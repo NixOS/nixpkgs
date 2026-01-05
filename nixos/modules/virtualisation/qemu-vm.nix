@@ -360,58 +360,12 @@ let
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
   };
-
-  interfaceType = types.submodule (
-    { name, ... }:
-    {
-      options = {
-        name = mkOption {
-          type = types.str;
-          default = name;
-          description = ''
-            Interface name
-          '';
-        };
-
-        vlan = mkOption {
-          type = types.ints.unsigned;
-          description = ''
-            VLAN to which the network interface is connected.
-          '';
-        };
-
-        assignIP = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Automatically assign an IP address to the network interface using the same scheme as
-            virtualisation.vlans.
-          '';
-        };
-      };
-    }
-  );
-
-  # Convert legacy VLANs to named interfaces.
-  vlansNumbered = lib.listToAttrs (
-    lib.forEach (lib.zipLists cfg.vlans (lib.range 1 255)) (
-      v:
-      let
-        name = "eth${toString v.snd}";
-      in
-      lib.nameValuePair name {
-        inherit name;
-        vlan = v.fst;
-        assignIP = true;
-      }
-    )
-  );
-
 in
 {
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
+    ./guest-networking-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -726,48 +680,6 @@ in
       '';
     };
 
-    virtualisation.vlans = mkOption {
-      type = types.listOf types.ints.unsigned;
-      default = if config.virtualisation.interfaces == { } then [ 1 ] else [ ];
-      defaultText = lib.literalExpression ''if config.virtualisation.interfaces == {} then [ 1 ] else [ ]'';
-      example = [
-        1
-        2
-      ];
-      description = ''
-        Virtual networks to which the VM is connected.  Each
-        number «N» in this list causes
-        the VM to have a virtual Ethernet interface attached to a
-        separate virtual network on which it will be assigned IP
-        address
-        `192.168.«N».«M»`,
-        where «M» is the index of this VM
-        in the list of VMs.
-      '';
-    };
-
-    virtualisation.interfaces = mkOption {
-      default = { };
-      example = {
-        enp1s0.vlan = 1;
-      };
-      description = ''
-        Extra network interfaces to add to the VM in addition to the ones
-        created by {option}`virtualisation.vlans`.
-      '';
-      type = types.attrsOf interfaceType;
-    };
-
-    virtualisation.allInterfaces = mkOption {
-      type = types.attrsOf interfaceType;
-      readOnly = true;
-      description = ''
-        All network interfaces for the VM. Combines
-        {option}`virtualisation.vlans` and {option}`virtualisation.interfaces`.
-      '';
-      default = vlansNumbered // cfg.interfaces;
-    };
-
     virtualisation.writableStore = mkOption {
       type = types.bool;
       default = cfg.mountHostNixStore;
@@ -788,20 +700,6 @@ in
         Use a tmpfs for the writable store instead of writing to the VM's
         own filesystem.
       '';
-    };
-
-    networking.primaryIPAddress = mkOption {
-      type = types.str;
-      default = "";
-      internal = true;
-      description = "Primary IP address used in /etc/hosts.";
-    };
-
-    networking.primaryIPv6Address = mkOption {
-      type = types.str;
-      default = "";
-      internal = true;
-      description = "Primary IPv6 address used in /etc/hosts.";
     };
 
     virtualisation.host.pkgs = mkOption {
@@ -1286,30 +1184,6 @@ in
         )
       )
       ++ [
-        (
-          let
-            conflictingKeys = lib.intersectAttrs vlansNumbered cfg.interfaces;
-          in
-          {
-            assertion = conflictingKeys == { };
-            message = ''
-              `virtualisation.vlans` and `virtualisation.interfaces` have conflicting keys: ${lib.concatStringsSep "," (lib.attrNames conflictingKeys)}
-            '';
-          }
-        )
-        (
-          let
-            allInterfaceNames =
-              (lib.mapAttrsToList (k: i: i.name) vlansNumbered)
-              ++ (lib.mapAttrsToList (k: i: i.name) cfg.interfaces);
-          in
-          {
-            assertion = lib.allUnique allInterfaceNames;
-            message = ''
-              `virtualisation.vlans` and `virtualisation.interfaces` have conflicting interface names: ${lib.concatStringsSep "," allInterfaceNames}
-            '';
-          }
-        )
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
