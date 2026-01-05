@@ -1055,21 +1055,21 @@ let
     # Rocky Linux's /pub/rocky/9/ URL is rolling and changes with each minor release. We use the
     # vault instead, which provides stable URLs for specific minor versions.
     rocky9x86_64 = {
-      name = "rocky-9.5-x86_64";
-      fullName = "Rocky Linux 9.5 (x86_64)";
+      name = "rocky-9.6-x86_64";
+      fullName = "Rocky Linux 9.6 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://dl.rockylinux.org/vault/rocky/9.5/BaseOS/x86_64/os/repodata/554cd09406b7bf632fc7014d0a567094272d37ac08f75af955de96183425dfa8-primary.xml.gz";
-          hash = "sha256-VUzQlAa3v2MvxwFNClZwlCctN6wI91r5Vd6WGDQl36g=";
+          url = "https://dl.rockylinux.org/vault/rocky/9.6/BaseOS/x86_64/os/repodata/9965e429a90787a87a07eed62872d046411fb7dded524b96d74c4ce1eade327a-primary.xml.gz";
+          hash = "sha256-mWXkKakHh6h6B+7WKHLQRkEft93tUkuW10xM4ereMno=";
         })
         (fetchurl {
-          url = "https://dl.rockylinux.org/vault/rocky/9.5/AppStream/x86_64/os/repodata/db8f32057dd37687574ea660d322ff7a0b5dc01bfba42888818b48ef686837cd-primary.xml.gz";
-          hash = "sha256-248yBX3TdodXTqZg0yL/egtdwBv7pCiIgYtI72hoN80=";
+          url = "https://dl.rockylinux.org/vault/rocky/9.6/AppStream/x86_64/os/repodata/8cc9f795679c3365c06b6135f685ebf4188a5863a5f52f09f8cabd4f09c4dfa1-primary.xml.gz";
+          hash = "sha256-jMn3lWecM2XAa2E19oXr9BiKWGOl9S8J+Mq9TwnE36E=";
         })
       ];
       urlPrefixes = [
-        "https://dl.rockylinux.org/vault/rocky/9.5/BaseOS/x86_64/os"
-        "https://dl.rockylinux.org/vault/rocky/9.5/AppStream/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/9.6/BaseOS/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/9.6/AppStream/x86_64/os"
       ];
       archs = [
         "noarch"
