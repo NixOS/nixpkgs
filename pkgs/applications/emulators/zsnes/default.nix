@@ -71,6 +71,8 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--enable-release" ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     function installIcon () {
         mkdir -p $out/share/icons/hicolor/$1/apps/
