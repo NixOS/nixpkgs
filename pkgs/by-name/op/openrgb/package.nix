@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     HOME=$TMPDIR $out/bin/openrgb --help > /dev/null
 
+    if grep -R /usr/bin/env "$out/lib/udev/rules.d"; then
+      echo "Error: udev rules must not reference /usr/bin/env"
+      exit 1
+    fi
+
     runHook postInstallCheck
   '';
 
