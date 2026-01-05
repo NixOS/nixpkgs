@@ -1,0 +1,59 @@
+diff --git a/src/highlighters.cc b/src/highlighters.cc
+--- a/src/highlighters.cc
++++ b/src/highlighters.cc
+@@ -1318,7 +1318,7 @@ void expand_unprintable(HighlightContext context, DisplayBuffer& display_buffer,
+             {
+                 auto next = it;
+                 Codepoint cp = utf8::read_codepoint(next, end);
+-                if (cp != '\n' and (cp < ' ' or cp > '~') and not iswprint((wchar_t)cp))
++                if (cp != '\n' and (cp < ' ' or cp > '~') and not kak_iswprint((wchar_t)cp))
+                 {
+                     if (ByteCount pos(it - line_data); pos != begin.column)
+                         atom_it = ++line.split(atom_it, {begin.line, pos});
+diff --git a/src/unicode.hh b/src/unicode.hh
+--- a/src/unicode.hh
++++ b/src/unicode.hh
+@@ -7,6 +7,34 @@
+ #include "array_view.hh"
+ #include "units.hh"
+
++#ifdef __APPLE__
++// macOS libc has outdated Unicode tables causing wcwidth() to return -1
++// for modern emoji. Use termux/wcwidth (Unicode 15) instead.
++// See: https://github.com/mawww/kakoune/issues/3059
++extern "C" int mk_wcwidth(wchar_t ucs);
++#define kak_wcwidth mk_wcwidth
++
++// musl-style iswprint - more permissive than macOS libc.
++// Considers all legal Unicode codepoints as printable except for:
++// - C0 and C1 control characters
++// - U+2028 and U+2029 (line/para break)
++// - U+FFF9 through U+FFFB (interlinear annotation controls)
++inline int kak_iswprint(wint_t wc) noexcept
++{
++    if (wc < 0xffU)
++        return (wc + 1 & 0x7f) >= 0x21;
++    if (wc < 0x2028U || wc - 0x202aU < 0xd800 - 0x202a || wc - 0xe000U < 0xfff9 - 0xe000)
++        return 1;
++    if (wc - 0xfffcU > 0x10ffff - 0xfffc || (wc & 0xfffe) == 0xfffe)
++        return 0;
++    return 1;
++}
++#else
++// On other platforms, use system functions
++#define kak_wcwidth wcwidth
++#define kak_iswprint iswprint
++#endif
++
+ namespace Kakoune
+ {
+
+@@ -103,7 +131,7 @@ inline bool is_identifier(Codepoint c) noexcept
+ {
+     if (c == '\n')
+         return 1;
+-    const auto width = wcwidth((wchar_t)c);
++    const auto width = kak_wcwidth((wchar_t)c);
+     return width >= 0 ? width : 1;
+ }
+
