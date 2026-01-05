@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "snappy";
-  version = "3.2";
+  version = "3.3.2";
   pyproject = true;
 
   outputs = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "3-manifolds";
     repo = "SnapPy";
     tag = "${version}_as_released";
-    hash = "sha256-IwPxuyVDsL5yML+J06HTKlz52sYrPkohLJ0XDXDwTlo=";
+    hash = "sha256-Pl4Nl0LXNvdtQ/EFVQy0QdUA/Fqoz2QAFWW5nz0bv78=";
   };
 
   patches = [
@@ -61,11 +61,6 @@ buildPythonPackage rec {
       name = "no-copy-doc.patch";
       url = "https://github.com/3-manifolds/SnapPy/commit/c6aeeaaec7010a54e4ebdf2e8dad7b384c2ce8e5.patch";
       hash = "sha256-OV3Qr5wO5UHNzVFTPTujIpp5ptel6gvAlcMgrJ8C0KY=";
-    })
-    (fetchpatch {
-      name = "fix-test-aarch64.patch";
-      url = "https://github.com/3-manifolds/SnapPy/commit/a8d57db39bc8f486746dc61027779168d0bc316a.patch";
-      hash = "sha256-RsuwaR+7UrVTKlPwQeHblTAN++La7b9BSMdFcJSiX5Q=";
     })
   ];
 
