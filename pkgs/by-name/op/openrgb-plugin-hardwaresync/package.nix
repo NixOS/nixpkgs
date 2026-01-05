@@ -2,38 +2,26 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  openrgb,
   glib,
   libgtop,
   lm_sensors,
   pkg-config,
   qt6Packages,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-hardwaresync";
-  version = "0.9";
+  version = "1.0rc2";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBHardwareSyncPlugin";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-3sQFiqmXhuavce/6v3XBpp6PAduY7t440nXfbfCX9a0=";
+    tag = "release_candidate_${finalAttrs.version}";
+    hash = "sha256-t5NPlmCg0btHpD/hpHSwDRl8LjVoOiT89WoOm3PmhXA=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix Qt 6 build
-    (fetchpatch {
-      url = "https://gitlab.com/OpenRGBDevelopers/OpenRGBHardwareSyncPlugin/-/commit/62707c260953fb5ac2bb782595c18791bf54ff97.patch";
-      hash = "sha256-xMsnVyrn/Cv2x2xQtAnPb5HJc+WolNx4v7h0TkTj9DU=";
-    })
-  ];
-
   postPatch = ''
-    # Use the source of openrgb from nixpkgs instead of the submodule
-    rmdir OpenRGB
-    ln -s ${openrgb.src} OpenRGB
     # Remove prebuilt stuff
     rm -r dependencies/lhwm-cpp-wrapper
   '';
