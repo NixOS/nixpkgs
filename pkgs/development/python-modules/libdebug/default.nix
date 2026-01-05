@@ -1,31 +1,32 @@
 {
   lib,
-  scikit-build-core,
+  buildPythonPackage,
   cmake,
-  ninja,
-  pkg-config,
-  zstd,
-  zlib,
   elfutils,
+  fetchFromGitHub,
   libdwarf,
   libiberty,
-  fetchFromGitHub,
+  nanobind,
+  ninja,
+  pkg-config,
+  prompt-toolkit,
   psutil,
   pyelftools,
   requests,
-  prompt-toolkit,
-  nanobind,
+  scikit-build-core,
   typing-extensions,
-  python,
+  writableTmpDirAsHomeHook,
+  zlib,
+  zstd,
 }:
 
-python.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "libdebug";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "libdebug";
-    repo = pname;
+    repo = "libdebug";
     tag = version;
 
     hash = "sha256-J0ETzqAGufsZyW+XDhJCKwX1rrmDBwlAicvBb1AAiIQ=";
@@ -43,7 +44,7 @@ python.pkgs.buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     psutil
     pyelftools
     requests
@@ -58,15 +59,13 @@ python.pkgs.buildPythonPackage rec {
     ninja
   ];
 
-  pythonImportsCheckPhase = ''
-    echo "Not Executing pythonImportsCheckPhase, because importing creates a history in .cache";
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   pythonImportsCheck = [ "libdebug" ];
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libdebug/libdebug";
-    description = "libdebug - A Python library to debug binary executables, your own way. ";
-    maintainers = [ maintainers.mrsmoer ];
-    license = licenses.mit;
+    description = "Programmatic debugging of userland Linux binaries";
+    maintainers = with lib.maintainers; [ mrsmoer ];
+    license = lib.licenses.mit;
   };
 }
