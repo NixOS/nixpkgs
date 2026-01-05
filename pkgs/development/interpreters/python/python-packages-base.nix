@@ -53,13 +53,19 @@ let
       f':
       lib.mirrorFunctionArgs f (
         args:
+        let
+          getName = x: x.pname or (lib.getName (x.name or "<unnamed>"));
+          applyMsgStdenvArg =
+            name:
+            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+              ${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+                buildPythonPackage.override { stdenv = customStdenv; } { }
+            '';
+        in
         if !(lib.isFunction args) && (args ? stdenv) then
-          lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
-            ${
-              args.name or args.pname or "<unnamed>"
-            }: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
-              buildPythonPackage.override { stdenv = customStdenv; } { }
-          '' (f'.override { inherit (args) stdenv; } (removeAttrs args [ "stdenv" ]))
+          applyMsgStdenvArg (getName args) (
+            f'.override { inherit (args) stdenv; } (removeAttrs args [ "stdenv" ])
+          )
         else
           f args
       )
