@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocserv";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "ocserv";
     tag = finalAttrs.version;
-    hash = "sha256-oZ1t1BTCdsq1jpa7LfzRGwQNTROHH9/lLBT2WAvj5h4=";
+    hash = "sha256-u6gk1foCmx88iw7vMB9If0zHpd1xpzGsfHx2SxgXSX0=";
   };
 
   nativeBuildInputs = [
