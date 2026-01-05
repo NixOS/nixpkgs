@@ -19,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SCQDORhmJmTb0CYm15zjEa7dkwc+lpW2s1d4DsMRovI=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "ABSL_BUILD_TEST_HELPERS" true)
     (lib.cmakeBool "ABSL_USE_EXTERNAL_GOOGLETEST" true)
