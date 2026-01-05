@@ -11,7 +11,6 @@ from pathlib import Path
 
 logger = logging.getLogger()
 
-
 # Install a SIGTERM handler so all our context managers get a chance to
 # clean up.
 signal.signal(signal.SIGTERM, lambda _signum, _frame: sys.exit(0))
@@ -204,3 +203,48 @@ def run(
             )
 
         sys.exit(exit_code)
+
+
+def main():
+    import argparse
+    import json
+
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
+        "--container-name", required=True, help="Name of the container"
+    )
+    arg_parser.add_argument(
+        "--root-dir",
+        required=True,
+        help="Path to container root directory (overridable with RUN_NSPAWN_ROOT_DIR)",
+    )
+    arg_parser.add_argument(
+        "--interfaces-json",
+        dest="interfaces",
+        type=json.loads,
+        required=True,
+        help="JSON-encoded list of interfaces, each with 'name' and 'vlan' fields",
+    )
+    arg_parser.add_argument("--init", required=True, help="Path to init binary")
+    arg_parser.add_argument(
+        "--cmdline-json",
+        dest="cmdline",
+        type=json.loads,
+        default=[],
+        help="JSON-encoded list of command line arguments to pass to init",
+    )
+    # Parse only known args to allow for extra args to be passed to systemd-nspawn.
+    args, nspawn_options = arg_parser.parse_known_args()
+
+    run(
+        container_name=args.container_name,
+        root_dir_str=os.getenv("RUN_NSPAWN_ROOT_DIR", default=args.root_dir),
+        interfaces=args.interfaces,
+        nspawn_options=nspawn_options,
+        init=args.init,
+        cmdline=args.cmdline,
+    )
+
+
+if __name__ == "__main__":
+    main()
