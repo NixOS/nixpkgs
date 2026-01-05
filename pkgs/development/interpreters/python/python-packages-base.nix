@@ -54,6 +54,7 @@ let
       lib.mirrorFunctionArgs f (
         args:
         let
+          result = f args;
           applyMsgStdenvArg = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
             ${
               args.name or args.pname or "<unnamed>"
@@ -63,8 +64,10 @@ let
         in
         if !(lib.isFunction args) && (args ? stdenv) then
           f'.override { stdenv = applyMsgStdenvArg args.stdenv; } (removeAttrs args [ "stdenv" ])
+        else if result ? __stdenvPythonCompat then
+          f'.override { stdenv = applyMsgStdenvArg result.__stdenvPythonCompat; } args
         else
-          f args
+          result
       )
       // {
         # Preserve the effect of overrideStdenvCompat when calling `buildPython*.override`.
