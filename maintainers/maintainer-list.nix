@@ -114,6 +114,12 @@
     github = "0x5a4";
     githubId = 54070204;
   };
+  _0xatrilla = {
+    email = "cazz9584@gmail.com";
+    github = "0xatrilla";
+    githubId = 107285362;
+    name = "0xatrilla";
+  };
   _0xB10C = {
     email = "nixpkgs@b10c.me";
     name = "0xB10C";
