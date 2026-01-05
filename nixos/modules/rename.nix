@@ -63,6 +63,13 @@ in
       "networking"
       "wicd"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "programs"
+        "adb"
+      ]
+      "This option is no longer needed as systemd 258 handles uaccess rules automatically. Please add `pkgs.android-tools` to your system packages to get the adb command."
+    )
     (mkRemovedOptionModule [
       "programs"
       "cardboard"
