@@ -1656,6 +1656,10 @@ in
 
   options = {
 
+    security.pam.enable = lib.mkEnableOption "enable pam" // {
+      default = true;
+    };
+
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
 
     security.pam.loginLimits = lib.mkOption {
@@ -2277,7 +2281,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkIf config.security.pam.enable {
     assertions = [
       {
         assertion = config.users.motd == "" || config.users.motdFile == null;

@@ -191,7 +191,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf config.systemd.enable {
     systemd.additionalUpstreamSystemUnits = [
       "user.slice"
     ];
