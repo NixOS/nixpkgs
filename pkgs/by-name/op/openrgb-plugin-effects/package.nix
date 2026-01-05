@@ -2,40 +2,31 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  openrgb,
   glib,
   openal,
+  hidapi,
+  pipewire,
   pkg-config,
   qt6Packages,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-effects";
-  version = "0.9";
+  version = "1.0rc2";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBEffectsPlugin";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-8BnHifcFf7ESJgJi/q3ca38zuIVa++BoGlkWxj7gpog=";
+    tag = "release_candidate_${finalAttrs.version}";
+    hash = "sha256-0W0hO3PSMpPLc0a7g/Nn7GWMcwBXhOxh1Y2flpdcnfE=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix Qt6 issues in OpenRGBPluginsFont.cpp
-    (fetchpatch {
-      url = "https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/commit/e952b0ed390045d4f4adec8e74b3126c2f8abcab.patch";
-      hash = "sha256-xMsnVyrn/Cv2x2xQtAnPb5HJc+WolNx4v7h0TkTj9DU=";
-    })
-    ./qt5compat.patch
+  qmakeFlags = [
+    "CONFIG+=link_pkgconfig"
+    "PKGCONFIG+=libpipewire-0.3"
+    "QT_TOOL.lrelease.binary=${lib.getDev qt6Packages.qttools}/bin/lrelease"
   ];
-
-  postPatch = ''
-    # Use the source of openrgb from nixpkgs instead of the submodule
-    rm -r OpenRGB
-    ln -s ${openrgb.src} OpenRGB
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -48,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qt5compat
     glib
     openal
+    hidapi
+    pipewire
   ];
 
   meta = {
