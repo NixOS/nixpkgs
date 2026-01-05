@@ -10,8 +10,10 @@
   monotonic,
   openai,
   parameterized,
+  pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   requests,
   setuptools,
   six,
@@ -20,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "6.7.0";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-//PjAWZF6FYsiG9UDg+MPv1x06Yp4msBkYkNAU9Rjsc=";
+    hash = "sha256-YDW3FneQec09BOUh3wBbgz1ng3n6tkzoAZhIynp4wGA=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +50,7 @@ buildPythonPackage (finalAttrs: {
     mock
     openai
     parameterized
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -62,12 +65,15 @@ buildPythonPackage (finalAttrs: {
     "test_upload"
     # AssertionError: 2 != 3
     "test_flush_interval"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Pydantic V1 functionality isn't compatible with Python 3.14
+    "test_clean_pydantic"
   ];
 
   disabledTestPaths = [
-    # Revisit this at the next version bump, issue open upstream
-    # See https://github.com/PostHog/posthog-python/issues/234
-    "posthog/test/ai/openai/test_openai.py"
+    # Missing parts
+    "posthog/test/integrations/test_middleware.py"
   ];
 
   meta = {
