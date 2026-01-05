@@ -171,6 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     docbook_xml_dtd_45
     libxslt
+  ]
+  ++ lib.optionals rustSupport [
+    cargo
+    rustc
   ];
   buildInputs = [
     curl
@@ -189,10 +193,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     glib
     libsecret
-  ]
-  ++ lib.optionals rustSupport [
-    cargo
-    rustc
   ];
 
   # required to support pthread_cancel()
