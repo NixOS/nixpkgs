@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   callPackage,
   buildGoModule,
   installShellFiles,
@@ -26,7 +27,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
-  version = "1.2.0";
+  version = "1.2.5";
 
   outputs = [
     "out"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "lexiforest";
     repo = "curl-impersonate";
     tag = "v${version}";
-    hash = "sha256-tAQdTRGAOD2rpLZvoLQ2YL0wrohXEcmChMZBvYjsMhE=";
+    hash = "sha256-IYJMPbMjCNBsnp9QLPuJJB2Ag8tENpp6UfNtB5fjNgc=";
   };
 
   # Disable blanket -Werror to fix build on `gcc-13` related to minor

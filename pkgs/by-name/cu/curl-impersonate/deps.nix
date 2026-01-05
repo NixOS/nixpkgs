@@ -31,4 +31,16 @@
     url = "https://github.com/ngtcp2/nghttp3/releases/download/v1.9.0/nghttp3-1.9.0.tar.bz2";
     hash = "sha256-TTCmjxfnKhOStghdr6qfxzLaHX0m7sVUuyFnCDMvzxo=";
   };
+
+  "c-ares-1.30.0.tar.gz" = fetchurl {
+    url = "https://github.com/c-ares/c-ares/releases/download/v1.30.0/c-ares-1.30.0.tar.gz";
+    hash = "sha256-T+oxIRICG87wgSA7HqAgEJhC/rWM2KNqPT9+DYvBE4w=";
+  };
+
+  # the auto update script should automatically remove this after
+  # https://github.com/lexiforest/curl-impersonate/pull/205
+  "cares-1.30.0.tar.gz" = fetchurl {
+    url = "https://github.com/c-ares/c-ares/releases/download/v1.30.0/c-ares-1.30.0.tar.gz";
+    hash = "sha256-T+oxIRICG87wgSA7HqAgEJhC/rWM2KNqPT9+DYvBE4w=";
+  };
 }
