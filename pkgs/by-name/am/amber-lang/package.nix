@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   patches = [
+    # Upstreamed in #995, can be removed in >= 0.5.2
+    # github.com/amber-lang/amber/pull/995
     ./fix_word_boundaries.patch
   ];
 
