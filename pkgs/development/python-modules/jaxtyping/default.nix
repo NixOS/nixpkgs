@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "patrick-kidger";
     repo = "jaxtyping";
     tag = "v${finalAttrs.version}";
     hash = "sha256-0Vt6UD1xQkwve6yDVi5XQCoJ/IsJWHCkGesj66myQq4=";
@@ -67,7 +67,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Type annotations and runtime checking for JAX arrays and PyTrees";
-    homepage = "https://github.com/google/jaxtyping";
+    homepage = "https://github.com/patrick-kidger/jaxtyping";
     changelog = "https://github.com/patrick-kidger/jaxtyping/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
