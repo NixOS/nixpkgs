@@ -61,7 +61,6 @@ let
     repo = "Signal-Desktop";
     tag = "v${version}";
     hash = "sha256-r1RB6vtG2mdRJifaKNrmQvxJxXOqkpHoWivvPPpesow=";
-    forceFetchGit = true;
     postCheckout = ''
       git -C "$out" show -s --format=%ct > "$out"/GIT_COMMIT_TIME
     '';
@@ -131,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     # it at runtime.
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+
+    # https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace ts/util/version.std.ts \
+      --replace-fail 'isAdhoc(version)' 'true'
   '';
 
   pnpmDeps = fetchPnpmDeps {
