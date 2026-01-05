@@ -66,7 +66,7 @@ in
     ];
 
     environment.etc."vscode/policy.json" = lib.mkIf (cfg.policies != { }) {
-      text = json.generate "policy.json" cfg.policies;
+      source = format.generate "policy.json" cfg.policies;
     };
 
     environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (
