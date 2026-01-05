@@ -7,7 +7,7 @@
   hatchling,
 
   # native
-  beets,
+  beets-minimal,
 
   # dependencies
   markdownify,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    beets
+    beets-minimal
   ];
 
   pythonRelaxDeps = true;
