@@ -35,29 +35,6 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-let
-  cfg = writeTextFile {
-    name = "site.cfg";
-    text = lib.generators.toINI { } {
-      ${blas.implementation} = {
-        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
-        library_dirs = "${blas}/lib:${lapack}/lib";
-        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
-        libraries = "lapack,lapacke,blas,cblas";
-      };
-      lapack = {
-        include_dirs = "${lib.getDev lapack}/include";
-        library_dirs = "${lapack}/lib";
-        runtime_library_dirs = "${lapack}/lib";
-      };
-      blas = {
-        include_dirs = "${lib.getDev blas}/include";
-        library_dirs = "${blas}/lib";
-        runtime_library_dirs = "${blas}/lib";
-      };
-    };
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
   version = "2.3.5";
@@ -126,7 +103,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    ln -s ${cfg} site.cfg
+    ln -s ${finalAttrs.finalPackage.passthru.cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -192,7 +169,28 @@ buildPythonPackage (finalAttrs: {
     # just for backwards compatibility
     blas = blas.provider;
     blasImplementation = blas.implementation;
-    inherit cfg;
+    buildConfig = {
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+        runtime_library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
+        library_dirs = "${blas}/lib";
+        runtime_library_dirs = "${blas}/lib";
+      };
+    };
+    cfg = writeTextFile {
+      name = "site.cfg";
+      text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
+    };
     coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
     tests = {
       inherit sage;
