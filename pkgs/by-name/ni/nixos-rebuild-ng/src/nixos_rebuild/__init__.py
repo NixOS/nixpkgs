@@ -137,6 +137,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Roll back to the previous configuration",
     )
     main_parser.add_argument(
+        "--store-path",
+        metavar="PATH",
+        help="Use a pre-built NixOS system store path instead of building",
+    )
+    main_parser.add_argument(
         "--upgrade",
         action="store_true",
         help="Update the root user's channel named 'nixos' before rebuilding "
@@ -269,6 +274,22 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
+    if args.store_path:
+        if args.rollback:
+            parser.error("--store-path and --rollback are mutually exclusive")
+        if args.flake or args.file or args.attr:
+            parser.error("--store-path cannot be used with --flake, --file, or --attr")
+        if args.action not in (
+            Action.SWITCH.value,
+            Action.BOOT.value,
+            Action.TEST.value,
+            Action.DRY_ACTIVATE.value,
+        ):
+            parser.error(f"--store-path cannot be used with '{args.action}'")
+        if args.flake is None:
+            # Disable flake auto-detection since we're using a pre-built store path
+            args.flake = False
+
     return args, grouped_nix_args
 
 
@@ -297,7 +318,7 @@ def execute(argv: list[str]) -> None:
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
-    if can_run and not flake:
+    if can_run and not flake and not args.store_path:
         services.write_version_suffix(grouped_nix_args)
 
     match action:
