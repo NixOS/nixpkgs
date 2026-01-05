@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "primer3";
   version = "2.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libnano";
     repo = "primer3-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GrVYYjS/+LZScZETfk7YcSy2yrWc3SPumXvyQeEpFUg=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Oligo analysis and primer design";
     homepage = "https://github.com/libnano/primer3-py";
-    changelog = "https://github.com/libnano/primer3-py/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/libnano/primer3-py/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
