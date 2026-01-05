@@ -63,8 +63,8 @@ let
             '';
         in
         if !(lib.isFunction args) && (args ? stdenv) then
-          applyMsgStdenvArg (getName args) (
-            f'.override { inherit (args) stdenv; } (removeAttrs args [ "stdenv" ])
+          f'.override { stdenv = applyMsgStdenvArg (getName args) args.stdenv; } (
+            removeAttrs args [ "stdenv" ]
           )
         else
           f args
