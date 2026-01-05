@@ -1,10 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   importlib-metadata,
   importlib-resources,
   poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -12,9 +13,12 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-9sHLmi/+zvOHvxobk75sYckbxvQXFPGDw+tNWz4f9fY=";
+  src = fetchFromGitHub {
+    owner = "prosegrinder";
+    repo = "python-cmudict";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pOqzezrDlwlVsvBHreHmLKxYKDxllZNs0TgLwxBhy58=";
+    fetchSubmodules = true;
   };
 
   build-system = [ poetry-core ];
@@ -23,6 +27,8 @@ buildPythonPackage (finalAttrs: {
     importlib-metadata
     importlib-resources
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cmudict" ];
 
