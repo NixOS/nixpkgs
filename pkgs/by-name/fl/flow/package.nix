@@ -2,10 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
   dune,
 }:
 
+let
+  ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
+    self: super: {
+      ppxlib = super.ppxlib.override { version = "0.33.0"; };
+    }
+  );
+in
 stdenv.mkDerivation rec {
   pname = "flow";
   version = "0.288.0";
