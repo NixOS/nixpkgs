@@ -5,15 +5,12 @@
   flit-core,
   pytestCheckHook,
   nodejs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pscript";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "flexxui";
