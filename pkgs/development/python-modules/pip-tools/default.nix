@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.5.1-unstable-2025-11-08";
+  version = "7.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
