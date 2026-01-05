@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch2,
   python,
-  numpy_2,
   pythonAtLeast,
   pythonOlder,
   buildPythonPackage,
@@ -59,7 +58,7 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy";
   version = "2.3.5";
   pyproject = true;
@@ -69,7 +68,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numpy";
     repo = "numpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
   };
@@ -194,17 +193,17 @@ buildPythonPackage rec {
     blas = blas.provider;
     blasImplementation = blas.implementation;
     inherit cfg;
-    coreIncludeDir = "${numpy_2}/${python.sitePackages}/numpy/_core/include";
+    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
     tests = {
       inherit sage;
     };
   };
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/${finalAttrs.src.tag}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
