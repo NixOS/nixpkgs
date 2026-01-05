@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-CPbZOpUYi7MWKLMj7kwTsmEkxLCf4wU7IOCcbzMkPlU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail  "hatchling==1.27.0" "hatchling"
+  '';
+
   build-system = [
     flit-core
     hatchling
