@@ -5,6 +5,5 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  grunt-cli = "grunt";
   gulp-cli = "gulp";
 }

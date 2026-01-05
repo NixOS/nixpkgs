@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "beads";
-  version = "0.27.2";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "steveyegge";
     repo = "beads";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PpuyQCQocmOqt4EYDsjx1nh0dRxt2e7Vu1/KQ74B88Q=";
+    hash = "sha256-3t+pm7vuFj3PH1oCJ/AnwbGupqleimNQnP2bRSBHrSg=";
   };
 
-  vendorHash = "sha256-5p4bHTBB6X30FosIn6rkMDJoap8tOvB7bLmVKsy09D8=";
+  vendorHash = "sha256-ovG0EWQFtifHF5leEQTFvTjGvc+yiAjpAaqaV0OklgE=";
 
   subPackages = [ "cmd/bd" ];
 

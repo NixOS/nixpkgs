@@ -26,6 +26,8 @@
   csound,
   cunit,
   pkg-config,
+  libGL,
+  libGLU,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
     cunit
     libtool
     readline
+    libGL
+    libGLU
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -72,6 +76,7 @@ stdenv.mkDerivation rec {
       # Needed with GCC 12 but problematic with some old GCCs
       "-Wno-error=address"
       "-Wno-error=use-after-free"
+      "-std=gnu17"
     ]
     ++ [
       "-Wno-error=deprecated-declarations"

@@ -7883,7 +7883,6 @@ with pkgs;
   openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
-  opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
@@ -11335,9 +11334,6 @@ with pkgs;
     libOnly = true;
     withConplay = false;
   };
-
-  # a somewhat more maintained fork of ympd
-  memento = qt6Packages.callPackage ../applications/video/memento { };
 
   mplayer = callPackage ../applications/video/mplayer (
     {

@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchNpmDeps,
   fetchFromGitHub,
+  nodejs_22,
   pkg-config,
   node-gyp,
   vips,
@@ -51,6 +52,9 @@ buildNpmPackage rec {
     hash = npmDepsHash;
     patches = [ ./0004-fix-deps-v080.patch ];
   };
+
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   nativeBuildInputs = [
     pkg-config

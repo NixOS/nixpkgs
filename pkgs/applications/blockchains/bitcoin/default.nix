@@ -30,9 +30,10 @@
   builderKeys ? [
     "152812300785C96444D3334D17565732E08E5E41" # achow101.gpg
     "9EDAFF80E080659604F4A76B2EBB056FD847F8A7" # Emzy.gpg
-    "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg
-    "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg
+    # "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg (not signed 30.1)
     "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg
+    "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg
+    "67AA5B46E7AF78053167FE343B8F814A784218F8" # willcl-ark.gpg
   ],
 }:
 
@@ -45,14 +46,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "30.0";
+  version = "30.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "9b472a4d51dfed9aa9d0ded2cb8c7bcb9267f8439a23a98f36eb509c1a5e6974";
+    sha256 = "5d5518782c3000f64717ec1b4291e7e609a1f900d9729ee83c982243779c3f43";
   };
 
   nativeBuildInputs = [
@@ -86,18 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoin-core";
         repo = "guix.sigs";
-        rev = "a788388207bd244d5ab07b31ecd6c126f213a6c6";
-        sha256 = "sha256-gbenuEWP6pqY9ywPd/yZy6QfWI7jvSObwto27DRXjGI=";
+        rev = "8427342623f66a98e4b2503e5e15eb41485200d2";
+        sha256 = "sha256-X1mA1iPAb0OE9RNP9O5rFe9rzsui+BWQ2zMcV7SghXE=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-v/b1wTOreKifpWkIrUEJsGaSo7LFs4pn7YgBN88dO9o=";
+        hash = "sha256-WdOYSEbxmpecFpThNwxKTNXbbwQvqlUuCxmCbhfhW6k";
       };
 
       signatures = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-MK37HyHAqp/vWLjKm/3HF0LkTXtKQwqz6cL4hY2YUPU=";
+        hash = "sha256-yFPhf/tyotBtpx1lZAQR+C2YdZaAyaWCq/0OVdP2wR4=";
       };
 
       verifyBuilderKeys =

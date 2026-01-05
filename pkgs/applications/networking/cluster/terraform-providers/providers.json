@@ -45,13 +45,13 @@
     "vendorHash": "sha256-weHY7ZV3HaFBYlDNhwAYN9vDItkI+wtk9UNlM0uuwfY="
   },
   "aliyun_alicloud": {
-    "hash": "sha256-i53+JvEr5K4/RCsk5Kfa1Nbox1/KfsgXjX5wCa4zd7o=",
+    "hash": "sha256-WDFoyj4DxHiS1xIu8bPKUzHaVsGn88rIBzx3KoE8lA0=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.266.0",
+    "rev": "v1.267.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xRoj0X06lhoVXFLfrV8ganqsyzc4PFk+6R2Jx67VIpE="
+    "vendorHash": "sha256-ogQLStDbsM0aRf4QIbITB8Z+L9DUtZwoAPK6T4xylXI="
   },
   "aminueza_minio": {
     "hash": "sha256-G6eQeoxIeuUJK7LF8gByOrNP27i3p0OccZNxL2DxDw0=",
@@ -715,11 +715,11 @@
     "vendorHash": "sha256-BUxnKxr0htpdSSTMzb3ix1nNlX7PTBv38ozDjnZ2eK8="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-MQq3fbDXJdULy0xutWmWRmgKa3STny3qsklxgL/z/28=",
+    "hash": "sha256-8GsGyWBkeHy+7MOrjn6r8Q67EDBycU0FEFILabJvkWA=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.82.4",
+    "rev": "v1.83.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

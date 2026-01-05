@@ -3487,6 +3487,13 @@ assertNoAdditions {
     dependencies = [ self.telescope-nvim ];
   };
 
+  telescope-hierarchy-nvim = super.telescope-hierarchy-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+  };
+
   telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
