@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nxv";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jamesbrink";
     repo = "nxv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tKjb+B65ZrLIJ7aDYGC3kj71iAXoFmAaj5I8+o4EzlM=";
+    hash = "sha256-Gj+5Tgt0IO2P/GyPVM9yBgYoiSkpdfcq1r8TmZLZMSs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-RW3WrG1A/J1xuWWcHOARG6EEmSWWnDeycAtbppY52OI=";
+  cargoHash = "sha256-7c1LryJvrOsSiLPYNvGIFaTONhA0c99n918/yNRKkxo=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
