@@ -3108,6 +3108,19 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  inherit (callPackage ../build-support/deno/fetch-deno-deps { }) fetchDenoDeps;
+
+  fetch-deno-deps-scripts = {
+    deno =
+      (callPackage ../build-support/deno/fetch-deno-deps/scripts/deno/default.nix { })
+      .fetch-deno-deps-scripts;
+    rust =
+      (callPackage
+        ../build-support/deno/fetch-deno-deps/scripts/rust/file-structure-transformer-vendor/default.nix
+        { }
+      ).file-structure-transformer-vendor;
+  };
+
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
