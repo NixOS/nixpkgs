@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Mqx07dJAYIesp09RmKr74rLKRkG46nHQERhuQ7AyAiM=";
   };
 
+  patches = [
+    # error: 'uint64_t' does not name a type
+    ./gcc-15-compat.patch
+  ];
+
   makeFlags = [ "FLOW_RELEASE=1" ];
 
   strictDeps = true;
