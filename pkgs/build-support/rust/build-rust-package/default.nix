@@ -13,6 +13,7 @@
   buildPackages,
   rustc,
   windows,
+  GLOBAL_RUSTFLAGS ? "",
 }:
 
 let
@@ -97,10 +98,10 @@ lib.extendMkDerivation {
           PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
           RUST_LOG = logLevel;
           # Prevent shadowing *_RUSTFLAGS environment variables
-          ${if args ? RUSTFLAGS || isDarwinDebug then "RUSTFLAGS" else null} =
-            lib.optionalString isDarwinDebug "-C split-debuginfo=packed "
+          ${if args ? RUSTFLAGS || GLOBAL_RUSTFLAGS != "" || isDarwinDebug then "RUSTFLAGS" else null} =
+            (lib.optionalString isDarwinDebug "-C split-debuginfo=packed ")
             # Workaround the existing RUSTFLAGS specified as a list.
-            + interpolateString (args.RUSTFLAGS or "");
+            + interpolateString (args.RUSTFLAGS or GLOBAL_RUSTFLAGS);
         }
         // args.env or { };
 
