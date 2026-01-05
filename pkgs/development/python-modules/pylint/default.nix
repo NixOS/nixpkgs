@@ -13,6 +13,7 @@
   pytest-timeout,
   pytest-xdist,
   pytest7CheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   setuptools,
@@ -95,6 +96,10 @@ buildPythonPackage rec {
     "test_functional"
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ModuleNotFoundError: No module named 'completely_unknown'
+    "test_do_not_import_files_from_local_directory"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_parallel_execution"

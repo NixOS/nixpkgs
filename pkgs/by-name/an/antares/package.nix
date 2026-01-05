@@ -3,7 +3,7 @@
   lib,
   buildNpmPackage,
   electron,
-  nodejs,
+  nodejs_22,
   makeDesktopItem,
   copyDesktopItems,
   icoutils,
@@ -29,7 +29,9 @@ buildNpmPackage rec {
     ./npm-lock.patch
   ];
 
-  buildInputs = [ nodejs ];
+  nodejs = nodejs_22;
+
+  buildInputs = [ nodejs_22 ];
 
   nativeBuildInputs = [
     copyDesktopItems

@@ -198,25 +198,17 @@ lib.makeExtensible (
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
-      nixComponents_2_32 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.32.4";
-          inherit (self.nix_2_31.meta) maintainers teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
-          };
-        }).appendPatches
-          [
-            (fetchpatch2 {
-              name = "nix-2.32-14693-mdbook-0.5-support.patch";
-              url = "https://github.com/NixOS/nix/commit/ba5bede9f51f126b29aaa01a3170da281cef0231.patch";
-              hash = "sha256-jY5fWnJSBfHRmB0RnBKeu3aYQ8wmDKYVqTj85cWVZRA=";
-            })
-          ];
+      nixComponents_2_32 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.32.5";
+        inherit (self.nix_2_31.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-vnlVgJ5VXn2LVvdzf1HUZeGq0pqa6vII11C8u5Q/YgM=";
+        };
+      };
 
       nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
 

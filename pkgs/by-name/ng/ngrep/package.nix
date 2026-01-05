@@ -2,39 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   libpcap,
-  pcre,
+  pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ngrep";
-  version = "1.47";
+  version = "1.48.3";
 
   src = fetchFromGitHub {
     owner = "jpr5";
     repo = "ngrep";
-    rev = "V${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1x2fyd7wdqlj1r76ilal06cl2wmbz0ws6i3ys204sbjh1cj6dcl7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2fYv9iLS+YLFLMjTpi/K4BLRSLTbkLGATlToA2ivrTo=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/jpr5/ngrep/pull/11.patch";
-      sha256 = "0k5qzvj8j3r1409qwwvzp7m3clgs2g7hs4q68bhrqbrsvvb2h5dh";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     libpcap
-    pcre
+    pcre2
   ];
 
   configureFlags = [
     "--enable-ipv6"
-    "--enable-pcre"
+    "--enable-pcre2"
     "--disable-pcap-restart"
     "--with-pcap-includes=${libpcap}/include"
   ];
@@ -65,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "ngrep";
   };
-}
+})
