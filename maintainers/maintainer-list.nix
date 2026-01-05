@@ -115,7 +115,7 @@
     githubId = 54070204;
   };
   _0xatrilla = {
-    email = "cazz9584@gmail.com";
+    email = "acxtrilla@proton.me";
     github = "0xatrilla";
     githubId = 107285362;
     name = "0xatrilla";
