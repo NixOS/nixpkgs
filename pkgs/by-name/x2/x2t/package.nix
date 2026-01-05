@@ -14,7 +14,6 @@
   jdk,
   lib,
   nodejs,
-  nodePackages,
   # needs to be static and built with MD2 support!
   openssl,
   pkg-config,
@@ -23,6 +22,7 @@
   stdenv,
   writeScript,
   x2t,
+  grunt-cli,
 }:
 
 let
@@ -149,7 +149,7 @@ let
     nativeBuildInputs = [
       autoconf
       automake
-      nodePackages.grunt-cli
+      grunt-cli
     ];
 
     dontNpmBuild = true;
@@ -189,7 +189,7 @@ let
     dontNpmBuild = true;
 
     nativeBuildInputs = [
-      nodePackages.grunt-cli
+      grunt-cli
       jdk
     ];
 

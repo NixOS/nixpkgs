@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-xai";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-xai==${version}";
-    hash = "sha256-bm7sIa62CIvsYNDdaN+XZKpRnCv5bg9kPZ1Ym8utFcM=";
+    hash = "sha256-aYl6tYPJgNE7zUQJ1hwaEzFUBgMK6MyXcvB9jJBOPHk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/xai";
