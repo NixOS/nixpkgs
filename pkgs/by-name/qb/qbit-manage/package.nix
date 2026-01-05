@@ -5,6 +5,7 @@
   testers,
   nix-update-script,
   qbit-manage,
+  nixosTests,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "qbit-manage";
@@ -57,6 +58,7 @@ python3Packages.buildPythonApplication rec {
         package = qbit-manage;
         command = "env HOME=$TMPDIR qbit-manage --version";
       };
+      testService = nixosTests.qbit-manage;
     };
   };
 

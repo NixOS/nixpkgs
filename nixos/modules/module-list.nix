@@ -1564,6 +1564,7 @@
   ./services/torrent/magnetico.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
+  ./services/torrent/qbit-manage.nix
   ./services/torrent/qbittorrent.nix
   ./services/torrent/qui.nix
   ./services/torrent/rqbit.nix
