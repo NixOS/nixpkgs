@@ -7,7 +7,7 @@
   nodejs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pscript";
   version = "0.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flexxui";
     repo = "pscript";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pqjig3dFJ4zfpor6TT6fiBMS7lAtJE/bAYbzl46W/YY=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python to JavaScript compiler";
     homepage = "https://pscript.readthedocs.io";
-    changelog = "https://github.com/flexxui/pscript/blob/${src.tag}/docs/releasenotes.rst";
+    changelog = "https://github.com/flexxui/pscript/blob/${finalAttrs.src.tag}/docs/releasenotes.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})
