@@ -43,7 +43,7 @@ let
 
   libmathdx = callPackage ./libmathdx.nix { };
 in
-buildPythonPackage {
+buildPythonPackage.override { stdenv = effectiveStdenv; } {
   pname = "warp-lang";
   inherit version;
   pyproject = true;
@@ -52,8 +52,6 @@ buildPythonPackage {
   # causing a bunch of missing math symbols (like expf) when linking against the static library
   # provided by NVCC.
   __structuredAttrs = true;
-
-  stdenv = effectiveStdenv;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
