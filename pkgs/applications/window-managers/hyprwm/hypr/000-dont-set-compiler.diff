@@ -1,0 +1,18 @@
+diff -Naur source-old/CMakeLists.txt source/CMakeLists.txt
+--- source-old/CMakeLists.txt	2022-10-19 00:55:52.766480588 -0300
++++ source/CMakeLists.txt	2022-10-19 00:56:08.368515654 -0300
+@@ -1,7 +1,5 @@
+ cmake_minimum_required(VERSION 3.4)
+ 
+-set(CMAKE_CXX_COMPILER "/bin/g++")
+-
+ project(Hypr 
+     VERSION 0.1
+     DESCRIPTION "A Modern OOP C++ Window Manager"
+@@ -54,4 +52,4 @@
+     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg -no-pie -fno-builtin")
+     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -no-pie -fno-builtin")
+     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg -no-pie -fno-builtin")
+-ENDIF(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
+\ No newline at end of file
++ENDIF(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)

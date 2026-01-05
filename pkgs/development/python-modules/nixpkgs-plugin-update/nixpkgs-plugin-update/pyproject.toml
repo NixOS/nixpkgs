@@ -1,0 +1,20 @@
+[project]
+name = "nixpkgs-plugin-update"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "gitpython>=3.1.45",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.19"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "ruff>=0.14.1",
+]
+
+[tool.mypy]
+packages = ["nixpkgs_plugin_update"]

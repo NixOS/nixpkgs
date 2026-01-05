@@ -1,0 +1,71 @@
+From ed9f9819c3a0d6b8e92f66aafa6324eb4b310282 Mon Sep 17 00:00:00 2001
+From: Tom van Dijk <18gatenmaker6@gmail.com>
+Date: Thu, 23 Oct 2025 15:53:06 +0200
+Subject: [PATCH 3/3] incompatible pointer types
+
+---
+ src/display_sdl.c                  | 2 +-
+ src/physfs/archivers/bind_physfs.c | 2 +-
+ src/physfs/physfs.c                | 3 ++-
+ src/tgl.h                          | 2 +-
+ 4 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/display_sdl.c b/src/display_sdl.c
+index 61b2f0e..c533c8b 100644
+--- a/src/display_sdl.c
++++ b/src/display_sdl.c
+@@ -78,5 +78,5 @@ GLuint gl_c_shader = 0;
+ int nb_draws = 0;
+ int gl_c_vertices_nb = 0, gl_c_texcoords_nb = 0, gl_c_colors_nb = 0;
+ GLfloat *gl_c_vertices_ptr = NULL;
+-GLfloat *gl_c_texcoords_ptr = NULL;
++void *gl_c_texcoords_ptr = NULL;
+ GLfloat *gl_c_colors_ptr = NULL;
+diff --git a/src/physfs/archivers/bind_physfs.c b/src/physfs/archivers/bind_physfs.c
+index d02d323..c0d77c1 100644
+--- a/src/physfs/archivers/bind_physfs.c
++++ b/src/physfs/archivers/bind_physfs.c
+@@ -222,7 +222,7 @@ static fvoid *doOpen(dvoid *opaque, const char *name,
+ 
+ static fvoid *BIND_PHYSFS_openRead(dvoid *opaque, const char *fnm, int *exist)
+ {
+-	return(doOpen(opaque, fnm, PHYSFS_openRead, exist));
++	return(doOpen(opaque, fnm, (void * (*)(const char *)) PHYSFS_openRead, exist));
+ } /* BIND_PHYSFS_openRead */
+ 
+ 
+diff --git a/src/physfs/physfs.c b/src/physfs/physfs.c
+index 03eb86d..32e2c91 100644
+--- a/src/physfs/physfs.c
++++ b/src/physfs/physfs.c
+@@ -68,12 +68,13 @@ extern const PHYSFS_Archiver       __PHYSFS_Archiver_MVL;
+ extern const PHYSFS_ArchiveInfo    __PHYSFS_ArchiveInfo_WAD;
+ extern const PHYSFS_Archiver       __PHYSFS_Archiver_WAD;
+ extern const PHYSFS_Archiver       __PHYSFS_Archiver_DIR;
++extern const PHYSFS_ArchiveInfo    __PHYSFS_ArchiveInfo_BIND_PHYSFS;
+ extern const PHYSFS_Archiver       __PHYSFS_Archiver_BIND_PHYSFS;
+ 
+ 
+ static const PHYSFS_ArchiveInfo *supported_types[] =
+ {
+-    &__PHYSFS_Archiver_BIND_PHYSFS,
++    &__PHYSFS_ArchiveInfo_BIND_PHYSFS,
+ #if (defined PHYSFS_SUPPORTS_ZIP)
+     &__PHYSFS_ArchiveInfo_SUBZIP,
+     &__PHYSFS_ArchiveInfo_ZIP,
+diff --git a/src/tgl.h b/src/tgl.h
+index e2ec026..f905033 100644
+--- a/src/tgl.h
++++ b/src/tgl.h
+@@ -71,7 +71,7 @@ extern int nb_draws;
+ 
+ extern int gl_c_vertices_nb, gl_c_texcoords_nb, gl_c_colors_nb;
+ extern GLfloat *gl_c_vertices_ptr;
+-extern GLfloat *gl_c_texcoords_ptr;
++extern void *gl_c_texcoords_ptr;
+ extern GLfloat *gl_c_colors_ptr;
+ #define glVertexPointer(nb, t, v, p) \
+ { \
+-- 
+2.51.0
+

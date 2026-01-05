@@ -1,0 +1,20 @@
+Fix build with texinfo 6.7. Otherwise
+
+    makeinfo -I topdocs --no-split --no-headers --output AUTHORS topdocs/AUTHORS.texi
+
+fails with
+
+    utf8 "\xC1" does not map to Unicode at /nix/store/...-texinfo-6.7/share/texinfo/Texinfo/ParserNonXS.pm line 1796, <FH> line 38.
+
+--- a/topdocs/AUTHORS.texi
++++ b/topdocs/AUTHORS.texi
+@@ -1,2 +1,3 @@
+ \input texinfo
++@documentencoding ISO-8859-1
+ @setfilename AUTHORS.info
+--- a/topdocs/README.texi
++++ b/topdocs/README.texi
+@@ -1,2 +1,3 @@
+ \input texinfo
++@documentencoding ISO-8859-1
+ @setfilename README.info

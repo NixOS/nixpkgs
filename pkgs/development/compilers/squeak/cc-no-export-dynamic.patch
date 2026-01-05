@@ -1,0 +1,20 @@
+diff --git a/platforms/unix/config/make.prg.in b/platforms/unix/config/make.prg.in
+index 96a64a1..05f6114 100644
+--- a/platforms/unix/config/make.prg.in
++++ b/platforms/unix/config/make.prg.in
+@@ -8,13 +8,13 @@ o		= .o
+ a		= .a
+ x		=
+ COMPILE		= $(CC) $(CFLAGS) $(CPPFLAGS) $(XCFLAGS) \
+-		  $(LDFLAGS) $(XLDFLAGS) $(TARGET_ARCH) -export-dynamic -c -o
++		  $(LDFLAGS) $(XLDFLAGS) $(TARGET_ARCH) -c -o
+ COMPILEIFP	= $(CC) $(CFLAGS) $(XCFLAGS) \
+ 		  $(LDFLAGS) $(XLDFLAGS) $(TARGET_ARCH) -export-dynamic -fno-omit-frame-pointer -c -o
+ CXXFLAGS	= $(CFLAGS) # Hack; can't be bothered to add CXXFLAGS to the configure mess
+ COMPILE.cpp = $(COMPILE.cc)
+ COMPILE.cc	= $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(XCFLAGS) \
+-		  $(LDFLAGS) $(XLDFLAGS) $(TARGET_ARCH) -export-dynamic -c -o
++		  $(LDFLAGS) $(XLDFLAGS) $(TARGET_ARCH) -c -o
+ LINK		= $(LIBTOOL) --mode=link \
+ 		  $(CC) $(CFLAGS) $(XCFLAGS) \
+ 		  $(LDFLAGS) $(XLDFLAGS) $(TARGET_ARCH) -export-dynamic -o

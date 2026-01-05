@@ -1,0 +1,27 @@
+From bcf95a23380424f2ca82649d93e9e0bdf8274b74 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Fri, 31 Oct 2025 14:23:54 +0800
+Subject: [PATCH 3/3] nix: skip terracotta existence check on darwin
+
+---
+ .../org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java b/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java
+index 00626f8b6..59125962d 100644
+--- a/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java
++++ b/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java
+@@ -45,10 +45,6 @@ public final class MacOSProvider implements ITerracottaProvider {
+     public Status status() throws IOException {
+         assert binary != null;
+ 
+-        if (!Files.exists(Path.of("/Applications/terracotta.app"))) {
+-            return Status.NOT_EXIST;
+-        }
+-
+         return binary.status();
+     }
+ 
+-- 
+2.51.0
+

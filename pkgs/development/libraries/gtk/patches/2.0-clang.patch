@@ -1,0 +1,49 @@
+diff --git a/gtk/gtkscale.c b/gtk/gtkscale.c
+index 4317523fb8..3c09cd3ae8 100644
+--- a/gtk/gtkscale.c
++++ b/gtk/gtkscale.c
+@@ -1471,7 +1471,7 @@ gtk_scale_add_mark (GtkScale        *scale,
+   mark->position = position;
+  
+   priv->marks = g_slist_insert_sorted_with_data (priv->marks, mark,
+-                                                 (GCompareFunc) compare_marks,
++                                                 (GCompareDataFunc) compare_marks,
+                                                  GINT_TO_POINTER (
+                                                    gtk_range_get_inverted (GTK_RANGE (scale)) 
+                                                    ));
+diff --git a/tests/testmenubars.c b/tests/testmenubars.c
+index 416a939861..c65e82be26 100644
+--- a/tests/testmenubars.c
++++ b/tests/testmenubars.c
+@@ -21,7 +21,7 @@
+ #include <gtk/gtk.h>
+ 
+ static GtkWidget *
+-create_menu (depth)
++create_menu (int depth, gboolean _unused)
+ {
+     GtkWidget *menu;
+     GtkWidget *menuitem;
+@@ -35,19 +35,19 @@ create_menu (depth)
+     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+     gtk_widget_show (menuitem);
+     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+-			       create_menu (depth - 1));
++			       create_menu (depth - 1, _unused));
+ 
+     menuitem = gtk_menu_item_new_with_mnemonic ("Two");
+     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+     gtk_widget_show (menuitem);
+     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+-			       create_menu (depth - 1));
++			       create_menu (depth - 1, _unused));
+ 
+     menuitem = gtk_menu_item_new_with_mnemonic ("Three");
+     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+     gtk_widget_show (menuitem);
+     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+-			       create_menu (depth - 1));
++			       create_menu (depth - 1, _unused));
+ 
+     return menu;
+ }

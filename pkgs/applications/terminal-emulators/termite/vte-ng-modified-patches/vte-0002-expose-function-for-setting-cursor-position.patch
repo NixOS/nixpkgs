@@ -1,0 +1,61 @@
+From 5ae3acb69474fe5bc43767a4a3625e9ed23607a1 Mon Sep 17 00:00:00 2001
+From: Jelle van der Waa <jelle@vdwaa.nl>
+Date: Sat, 13 Feb 2016 22:18:01 +0100
+Subject: [PATCH] expose function for setting cursor position
+
+---
+ src/vte/vteterminal.h |  5 +++++
+ src/vtegtk.cc         | 24 ++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+)
+
+diff --git a/src/vte/vteterminal.h b/src/vte/vteterminal.h
+index a607e5da..9701320d 100644
+--- a/src/vte/vteterminal.h
++++ b/src/vte/vteterminal.h
+@@ -378,6 +378,11 @@ _VTE_PUBLIC
+ void vte_terminal_get_cursor_position(VteTerminal *terminal,
+ 				      glong *column,
+                                       glong *row) _VTE_CXX_NOEXCEPT _VTE_GNUC_NONNULL(1);
++_VTE_PUBLIC
++void vte_terminal_set_cursor_position(VteTerminal *terminal,
++                                      glong column,
++                                      glong row) _VTE_CXX_NOEXCEPT _VTE_GNUC_NONNULL(1);
++
+ 
+ _VTE_PUBLIC
+ char *vte_terminal_hyperlink_check_event(VteTerminal *terminal,
+diff --git a/src/vtegtk.cc b/src/vtegtk.cc
+index b11b780b..bdf36eac 100644
+--- a/src/vtegtk.cc
++++ b/src/vtegtk.cc
+@@ -2415,6 +2415,30 @@ vte_terminal_get_cursor_position(VteTerminal *terminal,
+ 	}
+ }
+ 
++/**
++ * vte_terminal_set_cursor_position
++ * @terminal: a #VteTerminal
++ * @column: the new cursor column
++ * @row: the new cursor row
++ *
++ * Set the location of the cursor.
++ */
++void
++vte_terminal_set_cursor_position(VteTerminal *terminal,
++		                 long column, long row) noexcept
++{
++	g_return_if_fail(VTE_IS_TERMINAL(terminal));
++
++        auto impl = IMPL(terminal);
++	impl->invalidate_cursor_once(FALSE);
++	impl->m_screen->cursor.col = column;
++	impl->m_screen->cursor.row = row;
++	impl->invalidate_cursor_once(FALSE);
++	impl->check_cursor_blink();
++	impl->queue_cursor_moved();
++
++}
++
+ /**
+  * vte_terminal_pty_new_sync:
+  * @terminal: a #VteTerminal

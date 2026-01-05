@@ -1,0 +1,10 @@
+Author: @vcunat
+
+    Don't redefine bool and use the standard one instead.
+
+--- a/Onboard/osk/osk_module.h
++++ b/Onboard/osk/osk_module.h
+@@ -28 +28 @@
+-typedef enum { false, true } bool;
++#include <stdbool.h>
+

@@ -1,0 +1,34 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 12dbdbb..22495bb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project( kdiagram )
+ 
+diff --git a/src/KChart/CMakeLists.txt b/src/KChart/CMakeLists.txt
+index 676b71f..a9a2928 100644
+--- a/src/KChart/CMakeLists.txt
++++ b/src/KChart/CMakeLists.txt
+@@ -359,6 +359,7 @@ install(EXPORT KChartTargets
+ ecm_generate_pri_file(
+     BASE_NAME KChart
+     LIB_NAME KChart
++    VERSION ${KCHARTLIB_VERSION}
+     DEPS "widgets svg"
+     FILENAME_VAR PRI_FILENAME
+     INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/KChart
+diff --git a/src/KGantt/CMakeLists.txt b/src/KGantt/CMakeLists.txt
+index 107d762..5cbb254 100644
+--- a/src/KGantt/CMakeLists.txt
++++ b/src/KGantt/CMakeLists.txt
+@@ -183,6 +183,7 @@ install(EXPORT KGanttTargets
+ ecm_generate_pri_file(
+     BASE_NAME KGantt
+     LIB_NAME KGantt
++    VERSION ${KGANTTLIB_VERSION}
+     DEPS "widgets printsupport"
+     FILENAME_VAR PRI_FILENAME
+     INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/KGantt

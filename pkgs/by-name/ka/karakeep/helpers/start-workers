@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+[[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
+
+export RELEASE=@VERSION@
+export NODE_ENV=production
+export NODE_PATH="@KARAKEEP_LIB_PATH@"/apps/workers
+
+cd "$NODE_PATH"
+
+exec @NODEJS@/bin/node "$NODE_PATH"/dist/index.js

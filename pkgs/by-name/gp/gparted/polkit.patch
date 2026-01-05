@@ -1,0 +1,11 @@
+--- old/gparted-1.0.0/configure	2025-01-30 18:31:10.000000000 +0100
++++ gparted-1.0.0/configure	2025-02-06 14:07:24.264733753 +0100
+@@ -17041,7 +17041,7 @@
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pkexec >= $PKEXEC_REQUIRED_VERSION" >&5
+ printf %s "checking for pkexec >= $PKEXEC_REQUIRED_VERSION... " >&6; }
+ PKEXEC_REQUIRED_INT=`echo "$PKEXEC_REQUIRED_VERSION" | $AWK -F. '{print $1 * 10000 + $2}'`
+-PKEXEC_VERSION_OUTPUT=`pkexec --version 2> /dev/null` ||
++PKEXEC_VERSION_OUTPUT='pkexec version @polkit_version@' ||
+ 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+ printf "%s\n" "not found" >&6; }
+ if test "x$PKEXEC_VERSION_OUTPUT" != 'x'; then

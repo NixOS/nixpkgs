@@ -1,0 +1,19 @@
+From 00dc4f44c60e364ad898311677e4d1c8b026e1e0 Mon Sep 17 00:00:00 2001
+From: Skoh <101289702+SkohTV@users.noreply.github.com>
+Date: Thu, 9 Oct 2025 16:54:07 -0400
+Subject: [PATCH] Increase cmake_minimum_required: 2.8 -> 3.10
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ca6c3f8..edaf584 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ project(pamix C)
+ 
+ set(CMAKE_C_STANDARD 99)
