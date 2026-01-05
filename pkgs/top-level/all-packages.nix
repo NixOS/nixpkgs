@@ -10348,8 +10348,6 @@ with pkgs;
     pinentry = pinentry-curses;
   };
 
-  blender-hip = blender.override { hipSupport = true; };
-
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
   };
