@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   inherit (duckdb)
     pname
-    version
+    version # nixpkgs-update: no auto update
     ;
   pyproject = true;
 
@@ -33,14 +33,13 @@ buildPythonPackage rec {
     owner = "duckdb";
     repo = "duckdb-python";
     tag = "v${version}";
-    hash = "sha256-cZyiTqu5iW/cqEo42b/XnOG7hJqtQs1h2RXXL392ujA=";
+    hash = duckdb.passthru.pythonHash;
   };
 
   postPatch = ''
-    # patch cmake to ignore absence of git submodule copy of duckdb
-    substituteInPlace cmake/duckdb_loader.cmake \
-      --replace-fail '"''${CMAKE_CURRENT_SOURCE_DIR}/external/duckdb"' \
-                     '"${duckdb.src}"'
+    # The build depends on a duckdb git submodule
+    rm -r external/duckdb
+    ln -s ${duckdb.src} external/duckdb
 
     # replace pybind11[global] with pybind11
     substituteInPlace pyproject.toml \
