@@ -20,14 +20,14 @@
   zstd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libdebug";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "libdebug";
     repo = "libdebug";
-    tag = version;
+    tag = finalAttrs.version;
 
     hash = "sha256-J0ETzqAGufsZyW+XDhJCKwX1rrmDBwlAicvBb1AAiIQ=";
   };
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ mrsmoer ];
     license = lib.licenses.mit;
   };
-}
+})
