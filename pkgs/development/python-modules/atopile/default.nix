@@ -61,7 +61,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atopile";
   version = "0.12.4";
   pyproject = true;
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
   };
 
@@ -228,9 +228,9 @@ buildPythonPackage rec {
     description = "Design circuit boards with code";
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
-    changelog = "https://github.com/atopile/atopile/releases/tag/${src.tag}";
+    changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";
   };
-}
+})
