@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-gitconfig";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirbizarre";
     repo = "pytest-gitconfig";
     tag = version;
-    hash = "sha256-5DfG74mEvsWHH2xPyG1mNcWp9/DgpveLbaSEOoRzD+g=";
+    hash = "sha256-z3W9AL74i47k/eYCbFMn3foVaD2h7lFrGzyOnbDwkyc=";
   };
 
   build-system = [ pdm-backend ];
