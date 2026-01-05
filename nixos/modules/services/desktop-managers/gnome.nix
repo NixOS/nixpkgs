@@ -30,7 +30,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
@@ -480,7 +480,6 @@ in
       # Since some of these have a corresponding package, we only
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
-      programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
