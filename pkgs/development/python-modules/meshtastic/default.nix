@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.7.5";
+  version = "2.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
     tag = version;
-    hash = "sha256-Vc8m5qc2vKQ4ZwP/TQWJhottBANqEaSUNFCbCNPmQnI=";
+    hash = "sha256-5MvIv9/v5feqbLN60PFps0xr+k+AOczVsLwnlCJJDZI=";
   };
 
   pythonRelaxDeps = [
