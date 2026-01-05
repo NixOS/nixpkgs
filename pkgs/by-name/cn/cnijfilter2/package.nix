@@ -15,10 +15,10 @@
 stdenv.mkDerivation {
   pname = "cnijfilter2";
 
-  version = "6.40";
+  version = "6.90";
 
   src = fetchzip {
-    url = "https://gdlp01.c-wss.com/gds/1/0100011381/01/cnijfilter2-source-6.40-1.tar.gz";
+    url = "https://gdlp01.c-wss.com/gds/1/0100011381/01/cnijfilter2-source-6.90-1.tar.gz";
     sha256 = "3RoG83jLOsdTEmvUkkxb7wa8oBrJA4v1mGtxTGwSowU=";
   };
 
@@ -37,6 +37,7 @@ stdenv.mkDerivation {
   patches = [
     ./patches/get_protocol.patch
     ./patches/add_missing_import.patch
+    ./patches/gcc15-fix.patch
   ];
 
   # lgmon3's --enable-libdir flag is used solely for specifying in which

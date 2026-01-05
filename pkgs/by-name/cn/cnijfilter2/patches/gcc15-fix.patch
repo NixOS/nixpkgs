@@ -1,0 +1,15 @@
+--- cnijfilter2-source-6.90-1/lgmon3/src/common/libcnnet2_type.h	2025-06-30 16:56:58.000000000 +1200
++++ cnijfilter2-source-6.90-1.new/lgmon3/src/common/libcnnet2_type.h	2025-11-02 01:38:14.944227622 +1300
+@@ -47,8 +47,10 @@
+   CNNET2_SETTING_FLAG_DISCOVER_PACKET_WAIT_MILLIS,         /*æ¤œç´¢ãƒ‘ã‚±ãƒƒãƒˆè¤‡æ•°é€ä¿¡æ™‚ã®å¾…ã¡æ™‚é–“*/
+ } CNNET2_SETTING_FLAGS;
+ 
+-#ifndef __cplusplus
+-typedef char bool;
++#if defined(__GNUC__) && __GNUC__ < 15
++  #ifndef __cplusplus
++  typedef char bool;
++  #endif
+ #endif
+ 
+ typedef struct {
