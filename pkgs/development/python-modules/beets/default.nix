@@ -19,6 +19,9 @@
   **     };
   **   };
   ** }
+  **
+  ** For an example adding a builtin plugin, see
+  ** passthru.tests.with-new-builtin-plugin below
 */
 {
   lib,
@@ -486,6 +489,17 @@ buildPythonPackage (finalAttrs: {
 
             ${finalAttrs.finalPackage}/bin/beet -c $out/config.yaml > /dev/null
           '';
+      with-new-builtin-plugin = finalAttrs.finalPackage.overrideAttrs (
+        newAttrs: oldAttrs: {
+          postPatch = (oldAttrs.postPatch or "") + ''
+            mkdir -p beetsplug/my_special_plugin
+            touch beetsplug/my_special_plugin/__init__.py
+          '';
+          passthru = lib.recursiveUpdate oldAttrs.passthru {
+            plugins.builtins.my_special_plugin = { };
+          };
+        }
+      );
     };
   };
 
