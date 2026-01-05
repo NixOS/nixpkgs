@@ -6,7 +6,7 @@
   glib,
   openal,
   pkg-config,
-  kdePackages,
+  qt6Packages,
   fetchpatch,
 }:
 
@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    kdePackages.wrapQtAppsHook
-    kdePackages.qmake
+    qt6Packages.wrapQtAppsHook
+    qt6Packages.qmake
   ];
 
   buildInputs = [
-    kdePackages.qtbase
-    kdePackages.qt5compat
+    qt6Packages.qtbase
+    qt6Packages.qt5compat
     glib
     openal
   ];

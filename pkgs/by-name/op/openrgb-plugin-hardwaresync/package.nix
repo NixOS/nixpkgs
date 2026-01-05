@@ -7,7 +7,7 @@
   libgtop,
   lm_sensors,
   pkg-config,
-  kdePackages,
+  qt6Packages,
   fetchpatch,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    kdePackages.qtbase
+    qt6Packages.qtbase
     glib
     libgtop
     lm_sensors
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    kdePackages.qmake
-    kdePackages.wrapQtAppsHook
+    qt6Packages.qmake
+    qt6Packages.wrapQtAppsHook
   ];
 
   meta = {

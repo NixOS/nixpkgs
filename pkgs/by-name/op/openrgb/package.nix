@@ -8,7 +8,7 @@
   coreutils,
   mbedtls,
   symlinkJoin,
-  kdePackages,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ (with kdePackages; [
+  ++ (with qt6Packages; [
     qmake
     wrapQtAppsHook
   ]);
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     mbedtls
   ]
-  ++ (with kdePackages; [
+  ++ (with qt6Packages; [
     qtbase
     qttools
     qtwayland
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qmakeFlags = [
-    "QT_TOOL.lrelease.binary=${lib.getDev kdePackages.qttools}/bin/lrelease"
+    "QT_TOOL.lrelease.binary=${lib.getDev qt6Packages.qttools}/bin/lrelease"
   ];
 
   passthru.withPlugins =
