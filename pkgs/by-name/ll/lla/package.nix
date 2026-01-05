@@ -30,6 +30,9 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--workspace" ];
 
+  # Fixes build with GCC 15.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   # TODO: Upstream also provides Elvish and PowerShell completions,
   # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
   postInstall = ''
