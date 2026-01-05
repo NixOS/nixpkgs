@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "countryguess";
   version = "0.4.9";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     domain = "codeberg.org";
     owner = "plotski";
     repo = "countryguess";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RlOOao6aU3MylghDyOeg3poYQw+0UhljN79/ZBLjq24=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})
