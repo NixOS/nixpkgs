@@ -7,16 +7,16 @@
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "plink";
-  version = "2.4.6";
+  version = "2.4.7-unstable-2026-01-02";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "plink";
-    tag = "${version}_as_released";
-    hash = "sha256-+WUyQvQY9Fx47GikzJ4gcCpSIjvk5756FP0bDdF6Ack=";
+    rev = "cab9807897602727f101f9e2bbf68aa6acee1f76";
+    hash = "sha256-XTdyfP6rVNJIuvUjo/G6DErnTQdJYHEPbcYrzW7Lz84=";
   };
 
   build-system = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "Full featured Tk-based knot and link editor";
     mainProgram = "plink";
     homepage = "https://3-manifolds.github.io/PLink";
-    changelog = "https://github.com/3-manifolds/PLink/releases/tag/${src.tag}";
+    # changelog = "https://github.com/3-manifolds/PLink/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
