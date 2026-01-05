@@ -3,21 +3,23 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  replaceVars,
   makeBinaryWrapper,
   perl,
   ghostscript,
+  vips,
   nixosTests,
 }:
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.50";
+  version = "0.9.60";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     tag = "v.${version}";
-    hash = "sha256-WwAY74sFPFJNfrTcGfXEZE8svuOxoCXR70SFyHb2Y40=";
+    hash = "sha256-ieYil/3n8iSWdfO6MQ1sW8q/TnQekpCx24n/BDfeLNg=";
   };
 
   patches = [
@@ -28,16 +30,23 @@ buildNpmPackage rec {
     # Skip running `npm ci` and unnecessary build-time checks
     ./install.patch
 
+    # Lower the version requirement of Test::MockModule
+    ./lower-version-reqs.patch
+
     # Don't assume that the cwd is $out/share/lanraragi
     # Put logs and temp files into the cwd by default, instead of into $out/share/lanraragi
     ./fix-paths.patch
+
+    (replaceVars ./vips-lib-path.patch {
+      vips_lib = "${lib.getLib vips}/lib";
+    })
 
     # Expose the password hashing logic that can be used by the NixOS module
     # to set the admin password
     ./expose-password-hashing.patch
   ];
 
-  npmDepsHash = "sha256-+vS/uoEmJJM3G9jwdwQTlhV0VkjAhhVd60x+PcYyWSw=";
+  npmDepsHash = "sha256-9SuimhLvEuruvFXuFm62DzgldngfiJneV6MDedGy6LY=";
 
   nativeBuildInputs = [
     perl
@@ -88,6 +97,7 @@ buildNpmPackage rec {
       CHI
       # CHI::Driver::FastMmap (part of CHI)
       CacheFastMmap
+      FFIPlatypus
     ]
     # deps listed in `tools/install.pm`:
     ++ [
@@ -116,6 +126,7 @@ buildNpmPackage rec {
     TestMockObject
     TestTrap
     TestDeep
+    TestMockModule
   ];
 
   checkPhase = ''
