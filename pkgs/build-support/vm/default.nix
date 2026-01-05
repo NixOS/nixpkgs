@@ -1052,60 +1052,6 @@ let
       unifiedSystemDir = true;
     };
 
-    centosStream9x86_64 = {
-      name = "centos-stream-9-x86_64";
-      fullName = "CentOS Stream 9 (x86_64)";
-      packagesLists = [
-        (fetchurl {
-          url = "https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/repodata/737e7bb91d5464e0cc258ff5ae5070a00d682c39fc2de0b9b55df671022ba732-primary.xml.gz";
-          hash = "sha256-c357uR1UZODMJY/1rlBwoA1oLDn8LeC5tV32cQIrpzI=";
-        })
-        (fetchurl {
-          url = "https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/repodata/9f0c1578e5df33e6479a1d3e5397b87ecaa1b5bac7fd34de6c837bddb3949fde-primary.xml.gz";
-          hash = "sha256-nwwVeOXfM+ZHmh0+U5e4fsqhtbrH/TTebIN73bOUn94=";
-        })
-      ];
-      urlPrefixes = [
-        "https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os"
-        "https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os"
-      ];
-      archs = [
-        "noarch"
-        "x86_64"
-      ];
-      packages = commonCentOSStreamPackages ++ [
-        "annobin"
-      ];
-      unifiedSystemDir = true;
-    };
-
-    centosStream10x86_64 = {
-      name = "centos-stream-10-x86_64";
-      fullName = "CentOS Stream 10 (x86_64)";
-      packagesLists = [
-        (fetchurl {
-          url = "https://mirror.stream.centos.org/10-stream/BaseOS/x86_64/os/repodata/b3bb8f59e9c3dfedf3439c8357dc6fb727dc3e6fd2e351ab5e1fb0cfbbf07381-primary.xml.gz";
-          hash = "sha256-s7uPWenD3+3zQ5yDV9xvtyfcPm/S41GrXh+wz7vwc4E=";
-        })
-        (fetchurl {
-          url = "https://mirror.stream.centos.org/10-stream/AppStream/x86_64/os/repodata/962343afafa14dcc36a6c054608ae9bbf700c8ead08d1ca8898b5b1a192e3106-primary.xml.gz";
-          hash = "sha256-liNDr6+hTcw2psBUYIrpu/cAyOrQjRyoiYtbGhkuMQY=";
-        })
-      ];
-      urlPrefixes = [
-        "https://mirror.stream.centos.org/10-stream/BaseOS/x86_64/os"
-        "https://mirror.stream.centos.org/10-stream/AppStream/x86_64/os"
-      ];
-      archs = [
-        "noarch"
-        "x86_64"
-      ];
-      packages = commonCentOSStreamPackages ++ [
-        "annobin-plugin-gcc"
-      ];
-      unifiedSystemDir = true;
-    };
-
     # Rocky Linux's /pub/rocky/9/ URL is rolling and changes with each minor release. We use the
     # vault instead, which provides stable URLs for specific minor versions.
     rocky9x86_64 = {
@@ -1482,7 +1428,7 @@ let
     };
   };
 
-  # Base packages for all RHEL-family distros (Fedora, CentOS Stream, Rocky, Alma, etc.)
+  # Base packages for all RHEL-family distros (Fedora, Rocky, Alma, etc.)
   baseRHELFamilyPackages = [
     "autoconf"
     "automake"
@@ -1509,12 +1455,6 @@ let
     "fedora-release"
     "gcc-plugin-annobin"
     "pkgconf-pkg-config"
-  ];
-
-  commonCentOSStreamPackages = baseRHELFamilyPackages ++ [
-    "centos-stream-release"
-    "gcc-plugin-annobin"
-    "pkgconf"
   ];
 
   commonRockyPackages = baseRHELFamilyPackages ++ [

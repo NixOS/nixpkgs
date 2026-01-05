@@ -111,9 +111,6 @@ A set of functions that build a predefined set of minimal Linux distributions im
 * Fedora
   * `fedora42x86_64`
   * `fedora43x86_64`
-* CentOS Stream
-  * `centosStream9x86_64`
-  * `centosStream10x86_64`
 * Rocky Linux
   * `rocky9x86_64`
   * `rocky10x86_64`
