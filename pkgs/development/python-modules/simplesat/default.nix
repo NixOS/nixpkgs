@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/enthought/sat-solver";
     changelog = "https://github.com/enthought/sat-solver/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

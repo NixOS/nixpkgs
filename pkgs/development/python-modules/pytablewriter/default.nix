@@ -106,6 +106,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/pytablewriter";
     changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

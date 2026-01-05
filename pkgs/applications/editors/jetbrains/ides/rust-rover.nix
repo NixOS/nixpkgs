@@ -68,7 +68,7 @@ in
     homepage = "https://www.jetbrains.com/rust/";
     description = "Rust IDE from JetBrains";
     longDescription = "Rust IDE from JetBrains";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

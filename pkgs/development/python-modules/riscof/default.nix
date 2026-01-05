@@ -48,7 +48,7 @@ buildPythonPackage rec {
     mainProgram = "riscof";
     homepage = "https://github.com/riscv-software-src/riscof";
     changelog = "https://github.com/riscv-software-src/riscof/blob/${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
   };
 }

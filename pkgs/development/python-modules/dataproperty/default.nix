@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/DataProperty";
     changelog = "https://github.com/thombashi/DataProperty/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }
