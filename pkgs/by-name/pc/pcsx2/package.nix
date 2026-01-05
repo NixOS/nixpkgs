@@ -59,17 +59,18 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Remove PCSX2_GIT_REV
-    ./0000-define-rev.patch
-
     ./remove-cubeb-vendor.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/Pcsx2Utils.cmake \
+      --replace-fail 'set(PCSX2_GIT_TAG "")' 'set(PCSX2_GIT_TAG "${finalAttrs.src.tag}")'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.tag)
   ];
 
   nativeBuildInputs = [
