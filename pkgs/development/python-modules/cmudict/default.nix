@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/prosegrinder/python-cmudict/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/prosegrinder/python-cmudict/blob/v${version}/CHANGELOG.md";
     description = "A versioned python wrapper package for The CMU Pronouncing Dictionary data files";
     homepage = "https://pypi.org/project/cmudict/";
     license = lib.licenses.gpl3Only;
