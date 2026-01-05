@@ -128,9 +128,10 @@
             echo
             echo "The new configuration contains changes to packages that were"
             echo "listed as switch inhibitors."
+            echo "You probably want to run 'nixos-rebuild boot' and reboot your system."
             echo
             echo "If you really want to switch into this configuration directly, then"
-            echo "you can set NIXOS_NO_CHECK=1 to ignore these pre-switch checks."
+            echo "you can set NIXOS_NO_CHECK=1 to ignore pre-switch checks."
             echo
             echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
             echo
