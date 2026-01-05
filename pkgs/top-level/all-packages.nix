@@ -4263,12 +4263,10 @@ with pkgs;
   wrapNonDeterministicGcc =
     stdenv: ccWrapper:
     if ccWrapper.isGNU then
-      ccWrapper.overrideAttrs (old: {
-        env = old.env // {
-          cc = old.env.cc.override {
-            reproducibleBuild = false;
-            profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
-          };
+      ccWrapper.override (prev: {
+        cc = prev.cc.override {
+          reproducibleBuild = false;
+          profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
         };
       })
     else
