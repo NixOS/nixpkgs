@@ -18,7 +18,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "posthog";
   version = "6.7.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-//PjAWZF6FYsiG9UDg+MPv1x06Yp4msBkYkNAU9Rjsc=";
   };
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})
