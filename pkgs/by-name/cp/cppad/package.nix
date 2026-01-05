@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppad";
-  version = "20250000.3";
+  version = "20260000.0";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "CppAD";
     tag = finalAttrs.version;
-    hash = "sha256-nxndrOAgmEbMSVLz66E3X/r35NSgiOvNJnF9BY/IOd0=";
+    hash = "sha256-P8FUcW0AjMTqG7TVtdM6/v+ctyNQXJsImC26bpxz/i8=";
   };
 
   nativeBuildInputs = [

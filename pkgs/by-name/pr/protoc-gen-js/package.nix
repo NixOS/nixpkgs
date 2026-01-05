@@ -1,5 +1,6 @@
 {
   stdenv,
+  gcc14Stdenv,
   lib,
   buildBazelPackage,
   bazel_7,
@@ -7,7 +8,17 @@
   cctools,
 }:
 
-buildBazelPackage rec {
+let
+  # fails to build with gcc15, see https://github.com/NixOS/nixpkgs/issues/475586
+  buildBazelPackage' =
+    if stdenv.cc.isGNU then
+      buildBazelPackage.override {
+        stdenv = gcc14Stdenv;
+      }
+    else
+      buildBazelPackage;
+in
+buildBazelPackage' rec {
   pname = "protoc-gen-js";
   version = "3.21.4";
 
