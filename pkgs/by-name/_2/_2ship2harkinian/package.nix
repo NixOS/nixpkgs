@@ -114,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-3TmgOhlcYpu5FYvn9xblmNxwYUVSLjyE4VKbddR6D9s=";
     fetchSubmodules = true;
-    fetchTags = true;
     deepClone = true;
     postFetch = ''
       cd $out
