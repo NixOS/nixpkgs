@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   flex,
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.3.0";
+  version = "2.4.1";
 
   outputs = [
     "out"
@@ -41,17 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     tag = finalAttrs.version;
-    hash = "sha256-37qeWGEuutF0cOOidoLchKJLQCvJFdVRZXepWzD4pZs=";
+    hash = "sha256-I4kWToLixfkP0XaONiWqNLXXmz+3n+LafbITfZOxLZw=";
   };
-
-  # fix build with macOS 11 SDK
-  patches = [
-    (fetchpatch {
-      url = "https://salsa.debian.org/rousseau/PCSC/-/commit/f41fdaaf7c82bc270af6d7439c6da037bf149be8.patch";
-      revert = true;
-      hash = "sha256-8A76JfYqcILi52X9l/uIpJXeRJDf2dkrNEToOsxGZXk=";
-    })
-  ];
 
   mesonFlags = [
     (lib.mesonOption "sysconfdir" "/etc")
@@ -71,12 +61,20 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
       --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
+    substituteInPlace meson.build \
+      --replace-fail \
+        "install_dir : get_option('sysconfdir') / 'default'" \
+        "install_dir : '${placeholder "out"}/etc/default'"
   ''
   + lib.optionalString systemdSupport ''
     substituteInPlace meson.build \
       --replace-fail \
-        "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + unit + 'unitdir')" \
+        "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + systemdunit + 'unitdir')" \
         "systemdsystemunitdir = '${placeholder "out"}/lib/systemd/system'"
+    substituteInPlace meson.build \
+      --replace-fail \
+        "sysusersdir = systemd.get_variable(pkgconfig : 'sysusersdir')" \
+        "sysusersdir = '${placeholder "out"}/lib/sysusers.d'"
   ''
   + lib.optionalString polkitSupport ''
     substituteInPlace meson.build \
