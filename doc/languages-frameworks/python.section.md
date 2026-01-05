@@ -207,6 +207,40 @@ following are specific to `buildPythonPackage`:
 * `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
 * `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
+##### Using fixed-point arguments {#buildpythonpackage-fixed-point-arguments}
+
+Both `buildPythonPackage` and `buildPythonApplication` support [fixed-point arguments](#chap-build-helpers-finalAttrs), similar to `stdenv.mkDerivation`.
+This allows you to reference the final attributes of the derivation.
+
+Instead of using `rec`:
+
+```nix
+buildPythonPackage rec {
+  pname = "pyspread";
+  version = "2.4";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-...";
+  };
+}
+```
+
+You can use the `finalAttrs` pattern:
+
+```nix
+buildPythonPackage (finalAttrs: {
+  pname = "pyspread";
+  version = "2.4";
+  src = fetchPypi {
+    pname = "pyspread";
+    inherit (finalAttrs) version;
+    hash = "sha256-...";
+  };
+})
+```
+
+See the [general documentation on fixed-point arguments](#chap-build-helpers-finalAttrs) for more details on the benefits of this pattern.
+
 The [`stdenv.mkDerivation`](#sec-using-stdenv) function accepts various parameters for describing
 build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
