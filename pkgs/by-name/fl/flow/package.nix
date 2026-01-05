@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ocaml-ng,
   dune,
+  versionCheckHook,
 }:
 
 let
@@ -13,23 +14,18 @@ let
     }
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flow";
   version = "0.288.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9KApZvjOSwR9wcO7nRmpPf2M5SzmV0Z0bM7O8StqZK0=";
   };
 
   makeFlags = [ "FLOW_RELEASE=1" ];
-
-  installPhase = ''
-    install -Dm755 bin/flow $out/bin/flow
-    install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
-  '';
 
   strictDeps = true;
 
@@ -59,13 +55,28 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]
   );
 
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 bin/flow $out/bin/flow
+    install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
+
+    runHook postInstall
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = {
     description = "Static type checker for JavaScript";
     mainProgram = "flow";
     homepage = "https://flow.org/";
-    changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/facebook/flow/blob/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with lib.maintainers; [ puffnfresh ];
   };
-}
+})
