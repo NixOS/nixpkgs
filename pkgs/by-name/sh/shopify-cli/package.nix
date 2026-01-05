@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     popd
     # Install runtime dependencies
     rm -rf node_modules
-    pnpm config set nodeLinker hoisted
     pnpm install --offline --prod --force --ignore-scripts --frozen-lockfile
     mv node_modules $out/lib/node_modules/@shopify/cli/node_modules
 
