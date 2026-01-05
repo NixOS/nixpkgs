@@ -144,6 +144,7 @@ stdenv.mkDerivation rec {
       ${lib.optionalString enableDMARC ''
         s:^# \(SUPPORT_DMARC\)=.*:\1=yes:
         s:^# \(LDFLAGS += -lopendmarc\):\1:
+        s:^# \(LDFLAGS += -lopendmarc\):a CFLAGS +=-std=gcc17:
       ''}
       ${lib.optionalString enableRedis ''
         s:^# \(LOOKUP_REDIS=yes\)$:\1:
