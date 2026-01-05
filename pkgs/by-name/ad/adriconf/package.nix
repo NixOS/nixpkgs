@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "adriconf";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "adriconf";
     tag = "v${version}";
-    sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
+    sha256 = "sha256-MRZYAinBL4fzj/Nhhn22sJgupVMpoeeyOYYWTr+fK+E=";
   };
 
   # fix build with c23
