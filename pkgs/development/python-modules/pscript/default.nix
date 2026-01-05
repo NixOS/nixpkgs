@@ -19,6 +19,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-pqjig3dFJ4zfpor6TT6fiBMS7lAtJE/bAYbzl46W/YY=";
   };
 
+  postPatch = ''
+    # https://github.com/flexxui/pscript/pull/77
+    substituteInPlace pscript/commonast.py \
+      --replace-fail "ast.Ellipsis" "ast.Constant"
+  '';
+
   build-system = [ flit-core ];
 
   nativeCheckInputs = [
