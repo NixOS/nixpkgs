@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
   importlib-metadata,
   importlib-resources,
+  poetry-core,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9sHLmi/+zvOHvxobk75sYckbxvQXFPGDw+tNWz4f9fY=";
   };
 
@@ -27,9 +27,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "cmudict" ];
 
   meta = {
+    description = "Python wrapper package for The CMU Pronouncing Dictionary data files";
+    homepage = "https://github.com/prosegrinder/python-cmudict";
     changelog = "https://github.com/prosegrinder/python-cmudict/blob/v${finalAttrs.version}/CHANGELOG.md";
-    description = "A versioned python wrapper package for The CMU Pronouncing Dictionary data files";
-    homepage = "https://pypi.org/project/cmudict/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sandarukasa ];
   };
