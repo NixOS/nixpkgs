@@ -163,6 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
     FISH_BUILD_VERSION = finalAttrs.version;
     # Skip tests that are known to be flaky in CI
     CI = 1;
+    # really skip them all https://github.com/fish-shell/fish-shell/issues/12253#issuecomment-3707996020
+    FISH_CI_SAN = 1;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
