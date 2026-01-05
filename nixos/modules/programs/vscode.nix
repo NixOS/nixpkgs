@@ -7,6 +7,7 @@
 
 let
   cfg = config.programs.vscode;
+  format = pkgs.formats.json { };
 in
 {
   options.programs.vscode = {
@@ -37,7 +38,7 @@ in
     };
 
     policies = lib.mkOption {
-      type = lib.types.attrs;
+      type = format.type;
       default = { };
       example = lib.literalExpression ''
         {
@@ -65,7 +66,7 @@ in
     ];
 
     environment.etc."vscode/policy.json" = lib.mkIf (cfg.policies != { }) {
-      text = builtins.toJSON cfg.policies;
+      text = json.generate "policy.json" cfg.policies;
     };
 
     environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (
