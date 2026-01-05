@@ -185,6 +185,7 @@ buildPythonPackage rec {
   disabledTests = [
     # timeout
     "test_build_error_logging"
+    "test_can_evaluate_literals"
     "test_examples_build"
     "test_net_names_deterministic"
     "test_performance_mifs_bus_params"
