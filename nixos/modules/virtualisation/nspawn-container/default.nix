@@ -220,37 +220,17 @@ in
 
     system.build.nspawn =
       let
-        toPythonStr =
-          s:
-          assert builtins.typeOf s == "string";
-          # Hack: JSON strings are (AFAIK) valid Python expressions that
-          # represent the exact same string.
-          builtins.toJSON s;
-
-        toPythonExpression = data: /* python */ "json.loads(${toPythonStr (builtins.toJSON data)})";
+        run-nspawn = pkgs.callPackage ./run-nspawn { };
+        commandLineOptions = lib.cli.toCommandLineShellGNU { } {
+          container-name = config.system.name;
+          root-dir = cfg.rootDir;
+          interfaces-json = builtins.toJSON (lib.attrValues cfg.allInterfaces);
+          init = "${config.system.build.toplevel}/init";
+          cmdline-json = builtins.toJSON cfg.cmdline;
+        };
       in
-      pkgs.writers.writePython3Bin "run-${config.system.name}-nspawn"
-        {
-          libraries = ps: [
-            (pkgs.callPackage ./run-nspawn { python3Packages = ps; })
-          ];
-        }
-        ''
-          import json
-          import os
-          import sys
-          from pathlib import Path
-
-          import run_nspawn
-
-          run_nspawn.run(
-            container_name=${toPythonStr config.system.name},  # noqa
-            root_dir_str=Path(os.environ.get("RUN_NSPAWN_ROOT_DIR", ${toPythonStr cfg.rootDir})),  # noqa
-            interfaces=${toPythonExpression (lib.attrValues cfg.allInterfaces)},  # noqa
-            nspawn_options=${toPythonExpression config.virtualisation.systemd-nspawn.options} + sys.argv[1:],  # noqa
-            init=${toPythonStr "${config.system.build.toplevel}/init"},  # noqa
-            cmdline=${toPythonExpression cfg.cmdline},  # noqa
-          )
-        '';
+      pkgs.writers.writeDashBin "run-${config.system.name}-nspawn" ''
+        exec ${lib.getExe run-nspawn} ${commandLineOptions} ${lib.escapeShellArgs config.virtualisation.systemd-nspawn.options} "$@"
+      '';
   };
 }

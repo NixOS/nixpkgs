@@ -1,5 +1,5 @@
 {
-  buildPythonPackage,
+  buildPythonApplication,
   e2fsprogs,
   iproute2,
   lib,
@@ -9,7 +9,7 @@
   systemd,
 }:
 
-buildPythonPackage {
+buildPythonApplication {
   pname = "run-nspawn";
   version = "1.0";
   pyproject = true;
@@ -47,4 +47,8 @@ buildPythonPackage {
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
   '';
+
+  meta = {
+    mainProgram = "run-nspawn";
+  };
 }
