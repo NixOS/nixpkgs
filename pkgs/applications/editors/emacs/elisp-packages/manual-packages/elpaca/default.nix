@@ -6,7 +6,7 @@
   lib,
 }:
 
-melpaBuild rec {
+melpaBuild {
   pname = "elpaca";
   version = "0-unstable-2025-11-06";
 
@@ -19,23 +19,34 @@ melpaBuild rec {
 
   nativeBuildInputs = [ git ];
 
-  # Moves extensions into the source root directory to install them.
-  # Disables warnings related to being used with package.el and not matching the installer
-  # Points the elpaca-repos-directory to the installed package in the nix store
-  postPatch =
-    let
-      siteVersion = lib.concatStrings (lib.drop 2 (lib.splitVersion version));
-    in
-    ''
-      mv extensions/* .
-      substituteInPlace elpaca.el \
-        --replace-fail "lwarn '(elpaca installer)" \
-                       "ignore '(elpaca installer)" \
-        --replace-fail "warn \"Package.el" \
-                       "ignore \"Package.el" \
-        --replace-fail "(expand-file-name \"elpaca/\" elpaca-repos-directory)" \
-                       "\"${placeholder "out"}/share/emacs/site-lisp/elpa/elpaca-${siteVersion}.0\""
-    '';
+  files = ''(:defaults "extensions/*.el")'';
+
+  # elpaca uses a installer bootstrap via the user's init.el to install itself
+  # https://github.com/progfolio/elpaca#installer
+  #
+  # elpaca checks to see if `elpaca-installer-version` variable is set
+  # to a fixed value, this doesn't apply to nix since we don't use the
+  # bootstrapped installer; silence this warning
+  #
+  # elpaca also checks if package.el loads before it, which in this
+  # case, package.el always is and has to be. This does not affect
+  # normal usage of elpaca with nix, other than packages installed
+  # with elpaca will take precedence over packages installed via Nix
+  # and imperatively installed via package.el; silence this warning.
+  #
+  # Since elpaca is not bootstrapped here, it cannot find itself in the
+  # `elpaca-repos-directory` and so will fail to install any package.
+  # Fix by substituting the `expand-file-name` s-exp to the string
+  # filepath of elpaca's install location in the nix store.
+  postPatch = ''
+    substituteInPlace elpaca.el \
+      --replace-fail "lwarn '(elpaca installer)" \
+                     "ignore '(elpaca installer)" \
+      --replace-fail "warn \"Package.el" \
+                     "ignore \"Package.el" \
+      --replace-fail "(expand-file-name \"elpaca/\" elpaca-repos-directory)" \
+                     "\"${placeholder "out"}/share/emacs/site-lisp/elpa/$ename-$melpaVersion\""
+  '';
 
   passthru.updateScript = unstableGitUpdater { };
 
