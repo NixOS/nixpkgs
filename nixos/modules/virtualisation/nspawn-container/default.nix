@@ -120,7 +120,7 @@ in
       default = vlansNumbered // cfg.interfaces;
     };
 
-    virtualisation.initArgs = lib.mkOption {
+    virtualisation.cmdline = lib.mkOption {
       type = types.listOf types.str;
       default = [ ];
       example = [
@@ -249,7 +249,7 @@ in
             interfaces=${toPythonExpression (lib.attrValues cfg.allInterfaces)},  # noqa
             nspawn_options=${toPythonExpression config.virtualisation.systemd-nspawn.options} + sys.argv[1:],  # noqa
             init=${toPythonStr "${config.system.build.toplevel}/init"},  # noqa
-            init_args=${toPythonExpression cfg.initArgs},  # noqa
+            cmdline=${toPythonExpression cfg.cmdline},  # noqa
           )
         '';
   };

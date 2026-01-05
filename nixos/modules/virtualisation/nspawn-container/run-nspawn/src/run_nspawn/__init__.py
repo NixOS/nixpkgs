@@ -130,7 +130,7 @@ def run(
     interfaces: dict,
     nspawn_options: list[str],
     init: str,
-    init_args: list[str],
+    cmdline: list[str],
 ) -> None:
     logging.basicConfig(
         format=f"nixos-nspawn({container_name}): %(message)s",
@@ -174,7 +174,7 @@ def run(
                 f"--directory={root_dir}",
                 f"--network-namespace-path={netns.path}",
                 init,
-                *init_args,
+                *cmdline,
             ],
             preexec_fn=print_pid,
         )
