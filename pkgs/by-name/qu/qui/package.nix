@@ -84,7 +84,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/autobrr/qui";
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ pta2002 ];
+    maintainers = with lib.maintainers; [
+      pta2002
+      tmarkus
+    ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;
   };
