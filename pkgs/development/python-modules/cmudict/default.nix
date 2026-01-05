@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   importlib-metadata,
   importlib-resources,
@@ -13,24 +12,19 @@ buildPythonPackage rec {
   version = "1.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-9sHLmi/+zvOHvxobk75sYckbxvQXFPGDw+tNWz4f9fY=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     importlib-metadata
     importlib-resources
   ];
 
-  pythonImportsCheck = [
-    "cmudict"
-  ];
+  pythonImportsCheck = [ "cmudict" ];
 
   meta = {
     changelog = "https://github.com/prosegrinder/python-cmudict/blob/v${version}/CHANGELOG.md";
