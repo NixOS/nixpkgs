@@ -10,29 +10,22 @@
   libpulseaudio,
   makeDesktopItem,
   makeWrapper,
+  openldap,
 }:
 
 stdenv.mkDerivation rec {
   pname = "outfox";
-  version = "0.5.0-pre042";
+  version = "0.5.0-pre043";
 
   src =
     {
-      i686-linux = fetchurl {
-        url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Linux-14.04-32bit-i386-i386-legacy-date-20231227.tar.gz";
-        hash = "sha256-NFjNoqJ7Fq4A7Y0k6oQcWjykV+/b/MiRtJ1p6qlZdjs=";
-      };
       x86_64-linux = fetchurl {
-        url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Linux-22.04-amd64-current-date-20231224.tar.gz";
-        hash = "sha256-dW+g/JYav3rUuI+nHDi6rXu/O5KYiEdk/HH82jgOUnI=";
+        url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-043/OutFox-alpha-0.5.0-pre-043-Final-24.04-amd64-current-date-20250907.tar.gz";
+        hash = "sha256-1YN3YCcSluHBUpNRQdh0pJ9R9hTHKBuTSULTKL28OO0=";
       };
       aarch64-linux = fetchurl {
-        url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Raspberry-Pi-Linux-18.04-arm64-arm64v8-modern-date-20231225.tar.gz";
-        hash = "sha256-7Qrq6t8KmUSIK4Rskkxw5l4UZ2vsb9/orzPegHySaJ4=";
-      };
-      armv7l-linux = fetchurl {
-        url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Raspberry-Pi-Linux-14.04-arm32-arm32v7-legacy-date-20231227.tar.gz";
-        hash = "sha256-PRp7kuqFBRy7nextTCB+/poc+A9AX2EiQphx6aUfT8E=";
+        url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-043/OutFox-alpha-0.5.0-pre-043-Final-RaspberryPi-debian12-arm64-aarch64-current-date-20250927.tar.gz";
+        hash = "sha256-/E4Keh1J3iytqaq0ziJy9F1mRR3mPbjlGto1Dbct3JM=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -48,6 +41,7 @@ stdenv.mkDerivation rec {
     libjack2
     libglvnd
     libpulseaudio
+    openldap
   ];
 
   desktop = makeDesktopItem {
@@ -73,14 +67,12 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Rhythm game engine forked from StepMania";
     homepage = "https://projectoutfox.com";
-    changelog = "https://projectoutfox.com/releases/${version}";
+    changelog = "https://github.com/TeamRizu/OutFox/releases/tag/OF5.0.0-043";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
-      "i686-linux"
       "aarch64-linux"
-      "armv7l-linux"
     ];
     maintainers = with lib.maintainers; [ maxwell-lt ];
     mainProgram = "OutFox";
