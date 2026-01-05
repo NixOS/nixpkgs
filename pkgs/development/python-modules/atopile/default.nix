@@ -58,6 +58,7 @@
   pytest-xdist,
   hypothesis,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -143,7 +144,9 @@ buildPythonPackage rec {
     pytest-datafiles
     pytest-timeout
     hypothesis
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # do not report worker logs to filee
