@@ -23,7 +23,6 @@
   gettext,
   glew,
   gmp,
-  hipSupport ? false,
   jackaudioSupport ? false,
   jemalloc,
   lib,
@@ -68,7 +67,8 @@
   potrace,
   pugixml,
   python311Packages, # must use python3Packages instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
-  rocmPackages, # comes with a significantly larger closure size
+  rocmPackages,
+  rocmSupport ? config.rocmSupport,
   rubberband,
   runCommand,
   shaderc,
@@ -95,8 +95,9 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
-  python3 = python311Packages.python;
-  pyPkgsOpenusd = python311Packages.openusd.override (old: {
+  python3Packages = python311Packages;
+  python3 = python3Packages.python;
+  pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
     withOsl = false;
   });
@@ -131,14 +132,14 @@ stdenv'.mkDerivation (finalAttrs: {
       substituteInPlace source/creator/CMakeLists.txt \
         --replace-fail '${"$"}{LIBDIR}/python' \
                   '${python3}' \
-        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python311Packages.materialx}/'
+        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
                   '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
         --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
                   '${lib.getLib brotli}/lib/libbrotlidec.dylib'
     '')
-    + (lib.optionalString hipSupport ''
+    + (lib.optionalString rocmSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
       substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
@@ -149,18 +150,18 @@ stdenv'.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-C../build_files/cmake/config/blender_release.cmake"
 
-    (lib.cmakeFeature "MaterialX_DIR" "${python311Packages.materialx}/lib/cmake/MaterialX")
+    (lib.cmakeFeature "MaterialX_DIR" "${python3Packages.materialx}/lib/cmake/MaterialX")
     (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
     (lib.cmakeFeature "PYTHON_LIBPATH" "${python3}/lib")
     (lib.cmakeFeature "PYTHON_LIBRARY" "${python3.libPrefix}")
-    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python311Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
-    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python311Packages.numpy_1}/${python3.sitePackages}")
+    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
+    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python3Packages.numpy_1}/${python3.sitePackages}")
     (lib.cmakeFeature "PYTHON_VERSION" "${python3.pythonVersion}")
 
     (lib.cmakeBool "WITH_BUILDINFO" false)
     (lib.cmakeBool "WITH_CPU_CHECK" false)
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" hipSupport)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
@@ -187,7 +188,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
-  ++ lib.optionals hipSupport [
+  ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "HIPRT_INCLUDE_DIR" "${rocmPackages.hiprt}/include")
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" true)
     (lib.cmakeBool "WITH_CYCLES_HIP_BINARIES" true)
@@ -221,7 +222,7 @@ stdenv'.mkDerivation (finalAttrs: {
     cmake
     llvmPackages.llvm.dev
     makeWrapper
-    python311Packages.wrapPython
+    python3Packages.wrapPython
   ]
   ++ lib.optionals cudaSupport [
     addDriverRunpath
@@ -263,13 +264,13 @@ stdenv'.mkDerivation (finalAttrs: {
     potrace
     pugixml
     python3
-    python311Packages.materialx
+    python3Packages.materialx
     rubberband
     zlib
     zstd
   ]
   ++ lib.optional embreeSupport embree
-  ++ lib.optional hipSupport rocmPackages.clr
+  ++ lib.optional rocmSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
   ++ (
     if (!stdenv.hostPlatform.isDarwin) then
@@ -316,7 +317,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   pythonPath =
     let
-      ps = python311Packages;
+      ps = python3Packages;
     in
     [
       ps.materialx
@@ -362,13 +363,13 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     python = python3;
-    pythonPackages = python311Packages;
+    pythonPackages = python3Packages;
 
     withPackages =
       f:
       (callPackage ./wrapper.nix { }).override {
         blender = finalAttrs.finalPackage;
-        extraModules = (f python311Packages);
+        extraModules = (f python3Packages);
       };
 
     tests = {
