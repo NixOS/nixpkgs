@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "plink";
-  version = "2.4.6";
+  version = "2.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "plink";
     tag = "${version}_as_released";
-    hash = "sha256-+WUyQvQY9Fx47GikzJ4gcCpSIjvk5756FP0bDdF6Ack=";
+    hash = "sha256-+O371oWfvRvMfjXX6qZj91c7+4MBneZFNcfdrJQNCY8=";
   };
 
   build-system = [
