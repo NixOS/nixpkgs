@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrdfa3";
   version = "3.6.4";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ZHEtGkvyGCllKzlxW62m58A7zxnLSfliwZCjj0YXIkM=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "RDFa 1.1 distiller/parser library";
     homepage = "https://github.com/prrvchr/pyrdfa3/";
-    changelog = "https://github.com/prrvchr/pyrdfa3/releases/tag/v${version}";
+    changelog = "https://github.com/prrvchr/pyrdfa3/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.w3c;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})
