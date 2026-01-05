@@ -8,7 +8,6 @@
   fetchFromGitHub,
   gcc,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "primer3";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libnano";
@@ -37,6 +34,7 @@ buildPythonPackage rec {
     click
     pytestCheckHook
   ];
+
   # We are not sure why exactly this is need. It seems `pytestCheckHook`
   # doesn't find extension modules installed in $out/${python.sitePackages},
   # and the tests rely upon them. This was initially reported upstream at
