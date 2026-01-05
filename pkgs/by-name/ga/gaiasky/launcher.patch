@@ -1,0 +1,35 @@
+diff --git a/core/exe/gaiasky b/core/exe/gaiasky
+index 2defbc7..f70f707 100644
+--- a/core/exe/gaiasky
++++ b/core/exe/gaiasky
+@@ -33,6 +33,7 @@ fi
+ #
+ # Choose jre
+ #
++if false; then
+ if [[ "$OSTYPE" == "darwin"* ]]; then
+     # macOS, use bundled JRE
+     if [[ -f "$GSDIR/../../PlugIns/jre.bundle/Contents/Home/jre/bin/java" ]]; then
+@@ -58,6 +59,9 @@ fi
+ 
+ # Escape
+ JAVA=$(printf %q "$JAVA")
++fi
++
++JAVA="@java_exe_path@"
+ 
+ #
+ # Settings.
+@@ -98,6 +102,12 @@ OPTS="$OPTS -Dorg.slf4j.simpleLogger.defaultLogLevel=warn -Dorg.slf4j.simpleLogg
+ # Process name
+ OPTS="$OPTS -Dname=gaiasky"
+ 
++# Add library search paths
++library_path="@library_path@"
++if [ -n "$library_path" ]; then
++  export LD_LIBRARY_PATH="$library_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
++fi
++
+ #
+ # Run.
+ #
