@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.13.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "home-assistant-bluetooth";
     tag = "v${version}";
-    hash = "sha256-piX812Uzd2F8A8+IF/17N+xy6ENpfRVJ1BxsAxL5aj0=";
+    hash = "sha256-A29Jezj9kQ/v4irvpcpCiZlrNQBQwByrSJOx4HaXTdc=";
   };
 
   build-system = [
@@ -37,6 +37,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ habluetooth ];
+
+  doCheck = false; # broken with habluetooth>=4.0
 
   nativeCheckInputs = [
     bleak
@@ -51,6 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/home-assistant-libs/home-assistant-bluetooth";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 }

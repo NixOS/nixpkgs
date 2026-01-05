@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "capslock";
-  version = "0.2.7";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "capslock";
-    rev = "v${version}";
-    hash = "sha256-kRuEcrx9LBzCpXFWlc9bSsgZt84T8R8VFdbAWAseSPQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ln2NqyIlFGlPZL4rbmlY+fnJFCVVaKWmwQxhE2h7e2E=";
   };
 
-  vendorHash = "sha256-CUw4ukSAs12dprgcQRfdoKzY7gbzUCHk0t2SrUMtrxo=";
+  vendorHash = "sha256-ObQvJwebefu8hIBd+dcs3i3xhRfFax1TIBDPfaTUKOY=";
 
   subPackages = [ "cmd/capslock" ];
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     mainProgram = "capslock";
     maintainers = with lib.maintainers; [ katexochen ];
   };
-}
+})

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, jre
-, makeBinaryWrapper
-, copyDesktopItems
-, makeDesktopItem
-, desktopToDarwinBundle
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
+  unzip,
 }:
 
 let
@@ -17,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logisim-evolution";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
-    hash = "sha256-QxU1h6LKzWy25wtXgEufPT0KsIsLhrKnq9CRcS4Mlzc=";
+    hash = "sha256-aZ+VekHVLAtPy8KJmhWpGC6RwZBui31lNCCABDhxYfQ=";
   };
   dontUnpack = true;
 
@@ -29,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     copyDesktopItems
     unzip
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 

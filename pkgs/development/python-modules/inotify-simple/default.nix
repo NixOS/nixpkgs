@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inotify_simple" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python wrapper around inotify";
     homepage = "https://github.com/chrisjbillington/inotify_simple";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

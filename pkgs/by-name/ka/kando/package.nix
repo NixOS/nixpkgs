@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   electron,
-  nodejs,
+  nodejs_22,
 
   cmake,
   zip,
@@ -21,33 +21,35 @@
   wayland,
 }:
 
-buildNpmPackage rec {
+let
+  nodejs = nodejs_22; # NPM v11 included in nodejs_24 doesn't work with the current lockfile
+in
+buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";
-  version = "1.7.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-ihWHyafDU/B2Xb3ezNlC7hB8EhBCQOSuW+ki/V2SIPs=";
+    hash = "sha256-x+emk0N5AL5Nfk9d1+RehdLoEvqVe5DafZL1WRPFdrc=";
   };
 
-  npmDepsHash = "sha256-PnKrTHAo3mKcVBhJQf/273k91UZxlDb3+2iXWGIfPs0=";
+  npmDepsHash = "sha256-zbPrQpm2IgIMqGvMzj6fzEV/lV/FszfU3fnFx3kPHr4=";
 
   npmFlags = [ "--ignore-scripts" ];
 
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      zip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    zip
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+    copyDesktopItems
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon

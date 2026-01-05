@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "dwlb";
-  version = "0-unstable-2024-05-16";
+  version = "0-unstable-2025-05-20";
 
   src = fetchFromGitHub {
     owner = "kolunmi";
     repo = "dwlb";
-    rev = "0daa1c1fdd82c4d790e477bf171e23ca2fdfa0cb";
-    hash = "sha256-Bu20IqRwBP1WRBgbcEQU4Q2BZ2FBnVaySOTsCn0iSSE=";
+    rev = "48dbe00bdb98a1ae6a0e60558ce14503616aa759";
+    hash = "sha256-S0jkoELkF+oEmXqiWZ8KJYtWAHEXR/Y93jl5yHgUuSM=";
   };
 
   nativeBuildInputs = [

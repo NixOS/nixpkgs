@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
-  version = "1.6.3";
+  version = "1.6.8";
 
   src = fetchFromGitLab {
     owner = "etherlab.org";
     repo = "ethercat";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vTAAeWAiJDo/Bd/3id4Bc0OdkL6s57vl+jbwOGFzfnc=";
+    hash = "sha256-yIlaAjPNcA7yIiCe+2kwk5IHIkwUv8bTxK0H3hu91MI=";
   };
 
   separateDebugInfo = true;
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "IgH EtherCAT Master for Linux";
     homepage = "https://etherlab.org/ethercat";
     changelog = "https://gitlab.com/etherlab.org/ethercat/-/blob/${finalAttrs.version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ stv0g ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ stv0g ];
     platforms = [ "x86_64-linux" ];
   };
 })

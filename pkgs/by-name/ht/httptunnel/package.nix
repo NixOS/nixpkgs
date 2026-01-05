@@ -16,15 +16,19 @@ stdenv.mkDerivation {
     hash = "sha256-fUaVHE3nxq3fU7DYCvaQTOoMzax/qFH8cMegFLLybNk=";
   };
 
+  # httptunnel makes liberal use of old C features, just selecting an old version
+  # is easier than patching around language updates.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates a bidirectional virtual data connection tunnelled in HTTP requests";
     homepage = "http://www.gnu.org/software/httptunnel/httptunnel.html";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ koral ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ koral ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -49,37 +49,36 @@ stdenvNoCC.mkDerivation {
   # FamilyName.ttf. This installs all fonts if fonts is empty and otherwise
   # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [ " " ] [ "" ] font) fonts;
-  installPhase =
-    ''
-      adobeBlankDest=$adobeBlank/share/fonts/truetype
-      install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
-      rm -r ofl/adobeblank
-      dest=$out/share/fonts/truetype
-    ''
-    + (
-      if fonts == [ ] then
-        ''
-          find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
-        ''
-      else
-        ''
-          for font in $fonts; do
-            find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
-          done
-        ''
-    );
+  installPhase = ''
+    adobeBlankDest=$adobeBlank/share/fonts/truetype
+    install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
+    rm -r ofl/adobeblank
+    dest=$out/share/fonts/truetype
+  ''
+  + (
+    if fonts == [ ] then
+      ''
+        find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
+      ''
+    else
+      ''
+        for font in $fonts; do
+          find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
+        done
+      ''
+  );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       ofl
       ufl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ manveru ];
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    maintainers = with lib.maintainers; [ manveru ];
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 }

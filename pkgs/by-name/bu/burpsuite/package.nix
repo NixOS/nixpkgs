@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2025.1.5";
+  version = "2025.12";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-QTYeiM2hyZpvSu5oE2wrNrF3qFkp4JJnQftOg3BJqZA=";
+        hash = "sha256-6firazY0uyDBjdw8Qvs48xVXwy3MfCULtitb1gvGHQM=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-vIcBRsylS+ftSq5x0HDe6Zb8dtVUtWw6hENBITYmzyQ=";
+        hash = "sha256-hvhS6JKISPeDp0L7ElI/BojitUp93TvuPgO4zKBJjnI=";
       };
 
   src = fetchurl {
@@ -36,7 +36,7 @@ let
   };
 
   pname = "burpsuite";
-  description = "An integrated platform for performing security testing of web applications";
+  description = "Integrated platform for performing security testing of web applications";
   desktopItem = makeDesktopItem {
     name = "burpsuite";
     exec = pname;
@@ -91,7 +91,9 @@ buildFHSEnv {
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     inherit description;
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
@@ -102,14 +104,16 @@ buildFHSEnv {
     homepage = "https://portswigger.net/burp/";
     changelog =
       "https://portswigger.net/burp/releases/professional-community-"
-      + replaceStrings [ "." ] [ "-" ] version;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+      + lib.replaceStrings [ "." ] [ "-" ] version;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bennofs
+      blackzeshi
       fab
+      yechielw
     ];
     mainProgram = "burpsuite";
   };

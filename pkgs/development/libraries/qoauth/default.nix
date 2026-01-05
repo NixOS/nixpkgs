@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Qt library for OAuth authentication";
     inherit (qtbase.meta) platforms;
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

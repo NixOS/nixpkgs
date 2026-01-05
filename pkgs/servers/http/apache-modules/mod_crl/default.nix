@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     url = "https://redwax.eu/dist/rs/";
   };
 
-  meta = with lib; {
+  meta = {
     description = "RedWax module for Certificate Revocation Lists";
     homepage = "https://redwax.eu";
     changelog = "https://source.redwax.eu/projects/RS/repos/mod_crl/browse/ChangeLog";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dirkx ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dirkx ];
   };
 }

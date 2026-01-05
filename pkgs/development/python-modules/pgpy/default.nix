@@ -34,6 +34,9 @@ buildPythonPackage rec {
   patches = [
     # https://github.com/SecurityInnovation/PGPy/issues/462
     ./pr-443.patch
+
+    # https://github.com/SecurityInnovation/PGPy/pull/474
+    ./Fix-compat-with-current-cryptography.patch
   ];
 
   postPatch = ''

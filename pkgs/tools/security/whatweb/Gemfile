@@ -1,6 +1,0 @@
-source 'https://rubygems.org'
-gem 'ipaddr'
-gem 'addressable'
-gem 'json'
-gem 'mongo'
-gem 'rchardet'

@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = chromedriver.meta // {
     description = "Custom Selenium ChromeDriver that passes all bot mitigation systems";
     mainProgram = "undetected-chromedriver";
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = [ ];
   };
 })

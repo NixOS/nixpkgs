@@ -15,16 +15,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/0pqegVxrqqxaQ2JiUfkkFK9hp+Vuq7eTap052HEcJs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Q6F7cqs+d1LqYaZkcpCBTOB9Z0qxuGz9zRDK2Yg10CU=";
 
   buildAndTestSubdir = "shellclear";
 
-  meta = with lib; {
+  meta = {
     description = "Secure shell history commands by finding sensitive data";
     homepage = "https://github.com/rusty-ferris-club/shellclear";
     changelog = "https://github.com/rusty-ferris-club/shellclear/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

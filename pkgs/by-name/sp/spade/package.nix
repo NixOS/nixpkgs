@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YMUeHr9eUOYIcO7PbaFgZa0Ib10GMF+jT10ZCSG7PNo=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
@@ -55,24 +54,25 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
   env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
 
   passthru.tests = {
     inherit swim;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Better hardware description language";
     homepage = "https://gitlab.com/spade-lang/spade";
     changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
-    license = with licenses; [
+    license = with lib.licenses; [
       eupl12
       asl20
       mit
     ];
-    maintainers = with maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "spade";
   };
 }

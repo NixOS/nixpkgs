@@ -17,15 +17,16 @@
   geoclue2,
   python3,
   gsettings-desktop-schemas,
+  typescript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-weather";
-  version = "47.0";
+  version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/gnome-weather-${version}.tar.xz";
-    hash = "sha256-UV9YYjdN00bLyFqd3wMGstMnZXhQu2C2ycmGD86WIOY=";
+    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major finalAttrs.version}/gnome-weather-${finalAttrs.version}.tar.xz";
+    hash = "sha256-7h92uF66nbDI1cAgQanYXs3SKrtexrs/8yIlkpwPzl8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     python3
     gobject-introspection
     gjs
+    typescript
   ];
 
   buildInputs = [
@@ -62,15 +64,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-weather"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-weather";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Weather/";
     description = "Access current weather conditions and forecasts";
     mainProgram = "gnome-weather";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

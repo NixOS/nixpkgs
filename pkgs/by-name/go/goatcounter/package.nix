@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "goatcounter";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "goatcounter";
     rev = "v${version}";
-    hash = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
+    hash = "sha256-BVKz1vPYDOpaBdurR1wjg1Jo+qncqrIbZuDVmlFAO9I=";
   };
 
-  vendorHash = "sha256-YAb3uBWQc6hWzF1Z5cAg8RzJQSJV+6dkppfczKS832s=";
+  vendorHash = "sha256-ICbtL6O1Kbig2WgbLCVSSe9MbIrYWmxYn4M2R5mwv/c=";
   subPackages = [ "cmd/goatcounter" ];
   modRoot = ".";
 

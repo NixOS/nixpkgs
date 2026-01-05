@@ -5,7 +5,6 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
   pythonOlder,
   requests,
   responses,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.22.1";
+  version = "3.24.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "IBM";
     repo = "python-sdk-core";
     tag = "v${version}";
-    hash = "sha256-wXffw+/esHvWxrNdlnYLTPflgOaRyIdf0hxI4M12Xdc=";
+    hash = "sha256-xw7jEDr/5Qmd4+riAqFzTTFfmX/gQdlbzNZ8pua0hIs=";
   };
 
   pythonRelaxDeps = [ "requests" ];
@@ -63,11 +62,11 @@ buildPythonPackage rec {
     "test_integration/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
-    changelog = "https://github.com/IBM/python-sdk-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ globin ];
+    changelog = "https://github.com/IBM/python-sdk-core/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

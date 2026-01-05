@@ -38,6 +38,11 @@ stdenv.mkDerivation {
     "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
   ];
 
+  patches = [
+    # fix compilation with GCC 14
+    ./declare-missing-prototype.patch
+  ];
+
   buildInputs = with xorg; [
     cairo
     ghostscript
@@ -51,13 +56,13 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic drawing program tailored to circuit diagrams";
     mainProgram = "xcircuit";
     homepage = "http://opencircuitdesign.com/xcircuit";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       john-shaffer
       spacefrogg
       thoughtpolice

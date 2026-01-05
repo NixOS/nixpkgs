@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
-    repo = pname;
+    repo = "enamlx";
     tag = "v${version}";
     hash = "sha256-C3/G0bnu1EQh0elqdrpCwkFPZU4qmkUX7WRSRK9nkM4=";
   };
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "enamlx.widgets"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frmdstryr/enamlx";
     description = "Additional Qt Widgets for Enaml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

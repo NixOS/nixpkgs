@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "wjdp";
-    repo = pname;
+    repo = "htmltest";
     rev = "v${version}";
     sha256 = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
   };
@@ -26,7 +26,7 @@ buildGoModule rec {
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to test generated HTML output";
     mainProgram = "htmltest";
     longDescription = ''
@@ -34,7 +34,7 @@ buildGoModule rec {
       links, images, scripts references work, your alt tags are filled in, etc.
     '';
     homepage = "https://github.com/wjdp/htmltest";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

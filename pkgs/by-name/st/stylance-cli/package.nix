@@ -2,25 +2,32 @@
   lib,
   rustPlatform,
   fetchCrate,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+let
   pname = "stylance-cli";
-  version = "0.5.5";
+  version = "0.7.4";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-/aTda9TOwC2spODMWQIaBzJJ17/8EoWIRZ7DjJE/ta4=";
+    hash = "sha256-lGgKmNqZ0nflVAM3GMDwGgxnXyLCqVz1bTUsvabXmj8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZMIbNQMZ7uCYFSIX2NTGY/31V6e0QWHjZvVaA8Vv7IQ=";
+  cargoHash = "sha256-HWZQNEKTyNnmA1twN5cfo5RY2tOeCnL6zEp+M4F+Tqg=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Library and cli tool for working with scoped CSS in rust";
     mainProgram = "stylance";
     homepage = "https://github.com/basro/stylance-rs";
     changelog = "https://github.com/basro/stylance-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ dav-wolff ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ dav-wolff ];
   };
 }

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "helm-git";
-  version = "1.3.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "aslafy-z";
-    repo = pname;
+    repo = "helm-git";
     rev = "v${version}";
-    sha256 = "sha256-o9y1C4O1uG2Z7f3kCEoK1tSmSuQh1zJxB/CZBv/GPus=";
+    sha256 = "sha256-jgHFmANmxDS75k0JQIiT8DDw9nSppw1EZeEWM3jirsg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm downloader plugin that provides GIT protocol support";
     homepage = "https://github.com/aslafy-z/helm-git";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

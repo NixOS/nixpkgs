@@ -13,7 +13,7 @@
   extra-cmake-modules,
   glog,
   libXdmcp,
-  python3,
+  python312,
   wayland,
 }:
 
@@ -26,6 +26,7 @@ let
     rev = "Natron-v${minorVersion}";
     hash = "sha256-TD7Uge9kKbFxOmOCn+TSQovnKTmFS3uERTu5lmZFHbc=";
   };
+  python3 = python312;
 in
 stdenv.mkDerivation {
   inherit version;
@@ -60,6 +61,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -71,7 +73,6 @@ stdenv.mkDerivation {
     python3
     python3.pkgs.pyside2
     python3.pkgs.shiboken2
-    extra-cmake-modules
     wayland
     glog
     ceres-solver
@@ -94,7 +95,7 @@ stdenv.mkDerivation {
       --set-default OCIO "$out/share/OpenColorIO-Configs/blender/config.ocio"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Node-graph based, open-source compositing software";
     longDescription = ''
       Node-graph based, open-source compositing software. Similar in
@@ -102,8 +103,9 @@ stdenv.mkDerivation {
     '';
     homepage = "https://natron.fr/";
     license = lib.licenses.gpl2;
-    maintainers = [ maintainers.puffnfresh ];
-    platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    maintainers = [ lib.maintainers.puffnfresh ];
+    platforms = lib.platforms.linux;
+    # error: 'LogMessageVoidify' is not a member of 'google'
+    broken = true;
   };
 }

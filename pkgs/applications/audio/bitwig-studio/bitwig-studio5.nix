@@ -11,11 +11,13 @@
   glib,
   gtk3,
   harfbuzz,
+  lcms,
   lib,
   libglvnd,
   libjack2,
   libjpeg,
   libnghttp2,
+  libudev-zero,
   libxkbcommon,
   makeWrapper,
   pango,
@@ -30,12 +32,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio-unwrapped";
-  version = "5.3.1";
+  version = "5.3.13";
 
   src = fetchurl {
     name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-mxodFCu4SDzofnoZZZ7TPDUIrRc3UJt8TuEBwDOo2wQ=";
+    hash = "sha256-tx+Dz9fTm4DIobwLa055ZOCMG+tU7vQl11NFnEKMAno=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     harfbuzz
+    lcms
     libglvnd
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
@@ -66,6 +69,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXtst
     libxkbcommon
+    libudev-zero
     pango
     pipewire
     (lib.getLib stdenv.cc.cc)
@@ -90,7 +94,7 @@ stdenv.mkDerivation rec {
 
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
 
       runHook postInstall
   '';

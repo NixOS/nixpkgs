@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shortuuidfield" ];
 
-  meta = with lib; {
+  meta = {
     description = "Short UUIDField for Django. Good for use in urls & file names";
     homepage = "https://github.com/benrobster/django-shortuuidfield";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

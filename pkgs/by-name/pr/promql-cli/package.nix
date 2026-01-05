@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nalbury";
-    repo = pname;
+    repo = "promql-cli";
     rev = "v${version}";
     hash = "sha256-EV63fdG+GF+kVLH2TxHPhRcUU5xBvkW5bhHC1lEoj84=";
   };
@@ -26,11 +26,11 @@ buildGoModule rec {
     mv -v $out/bin/promql-cli $out/bin/promql
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to query a Prometheus server with PromQL and visualize the output";
     homepage = "https://github.com/nalbury/promql-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arikgrahl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "promql";
   };
 }

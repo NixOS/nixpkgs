@@ -2,36 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   aiohttp,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiodocker";
-  # unstable includes support for python 3.10+
-  version = "unstable-2022-01-20";
-  format = "setuptools";
+  version = "0.25.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
-    rev = "f1dbdc3d42147f4c2ab5e6802acf6f7d0f885be4";
-    sha256 = "RL5Ck4wsBZO88afmoojeFKbdIeCjDo/SwNqUcERH6Ls=";
+    repo = "aiodocker";
+    tag = "v${version}";
+    hash = "sha256-SaPTMpMljAh/6Km/JrbEjAOm30gBHH2QBkj7At/BTBA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     aiohttp
-    typing-extensions
   ];
 
   # tests require docker daemon
   doCheck = false;
+
   pythonImportsCheck = [ "aiodocker" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/aio-libs/aiodocker/releases/tag/${src.tag}";
     description = "Docker API client for asyncio";
     homepage = "https://github.com/aio-libs/aiodocker";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

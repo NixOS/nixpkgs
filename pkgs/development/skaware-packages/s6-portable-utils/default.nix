@@ -6,13 +6,13 @@
 
 skawarePackages.buildPackage {
   pname = "s6-portable-utils";
-  version = "2.3.0.3";
-  sha256 = "PkSSBV0WDCX7kBU/DvwnfX1Sv5gbvj6i6d/lHEk1Yf8=";
+  version = "2.3.1.0";
+  sha256 = "sha256-BCRKqHrixBLUmZdptec8tCivugwuiqkhWzo2574qgPk=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-portable-utils-man-pages";
-    version = "2.3.0.2.2";
-    sha256 = "0zbxr6jqrx53z1gzfr31nm78wjfmyjvjx7216l527nxl9zn8nnv1";
+    version = "2.3.0.4.1";
+    sha256 = "sha256-LbXa+fecxYyFdVmEHT8ch4Y8Pf1YIyd9Gia3zujxUgs=";
     description = "Port of the documentation for the s6-portable-utils suite to mdoc";
     maintainers = [ lib.maintainers.somasis ];
   };

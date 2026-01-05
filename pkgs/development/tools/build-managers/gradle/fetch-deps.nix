@@ -26,7 +26,7 @@ in
 
 let
   data' =
-    builtins.removeAttrs
+    removeAttrs
       (
         if builtins.isPath data then
           lib.importJSON data
@@ -168,7 +168,7 @@ let
                   sortByVersion = a: b: (builtins.compareVersions a.version b.version) < 0;
                   sortedJarPomList = lib.sort sortByVersion jarPomList;
 
-                  uniqueVersionFiles = builtins.map ({ i, x }: x) (
+                  uniqueVersionFiles = map ({ i, x }: x) (
                     builtins.filter (
                       { i, x }: i == 0 || (builtins.elemAt sortedJarPomList (i - 1)).version != x.version
                     ) (lib.imap0 (i: x: { inherit i x; }) sortedJarPomList)

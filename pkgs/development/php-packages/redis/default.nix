@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "6.1.0";
+  version = "6.3.0";
 in
 buildPecl {
   inherit version;
@@ -16,16 +16,16 @@ buildPecl {
     repo = "phpredis";
     owner = "phpredis";
     rev = version;
-    hash = "sha256-zuvdWBJl6vBDnIAR0txfar1+c06VqGnwtobZnxok2uU=";
+    hash = "sha256-mdphyUG4OUc1PBEA5Ub1X9afFDMJ5+HoXH4WnmeAKpE=";
   };
 
   internalDeps = with php.extensions; [ session ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/phpredis/phpredis/releases/tag/${version}";
     description = "PHP extension for interfacing with Redis";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://github.com/phpredis/phpredis/";
-    maintainers = teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

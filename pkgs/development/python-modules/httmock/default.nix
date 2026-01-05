@@ -23,14 +23,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "httmock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mocking library for requests";
     homepage = "https://github.com/patrys/httmock";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

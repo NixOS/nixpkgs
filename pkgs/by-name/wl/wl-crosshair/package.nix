@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-q5key9BWJjJQqECrhflso9ZTzULBeScvromo0S4fjqE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-34K8Vjb7MrB8WGGLase+GnN2bUDuAnvU6VWRV1k+ZYM=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    description = "A crosshair overlay for wlroots compositor";
+    description = "Crosshair overlay for wlroots compositor";
     homepage = "https://github.com/lelgenio/wl-crosshair";
     license = lib.licenses.unfree; # didn't found a license
     mainProgram = "wl-crosshair";

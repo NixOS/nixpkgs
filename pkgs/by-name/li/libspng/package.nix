@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
 
+  # disable two tests broken after libpng update
+  # https://github.com/randy408/libspng/issues/276
+  postPatch = ''
+    cat tests/images/meson.build | grep -v "'ch1n3p04'" | grep -v "'ch2n3p08'" > tests/images/meson.build-patched
+    mv tests/images/meson.build-patched tests/images/meson.build
+  '';
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   mesonBuildType = "release";
@@ -53,11 +60,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, modern libpng alternative";
     homepage = "https://libspng.org/";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ humancalico ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ humancalico ];
+    platforms = lib.platforms.all;
   };
 }

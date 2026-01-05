@@ -2,15 +2,16 @@
   lib,
   appimageTools,
   fetchurl,
+  version ? "0.9.13.1",
+  hash ? "sha256-2IIm6frUgyZ7Xe/wmw2H3bvg4WB1EZtlM1ikSvMK9rQ=",
 }:
 
 let
-  version = "0.9.9.19";
   pname = "hifile";
 
   src = fetchurl {
     url = "https://www.hifile.app/files/HiFile-${version}.AppImage";
-    hash = "sha256-WrPNH7N8nYr/zd6RGsX3mL1P+nYUzXMPgIoBtC6tGo0=";
+    inherit hash;
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -26,6 +27,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \
       --replace-fail 'Exec=HiFile' 'Exec=hifile'
+    echo "StartupWMClass=app.hifile.www.HiFile" >> $out/share/applications/HiFile.desktop
   '';
 
   passthru.updateScript = ./update.sh;

@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) $out/bin/mystem
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Morphological analysis of Russian text";
     homepage = "https://yandex.ru/dev/mystem/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ abbradar ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mystem";
   };

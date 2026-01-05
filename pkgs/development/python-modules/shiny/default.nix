@@ -8,7 +8,6 @@
   setuptools-scm,
 
   # dependencies
-  appdirs,
   asgiref,
   click,
   htmltools,
@@ -19,9 +18,11 @@
   narwhals,
   orjson,
   packaging,
+  platformdirs,
   prompt-toolkit,
   python-multipart,
   questionary,
+  shinychat,
   starlette,
   typing-extensions,
   uvicorn,
@@ -47,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${version}";
-    hash = "sha256-YCPHjelGPYYo23Vzxy5+8Kn9fVlSZy1Qva7zp93+nzg=";
+    hash = "sha256-zRKfSY0rE+jzwYUcrRTIFW3OVmavhMDbAQEpry46zCI=";
   };
 
   build-system = [
@@ -63,7 +64,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    appdirs
     asgiref
     click
     htmltools
@@ -73,10 +73,12 @@ buildPythonPackage rec {
     narwhals
     orjson
     packaging
+    platformdirs
     prompt-toolkit
     python-multipart
     questionary
     setuptools
+    shinychat
     starlette
     typing-extensions
     uvicorn
@@ -107,7 +109,16 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    # ERROR: 'fixture' is not a valid asyncio_default_fixture_loop_scope.
+    # Valid scopes are: function, class, module, package, session.
+    # https://github.com/pytest-dev/pytest-asyncio/issues/924
+    "-o asyncio_mode=auto"
+    "-o asyncio_default_fixture_loop_scope=function"
+  ];
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -123,7 +134,7 @@ buildPythonPackage rec {
   meta = {
     description = "Build fast, beautiful web applications in Python";
     homepage = "https://shiny.posit.co/py";
-    changelog = "https://github.com/posit-dev/py-shiny/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

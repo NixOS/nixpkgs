@@ -40,6 +40,7 @@ common_inc = [
     'dyld',
     'include',
     'mach_o',
+    'include/mach-o',
 ]
 
 
@@ -86,6 +87,79 @@ lsl_dep = declare_dependency(
     link_with : lsl,
 )
 
+libmach_o = static_library(
+    'mach_o',
+    dependencies : [ lsl_dep ],
+    include_directories : [
+        common_inc,
+        'mach_o',
+    ],
+    sources : [
+        'mach_o/Architecture.cpp',
+        'mach_o/Archive.cpp',
+        'mach_o/BindOpcodes.cpp',
+        'mach_o/ChainedFixups.cpp',
+        'mach_o/CompactUnwind.cpp',
+        'mach_o/DataInCode.cpp',
+        'mach_o/DwarfDebug.cpp',
+        'mach_o/Error.cpp',
+        'mach_o/ExportsTrie.cpp',
+        'mach_o/Fixups.cpp',
+        'mach_o/FunctionStarts.cpp',
+        'mach_o/FunctionVariants.cpp',
+        'mach_o/GradedArchitectures.cpp',
+        'mach_o/Header.cpp',
+        'mach_o/Image.cpp',
+        'mach_o/Instructions.cpp',
+        # 'mach_o/LinkerOptimizationHints.cpp',
+        'mach_o/LoggingStub.cpp',
+        'mach_o/Misc.cpp',
+        'mach_o/NListSymbolTable.cpp',
+        'mach_o/ObjC.cpp',
+        'mach_o/Platform.cpp',
+        'mach_o/Policy.cpp',
+        'mach_o/RebaseOpcodes.cpp',
+        'mach_o/SplitSeg.cpp',
+        'mach_o/Symbol.cpp',
+        'mach_o/Universal.cpp',
+        'mach_o/Version32.cpp',
+        'mach_o/Version64.cpp',
+    ],
+)
+libmach_o_dep = declare_dependency(
+    include_directories : [ 'mach_o' ],
+    link_with : libmach_o,
+)
+
+libmach_o_writer = static_library(
+    'mach_o_writer',
+    dependencies : [ lsl_dep ],
+    include_directories : [
+        common_inc,
+        'mach_o_writer',
+    ],
+    sources : [
+        'mach_o_writer/ArchiveWriter.cpp',
+        'mach_o_writer/BindOpcodesWriter.cpp',
+        'mach_o_writer/ChainedFixupsWriter.cpp',
+        'mach_o_writer/ChunkBumpAllocator.cpp',
+        'mach_o_writer/CompactUnwindWriter.cpp',
+        'mach_o_writer/DataInCodeWriter.cpp',
+        'mach_o_writer/ExportsTrieWriter.cpp',
+        'mach_o_writer/FunctionStartsWriter.cpp',
+        'mach_o_writer/FunctionVariantsWriter.cpp',
+        'mach_o_writer/HeaderWriter.cpp',
+        'mach_o_writer/LinkerOptimizationHintsWriter.cpp',
+        'mach_o_writer/NListSymbolTableWriter.cpp',
+        'mach_o_writer/RebaseOpcodesWriter.cpp',
+        'mach_o_writer/SplitSegWriter.cpp',
+        'mach_o_writer/UniversalWriter.cpp',
+    ],
+)
+libmach_o_writer_dep = declare_dependency(
+    include_directories : [ 'mach_o_writer' ],
+    link_with : libmach_o_writer,
+)
 
 # These files need to be built with `BUILDING_LIBDYLD` not `BUILDING_DYLDINFO`.
 # `dyld_info` can’t just link against `libdyld` because the symbols it needs are not publicly exported.
@@ -110,15 +184,17 @@ libminidyld = static_library(
         'common/MachOLayout.cpp',
         'common/MachOLoaded.cpp',
         'libdyld/CrashReporterAnnotations.c',
-        'mach_o/ChainedFixups.cpp',
-        'mach_o/GradedArchitectures.cpp',
     ],
 )
 
 libdsc_extractor = shared_library(
     'dsc_extractor',
     cpp_args : [ '-DBUILDING_SHARED_CACHE_EXTRACTOR=1' ],
-    dependencies : [ corecrypto_dep, lsl_dep ],
+    dependencies : [
+        corecrypto_dep,
+        libmach_o_dep,
+        lsl_dep
+    ],
     include_directories : [
         common_inc,
         'cache-builder',
@@ -132,6 +208,7 @@ libdsc_extractor = shared_library(
     sources : [
         'common/DyldSharedCache.cpp',
         'common/MachOFile.cpp',
+        'common/TargetPolicy.cpp',
         'other-tools/dsc_extractor.cpp',
         'other-tools/dsc_iterator.cpp',
         'common/MachOLayout.cpp',
@@ -156,6 +233,7 @@ executable(
     ],
     dependencies : [
         corecrypto_dep,
+        libmach_o_dep,
         llvm_dep,
         lsl_dep,
     ],
@@ -175,31 +253,10 @@ executable(
         'common/MachOFile.cpp',
         'common/MetadataVisitor.cpp',
         'common/SwiftVisitor.cpp',
-        'mach_o/Architecture.cpp',
-        'mach_o/Archive.cpp',
-        'mach_o/BindOpcodes.cpp',
-        'mach_o/ChainedFixups.cpp',
-        'mach_o/CompactUnwind.cpp',
-        'mach_o/Error.cpp',
-        'mach_o/ExportsTrie.cpp',
-        'mach_o/Fixups.cpp',
-        'mach_o/FunctionStarts.cpp',
-        'mach_o/Header.cpp',
-        'mach_o/Image.cpp',
-        'mach_o/Instructions.cpp',
-        'mach_o/LoggingStub.cpp',
-        'mach_o/Misc.cpp',
-        'mach_o/NListSymbolTable.cpp',
-        'mach_o/ObjC.cpp',
-        'mach_o/Platform.cpp',
-        'mach_o/Policy.cpp',
-        'mach_o/RebaseOpcodes.cpp',
-        'mach_o/SplitSeg.cpp',
-        'mach_o/Symbol.cpp',
-        'mach_o/Universal.cpp',
-        'mach_o/Version32.cpp',
-        'mach_o/Version64.cpp',
+        'common/TargetPolicy.cpp',
         'other-tools/dyld_info.cpp',
+        'other-tools/MiscFileUtils.cpp',
+        'other-tools/SymbolicatedImage.cpp',
     ],
 )
 install_man('doc/man/man1/dyld_info.1')

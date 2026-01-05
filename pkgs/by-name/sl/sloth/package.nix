@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sloth";
-  version = "0.11.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "slok";
-    repo = pname;
+    repo = "sloth";
     rev = "v${version}";
-    hash = "sha256-KMVD7uH3Yg9ThnwKKzo6jom0ctFywt2vu7kNdfjiMCs=";
+    hash = "sha256-VwktgkJjJ1tMlGZwhr1bvaCDiatZKlylFY//8YpXPYw=";
   };
 
-  vendorHash = "sha256-j6qXUQ/Tu3VNQL5xBOHloRn5DH3KG/znCLi1s8RIoL8=";
+  vendorHash = "sha256-5TTOQ9u7BDrwGa2X8y6d0C6Vb92ZBk451V0kpsUhl9c=";
 
   subPackages = [ "cmd/sloth" ];
 

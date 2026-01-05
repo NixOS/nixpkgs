@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "blackbinn";
-    repo = pname;
+    repo = "wprecon";
     rev = version;
     hash = "sha256-23zJD3Nnkeko+J2FjPq5RA5dIjORMXvwt3wtAYiVlQs=";
   };
@@ -19,15 +19,15 @@ buildGoModule rec {
 
   postFixup = ''
     # Rename binary
-    mv $out/bin/cli $out/bin/${pname}
+    mv $out/bin/cli $out/bin/wprecon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WordPress vulnerability recognition tool";
     homepage = "https://github.com/blackbinn/wprecon";
     # License Zero Noncommercial Public License 2.0.1
     # https://github.com/blackbinn/wprecon/blob/master/LICENSE
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ unfree ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

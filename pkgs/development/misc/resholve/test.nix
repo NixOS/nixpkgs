@@ -25,6 +25,7 @@
   rlwrap,
   gnutar,
   bc,
+  systemd,
   # override testing
   esh,
   getconf,
@@ -33,7 +34,6 @@
   mount,
   ncurses,
   nixos-install-tools,
-  nixos-rebuild,
   procps,
   ps,
   # known consumers
@@ -42,7 +42,6 @@
   bashup-events32,
   dgoss,
   git-ftp,
-  ix,
   lesspipe,
   locate-dominating-file,
   mons,
@@ -50,7 +49,6 @@
   nix-direnv,
   pdf2odt,
   pdfmm,
-  rancid,
   s0ix-selftest-tool,
   unix-privesc-check,
   wgnord,
@@ -77,6 +75,10 @@ let
     rlwrap
     gnutar
     bc
+    msmtp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    systemd
   ];
 in
 rec {
@@ -158,6 +160,9 @@ rec {
         inputs = [ ];
       };
     };
+    postResholve = ''
+      echo "not a load-bearing test, just prove we exist"
+    '';
   };
   # demonstrate that we could use resholve in larger build
   module3 = stdenv.mkDerivation {
@@ -218,27 +223,28 @@ rec {
     # explicit interpreter for demo suite; maybe some better way...
     INTERP = "${bash}/bin/bash";
 
-    checkPhase =
-      ''
-        patchShebangs .
-        mkdir empty_lore
-        touch empty_lore/{execers,wrappers}
-        export EMPTY_LORE=$PWD/empty_lore
-        printf "\033[33m============================= resholve test suite ===================================\033[0m\n" > test.ansi
-        if ./test.sh &>> test.ansi; then
-          cat test.ansi
-        else
-          cat test.ansi && exit 1
-        fi
-      ''
-      + lib.optionalString runDemo ''
-        printf "\033[33m============================= resholve demo ===================================\033[0m\n" > demo.ansi
-        if ./demo &>> demo.ansi; then
-          cat demo.ansi
-        else
-          cat demo.ansi && exit 1
-        fi
-      '';
+    checkPhase = ''
+      echo removing parse tests matching no${stdenv.buildPlatform.uname.system}
+      rm tests/parse_*no${stdenv.buildPlatform.uname.system}.sh || true # ok if none exist
+      patchShebangs .
+      mkdir empty_lore
+      touch empty_lore/{execers,wrappers}
+      export EMPTY_LORE=$PWD/empty_lore
+      printf "\033[33m============================= resholve test suite ===================================\033[0m\n" > test.ansi
+      if ./test.sh &>> test.ansi; then
+        cat test.ansi
+      else
+        cat test.ansi && exit 1
+      fi
+    ''
+    + lib.optionalString runDemo ''
+      printf "\033[33m============================= resholve demo ===================================\033[0m\n" > demo.ansi
+      if ./demo &>> demo.ansi; then
+        cat demo.ansi
+      else
+        cat demo.ansi && exit 1
+      fi
+    '';
   };
 
   # Caution: ci.nix asserts the equality of both of these w/ diff
@@ -276,22 +282,20 @@ rec {
   loreOverrides =
     resholve.writeScriptBin "verify-overrides"
       {
-        inputs =
-          [
-            coreutils
-            esh
-            getconf
-            libarchive
-            locale
-            mount
-            ncurses
-            procps
-            ps
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            nixos-install-tools
-            nixos-rebuild
-          ];
+        inputs = [
+          coreutils
+          esh
+          getconf
+          libarchive
+          locale
+          mount
+          ncurses
+          procps
+          ps
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          nixos-install-tools
+        ];
         interpreter = "none";
         execer = [
           "cannot:${esh}/bin/esh"
@@ -317,7 +321,6 @@ rec {
         ''
         + lib.optionalString stdenv.hostPlatform.isLinux ''
           nixos-generate-config fake args
-          nixos-rebuild fake args
         ''
       );
 
@@ -326,7 +329,6 @@ rec {
   inherit bashup-events32;
   inherit bats;
   inherit git-ftp;
-  inherit ix;
   inherit lesspipe;
   inherit locate-dominating-file;
   inherit mons;
@@ -341,7 +343,6 @@ rec {
 // lib.optionalAttrs stdenv.hostPlatform.isLinux {
   inherit arch-install-scripts;
   inherit dgoss;
-  inherit rancid;
   inherit unix-privesc-check;
   inherit wgnord;
   inherit wsl-vpnkit;

@@ -8,23 +8,20 @@
   pkg-config, # from pkgs
   pkgconfig, # from pythonPackages
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   vips,
 }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.2.3";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
     tag = "v${version}";
-    hash = "sha256-EGB1cOR1pVCXGjRj1NLj4Mk3kIy8luRqk3gGJqVNs7U=";
+    hash = "sha256-BPQFndikPSsKU4HPauTAewab32IumckG/y3lhUUNbMU=";
   };
 
   nativeBuildInputs = [
@@ -57,14 +54,24 @@ buildPythonPackage rec {
       --replace 'libgobject-2.0.dylib' '${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}' \
   '';
 
+  disabledTests = [
+    # flaky due to a race condition
+    # https://github.com/libvips/pyvips/issues/566
+    "test_progress"
+  ];
+
+  disabledTestPaths = [
+    "tests/perf"
+  ];
+
   pythonImportsCheck = [ "pyvips" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
     changelog = "https://github.com/libvips/pyvips/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ccellado
       anthonyroussel
     ];

@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.journald.upload;
-  format = pkgs.formats.systemd;
+  format = pkgs.formats.systemd { };
 in
 {
   meta.maintainers = [ lib.maintainers.raitobezarius ];

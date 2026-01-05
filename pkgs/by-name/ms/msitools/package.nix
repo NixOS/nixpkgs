@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "msitools";
-  version = "0.103";
+  version = "0.106";
 
   src = fetchurl {
     url = "mirror://gnome/sources/msitools/${lib.versions.majorMinor version}/msitools-${version}.tar.xz";
-    hash = "sha256-0XYi7rvzf6TAm1m+C8jbCLJr4wCmcxx02h684mK86Dk=";
+    hash = "sha256-HtNCec+AgPFPG48Q5klHQSVJKgiZEufKcOWd+i5aZZs=";
   };
 
   nativeBuildInputs = [
@@ -58,16 +58,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of programs to inspect and build Windows Installer (.MSI) files";
     homepage = "https://gitlab.gnome.org/GNOME/msitools";
-    license = with licenses; [
+    license = with lib.licenses; [
       # Library
       lgpl21Plus
       # Tools
       gpl2Plus
     ];
-    maintainers = with maintainers; [ PlushBeaver ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ PlushBeaver ];
+    platforms = lib.platforms.unix;
   };
 }

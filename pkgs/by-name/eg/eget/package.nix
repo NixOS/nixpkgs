@@ -6,17 +6,16 @@
   installShellFiles,
   nix-update-script,
   testers,
-  eget,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "eget";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
-    repo = pname;
-    rev = "v${version}";
+    repo = "eget";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-jhVUYyp6t5LleVotQQme07IJVdVnIOVFFtKEmzt8e2k=";
   };
 
@@ -25,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -34,6 +33,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    rm $out/bin/{test,tools}
     pandoc man/eget.md -s -t man -o eget.1
     installManPage eget.1
   '';
@@ -41,16 +41,16 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      package = eget;
+      package = finalAttrs.finalPackage;
       command = "eget -v";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easily install prebuilt binaries from GitHub";
     homepage = "https://github.com/zyedidia/eget";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

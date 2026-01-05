@@ -4,9 +4,9 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_34,
+  electron,
   nodejs_22,
-  yarn-berry,
+  yarn-berry_4,
   cacert,
   writableTmpDirAsHomeHook,
   cargo,
@@ -17,6 +17,8 @@
   jq,
   copyDesktopItems,
   makeWrapper,
+  llvmPackages,
+  apple-sdk_15,
   makeDesktopItem,
   nix-update-script,
   buildType ? "stable",
@@ -24,40 +26,45 @@
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
-  nodePlatform = hostPlatform.parsed.kernel.name; # nodejs's `process.platform`
-  nodeArch = # nodejs's `process.arch`
-    {
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${hostPlatform.parsed.cpu.name}
-      or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
-  electron = electron_34;
+  nodePlatform = hostPlatform.node.platform;
+  nodeArch = hostPlatform.node.arch;
   nodejs = nodejs_22;
-  yarn = yarn-berry.override { inherit nodejs; };
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
   binName = lib.toLower productName;
+  electron-dist-zip = stdenvNoCC.mkDerivation {
+    pname = "electron-dist-zip";
+    version = electron.version;
+    src = electron.dist;
+    nativeBuildInputs = [ zip ];
+    buildPhase = ''
+      zip --recurse-paths - . > $out
+    '';
+    dontInstall = true;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.20.5";
+  version = "0.25.7";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eMVHwjJe6u3A3Dxo6SurusRuMksp/moPmXAUv0FXBwc=";
+    hash = "sha256-+MdPo2THiwgRT4x/Xnf9+1C+Bu0BsV9P1yIXhgdA3CQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ob+A7NMTFuJ2wmRkHmemHnqkEAiY7G8NyxXXrT7NTR8=";
+    hash = "sha256-0SOuaMjVihmSBQhVKZHIZkIUs+MXnW5VkrhGRD6xNcM=";
   };
+
+  # keep yarnOfflineCache same output style with offlineCache = yarn-berry.fetchYarnBerryDeps { inherit (finalAttrs) src missingHashes; hash = "" };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
     inherit (finalAttrs) src;
     nativeBuildInputs = [
-      yarn
+      yarn-berry
       cacert
       writableTmpDirAsHomeHook
     ];
@@ -84,39 +91,54 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         runHook preBuild
 
-        mkdir -p $out
+        mkdir -p $out/cache
+
         yarn config set enableTelemetry false
-        yarn config set cacheFolder $out
+        yarn config set cacheFolder $out/cache
         yarn config set enableGlobalCache false
         yarn config set supportedArchitectures --json '${supportedArchitectures}'
 
         yarn install --immutable --mode=skip-build
 
+        cp yarn.lock $out/yarn.lock
+
         runHook postBuild
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-e5GNWgeYw4CcpOGDd/LNk+syBupqAuws0hz+wUbaFL4=";
+    outputHash = "sha256-pPLnNsQ7+ao+MQw6Zmf/XA8ITWr+AeUA0gvu6qVUECw=";
   };
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn
-      cargo
-      rustc
-      findutils
-      zip
-      jq
-      rsync
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals hostPlatform.isLinux [
-      copyDesktopItems
-      makeWrapper
-    ];
 
-  # force yarn install run in CI mode
-  env.CI = "1";
+  buildInputs = lib.optionals hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+    cargo
+    rustc
+    findutils
+    zip
+    jq
+    rsync
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
+    copyDesktopItems
+    makeWrapper
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # bindgenHook is needed to build `coreaudio-sys` on darwin
+    rustPlatform.bindgenHook
+  ];
+
+  env = {
+    # force yarn install run in CI mode
+    CI = "1";
+    # `LIBCLANG_PATH` is needed to build `coreaudio-sys` on darwin
+    LIBCLANG_PATH = lib.optionalString hostPlatform.isDarwin "${lib.getLib llvmPackages.libclang}/lib";
+  };
 
   # Remove code under The AFFiNE Enterprise Edition (EE) license.
   # Keep file package.json for `yarn install --immutable` lockfile check.
@@ -126,8 +148,9 @@ stdenv.mkDerivation (finalAttrs: {
     echo "$BACKEND_SERVER_PACKAGE_JSON" > packages/backend/server/package.json
   '';
 
+  # FIXME: use `yarn config set cacheFolder $offlineCache/cache`
   configurePhase = ''
-    runHook preConfigurePhase
+    runHook preConfigure
 
     # cargo config
     mkdir -p .cargo
@@ -137,17 +160,16 @@ stdenv.mkDerivation (finalAttrs: {
     # yarn config
     yarn config set enableTelemetry false
     yarn config set enableGlobalCache false
-    yarn config set cacheFolder $yarnOfflineCache
+    yarn config set cacheFolder $yarnOfflineCache/cache
 
     # electron config
     ELECTRON_VERSION_IN_LOCKFILE=$(yarn why electron --json | tail --lines 1 | jq --raw-output '.children | to_entries | first | .key ' | cut -d : -f 2)
-    rsync --archive --chmod=u+w "${electron.dist}/" $HOME/.electron-prebuilt-zip-tmp
     export ELECTRON_FORGE_ELECTRON_ZIP_DIR=$PWD/.electron_zip_dir
     mkdir -p $ELECTRON_FORGE_ELECTRON_ZIP_DIR
-    (cd $HOME/.electron-prebuilt-zip-tmp && zip --recurse-paths - .) > $ELECTRON_FORGE_ELECTRON_ZIP_DIR/electron-v$ELECTRON_VERSION_IN_LOCKFILE-${nodePlatform}-${nodeArch}.zip
+    cp ${electron-dist-zip} $ELECTRON_FORGE_ELECTRON_ZIP_DIR/electron-v$ELECTRON_VERSION_IN_LOCKFILE-${nodePlatform}-${nodeArch}.zip
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 
-    runHook postConfigurePhase
+    runHook postConfigure
   '';
 
   buildPhase = ''

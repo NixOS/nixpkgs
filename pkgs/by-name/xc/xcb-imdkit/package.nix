@@ -25,21 +25,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     xorgproto
     uthash
   ];
 
   buildInputs = [
-    extra-cmake-modules
     xcbutil
     xcbutilkeysyms
   ];
 
-  meta = with lib; {
-    description = "input method development support for xcb";
+  meta = {
+    description = "Input method development support for xcb";
     homepage = "https://github.com/fcitx/xcb-imdkit";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

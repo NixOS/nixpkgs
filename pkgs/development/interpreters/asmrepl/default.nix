@@ -11,11 +11,11 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "asmrepl";
 
-  meta = with lib; {
+  meta = {
     description = "REPL for x86-64 assembly language";
     homepage = "https://github.com/tenderlove/asmrepl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lom ];
-    platforms = platforms.x86_64;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.x86_64;
   };
 }

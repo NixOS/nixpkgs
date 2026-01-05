@@ -13,7 +13,6 @@
   pugixml,
   libuuid,
   zlib,
-  pkg-config,
 }:
 
 let
@@ -40,18 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc-plugin-dicomweb";
-  version = "1.18";
+  version = "1.20";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc-dicomweb/";
     rev = "OrthancDicomWeb-${finalAttrs.version}";
-    hash = "sha256-ee271Fcu8yi1gZpTWrCuqhsBdFcPR/JK/fsnJg8PwIc=";
+    hash = "sha256-p1n4YAFC3W2B2YYsFm/1cJ/zqLsrycJgkMrcXFf/3Xk=";
   };
-
-  patches = [
-    # Fix Orthanc Framework headers files detection
-    ./fix-orthanc-framework-headers-detection.patch
-  ];
 
   postPatch = ''
     mkdir -p ThirdPartyDownloads
@@ -60,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${axios} ThirdPartyDownloads/axios-0.19.0.tar.gz
     ln -s ${font-awesome} ThirdPartyDownloads/Font-Awesome-4.7.0.tar.gz
     ln -s ${babel-polyfill} ThirdPartyDownloads/babel-polyfill-6.26.0.min.js.gz
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   SourceRoot = "${finalAttrs.src.name}/Build";
@@ -92,13 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSTATIC_BUILD=OFF"
     "-DORTHANC_FRAMEWORK_SOURCE=system"
+    "-DORTHANC_FRAMEWORK_ROOT=${orthanc.framework}/include/orthanc-framework"
   ];
 
   meta = {
     description = "Plugin that extends Orthanc with support for the DICOMweb protocols";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      drupol
       dvcorreia
     ];
     platforms = lib.platforms.linux;

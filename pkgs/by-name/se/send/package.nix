@@ -3,22 +3,23 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs_20,
   nixosTests,
 }:
-
 buildNpmPackage rec {
   pname = "send";
-  version = "3.4.23";
+  version = "3.4.27";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
     tag = "v${version}";
-    hash = "sha256-bqQEXLwUvTKX+m2yNHRnrl+eeaGmcovXpXugxd+j14A=";
+    hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
   };
 
-  npmDepsHash = "sha256-r1iaurKuhpP0sevB5pFdtv9j1ikM1fKL7Jgakh4FzTI=";
+  nodejs = nodejs_20;
+
+  npmDepsHash = "sha256-ZVegUECrwkn/DlAwqx5VDmcwEIJV/jAAV99Dq29Tm2w=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -52,7 +53,10 @@ buildNpmPackage rec {
     changelog = "https://github.com/timvisee/send/releases/tag/v${version}";
     homepage = "https://github.com/timvisee/send";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      MrSom3body
+    ];
     mainProgram = "send";
   };
 }

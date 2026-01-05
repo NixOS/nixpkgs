@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upx";
-  version = "5.0.0";
+  version = "5.0.2";
   src = fetchFromGitHub {
     owner = "upx";
     repo = "upx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-LWir7Quf53G3Q9Lyw+sokn7Rtes2DxeZD8UsYviy3aA=";
+    hash = "sha256-ntnOuraEFVIU4dVE2oumpxBmzNNGjqrwMrQFaJp/zww=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://upx.github.io/";
     description = "Ultimate Packer for eXecutables";
     changelog = "https://github.com/upx/upx/blob/${finalAttrs.src.rev}/NEWS";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "upx";
   };
 })

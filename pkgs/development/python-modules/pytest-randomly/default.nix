@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "pytest-randomly";
     owner = "pytest-dev";
     rev = version;
     hash = "sha256-bxbW22Nf/0hfJYSiz3xdrNCzrb7vZwuVvSIrWl0Bkv4=";
@@ -39,18 +39,17 @@ buildPythonPackage rec {
   ];
 
   # needs special invocation, copied from tox.ini
-  pytestFlagsArray = [
-    "-p"
-    "no:randomly"
+  pytestFlags = [
+    "-pno:randomly"
   ];
 
   pythonImportsCheck = [ "pytest_randomly" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${version}/CHANGELOG.rst";
     description = "Pytest plugin to randomly order tests and control random.seed";
     homepage = "https://github.com/pytest-dev/pytest-randomly";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

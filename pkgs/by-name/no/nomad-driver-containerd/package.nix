@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Roblox";
-    repo = pname;
+    repo = "nomad-driver-containerd";
     rev = "v${version}";
     sha256 = "sha256-11K1ACk2hhEi+sAlI932eKpyy82Md7j1edRWH2JJ8sI=";
   };
@@ -46,12 +46,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.github.com/Roblox/nomad-driver-containerd";
     description = "Containerd task driver for Nomad";
     mainProgram = "nomad-driver-containerd";
-    platforms = platforms.linux;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

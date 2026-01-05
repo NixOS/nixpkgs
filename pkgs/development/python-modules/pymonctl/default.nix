@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -38,5 +39,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     description = "Cross-Platform toolkit to get info on and control monitors connected";
     maintainers = with lib.maintainers; [ sigmanificient ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

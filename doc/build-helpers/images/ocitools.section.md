@@ -76,11 +76,13 @@ Note that no user namespace is created, which means that you won't be able to ru
 This example uses `ociTools.buildContainer` to create a simple container that runs `bash`.
 
 ```nix
-{ ociTools, lib, bash }:
+{
+  ociTools,
+  lib,
+  bash,
+}:
 ociTools.buildContainer {
-  args = [
-    (lib.getExe bash)
-  ];
+  args = [ (lib.getExe bash) ];
 
   readonly = false;
 }

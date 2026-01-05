@@ -36,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freebox_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
     changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "freebox_api";
   };
 }

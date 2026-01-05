@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/siduck/st";
-    description = "snazzy terminal (suckless + beautiful)";
+    description = "Snazzy terminal (suckless + beautiful)";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pouya ];
     platforms = lib.platforms.linux;

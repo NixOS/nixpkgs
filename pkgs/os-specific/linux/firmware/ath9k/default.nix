@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs target_firmware/firmware-crc.pl
+    substituteInPlace target_firmware/CMakeLists.txt \
+    --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" \
+                   "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -47,7 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-w"; # old libiberty emits fatal warnings
+  env.NIX_CFLAGS_COMPILE =
+    # old libiberty emits fatal warnings
+    "-w"
+    # old gmp fails to compile with newer gcc
+    # FIXME remove when the normal version has moved on
+    + lib.optionalString (!enableUnstable) " -fpermissive";
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
@@ -108,33 +116,32 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     update = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-${finalAttrs.version}-update";
-      shellHook =
-        ''
-          echo 'rec {'
-          echo '  BASEDIR="$NIX_BUILD_TOP";'
-          make --dry-run --print-data-base -f ${finalAttrs.src}/Makefile download \
-            | egrep    '^[A-Z]+_(VER|URL|SUM|DIR) = ' \
-            | sed 's_\([^ ]*\) = \(.*\)_\1 = "\2\";_' \
-            | tr \( \{ \
-            | tr \) \}
-        ''
-        # sha256 checksums were not added to upstream's Makefile until
-        # after the 1.4.0 release.  The following line is needed for
-        # the `enableUnstable==false` build but not for the
-        # `enableUnstable==true` build.  We can remove the lines below
-        # as soon as `enableUnstable==false` points to a version
-        # greater than 1.4.0.
-        + lib.optionalString (finalAttrs.version == "1.4.0") ''
-          echo 'GCC_SUM = "sha256-kuYcbcOgpEnmLXKjgYX9pVAWioZwLeoHEl69PsOZYoI=";'
-          echo 'MPFR_SUM = "sha256-e2bD8T3IOF8IJkyAWFPz4aju2rgHHVgvPmYZccms1f0=";'
-          echo 'MPC_SUM = "sha256-7VqBXP6lJdx3jfDLN0aLnBtVSq8w2TKLFDHKcFt0AP8=";'
-          echo 'GMP_SUM = "sha256-H1iKrMxBu5rtlG+f44Uhwm2LKQ0APF34B/ZWkPKq3sk=";'
-          echo 'BINUTILS_SUM = "sha256-KrLlsD4IbRLGKV+DGtrUaz4UEKOiNJM6Lo+sZssuehk=";'
-        ''
-        + ''
-          echo '}'
-          exit
-        '';
+      shellHook = ''
+        echo 'rec {'
+        echo '  BASEDIR="$NIX_BUILD_TOP";'
+        make --dry-run --print-data-base -f ${finalAttrs.src}/Makefile download \
+          | egrep    '^[A-Z]+_(VER|URL|SUM|DIR) = ' \
+          | sed 's_\([^ ]*\) = \(.*\)_\1 = "\2\";_' \
+          | tr \( \{ \
+          | tr \) \}
+      ''
+      # sha256 checksums were not added to upstream's Makefile until
+      # after the 1.4.0 release.  The following line is needed for
+      # the `enableUnstable==false` build but not for the
+      # `enableUnstable==true` build.  We can remove the lines below
+      # as soon as `enableUnstable==false` points to a version
+      # greater than 1.4.0.
+      + lib.optionalString (finalAttrs.version == "1.4.0") ''
+        echo 'GCC_SUM = "sha256-kuYcbcOgpEnmLXKjgYX9pVAWioZwLeoHEl69PsOZYoI=";'
+        echo 'MPFR_SUM = "sha256-e2bD8T3IOF8IJkyAWFPz4aju2rgHHVgvPmYZccms1f0=";'
+        echo 'MPC_SUM = "sha256-7VqBXP6lJdx3jfDLN0aLnBtVSq8w2TKLFDHKcFt0AP8=";'
+        echo 'GMP_SUM = "sha256-H1iKrMxBu5rtlG+f44Uhwm2LKQ0APF34B/ZWkPKq3sk=";'
+        echo 'BINUTILS_SUM = "sha256-KrLlsD4IbRLGKV+DGtrUaz4UEKOiNJM6Lo+sZssuehk=";'
+      ''
+      + ''
+        echo '}'
+        exit
+      '';
     };
   };
 
@@ -160,7 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       # see NOTICE.txt for details
       bsd3 # almost everything; "the ClearBSD licence"
-      gpl2ClasspathPlus # **/*cmnos_printf.c, only three files
+      gpl2Plus # **/*cmnos_printf.c, only three files
+      classpathException20 # **/*cmnos_printf.c, only three files
       mit # **/xtos, **/xtensa
     ];
 
@@ -181,5 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://lists.infradead.org/mailman/listinfo/ath9k_htc_fw";
     downloadPage = "https://github.com/qca/open-ath9k-htc-firmware";
     changelog = "https://github.com/qca/open-ath9k-htc-firmware/tags";
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

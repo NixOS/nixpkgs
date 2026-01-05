@@ -1,21 +1,26 @@
-import ./make-test-python.nix (
-  { pkgs, ... }:
-  {
-    name = "gollum";
+{ pkgs, ... }:
+{
+  name = "gollum";
 
-    nodes = {
-      webserver =
-        { pkgs, lib, ... }:
-        {
-          services.gollum.enable = true;
-        };
-    };
+  nodes = {
+    webserver =
+      { pkgs, lib, ... }:
+      {
+        services.gollum.enable = true;
+        services.gollum.extraConfig = ''
+          wiki_options = {
+            show_local_time: true
+          }
 
-    testScript =
-      { nodes, ... }:
-      ''
-        webserver.wait_for_unit("gollum")
-        webserver.wait_for_open_port(${toString nodes.webserver.services.gollum.port})
-      '';
-  }
-)
+          Precious::App.set(:wiki_options, wiki_options)
+        '';
+      };
+  };
+
+  testScript =
+    { nodes, ... }:
+    ''
+      webserver.wait_for_unit("gollum")
+      webserver.wait_for_open_port(${toString nodes.webserver.services.gollum.port})
+    '';
+}

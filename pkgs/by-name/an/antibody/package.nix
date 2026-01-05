@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getantibody";
     repo = "antibody";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-If7XAwtg1WqkDkrJ6qYED+DjwHWloPu3P7X9rUd5ikU=";
   };
 
@@ -26,12 +26,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fastest shell plugin manager";
     mainProgram = "antibody";
     homepage = "https://github.com/getantibody/antibody";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
 
     # golang.org/x/sys needs to be updated due to:
     #

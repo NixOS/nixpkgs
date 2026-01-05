@@ -1,34 +1,32 @@
 {
   cwtch,
   fetchgit,
-  flutter,
+  flutter329,
   lib,
   tor,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  runCommand,
+  yq-go,
+  dart,
 }:
+
 let
-  runtimeBinDependencies = [
-    tor
-  ];
-in
-flutter.buildFlutterApplication rec {
-  pname = "cwtch-ui";
-  version = "1.15.5";
+  version = "1.16.3";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
-    rev = "v${version}";
-    hash = "sha256-u0IFLZp53Fg8soKjSXr6IjNxFI9aTU5xUYgf1SN6rTQ=";
+    tag = "v${version}";
+    hash = "sha256-w1bIT9EIwpmJ4fkOGKo6iI3HdkcYgrGlW0xeecpUn7g=";
   };
+in
+flutter329.buildFlutterApplication {
+  pname = "cwtch-ui";
+  inherit version src;
 
-  # NOTE: The included pubspec.json does not exactly match the upstream
-  # pubspec.lock. With Flutter 3.24, a newer version of material_color_utilities
-  # is required than the upstream locked version. From a checkout of cwtch-ui
-  # 1.15.4, I ran `flutter pub upgrade material_color_utilities` on 2024-12-15.
-  # This upgraded material_color_utilities and its dependencies.
-  pubspecLock = lib.importJSON ./pubspec.json;
-  gitHashes = {
-    flutter_gherkin = "sha256-Y8tR84kkczQPBwh7cGhPFAAqrMZKRfGp/02huPaaQZg=";
-  };
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   flutterBuildFlags = [
     "--dart-define"
@@ -40,13 +38,44 @@ flutter.buildFlutterApplication rec {
   # These things are added to LD_LIBRARY_PATH, but not PATH
   runtimeDependencies = [ cwtch ];
 
-  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath runtimeBinDependencies}";
+  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath [ tor ]}";
 
   postInstall = ''
     mkdir -p $out/share/applications
     substitute linux/cwtch.template.desktop "$out/share/applications/cwtch.desktop" \
       --replace-fail PREFIX "$out"
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "cwtch-ui.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     description = "Messaging app built on the cwtch decentralized, privacy-preserving, multi-party messaging protocol";

@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
   };
 
+  patches = [
+    # Remove unused SDL2 header that erroneously adds libX11 dependency
+    ./remove-unused-header.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     nasm
@@ -47,11 +52,10 @@ stdenv.mkDerivation rec {
     dash m64p_install.sh DESTDIR="$out" PREFIX=""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nintendo 64 Emulator";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.mupen64plus.org/";
-    maintainers = [ maintainers.sander ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mupen64plus";
   };

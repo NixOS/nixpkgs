@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "pyevilgenius";
     rev = version;
     hash = "sha256-wjC32oq/lW3Z4XB+4SILRKIOuCgBKk1gruOo4uc/4/o=";
   };
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyevilgenius" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK to interact with Evil Genius Labs devices";
     homepage = "https://github.com/home-assistant-libs/pyevilgenius";
     changelog = "https://github.com/home-assistant-libs/pyevilgenius/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

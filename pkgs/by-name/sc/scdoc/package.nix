@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scdoc";
-  version = "1.11.3";
+  version = "1.11.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scdoc";
     rev = finalAttrs.version;
-    hash = "sha256-MbLDhLn/JY6OcdOz9/mIPAQRp5TZ6IKuQ/FQ/R3wjGc=";
+    hash = "sha256-gldCHzLigeLKDFDcE3TYrNOEWoSt/uYIg9aTg6wwW54=";
   };
 
   outputs = [
@@ -22,18 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "LDFLAGS+=-static" "LDFLAGS+="
-  '';
-
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
-    ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
+  ];
 
   doCheck = true;
 
@@ -43,9 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "scdoc";
-    maintainers = with lib.maintainers; [
-      primeos
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -27,6 +27,6 @@ buildPecl {
     description = "PHP bindings to RRD tool system";
     license = lib.licenses.bsd0;
     homepage = "https://github.com/php/pecl-processing-rrd";
-    maintainers = lib.teams.wdz.members;
+    teams = [ lib.teams.wdz ];
   };
 }

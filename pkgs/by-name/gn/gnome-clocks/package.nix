@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-clocks";
-  version = "47.0";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major finalAttrs.version}/gnome-clocks-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QovfS9F+Jt5s7wFM16fuvYkUPD8nMrJLfaaYErqlITE=";
+    hash = "sha256-v3aRXypJLooFkv5As1NGWTqjnk5ogdYXbg79h3HU5vo=";
   };
 
   nativeBuildInputs = [
@@ -45,24 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  buildInputs =
-    [
-      gtk4
-      glib
-      gsettings-desktop-schemas
-      gdk-pixbuf
-      gnome-desktop
-      geocode-glib_2
-      geoclue2
-      libgweather
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      # GStreamer plugins needed for Alarms
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    gtk4
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    gnome-desktop
+    geocode-glib_2
+    geoclue2
+    libgweather
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    # GStreamer plugins needed for Alarms
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   doCheck = true;
 
@@ -72,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://apps.gnome.org/Clocks/";
-    description = "A simple and elegant clock application for GNOME";
+    description = "Simple and elegant clock application for GNOME";
     longDescription = ''
       A simple and elegant clock application. It includes world clocks, alarms,
       a stopwatch, and timers.
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Set timers to properly cook your food
     '';
     mainProgram = "gnome-clocks";
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };

@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "streamlabswater" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the StreamLabs API";
     homepage = "https://github.com/streamlabswater/stream-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

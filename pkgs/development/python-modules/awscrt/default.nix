@@ -2,32 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   cmake,
   perl,
   stdenv,
-  CoreFoundation,
-  Security,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.24.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.30.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sqa/+5nFbDYmjRNZrYM8F58xrnlsz77Zv1XDSEbhMdA=";
+    hash = "sha256-4aEzQw5xEW6cDxAbDREif0e3xWGtUwP1rwD2wzoW84I=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
+
+  hardeningDisable = [ "fortify" ]; # needed for jitterentropy
 
   dontUseCmakeConfigure = true;
 
@@ -37,11 +32,11 @@ buildPythonPackage rec {
   # https://github.com/awslabs/aws-crt-python/issues/281
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/awslabs/aws-crt-python";
     changelog = "https://github.com/awslabs/aws-crt-python/releases/tag/v${version}";
     description = "Python bindings for the AWS Common Runtime";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ davegallant ];
   };
 }

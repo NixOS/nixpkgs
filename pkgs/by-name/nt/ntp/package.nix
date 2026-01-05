@@ -31,34 +31,32 @@ stdenv.mkDerivation rec {
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
-  ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [
-      openssl
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pps-tools
-      libcap
-    ];
-
-  hardeningEnable = [ "pie" ];
+  buildInputs = [
+    openssl
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pps-tools
+    libcap
+  ];
 
   postInstall = ''
     rm -rf $out/share/doc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
   };
 }

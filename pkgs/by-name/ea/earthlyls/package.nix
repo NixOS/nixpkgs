@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-GnFzfCjT4kjb9WViKIFDkIU7zVpiI6HDuUeddgHGQuc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-sWbYN92Jfr/Pr3qoHWkew/ASIdq8DQg0WHpdyklGBLo=";
 
   passthru = {
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/glehmann/earthlyls/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "earthlyls";
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

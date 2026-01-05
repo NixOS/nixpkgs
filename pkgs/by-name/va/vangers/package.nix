@@ -4,6 +4,7 @@
   callPackage,
   stdenv,
   cmake,
+  installShellFiles,
   SDL2,
   SDL2_net,
   libogg,
@@ -26,6 +27,14 @@ stdenv.mkDerivation {
     hash = "sha256-IhCQh60wBzaRsj72Y8NUHrv9lvss0fmgHjzrO/subOI=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0)" \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 4.0)"
+  '';
+
+  strictDeps = true;
+
   buildInputs = [
     SDL2
     SDL2_net
@@ -35,17 +44,24 @@ stdenv.mkDerivation {
     clunk
     zlib
   ];
-  nativeBuildInputs = [ cmake ];
+
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -T -m755 server/vangers_server $out/bin/vangers_server
-    install -T -m755 src/vangers $out/bin/vangers
-    install -T -m755 surmap/surmap $out/bin/surmap
+    runHook preInstall
+
+    installBin server/vangers_server
+    installBin src/vangers
+    installBin surmap/surmap
+
+    runHook postInstall
   '';
 
   meta = {
-    description = "The video game that combines elements of the racing and role-playing genres";
+    description = "Video game that combines elements of the racing and role-playing genres";
     homepage = "https://github.com/KranX/Vangers";
     mainProgram = "vangers";
     platforms = lib.platforms.all;

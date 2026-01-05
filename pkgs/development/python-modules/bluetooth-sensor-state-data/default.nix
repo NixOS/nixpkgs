@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-sensor-state-data";
-  version = "1.7.5";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-sensor-state-data";
     tag = "v${version}";
-    hash = "sha256-W+gU9YlxoCh5zRht44Ovq3Doms8UtCvUNLlSUpzsQwA=";
+    hash = "sha256-V7stHAID6zkLFYDX5HUVF38/8OHa4AZr48FPmSoDcAE=";
   };
 
   build-system = [ poetry-core ];
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bluetooth_sensor_state_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "Models for storing and converting Bluetooth Sensor State Data";
     homepage = "https://github.com/bluetooth-devices/bluetooth-sensor-state-data";
     changelog = "https://github.com/Bluetooth-Devices/bluetooth-sensor-state-data/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

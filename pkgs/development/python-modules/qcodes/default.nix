@@ -51,6 +51,7 @@
   lxml,
   pip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
   pytest-xdist,
@@ -60,14 +61,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.51.0";
+  version = "0.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     tag = "v${version}";
-    hash = "sha256-QgCMoZrC3ZCo8yayRXw9fvBj5xi+XH2x/E1MuQFULPo=";
+    hash = "sha256-uXVL25U7szJF/v7OEsB9Ww1h6ziBxsMJdqhZG5qn0VU=";
   };
 
   postPatch = ''
@@ -142,6 +143,7 @@ buildPythonPackage rec {
     lxml
     pip
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
@@ -153,11 +155,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    # Follow upstream with settings
-    "-m 'not serial'"
     "--hypothesis-profile ci"
+    # Follow upstream with settings
     "--durations=20"
   ];
 
@@ -168,10 +169,16 @@ buildPythonPackage rec {
     "tests/dataset/test_dataset_basic.py"
   ];
 
+  disabledTestMarks = [
+    "serial"
+  ];
+
   disabledTests = [
     # Tests are time-sensitive and power-consuming
     # Those tests fails repeatably and are flaky
+    "test_access_channels_by_name"
     "test_access_channels_by_slice"
+    "test_access_channels_by_tuple"
     "test_aggregator"
     "test_datasaver"
     "test_do1d_additional_setpoints_shape"
@@ -179,7 +186,9 @@ buildPythonPackage rec {
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
+    "test_measured"
     "test_ramp_safely"
+    "test_ramp_scaled"
 
     # more flaky tests
     # https://github.com/microsoft/Qcodes/issues/5551
@@ -191,7 +200,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python-based data acquisition framework";
-    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${src.tag}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
     license = lib.licenses.mit;

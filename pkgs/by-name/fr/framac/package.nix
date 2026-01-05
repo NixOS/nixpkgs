@@ -8,6 +8,7 @@
   ocamlPackages,
   ltl2ba,
   coq,
+  dune,
   why3,
   gdk-pixbuf,
   wrapGAppsHook3,
@@ -46,12 +47,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "30.0";
-  slang = "Zinc";
+  version = "31.0";
+  slang = "Gallium";
 
   src = fetchurl {
     url = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-OsD5lSYeyCmnvQQr9w/CmsY3kCnrnfMLzARHSOtNKlY=";
+    hash = "sha256-qUOE8A1TeRy7S02Dq0Fge8cZYtQkYfAtcRFsT/bcpWc=";
   };
 
   preConfigure = ''
@@ -62,16 +63,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ wrapGAppsHook3 ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      dune_3
-      menhir
-    ]);
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    dune
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
   buildInputs = with ocamlPackages; [
+    camlzip
     dune-site
     dune-configurator
     ocamlgraph

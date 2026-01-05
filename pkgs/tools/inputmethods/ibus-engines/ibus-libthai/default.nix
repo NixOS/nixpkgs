@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     libthai
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     homepage = "https://linux.thai.net/projects/ibus-libthai";
     description = "Thai input method engine for IBus";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

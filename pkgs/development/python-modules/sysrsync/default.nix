@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gchamon";
-    repo = pname;
+    repo = "sysrsync";
     tag = version;
     hash = "sha256-2Sz3JrNmIGOnad+qjRzbAgsFEzDtwBT0KLEFyQKZra4=";
   };
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sysrsync" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and safe system's rsync wrapper for Python";
     homepage = "https://github.com/gchamon/sysrsync";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

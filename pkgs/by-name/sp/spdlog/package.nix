@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   fmt,
   catch2_3,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spdlog";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4QZVCounDbtkP+58fejHGWjquWT3b03b9TNGs45dN7c=";
+    hash = "sha256-VB82cNfpJlamUjrQFYElcy0CXAbkPqZkD5zhuLeHLzs=";
   };
 
   nativeBuildInputs = [ cmake ];

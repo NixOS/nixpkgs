@@ -7,9 +7,12 @@
   lib,
   stdenv,
   makeSetupHook,
+  runCommand,
   makeBinaryWrapper,
   pkg-config,
   targetPackages,
+  cosmic-icons,
+  cosmic-settings,
   libGL,
   libxkbcommon,
   xorg,
@@ -44,9 +47,17 @@ makeSetupHook {
     ];
 
   substitutions = {
-    fallbackXdgDirs = "${lib.optionalString includeSettings "${targetPackages.cosmic-settings}/share:"}${targetPackages.cosmic-icons}/share";
-
-    cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
+    fallbackXdgDirs =
+      let
+        fallbackThemes = runCommand "cosmic-fallback-themes" { } ''
+          mkdir -p $out/share
+          ln -s ${targetPackages.cosmic-settings or cosmic-settings}/share/cosmic $out/share/cosmic
+        '';
+      in
+      lib.makeSearchPath "share" (
+        lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons or cosmic-icons ]
+      );
+    cargoLinkerVar = stdenv.targetPlatform.rust.cargoEnvVarTarget;
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
       [
@@ -76,10 +87,6 @@ makeSetupHook {
 
   meta = {
     description = "Setup hook for configuring and wrapping applications based on libcosmic";
-    maintainers = with lib.maintainers; [
-      HeitorAugustoLN
-      nyabinary
-      thefossguy
-    ];
+    teams = [ lib.teams.cosmic ];
   };
 } ./libcosmic-app-hook.sh

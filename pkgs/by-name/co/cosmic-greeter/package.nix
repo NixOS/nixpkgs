@@ -6,27 +6,35 @@
   libcosmicAppHook,
   cmake,
   just,
+  cosmic-randr,
   libinput,
   linux-pam,
   udev,
   coreutils,
   xkeyboard_config,
   nix-update-script,
+  nixosTests,
+  orca,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.0-alpha.6";
+  version = "1.0.1";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-K6kCBtlmFfav8UP4zorzDJBzHt4CoSaFFAufrW1DPrw=";
+    hash = "sha256-G9ahiwk3/nJEGtlHSaK9dUi4/zGEH90QGKeSdpNQDLU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nmkM/Jm2P5ftZFfzX+O1Fe6eobRbgBkajZsbyI67Zfw=";
+  cargoHash = "sha256-4yRBgFrH4RBpuvChTED+ynx+PyFumoT2Z+R1gXxF4Xc=";
+
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-12-31";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+  };
 
   cargoBuildFlags = [ "--all" ];
 
@@ -38,9 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    cosmic-randr
     libinput
     linux-pam
     udev
+    orca
   ];
 
   dontUseJustBuild = true;
@@ -51,31 +61,39 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter"
-    "--set"
-    "daemon-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter-daemon"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   postPatch = ''
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
   '';
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
@@ -83,10 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

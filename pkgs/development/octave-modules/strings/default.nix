@@ -34,11 +34,11 @@ buildOctavePackage rec {
     sed -i s/toascii/double/g inst/*.m
   '';
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/strings/index.html";
-    license = licenses.gpl3Plus;
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/strings/";
+    license = lib.licenses.gpl3Plus;
     # Claims to have a freebsd license, but I found none.
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Additional functions for manipulation and analysis of strings";
     # Some pcre symbols claimed to be missing
     broken = stdenv.hostPlatform.isDarwin;

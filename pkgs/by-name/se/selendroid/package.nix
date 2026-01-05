@@ -45,12 +45,12 @@ stdenv.mkDerivation {
       --add-flags "-capabilityMatcher io.selendroid.grid.SelendroidCapabilityMatcher"
   '';
 
-  meta = with lib; {
-    homepage = "http://selendroid.io/";
+  meta = {
+    homepage = "https://selendroid.io/";
     description = "Test automation for native or hybrid Android apps and the mobile web";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
   };
 }

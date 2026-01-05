@@ -10,7 +10,7 @@
   python3,
   ruby,
   jre8,
-  nettools,
+  net-tools,
   bc,
   nixosTests,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     which
     coreutils
     rrdtool
-    nettools
+    net-tools
     perlPackages.perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) munin; };
 
-  meta = with lib; {
+  meta = {
     description = "Networked resource monitoring tool";
     longDescription = ''
       Munin is a monitoring tool that surveys all your computers and remembers
@@ -173,8 +173,8 @@ stdenv.mkDerivation rec {
       to kill our performance?' problems.
     '';
     homepage = "https://munin-monitoring.org/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.bjornfor ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

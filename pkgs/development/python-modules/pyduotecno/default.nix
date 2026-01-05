@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duotecno" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Duotecno IP interfaces";
     homepage = "https://github.com/Cereal2nd/pyDuotecno";
     changelog = "https://github.com/Cereal2nd/pyDuotecno/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

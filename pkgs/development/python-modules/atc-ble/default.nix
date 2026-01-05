@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atc_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for ATC devices with custom firmware";
     homepage = "https://github.com/Bluetooth-Devices/atc-ble";
     changelog = "https://github.com/Bluetooth-Devices/atc-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

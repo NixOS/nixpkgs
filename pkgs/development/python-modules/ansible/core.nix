@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  python,
   pythonOlder,
   installShellFiles,
   docutils,
@@ -25,38 +26,36 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.18.3";
+  version = "2.20.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    pname = "ansible_core";
-    inherit version;
-    hash = "sha256-jE6spAhFI44mAbm8nb+9T27TUCy4smMnifdc5Hir/e4=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    tag = "v${version}";
+    hash = "sha256-4kTBzDHDfdHR/W4edxrGtWhg6TRLMtdEgUZYcn8cFQg=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
   # the python interpreter again, as it would break execution of
   # connection plugins.
   postPatch = ''
-    substituteInPlace lib/ansible/executor/task_executor.py \
-      --replace "[python," "["
-
     patchShebangs --build packaging/cli-doc/build.py
 
     SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
-    PYPROJECT=$(cat pyproject.toml)
-    if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
-      echo "setuptools replace: ''${BASH_REMATCH[0]}"
-      echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
-    else
-      exit 2
-    fi
+    WHEEL_PATTERN='"wheel[0-9 <>=.,]+"'
+    echo "Patching pyproject.toml"
+    # print replaced patterns to stdout
+    sed -r -i -e 's/'"$SETUPTOOLS_PATTERN"'/"setuptools"/w /dev/stdout' \
+      -e 's/'"$WHEEL_PATTERN"'/"wheel"/w /dev/stdout' pyproject.toml
   '';
 
   nativeBuildInputs = [
@@ -87,7 +86,9 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ]
+  ++ extraPackages python.pkgs;
 
   pythonRelaxDeps = [ "resolvelib" ];
 
@@ -100,11 +101,14 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

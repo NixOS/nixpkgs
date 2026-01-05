@@ -32,14 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     cjson
     libev
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
-  meta = with lib; {
+  meta = {
     description = "High-performance connection pool for PostgreSQL";
     homepage = "https://agroal.github.io/pgagroal/";
     changelog = "https://github.com/agroal/pgagroal/releases/tag/${finalAttrs.version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

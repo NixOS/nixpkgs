@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_33,
+  electron_38,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
@@ -10,8 +10,8 @@
 }:
 
 let
-  electron = electron_33;
-  version = "2024.12.1";
+  electron = electron_38;
+  version = "2025.8.2";
 in
 
 buildNpmPackage {
@@ -22,16 +22,18 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-O2rBODsZuW6M3dM1zL2TVTPxnTPaReD+yOyBLywnxIU=";
+    hash = "sha256-v3UN58dJ+rSdFx+99xRMI88gnJ/hgL48Lr7AMjNgXMY=";
   };
 
-  npmDepsHash = "sha256-RhRa0VgEfVv9kW+EY7yhmm6k/waYAVcvom55xUbfhDs=";
+  npmDepsHash = "sha256-rlmAZyznoLSudAf7k1mgf13CO+9mlDB3HhubPga+30Q=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
+
+  makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
@@ -57,7 +59,7 @@ buildNpmPackage {
       --set NODE_ENV production
 
     install -m 444 -D 'app/common/renderer/assets/images/icon.png' \
-      $out/share/icons/hicolor/512x512/apps/appium-inspector.png
+      $out/share/icons/hicolor/256x256/apps/appium-inspector.png
 
     runHook postInstall
   '';
@@ -82,6 +84,6 @@ buildNpmPackage {
     license = lib.licenses.asl20;
     mainProgram = "appium-inspector";
     maintainers = with lib.maintainers; [ marie ];
-    inherit (electron.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

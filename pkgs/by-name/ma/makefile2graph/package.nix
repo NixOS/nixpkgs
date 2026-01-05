@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
       --set PATH ${lib.makeBinPath [ gnumake ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lindenb/makefile2graph";
     description = "Creates a graph of dependencies from GNU-Make; Output is a graphiz-dot file or a Gexf-XML file";
-    maintainers = with maintainers; [ cmcdragonkai ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

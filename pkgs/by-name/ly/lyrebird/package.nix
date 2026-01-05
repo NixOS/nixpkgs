@@ -71,12 +71,12 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 app.py $out/bin/lyrebird
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and powerful voice changer for Linux, written in GTK 3";
     mainProgram = "lyrebird";
     homepage = "https://github.com/lyrebird-voice-changer/lyrebird";
-    license = licenses.mit;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 }

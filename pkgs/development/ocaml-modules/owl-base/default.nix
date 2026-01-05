@@ -17,12 +17,12 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.10";
 
-  meta = with lib; {
+  meta = {
     description = "Numerical computing library for Ocaml";
     homepage = "https://ocaml.xyz";
     changelog = "https://github.com/owlbarn/owl/releases";
-    platforms = platforms.x86_64 ++ platforms.aarch64;
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.mit;
+    platforms = lib.platforms.x86_64 ++ lib.platforms.aarch64;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.mit;
   };
 }

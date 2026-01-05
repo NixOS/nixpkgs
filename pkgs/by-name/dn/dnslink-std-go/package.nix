@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://dnslink.org/";
     license = lib.licenses.mit;
     mainProgram = "dnslink";
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

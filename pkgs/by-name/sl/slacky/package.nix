@@ -7,23 +7,32 @@
   makeDesktopItem,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "slacky";
-  version = "0.0.5";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "andirsun";
     repo = "Slacky";
-    tag = "v${version}";
-    hash = "sha256-nDxmzZqi7xEe4hnY6iXJg+613lSKElWxvF3w8bRDW90=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IGxIybfAfab21+c6yNGxCXCpJ7jMnxpoCvXIkwwRick=";
   };
 
-  npmDepsHash = "sha256-9+4cxeQw2Elug+xIgzNvpaSMgDVlBFz/+TW1jJwDm40=";
+  npmDepsHash = "sha256-5hCQVQUK/zOL8/WwBOGHE8/t+WCJL1H5ThpshLQ6Ni8=";
 
-  npmPackFlags = [ "--ignore-scripts" ];
+  npmPackFlags = [
+    "--ignore-scripts"
+  ];
+
+  makeCacheWritable = true;
+
+  npmFlags = [
+    "--legacy-peer-deps"
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    electron
     copyDesktopItems
   ];
 
@@ -32,7 +41,8 @@ buildNpmPackage rec {
   postInstall = ''
     mkdir -p $out/share/icons
     ln -s $out/lib/node_modules/slacky/build/icons/icon.png $out/share/icons/slacky.png
-    makeWrapper ${electron}/bin/electron $out/bin/slacky \
+    makeWrapper ${lib.getExe electron} $out/bin/slacky \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/node_modules/slacky/
   '';
 
@@ -58,10 +68,10 @@ buildNpmPackage rec {
   meta = {
     description = "Unofficial Slack desktop client for arm64 Linux";
     homepage = "https://github.com/andirsun/Slacky";
-    changelog = "https://github.com/andirsun/Slacky/releases/tag/v${version}";
+    changelog = "https://github.com/andirsun/Slacky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ awwpotato ];
-    platforms = [ "aarch64-linux" ];
+    maintainers = with lib.maintainers; [ da157 ];
+    platforms = lib.platforms.linux;
     mainProgram = "slacky";
   };
-}
+})

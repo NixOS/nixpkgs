@@ -1,50 +1,55 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  getent,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kn";
-  version = "1.15.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
-    rev = "knative-v${version}";
-    sha256 = "sha256-bXICU1UBNPVIumzRPSOWa1I5hUYWEvo6orBpUvbPEvg=";
+    tag = "knative-v${finalAttrs.version}";
+    hash = "sha256-rElNlb3NfbOZjCMWT2efknWM9B0+BFa5CCNmcA6afPY=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-rZEkwiCy2kpeKOi4lhLoW1o+cws/p++c9Dz8fKhgNKQ=";
+
+  env.GOWORK = "off";
 
   subPackages = [ "cmd/kn" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [
-    "-X knative.dev/client/pkg/kn/commands/version.Version=v${version}"
-    "-X knative.dev/client/pkg/kn/commands/version.VersionEventing=v${version}"
-    "-X knative.dev/client/pkg/kn/commands/version.VersionServing=v${version}"
-  ];
+  ldflags = [ "-X knative.dev/client/pkg/commands/version.Version=v${finalAttrs.version}" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kn \
       --bash <($out/bin/kn completion bash) \
       --zsh <($out/bin/kn completion zsh)
   '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
-    $out/bin/kn version | grep ${version} > /dev/null
+    runHook preInstallCheck
+
+    PATH=$PATH:${getent}/bin $out/bin/kn version | grep ${finalAttrs.version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
-  meta = with lib; {
-    description = "Knative client kn is your door to the Knative world. It allows you to create Knative resources interactively from the command line or from within scripts";
+  meta = {
+    description = "Create Knative resources interactively from the command line or from within scripts";
     mainProgram = "kn";
     homepage = "https://github.com/knative/client";
-    changelog = "https://github.com/knative/client/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    changelog = "https://github.com/knative/client/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

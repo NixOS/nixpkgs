@@ -14,6 +14,7 @@ let
     "yazi"
     "theme"
     "keymap"
+    "vfs"
   ];
 in
 {
@@ -26,23 +27,17 @@ in
       type =
         with lib.types;
         submodule {
-          options = (
-            lib.listToAttrs (
-              map (
-                name:
-                lib.nameValuePair name (
-                  lib.mkOption {
-                    inherit (settingsFormat) type;
-                    default = { };
-                    description = ''
-                      Configuration included in `${name}.toml`.
+          options = lib.genAttrs files (
+            name:
+            lib.mkOption {
+              inherit (settingsFormat) type;
+              default = { };
+              description = ''
+                Configuration included in `${name}.toml`.
 
-                      See https://yazi-rs.github.io/docs/configuration/${name}/ for documentation.
-                    '';
-                  }
-                )
-              ) files
-            )
+                See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
+              '';
+            }
           );
         };
       default = { };
@@ -71,12 +66,12 @@ in
       description = ''
         Lua plugins.
 
-        See https://yazi-rs.github.io/docs/plugins/overview/ for documentation.
+        See <https://yazi-rs.github.io/docs/plugins/overview/> for documentation.
       '';
       example = lib.literalExpression ''
         {
           foo = ./foo;
-          bar = pkgs.bar;
+          inherit (pkgs.yaziPlugins) bar;
         }
       '';
     };
@@ -92,12 +87,12 @@ in
       description = ''
         Pre-made themes.
 
-        See https://yazi-rs.github.io/docs/flavors/overview/ for documentation.
+        See <https://yazi-rs.github.io/docs/flavors/overview/> for documentation.
       '';
       example = lib.literalExpression ''
         {
           foo = ./foo;
-          bar = pkgs.bar;
+          inherit (pkgs.yaziPlugins) bar;
         }
       '';
     };
@@ -118,6 +113,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ linsui ];
+    maintainers = with lib.maintainers; [
+      linsui
+      ryan4yin
+    ];
   };
 }

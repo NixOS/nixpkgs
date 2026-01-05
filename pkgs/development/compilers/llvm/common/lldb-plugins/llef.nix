@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llef";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "foundryzero";
     repo = "llef";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gbZDs3uurmi5YrnjumjQgzKhEumphvgYMk3R73vZiUA=";
+    hash = "sha256-pAFjLaZi4Sjlq3evKT2IG+0/imf4Fp5bM2gknLKpRvs=";
   };
 
   dontBuild = true;
@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LLEF is a plugin for LLDB to make it more useful for RE and VR";
     homepage = "https://github.com/foundryzero/llef";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nrabulinski ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ nrabulinski ];
     mainProgram = "llef";
   };
 })

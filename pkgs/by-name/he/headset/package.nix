@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple music player for YouTube and Reddit";
     homepage = "https://headsetapp.co/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ muscaln ];
+    maintainers = with lib.maintainers; [ muscaln ];
     mainProgram = "headset";
   };
 }

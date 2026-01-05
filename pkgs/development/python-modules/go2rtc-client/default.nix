@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "go2rtc-client";
-  version = "0.1.2";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-go2rtc-client";
     tag = version;
-    hash = "sha256-t4ewL4YvxdeDBBKDYapvDUK/Mt6zQ/hhOpVtW3dlmSg=";
+    hash = "sha256-+/ko59AeFl8R/fRNjB5SykFPXm8PR3s6Imccj/bHkJI=";
   };
 
   postPatch = ''
@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/home-assistant-libs/python-go2rtc-client";
     changelog = "https://github.com/home-assistant-libs/python-go2rtc-client/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

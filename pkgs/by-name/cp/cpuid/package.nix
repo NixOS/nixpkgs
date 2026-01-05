@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cpuid";
-  version = "20241023";
+  version = "20250513";
 
   src = fetchurl {
     url = "http://etallen.com/cpuid/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-/HdDWo1dKzVRcTMB6M24PmKjz+3IQTKw7JsbteUkT9w=";
+    sha256 = "sha256-b0dKIrWEhIjkVLAaMduA65WNVWdLUzlTP8DmrreTYms=";
   };
 
   # For pod2man during the build process.
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux tool to dump x86 CPUID information about the CPU";
     longDescription = ''
       cpuid dumps detailed information about the CPU(s) gathered from the CPUID
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       Cyrix, UMC, NexGen, Rise, and SiS CPUs.
     '';
     homepage = "http://etallen.com/cpuid.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ blitz ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ blitz ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -16,7 +16,7 @@ fetchzip rec {
   '';
 
   meta = {
-    description = "The VST2 source development kit";
+    description = "VST2 source development kit";
     longDescription = ''
       VST2 is proprietary, and deprecated by Steinberg.
       As such, it should only be used for legacy reasons.

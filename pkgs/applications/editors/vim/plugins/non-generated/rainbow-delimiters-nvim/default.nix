@@ -4,18 +4,18 @@
   fetchFromGitLab,
   nix-update-script,
 }:
-vimUtils.buildVimPlugin {
+vimUtils.buildVimPlugin rec {
   pname = "rainbow-delimiters.nvim";
-  version = "unstable-2025-01-12";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     owner = "HiPhish";
     repo = "rainbow-delimiters.nvim";
-    rev = "85b80abaa09cbbc039e3095b2f515b3cf8cadd11";
-    hash = "sha256-zWHXYs3XdnoszqOFY3hA2L5mNn1a44OAeKv3lL3EMEw=";
+    tag = "v${version}";
+    hash = "sha256-E0ZPi9Vzc3TwhNHsGyABY+sgn/vO6Oyun6eRd7/RFgU=";
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # rainbow-delimiters.types.lua
     "rainbow-delimiters.types"
     # Test that requires an unpackaged dependency

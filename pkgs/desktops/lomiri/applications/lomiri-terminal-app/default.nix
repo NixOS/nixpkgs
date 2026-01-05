@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-terminal-app";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-terminal-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X+bq/6QPjNfHrOuSvNhFsKALoj9DSvxuyC3YoXBgBHE=";
+    hash = "sha256-STL8Km5NVSW3wEjC96sT4Q9z/lTSYKFQ6ku6M+CKM78=";
   };
 
   postPatch = ''
@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Terminal app for desktop and mobile devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-terminal-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

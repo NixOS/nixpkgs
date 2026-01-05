@@ -18,30 +18,22 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
+    with lib.versions;
     lib.switch
-      [ coq.version mathcomp.version ]
+      [ coq.coq-version mathcomp.version ]
       [
-        {
-          cases = [
-            (lib.versions.range "8.10" "8.16")
-            (lib.versions.range "1.12.0" "1.15.0")
-          ];
-          out = "1.2.1";
-        }
-        {
-          cases = [
-            (lib.versions.range "8.10" "8.15")
-            (lib.versions.range "1.12.0" "1.14.0")
-          ];
-          out = "1.2.0";
-        }
-        {
-          cases = [
-            (lib.versions.range "8.10" "8.14")
-            (lib.versions.range "1.11.0" "1.12.0")
-          ];
-          out = "1.1.2";
-        }
+        (case (range "8.10" "8.16") (range "1.12.0" "1.15.0") "1.2.1")
+        (case (range "8.10" "8.15") (range "1.12.0" "1.14.0") "1.2.0")
+        (case (range "8.10" "8.14") (range "1.11.0" "1.12.0") "1.1.2")
       ]
       null;
 
@@ -55,9 +47,9 @@ mkCoqDerivation {
     mathcomp-real-closed
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Abel - Galois and Abel - Ruffini Theorems";
-    license = licenses.cecill-b;
-    maintainers = [ maintainers.cohencyril ];
+    license = lib.licenses.cecill-b;
+    maintainers = [ lib.maintainers.cohencyril ];
   };
 }

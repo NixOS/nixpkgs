@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlitecpp";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "SRombauts";
     repo = "sqlitecpp";
     rev = finalAttrs.version;
-    sha256 = "sha256-rsVFk4FsonrwpBd3TonkxilwWeOBocH8AyeB+71OBdI=";
+    hash = "sha256-RSNJGfvIvNfk+/Awzh06tDi/TA5Wc35X8ya0X5mP9IE=";
   };
 
   nativeBuildInputs = [
@@ -32,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSQLITECPP_BUILD_TESTS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://srombauts.github.io/SQLiteCpp/";
     description = "C++ SQLite3 wrapper";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.jbedo
-      maintainers.doronbehar
+      lib.maintainers.jbedo
+      lib.maintainers.doronbehar
     ];
   };
 })

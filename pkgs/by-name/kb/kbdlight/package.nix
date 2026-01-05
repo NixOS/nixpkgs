@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
       --replace 4755 0755
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hobarrera/kbdlight";
     description = "Very simple application that changes MacBooks' keyboard backlight level";
     mainProgram = "kbdlight";
-    license = licenses.isc;
-    maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.womfoo ];
+    platforms = lib.platforms.linux;
   };
 }

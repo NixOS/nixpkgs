@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "vimv";
-  version = "unstable-2019-10-31";
+  version = "0-unstable-2019-10-31";
 
   src = fetchFromGitHub {
     owner = "thameera";
@@ -21,12 +21,12 @@ stdenvNoCC.mkDerivation {
     patchShebangs $out/bin/vimv
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thameera/vimv";
     description = "Batch-rename files using Vim";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ kmein ];
     mainProgram = "vimv";
   };
 }

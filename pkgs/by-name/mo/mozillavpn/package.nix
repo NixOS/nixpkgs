@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -22,15 +23,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.25.0";
+  version = "2.32.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-XunvADSdLA6jFVjXTAtmYvC1i5ZE7WYaCTvlAd8C1ko=";
+    hash = "sha256-STp/BCh3gELF0UgkMF2uUV9U5JgTNsqoh+Cog8fQy2c=";
   };
-  patches = [ ];
+  patches = [
+    # VPN-7309: Qt 6.10 QML loading fixes (#10832)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/5e7a26efd5acc3cdeeda8d1954459bff1a7e373e.patch";
+      hash = "sha256-CdvEuASPNYzQwyCMKXWZObOHH55WRFsxGYlEP8b20Mc=";
+    })
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
@@ -45,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-HaOqhjDodn9z0XQMsxJAMKrs1s7l2cJCIzHECjwnA5A=";
+    hash = "sha256-bJTOTHlCYSrlhy6GewpK8qhBGRH49xNkFqOXZug5lNA=";
   };
 
   buildInputs = [
@@ -90,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
+
+    patchShebangs scripts/utils/xlifftool.py
   '';
 
   cmakeFlags = [
@@ -97,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"

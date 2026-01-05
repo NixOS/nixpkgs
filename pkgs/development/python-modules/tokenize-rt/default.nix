@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "asottile";
-    repo = pname;
+    repo = "tokenize-rt";
     rev = "v${version}";
     hash = "sha256-7ykczY73KkqR99tYLL/5bgr9bqU444qHs2ONz+ldVyg=";
   };
@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around the stdlib `tokenize` which roundtrips";
     mainProgram = "tokenize-rt";
     homepage = "https://github.com/asottile/tokenize-rt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

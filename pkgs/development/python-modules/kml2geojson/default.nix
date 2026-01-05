@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mrcagney";
-    repo = pname;
+    repo = "kml2geojson";
     rev = version;
     hash = "sha256-iJEcXpvy+Y3MkxAF2Q1Tkcx8GxUVjeVzv6gl134zdiI=";
   };
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kml2geojson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to convert KML to GeoJSON";
     mainProgram = "k2g";
     homepage = "https://github.com/mrcagney/kml2geojson";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

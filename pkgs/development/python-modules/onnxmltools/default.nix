@@ -2,10 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   numpy,
   onnx,
   skl2onnx,
-  # native check inputs
+
+  # tests
   pytestCheckHook,
   pandas,
   xgboost,
@@ -17,17 +23,21 @@
 
 buildPythonPackage rec {
   pname = "onnxmltools";
-  version = "1.13";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
-    tag = "v${version}";
-    hash = "sha256-uNd7N7/FgX8zaJp8ouvftwGqGqas8lZRXFmjpS+t2B4=";
+    tag = version;
+    hash = "sha256-CcZlGLX8/ANHnhoOv5s/ybBN74gRH/8eLYJ6q/BJo/4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     onnx
     skl2onnx
@@ -51,10 +61,11 @@ buildPythonPackage rec {
     # h20
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ONNXMLTools enables conversion of models to ONNX";
     homepage = "https://github.com/onnx/onnxmltools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/onnx/onnxmltools/blob/${src.tag}/CHANGELOGS.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

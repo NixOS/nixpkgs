@@ -12,13 +12,13 @@
 buildKodiAddon rec {
   pname = "netflix";
   namespace = "plugin.video.netflix";
-  version = "1.23.3";
+  version = "1.23.5";
 
   src = fetchFromGitHub {
     owner = "CastagnaIT";
     repo = namespace;
     rev = "v${version}";
-    hash = "sha256-tve7E7dK60BIHETdwt9hD3/5eEdJB6c6rhw4oDoLAKM=";
+    hash = "sha256-IIRut99AH08Z3udTkzUf2wz7dQMA94dOnfROm7iM9RM=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +29,11 @@ buildKodiAddon rec {
     myconnpy
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/CastagnaIT/plugin.video.netflix";
     description = "Netflix VOD Services Add-on";
-    license = licenses.mit;
-    maintainers = teams.kodi.members ++ [ maintainers.pks ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.pks ];
+    teams = [ lib.teams.kodi ];
   };
 }

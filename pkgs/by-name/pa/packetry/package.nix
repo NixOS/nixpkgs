@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eDVom0kAL1QwO8BtrJS76VTvxtKs7CP6Ob5BWlE6wOM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-he+Y2vBCw5lmYe5x6myIxMKRIohBCLDQ/B1EV+4pKGs=";
 
   nativeBuildInputs = [
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # packetry-cli is only necessary on windows https://github.com/greatscottgadgets/packetry/pull/154

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   gtk3,
@@ -10,6 +11,7 @@
   gobject-introspection,
   wrapGAppsHook3,
   gettext,
+  desktopToDarwinBundle,
   # Optional packages:
   enableOSM ? true,
   osm-gps-map,
@@ -20,21 +22,16 @@
   ghostscript,
 }:
 
-let
-  inherit (python3Packages) buildPythonApplication pythonOlder;
-in
-buildPythonApplication rec {
-  version = "5.2.4";
+python3Packages.buildPythonApplication rec {
+  version = "6.0.6";
   pname = "gramps";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-Jue5V4pzfd1MaZwEhkGam+MhNjaisio7byMBPgGmiFg=";
+    hash = "sha256-+sWO+c7haKXH42JVT6Zpz70cHdGC/TPgBUMSD+0+/JI=";
   };
 
   patches = [
@@ -44,12 +41,23 @@ buildPythonApplication rec {
     ./disable-gtk-warning-dialog.patch
   ];
 
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    berkeleydb
+    orjson
+    pyicu
+    pygobject3
+    pycairo
+  ];
+
   nativeBuildInputs = [
     wrapGAppsHook3
     intltool
     gettext
     gobject-introspection
-    python3Packages.setuptools
   ];
 
   nativeCheckInputs = [
@@ -58,30 +66,26 @@ buildPythonApplication rec {
     python3Packages.jsonschema
     python3Packages.mock
     python3Packages.lxml
+  ]
+  # TODO: use JHBuild to build the Gramps' bundle
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
-  buildInputs =
-    [
-      gtk3
-      pango
-      gexiv2
-    ]
-    # Map support
-    ++ lib.optionals enableOSM [
-      osm-gps-map
-      glib-networking
-    ]
-    # Graphviz support
-    ++ lib.optional enableGraphviz graphviz
-    # Ghostscript support
-    ++ lib.optional enableGhostscript ghostscript;
-
-  propagatedBuildInputs = with python3Packages; [
-    berkeleydb
-    pyicu
-    pygobject3
-    pycairo
-  ];
+  buildInputs = [
+    gtk3
+    pango
+    gexiv2
+  ]
+  # Map support
+  ++ lib.optionals enableOSM [
+    osm-gps-map
+    glib-networking
+  ]
+  # Graphviz support
+  ++ lib.optional enableGraphviz graphviz
+  # Ghostscript support
+  ++ lib.optional enableGhostscript ghostscript;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -100,16 +104,16 @@ buildPythonApplication rec {
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-hooks-gobject-introspection
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     description = "Genealogy software";
     mainProgram = "gramps";
     homepage = "https://gramps-project.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       pinpox
       tomasajt
     ];
-    changelog = "https://github.com/gramps-project/gramps/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/gramps-project/gramps/blob/${src.tag}/ChangeLog";
     longDescription = ''
       Every person has their own story but they are also part of a collective
       family history. Gramps gives you the ability to record the many details of
@@ -117,6 +121,6 @@ buildPythonApplication rec {
       people, places and events. All of your research is kept organized,
       searchable and as precise as you need it to be.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -21,7 +21,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy String Baseline";
     mainProgram = "baseline";
     longDescription = ''
@@ -29,7 +29,7 @@ buildPythonPackage {
       string output against a baseline.
     '';
     homepage = "https://github.com/dmgass/baseline";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

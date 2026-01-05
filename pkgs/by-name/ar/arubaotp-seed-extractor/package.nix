@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "arubaotp-seed-extractor";
-  version = "unstable-22-12-2022";
+  version = "0-unstable-2022-12-22";
 
   src = fetchFromGitHub {
     owner = "andry08";
@@ -38,11 +38,11 @@ python3Packages.buildPythonApplication {
     ln -s "$libdir/main.py" $out/bin/arubaotp-seed-extractor
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/andry08/ArubaOTP-seed-extractor";
     description = "Extract TOTP seed instead of using ArubaOTP app";
     mainProgram = "arubaotp-seed-extractor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

@@ -6,17 +6,18 @@
   libgcrypt,
   zlib,
   bzip2,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "munge";
-  version = "0.5.16";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "dun";
     repo = "munge";
     rev = "munge-${finalAttrs.version}";
-    sha256 = "sha256-fv42RMUAP8Os33/iHXr70i5Pt2JWZK71DN5vFI3q7Ak=";
+    sha256 = "sha256-MfxED81P4ipdP4fuxwmpNrAeej3ZH+qiHIt5bSrct1o=";
   };
 
   nativeBuildInputs = [
@@ -62,17 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir "$out"/{var{/{lib,log}{/munge,},},etc/munge}
   '';
 
-  meta = with lib; {
+  passthru.tests.nixos = nixosTests.munge;
+
+  meta = {
     description = ''
       An authentication service for creating and validating credentials
     '';
     license = [
       # MUNGE
-      licenses.gpl3Plus
+      lib.licenses.gpl3Plus
       # libmunge
-      licenses.lgpl3Plus
+      lib.licenses.lgpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = [ maintainers.rickynils ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.rickynils ];
   };
 })

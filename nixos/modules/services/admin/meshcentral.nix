@@ -24,7 +24,7 @@ with lib;
         - [Old homepage with documentation link](https://www.meshcommander.com/meshcentral2)
       '';
       type = types.submodule {
-        freeformType = configFormat.type;
+        freeformType = attrsOf configFormat.type;
       };
       example = {
         settings = {

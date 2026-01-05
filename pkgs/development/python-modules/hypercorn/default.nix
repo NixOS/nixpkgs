@@ -56,23 +56,19 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
     mainProgram = "hypercorn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dgliwka ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dgliwka ];
   };
 }

@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://base64io-python.readthedocs.io/";
     changelog = "https://github.com/aws/base64io-python/blob/${version}/CHANGELOG.rst";
     description = "Python stream implementation for base64 encoding/decoding";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

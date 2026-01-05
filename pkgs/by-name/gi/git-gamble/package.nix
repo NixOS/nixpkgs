@@ -8,27 +8,27 @@
   nix-update-script,
 }:
 
-let
-  version = "2.9.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "git-gamble";
+  version = "2.11.0";
 
   src = fetchFromGitLab {
     owner = "pinage404";
     repo = "git-gamble";
-    rev = "version/${version}";
-    hash = "sha256-hMP5mBKXcO+Ws04G3OxdYuB5JoaSjlYtlkerRQ6+bXw=";
+    rev = "version/${finalAttrs.version}";
+    hash = "sha256-b7jGrt8uJ9arH4EEsOOPCIcQmhwrrJb8uXcSsZPFrNQ=";
   };
-in
-rustPlatform.buildRustPackage {
-  pname = "git-gamble";
-  inherit version src;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-t58vf/xhJi5HV9lBWvXzKMZ8I2stjTAmCOrdLWPerGI=";
+  cargoHash = "sha256-lf66me4ot5lvrz2JTj8MreaHyVwOcFSVfPGX9lBTKug=";
 
   nativeCheckInputs = [ gitMinimal ];
   preCheck = ''
     patchShebangs tests/editor/fake_editor.sh
   '';
+  checkFlags = [
+    # this test can be flaky ; help is needed to stabilize it in upstream
+    "--skip=git_time_keeper::white_box::lock_file::create_as_many_as_lock_files_when_starting_several_times"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,15 +50,20 @@ rustPlatform.buildRustPackage {
     installManPage git-gamble.1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "version/(.*)"
+    ];
+  };
 
   meta = {
     description = "Tool that blends TDD (Test Driven Development) + TCR (`test && commit || revert`)";
     homepage = "https://git-gamble.is-cool.dev";
-    changelog = "https://gitlab.com/pinage404/git-gamble/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/pinage404/git-gamble/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.isc;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "git-gamble";
   };
-}
+})

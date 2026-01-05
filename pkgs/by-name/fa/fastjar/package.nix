@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchzip {
     pname = "fastjar-source";
     inherit (finalAttrs) version;
-    url = "https://download.savannah.gnu.org/releases/fastjar/fastjar-${finalAttrs.version}.tar.gz";
+    url = "mirror://savannah/fastjar/fastjar-${finalAttrs.version}.tar.gz";
     hash = "sha256-8VyKNQaPLrXAy/UEm2QkBx56SSSoLdU/7w4IwrxbsQc=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "fastjar";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

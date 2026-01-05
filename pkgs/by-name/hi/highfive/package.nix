@@ -41,13 +41,15 @@ stdenv.mkDerivation rec {
     "-DHIGHFIVE_EXAMPLES=OFF"
     "-DHIGHFIVE_UNIT_TESTS=OFF"
     "-DHIGHFIVE_USE_INSTALL_DEPS=ON"
-  ] ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ]
+  ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++ HDF5 interface";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     homepage = "https://bluebrain.github.io/HighFive/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ robertodr ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ robertodr ];
   };
 }

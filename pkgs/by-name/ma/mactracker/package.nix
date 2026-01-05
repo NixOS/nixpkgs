@@ -16,11 +16,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mactracker";
-  version = "7.13.2";
+  version = "7.13.5";
 
   src = fetchurl {
     url = "https://mactracker.ca/downloads/Mactracker_${finalAttrs.version}.zip";
-    hash = "sha256-Ns2es6uMqfHKmeVV6ehGXV0pNtv2T3eNYLnRvsjOhpE=";
+    hash = "sha256-VCcpEgMWo5U3BJpDSc0mQUIlmPuTKD7JBcmmKmYNf1Y=";
   };
 
   dontPatch = true;
@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    description = "Mactracker provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
+    description = "Provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
     homepage = "https://mactracker.ca";
     changelog = "https://mactracker.ca/releasenotes-mac.html";
     license = lib.licenses.unfree;

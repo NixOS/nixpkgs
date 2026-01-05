@@ -52,15 +52,16 @@ buildPythonPackage rec {
     # AssertionError: assert '1740326049.9886339' == '1740326049'
     "test_headers_no_breach"
     "test_headers_breach"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [ "test_multiple_decorators" ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [ "test_multiple_decorators" ];
 
   pythonImportsCheck = [ "slowapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for API rate limiting";
     homepage = "https://github.com/laurentS/slowapi";
     changelog = "https://github.com/laurentS/slowapi/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

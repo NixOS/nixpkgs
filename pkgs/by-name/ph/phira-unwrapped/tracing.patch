@@ -1,0 +1,24 @@
+diff --git a/phira-monitor/Cargo.toml b/phira-monitor/Cargo.toml
+index 722a022..899b7db 100644
+--- a/phira-monitor/Cargo.toml
++++ b/phira-monitor/Cargo.toml
+@@ -15,6 +15,7 @@ serde = { version = "*", features = ["derive"] }
+ serde_yaml = "*"
+ tokio = { workspace = true }
+ uuid = { version = "1.4.0", features = ["v4"] }
++tracing = "0.1"
+ 
+ phira-mp-client = { git = "https://github.com/TeamFlos/phira-mp" }
+ phira-mp-common = { git = "https://github.com/TeamFlos/phira-mp" }
+diff --git a/phira-monitor/src/main.rs b/phira-monitor/src/main.rs
+index 61bcfba..a4bf8af 100644
+--- a/phira-monitor/src/main.rs
++++ b/phira-monitor/src/main.rs
+@@ -14,6 +14,7 @@ use prpr::{
+ use scene::MainScene;
+ use serde::Deserialize;
+ use std::fs::File;
++use tracing::warn;
+ 
+ mod dir {
+     use anyhow::Result;

@@ -10,15 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-show-asm";
-  version = "0.2.48";
+  version = "0.2.55";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-y8qGadmp+6exKAJvNIyBQLZnIe0DYRkiWMyIAMXMr0s=";
+    hash = "sha256-ZSPlFDnLVQp1uz1VrbXmw8bAM1/ZWojAv7PSFG+k2Pw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6AE/Ym6Uc2kXafWW3Z/qr8O3tLcbO1wkoYdGjDw5/Do=";
+  cargoHash = "sha256-M4nn9MnFtyHh9QX12CHGGOL4gkTy9lozd87Rph4+OBA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,16 +37,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand showing the assembly, LLVM-IR and MIR generated for Rust code";
     homepage = "https://github.com/pacak/cargo-show-asm";
     changelog = "https://github.com/pacak/cargo-show-asm/blob/${version}/Changelog.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       oxalica
       matthiasbeyer
     ];

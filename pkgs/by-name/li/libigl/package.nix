@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libigl";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "libigl";
     repo = "libigl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OpjkQGRiuc7kNlwgCeM4dcotTb5J+6LUn4IOe9bFbW4=";
+    hash = "sha256-7Cvz/yOb5kQaIceUwyijBNplXvok5reJoJsTnvKWt4M=";
   };
 
   # We could also properly use CMake, but we would have to heavily patch it
@@ -20,12 +20,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/include
     cp -r include/igl $out/include
+    rm -rf $out/include/igl/opengl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple C++ geometry processing library";
     homepage = "https://github.com/libigl/libigl";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 })

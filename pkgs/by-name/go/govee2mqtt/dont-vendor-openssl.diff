@@ -1,24 +1,24 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index 303f6f8..952a7ff 100644
+index 76cb503..19245e0 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1373,15 +1373,6 @@ version = "0.1.5"
+@@ -1496,15 +1496,6 @@ version = "0.1.6"
  source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
+ checksum = "d05e27ee213611ffe7d6348b942e8f942b37114c00cc03cec254295a4a17852e"
  
 -[[package]]
 -name = "openssl-src"
--version = "300.2.1+3.2.0"
+-version = "300.5.4+3.5.4"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "3fe476c29791a5ca0d1273c697e96085bbabbbea2ef7afd5617e78a4b40332d3"
+-checksum = "a507b3792995dae9b0df8a1c1e3771e8418b7c2d9f0baeba32e6fe8b06c7cb72"
 -dependencies = [
 - "cc",
 -]
 -
  [[package]]
  name = "openssl-sys"
- version = "0.9.98"
-@@ -1390,7 +1381,6 @@ checksum = "c1665caf8ab2dc9aef43d1c0023bd904633a6a05cb30b0ad59bec2ae986e57a7"
+ version = "0.9.111"
+@@ -1513,7 +1504,6 @@ checksum = "82cab2d520aa75e3c58898289429321eb788c3106963d0dc886ec7a5f4adc321"
  dependencies = [
   "cc",
   "libc",
@@ -27,15 +27,14 @@ index 303f6f8..952a7ff 100644
   "vcpkg",
  ]
 diff --git a/Cargo.toml b/Cargo.toml
-index a4cf25c..42fde6d 100644
+index 290b9fb..3b04346 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -44,7 +44,7 @@ parking_lot = "0.12.1"
+@@ -44,7 +44,6 @@ parking_lot = "0.12.1"
  
  [dependencies.mosquitto-rs]
  version="0.11.1"
 -features = ["vendored-openssl"]
-+features = ["router"]
  #path = "../mosquitto-rs/mosquitto-rs"
  
  [dev-dependencies]

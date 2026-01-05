@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-3LYoNQquYbyiEd9ZXRr4UPIcl3gultsBYWCWaCYshwQ=";
   };
 
@@ -68,12 +67,12 @@ stdenv.mkDerivation rec {
     $out/bin/kooha --help
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elegantly record your screen";
     homepage = "https://github.com/SeaDve/Kooha";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ austinbutler ];
     mainProgram = "kooha";
   };
 }

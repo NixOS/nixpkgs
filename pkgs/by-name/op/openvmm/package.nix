@@ -34,14 +34,13 @@ rustPlatform.buildRustPackage {
   ];
 
   cargoHash = "sha256-u0E09yFssd71wUS1BD766ztDImauu90T/jIWOb2v0mE=";
-  useFetchCargoVendor = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/microsoft/openvmm";
-    description = "modular, cross-platform Virtual Machine Monitor (VMM), written in Rust";
-    license = licenses.mit;
+    description = "Modular, cross-platform Virtual Machine Monitor (VMM), written in Rust";
+    license = lib.licenses.mit;
     mainProgram = "openvmm";
-    maintainers = with maintainers; [ astro ];
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitLab {
     owner = "greut";
-    repo = pname;
+    repo = "eclint";
     rev = "v${version}";
     hash = "sha256-XY+D0bRIgWTm2VH+uDVodYeyGeu+8Xyyq4xDvTDLii4=";
   };
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   ldflags = [ "-X main.version=${version}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/greut/eclint";
     description = "EditorConfig linter written in Go";
     mainProgram = "eclint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

@@ -29,11 +29,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "keepkey_agent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Using KeepKey as hardware-based SSH/PGP agent";
     homepage = "https://github.com/romanz/trezor-agent";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       hkjn
       np
       mmahut

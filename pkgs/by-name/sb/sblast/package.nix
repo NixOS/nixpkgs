@@ -11,13 +11,13 @@
 let
   self = buildGoModule rec {
     pname = "sblast";
-    version = "0.7.0";
+    version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "ugjka";
       repo = "sblast";
       rev = "v${version}";
-      hash = "sha256-+ZeZ2lohAngfljCa/z9yjCKvQwCMEiwzzPFrpAU8lWA=";
+      hash = "sha256-ICSnLfzBoaax3YKa4LiTBQ4zxgDxttxcN4YVLApFH24=";
     };
 
     vendorHash = "sha256-yPwLilMiDR1aSeuk8AEmuYPsHPRWqiByGLwgkdI5t+s=";
@@ -50,8 +50,7 @@ let
     meta = {
       description = "Blast your Linux audio to DLNA receivers";
       homepage = "https://github.com/ugjka/sblast";
-      # license is "MIT+NoAI": <https://github.com/ugjka/sblast/blob/main/LICENSE>
-      license = lib.licenses.unfree;
+      license = lib.licenses.mit;
       mainProgram = "sblast";
       maintainers = with lib.maintainers; [ colinsane ];
       platforms = lib.platforms.linux;

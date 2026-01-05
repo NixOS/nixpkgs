@@ -33,11 +33,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Local webserver for developers";
     mainProgram = "devd";
     homepage = "https://github.com/cortesi/devd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ brianhicks ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ brianhicks ];
   };
 }

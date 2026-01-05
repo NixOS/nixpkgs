@@ -34,11 +34,10 @@ stdenv.mkDerivation rec {
     NetServer
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SMTP-proxy that signs and/or verifies emails";
     homepage = "https://dkimproxy.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ekleog ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

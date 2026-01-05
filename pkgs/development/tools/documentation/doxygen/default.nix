@@ -6,22 +6,22 @@
   python3,
   flex,
   bison,
-  qt5,
-  CoreServices,
+  qt6,
   libiconv,
   spdlog,
+  fmt,
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doxygen";
-  version = "1.13.2";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-tet2Ep2Mvucg2QBJbo9A6531cJhQ9L7+ZMmo07S8cwY=";
+    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-HbUAIfkfP0Tvb2NLSerTSL8A+8Ox2thgGL2/zGLkZdc=";
   };
 
   # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509
@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
       --replace-fail 'JAVACC_CHAR_TYPE=\"unsigned char\"' \
                      'JAVACC_CHAR_TYPE=\"char8_t\"' \
       --replace-fail "CMAKE_CXX_STANDARD 17" "CMAKE_CXX_STANDARD 20"
+  ''
+  # otherwise getting linker errors for deps
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+                     'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
   '';
 
   nativeBuildInputs = [
@@ -39,26 +45,24 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-    [
-      libiconv
-      spdlog
-      sqlite
-    ]
-    ++ lib.optionals (qt5 != null) (
-      with qt5;
-      [
-        qtbase
-        wrapQtAppsHook
-      ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  buildInputs = [
+    libiconv
+    spdlog
+    fmt
+    sqlite
+  ]
+  ++ lib.optionals (qt6 != null) [
+    qt6.qtbase
+    qt6.wrapQtAppsHook
+    qt6.qtsvg
+  ];
 
   cmakeFlags = [
-    "-DICONV_INCLUDE_DIR=${libiconv}/include"
     "-Duse_sys_spdlog=ON"
+    "-Duse_sys_fmt=ON"
     "-Duse_sys_sqlite3=ON"
-  ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  ]
+  ++ lib.optional (qt6 != null) "-Dbuild_wizard=YES";
 
   # put examples in an output so people/tools can test against them
   outputs = [
@@ -85,6 +89,6 @@ stdenv.mkDerivation rec {
       off-line reference manual (in LaTeX) from a set of documented source
       files.
     '';
-    platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
+    platforms = if qt6 != null then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})

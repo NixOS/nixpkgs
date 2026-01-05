@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "pavucontrol-qt";
     rev = version;
-    hash = "sha256-V3VYwDlTRd7q7EJhC4zHcX56AbUYJdfumqXaKlkLEfg=";
+    hash = "sha256-6t7nbuC/13S+Q9mINP1WuyaDqZUKp4s9LObcbSRuJ1c=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     mainProgram = "pavucontrol-qt";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 }

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "7.0.2";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pWNRWAnLORGXXeWlQgmFXwtv23ymkSpegd4mUp9wQow=";
+    hash = "sha256-r0d1dH4R4F/+E9O6Rj2S9n8fPRqeT0a6M6ROoisMlkQ=";
   };
 
   build-system = [ setuptools ];

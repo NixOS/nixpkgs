@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/nuXmv --prefix DYLD_LIBRARY_PATH : ${gmp}/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Symbolic model checker for analysis of finite and infinite state systems";
     homepage = "https://nuxmv.fbk.eu/pmwiki.php";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ siraben ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ siraben ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

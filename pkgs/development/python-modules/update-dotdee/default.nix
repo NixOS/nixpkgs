@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "test_executable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic modularized configuration file manager";
     mainProgram = "update-dotdee";
     homepage = "https://github.com/xolox/python-update-dotdee";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

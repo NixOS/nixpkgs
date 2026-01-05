@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   zope-schema,
   zope-interface,
@@ -10,14 +10,20 @@
 
 buildPythonPackage rec {
   pname = "zope-filerepresentation";
-  version = "6.0";
+  version = "7.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.filerepresentation";
-    inherit version;
-    hash = "sha256-yza3iGspJ2+C8WhfPykfQjXmac2HhdFHQtRl0Trvaqs=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.filerepresentation";
+    tag = version;
+    hash = "sha256-VWi00b7m+aKwkg/Gfzo5fJWMqdMqgowBpkqsYcEO2gY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+  '';
 
   build-system = [ setuptools ];
 

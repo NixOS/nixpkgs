@@ -23,11 +23,12 @@
   uvicorn,
   requests,
   prometheus-client,
+  shtab,
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.3.0.8";
+  version = "4.3.3";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.9";
@@ -36,7 +37,7 @@ buildPythonApplication rec {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${version}";
-    hash = "sha256-BLOGsqeVrMZf2fLRqu1BIopWxgQF/z9KgsQopFfvdvo=";
+    hash = "sha256-RmGbd8Aa2jJ2DMrBUUoa8mPBa6bGnQd0s0y3p/zP0ng=";
   };
 
   build-system = [ setuptools ];
@@ -66,7 +67,9 @@ buildPythonApplication rec {
     jinja2
     which
     prometheus-client
-  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+    shtab
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
   passthru.tests = {
     service = nixosTests.glances;
@@ -91,7 +94,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
-      primeos
       koral
     ];
   };

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   appstream,
   blueprint-compiler,
   desktop-file-utils,
@@ -13,20 +13,15 @@
   pkg-config,
   typescript,
   wrapGAppsHook4,
-  nix-update-script,
+  gnome,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "decibels";
-  version = "46.0";
+  version = "49.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    group = "GNOME";
-    owner = "Incubator";
-    repo = "decibels";
-    rev = version;
-    hash = "sha256-3LQQcrpmWrTfk8A8GR+KnxJEB1HGozgEsM+j5ECK8kc=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "mirror://gnome/sources/decibels/${lib.versions.major finalAttrs.version}/decibels-${finalAttrs.version}.tar.xz";
+    hash = "sha256-KbebouKWfmkUHjnwrSxnfjj+P/ufug+lx1MflNP2c8o=";
   };
 
   nativeBuildInputs = [
@@ -60,16 +55,21 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gnome.updateScript {
+      packageName = "decibels";
+    };
   };
 
   meta = {
     description = "Play audio files";
-    homepage = "https://gitlab.gnome.org/GNOME/Incubator/decibels";
-    changelog = "https://gitlab.gnome.org/GNOME/Incubator/decibels/-/blob/main/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/GNOME/decibels";
+    changelog = "https://gitlab.gnome.org/GNOME/decibels/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [
+      lib.teams.gnome
+      lib.teams.gnome-circle
+    ];
     mainProgram = "org.gnome.Decibels";
     platforms = lib.platforms.linux;
   };
-}
+})

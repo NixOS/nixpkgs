@@ -29,25 +29,24 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.0.2";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AquAVoEqlsBVxd41hG2sVo9UoSS+255eCQzIfGkC/Tk=";
+    hash = "sha256-rccVjSrOVIe4ZDtloCoCCI3u9UIcUqdirHIzS7ffAas=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      rocm-cmake
-      clr
-    ]
-    ++ lib.optionals buildDocs [
-      rocm-docs-core
-      python3Packages.python
-    ];
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
+    clr
+  ]
+  ++ lib.optionals buildDocs [
+    rocm-docs-core
+    python3Packages.python
+  ];
 
   buildInputs = [
     half
@@ -55,24 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
-  cmakeFlags =
-    [
-      "-DROCM_PATH=${clr}"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals (!useOpenCL && !useCPU) [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DBACKEND=HIP"
-    ]
-    ++ lib.optionals (useOpenCL && !useCPU) [
-      "-DBACKEND=OCL"
-    ]
-    ++ lib.optionals useCPU [
-      "-DBACKEND=CPU"
-    ];
+  cmakeFlags = [
+    "-DROCM_PATH=${clr}"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals (!useOpenCL && !useCPU) [
+    "-DBACKEND=HIP"
+  ]
+  ++ lib.optionals (useOpenCL && !useCPU) [
+    "-DBACKEND=OCL"
+  ]
+  ++ lib.optionals useCPU [
+    "-DBACKEND=CPU"
+  ];
 
   postPatch = lib.optionalString (!useOpenCL && !useCPU) ''
     # Bad path
@@ -86,18 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive high-performance computer vision library for AMD processors";
     homepage = "https://github.com/ROCm/rpp";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
+    broken = useOpenCL;
   };
 })

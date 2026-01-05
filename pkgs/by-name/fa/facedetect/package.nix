@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.thregr.org/~wavexx/software/facedetect/";
     description = "Simple face detector for batch processing";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
     mainProgram = "facedetect";
   };
 }

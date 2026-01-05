@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "indexed_gzip";
-  version = "1.8.7";
+  version = "1.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dryq1LLC+lVHj/i+m60ubGGItlX5/clCnwNGrexI92I=";
+    hash = "sha256-EFNmVndZ22x9+GbYaWEd7Tu4PVwOUPuwHQLBkiuYtFc=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "indexed_gzip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to seek within compressed gzip files";
     homepage = "https://github.com/pauldmccarthy/indexed_gzip";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

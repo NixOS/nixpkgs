@@ -1,15 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.tlp;
   enableRDW = config.networking.networkmanager.enable;
   # TODO: Use this for having proper parameters in the future
-  mkTlpConfig = tlpConfig: lib.generators.toKeyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault {
-      mkValueString = val:
-        if lib.isList val then "\"" + (toString val) + "\""
-        else toString val;
-    } "=";
-  } tlpConfig;
+  mkTlpConfig =
+    tlpConfig:
+    lib.generators.toKeyValue {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
+        mkValueString = val: if lib.isList val then "\"" + (toString val) + "\"" else toString val;
+      } "=";
+    } tlpConfig;
 in
 {
   ###### interface
@@ -21,14 +26,29 @@ in
         description = "Whether to enable the TLP power management daemon.";
       };
 
-      settings = lib.mkOption {type = with lib.types; attrsOf (oneOf [bool int float str (listOf str)]);
-        default = {};
+      pd = {
+        enable = lib.mkEnableOption "the power-rofiles-daemon like DBus interface for TLP";
+
+        package = lib.mkPackageOption pkgs "tlp-pd" { };
+      };
+
+      settings = lib.mkOption {
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            bool
+            int
+            float
+            str
+            (listOf str)
+          ]);
+        default = { };
         example = {
           SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
           USB_BLACKLIST_PHONE = 1;
         };
         description = ''
-          Options passed to TLP. See https://linrunner.de/tlp for all supported options..
+          Options passed to TLP. See <https://linrunner.de/tlp> for all supported options..
         '';
       };
 
@@ -58,35 +78,59 @@ in
       Using config.services.tlp.extraConfig is deprecated and will become unsupported in a future release. Use config.services.tlp.settings instead.
     '';
 
-    assertions = [{
-      assertion = cfg.enable -> config.powerManagement.scsiLinkPolicy == null;
-      message = ''
-        `services.tlp.enable` and `config.powerManagement.scsiLinkPolicy` cannot be set both.
-        Set `services.tlp.settings.SATA_LINKPWR_ON_AC` and `services.tlp.settings.SATA_LINKPWR_ON_BAT` instead.
-      '';
-    }];
+    assertions = [
+      {
+        assertion = cfg.enable -> config.powerManagement.scsiLinkPolicy == null;
+        message = ''
+          `services.tlp.enable` and `config.powerManagement.scsiLinkPolicy` cannot be set both.
+          Set `services.tlp.settings.SATA_LINKPWR_ON_AC` and `services.tlp.settings.SATA_LINKPWR_ON_BAT` instead.
+        '';
+      }
+      {
+        assertion = cfg.pd.enable -> !config.services.power-profiles-daemon.enable;
+        message = ''
+          `services.tlp.pd` and `services.power-profiles-daemon` cannot be enabled together,
+          because they are using the same dbus interface and have the same functionality.
+          Generally, `services.tlp.pd` should be preferred as upstream does not recommend
+          using tlp together with power-profiles-daemon.
+          Set `services.power-profiles-daemon.enable` to `false` to resolve this error.
+        '';
+      }
+      {
+        assertion = cfg.pd.enable -> !(config.services.tuned.enable && config.services.tuned.ppdSupport);
+        message = ''
+          `services.tlp.pd` and `services.tuned.ppdSupport` cannot be enabled together,
+          because they are using the same dbus interface and have the same functionality.
+        '';
+      }
+    ];
 
     environment.etc = {
       "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
-    } // lib.optionalAttrs enableRDW {
+    }
+    // lib.optionalAttrs enableRDW {
       "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
         "${cfg.package}/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      cfg.package
+    ]
+    ++ lib.optionals cfg.pd.enable [ cfg.pd.package ];
 
-
-    services.tlp.settings = let
-      cfg = config.powerManagement;
-      maybeDefault = val: lib.mkIf (val != null) (lib.mkDefault val);
-    in {
-      CPU_SCALING_GOVERNOR_ON_AC = maybeDefault cfg.cpuFreqGovernor;
-      CPU_SCALING_GOVERNOR_ON_BAT = maybeDefault cfg.cpuFreqGovernor;
-      CPU_SCALING_MIN_FREQ_ON_AC = maybeDefault cfg.cpufreq.min;
-      CPU_SCALING_MAX_FREQ_ON_AC = maybeDefault cfg.cpufreq.max;
-      CPU_SCALING_MIN_FREQ_ON_BAT = maybeDefault cfg.cpufreq.min;
-      CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
-    };
+    services.tlp.settings =
+      let
+        cfg = config.powerManagement;
+        maybeDefault = val: lib.mkIf (val != null) (lib.mkDefault val);
+      in
+      {
+        CPU_SCALING_GOVERNOR_ON_AC = maybeDefault cfg.cpuFreqGovernor;
+        CPU_SCALING_GOVERNOR_ON_BAT = maybeDefault cfg.cpuFreqGovernor;
+        CPU_SCALING_MIN_FREQ_ON_AC = maybeDefault cfg.cpufreq.min;
+        CPU_SCALING_MAX_FREQ_ON_AC = maybeDefault cfg.cpufreq.max;
+        CPU_SCALING_MIN_FREQ_ON_BAT = maybeDefault cfg.cpufreq.min;
+        CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
+      };
 
     services.udev.packages = [ cfg.package ];
 
@@ -94,7 +138,11 @@ in
       # use native tlp instead because it can also differentiate between AC/BAT
       services.cpufreq.enable = false;
 
-      packages = [ cfg.package ];
+      packages = [
+        cfg.package
+      ]
+      ++ lib.optionals cfg.pd.enable [ cfg.pd.package ];
+
       # XXX: These must always be disabled/masked according to [1].
       #
       # [1]: https://github.com/linrunner/TLP/blob/a9ada09e0821f275ce5f93dc80a4d81a7ff62ae4/tlp-stat.in#L319

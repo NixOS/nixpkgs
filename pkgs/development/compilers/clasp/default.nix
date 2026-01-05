@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Common Lisp implementation based on LLVM with C++ integration";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

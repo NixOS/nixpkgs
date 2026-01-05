@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   click,
@@ -31,6 +33,7 @@
   pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
@@ -38,57 +41,53 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.2.0";
+  version = "2025.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-PpgzlaVWKW+aLbFtDztNjBMI79pmsiS3uN8su75Rako=";
+    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
   };
 
-  postPatch = ''
-    # versioneer hack to set version of GitHub package
-    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
-
-    substituteInPlace setup.py \
-      --replace-fail "import versioneer" "" \
-      --replace-fail "version=versioneer.get_version()," "version='${version}'," \
-      --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
-
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "versioneer[toml]==0.29"' ""
+  # https://github.com/dask/dask/issues/12043
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace dask/dataframe/dask_expr/tests/_util.py \
+      --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     click
     cloudpickle
     fsspec
+    importlib-metadata
     packaging
     partd
     pyyaml
-    importlib-metadata
     toolz
   ];
 
   optional-dependencies = lib.fix (self: {
     array = [ numpy ];
-    complete =
-      [
-        pyarrow
-        lz4
-      ]
-      ++ self.array
-      ++ self.dataframe
-      ++ self.distributed
-      ++ self.diagnostics;
+    complete = [
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       pandas
       pyarrow
-    ] ++ self.array;
+    ]
+    ++ self.array;
     distributed = [ distributed ];
     diagnostics = [
       bokeh
@@ -96,32 +95,34 @@ buildPythonPackage rec {
     ];
   });
 
-  nativeCheckInputs =
-    [
-      hypothesis
-      pyarrow
-      pytest-asyncio
-      pytest-cov-stub
-      pytest-mock
-      pytest-rerunfailures
-      pytest-xdist
-      pytestCheckHook
-      versionCheckHook
-    ]
-    ++ optional-dependencies.array
-    ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = [ "--version" ];
+  nativeCheckInputs = [
+    hypothesis
+    pyarrow
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-mock
+    pytest-rerunfailures
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+    versionCheckHook
+  ]
+  ++ optional-dependencies.array
+  ++ optional-dependencies.dataframe;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Rerun failed tests up to three times
-    "--reruns 3"
-    # Don't run tests that require network access
-    "-m 'not network'"
+    "--reruns=3"
   ];
 
-  disabledTests = [
-    # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
-    "test_set_index_head_nlargest_string"
+  disabledTestMarks = [
+    # Don't run tests that require network access
+    "network"
+  ];
+
+  # https://github.com/dask/dask/issues/12042
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_multiple_repartition_partition_size"
   ];
 
   __darwinAllowLocalNetworking = true;

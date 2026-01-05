@@ -23,7 +23,12 @@ let
       hash = "sha256-4Mltt0yFt4oh9hsrHL8/ch5n7nZYiXIJ1UgLktPvlKQ=";
     };
 
-    patches = lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
+    patches = [
+      # Fix build for GCC 15/C23 by adding parameters to unsquashfs signal
+      # handlers instead of relying on an empty parameter list.
+      ./gcc15-fix-prototypes.patch
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
     strictDeps = true;
     nativeBuildInputs = [ which ];

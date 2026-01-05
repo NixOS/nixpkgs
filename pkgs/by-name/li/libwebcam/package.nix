@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   libxml2,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,19 +24,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [ libxml2 ];
 
   postPatch = ''
     substituteInPlace ./uvcdynctrl/CMakeLists.txt \
-      --replace "/lib/udev" "$out/lib/udev"
+      --replace-fail "/lib/udev" "$out/lib/udev" \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
 
     substituteInPlace ./uvcdynctrl/udev/scripts/uvcdynctrl \
-      --replace 'debug=0' 'debug=''${NIX_UVCDYNCTRL_UDEV_DEBUG:-0}' \
-      --replace 'uvcdynctrlpath=uvcdynctrl' "uvcdynctrlpath=$out/bin/uvcdynctrl"
+      --replace-fail 'debug=0' 'debug=''${NIX_UVCDYNCTRL_UDEV_DEBUG:-0}' \
+      --replace-fail 'uvcdynctrlpath=uvcdynctrl' "uvcdynctrlpath=$out/bin/uvcdynctrl"
 
     substituteInPlace ./uvcdynctrl/udev/rules/80-uvcdynctrl.rules \
-      --replace "/lib/udev" "$out/lib/udev"
+      --replace-fail "/lib/udev" "$out/lib/udev"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace libwebcam/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   preConfigure = ''
@@ -45,10 +53,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Webcam-tools package";
-    platforms = platforms.linux;
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

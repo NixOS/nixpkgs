@@ -10,8 +10,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-prometheus";
-    rev = "b1b899ca995783ef5eba90c35dbfc120a2949c38";
-    sha256 = "sha256-tSU1aba8EadObOsb/nRM4jAdQ6D1F9QiIaGoHi2GGDk=";
+    rev = "a1e0ba671e13ceb9541a4d62d3ff7d206393d438";
+    sha256 = "sha256-tZdRbLxUs4qPbN39g/y1dVCa0b+6Pk8uvCvsKVbUkMk=";
   };
 
   patches = [
@@ -21,10 +21,10 @@ mkDiscoursePlugin {
     ./spec-import-fix-abi-version.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/discourse/discourse-prometheus";
-    maintainers = with maintainers; [ dpausp ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ dpausp ];
+    license = lib.licenses.mit;
     description = "Official Discourse Plugin for Prometheus Monitoring";
   };
 }

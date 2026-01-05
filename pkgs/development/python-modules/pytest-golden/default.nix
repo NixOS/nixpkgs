@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "oprypin";
-    repo = pname;
+    repo = "pytest-golden";
     tag = "v${version}";
     hash = "sha256-l5fXWDK6gWJc3dkYFTokI9tWvawMRnF0td/lSwqkYXE=";
   };
@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_golden" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for pytest that offloads expected outputs to data files";
     homepage = "https://github.com/oprypin/pytest-golden";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

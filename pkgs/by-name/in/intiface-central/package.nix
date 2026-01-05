@@ -1,26 +1,39 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   corrosion,
   rustPlatform,
   cargo,
   rustc,
+  jdk,
   udev,
+  zlib,
   copyDesktopItems,
   makeDesktopItem,
+  runCommand,
 }:
 
-flutter327.buildFlutterApplication rec {
+let
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
+  '';
+
   pname = "intiface-central";
-  version = "2.6.5";
+
+  version = "2.6.8-unstable-2025-09-14";
 
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
-    tag = "v${version}";
-    hash = "sha256-goN0750EvGw5G8cb4jy6wWnjlLwlwMeTz4GQEilbwpY=";
+    rev = "17877c623ad7e47fccfbb0acd6d191d672dc5053";
+    hash = "sha256-sXvV3T/3Po2doDWXxiiJhAbQidwPPTS5300tEbgP83g=";
   };
+in
+flutter332.buildFlutterApplication {
+  inherit pname version src;
 
   patches = [
     ./corrosion.patch
@@ -29,10 +42,9 @@ flutter327.buildFlutterApplication rec {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}-cargo-deps";
-    inherit src;
+    inherit pname version src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-z9i0xT0e8G9spOmXpI2yFee/y3ZEh69YqL+7zRWszzA=";
+    hash = "sha256-S+TonMTj3xb9oVo17hfjbl448pEvR+3sTTI8ePFjYXk=";
   };
 
   cargoRoot = "intiface-engine-flutter-bridge";
@@ -49,7 +61,12 @@ flutter327.buildFlutterApplication rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ udev ];
+  buildInputs = [
+    jdk
+    udev
+  ];
+
+  env.ZLIB_ROOT = zlib-root;
 
   # without this, only the splash screen will be shown and the logs will contain the
   # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`
@@ -68,6 +85,8 @@ flutter327.buildFlutterApplication rec {
       desktopName = "Intiface Central";
     })
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "intiface_central";

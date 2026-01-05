@@ -13,6 +13,7 @@ with python3Packages;
 buildPythonApplication {
   pname = "gnomecast";
   version = "unstable-2022-04-23";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "keredson";
@@ -45,10 +46,10 @@ buildPythonApplication {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Native Linux GUI for Chromecasting local files";
     homepage = "https://github.com/keredson/gnomecast";
-    license = with licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3 ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gnomecast";
   };

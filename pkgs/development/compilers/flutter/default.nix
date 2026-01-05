@@ -6,6 +6,7 @@
   dart,
   lib,
   stdenv,
+  runCommand,
 }:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
@@ -48,38 +49,58 @@ let
           channel
           ;
 
-        dart = dart.override {
-          version = dartVersion;
-          sources = {
-            "${dartVersion}-x86_64-linux" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-              sha256 = dartHash.x86_64-linux;
-            };
-            "${dartVersion}-aarch64-linux" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-              sha256 = dartHash.aarch64-linux;
-            };
-            "${dartVersion}-x86_64-darwin" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
-              sha256 = dartHash.x86_64-darwin;
-            };
-            "${dartVersion}-aarch64-darwin" = fetchzip {
-              url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
-              sha256 = dartHash.aarch64-darwin;
+        dart =
+          let
+            dartChannel = if lib.strings.hasSuffix ".beta" dartVersion then "beta" else "stable";
+          in
+          dart.override {
+            version = dartVersion;
+            sources = {
+              "${dartVersion}-x86_64-linux" = fetchzip {
+                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
+                hash = dartHash.x86_64-linux;
+              };
+              "${dartVersion}-aarch64-linux" = fetchzip {
+                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
+                hash = dartHash.aarch64-linux;
+              };
+              "${dartVersion}-x86_64-darwin" = fetchzip {
+                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
+                hash = dartHash.x86_64-darwin;
+              };
+              "${dartVersion}-aarch64-darwin" = fetchzip {
+                url = "https://storage.googleapis.com/dart-archive/channels/${dartChannel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
+                hash = dartHash.aarch64-darwin;
+              };
             };
           };
-        };
-        src = fetchFromGitHub {
-          owner = "flutter";
-          repo = "flutter";
-          rev = version;
-          hash = flutterHash;
-        };
+        src =
+          let
+            source = fetchFromGitHub {
+              owner = "flutter";
+              repo = "flutter";
+              tag = version;
+              hash = flutterHash;
+            };
+          in
+          (
+            if lib.versionAtLeast version "3.32" then
+              # # Could not determine engine revision
+              (runCommand source.name { } ''
+                cp --recursive ${source} $out
+                chmod +w $out/bin
+                mkdir $out/bin/cache
+                cp $out/bin/internal/engine.version $out/bin/cache/engine.stamp
+                touch $out/bin/cache/engine.realm
+              '')
+            else
+              source
+          );
       };
     in
     (mkCustomFlutter args).overrideAttrs (
       prev: next: {
-        passthru = next.passthru // rec {
+        passthru = next.passthru // {
           inherit wrapFlutter mkCustomFlutter mkFlutter;
           buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
             flutter = wrapFlutter (mkCustomFlutter args);
@@ -112,7 +133,11 @@ let
 in
 flutterVersions
 // {
-  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
-  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
   inherit wrapFlutter mkFlutter;
+}
+// lib.optionalAttrs (betaFlutterVersions != { }) {
+  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
+}
+// lib.optionalAttrs (stableFlutterVersions != { }) {
+  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
 }

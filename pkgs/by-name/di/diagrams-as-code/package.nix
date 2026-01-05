@@ -37,7 +37,7 @@ python3Packages.buildPythonPackage rec {
   doCheck = false; # no tests
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
+    simple = runCommand "diagrams-as-code-test" { } ''
       # giving full path to diagrams-as-code causes
       # a bad path concatenation
       cp ${diagrams-as-code.src}/examples/all-fields.yaml .

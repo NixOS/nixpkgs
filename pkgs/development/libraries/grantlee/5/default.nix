@@ -49,7 +49,7 @@ mkDerivation rec {
 
   doCheck = false; # fails all the tests (ctest)
 
-  meta = with lib; {
+  meta = {
     description = "Qt5 port of Django template system";
     longDescription = ''
       Grantlee is a plugin based String Template system written using the Qt
@@ -61,8 +61,8 @@ mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = "https://github.com/steveire/grantlee";
-    maintainers = [ maintainers.ttuegel ];
-    license = licenses.lgpl21;
+    maintainers = [ lib.maintainers.ttuegel ];
+    license = lib.licenses.lgpl21;
     inherit (qtbase.meta) platforms;
   };
 }

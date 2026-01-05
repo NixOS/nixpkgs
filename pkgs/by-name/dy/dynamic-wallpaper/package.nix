@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "dusansimic";
-    repo = pname;
+    repo = "dynamic-wallpaper";
     rev = version;
     hash = "sha256-DAdx34EYO8ysQzbWrAIPoghhibwFtoqCi8oyDVyO5lk=";
   };
@@ -55,12 +55,12 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic wallpaper maker for Gnome";
     homepage = "https://github.com/dusansimic/dynamic-wallpaper";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "me.dusansimic.DynamicWallpaper";
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

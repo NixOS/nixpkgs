@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "juliosueiras";
-    repo = pname;
+    repo = "terraform-lsp";
     rev = "v${version}";
     sha256 = "111350jbq0dp0qhk48j12hrlisd1fwzqpcv357igrbqf6ki7r78q";
   };
@@ -24,11 +24,11 @@ buildGoModule rec {
     "-X main.GitCommit=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol for Terraform";
     mainProgram = "terraform-lsp";
     homepage = "https://github.com/juliosueiras/terraform-lsp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

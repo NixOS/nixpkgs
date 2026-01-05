@@ -23,7 +23,10 @@ mkDerivation (
     extraPaths = [
       "sys/crypto"
       "sys/sys"
-    ] ++ extraSrc;
+      "sys/kern"
+      "lib/libc/Versions.def"
+    ]
+    ++ extraSrc;
 
     outputs = [
       "out"
@@ -33,6 +36,8 @@ mkDerivation (
 
     noLibc = !bootstrapInstallation;
 
+    MK_TESTS = "no";
+
     buildInputs =
       lib.optionals (!bootstrapInstallation) [
         libcMinimal
@@ -41,13 +46,12 @@ mkDerivation (
       ]
       ++ compatIfNeeded;
 
-    preBuild =
-      ''
-        mkdir $BSDSRCDIR/lib/libmd/sys
-      ''
-      + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
-      '';
+    preBuild = ''
+      mkdir $BSDSRCDIR/lib/libmd/sys
+    ''
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    '';
 
     installPhase =
       if (!bootstrapInstallation) then

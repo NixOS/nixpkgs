@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.6";
+  version = "2.2.15";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
-    tag = version;
-    hash = "sha256-N0WAdfxToVF93ICGpDstQig3aGz2lAzJz1nf4tSvxAY=";
+    tag = finalAttrs.version;
+    hash = "sha256-19i+TeBcPnI1Gfpf81gHE9sLvytsS4x1A5XU8oD7YIU=";
   };
 
-  vendorHash = "sha256-AG3NNqwpaTctvgOEZ2SarsMK4SRgzWxf+j9N4wwKKB4=";
+  vendorHash = "sha256-XrTmXAUABlTQaA3Z0vU0HQW5Q1e/Yg6yq690oZH8M+A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X miniflux.app/v2/internal/version.Version=${version}"
+    "-X miniflux.app/v2/internal/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -40,11 +40,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist and opinionated feed reader";
+    changelog = "https://miniflux.app/releases/${finalAttrs.version}.html";
     homepage = "https://miniflux.app/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       benpye
       emilylange
@@ -52,4 +53,4 @@ buildGoModule rec {
     ];
     mainProgram = "miniflux";
   };
-}
+})

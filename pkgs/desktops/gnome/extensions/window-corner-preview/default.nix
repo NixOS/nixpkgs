@@ -30,9 +30,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Shell extension showing a video preview on the corner of the screen";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     homepage = "https://github.com/medenagan/window-corner-preview";
     broken = lib.versionAtLeast gnome-shell.version "3.32"; # Doesn't support 3.34

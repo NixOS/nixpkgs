@@ -48,12 +48,12 @@ mkDerivation {
       --prefix PATH : ${rtmpdump}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/qarte";
     description = "Recorder for Arte TV Guide and Arte Concert";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ vbgl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.linux;
     mainProgram = "qarte";
   };
 }

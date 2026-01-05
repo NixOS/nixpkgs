@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JgLozj9LZwk6TRHj2d4kiq8j3aILBUWaE9ldzvlTBNs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Cg07SlNmG6ELZmoQfkr6ADrGJirbFm0D1Iko1WVNfl0=";
 
   nativeBuildInputs = [
@@ -52,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Implementation of the Stateless OpenPGP Command Line Interface using Sequoia";
-    homepage = "https://docs.sequoia-pgp.org/sqop/";
+    homepage = "https://gitlab.com/sequoia-pgp/sequoia-sop";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqop";

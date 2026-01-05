@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     version = "1.4";
   };
 
-  PERL_USE_UNSAFE_INC = "1";
+  env.PERL_USE_UNSAFE_INC = "1";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
@@ -47,11 +47,12 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
     description = "Hebrew spell checker";
     homepage = "http://hspell.ivrix.org.il/";
-    platforms = platforms.all;
-    license = licenses.gpl2;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2;
   };
 }

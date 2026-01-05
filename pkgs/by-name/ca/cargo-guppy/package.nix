@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -19,16 +17,11 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nNbCQ/++gm2S+xFbE5t9U9gQR8E2fVWE4kh73wgbAwQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "-p"
@@ -39,14 +32,14 @@ rustPlatform.buildRustPackage {
     "cargo-guppy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line frontend for guppy";
     mainProgram = "cargo-guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

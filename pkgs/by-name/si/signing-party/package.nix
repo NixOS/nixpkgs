@@ -13,7 +13,7 @@
   which,
   getopt,
   libpaper,
-  nettools,
+  net-tools,
   qprint,
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
@@ -41,14 +41,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "signing-party-team";
     repo = "signing-party";
     rev = "v${version}";
-    sha256 = "1aig5ssabzbk4mih7xd04vgr931bw0flbi8dz902wlr610gyv5s5";
+    sha256 = "sha256-hUlMClx/TRmnC2Ah6MIsNGpZGI/KmgWt2z4XzbIAnag=";
   };
 
   # TODO: Get this patch upstream...
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
           --prefix PATH ":" \
           "${
             lib.makeBinPath [
-              nettools
+              net-tools
               gnupg
             ]
           }"
@@ -277,7 +277,7 @@ stdenv.mkDerivation rec {
           ${with perlPackages; makePerlPath [ GD ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://salsa.debian.org/signing-party-team/signing-party";
     description = "Collection of several projects relating to OpenPGP";
     longDescription = ''
@@ -300,14 +300,14 @@ stdenv.mkDerivation rec {
       * keyart: creates a random ASCII art of a PGP key file
       * gpg-key2latex: generate LaTeX file with fingerprint paper slips
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       bsd3
       gpl2Only
       gpl2Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [ primeos ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

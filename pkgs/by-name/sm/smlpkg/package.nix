@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smlpkg";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlpkg";
     rev = "v${version}";
-    sha256 = "1xmbdnfc34ia0a78dhkfv5jyadxndinhw8c47l1mjd4l7n8vqnph";
+    sha256 = "sha256-g7w4/E+BHeiic5bT1RFF/CGQz5Mc1g2kzoNXsija3HU=";
   };
 
   enableParallelBuilding = true;
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic package manager for Standard ML libraries and programs";
     homepage = "https://github.com/diku-dk/smlpkg";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = mlton.meta.platforms;
-    maintainers = with maintainers; [ athas ];
+    maintainers = with lib.maintainers; [ athas ];
     mainProgram = "smlpkg";
   };
 }

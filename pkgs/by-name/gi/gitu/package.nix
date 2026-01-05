@@ -6,50 +6,42 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
   git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.29.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-c2YVcE+a/9Z6qTLEbcSFE6393SEeudyvdbzCRJfszcc=";
+    hash = "sha256-JNa9foW5z0NrXk5r/Oep20+u7YRhkzMIZQPHlZVifGI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+tSNUtsDFKqx5W8+cuxyFsG1etm44eYgoYuoUt5tw3E=";
+  cargoHash = "sha256-mQ5xXYVmadmNx57nnJGICZ2dhll+V3PkYK+hwTTfdVE=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+    zlib
+  ];
 
   nativeCheckInputs = [
     git
   ];
 
-  meta = with lib; {
+  meta = {
     description = "TUI Git client inspired by Magit";
     homepage = "https://github.com/altsem/gitu";
     changelog = "https://github.com/altsem/gitu/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evanrichter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evanrichter ];
     mainProgram = "gitu";
   };
 }

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "1.1.2";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jamesturk";
     repo = "jellyfish";
-    rev = version;
-    hash = "sha256-xInjoTXYgZuHyvyKm+N4PAwHozE5BOkxoYhRzZnPs3Q=";
+    rev = "v${version}";
+    hash = "sha256-jKz7FYzV66TUkJZfWDTy8GXmTZ6SU5jEdtkjYLDfS/8=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jellyfish" ];
 
   meta = {
-    description = "A python library for doing approximate and phonetic matching of strings";
+    description = "Python library for doing approximate and phonetic matching of strings";
     homepage = "https://github.com/jamesturk/jellyfish";
     changelog = "https://github.com/jamesturk/jellyfish/releases/tag/v${version}";
     license = lib.licenses.mit;

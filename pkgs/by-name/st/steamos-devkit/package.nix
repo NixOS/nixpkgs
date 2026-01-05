@@ -13,6 +13,7 @@ let
   pyimgui = python3.pkgs.buildPythonPackage {
     pname = "pyimgui";
     version = "2.0.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "pyimgui";
@@ -58,6 +59,7 @@ in
 python3.pkgs.buildPythonPackage rec {
   pname = "steamos-devkit";
   version = "0.20240216.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "gitlab.steamos.cloud";
@@ -126,11 +128,11 @@ python3.pkgs.buildPythonPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SteamOS Devkit Client";
     mainProgram = "steamos-devkit";
     homepage = "https://gitlab.steamos.cloud/devkit/steamos-devkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ myaats ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ myaats ];
   };
 }

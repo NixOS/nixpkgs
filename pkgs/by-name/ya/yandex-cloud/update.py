@@ -38,7 +38,7 @@ package_attrs = json.loads(subprocess.run(
         "--json",
         "--file", nixpkgs_path,
         "--apply", """p: {
-          dir = builtins.dirOf p.meta.position;
+          dir = dirOf p.meta.position;
           version = p.version;
         }""",
         "--",

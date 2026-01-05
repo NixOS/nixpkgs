@@ -10,23 +10,26 @@
   monotonic,
   openai,
   parameterized,
+  pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   requests,
   setuptools,
   six,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "3.18.1";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${version}";
-    hash = "sha256-1jJACzDf8J4Vsrvtj0PgeK1Ck2Bzy5ThHm0Ohd+LyYs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YDW3FneQec09BOUh3wBbgz1ng3n6tkzoAZhIynp4wGA=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +41,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -46,6 +50,7 @@ buildPythonPackage rec {
     mock
     openai
     parameterized
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -60,13 +65,22 @@ buildPythonPackage rec {
     "test_upload"
     # AssertionError: 2 != 3
     "test_flush_interval"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Pydantic V1 functionality isn't compatible with Python 3.14
+    "test_clean_pydantic"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Missing parts
+    "posthog/test/integrations/test_middleware.py"
+  ];
+
+  meta = {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

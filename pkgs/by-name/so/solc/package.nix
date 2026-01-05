@@ -25,14 +25,13 @@ assert cvc4Support -> cvc4 != null && cln != null && gmp != null;
 let
   pname = "solc";
 
-  version = "0.8.28";
-  linuxHash = "sha256-kosJ10stylGK5NUtsnMM7I+OfhR40TXPQDvnggOFLLc=";
-  darwinHash = "sha256-gVFbDlPeqiZtVJVFzKrApalubU6CAcd/ZzsscQl22eo=";
+  version = "0.8.33";
+  linuxHash = "sha256-sWCV0GOUW5GPNX1flk+UOrdwoHZHnx4MsZMGDDBxx6M=";
+  darwinHash = "sha256-gyQoBZHOOY1+JyKEa8EOzxd5sToyjvl7aHySzZxwgBo=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   meta = {
@@ -55,7 +54,6 @@ let
           pname
           version
           nativeInstallCheckInputs
-          versionCheckProgramArg
           doInstallCheck
           meta
           ;
@@ -66,43 +64,34 @@ let
           hash = linuxHash;
         };
 
-        # Fix build with GCC 14
-        # Submitted upstream: https://github.com/ethereum/solidity/pull/15685
-        postPatch = ''
-          substituteInPlace test/yulPhaser/Chromosome.cpp \
-            --replace-fail \
-              "BOOST_TEST(abs" \
-              "BOOST_TEST(fabs"
-        '';
+        cmakeFlags = [
+          "-DBoost_USE_STATIC_LIBS=OFF"
 
-        cmakeFlags =
-          [
-            "-DBoost_USE_STATIC_LIBS=OFF"
-
-          ]
-          ++ (
-            if z3Support then
-              [
-                "-DSTRICT_Z3_VERSION=OFF"
-              ]
-            else
-              [
-                "-DUSE_Z3=OFF"
-              ]
-          )
-          ++ lib.optionals (!cvc4Support) [
-            "-DUSE_CVC4=OFF"
-          ];
+        ]
+        ++ (
+          if z3Support then
+            [
+              "-DSTRICT_Z3_VERSION=OFF"
+            ]
+          else
+            [
+              "-DUSE_Z3=OFF"
+            ]
+        )
+        ++ lib.optionals (!cvc4Support) [
+          "-DUSE_CVC4=OFF"
+        ];
 
         nativeBuildInputs = [ cmake ];
-        buildInputs =
-          [ boost ]
-          ++ lib.optionals z3Support [ z3 ]
-          ++ lib.optionals cvc4Support [
-            cvc4
-            cln
-            gmp
-          ];
+        buildInputs = [
+          boost
+        ]
+        ++ lib.optionals z3Support [ z3 ]
+        ++ lib.optionals cvc4Support [
+          cvc4
+          cln
+          gmp
+        ];
         nativeCheckInputs = [
           jq
           ncurses
@@ -158,7 +147,6 @@ let
           pname
           version
           nativeInstallCheckInputs
-          versionCheckProgramArg
           doInstallCheck
           meta
           ;

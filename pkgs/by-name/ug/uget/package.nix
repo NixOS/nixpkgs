@@ -12,7 +12,9 @@
   gtk3,
   dconf,
   wrapGAppsHook3,
-  aria2 ? null,
+  aria2,
+  # Boolean guards
+  aria2Support ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +25,13 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
     sha256 = "0jchvgkkphhwp2z7vd4axxr9ns8b6vqc22b2z8a906qm8916wd8i";
   };
+
+  patches = [
+    # Fix build with gcc15
+    #   UgtkMenubar.c:188:19: error: too many arguments to function 'ugtk_setting_dialog_new'; expected 0, have 2
+    #   UgtkSettingDialog.c:50:21: error: conflicting types for 'ugtk_setting_dialog_new'; have 'UgtkSettingDialog *(const gchar *, GtkWindow *)' {aka 'UgtkSettingDialog *(const char *, struct _GtkWindow *)'}
+    ./fix-match-ugtk_setting_dialog_new-declaration-with-d.patch
+  ];
 
   # Apply upstream fix for -fno-common toolchains.
   postPatch = ''
@@ -37,29 +46,26 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      curl
-      libnotify
-      libappindicator-gtk3
-      gtk3
-      (lib.getLib dconf)
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ])
-    ++ (lib.optional (aria2 != null) aria2);
+  buildInputs = [
+    openssl
+    curl
+    libnotify
+    libappindicator-gtk3
+    gtk3
+    (lib.getLib dconf)
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ])
+  ++ (lib.optional aria2Support aria2);
 
   enableParallelBuilding = true;
 
-  preFixup = lib.optionalString (
-    aria2 != null
-  ) ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
+  preFixup = lib.optionalString aria2Support ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
-  meta = with lib; {
+  meta = {
     description = "Download manager using GTK and libcurl";
     longDescription = ''
       uGet is a VERY Powerful download manager application with a large
@@ -69,9 +75,9 @@ stdenv.mkDerivation rec {
       and lightweight power is uGet!
     '';
     homepage = "http://www.ugetdm.com";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "uget-gtk";
   };
 }

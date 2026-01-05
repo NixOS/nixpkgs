@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "BayeScan${version}/source";
 
   postPatch = ''
-    substituteInPlace Makefile --replace "-static" "" \
-                               --replace "g++" "c++"
+    substituteInPlace Makefile --replace-fail "-static" "" \
+                               --replace-fail "g++" "${stdenv.cc.targetPrefix}c++"
   '';
 
   installPhase = ''
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
-  meta = with lib; {
+  meta = {
     description = "Detecting natural selection from population-based genetic data";
     homepage = "http://cmpg.unibe.ch/software/BayeScan";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.bzizou ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bzizou ];
     mainProgram = "bayescan_${version}";
     platforms = lib.platforms.all;
   };

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
+    repo = "mdformat-tables";
     tag = "v${version}";
     hash = "sha256-7MbpGBGprhGrQ9P31HUU2h0bjyHWap6DETVN/dCDA1w=";
   };
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for rendering tables";
     homepage = "https://github.com/executablebooks/mdformat-tables";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];

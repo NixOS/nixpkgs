@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "madmaze";
-    repo = pname;
+    repo = "pytesseract";
     tag = "v${version}";
     hash = "sha256-gQMeck6ojlIwyiOCBBhzHHrjQfBMelVksVGd+fyxWZk=";
   };
@@ -44,9 +44,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pytesseract/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python wrapper for Google Tesseract";
     mainProgram = "pytesseract";
     maintainers = [ ];

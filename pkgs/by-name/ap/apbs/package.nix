@@ -40,13 +40,13 @@ let
       suitesparse
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Fork of the Finite Element ToolKit from fetk.org";
       homepage = "https://github.com/Electrostatics/FETK";
       changelog = "https://github.com/Electrostatics/FETK/releases/tag/${finalAttrs.version}";
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ natsukium ];
-      platforms = platforms.unix;
+      license = lib.licenses.lgpl21Plus;
+      maintainers = with lib.maintainers; [ natsukium ];
+      platforms = lib.platforms.unix;
     };
   });
 in
@@ -76,16 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    [
-      fetk
-      suitesparse
-      blas
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libintl
-    ];
+  buildInputs = [
+    fetk
+    suitesparse
+    blas
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libintl
+  ];
 
   cmakeFlags = [
     "-DPYTHON_VERSION=${python3.version}"
@@ -97,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Software for biomolecular electrostatics and solvation calculations";
     mainProgram = "apbs";
     homepage = "https://www.poissonboltzmann.org/";
     changelog = "https://github.com/Electrostatics/apbs/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

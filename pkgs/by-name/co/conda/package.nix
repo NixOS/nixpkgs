@@ -27,6 +27,7 @@
   ],
   # Any extra nixpkgs you'd like available in the FHS env for Conda to use
   extraPkgs ? [ ],
+  runScript ? "bash -l",
 }:
 
 # How to use this package?
@@ -43,7 +44,7 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "25.1.1-2";
+  version = "25.9.1-3";
 
   src =
     let
@@ -57,23 +58,17 @@ let
       };
     in
     fetchurl {
-      url = "https://repo.anaconda.com/miniconda/Miniconda3-py312_${version}-Linux-${arch}.sh";
+      url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-Linux-${arch}.sh";
       hash = selectSystem {
-        x86_64-linux = "sha256-R2bYW199I1ziUOmY67WoqCEMvU8rD+pNIXez7Z6oeIQ=";
-        aarch64-linux = "sha256-bQW5+bfzJ7kHl6TPVtaMgVeLqy9jJXo+eotyyw8OS10=";
+        x86_64-linux = "sha256-a+xl/LDGZZalBYxnZ9JdiaU364PuhGhOwPpaT7+zJkc=";
+        aarch64-linux = "sha256-A2BT5+blhmQ1vBoRcRtBKT5b8HdrtKqafqRtAfMO2jE=";
       };
     };
 
-  conda = (
-    let
-      libPath = lib.makeLibraryPath [
-        zlib # libz.so.1
-      ];
-    in
+  conda =
     runCommand "install-conda"
       {
         nativeBuildInputs = [ makeWrapper ];
-        buildInputs = [ zlib ];
       }
       # on line 10, we have 'unset LD_LIBRARY_PATH'
       # we have to comment it out however in a way that the number of bytes in the
@@ -82,24 +77,25 @@ let
       # of bytes from the top of the installer script
       # and unsetting the library path prevents the zlib library from being discovered
       ''
-        mkdir -p $out/bin
+        mkdir --parents $out/bin
 
         sed 's/unset LD_LIBRARY_PATH/#nset LD_LIBRARY_PATH/' ${src} > $out/bin/miniconda-installer.sh
         chmod +x $out/bin/miniconda-installer.sh
 
-        makeWrapper                            \
-          $out/bin/miniconda-installer.sh      \
-          $out/bin/install-conda               \
+        makeWrapper $out/bin/miniconda-installer.sh $out/bin/install-conda \
           --add-flags "-p ${installationPath}" \
-          --add-flags "-b"                     \
-          --prefix "LD_LIBRARY_PATH" : "${libPath}"
-      ''
-  );
+          --add-flags "-b" \
+          --prefix "LD_LIBRARY_PATH" : "${
+            lib.makeLibraryPath [
+              zlib # libz.so.1
+            ]
+          }"
+      '';
 in
 
 buildFHSEnv {
   pname = "conda-shell";
-  inherit version;
+  inherit version runScript;
 
   targetPkgs =
     pkgs:
@@ -109,25 +105,30 @@ buildFHSEnv {
       extraPkgs
     ]);
 
-  profile = ''
-    # Add conda to PATH
-    export PATH=${installationPath}/bin:$PATH
-    # Paths for gcc if compiling some C sources with pip
-    export NIX_CFLAGS_COMPILE="-I${installationPath}/include"
-    export NIX_CFLAGS_LINK="-L${installationPath}lib"
-    # Some other required environment variables
-    export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-    export QTCOMPOSE=${xorg.libX11}/share/X11/locale
-    export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
-    # Allows `conda activate` to work properly
-    condaSh=${installationPath}/etc/profile.d/conda.sh
-    if [ ! -f $condaSh ]; then
-      install-conda
-    fi
-    source $condaSh
-  '';
+  profile =
+    let
+      condaSh = "${installationPath}/etc/profile.d/conda.sh";
+    in
+    ''
+      # Add conda to PATH
+      export PATH=${installationPath}/bin:$PATH
+      # Paths for gcc if compiling some C sources with pip
+      export NIX_CFLAGS_COMPILE="-I${installationPath}/include"
+      export NIX_CFLAGS_LINK="-L${installationPath}/lib"
+      # Some other required environment variables
+      export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+      export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+      export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
+      # Allows `conda activate` to work properly
+      if [ ! -f ${condaSh} ]; then
+        install-conda
+      fi
+      source ${condaSh}
+    '';
 
-  runScript = "bash -l";
+  passthru = {
+    inherit src;
+  };
 
   meta = {
     description = "Package manager for Python";

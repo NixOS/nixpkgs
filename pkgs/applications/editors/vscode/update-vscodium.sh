@@ -21,6 +21,6 @@ for i in \
     "aarch64-darwin darwin-arm64 zip" \
     "x86_64-darwin darwin-x64 zip"; do
     set -- $i
-    hash=$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url "https://github.com/VSCodium/vscodium/releases/download/$latestVersion/VSCodium-$2-$latestVersion.$3"))
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(nix-prefetch-url "https://github.com/VSCodium/vscodium/releases/download/$latestVersion/VSCodium-$2-$latestVersion.$3"))
     update-source-version vscodium $latestVersion $hash --system=$1 --ignore-same-version
 done

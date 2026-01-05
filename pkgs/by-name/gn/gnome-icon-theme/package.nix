@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   allowedReferences = [ ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of icons for the GNOME 2 desktop";
     homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-icon-theme.x86_64-darwin
   };
 }

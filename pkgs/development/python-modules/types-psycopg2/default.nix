@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-psycopg2";
-  version = "2.9.21.20250121";
+  version = "2.9.21.20251012";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_psycopg2";
     inherit version;
-    hash = "sha256-Kw4s0PN0evGuJacCeJhxbYAglgR3DvPL81D+BVucNJs=";
+    hash = "sha256-TNr9OJJ9oM/eSYBPOauFr9nG6cSSgA5C8fDBobAxKTU=";
   };
 
   build-system = [ setuptools ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for psycopg2";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -1,61 +1,55 @@
-import ./make-test-python.nix ({
+{
   name = "corerad";
   nodes = {
-    router =
-      { config, pkgs, ... }:
-      {
-        config = {
-          # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
-          boot.kernel.sysctl = {
-            "net.ipv6.conf.all.forwarding" = true;
-          };
-          networking.interfaces.eth1 = {
-            ipv6.addresses = [
-              {
-                address = "fd00:dead:beef:dead::1";
-                prefixLength = 64;
-              }
-            ];
-          };
-          services.corerad = {
-            enable = true;
-            # Serve router advertisements to the client machine with prefix information matching
-            # any IPv6 /64 prefixes configured on this interface.
-            #
-            # This configuration is identical to the example in the CoreRAD NixOS module.
-            settings = {
-              interfaces = [
-                {
-                  name = "eth0";
-                  monitor = true;
-                }
-                {
-                  name = "eth1";
-                  advertise = true;
-                  prefix = [ { prefix = "::/64"; } ];
-                }
-              ];
-              debug = {
-                address = "localhost:9430";
-                prometheus = true;
-              };
-            };
+    router = {
+      # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
+      boot.kernel.sysctl = {
+        "net.ipv6.conf.all.forwarding" = true;
+      };
+      networking.interfaces.eth1 = {
+        ipv6.addresses = [
+          {
+            address = "fd00:dead:beef:dead::1";
+            prefixLength = 64;
+          }
+        ];
+      };
+      services.corerad = {
+        enable = true;
+        # Serve router advertisements to the client machine with prefix information matching
+        # any IPv6 /64 prefixes configured on this interface.
+        #
+        # This configuration is identical to the example in the CoreRAD NixOS module.
+        settings = {
+          interfaces = [
+            {
+              name = "eth0";
+              monitor = true;
+            }
+            {
+              name = "eth1";
+              advertise = true;
+              prefix = [ { prefix = "::/64"; } ];
+            }
+          ];
+          debug = {
+            address = "localhost:9430";
+            prometheus = true;
           };
         };
       };
+    };
     client =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
       {
         # Use IPv6 SLAAC from router advertisements, and install rdisc6 so we can
         # trigger one immediately.
-        config = {
-          boot.kernel.sysctl = {
-            "net.ipv6.conf.all.autoconf" = true;
-          };
-          environment.systemPackages = with pkgs; [
-            ndisc6
-          ];
+        boot.kernel.sysctl = {
+          "net.ipv6.conf.all.autoconf" = true;
         };
+        environment.systemPackages = with pkgs; [
+          ndisc6
+        ];
       };
   };
 
@@ -97,4 +91,4 @@ import ./make-test-python.nix ({
             "corerad_build_info" in out
         ), "Build info metric was not found in Prometheus output"
   '';
-})
+}

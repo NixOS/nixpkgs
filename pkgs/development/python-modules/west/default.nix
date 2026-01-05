@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "west";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iTIANL6HCZ0W519HYKwNHtZ+iXiSjkaKuZPj+6DP6S8=";
+    hash = "sha256-cIj+Dpr+Bxnr7pXFHFKRSfe8/JGdg6ggbTX6nGg+0KU=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "west" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zephyr RTOS meta tool";
     mainProgram = "west";
     longDescription = ''
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/zephyrproject-rtos/west";
     changelog = "https://github.com/zephyrproject-rtos/west/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

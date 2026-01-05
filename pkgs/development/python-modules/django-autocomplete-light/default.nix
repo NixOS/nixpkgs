@@ -9,9 +9,9 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-autocomplete-light";
-  version = "3.11.0";
+  version = "3.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yourlabs";
     repo = "django-autocomplete-light";
-    tag = version;
-    hash = "sha256-Lcl14CVmpDoEdEq49sL4GFtWWqFcVoSjOJOBU7oWeH4=";
+    tag = finalAttrs.version;
+    hash = "sha256-ctNbbmTUgrkLGCo7tgPIJpLn7RmkZSuj54/5RBe/sdA=";
   };
 
   build-system = [ setuptools ];
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fresh approach to autocomplete implementations, specially for Django";
     homepage = "https://django-autocomplete-light.readthedocs.io";
-    changelog = "https://github.com/yourlabs/django-autocomplete-light/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ambroisie ];
+    changelog = "https://github.com/yourlabs/django-autocomplete-light/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

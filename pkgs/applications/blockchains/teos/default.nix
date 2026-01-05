@@ -4,8 +4,6 @@
   fetchFromGitHub,
   protobuf,
   rustfmt,
-  stdenv,
-  darwin,
   pkg-config,
   openssl,
 }:
@@ -20,10 +18,10 @@ let
     hash = "sha256-UrzH9xmhVq12TcSUQ1AihCG1sNGcy/N8LDsZINVKFkY=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/talaia-labs/rust-teos";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seberm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seberm ];
   };
   updateScript = ./update.sh;
 in
@@ -32,7 +30,6 @@ in
     pname = "teos";
     inherit version src;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
 
     buildAndTestSubdir = "teos";
@@ -40,10 +37,6 @@ in
     nativeBuildInputs = [
       protobuf
       rustfmt
-    ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
     ];
 
     passthru.updateScript = updateScript;
@@ -59,7 +52,6 @@ in
     pname = "teos-watchtower-plugin";
     inherit version src;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
 
     buildAndTestSubdir = "watchtower-plugin";
@@ -70,13 +62,9 @@ in
       rustfmt
     ];
 
-    buildInputs =
-      [
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.SystemConfiguration
-      ];
+    buildInputs = [
+      openssl
+    ];
 
     passthru.updateScript = updateScript;
 

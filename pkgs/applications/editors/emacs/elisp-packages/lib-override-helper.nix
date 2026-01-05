@@ -18,7 +18,7 @@ rec {
           if predicate finalAttrs previousAttrs then
             previousAttrs.packageRequires or [ ] ++ packageRequires
           else
-            previousAttrs.packageRequires or null;
+            previousAttrs.packageRequires or [ ];
       }
     );
 
@@ -89,7 +89,7 @@ rec {
           if predicate finalAttrs previousAttrs then
             previousAttrs.nativeBuildInputs or [ ] ++ [ pkgs.writableTmpDirAsHomeHook ]
           else
-            previousAttrs.nativeBuildInputs or null;
+            previousAttrs.nativeBuildInputs or [ ];
       }
     );
 }

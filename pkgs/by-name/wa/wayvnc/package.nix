@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, aml
-, jansson
-, libxkbcommon
-, libgbm
-, neatvnc
-, pam
-, pixman
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  aml,
+  jansson,
+  libxkbcommon,
+  libgbm,
+  neatvnc,
+  pam,
+  pixman,
+  wayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "any1";
-    repo = pname;
+    repo = "wayvnc";
     rev = "v${version}";
     hash = "sha256-LINzkC18gitj1a8Giqlt/6LyydOdV+8YXRJmuxT/Nq8=";
   };
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches
@@ -70,8 +71,8 @@ stdenv.mkDerivation rec {
     mainProgram = "wayvnc";
     inherit (src.meta) homepage;
     changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

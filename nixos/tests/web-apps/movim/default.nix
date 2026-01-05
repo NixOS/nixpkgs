@@ -1,14 +1,5 @@
-{
-  system ? builtins.currentSystem,
-  handleTestOn,
-}:
-
-let
-  supportedSystems = [
-    "x86_64-linux"
-    "i686-linux"
-  ];
-in
-{
-  standard = handleTestOn supportedSystems ./standard.nix { inherit system; };
+{ lib, runTest }:
+lib.recurseIntoAttrs {
+  ejabberd-h2o = runTest ./ejabberd-h2o.nix;
+  prosody-nginx = runTest ./prosody-nginx.nix;
 }

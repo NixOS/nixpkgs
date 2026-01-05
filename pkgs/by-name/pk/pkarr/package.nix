@@ -1,31 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  darwin,
   rustPlatform,
-  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pkarr";
-  version = "2.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "pubky";
     repo = "pkarr";
     rev = "v${version}";
-    hash = "sha256-zJe/hCdGVqs2TTwxnceGVXt0ZFRheSRYzjSRHytYXks=";
+    hash = "sha256-564JL7EG/RB2k2JdxAENpP5UZtKtaGlrZfeYOgsLBEY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-y20vVO714WPcB2aYzo0LBuJhy224bsHA7O9Dj00ViWE=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Security
-      SystemConfiguration
-    ]
-  );
+  cargoHash = "sha256-HG4cmKQleiWdYBrOgv1Aj/erWjZX5PMwIZpQSQc+sFU=";
 
   meta = {
     description = "Public Key Addressable Resource Records (sovereign TLDs) ";

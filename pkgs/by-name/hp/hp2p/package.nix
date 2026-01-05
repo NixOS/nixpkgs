@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hp2p";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "cea-hpc";
     repo = "hp2p";
     tag = finalAttrs.version;
-    hash = "sha256-Rrqb6M9E3WNuxhJXYfBrrv3sFQ2avU33gLZNUtU9Yuc=";
+    hash = "sha256-KuDf1VhLQRDDY3NZaNaHDVGipLmB8+1K36/W1fKnno0=";
   };
 
   enableParallelBuilding = true;
@@ -26,12 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     python3Packages.wrapPython
   ];
-  buildInputs =
-    [ mpi ]
-    ++ (with python3Packages; [
-      python
-      plotly
-    ]);
+  buildInputs = [
+    mpi
+  ]
+  ++ (with python3Packages; [
+    python
+    plotly
+  ]);
   pythonPath = (with python3Packages; [ plotly ]);
 
   preConfigure = ''

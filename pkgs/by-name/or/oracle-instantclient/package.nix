@@ -25,7 +25,8 @@ let
     "sdk"
     "sqlplus"
     "tools"
-  ] ++ optional odbcSupport "odbc";
+  ]
+  ++ optional odbcSupport "odbc";
 
   # determine the version number, there might be different ones per architecture
   version =
@@ -142,20 +143,18 @@ in
 stdenv.mkDerivation {
   inherit pname version srcs;
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ optional stdenv.hostPlatform.isLinux libaio
-    ++ optional odbcSupport unixODBC;
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ optional stdenv.hostPlatform.isLinux libaio
+  ++ optional odbcSupport unixODBC;
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      (if isDarwinAarch64 then _7zz else unzip)
-    ]
-    ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    makeWrapper
+    (if isDarwinAarch64 then _7zz else unzip)
+  ]
+  ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   outputs = [
     "out"
@@ -188,22 +187,22 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Oracle instant client libraries and sqlplus CLI";
     longDescription = ''
       Oracle instant client provides access to Oracle databases (OCI,
       OCCI, Pro*C, ODBC or JDBC). This package includes the sqlplus
       command line SQL client.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ dylanmtaylor ];
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
     hydraPlatforms = [ ];
   };
 }

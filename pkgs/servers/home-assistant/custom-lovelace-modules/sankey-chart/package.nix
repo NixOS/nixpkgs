@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "sankey-chart";
-  version = "3.6.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "MindFreeze";
     repo = "ha-sankey-chart";
     rev = "v${version}";
-    hash = "sha256-Yjh9HrL7zcMFSlXLRW071zG4Wiyv9q2siIw5Ego4e80=";
+    hash = "sha256-bGW3nM0YcC/+8xOD+I1zbiOEmrdyGjSZmjViWOBg7xo=";
   };
 
-  npmDepsHash = "sha256-rrzBw+zkvSf6+ABSGfC8rvtQ+pxYyZOPDW7TBpA0ysQ=";
+  npmDepsHash = "sha256-381lIUJq5ZKc+h8roSnwBOLd/K1sPLHqhVnq7j6IjD8=";
 
   installPhase = ''
     runHook preInstall
@@ -27,7 +27,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "Home Assistant lovelace card to display a sankey chart.";
+    description = "Home Assistant lovelace card to display a sankey chart";
     homepage = "https://github.com/MindFreeze/ha-sankey-chart";
     changelog = "https://github.com/MindFreeze/ha-sankey-chart/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

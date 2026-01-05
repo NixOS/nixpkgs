@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -16,7 +15,7 @@
   json_c,
   libmodulemd,
   librepo,
-  libsmartcols,
+  util-linux,
   libsolv,
   libxml2,
   libyaml,
@@ -26,7 +25,7 @@
   sphinx,
   sqlite,
   systemd,
-  testers,
+  versionCheckHook,
   toml11,
   zchunk,
   nix-update-script,
@@ -34,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.11.0";
+  version = "5.2.17.0";
 
   outputs = [
     "out"
@@ -45,33 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-89zJ2ORHPqy6qgmMdOSyPEcgxtEYE4CPnmRp7FfNj8Y=";
+    hash = "sha256-bVXmpoM2ymLgqjv8+3syYhkIKSyW68eKzKhUWRfR1vY=";
   };
 
-  patches = [
-    # Only define systemd constants when WITH_SYSTEMD is enabled
-    (fetchpatch {
-      name = "0001-offline-only-define-systemd-constants.patch";
-      url = "https://github.com/rpm-software-management/dnf5/commit/f75894eea0892917d80e8f0bf3f9f6c8db0ac400.patch";
-      hash = "sha256-4eBeBTzhOTUDtiOlfiddh7gJ8AoiMty4FSTlLtdymos=";
-    })
-  ];
-
-  nativeBuildInputs =
-    [
-      cmake
-      createrepo_c
-      doxygen
-      gettext
-      help2man
-      pkg-config
-      sphinx
-    ]
-    ++ (with python3Packages; [
-      breathe
-      sphinx-autoapi
-      sphinx-rtd-theme
-    ]);
+  nativeBuildInputs = [
+    cmake
+    createrepo_c
+    doxygen
+    gettext
+    help2man
+    pkg-config
+    sphinx
+  ]
+  ++ (with python3Packages; [
+    breathe
+    sphinx-autoapi
+    sphinx-rtd-theme
+  ]);
 
   buildInputs = [
     appstream
@@ -80,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     libmodulemd
     librepo
-    libsmartcols
+    util-linux
     libsolv
     libxml2
     libyaml
@@ -124,23 +113,24 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/etc/bash_completion.d" "$out/etc/bash_completion.d"
   '';
 
-  dontFixCmake = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       malt3
       katexochen
     ];
     mainProgram = "dnf5";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

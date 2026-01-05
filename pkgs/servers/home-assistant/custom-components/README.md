@@ -19,15 +19,16 @@ versions into the Python environment.
 **Example Boilerplate:**
 
 ```nix
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
 }:
 
 buildHomeAssistantComponent {
   # owner, domain, version
 
-  src = fetchFromGithub {
+  src = fetchFromGitHub {
     # owner, repo, rev, hash
   };
 
@@ -35,7 +36,7 @@ buildHomeAssistantComponent {
     # python requirements, as specified in manifest.json
   ];
 
-  meta = with lib; {
+  meta = {
     # changelog, description, homepage, license, maintainers
   };
 }
@@ -80,13 +81,10 @@ needs to be. Instead of applying brittle substitutions the version constraint
 can be ignored on a per requirement basis.
 
 ```nix
-  dependencies = [
-    pyemvue
-  ];
+{
+  dependencies = [ pyemvue ];
 
   # don't check the version constraint of pyemvue
-  ignoreVersionRequirement = [
-    "pyemvue"
-  ];
+  ignoreVersionRequirement = [ "pyemvue" ];
+}
 ```
-`

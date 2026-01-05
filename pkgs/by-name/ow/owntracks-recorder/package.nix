@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "owntracks-recorder";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "owntracks";
     repo = "recorder";
     rev = finalAttrs.version;
-    hash = "sha256-E4hdsUAg8NHjmUrlr8cskezib4qMv+wF32cThe2/kBc=";
+    hash = "sha256-/nLt8R8s3k6MQhtMXOLUDluuU7eNwZGYh5/km8tXtiE=";
   };
 
   nativeBuildInputs = [
@@ -74,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     version = finalAttrs.version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Store and access data published by OwnTracks apps";
     homepage = "https://github.com/owntracks/recorder";
     changelog = "https://github.com/owntracks/recorder/blob/master/Changelog";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "ot-recorder";
   };
 })

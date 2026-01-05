@@ -26,10 +26,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "OCaml implementation of the Npy format spec";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.asl20;
   };
 }

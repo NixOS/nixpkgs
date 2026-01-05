@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "9.10.0";
+  version = "10.7.5";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-G+DlQwEUyd7JOCjS1Hg1cKWmA/qAiK8UpUIKcP+riGQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kKMwgRcjELla/9aak5gZbUHg1bkgGhlobr964wdatxI=";
   };
 
   patches = lib.optional (
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enableJemalloc jemalloc
     ++ lib.optional enableLiburing liburing
-    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   outputs = [
     "out"
@@ -75,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (lib.optional sse42Support "-DFORCE_SSE42=1")
     "-DFAIL_ON_WARNINGS=NO"
-  ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
+  ]
+  ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
@@ -89,23 +90,30 @@ stdenv.mkDerivation (finalAttrs: {
       sed -e '1i #include <cstdint>' -i util/string_util.h
       sed -e '1i #include <cstdint>' -i include/rocksdb/utilities/checkpoint.h
     ''
+    + lib.optionalString (lib.versionOlder finalAttrs.version "10.4.2") ''
+      # Fix gcc-15 build failures due to missing <cstdint>
+      sed -e '1i #include <cstdint>' -i db/blob/blob_file_meta.h
+      sed -e '1i #include <cstdint>' -i include/rocksdb/sst_partitioner.h
+      sed -e '1i #include <cstdint>' -i include/rocksdb/write_batch_base.h
+      # Some older versions don't have this
+      sed -e '1i #include <cstdint>' -i include/rocksdb/trace_record.h || true
+    ''
     + lib.optionalString (lib.versionOlder finalAttrs.version "7") ''
       # Fix gcc-13 build failures due to missing <cstdint> and
       # <system_error> includes, fixed upstyream sice 7.x
       sed -e '1i #include <system_error>' -i third-party/folly/folly/synchronization/detail/ProxyLockable-inl.h
     '';
 
-  preInstall =
-    ''
-      mkdir -p $tools/bin
-      cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
-      ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib {}
-    '';
+  preInstall = ''
+    mkdir -p $tools/bin
+    cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib {}
+  '';
 
   # Old version doesn't ship the .pc file, new version puts wrong paths in there.
   postFixup = ''
@@ -115,15 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rocksdb.org";
     description = "Library that provides an embeddable, persistent key-value store for fast storage";
     changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       adev
-      magenbluten
     ];
   };
 })

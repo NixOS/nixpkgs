@@ -13,7 +13,7 @@
   eigen,
   glew,
   glm,
-  sfml,
+  sfml_2,
 
   makeDesktopItem,
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     glew
     glm
-    sfml
+    sfml_2
   ];
 
   installFlags = [ "DESTDIR=$(out)" ];
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A community-developed version of the original Marble Marcher - a fractal physics game";
+    description = "Community-developed version of the original Marble Marcher - a fractal physics game";
     mainProgram = "marble-marcher-ce";
     homepage = "https://michaelmoroz.itch.io/mmce";
     license = with lib.licenses; [

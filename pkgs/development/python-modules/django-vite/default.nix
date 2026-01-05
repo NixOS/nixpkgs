@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MrBin99";
-    repo = pname;
+    repo = "django-vite";
     tag = version;
     hash = "sha256-S5DpU0Sw0TOY1SNici6djeTrvg4gehH/a2UCzju1e/s=";
   };
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_vite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integration of ViteJS in a Django project";
     homepage = "https://github.com/MrBin99/django-vite";
     changelog = "https://github.com/MrBin99/django-vite/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

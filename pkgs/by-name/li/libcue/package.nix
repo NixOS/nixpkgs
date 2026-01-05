@@ -24,9 +24,17 @@ stdenv.mkDerivation rec {
     flex
   ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
+  '';
+
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "CUE Sheet Parser Library";
     longDescription = ''
       libcue is intended to parse a so called cue sheet from a char string or
@@ -34,8 +42,7 @@ stdenv.mkDerivation rec {
       available.
     '';
     homepage = "https://github.com/lipnitsk/libcue";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

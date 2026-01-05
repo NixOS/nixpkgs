@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-wayland-session";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-wayland-session";
     rev = version;
-    hash = "sha256-UMlV8LqUXM2+3ZSLj30FFgC+ZVPmt2W8uE2RrZKqCJE=";
+    hash = "sha256-MmiYPclMW8Y9VMZsY8wx52S3fN3RzUVrhQAGs5qSTfI=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+  passthru.providedSessions = [ "lxqt-wayland" ];
+
   meta = {
     homepage = "https://github.com/lxqt/lxqt-wayland-session";
     description = "Files needed for the LXQt Wayland Session";
@@ -72,6 +74,6 @@ stdenv.mkDerivation rec {
       mit
     ];
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 }

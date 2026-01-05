@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/fvwmorg/fvwm3/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
   };
 })

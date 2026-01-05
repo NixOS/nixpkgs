@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -8,16 +9,16 @@
 
 buildGoModule rec {
   pname = "enc";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "life4";
     repo = "enc";
     rev = version;
-    hash = "sha256-G6x17CDAKpmqvl7FTycSQ5bF0JndNP+SlUoBVUk76IQ=";
+    hash = "sha256-VBtjULav6ks2BYMVnUmOn/bAvonGDPia0eO7pJ1P5+Q=";
   };
 
-  vendorHash = "sha256-lB4DoHB+hGKjIcrAjeCd8a5prTn8XFIWhzNakA7utHI=";
+  vendorHash = "sha256-u9PAYb51NZ4C1TqjwgzfSdcfAUrEcNfvwqjnZpyqB9I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,14 +32,14 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd enc \
       --bash <($out/bin/enc completion bash) \
       --fish <($out/bin/enc completion fish) \
       --zsh <($out/bin/enc completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/life4/enc";
     changelog = "https://github.com/life4/enc/releases/tag/v${version}";
     description = "Modern and friendly alternative to GnuPG";
@@ -50,7 +51,7 @@ buildGoModule rec {
       Our goal was to make encryption available to all engineers without the need to learn a lot of new words, concepts,
       and commands. It is the most beginner-friendly CLI tool for encryption, and keeping it that way is our top priority.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvnstn ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvnstn ];
   };
 }

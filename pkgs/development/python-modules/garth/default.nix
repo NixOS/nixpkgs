@@ -6,21 +6,18 @@
   pydantic,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "garth";
-  version = "0.5.3";
+  version = "0.5.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cyqXCkfkpd71VqguZFOA4bO/dOkKBZkEzJ6BVLCBWFA=";
+    hash = "sha256-dqn/SeLQMT+6XOr65hlavZf1zdHnICKm9VCFh9DMLpk=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];
@@ -55,11 +52,11 @@ buildPythonPackage rec {
     "test_weekly"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Garmin SSO auth and connect client";
     homepage = "https://github.com/matin/garth";
     changelog = "https://github.com/matin/garth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

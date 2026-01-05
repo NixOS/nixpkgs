@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "augmax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficiently Composable Data Augmentation on the GPU with Jax";
     homepage = "https://github.com/khdlr/augmax";
     changelog = "https://github.com/khdlr/augmax/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

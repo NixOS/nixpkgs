@@ -20,7 +20,7 @@ let
 
       # symlinkJoin seems to be missing the .git directory for some reason.
       if [ -d '${flutter.sdk}/.git' ]; then
-        ln -s '${flutter.sdk}/.git' "$out"
+        ln --symbolic '${flutter.sdk}/.git' "$out"
       fi
 
       # For iOS/macOS builds, *.xcframework/'s from the pre-built
@@ -40,8 +40,8 @@ let
         # Remove the symlinkJoin .xcframework dir and replace it with a symlink
         # to the unwrapped .xcframework dir.
         frameworkDir="$(dirname "$file")"
-        rm -r "$frameworkDir"
-        ln -s "$origFrameworkDir" "$frameworkDir"
+        rm --recursive "$frameworkDir"
+        ln --symbolic "$origFrameworkDir" "$frameworkDir"
       done
       shopt -u globstar
     '';

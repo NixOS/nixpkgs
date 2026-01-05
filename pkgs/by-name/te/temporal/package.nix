@@ -1,24 +1,42 @@
-{ lib, fetchFromGitHub, buildGoModule, testers, temporal }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+  testers,
+  temporal,
+  versionCheckHook,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.27.1";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
-    rev = "v${version}";
-    hash = "sha256-hQs2rSTbNqknQ/N0mZ8BxeKQn2Pm9Yt/5eKGB2Kc+ME=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WiiezZ/2FgRte4BStIGHQhb5bHtfldi3TaIRG0xFtW0=";
   };
 
-  vendorHash = "sha256-kasKs692fHojyCLsSdho5LWej11Asu8JJb61rbg1k2k=";
+  vendorHash = "sha256-CdzcOE/J0gqUbq7BXPpLFyNPNbFTziR5j9GPdYPzv50=";
+
+  overrideModAttrs = old: {
+    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   excludedPackages = [ "./build" ];
 
   env.CGO_ENABLED = 0;
 
   tags = [ "test_dep" ];
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # There too many integration tests.
   doCheck = false;
@@ -37,16 +55,25 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = temporal;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.tests = {
+    inherit (nixosTests) temporal;
+    version = testers.testVersion {
+      package = temporal;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     homepage = "https://temporal.io";
-    changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpds ];
+    changelog = "https://github.com/temporalio/temporal/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "temporal-server";
   };
-}
+})

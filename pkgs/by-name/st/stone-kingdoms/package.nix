@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "stone-kingdoms";
-    repo = pname;
+    repo = "stone-kingdoms";
     rev = version;
     hash = "sha256-W2hzJg22O857Kh7CJVVHV5qu8QKjXCwW3hmgKBc0n2g=";
   };
@@ -30,12 +30,12 @@ stdenvNoCC.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "stone-kingdoms";
+      exec = "stone-kingdoms";
+      icon = "stone-kingdoms";
       comment = "A real-time strategy game made with LÖVE based on the original Stronghold by Firefly studios";
       desktopName = "Stone Kingdoms";
-      genericName = pname;
+      genericName = "stone-kingdoms";
       categories = [ "Game" ];
     })
   ];
@@ -51,14 +51,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time strategy game made with LÖVE based on the original Stronghold by Firefly studios";
     homepage = "https://gitlab.com/stone-kingdoms/stone-kingdoms";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       asl20 # engine
       unfree # game assets
     ];
-    maintainers = with maintainers; [ hulr ];
+    maintainers = with lib.maintainers; [ hulr ];
   };
 }

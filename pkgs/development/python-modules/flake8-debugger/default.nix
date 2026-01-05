@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_debugger" ];
 
-  meta = with lib; {
+  meta = {
     description = "ipdb/pdb statement checker plugin for flake8";
     homepage = "https://github.com/jbkahn/flake8-debugger";
-    license = licenses.mit;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

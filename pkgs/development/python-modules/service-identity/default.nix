@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pyca";
-    repo = pname;
+    repo = "service-identity";
     tag = version;
     hash = "sha256-onxCUWqGVeenLqB5lpUpj3jjxTM61ogXCQOGnDnClT4=";
   };
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "service_identity" ];
 
-  meta = with lib; {
+  meta = {
     description = "Service identity verification for pyOpenSSL";
     homepage = "https://service-identity.readthedocs.io";
     changelog = "https://github.com/pyca/service-identity/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

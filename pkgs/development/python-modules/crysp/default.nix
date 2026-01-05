@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = pname;
+    repo = "crysp";
     rev = "v${version}";
     hash = "sha256-51SKS6OOXIFT1L3YICR6a4QGSz/rbB8V+Z0u0jMO474=";
   };
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crysp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module that provides crypto-related facilities";
     homepage = "https://github.com/bdcht/crysp";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

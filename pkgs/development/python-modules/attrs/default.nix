@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "25.1.0";
+  version = "25.4.0";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HJcHioDIFCc6drKimKky62gch0FcEd7gppId5/GwLD4=";
+    hash = "sha256-FtWWm4fwhZ7zOkizXVWsG+bkKuSdXoU7WX23DDXFfhE=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   postInstall = ''
     # Install tests as the tests output.
     mkdir $testout
-    cp -R conftest.py tests $testout
+    cp -R tests $testout
   '';
 
   pythonImportsCheck = [ "attr" ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
     changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

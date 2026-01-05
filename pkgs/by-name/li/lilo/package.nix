@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "MAN_DIR=/share/man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.joonet.de/lilo/";
     description = "Linux bootloader";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

@@ -23,14 +23,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nBpM8i4jlxtnaonOx71DWjbLS8tYznJkoR2JI/B25LM=";
 
   meta = {
     description = "Mirror installed software on multiple machines";
     homepage = "https://github.com/tversteeg/emplace";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "emplace";
   };
 }

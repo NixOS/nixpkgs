@@ -20,10 +20,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
   pythonImportsCheck = [ "pbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Display customizable progress bars on the terminal easily";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://darvil82.github.io/PBar";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  libmambapy,
   hatchling,
   hatch-vcs,
   boltons,
+  libmambapy,
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";
-  version = "25.1.1";
+  version = "25.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -17,9 +17,8 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda-libmamba-solver";
     tag = version;
-    hash = "sha256-d6KLUhc7+KZ5H9vkI84S9TyximSwatu6lg7XIdMqtk0=";
+    hash = "sha256-DnRy5ntSjKADeHbqvLJz62WlLbM94U7urZLJg+Tpqbw=";
   };
-
 
   build-system = [
     hatchling

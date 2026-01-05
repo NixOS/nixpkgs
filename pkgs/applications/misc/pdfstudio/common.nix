@@ -26,7 +26,8 @@ let
 
     buildInputs = [
       sane-backends # for libsane.so.1
-    ] ++ extraBuildInputs;
+    ]
+    ++ extraBuildInputs;
 
     nativeBuildInputs = [
       autoPatchelfHook

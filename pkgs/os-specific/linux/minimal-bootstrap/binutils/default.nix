@@ -74,12 +74,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Tools for manipulating binaries (linker, assembler, etc.)";
       homepage = "https://www.gnu.org/software/binutils";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
     };
   }
   ''

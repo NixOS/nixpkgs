@@ -12,19 +12,18 @@
   libXcursor,
   libXi,
   stdenv,
-  darwin,
   makeWrapper,
   zenity,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfer";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "surfer-project";
     repo = "surfer";
-    rev = "v${version}";
-    hash = "sha256-mvHyljAEVi1FMkEbKsPmCNx2Cg0/Ydw3ZQCZsowEKGc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2ikeG4K1CpyHgAZZfPzEFRXRoEh2PnOIf+8OREO6xug=";
     fetchSubmodules = true;
   };
 
@@ -34,12 +33,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+    (lib.getLib stdenv.cc.cc)
+  ];
 
   # Wayland and X11 libs are required at runtime since winit uses dlopen
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
@@ -51,14 +48,7 @@ rustPlatform.buildRustPackage rec {
     libXi
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-      "egui_skia_renderer-0.2.0" = "sha256-1l8iluTHDYZGRkKWnurRMj4iHljogPWs26pzkUtIGwY=";
-      "spade-0.10.0" = "sha256-nl9MsrV68mE7hVEBFF/WdasUXCJoUazCFg4xG+2MOEY=";
-    };
-  };
+  cargoHash = "sha256-E+9u7t6bLzORL2HiG4iT5pT4nGftyOgO2/eXHuQK4pQ=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;
@@ -71,10 +61,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Extensible and Snappy Waveform Viewer";
     homepage = "https://surfer-project.org/";
-    changelog = "https://gitlab.com/surfer-project/surfer/-/releases/v${version}";
+    changelog = "https://gitlab.com/surfer-project/surfer/-/releases/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ hakan-demirli ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "surfer";
   };
-}
+})

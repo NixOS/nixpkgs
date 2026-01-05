@@ -8,7 +8,6 @@
   libGL,
   openal,
   luajit,
-  libdevil,
   freetype,
   physfs,
   libmodplug,
@@ -20,6 +19,7 @@
   autoconf,
   automake,
   libtool,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     SDL2
+    xorg.libX11 # SDl2 optional depend, for SDL_syswm.h
     libGLU
     libGL
     openal
     luajit
-    libdevil
     freetype
     physfs
     libmodplug

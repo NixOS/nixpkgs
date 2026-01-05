@@ -11,12 +11,12 @@
 
 tcl.mkTclDerivation rec {
   pname = "eltclsh";
-  version = "1.19";
+  version = "1.20";
 
   src = fetchgit {
     url = "https://git.openrobots.org/robots/eltclsh.git";
     rev = "eltclsh-${version}";
-    hash = "sha256-YcJRaNct/cLNsjWk+NLzGiDYOG0jNgKudBczKckQU14=";
+    hash = "sha256-kNUT190DkY+NNUmBwHfSxgBLbSyc0MutVDLsRh7kFDE=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ tcl.mkTclDerivation rec {
     "--with-libtool=${libtool}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive shell for the TCL programming language based on editline";
     homepage = "https://homepages.laas.fr/mallet/soft/shell/eltclsh";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ iwanb ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ iwanb ];
+    platforms = lib.platforms.all;
   };
 }

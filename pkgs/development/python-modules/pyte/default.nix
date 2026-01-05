@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "selectel";
-    repo = pname;
+    repo = "pyte";
     rev = version;
     hash = "sha256-u24ltX/LEteiZ2a/ioKqxV2AZgrFmKOHXmySmw21sLE=";
   };
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyte" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple VTXXX-compatible linux terminal emulator";
     homepage = "https://github.com/selectel/pyte";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

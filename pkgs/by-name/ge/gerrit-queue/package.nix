@@ -16,11 +16,11 @@ buildGoModule rec {
   };
   vendorHash = "sha256-+Ig4D46NphzpWKXO23Haea9EqVtpda8v9zLPJkbe3bQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Merge bot for Gerrit";
     homepage = "https://github.com/flokli/gerrit-queue";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ flokli ];
     mainProgram = "gerrit-queue";
   };
 }

@@ -10,7 +10,7 @@
 
 timeshift-unwrapped: runtimeDeps:
 stdenvNoCC.mkDerivation {
-  inherit (timeshift-unwrapped) pname version;
+  inherit (timeshift-unwrapped) pname version outputs;
 
   dontUnpack = true;
 
@@ -21,8 +21,12 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p "$out"
-    lndir "${timeshift-unwrapped}" "$out"
+  ''
+  + lib.concatMapStrings (outputName: ''
+    mkdir -p "''$${outputName}"
+    lndir -silent "${timeshift-unwrapped.${outputName}}" "''$${outputName}"
+  '') timeshift-unwrapped.outputs
+  + ''
     runHook postInstall
   '';
 

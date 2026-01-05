@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-display";
     rev = version;
-    sha256 = "sha256-uSEixgakYmh+rheDVF9kYs43C+vjfzuz1SNfwV3+RIU=";
+    sha256 = "sha256-/qWNs72x9Y2m+QOu5jLjtbIXjZhf6AGtLdpRpdED+AE=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Displays Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-display";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-display";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

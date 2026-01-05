@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   pytest-aiohttp,
+  pytest-asyncio_0,
   pytestCheckHook,
   setuptools,
   webtest,
@@ -38,21 +39,24 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ webtest ];
+  dependencies = [
+    aiohttp
+    webtest
+  ];
 
   nativeCheckInputs = [
-    aiohttp
+    pytest-asyncio_0
     pytest-aiohttp
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "webtest_aiohttp" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sloria/webtest-aiohttp/blob/${src.rev}/CHANGELOG.rst";
     description = "Provides integration of WebTest with aiohttp.web applications";
     homepage = "https://github.com/sloria/webtest-aiohttp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cript0nauta ];
   };
 }

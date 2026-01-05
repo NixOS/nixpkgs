@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
-    repo = pname;
+    repo = "qtawesome";
     tag = "v${version}";
     hash = "sha256-VjUlP+5QU9ApD09UNvF48b0gepCUpVO6U6zYaKm0KoE=";
   };
@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtawesome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Iconic fonts in PyQt and PySide applications";
     mainProgram = "qta-browser";
     homepage = "https://github.com/spyder-ide/qtawesome";
     changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux; # fails on Darwin
+    platforms = lib.platforms.linux; # fails on Darwin
   };
 }

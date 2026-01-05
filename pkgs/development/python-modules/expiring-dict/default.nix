@@ -2,27 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "expiring-dict";
-  version = "1.1.1";
-  format = "setuptools";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-J3lC7cYNWxI0V8GkaGmMlJI9v6yNQLJjuSHATmlA3Ak=";
+    pname = "expiring_dict";
+    inherit version;
+    hash = "sha256-yoy4AjBOrlszoj7EwZAZthCt/aUMvEyb+jrVws04djE=";
   };
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  build-system = [ setuptools ];
+
+  dependencies = [ sortedcontainers ];
 
   pythonImportsCheck = [ "expiring_dict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python dict with TTL support for auto-expiring caches";
     homepage = "https://github.com/dparker2/py-expiring-dict";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

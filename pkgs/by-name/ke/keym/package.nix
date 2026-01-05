@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cwkx/keym";
     description = "C tool to control mouse with keyboard for X11";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "keym";
-    maintainers = with maintainers; [ CompileTime ];
+    maintainers = with lib.maintainers; [ CompileTime ];
   };
 }

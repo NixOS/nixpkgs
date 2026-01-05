@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gt";
-  version = "unstable-2022-05-08";
+  version = "0-unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "linux-usb-gadgets";
@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   preConfigure = ''
     cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")

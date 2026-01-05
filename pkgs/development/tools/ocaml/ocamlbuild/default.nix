@@ -31,9 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   strictDeps = true;
 
-  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
-  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-
   configurePhase = ''
     runHook preConfigure
 
@@ -46,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Build system with builtin rules to easily build most OCaml projects";
     homepage = "https://github.com/ocaml/ocamlbuild/";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ vbgl ];
     mainProgram = "ocamlbuild";
     inherit (ocaml.meta) platforms;
   };

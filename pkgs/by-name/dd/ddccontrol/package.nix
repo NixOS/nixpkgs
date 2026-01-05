@@ -11,14 +11,14 @@
   ddccontrol-db,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-qyD6i44yH3EufIW+LA/LBMW20Tejb49zvsDfv6YFD6c=";
   };
 
@@ -53,11 +53,14 @@ stdenv.mkDerivation rec {
     intltoolize --force
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ pakhfn ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pakhfn
+      doronbehar
+    ];
   };
-}
+})

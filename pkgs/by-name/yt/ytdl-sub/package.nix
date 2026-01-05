@@ -1,21 +1,22 @@
 {
   python3Packages,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   lib,
   versionCheckHook,
-  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.02.21";
+  version = "2025.12.31.post5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-TRq4sJowCi8CsZP859eJt2NWTDs2LN+2sG3y2s7UDA0=";
+    hash = "sha256-Ksm3aXqE+rhuc9nDN4uFqePrrIonvPTSz+J6WkxlnTg=";
   };
 
   postPatch = ''
@@ -38,14 +39,35 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg "ffmpeg"}"
-    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
+    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg_7 "ffmpeg"}"
+    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg_7 "ffprobe"}"
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  env = {
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg_7 "ffprobe"}";
+  };
+
+  disabledTests = [
+    "test_logger_can_be_cleaned_during_execution"
+    "test_no_config_works"
+    "test_presets_run"
+    "test_thumbnail"
+  ];
+
+  disabledTestPaths = [
+    # According to documentation, e2e tests can be flaky:
+    # "This checksum can be inaccurate for end-to-end tests"
+    "tests/e2e"
+  ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://github.com/jmbannon/ytdl-sub";

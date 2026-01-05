@@ -3,90 +3,78 @@
   buildPythonPackage,
   pythonOlder,
   isPyPy,
-  cython,
   distlib,
-  fetchPypi,
+  fetchFromGitHub,
   filelock,
   flaky,
   hatch-vcs,
   hatchling,
-  importlib-metadata,
   platformdirs,
-  pytest-freezegun,
   pytest-mock,
-  pytest-timeout,
   pytestCheckHook,
   time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.29.2";
-  format = "pyproject";
+  version = "20.35.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/aq+v20DtbqDrgoCz+lvSKcW9PrlVkYdGAglhm91tyg=";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = "virtualenv";
+    tag = version;
+    hash = "sha256-0PWIYU1/zXiOBUV/45rJsJwVlcqHeac68nRM2tvEPHo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     distlib
     filelock
     platformdirs
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
-    cython
     flaky
-    pytest-freezegun
     pytest-mock
-    pytest-timeout
     pytestCheckHook
-  ] ++ lib.optionals (!isPyPy) [ time-machine ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  ]
+  ++ lib.optionals (!isPyPy) [ time-machine ];
 
   disabledTestPaths = [
     # Ignore tests which require network access
     "tests/unit/create/test_creator.py"
-    "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
+    "tests/unit/create/via_global_ref/test_build_c_ext.py"
   ];
 
-  disabledTests =
-    [
-      # Network access
-      "test_create_no_seed"
-      "test_seed_link_via_app_data"
-      # Permission Error
-      "test_bad_exe_py_info_no_raise"
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ "test_help" ]
-    ++ lib.optionals (isPyPy) [
-      # encoding problems
-      "test_bash"
-      # permission error
-      "test_can_build_c_extensions"
-      # fails to detect pypy version
-      "test_discover_ok"
-    ];
+  disabledTests = [
+    # Network access
+    "test_seed_link_via_app_data"
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ "test_help" ]
+  ++ lib.optionals isPyPy [
+    # encoding problems
+    "test_bash"
+    # permission error
+    "test_can_build_c_extensions"
+    # fails to detect pypy version
+    "test_discover_ok"
+    # type error
+    "test_fallback_existent_system_executable"
+  ];
 
   pythonImportsCheck = [ "virtualenv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create isolated Python environments";
     mainProgram = "virtualenv";
     homepage = "http://www.virtualenv.org";
     changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

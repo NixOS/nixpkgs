@@ -6,6 +6,7 @@
   libiconv,
   openssl,
   pcre,
+  pcre2,
 }:
 
 import ./versions.nix (
@@ -19,11 +20,13 @@ import ./versions.nix (
       inherit hash;
     };
 
+    enableParallelBuilding = true;
+
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       libiconv
       openssl
-      pcre
+      (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
     ];
 
     configureFlags = [
@@ -48,6 +51,7 @@ import ./versions.nix (
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
+        bstanderline
         mmahut
         psyanticy
       ];

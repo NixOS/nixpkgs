@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "WSGI HTTP Digest Authentication middleware";
     homepage = "https://github.com/jonashaag/httpauth";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

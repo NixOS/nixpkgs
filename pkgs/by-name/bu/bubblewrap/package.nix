@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-8IDMLQPeO576N1lizVudXUmTV6hNOiowjzRpEWBsZ+U=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   postPatch = ''
     substituteInPlace tests/libtest.sh \
       --replace "/var/tmp" "$TMPDIR"
@@ -45,13 +50,13 @@ stdenv.mkDerivation rec {
   # incompatible with Nix sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/containers/bubblewrap/releases/tag/${src.rev}";
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
     mainProgram = "bwrap";
   };
 }

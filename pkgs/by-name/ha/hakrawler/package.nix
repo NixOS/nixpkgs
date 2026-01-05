@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-NzgFwPvuEZ2/Ks5dZNRJjzzCNPRGelQP/A6eZltqkmM=";
 
-  meta = with lib; {
+  meta = {
     description = "Web crawler for the discovery of endpoints and assets";
     mainProgram = "hakrawler";
     homepage = "https://github.com/hakluke/hakrawler";
@@ -25,7 +25,7 @@ buildGoModule rec {
       Simple, fast web crawler designed for easy, quick discovery of endpoints
       and assets within a web application.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

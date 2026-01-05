@@ -18,11 +18,11 @@ stdenv.mkDerivation {
     cp -R * "$out/share/pari/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PARI database needed by ellap for large primes";
     homepage = "http://pari.math.u-bordeaux.fr/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = teams.sage.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.sage ];
   };
 }

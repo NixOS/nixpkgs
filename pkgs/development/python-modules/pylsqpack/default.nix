@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pylsqpack";
-  version = "0.3.19";
+  version = "0.3.22";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Up+j49bxsO7JK0NFA8DsVRy3FAI8wXEJEfZl+raobr0=";
+    hash = "sha256-tn9xGzyDcNn0D39/U2qmAY2JAPoJ+kn3Lww/E4hs7No=";
   };
 
   build-system = [ setuptools ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylsqpack" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the ls-qpack QPACK library";
     homepage = "https://github.com/aiortc/pylsqpack";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

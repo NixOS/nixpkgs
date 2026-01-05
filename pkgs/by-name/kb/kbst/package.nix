@@ -38,11 +38,11 @@ buildGoModule rec {
     $out/bin/kbst help | grep v${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubestack framework CLI";
     mainProgram = "kbst";
     homepage = "https://www.kubestack.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mtrsk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mtrsk ];
   };
 }

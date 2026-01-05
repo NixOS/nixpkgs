@@ -1,20 +1,21 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, nixosTests
-, php
-, writeText
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  php,
+  writeText,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-hgkFNZg+A1cF+xh17d2n4SCvxTZm/Eryj6jP7MvnpTE=";
+    hash = "sha256-//UiGxsdJQAc9qAn3P8/bCl8ka5LacfqkydU4b2/TtI=";
   };
 
   postPatch = ''
@@ -47,10 +48,12 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests) freshrss;
   };
 
-  meta = with lib; {
+  meta = {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
     homepage = "https://www.freshrss.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ etu stunkymonkey ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      stunkymonkey
+    ];
   };
 }

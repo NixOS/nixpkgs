@@ -15,12 +15,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Filter IPv4 and IPv6 addresses matching CIDR patterns";
     homepage = "https://www.pc-tools.net/unix/grepcidr/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.fadenb ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     mainProgram = "grepcidr";
   };
 }

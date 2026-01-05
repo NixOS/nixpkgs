@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "3.7.0";
+  version = "3.21.0";
 
   kata-images = callPackage ./kata-images.nix { inherit version; };
 
@@ -34,10 +34,10 @@ buildGoModule rec {
     owner = "kata-containers";
     repo = "kata-containers";
     rev = version;
-    hash = "sha256-Ir+/ZZJHm6E+044wczU3UvL+Py9Wprgw2QKJaYyDrKU=";
+    hash = "sha256-gOPabvimKzP7U1/BRzjKPDKE0MHnhKI4j0WZPM6ZTSA=";
   };
 
-  sourceRoot = "source/src/runtime";
+  sourceRoot = "${src.name}/src/runtime";
 
   vendorHash = null;
 

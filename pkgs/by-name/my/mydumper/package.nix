@@ -6,7 +6,6 @@
   installShellFiles,
   pkg-config,
   glib,
-  pcre,
   pcre2,
   util-linux,
   libsysprof-capture,
@@ -21,16 +20,15 @@
   versionCheckHook,
   mydumper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.18.1-1";
+  version = "0.21.1-1";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
     tag = "v${version}";
-    hash = "sha256-7CnNcaZ2jLlLx211DA5Zk3uf724yCMpt/0zgjvZl3fM=";
+    hash = "sha256-6x0d1Ywgy6kkfDs3KsS6pRK0/3z9Ur7klO8xMTsoDPI=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -50,22 +48,20 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  buildInputs =
-    [
-      glib
-      pcre
-      pcre2
-      util-linux
-      libmysqlclient
-      libressl
-      libsysprof-capture
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      libselinux
-      libsepol
-    ];
+  buildInputs = [
+    glib
+    pcre2
+    util-linux
+    libmysqlclient
+    libressl
+    libsysprof-capture
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libselinux
+    libsepol
+  ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
@@ -73,10 +69,10 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = (
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       toString [
-        "-Wno-error=deprecated-non-prototype"
         "-Wno-error=format"
+        "-Wno-error=sometimes-uninitialized"
       ]
     else
       "-Wno-error=maybe-uninitialized"
@@ -85,7 +81,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
     substituteInPlace CMakeLists.txt\
-      --replace-fail "/etc" "$out/etc"
+      --replace-fail "/etc" "$out/etc" \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   # copy man files & docs over
@@ -111,13 +108,13 @@ stdenv.mkDerivation rec {
     version = "myloader v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance MySQL backup tool";
     homepage = "https://github.com/mydumper/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       izorkin
       michaelglass
     ];

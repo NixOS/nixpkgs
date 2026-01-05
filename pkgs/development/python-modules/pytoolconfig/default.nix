@@ -46,7 +46,8 @@ buildPythonPackage rec {
     sphinx-autodoc-typehints
     sphinx-rtd-theme
     sphinxHook
-  ] ++ optional-dependencies.doc;
+  ]
+  ++ optional-dependencies.doc;
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
@@ -63,14 +64,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     description = "Python tool configuration";
     homepage = "https://github.com/bagel897/pytoolconfig";
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       fab
       hexa
     ];

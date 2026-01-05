@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace rtl-sdr.rules \
       --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -40,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "INSTALL_UDEV_RULES" stdenv.hostPlatform.isLinux)
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Turns your Realtek RTL2832 based DVB dongle into a FM radio stereo receiver";

@@ -12,9 +12,7 @@ let
 
   configFile = format.generate "pretalx.cfg" cfg.settings;
 
-  finalPackage = cfg.package.override {
-    inherit (cfg) plugins;
-  };
+  inherit (cfg) finalPackage;
 
   pythonEnv = finalPackage.python.buildEnv.override {
     extraLibs =
@@ -32,14 +30,30 @@ let
 in
 
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
+  meta = {
+    maintainers = with lib.maintainers; [ hexa ] ++ lib.teams.c3d2.members;
   };
 
   options.services.pretalx = {
     enable = lib.mkEnableOption "pretalx";
 
     package = lib.mkPackageOption pkgs "pretalx" { };
+
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      default = cfg.package.override {
+        inherit (cfg) plugins;
+      };
+      defaultText = ''
+        config.services.package.override {
+          inherit (config.services.pretalx) plugins;
+        }
+      '';
+      readOnly = true;
+      description = ''
+        The effective pretalx package used. This is the base package with the selected plugins applied.
+      '';
+    };
 
     group = lib.mkOption {
       type = lib.types.str;
@@ -220,8 +234,8 @@ in
             };
             static = lib.mkOption {
               type = lib.types.path;
-              default = "${cfg.package.static}/";
-              defaultText = lib.literalExpression "\${config.services.pretalx.package}.static}/";
+              default = "${finalPackage.static}/";
+              defaultText = "\${config.services.pretalx.finalPackage.static}/";
               readOnly = true;
               description = ''
                 Path to the directory that contains static files.
@@ -299,7 +313,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # https://docs.pretalx.org/administrator/installation.html
+    # https://docs.pretalx.org/administrator/installation/
 
     environment.systemPackages = [
       (pkgs.writeScriptBin "pretalx-manage" ''
@@ -331,7 +345,7 @@ in
         recommendedTlsSettings = lib.mkDefault true;
         upstreams.pretalx.servers."unix:/run/pretalx/pretalx.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
-          # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
+          # https://docs.pretalx.org/administrator/installation/#step-8-reverse-proxy
           extraConfig = ''
             more_set_headers "Referrer-Policy: same-origin";
             more_set_headers "X-Content-Type-Options: nosniff";
@@ -428,28 +442,34 @@ in
       {
         pretalx-web = lib.recursiveUpdate commonUnitConfig {
           description = "pretalx web service";
-          after =
-            [
-              "network.target"
-              "redis-pretalx.service"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-              "postgresql.service"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-              "mysql.service"
-            ];
+          after = [
+            "network.target"
+            "redis-pretalx.service"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+            "postgresql.target"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+            "mysql.service"
+          ];
           wantedBy = [ "multi-user.target" ];
-          preStart = ''
-            versionFile="${cfg.settings.filesystem.data}/.version"
-            version=$(cat "$versionFile" 2>/dev/null || echo 0)
+          preStart =
+            let
+              versionString = lib.concatStringsSep "\n" (
+                [ "pretalx-${finalPackage.version}" ]
+                ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
+              );
+            in
+            ''
+              versionFile="${cfg.settings.filesystem.data}/.version"
+              version="$(cat "$versionFile" 2>/dev/null || echo 0)"
 
-            if [[ $version != ${cfg.package.version} ]]; then
-              ${lib.getExe' pythonEnv "pretalx-manage"} migrate
+              if [[ "$version" != "${versionString}" ]]; then
+                ${lib.getExe' pythonEnv "pretalx-manage"} migrate
 
-              echo "${cfg.package.version}" > "$versionFile"
-            fi
-          '';
+                echo "${versionString}" > "$versionFile"
+              fi
+            '';
           serviceConfig = {
             ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi";
             RuntimeDirectory = "pretalx";
@@ -478,17 +498,16 @@ in
         pretalx-worker = lib.mkIf cfg.celery.enable (
           lib.recursiveUpdate commonUnitConfig {
             description = "pretalx asynchronous job runner";
-            after =
-              [
-                "network.target"
-                "redis-pretalx.service"
-              ]
-              ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-                "postgresql.service"
-              ]
-              ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-                "mysql.service"
-              ];
+            after = [
+              "network.target"
+              "redis-pretalx.service"
+            ]
+            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+              "postgresql.target"
+            ]
+            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+              "mysql.service"
+            ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
           }

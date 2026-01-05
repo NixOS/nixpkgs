@@ -1,35 +1,50 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "updog";
-  version = "1.4";
+  version = "2.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7n/ddjF6eJklo+T79+/zBxSHryebc2W9gxwxsb2BbF4=";
+  src = fetchFromGitHub {
+    owner = "sc0tfree";
+    repo = "updog";
+    tag = "v${version}";
+    hash = "sha256-EFAqxlKrQ9HBMHBdmstY+RZPqK0kWY5Ws6WMFHlMyM0=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    flask
-    flask-httpauth
-    werkzeug
-    pyopenssl
+  build-system = [
+    python3Packages.poetry-core
   ];
 
-  checkPhase = ''
-    $out/bin/updog --help > /dev/null
-  '';
+  dependencies = with python3Packages; [
+    colorama
+    flask
+    flask-cors
+    flask-httpauth
+    pyopenssl
+    werkzeug
+  ];
 
-  meta = with lib; {
-    description = "Updog is a replacement for Python's SimpleHTTPServer";
+  pythonRelaxDeps = [
+    "pyopenssl"
+    "flask-cors"
+  ];
+
+  nativeCheckInputs = [ versionCheckHook ];
+
+  # no python tests
+
+  meta = {
+    description = "Replacement for Python's SimpleHTTPServer";
     mainProgram = "updog";
     homepage = "https://github.com/sc0tfree/updog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    changelog = "https://github.com/sc0tfree/updog/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
 }

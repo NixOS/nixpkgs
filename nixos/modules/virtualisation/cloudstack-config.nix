@@ -1,16 +1,15 @@
 { lib, pkgs, ... }:
 
-with lib;
-
 {
   imports = [
     ../profiles/qemu-guest.nix
   ];
 
   config = {
-    fileSystems."/" = {
+    fileSystems."/" = lib.mkImageMediaOverride {
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
+      fsType = "ext4";
     };
 
     boot.growPartition = true;

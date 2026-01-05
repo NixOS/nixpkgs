@@ -1,32 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, python3
-, zbar
-, secp256k1
-, enableQt ? true
-, qtwayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  python3,
+  zbar,
+  secp256k1,
+  enableQt ? true,
+  qtwayland,
 }:
 
 let
   version = "4.5.4";
 
   libsecp256k1_name =
-    if stdenv.hostPlatform.isLinux then "libsecp256k1.so.{v}"
-    else if stdenv.hostPlatform.isDarwin then "libsecp256k1.{v}.dylib"
-    else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isLinux then
+      "libsecp256k1.so.{v}"
+    else if stdenv.hostPlatform.isDarwin then
+      "libsecp256k1.{v}.dylib"
+    else
+      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.hostPlatform.isLinux then "libzbar.so.0"
-    else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
-    else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isLinux then
+      "libzbar.so.0"
+    else if stdenv.hostPlatform.isDarwin then
+      "libzbar.0.dylib"
+    else
+      "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
 in
 
 python3.pkgs.buildPythonApplication {
   pname = "electrum-grs";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
@@ -38,41 +46,46 @@ python3.pkgs.buildPythonApplication {
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiohttp
-    aiohttp-socks
-    aiorpcx
-    attrs
-    bitstring
-    cryptography
-    dnspython
-    groestlcoin-hash
-    jsonrpclib-pelix
-    matplotlib
-    pbkdf2
-    protobuf
-    pysocks
-    qrcode
-    requests
-    certifi
-    jsonpatch
-    # plugins
-    btchip-python
-    ledger-bitcoin
-    ckcc-protocol
-    keepkey
-    trezor
-    bitbox02
-    cbor
-    pyserial
-  ] ++ lib.optionals enableQt [
-    pyqt5
-    qdarkstyle
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      aiohttp
+      aiohttp-socks
+      aiorpcx
+      attrs
+      bitstring
+      cryptography
+      dnspython
+      groestlcoin-hash
+      jsonrpclib-pelix
+      matplotlib
+      pbkdf2
+      protobuf
+      pysocks
+      qrcode
+      requests
+      certifi
+      jsonpatch
+      # plugins
+      btchip-python
+      ledger-bitcoin
+      ckcc-protocol
+      keepkey
+      trezor
+      bitbox02
+      cbor
+      pyserial
+    ]
+    ++ lib.optionals enableQt [
+      pyqt5
+      qdarkstyle
+    ];
 
-  checkInputs = with python3.pkgs; lib.optionals enableQt [
-    pyqt6
-  ];
+  checkInputs =
+    with python3.pkgs;
+    lib.optionals enableQt [
+      pyqt6
+    ];
 
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
@@ -83,12 +96,18 @@ python3.pkgs.buildPythonApplication {
 
     substituteInPlace ./electrum_grs/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + (if enableQt then ''
-    substituteInPlace ./electrum_grs/qrscanner.py \
-      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' else ''
-    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-  '');
+  ''
+  + (
+    if enableQt then
+      ''
+        substituteInPlace ./electrum_grs/qrscanner.py \
+          --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      ''
+    else
+      ''
+        sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+      ''
+  );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum-grs.desktop \
@@ -109,7 +128,7 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum-grs help >/dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Groestlcoin wallet";
     longDescription = ''
       An easy-to-use Groestlcoin client featuring wallets generated from
@@ -118,10 +137,10 @@ python3.pkgs.buildPythonApplication {
       of the blockchain.
     '';
     homepage = "https://groestlcoin.org/";
-    downloadPage = "https://github.com/Groestlcoin/electrum-grs/releases/tag/v{version}";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gruve-p ];
+    downloadPage = "https://github.com/Groestlcoin/electrum-grs/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gruve-p ];
     mainProgram = "electrum-grs";
   };
 }

@@ -64,55 +64,84 @@ let
         ];
       }
       ''
-        magick -size 640x480 canvas:white -pointsize 30 -fill black -annotate +100+100 '${wallpaperText}' $out
+        magick -size 640x480 canvas:black -pointsize 30 -fill white -annotate +100+100 '${wallpaperText}' $out
       '';
-  # gsettings tool with access to wallpaper schema
-  lomiri-gsettings =
-    pkgs:
-    pkgs.stdenv.mkDerivation {
-      name = "lomiri-gsettings";
-      dontUnpack = true;
-      nativeBuildInputs = with pkgs; [
-        glib
-        wrapGAppsHook3
-      ];
-      buildInputs = with pkgs; [
-        # Not using the Lomiri-namespaced setting yet
-        # lomiri.lomiri-schemas
-        gsettings-desktop-schemas
-      ];
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/bin
-        ln -s ${pkgs.lib.getExe' pkgs.glib "gsettings"} $out/bin/lomiri-gsettings
-        runHook postInstall
-      '';
-    };
-  setLomiriWallpaperService =
-    pkgs:
-    let
-      lomiriServices = [
-        "lomiri.service"
-        "lomiri-full-greeter.service"
-        "lomiri-full-shell.service"
-        "lomiri-greeter.service"
-        "lomiri-shell.service"
-      ];
-    in
-    rec {
-      description = "Set Lomiri wallpaper to something OCR-able";
-      wantedBy = lomiriServices;
-      before = lomiriServices;
-      serviceConfig = {
-        Type = "oneshot";
-        # Not using the Lomiri-namespaed settings yet
-        # ExecStart = "${lomiri-gsettings pkgs}/bin/lomiri-gsettings set com.lomiri.Shell background-picture-uri file://${wallpaperFile pkgs}";
-        ExecStart = "${lomiri-gsettings pkgs}/bin/lomiri-gsettings set org.gnome.desktop.background picture-uri file://${wallpaperFile pkgs}";
+
+  lomiriWallpaperDconfSettings = pkgs: {
+    settings = {
+      "org/gnome/desktop/background" = {
+        picture-uri = "file://${wallpaperFile pkgs}";
       };
     };
+  };
 
   sharedTestFunctions = ''
-    def wait_for_text(text):
+    from collections.abc import Callable
+    import tempfile
+    import subprocess
+
+    # Based on terminal-emulators.nix' check_for_pink
+    def check_for_color(color: str) -> Callable[[bool], bool]:
+      def check_for_color_retry(final=False) -> bool:
+        with tempfile.NamedTemporaryFile() as tmpin:
+          machine.send_monitor_command("screendump {}".format(tmpin.name))
+
+          cmd = 'convert {} -define histogram:unique-colors=true -format "%c" histogram:info:'.format(
+            tmpin.name
+          )
+          ret = subprocess.run(cmd, shell=True, capture_output=True)
+          if ret.returncode != 0:
+            raise Exception(
+              "image analysis failed with exit code {}".format(ret.returncode)
+            )
+
+          text = ret.stdout.decode("utf-8")
+          return color in text
+
+      return check_for_color_retry
+
+    def check_for_color_continued_presence(color: str) -> Callable[[bool], bool]:
+      colorFunc: Callable[[bool], bool] = check_for_color(color)
+      def check_for_color_continued_presence_retry(final=False) -> bool:
+        colorPresent: bool = colorFunc(final)
+
+        if final:
+          # If it fails now, retry handles the exception raising.
+          # Otherwise, we passed.
+          return colorPresent
+        else:
+          if colorPresent:
+            # We want retry to continue running us until the timeout, so signal failure.
+            return False
+          else:
+            # Color disappeared
+            raise Exception(
+              "color {} has disappeared from the screen!".format(color)
+            )
+      return check_for_color_continued_presence_retry
+
+    def ensure_lomiri_running() -> None:
+      """
+      Ensure that Lomiri has finished starting up.
+      """
+
+      # Process runs
+      machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+
+      # Output rendering from Lomiri has started when it starts printing performance diagnostics
+      machine.wait_for_console_text("Last frame took")
+
+      # One of the last UI elements that loads is the clock. In the past, we could OCR for AM/PM to ensure it's there. That is now flaky.
+      # The next best thing is to look for the launcher button, and ensure it stays around for awhile (DE doesn't crash).
+      launcherColor: str = "#5277C3"
+      with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
+        retry(check_for_color(launcherColor))
+      with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
+        retry(fn=check_for_color_continued_presence(launcherColor), timeout=30)
+
+      machine.screenshot("lomiri_launched")
+
+    def wait_for_text(text) -> None:
       """
       Wait for on-screen text, and try to optimise retry count for slow hardware.
       """
@@ -120,7 +149,7 @@ let
       machine.sleep(30)
       machine.wait_for_text(text)
 
-    def toggle_maximise():
+    def toggle_maximise() -> None:
       """
       Maximise the current window.
       """
@@ -134,30 +163,26 @@ let
       machine.send_key("esc")
       machine.sleep(5)
 
-    def mouse_click(xpos, ypos):
+    def mouse_click(xpos, ypos) -> None:
       """
       Move the mouse to a screen location and hit left-click.
       """
 
-      # Need to reset to top-left, --absolute doesn't work?
-      machine.execute("ydotool mousemove -- -10000 -10000")
-      machine.sleep(2)
-
       # Move
-      machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
+      machine.execute(f"ydotool mousemove --absolute -- {xpos} {ypos}")
       machine.sleep(2)
 
       # Click (C0 - left button: down & up)
       machine.execute("ydotool click 0xC0")
       machine.sleep(2)
 
-    def open_starter():
+    def open_starter() -> None:
       """
       Open the starter, and ensure it's opened.
       """
 
       # Using the keybind has a chance of instantly closing the menu again? Just click the button
-      mouse_click(20, 30)
+      mouse_click(15, 15)
 
   '';
 
@@ -219,12 +244,7 @@ let
 
             # The session should start, and not be stuck in i.e. a crash loop
             with subtest("lomiri starts"):
-                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-                # Output rendering from Lomiri has started when it starts printing performance diagnostics
-                machine.wait_for_console_text("Last frame took")
-                # Look for datetime's clock, one of the last elements to load
-                wait_for_text(r"(AM|PM)")
-                machine.screenshot("lomiri_launched")
+                ensure_lomiri_running()
 
             # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
             # There's a test app we could use that also displays their contents, but it's abit inconsistent.
@@ -417,12 +437,14 @@ in
             ];
           };
 
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
+
           # Help with OCR
           systemd.tmpfiles.settings = {
             "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
-
-          systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
         };
 
       enableOCR = true;
@@ -436,12 +458,7 @@ in
 
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
+              ensure_lomiri_running()
 
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
@@ -469,15 +486,16 @@ in
               machine.send_key("alt-f4")
 
           # Morph is how we go online
-          with subtest("morph browser works"):
-              open_starter()
-              machine.send_chars("Morph\n")
-              wait_for_text(r"(Bookmarks|address|site|visited any)")
-              machine.screenshot("morph_open")
-
-              # morph-browser has a separate VM test to test its basic functionalities
-
-              machine.send_key("alt-f4")
+          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+          # with subtest("morph browser works"):
+          #     open_starter()
+          #     machine.send_chars("Morph\n")
+          #     wait_for_text(r"(Bookmarks|address|site|visited any)")
+          #     machine.screenshot("morph_open")
+          #
+          #     # morph-browser has a separate VM test to test its basic functionalities
+          #
+          #     machine.send_key("alt-f4")
 
           # LSS provides DE settings
           with subtest("system settings open"):
@@ -566,12 +584,14 @@ in
             ];
           };
 
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
+
           # Help with OCR
           systemd.tmpfiles.settings = {
             "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
           };
-
-          systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
         };
 
       enableOCR = true;
@@ -585,12 +605,7 @@ in
 
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
+              ensure_lomiri_running()
 
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
@@ -649,14 +664,14 @@ in
               machine.send_key("ret")
 
               # Peers should be loaded
-              wait_for_text("Morph") # or Gallery, but Morph is already packaged
+              wait_for_text("Gallery")
               machine.screenshot("settings_lomiri-content-hub_peers")
 
-              # Select Morph as content source
-              mouse_click(370, 100)
+              # Select Gallery as content source
+              mouse_click(460, 80)
 
-              # Expect Morph to be brought into the foreground, with its Downloads page open
-              wait_for_text("No downloads")
+              # Expect Gallery to be brought into the foreground, with its sharing page open
+              wait_for_text("Photos")
 
               # If lomiri-content-hub encounters a problem, it may have crashed the original application issuing the request.
               # Check that it's still alive
@@ -665,9 +680,10 @@ in
               machine.screenshot("lomiri-content-hub_exchange")
 
               # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
-              machine.send_key("esc")
+              machine.send_key("tab")
+              machine.send_key("ret")
 
-              machine.sleep(2) # sleep a tiny bit so morph can close & the focus can return to LSS
+              machine.sleep(2) # sleep a tiny bit so gallery can close & the focus can return to LSS
               machine.send_key("alt-f4")
         '';
     }
@@ -714,7 +730,9 @@ in
 
             environment.etc."${wallpaperName}".source = wallpaperFile pkgs;
 
-            systemd.user.services.set-lomiri-wallpaper = setLomiriWallpaperService pkgs;
+            programs.dconf.profiles.user.databases = [
+              (lomiriWallpaperDconfSettings pkgs)
+            ];
 
             # Help with OCR
             systemd.tmpfiles.settings = {
@@ -737,7 +755,8 @@ in
                 machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
 
                 # Start page shows current time
-                wait_for_text(r"(AM|PM)")
+                # And the greeter *actually* renders our wallpaper!
+                wait_for_text(r"(AM|PM|Lorem|ipsum)")
                 machine.screenshot("lomiri_greeter_launched")
 
                 # Advance to login part
@@ -747,13 +766,9 @@ in
 
                 # Login
                 machine.send_chars("${pwInput}\n")
-                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
 
-                # Output rendering from Lomiri has started when it starts printing performance diagnostics
-                machine.wait_for_console_text("Last frame took")
-                # Look for datetime's clock, one of the last elements to load
-                wait_for_text(r"(AM|PM)")
-                machine.screenshot("lomiri_launched")
+                # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
+                ensure_lomiri_running()
 
             # Lomiri in desktop mode should use the correct keymap
             with subtest("lomiri session keymap works"):
@@ -805,58 +820,58 @@ in
   ];
   details = [
     # messages normally has no contents
-    ({
+    {
       name = "display";
       left = 6;
       ocr = [ "Lock" ];
-    })
-    ({
+    }
+    {
       name = "bluetooth";
       left = 5;
       ocr = [ "Bluetooth" ];
-    })
-    ({
+    }
+    {
       name = "network";
       left = 4;
       ocr = [
         "Flight"
         "Wi-Fi"
       ];
-    })
-    ({
+    }
+    {
       name = "sound";
       left = 3;
       ocr = [
         "Silent"
         "Volume"
       ];
-    })
-    ({
+    }
+    {
       name = "power";
       left = 2;
       ocr = [
         "Charge"
         "Battery"
       ];
-    })
-    ({
+    }
+    {
       name = "datetime";
       left = 1;
       ocr = [
         "Time"
         "Date"
       ];
-    })
-    ({
+    }
+    {
       name = "session";
       left = 0;
       ocr = [ "Log Out" ];
       extraCheck = ''
         # We should be able to log out and return to the greeter
-        mouse_click(720, 280) # "Log Out"
-        mouse_click(400, 240) # confirm logout
+        mouse_click(600, 250) # "Log Out"
+        mouse_click(340, 220) # confirm logout
         machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
       '';
-    })
+    }
   ];
 }

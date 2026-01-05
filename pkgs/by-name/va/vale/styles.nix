@@ -33,7 +33,8 @@ let
         meta = {
           platforms = lib.platforms.all;
           maintainers = with lib.maintainers; [ katexochen ];
-        } // (args.meta or { });
+        }
+        // (args.meta or { });
       }
       // removeAttrs args [
         "meta"
@@ -61,12 +62,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.6.2";
+    version = "0.6.3";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-ldwK9tMA04H/jTd3dQeRX/sZOwZcyPb+I56cDg0vZDg=";
+      hash = "sha256-1aN7wCdShhMsBN83u7l+5Ffm2WKC8ltZyT3hPZCNWYo=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -93,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.14.1";
+    version = "0.14.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-4j05bIGAVEy6untUqtrUxdLKlhyOcJsbcsow8OxRp1A=";
+      hash = "sha256-Sie4bBeKPOFOJhgd+mLbiz4vG+xpKL0LnwnRQHzOw+Q=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";

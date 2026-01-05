@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
   bluez,
@@ -19,6 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-evmjQrQPHe8F+6w12bnUv6P4QKGkm63cmP1HEv6equw=";
   };
+
+  patches = [
+    # Remove deprecated ida_simple_xx() usage
+    (fetchpatch {
+      url = "https://github.com/orderedstereographic/xpadneo/commit/233e1768fff838b70b9e942c4a5eee60e57c54d4.patch";
+      hash = "sha256-HL+SdL9kv3gBOdtsSyh49fwYgMCTyNkrFrT+Ig0ns7E=";
+      stripLen = 2;
+    })
+  ];
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
@@ -44,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Advanced Linux driver for Xbox One wireless controllers";
     homepage = "https://atar-axis.github.io/xpadneo";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.linux;
   };
 })

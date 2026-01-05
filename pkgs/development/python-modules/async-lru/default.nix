@@ -3,43 +3,54 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
   typing-extensions,
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "2.0.4";
-
-  disabled = pythonOlder "3.8";
-
-  format = "setuptools";
+  version = "2.0.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
     tag = "v${version}";
-    hash = "sha256-S2sOkgtS+YdMtVP7UHD3+oR8Fem8roLhhgVVfh33PcM=";
+    hash = "sha256-FJ1q6W9IYs0OSMZc+bI4v22hOAAWAv2OW3BAqixm8Hs=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/aio-libs/async-lru/issues/635
+      name = "python314-compatibility.patch";
+      url = "https://github.com/aio-libs/async-lru/commit/4df3785d3e5210ce6277b3137c4625cd73918088.patch";
+      hash = "sha256-B9KCJPbiZTQJrnxC/7VI+jgr2PKfwOmS7naXZwKtF9c=";
+    })
+  ];
 
-  postPatch = ''
-    sed -i -e '/^addopts/d' -e '/^filterwarnings/,+2d' setup.cfg
-  '';
+  build-system = [ setuptools ];
+
+  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
+    pytest-timeout
   ];
 
   pythonImportsCheck = [ "async_lru" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/aio-libs/async-lru/releases/tag/${src.tag}";
     description = "Simple lru cache for asyncio";
     homepage = "https://github.com/wikibusiness/async_lru";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

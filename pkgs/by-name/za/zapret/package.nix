@@ -8,21 +8,26 @@
   zlib,
   libnetfilter_queue,
   libnfnetlink,
-
-  iptables,
-  nftables,
-  gawk,
+  libmnl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "70.3";
+  version = "72.5";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
+
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
+
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sYLZH/j8bHUKfkUAAAuTrCTOXB6Qp9kVj4GjyFv6M+g=";
+    hash = "sha256-idIL7jO7bXuuE2b6fC4LvoEobCFiLoQp5R/Mxz67wVE=";
   };
 
   buildInputs = [
@@ -30,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libnetfilter_queue
     libnfnetlink
+    libmnl
   ];
-  nativeBuildInputs = [
-    iptables
-    nftables
-    gawk
-  ];
+
+  preBuild = ''
+    makeFlagsArray+=("CFLAGS=-DZAPRET_GH_VER=${finalAttrs.src.tag} -DZAPRET_GH_HASH=`cat $src/COMMIT`")
+  '';
 
   makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 
@@ -62,9 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r $src/docs/* $out/usr/share/docs
 
-    mkdir -p $out/usr/share/zapret/{common,ipset}
+    mkdir -p $out/usr/share/zapret/{common,files/fake,ipset}
 
     cp $src/common/* $out/usr/share/zapret/common
+    cp $src/files/fake/* $out/usr/share/zapret/files/fake
     cp $src/ipset/* $out/usr/share/zapret/ipset
 
     rm -f $out/usr/share/zapret/ipset/zapret-hosts-user-exclude.txt.default
@@ -88,12 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
-    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/bol-van/zapret/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
-
-    # probably gonna work on darwin, but untested
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

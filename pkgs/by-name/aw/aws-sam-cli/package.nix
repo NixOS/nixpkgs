@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.134.0";
+  version = "1.146.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-CuXJHKHFE1HOs3fQPofWPJI1/+mtkXBGEmO7bIQD5lA=";
+    hash = "sha256-b0nXhhgQgV0TZ0PGYexKxsb1s7PIe+5dqjOWJiVlWJY=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -82,6 +82,12 @@ python3.pkgs.buildPythonApplication rec {
       xray
     ]);
 
+  # Remove after upstream bumps click > 8.1.8
+  postPatch = ''
+    substituteInPlace requirements/base.txt --replace-fail \
+      'click==8.1.8' 'click==${python3.pkgs.click.version}'
+  '';
+
   postFixup = ''
     # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
     wrapProgram $out/bin/sam \
@@ -105,11 +111,13 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  pytestFlagsArray = [
-    "tests"
+  pytestFlags = [
     # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
+  ];
+
+  enabledTestPaths = [
+    "tests"
   ];
 
   disabledTestPaths = [
@@ -123,7 +131,9 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unit/lib/observability/cw_logs/"
     "tests/unit/lib/build_module/"
     # Disable flaky tests
-    "tests/unit/lib/samconfig/test_samconfig.py"
+    "tests/unit/cli/test_main.py"
+    "tests/unit/commands/samconfig/test_samconfig.py"
+    "tests/unit/local/docker/test_lambda_image.py"
   ];
 
   disabledTests = [
@@ -151,13 +161,13 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for local development and testing of Serverless applications";
     homepage = "https://github.com/aws/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "sam";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lo1tuma
       anthonyroussel
     ];

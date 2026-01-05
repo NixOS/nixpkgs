@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.37.1";
+  version = "0.39.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-aBKbDDUUiHIpVX7NtNJOQAH/hov7Zj5O5bE6J25ck10=";
+    hash = "sha256-8nM7Jnxx1NoQQwL0VyPGLzdq1UW5apjxKa1ksq2Qh6U=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.6.0", ' ""
+    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.13.6", ' ""
   '';
 
   DUCC0_USE_NANOBIND = "";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     scipy
     pytest-xdist
   ];
-  pytestFlagsArray = [ "python/test" ];
+  enabledTestPaths = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
   postInstall = ''

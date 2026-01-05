@@ -41,20 +41,19 @@ stdenv.mkDerivation rec {
     "--with-bash-headers=${bash.dev}/include/bash"
   ];
 
-  buildInputs =
-    [
-      curl
-    ]
-    ++ lib.optionals withEncryption [
-      libgpg-error.dev
-      libgcrypt.dev
-    ]
-    ++ lib.optionals withUuid [
-      libuuid
-    ]
-    ++ lib.optionals withBashBuiltins [
-      bash.dev
-    ];
+  buildInputs = [
+    curl
+  ]
+  ++ lib.optionals withEncryption [
+    libgpg-error.dev
+    libgcrypt.dev
+  ]
+  ++ lib.optionals withUuid [
+    libuuid
+  ]
+  ++ lib.optionals withBashBuiltins [
+    bash.dev
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/recutils/";
     description = "Tools and libraries to access human-editable, text-based databases";
     longDescription = ''
@@ -81,8 +80,8 @@ stdenv.mkDerivation rec {
       text-based databases called recfiles. The data is stored as a sequence of
       records, each record containing an arbitrary number of named fields.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

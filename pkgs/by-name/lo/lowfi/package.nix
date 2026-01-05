@@ -5,38 +5,35 @@
   pkg-config,
   openssl,
   stdenv,
-  darwin,
   alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lowfi";
-  version = "1.5.6";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "lowfi";
     tag = version;
-    hash = "sha256-lR22UN9LiuJknq2KTNOXcybXwi2KvLRe0KHocFWL0GM=";
+    hash = "sha256-0Oim1nGll76APjjfNCuJgjOlEJxAU6vZteECEFhsWkI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-xMksujaZgOPJsBiv6//4zeiUcWEV2Pc7daBaPUh3cYc=";
+  cargoHash = "sha256-vInuM96TJuewhFafDkhOiZiyxwc6SeBsSH8Fs8YIRRs=";
 
-  buildFeatures = [ "mpris" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   meta = {
     description = "Extremely simple lofi player";

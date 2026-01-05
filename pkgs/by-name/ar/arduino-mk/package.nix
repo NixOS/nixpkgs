@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sudar";
     repo = "Arduino-Makefile";
-    rev = version;
+    tag = version;
     sha256 = "0flpl97d2231gp51n3y4qvf3y1l8xzafi1sgpwc305vwc2h4dl2x";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Makefile for Arduino sketches";
     homepage = "https://github.com/sudar/Arduino-Makefile";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.eyjhb ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.eyjhb ];
+    platforms = lib.platforms.unix;
   };
 }

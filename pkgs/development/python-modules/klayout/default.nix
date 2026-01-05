@@ -7,16 +7,18 @@
   expat,
   libpng,
   setuptools,
+  stdenv,
+  fixDarwinDylibNames,
 }:
 
 buildPythonPackage rec {
   pname = "klayout";
-  version = "0.29.12";
+  version = "0.30.4.post1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6eJpoxdrUuMBn78QTqvh8zfUH0B8YvWTQR28hZ7HLCY=";
+    hash = "sha256-jQLVD3IsekQfO0P80miKOtyTyGldc2Vn/mJFfvvgMFo=";
   };
 
   build-system = [
@@ -30,13 +32,19 @@ buildPythonPackage rec {
     libpng
   ];
 
+  # libpng-config is needed for the build on Darwin
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng.dev
+    fixDarwinDylibNames
+  ];
+
   pythonImportsCheck = [ "klayout" ];
 
-  meta = with lib; {
+  meta = {
     description = "KLayout’s Python API";
     homepage = "https://github.com/KLayout/klayout";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
   patches = [ ./fno-common.patch ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'
+    substituteInPlace CMakeLists.txt --replace-fail 'COPYING' 'LICENSE'
+
+    # cmake 4 compatibility, upstream is dead
+    substituteInPlace CMakeLists.txt --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required (VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -26,11 +29,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.hostPlatform.isx86 then "ON" else "OFF"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for reading and parsing EDID data from monitors";
     homepage = "http://www.polypux.org/projects/read-edid/";
-    license = licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.linux;
   };
 }

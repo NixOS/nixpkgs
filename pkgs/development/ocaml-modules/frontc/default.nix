@@ -21,11 +21,11 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ menhir ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
     description = "C Parsing Library";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.maurer ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.maurer ];
   };
 }

@@ -63,7 +63,6 @@ lib.extendMkDerivation {
           patches
           postPatch
           patchFlags
-          nativeBuildInputs
           ;
         name = "${name}-npm-deps";
         hash = npmDepsHash;

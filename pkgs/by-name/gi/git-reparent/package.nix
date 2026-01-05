@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "git-reparent";
-  version = "unstable-2017-09-03";
+  version = "0-unstable-2017-09-03";
 
   src = fetchFromGitHub {
     owner = "MarkLodato";
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Git command to recommit HEAD with a new set of parents";
     maintainers = [ ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     mainProgram = "git-reparent";
   };
 }

@@ -4,24 +4,24 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlocate";
   version = "0.26";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/mlocate/mlocate-${version}.tar.xz";
-    sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
+    url = "https://releases.pagure.org/mlocate/mlocate-${finalAttrs.version}.tar.xz";
+    hash = "sha256-MGPfef4Zj7lhjhgMVLrzEFsz2I/mAv8thXCq+UTxJj4=";
   };
 
   makeFlags = [
     "dbfile=/var/cache/locatedb"
   ];
 
-  meta = with lib; {
-    description = "Merging locate is an utility to index and quickly search for files";
+  meta = {
+    description = "Utility to index and quickly search for files";
     homepage = "https://pagure.io/mlocate";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

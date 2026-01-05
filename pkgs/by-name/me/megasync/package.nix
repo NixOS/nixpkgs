@@ -34,13 +34,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";
-  version = "5.9.0.3";
+  version = "5.16.0.2";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-anX/zVCKG3azROamIIqG9hrj+2Tcw+sFIE60RDCJjaY=";
+    hash = "sha256-Bkye2Is3GbdnYYaS//AkNfrt8ppWP9zE58obcmUm0wE=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -58,14 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/020-megasync-sdk-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
+      url = "https://github.com/archlinux/aur/raw/ff59780039697591e7e3a966db058b23bee0451c/020-megasync-sdk-fix-cmake-dependencies-detection.patch";
       hash = "sha256-hQY6tMwiV3B6M6WiFdOESdhahAtuWjdoj2eI2mst/K8=";
       extraPrefix = "src/MEGASync/mega/";
       stripLen = true;
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
+      url = "https://github.com/archlinux/aur/raw/ff59780039697591e7e3a966db058b23bee0451c/030-megasync-app-fix-cmake-dependencies-detection.patch";
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
+    })
+    (fetchpatch {
+      url = "https://github.com/archlinux/aur/raw/c1f647871f5aad7e421971165b07e51b3e7900e9/040-megasync-app-add-missing-link-to-zlib.patch";
+      hash = "sha256-HMsS5TlzkQZbfANSIrvH8Cp6mTxLJ04idcWUWeD2A0U=";
     })
     ./megasync-fix-cmake-install-bindir.patch
     ./dont-fetch-clang-format.patch
@@ -122,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_PDFIUM" false) # PDFIUM is not in nixpkgs
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
     (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
+    (lib.cmakeBool "USE_BREAKPAD" false)
+    (lib.cmakeBool "ENABLE_DESKTOP_APP_TESTS" false)
   ];
 
   preFixup = ''
@@ -141,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mega.nz/";
     downloadPage = "https://github.com/meganz/MEGAsync";
     changelog = "https://github.com/meganz/MEGAsync/releases/tag/v${finalAttrs.version}_Linux";
-    license = lib.licenses.unfree;
+    license = lib.licenses.unfreeRedistributable;
     platforms = [
       "i686-linux"
       "x86_64-linux"

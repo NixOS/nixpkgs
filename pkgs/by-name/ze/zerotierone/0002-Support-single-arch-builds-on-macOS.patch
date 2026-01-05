@@ -1,0 +1,52 @@
+From 5c6f3e6c8c33e23b8bb3fe39b9ce26495724af09 Mon Sep 17 00:00:00 2001
+From: Daniel Fullmer <danielrf12@gmail.com>
+Date: Sat, 4 Oct 2025 19:27:19 -0700
+Subject: [PATCH 2/2] Support single arch builds on macOS
+
+Co-Authored-By: Michael Hoang <enzime@users.noreply.github.com>
+---
+ make-mac.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/make-mac.mk b/make-mac.mk
+index 3cf0be175..8da630e90 100644
+--- a/make-mac.mk
++++ b/make-mac.mk
+@@ -5,7 +5,8 @@ TOPDIR=$(shell pwd)
+ INCLUDES=-I$(shell pwd)/rustybits/target -isystem $(TOPDIR)/ext  -I$(TOPDIR)/ext/prometheus-cpp-lite-1.0/core/include -I$(TOPDIR)/ext-prometheus-cpp-lite-1.0/3rdparty/http-client-lite/include -I$(TOPDIR)/ext/prometheus-cpp-lite-1.0/simpleapi/include
+ DEFS=
+ LIBS=
+-ARCH_FLAGS=-arch x86_64 -arch arm64
++ARCH := x86_64 arm64
++ARCH_FLAGS=$(addprefix -arch ,$(ARCH))
+ 
+ CODESIGN=echo
+ PRODUCTSIGN=echo
+@@ -79,6 +80,7 @@ endif
+ # Debug mode -- dump trace output, build binary with -g
+ ifeq ($(ZT_DEBUG),1)
+ 	ZT_TRACE=1
++	ARCH=
+ 	ARCH_FLAGS=
+ 	CFLAGS+=-Wall -g $(INCLUDES) $(DEFS) $(ARCH_FLAGS)
+ 	STRIP=echo
+@@ -156,12 +158,12 @@ rustybits/target/libsmeeclient.a:	FORCE
+ endif
+ 
+ rustybits/target/libzeroidc.a:	FORCE
+-	cd rustybits && MACOSX_DEPLOYMENT_TARGET=$(MACOS_VERSION_MIN) cargo build -p zeroidc --target=x86_64-apple-darwin $(EXTRA_CARGO_FLAGS)
+-	cd rustybits && MACOSX_DEPLOYMENT_TARGET=$(MACOS_VERSION_MIN) cargo build -p zeroidc --target=aarch64-apple-darwin $(EXTRA_CARGO_FLAGS)
+-	cd rustybits && lipo -create target/x86_64-apple-darwin/$(RUST_VARIANT)/libzeroidc.a target/aarch64-apple-darwin/$(RUST_VARIANT)/libzeroidc.a -output target/libzeroidc.a
++	if [[ "$(ARCH)" == *"x86_64"* ]]; then cd rustybits && MACOSX_DEPLOYMENT_TARGET=$(MACOS_VERSION_MIN) cargo build -p zeroidc --target=x86_64-apple-darwin $(EXTRA_CARGO_FLAGS); fi
++	if [[ "$(ARCH)" == *"arm64"* ]]; then cd rustybits && MACOSX_DEPLOYMENT_TARGET=$(MACOS_VERSION_MIN) cargo build -p zeroidc --target=aarch64-apple-darwin $(EXTRA_CARGO_FLAGS); fi
++	cd rustybits && lipo -create target/*/$(RUST_VARIANT)/libzeroidc.a -output target/libzeroidc.a
+ 
+ central-controller:
+-	make ARCH_FLAGS="-arch x86_64" ZT_CONTROLLER=1 one
++	make ARCH=x86_64 ZT_CONTROLLER=1 one
+ 
+ zerotier-idtool: one
+ 
+-- 
+2.51.0
+

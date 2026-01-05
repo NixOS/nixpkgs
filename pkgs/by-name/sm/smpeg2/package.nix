@@ -3,7 +3,6 @@
   stdenv,
   autoconf,
   automake,
-  darwin,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
@@ -28,7 +27,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [ SDL2 ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
+  buildInputs = [ SDL2 ];
 
   outputs = [
     "out"
@@ -49,11 +48,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://icculus.org/smpeg/";
     description = "SDL2 MPEG Player Library";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -41,18 +41,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "winrm" ];
 
-  pytestFlagsArray = [ "winrm/tests/" ];
+  enabledTestPaths = [ "winrm/tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Windows Remote Management";
     homepage = "https://github.com/diyan/pywinrm";
     changelog = "https://github.com/diyan/pywinrm/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       elasticdog
       kamadorueda
     ];

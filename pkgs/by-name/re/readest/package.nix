@@ -1,6 +1,8 @@
 {
   rustPlatform,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cargo-tauri,
   nodejs,
   pkg-config,
@@ -15,17 +17,17 @@
   nix-update-script,
   moreutils,
   jq,
+  gst_all_1,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.23";
+  version = "0.9.96";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
-    tag = "v${version}";
-    hash = "sha256-MveWZ+9SSd6mPw580U8d8aP7c4rl4861VzCKHpOKiXU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3PCdcSF9ocDqHzK9P/FJQwch5u5zVLQ3eDNSGJQGSKw=";
     fetchSubmodules = true;
   };
 
@@ -34,38 +36,38 @@ rustPlatform.buildRustPackage rec {
     chmod -R +w .
   '';
 
-  sourceRoot = "${src.name}/apps/readest-app";
+  sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-faLytJLMlWs80HZpN0TnCCEWPe9SPP9QH0bx3HLDO5o=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-Ea/J3W3L8vVDlIRY/szaCfcqunjiFU6yL+e8h4c5UHg=";
   };
 
   pnpmRoot = "../..";
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-5E+3Hpa6hiOORtZ5ykrXVOPucbppwO5KVVS1mb9mVXY=";
+  cargoHash = "sha256-AwrA0KXLTSUhLxIJHKU1crVxUxImFOKDRStB48mZfcg=";
 
   cargoRoot = "../..";
 
   buildAndTestSubdir = "src-tauri";
 
   postPatch = ''
-    substituteInPlace src-tauri/Cargo.toml \
-      --replace-fail '"devtools"' '"devtools", "rustls-tls"'
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"Readest"' '"readest"'
     jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
-      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false"
+      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
+      --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
   '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -78,10 +80,16 @@ rustPlatform.buildRustPackage rec {
     gtk3
     librsvg
     openssl
+    # TTS
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 
   preBuild = ''
-    pnpm setup-pdfjs
+    # set up pdfjs and simplecc
+    pnpm setup-vendors
   '';
 
   preFixup = ''
@@ -95,10 +103,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Modern, feature-rich ebook reader";
     homepage = "https://github.com/readest/readest";
-    changelog = "https://github.com/readest/readest/releases/tag/v${version}";
+    changelog = "https://github.com/readest/readest/releases/tag/v${finalAttrs.version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
     platforms = lib.platforms.linux;
   };
-}
+})

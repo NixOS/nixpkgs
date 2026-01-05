@@ -53,6 +53,8 @@ let
         uint64_t xdi_xdtream_obj_id;
       };
       #define APFS_CLEAR_PURGEABLE 0
+      #define APFS_PURGEABLE_FLAGS_MASK 0xFFFF
+      #define APFSIOC_GET_PURGEABLE_FILE_FLAGS _IOR('J', 71, uint64_t)
       #define APFSIOC_MARK_PURGEABLE _IOWR('J', 68, uint64_t)
       #define APFSIOC_XDSTREAM_OBJ_ID _IOWR('J', 53, struct xdstream_obj_id)
       EOF
@@ -89,7 +91,7 @@ mkAppleDerivation {
     "xattr"
   ];
 
-  xcodeHash = "sha256-u23AoLa7J0eFtf4dXKkVO59eYL2I3kRsHcWPfT03MCU=";
+  xcodeHash = "sha256-KEZYuaDxLdprF+wGiszUdTXPQBfLNj0xP9Y0uarNjSs=";
 
   patches = [
     # Fixes build of ls

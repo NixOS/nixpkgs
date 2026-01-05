@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Youtube extension for Sphinx";
     homepage = "https://github.com/sphinx-contrib/youtube";
-    maintainers = with maintainers; [ gador ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
+    license = lib.licenses.bsd3;
   };
 }

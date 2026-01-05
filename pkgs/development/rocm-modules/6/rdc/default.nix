@@ -4,9 +4,11 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
+  amdsmi,
   rocm-smi,
   rocm-runtime,
   libcap,
+  libdrm,
   grpc,
   protobuf,
   openssl,
@@ -46,97 +48,95 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "6.0.2";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-QugcajxILmDeQiWG5uAUO41Wut45irg2Ynufgn1bmps=";
+    hash = "sha256-zILZPW9Lx5T+cMDqTg/zWy3ro+Nypzc9bDNTupZjt4s=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      protobuf
-    ]
-    ++ lib.optionals buildDocs [
-      doxygen
-      graphviz
-      latex
-    ];
+  nativeBuildInputs = [
+    cmake
+    protobuf
+  ]
+  ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
+    latex
+  ];
 
-  buildInputs =
-    [
-      rocm-smi
-      rocm-runtime
-      libcap
-      grpc
-      openssl
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ];
+  buildInputs = [
+    amdsmi
+    rocm-smi
+    rocm-runtime
+    libcap
+    libdrm
+    grpc
+    openssl
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_VERBOSE_MAKEFILE=OFF"
-      "-DRDC_INSTALL_PREFIX=${placeholder "out"}"
-      "-DBUILD_ROCRTEST=ON"
-      "-DRSMI_INC_DIR=${rocm-smi}/include"
-      "-DRSMI_LIB_DIR=${rocm-smi}/lib"
-      "-DGRPC_ROOT=${grpc}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-      "-DCMAKE_INSTALL_DOCDIR=doc"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_TESTS=ON"
-    ];
+  CXXFLAGS = "-I${libcap.dev}/include";
+
+  cmakeFlags = [
+    "-DCMAKE_VERBOSE_MAKEFILE=OFF"
+    "-DRDC_INSTALL_PREFIX=${placeholder "out"}"
+    "-DBUILD_RVS=OFF" # TODO: Needs RVS package
+    "-DBUILD_ROCRTEST=ON"
+    "-DRSMI_INC_DIR=${rocm-smi}/include"
+    "-DRSMI_LIB_DIR=${rocm-smi}/lib"
+    "-DGRPC_ROOT=${grpc}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+    "-DCMAKE_INSTALL_DOCDIR=doc"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_TESTS=ON"
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "file(STRINGS /etc/os-release LINUX_DISTRO LIMIT_COUNT 1 REGEX \"NAME=\")" "set(LINUX_DISTRO \"NixOS\")"
   '';
 
-  postInstall =
-    ''
-      find $out/bin -executable -type f -exec \
-        patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;
-    ''
-    + lib.optionalString buildTests ''
-      mkdir -p $test
-      mv $out/bin/rdctst_tests $test/bin
-    '';
+  postInstall = ''
+    find $out/bin -executable -type f -exec \
+      patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;
+  ''
+  + lib.optionalString buildTests ''
+    mkdir -p $test
+    mv $out/bin/rdctst_tests $test/bin
+  '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
     homepage = "https://github.com/ROCm/rdc";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
-    # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version || versionAtLeast finalAttrs.version "7.0.0";
-    broken = true; # Too many errors, unsure how to fix
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

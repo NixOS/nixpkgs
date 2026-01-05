@@ -7,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   docling-core,
   huggingface-hub,
   jsonlines,
@@ -14,6 +15,7 @@
   opencv-python-headless,
   pillow,
   pydantic,
+  rtree,
   safetensors,
   torch,
   torchvision,
@@ -28,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.4.1";
+  version = "3.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-IgKP+4en0N6xLBjzwmddDk8z5P3J1vo+UMW+65a01Ww=";
+    hash = "sha256-eX0dnXh+WB/TIgKJzkpp1SOqJ2KSxoOD4JL+nsfqkLM=";
   };
 
   build-system = [
@@ -43,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     docling-core
     huggingface-hub
     jsonlines
@@ -50,6 +53,7 @@ buildPythonPackage rec {
     opencv-python-headless
     pillow
     pydantic
+    rtree
     safetensors
     torch
     torchvision
@@ -58,8 +62,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "transformers"
+    "jsonlines"
     "numpy"
+    "transformers"
   ];
 
   pythonImportsCheck = [
@@ -86,6 +91,6 @@ buildPythonPackage rec {
     description = "Docling IBM models";
     homepage = "https://github.com/DS4SD/docling-ibm-models";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

@@ -6,6 +6,7 @@
   jq,
   pytestCheckHook,
   pyyaml,
+  setuptools,
   setuptools-scm,
   replaceVars,
   tomlkit,
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "yq";
   version = "3.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,9 +29,12 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argcomplete
     pyyaml
     tomlkit
@@ -39,16 +43,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "yq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line YAML/XML/TOML processor - jq wrapper for YAML, XML, TOML documents";
     homepage = "https://github.com/kislyuk/yq";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      womfoo
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
     mainProgram = "yq";

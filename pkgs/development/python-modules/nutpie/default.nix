@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -30,20 +31,19 @@
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.14.3";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-l2TEGa9VVJmU4mKZwfUdhiloW6Bh41OqIQzTRvYK3eg=";
+    hash = "sha256-9rcQtEdaafMyuNb/ezcqUmrwXbQFa9hdajGAtANdHOw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-hPKT+YM9s7XZhI3sfnLBfokbGQhwDa9y5Fgg1TItO4M=";
+    inherit pname version src;
+    hash = "sha256-6JWBJYGhSNUL8KYiEE2ZBW9xP4CmkCcwwhsO6aOvZyA=";
   };
 
   build-system = [
@@ -79,6 +79,15 @@ buildPythonPackage rec {
     pytestCheckHook
     setuptools
     writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    "-v"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky (assert np.float64(0.0017554642626285276) > 0.01)
+    "test_normalizing_flow"
   ];
 
   disabledTestPaths = [

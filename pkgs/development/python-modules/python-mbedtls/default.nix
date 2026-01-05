@@ -12,36 +12,38 @@
 
 buildPythonPackage rec {
   pname = "python-mbedtls";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.10.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Synss";
     repo = "python-mbedtls";
     rev = version;
-    hash = "sha256-gMFludfAprQ/1JR77Ee6/xVvGLJ9pY1LrouLpSKVrzk=";
+    hash = "sha256-eKKb12G/0QAcwtv5Yk/92QXhMipeKOfKR1JEaNHDIlg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
 
   buildInputs = [ mbedtls_2 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     typing-extensions
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mbedtls" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic library with an mbed TLS back end";
     homepage = "https://github.com/Synss/python-mbedtls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twentemilieu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Twente Milieu";
     homepage = "https://github.com/frenck/python-twentemilieu";
     changelog = "https://github.com/frenck/python-twentemilieu/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

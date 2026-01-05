@@ -32,14 +32,14 @@ stdenv.mkDerivation {
     make
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Use Vim as PAGER";
     homepage = "https://www.vim.org/scripts/script.php?script_id=1723";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       mit
       vim
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -34,11 +34,11 @@
       cp test/* $out/test/.
     '';
 
-    meta = with lib; {
+    meta = {
       description = "MCE error injection tool";
-      license = licenses.gpl2Only;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.linux;
+      maintainers = [ ];
     };
   };
 
@@ -67,11 +67,11 @@
       cp examples/* $out/examples/.
     '';
 
-    meta = with lib; {
+    meta = {
       description = "PCIE AER error injection tool";
-      license = licenses.gpl2Only;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.evils ];
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.linux;
+      maintainers = [ ];
     };
   };
 }

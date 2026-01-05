@@ -39,7 +39,7 @@ buildPythonPackage rec {
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pytest_variables" ];
 

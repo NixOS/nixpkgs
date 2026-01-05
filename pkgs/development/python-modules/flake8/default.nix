@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "7.1.2";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8";
     tag = version;
-    hash = "sha256-VhHWGO8UIf77IzVxz9SCpg6Z/ebRmIJQLlSGsKY9Y0E=";
+    hash = "sha256-dZFIGyjqkd+MRz9NoOEcMuR9ZshFb/h+zO2OJZsQajc=";
   };
 
   build-system = [ setuptools ];

@@ -134,7 +134,7 @@ in
       enable = true;
       virtualHosts."${cfg.domain}".locations = {
         "/" = {
-          root = "${cfg.package}/share/engelsystem/public";
+          root = "${cfg.package}/share/php/engelsystem/public";
           extraConfig = ''
             index index.php;
             try_files $uri $uri/ /index.php?$args;
@@ -142,7 +142,7 @@ in
           '';
         };
         "~ \\.php$" = {
-          root = "${cfg.package}/share/engelsystem/public";
+          root = "${cfg.package}/share/php/engelsystem/public";
           extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.engelsystem.socket};
             fastcgi_index index.php;

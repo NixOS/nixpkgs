@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmountains";
-  version = "2.11";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "spbooth";
     repo = "xmountains";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q2+aJ5ISoSXUW4BaAf9Qq/d+DEBSylceZNKKmN4SbQQ=";
+    hash = "sha256-xAXEa2QQgWR88o6Zx9ZtXXFYerJByqQ1FojaVkru/O8=";
   };
 
   buildInputs = [

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "waybackpy";
   version = "3.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "waybackpy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://akamhy.github.io/waybackpy/";
     description = "Wayback Machine API interface & a command-line tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chpatrick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chpatrick ];
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "weatherflow4py";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = "weatherflow4py";
     tag = "v${version}";
-    hash = "sha256-X5zMxX8PthiqaEIM0/fElGIjeeCey0ossVDKevy1Mnw=";
+    hash = "sha256-nHpLdzO49HhX5+gtYrgche4whs7Onzp4HeRNFwLHcVI=";
   };
 
   build-system = [ poetry-core ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "test_convert_json_to_weather_data4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the WeatherFlow REST API";
     homepage = "https://github.com/jeeftor/weatherflow4py";
-    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

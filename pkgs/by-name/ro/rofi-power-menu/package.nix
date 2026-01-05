@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp dmenu-power-menu $out/bin/dmenu-power-menu
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shows a Power/Lock menu with Rofi";
     homepage = "https://github.com/jluttine/rofi-power-menu";
-    maintainers = with maintainers; [ ikervagyok ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ikervagyok ];
+    platforms = lib.platforms.linux;
     mainProgram = "rofi-power-menu";
   };
 }

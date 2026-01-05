@@ -7,13 +7,12 @@
   empty-files,
   fetchFromGitHub,
   mock,
-  mrjob,
   numpy,
   pyperclip,
   pytest,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  pyyaml,
   setuptools,
   testfixtures,
   typing-extensions,
@@ -21,17 +20,24 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "14.3.0";
+  version = "16.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-HcF4SjAdAPxINB0+kI1RWtKQ3VBhMNpFk6BECup7E+w=";
+    hash = "sha256-gu9Wa52yekUmFg1zlVtLSN18hUuqVOUCN7krUh0m1m0=";
   };
+
+  postPatch = ''
+    test -f setup.py || mv setup/setup.py .
+    touch setup/__init__.py
+    substituteInPlace setup.py \
+      --replace-fail "from setup_utils" "from setup.setup_utils"
+
+    patchShebangs internal_documentation/scripts
+  '';
 
   build-system = [ setuptools ];
 
@@ -41,7 +47,6 @@ buildPythonPackage rec {
     beautifulsoup4
     empty-files
     mock
-    mrjob
     pyperclip
     pytest
     testfixtures
@@ -52,13 +57,13 @@ buildPythonPackage rec {
     numpy
     pytest-asyncio
     pytestCheckHook
+    pyyaml
   ];
 
   disabledTests = [
-    "test_preceding_whitespace"
-    # Tests expect paths below ApprovalTests.Python directory
-    "test_received_filename"
-    "test_pytest_namer"
+    "test_warnings"
+    # test runs another python interpreter, ignoring $PYTHONPATH
+    "test_command_line_verify"
   ];
 
   pythonImportsCheck = [
@@ -66,11 +71,11 @@ buildPythonPackage rec {
     "approvaltests.reporters.generic_diff_reporter_factory"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Assertion/verification library to aid testing";
     homepage = "https://github.com/approvals/ApprovalTests.Python";
-    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

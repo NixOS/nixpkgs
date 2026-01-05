@@ -14,13 +14,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
   # nixpkgs-update: no auto update
-  version = "0.9.2";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
     rev = "v${version}";
-    hash = "sha256-3nT64dFUcuwPfhQDwY5MTe/xPdr7XZMBpVL7V0y9tng=";
+    hash = "sha256-t9PoxOjgV9qLris+C18SaEwXodBGcgK591LZl0dajxU=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 implementation of the HTTP/1.1 and HTTP/2 specifications";
     homepage = "https://github.com/awslabs/aws-c-http";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   pname = "unrtf";
   version = "0.21.10";
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1bil6z4niydz9gqm2j861dkxmqnpc8m7hvidsjbzz7x63whj17xl";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converter from Rich Text Format to other formats";
     mainProgram = "unrtf";
     longDescription = ''
@@ -38,8 +40,8 @@ stdenv.mkDerivation rec {
       formats, including HTML, LaTeX, and RTF itself.
     '';
     homepage = "https://www.gnu.org/software/unrtf/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.unix;
   };
 }

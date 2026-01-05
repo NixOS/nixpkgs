@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "peaqevcore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with Peaqev car charging";
     homepage = "https://github.com/elden1337/peaqev-core";
     changelog = "https://github.com/elden1337/peaqev-core/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

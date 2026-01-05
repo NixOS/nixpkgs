@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/skypjack/entt";
     description = "Header-only, tiny and easy to use library for game programming and much more written in modern C++";
-    maintainers = with maintainers; [ twey ];
-    platforms = platforms.all;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
   };
 }

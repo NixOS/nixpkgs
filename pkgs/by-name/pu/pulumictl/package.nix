@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "pulumictl";
-  version = "0.0.48";
+  version = "0.0.50";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumictl";
     rev = "v${version}";
-    sha256 = "sha256-rFVxfWeESWmqH0BhKY6BO5AxSPXVW8tOPGyUXB5Kc/E=";
+    sha256 = "sha256-Jq7H2lM5Vu/cb+mgoUP6p8MQxJ3w0Pgt+adWey2mPKk=";
   };
 
-  vendorHash = "sha256-x5CBSzwOfX0BwwbAOuW1ibrLnnkVSNjqG0Sj2EcmRbM=";
+  vendorHash = "sha256-sgI6kpmVofG1yCVH6rWtb7Owoxlypp4we/gPfIGa6sM=";
 
   ldflags = [
     "-s"
@@ -25,11 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pulumictl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Swiss Army Knife for Pulumi Development";
     mainProgram = "pulumictl";
     homepage = "https://github.com/pulumi/pulumictl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vincentbernat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vincentbernat ];
   };
 }

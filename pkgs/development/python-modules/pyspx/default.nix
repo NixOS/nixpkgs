@@ -6,7 +6,6 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -24,21 +23,20 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cffi
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyspx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for SPHINCS";
     homepage = "https://github.com/sphincs/pyspx";
     changelog = "https://github.com/sphincs/pyspx/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

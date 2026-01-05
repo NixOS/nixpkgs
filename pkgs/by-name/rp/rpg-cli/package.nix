@@ -15,17 +15,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xNkM8qN9vg/WGRR/96aCQRVjIbSdSs2845l6oE6+tzg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GzVdcQzYmKwb3GWhmbTb9HdBPosKgbimgvwZTfBMEk8=";
 
   # tests assume the authors macbook, and thus fail
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Your filesystem as a dungeon";
     mainProgram = "rpg-cli";
     homepage = "https://github.com/facundoolano/rpg-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, jdk
-, maven
-, fetchFromGitHub
-, fetchpatch
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  jdk,
+  maven,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  wrapGAppsHook3,
+  gtk3,
+  udevCheckHook,
 }:
 
 let
@@ -15,13 +16,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "quark-goldleaf";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "XorTroll";
     repo = "Goldleaf";
-    rev = version;
-    hash = "sha256-gagIQGOiygJ0Onm0SrkbFWaovqWX2WJNx7LpSRheCLM=";
+    tag = version;
+    hash = "sha256-ldGNtNmn7ln53JvxRkP1AMPslKH0JtSPhBkyqytSx20=";
   };
 
   sourceRoot = "${src.name}/Quark";
@@ -29,12 +30,6 @@ maven.buildMavenPackage rec {
   patches = [
     ./fix-maven-plugin-versions.patch
     ./remove-pom-jfx.patch
-    (fetchpatch {
-      name = "fix-config-path.patch";
-      url = "https://github.com/XorTroll/Goldleaf/commit/714ecc2755df9c1252615ad02cafff9c0311a739.patch";
-      hash = "sha256-4j+6uLIOdltZ4XIb3OtOzZg9ReH9660gZMMNQpHnn4o=";
-      relative = "Quark";
-    })
   ];
 
   mvnJdk = jdk';
@@ -47,12 +42,15 @@ maven.buildMavenPackage rec {
     imagemagick # for icon conversion
     copyDesktopItems
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [ gtk3 ];
 
   # don't double-wrap
   dontWrapGApps = true;
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -83,14 +81,21 @@ maven.buildMavenPackage rec {
       desktopName = "Quark";
       comment = meta.description;
       terminal = false;
-      categories = [ "Utility" "FileTransfer" ];
-      keywords = [ "nintendo" "switch" "goldleaf" ];
+      categories = [
+        "Utility"
+        "FileTransfer"
+      ];
+      keywords = [
+        "nintendo"
+        "switch"
+        "goldleaf"
+      ];
     })
   ];
 
   meta = {
     changelog = "https://github.com/XorTroll/Goldleaf/releases/tag/${src.rev}";
-    description = "A GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
+    description = "GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
     homepage = "https://github.com/XorTroll/Goldleaf#quark-and-remote-browsing";
     longDescription = ''
       ${meta.description}
@@ -103,7 +108,7 @@ maven.buildMavenPackage rec {
 
       or by adding the package manually to udev packages:
 
-      `services.udev.packages = [ pkgs.quark-goldleaf ];
+      `services.udev.packages = [ pkgs.quark-goldleaf ];`
     '';
     license = lib.licenses.gpl3Only;
     mainProgram = "quark-goldleaf";
@@ -111,4 +116,3 @@ maven.buildMavenPackage rec {
     platforms = with lib.platforms; linux ++ darwin;
   };
 }
-

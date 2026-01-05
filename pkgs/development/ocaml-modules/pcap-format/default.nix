@@ -32,10 +32,10 @@ buildDunePackage rec {
     ounit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decode and encode PCAP (packet capture) files";
     homepage = "https://mirage.github.io/ocaml-pcap";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

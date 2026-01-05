@@ -16,11 +16,10 @@ php82.buildComposerProject2 (finalAttrs: {
     hash = "sha256-giJAcH2R9hAlUTbwRi7rbmUP+WV8Nfb9XmoHHs4RcbI=";
   };
 
-  vendorHash = "sha256-7oZtuQ7PhB7q9vNO2TLI46kg2q9BgdLjGUduGXAHc0E=";
+  vendorHash = "sha256-K/mgYRp8vM+PC9AEJDZ9lW/XZkQ+YxHSnEY70VVX9FY=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";
@@ -28,6 +27,6 @@ php82.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/box-project/box";
     license = lib.licenses.mit;
     mainProgram = "box";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

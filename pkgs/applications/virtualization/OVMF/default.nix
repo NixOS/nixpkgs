@@ -40,7 +40,6 @@
   sourceDebug ? false,
   projectDscPath ?
     {
-      i686 = "OvmfPkg/OvmfPkgIa32.dsc";
       x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
       aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
       riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
@@ -50,7 +49,6 @@
       or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}"),
   fwPrefix ?
     {
-      i686 = "OVMF";
       x86_64 = "OVMF";
       aarch64 = "AAVMF";
       riscv64 = "RISCV_VIRT";
@@ -58,16 +56,12 @@
     }
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  metaPlatforms ? edk2.meta.platforms,
+  metaPlatforms ? lib.subtractLists lib.platforms.i686 edk2.meta.platforms,
 }:
 
 let
 
   platformSpecific = {
-    i686.msVarsArgs = {
-      flavor = "OVMF";
-      archDir = "Ia32";
-    };
     x86_64.msVarsArgs = {
       flavor = "OVMF_4M";
       archDir = "X64";
@@ -95,9 +89,10 @@ let
       "debian/edk2-vars-generator.py"
       "debian/python"
       "debian/PkKek-1-*.pem"
+      "debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch"
     ];
-    rev = "refs/tags/debian/2024.05-1";
-    hash = "sha256-uAjXJaHOVh944ZxcA2IgCsrsncxuhc0JKlsXs0E03s0=";
+    rev = "refs/tags/debian/2025.02-8";
+    hash = "sha256-n/6T5UBwW8U49mYhITRZRgy2tNdipeU4ZgGGDu9OTkg=";
   };
 
   buildPrefix = "Build/*/*";
@@ -117,24 +112,23 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "fd"
   ];
 
-  nativeBuildInputs =
-    [
-      util-linux
-      nasm
-      acpica-tools
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.bintools
-      llvmPackages.llvm
-    ]
-    ++ lib.optionals msVarsTemplate [
-      python3
-      pexpect
-      xorriso
-      qemu
-      dosfstools
-      mtools
-    ];
+  nativeBuildInputs = [
+    util-linux
+    nasm
+    acpica-tools
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.bintools
+    llvmPackages.llvm
+  ]
+  ++ lib.optionals msVarsTemplate [
+    python3
+    pexpect
+    xorriso
+    qemu
+    dosfstools
+    mtools
+  ];
   strictDeps = true;
 
   hardeningDisable = [
@@ -172,6 +166,10 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   postUnpack = lib.optionalDrvAttr msVarsTemplate ''
     ln -s ${debian-edk-src}/debian
   '';
+
+  patches = [
+    (debian-edk-src + "/debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch")
+  ];
 
   postConfigure = lib.optionalDrvAttr msVarsTemplate ''
     tr -d '\n' < ${vendorPkKek} | sed \
@@ -216,35 +214,34 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   # TODO: Usage of -bios OVMF.fd is discouraged: https://lists.katacontainers.io/pipermail/kata-dev/2021-January/001650.html
   # We should remove the isx86-specific block here once we're ready to update nixpkgs to stop using that and update the
   # release notes accordingly.
-  postInstall =
-    ''
-      mkdir -vp $fd/FV
-    ''
-    +
-      lib.optionalString
-        (builtins.elem fwPrefix [
-          "OVMF"
-          "AAVMF"
-          "RISCV_VIRT"
-          "LOONGARCH_VIRT"
-        ])
-        ''
-          mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
-        ''
-    + lib.optionalString stdenv.hostPlatform.isx86 ''
-      mv -v $out/FV/${fwPrefix}.fd $fd/FV
-    ''
-    + lib.optionalString msVarsTemplate ''
-      mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
-      ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isAarch ''
-      mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
-      # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/rpms/edk2/blob/main/f/edk2.spec
-      mkdir -vp $fd/AAVMF
-      ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
-      ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
-    '';
+  postInstall = ''
+    mkdir -vp $fd/FV
+  ''
+  +
+    lib.optionalString
+      (builtins.elem fwPrefix [
+        "OVMF"
+        "AAVMF"
+        "RISCV_VIRT"
+        "LOONGARCH_VIRT"
+      ])
+      ''
+        mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
+      ''
+  + lib.optionalString stdenv.hostPlatform.isx86 ''
+    mv -v $out/FV/${fwPrefix}.fd $fd/FV
+  ''
+  + lib.optionalString msVarsTemplate ''
+    mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
+    ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch ''
+    mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
+    # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/rpms/edk2/blob/main/f/edk2.spec
+    mkdir -vp $fd/AAVMF
+    ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
+    ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
+  '';
 
   dontPatchELF = true;
 

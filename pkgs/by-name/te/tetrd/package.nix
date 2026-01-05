@@ -76,12 +76,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/tetrd.desktop --replace /opt $out/opt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Share your internet connection from your device to your PC and vice versa through a USB cable";
     homepage = "https://tetrd.app";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Madouura ];
   };
 }

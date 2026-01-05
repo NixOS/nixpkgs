@@ -14,14 +14,15 @@ let
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
-      luksDevices = config.boot.initrd.luks.devices;
+      luksDevices = builtins.attrNames config.boot.initrd.luks.devices;
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
+      secureBoot = cfg.secureBoot;
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
-      forceMbr = cfg.forceMbr;
+      force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
@@ -38,14 +39,20 @@ let
   defaultWallpaper = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath;
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    lzcunt
-    phip1611
-    programmerlexi
+  meta = {
+    inherit (pkgs.limine.meta) maintainers;
+  };
+
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "boot" "loader" "limine" "forceMbr" ]
+      [ "boot" "loader" "limine" "force" ]
+    )
   ];
 
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
+    package = lib.mkPackageOption pkgs "limine" { };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -118,8 +125,6 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs "limine" { };
-
     efiSupport = lib.mkEnableOption null // {
       default = pkgs.stdenv.hostPlatform.isEfi;
       defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isEfi";
@@ -171,10 +176,45 @@ in
       '';
     };
 
-    forceMbr = lib.mkEnableOption null // {
+    force = lib.mkEnableOption null // {
       description = ''
-        Force MBR detection to work even if the safety checks fail, use absolutely only if necessary!
+        Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
+    };
+
+    secureBoot = {
+      enable = lib.mkEnableOption null // {
+        description = ''
+          Whether to use sign the limine binary with sbctl.
+
+          ::: {.note}
+          This requires you to already have generated the keys and enrolled them with {command}`sbctl`.
+
+          To create keys use {command}`sbctl create-keys`.
+
+          To enroll them first reset secure boot to "Setup Mode". This is device specific.
+          Then enroll them using {command}`sbctl enroll-keys -m -f`.
+
+          You can now rebuild your system with this option enabled.
+
+          Afterwards turn setup mode off and enable secure boot.
+          :::
+        '';
+      };
+
+      createAndEnrollKeys = lib.mkEnableOption null // {
+        internal = true;
+        description = ''
+          Creates secure boot signing keys and enrolls them during bootloader installation.
+
+          ::: {.note}
+          This is used for automated nixos tests.
+          NOT INTENDED to be used on a real system.
+          :::
+        '';
+      };
+
+      sbctl = lib.mkPackageOption pkgs "sbctl" { };
     };
 
     style = {
@@ -189,10 +229,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -335,7 +375,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [
@@ -358,13 +398,69 @@ in
 
       system = {
         boot.loader.id = "limine";
-        build.installBootLoader = pkgs.substituteAll {
+        build.installBootLoader = pkgs.replaceVarsWith {
           src = ./limine-install.py;
           isExecutable = true;
-
-          python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-          configPath = limineInstallConfig;
+          replacements = {
+            python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+            configPath = limineInstallConfig;
+          };
         };
+      };
+    })
+    (lib.mkIf (cfg.enable && cfg.secureBoot.enable) {
+      assertions = [
+        {
+          assertion = cfg.enrollConfig;
+          message = "Disabling enrollConfig allows bypassing secure boot.";
+        }
+        {
+          assertion = cfg.validateChecksums;
+          message = "Disabling validateChecksums allows bypassing secure boot.";
+        }
+        {
+          assertion = cfg.panicOnChecksumMismatch;
+          message = "Disabling panicOnChecksumMismatch allows bypassing secure boot.";
+        }
+        {
+          assertion = cfg.efiSupport;
+          message = "Secure boot is only supported on EFI systems.";
+        }
+      ];
+
+      boot.loader.limine.enrollConfig = true;
+      boot.loader.limine.validateChecksums = true;
+      boot.loader.limine.panicOnChecksumMismatch = true;
+    })
+
+    # Fwupd binary needs to be signed in secure boot mode
+    (lib.mkIf (cfg.enable && cfg.secureBoot.enable && config.services.fwupd.enable) {
+      systemd.services.fwupd = {
+        environment.FWUPD_EFIAPPDIR = "/run/fwupd-efi";
+      };
+
+      systemd.services.fwupd-efi = {
+        description = "Sign fwupd EFI app for secure boot";
+        wantedBy = [ "fwupd.service" ];
+        partOf = [ "fwupd.service" ];
+        before = [ "fwupd.service" ];
+
+        unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          RuntimeDirectory = "fwupd-efi";
+        };
+
+        script = ''
+          cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
+          chmod +w /run/fwupd-efi/fwupd*.efi
+          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
+        '';
+      };
+
+      services.fwupd.uefiCapsuleSettings = {
+        DisableShimForSecureBoot = true;
       };
     })
   ];

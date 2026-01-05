@@ -25,14 +25,14 @@
 }:
 
 let
-  pname = "clutter";
   version = "1.26.4";
 in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+stdenv.mkDerivation {
+  pname = "clutter";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/clutter/${lib.versions.majorMinor version}/clutter-${version}.tar.xz";
     sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
@@ -46,38 +46,36 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
   ];
-  propagatedBuildInputs =
-    [
-      cogl
-      pango
-      atk
-      json-glib
-      gobject-introspection
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libGL
-      libGLU
-      libXext
-      libXfixes
-      libXdamage
-      libXcomposite
-      libXi
-      libxcb
-      libinput
-      libgudev
-      libxkbcommon
-    ];
+  propagatedBuildInputs = [
+    cogl
+    pango
+    atk
+    json-glib
+    gobject-introspection
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libGL
+    libGLU
+    libXext
+    libXfixes
+    libXdamage
+    libXcomposite
+    libXi
+    libxcb
+    libinput
+    libgudev
+    libxkbcommon
+  ];
 
-  configureFlags =
-    [
-      "--enable-introspection" # needed by muffin AFAIK
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--without-x"
-      "--enable-x11-backend=no"
-      "--enable-quartz-backend=yes"
-    ];
+  configureFlags = [
+    "--enable-introspection" # needed by muffin AFAIK
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--without-x"
+    "--enable-x11-backend=no"
+    "--enable-quartz-backend=yes"
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -87,7 +85,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "clutter";
       versionPolicy = "odd-unstable";
     };
   };

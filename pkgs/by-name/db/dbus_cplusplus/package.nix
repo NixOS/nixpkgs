@@ -66,20 +66,19 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  configureFlags =
-    [
-      "--disable-ecore"
-      "--disable-tests"
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "--disable-examples"
-    ];
+  configureFlags = [
+    "--disable-ecore"
+    "--disable-tests"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "--disable-examples"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dbus-cplusplus.sourceforge.net";
     description = "C++ API for D-BUS";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

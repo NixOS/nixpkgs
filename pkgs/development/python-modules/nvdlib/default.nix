@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nvdlib";
-  version = "0.8.0";
+  version = "0.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Vehemont";
     repo = "nvdlib";
     tag = "v${version}";
-    hash = "sha256-fj7tgTv3r++oo+45QFQy/rmXYdKyKhR74maHOdp+0yA=";
+    hash = "sha256-FjeYJMMccao9KJMcJBKtt5QhpQEEbcPyNunj+VqMdx0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nvdlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the National Vulnerability CVE/CPE API";
     homepage = "https://github.com/Vehemont/nvdlib/";
     changelog = "https://github.com/vehemont/nvdlib/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

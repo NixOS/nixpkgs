@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "arc-kde";
-    rev = version;
+    tag = version;
     sha256 = "sha256-dxk8YpJB4XaZHD/O+WvQUFKJD2TE38VZyC5orn4N7BA=";
   };
 

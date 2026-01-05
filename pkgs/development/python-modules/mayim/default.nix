@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mayim";
-  version = "1.1.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
     tag = "v${version}";
-    hash = "sha256-nb0E9kMEJUihaCp8RnqGh0nSyDQo50eL1C4K5lBPlPQ=";
+    hash = "sha256-RJMPqqmvpwvdRTaVznxGunvC0/KlL0z1GUX1VBTCbwo=";
   };
 
   build-system = [
@@ -39,24 +39,24 @@ buildPythonPackage rec {
     sqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-asyncio
-      pytest-cov-stub
-    ]
-    ++ (with optional-dependencies; [
-      postgres
-      mysql
-      sqlite
-    ]);
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+  ]
+  ++ (with optional-dependencies; [
+    postgres
+    mysql
+    sqlite
+  ]);
 
   pythonImportsCheck = [ "mayim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SQL hydrator";
     homepage = "https://github.com/ahopkins/mayim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ huyngo ];
+    changelog = "https://github.com/ahopkins/mayim/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }

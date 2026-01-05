@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "xlrd";
-  version = "2.0.1";
+  version = "2.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88";
+    sha256 = "sha256-CLXiXeWPIc5x3H2zs7gQbB+ndvMCTFTkW0WzdOiSNMk=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.python-excel.org/";
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
     mainProgram = "runxlrd.py";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

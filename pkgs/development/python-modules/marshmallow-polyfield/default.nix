@@ -34,10 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marshmallow" ];
 
-  meta = with lib; {
+  meta = {
+    # https://github.com/Bachmann1234/marshmallow-polyfield/issues/45
+    broken = true;
     description = "Extension to Marshmallow to allow for polymorphic fields";
     homepage = "https://github.com/Bachmann1234/marshmallow-polyfield";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

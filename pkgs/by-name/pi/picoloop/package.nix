@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "0.77e";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "picoloop";
     owner = "yoyz";
-    rev = "${pname}-${version}";
+    rev = "picoloop-${version}";
     sha256 = "0i8j8rgyha3ara6d4iis3wcimszf2csxdwrm5yq0wyhg74g7cvjd";
   };
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     cp {font.*,LICENSE} $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Synth and a stepsequencer (a clone of the famous nanoloop)";
     homepage = "https://github.com/yoyz/picoloop";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "picoloop";
   };
 }

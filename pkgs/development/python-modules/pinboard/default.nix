@@ -6,24 +6,24 @@
 
 buildPythonPackage rec {
   pname = "pinboard";
-  version = "2.1.8";
+  version = "2.1.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lionheart";
-    repo = pname;
+    repo = "pinboard";
     rev = version;
-    sha256 = "0ppc3vwv48ahqx6n5c7d7066zhi31cjdik0ma9chq6fscq2idgdf";
+    sha256 = "sha256-+JWr2QmdqASK/X10U0ZOZ95K2ctWceSW167raxZjIW4=";
   };
 
   # tests require an API key
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Pinboard.in";
     mainProgram = "pinboard";
-    maintainers = with maintainers; [ djanatyn ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ djanatyn ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/lionheart/pinboard.py";
   };
 }

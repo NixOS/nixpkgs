@@ -13,12 +13,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KH6FFSaP+NFiRIeODi4tczwD2S3SsrhJFdde9N5sJh8=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/lzip/clzip.html";
     description = "C language version of lzip";
     mainProgram = "clzip";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

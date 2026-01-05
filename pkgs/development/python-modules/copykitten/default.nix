@@ -8,19 +8,19 @@
 
 buildPythonPackage rec {
   pname = "copykitten";
-  version = "1.2.3";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Klavionik";
     repo = "copykitten";
     tag = "v${version}";
-    hash = "sha256-S4IPVhYk/o15LQK1AB8VpdrHwIwTZyvmI2+e27/vDLs=";
+    hash = "sha256-hjkRVX2+CuLyQw8/1cHRf84qbxPxAnDxCm5gVwdhecs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-kWhZzX/OI+05rvVFD+lOFvpKbNH/gMROFufcCzYDyko=";
+    hash = "sha256-Ujed/3vckHMkYaQ1Euj+KaPG4yeERS7HBbl5SzvbOWE=";
   };
 
   build-system = [

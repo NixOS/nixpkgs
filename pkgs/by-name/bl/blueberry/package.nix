@@ -20,8 +20,8 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
+    repo = "blueberry";
+    tag = version;
     sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 
@@ -87,12 +87,12 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $out/lib "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bluetooth configuration tool";
     homepage = "https://github.com/linuxmint/blueberry";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bobby285271
       romildo
     ];

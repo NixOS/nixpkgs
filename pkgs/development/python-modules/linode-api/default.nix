@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   polling,
@@ -14,17 +13,15 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.28.0";
+  version = "5.38.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
     tag = "v${version}";
-    hash = "sha256-NTI/T78/D95sgVugjrsRKEPxU2jArvRcKiuD+09tKCo=";
+    hash = "sha256-ToM3ur0bqU5xXCtO8ekZwpvM1bRxtwa7CqOzGJEyY7I=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
+    changelog = "https://github.com/linode/linode_api4-python/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ glenns ];
   };

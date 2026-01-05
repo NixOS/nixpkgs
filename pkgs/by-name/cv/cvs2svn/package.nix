@@ -13,6 +13,7 @@
 pypy2Packages.buildPythonApplication rec {
   pname = "cvs2svn";
   version = "2.5.0";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/mhagger/cvs2svn/releases/download/${version}/${pname}-${version}.tar.gz";
@@ -43,14 +44,14 @@ pypy2Packages.buildPythonApplication rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert CVS repositories to Subversion repositories";
     homepage = "https://github.com/mhagger/cvs2svn";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       makefu
       viraptor
     ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

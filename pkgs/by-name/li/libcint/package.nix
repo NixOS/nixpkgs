@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "6.1.2";
+  version = "6.1.3";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    hash = "sha256-URJcC0ib87ejrTCglCjhC2tQHNc5TRvo4CQ52N58n+4=";
+    hash = "sha256-k9luTarszZAqh33SzPMM3BYj01HT7cfTipt44nSC+2A=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ python3.pkgs.numpy ];
 
-  meta = with lib; {
+  meta = {
     description = "General GTO integrals for quantum chemistry";
     longDescription = ''
       libcint is an open source library for analytical Gaussian integrals.
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
     homepage = "http://wiki.sunqm.net/libcint";
     downloadPage = "https://github.com/sunqm/libcint";
     changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

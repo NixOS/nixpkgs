@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
 
   dontInstall = true;
 
-  meta = with lib; {
+  meta = {
     description = "Task management system";
     mainProgram = "thinkingrock";
     homepage = "http://www.thinkingrock.com.au/";
-    license = licenses.cddl;
-    platforms = platforms.unix;
+    license = lib.licenses.cddl;
+    platforms = lib.platforms.unix;
   };
 }

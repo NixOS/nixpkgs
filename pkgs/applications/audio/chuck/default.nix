@@ -9,13 +9,6 @@
   which,
   DarwinTools,
   xcbuild,
-  AppKit,
-  Carbon,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
-  Kernel,
-  MultitouchSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,29 +20,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
   };
 
-  nativeBuildInputs =
-    [
-      flex
-      bison
-      which
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    flex
+    bison
+    which
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
+    xcbuild
+  ];
 
-  buildInputs =
-    [ libsndfile ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Carbon
-      CoreAudio
-      CoreMIDI
-      CoreServices
-      Kernel
-      MultitouchSupport
-    ];
+  buildInputs = [ libsndfile ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   patches = [ ./darwin-limits.patch ];
 
@@ -59,12 +40,12 @@ stdenv.mkDerivation rec {
   ];
   buildFlags = [ (if stdenv.hostPlatform.isDarwin then "mac" else "linux-alsa") ];
 
-  meta = with lib; {
+  meta = {
     description = "Programming language for real-time sound synthesis and music creation";
     homepage = "http://chuck.cs.princeton.edu";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ftrvxmtrx ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
     mainProgram = "chuck";
   };
 }

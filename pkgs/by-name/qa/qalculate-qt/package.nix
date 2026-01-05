@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "5.5.1";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mk1K+xekyusW17iH7Ecgd9VKCDCu5H2dTG0rtTctTeU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+5LEXc5B2Kt5UifIV2owSsp7Yd412gppMeHs2YLdGYg=";
   };
 
   nativeBuildInputs = with qt6; [
@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/{Applications/qalculate-qt.app/Contents/MacOS,bin}/qalculate-qt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ _4825764518 ];
-    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "qalculate-qt";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

@@ -32,20 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      libcdio
-      libiconv
-      readline
-      zlib
-      libburn
-      libisofs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-    ];
+  buildInputs = [
+    bzip2
+    libcdio
+    libiconv
+    readline
+    zlib
+    libburn
+    libisofs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+  ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     acl
@@ -67,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://dev.lovelyhq.com/libburnia/libisoburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "osirrox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libisofs.meta) platforms;
   };
 })

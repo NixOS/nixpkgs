@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   wayland,
   meson,
   pkg-config,
@@ -10,7 +11,7 @@
   libxml2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-scanner";
   inherit (wayland) version src;
 
@@ -33,17 +34,26 @@ stdenv.mkDerivation {
     meson
     pkg-config
     ninja
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) wayland-scanner;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) wayland-scanner;
 
   buildInputs = [
     expat
     libxml2
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+  };
+
+  meta = {
     inherit (wayland.meta) homepage license maintainers;
     mainProgram = "wayland-scanner";
     description = "C code generator for Wayland protocol XML files";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    pkgConfigModules = [ "wayland-scanner" ];
   };
-}
+})

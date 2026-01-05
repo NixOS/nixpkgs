@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "10.0.0";
+  version = "10.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2QPg1RJivw+HgoQc8W6qbX4+HxLq41q0HC4xiDfGY38=";
+    hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
@@ -62,12 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mss" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform multiple screenshots module";
     mainProgram = "mss";
     homepage = "https://github.com/BoboTiG/python-mss";
     changelog = "https://github.com/BoboTiG/python-mss/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ austinbutler ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
 }

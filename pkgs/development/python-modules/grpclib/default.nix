@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "grpclib";
-  version = "0.4.7";
+  version = "0.4.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "vmagamedov";
     repo = "grpclib";
     tag = "v${version}";
-    hash = "sha256-5221hVjD0TynCsTdruiUZkTsb7uOi49tZ8M/YqdWreE=";
+    hash = "sha256-9ElCIL084B+KihV1AXYJejBletj8y6LnoWRGEj4E1tQ=";
   };
 
   build-system = [ setuptools ];
@@ -44,13 +44,15 @@ buildPythonPackage rec {
     certifi
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "grpclib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python gRPC implementation for asyncio";
     homepage = "https://github.com/vmagamedov/grpclib";
     changelog = "https://github.com/vmagamedov/grpclib/blob/v${version}/docs/changelog/index.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "exiv2";
-  version = "0.17.3";
+  version = "0.17.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
     tag = version;
-    hash = "sha256-6xXdiJZr5ZeGduviIyJiK70KwvhrpKWuaj06XVqVN2g=";
+    hash = "sha256-MQNovei1Y8EZTF8hEyIWLaL2NbQPCB6FGbVfDHIvNVo=";
   };
 
   # FAIL: test_localisation (test_types.TestTypesModule.test_localisation)

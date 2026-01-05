@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
-    repo = pname;
+    repo = "thc-ipv6";
     rev = "v${version}";
     sha256 = "07kwika1zdq62s5p5z94xznm77dxjxdg8k0hrg7wygz50151nzmx";
   };
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IPv6 attack toolkit";
     homepage = "https://github.com/vanhauser-thc/thc-ipv6";
-    maintainers = with maintainers; [ ajs124 ];
-    platforms = platforms.linux;
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ ajs124 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.agpl3Only;
   };
 }

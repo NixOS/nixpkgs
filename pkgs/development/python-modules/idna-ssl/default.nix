@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # Infinite recursion: tests require aiohttp, aiohttp requires idna-ssl
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Patch ssl.match_hostname for Unicode(idna) domains support";
     homepage = "https://github.com/aio-libs/idna-ssl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

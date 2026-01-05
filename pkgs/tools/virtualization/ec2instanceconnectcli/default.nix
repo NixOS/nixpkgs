@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ec2instanceconnectcli";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ec2instanceconnectcli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface for AWS EC2 Instance Connect";
     homepage = "https://github.com/aws/aws-ec2-instance-connect-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yurrriq ];
   };
 }

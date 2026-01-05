@@ -44,9 +44,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connect_box" ];
 
-  pytestFlagsArray = [ "--vcr-record=none" ];
+  pytestFlags = [ "--vcr-record=none" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interact with a Compal CH7465LG cable modem/router";
     longDescription = ''
       Python Client for interacting with the cable modem/router Compal
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-connect-box";
     changelog = "https://github.com/home-assistant-ecosystem/python-connect-box/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

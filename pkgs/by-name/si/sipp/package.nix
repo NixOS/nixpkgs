@@ -11,15 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sipp";
-  version = "3.7.3-unstable-2025-01-22";
+  version = "3.7.5";
 
   src = fetchFromGitHub {
     owner = "SIPp";
     repo = "sipp";
-    rev = "464cf74c7321069b51c10f0c37f19ba16c2e7138";
-    hash = "sha256-mloeBKgDXmsa/WAUhlDsgNdhK8dpisGf3ti5UQQchJ8=";
-    leaveDotGit = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W5KOvBBaUmyYJshYEg39QpkS8rrpGSEj4g3NZD29YrY=";
   };
+
+  postPatch = ''
+    echo '#define SIPP_VERSION VERSION' > include/version.h
+    echo '#define VERSION "v${finalAttrs.version}"' >> include/version.h
+  '';
 
   cmakeFlags = [
     "-DUSE_PCAP=1"
@@ -40,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     libpcap
     openssl
-  ] ++ lib.optional (stdenv.hostPlatform.isLinux) lksctp-tools;
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux) lksctp-tools;
 
   meta = {
     homepage = "http://sipp.sf.net";

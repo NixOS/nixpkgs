@@ -4,7 +4,9 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   node-gyp,
   cctools,
@@ -14,34 +16,35 @@
   libpq,
   makeWrapper,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.75.2";
+  version = "1.123.5";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-fIdwciI4QUNr2wNWiq7qT4c6aZeUnkaVhSkIgFO4Svw=";
+    hash = "sha256-3vXJnLqQz60Sq1A8lLW0x6xAoN3DneFYVsaHAD0nzng=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rtXTAHZUeitQFTa1Tw6l4el+xWD2hLT+2wu2LXW80cE=";
+    pnpm = pnpm_10;
+    fetcherVersion = 2;
+    hash = "sha256-JlW08N9LuwmWqZsXmu4uMAHO0cb8XtOmtER7Bt/Vg8A=";
   };
 
-  nativeBuildInputs =
-    [
-      pnpm_9.configHook
-      python3 # required to build sqlite3 bindings
-      node-gyp # required to build sqlite3 bindings
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    pnpmConfigHook
+    pnpm_10
+    python3 # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar
@@ -112,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

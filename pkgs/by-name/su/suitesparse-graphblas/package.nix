@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse-graphblas";
-  version = "10.0.1";
+  version = "10.3.0";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "GraphBLAS";
     rev = "v${version}";
-    hash = "sha256-YQ/yLM6hSlgAsYWyYd+7OsZd5Nxl/TqJjxam8+ug2BY=";
+    hash = "sha256-wsvw/95eHF9KeduAgCfvNunRs86m4tiilxle26d1yJs=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graph algorithms in the language of linear algebra";
     homepage = "https://people.engr.tamu.edu/davis/GraphBLAS.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wegank ];
-    platforms = with platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = with lib.platforms; unix;
   };
 }

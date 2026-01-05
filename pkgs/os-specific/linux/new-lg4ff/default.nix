@@ -1,14 +1,20 @@
-{ lib, stdenv, kernel, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  kernel,
+  kernelModuleMakeFlags,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "new-lg4ff";
-  version = "0-unstable-2024-11-25";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "new-lg4ff";
-    rev = "6100a34c182536c607af80e119d54a66c6fb2a23";
-    sha256 = "sha256-90PnQDGwp94ELvWx6p8QiZucYmTbH3N0GiZbj3fo25g=";
+    tag = "v${version}";
+    sha256 = "sha256-nh5J89S3z0odzh2fDsAVVY1X6lr4ZUwoyu3UVOYQiq8=";
   };
 
   preBuild = ''
@@ -20,17 +26,24 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
-    "KVERSION=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  preConfigure = ''
+    makeFlagsArray+=(
+      KVERSION="${kernel.modDirVersion}"
+      KDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      KCFLAGS="-DCONFIG_LOGIWHEELS_FF -DCONFIG_LEDS_CLASS"
+      ${builtins.concatStringsSep " " kernelModuleMakeFlags}
+    )
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Logitech force feedback module for Linux";
     homepage = "https://github.com/berarma/new-lg4ff";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthiasbenaets ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      amadejkastelic
+      matthiasbenaets
+    ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

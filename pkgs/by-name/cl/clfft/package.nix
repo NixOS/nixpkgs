@@ -8,11 +8,9 @@
   boost,
   opencl-clhpp,
   ocl-icd,
-  darwin,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) OpenCL;
   stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
@@ -30,34 +28,35 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i '/-m64/d;/-m32/d' CMakeLists.txt
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required( VERSION 2.6 )' \
+      'cmake_minimum_required( VERSION 3.5 ) '
   '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      fftw
-      fftwFloat
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      opencl-clhpp
-      ocl-icd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenCL ];
+  buildInputs = [
+    fftw
+    fftwFloat
+    boost
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    opencl-clhpp
+    ocl-icd
+  ];
 
   # https://github.com/clMathLibraries/clFFT/issues/237
   CXXFLAGS = "-std=c++98";
 
-  meta = with lib; {
+  meta = {
     description = "Library containing FFT functions written in OpenCL";
     longDescription = ''
       clFFT is a software library containing FFT functions written in OpenCL.
       In addition to GPU devices, the library also supports running on CPU devices to facilitate debugging and heterogeneous programming.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "http://clmathlibraries.github.io/clFFT/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ chessai ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ chessai ];
   };
 }

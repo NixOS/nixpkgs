@@ -4,20 +4,22 @@ Astal is a collection of building blocks for creating custom desktop shells.
 
 ## Bundling {#astal-bundling}
 
-Bundling Astal application is done using `ags` tool, you can use it like this:
+Bundling an Astal application is done using the `ags` tool. You can use it like this:
 
 ```nix
 ags.bundle {
   pname = "hyprpanel";
   version = "1.0.0";
 
-  src = fetchFromGitHub { ... };
+  src = fetchFromGitHub {
+    #...
+  };
 
   # change your entry file (default is `app.ts`)
   entry = "app.ts";
 
   dependencies = [
-    # list here astal modules, that your package depends on
+    # list here astal modules that your package depends on
     # `astal3`, `astal4` and `astal.io` are automatically included
     astal.apps
     astal.battery
@@ -32,7 +34,9 @@ ags.bundle {
   # GTK 4 support is opt-in
   enableGtk4 = true;
 
-  meta = { ... };
+  meta = {
+    #...
+  };
 }
 ```
 

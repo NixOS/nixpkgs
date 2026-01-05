@@ -7,23 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "urxvt-tabbedex";
-  version = "19.21";
+  version = "22.32";
 
   src = fetchFromGitHub {
     owner = "mina86";
     repo = "urxvt-tabbedex";
     rev = "v${version}";
-    sha256 = "06msd156h6r8ss7qg66sjz5jz8613qfq2yvp0pc24i6mxzj8vl77";
+    sha256 = "sha256-4+4iPFoy1j5xjXRM5kBauhff44Y7/ik/+ZLZ1prc+Xo=";
   };
 
   nativeBuildInputs = [ perl ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tabbed plugin for rxvt-unicode with many enhancements (mina86's fork)";
     homepage = "https://github.com/mina86/urxvt-tabbedex";
-    maintainers = with maintainers; [ abbradar ];
-    platforms = with platforms; unix;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
+    license = lib.licenses.gpl3Plus;
   };
 }

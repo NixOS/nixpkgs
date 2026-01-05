@@ -29,11 +29,11 @@ buildGoModule rec {
       --replace "\"yt-dlp\"" "\"${lib.getBin yt-dlp}/bin/yt-dlp\""
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://darkhz.github.io/invidtui/";
     description = "Invidious TUI client";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rettetdemdativ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rettetdemdativ ];
     mainProgram = "invidtui";
   };
 }

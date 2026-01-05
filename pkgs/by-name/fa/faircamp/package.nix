@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitea,
   makeWrapper,
@@ -10,26 +9,23 @@
   vips,
   ffmpeg,
   callPackage,
-  darwin,
   testers,
   faircamp,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "1.2.0";
+  version = "1.7.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;
-    hash = "sha256-InBPQk8dIwsCfvo24/0ggK/tipHaC0owPbZtrrIT/FY=";
+    hash = "sha256-r5r7vfTbMPjAqMg5f7L/YfSzlxZgrSFjO6WHO64wfIo=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-f+RFjBiChLAEk0Azh2wqXmOlDNl3221MYUVVbCisg0c=";
+  cargoHash = "sha256-11EcYZw6Dq0Ls1fhBYLlvvHeZtiaweg6JAGBmkX+acw=";
 
   buildFeatures = [ "libvips" ];
 
@@ -38,15 +34,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      libopus
-      vips
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    glib
+    libopus
+    vips
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/faircamp \
@@ -58,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = faircamp; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hostable, statically generated bandcamp alternative";
     mainProgram = "faircamp";
     longDescription = ''
@@ -74,8 +66,8 @@ rustPlatform.buildRustPackage rec {
       means you prefer to do that manually.
     '';
     homepage = "https://simonrepp.com/faircamp/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 }

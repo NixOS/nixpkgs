@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abc-verifier";
-  version = "unstable-2023-10-13";
+  version = "0.55";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo = "abc";
-    rev = "896e5e7dedf9b9b1459fa019f1fa8aa8101fdf43";
-    hash = "sha256-ou+E2lvDEOxXRXNygE/TyVi7quqk+CJHRI+HDI0xljE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ib6bZSPQmpI1UOsUG733TH6W6v+UnLyagdjUc8MreKw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,15 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
   # needed by yosys
   passthru.rev = finalAttrs.src.rev;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for squential logic synthesis and formal verification";
     homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       Luflosi
     ];
     mainProgram = "abc";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

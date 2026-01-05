@@ -48,21 +48,20 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      gtk3
-      glib
-      gjs
-      libxml2
-      python3
-      python3.pkgs.pygobject3
-      gsettings-desktop-schemas
-      gdk-pixbuf
-      adwaita-icon-theme
-    ]
-    ++ lib.optionals enableWebkit2gtk [
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    gtk3
+    glib
+    gjs
+    libxml2
+    python3
+    python3.pkgs.pygobject3
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    adwaita-icon-theme
+  ]
+  ++ lib.optionals enableWebkit2gtk [
+    webkitgtk_4_1
+  ];
 
   mesonFlags = [
     (lib.mesonEnable "webkit2gtk" enableWebkit2gtk)
@@ -79,11 +78,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/glade";
     description = "User interface designer for GTK applications";
-    maintainers = teams.gnome.members;
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

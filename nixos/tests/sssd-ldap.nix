@@ -99,6 +99,7 @@ import ./make-test-python.nix (
               objectClass: posixAccount
               userPassword: ${testPassword}
               homeDirectory: /home/${testUser}
+              loginShell: /run/current-system/sw/bin/bash
               uidNumber: 1234
               gidNumber: 1234
               cn: ""
@@ -111,23 +112,25 @@ import ./make-test-python.nix (
           enable = true;
           # just for testing purposes, don't put this into the Nix store in production!
           environmentFile = "${pkgs.writeText "ldap-root" "LDAP_BIND_PW=${ldapRootPassword}"}";
-          config = ''
-            [sssd]
-            config_file_version = 2
-            services = nss, pam, sudo
-            domains = ${dbDomain}
+          settings = {
+            sssd = {
+              config_file_version = 2;
+              services = "nss, pam, sudo";
+              domains = dbDomain;
+            };
 
-            [domain/${dbDomain}]
-            auth_provider = ldap
-            id_provider = ldap
-            ldap_uri = ldaps://127.0.0.1:636
-            ldap_tls_reqcert = allow
-            ldap_tls_cacert = /etc/cert.pem
-            ldap_search_base = ${dbSuffix}
-            ldap_default_bind_dn = cn=${ldapRootUser},${dbSuffix}
-            ldap_default_authtok_type = password
-            ldap_default_authtok = $LDAP_BIND_PW
-          '';
+            "domain/${dbDomain}" = {
+              auth_provider = "ldap";
+              id_provider = "ldap";
+              ldap_uri = "ldaps://127.0.0.1:636";
+              ldap_tls_reqcert = "allow";
+              ldap_tls_cacert = "/etc/cert.pem";
+              ldap_search_base = dbSuffix;
+              ldap_default_bind_dn = "cn=${ldapRootUser},${dbSuffix}";
+              ldap_default_authtok_type = "password";
+              ldap_default_authtok = "$LDAP_BIND_PW";
+            };
+          };
         };
       };
 

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ckzg";
-  version = "2.1.0";
+  version = "2.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "c-kzg-4844";
     tag = "v${version}";
-    hash = "sha256-gmH3JR05LkZvjYXf25Ar3rfh9DqabqJr7Vpe1QuRqNA=";
+    hash = "sha256-Sv22Cj1PRMUi9k+0Yj6yi8vCsOr+bVF7QdmQOqJIkBY=";
   };
 
   build-system = [ setuptools ];

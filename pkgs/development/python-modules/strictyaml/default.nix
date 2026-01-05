@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "strictyaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Strict, typed YAML parser";
     homepage = "https://hitchdev.com/strictyaml/";
     changelog = "https://hitchdev.com/strictyaml/changelog/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

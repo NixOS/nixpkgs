@@ -35,7 +35,8 @@ mkOpenModelicaDerivation (
       flex
       bison
       pkg-config
-    ] ++ lib.optional isCross nativeOMCompiler;
+    ]
+    ++ lib.optional isCross nativeOMCompiler;
 
     buildInputs = [
       targetPackages.stdenv.cc.cc
@@ -67,15 +68,15 @@ mkOpenModelicaDerivation (
       done
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Modelica compiler from OpenModelica suite";
       homepage = "https://openmodelica.org";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [
         balodja
         smironov
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   }
   // lib.optionalAttrs isCross {

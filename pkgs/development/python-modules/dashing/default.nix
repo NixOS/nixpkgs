@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ blessed ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FedericoCeratto/dashing";
     description = "Terminal dashboards for Python";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ juliusrickert ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ juliusrickert ];
   };
 }

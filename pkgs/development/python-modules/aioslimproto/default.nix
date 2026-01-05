@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "3.1.0";
+  version = "3.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aioslimproto";
     tag = version;
-    hash = "sha256-3soqvZld92ohCEwTFaMIOC+cvOjBQyVQOoLmKr53aMA=";
+    hash = "sha256-9WPlVAj/Bo7k/oWHI3xDkn07OrQdvNruou2s/zxB61Q=";
   };
 
   postPatch = ''
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioslimproto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to control Squeezebox players";
     homepage = "https://github.com/home-assistant-libs/aioslimproto";
-    changelog = "https://github.com/home-assistant-libs/aioslimproto/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/home-assistant-libs/aioslimproto/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

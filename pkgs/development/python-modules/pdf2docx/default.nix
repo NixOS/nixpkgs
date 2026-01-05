@@ -47,20 +47,22 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    "./test/test.py::TestConversion"
   ];
 
+  enabledTestPaths = [
+    "./test/test.py::TestConversion"
+  ];
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert PDF to DOCX";
     mainProgram = "pdf2docx";
     homepage = "https://github.com/ArtifexSoftware/pdf2docx";
     changelog = "https://github.com/ArtifexSoftware/pdf2docx/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

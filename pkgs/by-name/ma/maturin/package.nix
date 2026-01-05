@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   libiconv,
   testers,
   nix-update-script,
@@ -13,20 +12,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.8.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-k4s0kh68kycc8MSVkD64X547mWmFW4UuToDIcZ87OSc=";
+    hash = "sha256-txbMVkbws/3mvYsxf332WhTymsVdr6JlgQoi85e4pgE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6aLWkphWLScUz6l0RJj9LmNad6aPxLz2iVxXVOXq7pg=";
+  cargoHash = "sha256-2eLzT9Ozz7p43hbysoE5isLuithqJhvo8TfRZnklzf4=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
     libiconv
   ];
 

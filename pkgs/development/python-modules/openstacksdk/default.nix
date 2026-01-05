@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.4.0";
+  version = "4.8.0";
   pyproject = true;
 
   outputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FXQ3Vj1k8/b+7BeW+9hVLVYnczJGF3jE2+dtGCj9MeA=";
+    hash = "sha256-TcA44cF9iTAF86ColRRWr9nRSPP2XUSPlK3M6yeNfzE=";
   };
 
   postPatch = ''
@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openstack" ];
 
-  meta = with lib; {
+  meta = {
     description = "SDK for building applications to work with OpenStack";
     mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

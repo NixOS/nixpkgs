@@ -3,12 +3,15 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  fetchpatch2,
   kernel,
 }:
 
 let
   version = "6.30.223.271";
+  # Patchset release number from rpmfusion, to more easily differentiate
+  # versions and updates. See `wl-kmod.spec` file:
+  # https://github.com/rpmfusion/wl-kmod/blob/master/wl-kmod.spec#L19
+  release = "59";
   hashes = {
     i686-linux = "sha256-T4twspOsjMXHDlca1dGHjQ8p0TOkb+eGmGjZwZtQWM0=";
     x86_64-linux = "sha256-X3l3TVvuyPdja1nA+wegMQju8eP9MkVjiyCFjHFBRL4=";
@@ -21,8 +24,8 @@ let
   rpmFusionPatches = fetchFromGitHub {
     owner = "rpmfusion";
     repo = "wl-kmod";
-    rev = "cb67598cbf5d8c5260b750d6f7e5c6a6599b7b85";
-    hash = "sha256-g/j/LIZHG2Jl6UwnDNAlZpsuvjCyVzv4Qweog/tviqE=";
+    rev = "7786b3a3e54962124d24b4b61a6472bb0c4bbd94";
+    hash = "sha256-yEMsFaGBVs/rtDZLG8j8ZW1CV9SDtt00avoWxkJdLAU=";
   };
   patchset = [
     "wl-kmod-001_wext_workaround.patch"
@@ -53,10 +56,17 @@ let
     "wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch"
     "wl-kmod-027_wpa_supplicant-2.11_add_max_scan_ie_len.patch"
     "wl-kmod-028_kernel_6.12_adaptation.patch"
+    "wl-kmod-029_kernel_6.13_adaptation.patch"
+    "wl-kmod-030_kernel_6.14_adaptation.patch"
+    "wl-kmod-031_replace_EXTRA_CFLAGS_EXTRA_LDFLAGS_with_ccflags-y_ldflags-y.patch"
+    "wl-kmod-032_add_MODULE_DESCRIPTION_macro.patch"
+    "wl-kmod-033_disable_objtool_add_warning_unmaintained.patch"
+    "wl-kmod-034_kernel_6.15_adaptation_replace_del_timer_with_timer_delete.patch"
+    "wl-kmod-035_kernel_6.17_adaptation_fix_functions_prototypes.patch"
   ];
 in
 stdenv.mkDerivation {
-  name = "broadcom-sta-${version}-${kernel.version}";
+  name = "broadcom-sta-${version}-${release}-${kernel.version}";
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
@@ -68,13 +78,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset ++ [
-    # Fix for Kernel 6.13
-    (fetchpatch2 {
-      url = "https://gist.githubusercontent.com/joanbm/72189c81ff67b39d36a660cf00483ccb/raw/17cae74c8d3ebb90e5bfcb84dc176c32f2519078/broadcom-wl-fix-linux-6.13.patch";
-      hash = "sha256-b4XE3Dys0d7finPmNhTtvQqxXBSX1CXEj2Krq7qGHAw=";
-    })
-  ];
+  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset;
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
@@ -98,9 +102,25 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
-    homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
+    homepage = "https://www.broadcom.com/support/download-search?pg=Legacy%20Products&pf=Legacy%20Wireless&pn&pa&po&dk&pl";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = [ lib.maintainers.j0hax ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      j0hax
+      nullcube
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
+    knownVulnerabilities = [
+      "CVE-2019-9501: heap buffer overflow, potentially allowing remote code execution by sending specially-crafted WiFi packets"
+      "CVE-2019-9502: heap buffer overflow, potentially allowing remote code execution by sending specially-crafted WiFi packets"
+      (
+        "The Broadcom STA wireless driver is not maintained "
+        + "and is incompatible with Linux kernel security mitigations. "
+        + "It is heavily recommended to replace the hardware and remove the driver. "
+        + "Proceed at your own risk!"
+      )
+    ];
   };
 }

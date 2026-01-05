@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "filcole";
-    repo = pname;
+    repo = "pycarwings2";
     rev = "v${version}";
     hash = "sha256-kqj/NZXqgPUsOnnzMPmIlICHek7RBxksmL3reNBK+bo=";
   };
@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycarwings2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the NissanConnect EV";
     homepage = "https://github.com/filcole/pycarwings2";
     changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

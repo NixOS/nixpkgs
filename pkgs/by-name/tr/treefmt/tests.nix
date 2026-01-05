@@ -3,7 +3,7 @@
   runCommand,
   testers,
   treefmt,
-  nixfmt-rfc-style,
+  nixfmt,
 }:
 let
   inherit (treefmt) buildConfig withConfig;
@@ -29,7 +29,7 @@ let
 
   nixfmtExamplePackage = withConfig {
     settings = nixfmtExampleConfig;
-    runtimeInputs = [ nixfmt-rfc-style ];
+    runtimeInputs = [ nixfmt ];
   };
 in
 {
@@ -45,6 +45,7 @@ in
     expected = ''
       on-unmatched = "info"
       tree-root-file = ".git/index"
+
       [formatter.nixfmt]
       command = "nixfmt"
       includes = ["*.nix"]
@@ -60,6 +61,7 @@ in
     expected = ''
       on-unmatched = "info"
       tree-root-file = "overridden"
+
       [formatter.nixfmt]
       command = "nixfmt"
       includes = ["*.nix"]

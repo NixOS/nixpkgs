@@ -38,7 +38,7 @@ let
       '';
 
       meta = {
-        description = "translateLocally model - ${name}";
+        description = "TranslateLocally model - ${name}";
         homepage = "https://translatelocally.com/";
         # https://github.com/browsermt/students/blob/master/LICENSE.md
         license = lib.licenses.cc-by-sa-40;

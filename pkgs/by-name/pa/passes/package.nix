@@ -13,7 +13,7 @@
   pkg-config,
   python3,
   wrapGAppsHook4,
-  zint,
+  libzint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace-fail /app/lib ${zint}/lib
+      --replace-fail /app/lib ${lib.getLib libzint}/lib
   '';
 
   strictDeps = true;
@@ -49,16 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    zint
+    libzint
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Digital pass manager";
     mainProgram = "passes";
     homepage = "https://github.com/pablo-s/passes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Crashes
   };
 })

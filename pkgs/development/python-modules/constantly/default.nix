@@ -30,7 +30,8 @@ let
     nativeBuildInputs = [
       setuptools
       versioneer
-    ] ++ versioneer.optional-dependencies.toml;
+    ]
+    ++ versioneer.optional-dependencies.toml;
 
     # would create dependency loop with twisted
     doCheck = false;
@@ -47,10 +48,10 @@ let
 
     passthru.tests.constantly = self.overridePythonAttrs { doCheck = true; };
 
-    meta = with lib; {
+    meta = {
       description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     };
   };

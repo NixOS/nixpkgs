@@ -31,11 +31,11 @@ stdenv.mkDerivation {
     cp hash_extender $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automate hash length extension attacks";
     mainProgram = "hash_extender";
     homepage = "https://github.com/iagox86/hash_extender";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "memestra" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter that tracks reference to deprecated functions";
     homepage = "https://github.com/QuantStack/memestra";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

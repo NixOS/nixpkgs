@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-bgp";
-  version = "0.15.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-bgp";
     tag = "v${version}";
-    hash = "sha256-2PJD/6WjFQRfreK2kpWIYXb5r4noJBa8zejK5r+A+xA=";
+    hash = "sha256-2Ss1ImJTqhr1FTRpnk1cwpFbHPjoNuUdpXoJJ9mjzHQ=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/netbox-community/netbox-bgp";
     changelog = "https://github.com/netbox-community/netbox-bgp/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ felbinger ];
+    teams = with lib.teams; [ secshell ];
   };
 }

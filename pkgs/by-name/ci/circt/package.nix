@@ -9,8 +9,16 @@
   ninja,
   lit,
   z3,
+  sv-lang,
+  fmt,
+  boost,
+  mimalloc,
   gitUpdater,
   callPackage,
+  versionCheckHook,
+
+  # sv-lang (slang) build is broken on darwin
+  enableSlangFrontend ? stdenv.hostPlatform.isLinux,
 }:
 
 let
@@ -19,12 +27,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.109.0";
+  version = "1.138.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-FFMmS5S382Dy8Ut01pY0eq1bI1uSn8I3evMS6hftSss=";
+    hash = "sha256-yx6sk6FO7MHNuRFBMhOXTSjtDQ0B6XyhGHb4uHSXx/8=";
     fetchSubmodules = true;
   };
 
@@ -36,16 +44,28 @@ stdenv.mkDerivation rec {
     git
     pythonEnv
     z3
+    versionCheckHook
   ];
-  buildInputs = [ circt-llvm ];
+  buildInputs = [
+    circt-llvm
+  ]
+  ++ lib.optionals enableSlangFrontend [
+    boost
+    fmt
+    mimalloc
+    sv-lang
+  ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DMLIR_DIR=${circt-llvm.dev}/lib/cmake/mlir"
-
+    # Based on .github/workflows/buildAndTest.yml:211
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "LLVM_ENABLE_ASSERTIONS" false)
+    (lib.cmakeFeature "MLIR_DIR" "${circt-llvm.dev}/lib/cmake/mlir")
+    (lib.cmakeFeature "LLVM_DIR" "${circt-llvm.dev}/lib/cmake/llvm")
     # LLVM_EXTERNAL_LIT is executed by python3, the wrapped bash script will not work
-    "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
-    "-DCIRCT_LLHD_SIM_ENABLED=OFF"
+    (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/.lit-wrapped")
+    (lib.cmakeBool "CIRCT_SLANG_FRONTEND_ENABLED" enableSlangFrontend)
+    (lib.cmakeBool "CIRCT_SLANG_BUILD_FROM_SOURCE" false)
   ];
 
   # cannot use lib.optionalString as it creates an empty string, disabling all tests
@@ -75,6 +95,8 @@ stdenv.mkDerivation rec {
           "CIRCT :: circt-as-dis/.*\\.mlir"
           "CIRCT :: circt-reduce/.*\\.mlir"
           "CIRCT :: circt-test/basic.mlir"
+          "CIRCT :: firld/.*\\.mlir"
+          "CIRCT :: Tools/domaintool/clock-spec-json.mlir"
         ]
         ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000
@@ -87,6 +109,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tools/circt-test
+
+    substituteInPlace \
+      lib/Tools/circt-verilog-lsp-server/VerilogServerImpl/CMakeLists.txt \
+      lib/Conversion/ImportVerilog/CMakeLists.txt \
+      --replace-fail "slang_slang" "slang::slang"
   '';
 
   preConfigure = ''
@@ -102,13 +129,11 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkTarget = "check-circt check-circt-integration";
+  checkTarget = "check-circt check-circt-unit";
 
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    echo moving libarc-jit-env.dylib to '$lib' before check because archilator links to the output path
-    mkdir -pv $lib/lib
-    cp -v ./lib/libarc-jit-env.dylib $lib/lib
-  '';
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/firtool";
+  versionCheckProgramArg = "--version";
 
   outputs = [
     "out"
@@ -125,6 +150,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput lib "$lib"
+    moveToOutput lib/cmake "$dev"
+
+    substituteInPlace $dev/lib/cmake/circt/CIRCTConfig.cmake \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/lib/cmake/mlir" "${circt-llvm.dev}/lib/cmake/mlir" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/lib/cmake/circt" "$dev/lib/cmake/circt" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/include" "$dev/include" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/lib" "$lib/lib" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}/bin" "$out/bin" \
+      --replace-fail "\''${CIRCT_INSTALL_PREFIX}" "$out"
+    substituteInPlace $dev/lib/cmake/circt/CIRCTTargets-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$lib/lib"
   '';
 
   passthru = {

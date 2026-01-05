@@ -7,21 +7,25 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "atomic-operator";
   version = "0.8.5";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "swimlane";
-    repo = pname;
-    rev = version;
+    repo = "atomic-operator";
+    tag = version;
     hash = "sha256-DyNqu3vndyLkmfybCfTbgxk3t/ALg7IAkAMg4kBkH7Q=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "charset_normalizer~=2.0.0" "charset_normalizer"
-  '';
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "charset_normalizer"
+    "urllib3"
+  ];
+
+  dependencies = with python3.pkgs; [
     attrs
     certifi
     chardet
@@ -51,11 +55,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_config_parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to execute Atomic Red Team tests (Atomics)";
     mainProgram = "atomic-operator";
     homepage = "https://www.atomic-operator.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

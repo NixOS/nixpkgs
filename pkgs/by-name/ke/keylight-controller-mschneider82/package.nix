@@ -25,31 +25,30 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libGL
-      nssmdns
-    ]
-    ++ (with xorg; [
-      libX11
-      libX11.dev
-      libXcursor
-      libXext
-      libXi
-      libXinerama
-      libXrandr
-      libXxf86vm
-      xinput
-    ]);
+  buildInputs = [
+    libGL
+    nssmdns
+  ]
+  ++ (with xorg; [
+    libX11
+    libX11.dev
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libXrandr
+    libXxf86vm
+    xinput
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application to control Elgato Keylights";
     longDescription = ''
       Requires having:
       * Elgato's Keylight paired to local wifi network.
       * Service avahi with nssmdns4 enabled.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mschneider82/keylight-control";
     maintainers = [ ];
     mainProgram = "keylight-control";

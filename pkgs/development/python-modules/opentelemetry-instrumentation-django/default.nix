@@ -40,7 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
-  ] ++ optional-dependencies.asgi;
+  ]
+  ++ optional-dependencies.asgi;
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.django" ];
 

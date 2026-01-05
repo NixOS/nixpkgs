@@ -225,11 +225,12 @@ in
 
                 serviceDependencies = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
-                  default =
-                    [ config.registrationServiceUnit ]
-                    ++ (lib.lists.optional upperConfig.services.matrix-synapse.enable upperConfig.services.matrix-synapse.serviceUnit)
-                    ++ (lib.lists.optional upperConfig.services.matrix-conduit.enable "matrix-conduit.service")
-                    ++ (lib.lists.optional upperConfig.services.dendrite.enable "dendrite.service");
+                  default = [
+                    config.registrationServiceUnit
+                  ]
+                  ++ (lib.lists.optional upperConfig.services.matrix-synapse.enable upperConfig.services.matrix-synapse.serviceUnit)
+                  ++ (lib.lists.optional upperConfig.services.matrix-conduit.enable "matrix-conduit.service")
+                  ++ (lib.lists.optional upperConfig.services.dendrite.enable "dendrite.service");
 
                   defaultText = ''
                     [ config.registrationServiceUnit ] ++
@@ -618,5 +619,5 @@ in
     }
   ];
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 }

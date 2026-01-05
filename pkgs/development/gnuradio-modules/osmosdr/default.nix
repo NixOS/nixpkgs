@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchgit
-, gnuradio
-, cmake
-, pkg-config
-, logLib
-, libsndfile
-, mpir
-, boost
-, gmp
-, thrift
-, fftwFloat
-, python
-, uhd
-, icu
-, airspy
-, hackrf
-, libbladeRF
-, rtl-sdr
-, soapysdr-with-plugins
-, gnuradioAtLeast
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchgit,
+  gnuradio,
+  cmake,
+  pkg-config,
+  logLib,
+  libsndfile,
+  mpir,
+  boost,
+  gmp,
+  thrift,
+  fftwFloat,
+  python,
+  uhd,
+  icu,
+  airspy,
+  hackrf,
+  libbladeRF,
+  rtl-sdr,
+  soapysdr-with-plugins,
+  gnuradioAtLeast,
 }:
 
 mkDerivation rec {
@@ -35,7 +36,10 @@ mkDerivation rec {
 
   disabled = gnuradioAtLeast "3.11";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [
     logLib
@@ -49,32 +53,32 @@ mkDerivation rec {
     libbladeRF
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-blocks") [
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-blocks") [
     libsndfile
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     uhd
-  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift
     python.pkgs.thrift
-  ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.numpy
-      python.pkgs.pybind11
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.numpy
+    python.pkgs.pybind11
   ];
   cmakeFlags = [
-    (if (gnuradio.hasFeature "python-support") then
-      "-DENABLE_PYTHON=ON"
-    else
-      "-DENABLE_PYTHON=OFF"
-    )
+    (if (gnuradio.hasFeature "python-support") then "-DENABLE_PYTHON=ON" else "-DENABLE_PYTHON=OFF")
   ];
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.mako
-      python
-    ]
-  ;
+  ]
+  ++ lib.optionals (gnuradio.hasFeature "python-support") [
+    python.pkgs.mako
+    python
+  ];
 
   meta = {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";

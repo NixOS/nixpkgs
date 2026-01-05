@@ -1,0 +1,24 @@
+From 7698d2e2fdde341677907fbbec7197c8bb3a687a Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 31 Dec 2025 22:12:04 +0800
+Subject: [PATCH] remove-redundant-bool
+
+---
+ lib/asn1/typedefs.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/asn1/typedefs.h b/lib/asn1/typedefs.h
+index 756a629..45db045 100644
+--- a/lib/asn1/typedefs.h
++++ b/lib/asn1/typedefs.h
+@@ -52,7 +52,6 @@ typedef unsigned char u_char;
+ 
+ #endif
+ 
+-typedef unsigned char bool;
+ typedef unsigned int u_int;
+ 
+ #define DBG1(s...)
+-- 
+2.51.2
+

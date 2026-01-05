@@ -7,6 +7,7 @@ The stdenv built-in hooks are documented in [](#ssec-setup-hooks).
 ```{=include=} sections
 autoconf.section.md
 automake.section.md
+autopatchcil.section.md
 autopatchelf.section.md
 aws-c-common.section.md
 bmake.section.md
@@ -19,6 +20,7 @@ ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
+julec.section.md
 just.section.md
 libiconv.section.md
 libxml2.section.md
@@ -34,6 +36,7 @@ python.section.md
 scons.section.md
 tauri.section.md
 tetex-tex-live.section.md
+udevCheckHook.section.md
 unzip.section.md
 validatePkgConfig.section.md
 versionCheckHook.section.md

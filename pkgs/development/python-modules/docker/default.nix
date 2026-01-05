@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     ssh = [ paramiko ];
-    tls = [];
+    tls = [ ];
     websockets = [ websocket-client ];
   };
 
@@ -57,9 +57,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -68,11 +69,11 @@ buildPythonPackage rec {
     "socket_file"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/docker/docker-py/releases/tag/${version}";
     description = "API client for docker written in Python";
     homepage = "https://github.com/docker/docker-py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

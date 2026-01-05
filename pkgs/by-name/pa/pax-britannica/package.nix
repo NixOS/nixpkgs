@@ -23,33 +23,32 @@ stdenv.mkDerivation {
     domain = "salsa.debian.org";
     owner = "games-team";
     repo = "pax-britannica";
-    rev = "00ccbac5";
+    rev = "00ccbac55fe6ff1217e0870d69ea403b05292c53";
     hash = "sha256-j69di+3P+vaFzv8Zke1MdABMkLtknTNvlfPk1YVUfmU=";
   };
 
-  patches =
-    [
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/compile_for_linux.patch";
-        hash = "sha256-XncjmJrBakz5/w90O6rDif2rWSoAVKzuPEj9wN2VNvQ=";
-      })
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/add_manpage.patch";
-        hash = "sha256-c8O6t0Zv/ln7WiPdbN3sYGsb7SL9Rmeo+94DsjpfgvY=";
-      })
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/load_resources_from_usr_share.patch";
-        hash = "sha256-61Yt4Rq1I/Ofu640XsDDo0il275B+ozqH0Z6P18XT6Q=";
-      })
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/add_desktop_entry.patch";
-        hash = "sha256-QSQEBoCw7KTOLgy7TaFvQRpR17HoggTOCxhfTG+kIOA=";
-      })
-    ]
-    ++ lib.optional useGlfw3 (fetchpatch {
-      url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/glfw3.patch";
-      hash = "sha256-hj00vnW/i7lxFc4CGlRz6Havkg45gGgIg6MmCXcMsSg=";
-    });
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/compile_for_linux.patch";
+      hash = "sha256-XncjmJrBakz5/w90O6rDif2rWSoAVKzuPEj9wN2VNvQ=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/add_manpage.patch";
+      hash = "sha256-c8O6t0Zv/ln7WiPdbN3sYGsb7SL9Rmeo+94DsjpfgvY=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/load_resources_from_usr_share.patch";
+      hash = "sha256-61Yt4Rq1I/Ofu640XsDDo0il275B+ozqH0Z6P18XT6Q=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/add_desktop_entry.patch";
+      hash = "sha256-QSQEBoCw7KTOLgy7TaFvQRpR17HoggTOCxhfTG+kIOA=";
+    })
+  ]
+  ++ lib.optional useGlfw3 (fetchpatch {
+    url = "https://sources.debian.org/data/main/p/pax-britannica/1.0.0-5/debian/patches/glfw3.patch";
+    hash = "sha256-hj00vnW/i7lxFc4CGlRz6Havkg45gGgIg6MmCXcMsSg=";
+  });
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '-DEXTRA_LOADERS=\"../extra_loaders.h\"' '-DEXTRA_LOADERS=\\\"../extra_loaders.h\\\"'

@@ -1,32 +1,43 @@
 {
   lib,
   stdenv,
-  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
   intltool,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol-db";
-  version = "20250320";
+  version = "20251102";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
-    rev = version;
-    sha256 = "sha256-KhZp0gGGK27hAtfAwuff7VI9Z3D4MtMxkNW6l6B56Xw=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-r87zucuHnWbvaqg++xI3s3Tghz80auQBgUxJzu7nmqU=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
     intltool
+    libtool
   ];
 
-  meta = with lib; {
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  meta = {
     description = "Monitor database for DDCcontrol";
     homepage = "https://github.com/ddccontrol/ddccontrol-db";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ lib.maintainers.pakhfn ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pakhfn
+      doronbehar
+    ];
   };
-}
+})

@@ -1,13 +1,13 @@
 [
   {
     "pname": "BouncyCastle.Cryptography",
-    "version": "2.4.0",
-    "hash": "sha256-DoDZNWtYM+0OLIclOEZ+tjcGXymGlXvdvq2ZMPmiAJA="
+    "version": "2.6.1",
+    "hash": "sha256-0NNwK/UZlnIK4Nb7bs4ya0XfoVluKQPUVQvaR88UHKo="
   },
   {
     "pname": "CsvHelper",
-    "version": "30.0.1",
-    "hash": "sha256-lCfo0ZQUJFXABIi18fy/alC1YGwkwM+lGy2zL47RAWw="
+    "version": "33.1.0",
+    "hash": "sha256-pEfX4o63xupI7uuwe6qa05One0pJ7UbzzJqLh4Shju8="
   },
   {
     "pname": "LiteDB",
@@ -16,8 +16,8 @@
   },
   {
     "pname": "MailKit",
-    "version": "4.8.0",
-    "hash": "sha256-ONvrVOwjxyNrIQM8FMzT5mLzlU56Kc8oOwkzegNAiXM="
+    "version": "4.14.1",
+    "hash": "sha256-YSEcfyYVskwJX6xa13wGW4JgHn0VpD04CtUiAGn3et0="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -25,39 +25,49 @@
     "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
   },
   {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.2",
+    "hash": "sha256-UfLfEQAkXxDaVPC7foE/J3FVEXd31Pu6uQIhTic3JgY="
+  },
+  {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
     "version": "8.0.0",
     "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
   },
   {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "8.0.2",
+    "hash": "sha256-cHpe8X2BgYa5DzulZfq24rg8O2K5Lmq2OiLhoyAVgJc="
+  },
+  {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "7.3.1",
-    "hash": "sha256-lbZKfnulWcM4Mxbz6Hkrp/lM41hsOfCnsHLEb+u2czc="
+    "version": "8.14.0",
+    "hash": "sha256-bkCuz1Wj56N+LHWLvHKLcCtIRqBK+3k5vD2qfB7xXKk="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "7.3.1",
-    "hash": "sha256-C7uySnKBB0e5Wf6z8YNtjbtBbhalJMdqx0EWVcYy7Q4="
+    "version": "8.14.0",
+    "hash": "sha256-YBXaSWnLgxIQxv+Lwt2aRC20miFguNZbbuTc2Jjq+Ys="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "7.3.1",
-    "hash": "sha256-6OHGsItAXicCSlW0ghCy5szNi6HwhlCmbykbN1O5yAw="
+    "version": "8.14.0",
+    "hash": "sha256-QvCJplLvTGTXZKGbRMccW2hld6oWUhHkneZd+msn9aE="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "7.3.1",
-    "hash": "sha256-qfTNU0g9QA8kV42VTAez1pSTmfFRJBbeTbGn/nfGFUU="
+    "version": "8.14.0",
+    "hash": "sha256-ALeMe3AjEy4dazHTBeR1JHMtzm+sqS3RbrjQWoNbuno="
   },
   {
     "pname": "MimeKit",
-    "version": "4.8.0",
-    "hash": "sha256-4EB54ktBXuq5QRID9i8E7FzU7YZTE4wwH+2yr7ivi/Q="
+    "version": "4.14.0",
+    "hash": "sha256-06dqA6w2V2D+miq387smCuJ/8fk1FVc0rvRjmglAWyM="
   },
   {
     "pname": "Npgsql",
-    "version": "8.0.5",
-    "hash": "sha256-vGIznPqwfhg8wY9bt5XlinyNWMr5kJ2jJZHDXc73uhI="
+    "version": "9.0.4",
+    "hash": "sha256-YH2QYLe56dH6NNGgSwLIaHefjkKQLh0Sf4vMWoJciyU="
   },
   {
     "pname": "System.Formats.Asn1",
@@ -65,13 +75,8 @@
     "hash": "sha256-may/Wg+esmm1N14kQTG4ESMBi+GQKPp0ZrrBo/o6OXM="
   },
   {
-    "pname": "System.IdentityModel.Tokens.Jwt",
-    "version": "7.3.1",
-    "hash": "sha256-Si60aDtJSjvXvY5ZkVQKF3JzxAkmkAKOw5D/q8CwuyQ="
-  },
-  {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "8.0.0",
-    "hash": "sha256-yqfIIeZchsII2KdcxJyApZNzxM/VKknjs25gDWlweBI="
+    "version": "8.0.1",
+    "hash": "sha256-KMNIkJ3yQ/5O6WIhPjyAIarsvIMhkp26A6aby5KkneU="
   }
 ]

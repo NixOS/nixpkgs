@@ -42,13 +42,23 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "mkdocs";
+    repo = "mkdocs";
     tag = version;
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
-  build-system = [ hatchling ];
+  patches = [
+    # https://github.com/mkdocs/mkdocs/pull/4065
+    ./click-8.3.0-compat.patch
+  ];
+
+  build-system = [
+    hatchling
+    # babel, setuptools required as "build hooks"
+    babel
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
 
   dependencies = [
     click
@@ -64,16 +74,18 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
-    i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
+    i18n = [ babel ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
     mock
-  ] ++ optional-dependencies.i18n;
+  ]
+  ++ optional-dependencies.i18n;
 
   unittestFlagsArray = [
     "-v"
@@ -84,7 +96,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
     mainProgram = "mkdocs";
@@ -97,8 +109,8 @@ buildPythonPackage rec {
       MkDocs can also be used to generate general-purpose websites.
     '';
     homepage = "http://mkdocs.org/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rkoe ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rkoe ];
   };
 }

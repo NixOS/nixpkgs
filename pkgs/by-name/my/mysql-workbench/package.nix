@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
 
   cmake,
+  jre,
   ninja,
   pkg-config,
-  jre,
   swig,
   wrapGAppsHook3,
 
@@ -16,25 +17,27 @@
   glibc,
   sudo,
 
+  python3Packages,
+
   cairo,
   mysql,
   libiodbc,
   proj,
 
   antlr4_13,
-  gtkmm3,
-  libxml2,
-  libmysqlconnectorcpp,
-  vsqlite,
-  gdal,
   boost,
+  gdal,
+  gtkmm3,
+  libmysqlconnectorcpp,
+  libsecret,
   libssh,
+  libuuid,
+  libxml2,
+  libzip,
   openssl,
   rapidjson,
-  libuuid,
-  libzip,
-  libsecret,
-  python3Packages,
+  vsqlite,
+  zstd,
 }:
 
 let
@@ -50,11 +53,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.41";
+  version = "8.0.43";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-H/u1nwizZ9pCEu9JPXRcKshxjvc/efcZ//6ankHcGGk=";
+    hash = "sha256-E9fn72r35WrGzIOoDouIvJFZdpfw9sgDNHwEe/0DdUI=";
   };
 
   patches = [
@@ -73,6 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
     ./dont-search-for-antlr-jar.patch
+
+    # fixes the build with python 3.13
+    (fetchpatch {
+      name = "python3.13.patch";
+      url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
+      hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
+    })
   ];
 
   postPatch = ''
@@ -82,30 +92,35 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/get_wb_version.sh
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+    jre
     ninja
     pkg-config
-    jre
     swig_4_2
     wrapGAppsHook3
   ];
 
   buildInputs = [
     antlr4_13.runtime.cpp
-    gtkmm3
-    (libxml2.override { enableHttp = true; })
-    libmysqlconnectorcpp
-    vsqlite
-    gdal
     boost
+    gdal
+    gtkmm3
+    libiodbc
+    libmysqlconnectorcpp
+    libsecret
     libssh
+    libuuid
+    (libxml2.override { enableHttp = true; })
+    libzip
     openssl
     rapidjson
-    libuuid
-    libzip
-    libsecret
-    libiodbc
+    vsqlite
+    zstd
+
+    bash # for shebangs
 
     # python dependencies:
     paramiko

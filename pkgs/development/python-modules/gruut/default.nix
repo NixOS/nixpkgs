@@ -69,29 +69,30 @@ buildPythonPackage rec {
     num2words
     numpy
     python-crfsuite
-  ] ++ optional-dependencies.en;
+  ]
+  ++ optional-dependencies.en;
 
-  optional-dependencies =
-    {
-      train = [
-        pydub
-        rapidfuzz
-      ];
-    }
-    // lib.genAttrs langPkgs (lang: [
-      (callPackage ./language-pack.nix {
-        inherit
-          lang
-          version
-          src
-          build-system
-          ;
-      })
-    ]);
+  optional-dependencies = {
+    train = [
+      pydub
+      rapidfuzz
+    ];
+  }
+  // lib.genAttrs langPkgs (lang: [
+    (callPackage ./language-pack.nix {
+      inherit
+        lang
+        version
+        src
+        build-system
+        ;
+    })
+  ]);
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25
@@ -104,11 +105,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gruut" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tokenizer, text cleaner, and phonemizer for many human languages";
     mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

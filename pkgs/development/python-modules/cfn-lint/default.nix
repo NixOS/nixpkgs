@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jschema-to-python,
   jsonpatch,
-  jsonschema,
   junit-xml,
   mock,
   networkx,
@@ -18,11 +17,12 @@
   sarif-om,
   setuptools,
   sympy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.27.0";
+  version = "1.41.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,23 +31,19 @@ buildPythonPackage rec {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-UUbIDThzjlypwHvAv6ry2ppBTQp3/4EXRnn570/s0Xo=";
+    hash = "sha256-AudCeFMbCQucANLLAknCKC7gzi0vvFh9c9k7ll0a1MM=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aws-sam-translator
-    jschema-to-python
     jsonpatch
-    jsonschema
-    junit-xml
-    networkx
     networkx
     pyyaml
     regex
-    sarif-om
     sympy
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -57,19 +53,15 @@ buildPythonPackage rec {
       jschema-to-python
       sarif-om
     ];
-    full = [
-      jschema-to-python
-      junit-xml
-      pydot
-      sarif-om
-    ];
+    full = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "full" ]);
   };
 
   nativeCheckInputs = [
     defusedxml
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ optional-dependencies.full;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -78,27 +70,16 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires git directory
     "test_update_docs"
-    # Tests depend on network access (fails in getaddrinfo)
-    "test_update_resource_specs_python_2"
-    "test_update_resource_specs_python_3"
-    "test_sarif_formatter"
-    # Some CLI tests fails
-    "test_bad_config"
-    "test_override_parameters"
-    "test_positional_template_parameters"
-    "test_template_config"
-    # Assertion error
-    "test_build_graph"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

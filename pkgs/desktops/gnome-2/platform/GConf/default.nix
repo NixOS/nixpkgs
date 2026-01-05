@@ -8,7 +8,7 @@
   ORBit2,
   libxml2,
   polkit,
-  python3,
+  python312,
   intltool,
 }:
 
@@ -29,14 +29,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs =
-    [
-      ORBit2
-      libxml2
-    ]
-    # polkit requires pam, which requires shadow.h, which is not available on
-    # darwin
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) polkit;
+  buildInputs = [
+    ORBit2
+    libxml2
+  ]
+  # polkit requires pam, which requires shadow.h, which is not available on
+  # darwin
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) polkit;
 
   propagatedBuildInputs = [
     glib
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
-    python3
+    python312
     glib
   ];
 
@@ -58,9 +57,9 @@ stdenv.mkDerivation rec {
     2to3 --write --nobackup gsettings/gsettings-schema-convert
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://projects.gnome.org/gconf/";
     description = "Deprecated system for storing application preferences";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

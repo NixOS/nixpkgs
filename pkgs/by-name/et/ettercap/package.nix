@@ -1,72 +1,68 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
+  atk,
+  bison,
   cmake,
-  libpcap,
-  libnet,
-  zlib,
   curl,
-  pcre,
-  openssl,
-  ncurses,
+  fetchFromGitHub,
+  flex,
+  geoip,
   glib,
   gtk3,
-  atk,
-  pango,
-  flex,
-  bison,
-  geoip,
   harfbuzz,
+  libmaxminddb,
+  libnet,
+  libpcap,
+  ncurses,
+  openssl,
+  pango,
+  pcre2,
   pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ettercap";
-  version = "0.8.3.1";
+  version = "0.8.4-unstable-2025-07-16";
 
   src = fetchFromGitHub {
     owner = "Ettercap";
     repo = "ettercap";
-    rev = "v${version}";
-    sha256 = "1sdf1ssa81ib6k0mc5m2jzbjl4jd1yv6ahv5dwx2x9w4b2pyqg1c";
+    rev = "26ef2d2e1432b866460f9c4ddf9e4dce3db1a5ab";
+    hash = "sha256-T3LsOD2LGbk4f5un3l5Ybf5/kgYQJfw7lGa2UXB/brY=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "curl-8.patch";
-      url = "https://github.com/Ettercap/ettercap/commit/9ec4066addc49483e40055e0738c2e0ef144702f.diff";
-      sha256 = "6D8lIxub0OS52BFr42yWRyqS2Q5CrpTLTt6rcItXFMM=";
-    })
-  ];
-
   strictDeps = true;
+
   nativeBuildInputs = [
+    bison
     cmake
     flex
-    bison
     pkg-config
   ];
+
   buildInputs = [
-    libpcap
-    libnet
-    zlib
+    atk
     curl
-    pcre
-    openssl
-    ncurses
+    geoip
     glib
     gtk3
-    atk
-    pango
-    geoip
     harfbuzz
+    libmaxminddb
+    libnet
+    libpcap
+    ncurses
+    openssl
+    pango
+    pcre2
+    zlib
   ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace /etc \$\{INSTALL_PREFIX\}/etc \
-                                     --replace /usr \$\{INSTALL_PREFIX\}
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /etc \$\{INSTALL_PREFIX\}/etc \
+      --replace-fail /usr \$\{INSTALL_PREFIX\}
   '';
 
   cmakeFlags = [
@@ -77,7 +73,7 @@ stdenv.mkDerivation rec {
   # TODO: Remove after the next release (0.8.4 should work without this):
   env.NIX_CFLAGS_COMPILE = toString [ "-I${harfbuzz.dev}/include/harfbuzz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive suite for man in the middle attacks";
     longDescription = ''
       Ettercap is a comprehensive suite for man in the middle attacks. It
@@ -87,8 +83,9 @@ stdenv.mkDerivation rec {
       analysis.
     '';
     homepage = "https://www.ettercap-project.org/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${version}";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

@@ -5,33 +5,32 @@
   fetchFromGitHub,
   libcosmicAppHook,
   pkg-config,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libgbm,
   libinput,
   pixman,
   seatd,
   udev,
   systemd,
-  xwayland,
   nix-update-script,
+  nixosTests,
 
-  useXWayland ? true,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.0.0-alpha.6";
+  version = "1.0.1";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-CygtVtzO8JJQv+G3yx/OCCy8BlPqyNqcmf3Mv1gFuT4=";
+    hash = "sha256-xvvaRuYbUDNORCoBQ9FKIpGROoDoyg3k5CdUl2gjd0s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bfVsfrxGi0Lq/YRddCVhfqXL8kPGL9p4bqSNPsmjx0o=";
+  cargoHash = "sha256-1j99crcOUGocmdCsKCN0gKRUd4s0YOJyHskiR/SqA7A=";
 
   separateDebugInfo = true;
 
@@ -41,13 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    libdisplay-info
+    libdisplay-info_0_2
     libgbm
     libinput
     pixman
     seatd
     udev
-  ] ++ lib.optional useSystemd systemd;
+  ]
+  ++ lib.optional useSystemd systemd;
 
   # Only default feature is systemd
   buildNoDefaultFeatures = !useSystemd;
@@ -59,17 +59,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   dontCargoInstall = true;
 
-  preFixup = lib.optionalString useXWayland ''
-    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})
-  '';
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
@@ -77,11 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      qyliss
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

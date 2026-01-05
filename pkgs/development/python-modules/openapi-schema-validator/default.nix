@@ -14,6 +14,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -25,14 +26,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
+    repo = "openapi-schema-validator";
     tag = version;
     hash = "sha256-1Y049W4TbqvKZRwnvPVwyLq6CH6NQDrEfJknuMn8dGo=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -42,22 +39,25 @@ buildPythonPackage rec {
     rfc3339-validator
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # https://github.com/python-openapi/openapi-schema-validator/issues/153
     "test_array_prefixitems_invalid"
   ];
 
-  pytestFlagsArray = [ "-vvv" ];
+  pytestFlags = [ "-vvv" ];
 
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

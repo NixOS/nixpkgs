@@ -4,7 +4,7 @@
   vdr,
   fetchFromGitHub,
   graphicsmagick,
-  boost,
+  boost186,
   libgcrypt,
   ncurses,
   callPackage,
@@ -38,18 +38,6 @@ in
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
 
-  inherit
-    (lib.genAttrs [
-      "epgtableid0"
-      "hello"
-      "osddemo"
-      "pictures"
-      "servicedemo"
-      "status"
-      "svdrpdemo"
-    ] mkPlugin)
-    ;
-
   femon = stdenv.mkDerivation rec {
     pname = "vdr-femon";
     version = "2.4.0";
@@ -67,11 +55,11 @@ in
 
     makeFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
 
@@ -92,11 +80,11 @@ in
       sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
     };
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "VDR plugin to handle KODI clients";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
 
@@ -132,11 +120,11 @@ in
 
     dontInstall = true;
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };
@@ -155,18 +143,27 @@ in
 
     buildInputs = [
       vdr
-      boost
+      boost186
       libgcrypt
     ];
 
     installFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "Plugin for VDR to access AVMs Fritz Box routers";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };
 }
+// (lib.genAttrs [
+  "epgtableid0"
+  "hello"
+  "osddemo"
+  "pictures"
+  "servicedemo"
+  "status"
+  "svdrpdemo"
+] mkPlugin)

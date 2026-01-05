@@ -1,35 +1,41 @@
 {
   lib,
+  brotli,
   buildPythonPackage,
   fetchFromGitHub,
+  pkgconfig,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "brotli";
-  version = "1.1.0";
-  format = "setuptools";
+  inherit (brotli) version src;
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-U1vAupUthD5W0xvlOKdgm9MAVLqsVyZUaFdeLsDAbDM=";
-    # .gitattributes is not correct or GitHub does not parse it correct and the archive is missing the test data
-    forceFetchGit = true;
-  };
+  build-system = [
+    pkgconfig
+    setuptools
+  ];
 
   # only returns information how to really build
   dontConfigure = true;
 
+  env.USE_SYSTEM_BROTLI = 1;
+
+  buildInputs = [
+    brotli
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "python/tests" ];
+  enabledTestPaths = [ "python/tests" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/google/brotli/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

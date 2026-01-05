@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bayespy";
     repo = "bayespy";
     tag = version;
-    hash = "sha256-X7CwJBrKHlU1jqMkt/7XEzaiwul1Yzkb/V64lXG4Aqo=";
+    hash = "sha256-kx87XY4GCL1PQIeZyovEbrPyCC/EVA6Hdvt+3P/D6VI=";
   };
 
   postPatch = ''
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bayespy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.bayespy.org";
     description = "Variational Bayesian inference tools for Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

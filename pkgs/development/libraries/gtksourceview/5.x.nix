@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.14.2";
+  version = "5.18.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gm04emgHX4rv1OdSz0hxd8SmgjsU/4pDSYaFiurvYmQ=";
+    hash = "sha256-BRp4/jj3kzKAR+W81thVxkJcC0gMINlDIXnjVnQsasA=";
   };
 
   patches = [
@@ -111,12 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-5" ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

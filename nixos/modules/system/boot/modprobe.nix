@@ -7,6 +7,16 @@
 
 with lib;
 
+let
+
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
+
+in
+
 {
 
   ###### interface
@@ -25,16 +35,19 @@ with lib;
       };
 
     boot.blacklistedKernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+      type = attrNamesToTrue;
+      default = { };
       example = [
         "cirrusfb"
         "i2c_piix4"
       ];
       description = ''
-        List of names of kernel modules that should not be loaded
-        automatically by the hardware probing code.
+        Set of names of kernel modules that should not be loaded
+        automatically by the hardware probing code. This can either be
+        a list of modules or an attrset. In an attrset, names that are
+        set to `true` represent modules that will be blacklisted.
       '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.extraModprobeConfig = mkOption {

@@ -15,19 +15,18 @@
   hwloc,
   munge,
   zlib,
-  pandoc,
   gitMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmix";
-  version = "5.0.7";
+  version = "5.0.9";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qj/exBi1siCHY1QqNY+ad6n3XI4JZuwnM93Vp+rj1AQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3z3NZPssaKBujulASYEJXwX/dhyCQxmRmjy31kOMpAQ=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    pandoc
     perl
     autoconf
     automake
@@ -70,25 +68,24 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.pl
   '';
 
-  postInstall =
-    ''
-      find $out/lib/ -name "*.la" -exec rm -f \{} \;
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
-      moveToOutput "bin/pmix_info" "''${!outputDev}"
-      moveToOutput "bin/pmixcc" "''${!outputDev}"
-      moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
+    moveToOutput "bin/pmix_info" "''${!outputDev}"
+    moveToOutput "bin/pmixcc" "''${!outputDev}"
+    moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
 
-    ''
-    # From some reason the Darwin build doesn't include this file, so we
-    # currently disable this substitution for any non-Linux platform, until a
-    # Darwin user will care enough about this cross platform fix.
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Pin the compiler to the current version in a cross compiler friendly way.
-      # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
-      substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
-        --replace-fail compiler=${stdenv.cc.targetPrefix}gcc \
-          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
-    '';
+  ''
+  # From some reason the Darwin build doesn't include this file, so we
+  # currently disable this substitution for any non-Linux platform, until a
+  # Darwin user will care enough about this cross platform fix.
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Pin the compiler to the current version in a cross compiler friendly way.
+    # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
+    substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
+      --replace-fail compiler=${stdenv.cc.targetPrefix}gcc \
+        compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
+  '';
 
   postFixup = lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
     # The build info (parameters to ./configure) are hardcoded

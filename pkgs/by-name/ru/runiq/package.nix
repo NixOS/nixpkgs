@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -23,15 +21,11 @@ rustPlatform.buildRustPackage {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Efficient way to filter duplicate lines from input, à la uniq";
     mainProgram = "runiq";
     homepage = "https://github.com/whitfin/runiq";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

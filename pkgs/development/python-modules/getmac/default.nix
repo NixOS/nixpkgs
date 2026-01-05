@@ -45,16 +45,16 @@ buildPythonPackage rec {
     "test_initialize_method_cache_valid_types"
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "getmac" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
     changelog = "https://github.com/GhostofGoes/getmac/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "getmac";
   };
 }

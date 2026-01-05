@@ -34,11 +34,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Optimism is Ethereum, scaled";
     homepage = "https://github.com/ethereum-optimism/optimism";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "cmd";
   };
 }

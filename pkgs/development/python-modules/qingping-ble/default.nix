@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "qingping-ble";
-  version = "0.10.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "qingping-ble";
     tag = "v${version}";
-    hash = "sha256-5w3KGJLdHFv6kURKTz3YImZNjaETiVqbbJTJpBSLSo8=";
+    hash = "sha256-YESOD2wdSD9Z7cHgzQq3Dkem0yxerOBsX9rFNEbBZfo=";
   };
 
   build-system = [ poetry-core ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qingping_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Qingping BLE devices";
     homepage = "https://github.com/bluetooth-devices/qingping-ble";
     changelog = "https://github.com/Bluetooth-Devices/qingping-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

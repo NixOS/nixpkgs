@@ -29,15 +29,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "cbor-diag";
 
-  meta = with lib; {
+  meta = {
     description = "CBOR diagnostic utilities";
     homepage = "https://github.com/cabo/cbor-diag";
-    license = with licenses; asl20;
-    maintainers = with maintainers; [
+    license = with lib.licenses; asl20;
+    maintainers = with lib.maintainers; [
       fdns
       nicknovitski
       amesgen
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
-    repo = pname;
+    repo = "farama-notifications";
     rev = version;
     hash = "sha256-UUrJ/5t5x54xs1gweNUhwqrMJQXiyrUPn1bBfTsiPcw=";
   };
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "farama_notifications" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows for providing notifications on import to all Farama Packages";
     homepage = "https://github.com/Farama-Foundation/Farama-Notifications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

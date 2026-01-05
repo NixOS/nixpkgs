@@ -18,6 +18,7 @@
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   quazip,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,12 +41,14 @@ stdenv.mkDerivation rec {
     qtx11extras
     libdbusmenu
     quazip
-  ] ++ lib.optional withPulseaudio libpulseaudio;
+  ]
+  ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     wrapQtAppsHook
     pkg-config
     cmake
+    udevCheckHook
   ];
 
   cmakeFlags = [
@@ -62,16 +65,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \
       --replace-fail "/usr/bin/env sed" "${lib.getExe gnused}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver and configuration tool for Corsair keyboards and mice";
     homepage = "https://github.com/ckb-next/ckb-next";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "ckb-next";
     maintainers = [ ];
   };

@@ -18,12 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "hubblo-org";
-    repo = pname;
+    repo = "scaphandre";
     rev = "v${version}";
     hash = "sha256-I+cECdpLoIj4yuWXfirwHlcn0Hkm9NxPqo/EqFiBObw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-OIoQ2r/T0ZglF1pe25ND8xe/BEWgP9JbWytJp4k7yyg=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -66,12 +65,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Electrical power consumption metrology agent";
     homepage = "https://github.com/hubblo-org/scaphandre";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ gaelreyrol ];
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "scaphandre";
+    # Upstream needs to decide what to do about a broken dependency
+    # https://github.com/hubblo-org/scaphandre/issues/403
+    broken = true;
   };
 }

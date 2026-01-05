@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnsproxy";
-  version = "0.75.0";
+  version = "0.78.2";
 
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "dnsproxy";
-    rev = "v${version}";
-    hash = "sha256-kaGMudHELG7ggYXvAL1Yz03ZXDnzrVNj+9QN8jDnS3g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BZ9yiw5EoSLTZux/MC8MJLV9eifQYnz+ZBzAPZaxOPI=";
   };
 
-  vendorHash = "sha256-d1WrUfE31Gvgz8tw7cVdPhWf4OHsuuyEHDSn9bETCjI=";
+  vendorHash = "sha256-NS7MsK7QXg8tcAytYd9FGvaYZcReYkO5ESPpLbzL0IQ=";
 
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "github.com/AdguardTeam/dnsproxy/internal/version.version=${version}"
+    "github.com/AdguardTeam/dnsproxy/internal/version.version=${finalAttrs.version}"
   ];
 
   # Development tool dependencies; not part of the main project
@@ -29,14 +29,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple DNS proxy with DoH, DoT, and DNSCrypt support";
     homepage = "https://github.com/AdguardTeam/dnsproxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       contrun
       diogotcorreia
     ];
     mainProgram = "dnsproxy";
   };
-}
+})

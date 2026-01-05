@@ -13,33 +13,38 @@
   util-linux,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
   ncurses,
+  udevCheckHook,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "brltty";
-  version = "6.7";
+  version = "6.8";
 
   src = fetchurl {
     url = "https://brltty.app/archive/brltty-${version}.tar.gz";
-    sha256 = "sha256-FsM9AeL1lnBziJlmB7EZAIgDKylT8D4Il81Fe1y9Yjg=";
+    sha256 = "sha256-MoDYjHU6aJY9e5cgjm9InOEDGCs+jvlEurMWg9wo4RY=";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
-    pkg-config
     python3.pkgs.cython
     python3.pkgs.setuptools
-    tcl
+    tcl # One of build scripts require tclsh
+    udevCheckHook
   ];
-  buildInputs =
-    [
-      bluez
-      ncurses.dev
-    ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional systemdSupport systemd;
+  buildInputs = [
+    bluez
+    ncurses.dev
+    tcl # For TCL bindings
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional systemdSupport systemdMinimal;
+
+  doInstallCheck = true;
 
   meta = {
     description = "Access software for a blind person using a braille display";
@@ -78,17 +83,30 @@ stdenv.mkDerivation rec {
     "install-polkit"
   ];
 
+  env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    # Build platform compilers for mk4build and second pass of ./configure
+    CC_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  };
+
   preConfigure = ''
-    substituteInPlace configure --replace /sbin/ldconfig ldconfig
+    substituteInPlace configure --replace-fail "/sbin/ldconfig -n" "true"
 
     # Some script needs a working tclsh shebang
     patchShebangs .
 
     # Skip impure operations
     substituteInPlace Programs/Makefile.in    \
-      --replace install-writable-directory "" \
-      --replace install-apisoc-directory ""   \
-      --replace install-api-key ""
+      --replace-fail install-apisoc-directory ""   \
+      --replace-fail install-api-key ""
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    # ./configure call itself second time for build platform, if it fail -- it fails silently, make it visible
+    # (this is not mandatory changing, but make further maintaining easier)
+    substituteInPlace mk4build \
+      --replace-fail "--quiet" ""
+    # Respect targetPrefix when invoking ar
+    substituteInPlace Programs/Makefile.in \
+      --replace-fail "ar " "$AR "
   '';
 
   postInstall = ''
@@ -121,6 +139,6 @@ stdenv.mkDerivation rec {
      )
      substituteInPlace $out/libexec/brltty/systemd-wrapper \
        --replace 'logger' "${util-linux}/bin/logger" \
-       --replace 'udevadm' "${systemd}/bin/udevadm"
+       --replace 'udevadm' "${systemdMinimal}/bin/udevadm"
   '';
 }

@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     lcms2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference library for reading, displaying, writing and examining Multiple-Image Network Graphics";
     homepage = "http://www.libmng.com";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

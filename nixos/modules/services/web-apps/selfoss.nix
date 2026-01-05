@@ -100,7 +100,7 @@ in
         };
 
         port = mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             The database's port. If not set, the default ports will be
@@ -148,7 +148,11 @@ in
         ls | grep -v data | while read line; do rm -rf $line; done || true
 
         # Create the files
-        cp -r "${pkgs.selfoss}/"* "${dataDir}"
+        cp -r \
+          "${pkgs.selfoss}/.htaccess" \
+          "${pkgs.selfoss}/.nginx.conf" \
+          "${pkgs.selfoss}/"* \
+          "${dataDir}"
         ln -sf "${selfoss-config}" "${dataDir}/config.ini"
         chown -R "${cfg.user}" "${dataDir}"
         chmod -R 755 "${dataDir}"
@@ -158,7 +162,7 @@ in
 
     systemd.services.selfoss-update = {
       serviceConfig = {
-        ExecStart = "${pkgs.php}/bin/php ${dataDir}/cliupdate.php";
+        ExecStart = "${pkgs.php83}/bin/php ${dataDir}/cliupdate.php";
         User = "${cfg.user}";
       };
       startAt = "hourly";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.9.2";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    hash = "sha256-pMY86Ucp5nuH63YgAh60l3WZYDPvM8LcTaV9QS2BzAA=";
+    hash = "sha256-al/byEO5wNhoVnfHHJFQMnx7EtoF3+P7MtS/x82Z8w0=";
   };
 
-  vendorHash = "sha256-dvsq2idsLmo1Tc8kfg3pJKNIMosrAMXN1fxvayS7glQ=";
+  vendorHash = "sha256-4thcMvdS2oxBai+3aOUPXd5T6f2DcW0Mm1d3y/DMGFc=";
 
   ldflags = [
     "-s"
@@ -31,7 +32,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubeone \
       --bash <($out/bin/kubeone completion bash) \
       --zsh <($out/bin/kubeone completion zsh)
@@ -42,11 +43,11 @@ buildGoModule rec {
     command = "kubeone version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments";
     homepage = "https://kubeone.io/";
     changelog = "https://github.com/kubermatic/kubeone/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lblasc ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lblasc ];
   };
 }

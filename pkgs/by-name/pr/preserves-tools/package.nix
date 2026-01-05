@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Uyh5mXCypX3TDxxJtnTe6lBoVI8aqdG56ywn7htDGUY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-m07/fNuF78+PtG/trXZq9gllmKTt0w5BSMsq2UTKBbY=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line utilities for working with Preserves documents";
     homepage = "https://preserves.dev/doc/preserves-tool.html";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "preserves-tool";
   };
 }

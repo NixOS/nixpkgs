@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${mono}/bin/mono $out/bin/NaturalDocs --add-flags "$out/NaturalDocs.exe"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Documentation generator for multiple programming languages";
     longDescription = ''
       Natural Docs is an open source documentation generator for multiple
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       high-quality HTML documentation from it.
     '';
     homepage = "https://naturaldocs.org";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.nkpvk ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.nkpvk ];
     mainProgram = "NaturalDocs";
   };
 }

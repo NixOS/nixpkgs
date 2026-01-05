@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nerdfetch";
-  version = "8.3.1";
+  version = "8.4.2";
 
   src = fetchFromGitHub {
     owner = "ThatOneCalculator";
     repo = "NerdFetch";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Ptd699Q2kX+04TGnChQK45dBf0W1QUFk7vHpRl3kFKo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G1BWggVPxpIKK82pKHD4Jxyis4CY156Jox2/xHRQfrI=";
   };
 
   dontUnpack = true;
@@ -27,12 +27,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
     homepage = "https://github.com/ThatOneCalculator/NerdFetch";
-    maintainers = with maintainers; [ ByteSudoer ];
-    license = licenses.mit;
+    changelog = "https://github.com/ThatOneCalculator/NerdFetch/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = lib.licenses.mit;
     mainProgram = "nerdfetch";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

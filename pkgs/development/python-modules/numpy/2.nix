@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch2,
   python,
   numpy_2,
   pythonAtLeast,
@@ -19,6 +20,7 @@
 
   # native dependencies
   blas,
+  coreutils,
   lapack,
 
   # Reverse dependency
@@ -59,39 +61,57 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.2.3";
+  version = "2.3.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-29wV8MgWEZJfOC36l7O9C8LBzhnU/lBILLDdwSujACA=";
+  src = fetchFromGitHub {
+    owner = "numpy";
+    repo = "numpy";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
-  ];
+  patches =
+    lib.optionals python.hasDistutilsCxxPatch [
+      # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+      # Patching of numpy.distutils is needed to prevent it from undoing the
+      # patch to distutils.
+      ./numpy-distutils-C++.patch
+    ]
+    ++
+      lib.optionals
+        (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+        [
+          # don't assert RecursionError in monster dtype test
+          # see https://github.com/numpy/numpy/pull/30375
+          (fetchpatch2 {
+            url = "https://github.com/numpy/numpy/commit/eeaf04662e07cc8e2041f3e25bbd3698949a0c02.patch?full_index=1";
+            excludes = [ ".github/workflows/macos.yml" ];
+            hash = "sha256-bLPLExlKnX18MXhbZxzCHniaAE0yTSyK9WuQyFyYHOI=";
+          })
+        ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
     substituteInPlace numpy/meson.build \
       --replace-fail 'py.full_path()' "'python'"
+
+    # Test_POWER_Features::test_features - FileNotFoundError: [Errno 2] No such file or directory: '/bin/true'
+    substituteInPlace numpy/_core/tests/test_cpu_features.py \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
-  build-system =
-    [
-      cython
-      gfortran
-      meson-python
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+  build-system = [
+    cython
+    gfortran
+    meson-python
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
@@ -122,6 +142,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     pushd $out
+    # For numpy-config executable to be available during tests
+    export PATH=$PATH:$out/bin
   '';
 
   postCheck = ''
@@ -129,37 +151,43 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/numpy/numpy/blob/a277f6210739c11028f281b8495faf7da298dbef/numpy/_pytesttester.py#L180
-  pytestFlagsArray = [
-    "-m"
-    "not\\ slow" # fast test suite
+  disabledTestMarks = [
+    "slow" # fast test suite
   ];
 
-  disabledTests =
-    [
-      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
-      "test_api_importable"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/numpy/numpy/issues/26713
-      "test_iter_refcount"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-      # https://github.com/numpy/numpy/issues/24548
-      "test_impossible_feature_enable" # AssertionError: Failed to generate error
-      "test_features" # AssertionError: Failure Detection
-      "test_new_policy" # AssertionError: assert False
-      "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
-      "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage object at 0xd1197430>]
-      "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
-      "test_real" # AssertionError: selectedrealkind(16): expected 10 but got -1
-      "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
-      "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
-      "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
-      "test_loss_of_precision"
-    ];
+  disabledTests = [
+    # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+    "test_api_importable"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/numpy/numpy/issues/26713
+    "test_iter_refcount"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    # https://github.com/numpy/numpy/issues/24548
+    "test_impossible_feature_enable" # AssertionError: Failed to generate error
+    "test_features" # AssertionError: Failure Detection
+    "test_new_policy" # AssertionError: assert False
+    "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
+    "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage object at 0xd1197430>]
+    "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
+    "test_real" # AssertionError: selectedrealkind(16): expected 10 but got -1
+    "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
+    "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
+    "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
+    "test_loss_of_precision"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/numpy/numpy/issues/29918
+    "test_sq_cases"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
+    # remove if https://github.com/numpy/numpy/issues/27460 is resolved
+    "test_validate_transcendentals"
+  ];
 
   passthru = {
     # just for backwards compatibility
@@ -173,7 +201,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/${src.tag}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;

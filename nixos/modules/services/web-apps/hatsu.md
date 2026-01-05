@@ -4,7 +4,7 @@
 
 ## Quickstart {#module-services-hatsu-quickstart}
 
-the minimum configuration to start hatsu server would look like this:
+The minimum configuration to start hatsu server would look like this:
 
 ```nix
 {

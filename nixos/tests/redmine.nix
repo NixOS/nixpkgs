@@ -19,18 +19,6 @@ let
             enable = true;
             package = pkgs.redmine;
             database.type = type;
-            plugins = {
-              redmine_env_auth = pkgs.fetchurl {
-                url = "https://github.com/Intera/redmine_env_auth/archive/0.7.zip";
-                sha256 = "1xb8lyarc7mpi86yflnlgyllh9hfwb9z304f19dx409gqpia99sc";
-              };
-            };
-            themes = {
-              dkuk-redmine_alex_skin = pkgs.fetchurl {
-                url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
-                sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
-              };
-            };
           };
         };
 

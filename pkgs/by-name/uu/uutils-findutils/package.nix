@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   rustPlatform,
   nix-update-script,
   versionCheckHook,
@@ -8,17 +9,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-findutils";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "findutils";
     tag = finalAttrs.version;
-    hash = "sha256-EEyrXG9jybtYoBvjiXTCNg6/1WPchEGJcldB6Gqgmdc=";
+    hash = "sha256-i+ryTF2hlZFbyFft/769c800FkzL26E4snUsxU79sKY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nZOa7O0S9ykFM9sH6aqlAPtv3hWKF/vAXZYNRnjcOj4=";
+  cargoPatches = [
+    (fetchpatch2 {
+      url = "https://github.com/uutils/findutils/commit/90845d95ceb12289a1b5ee50704ed66f2f7349c3.patch";
+      hash = "sha256-sCqOzfa3R45tXTK3N4344qb8YRmiW0o/lZwqHoBvgl8=";
+    })
+  ];
+
+  cargoHash = "sha256-TQRt1eecT500JaJB2P10T1yV+z2/T8cgTNtF9r5zQpg=";
 
   postInstall = ''
     rm $out/bin/testing-commandline
@@ -31,7 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/find";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -44,10 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/findutils";
     license = lib.licenses.mit;
     mainProgram = "find";
-    maintainers = with lib.maintainers; [
-      defelo
-      drupol
-    ];
+    maintainers = with lib.maintainers; [ defelo ];
     platforms = lib.platforms.unix;
   };
 })

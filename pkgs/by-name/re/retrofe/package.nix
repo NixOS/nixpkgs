@@ -35,26 +35,29 @@ stdenv.mkDerivation {
     python3
   ];
 
-  buildInputs =
-    [
-      glib
-      gst_all_1.gstreamer
-      SDL2
-      SDL2_image
-      SDL2_mixer
-      SDL2_ttf
-      sqlite
-      zlib
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    glib
+    gst_all_1.gstreamer
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    sqlite
+    zlib
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   configurePhase = ''
+    runHook preConfigure
+
     cmake RetroFE/Source -BRetroFE/Build -DCMAKE_BUILD_TYPE=Release \
       -DVERSION_MAJOR=0 -DVERSION_MINOR=0 -DVERSION_BUILD=0 \
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
@@ -99,11 +102,10 @@ stdenv.mkDerivation {
       --run 'export RETROFE_PATH=''${RETROFE_PATH:-$PWD}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for arcade cabinets and media PCs";
     homepage = "http://retrofe.nl/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -26,11 +26,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://leather.rtfd.io";
     description = "Python charting library";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

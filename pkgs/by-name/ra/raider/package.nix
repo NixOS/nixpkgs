@@ -15,30 +15,29 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "raider";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "ADBeveridge";
     repo = "raider";
-    rev = "v${version}";
-    hash = "sha256-fOv4Y5kBbZazFNkPrLS3D7LMLLvT/kIYmsCezsl/fxQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X8VIpxOhfvOIf5CYQOBVrC9T6Dhgz/oMIQCaoRch4Oo=";
   };
 
-  nativeBuildInputs =
-    [
-      appstream
-      blueprint-compiler
-      desktop-file-utils
-      meson
-      ninja
-      pkg-config
-      wrapGAppsHook4
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    appstream
+    blueprint-compiler
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook4
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     gtk4
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Permanently delete your files (also named File Shredder)";
     longDescription = ''
       Raider is a shredding program built for the GNOME
@@ -63,14 +62,13 @@ stdenv.mkDerivation rec {
       money and patience required to extract it effectively.
     '';
     homepage = "https://apps.gnome.org/Raider";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/ADBeveridge/raider/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "raider";
-    maintainers =
-      with maintainers;
-      [
-        benediktbroich
-      ]
-      ++ lib.teams.gnome-circle.members;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      benediktbroich
+    ];
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.unix;
   };
-}
+})

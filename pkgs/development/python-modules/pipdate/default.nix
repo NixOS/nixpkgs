@@ -31,16 +31,17 @@ buildPythonPackage rec {
     requests
     rich
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require network access and pythonImportsCheck requires configuration file
   doCheck = false;
 
-  meta = with lib; {
-    description = "pip update helpers";
+  meta = {
+    description = "Pip update helpers";
     mainProgram = "pipdate";
     homepage = "https://github.com/nschloe/pipdate";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

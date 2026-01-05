@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
-    repo = pname;
+    repo = "pg_featureserv";
     rev = "v${version}";
     sha256 = "sha256-GsloUZFgrOrJc23vKv+8iSeyIEKblaukPSCpZGRtSL4=";
   };
@@ -43,11 +43,11 @@ buildGoModule rec {
     cp config/pg_featureserv.toml.example $out/share/config/pg_featureserv.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight RESTful Geospatial Feature Server for PostGIS in Go";
     mainProgram = "pg_featureserv";
     homepage = "https://github.com/CrunchyData/pg_featureserv";
-    license = licenses.asl20;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.geospatial ];
   };
 }

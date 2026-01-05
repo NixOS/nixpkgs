@@ -31,30 +31,29 @@ stdenv.mkDerivation {
 
   buildFlags = [ "pikchr" ] ++ lib.optional enableTcl "piktcl";
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 pikchr $out/bin/pikchr
-      install -Dm755 pikchr.out $out/lib/pikchr.o
-      install -Dm644 pikchr.h $out/include/pikchr.h
-    ''
-    + lib.optionalString enableTcl ''
-      cp -r piktcl $out/lib/piktcl
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 pikchr $out/bin/pikchr
+    install -Dm755 pikchr.out $out/lib/pikchr.o
+    install -Dm644 pikchr.h $out/include/pikchr.h
+  ''
+  + lib.optionalString enableTcl ''
+    cp -r piktcl $out/lib/piktcl
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   dontWrapTclBinaries = true;
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "PIC-like markup language for diagrams in technical documentation";
     homepage = "https://pikchr.org";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "pikchr";
   };
 }

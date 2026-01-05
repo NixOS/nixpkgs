@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spades";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "ablab";
     repo = "spades";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JKtWlVf0nXXLgb6BxMgVVtEdjUOOYc0bPaFMDm5O6vg=";
+    hash = "sha256-BlZjfZKtCm1kWNPjdth3pYFN0plU7xfTsFotPefzzMY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.20";
+  version = "0.22";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = "schemdraw";
     tag = version;
-    hash = "sha256-mt1XTrUH570zrJpCFo0jORAE/jo7H2T7sKpIskYw8bk=";
+    hash = "sha256-trhpPv9x+S4d9AHT52/uvuCDOX4tJj6EhPzYBxtzyeQ=";
   };
 
   build-system = [ setuptools ];
@@ -58,15 +58,15 @@ buildPythonPackage rec {
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "schemdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for producing high-quality electrical circuit schematic diagrams";
     homepage = "https://schemdraw.readthedocs.io/en/latest/";
     changelog = "https://schemdraw.readthedocs.io/en/latest/changes.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

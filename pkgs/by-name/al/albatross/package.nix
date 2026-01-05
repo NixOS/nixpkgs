@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "Albatross";
     owner = "shimmerproject";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0mq87n2hxy44nzr567av24n5nqjaljhi1afxrn3mpjqdbkq7lx88";
   };
 

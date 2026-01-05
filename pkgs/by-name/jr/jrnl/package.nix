@@ -24,6 +24,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "from pytest_bdd.steps import inject_fixture" "from pytest_bdd.compat import inject_fixture"
   '';
 
+  disabledTests = [
+    "test_override_configured_linewrap_with_a_value_of_23"
+  ];
+
   build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
@@ -40,6 +44,8 @@ python3.pkgs.buildPythonApplication rec {
     ruamel-yaml
     rich
   ];
+
+  pythonRelaxDeps = [ "rich" ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
@@ -59,13 +65,12 @@ python3.pkgs.buildPythonApplication rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
     changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      bryanasdev000
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       zalakain
     ];
     mainProgram = "jrnl";

@@ -6,16 +6,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bao";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchCrate {
     inherit version;
     pname = "${pname}_bin";
-    hash = "sha256-MpMNhL1n8dNJJcJJiDXv/qWUgCNqQIvvcR8veH+abuI=";
+    hash = "sha256-8h5otpu3z2Hgy0jMCITJNr8Q4iVdlR5Lea2X+WuenWs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Vw8T/pgGMjI8QklkQNuZSYmKcKhaR320q8ZBAT4HPZ8=";
+  cargoHash = "sha256-B0wvJTcIRJxBU0G1DONnKeQYrmsmMIorhTLc73o4/kE=";
 
   meta = {
     description = "Implementation of BLAKE3 verified streaming";

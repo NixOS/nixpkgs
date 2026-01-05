@@ -17,8 +17,8 @@
   freetype,
   libpng,
   libtheora,
-  # glx
   libX11,
+  # glx
   libGLU,
   libGL,
   libXpm,
@@ -52,7 +52,7 @@ let
       "-what-even-am-i";
 
   meta = {
-    description = "A free fast-paced first-person shooter";
+    description = "Free fast-paced first-person shooter";
     longDescription = ''
       Xonotic is a free, fast-paced first-person shooter that works on
       Windows, macOS and Linux. The project is geared towards providing
@@ -64,7 +64,6 @@ let
     homepage = "https://www.xonotic.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      astsmtl
       zalakain
     ];
     platforms = lib.platforms.linux;
@@ -92,25 +91,26 @@ let
       hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
     };
 
+    patches = [ ./fix-build-with-c23.patch ];
+
     nativeBuildInputs = [ unzip ];
-    buildInputs =
-      [
-        libjpeg
-        zlib
-        libvorbis
-        curl
-        gmp
-      ]
-      ++ lib.optionals withGLX [
-        libX11
-        libGLU
-        libGL
-        libXpm
-        libXext
-        libXxf86vm
-        alsa-lib
-      ]
-      ++ lib.optionals withSDL [ SDL2 ];
+    buildInputs = [
+      libjpeg
+      zlib
+      libvorbis
+      curl
+      gmp
+      libX11
+    ]
+    ++ lib.optionals withGLX [
+      libGLU
+      libGL
+      libXpm
+      libXext
+      libXxf86vm
+      alsa-lib
+    ]
+    ++ lib.optionals withSDL [ SDL2 ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 

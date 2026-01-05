@@ -8,24 +8,24 @@
   sphinx,
   coreutils,
   iptables,
-  nettools,
+  net-tools,
   openssh,
   procps,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
     tag = "v${version}";
-    hash = "sha256-6RNH2S4GXlAWBQSSmgHFcpYECYJoQtZVScrhLMM0gEk=";
+    hash = "sha256-Rvhh99DO/4J1p0JZJauOnvQZKtZBvxu+7hNnNgsXn2w=";
   };
 
-  build-system = [ python3Packages.poetry-core ];
+  build-system = [ python3Packages.hatchling ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iptables
-            nettools
+            net-tools
           ]
         )
       }" \
@@ -73,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/sshuttle/sshuttle/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      domenkozar
       carlosdagos
     ];
   };

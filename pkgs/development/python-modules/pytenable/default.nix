@@ -15,7 +15,6 @@
   pytestCheckHook,
   python-box,
   python-dateutil,
-  pythonOlder,
   requests-pkcs12,
   requests-toolbelt,
   requests,
@@ -28,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.7.4";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     tag = version;
-    hash = "sha256-kIjAmGtfOZSNqSKOmagttfzVt2onqVwrCkYM6SCOlCg=";
+    hash = "sha256-ml5364D3qvd6VNhF2JyGoCzxbdO0DBkaBMoD38O5x8o=";
   };
 
   pythonRelaxDeps = [
@@ -87,15 +84,22 @@ buildPythonPackage rec {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    # https://github.com/tenable/pyTenable/issues/953
+    "test_construct_query_str"
+    "test_construct_query_stored_file"
+    "test_iterator_empty_page"
+    "test_iterator_max_page_term"
+    "test_iterator_pagination"
+    "test_iterator_total_term"
   ];
 
   pythonImportsCheck = [ "tenable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

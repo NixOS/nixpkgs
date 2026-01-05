@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "jobspy";
-  version = "1.1.77";
+  version = "1.1.79";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bunsly";
     repo = "JobSpy";
     tag = "v${version}";
-    hash = "sha256-/cZmUrWZutSRs5tkEEdyUiTBp1zW1baYcymXzo9NO7M=";
+    hash = "sha256-09UVZUcBNyKLSbqHOctct7dRJhmRdS6wb5hjMI3YWdg=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "markdownify"
+    "regex"
   ];
 
   build-system = [ poetry-core ];

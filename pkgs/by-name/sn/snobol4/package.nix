@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "snobol4";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     urls = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       # fallback for when the current version is moved to the old folder
       "https://ftp.regressive.org/snobol4/old/snobol4-${version}.tar.gz"
     ];
-    hash = "sha256-QeMB6d0YDXARfWTzaU+d1U+e2QmjajJYfIvthatorBU=";
+    hash = "sha256-v9UwcdaSg3dvWydk94ZdNUuJ03JWmFShiHjln1c4jtI=";
   };
 
   outputs = [
@@ -40,19 +40,18 @@ stdenv.mkDerivation rec {
     gzip
   ];
   # enable all features (undocumented, based on manual review of configure script)
-  buildInputs =
-    [
-      bzip2
-      libffi
-      openssl
-      readline
-      sqlite
-      tcl
-      xz
-      zlib
-    ]
-    # ndbm compat library
-    ++ lib.optional stdenv.hostPlatform.isLinux gdbm;
+  buildInputs = [
+    bzip2
+    libffi
+    openssl
+    readline
+    sqlite
+    tcl
+    xz
+    zlib
+  ]
+  # ndbm compat library
+  ++ lib.optional stdenv.hostPlatform.isLinux gdbm;
   configureFlags = lib.optional (tcl != null) "--with-tcl=${tcl}/lib/tclConfig.sh";
 
   # INSTALL says "parallel make will fail"
@@ -68,15 +67,15 @@ stdenv.mkDerivation rec {
     prependToVar configureFlags --mandir="$man"/share/man
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Macro Implementation of SNOBOL4 in C";
     longDescription = ''
       An open source port of Macro SNOBOL4 (The original Bell Telephone Labs implementation, written in SIL macros) by Phil Budne.
       Supports full SNOBOL4 language plus SPITBOL, [Blocks](https://www.regressive.org/snobol4/blocks/) and other extensions.
     '';
     homepage = "https://www.regressive.org/snobol4/csnobol4/";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ xworld21 ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ xworld21 ];
   };
 }

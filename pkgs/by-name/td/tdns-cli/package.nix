@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-BGxkqlKg81izq4eOBEZFJ/MPb3UCSOo8ZTYTjtjierk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KDZGTGLHLuZgFtzIp+lL0VIiQcYspvxAivp7hVE9V/A=";
 
-  meta = with lib; {
+  meta = {
     description = "DNS tool that aims to replace dig and nsupdate";
     homepage = "https://github.com/rotty/tdns-cli";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ astro ];
     mainProgram = "tdns";
   };
 }

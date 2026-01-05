@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cliff,
   dogpile-cache,
   jsonschema,
@@ -25,12 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.10.0";
+  version = "5.14.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Eg2eakri5+1hPuKyq9+f4dL33il6G4LYLZvoWYfU4LY=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-ironicclient";
+    tag = version;
+    hash = "sha256-Mang/QJAgkxiKnwx8+q37hy+aRAnsw2uOQgniO545yc=";
   };
 
   build-system = [
@@ -63,6 +65,8 @@ buildPythonPackage rec {
     oslotest
   ];
 
+  env.PBR_VERSION = version;
+
   checkPhase = ''
     runHook preCheck
     stestr run -e <(echo "
@@ -80,11 +84,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ironicclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for OpenStack bare metal provisioning API, includes a Python module (ironicclient) and CLI (baremetal)";
     mainProgram = "baremetal";
     homepage = "https://github.com/openstack/python-ironicclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

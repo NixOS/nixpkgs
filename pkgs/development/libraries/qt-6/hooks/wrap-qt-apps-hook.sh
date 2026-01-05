@@ -81,6 +81,9 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
             [ -d "$targetDir" ] || continue
 
             find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file; do
+                # Skip the file if it is not a binary (ELF or Mach-O)
+                isELF "$file" || isMachO "$file" || continue
+
                 if [ -h "$file" ]; then
                     target="$(readlink -e "$file")"
                     echo "wrapping $file -> $target"

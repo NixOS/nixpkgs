@@ -1,0 +1,43 @@
+{
+    "release_date": "2025-08-12",
+    "release_label": "0.7.0",
+    "release_product": "cusolvermp",
+    "libcusolvermp": {
+        "name": "NVIDIA libcusolvermp library",
+        "license": "libcusolvermp library",
+        "license_path": "libcusolvermp/LICENSE.txt",
+        "version": "0.7.0.833",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcusolvermp/linux-x86_64/libcusolvermp-linux-x86_64-0.7.0.833_cuda12-archive.tar.xz",
+                "sha256": "5383f35eefd45cc0a5cbd173a4a353941f02b912eb2f8d3a85c30345054df5e9",
+                "md5": "f9cf72595e8ff6d72a68b4a23ccc9973",
+                "size": "9293812"
+            },
+            "cuda13": {
+                "relative_path": "libcusolvermp/linux-x86_64/libcusolvermp-linux-x86_64-0.7.0.833_cuda13-archive.tar.xz",
+                "sha256": "4a4bf2d08dad3a276b33f9356f8cd8b5b2a70201257a277c83bb3cfdb7a7107a",
+                "md5": "a95c2c6a6f8d9c07ee99ca1545a71967",
+                "size": "8014464"
+            }
+        },
+        "cuda_variant": [
+            "12",
+            "13"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcusolvermp/linux-sbsa/libcusolvermp-linux-sbsa-0.7.0.833_cuda12-archive.tar.xz",
+                "sha256": "a0012c5be7ac742a26cf8894bed3c703edea84eddf0d5dca42d35582622ffb9b",
+                "md5": "626c1e35145fa495a7708c5fff007866",
+                "size": "9214676"
+            },
+            "cuda13": {
+                "relative_path": "libcusolvermp/linux-sbsa/libcusolvermp-linux-sbsa-0.7.0.833_cuda13-archive.tar.xz",
+                "sha256": "51b80fc5cdeb197b3e9b1de393a8413943ccb2d0e7509c6a183816be83123260",
+                "md5": "6338b4e581a076214581ec650f9eb92e",
+                "size": "7605548"
+            }
+        }
+    }
+}

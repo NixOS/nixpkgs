@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  autoreconfHook,
   gettext,
   coreutils,
   updateAutotoolsGnuConfigScriptsHook,
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
 
   # GNU Gettext is needed on non-GNU platforms.
   buildInputs = [
+    autoreconfHook
     coreutils
     gettext
   ];
@@ -55,6 +57,12 @@ stdenv.mkDerivation rec {
       url = "https://lists.gnu.org/archive/html/bug-gnu-utils/2020-01/txt5Z_KZup0yN.txt";
       sha256 = "0an8vfy3qj6sss9w0i4j8ilf7g5mbc7y13l644jy5bcm9przcjbd";
     })
+
+    # various build fixes for >= gcc 15, sourced from
+    # https://lists.gnu.org/archive/html/bug-gnu-utils/2025-03/msg00000.html
+    ./gcc15-stdboolm4-backport.patch
+    ./gcc15-getcwdm4-port.patch
+    ./gcc15-c23-port.patch
   ];
 
   postPatch =
@@ -77,7 +85,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for remote synchronization and `shell archives'";
     longDescription = ''
       GNU shar makes so-called shell archives out of many files, preparing
@@ -96,8 +104,8 @@ stdenv.mkDerivation rec {
       concatenated shell archives.
     '';
     homepage = "https://www.gnu.org/software/sharutils/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "lc";
-    repo = pname;
+    repo = "subjs";
     rev = "v${version}";
     hash = "sha256-csxFn3YUnuYjZ5/4jIi7DfuujB/gFjHogLaV4XK5kQU=";
   };
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.AppVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fetcher for Javascript files";
     mainProgram = "subjs";
     longDescription = ''
@@ -32,7 +32,7 @@ buildGoModule rec {
       secrets and more.
     '';
     homepage = "https://github.com/lc/subjs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

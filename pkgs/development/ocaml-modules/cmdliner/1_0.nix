@@ -5,8 +5,6 @@
   ocaml,
 }:
 
-assert (lib.versionAtLeast ocaml.version "4.03");
-
 stdenv.mkDerivation rec {
   pname = "cmdliner";
   version = "1.0.4";
@@ -28,11 +26,12 @@ stdenv.mkDerivation rec {
     mv $out/lib/ocaml/${ocaml.version}/site-lib/${pname}/{opam,${pname}.opam}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://erratique.ch/software/cmdliner";
     description = "OCaml module for the declarative definition of command line interfaces";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
+    broken = !(lib.versionAtLeast ocaml.version "4.03");
   };
 }

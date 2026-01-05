@@ -21,7 +21,7 @@ in
     machine.wait_for_open_port(${mainPort})
   '';
 
-  meta = with lib.maintainers; {
-    maintainers = [ drupol ];
+  meta = {
+    maintainers = [ ];
   };
 }

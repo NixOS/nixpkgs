@@ -1,62 +1,94 @@
 {
   lib,
-  asn1crypto,
+  stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  asn1crypto,
+  badldap,
   cryptography,
   dnspython,
-  fetchFromGitHub,
-  hatchling,
-  minikerberos,
-  msldap,
-  pyasn1,
-  pytestCheckHook,
-  pythonOlder,
+  kerbad,
   winacl,
+
+  # test
+  certipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.9";
+  version = "2.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-XqCP2GfS8hxlFU4Mndeh+7Ll2kXJ3Dei+AGp/oy0PUg=";
+    hash = "sha256-RWh73ZlzvTn1nGjQm9Keacvgm0AP0MGCYo/fM45nsmk=";
   };
+
+  pythonRelaxDeps = [ "cryptography" ];
+
+  pythonRemoveDeps = [
+    "kerbad"
+    "badldap"
+  ];
 
   build-system = [ hatchling ];
 
+  # Upstream provides two package scripts: bloodyad and bloodyAD,
+  # but this causes a FileAlreadyExists error during installation
+  # on Darwin (case-insensitive filesystem).
+  # https://github.com/CravateRouge/bloodyAD/issues/99
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "bloodyAD = \"bloodyAD.main:main\"" ""
+  '';
+
   dependencies = [
     asn1crypto
+    badldap
     cryptography
     dnspython
-    minikerberos
-    msldap
+    kerbad
     winacl
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    certipy
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bloodyAD" ];
 
   disabledTests = [
     # Tests require network access
+    "test_kerberos_authentications"
     "test_01AuthCreateUser"
     "test_02SearchAndGetChildAndGetWritable"
     "test_03UacOwnerGenericShadowGroupPasswordDCSync"
     "test_04ComputerRbcdGetSetAttribute"
     "test_06AddRemoveGetDnsRecord"
+    "test_certificate_authentications"
+    "test_04ComputerRbcdRestoreGetSetAttribute"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # TypeError: applyFormatters() takes 1 positional argument but 2 were given
+    # https://github.com/CravateRouge/bloodyAD/issues/98
+    "tests/test_formatters.py"
+  ];
+
+  meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
-    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

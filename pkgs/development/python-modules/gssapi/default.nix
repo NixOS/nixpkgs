@@ -13,7 +13,6 @@
   decorator,
 
   # native dependencies
-  GSS,
   krb5-c, # C krb5 library, not PyPI krb5
 
   # tests
@@ -53,8 +52,6 @@ buildPythonPackage rec {
 
   dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
-
   # k5test is marked as broken on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -75,9 +72,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gssapi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.python.org/pypi/gssapi";
     description = "Python GSSAPI Wrapper";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

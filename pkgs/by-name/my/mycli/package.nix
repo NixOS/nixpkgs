@@ -7,17 +7,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mycli";
-  version = "1.29.2";
+  version = "1.42.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${version}";
-    hash = "sha256-d90HJszhnYDxFkvLmTkt/LZ6XctcBjgKBoMUD3m+Sdw=";
+    hash = "sha256-V8HqrhC+bVEgXlRPAZEo5KI8Bpz8qWbqd0qyLzSbSEQ=";
   };
 
-  pythonRelaxDeps = [ "sqlparse" ];
+  pythonRelaxDeps = [
+    "sqlparse"
+    "click"
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -31,9 +34,10 @@ python3Packages.buildPythonApplication rec {
       click
       configobj
       cryptography
+      llm
       paramiko
       prompt-toolkit
-      pyaes
+      pycryptodomex
       pygments
       pymysql
       pyperclip

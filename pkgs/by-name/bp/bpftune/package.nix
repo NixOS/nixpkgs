@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "BPF-based auto-tuning of Linux system parameters";
     mainProgram = "bpftune";
     homepage = "https://github.com/oracle-samples/bpftune";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

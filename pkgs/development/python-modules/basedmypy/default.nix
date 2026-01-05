@@ -29,9 +29,9 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "basedmypy";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,14 +39,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KotlinIsland";
     repo = "basedmypy";
-    tag = "v${version}";
-    hash = "sha256-/43wVQoW/BbRD8j8Oypq5yz79ZTyAkLD4T8/aUg/QT8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IzRKOReSgio5S5PG8iD9VQF9R1GEqBAIDeeCtq+ZVXg=";
   };
 
   postPatch = ''
     substituteInPlace \
       pyproject.toml \
       --replace-warn 'types-setuptools==' 'types-setuptools>='
+  ''
+  # __closed__ returns None at runtime (not a bool)
+  + ''
+    substituteInPlace test-data/unit/lib-stub/typing_extensions.pyi \
+      --replace-fail "__closed__: bool" "__closed__: None"
   '';
 
   build-system = [
@@ -55,13 +60,15 @@ buildPythonPackage rec {
     types-psutil
     types-setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   dependencies = [
     basedtyping
     mypy-extensions
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     dmypy = [ psutil ];
@@ -76,19 +83,18 @@ buildPythonPackage rec {
   # when testing reduce optimisation level to reduce build time by 20%
   env.MYPYC_OPT_LEVEL = 1;
 
-  pythonImportsCheck =
-    [
-      "mypy"
-      "mypy.api"
-      "mypy.fastparse"
-      "mypy.types"
-      "mypyc"
-      "mypyc.analysis"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-      # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
-      "mypy.report"
-    ];
+  pythonImportsCheck = [
+    "mypy"
+    "mypy.api"
+    "mypy.fastparse"
+    "mypy.types"
+    "mypyc"
+    "mypyc.analysis"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
+    "mypy.report"
+  ];
 
   nativeCheckInputs = [
     attrs
@@ -97,7 +103,8 @@ buildPythonPackage rec {
     pytestCheckHook
     setuptools
     tomli
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # cannot find distutils, and distutils cannot find types
@@ -105,29 +112,34 @@ buildPythonPackage rec {
     "test_c_unit_test"
   ];
 
-  disabledTestPaths =
-    [
-      # fails to find typing_extensions
-      "mypy/test/testcmdline.py"
-      "mypy/test/testdaemon.py"
-      # fails to find setuptools
-      "mypyc/test/test_commandline.py"
-      # fails to find hatchling
-      "mypy/test/testpep561.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [
-      # https://github.com/python/mypy/issues/15221
-      "mypyc/test/test_run.py"
-    ];
+  disabledTestPaths = [
+    # fails to find typing_extensions
+    "mypy/test/testcmdline.py"
+    "mypy/test/testdaemon.py"
+    # fails to find setuptools
+    "mypyc/test/test_commandline.py"
+    # fails to find hatchling
+    "mypy/test/testpep561.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # https://github.com/python/mypy/issues/15221
+    "mypyc/test/test_run.py"
+  ]
+  ++
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && pythonOlder "3.13")
+      [
+        # mypy/test/testsolve.py::SolveSuite::test_simple_constraints_with_dynamic_type: [Any | A] != [Any]
+        "mypy/test/testsolve.py"
+      ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Based Python static type checker with baseline, sane default settings and based typing features";
     homepage = "https://kotlinisland.github.io/basedmypy/";
-    changelog = "https://github.com/KotlinIsland/basedmypy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/KotlinIsland/basedmypy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "mypy";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

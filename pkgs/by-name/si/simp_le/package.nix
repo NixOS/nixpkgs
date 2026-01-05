@@ -10,7 +10,15 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      # acme doesn't support josepy v2
+      certbot = super.certbot.overridePythonAttrs rec {
+        version = "3.1.0";
+        src = fetchFromGitHub {
+          owner = "certbot";
+          repo = "certbot";
+          tag = "v${version}";
+          hash = "sha256-lYGJgUNDzX+bE64GJ+djdKR+DXmhpcNbFJrAEnP86yQ=";
+        };
+      };
       josepy = super.josepy.overridePythonAttrs (old: rec {
         version = "1.15.0";
         src = fetchFromGitHub {
@@ -67,13 +75,13 @@ python.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zenhack/simp_le";
     description = "Simple Let's Encrypt client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       makefu
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

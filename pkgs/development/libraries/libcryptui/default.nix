@@ -2,16 +2,19 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
+  gettext,
   pkg-config,
   intltool,
   glib,
   gnome,
   gtk3,
+  gtk-doc,
   gnupg,
   gpgme,
   dbus-glib,
-  libgnome-keyring,
+  gcr,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,20 +22,23 @@ stdenv.mkDerivation rec {
   version = "3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libcryptui/${lib.versions.majorMinor version}/libcryptui-${version}.tar.xz";
     sha256 = "0rh8wa5k2iwbwppyvij2jdxmnlfjbna7kbh2a5n7zw4nnjkx3ski";
   };
 
-  patches = [
-    # based on https://gitlab.gnome.org/GNOME/libcryptui/-/commit/b05e301d1b264a5d8f07cb96e5edc243d99bff79.patch
-    # https://gitlab.gnome.org/GNOME/libcryptui/-/merge_requests/1
-    ./fix-latest-gnupg.patch
+  patches = (lib.map fetchurl (import ./debian-patches.nix)) ++ [
+    # Fix build with gpgme 2.0
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libcryptui/-/raw/1-3.12.2+r71+ged4f890e-2/gpgme-2.0.patch";
+      hash = "sha256-yftIixqVGUqn/VP0tfzPnhLPI7A/m61kVY5P1NDTIqQ=";
+    })
   ];
 
   nativeBuildInputs = [
     pkg-config
     dbus-glib # dbus-binding-tool
     gtk3 # AM_GLIB_GNU_GETTEXT
+    gtk-doc
     intltool
     autoreconfHook
   ];
@@ -42,7 +48,7 @@ stdenv.mkDerivation rec {
     gnupg
     gpgme
     dbus-glib
-    libgnome-keyring
+    gcr
   ];
   propagatedBuildInputs = [ dbus-glib ];
 
@@ -51,19 +57,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preAutoreconf = ''
+    # error: possibly undefined macro: AM_NLS
+    cp ${gettext}/share/gettext/m4/nls.m4 m4
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libcryptui";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interface components for OpenPGP";
     mainProgram = "seahorse-daemon";
     homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     # ImportError: lib/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so
     # cannot open shared object file: No such file or directory
     broken = stdenv.buildPlatform != stdenv.hostPlatform;

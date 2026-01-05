@@ -16,16 +16,16 @@ let
   variants = {
     # ./update-zen.py zen
     zen = {
-      version = "6.13.7"; # zen
+      version = "6.18.3"; # zen
       suffix = "zen1"; # zen
-      sha256 = "1gziphpd8lqgz21d22n0pbnbms1qb2f5ri7y2jdfigrp45sh8kz3"; # zen
+      sha256 = "02iw0lsgb8b3yiqdcf90fn0dgbrlbalgdbzbgn6mpy44ycynl8jc"; # zen
       isLqx = false;
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.13.7"; # lqx
+      version = "6.18.2"; # lqx
       suffix = "lqx1"; # lqx
-      sha256 = "0zijfh3ibdqw9vii0pzj9ld4sj0dcx7i30hpq9cw8ij1q7mp82jc"; # lqx
+      sha256 = "0g2nxdcyzswndz15s5xpia3p7jsdi9kvh8rk0d87zgwwz395zzvq"; # lqx
       isLqx = true;
     };
   };
@@ -106,7 +106,7 @@ let
             HZ_1000 = yes;
 
           }
-          // lib.optionalAttrs (isLqx) {
+          // lib.optionalAttrs isLqx {
             # https://github.com/damentz/liquorix-package/commit/07b176edc002f2a7825ae181613e1f79a3650fd2
             CMDLINE_BOOL = yes;
             CMDLINE = freeform "audit=0 intel_pstate=disable amd_pstate=disable ";
@@ -145,7 +145,7 @@ let
             UCLAMP_TASK_GROUP = mkKernelOverride (option no);
           };
 
-        passthru.updateScript = [
+        extraPassthru.updateScript = [
           ./update-zen.py
           (if isLqx then "lqx" else "zen")
         ];
@@ -157,6 +157,7 @@ let
             jerrysm64
             axertheaxe
           ];
+          teams = [ ];
           description =
             "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads."
             + lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";

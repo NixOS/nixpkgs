@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     cp -rva lib64 $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing Excel files";
     homepage = "https://www.libxl.com/";
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

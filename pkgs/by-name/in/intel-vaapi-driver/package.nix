@@ -41,7 +41,8 @@ stdenv.mkDerivation {
   configureFlags = [
     (lib.enableFeature enableGui "x11")
     (lib.enableFeature enableGui "wayland")
-  ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
+  ]
+  ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -51,27 +52,26 @@ stdenv.mkDerivation {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      intel-gpu-tools
-      libdrm
-      libva
-    ]
-    ++ lib.optionals enableGui [
-      libX11
-      libXext
-      libGL
-      wayland
-    ]
-    ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
+  buildInputs = [
+    intel-gpu-tools
+    libdrm
+    libva
+  ]
+  ++ lib.optionals enableGui [
+    libX11
+    libXext
+    libGL
+    wayland
+  ]
+  ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://01.org/linuxmedia";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "VA-API user mode driver for Intel GEN Graphics family";
     longDescription = ''
       This VA-API video driver backend provides a bridge to the GEN GPUs through
@@ -87,6 +87,6 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

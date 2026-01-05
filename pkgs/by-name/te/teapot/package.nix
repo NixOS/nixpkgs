@@ -1,27 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchzip,
   cmake,
   libtirpc,
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teapot";
   version = "2.3.0";
 
-  src = fetchFromGitHub {
-    name = "${pname}-${version}";
-    owner = "museoa";
-    repo = pname;
-    rev = version;
-    hash = "sha256-38XFjRzOGasr030f+mRYT+ptlabpnVJfa+1s7ZAjS+k=";
+  src = fetchzip {
+    url = "https://www.syntax-k.de/projekte/teapot/teapot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-wzAwZwOMeTsuR5LhfjspGdejT6X1V8YJ8B7v9pcbxaY=";
   };
-
-  prePatch = ''
-    cd src
-  '';
 
   patches = [
     # include a local file in order to make cc happy
@@ -43,12 +36,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  cmakeConfigureFlags = [
-    "-DENABLE_HELP=OFF"
-  ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
     description = "Table Editor And Planner, Or: Teapot";
     longDescription = ''
       Teapot is a compact spreadsheet software originally written by Michael
@@ -71,11 +64,13 @@ stdenv.mkDerivation rec {
       spreadsheets still inherit from the days of VisiCalc on ancient CP/M
       systems.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "teapot";
+    homepage = "https://www.syntax-k.de/projekte/teapot/";
+    changelog = "https://www.syntax-k.de/projekte/teapot/";
   };
-}
+})
 # TODO: patch/fix FLTK building
 # TODO: add documentation

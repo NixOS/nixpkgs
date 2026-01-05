@@ -8,25 +8,26 @@
   openssl,
   curl,
   versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hurl";
-  version = "6.1.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = "hurl";
-    tag = version;
-    hash = "sha256-fj9OKS8IFKbxwzjhnta44hAXPy90fBOAV35K13YtaOs=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZKTlS+J+43cqB0O5BAqvGwB9ZXfiOunOVB4hH6t2NxI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-aGj/vQCf1nBLmQYYxdR8437irLP+3W3z0F8tyVTrKZk=";
+  cargoHash = "sha256-ZfkOh/sZb0OrA/f5v1mwZ23XuArTAoAcs3evmtAElf4=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -52,15 +53,17 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_hurlfmt
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
-    changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/Orange-OpenSource/hurl/blob/${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       eonpatapon
-      figsoda
+      defelo
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "hurl";
   };
-}
+})

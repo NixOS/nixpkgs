@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.vector;
-
 in
 {
   options.services.vector = {
@@ -19,6 +18,23 @@ in
       default = false;
       description = ''
         Enable Vector to access journald.
+      '';
+    };
+
+    gracefulShutdownLimitSecs = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 60;
+      description = ''
+        Set the duration in seconds to wait for graceful shutdown after SIGINT or SIGTERM are received.
+        After the duration has passed, Vector will force shutdown.
+      '';
+    };
+
+    validateConfig = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Enable the checking of the vector config during build time. This should be disabled when interpolating environment variables.
       '';
     };
 
@@ -44,7 +60,7 @@ in
         let
           format = pkgs.formats.toml { };
           conf = format.generate "vector.toml" cfg.settings;
-          validateConfig =
+          validatedConfig =
             file:
             pkgs.runCommand "validate-vector-conf"
               {
@@ -56,7 +72,9 @@ in
               '';
         in
         {
-          ExecStart = "${lib.getExe cfg.package} --config ${validateConfig conf}";
+          ExecStart = "${lib.getExe cfg.package} --config ${
+            if cfg.validateConfig then (validatedConfig conf) else conf
+          }  --graceful-shutdown-limit-secs ${builtins.toString cfg.gracefulShutdownLimitSecs}";
           DynamicUser = true;
           Restart = "always";
           StateDirectory = "vector";

@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     chmod -R 755 "$SAGE_DOC_SRC_OVERRIDE"
   '';
 
-  buildPhase = ''
-    export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
+  preBuild = ''
+    export SAGE_ROOT="${sage-with-env.env.lib.src}"
+    export PATH="${sage-with-env}/bin:$PATH"
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
 
@@ -31,11 +32,13 @@ stdenv.mkDerivation rec {
     # jupyter-sphinx calls the sagemath jupyter kernel during docbuild
     export JUPYTER_PATH=${jupyter-kernel-specs}
 
-    ${sage-with-env}/bin/sage --docbuild \
-      --mathjax \
-      --no-pdf-links \
-      all html
+    # the Makefile tries to guess SAGE_DOC, but in a buggy way (changed in 10.8)
+    export SAGE_DOC="$SAGE_DOC_OVERRIDE"
+
+    cd docsrc
   '';
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     cd "$SAGE_DOC_OVERRIDE"

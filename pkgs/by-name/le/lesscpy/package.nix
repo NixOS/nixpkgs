@@ -4,29 +4,32 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonPackage rec {
   pname = "lesscpy";
   version = "0.15.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EEXRepj2iGRsp1jf8lTm6cA3RWSOBRoIGwOVw7d8gkw=";
   };
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
-  pythonImportsCheck = [ "lesscpy" ];
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     ply
     six
   ];
 
-  doCheck = false; # Really weird test failures (`nix-build-python2.css not found`)
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "lesscpy" ];
+
+  meta = {
     description = "Python LESS Compiler";
     mainProgram = "lesscpy";
     homepage = "https://github.com/lesscpy/lesscpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

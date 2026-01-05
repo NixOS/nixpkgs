@@ -34,14 +34,14 @@ let
 in
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.16.5";
+  version = "7.16.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yDRnu1d3/fqsXru46GTzALJ39oaS7MBNbaty8thEI0Q=";
+    hash = "sha256-V2p+N8ZIDae4Rl7vpmwXhEJDgWzhzMNyYzxrccPA9YI=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -57,24 +57,23 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      beautifulsoup4
-      bleach
-      defusedxml
-      jinja2
-      jupyter-core
-      jupyterlab-pygments
-      markupsafe
-      mistune
-      nbclient
-      packaging
-      pandocfilters
-      pygments
-      traitlets
-    ]
-    ++ bleach.optional-dependencies.css
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    beautifulsoup4
+    bleach
+    defusedxml
+    jinja2
+    jupyter-core
+    jupyterlab-pygments
+    markupsafe
+    mistune
+    nbclient
+    packaging
+    pandocfilters
+    pygments
+    traitlets
+  ]
+  ++ bleach.optional-dependencies.css
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -87,9 +86,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -109,6 +107,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbconvert";
     changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

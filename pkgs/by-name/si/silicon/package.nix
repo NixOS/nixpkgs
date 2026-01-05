@@ -5,12 +5,12 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  oniguruma,
   expat,
   freetype,
   libxcb,
   python3,
   libiconv,
-  darwin,
   fira-code,
   fontconfig,
   harfbuzz,
@@ -27,50 +27,45 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lwwbjSXW5uonJNZTAqTK14Ib4QDOD4puxY2CsiJk4/Q=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pathfinder_simd-0.5.4" = "sha256-RiivtlfdA44vQtFAzNQY9hu2FBwgq4aJ2hjQS8+Xucc=";
-    };
-  };
+  cargoHash = "sha256-MpmGLhg00quz4mYkidLofpcZTVwxbgIThg5v2r4HIfs=";
 
-  buildInputs =
-    [
-      expat
-      freetype
-      fira-code
-      fontconfig
-      harfbuzz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        libiconv
-        AppKit
-        CoreText
-        Security
-      ]
-    );
+  # Fix build with gcc15
+  #   regparse.c:588:5: error: initialization of 'int (*)(void)' from incompatible pointer type 'int (*)(st_str_end_key *, st_str_end_key *)' [-Wincompatible-pointer-types]
+  #   regparse.c:678:5: error: initialization of 'int (*)(void)' from incompatible pointer type 'int (*)(st_callout_name_key *, st_callout_name_key *)' [-Wincompatible-pointer-types]
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
+
+  buildInputs = [
+    expat
+    freetype
+    fira-code
+    fontconfig
+    harfbuzz
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       evanjs
       _0x4A6F
     ];

@@ -20,7 +20,7 @@
   cpuAcceleration ? null,
 }:
 
-# CUDA is only implemented for single precission
+# CUDA is only implemented for single precision
 assert enableCuda -> singlePrec;
 
 let
@@ -40,6 +40,8 @@ let
       "SSE4.1"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       "SSE4.1"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      "ARM_NEON_ASIMD"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "ARM_NEON_ASIMD"
     else
@@ -53,8 +55,8 @@ let
       }
     else
       {
-        version = "2025.1";
-        hash = "sha256-Ct9iGoD9gEP43v7ITOAoEcDN9CoFIjKJCTLYHyXE0oo=";
+        version = "2025.4";
+        hash = "sha256-yhdyC0omDrc2SSEen2qUDudUNFISmEQhPDrMsKknpcM=";
       };
 
 in
@@ -79,75 +81,74 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optional enablePlumed plumed
-    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optional enablePlumed plumed
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
-    [
-      fftw
-      perl
-      hwloc
-      blas
-      lapack
-    ]
-    ++ lib.optional enableMpi mpi
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_cccl
-      cudaPackages.cuda_cudart
-      cudaPackages.libcufft
-      cudaPackages.cuda_profiler_api
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs = [
+    fftw
+    perl
+    hwloc
+    blas
+    lapack
+  ]
+  ++ lib.optional enableMpi mpi
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
+    cudaPackages.cuda_cudart
+    cudaPackages.libcufft
+    cudaPackages.cuda_profiler_api
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "GMX_HWLOC" true)
-      "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
-      "-DGMX_OPENMP:BOOL=TRUE"
-      "-DBUILD_SHARED_LIBS=ON"
-    ]
-    ++ (
-      if singlePrec then
-        [
-          "-DGMX_DOUBLE=OFF"
-        ]
-      else
-        [
-          "-DGMX_DOUBLE=ON"
-          "-DGMX_DEFAULT_SUFFIX=OFF"
-        ]
-    )
-    ++ (
-      if enableMpi then
-        [
-          "-DGMX_MPI:BOOL=TRUE"
-          "-DGMX_THREAD_MPI:BOOL=FALSE"
-        ]
-      else
-        [
-          "-DGMX_MPI:BOOL=FALSE"
-        ]
-    )
-    ++ lib.optionals enableCuda [
-      "-DGMX_GPU=CUDA"
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
+  cmakeFlags = [
+    (lib.cmakeBool "GMX_HWLOC" true)
+    "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
+    "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
+  ]
+  ++ (
+    if singlePrec then
+      [
+        "-DGMX_DOUBLE=OFF"
+      ]
+    else
+      [
+        "-DGMX_DOUBLE=ON"
+        "-DGMX_DEFAULT_SUFFIX=OFF"
+      ]
+  )
+  ++ (
+    if enableMpi then
+      [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+    else
+      [
+        "-DGMX_MPI:BOOL=FALSE"
+      ]
+  )
+  ++ lib.optionals enableCuda [
+    "-DGMX_GPU=CUDA"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
-      # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
-      (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
-    ];
+    # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     moveToOutput share/cmake $dev
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gromacs.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -168,8 +169,8 @@ stdenv.mkDerivation rec {
 
       See: https://www.gromacs.org/about.html for details.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

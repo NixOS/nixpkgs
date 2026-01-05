@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdfrw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python library that reads and writes PDFs";
     homepage = "https://github.com/sarnold/pdfrw";
-    maintainers = with maintainers; [ loicreynier ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
   };
 }

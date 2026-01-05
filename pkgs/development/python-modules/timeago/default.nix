@@ -12,21 +12,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hustcc";
-    repo = pname;
+    repo = "timeago";
     rev = version;
     sha256 = "sha256-PqORJKAVrjezU/yP2ky3gb1XsM8obDI3GQzi+mok/OM=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/testcase.py" ];
+  enabledTestPaths = [ "test/testcase.py" ];
 
   pythonImportsCheck = [ "timeago" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to format past datetime output";
     homepage = "https://github.com/hustcc/timeago";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

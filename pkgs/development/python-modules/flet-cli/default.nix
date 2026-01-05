@@ -53,7 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flet_cli" ];
 
   meta = {
-    description = "Command-line interface tool for Flet, a framework for building interactive multi-platform applications using Python.";
+    description = "Command-line interface tool for Flet, a framework for building interactive multi-platform applications using Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;

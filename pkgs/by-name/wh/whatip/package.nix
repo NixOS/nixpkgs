@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GabMus";
-    repo = pname;
+    repo = "whatip";
     rev = version;
     hash = "sha256-gt/NKgnCpRoVmLvEJJq2geng4miM2g+YhXYEOm5pPTA=";
   };
@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Info on your IP";
     mainProgram = "whatip";
     homepage = "https://gitlab.gnome.org/GabMus/whatip";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

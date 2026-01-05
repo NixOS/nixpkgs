@@ -15,7 +15,7 @@ There are two more goals worth calling out explicitly:
 There are effectively two steps when updating the standard environment:
 
 1. Update the definition of llvmPackages in `all-packages.nix` for Darwin to match the value of
-   llvmPackages.latest in `all-packages.nix`. Timing-wise, this done currently using the spring
+   llvmPackages.latest in `all-packages.nix`. Timing-wise, this is done currently using the spring
    release of LLVM and once llvmPackages.latest has been updated to match. If the LLVM project
    has announced a release schedule of patch updates, wait until those are in nixpkgs. Otherwise,
    the LLVM updates will have to go through staging instead of being merged into master; and

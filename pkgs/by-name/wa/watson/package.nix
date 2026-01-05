@@ -6,26 +6,43 @@
   fetchpatch,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "watson";
   version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "TailorDev";
+    owner = "jazzband";
     repo = "Watson";
     rev = version;
     sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
   patches = [
-    # https://github.com/TailorDev/Watson/pull/473
+    # https://github.com/jazzband/Watson/pull/473
     (fetchpatch {
       name = "fix-completion.patch";
-      url = "https://github.com/TailorDev/Watson/commit/43ad061a981eb401c161266f497e34df891a5038.patch";
+      url = "https://github.com/jazzband/Watson/commit/43ad061a981eb401c161266f497e34df891a5038.patch";
       sha256 = "sha256-v8/asP1wooHKjyy9XXB4Rtf6x+qmGDHpRoHEne/ZCxc=";
     })
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
+    arrow
+    click
+    click-didyoumean
+    requests
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    pytest-mock
+    mock
+    pytest-datafiles
   ];
 
   postInstall = ''
@@ -34,26 +51,14 @@ buildPythonApplication rec {
     installShellCompletion --fish watson.fish
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-    mock
-    pytest-datafiles
-  ];
-  propagatedBuildInputs = [
-    arrow
-    click
-    click-didyoumean
-    requests
-  ];
-  nativeBuildInputs = [ installShellFiles ];
+  pythonImportsCheck = [ "watson" ];
 
-  meta = with lib; {
-    homepage = "https://tailordev.github.io/Watson/";
-    description = "Wonderful CLI to track your time!";
+  meta = {
+    homepage = "https://github.com/jazzband/Watson";
+    description = "Wonderful CLI to track your time";
     mainProgram = "watson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mguentner
       nathyong
       oxzi

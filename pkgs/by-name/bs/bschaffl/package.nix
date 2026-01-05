@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "bschaffl";
-    rev = version;
+    tag = version;
     sha256 = "sha256-zfhPYH4eUNWHV27ZtX2IIvobyPdKs5yGr/ryJRQa6as=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sjaehn/BSchaffl";
     description = "Pattern-controlled MIDI amp & time stretch LV2 plugin";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

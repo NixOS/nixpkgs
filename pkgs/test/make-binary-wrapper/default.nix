@@ -20,7 +20,7 @@ let
     runCommand "make-binary-wrapper-test-${testname}" env ''
       mkdir -p tmp/foo # for the chdir test
 
-      source=${./${testname}}
+      source=${./. + "/${testname}"}
 
       params=$(<"$source/${testname}.cmdline")
       eval "makeCWrapper /send/me/flags $params" > wrapper.c

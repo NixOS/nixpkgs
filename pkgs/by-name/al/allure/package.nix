@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "allure";
-  version = "2.33.0";
+  version = "2.36.0";
 
   src = fetchurl {
     url = "https://github.com/allure-framework/allure2/releases/download/${finalAttrs.version}/allure-${finalAttrs.version}.tgz";
-    hash = "sha256-ZRAvIBF89LFYWfmO/bPqL85/XQ9l0TRGOs/uQ9no7tA=";
+    hash = "sha256-sUXVk6v0oJHoyql4i6XKM8D+9jXN/HYCv/mjyhndRxo=";
   };
 
   dontConfigure = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://allurereport.org/";
-    description = "Allure Report is a flexible, lightweight multi-language test reporting tool";
+    description = "Flexible, lightweight multi-language test reporting tool";
     longDescription = ''
       Allure Report is a flexible, lightweight multi-language test reporting
       tool providing clear graphical reports and allowing everyone involved

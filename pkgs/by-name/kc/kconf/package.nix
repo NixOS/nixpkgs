@@ -33,12 +33,12 @@ buildGoModule rec {
       --zsh <($out/bin/kconf completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opinionated command line tool for managing multiple kubeconfigs";
     mainProgram = "kconf";
     homepage = "https://github.com/particledecay/kconf";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thmzlt
       sailord
       vinetos

@@ -29,13 +29,19 @@ buildPythonPackage rec {
     hash = "sha256-FYdSbq3rm6fBHm5fDRAB0airX9fNcUGs1wHN4i6mnG0=";
   };
 
+  patches = [
+    # Fix test failures with Python 3.13.6
+    # https://github.com/alan-turing-institute/ReadabiliPy/pull/116
+    ./python3.13.6-compatibility.patch
+  ];
+
   javascript = buildNpmPackage {
     pname = "readabilipy-javascript";
     inherit version;
 
     src = src;
     sourceRoot = "${src.name}/readabilipy/javascript";
-    npmDepsHash = "sha256-LiPSCZamkJjivzpawG7H9IEXYjn3uzFeY2vfucyHfUo=";
+    npmDepsHash = "sha256-1yp80TwRbE/NcMa0qrml0TlSZJ6zwSTmj+zDjBejko8=";
 
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
@@ -44,9 +50,9 @@ buildPythonPackage rec {
     dontNpmBuild = true;
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     html5lib
     lxml
@@ -75,6 +81,18 @@ buildPythonPackage rec {
     "tests/test_benchmarking.py"
   ];
 
+  disabledTests = [
+    # IndexError: list index out of range
+    "test_html_blacklist"
+    "test_prune_div_with_one_empty_span"
+    "test_prune_div_with_one_whitespace_paragraph"
+    "test_empty_page"
+    "test_contentless_page"
+    "test_extract_title"
+    "test_iframe_containing_tags"
+    "test_iframe_with_source"
+  ];
+
   passthru = {
     tests.version = testers.testVersion {
       package = readabilipy;
@@ -83,12 +101,12 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "HTML content extractor";
-    mainProgram = "readabilipy";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
     changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "readabilipy";
   };
 }

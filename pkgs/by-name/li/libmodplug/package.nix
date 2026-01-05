@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
        --replace /usr/bin/file ${file}/bin/file
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MOD playing library";
     homepage = "https://modplug-xmms.sourceforge.net/";
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
   };
 }

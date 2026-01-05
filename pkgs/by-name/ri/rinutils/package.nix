@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@RINUTILS_INSTALL_MYLIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C11 / gnu11 utilities C library by Shlomi Fish / Rindolf";
     homepage = "https://github.com/shlomif/rinutils";
     changelog = "https://github.com/shlomif/rinutils/raw/${version}/NEWS.asciidoc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

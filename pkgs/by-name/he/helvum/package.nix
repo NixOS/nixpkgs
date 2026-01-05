@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-rwhhbEaUg7IiszmJUFh4vQV7cYyyh3tqr1z4QgmwIDY=";
   };
 
@@ -53,12 +52,12 @@ stdenv.mkDerivation rec {
     pipewire
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK patchbay for pipewire";
     homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fufexan ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fufexan ];
+    platforms = lib.platforms.linux;
     mainProgram = "helvum";
   };
 }

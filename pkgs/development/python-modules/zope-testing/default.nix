@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
   setuptools,
   pytestCheckHook,
@@ -9,14 +9,20 @@
 
 buildPythonPackage rec {
   pname = "zope-testing";
-  version = "5.0.1";
+  version = "6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.testing";
-    inherit version;
-    hash = "sha256-6HzQ2NZmVzza8TOBare5vuyAGmSoZZXBnLX+mS7z1kk=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.testing";
+    tag = version;
+    hash = "sha256-px1+lS1U0lmmQrXJuxFTsX3N8e2mj5Yhckfis5++EX8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+  '';
 
   build-system = [ setuptools ];
 
@@ -24,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/zope/testing/tests.py" ];
+  enabledTestPaths = [ "src/zope/testing/tests.py" ];
 
   pythonImportsCheck = [ "zope.testing" ];
 

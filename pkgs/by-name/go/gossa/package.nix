@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pldubouilh";
     repo = "gossa";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-FGlUj0BJ8KeCfvdN9+NG4rqtaUIxgpqQ+09Ie1/TpAQ=";
   };
@@ -26,11 +26,11 @@ buildGoModule rec {
   # Tests require a socket connection to be created.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pldubouilh/gossa";
     description = "Fast and simple multimedia fileserver";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dsymbol ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dsymbol ];
     mainProgram = "gossa";
   };
 }

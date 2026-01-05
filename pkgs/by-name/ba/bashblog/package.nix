@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "bashblog";
-  version = "unstable-2022-03-26";
+  version = "0-unstable-2022-03-26";
 
   src = fetchFromGitHub {
     owner = "cfenollosa";
@@ -53,12 +53,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single Bash script to create blogs";
     mainProgram = "bashblog";
     homepage = "https://github.com/cfenollosa/bashblog";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

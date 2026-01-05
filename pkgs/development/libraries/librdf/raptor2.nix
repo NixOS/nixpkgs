@@ -54,6 +54,16 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
+  # Fix the build with CMake 4.
+  #
+  # See: <https://github.com/dajobe/raptor/issues/75>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+  '';
+
   meta = {
     description = "RDF Parser Toolkit";
     mainProgram = "rapper";

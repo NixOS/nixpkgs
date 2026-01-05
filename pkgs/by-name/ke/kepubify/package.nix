@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "pgaskin";
-    repo = pname;
+    repo = "kepubify";
     rev = "v${version}";
     sha256 = "sha256-H6W+C5twXit7Z9hLIJKAftbnvYDA9HAb9tR6yeQGRKI=";
   };
@@ -25,10 +25,10 @@ buildGoModule rec {
 
   excludedPackages = [ "kobotest" ];
 
-  meta = with lib; {
+  meta = {
     description = "EPUB to KEPUB converter";
     homepage = "https://pgaskin.net/kepubify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zowoq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zowoq ];
   };
 }

@@ -30,17 +30,18 @@ stdenv.mkDerivation rec {
     libX11
     libXft
     freetype
-  ] ++ extraLibs;
+  ]
+  ++ extraLibs;
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon-less notifications without D-Bus";
     homepage = "https://github.com/dudik/herbe";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     # NOTE: Could also work on 'unix'.
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wishfort36 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wishfort36 ];
     mainProgram = "herbe";
   };
 }

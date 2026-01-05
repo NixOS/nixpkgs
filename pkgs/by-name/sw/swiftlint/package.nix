@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "swiftlint";
-  version = "0.58.2";
+  version = "0.62.1";
 
   src = fetchurl {
     url = "https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip";
-    hash = "sha256-rQcdWjbX9Ddt/pLX7Z9LrvizvedbdRMdwofPNPEDU6U=";
+    hash = "sha256-VB20vZT4z4+6q3YvWX5/DkkBan+MpccNhrQ3CnzSNkE=";
   };
 
   dontPatch = true;
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A tool to enforce Swift style and conventions";
+    description = "Tool to enforce Swift style and conventions";
     homepage = "https://realm.github.io/SwiftLint/";
     license = lib.licenses.mit;
     mainProgram = "swiftlint";

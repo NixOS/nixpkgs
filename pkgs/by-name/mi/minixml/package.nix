@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small XML library";
     homepage = "https://www.msweet.org/mxml/";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

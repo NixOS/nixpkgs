@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/davidism/sphinxcontrib-log-cabinet";
     description = "Sphinx extension to organize changelogs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

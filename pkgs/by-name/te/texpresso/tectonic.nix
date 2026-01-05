@@ -15,7 +15,7 @@ tectonic-unwrapped.overrideAttrs (
       hash = "sha256-ap7fEPHsASAphIQkjcvk1CC7egTdxaUh7IpSS5os4W8=";
       fetchSubmodules = true;
     };
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-mqhbIv5r/5EDRDfP2BymXv9se2NCKxzRGqNqwqbD9A0=";
     # rebuild cargoDeps by hand because `.overrideAttrs cargoHash`
     # does not reconstruct cargoDeps (a known limitation):

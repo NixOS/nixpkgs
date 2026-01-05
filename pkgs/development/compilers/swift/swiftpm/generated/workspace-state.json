@@ -12,12 +12,46 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "e394bf350e38cb100b6bc4172834770ede1b7232",
-            "version": "1.0.3"
+            "revision": "8f4d2753f0e4778c76d5f05ad16c74f707390531",
+            "version": "1.2.3"
           },
           "name": "sourceControlCheckout"
         },
         "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-asn1",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-asn1.git",
+          "name": "swift-asn1"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "f70225981241859eb4aa1a18a75531d26637c8cc",
+            "version": "1.4.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-asn1"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-certificates",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-certificates.git",
+          "name": "swift-certificates"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "01d7664523af5c169f26038f1e5d444ce47ae5ff",
+            "version": "1.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-certificates"
       },
       {
         "basedOn": null,
@@ -29,8 +63,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "937e904258d22af6e447a0b72c0bc67583ef64a2",
-            "version": "1.0.4"
+            "revision": "d029d9d39c87bed85b1c50adee7c41795261a192",
+            "version": "1.0.6"
           },
           "name": "sourceControlCheckout"
         },
@@ -46,8 +80,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
-            "version": "2.2.4"
+            "revision": "629f0b679d0fd0a6ae823d7f750b9ab032c00b80",
+            "version": "3.0.0"
           },
           "name": "sourceControlCheckout"
         },
@@ -63,8 +97,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.8",
-            "revision": "7cfe0c0b6e6297efe88a3ce34e6138ee7eda969e"
+            "branch": "release/5.10",
+            "revision": "b461fd4fc51be8e1f2a3f4a2184b664b8846b46f"
           },
           "name": "sourceControlCheckout"
         },
@@ -80,8 +114,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.8",
-            "revision": "dccfc2e127a34b89a849407594cf2d604b598ba9"
+            "branch": "release/5.10",
+            "revision": "fd7c2e0d9279edd023ced6b0a590f8407f5472f9"
           },
           "name": "sourceControlCheckout"
         },
@@ -114,8 +148,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.8",
-            "revision": "ac4871e01ef338cb95b5d28328cab0ec1dfae935"
+            "branch": "release/5.10",
+            "revision": "90bdc2a157ebacc5d3de0c83e085d05d22ca5fa0"
           },
           "name": "sourceControlCheckout"
         },
@@ -131,8 +165,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "f47ba4838c30dbd59998a4e4c87ab620ff959e8a",
-            "version": "5.0.5"
+            "revision": "0d9ee7ea8c4ebd4a489ad7a73d5c6cad55d6fed3",
+            "version": "5.0.6"
           },
           "name": "sourceControlCheckout"
         },

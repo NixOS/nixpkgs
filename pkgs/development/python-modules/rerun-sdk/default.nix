@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgs,
   buildPythonPackage,
   rerun,
   python,
@@ -18,7 +19,12 @@
   typing-extensions,
 
   # tests
+  datafusion,
+  inline-snapshot,
+  polars,
+  pytest-snapshot,
   pytestCheckHook,
+  tomli,
   torch,
 }:
 
@@ -34,9 +40,10 @@ buildPythonPackage {
     ;
 
   nativeBuildInputs = [
+    pkgs.protobuf # for protoc
+    rerun
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    rerun
   ];
 
   dependencies = [
@@ -64,7 +71,12 @@ buildPythonPackage {
   pythonImportsCheck = [ "rerun" ];
 
   nativeCheckInputs = [
+    datafusion
+    inline-snapshot
+    polars
+    pytest-snapshot
     pytestCheckHook
+    tomli
     torch
   ];
 
@@ -72,18 +84,29 @@ buildPythonPackage {
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTests = [
-    # numpy 2 incompatibility: AssertionError / IndexError
-    # Issue: https://github.com/rerun-io/rerun/issues/9105
-    # PR: https://github.com/rerun-io/rerun/pull/9109
-    "test_any_value"
-    "test_bad_any_value"
-    "test_none_any_value"
+    # ConnectionError: Connection: connecting to server: transport error
+    "test_isolated_streams"
+    "test_send_dataframe_roundtrip"
+    "test_server_with_dataset_files"
+    "test_server_with_dataset_prefix"
+    "test_server_with_multiple_datasets"
+
+    # TypeError: 'Snapshot' object is not callable
+    "test_schema_recording"
   ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
+
+    # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
+    "rerun_py/tests/e2e_redap_tests"
+
+    # ConnectionError: Connection: connecting to server: transport error
+    "rerun_py/tests/api_sandbox/"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python bindings for `rerun` (an interactive visualization tool for stream data)";

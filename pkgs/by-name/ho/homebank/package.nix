@@ -13,10 +13,10 @@
 
 stdenv.mkDerivation rec {
   pname = "homebank";
-  version = "5.8.6";
+  version = "5.9.7";
   src = fetchurl {
     url = "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
-    hash = "sha256-rxOKe/LNeVwTOMXj2emZCe5rM9kgxhjcNcZHf9gm3fU=";
+    hash = "sha256-K4/fUSQpow7XpFfPWvR2dWwM/dyfznYA2rlcfwO+JuQ=";
   };
 
   nativeBuildInputs = [
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free, easy, personal accounting for everyone";
     mainProgram = "homebank";
     homepage = "https://www.gethomebank.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pSub
       frlan
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

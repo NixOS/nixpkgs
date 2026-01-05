@@ -9,9 +9,9 @@
   markdown,
   numpy,
   packaging,
+  pillow,
   protobuf,
   setuptools,
-  six,
   tensorboard-data-server,
   werkzeug,
   standard-imghdr,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.19.0";
+  version = "2.20.0";
   format = "wheel";
 
   # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-XnG5hmOmQafOim5wsL6OGkwMRdSHYLB2ODrEdVw1uaA=";
+    hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";
   };
 
   pythonRelaxDeps = [
@@ -44,9 +44,9 @@ buildPythonPackage rec {
     markdown
     numpy
     packaging
+    pillow
     protobuf
     setuptools
-    six
     tensorboard-data-server
     werkzeug
 
@@ -69,7 +69,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
@@ -77,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://www.tensorflow.org/";
     license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

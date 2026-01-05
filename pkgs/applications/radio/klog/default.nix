@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.3.2";
 
   src = fetchurl {
-    url = "https://download.savannah.nongnu.org/releases/klog/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1d5x7rq0mgfrqws3q1y4z8wh2qa3gvsmd0ssf2yqgkyq3fhdrb5c";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "KLog.pro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplatform free hamradio logger";
     mainProgram = "klog";
     longDescription = ''
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       ClubLog integration, WSJT-X, DX-Marathon support and much more.
     '';
     homepage = "https://www.klog.xyz/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pulsation ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pulsation ];
   };
 }

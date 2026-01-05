@@ -66,11 +66,11 @@ buildPythonPackage rec {
     "daemon.pidfile"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to implement a well-behaved Unix daemon process";
     homepage = "https://pagure.io/python-daemon/";
     # See "Copying" section in https://pagure.io/python-daemon/blob/main/f/README
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       asl20
     ];

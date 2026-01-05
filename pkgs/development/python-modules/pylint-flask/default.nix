@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_flask" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pylint plugin to analyze Flask applications";
     homepage = "https://github.com/jschaf/pylint-flask";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

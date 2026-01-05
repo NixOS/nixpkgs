@@ -5,18 +5,20 @@
   meson,
   ninja,
   pkg-config,
+  canfigger,
   ncurses,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rmw";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
-    rev = "v${version}";
-    hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
+    tag = "v${version}";
+    hash = "sha256-/bE9fFjn3mPfUbtsB6bXfQAxUtbtuZiT4pevi5RCQA4=";
     fetchSubmodules = true;
   };
 
@@ -27,15 +29,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    canfigger
     ncurses
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
-  meta = with lib; {
+  meta = {
     description = "Trashcan/ recycle bin utility for the command line";
     homepage = "https://github.com/theimpossibleastronaut/rmw";
     changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "rmw";
   };
 }

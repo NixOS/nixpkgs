@@ -13,23 +13,19 @@
 
 buildPythonPackage rec {
   pname = "cramjam";
-  # 2.9.1 ships with experimental decoders that were having issues.
-  # They were removed afterwards but the change has not been released yet:
-  # https://github.com/milesgranger/cramjam/pull/197
-  # TODO: update to the next stable release when available
-  version = "2.9.1-unstable-2025-01-04";
+  version = "2.11.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "cramjam";
-    rev = "61564e7761e38e5ec55e7939ccd6a276c2c55d11";
-    hash = "sha256-KTYTelQdN5EIJFbyQgrYcayqkAQQSNF+SHqUFFHf1Z8=";
+    tag = "v${version}";
+    hash = "sha256-iYx/cPQpZVVPAH+HTiYH/E9tmdnHvKf3Cel4yZpXSIA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-Jw9zbgcrX3pofW7E8b4xzZYKj3h6ufCVLjv2xD/qONo=";
+    hash = "sha256-jLGCyrVHtauWhiDghtYgt5MhgOl8wNiM7TAQhrCk2xU=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -49,6 +45,12 @@ buildPythonPackage rec {
     # https://github.com/HypothesisWorks/hypothesis/issues/3713
     CI = true;
   };
+
+  disabledTests = [
+    # I (@GaetanLepage) cannot reproduce the failure, but it fails consistently on Ofborg with:
+    # SyntaxError: could not convert string to float: 'V' - Consider hexadecimal for huge integer literals to avoid decimal conversion limits.
+    "test_variants_decompress_into"
+  ];
 
   disabledTestPaths = [
     "benchmarks/test_bench.py"

@@ -3,6 +3,7 @@
   include,
   libcMinimal,
   libgcc,
+  libsys,
   csu,
 }:
 
@@ -26,6 +27,7 @@ mkDerivation {
     include
     libcMinimal
     libgcc
+    libsys
   ];
 
   preBuild = ''

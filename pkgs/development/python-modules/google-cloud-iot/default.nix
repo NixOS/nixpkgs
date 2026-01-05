@@ -31,7 +31,8 @@ buildPythonPackage rec {
     libcst
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -58,11 +59,11 @@ buildPythonPackage rec {
     "google.cloud.iot_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud IoT API API client library";
     homepage = "https://github.com/googleapis/python-iot";
     changelog = "https://github.com/googleapis/python-iot/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

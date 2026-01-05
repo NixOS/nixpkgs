@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5GUna5k8GhAx1Xe8n9IvXT7IO6gksxCLh+sMANlxTBM=";
   };
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "AM_GNU_GETTEXT_VERSION([0.11.1])" "AM_GNU_GETTEXT_VERSION([0.12])"
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -40,12 +45,12 @@ stdenv.mkDerivation rec {
     cp doc/axelrc.example $out/share/doc/axelrc.example
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Console downloading program with some features for parallel connections for faster downloading";
     homepage = "https://github.com/axel-download-accelerator/axel";
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "axel";
   };
 }

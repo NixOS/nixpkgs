@@ -1,22 +1,11 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.xserver.desktopManager.phosh;
-
-  # Based on https://source.puri.sm/Librem5/librem5-base/-/blob/4596c1056dd75ac7f043aede07887990fd46f572/default/sm.puri.OSK0.desktop
-  oskItem = pkgs.makeDesktopItem {
-    name = "sm.puri.OSK0";
-    desktopName = "On-screen keyboard";
-    exec = "${pkgs.squeekboard}/bin/squeekboard";
-    categories = [ "GNOME" "Core" ];
-    onlyShowIn = [ "GNOME" ];
-    noDisplay = true;
-    extraConfig = {
-      X-GNOME-Autostart-Phase = "Panel";
-      X-GNOME-Provides = "inputmethod";
-      X-GNOME-Autostart-Notify = "true";
-      X-GNOME-AutoRestart = "true";
-    };
-  };
 
   phocConfigType = lib.types.submodule {
     options = {
@@ -26,7 +15,11 @@ let
 
           To start XWayland immediately, use `immediate`.
         '';
-        type = lib.types.enum [ "true" "false" "immediate" ];
+        type = lib.types.enum [
+          "true"
+          "false"
+          "immediate"
+        ];
         default = "false";
       };
       cursorTheme = lib.mkOption {
@@ -57,7 +50,7 @@ let
           One or more modelines.
         '';
         type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-        default = [];
+        default = [ ];
         example = [
           "87.25 720 776 848  976 1440 1443 1453 1493 -hsync +vsync"
           "65.13 768 816 896 1024 1024 1025 1028 1060 -HSync +VSync"
@@ -75,13 +68,11 @@ let
         description = ''
           Display scaling factor.
         '';
-        type = lib.types.nullOr (
-          lib.types.addCheck
-          (lib.types.either lib.types.int lib.types.float)
-          (x : x > 0)
-        ) // {
-          description = "null or positive integer or float";
-        };
+        type =
+          lib.types.nullOr (lib.types.addCheck (lib.types.either lib.types.int lib.types.float) (x: x > 0))
+          // {
+            description = "null or positive integer or float";
+          };
         default = null;
         example = 2;
       };
@@ -90,7 +81,14 @@ let
           Screen transformation.
         '';
         type = lib.types.enum [
-          "90" "180" "270" "flipped" "flipped-90" "flipped-180" "flipped-270" null
+          "90"
+          "180"
+          "270"
+          "flipped"
+          "flipped-90"
+          "flipped-180"
+          "flipped-270"
+          null
         ];
         default = null;
       };
@@ -99,31 +97,40 @@ let
 
   optionalKV = k: v: lib.optionalString (v != null) "${k} = ${builtins.toString v}";
 
-  renderPhocOutput = name: output: let
-    modelines = if builtins.isList output.modeline
-      then output.modeline
-      else [ output.modeline ];
-    renderModeline = l: "modeline = ${l}";
-  in ''
-    [output:${name}]
-    ${lib.concatStringsSep "\n" (map renderModeline modelines)}
-    ${optionalKV "mode" output.mode}
-    ${optionalKV "scale" output.scale}
-    ${optionalKV "rotate" output.rotate}
-  '';
+  renderPhocOutput =
+    name: output:
+    let
+      modelines = if builtins.isList output.modeline then output.modeline else [ output.modeline ];
+      renderModeline = l: "modeline = ${l}";
+    in
+    ''
+      [output:${name}]
+      ${lib.concatStringsSep "\n" (map renderModeline modelines)}
+      ${optionalKV "mode" output.mode}
+      ${optionalKV "scale" output.scale}
+      ${optionalKV "rotate" output.rotate}
+    '';
 
-  renderPhocConfig = phoc: let
-    outputs = lib.mapAttrsToList renderPhocOutput phoc.outputs;
-  in ''
-    [core]
-    xwayland = ${phoc.xwayland}
-    ${lib.concatStringsSep "\n" outputs}
-    [cursor]
-    theme = ${phoc.cursorTheme}
-  '';
+  renderPhocConfig =
+    phoc:
+    let
+      outputs = lib.mapAttrsToList renderPhocOutput phoc.outputs;
+    in
+    ''
+      [core]
+      xwayland = ${phoc.xwayland}
+      ${lib.concatStringsSep "\n" outputs}
+      [cursor]
+      theme = ${phoc.cursorTheme}
+    '';
 in
 
 {
+
+  meta = {
+    maintainers = with lib.maintainers; [ armelclo ];
+  };
+
   options = {
     services.xserver.desktopManager.phosh = {
       enable = lib.mkOption {
@@ -150,16 +157,23 @@ in
         description = ''
           Configurations for the Phoc compositor.
         '';
-        type = lib.types.oneOf [ lib.types.lines lib.types.path phocConfigType ];
-        default = {};
+        type = lib.types.oneOf [
+          lib.types.lines
+          lib.types.path
+          phocConfigType
+        ];
+        default = { };
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
     # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
+    # Parts taken from nixos/modules/services/wayland/cage.nix
     systemd.services.phosh = {
       wantedBy = [ "graphical.target" ];
+      after = [ "getty@tty1.service" ];
+      conflicts = [ "getty@tty1.service" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/phosh-session";
         User = cfg.user;
@@ -168,7 +182,7 @@ in
         WorkingDirectory = "~";
         Restart = "always";
 
-        TTYPath = "/dev/tty7";
+        TTYPath = "/dev/tty1";
         TTYReset = "yes";
         TTYVHangup = "yes";
         TTYVTDisallocate = "yes";
@@ -179,7 +193,7 @@ in
         StandardError = "journal";
 
         # Log this user with utmp, letting it show up with commands 'w' and 'who'.
-        UtmpIdentifier = "tty7";
+        UtmpIdentifier = "tty1";
         UtmpMode = "user";
       };
       environment = {
@@ -199,18 +213,27 @@ in
       };
     };
 
+    xdg.portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-phosh
+        pkgs.xdg-desktop-portal-gnome
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      configPackages = lib.mkDefault [ pkgs.phosh ];
+    };
+
     environment.systemPackages = [
       pkgs.phoc
       cfg.package
-      pkgs.squeekboard
-      oskItem
+      pkgs.stevia
     ];
 
     systemd.packages = [ cfg.package ];
 
     programs.feedbackd.enable = true;
 
-    security.pam.services.phosh = {};
+    security.pam.services.phosh = { };
 
     services.graphical-desktop.enable = true;
 
@@ -219,8 +242,11 @@ in
     services.displayManager.sessionPackages = [ cfg.package ];
 
     environment.etc."phosh/phoc.ini".source =
-      if builtins.isPath cfg.phocConfig then cfg.phocConfig
-      else if builtins.isString cfg.phocConfig then pkgs.writeText "phoc.ini" cfg.phocConfig
-      else pkgs.writeText "phoc.ini" (renderPhocConfig cfg.phocConfig);
+      if builtins.isPath cfg.phocConfig then
+        cfg.phocConfig
+      else if builtins.isString cfg.phocConfig then
+        pkgs.writeText "phoc.ini" cfg.phocConfig
+      else
+        pkgs.writeText "phoc.ini" (renderPhocConfig cfg.phocConfig);
   };
 }

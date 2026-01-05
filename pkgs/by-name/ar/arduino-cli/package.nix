@@ -5,29 +5,33 @@
   fetchFromGitHub,
   buildFHSEnv,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   go-task,
 }:
 
 let
 
-  pkg = buildGoModule rec {
+  pkg = buildGoModule (finalAttrs: {
     pname = "arduino-cli";
-    version = "1.2.0";
+    version = "1.4.0";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
-      tag = "v${version}";
-      hash = "sha256-7rruSIhKGm2R89Jo1jY+1ZWKloYsL5oaSWuppMKOeFQ=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-H7vccxDzJt0e/91PIV6Qg8nRD0beb/3g7AZ4uk2ebXU=";
     };
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      writableTmpDirAsHomeHook
+    ];
 
     nativeCheckInputs = [ go-task ];
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-uNrkDqw0JoRxe7FuAvQLd7Y4i+nQPhKH0/aWES2+FRc=";
+    vendorHash = "sha256-GPZLvEgL/2Ekfj58d8dsbc6e2hHB2zUapvFdIT43hhQ=";
 
     postPatch =
       let
@@ -58,35 +62,34 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
+      "-X github.com/arduino/arduino-cli/internal/version.versionString=${finalAttrs.version}"
       "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME="$(mktemp -d)"
       installShellCompletion --cmd arduino-cli \
         --bash <($out/bin/arduino-cli completion bash) \
         --zsh <($out/bin/arduino-cli completion zsh) \
         --fish <($out/bin/arduino-cli completion fish)
-      unset HOME
     '';
 
-    meta = with lib; {
-      inherit (src.meta) homepage;
+    meta = {
+      inherit (finalAttrs.src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
-      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = [
-        licenses.gpl3Only
-        licenses.asl20
+      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${finalAttrs.version}";
+      license = with lib.licenses; [
+        gpl3Only
+        asl20
       ];
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         ryantm
         sfrijters
       ];
     };
 
-  };
+  });
 
 in
 if stdenv.hostPlatform.isLinux then

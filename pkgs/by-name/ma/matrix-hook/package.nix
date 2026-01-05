@@ -18,12 +18,12 @@ buildGoModule rec {
     install message.html.tmpl -Dt $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple webhook for matrix";
     mainProgram = "matrix-hook";
     homepage = "https://github.com/pinpox/matrix-hook";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       pinpox
       mic92
       zowoq

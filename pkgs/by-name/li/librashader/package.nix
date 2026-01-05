@@ -1,62 +1,66 @@
 {
   fetchFromGitHub,
   lib,
+  nix-update-script,
   rustPlatform,
   stdenv,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librashader";
-  version = "0.6.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "SnowflakePowered";
     repo = "librashader";
-    rev = "librashader-v0.6.2";
-    hash = "sha256-zkvCpQ5Cq3sDOspc12/gPmNi6hn/nBe1UfWrMGi/o0Q=";
+    tag = "librashader-v${finalAttrs.version}";
+    hash = "sha256-Jv7orDUusmI+CHPFXO7ILZ2vH11OwdSMBQfJuMBrlvI=";
   };
 
   patches = [
     ./patches/fix-optional-dep-syntax.patch
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9rwrbCt/obrKlRDWzzc1hm6ywHubz5x6Ujm2JMso0vg=";
-
-  RUSTC_BOOTSTRAP = 1;
+  cargoHash = "sha256-BS4290tih96NWhcpmQeFUjYfM6NKlQP070jCIkyxTuE=";
 
   buildPhase = ''
     runHook preBuild
-    cargo run -p librashader-build-script -- --profile optimized
+    cargo run -p librashader-build-script -- --profile optimized --stable
     runHook postBuild
   '';
 
   doCheck = false;
 
-  installPhase =
-    ''
-      runHook preInstall
-      cd target/optimized
-      mkdir -p $out/lib $out/include/librashader
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          install_name_tool -id $out/lib/librashader.dylib librashader.dylib
-          install -m755 librashader.dylib $out/lib/librashader.dylib
-        ''
-      else
-        ''
-          patchelf --set-soname librashader.so.2 librashader.so
-          install -m755 librashader.so $out/lib/librashader.so.2
-          ln -s $out/lib/librashader.so.2 $out/lib/librashader.so
-        ''
-    )
-    + ''
-      install -m644 librashader.h -t $out/include/librashader
-      install -m644 ../../include/librashader_ld.h -t $out/include/librashader
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    cd target/optimized
+    mkdir -p $out/lib $out/include/librashader
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        install_name_tool -id $out/lib/librashader.dylib librashader.dylib
+        install -m755 librashader.dylib $out/lib/librashader.dylib
+      ''
+    else
+      ''
+        patchelf --set-soname librashader.so.2 librashader.so
+        install -m755 librashader.so $out/lib/librashader.so.2
+        ln -s $out/lib/librashader.so.2 $out/lib/librashader.so
+      ''
+  )
+  + ''
+    install -m644 ../../include/librashader.h -t $out/include/librashader
+    install -m644 ../../include/librashader_ld.h -t $out/include/librashader
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "librashader-v(.*)"
+    ];
+  };
 
   meta = {
     description = "RetroArch Shaders for All";
@@ -68,4 +72,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ nadiaholmquist ];
     platforms = lib.platforms.all;
   };
-}
+})

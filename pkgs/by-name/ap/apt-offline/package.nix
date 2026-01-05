@@ -18,9 +18,14 @@ let
   };
 in
 python3Packages.buildPythonApplication {
+  format = "pyproject";
   inherit pname version src;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
@@ -52,7 +57,7 @@ python3Packages.buildPythonApplication {
     description = "Offline APT package manager";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "apt-offline";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
 # TODO: verify GUI and pkexec

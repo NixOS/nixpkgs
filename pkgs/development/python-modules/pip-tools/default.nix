@@ -4,7 +4,7 @@
   buildPythonPackage,
   build,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   pep517,
   pip,
   pytest-xdist,
@@ -19,17 +19,21 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.4.1";
+  version = "7.5.1-unstable-2025-11-08";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hkgm9Qc4ZEUOJNvuuFzjkgzfsJhIo9aev1N7Uh8UvMk=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "pip-tools";
+    rev = "785ed5e30f4c86c24141898553a356402b142adf";
+    hash = "sha256-2mYUjLqrpN/sjR79t/ZIfpvVXAgpk/tpZWFcT/6e7uk=";
   };
 
-  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
+  patches = [
+    ./fix-setup-py-bad-syntax-detection.patch
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "7.5.1";
 
   build-system = [ setuptools-scm ];
 
@@ -40,7 +44,8 @@ buildPythonPackage rec {
     pip
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -63,6 +68,7 @@ buildPythonPackage rec {
     "test_bad_setup_file"
     # Assertion error
     "test_compile_recursive_extras"
+    "test_compile_build_targets_setuptools_no_wheel_dep"
     "test_combine_different_extras_of_the_same_package"
     "test_diff_should_not_uninstall"
     "test_cli_compile_all_extras_with_multiple_packages"
@@ -85,11 +91,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "piptools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Keeps your pinned dependencies fresh";
     homepage = "https://github.com/jazzband/pip-tools/";
     changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  meta = with lib; {
-    description = "Devour hides your current window when launching an external program";
+  meta = {
+    description = "Hides your current window when launching an external program";
     longDescription = "Devour hides your current window before launching an external program and unhides it after quitting";
     homepage = "https://github.com/salman-abedin/devour";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mazurel ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mazurel ];
+    platforms = lib.platforms.unix;
     mainProgram = "devour";
   };
 }

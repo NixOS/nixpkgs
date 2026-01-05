@@ -11,6 +11,8 @@
   xz,
   version,
   pharHash,
+  installShellFiles,
+  stdenv,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -24,7 +26,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -46,13 +51,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd composer \
+      --bash <($out/bin/composer completion bash)
+  '';
+
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
     description = "Dependency Manager for PHP, shipped from the PHAR file";
     homepage = "https://getcomposer.org/";
     license = lib.licenses.mit;
     mainProgram = "composer";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ lib.maintainers.patka ];
+    teams = [ lib.teams.php ];
     platforms = lib.platforms.all;
   };
 })

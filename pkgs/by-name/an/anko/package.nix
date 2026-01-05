@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "anko";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZVNkQu5IxBx3f+FkUWc36EOEcY176wQJ2ravLPQAHAA=";
   };
 
@@ -24,10 +24,10 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scriptable interpreter written in golang";
     homepage = "https://github.com/mattn/anko";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

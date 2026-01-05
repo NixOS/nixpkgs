@@ -9,21 +9,22 @@
   libgbm,
   udev,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-workspaces-epoch";
-  version = "1.0.0-alpha.6";
+  version = "1.0.1";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-workspaces-epoch";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-3jivE0EaSddPxMYn9DDaYUMafPf60XeCwVeQegbt++c=";
+    hash = "sha256-wGhXTQujwOqDBcBesXIRkcTJdQAhs0pavsVHMH98QCw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-l5y9bOG/h24EfiAFfVKjtzYCzjxU2TI8wh6HBUwoVcE=";
+  cargoHash = "sha256-ZVl09YgeH+V4X3H88rdeiBgua1IpVcfKe0y8A78wzl4=";
 
   separateDebugInfo = true;
 
@@ -45,13 +46,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
@@ -59,10 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Workspaces Epoch for the COSMIC Desktop Environment";
     mainProgram = "cosmic-workspaces";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

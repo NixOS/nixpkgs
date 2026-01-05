@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "penelope";
-  version = "0.12.4-unstable-2024-10-21";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brightio";
     repo = "penelope";
-    rev = "366534d192ed279cc822da565408ea7ff48d6a60";
-    hash = "sha256-pBEYgLyicG34HsIBSt8P9xGJEaEz9ZWyxokNyuO6mdM=";
+    tag = "v${version}";
+    hash = "sha256-paVKCqR8J1bINz80qOBqiG2wxGjiJlf0gv3LIyS/Xs0=";
   };
 
   postPatch = ''

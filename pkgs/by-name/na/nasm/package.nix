@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nasm";
-  version = "2.16.03";
+  version = "3.01";
 
   src = fetchurl {
     url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-FBKhx2C70F2wJrbA0WV6/9ZjHNCmPN229zzG1KphYUg=";
+    hash = "sha256-tzJMvobnZ7ZfJvRn7YsSrYDhJOPMuJB2hVyY5Dqe3dQ=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -35,11 +36,14 @@ stdenv.mkDerivation rec {
     ignoredVersions = "rc.*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nasm.us/";
     description = "80x86 and x86-64 assembler designed for portability and modularity";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub willibutz ];
-    license = licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      pSub
+    ];
+    mainProgram = "nasm";
+    license = lib.licenses.bsd2;
   };
 }

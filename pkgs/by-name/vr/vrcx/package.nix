@@ -1,35 +1,114 @@
 {
   lib,
-  fetchurl,
-  appimageTools,
-  dotnet-runtime_9,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  buildNpmPackage,
+  electron_39,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  stdenv,
 }:
 let
-  pname = "vrcx";
-  version = "2025.03.01";
-  filename = builtins.replaceStrings [ "." ] [ "" ] version;
-  src = fetchurl {
-    hash = "sha256-d+sqebPDZC0GWtd+5/R1KXIKUbpZ0k9YFupsf29IHCs=";
-    url = "https://github.com/vrcx-team/VRCX/releases/download/v${version}/VRCX_${filename}.AppImage";
-  };
-  appimageContents = appimageTools.extract {
-    inherit pname src version;
-  };
+  electron = electron_39;
+  dotnet = dotnetCorePackages.dotnet_9;
 in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
-  extraPkgs = pkgs: [ dotnet-runtime_9 ];
-  extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/vrcx.desktop \
-      $out/share/applications/VRCX.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/vrcx.png \
-      $out/share/icons/hicolor/256x256/apps/VRCX.png
+buildNpmPackage (finalAttrs: {
+  pname = "vrcx";
+  version = "2025.12.06";
 
-    substituteInPlace $out/share/applications/VRCX.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname} --no-install --ozone-platform-hint=auto'
-    substituteInPlace $out/share/applications/VRCX.desktop \
-      --replace-fail 'Icon=VRCX' "Icon=$out/share/icons/hicolor/256x256/apps/VRCX.png"
+  src = fetchFromGitHub {
+    repo = "VRCX";
+    owner = "vrcx-team";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eyw8zFtKVR85ao1/gO8qJOF5VcBkZd7L5AB1JB8qAv0=";
+  };
+
+  makeCacheWritable = true;
+  npmFlags = [ "--ignore-scripts" ];
+  npmDepsHash = "sha256-WHxrIzZLktU6Jd6wm5VeGnZAbNT3pkNfqcxE6tdBoq8=";
+
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
+
+  preBuild = ''
+    # Build fails at executing dart from sass-embedded
+    rm -r node_modules/sass-embedded*
   '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    env PLATFORM=linux npm exec vite build src
+    node ./src-electron/patch-package-version.js
+    npm exec electron-builder -- --dir \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
+    node ./src-electron/patch-node-api-dotnet.js
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/share/vrcx"
+    cp -r build/*-unpacked/resources "$out/share/vrcx/"
+    mkdir -p "$out/share/vrcx/resources/app.asar.unpacked/build/Electron"
+    cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
+
+    makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
+      --add-flags "--ozone-platform-hint=auto --no-updater" \
+      --add-flags "$out/share/vrcx/resources/app.asar"      \
+      --set NODE_ENV production                             \
+      --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
+      --prefix PATH : ${lib.makeBinPath [ dotnet.runtime ]}
+
+    install -Dm644 images/VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vrcx";
+      desktopName = "VRCX";
+      comment = "Friendship management tool for VRChat";
+      icon = "vrcx";
+      exec = "vrcx";
+      terminal = false;
+      categories = [
+        "Utility"
+        "Application"
+      ];
+      mimeTypes = [ "x-scheme-handler/vrcx" ];
+    })
+  ];
+
+  passthru = {
+    backend = buildDotnetModule {
+      pname = "${finalAttrs.pname}-backend";
+      inherit (finalAttrs) version src;
+
+      dotnet-sdk = dotnet.sdk;
+      dotnet-runtime = dotnet.runtime;
+      projectFile = "Dotnet/VRCX-Electron.csproj";
+
+      nugetDeps = ./deps.json;
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/build/Electron
+        cp -r build/Electron/* $out/build/Electron/
+
+        runHook postInstall
+      '';
+    };
+  };
 
   meta = {
     description = "Friendship management tool for VRChat";
@@ -40,8 +119,11 @@ appimageTools.wrapType2 rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/vrcx-team/VRCX";
     downloadPage = "https://github.com/vrcx-team/VRCX/releases";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ShyAssassin ];
+    maintainers = with lib.maintainers; [
+      ShyAssassin
+      ImSapphire
+    ];
     platforms = lib.platforms.linux;
+    broken = !stdenv.hostPlatform.isx86_64;
   };
-}
+})

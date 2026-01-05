@@ -1,31 +1,32 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, flutter327
-, gst_all_1
-, libunwind
-, makeWrapper
-, mimalloc
-, orc
-, python3
-, nix
-, gitUpdater
-, nix-prefetch-git
-, mpv-unwrapped
-, libplacebo
-, _experimental-update-script-combinators
-, fletTarget ? "linux"
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  flutter338,
+  gst_all_1,
+  libunwind,
+  makeWrapper,
+  mimalloc,
+  orc,
+  python3,
+  nix,
+  gitUpdater,
+  nix-prefetch-git,
+  mpv-unwrapped,
+  libplacebo,
+  _experimental-update-script-combinators,
+  fletTarget ? "linux",
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.27.6";
+  version = "0.80.0";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-ZtIAfLdj9209ZzgmNzTHMyzCTohxYK0Va4M8NYyie64=";
+    hash = "sha256-PxSFDWo5qN9RB/E+vLu1xYttJ8CQdy86OStyLMRn6Lo=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -56,16 +57,30 @@ flutter327.buildFlutterApplication rec {
     orc
     mimalloc
   ]
-    ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs
-  ;
+  ++ mpv-unwrapped.buildInputs
+  ++ libplacebo.buildInputs;
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=nontrivial-memcall"
+  ];
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       {
-        command = ["env" "PATH=${lib.makeBinPath [(python3.withPackages (p: [p.pyyaml])) nix-prefetch-git nix]}" "python3" ./update-lockfiles.py ];
-        supportedFeatures = ["silent"];
+        command = [
+          "env"
+          "PATH=${
+            lib.makeBinPath [
+              (python3.withPackages (p: [ p.pyyaml ]))
+              nix-prefetch-git
+              nix
+            ]
+          }"
+          "python3"
+          ./update-lockfiles.py
+        ];
+        supportedFeatures = [ "silent" ];
       }
     ];
   };
@@ -75,7 +90,10 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ heyimnova lucasew ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

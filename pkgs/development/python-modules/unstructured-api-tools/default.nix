@@ -57,7 +57,8 @@ buildPythonPackage {
     types-ujson
     uvicorn
     autoflake
-  ] ++ uvicorn.optional-dependencies.standard;
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   pythonImportsCheck = [ "unstructured_api_tools" ];
 
@@ -84,12 +85,12 @@ buildPythonPackage {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "";
     mainProgram = "unstructured_api_tools";
     homepage = "https://github.com/Unstructured-IO/unstructured-api-tools";
     changelog = "https://github.com/Unstructured-IO/unstructured-api-tools/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

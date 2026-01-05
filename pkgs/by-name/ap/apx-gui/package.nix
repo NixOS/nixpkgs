@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx-gui";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nZMbVXeWEgfBsVgX2iESRzDgu0tjiqC1dTCaTlW0iWA=";
   };
 

@@ -29,7 +29,7 @@ buildGoModule {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Web client for Pleroma and Mastodon";
     longDescription = ''
       A lightweight web client for Pleroma and Mastodon.
@@ -37,8 +37,8 @@ buildGoModule {
     '';
     homepage = "https://bloat.freesoftwareextremist.com";
     downloadPage = "https://git.freesoftwareextremist.com/bloat/";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "bloat";
   };
 }

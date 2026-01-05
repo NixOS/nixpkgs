@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "2.0.9";
+  version = "2.0.17";
 
   platform =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
-        "sha256-mslCzvJ+z5VNQkVa9HXjw2bUBprMgs3bAy3RmEt8OlI="
+        "sha256-pvqIotxcKVtrCQlMdbMGNkPvrMcNyw8CmtnUkQjAF8Y="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        "sha256-XdMPo9O7ADhInmGFIOHihl1z4yPKAyDjCH7m3tCtKNo="
+        "sha256-W54MoUGEQ48ju+h1PVUxlJZ0RxV2NLjYhlq6QacBEto="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        "sha256-sJM00f2KBI6fnVj3U/h/pYAFT7QjZkfJ7ubDfFlRJ0Q="
+        "sha256-7FtS1dlDK5v/zlwFA5rPSkyLaEVbKhAaKdOhZkZcFPg="
       else
         throw "unsupported platform";
   };
@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     zlib
@@ -77,10 +78,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scalacenter.github.io/bloop/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
     description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     mainProgram = "bloop";
     platforms = [
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       agilesteel
       kubukoz
       tomahna

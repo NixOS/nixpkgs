@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bendavid";
-    repo = pname;
+    repo = "aiopylgtv";
     rev = version;
     hash = "sha256-NkWJGy5QUrhpbARoscrXy/ilCjAz01YxeVTH0I+IjNM=";
   };
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "aiopylgtv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control webOS based LG TV units";
     mainProgram = "aiopylgtvcommand";
     homepage = "https://github.com/bendavid/aiopylgtv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

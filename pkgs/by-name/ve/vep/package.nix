@@ -58,7 +58,11 @@ let
     };
     # PREFIX is important
     configurePhase = ''
+      runHook preConfigure
+
       perl Makefile.PL PREFIX=$out INSTALLDIRS=site
+
+      runHook postConfigure
     '';
     # Test do not work -- wrong include path
     doCheck = false;

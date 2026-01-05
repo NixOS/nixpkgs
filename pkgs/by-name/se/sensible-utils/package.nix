@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sensible-utils";
-  version = "0.0.24";
+  version = "0.0.26";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "sensible-utils";
     rev = "debian/${version}";
-    sha256 = "sha256-omdg5df/TxURarrqawsB3+B85siDJxDaex/2rx5csXI=";
+    sha256 = "sha256-vxzCICkF3KDBe+IIZ63JMiZmfHOllHf1Xtw/vWaimc8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp sensible-browser sensible-editor sensible-pager sensible-terminal $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities used by programs to sensibly select and spawn an appropriate browser, editor, or pager";
     longDescription = ''
       The specific utilities included are:
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://salsa.debian.org/debian/sensible-utils";
     changelog = "https://salsa.debian.org/debian/sensible-utils/-/tags";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pbek ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pbek ];
+    platforms = lib.platforms.unix;
   };
 }

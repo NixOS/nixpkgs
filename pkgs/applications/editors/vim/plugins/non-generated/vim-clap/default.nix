@@ -20,12 +20,12 @@ let
     hash = "sha256-rhCum59GCIAwdi5QgSaPfrALelAIMncNetu81i53Q8c=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern performant fuzzy picker for Vim and NeoVim";
     mainProgram = "maple";
     homepage = "https://github.com/liuchengxu/vim-clap";
     changelog = "https://github.com/liuchengxu/vim-clap/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 
@@ -33,7 +33,6 @@ let
     pname = "maple";
     inherit version src meta;
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-FEeSwa8KmIyfhWAU9Dpric6uB2e0yK+Tig/k2zwq2Rg=";
 
     nativeBuildInputs = [

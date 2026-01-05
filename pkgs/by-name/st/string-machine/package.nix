@@ -49,11 +49,11 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jpcima/string-machine";
     description = "Digital model of electronic string ensemble instrument";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = intersectLists platforms.linux platforms.x86;
-    license = licenses.boost;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
+    license = lib.licenses.boost;
   };
 }

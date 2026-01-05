@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytrydan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with V2C EVSE Trydan";
     homepage = "https://github.com/dgomes/pytrydan";
     changelog = "https://github.com/dgomes/pytrydan/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytrydan";
   };
 }

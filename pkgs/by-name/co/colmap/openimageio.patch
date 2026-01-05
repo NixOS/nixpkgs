@@ -1,0 +1,4927 @@
+diff --git a/.github/workflows/build-mac.yml b/.github/workflows/build-mac.yml
+index bb4b844d..dbb9eccd 100644
+--- a/.github/workflows/build-mac.yml
++++ b/.github/workflows/build-mac.yml
+@@ -48,29 +48,31 @@ jobs:
+       - name: Setup Mac
+         run: |
+           # Fix `brew link` error.
+-          find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete          
++          find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
+ 
++          brew uninstall cmake  # Workaround for CI failures.
+           brew install \
+             cmake \
+             ninja \
+             boost \
+             eigen \
+-            freeimage \
++            openimageio \
+             curl \
+             metis \
+             glog \
+             googletest \
+             ceres-solver \
+-            qt5 \
++            qt \
+             glew \
+             cgal \
+             sqlite3 \
+-            ccache
++            ccache \
++            libomp
+           brew link --force libomp
+ 
+       - name: Configure and build
+         run: |
+-          export PATH="/usr/local/opt/qt@5/bin:$PATH"
++          export PATH="/usr/local/opt/qt/bin:$PATH"
+           cmake --version
+           mkdir build
+           cd build
+@@ -78,7 +80,7 @@ jobs:
+             -GNinja \
+             -DCMAKE_BUILD_TYPE=${{ matrix.config.cmakeBuildType }} \
+             -DTESTS_ENABLED=ON \
+-            -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake/Qt5"
++            -DQt6_DIR="$(brew --prefix qt)/lib/cmake/Qt6"
+           ninja
+ 
+       - name: Run tests
+diff --git a/.github/workflows/build-pycolmap.yml b/.github/workflows/build-pycolmap.yml
+index 03cb18b4..6063c215 100644
+--- a/.github/workflows/build-pycolmap.yml
++++ b/.github/workflows/build-pycolmap.yml
+@@ -21,9 +21,9 @@ jobs:
+     strategy:
+       matrix:
+         config: [
+-          {os: ubuntu-latest},
+-          {os: macos-14, arch: arm64, deploymentTarget: 14.0},
+-          {os: windows-latest},
++          {os: ubuntu-24.04},
++          # {os: macos-14, arch: arm64, deploymentTarget: 14.0},
++          {os: windows-2025},
+         ]
+     env:
+       COMPILER_CACHE_VERSION: 1
+diff --git a/.github/workflows/build-ubuntu.yml b/.github/workflows/build-ubuntu.yml
+index 617c6c0a..5f2f7fba 100644
+--- a/.github/workflows/build-ubuntu.yml
++++ b/.github/workflows/build-ubuntu.yml
+@@ -23,6 +23,7 @@ jobs:
+         config: [
+           {
+             os: ubuntu-24.04,
++            qtVersion: 6,
+             cmakeBuildType: RelWithDebInfo,
+             asanEnabled: false,
+             guiEnabled: true,
+@@ -33,6 +34,7 @@ jobs:
+           },
+           {
+             os: ubuntu-22.04,
++            qtVersion: 6,
+             cmakeBuildType: Release,
+             asanEnabled: false,
+             guiEnabled: true,
+@@ -43,6 +45,7 @@ jobs:
+           },
+           {
+             os: ubuntu-22.04,
++            qtVersion: 5,
+             cmakeBuildType: Release,
+             asanEnabled: false,
+             guiEnabled: false,
+@@ -53,6 +56,7 @@ jobs:
+           },
+           {
+             os: ubuntu-24.04,
++            qtVersion: 6,
+             cmakeBuildType: Release,
+             asanEnabled: true,
+             guiEnabled: false,
+@@ -63,6 +67,7 @@ jobs:
+           },
+           {
+             os: ubuntu-24.04,
++            qtVersion: 6,
+             cmakeBuildType: ClangTidy,
+             asanEnabled: false,
+             guiEnabled: false,
+@@ -125,6 +130,12 @@ jobs:
+ 
+       - name: Setup Ubuntu
+         run: |
++          if [ "${{ matrix.config.qtVersion }}" == "5" ]; then
++            qt_packages="qtbase5-dev libqt5opengl5-dev libcgal-qt5-dev"
++          elif [ "${{ matrix.config.qtVersion }}" == "6" ]; then
++            qt_packages="qt6-base-dev libqt6opengl6-dev libqt6openglwidgets6"
++          fi
++
+           sudo apt-get update && sudo apt-get install -y \
+             build-essential \
+             cmake \
+@@ -134,31 +145,29 @@ jobs:
+             libboost-system-dev \
+             libeigen3-dev \
+             libceres-dev \
+-            libfreeimage-dev \
++            libopenimageio-dev \
++            openimageio-tools \
+             libmetis-dev \
+             libgoogle-glog-dev \
+             libgtest-dev \
+             libgmock-dev \
+             libsqlite3-dev \
+             libglew-dev \
+-            qtbase5-dev \
+-            libqt5opengl5-dev \
++            $qt_packages \
+             libcgal-dev \
+-            libcgal-qt5-dev \
+             libgl1-mesa-dri \
+             libunwind-dev \
+             libcurl4-openssl-dev \
+             libmkl-full-dev \
+             xvfb
+ 
++          # Fix issue in Ubuntu's openimageio CMake config.
++          # We don't depend on any of openimageio's OpenCV functionality,
++          # but it still requires the OpenCV include directory to exist.
++          sudo mkdir -p /usr/include/opencv4
++
+           if [ "${{ matrix.config.cudaEnabled }}" == "true" ]; then
+-            if [ "${{ matrix.config.os }}" == "ubuntu-20.04" ]; then
+-              sudo apt-get install -y \
+-                nvidia-cuda-toolkit \
+-                nvidia-cuda-toolkit-gcc
+-              echo "CC=/usr/bin/cuda-gcc" >> $GITHUB_ENV
+-              echo "CXX=/usr/bin/cuda-g++" >> $GITHUB_ENV
+-            elif [ "${{ matrix.config.os }}" == "ubuntu-22.04" ]; then
++            if [ "${{ matrix.config.os }}" == "ubuntu-22.04" ]; then
+               sudo apt-get install -y \
+                 nvidia-cuda-toolkit \
+                 nvidia-cuda-toolkit-gcc \
+diff --git a/.github/workflows/build-windows.yml b/.github/workflows/build-windows.yml
+index bab35e18..0d2433fe 100644
+--- a/.github/workflows/build-windows.yml
++++ b/.github/workflows/build-windows.yml
+@@ -22,14 +22,14 @@ jobs:
+       matrix:
+         config: [
+           {
+-            os: windows-2022,
++            os: windows-2025,
+             cmakeBuildType: Release,
+             cudaEnabled: true,
+             testsEnabled: true,
+             exportPackage: true,
+           },
+           {
+-            os: windows-2022,
++            os: windows-2025,
+             cmakeBuildType: Release,
+             cudaEnabled: false,
+             testsEnabled: true,
+@@ -42,7 +42,6 @@ jobs:
+       COMPILER_CACHE_DIR: ${{ github.workspace }}/compiler-cache
+       CCACHE_DIR: ${{ github.workspace }}/compiler-cache/ccache
+       CCACHE_BASEDIR: ${{ github.workspace }}
+-      VCPKG_COMMIT_ID: 0cb95c860ea83aafc1b24350510b30dec535989a
+       GLOG_v: 2
+       GLOG_logtostderr: 1
+       CUDA_MAJOR_VERSION: 12
+@@ -51,7 +50,7 @@ jobs:
+ 
+     steps:
+       - uses: actions/checkout@v4
+-      
++
+       # We define the vcpkg binary sources using separate variables for read and
+       # write operations:
+       # * Read sources are defined as inline. These can be read by anyone and,
+@@ -82,7 +81,7 @@ jobs:
+           key: v${{ env.COMPILER_CACHE_VERSION }}-${{ matrix.config.os }}-${{ matrix.config.cmakeBuildType }}-${{ matrix.config.asanEnabled }}--${{ matrix.config.cudaEnabled }}-${{ github.run_id }}-${{ github.run_number }}
+           restore-keys: v${{ env.COMPILER_CACHE_VERSION }}-${{ matrix.config.os }}-${{ matrix.config.cmakeBuildType }}-${{ matrix.config.asanEnabled }}--${{ matrix.config.cudaEnabled }}
+           path: ${{ env.COMPILER_CACHE_DIR }}
+-      
++
+       - name: Install ccache
+         shell: pwsh
+         run: |
+@@ -109,7 +108,6 @@ jobs:
+           cd ${{ github.workspace }}
+           git clone https://github.com/microsoft/vcpkg
+           cd vcpkg
+-          git reset --hard ${{ env.VCPKG_COMMIT_ID }}
+           ./bootstrap-vcpkg.bat
+ 
+       - name: Install CMake and Ninja
+@@ -166,7 +164,7 @@ jobs:
+           ../vcpkg/vcpkg.exe export --raw --output-dir vcpkg_export --output colmap
+           cp vcpkg_export/colmap/installed/x64-windows/bin/*.dll install/bin
+           cp vcpkg_export/colmap/installed/x64-windows-release/bin/*.dll install/bin
+-          cp -r vcpkg_export/colmap/installed/x64-windows/plugins install
++          cp -r vcpkg_export/colmap/installed/x64-windows/Qt6/plugins install
+           if ($${{ matrix.config.cudaEnabled }}) {
+               cp "${{ steps.cuda-toolkit.outputs.CUDA_PATH }}/bin/cudart64_*.dll" install/bin
+               cp "${{ steps.cuda-toolkit.outputs.CUDA_PATH }}/bin/curand64_*.dll" install/bin
+diff --git a/cmake/FindDependencies.cmake b/cmake/FindDependencies.cmake
+index a0c3ff41..8833f115 100644
+--- a/cmake/FindDependencies.cmake
++++ b/cmake/FindDependencies.cmake
+@@ -27,7 +27,7 @@ find_package(Boost ${COLMAP_FIND_TYPE} COMPONENTS
+ 
+ find_package(Eigen3 ${COLMAP_FIND_TYPE})
+ 
+-find_package(FreeImage ${COLMAP_FIND_TYPE})
++find_package(OpenImageIO ${COLMAP_FIND_TYPE})
+ 
+ find_package(Metis ${COLMAP_FIND_TYPE})
+ 
+@@ -88,7 +88,7 @@ endif()
+ if(DOWNLOAD_ENABLED)
+     # The OpenSSL package in vcpkg seems broken under Windows and leads to
+     # missing certificate verification when connecting to SSL servers. We
+-    # therefore use curl[schannel] (i.e., native Windows SSL/TLS) under Windows
++    # therefore use curl[sspi] (i.e., native Windows SSL/TLS) under Windows
+     # and curl[openssl] otherwise.
+     find_package(CURL QUIET)
+     set(CRYPTO_FOUND FALSE)
+@@ -156,7 +156,7 @@ if(CUDA_ENABLED)
+ 
+             declare_imported_cuda_target(cudart ${CUDA_LIBRARIES})
+             declare_imported_cuda_target(curand ${CUDA_LIBRARIES})
+-            
++
+             set(CUDAToolkit_VERSION "${CUDA_VERSION_STRING}")
+             set(CUDAToolkit_BIN_DIR "${CUDA_TOOLKIT_ROOT_DIR}/bin")
+         else()
+@@ -198,11 +198,19 @@ else()
+ endif()
+ 
+ if(GUI_ENABLED)
+-    find_package(Qt5 5.4 ${COLMAP_FIND_TYPE} COMPONENTS Core OpenGL Widgets)
++    find_package(QT NAMES Qt5 Qt6 REQUIRED)
++    set(COLMAP_QT_COMPONENTS Core OpenGL Widgets)
++    if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
++        list(APPEND COLMAP_QT_COMPONENTS OpenGLWidgets)
++    endif()
++    find_package(Qt${QT_VERSION_MAJOR} ${COLMAP_FIND_TYPE} ${COLMAP_QT_COMPONENTS})
+     message(STATUS "Found Qt")
+-    message(STATUS "  Module : ${Qt5Core_DIR}")
+-    message(STATUS "  Module : ${Qt5OpenGL_DIR}")
+-    message(STATUS "  Module : ${Qt5Widgets_DIR}")
++    message(STATUS "  Module : ${Qt${QT_VERSION_MAJOR}Core_DIR}")
++    message(STATUS "  Module : ${Qt${QT_VERSION_MAJOR}OpenGL_DIR}")
++    message(STATUS "  Module : ${Qt${QT_VERSION_MAJOR}Widgets_DIR}")
++    if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
++        message(STATUS "  Module : ${Qt${QT_VERSION_MAJOR}OpenGLWidgets_DIR}")
++    endif()
+     if(Qt5_FOUND)
+         # Qt5 was built with -reduce-relocations.
+         if(Qt5_POSITION_INDEPENDENT_CODE)
+@@ -218,13 +226,15 @@ if(GUI_ENABLED)
+                 endif()
+             endif()
+         endif()
++    endif()
+ 
++    if(QT_FOUND)
+         # Enable automatic compilation of Qt resource files.
+         set(CMAKE_AUTORCC ON)
+     endif()
+ endif()
+ 
+-if(GUI_ENABLED AND Qt5_FOUND)
++if(GUI_ENABLED AND Qt${QT_VERSION_MAJOR}_FOUND)
+     list(APPEND COLMAP_COMPILE_DEFINITIONS COLMAP_GUI_ENABLED)
+     message(STATUS "Enabling GUI support")
+ else()
+diff --git a/cmake/FindFreeImage.cmake b/cmake/FindFreeImage.cmake
+deleted file mode 100644
+index cf213cf2..00000000
+--- a/cmake/FindFreeImage.cmake
++++ /dev/null
+@@ -1,104 +0,0 @@
+-# Copyright (c), ETH Zurich and UNC Chapel Hill.
+-# All rights reserved.
+-#
+-# Redistribution and use in source and binary forms, with or without
+-# modification, are permitted provided that the following conditions are met:
+-#
+-#     * Redistributions of source code must retain the above copyright
+-#       notice, this list of conditions and the following disclaimer.
+-#
+-#     * Redistributions in binary form must reproduce the above copyright
+-#       notice, this list of conditions and the following disclaimer in the
+-#       documentation and/or other materials provided with the distribution.
+-#
+-#     * Neither the name of ETH Zurich and UNC Chapel Hill nor the names of
+-#       its contributors may be used to endorse or promote products derived
+-#       from this software without specific prior written permission.
+-#
+-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+-# POSSIBILITY OF SUCH DAMAGE.
+-
+-
+-# Find package module for FreeImage library.
+-#
+-# The following variables are set by this module:
+-#
+-#   FREEIMAGE_FOUND: TRUE if FreeImage is found.
+-#   freeimage::FreeImage: Imported target to link against.
+-#
+-# The following variables control the behavior of this module:
+-#
+-# FREEIMAGE_INCLUDE_DIR_HINTS: List of additional directories in which to
+-#                              search for FreeImage includes.
+-# FREEIMAGE_LIBRARY_DIR_HINTS: List of additional directories in which to
+-#                              search for FreeImage libraries.
+-
+-set(FREEIMAGE_INCLUDE_DIR_HINTS "" CACHE PATH "FreeImage include directory")
+-set(FREEIMAGE_LIBRARY_DIR_HINTS "" CACHE PATH "FreeImage library directory")
+-
+-unset(FREEIMAGE_FOUND)
+-
+-find_package(FreeImage CONFIG QUIET)
+-if(FreeImage_FOUND)
+-    if(TARGET freeimage::FreeImage)
+-        set(FREEIMAGE_FOUND TRUE)
+-        message(STATUS "Found FreeImage")
+-        message(STATUS "  Target : freeimage::FreeImage")
+-    endif()
+-else()
+-    list(APPEND FREEIMAGE_CHECK_INCLUDE_DIRS
+-        ${FREEIMAGE_INCLUDE_DIR_HINTS}
+-        /usr/include
+-        /usr/local/include
+-        /opt/include
+-        /opt/local/include
+-    )
+-
+-    list(APPEND FREEIMAGE_CHECK_LIBRARY_DIRS
+-        ${FREEIMAGE_LIBRARY_DIR_HINTS}
+-        /usr/lib
+-        /usr/local/lib
+-        /opt/lib
+-        /opt/local/lib
+-    )
+-
+-    find_path(FREEIMAGE_INCLUDE_DIRS
+-        NAMES
+-        FreeImage.h
+-        PATHS
+-        ${FREEIMAGE_CHECK_INCLUDE_DIRS})
+-    find_library(FREEIMAGE_LIBRARIES
+-        NAMES
+-        freeimage
+-        PATHS
+-        ${FREEIMAGE_CHECK_LIBRARY_DIRS})
+-
+-    if(FREEIMAGE_INCLUDE_DIRS AND FREEIMAGE_LIBRARIES)
+-        set(FREEIMAGE_FOUND TRUE)
+-    endif()
+-
+-    if(FREEIMAGE_FOUND)
+-        message(STATUS "Found FreeImage")
+-        message(STATUS "  Includes : ${FREEIMAGE_INCLUDE_DIRS}")
+-        message(STATUS "  Libraries : ${FREEIMAGE_LIBRARIES}")
+-    endif()
+-
+-    add_library(freeimage::FreeImage INTERFACE IMPORTED)
+-    target_include_directories(
+-        freeimage::FreeImage INTERFACE ${FREEIMAGE_INCLUDE_DIRS})
+-    target_link_libraries(
+-        freeimage::FreeImage INTERFACE ${FREEIMAGE_LIBRARIES})
+-endif()
+-
+-if(NOT FREEIMAGE_FOUND AND FREEIMAGE_FIND_REQUIRED)
+-    message(FATAL_ERROR "Could not find FreeImage")
+-endif()
+diff --git a/cmake/colmap-config.cmake.in b/cmake/colmap-config.cmake.in
+index 250dfbc6..73ff530c 100644
+--- a/cmake/colmap-config.cmake.in
++++ b/cmake/colmap-config.cmake.in
+@@ -43,9 +43,6 @@ set(COLMAP_FOUND FALSE)
+ 
+ # Set hints for finding dependency packages.
+ 
+-set(FREEIMAGE_INCLUDE_DIR_HINTS @FREEIMAGE_INCLUDE_DIR_HINTS@)
+-set(FREEIMAGE_LIBRARY_DIR_HINTS @FREEIMAGE_LIBRARY_DIR_HINTS@)
+-
+ set(METIS_INCLUDE_DIR_HINTS @METIS_INCLUDE_DIR_HINTS@)
+ set(METIS_LIBRARY_DIR_HINTS @METIS_LIBRARY_DIR_HINTS@)
+ 
+diff --git a/doc/cli.rst b/doc/cli.rst
+index ce6c3068..24ed0861 100644
+--- a/doc/cli.rst
++++ b/doc/cli.rst
+@@ -166,7 +166,7 @@ the available options, e.g.::
+         Options can either be specified via command-line or by defining
+         them in a .ini project file passed to ``--project_path``.
+ 
+-            -h [ --help ] 
++            -h [ --help ]
+             --default_random_seed arg (=0)
+             --log_to_stderr arg (=1)
+             --log_level arg (=0)
+@@ -187,10 +187,10 @@ the available options, e.g.::
+             --ImageReader.default_focal_length_factor arg (=1.2)
+             --ImageReader.camera_mask_path arg
+             --FeatureExtraction.type arg (=SIFT)
++            --FeatureExtraction.max_image_size arg (=3200)
+             --FeatureExtraction.num_threads arg (=-1)
+             --FeatureExtraction.use_gpu arg (=1)
+             --FeatureExtraction.gpu_index arg (=-1)
+-            --SiftExtraction.max_image_size arg (=3200)
+             --SiftExtraction.max_num_features arg (=8192)
+             --SiftExtraction.first_octave arg (=-1)
+             --SiftExtraction.num_octaves arg (=4)
+diff --git a/doc/faq.rst b/doc/faq.rst
+index 4611e63f..f73b05ed 100644
+--- a/doc/faq.rst
++++ b/doc/faq.rst
+@@ -121,7 +121,7 @@ Example of images.txt::
+ 
+     4 0.698777 0.714625 -0.023996 0.021129 -0.048184 0.004529 -0.313427 2 image0004.png
+ 
+-Each image above must have the same ``image_id`` (first column) as in the database (next step). 
++Each image above must have the same ``image_id`` (first column) as in the database (next step).
+ This database can be inspected either in the GUI (under ``Database management > Processing``),
+ or, one can create a reconstruction with colmap and later export  it as text in order to see
+ the images.txt file it creates.
+@@ -217,9 +217,9 @@ camera centers of a subset or all registered images. The 3D similarity
+ transformation between the reconstructed model and the target coordinate frame
+ of the geo-registration is determined from these correspondences.
+ 
+-The geo-registered 3D coordinates can either be extracted from the database 
+-(tvec_prior field) or from a user specified text file. 
+-For text-files, the geo-registered 3D coordinates of the camera centers for 
++The geo-registered 3D coordinates can either be extracted from the database
++(tvec_prior field) or from a user specified text file.
++For text-files, the geo-registered 3D coordinates of the camera centers for
+ images must be specified with the following format::
+ 
+     image_name1.jpg X1 Y1 Z1
+@@ -232,7 +232,7 @@ In case of GPS coordinates, a conversion will be performed to turn those into
+ cartesian coordinates.  The conversion can be done from GPS to ECEF
+ (Earth-Centered-Earth-Fixed) or to ENU (East-North-Up) coordinates. If ENU coordinates
+ are used, the first image GPS coordinates will define the origin of the ENU frame.
+-It is also possible to use ECEF coordinates for alignment and then rotate the aligned 
++It is also possible to use ECEF coordinates for alignment and then rotate the aligned
+ reconstruction into the ENU plane.
+ 
+ Note that at least 3 images must be specified to estimate a 3D similarity
+@@ -344,7 +344,7 @@ extraction step). But note that this might result in a significant slow-down of
+ the reconstruction pipeline. Please, also note that feature extraction on the
+ CPU can consume excessive RAM for large images in the default settings, which
+ might require manually reducing the maximum image size using
+-``--SiftExtraction.max_image_size`` and/or setting
++``--FeatureExtraction.max_image_size`` and/or setting
+ ``--SiftExtraction.first_octave 0`` or by manually limiting the number of
+ threads using ``--FeatureExtraction.num_threads``.
+ 
+diff --git a/doc/install.rst b/doc/install.rst
+index 505e2516..1cc3c6cb 100755
+--- a/doc/install.rst
++++ b/doc/install.rst
+@@ -81,19 +81,30 @@ Dependencies from the default Ubuntu repositories::
+         libboost-graph-dev \
+         libboost-system-dev \
+         libeigen3-dev \
+-        libfreeimage-dev \
++        libopenimageio-dev \
++        openimageio-tools \
+         libmetis-dev \
+         libgoogle-glog-dev \
+         libgtest-dev \
+         libgmock-dev \
+         libsqlite3-dev \
+         libglew-dev \
+-        qtbase5-dev \
+-        libqt5opengl5-dev \
++        qt6-base-dev \
++        libqt6opengl6-dev \
++        libqt6openglwidgets6 \
+         libcgal-dev \
+         libceres-dev \
+         libcurl4-openssl-dev \
++        libssl-dev \
+         libmkl-full-dev
++    # Fix issue in Ubuntu's openimageio CMake config.
++    # We don't depend on any of openimageio's OpenCV functionality,
++    # but it still requires the OpenCV include directory to exist.
++    sudo mkdir -p /usr/include/opencv4
++
++Alternatively, you can also build against Qt 5 instead of Qt 6 using::
++
++    qtbase5-dev libqt5opengl5-dev
+ 
+ To compile with **CUDA support**, also install Ubuntu's default CUDA package::
+ 
+@@ -121,11 +132,6 @@ Run COLMAP::
+     colmap -h
+     colmap gui
+ 
+-Under **Ubuntu 18.04**, the CMake configuration scripts of CGAL are broken and
+-you must also install the CGAL Qt5 package::
+-
+-    sudo apt-get install libcgal-qt5-dev
+-
+ Under **Ubuntu 22.04**, there is a problem when compiling with Ubuntu's default
+ CUDA package and GCC, and you must compile against GCC 10::
+ 
+@@ -150,14 +156,14 @@ Dependencies from `Homebrew <http://brew.sh/>`__::
+         ninja \
+         boost \
+         eigen \
+-        freeimage \
++        openimageio \
+         curl \
+         libomp \
+         metis \
+         glog \
+         googletest \
+         ceres-solver \
+-        qt5 \
++        qt \
+         glew \
+         cgal \
+         sqlite3
+@@ -169,18 +175,15 @@ Configure and compile COLMAP::
+     cd colmap
+     mkdir build
+     cd build
+-    cmake .. \
+-        -GNinja \
+-        -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake/Qt5"
++    cmake -GNinja
+     ninja
+     sudo ninja install
+ 
+-If you have Qt 6 installed on your system as well, you might have to temporarily
++If you have Qt 5 installed on your system as well, you might have to temporarily
+ link your Qt 5 installation while configuring CMake::
+ 
+-    brew link qt5
+-    cmake ... (from previous code block)
+-    brew unlink qt5
++    brew unlink qt && brew link --force qt
++    cmake ...
+ 
+ Run COLMAP::
+ 
+@@ -329,7 +332,7 @@ with the source code ``hello_world.cc``::
+     }
+ 
+ Then compile and run your code as::
+-    
++
+     mkdir build
+     cd build
+     export colmap_DIR=${CMAKE_INSTALL_PREFIX}/share/colmap
+diff --git a/doc/pycolmap/index.rst b/doc/pycolmap/index.rst
+index f532102e..2048f78e 100644
+--- a/doc/pycolmap/index.rst
++++ b/doc/pycolmap/index.rst
+@@ -27,7 +27,7 @@ from source, follow these steps:
+    * On Windows, after installing COLMAP via VCPKG, run in powershell::
+ 
+       python -m pip install . `
+-          --cmake.define.CMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
++          --cmake.define.CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" `
+           --cmake.define.VCPKG_TARGET_TRIPLET="x64-windows"
+ 
+ Some features, such as cost functions, require that `PyCeres
+diff --git a/doc/tutorial.rst b/doc/tutorial.rst
+index 939b462e..70edc085 100755
+--- a/doc/tutorial.rst
++++ b/doc/tutorial.rst
+@@ -163,14 +163,13 @@ Data Structure
+ 
+ COLMAP assumes that all input images are in one input directory with potentially
+ nested sub-directories. It recursively considers all images stored in this
+-directory, and it supports various different image formats (see `FreeImage
+-<http://freeimage.sourceforge.net/documentation.html>`_). Other files are
+-automatically ignored. If high performance is a requirement, then you should
+-separate any files that are not images. Images are identified uniquely by their
+-relative file path. For later processing, such as image undistortion or dense
+-reconstruction, the relative folder structure should be preserved. COLMAP does
+-not modify the input images or directory and all extracted data is stored in a
+-single, self-contained SQLite database file (see :doc:`database`).
++directory, and it supports various different image formats by OpenImageIO. Other
++files are automatically ignored. If high performance is a requirement, then you
++should separate any files that are not images. Images are identified uniquely by
++their relative file path. For later processing, such as image undistortion or
++dense reconstruction, the relative folder structure should be preserved. COLMAP
++does not modify the input images or directory and all extracted data is stored
++in a single, self-contained SQLite database file (see :doc:`database`).
+ 
+ The first step is to start the graphical user interface of COLMAP by running the
+ pre-built binaries (Windows: ``COLMAP.bat``, Mac: ``COLMAP.app``) or by executing
+diff --git a/docker/Dockerfile b/docker/Dockerfile
+index d1a339cc..1c62bccf 100644
+--- a/docker/Dockerfile
++++ b/docker/Dockerfile
+@@ -24,20 +24,28 @@ RUN apt-get update && \
+         libboost-graph-dev \
+         libboost-system-dev \
+         libeigen3-dev \
+-        libfreeimage-dev \
++        libopenimageio-dev \
++        openimageio-tools \
+         libmetis-dev \
+         libgoogle-glog-dev \
+         libgtest-dev \
+         libgmock-dev \
+         libsqlite3-dev \
+         libglew-dev \
+-        qtbase5-dev \
+-        libqt5opengl5-dev \
++        qt6-base-dev \
++        libqt6opengl6-dev \
++        libqt6openglwidgets6 \
+         libcgal-dev \
+         libceres-dev \
+         libcurl4-openssl-dev \
++        libssl-dev \
+         libmkl-full-dev
+ 
++# Fix issue in Ubuntu's openimageio CMake config.
++# We don't depend on any of openimageio's OpenCV functionality,
++# but it still requires the OpenCV include directory to exist.
++RUN mkdir -p /usr/include/opencv4
++
+ # Build and install COLMAP.
+ RUN git clone https://github.com/colmap/colmap.git
+ RUN cd colmap && \
+@@ -68,15 +76,17 @@ RUN apt-get update && \
+         libopengl0 \
+         libmetis5 \
+         libceres4t64 \
+-        libfreeimage3 \
++        libopenimageio2.4t64 \
+         libgcc-s1 \
+         libgl1 \
+         libglew2.2 \
+         libgoogle-glog0v6t64 \
+-        libqt5core5a \
+-        libqt5gui5 \
+-        libqt5widgets5 \
++        libqt6core6 \
++        libqt6gui6 \
++        libqt6widgets6 \
++        libqt6openglwidgets6 \
+         libcurl4 \
++        libssl3t64 \
+         libmkl-locale \
+         libmkl-intel-lp64 \
+         libmkl-intel-thread \
+diff --git a/pyproject.toml b/pyproject.toml
+index 0afede3b..9a2922d2 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [build-system]
+ requires = [
+     "scikit-build-core>=0.3.3",
+-    "pybind11==3.0.0",
++    "pybind11==3.0.1",
+     "pybind11_stubgen @ git+https://github.com/sarlinpe/pybind11-stubgen@sarlinpe/fix-2025-08-20",
+     "numpy",
+     "ruff==0.12.7",
+@@ -44,9 +44,6 @@ archs = ["auto64"]
+ test-requires = "pytest mypy==1.17.0 enlighten==1.13.0"
+ test-command = "python -c \"import pycolmap; print(pycolmap.__version__)\" &&  python -m mypy --package pycolmap --implicit-optional && pytest {project}/python/examples/custom_incremental_pipeline_test.py"
+ 
+-[tool.cibuildwheel.environment]
+-VCPKG_COMMIT_ID = "0cb95c860ea83aafc1b24350510b30dec535989a"
+-
+ [tool.cibuildwheel.linux]
+ before-all = "{project}/python/ci/install-colmap-almalinux.sh"
+ 
+diff --git a/python/README.md b/python/README.md
+index e0dfda95..6a889454 100644
+--- a/python/README.md
++++ b/python/README.md
+@@ -28,7 +28,7 @@ python -m pip install .
+   - On Windows, after installing COLMAP [via VCPKG](https://colmap.github.io/install.html#id3), run in powershell:
+ ```powershell
+ python -m pip install . `
+-    --cmake.define.CMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
++    --cmake.define.CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" `
+     --cmake.define.VCPKG_TARGET_TRIPLET="x64-windows"
+ ```
+ 
+diff --git a/python/ci/install-colmap-almalinux.sh b/python/ci/install-colmap-almalinux.sh
+index a93393b8..4adfb7e0 100755
+--- a/python/ci/install-colmap-almalinux.sh
++++ b/python/ci/install-colmap-almalinux.sh
+@@ -38,7 +38,6 @@ export PATH="${COMPILER_TOOLS_DIR}:${PATH}"
+ # Setup vcpkg
+ git clone https://github.com/microsoft/vcpkg ${VCPKG_INSTALLATION_ROOT}
+ cd ${VCPKG_INSTALLATION_ROOT}
+-git checkout ${VCPKG_COMMIT_ID}
+ ./bootstrap-vcpkg.sh
+ ./vcpkg integrate install
+ 
+diff --git a/python/ci/install-colmap-macos.sh b/python/ci/install-colmap-macos.sh
+index 7c403ce3..c688f2ba 100755
+--- a/python/ci/install-colmap-macos.sh
++++ b/python/ci/install-colmap-macos.sh
+@@ -5,7 +5,7 @@ CURRDIR=$(pwd)
+ # Fix `brew link` error.
+ find /usr/local/bin -lname '*/Library/Frameworks/Python.framework/*' -delete
+ 
+-brew update
++brew uninstall cmake  # Workaround for CI failures.
+ brew install git cmake ninja gfortran ccache libomp
+ brew link --force libomp
+ 
+@@ -17,7 +17,6 @@ ln -sf $(which gfortran-14) "$(dirname $(which gfortran-14))/gfortran"
+ # Setup vcpkg
+ git clone https://github.com/microsoft/vcpkg ${VCPKG_INSTALLATION_ROOT}
+ cd ${VCPKG_INSTALLATION_ROOT}
+-git checkout ${VCPKG_COMMIT_ID}
+ ./bootstrap-vcpkg.sh
+ ./vcpkg integrate install
+ 
+diff --git a/python/ci/install-colmap-windows.ps1 b/python/ci/install-colmap-windows.ps1
+index 7ccb763b..5653d177 100755
+--- a/python/ci/install-colmap-windows.ps1
++++ b/python/ci/install-colmap-windows.ps1
+@@ -12,12 +12,11 @@ If (!(Test-Path -path "${COMPILER_TOOLS_DIR}/ccache.exe" -PathType Leaf)) {
+ cd ${CURRDIR}
+ git clone https://github.com/microsoft/vcpkg ${env:VCPKG_INSTALLATION_ROOT}
+ cd ${env:VCPKG_INSTALLATION_ROOT}
+-git checkout "${env:VCPKG_COMMIT_ID}"
+ ./bootstrap-vcpkg.bat
+ 
+ cd ${CURRDIR}
+ & "./scripts/shell/enter_vs_dev_shell.ps1"
+-& "${env:VCPKG_INSTALLATION_ROOT}/vcpkg.exe" integrate install
++& "${env:VCPKG_ROOT}/vcpkg.exe" integrate install
+ 
+ # Build COLMAP
+ mkdir build
+diff --git a/python/ci/test-colmap-windows.ps1 b/python/ci/test-colmap-windows.ps1
+index bf1bfd67..3cfc6eed 100644
+--- a/python/ci/test-colmap-windows.ps1
++++ b/python/ci/test-colmap-windows.ps1
+@@ -1,4 +1,4 @@
+-& "./scripts/shell/enter_vs_dev_shell.ps1"
+-& "${env:VCPKG_INSTALLATION_ROOT}/vcpkg.exe" integrate install
++& "$PSScriptRoot/../../scripts/shell/enter_vs_dev_shell.ps1"
++& "${env:VCPKG_ROOT}/vcpkg.exe" integrate install
+ 
+ & python -c "import pycolmap; print(pycolmap.__version__)"
+diff --git a/python/examples/custom_bundle_adjustment.py b/python/examples/custom_bundle_adjustment.py
+index 5e5aaed6..a43935b5 100644
+--- a/python/examples/custom_bundle_adjustment.py
++++ b/python/examples/custom_bundle_adjustment.py
+@@ -4,6 +4,7 @@ C++ with equivalent logic. As a result, one can add customized residuals on top
+ of the exposed ceres problem from conventional bundle adjustment.
+ """
+ 
++import collections
+ import copy
+ 
+ import pycolmap
+@@ -60,6 +61,10 @@ def adjust_global_bundle(mapper, mapper_options, ba_options):
+             if frame_id in mapper.existing_frame_ids:
+                 ba_config.set_constant_rig_from_world_pose(frame_id)
+ 
++    for rig_id in mapper_options.constant_rigs:
++        for sensor_id in reconstruction.rig(rig_id).sensors:
++            ba_config.set_constant_sensor_from_rig_pose(sensor_id)
++
+     for camera_id in mapper_options.constant_cameras:
+         ba_config.set_constant_cam_intrinsics(camera_id)
+ 
+@@ -145,24 +150,22 @@ def adjust_local_bundle(
+                     ba_config.set_constant_rig_from_world_pose(frame_id)
+ 
+         # Fix rig poses, if not all frames within the local bundle.
+-        num_frames_per_rig = {}
++        num_frames_per_rig = collections.defaultdict(int)
+         for frame_id in frame_ids:
+             frame = reconstruction.frame(frame_id)
+-            if frame.rig_id not in num_frames_per_rig:
+-                num_frames_per_rig[frame.rig_id] = 0
+             num_frames_per_rig[frame.rig_id] += 1
+         for rig_id, num_frames_local in num_frames_per_rig.items():
+-            if num_frames_local < mapper.num_reg_frames_per_rig[rig_id]:
+-                rig = reconstruction.rig(rig_id)
+-                for sensor_id, _ in rig.sensors.items():
++            if (
++                rig_id in mapper_options.constant_rigs
++                or num_frames_local < mapper.num_reg_frames_per_rig[rig_id]
++            ):
++                for sensor_id in reconstruction.rig(rig_id).sensors:
+                     ba_config.set_constant_sensor_from_rig_pose(sensor_id)
+ 
+         # Fix camera intrinsics, if not all images within local bundle.
+-        num_images_per_camera = {}
++        num_images_per_camera = collections.defaultdict(int)
+         for image_id in ba_config.images:
+             image = reconstruction.images[image_id]
+-            if image.camera_id not in num_images_per_camera:
+-                num_images_per_camera[image.camera_id] = 0
+             num_images_per_camera[image.camera_id] += 1
+         for camera_id, num_images_local in num_images_per_camera.items():
+             if (
+diff --git a/scripts/shell/build_mac_app.sh b/scripts/shell/build_mac_app.sh
+index 499f5c59..ff01b88b 100755
+--- a/scripts/shell/build_mac_app.sh
++++ b/scripts/shell/build_mac_app.sh
+@@ -66,7 +66,11 @@ install_name_tool -change @rpath/libtbb.dylib /usr/local/lib/libtbb.dylib $BASE_
+ install_name_tool -change @rpath/libtbbmalloc.dylib /usr/local/lib/libtbbmalloc.dylib $BASE_PATH/COLMAP.app/Contents/MacOS/COLMAP
+ 
+ echo "Linking dynamic libraries"
+-/usr/local/opt/qt5/bin/macdeployqt "$BASE_PATH/COLMAP.app"
++if [ -d "$(brew --prefix)/opt/qt6" ]; then
++    $(brew --prefix)/opt/qt6/bin/macdeployqt "$BASE_PATH/COLMAP.app"
++else
++    $(brew --prefix)/opt/qt5/bin/macdeployqt "$BASE_PATH/COLMAP.app"
++fi
+ 
+ echo "Wrapping binary"
+ cat <<EOM >"$BASE_PATH/COLMAP.app/Contents/MacOS/colmap_gui.sh"
+diff --git a/src/colmap/controllers/automatic_reconstruction.cc b/src/colmap/controllers/automatic_reconstruction.cc
+index dac39310..ea0eb484 100644
+--- a/src/colmap/controllers/automatic_reconstruction.cc
++++ b/src/colmap/controllers/automatic_reconstruction.cc
+@@ -96,6 +96,7 @@ AutomaticReconstructionController::AutomaticReconstructionController(
+ 
+   ImageReaderOptions& reader_options = *option_manager_.image_reader;
+   reader_options.image_path = *option_manager_.image_path;
++  reader_options.as_rgb = option_manager_.feature_extraction->RequiresRGB();
+   if (!options_.mask_path.empty()) {
+     reader_options.mask_path = options_.mask_path;
+     option_manager_.image_reader->mask_path = options_.mask_path;
+diff --git a/src/colmap/controllers/feature_extraction.cc b/src/colmap/controllers/feature_extraction.cc
+index dc75e29d..6b613a05 100644
+--- a/src/colmap/controllers/feature_extraction.cc
++++ b/src/colmap/controllers/feature_extraction.cc
+@@ -204,7 +204,7 @@ class FeatureExtractorThread : public Thread {
+                             &image_data.keypoints,
+                             &image_data.descriptors);
+             }
+-            if (image_data.mask.Data()) {
++            if (!image_data.mask.IsEmpty()) {
+               MaskKeypoints(image_data.mask,
+                             &image_data.keypoints,
+                             &image_data.descriptors);
+@@ -214,7 +214,9 @@ class FeatureExtractorThread : public Thread {
+           }
+         }
+ 
+-        image_data.bitmap.Deallocate();
++        // Release the memory, since it is not used afterwards.
++        image_data.bitmap = Bitmap();
++        image_data.mask = Bitmap();
+ 
+         output_queue_->Push(std::move(image_data));
+       } else {
+@@ -281,7 +283,7 @@ class FeatureWriterThread : public Thread {
+             image_data.camera.has_prior_focal_length ? " (Prior)" : "");
+         LOG(INFO) << "  Features:        " << image_data.keypoints.size()
+                   << " (" << extractor_type_str_ << ")";
+-        if (image_data.mask.Data()) {
++        if (!image_data.mask.IsEmpty()) {
+           LOG(INFO) << "  Mask:            Yes";
+         }
+ 
+@@ -367,11 +369,12 @@ class FeatureExtractorController : public Thread {
+     extractor_queue_ = std::make_unique<JobQueue<ImageData>>(kQueueSize);
+     writer_queue_ = std::make_unique<JobQueue<ImageData>>(kQueueSize);
+ 
+-    const int max_image_size = extraction_options_.MaxImageSize();
+-    if (max_image_size > 0) {
++    if (extraction_options_.max_image_size > 0) {
+       for (int i = 0; i < num_threads; ++i) {
+         resizers_.emplace_back(std::make_unique<ImageResizerThread>(
+-            max_image_size, resizer_queue_.get(), extractor_queue_.get()));
++            extraction_options_.max_image_size,
++            resizer_queue_.get(),
++            extractor_queue_.get()));
+       }
+     }
+ 
+@@ -403,7 +406,8 @@ class FeatureExtractorController : public Thread {
+     } else {
+       const static FeatureExtractionOptions kDefaultExtractionOptions;
+       if (extraction_options_.num_threads == -1 &&
+-          max_image_size == kDefaultExtractionOptions.MaxImageSize() &&
++          extraction_options_.max_image_size ==
++              kDefaultExtractionOptions.max_image_size &&
+           extraction_options_.sift->first_octave ==
+               kDefaultExtractionOptions.sift->first_octave) {
+         LOG(WARNING)
+@@ -455,7 +459,7 @@ class FeatureExtractorController : public Thread {
+       }
+     }
+ 
+-    const bool should_resize = extraction_options_.MaxImageSize() > 0;
++    const bool should_resize = extraction_options_.max_image_size > 0;
+ 
+     while (image_reader_.NextIndex() < image_reader_.NumImages()) {
+       if (IsStopped()) {
+@@ -475,7 +479,9 @@ class FeatureExtractorController : public Thread {
+                                              &image_data.mask);
+ 
+       if (image_data.status != ImageReader::Status::SUCCESS) {
+-        image_data.bitmap.Deallocate();
++        // Release the memory, since it is not used afterwards.
++        image_data.bitmap = Bitmap();
++        image_data.mask = Bitmap();
+       }
+ 
+       if (should_resize) {
+diff --git a/src/colmap/controllers/image_reader.cc b/src/colmap/controllers/image_reader.cc
+index ae38ac93..0c6a3c12 100644
+--- a/src/colmap/controllers/image_reader.cc
++++ b/src/colmap/controllers/image_reader.cc
+@@ -135,7 +135,7 @@ ImageReader::Status ImageReader::Next(Rig* rig,
+   // Read image.
+   //////////////////////////////////////////////////////////////////////////////
+ 
+-  if (!bitmap->Read(image_path, false)) {
++  if (!bitmap->Read(image_path, /*as_rgb=*/options_.as_rgb)) {
+     return Status::BITMAP_ERROR;
+   }
+ 
+diff --git a/src/colmap/controllers/image_reader.h b/src/colmap/controllers/image_reader.h
+index 9527fb40..ebd04313 100644
+--- a/src/colmap/controllers/image_reader.h
++++ b/src/colmap/controllers/image_reader.h
+@@ -82,6 +82,9 @@ struct ImageReaderOptions {
+   // value `default_focal_length_factor * max(width, height)`.
+   double default_focal_length_factor = 1.2;
+ 
++  // Whether to read images as grayscale or RGB.
++  bool as_rgb = false;
++
+   bool Check() const;
+ };
+ 
+diff --git a/src/colmap/controllers/image_reader_test.cc b/src/colmap/controllers/image_reader_test.cc
+index 5ac7c083..6bace906 100644
+--- a/src/colmap/controllers/image_reader_test.cc
++++ b/src/colmap/controllers/image_reader_test.cc
+@@ -40,9 +40,8 @@
+ namespace colmap {
+ namespace {
+ 
+-Bitmap CreateTestBitmap() {
+-  Bitmap bitmap;
+-  bitmap.Allocate(1, 3, false);
++Bitmap CreateTestBitmap(bool as_rgb) {
++  Bitmap bitmap(1, 3, as_rgb);
+   bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(1));
+   bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2));
+   bitmap.SetPixel(2, 0, BitmapColor<uint8_t>(3));
+@@ -50,25 +49,26 @@ Bitmap CreateTestBitmap() {
+ }
+ 
+ class ParameterizedImageReaderTests
+-    : public ::testing::TestWithParam<
+-          std::tuple</*num_images=*/int,
+-                     /*with_masks=*/bool,
+-                     /*with_existing_images=*/bool>> {};
++    : public ::testing::TestWithParam<std::tuple</*num_images=*/int,
++                                                 /*with_masks=*/bool,
++                                                 /*with_existing_images=*/bool,
++                                                 /*as_rgb=*/bool>> {};
+ 
+ TEST_P(ParameterizedImageReaderTests, Nominal) {
+-  const auto [kNumImages, kWithMasks, kWithExistingImages] = GetParam();
++  const auto [kNumImages, kWithMasks, kWithExistingImages, kAsRGB] = GetParam();
+ 
+   auto database = Database::Open(kInMemorySqliteDatabasePath);
+ 
+   const std::string test_dir = CreateTestDir();
+   ImageReaderOptions options;
+   options.image_path = test_dir + "/images";
++  options.as_rgb = kAsRGB;
+   CreateDirIfNotExists(options.image_path);
+   if (kWithMasks) {
+     options.mask_path = test_dir + "/masks";
+     CreateDirIfNotExists(options.mask_path);
+   }
+-  const Bitmap test_bitmap = CreateTestBitmap();
++  const Bitmap test_bitmap = CreateTestBitmap(kAsRGB);
+   for (int i = 0; i < kNumImages; ++i) {
+     const std::string image_name = std::to_string(i) + ".png";
+     test_bitmap.Write(options.image_path + "/" + image_name);
+@@ -117,8 +117,8 @@ TEST_P(ParameterizedImageReaderTests, Nominal) {
+     EXPECT_EQ(camera.width, test_bitmap.Width());
+     EXPECT_EQ(camera.height, test_bitmap.Height());
+     EXPECT_EQ(image.Name(), std::to_string(i) + ".png");
+-    EXPECT_EQ(bitmap.ConvertToRowMajorArray(),
+-              test_bitmap.ConvertToRowMajorArray());
++    EXPECT_EQ(bitmap.IsRGB(), kAsRGB);
++    EXPECT_EQ(bitmap.RowMajorData(), test_bitmap.RowMajorData());
+     if (kWithExistingImages) {
+       EXPECT_EQ(database->NumRigs(), kNumImages);
+       EXPECT_EQ(database->NumCameras(), kNumImages);
+@@ -135,12 +135,29 @@ TEST_P(ParameterizedImageReaderTests, Nominal) {
+   EXPECT_EQ(database->NumCameras(), kNumImages);
+ }
+ 
+-INSTANTIATE_TEST_SUITE_P(ImageReaderTests,
+-                         ParameterizedImageReaderTests,
+-                         ::testing::Values(std::make_tuple(0, false, true),
+-                                           std::make_tuple(5, false, false),
+-                                           std::make_tuple(5, true, false),
+-                                           std::make_tuple(5, false, true)));
++INSTANTIATE_TEST_SUITE_P(
++    ImageReaderTests,
++    ParameterizedImageReaderTests,
++    ::testing::Values(std::make_tuple(/*num_images=*/0,
++                                      /*with_masks=*/false,
++                                      /*with_existing_images=*/true,
++                                      /*as_rgb=*/true),
++                      std::make_tuple(/*num_images=*/5,
++                                      /*with_masks=*/false,
++                                      /*with_existing_images=*/false,
++                                      /*as_rgb=*/true),
++                      std::make_tuple(/*num_images=*/5,
++                                      /*with_masks=*/true,
++                                      /*with_existing_images=*/false,
++                                      /*as_rgb=*/true),
++                      std::make_tuple(/*num_images=*/5,
++                                      /*with_masks=*/true,
++                                      /*with_existing_images=*/false,
++                                      /*as_rgb=*/false),
++                      std::make_tuple(/*num_images=*/5,
++                                      /*with_masks=*/false,
++                                      /*with_existing_images=*/true,
++                                      /*as_rgb=*/true)));
+ 
+ }  // namespace
+ }  // namespace colmap
+diff --git a/src/colmap/controllers/incremental_pipeline.cc b/src/colmap/controllers/incremental_pipeline.cc
+index 348bd053..13654b55 100644
+--- a/src/colmap/controllers/incremental_pipeline.cc
++++ b/src/colmap/controllers/incremental_pipeline.cc
+@@ -87,6 +87,7 @@ IncrementalMapper::Options IncrementalPipelineOptions::Mapper() const {
+   options.num_threads = num_threads;
+   options.local_ba_num_images = ba_local_num_images;
+   options.fix_existing_frames = fix_existing_frames;
++  options.constant_rigs = constant_rigs;
+   options.constant_cameras = constant_cameras;
+   options.use_prior_position = use_prior_position;
+   options.use_robust_loss_on_prior_position = use_robust_loss_on_prior_position;
+diff --git a/src/colmap/controllers/incremental_pipeline.h b/src/colmap/controllers/incremental_pipeline.h
+index bdc52e0e..9dd5d742 100644
+--- a/src/colmap/controllers/incremental_pipeline.h
++++ b/src/colmap/controllers/incremental_pipeline.h
+@@ -153,6 +153,10 @@ struct IncrementalPipelineOptions {
+   // If reconstruction is provided as input, fix the existing frame poses.
+   bool fix_existing_frames = false;
+ 
++  // List of rigs for which to fix the sensor_from_rig transformation,
++  // independent of ba_refine_sensor_from_rig.
++  std::unordered_set<rig_t> constant_rigs;
++
+   // List of cameras for which to fix the camera parameters independent
+   // of refine_focal_length, refine_principal_point, and refine_extra_params.
+   std::unordered_set<camera_t> constant_cameras;
+diff --git a/src/colmap/controllers/incremental_pipeline_test.cc b/src/colmap/controllers/incremental_pipeline_test.cc
+index 6e8b2037..a17a1589 100644
+--- a/src/colmap/controllers/incremental_pipeline_test.cc
++++ b/src/colmap/controllers/incremental_pipeline_test.cc
+@@ -30,6 +30,7 @@
+ #include "colmap/controllers/incremental_pipeline.h"
+ 
+ #include "colmap/estimators/alignment.h"
++#include "colmap/geometry/rigid3_matchers.h"
+ #include "colmap/scene/database.h"
+ #include "colmap/scene/synthetic.h"
+ #include "colmap/util/testing.h"
+@@ -84,6 +85,15 @@ bool AreReconstructionsIdentical(const Reconstruction& gt,
+     return false;
+   }
+ 
++  for (const auto& [camera_id, camera] : gt.Cameras()) {
++    if (!computed.ExistsCamera(camera_id)) {
++      return false;
++    }
++    if (camera.params != computed.Camera(camera_id).params) {
++      return false;
++    }
++  }
++
+   for (const auto& [image_id, image] : computed.Images()) {
+     if (!gt.ExistsImage(image_id)) {
+       return false;
+@@ -106,16 +116,6 @@ bool AreReconstructionsIdentical(const Reconstruction& gt,
+   return true;
+ }
+ 
+-void ExpectReconstructionsIdentical(const Reconstruction& gt,
+-                                    const Reconstruction& computed) {
+-  EXPECT_TRUE(AreReconstructionsIdentical(gt, computed));
+-}
+-
+-void ExpectReconstructionsDifferent(const Reconstruction& gt,
+-                                    const Reconstruction& computed) {
+-  EXPECT_FALSE(AreReconstructionsIdentical(gt, computed));
+-}
+-
+ TEST(IncrementalPipeline, WithoutNoise) {
+   const std::string database_path = CreateTestDir() + "/database.db";
+ 
+@@ -185,6 +185,59 @@ TEST(IncrementalPipeline, WithoutNoiseAndWithNonTrivialFrames) {
+   }
+ }
+ 
++TEST(IncrementalPipeline, WithNonTrivialFramesAndConstantRigsAndCameras) {
++  const std::string database_path = CreateTestDir() + "/database.db";
++
++  auto database = Database::Open(database_path);
++  Reconstruction gt_reconstruction;
++  SyntheticDatasetOptions synthetic_dataset_options;
++  synthetic_dataset_options.num_rigs = 2;
++  synthetic_dataset_options.num_cameras_per_rig = 2;
++  synthetic_dataset_options.num_frames_per_rig = 7;
++  synthetic_dataset_options.num_points3D = 100;
++  synthetic_dataset_options.point2D_stddev = 0;
++  synthetic_dataset_options.camera_has_prior_focal_length = false;
++  synthetic_dataset_options.sensor_from_rig_translation_stddev = 0.05;
++  synthetic_dataset_options.sensor_from_rig_rotation_stddev = 30;
++  SynthesizeDataset(
++      synthetic_dataset_options, &gt_reconstruction, database.get());
++
++  constexpr int kConstantRigId = 1;
++  constexpr int kConstantCameraId = 1;
++
++  auto reconstruction_manager = std::make_shared<ReconstructionManager>();
++  auto options = std::make_shared<IncrementalPipelineOptions>();
++  options->constant_rigs.insert(kConstantRigId);
++  options->constant_cameras.insert(kConstantCameraId);
++  IncrementalPipeline mapper(options,
++                             /*image_path=*/"",
++                             database_path,
++                             reconstruction_manager);
++  mapper.Run();
++
++  ASSERT_EQ(reconstruction_manager->Size(), 1);
++  auto& reconstruction = *reconstruction_manager->Get(0);
++  ExpectReconstructionsNear(gt_reconstruction,
++                            reconstruction,
++                            /*max_rotation_error_deg=*/1e-2,
++                            /*max_proj_center_error=*/1e-3,
++                            /*num_obs_tolerance=*/0,
++                            /*align=*/true,
++                            /*check_scale=*/true);
++
++  for (const auto& [sensor_id, sensor_from_rig] :
++       reconstruction.Rig(kConstantRigId).Sensors()) {
++    EXPECT_THAT(
++        sensor_from_rig.value(),
++        Rigid3dNear(
++            gt_reconstruction.Rig(kConstantRigId).SensorFromRig(sensor_id),
++            /*rtol=*/1e-6,
++            /*ttol=*/1e-6));
++  }
++  EXPECT_EQ(reconstruction.Camera(kConstantCameraId).params,
++            gt_reconstruction.Camera(kConstantCameraId).params);
++}
++
+ TEST(IncrementalPipeline, WithoutNoiseAndWithPanoramicNonTrivialFrames) {
+   const std::string database_path = CreateTestDir() + "/database.db";
+ 
+@@ -570,6 +623,8 @@ TEST(IncrementalPipeline, GPSPriorBasedSfMWithNoise) {
+ }
+ 
+ TEST(IncrementalPipeline, SfMWithRandomSeedStability) {
++  SetPRNGSeed(1);
++
+   const std::string database_path = CreateTestDir() + "/database.db";
+ 
+   auto database = Database::Open(database_path);
+@@ -577,9 +632,9 @@ TEST(IncrementalPipeline, SfMWithRandomSeedStability) {
+   SyntheticDatasetOptions synthetic_dataset_options;
+   synthetic_dataset_options.num_rigs = 2;
+   synthetic_dataset_options.num_cameras_per_rig = 1;
+-  synthetic_dataset_options.num_frames_per_rig = 7;
++  synthetic_dataset_options.num_frames_per_rig = 5;
+   synthetic_dataset_options.num_points3D = 100;
+-  synthetic_dataset_options.point2D_stddev = 2.5;
++  synthetic_dataset_options.point2D_stddev = 1;
+   synthetic_dataset_options.use_prior_position = false;
+   SynthesizeDataset(
+       synthetic_dataset_options, &gt_reconstruction, database.get());
+@@ -600,48 +655,53 @@ TEST(IncrementalPipeline, SfMWithRandomSeedStability) {
+     return reconstruction_manager;
+   };
+ 
+-  // Single-thread execution
++  // Single-threaded execution.
+   {
++    constexpr int kRandomSeed = 42;
+     auto reconstruction_manager0 =
+-        run_mapper(/*num_threads=*/1, /*random_seed=*/42);
++        run_mapper(/*num_threads=*/1, /*random_seed=*/kRandomSeed);
+     auto reconstruction_manager1 =
+-        run_mapper(/*num_threads=*/1, /*random_seed=*/42);
+-    // Same seed should produce identical reconstructions in single-thread mode
+-
+-    ExpectReconstructionsIdentical(*reconstruction_manager0->Get(0),
+-                                   *reconstruction_manager1->Get(0));
+-
+-    // Different seed should produce different reconstructions
+-    auto reconstruction_manager2 =
+-        run_mapper(/*num_threads=*/1, /*random_seed=*/123);
+-    ExpectReconstructionsDifferent(*reconstruction_manager0->Get(0),
+-                                   *reconstruction_manager2->Get(0));
++        run_mapper(/*num_threads=*/1, /*random_seed=*/kRandomSeed);
++    EXPECT_TRUE(AreReconstructionsIdentical(*reconstruction_manager0->Get(0),
++                                            *reconstruction_manager1->Get(0)));
++
++    // Different seed should produce different reconstructions. Notice that, for
++    // some seeds, we may still get identical results, so we try a few different
++    // seeds until we get a different result.
++    bool different_result = false;
++    for (int random_seed = kRandomSeed + 1; random_seed < kRandomSeed + 10;
++         ++random_seed) {
++      auto reconstruction_manager2 =
++          run_mapper(/*num_threads=*/1, /*random_seed=*/random_seed);
++      if (!AreReconstructionsIdentical(*reconstruction_manager0->Get(0),
++                                       *reconstruction_manager2->Get(0))) {
++        different_result = true;
++        break;
++      }
++    }
++    EXPECT_TRUE(different_result);
+   }
+ 
+-  // Multi-thread execution
++  // Multi-threaded execution.
+   {
+     auto reconstruction_manager0 =
+         run_mapper(/*num_threads=*/-1, /*random_seed=*/42);
+     auto reconstruction_manager1 =
+         run_mapper(/*num_threads=*/-1, /*random_seed=*/42);
+     // Same seed should produce similar results, up to floating-point variations
+-    // in optimization
++    // in optimization.
+     ExpectReconstructionsNear(*reconstruction_manager0->Get(0),
+                               *reconstruction_manager1->Get(0),
+-                              /*max_rotation_error_deg=*/1e-14,
+-                              /*max_proj_center_error=*/1e-14,
++                              /*max_rotation_error_deg=*/1e-10,
++                              /*max_proj_center_error=*/1e-10,
+                               /*num_obs_tolerance=*/0.01,
+                               /*align=*/false);
+-
+-    auto reconstruction_manager2 =
+-        run_mapper(/*num_threads=*/-1, /*random_seed=*/123);
+-    // Different seed may produce different reconstructions
+-    ExpectReconstructionsDifferent(*reconstruction_manager0->Get(0),
+-                                   *reconstruction_manager2->Get(0));
+   }
+ }
+ 
+ TEST(IncrementalPipeline, PriorBasedSfMWithRandomSeedStability) {
++  SetPRNGSeed(1);
++
+   const std::string database_path = CreateTestDir() + "/database.db";
+ 
+   auto database = Database::Open(database_path);
+@@ -651,11 +711,11 @@ TEST(IncrementalPipeline, PriorBasedSfMWithRandomSeedStability) {
+   synthetic_dataset_options.num_cameras_per_rig = 1;
+   synthetic_dataset_options.num_frames_per_rig = 7;
+   synthetic_dataset_options.num_points3D = 100;
+-  synthetic_dataset_options.point2D_stddev = 2.5;
++  synthetic_dataset_options.point2D_stddev = 1;
+   synthetic_dataset_options.use_prior_position = true;
+   SynthesizeDataset(
+       synthetic_dataset_options, &gt_reconstruction, database.get());
+-  synthetic_dataset_options.prior_position_stddev = 2.0;
++  synthetic_dataset_options.prior_position_stddev = 1.0;
+ 
+   auto mapper_options = std::make_shared<IncrementalPipelineOptions>();
+   mapper_options->use_prior_position = false;
+@@ -673,43 +733,48 @@ TEST(IncrementalPipeline, PriorBasedSfMWithRandomSeedStability) {
+     return reconstruction_manager;
+   };
+ 
+-  // Single-thread execution
++  // Single-threaded execution.
+   {
++    constexpr int kRandomSeed = 42;
+     auto reconstruction_manager0 =
+-        run_mapper(/*num_threads=*/1, /*random_seed=*/42);
++        run_mapper(/*num_threads=*/1, /*random_seed=*/kRandomSeed);
+     auto reconstruction_manager1 =
+-        run_mapper(/*num_threads=*/1, /*random_seed=*/42);
+-    // Same seed should produce identical reconstructions in single-thread mode
+-    ExpectReconstructionsIdentical(*reconstruction_manager0->Get(0),
+-                                   *reconstruction_manager1->Get(0));
+-
+-    // Different seed should produce different reconstructions
+-    auto reconstruction_manager2 =
+-        run_mapper(/*num_threads=*/1, /*random_seed=*/123);
+-    ExpectReconstructionsDifferent(*reconstruction_manager0->Get(0),
+-                                   *reconstruction_manager2->Get(0));
++        run_mapper(/*num_threads=*/1, /*random_seed=*/kRandomSeed);
++    EXPECT_TRUE(AreReconstructionsIdentical(*reconstruction_manager0->Get(0),
++                                            *reconstruction_manager1->Get(0)));
++
++    // Different seed should produce different reconstructions. Notice that, for
++    // some seeds, we may still get identical results, so we try a few different
++    // seeds until we get a different result.
++    bool different_result = false;
++    for (int random_seed = kRandomSeed + 1; random_seed < kRandomSeed + 10;
++         ++random_seed) {
++      // Different seed should produce different reconstructions.
++      auto reconstruction_manager2 =
++          run_mapper(/*num_threads=*/1, /*random_seed=*/random_seed);
++      if (!AreReconstructionsIdentical(*reconstruction_manager0->Get(0),
++                                       *reconstruction_manager2->Get(0))) {
++        different_result = true;
++        break;
++      }
++    }
++    EXPECT_TRUE(different_result);
+   }
+ 
+-  // Multi-thread execution
++  // Multi-threaded execution.
+   {
+     auto reconstruction_manager0 =
+         run_mapper(/*num_threads=*/-1, /*random_seed=*/42);
+     auto reconstruction_manager1 =
+         run_mapper(/*num_threads=*/-1, /*random_seed=*/42);
+     // Same seed should produce similar results, up to floating-point variations
+-    // in optimization
++    // in optimization.
+     ExpectReconstructionsNear(*reconstruction_manager0->Get(0),
+                               *reconstruction_manager1->Get(0),
+-                              /*max_rotation_error_deg=*/1e-13,
+-                              /*max_proj_center_error=*/1e-13,
++                              /*max_rotation_error_deg=*/1e-10,
++                              /*max_proj_center_error=*/1e-10,
+                               /*num_obs_tolerance=*/0.01,
+                               /*align=*/false);
+-
+-    auto reconstruction_manager2 =
+-        run_mapper(/*num_threads=*/-1, /*random_seed=*/123);
+-    // Different seed may produce different reconstructions
+-    ExpectReconstructionsDifferent(*reconstruction_manager0->Get(0),
+-                                   *reconstruction_manager2->Get(0));
+   }
+ }
+ 
+diff --git a/src/colmap/controllers/option_manager.cc b/src/colmap/controllers/option_manager.cc
+index 06a5498b..14c421d4 100644
+--- a/src/colmap/controllers/option_manager.cc
++++ b/src/colmap/controllers/option_manager.cc
+@@ -110,7 +110,7 @@ void OptionManager::ModifyForInternetData() {
+ }
+ 
+ void OptionManager::ModifyForLowQuality() {
+-  feature_extraction->sift->max_image_size = 1000;
++  feature_extraction->max_image_size = 1000;
+   feature_extraction->sift->max_num_features = 2048;
+   sequential_pairing->loop_detection_num_images /= 2;
+   vocab_tree_pairing->max_num_features = 256;
+@@ -131,7 +131,7 @@ void OptionManager::ModifyForLowQuality() {
+ }
+ 
+ void OptionManager::ModifyForMediumQuality() {
+-  feature_extraction->sift->max_image_size = 1600;
++  feature_extraction->max_image_size = 1600;
+   feature_extraction->sift->max_num_features = 4096;
+   sequential_pairing->loop_detection_num_images /= 1.5;
+   vocab_tree_pairing->max_num_features = 1024;
+@@ -153,7 +153,7 @@ void OptionManager::ModifyForMediumQuality() {
+ 
+ void OptionManager::ModifyForHighQuality() {
+   feature_extraction->sift->estimate_affine_shape = true;
+-  feature_extraction->sift->max_image_size = 2400;
++  feature_extraction->max_image_size = 2400;
+   feature_extraction->sift->max_num_features = 8192;
+   feature_matching->guided_matching = true;
+   vocab_tree_pairing->max_num_features = 4096;
+@@ -269,7 +269,7 @@ void OptionManager::AddFeatureExtractionOptions() {
+                               &feature_extraction->gpu_index);
+ 
+   AddAndRegisterDefaultOption("SiftExtraction.max_image_size",
+-                              &feature_extraction->sift->max_image_size);
++                              &feature_extraction->max_image_size);
+   AddAndRegisterDefaultOption("SiftExtraction.max_num_features",
+                               &feature_extraction->sift->max_num_features);
+   AddAndRegisterDefaultOption("SiftExtraction.first_octave",
+@@ -645,6 +645,8 @@ void OptionManager::AddMapperOptions() {
+                               &mapper->mapper.local_ba_min_tri_angle);
+ 
+   AddDefaultOption("Mapper.image_list_path", &mapper_image_list_path_);
++  AddDefaultOption("Mapper.constant_rig_list_path",
++                   &mapper_constant_rig_list_path_);
+   AddDefaultOption("Mapper.constant_camera_list_path",
+                    &mapper_constant_camera_list_path_);
+ 
+@@ -952,6 +954,12 @@ void OptionManager::Parse(const int argc, char** argv) {
+     if (!mapper_image_list_path_.empty()) {
+       mapper->image_names = ReadTextFileLines(mapper_image_list_path_);
+     }
++    if (!mapper_constant_rig_list_path_.empty()) {
++      for (const std::string& line :
++           ReadTextFileLines(mapper_constant_rig_list_path_)) {
++        mapper->constant_rigs.insert(std::stoi(line));
++      }
++    }
+     if (!mapper_constant_camera_list_path_.empty()) {
+       for (const std::string& line :
+            ReadTextFileLines(mapper_constant_camera_list_path_)) {
+diff --git a/src/colmap/controllers/option_manager.h b/src/colmap/controllers/option_manager.h
+index 12bfe68a..3d5bffc6 100644
+--- a/src/colmap/controllers/option_manager.h
++++ b/src/colmap/controllers/option_manager.h
+@@ -174,6 +174,7 @@ class OptionManager {
+   std::string feature_matching_type_;
+ 
+   std::string mapper_image_list_path_;
++  std::string mapper_constant_rig_list_path_;
+   std::string mapper_constant_camera_list_path_;
+ 
+   bool added_log_options_;
+diff --git a/src/colmap/exe/feature.cc b/src/colmap/exe/feature.cc
+index 59e2d8fa..122c048a 100644
+--- a/src/colmap/exe/feature.cc
++++ b/src/colmap/exe/feature.cc
+@@ -106,6 +106,7 @@ int RunFeatureExtractor(int argc, char** argv) {
+ 
+   ImageReaderOptions reader_options = *options.image_reader;
+   reader_options.image_path = *options.image_path;
++  reader_options.as_rgb = options.feature_extraction->RequiresRGB();
+ 
+   if (camera_mode >= 0) {
+     UpdateImageReaderOptionsFromCameraMode(reader_options,
+diff --git a/src/colmap/exe/gui.cc b/src/colmap/exe/gui.cc
+index 040f4427..19a35f02 100644
+--- a/src/colmap/exe/gui.cc
++++ b/src/colmap/exe/gui.cc
+@@ -53,13 +53,15 @@ int RunGraphicalUserInterface(int argc, char** argv) {
+     options.Parse(argc, argv);
+   }
+ 
+-#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+-  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+-  QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+-#endif
+-
+   QApplication app(argc, argv);
+ 
++#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)) && \
++    (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
++  app.setAttribute(Qt::AA_EnableHighDpiScaling);
++  app.setAttribute(Qt::AA_UseHighDpiPixmaps);
++#endif
++  app.setAttribute(Qt::AA_DontShowIconsInMenus, false);
++
+   colmap::MainWindow main_window(options);
+   main_window.show();
+ 
+diff --git a/src/colmap/feature/CMakeLists.txt b/src/colmap/feature/CMakeLists.txt
+index c03e3643..0f3ebea9 100644
+--- a/src/colmap/feature/CMakeLists.txt
++++ b/src/colmap/feature/CMakeLists.txt
+@@ -101,5 +101,5 @@ COLMAP_ADD_TEST(
+         colmap_util
+ )
+ if(TESTS_ENABLED AND GUI_ENABLED)
+-    target_link_libraries(colmap_feature_sift_test Qt5::Widgets)
++    target_link_libraries(colmap_feature_sift_test Qt${QT_VERSION_MAJOR}::Widgets)
+ endif()
+diff --git a/src/colmap/feature/extractor.cc b/src/colmap/feature/extractor.cc
+index 730a3da2..45dfa1d3 100644
+--- a/src/colmap/feature/extractor.cc
++++ b/src/colmap/feature/extractor.cc
+@@ -46,17 +46,18 @@ void ThrowUnknownFeatureExtractorType(FeatureExtractorType type) {
+ FeatureExtractionOptions::FeatureExtractionOptions(FeatureExtractorType type)
+     : type(type), sift(std::make_shared<SiftExtractionOptions>()) {}
+ 
+-int FeatureExtractionOptions::MaxImageSize() const {
++bool FeatureExtractionOptions::RequiresRGB() const {
+   switch (type) {
+     case FeatureExtractorType::SIFT:
+-      return sift->max_image_size;
++      return false;
+     default:
+       ThrowUnknownFeatureExtractorType(type);
+   }
+-  return -1;
++  return false;
+ }
+ 
+ bool FeatureExtractionOptions::Check() const {
++  CHECK_OPTION_GT(max_image_size, 0);
+   if (use_gpu) {
+     CHECK_OPTION_GT(CSVToVector<int>(gpu_index).size(), 0);
+ #ifndef COLMAP_GPU_ENABLED
+diff --git a/src/colmap/feature/extractor.h b/src/colmap/feature/extractor.h
+index c6808a04..d2bcc7dc 100644
+--- a/src/colmap/feature/extractor.h
++++ b/src/colmap/feature/extractor.h
+@@ -47,6 +47,9 @@ struct FeatureExtractionOptions {
+ 
+   FeatureExtractorType type = FeatureExtractorType::SIFT;
+ 
++  // Maximum image size, otherwise image will be down-scaled.
++  int max_image_size = 3200;
++
+   // Number of threads for feature extraction.
+   int num_threads = -1;
+ 
+@@ -59,7 +62,8 @@ struct FeatureExtractionOptions {
+ 
+   std::shared_ptr<SiftExtractionOptions> sift;
+ 
+-  int MaxImageSize() const;
++  // Whether the selected extractor requires RGB (or grayscale) images.
++  bool RequiresRGB() const;
+ 
+   bool Check() const;
+ };
+diff --git a/src/colmap/feature/sift.cc b/src/colmap/feature/sift.cc
+index 9aeee62e..79265d65 100644
+--- a/src/colmap/feature/sift.cc
++++ b/src/colmap/feature/sift.cc
+@@ -63,7 +63,6 @@ namespace colmap {
+ constexpr int kSqSiftDescriptorNorm = 512 * 512;
+ 
+ bool SiftExtractionOptions::Check() const {
+-  CHECK_OPTION_GT(max_image_size, 0);
+   CHECK_OPTION_GT(max_num_features, 0);
+   CHECK_OPTION_GT(octave_resolution, 0);
+   CHECK_OPTION_GT(peak_threshold, 0.0);
+@@ -157,7 +156,7 @@ class SiftCPUFeatureExtractor : public FeatureExtractor {
+     bool first_octave = true;
+     while (true) {
+       if (first_octave) {
+-        const std::vector<uint8_t> data_uint8 = bitmap.ConvertToRowMajorArray();
++        const std::vector<uint8_t>& data_uint8 = bitmap.RowMajorData();
+         std::vector<float> data_float(data_uint8.size());
+         for (size_t i = 0; i < data_uint8.size(); ++i) {
+           data_float[i] = static_cast<float>(data_uint8[i]) / 255.0f;
+@@ -346,7 +345,7 @@ class CovariantSiftCPUFeatureExtractor : public FeatureExtractor {
+     vl_covdet_set_edge_threshold(covdet.get(), options_.sift->edge_threshold);
+ 
+     {
+-      const std::vector<uint8_t> data_uint8 = bitmap.ConvertToRowMajorArray();
++      const std::vector<uint8_t>& data_uint8 = bitmap.RowMajorData();
+       std::vector<float> data_float(data_uint8.size());
+       for (size_t i = 0; i < data_uint8.size(); ++i) {
+         data_float[i] = static_cast<float>(data_uint8[i]) / 255.0f;
+@@ -573,7 +572,7 @@ class SiftGPUFeatureExtractor : public FeatureExtractor {
+                                     << -std::min(0, options.sift->first_octave);
+     sift_gpu_args.push_back("-maxd");
+     sift_gpu_args.push_back(
+-        std::to_string(options.sift->max_image_size * compensation_factor));
++        std::to_string(options.max_image_size * compensation_factor));
+ 
+     // Keep the highest level features.
+     sift_gpu_args.push_back("-tc2");
+@@ -647,17 +646,16 @@ class SiftGPUFeatureExtractor : public FeatureExtractor {
+     // first octave in the pyramid (which is the 'first_octave').
+     const int compensation_factor =
+         1 << -std::min(0, options_.sift->first_octave);
+-    THROW_CHECK_EQ(options_.sift->max_image_size * compensation_factor,
++    THROW_CHECK_EQ(options_.max_image_size * compensation_factor,
+                    sift_gpu_.GetMaxDimension());
+ 
+     std::lock_guard<std::mutex> lock(*sift_gpu_mutexes_[sift_gpu_.gpu_index]);
+ 
+     // Note, that this produces slightly different results than using SiftGPU
+     // directly for RGB->GRAY conversion, since it uses different weights.
+-    const std::vector<uint8_t> bitmap_raw_bits = bitmap.ConvertToRawBits();
+     const int code = sift_gpu_.RunSIFT(bitmap.Pitch(),
+                                        bitmap.Height(),
+-                                       bitmap_raw_bits.data(),
++                                       bitmap.RowMajorData().data(),
+                                        GL_LUMINANCE,
+                                        GL_UNSIGNED_BYTE);
+ 
+diff --git a/src/colmap/feature/sift.h b/src/colmap/feature/sift.h
+index 017e6c32..7cdb48b6 100644
+--- a/src/colmap/feature/sift.h
++++ b/src/colmap/feature/sift.h
+@@ -35,9 +35,6 @@
+ namespace colmap {
+ 
+ struct SiftExtractionOptions {
+-  // Maximum image size, otherwise image will be down-scaled.
+-  int max_image_size = 3200;
+-
+   // Maximum number of features to detect, keeping larger-scale features.
+   int max_num_features = 8192;
+ 
+diff --git a/src/colmap/feature/sift_test.cc b/src/colmap/feature/sift_test.cc
+index 5c89eb11..af493016 100644
+--- a/src/colmap/feature/sift_test.cc
++++ b/src/colmap/feature/sift_test.cc
+@@ -46,19 +46,19 @@
+ namespace colmap {
+ namespace {
+ 
+-void CreateImageWithSquare(const int size, Bitmap* bitmap) {
+-  bitmap->Allocate(size, size, false);
+-  bitmap->Fill(BitmapColor<uint8_t>(0, 0, 0));
++Bitmap CreateImageWithSquare(const int size) {
++  Bitmap bitmap(size, size, false);
++  bitmap.Fill(BitmapColor<uint8_t>(0, 0, 0));
+   for (int r = size / 2 - size / 8; r < size / 2 + size / 8; ++r) {
+     for (int c = size / 2 - size / 8; c < size / 2 + size / 8; ++c) {
+-      bitmap->SetPixel(r, c, BitmapColor<uint8_t>(255));
++      bitmap.SetPixel(r, c, BitmapColor<uint8_t>(255));
+     }
+   }
++  return bitmap;
+ }
+ 
+ TEST(ExtractSiftFeaturesCPU, Nominal) {
+-  Bitmap bitmap;
+-  CreateImageWithSquare(256, &bitmap);
++  const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+   FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+   options.use_gpu = false;
+@@ -89,8 +89,7 @@ TEST(ExtractSiftFeaturesCPU, Nominal) {
+ }
+ 
+ TEST(ExtractCovariantSiftFeaturesCPU, Nominal) {
+-  Bitmap bitmap;
+-  CreateImageWithSquare(256, &bitmap);
++  const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+   FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+   options.use_gpu = false;
+@@ -121,8 +120,7 @@ TEST(ExtractCovariantSiftFeaturesCPU, Nominal) {
+ }
+ 
+ TEST(ExtractCovariantAffineSiftFeaturesCPU, Nominal) {
+-  Bitmap bitmap;
+-  CreateImageWithSquare(256, &bitmap);
++  const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+   FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+   options.use_gpu = false;
+@@ -153,8 +151,7 @@ TEST(ExtractCovariantAffineSiftFeaturesCPU, Nominal) {
+ }
+ 
+ TEST(ExtractCovariantAffineSiftFeaturesCPU, Upright) {
+-  Bitmap bitmap;
+-  CreateImageWithSquare(256, &bitmap);
++  const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+   FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+   options.use_gpu = false;
+@@ -186,8 +183,7 @@ TEST(ExtractCovariantAffineSiftFeaturesCPU, Upright) {
+ }
+ 
+ TEST(ExtractCovariantDSPSiftFeaturesCPU, Nominal) {
+-  Bitmap bitmap;
+-  CreateImageWithSquare(256, &bitmap);
++  const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+   FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+   options.use_gpu = false;
+@@ -218,8 +214,7 @@ TEST(ExtractCovariantDSPSiftFeaturesCPU, Nominal) {
+ }
+ 
+ TEST(ExtractCovariantAffineDSPSiftFeaturesCPU, Nominal) {
+-  Bitmap bitmap;
+-  CreateImageWithSquare(256, &bitmap);
++  const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+   FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+   options.use_gpu = false;
+@@ -260,8 +255,7 @@ TEST(ExtractSiftFeaturesGPU, Nominal) {
+     void Run() {
+       opengl_context_.MakeCurrent();
+ 
+-      Bitmap bitmap;
+-      CreateImageWithSquare(256, &bitmap);
++      const Bitmap bitmap = CreateImageWithSquare(256);
+ 
+       FeatureExtractionOptions options(FeatureExtractorType::SIFT);
+       options.use_gpu = true;
+diff --git a/src/colmap/image/CMakeLists.txt b/src/colmap/image/CMakeLists.txt
+index 1e28dc91..2bfe492b 100644
+--- a/src/colmap/image/CMakeLists.txt
++++ b/src/colmap/image/CMakeLists.txt
+@@ -42,6 +42,7 @@ COLMAP_ADD_LIBRARY(
+     PRIVATE_LINK_LIBS
+         colmap_util
+         colmap_sensor
++        colmap_vlfeat
+ )
+ if(LSD_ENABLED)
+     target_link_libraries(colmap_image PRIVATE colmap_lsd)
+diff --git a/src/colmap/image/line.cc b/src/colmap/image/line.cc
+index e1a13aec..b5036355 100644
+--- a/src/colmap/image/line.cc
++++ b/src/colmap/image/line.cc
+@@ -49,21 +49,21 @@ struct RawDeleter {
+ }  // namespace
+ 
+ #ifdef COLMAP_LSD_ENABLED
++
+ std::vector<LineSegment> DetectLineSegments(const Bitmap& bitmap,
+                                             const double min_length) {
+   const double min_length_squared = min_length * min_length;
+ 
+-  std::vector<uint8_t> bitmap_data;
++  std::vector<double> bitmap_data_double;
+   if (bitmap.IsGrey()) {
+-    bitmap_data = bitmap.ConvertToRowMajorArray();
++    bitmap_data_double = {bitmap.RowMajorData().begin(),
++                          bitmap.RowMajorData().end()};
+   } else {
+     const Bitmap bitmap_gray = bitmap.CloneAsGrey();
+-    bitmap_data = bitmap_gray.ConvertToRowMajorArray();
++    bitmap_data_double = {bitmap_gray.RowMajorData().begin(),
++                          bitmap_gray.RowMajorData().end()};
+   }
+ 
+-  std::vector<double> bitmap_data_double(bitmap_data.begin(),
+-                                         bitmap_data.end());
+-
+   int num_segments;
+   std::unique_ptr<double, RawDeleter> segments_data(
+       lsd(&num_segments,
+diff --git a/src/colmap/image/line_test.cc b/src/colmap/image/line_test.cc
+index bfd04ada..422291ad 100644
+--- a/src/colmap/image/line_test.cc
++++ b/src/colmap/image/line_test.cc
+@@ -35,9 +35,9 @@ namespace colmap {
+ namespace {
+ 
+ #ifdef COLMAP_LSD_ENABLED
++
+ TEST(DetectLineSegments, Nominal) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, false);
++  Bitmap bitmap(100, 100, false);
+   for (size_t i = 0; i < 100; ++i) {
+     bitmap.SetPixel(i, i, BitmapColor<uint8_t>(255));
+   }
+@@ -57,8 +57,7 @@ TEST(DetectLineSegments, Nominal) {
+ }
+ 
+ TEST(ClassifyLineSegmentOrientations, Nominal) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, false);
++  Bitmap bitmap(100, 100, false);
+   for (size_t i = 60; i < 100; ++i) {
+     bitmap.SetPixel(i, 50, BitmapColor<uint8_t>(255));
+     bitmap.SetPixel(50, i, BitmapColor<uint8_t>(255));
+diff --git a/src/colmap/image/undistortion.cc b/src/colmap/image/undistortion.cc
+index ec4b8a7a..839d4e80 100644
+--- a/src/colmap/image/undistortion.cc
++++ b/src/colmap/image/undistortion.cc
+@@ -1084,12 +1084,12 @@ void RectifyAndUndistortStereoImages(const UndistortCameraOptions& options,
+   THROW_CHECK_EQ(distorted_camera2.height, distorted_image2.Height());
+ 
+   *undistorted_camera = UndistortCamera(options, distorted_camera1);
+-  undistorted_image1->Allocate(static_cast<int>(undistorted_camera->width),
++  *undistorted_image1 = Bitmap(static_cast<int>(undistorted_camera->width),
+                                static_cast<int>(undistorted_camera->height),
+                                distorted_image1.IsRGB());
+   distorted_image1.CloneMetadata(undistorted_image1);
+ 
+-  undistorted_image2->Allocate(static_cast<int>(undistorted_camera->width),
++  *undistorted_image2 = Bitmap(static_cast<int>(undistorted_camera->width),
+                                static_cast<int>(undistorted_camera->height),
+                                distorted_image2.IsRGB());
+   distorted_image2.CloneMetadata(undistorted_image2);
+diff --git a/src/colmap/image/undistortion_test.cc b/src/colmap/image/undistortion_test.cc
+index be0fdee5..a7296890 100644
+--- a/src/colmap/image/undistortion_test.cc
++++ b/src/colmap/image/undistortion_test.cc
+@@ -110,8 +110,7 @@ TEST(UndistortCamera, BlankPixels) {
+       Camera::CreateFromModelName(1, "SIMPLE_RADIAL", 100, 100, 100);
+   distorted_camera.params[3] = 0.5;
+ 
+-  Bitmap distorted_image;
+-  distorted_image.Allocate(100, 100, false);
++  Bitmap distorted_image(100, 100, false);
+   distorted_image.Fill(BitmapColor<uint8_t>(255));
+ 
+   Bitmap undistorted_image;
+@@ -154,8 +153,7 @@ TEST(UndistortCamera, NoBlankPixels) {
+       Camera::CreateFromModelName(1, "SIMPLE_RADIAL", 100, 100, 100);
+   distorted_camera.params[3] = 0.5;
+ 
+-  Bitmap distorted_image;
+-  distorted_image.Allocate(100, 100, false);
++  Bitmap distorted_image(100, 100, false);
+   distorted_image.Fill(BitmapColor<uint8_t>(255));
+ 
+   Bitmap undistorted_image;
+@@ -179,9 +177,9 @@ TEST(UndistortCamera, NoBlankPixels) {
+     for (int x = 0; x < undistorted_image.Width(); ++x) {
+       BitmapColor<uint8_t> color;
+       EXPECT_TRUE(undistorted_image.GetPixel(x, y, &color));
+-      EXPECT_NE(color.r, 0);
+-      EXPECT_EQ(color.g, 0);
+-      EXPECT_EQ(color.b, 0);
++      ASSERT_NE(color.r, 0);
++      ASSERT_NE(color.g, 0);
++      ASSERT_NE(color.b, 0);
+     }
+   }
+ }
+diff --git a/src/colmap/image/warp.cc b/src/colmap/image/warp.cc
+index b8a83969..11cb6605 100644
+--- a/src/colmap/image/warp.cc
++++ b/src/colmap/image/warp.cc
+@@ -61,7 +61,7 @@ void WarpImageBetweenCameras(const Camera& source_camera,
+   THROW_CHECK_EQ(source_camera.height, source_image.Height());
+   THROW_CHECK_NOTNULL(target_image);
+ 
+-  target_image->Allocate(static_cast<int>(source_camera.width),
++  *target_image = Bitmap(static_cast<int>(source_camera.width),
+                          static_cast<int>(source_camera.height),
+                          source_image.IsRGB());
+ 
+@@ -143,7 +143,7 @@ void WarpImageWithHomographyBetweenCameras(const Eigen::Matrix3d& H,
+   THROW_CHECK_EQ(source_camera.height, source_image.Height());
+   THROW_CHECK_NOTNULL(target_image);
+ 
+-  target_image->Allocate(static_cast<int>(source_camera.width),
++  *target_image = Bitmap(static_cast<int>(source_camera.width),
+                          static_cast<int>(source_camera.height),
+                          source_image.IsRGB());
+ 
+diff --git a/src/colmap/image/warp_test.cc b/src/colmap/image/warp_test.cc
+index 13c7feb7..0604b17f 100644
+--- a/src/colmap/image/warp_test.cc
++++ b/src/colmap/image/warp_test.cc
+@@ -37,20 +37,20 @@ namespace colmap {
+ namespace {
+ namespace {
+ 
+-void GenerateRandomBitmap(const int width,
+-                          const int height,
+-                          const bool as_rgb,
+-                          Bitmap* bitmap) {
+-  bitmap->Allocate(width, height, as_rgb);
++const Bitmap GenerateRandomBitmap(const int width,
++                                  const int height,
++                                  const bool as_rgb) {
++  Bitmap bitmap(width, height, as_rgb);
+   for (int x = 0; x < width; ++x) {
+     for (int y = 0; y < height; ++y) {
+       BitmapColor<uint8_t> color;
+       color.r = RandomUniformInteger<int>(0, 255);
+       color.g = RandomUniformInteger<int>(0, 255);
+       color.b = RandomUniformInteger<int>(0, 255);
+-      bitmap->SetPixel(x, y, color);
++      bitmap.SetPixel(x, y, color);
+     }
+   }
++  return bitmap;
+ }
+ 
+ // Check that the two bitmaps are equal, ignoring a 1px boundary.
+@@ -91,14 +91,12 @@ void CheckBitmapsTransposed(const Bitmap& bitmap1, const Bitmap& bitmap2) {
+ 
+ TEST(Warp, IdenticalCameras) {
+   const Camera camera = Camera::CreateFromModelName(1, "PINHOLE", 1, 100, 100);
+-  Bitmap source_image_gray;
+-  GenerateRandomBitmap(100, 100, false, &source_image_gray);
++  const Bitmap source_image_gray = GenerateRandomBitmap(100, 100, false);
+   Bitmap target_image_gray;
+   WarpImageBetweenCameras(
+       camera, camera, source_image_gray, &target_image_gray);
+   CheckBitmapsEqual(source_image_gray, target_image_gray);
+-  Bitmap source_image_rgb;
+-  GenerateRandomBitmap(100, 100, true, &source_image_rgb);
++  const Bitmap source_image_rgb = GenerateRandomBitmap(100, 100, true);
+   Bitmap target_image_rgb;
+   WarpImageBetweenCameras(camera, camera, source_image_rgb, &target_image_rgb);
+   CheckBitmapsEqual(source_image_rgb, target_image_rgb);
+@@ -109,8 +107,7 @@ TEST(Warp, ShiftedCameras) {
+       Camera::CreateFromModelName(1, "PINHOLE", 1, 100, 100);
+   Camera target_camera = source_camera;
+   target_camera.SetPrincipalPointX(0.0);
+-  Bitmap source_image_gray;
+-  GenerateRandomBitmap(100, 100, true, &source_image_gray);
++  const Bitmap source_image_gray = GenerateRandomBitmap(100, 100, true);
+   Bitmap target_image_gray;
+   WarpImageBetweenCameras(
+       source_camera, target_camera, source_image_gray, &target_image_gray);
+@@ -132,18 +129,14 @@ TEST(Warp, ShiftedCameras) {
+ }
+ 
+ TEST(Warp, WarpImageWithHomographyIdentity) {
+-  Bitmap source_image_gray;
+-  GenerateRandomBitmap(100, 100, false, &source_image_gray);
+-  Bitmap target_image_gray;
+-  target_image_gray.Allocate(100, 100, false);
++  const Bitmap source_image_gray = GenerateRandomBitmap(100, 100, false);
++  Bitmap target_image_gray(100, 100, false);
+   WarpImageWithHomography(
+       Eigen::Matrix3d::Identity(), source_image_gray, &target_image_gray);
+   CheckBitmapsEqual(source_image_gray, target_image_gray);
+ 
+-  Bitmap source_image_rgb;
+-  GenerateRandomBitmap(100, 100, true, &source_image_rgb);
+-  Bitmap target_image_rgb;
+-  target_image_rgb.Allocate(100, 100, true);
++  const Bitmap source_image_rgb = GenerateRandomBitmap(100, 100, true);
++  Bitmap target_image_rgb(100, 100, true);
+   WarpImageWithHomography(
+       Eigen::Matrix3d::Identity(), source_image_rgb, &target_image_rgb);
+   CheckBitmapsEqual(source_image_rgb, target_image_rgb);
+@@ -153,27 +146,21 @@ TEST(Warp, WarpImageWithHomographyTransposed) {
+   Eigen::Matrix3d H;
+   H << 0, 1, 0, 1, 0, 0, 0, 0, 1;
+ 
+-  Bitmap source_image_gray;
+-  GenerateRandomBitmap(100, 100, false, &source_image_gray);
+-  Bitmap target_image_gray;
+-  target_image_gray.Allocate(100, 100, false);
++  const Bitmap source_image_gray = GenerateRandomBitmap(100, 100, false);
++  Bitmap target_image_gray(100, 100, false);
+   WarpImageWithHomography(H, source_image_gray, &target_image_gray);
+   CheckBitmapsTransposed(source_image_gray, target_image_gray);
+ 
+-  Bitmap source_image_rgb;
+-  GenerateRandomBitmap(100, 100, true, &source_image_rgb);
+-  Bitmap target_image_rgb;
+-  target_image_rgb.Allocate(100, 100, true);
++  const Bitmap source_image_rgb = GenerateRandomBitmap(100, 100, true);
++  Bitmap target_image_rgb(100, 100, true);
+   WarpImageWithHomography(H, source_image_rgb, &target_image_rgb);
+   CheckBitmapsTransposed(source_image_rgb, target_image_rgb);
+ }
+ 
+ TEST(Warp, WarpImageWithHomographyBetweenCamerasIdentity) {
+   const Camera camera = Camera::CreateFromModelName(1, "PINHOLE", 1, 100, 100);
+-  Bitmap source_image_gray;
+-  GenerateRandomBitmap(100, 100, false, &source_image_gray);
++  const Bitmap source_image_gray = GenerateRandomBitmap(100, 100, false);
+   Bitmap target_image_gray;
+-  target_image_gray.Allocate(100, 100, false);
+   WarpImageWithHomographyBetweenCameras(Eigen::Matrix3d::Identity(),
+                                         camera,
+                                         camera,
+@@ -181,10 +168,8 @@ TEST(Warp, WarpImageWithHomographyBetweenCamerasIdentity) {
+                                         &target_image_gray);
+   CheckBitmapsEqual(source_image_gray, target_image_gray);
+ 
+-  Bitmap source_image_rgb;
+-  GenerateRandomBitmap(100, 100, true, &source_image_rgb);
++  const Bitmap source_image_rgb = GenerateRandomBitmap(100, 100, true);
+   Bitmap target_image_rgb;
+-  target_image_rgb.Allocate(100, 100, true);
+   WarpImageWithHomographyBetweenCameras(Eigen::Matrix3d::Identity(),
+                                         camera,
+                                         camera,
+@@ -199,18 +184,14 @@ TEST(Warp, WarpImageWithHomographyBetweenCamerasTransposed) {
+   Eigen::Matrix3d H;
+   H << 0, 1, 0, 1, 0, 0, 0, 0, 1;
+ 
+-  Bitmap source_image_gray;
+-  GenerateRandomBitmap(100, 100, false, &source_image_gray);
++  const Bitmap source_image_gray = GenerateRandomBitmap(100, 100, false);
+   Bitmap target_image_gray;
+-  target_image_gray.Allocate(100, 100, false);
+   WarpImageWithHomographyBetweenCameras(
+       H, camera, camera, source_image_gray, &target_image_gray);
+   CheckBitmapsTransposed(source_image_gray, target_image_gray);
+ 
+-  Bitmap source_image_rgb;
+-  GenerateRandomBitmap(100, 100, true, &source_image_rgb);
++  const Bitmap source_image_rgb = GenerateRandomBitmap(100, 100, true);
+   Bitmap target_image_rgb;
+-  target_image_rgb.Allocate(100, 100, true);
+   WarpImageWithHomographyBetweenCameras(
+       H, camera, camera, source_image_rgb, &target_image_rgb);
+   CheckBitmapsTransposed(source_image_rgb, target_image_rgb);
+diff --git a/src/colmap/mvs/depth_map.cc b/src/colmap/mvs/depth_map.cc
+index 1a18cc9d..fa9c6cd7 100644
+--- a/src/colmap/mvs/depth_map.cc
++++ b/src/colmap/mvs/depth_map.cc
+@@ -87,8 +87,7 @@ Bitmap DepthMap::ToBitmap(const float min_percentile,
+   THROW_CHECK_GT(width_, 0);
+   THROW_CHECK_GT(height_, 0);
+ 
+-  Bitmap bitmap;
+-  bitmap.Allocate(width_, height_, true);
++  Bitmap bitmap(width_, height_, true);
+ 
+   std::vector<float> valid_depths;
+   valid_depths.reserve(data_.size());
+diff --git a/src/colmap/mvs/image.cc b/src/colmap/mvs/image.cc
+index efb6fb3f..952f9f89 100644
+--- a/src/colmap/mvs/image.cc
++++ b/src/colmap/mvs/image.cc
+@@ -66,7 +66,7 @@ void Image::Rescale(const float factor_x, const float factor_y) {
+   const size_t new_width = std::round(width_ * factor_x);
+   const size_t new_height = std::round(height_ * factor_y);
+ 
+-  if (bitmap_.Data() != nullptr) {
++  if (!bitmap_.IsEmpty()) {
+     bitmap_.Rescale(new_width, new_height);
+   }
+ 
+diff --git a/src/colmap/mvs/normal_map.cc b/src/colmap/mvs/normal_map.cc
+index 47389c10..5014db54 100644
+--- a/src/colmap/mvs/normal_map.cc
++++ b/src/colmap/mvs/normal_map.cc
+@@ -101,8 +101,7 @@ Bitmap NormalMap::ToBitmap() const {
+   THROW_CHECK_GT(height_, 0);
+   THROW_CHECK_EQ(depth_, 3);
+ 
+-  Bitmap bitmap;
+-  bitmap.Allocate(width_, height_, true);
++  Bitmap bitmap(width_, height_, true);
+ 
+   for (size_t y = 0; y < height_; ++y) {
+     for (size_t x = 0; x < width_; ++x) {
+diff --git a/src/colmap/mvs/patch_match_cuda.cu b/src/colmap/mvs/patch_match_cuda.cu
+index b7267318..f3080a3a 100644
+--- a/src/colmap/mvs/patch_match_cuda.cu
++++ b/src/colmap/mvs/patch_match_cuda.cu
+@@ -1539,9 +1539,7 @@ void PatchMatchCuda::InitRefImage() {
+ 
+   // Upload to device and filter.
+   ref_image_.reset(new GpuMatRefImage(ref_width_, ref_height_));
+-  const std::vector<uint8_t> ref_image_array =
+-      ref_image.GetBitmap().ConvertToRowMajorArray();
+-  ref_image_->Filter(ref_image_array.data(),
++  ref_image_->Filter(ref_image.GetBitmap().RowMajorData().data(),
+                      options_.window_radius,
+                      options_.window_step,
+                      options_.sigma_spatial,
+@@ -1576,10 +1574,7 @@ void PatchMatchCuda::InitSourceImages() {
+       const Image& image = problem_.images->at(problem_.src_image_idxs[i]);
+       const Bitmap& bitmap = image.GetBitmap();
+       uint8_t* dest = src_images_host_data.data() + max_width * max_height * i;
+-      for (size_t r = 0; r < image.GetHeight(); ++r) {
+-        memcpy(dest, bitmap.GetScanline(r), image.GetWidth() * sizeof(uint8_t));
+-        dest += max_width;
+-      }
++      memcpy(dest, bitmap.RowMajorData().data(), bitmap.NumBytes());
+     }
+ 
+     // Create source images texture.
+diff --git a/src/colmap/scene/reconstruction.cc b/src/colmap/scene/reconstruction.cc
+index e7a26ed9..06e83cba 100644
+--- a/src/colmap/scene/reconstruction.cc
++++ b/src/colmap/scene/reconstruction.cc
+@@ -830,7 +830,8 @@ bool Reconstruction::ExtractColorsForImage(const image_t image_id,
+   const class Image& image = Image(image_id);
+ 
+   Bitmap bitmap;
+-  if (!bitmap.Read(JoinPaths(path, image.Name()))) {
++  if (!bitmap.Read(JoinPaths(path, image.Name()),
++                   /*as_rgb=*/true)) {
+     return false;
+   }
+ 
+@@ -862,7 +863,8 @@ void Reconstruction::ExtractColorsForAllImages(const std::string& path) {
+     const std::string image_path = JoinPaths(path, image.Name());
+ 
+     Bitmap bitmap;
+-    if (!bitmap.Read(image_path)) {
++    if (!bitmap.Read(image_path,
++                     /*as_rgb=*/true)) {
+       LOG(WARNING) << "Could not read image " << image.Name() << " at path "
+                    << image_path;
+       continue;
+diff --git a/src/colmap/sensor/CMakeLists.txt b/src/colmap/sensor/CMakeLists.txt
+index d8fd80ad..a79e04b1 100644
+--- a/src/colmap/sensor/CMakeLists.txt
++++ b/src/colmap/sensor/CMakeLists.txt
+@@ -44,8 +44,7 @@ COLMAP_ADD_LIBRARY(
+     PRIVATE_LINK_LIBS
+         colmap_geometry
+         colmap_util
+-        colmap_vlfeat
+-        freeimage::FreeImage
++        OpenImageIO::OpenImageIO
+ )
+ 
+ COLMAP_ADD_TEST(
+@@ -53,7 +52,6 @@ COLMAP_ADD_TEST(
+     SRCS bitmap_test.cc
+     LINK_LIBS
+         colmap_sensor
+-        freeimage::FreeImage
+ )
+ COLMAP_ADD_TEST(
+     NAME database_test
+diff --git a/src/colmap/sensor/bitmap.cc b/src/colmap/sensor/bitmap.cc
+index 7dfcc40f..1fb258c1 100644
+--- a/src/colmap/sensor/bitmap.cc
++++ b/src/colmap/sensor/bitmap.cc
+@@ -35,99 +35,173 @@
+ #include "colmap/util/logging.h"
+ #include "colmap/util/misc.h"
+ 
+-#include "thirdparty/VLFeat/imopv.h"
+-
+-#include <regex>
+-#include <unordered_map>
+-
+-#ifdef _WIN32
+-#ifndef NOMINMAX
+-#define NOMINMAX
+-#endif
+-#include <Windows.h>
+-#endif
+-#include <FreeImage.h>
++#include <OpenImageIO/color.h>
++#include <OpenImageIO/imagebufalgo.h>
++#include <OpenImageIO/imageio.h>
+ 
+ namespace colmap {
+ namespace {
+ 
+-#ifdef FREEIMAGE_LIB  // Only needed for static FreeImage.
++struct OIIOInitializer {
++  OIIOInitializer() {
++    OIIO::attribute("threads", 1);
++    OIIO::attribute("exr_threads", 1);
++  }
+ 
+-struct FreeImageInitializer {
+-  FreeImageInitializer() { FreeImage_Initialise(); }
+-  ~FreeImageInitializer() { FreeImage_DeInitialise(); }
++#if OIIO_VERSION >= OIIO_MAKE_VERSION(2, 5, 3)
++  ~OIIOInitializer() { OIIO::shutdown(); }
++#endif
+ };
+ 
+-const static auto initializer = FreeImageInitializer();
++const static auto initializer = OIIOInitializer();
+ 
+-#endif  // FREEIMAGE_LIB
++struct OIIOMetaData : public Bitmap::MetaData {
++  OIIOMetaData() = default;
+ 
+-bool ReadExifTag(FIBITMAP* ptr,
+-                 const FREE_IMAGE_MDMODEL model,
+-                 const std::string& tag_name,
+-                 std::string* result) {
+-  FITAG* tag = nullptr;
+-  FreeImage_GetMetadata(model, ptr, tag_name.c_str(), &tag);
+-  if (tag == nullptr) {
+-    *result = "";
+-    return false;
++  OIIO::ImageSpec image_spec;
++
++  static OIIOMetaData* Upcast(Bitmap::MetaData* meta_data) {
++    return THROW_CHECK_NOTNULL(dynamic_cast<OIIOMetaData*>(meta_data));
++  }
++
++  static std::unique_ptr<MetaData> Clone(
++      const std::unique_ptr<Bitmap::MetaData>& meta_data) {
++    auto cloned = std::make_unique<OIIOMetaData>();
++    *cloned = *Upcast(meta_data.get());
++    return cloned;
++  }
++};
++
++// For backwards compatibility with older OIIO versions without implicit
++// conversion from std::string_view.
++OIIO::string_view OIIOFromStdStringView(std::string_view value) {
++  return {value.data(), value.size()};
++}
++
++std::vector<uint8_t> ConvertColorSpace(const uint8_t* src_data,
++                                       int width,
++                                       int height,
++                                       int channels,
++                                       const std::string_view& from,
++                                       const std::string_view& to) {
++  const OIIO::ImageSpec image_spec(
++      width, height, channels, OIIO::TypeDesc::UINT8);
++  const int pitch = width * channels;
++  const OIIO::ImageBuf src(image_spec, const_cast<uint8_t*>(src_data));
++  std::vector<uint8_t> tgt_data(height * pitch);
++  OIIO::ImageBuf tgt(image_spec, tgt_data.data());
++  THROW_CHECK(OIIO::ImageBufAlgo::colorconvert(
++      tgt, src, OIIOFromStdStringView(from), OIIOFromStdStringView(to)));
++  return tgt_data;
++}
++
++void SetImageSpecColorSpace(OIIO::ImageSpec& image_spec,
++                            const OIIO::string_view& colorspace) {
++#if OIIO_VERSION >= OIIO_MAKE_VERSION(3, 0, 0)
++  image_spec.set_colorspace(colorspace);
++#else
++  // Extract logic from 3.0.0 version for backwards compatibility.
++  const OIIO::string_view oldspace =
++      image_spec.get_string_attribute("oiio:ColorSpace");
++  if (oldspace.size() && colorspace.size() && oldspace == colorspace) {
++    return;
++  }
++
++  if (colorspace.empty()) {
++    image_spec.erase_attribute("oiio:ColorSpace");
+   } else {
+-    if (tag_name == "FocalPlaneXResolution") {
+-      // This tag seems to be in the wrong category.
+-      *result = std::string(FreeImage_TagToString(FIMD_EXIF_INTEROP, tag));
+-    } else {
+-      *result = FreeImage_TagToString(model, tag);
+-    }
+-    return true;
++    image_spec.attribute("oiio:ColorSpace", colorspace);
+   }
+-}
+ 
+-bool IsPtrGrey(FIBITMAP* ptr) {
+-  return FreeImage_GetColorType(ptr) == FIC_MINISBLACK &&
+-         FreeImage_GetBPP(ptr) == 8;
+-}
++  if (colorspace != "sRGB") {
++    image_spec.erase_attribute("Exif:ColorSpace");
++  }
+ 
+-bool IsPtrRGB(FIBITMAP* ptr) {
+-  return FreeImage_GetColorType(ptr) == FIC_RGB && FreeImage_GetBPP(ptr) == 24;
++  image_spec.erase_attribute("tiff:ColorSpace");
++  image_spec.erase_attribute("tiff:PhotometricInterpretation");
++  image_spec.erase_attribute("oiio:Gamma");
++#endif
+ }
+ 
+-bool IsPtrSupported(FIBITMAP* ptr) { return IsPtrGrey(ptr) || IsPtrRGB(ptr); }
++bool IsEquivalentColorSpace(const std::string_view& colorspace1,
++                            const std::string_view& colorspace2) {
++#if OIIO_VERSION >= OIIO_MAKE_VERSION(3, 0, 0)
++  return OIIO::equivalent_colorspace(colorspace1, colorspace2);
++#else
++  // Poor (wo)man's version of available functionality in recent OIIO versions.
++  auto is_linear_srgb = [](const std::string_view& colorspace) {
++    return colorspace == "linear" || colorspace == "lin_srgb" ||
++           colorspace == "lin_rec709P";
++  };
++  if (is_linear_srgb(colorspace1) && is_linear_srgb(colorspace2)) {
++    return true;
++  } else {
++    return colorspace1 == colorspace2;
++  }
++#endif
++}
+ 
+ }  // namespace
+ 
+-Bitmap::Bitmap() : width_(0), height_(0), channels_(0) {}
++Bitmap::Bitmap()
++    : width_(0), height_(0), channels_(0), linear_colorspace_(true) {}
+ 
+-Bitmap::Bitmap(const Bitmap& other) : Bitmap() {
+-  if (other.handle_.ptr != nullptr) {
+-    SetPtr(FreeImage_Clone(other.handle_.ptr));
+-  }
++Bitmap::Bitmap(const int width,
++               const int height,
++               const bool as_rgb,
++               const bool linear_colorspace) {
++  width_ = width;
++  height_ = height;
++  channels_ = as_rgb ? 3 : 1;
++  linear_colorspace_ = linear_colorspace;
++  data_.resize(width_ * height_ * channels_);
++  auto meta_data = std::make_unique<OIIOMetaData>();
++  meta_data->image_spec =
++      OIIO::ImageSpec(width_, height_, channels_, OIIO::TypeDesc::UINT8);
++  SetImageSpecColorSpace(meta_data->image_spec,
++                         linear_colorspace ? "linear" : "sRGB");
++  meta_data_ = std::move(meta_data);
+ }
+ 
+-Bitmap::Bitmap(Bitmap&& other) noexcept : Bitmap() {
+-  handle_ = std::move(other.handle_);
++Bitmap::Bitmap(const Bitmap& other) {
+   width_ = other.width_;
+   height_ = other.height_;
+   channels_ = other.channels_;
++  linear_colorspace_ = other.linear_colorspace_;
++  data_ = other.data_;
++  meta_data_ = OIIOMetaData::Clone(other.meta_data_);
++}
++
++Bitmap::Bitmap(Bitmap&& other) noexcept {
++  width_ = other.width_;
++  height_ = other.height_;
++  channels_ = other.channels_;
++  linear_colorspace_ = other.linear_colorspace_;
++  data_ = std::move(other.data_);
++  meta_data_ = std::move(other.meta_data_);
+   other.width_ = 0;
+   other.height_ = 0;
+   other.channels_ = 0;
+ }
+ 
+-Bitmap::Bitmap(FIBITMAP* data) : Bitmap() { SetPtr(data); }
+-
+ Bitmap& Bitmap::operator=(const Bitmap& other) {
+-  if (other.handle_.ptr != nullptr) {
+-    SetPtr(FreeImage_Clone(other.handle_.ptr));
+-  }
++  width_ = other.width_;
++  height_ = other.height_;
++  channels_ = other.channels_;
++  linear_colorspace_ = other.linear_colorspace_;
++  data_ = other.data_;
++  meta_data_ = OIIOMetaData::Clone(other.meta_data_);
+   return *this;
+ }
+ 
+ Bitmap& Bitmap::operator=(Bitmap&& other) noexcept {
+   if (this != &other) {
+-    handle_ = std::move(other.handle_);
+     width_ = other.width_;
+     height_ = other.height_;
+     channels_ = other.channels_;
++    linear_colorspace_ = other.linear_colorspace_;
++    data_ = std::move(other.data_);
++    meta_data_ = std::move(other.meta_data_);
+     other.width_ = 0;
+     other.height_ = 0;
+     other.channels_ = 0;
+@@ -135,167 +209,16 @@ Bitmap& Bitmap::operator=(Bitmap&& other) noexcept {
+   return *this;
+ }
+ 
+-bool Bitmap::Allocate(const int width, const int height, const bool as_rgb) {
+-  width_ = width;
+-  height_ = height;
+-  if (as_rgb) {
+-    const int kNumBitsPerPixel = 24;
+-    handle_ =
+-        FreeImageHandle(FreeImage_Allocate(width, height, kNumBitsPerPixel));
+-    channels_ = 3;
+-  } else {
+-    const int kNumBitsPerPixel = 8;
+-    handle_ =
+-        FreeImageHandle(FreeImage_Allocate(width, height, kNumBitsPerPixel));
+-    channels_ = 1;
+-  }
+-  return handle_.ptr != nullptr;
+-}
+-
+-void Bitmap::Deallocate() {
+-  handle_ = FreeImageHandle();
+-  width_ = 0;
+-  height_ = 0;
+-  channels_ = 0;
+-}
+-
+-size_t Bitmap::NumBytes() const {
+-  if (handle_.ptr != nullptr) {
+-    return Pitch() * height_;
+-  } else {
+-    return 0;
+-  }
+-}
+-
+-unsigned int Bitmap::BitsPerPixel() const {
+-  return FreeImage_GetBPP(handle_.ptr);
+-}
+-
+-unsigned int Bitmap::Pitch() const { return FreeImage_GetPitch(handle_.ptr); }
+-
+-std::vector<uint8_t> Bitmap::ConvertToRowMajorArray() const {
+-  std::vector<uint8_t> array(width_ * height_ * channels_);
+-  size_t i = 0;
+-  for (int y = 0; y < height_; ++y) {
+-    const uint8_t* line = FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-    for (int x = 0; x < width_; ++x) {
+-      for (int d = 0; d < channels_; ++d) {
+-        array[i] = line[x * channels_ + d];
+-        i += 1;
+-      }
+-    }
+-  }
+-  return array;
+-}
+-
+-std::vector<uint8_t> Bitmap::ConvertToColMajorArray() const {
+-  std::vector<uint8_t> array(width_ * height_ * channels_);
+-  size_t i = 0;
+-  for (int d = 0; d < channels_; ++d) {
+-    for (int x = 0; x < width_; ++x) {
+-      for (int y = 0; y < height_; ++y) {
+-        const uint8_t* line =
+-            FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-        array[i] = line[x * channels_ + d];
+-        i += 1;
+-      }
+-    }
+-  }
+-  return array;
+-}
+-
+-std::vector<uint8_t> Bitmap::ConvertToRawBits() const {
+-  const unsigned int pitch = Pitch();
+-  const unsigned int bpp = BitsPerPixel();
+-  std::vector<uint8_t> raw_bits(pitch * height_ * bpp / 8, 0);
+-  FreeImage_ConvertToRawBits(raw_bits.data(),
+-                             handle_.ptr,
+-                             pitch,
+-                             bpp,
+-                             FI_RGBA_RED_MASK,
+-                             FI_RGBA_GREEN_MASK,
+-                             FI_RGBA_BLUE_MASK,
+-                             /*topdown=*/true);
+-  return raw_bits;
+-}
+-
+-Bitmap Bitmap::ConvertFromRawBits(
+-    const uint8_t* data, int pitch, int width, int height, bool rgb) {
+-  const unsigned bpp = rgb ? 24 : 8;
+-  return Bitmap(FreeImage_ConvertFromRawBitsEx(/*copy_source=*/true,
+-                                               const_cast<uint8_t*>(data),
+-                                               FIT_BITMAP,
+-                                               width,
+-                                               height,
+-                                               pitch,
+-                                               bpp,
+-                                               FI_RGBA_RED_MASK,
+-                                               FI_RGBA_GREEN_MASK,
+-                                               FI_RGBA_BLUE_MASK,
+-                                               /*topdown=*/true));
+-}
+-
+-bool Bitmap::GetPixel(const int x,
+-                      const int y,
+-                      BitmapColor<uint8_t>* color) const {
+-  if (x < 0 || x >= width_ || y < 0 || y >= height_) {
+-    return false;
+-  }
+-
+-  const uint8_t* line = FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-
+-  if (IsGrey()) {
+-    color->r = line[x];
+-    return true;
+-  } else if (IsRGB()) {
+-    color->r = line[3 * x + FI_RGBA_RED];
+-    color->g = line[3 * x + FI_RGBA_GREEN];
+-    color->b = line[3 * x + FI_RGBA_BLUE];
+-    return true;
+-  }
+-
+-  return false;
+-}
+-
+-bool Bitmap::SetPixel(const int x,
+-                      const int y,
+-                      const BitmapColor<uint8_t>& color) {
+-  if (x < 0 || x >= width_ || y < 0 || y >= height_) {
+-    return false;
+-  }
+-
+-  uint8_t* line = FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-
+-  if (IsGrey()) {
+-    line[x] = color.r;
+-    return true;
+-  } else if (IsRGB()) {
+-    line[3 * x + FI_RGBA_RED] = color.r;
+-    line[3 * x + FI_RGBA_GREEN] = color.g;
+-    line[3 * x + FI_RGBA_BLUE] = color.b;
+-    return true;
+-  }
+-
+-  return false;
+-}
+-
+-const uint8_t* Bitmap::GetScanline(const int y) const {
+-  THROW_CHECK_GE(y, 0);
+-  THROW_CHECK_LT(y, height_);
+-  return FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-}
+-
+ void Bitmap::Fill(const BitmapColor<uint8_t>& color) {
+-  for (int y = 0; y < height_; ++y) {
+-    uint8_t* line = FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-    for (int x = 0; x < width_; ++x) {
+-      if (IsGrey()) {
+-        line[x] = color.r;
+-      } else if (IsRGB()) {
+-        line[3 * x + FI_RGBA_RED] = color.r;
+-        line[3 * x + FI_RGBA_GREEN] = color.g;
+-        line[3 * x + FI_RGBA_BLUE] = color.b;
+-      }
++  if (IsGrey()) {
++    std::fill(data_.begin(), data_.end(), color.r);
++  } else {
++    THROW_CHECK_EQ(data_.size() % 3, 0);
++    size_t i = 0;
++    while (i < data_.size()) {
++      data_[i++] = color.r;
++      data_[i++] = color.g;
++      data_[i++] = color.b;
+     }
+   }
+ }
+@@ -311,12 +234,9 @@ bool Bitmap::InterpolateNearestNeighbor(const double x,
+ bool Bitmap::InterpolateBilinear(const double x,
+                                  const double y,
+                                  BitmapColor<float>* color) const {
+-  // FreeImage's coordinate system origin is in the lower left of the image.
+-  const double inv_y = height_ - 1 - y;
+-
+   const int x0 = static_cast<int>(std::floor(x));
+   const int x1 = x0 + 1;
+-  const int y0 = static_cast<int>(std::floor(inv_y));
++  const int y0 = static_cast<int>(std::floor(y));
+   const int y1 = y0 + 1;
+ 
+   if (x0 < 0 || x1 >= width_ || y0 < 0 || y1 >= height_) {
+@@ -324,12 +244,13 @@ bool Bitmap::InterpolateBilinear(const double x,
+   }
+ 
+   const double dx = x - x0;
+-  const double dy = inv_y - y0;
++  const double dy = y - y0;
+   const double dx_1 = 1 - dx;
+   const double dy_1 = 1 - dy;
+ 
+-  const uint8_t* line0 = FreeImage_GetScanLine(handle_.ptr, y0);
+-  const uint8_t* line1 = FreeImage_GetScanLine(handle_.ptr, y1);
++  const int pitch = width_ * channels_;
++  const uint8_t* line0 = &data_[y0 * pitch];
++  const uint8_t* line1 = &data_[y1 * pitch];
+ 
+   if (IsGrey()) {
+     // Top row, column-wise linear interpolation.
+@@ -348,14 +269,14 @@ bool Bitmap::InterpolateBilinear(const double x,
+     const uint8_t* p11 = &line1[3 * x1];
+ 
+     // Top row, column-wise linear interpolation.
+-    const double v0_r = dx_1 * p00[FI_RGBA_RED] + dx * p01[FI_RGBA_RED];
+-    const double v0_g = dx_1 * p00[FI_RGBA_GREEN] + dx * p01[FI_RGBA_GREEN];
+-    const double v0_b = dx_1 * p00[FI_RGBA_BLUE] + dx * p01[FI_RGBA_BLUE];
++    const double v0_r = dx_1 * p00[0] + dx * p01[0];
++    const double v0_g = dx_1 * p00[1] + dx * p01[1];
++    const double v0_b = dx_1 * p00[2] + dx * p01[2];
+ 
+     // Bottom row, column-wise linear interpolation.
+-    const double v1_r = dx_1 * p10[FI_RGBA_RED] + dx * p11[FI_RGBA_RED];
+-    const double v1_g = dx_1 * p10[FI_RGBA_GREEN] + dx * p11[FI_RGBA_GREEN];
+-    const double v1_b = dx_1 * p10[FI_RGBA_BLUE] + dx * p11[FI_RGBA_BLUE];
++    const double v1_r = dx_1 * p10[0] + dx * p11[0];
++    const double v1_g = dx_1 * p10[1] + dx * p11[1];
++    const double v1_b = dx_1 * p10[2] + dx * p11[2];
+ 
+     // Row-wise linear interpolation.
+     color->r = dy_1 * v0_r + dy * v1_r;
+@@ -369,120 +290,94 @@ bool Bitmap::InterpolateBilinear(const double x,
+ 
+ bool Bitmap::ExifCameraModel(std::string* camera_model) const {
+   // Read camera make and model
+-  std::string make_str;
+-  std::string model_str;
+-  std::string focal_length;
++  std::string_view make_str;
++  std::string_view model_str;
++  float focal_length = 0;
+   *camera_model = "";
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_MAIN, "Make", &make_str)) {
+-    *camera_model += (make_str + "-");
++  if (GetMetaData("Make", &make_str)) {
++    *camera_model += std::string(make_str) + "-";
+   } else {
+     *camera_model = "";
+     return false;
+   }
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_MAIN, "Model", &model_str)) {
+-    *camera_model += (model_str + "-");
++  if (GetMetaData("Model", &model_str)) {
++    *camera_model += std::string(model_str) + "-";
+   } else {
+     *camera_model = "";
+     return false;
+   }
+-  if (ReadExifTag(handle_.ptr,
+-                  FIMD_EXIF_EXIF,
+-                  "FocalLengthIn35mmFilm",
+-                  &focal_length) ||
+-      ReadExifTag(handle_.ptr, FIMD_EXIF_EXIF, "FocalLength", &focal_length)) {
+-    *camera_model += (focal_length + "-");
++  if (GetMetaData("Exif:FocalLengthIn35mmFilm", "float", &focal_length) ||
++      GetMetaData("Exif:FocalLength", "float", &focal_length)) {
++    *camera_model += std::to_string(focal_length) + "-";
+   } else {
+     *camera_model = "";
+     return false;
+   }
+-  *camera_model += (std::to_string(width_) + "x" + std::to_string(height_));
++  *camera_model += std::to_string(width_) + "x" + std::to_string(height_);
+   return true;
+ }
+ 
+ bool Bitmap::ExifFocalLength(double* focal_length) const {
+   const double max_size = std::max(width_, height_);
+ 
+-  //////////////////////////////////////////////////////////////////////////////
+-  // Focal length in 35mm equivalent
+-  //////////////////////////////////////////////////////////////////////////////
+-
+-  std::string focal_length_35mm_str;
+-  if (ReadExifTag(handle_.ptr,
+-                  FIMD_EXIF_EXIF,
+-                  "FocalLengthIn35mmFilm",
+-                  &focal_length_35mm_str)) {
+-    static const std::regex regex(".*?([0-9.]+).*?mm.*?");
+-    std::cmatch result;
+-    if (std::regex_search(focal_length_35mm_str.c_str(), result, regex)) {
+-      const double focal_length_35 = std::stold(result[1]);
+-      if (focal_length_35 > 0) {
+-        *focal_length = focal_length_35 / 35.0 * max_size;
+-        return true;
+-      }
++  float focal_length_35mm = 0;
++  if (GetMetaData("Exif:FocalLengthIn35mmFilm", "float", &focal_length_35mm)) {
++    if (focal_length_35mm > 0) {
++      // Based on https://en.wikipedia.org/wiki/35_mm_equivalent_focal_length
++      // According to CIPA guidelines, 35 mm equivalent focal length is to be
++      // calculated like this:
++      // "focal length in 35 mm camera" =
++      //   (Diagonal distance of image area in the 35 mm camera (43.27 mm) /
++      //    Diagonal distance of image area on the image sensor of the DSC)
++      //    * focal length of the lens of the DSC.
++      const double diagonal = std::sqrt(width_ * width_ + height_ * height_);
++      *focal_length = focal_length_35mm / 43.27 * diagonal;
++      return true;
+     }
+   }
+ 
+-  //////////////////////////////////////////////////////////////////////////////
+-  // Focal length in mm
+-  //////////////////////////////////////////////////////////////////////////////
+-
+-  std::string focal_length_str;
+-  if (ReadExifTag(
+-          handle_.ptr, FIMD_EXIF_EXIF, "FocalLength", &focal_length_str)) {
+-    std::regex regex(".*?([0-9.]+).*?mm");
+-    std::cmatch result;
+-    if (std::regex_search(focal_length_str.c_str(), result, regex)) {
+-      const double focal_length_mm = std::stold(result[1]);
+-
+-      // Lookup sensor width in database.
+-      std::string make_str;
+-      std::string model_str;
+-      if (ReadExifTag(handle_.ptr, FIMD_EXIF_MAIN, "Make", &make_str) &&
+-          ReadExifTag(handle_.ptr, FIMD_EXIF_MAIN, "Model", &model_str)) {
+-        CameraDatabase database;
+-        double sensor_width;
+-        if (database.QuerySensorWidth(make_str, model_str, &sensor_width)) {
+-          *focal_length = focal_length_mm / sensor_width * max_size;
+-          return true;
++  float focal_length_mm = 0.f;
++  if (GetMetaData("Exif:FocalLength", "float", &focal_length_mm)) {
++    float focal_x_res = 0.f;
++    int focal_x_res_unit = 0;
++    if (GetMetaData("Exif:FocalPlaneXResolution", "float", &focal_x_res) &&
++        GetMetaData(
++            "Exif:FocalPlaneResolutionUnit", "int", &focal_x_res_unit)) {
++      if (focal_length_mm > 0 && focal_x_res_unit > 1 &&
++          focal_x_res_unit <= 5) {
++        double pixels_per_mm = 0;
++        switch (focal_x_res_unit) {
++          case 2:  // inches
++            pixels_per_mm = focal_x_res * 25.4;
++            break;
++          case 3:  // cm
++            pixels_per_mm = focal_x_res * 10.0;
++            break;
++          case 4:  // mm
++            pixels_per_mm = focal_x_res * 1.0;
++            break;
++          case 5:  // um
++            pixels_per_mm = focal_x_res * 0.1;
++            break;
++          default:
++            LOG(FATAL) << "Unexpected FocalPlaneXResolution value";
+         }
++        *focal_length = focal_length_mm / pixels_per_mm;
++        return true;
+       }
++    }
+ 
+-      // Extract sensor width from EXIF.
+-      std::string pixel_x_dim_str;
+-      std::string x_res_str;
+-      std::string res_unit_str;
+-      if (ReadExifTag(handle_.ptr,
+-                      FIMD_EXIF_EXIF,
+-                      "PixelXDimension",
+-                      &pixel_x_dim_str) &&
+-          ReadExifTag(handle_.ptr,
+-                      FIMD_EXIF_EXIF,
+-                      "FocalPlaneXResolution",
+-                      &x_res_str) &&
+-          ReadExifTag(handle_.ptr,
+-                      FIMD_EXIF_EXIF,
+-                      "FocalPlaneResolutionUnit",
+-                      &res_unit_str)) {
+-        regex = std::regex(".*?([0-9.]+).*?");
+-        if (std::regex_search(pixel_x_dim_str.c_str(), result, regex)) {
+-          const double pixel_x_dim = std::stold(result[1]);
+-          regex = std::regex(".*?([0-9.]+).*?/.*?([0-9.]+).*?");
+-          if (std::regex_search(x_res_str.c_str(), result, regex)) {
+-            const double x_res = std::stold(result[2]) / std::stold(result[1]);
+-            // Use PixelXDimension instead of actual width of image, since
+-            // the image might have been resized, but the EXIF data preserved.
+-            const double ccd_width = x_res * pixel_x_dim;
+-            if (ccd_width > 0 && focal_length_mm > 0) {
+-              if (res_unit_str == "cm") {
+-                *focal_length = focal_length_mm / (ccd_width * 10.0) * max_size;
+-                return true;
+-              } else if (res_unit_str == "inches") {
+-                *focal_length = focal_length_mm / (ccd_width * 25.4) * max_size;
+-                return true;
+-              }
+-            }
+-          }
+-        }
++    // Lookup sensor width in database.
++    std::string_view make_str;
++    std::string_view model_str;
++    if (GetMetaData("Make", &make_str) && GetMetaData("Model", &model_str)) {
++      CameraDatabase database;
++      double sensor_width_mm;
++      if (database.QuerySensorWidth(std::string(make_str),
++                                    std::string(model_str),
++                                    &sensor_width_mm)) {
++        *focal_length = focal_length_mm / sensor_width_mm * max_size;
++        return true;
+       }
+     }
+   }
+@@ -491,199 +386,216 @@ bool Bitmap::ExifFocalLength(double* focal_length) const {
+ }
+ 
+ bool Bitmap::ExifLatitude(double* latitude) const {
+-  std::string str;
++  std::string_view latitude_ref;
+   double sign = 1.0;
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_GPS, "GPSLatitudeRef", &str)) {
+-    StringTrim(&str);
+-    StringToLower(&str);
+-    if (!str.empty() && str[0] == 's') {
++  if (GetMetaData("GPS:LatitudeRef", &latitude_ref)) {
++    if (latitude_ref == "N" || latitude_ref == "n") {
++      sign = 1.0;
++    } else if (latitude_ref == "S" || latitude_ref == "s") {
+       sign = -1.0;
+     }
+   }
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_GPS, "GPSLatitude", &str)) {
+-    static const std::regex regex(".*?([0-9.]+):([0-9.]+):([0-9.]+).*?");
+-    std::cmatch result;
+-    if (std::regex_search(str.c_str(), result, regex)) {
+-      const double hours = std::stold(result[1]);
+-      const double minutes = std::stold(result[2]);
+-      const double seconds = std::stold(result[3]);
+-      double value = hours + minutes / 60.0 + seconds / 3600.0;
+-      if (value > 0 && sign < 0) {
+-        value *= sign;
+-      }
+-      *latitude = value;
+-      return true;
++  float deg_min_sec[3] = {0.0};
++  if (GetMetaData("GPS:Latitude", "point", &deg_min_sec)) {
++    *latitude =
++        deg_min_sec[0] + deg_min_sec[1] / 60.0 + deg_min_sec[2] / 3600.0;
++    if (*latitude > 0 && sign < 0) {
++      *latitude *= sign;
+     }
++    return true;
+   }
+   return false;
+ }
+ 
+ bool Bitmap::ExifLongitude(double* longitude) const {
+-  std::string str;
++  std::string_view longitude_ref;
+   double sign = 1.0;
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_GPS, "GPSLongitudeRef", &str)) {
+-    StringTrim(&str);
+-    StringToLower(&str);
+-    if (!str.empty() && str[0] == 'w') {
++  if (GetMetaData("GPS:LongitudeRef", &longitude_ref)) {
++    if (longitude_ref == "W" || longitude_ref == "w") {
++      sign = 1.0;
++    } else if (longitude_ref == "E" || longitude_ref == "e") {
+       sign = -1.0;
+     }
+   }
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_GPS, "GPSLongitude", &str)) {
+-    static const std::regex regex(".*?([0-9.]+):([0-9.]+):([0-9.]+).*?");
+-    std::cmatch result;
+-    if (std::regex_search(str.c_str(), result, regex)) {
+-      const double hours = std::stold(result[1]);
+-      const double minutes = std::stold(result[2]);
+-      const double seconds = std::stold(result[3]);
+-      double value = hours + minutes / 60.0 + seconds / 3600.0;
+-      if (value > 0 && sign < 0) {
+-        value *= sign;
+-      }
+-      *longitude = value;
+-      return true;
++  float deg_min_sec[3] = {0.0};
++  if (GetMetaData("GPS:Longitude", "point", &deg_min_sec)) {
++    *longitude =
++        deg_min_sec[0] + deg_min_sec[1] / 60.0 + deg_min_sec[2] / 3600.0;
++    if (*longitude > 0 && sign < 0) {
++      *longitude *= sign;
+     }
++    return true;
+   }
+   return false;
+ }
+ 
+ bool Bitmap::ExifAltitude(double* altitude) const {
+-  std::string str;
+-  if (ReadExifTag(handle_.ptr, FIMD_EXIF_GPS, "GPSAltitude", &str)) {
+-    static const std::regex regex(".*?([0-9.]+).*?/.*?([0-9.]+).*?");
+-    std::cmatch result;
+-    if (std::regex_search(str.c_str(), result, regex)) {
+-      *altitude = std::stold(result[1]) / std::stold(result[2]);
+-      return true;
++  std::string_view altitude_ref;
++  double sign = 1.0;
++  if (GetMetaData("GPS:AltitudeRef", &altitude_ref)) {
++    if (altitude_ref == "0") {
++      sign = 1.0;
++    } else if (altitude_ref == "1") {
++      sign = -1.0;
+     }
+   }
++  float altitude_float = 0.f;
++  if (GetMetaData("GPS:Altitude", "float", &altitude_float)) {
++    *altitude = altitude_float;
++    if (*altitude > 0 && sign < 0) {
++      *altitude *= sign;
++    }
++    return true;
++  }
+   return false;
+ }
+ 
+-bool Bitmap::Read(const std::string& path, const bool as_rgb) {
++bool Bitmap::Read(const std::string& path,
++                  const bool as_rgb,
++                  const bool linearize_colorspace) {
+   if (!ExistsFile(path)) {
++    VLOG(3) << "Failed to read bitmap, because file does not exist";
+     return false;
+   }
+ 
+-  const FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path.c_str(), 0);
++  OIIO::ImageSpec config;
++  config["oiio:reorient"] = 0;
+ 
+-  if (format == FIF_UNKNOWN) {
++  const auto input = OIIO::ImageInput::open(path, &config);
++  if (!input) {
++    VLOG(3) << "Failed to read bitmap specs";
+     return false;
+   }
+ 
+-  handle_ = FreeImageHandle(FreeImage_Load(format, path.c_str()));
+-  if (handle_.ptr == nullptr) {
++  const OIIO::ImageSpec& image_spec = input->spec();
++  width_ = image_spec.width;
++  height_ = image_spec.height;
++  channels_ = image_spec.nchannels;
++  if (channels_ != 1 && channels_ != 3) {
++    VLOG(3) << "Bitmap is not grayscale or RGB";
+     return false;
+   }
+ 
+-  if (!IsPtrRGB(handle_.ptr) && as_rgb) {
+-    FIBITMAP* converted_bitmap = FreeImage_ConvertTo24Bits(handle_.ptr);
+-    handle_ = FreeImageHandle(converted_bitmap);
+-  } else if (!IsPtrGrey(handle_.ptr) && !as_rgb) {
+-    if (FreeImage_GetBPP(handle_.ptr) != 24) {
+-      FIBITMAP* converted_bitmap_24 = FreeImage_ConvertTo24Bits(handle_.ptr);
+-      handle_ = FreeImageHandle(converted_bitmap_24);
++  data_.resize(width_ * height_ * channels_);
++  input->read_image(0, 0, 0, channels_, OIIO::TypeDesc::UINT8, data_.data());
++  input->close();
++
++  auto meta_data = std::make_unique<OIIOMetaData>();
++  meta_data->image_spec = image_spec;
++  meta_data_ = std::move(meta_data);
++
++  if (linearize_colorspace) {
++    const std::string colorspace = image_spec["oiio:ColorSpace"];
++    if (IsEquivalentColorSpace(colorspace, "linear")) {
++      data_ = ConvertColorSpace(
++          data_.data(), width_, height_, channels_, colorspace, "linear");
+     }
+-    FIBITMAP* converted_bitmap = FreeImage_ConvertToGreyscale(handle_.ptr);
+-    handle_ = FreeImageHandle(converted_bitmap);
+   }
+ 
+-  if (!IsPtrSupported(handle_.ptr)) {
+-    handle_ = FreeImageHandle();
+-    return false;
++  if (as_rgb && channels_ != 3) {
++    *this = CloneAsRGB();
++  } else if (!as_rgb && channels_ != 1) {
++    *this = CloneAsGrey();
+   }
+ 
+-  width_ = FreeImage_GetWidth(handle_.ptr);
+-  height_ = FreeImage_GetHeight(handle_.ptr);
+-  channels_ = as_rgb ? 3 : 1;
+-
+   return true;
+ }
+ 
+-bool Bitmap::Write(const std::string& path, const int flags) const {
+-  FREE_IMAGE_FORMAT save_format = FreeImage_GetFIFFromFilename(path.c_str());
+-  if (save_format == FIF_UNKNOWN) {
+-    // If format could not be deduced, save as PNG by default.
+-    save_format = FIF_PNG;
++bool Bitmap::Write(const std::string& path,
++                   const bool delinearize_colorspace) const {
++  const auto output = OIIO::ImageOutput::create(path);
++  if (!output) {
++    std::cerr << "Could not create an ImageOutput for " << path
++              << ", error = " << OIIO::geterror() << "\n";
++    return false;
+   }
+ 
+-  int save_flags = flags;
+-  if (save_format == FIF_JPEG && flags == 0) {
+-    // Use superb JPEG quality by default to avoid artifacts.
+-    save_flags = JPEG_QUALITYSUPERB;
++  auto* meta_data = OIIOMetaData::Upcast(meta_data_.get());
++
++  const uint8_t* output_data_ptr = data_.data();
++  std::vector<uint8_t> maybe_linearized_output_data;
++  if (delinearize_colorspace && linear_colorspace_) {
++    std::string_view colorspace;
++    if (!GetMetaData("oiio:ColorSpace", &colorspace)) {
++      // Assume sRGB color space if not specified.
++      colorspace = "sRGB";
++      SetImageSpecColorSpace(meta_data->image_spec,
++                             OIIOFromStdStringView(colorspace));
++    }
++
++    maybe_linearized_output_data = ConvertColorSpace(
++        data_.data(), width_, height_, channels_, "linear", colorspace);
++    output_data_ptr = maybe_linearized_output_data.data();
+   }
+ 
+-  bool success = false;
+-  if (save_flags == 0) {
+-    success = FreeImage_Save(save_format, handle_.ptr, path.c_str());
+-  } else {
+-    success =
+-        FreeImage_Save(save_format, handle_.ptr, path.c_str(), save_flags);
++  if (HasFileExtension(path, ".jpg") || HasFileExtension(path, ".jpeg")) {
++    std::string_view compression;
++    if (!GetMetaData("Compression", &compression)) {
++      // Save JPEG in superb quality by default to reduce compression artifacts.
++      meta_data->image_spec["Compression"] = "jpeg:100";
++    }
+   }
+ 
+-  return success;
+-}
++  if (!output->open(path, meta_data->image_spec)) {
++    VLOG(3) << "Could not open " << path << ", error = " << output->geterror()
++            << "\n";
++    return false;
++  }
+ 
+-void Bitmap::Smooth(const float sigma_x, const float sigma_y) {
+-  std::vector<float> array(width_ * height_);
+-  std::vector<float> array_smoothed(width_ * height_);
+-  for (int d = 0; d < channels_; ++d) {
+-    size_t i = 0;
+-    for (int y = 0; y < height_; ++y) {
+-      const uint8_t* line = FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-      for (int x = 0; x < width_; ++x) {
+-        array[i] = line[x * channels_ + d];
+-        i += 1;
+-      }
+-    }
++  if (!output->write_image(OIIO::TypeDesc::UINT8, output_data_ptr)) {
++    VLOG(3) << "Could not write pixels to " << path
++            << ", error = " << output->geterror() << "\n";
++    return false;
++  }
+ 
+-    vl_imsmooth_f(array_smoothed.data(),
+-                  width_,
+-                  array.data(),
+-                  width_,
+-                  height_,
+-                  width_,
+-                  sigma_x,
+-                  sigma_y);
+-
+-    i = 0;
+-    for (int y = 0; y < height_; ++y) {
+-      uint8_t* line = FreeImage_GetScanLine(handle_.ptr, height_ - 1 - y);
+-      for (int x = 0; x < width_; ++x) {
+-        line[x * channels_ + d] =
+-            TruncateCast<float, uint8_t>(array_smoothed[i]);
+-        i += 1;
+-      }
+-    }
++  if (!output->close()) {
++    VLOG(3) << "Error closing " << path << ", error = " << output->geterror()
++            << "\n";
++    return false;
+   }
++
++  return true;
+ }
+ 
+ void Bitmap::Rescale(const int new_width,
+                      const int new_height,
+                      RescaleFilter filter) {
+-  FREE_IMAGE_FILTER fi_filter = FILTER_BILINEAR;
+-  switch (filter) {
+-    case RescaleFilter::kBilinear:
+-      fi_filter = FILTER_BILINEAR;
+-      break;
+-    case RescaleFilter::kBox:
+-      fi_filter = FILTER_BOX;
+-      break;
+-    default:
+-      LOG(FATAL_THROW) << "Filter not implemented";
+-  }
+-  SetPtr(FreeImage_Rescale(handle_.ptr, new_width, new_height, fi_filter));
+-}
++  const OIIO::ImageBuf buf(
++      OIIO::ImageSpec(width_, height_, channels_, OIIO::TypeDesc::UINT8),
++      data_.data());
++  std::vector<uint8_t> new_data(new_width * new_height * channels_);
++  OIIO::ImageBuf new_buf(
++      OIIO::ImageSpec(new_width, new_height, channels_, OIIO::TypeDesc::UINT8),
++      new_data.data());
++  THROW_CHECK(OIIO::ImageBufAlgo::resize(new_buf, buf));
+ 
+-Bitmap Bitmap::Clone() const {
+-  FIBITMAP* cloned = FreeImage_Clone(handle_.ptr);
+-  return Bitmap(cloned);
++  width_ = new_width;
++  height_ = new_height;
++  data_ = std::move(new_data);
++  auto* meta_data = OIIOMetaData::Upcast(meta_data_.get());
++  meta_data->image_spec.width = new_width;
++  meta_data->image_spec.height = new_height;
+ }
+ 
++Bitmap Bitmap::Clone() const { return *this; }
++
+ Bitmap Bitmap::CloneAsGrey() const {
+   if (IsGrey()) {
+     return Clone();
+   } else {
+-    return Bitmap(FreeImage_ConvertToGreyscale(handle_.ptr));
++    Bitmap cloned;
++    cloned.width_ = width_;
++    cloned.height_ = height_;
++    cloned.channels_ = 1;
++    cloned.linear_colorspace_ = linear_colorspace_;
++    cloned.data_.resize(width_ * height_);
++    for (size_t i = 0; i < cloned.data_.size(); ++i) {
++      cloned.data_[i] =
++          std::round(.2126f * data_[3 * i + 0] + .7152f * data_[3 * i + 1] +
++                     .0722f * data_[3 * i + 2]);
++    }
++    cloned.meta_data_ = OIIOMetaData::Clone(meta_data_);
++    return cloned;
+   }
+ }
+ 
+@@ -691,58 +603,72 @@ Bitmap Bitmap::CloneAsRGB() const {
+   if (IsRGB()) {
+     return Clone();
+   } else {
+-    return Bitmap(FreeImage_ConvertTo24Bits(handle_.ptr));
++    THROW_CHECK_EQ(channels_, 1);
++    Bitmap cloned;
++    cloned.width_ = width_;
++    cloned.height_ = height_;
++    cloned.channels_ = 3;
++    cloned.linear_colorspace_ = linear_colorspace_;
++    cloned.data_.resize(width_ * height_ * 3);
++    for (size_t i = 0; i < data_.size(); ++i) {
++      cloned.data_[3 * i + 0] = data_[i];
++      cloned.data_[3 * i + 1] = data_[i];
++      cloned.data_[3 * i + 2] = data_[i];
++    }
++    cloned.meta_data_ = OIIOMetaData::Clone(meta_data_);
++    return cloned;
++  }
++}
++
++void Bitmap::SetMetaData(const std::string_view& name,
++                         const std::string_view& type,
++                         const void* value) {
++  THROW_CHECK_NE(type, "string");
++  auto* meta_data = OIIOMetaData::Upcast(meta_data_.get());
++  OIIO::TypeDesc type_desc;
++  type_desc.fromstring(OIIOFromStdStringView(type));
++  THROW_CHECK_NE(type_desc, OIIO::TypeDesc::UNKNOWN);
++  meta_data->image_spec.attribute(
++      OIIOFromStdStringView(name), type_desc, value);
++}
++
++void Bitmap::SetMetaData(const std::string_view& name,
++                         const std::string_view& value) {
++  auto* meta_data = OIIOMetaData::Upcast(meta_data_.get());
++  meta_data->image_spec.attribute(OIIOFromStdStringView(name),
++                                  OIIOFromStdStringView(value));
++}
++
++bool Bitmap::GetMetaData(const std::string_view& name,
++                         const std::string_view& type,
++                         void* value) const {
++  THROW_CHECK_NE(type, "string");
++  auto* meta_data = OIIOMetaData::Upcast(meta_data_.get());
++  OIIO::TypeDesc type_desc;
++  type_desc.fromstring(OIIOFromStdStringView(type));
++  THROW_CHECK_NE(type_desc, OIIO::TypeDesc::UNKNOWN);
++  return meta_data->image_spec.getattribute(
++      OIIOFromStdStringView(name), type_desc, value);
++}
++
++bool Bitmap::GetMetaData(const std::string_view& name,
++                         std::string_view* value) const {
++  auto* meta_data = OIIOMetaData::Upcast(meta_data_.get());
++  OIIO::ustring ustring_value;
++  if (meta_data->image_spec.getattribute(
++          OIIOFromStdStringView(name), OIIO::TypeString, &ustring_value)) {
++    *value = std::string_view(ustring_value.data(), ustring_value.size());
++    return true;
+   }
++  return false;
+ }
+ 
+ void Bitmap::CloneMetadata(Bitmap* target) const {
+   THROW_CHECK_NOTNULL(target);
+-  THROW_CHECK_NOTNULL(target->Data());
+-  FreeImage_CloneMetadata(handle_.ptr, target->Data());
+-}
+-
+-void Bitmap::SetPtr(FIBITMAP* ptr) {
+-  THROW_CHECK_NOTNULL(ptr);
+-
+-  if (!IsPtrSupported(ptr)) {
+-    FreeImageHandle temp_handle(ptr);
+-    ptr = FreeImage_ConvertTo24Bits(temp_handle.ptr);
+-    THROW_CHECK(IsPtrSupported(ptr));
+-  }
+-
+-  handle_ = FreeImageHandle(ptr);
+-  width_ = FreeImage_GetWidth(handle_.ptr);
+-  height_ = FreeImage_GetHeight(handle_.ptr);
+-  channels_ = IsPtrRGB(handle_.ptr) ? 3 : 1;
+-}
+-
+-Bitmap::FreeImageHandle::FreeImageHandle() : ptr(nullptr) {}
+-
+-Bitmap::FreeImageHandle::FreeImageHandle(FIBITMAP* ptr) : ptr(ptr) {}
+-
+-Bitmap::FreeImageHandle::~FreeImageHandle() {
+-  if (ptr != nullptr) {
+-    FreeImage_Unload(ptr);
+-    ptr = nullptr;
+-  }
+-}
+-
+-Bitmap::FreeImageHandle::FreeImageHandle(
+-    Bitmap::FreeImageHandle&& other) noexcept {
+-  ptr = other.ptr;
+-  other.ptr = nullptr;
+-}
+-
+-Bitmap::FreeImageHandle& Bitmap::FreeImageHandle::operator=(
+-    Bitmap::FreeImageHandle&& other) noexcept {
+-  if (this != &other) {
+-    if (ptr != nullptr) {
+-      FreeImage_Unload(ptr);
+-    }
+-    ptr = other.ptr;
+-    other.ptr = nullptr;
+-  }
+-  return *this;
++  target->meta_data_ = OIIOMetaData::Clone(meta_data_);
++  auto* target_meta_data = OIIOMetaData::Upcast(target->meta_data_.get());
++  target_meta_data->image_spec.width = target->Width();
++  target_meta_data->image_spec.height = target->Height();
+ }
+ 
+ std::ostream& operator<<(std::ostream& stream, const Bitmap& bitmap) {
+diff --git a/src/colmap/sensor/bitmap.h b/src/colmap/sensor/bitmap.h
+index 925360ba..e07d6aee 100644
+--- a/src/colmap/sensor/bitmap.h
++++ b/src/colmap/sensor/bitmap.h
+@@ -36,11 +36,10 @@
+ #include <cstdint>
+ #include <ios>
+ #include <limits>
++#include <memory>
+ #include <string>
+ #include <vector>
+ 
+-struct FIBITMAP;
+-
+ namespace colmap {
+ 
+ // Templated bitmap color class.
+@@ -65,70 +64,47 @@ struct BitmapColor {
+   T b;
+ };
+ 
+-// Wrapper class around FreeImage bitmaps.
++// Wrapper class around bitmaps.
+ class Bitmap {
+  public:
+   Bitmap();
++  Bitmap(int width, int height, bool as_rgb, bool linear_colorspace = true);
+ 
+-  // Copy constructor.
+   Bitmap(const Bitmap& other);
+-  // Move constructor.
+   Bitmap(Bitmap&& other) noexcept;
+ 
+-  // Create bitmap object from existing FreeImage bitmap object. Note that
+-  // this class takes ownership of the object.
+-  explicit Bitmap(FIBITMAP* data);
+-
+-  // Copy assignment.
+   Bitmap& operator=(const Bitmap& other);
+-  // Move assignment.
+   Bitmap& operator=(Bitmap&& other) noexcept;
+ 
+-  // Allocate bitmap by overwriting the existing data.
+-  bool Allocate(int width, int height, bool as_rgb);
+-
+-  // Deallocate the bitmap by releasing the existing data.
+-  void Deallocate();
+-
+-  // Get pointer to underlying FreeImage object.
+-  inline const FIBITMAP* Data() const;
+-  inline FIBITMAP* Data();
+-
+   // Dimensions of bitmap.
+   inline int Width() const;
+   inline int Height() const;
+   inline int Channels() const;
+ 
+-  // Number of bits per pixel. This is 8 for grey and 24 for RGB image.
+-  unsigned int BitsPerPixel() const;
++  // Number of bits per pixel. This is 8 for grey and 24 for RGB images.
++  inline int BitsPerPixel() const;
++
++  // Number of bytes required to store image.
++  inline size_t NumBytes() const;
++
++  // Scan line size in bytes, also known as stride.
++  inline int Pitch() const;
+ 
+-  // Scan width of bitmap which differs from the actual image width to achieve
+-  // 32 bit aligned memory. Also known as stride.
+-  unsigned int Pitch() const;
++  // Check whether the image is empty (i.e., width/height=0).
++  inline bool IsEmpty() const;
+ 
+   // Check whether image is grey- or colorscale.
+   inline bool IsRGB() const;
+   inline bool IsGrey() const;
+ 
+-  // Number of bytes required to store image.
+-  size_t NumBytes() const;
+-
+-  // Copy raw image data to array.
+-  std::vector<uint8_t> ConvertToRowMajorArray() const;
+-  std::vector<uint8_t> ConvertToColMajorArray() const;
+-
+-  // Convert to/from raw bits.
+-  std::vector<uint8_t> ConvertToRawBits() const;
+-  static Bitmap ConvertFromRawBits(
+-      const uint8_t* data, int pitch, int width, int height, bool rgb = true);
++  // Access raw image data array.
++  inline std::vector<uint8_t>& RowMajorData();
++  inline const std::vector<uint8_t>& RowMajorData() const;
+ 
+   // Manipulate individual pixels. For grayscale images, only the red element
+   // of the RGB color is used.
+-  bool GetPixel(int x, int y, BitmapColor<uint8_t>* color) const;
+-  bool SetPixel(int x, int y, const BitmapColor<uint8_t>& color);
+-
+-  // Get pointer to y-th scanline, where the 0-th scanline is at the top.
+-  const uint8_t* GetScanline(int y) const;
++  inline bool GetPixel(int x, int y, BitmapColor<uint8_t>* color) const;
++  inline bool SetPixel(int x, int y, const BitmapColor<uint8_t>& color);
+ 
+   // Fill entire bitmap with uniform color. For grayscale images, the first
+   // element of the vector is used.
+@@ -148,15 +124,15 @@ class Bitmap {
+   bool ExifLongitude(double* longitude) const;
+   bool ExifAltitude(double* altitude) const;
+ 
+-  // Read bitmap at given path and convert to grey- or colorscale.
+-  bool Read(const std::string& path, bool as_rgb = true);
+-
+-  // Write image to file. Flags can be used to set e.g. the JPEG quality.
+-  // Consult the FreeImage documentation for all available flags.
+-  bool Write(const std::string& path, int flags = 0) const;
++  // Read bitmap at given path and convert to grey- or colorscale. Defaults to
++  // linearizing the colorspace for image processing.
++  bool Read(const std::string& path,
++            bool as_rgb = true,
++            bool linearize_colorspace = false);
+ 
+-  // Smooth the image using a Gaussian kernel.
+-  void Smooth(float sigma_x, float sigma_y);
++  // Write bitmap to file at given path. If the bitmap is linearized, write it
++  // de-linearized to the file in sRGB.
++  bool Write(const std::string& path, bool delinearize_colorspace = true) const;
+ 
+   // Rescale image to the new dimensions.
+   enum class RescaleFilter {
+@@ -172,27 +148,30 @@ class Bitmap {
+   Bitmap CloneAsGrey() const;
+   Bitmap CloneAsRGB() const;
+ 
++  // Access metadata information (EXIF).
++  void SetMetaData(const std::string_view& name,
++                   const std::string_view& type,
++                   const void* value);
++  void SetMetaData(const std::string_view& name, const std::string_view& value);
++  bool GetMetaData(const std::string_view& name,
++                   const std::string_view& type,
++                   void* value) const;
++  bool GetMetaData(const std::string_view& name, std::string_view* value) const;
++
+   // Clone metadata from this bitmap object to another target bitmap object.
+   void CloneMetadata(Bitmap* target) const;
+ 
+- private:
+-  struct FreeImageHandle {
+-    FreeImageHandle();
+-    explicit FreeImageHandle(FIBITMAP* ptr);
+-    ~FreeImageHandle();
+-    FreeImageHandle(FreeImageHandle&&) noexcept;
+-    FreeImageHandle& operator=(FreeImageHandle&&) noexcept;
+-    FreeImageHandle(const FreeImageHandle&) = delete;
+-    FreeImageHandle& operator=(const FreeImageHandle&) = delete;
+-    FIBITMAP* ptr;
++  struct MetaData {
++    virtual ~MetaData() = default;
+   };
+ 
+-  void SetPtr(FIBITMAP* ptr);
+-
+-  FreeImageHandle handle_;
++ private:
+   int width_;
+   int height_;
+   int channels_;
++  bool linear_colorspace_;
++  std::vector<uint8_t> data_;
++  std::unique_ptr<MetaData> meta_data_;
+ };
+ 
+ std::ostream& operator<<(std::ostream& stream, const Bitmap& bitmap);
+@@ -264,15 +243,70 @@ std::ostream& operator<<(std::ostream& output, const BitmapColor<T>& color) {
+   return output;
+ }
+ 
+-FIBITMAP* Bitmap::Data() { return handle_.ptr; }
+-const FIBITMAP* Bitmap::Data() const { return handle_.ptr; }
+-
+ int Bitmap::Width() const { return width_; }
++
+ int Bitmap::Height() const { return height_; }
++
+ int Bitmap::Channels() const { return channels_; }
+ 
++size_t Bitmap::NumBytes() const { return data_.size(); }
++
++int Bitmap::BitsPerPixel() const { return channels_ * 8; }
++
++int Bitmap::Pitch() const { return width_ * channels_; }
++
++bool Bitmap::IsEmpty() const { return NumBytes() == 0; }
++
+ bool Bitmap::IsRGB() const { return channels_ == 3; }
+ 
+ bool Bitmap::IsGrey() const { return channels_ == 1; }
+ 
++std::vector<uint8_t>& Bitmap::RowMajorData() { return data_; }
++
++const std::vector<uint8_t>& Bitmap::RowMajorData() const { return data_; }
++
++bool Bitmap::GetPixel(const int x,
++                      const int y,
++                      BitmapColor<uint8_t>* color) const {
++  if (x < 0 || x >= width_ || y < 0 || y >= height_) {
++    return false;
++  }
++
++  if (IsGrey()) {
++    color->r = data_[y * width_ + x];
++    color->g = color->r;
++    color->b = color->r;
++    return true;
++  } else if (IsRGB()) {
++    const uint8_t* pixel = &data_[(y * width_ + x) * channels_];
++    color->r = pixel[0];
++    color->g = pixel[1];
++    color->b = pixel[2];
++    return true;
++  }
++
++  return false;
++}
++
++bool Bitmap::SetPixel(const int x,
++                      const int y,
++                      const BitmapColor<uint8_t>& color) {
++  if (x < 0 || x >= width_ || y < 0 || y >= height_) {
++    return false;
++  }
++
++  if (IsGrey()) {
++    data_[y * width_ + x] = color.r;
++    return true;
++  } else if (IsRGB()) {
++    uint8_t* pixel = &data_[(y * width_ + x) * channels_];
++    pixel[0] = color.r;
++    pixel[1] = color.g;
++    pixel[2] = color.b;
++    return true;
++  }
++
++  return false;
++}
++
+ }  // namespace colmap
+diff --git a/src/colmap/sensor/bitmap_test.cc b/src/colmap/sensor/bitmap_test.cc
+index 0a1c787a..09998aac 100644
+--- a/src/colmap/sensor/bitmap_test.cc
++++ b/src/colmap/sensor/bitmap_test.cc
+@@ -31,7 +31,7 @@
+ 
+ #include "colmap/util/testing.h"
+ 
+-#include <FreeImage.h>
++#include <gmock/gmock.h>
+ #include <gtest/gtest.h>
+ 
+ namespace colmap {
+@@ -53,6 +53,13 @@ TEST(Bitmap, BitmapGrayColor) {
+   EXPECT_EQ(color.b, 5);
+ }
+ 
++TEST(Bitmap, BitmapRGBColor) {
++  BitmapColor<uint8_t> color(1, 2, 3);
++  EXPECT_EQ(color.r, 1);
++  EXPECT_EQ(color.g, 2);
++  EXPECT_EQ(color.b, 3);
++}
++
+ TEST(Bitmap, BitmapColorCast) {
+   BitmapColor<float> color1(1.1f, 2.9f, -3.0f);
+   BitmapColor<uint8_t> color2 = color1.Cast<uint8_t>();
+@@ -68,285 +75,125 @@ TEST(Bitmap, Empty) {
+   EXPECT_EQ(bitmap.Channels(), 0);
+   EXPECT_FALSE(bitmap.IsRGB());
+   EXPECT_FALSE(bitmap.IsGrey());
++  EXPECT_TRUE(bitmap.IsEmpty());
+ }
+ 
+ TEST(Bitmap, Print) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
+   std::ostringstream stream;
+   stream << bitmap;
+-  EXPECT_EQ(stream.str(), "Bitmap(width=100, height=100, channels=3)");
++  EXPECT_EQ(stream.str(), "Bitmap(width=100, height=80, channels=3)");
+ }
+ 
+ TEST(Bitmap, AllocateRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
+   EXPECT_EQ(bitmap.Width(), 100);
+-  EXPECT_EQ(bitmap.Height(), 100);
++  EXPECT_EQ(bitmap.Height(), 80);
+   EXPECT_EQ(bitmap.Channels(), 3);
+   EXPECT_TRUE(bitmap.IsRGB());
+   EXPECT_FALSE(bitmap.IsGrey());
++  EXPECT_FALSE(bitmap.IsEmpty());
+ }
+ 
+ TEST(Bitmap, AllocateGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, false);
++  Bitmap bitmap(100, 80, /*as_rgb=*/false);
+   EXPECT_EQ(bitmap.Width(), 100);
+-  EXPECT_EQ(bitmap.Height(), 100);
++  EXPECT_EQ(bitmap.Height(), 80);
+   EXPECT_EQ(bitmap.Channels(), 1);
+   EXPECT_FALSE(bitmap.IsRGB());
+   EXPECT_TRUE(bitmap.IsGrey());
+-}
+-
+-TEST(Bitmap, Deallocate) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, false);
+-  bitmap.Deallocate();
+-  EXPECT_EQ(bitmap.Width(), 0);
+-  EXPECT_EQ(bitmap.Height(), 0);
+-  EXPECT_EQ(bitmap.Channels(), 0);
+-  EXPECT_EQ(bitmap.NumBytes(), 0);
+-  EXPECT_FALSE(bitmap.IsRGB());
+-  EXPECT_FALSE(bitmap.IsGrey());
++  EXPECT_FALSE(bitmap.IsEmpty());
+ }
+ 
+ TEST(Bitmap, MoveConstruct) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 1, true);
+-  const auto* data = bitmap.Data();
++  Bitmap bitmap(2, 1, /*as_rgb=*/true);
+   Bitmap moved_bitmap(std::move(bitmap));
+   EXPECT_EQ(moved_bitmap.Width(), 2);
+   EXPECT_EQ(moved_bitmap.Height(), 1);
+   EXPECT_EQ(moved_bitmap.Channels(), 3);
+-  EXPECT_EQ(moved_bitmap.Data(), data);
+   // NOLINTBEGIN(bugprone-use-after-move,clang-analyzer-cplusplus.Move)
+   EXPECT_EQ(bitmap.Width(), 0);
+   EXPECT_EQ(bitmap.Height(), 0);
+   EXPECT_EQ(bitmap.Channels(), 0);
+   EXPECT_EQ(bitmap.NumBytes(), 0);
+-  EXPECT_EQ(bitmap.Data(), nullptr);
+   // NOLINTEND(bugprone-use-after-move,clang-analyzer-cplusplus.Move)
+ }
+ 
+ TEST(Bitmap, MoveAssign) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 1, true);
+-  const auto* data = bitmap.Data();
++  Bitmap bitmap(2, 1, /*as_rgb=*/true);
+   Bitmap moved_bitmap = std::move(bitmap);
+   EXPECT_EQ(moved_bitmap.Width(), 2);
+   EXPECT_EQ(moved_bitmap.Height(), 1);
+   EXPECT_EQ(moved_bitmap.Channels(), 3);
+-  EXPECT_EQ(moved_bitmap.Data(), data);
+   // NOLINTBEGIN(bugprone-use-after-move,clang-analyzer-cplusplus.Move)
+   EXPECT_EQ(bitmap.Width(), 0);
+   EXPECT_EQ(bitmap.Height(), 0);
+   EXPECT_EQ(bitmap.Channels(), 0);
+   EXPECT_EQ(bitmap.NumBytes(), 0);
+-  EXPECT_EQ(bitmap.Data(), nullptr);
+   // NOLINTEND(bugprone-use-after-move,clang-analyzer-cplusplus.Move)
+ }
+ 
+ TEST(Bitmap, BitsPerPixel) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(1, 1, /*as_rgb=*/true);
+   EXPECT_EQ(bitmap.BitsPerPixel(), 24);
+-  bitmap.Allocate(100, 100, false);
++  bitmap = Bitmap(1, 1, /*as_rgb=*/false);
+   EXPECT_EQ(bitmap.BitsPerPixel(), 8);
+ }
+ 
+ TEST(Bitmap, NumBytes) {
+   Bitmap bitmap;
+   EXPECT_EQ(bitmap.NumBytes(), 0);
+-  bitmap.Allocate(100, 100, true);
+-  EXPECT_EQ(bitmap.NumBytes(), 3 * 100 * 100);
+-  bitmap.Allocate(100, 100, false);
+-  EXPECT_EQ(bitmap.NumBytes(), 100 * 100);
++  bitmap = Bitmap(100, 80, /*as_rgb=*/true);
++  EXPECT_EQ(bitmap.NumBytes(), 3 * 100 * 80);
++  bitmap = Bitmap(100, 80, /*as_rgb=*/false);
++  EXPECT_EQ(bitmap.NumBytes(), 100 * 80);
+ }
+ 
+-TEST(Bitmap, ConvertToRowMajorArrayRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 2, true);
++TEST(Bitmap, RowMajorDataRGB) {
++  Bitmap bitmap(2, 3, /*as_rgb=*/true);
+   bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+   bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
+-  const std::vector<uint8_t> array = bitmap.ConvertToRowMajorArray();
+-  ASSERT_EQ(array.size(), 12);
+-  EXPECT_EQ(array[0], 0);
+-  EXPECT_EQ(array[1], 0);
+-  EXPECT_EQ(array[2], 0);
+-  EXPECT_EQ(array[3], 0);
+-  EXPECT_EQ(array[4], 0);
+-  EXPECT_EQ(array[5], 2);
+-  EXPECT_EQ(array[6], 0);
+-  EXPECT_EQ(array[7], 0);
+-  EXPECT_EQ(array[8], 1);
+-  EXPECT_EQ(array[9], 0);
+-  EXPECT_EQ(array[10], 0);
+-  EXPECT_EQ(array[11], 3);
+-}
+-
+-TEST(Bitmap, ConvertToRowMajorArrayGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 2, false);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
+-  const std::vector<uint8_t> array = bitmap.ConvertToRowMajorArray();
+-  ASSERT_EQ(array.size(), 4);
+-  EXPECT_EQ(array[0], 0);
+-  EXPECT_EQ(array[1], 2);
+-  EXPECT_EQ(array[2], 1);
+-  EXPECT_EQ(array[3], 3);
++  bitmap.SetPixel(0, 2, BitmapColor<uint8_t>(2, 0, 0));
++  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(3, 0, 0));
++  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(4, 0, 0));
++  bitmap.SetPixel(1, 2, BitmapColor<uint8_t>(5, 0, 0));
++  EXPECT_THAT(bitmap.RowMajorData(),
++              testing::ElementsAre(
++                  0, 0, 0, 3, 0, 0, 1, 0, 0, 4, 0, 0, 2, 0, 0, 5, 0, 0));
+ }
+ 
+-TEST(Bitmap, ConvertToColMajorArrayRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 2, true);
++TEST(Bitmap, RowMajorDataGrey) {
++  Bitmap bitmap(2, 3, /*as_rgb=*/false);
+   bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+   bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
+-  const std::vector<uint8_t> array = bitmap.ConvertToColMajorArray();
+-  ASSERT_EQ(array.size(), 12);
+-  EXPECT_EQ(array[0], 0);
+-  EXPECT_EQ(array[1], 0);
+-  EXPECT_EQ(array[2], 0);
+-  EXPECT_EQ(array[3], 0);
+-  EXPECT_EQ(array[4], 0);
+-  EXPECT_EQ(array[5], 0);
+-  EXPECT_EQ(array[6], 0);
+-  EXPECT_EQ(array[7], 0);
+-  EXPECT_EQ(array[8], 0);
+-  EXPECT_EQ(array[9], 1);
+-  EXPECT_EQ(array[10], 2);
+-  EXPECT_EQ(array[11], 3);
+-}
+-
+-TEST(Bitmap, ConvertToColMajorArrayGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 2, false);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
+-  const std::vector<uint8_t> array = bitmap.ConvertToColMajorArray();
+-  ASSERT_EQ(array.size(), 4);
+-  EXPECT_EQ(array[0], 0);
+-  EXPECT_EQ(array[1], 1);
+-  EXPECT_EQ(array[2], 2);
+-  EXPECT_EQ(array[3], 3);
+-}
+-
+-TEST(Bitmap, ConvertToFromRawBitsGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(3, 2, false);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0));
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3));
+-
+-  std::vector<uint8_t> raw_bits = bitmap.ConvertToRawBits();
+-  ASSERT_EQ(raw_bits.size(), bitmap.Pitch() * bitmap.Height());
+-
+-  const std::vector<uint8_t> raw_bits_copy = raw_bits;
+-  Bitmap bitmap_copy = Bitmap::ConvertFromRawBits(raw_bits.data(),
+-                                                  bitmap.Pitch(),
+-                                                  bitmap.Width(),
+-                                                  bitmap.Height(),
+-                                                  /*rgb=*/false);
+-  EXPECT_EQ(bitmap.Width(), bitmap_copy.Width());
+-  EXPECT_EQ(bitmap.Height(), bitmap_copy.Height());
+-  EXPECT_EQ(bitmap.Channels(), bitmap_copy.Channels());
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(5));
+-  bitmap_copy.SetPixel(0, 1, BitmapColor<uint8_t>(5));
+-  EXPECT_EQ(raw_bits_copy, raw_bits);
+-  EXPECT_EQ(bitmap.ConvertToRowMajorArray(),
+-            bitmap_copy.ConvertToRowMajorArray());
+-}
+-
+-TEST(Bitmap, ConvertToFromRawBitsRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(3, 2, true);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
+-
+-  std::vector<uint8_t> raw_bits = bitmap.ConvertToRawBits();
+-  ASSERT_EQ(raw_bits.size(), bitmap.Pitch() * bitmap.Height() * 3);
+-
+-  const std::vector<uint8_t> raw_bits_copy = raw_bits;
+-  Bitmap bitmap_copy = Bitmap::ConvertFromRawBits(raw_bits.data(),
+-                                                  bitmap.Pitch(),
+-                                                  bitmap.Width(),
+-                                                  bitmap.Height(),
+-                                                  /*rgb=*/true);
+-  EXPECT_EQ(bitmap.Width(), bitmap_copy.Width());
+-  EXPECT_EQ(bitmap.Height(), bitmap_copy.Height());
+-  EXPECT_EQ(bitmap.Channels(), bitmap_copy.Channels());
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(5, 0, 0));
+-  bitmap_copy.SetPixel(0, 1, BitmapColor<uint8_t>(5, 0, 0));
+-  EXPECT_EQ(raw_bits_copy, raw_bits);
+-  EXPECT_EQ(bitmap.ConvertToRowMajorArray(),
+-            bitmap_copy.ConvertToRowMajorArray());
++  bitmap.SetPixel(0, 2, BitmapColor<uint8_t>(2, 0, 0));
++  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(3, 0, 0));
++  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(4, 0, 0));
++  bitmap.SetPixel(1, 2, BitmapColor<uint8_t>(5, 0, 0));
++  EXPECT_THAT(bitmap.RowMajorData(), testing::ElementsAre(0, 3, 1, 4, 2, 5));
+ }
+ 
+ TEST(Bitmap, GetAndSetPixelRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(1, 1, true);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(1, 2, 3));
++  Bitmap bitmap(2, 3, /*as_rgb=*/true);
++  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(1, 2, 3));
+   BitmapColor<uint8_t> color;
+-  EXPECT_TRUE(bitmap.GetPixel(0, 0, &color));
++  EXPECT_TRUE(bitmap.GetPixel(1, 1, &color));
+   EXPECT_EQ(color, BitmapColor<uint8_t>(1, 2, 3));
+ }
+ 
+ TEST(Bitmap, GetAndSetPixelGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(1, 1, false);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 2, 3));
++  Bitmap bitmap(2, 3, /*as_rgb=*/false);
++  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(0, 2, 3));
+   BitmapColor<uint8_t> color;
+-  EXPECT_TRUE(bitmap.GetPixel(0, 0, &color));
++  EXPECT_TRUE(bitmap.GetPixel(1, 1, &color));
+   EXPECT_EQ(color, BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(1, 2, 3));
+-  EXPECT_TRUE(bitmap.GetPixel(0, 0, &color));
+-  EXPECT_EQ(color, BitmapColor<uint8_t>(1, 0, 0));
+-}
+-
+-TEST(Bitmap, GetScanlineRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(3, 3, true);
+-  bitmap.Fill(BitmapColor<uint8_t>(1, 2, 3));
+-  for (size_t r = 0; r < 3; ++r) {
+-    const uint8_t* scanline = bitmap.GetScanline(r);
+-    for (size_t c = 0; c < 3; ++c) {
+-      BitmapColor<uint8_t> color;
+-      EXPECT_TRUE(bitmap.GetPixel(r, c, &color));
+-      EXPECT_EQ(scanline[c * 3 + FI_RGBA_RED], color.r);
+-      EXPECT_EQ(scanline[c * 3 + FI_RGBA_GREEN], color.g);
+-      EXPECT_EQ(scanline[c * 3 + FI_RGBA_BLUE], color.b);
+-    }
+-  }
+-}
+-
+-TEST(Bitmap, GetScanlineGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(3, 3, false);
+-  bitmap.Fill(BitmapColor<uint8_t>(1, 2, 3));
+-  for (size_t r = 0; r < 3; ++r) {
+-    const uint8_t* scanline = bitmap.GetScanline(r);
+-    for (size_t c = 0; c < 3; ++c) {
+-      BitmapColor<uint8_t> color;
+-      EXPECT_TRUE(bitmap.GetPixel(r, c, &color));
+-      EXPECT_EQ(scanline[c], color.r);
+-    }
+-  }
++  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(1, 2, 3));
++  EXPECT_TRUE(bitmap.GetPixel(1, 1, &color));
++  EXPECT_EQ(color, BitmapColor<uint8_t>(1, 1, 1));
+ }
+ 
+ TEST(Bitmap, Fill) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(100, 100, /*as_rgb=*/true);
+   bitmap.Fill(BitmapColor<uint8_t>(1, 2, 3));
+   for (int y = 0; y < bitmap.Height(); ++y) {
+     for (int x = 0; x < bitmap.Width(); ++x) {
+@@ -358,76 +205,35 @@ TEST(Bitmap, Fill) {
+ }
+ 
+ TEST(Bitmap, InterpolateNearestNeighbor) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(11, 11, true);
++  Bitmap bitmap(11, 10, /*as_rgb=*/true);
+   bitmap.Fill(BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(5, 5, BitmapColor<uint8_t>(1, 2, 3));
++  bitmap.SetPixel(5, 4, BitmapColor<uint8_t>(1, 2, 3));
+   BitmapColor<uint8_t> color;
+-  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(5, 5, &color));
++  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(5, 4, &color));
+   EXPECT_EQ(color, BitmapColor<uint8_t>(1, 2, 3));
+-  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(5.4999, 5.4999, &color));
++  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(5.4999, 4.4999, &color));
+   EXPECT_EQ(color, BitmapColor<uint8_t>(1, 2, 3));
+-  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(5.5, 5.5, &color));
++  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(5.5, 4.5, &color));
+   EXPECT_EQ(color, BitmapColor<uint8_t>(0, 0, 0));
+-  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(4.5, 5.4999, &color));
++  EXPECT_TRUE(bitmap.InterpolateNearestNeighbor(4.5, 4.4999, &color));
+   EXPECT_EQ(color, BitmapColor<uint8_t>(1, 2, 3));
+ }
+ 
+ TEST(Bitmap, InterpolateBilinear) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(11, 11, true);
++  Bitmap bitmap(11, 10, /*as_rgb=*/true);
+   bitmap.Fill(BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(5, 5, BitmapColor<uint8_t>(1, 2, 3));
++  bitmap.SetPixel(5, 4, BitmapColor<uint8_t>(1, 2, 3));
+   BitmapColor<float> color;
+-  EXPECT_TRUE(bitmap.InterpolateBilinear(5, 5, &color));
++  EXPECT_TRUE(bitmap.InterpolateBilinear(5, 4, &color));
+   EXPECT_EQ(color, BitmapColor<float>(1, 2, 3));
+-  EXPECT_TRUE(bitmap.InterpolateBilinear(5.5, 5, &color));
++  EXPECT_TRUE(bitmap.InterpolateBilinear(5.5, 4, &color));
+   EXPECT_EQ(color, BitmapColor<float>(0.5, 1, 1.5));
+-  EXPECT_TRUE(bitmap.InterpolateBilinear(5.5, 5.5, &color));
++  EXPECT_TRUE(bitmap.InterpolateBilinear(5.5, 4.5, &color));
+   EXPECT_EQ(color, BitmapColor<float>(0.25, 0.5, 0.75));
+ }
+ 
+-TEST(Bitmap, SmoothRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(50, 50, true);
+-  for (int x = 0; x < 50; ++x) {
+-    for (int y = 0; y < 50; ++y) {
+-      bitmap.SetPixel(
+-          x, y, BitmapColor<uint8_t>(y * 50 + x, y * 50 + x, y * 50 + x));
+-    }
+-  }
+-  bitmap.Smooth(1, 1);
+-  EXPECT_EQ(bitmap.Width(), 50);
+-  EXPECT_EQ(bitmap.Height(), 50);
+-  EXPECT_EQ(bitmap.Channels(), 3);
+-  for (int x = 0; x < 50; ++x) {
+-    for (int y = 0; y < 50; ++y) {
+-      BitmapColor<uint8_t> color;
+-      EXPECT_TRUE(bitmap.GetPixel(x, y, &color));
+-      EXPECT_EQ(color.r, color.g);
+-      EXPECT_EQ(color.r, color.b);
+-    }
+-  }
+-}
+-
+-TEST(Bitmap, SmoothGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(50, 50, false);
+-  for (int x = 0; x < 50; ++x) {
+-    for (int y = 0; y < 50; ++y) {
+-      bitmap.SetPixel(
+-          x, y, BitmapColor<uint8_t>(y * 50 + x, y * 50 + x, y * 50 + x));
+-    }
+-  }
+-  bitmap.Smooth(1, 1);
+-  EXPECT_EQ(bitmap.Width(), 50);
+-  EXPECT_EQ(bitmap.Height(), 50);
+-  EXPECT_EQ(bitmap.Channels(), 1);
+-}
+-
+ TEST(Bitmap, RescaleRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
+   Bitmap bitmap1 = bitmap.Clone();
+   bitmap1.Rescale(50, 25);
+   EXPECT_EQ(bitmap1.Width(), 50);
+@@ -441,8 +247,7 @@ TEST(Bitmap, RescaleRGB) {
+ }
+ 
+ TEST(Bitmap, RescaleGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, false);
++  Bitmap bitmap(100, 80, /*as_rgb=*/false);
+   Bitmap bitmap1 = bitmap.Clone();
+   bitmap1.Rescale(50, 25);
+   EXPECT_EQ(bitmap1.Width(), 50);
+@@ -456,38 +261,191 @@ TEST(Bitmap, RescaleGrey) {
+ }
+ 
+ TEST(Bitmap, Clone) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++  bitmap.Fill(BitmapColor<uint8_t>(0, 0, 0));
++  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(10, 20, 30));
+   const Bitmap cloned_bitmap = bitmap.Clone();
+   EXPECT_EQ(cloned_bitmap.Width(), 100);
+-  EXPECT_EQ(cloned_bitmap.Height(), 100);
++  EXPECT_EQ(cloned_bitmap.Height(), 80);
+   EXPECT_EQ(cloned_bitmap.Channels(), 3);
+-  EXPECT_NE(bitmap.Data(), cloned_bitmap.Data());
++  BitmapColor<uint8_t> color;
++  EXPECT_TRUE(cloned_bitmap.GetPixel(0, 0, &color));
++  EXPECT_EQ(color, BitmapColor<uint8_t>(10, 20, 30));
+ }
+ 
+ TEST(Bitmap, CloneAsRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, false);
++  Bitmap bitmap(100, 80, /*as_rgb=*/false);
++  bitmap.Fill(BitmapColor<uint8_t>(0, 0, 0));
++  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(10, 0, 0));
+   const Bitmap cloned_bitmap = bitmap.CloneAsRGB();
+   EXPECT_EQ(cloned_bitmap.Width(), 100);
+-  EXPECT_EQ(cloned_bitmap.Height(), 100);
++  EXPECT_EQ(cloned_bitmap.Height(), 80);
+   EXPECT_EQ(cloned_bitmap.Channels(), 3);
+-  EXPECT_NE(bitmap.Data(), cloned_bitmap.Data());
++  BitmapColor<uint8_t> color;
++  EXPECT_TRUE(cloned_bitmap.GetPixel(0, 0, &color));
++  EXPECT_EQ(color, BitmapColor<uint8_t>(10, 10, 10));
+ }
+ 
+ TEST(Bitmap, CloneAsGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(100, 100, true);
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++  bitmap.Fill(BitmapColor<uint8_t>(0, 0, 0));
++  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(10, 20, 30));
+   const Bitmap cloned_bitmap = bitmap.CloneAsGrey();
+   EXPECT_EQ(cloned_bitmap.Width(), 100);
+-  EXPECT_EQ(cloned_bitmap.Height(), 100);
++  EXPECT_EQ(cloned_bitmap.Height(), 80);
+   EXPECT_EQ(cloned_bitmap.Channels(), 1);
+-  EXPECT_NE(bitmap.Data(), cloned_bitmap.Data());
++  BitmapColor<uint8_t> color;
++  EXPECT_TRUE(cloned_bitmap.GetPixel(0, 0, &color));
++  EXPECT_EQ(color, BitmapColor<uint8_t>(19, 19, 19));
++}
++
++TEST(Bitmap, SetGetMetaData) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++  const float kValue = 1.f;
++  bitmap.SetMetaData("foobar", "float", &kValue);
++  float value = 0.f;
++  EXPECT_TRUE(bitmap.GetMetaData("foobar", "float", &value));
++  EXPECT_EQ(value, kValue);
++  EXPECT_FALSE(bitmap.GetMetaData("does_not_exist", "float", &value));
++  EXPECT_FALSE(bitmap.GetMetaData("foobar", "int8", &value));
++}
++
++TEST(Bitmap, CloneMetaData) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++  const float kValue = 1.f;
++  bitmap.SetMetaData("foobar", "float", &kValue);
++
++  Bitmap bitmap2(100, 80, /*as_rgb=*/true);
++  float value = 0.f;
++  EXPECT_FALSE(bitmap2.GetMetaData("foobar", "float", &value));
++  bitmap.CloneMetadata(&bitmap2);
++  EXPECT_TRUE(bitmap2.GetMetaData("foobar", "float", &value));
++  EXPECT_EQ(value, kValue);
++}
++
++TEST(Bitmap, ExifCameraModel) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  std::string camera_model;
++  EXPECT_FALSE(bitmap.ExifCameraModel(&camera_model));
++
++  bitmap.SetMetaData("Make", "make");
++  bitmap.SetMetaData("Model", "model");
++  const float focal_length_in_35mm_film = 50.f;
++  bitmap.SetMetaData(
++      "Exif:FocalLengthIn35mmFilm", "float", &focal_length_in_35mm_film);
++
++  EXPECT_TRUE(bitmap.ExifCameraModel(&camera_model));
++  EXPECT_EQ(camera_model, "make-model-50.000000-100x80");
++}
++
++TEST(Bitmap, ExifFocalLengthIn35mm) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  double focal_length = 0.0;
++  EXPECT_FALSE(bitmap.ExifFocalLength(&focal_length));
++
++  const float focal_length_in_35mm_film = 70.f;
++  bitmap.SetMetaData(
++      "Exif:FocalLengthIn35mmFilm", "float", &focal_length_in_35mm_film);
++
++  EXPECT_TRUE(bitmap.ExifFocalLength(&focal_length));
++  EXPECT_NEAR(focal_length, 207.17, 0.1);
++}
++
++TEST(Bitmap, ExifFocalLengthWithPlane) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  double focal_length = 0.0;
++  EXPECT_FALSE(bitmap.ExifFocalLength(&focal_length));
++
++  const float kFocalLengthVal = 72.f;
++  bitmap.SetMetaData("Exif:FocalLength", "float", &kFocalLengthVal);
++  bitmap.SetMetaData("Make", "canon");
++  bitmap.SetMetaData("Model", "eos1dsmarkiii");
++
++  EXPECT_TRUE(bitmap.ExifFocalLength(&focal_length));
++  EXPECT_EQ(focal_length, 200);
++}
++
++TEST(Bitmap, ExifFocalLengthWithDatabaseLookup) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  double focal_length = 0.0;
++  EXPECT_FALSE(bitmap.ExifFocalLength(&focal_length));
++
++  const float kFocalLengthVal = 120.f;
++  bitmap.SetMetaData("Exif:FocalLength", "float", &kFocalLengthVal);
++  const int kPixelXDim = 100;
++  bitmap.SetMetaData("Exif:PixelXDimension", "int", &kPixelXDim);
++  const float kPlaneXRes = 1.f;
++  bitmap.SetMetaData("Exif:FocalPlaneXResolution", "float", &kPlaneXRes);
++  const int kPlanResUnit = 4;
++  bitmap.SetMetaData("Exif:FocalPlaneResolutionUnit", "int", &kPlanResUnit);
++
++  EXPECT_TRUE(bitmap.ExifFocalLength(&focal_length));
++  EXPECT_EQ(focal_length, 120);
++}
++
++TEST(Bitmap, ExifLatitude) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  double latitude = 0.0;
++  EXPECT_FALSE(bitmap.ExifLatitude(&latitude));
++
++  bitmap.SetMetaData("GPS:LatitudeRef", "N");
++  const float kDegMinSec[3] = {46, 30, 900};
++  bitmap.SetMetaData("GPS:Latitude", "point", kDegMinSec);
++
++  EXPECT_TRUE(bitmap.ExifLatitude(&latitude));
++  EXPECT_EQ(latitude, 46.75);
++
++  bitmap.SetMetaData("GPS:LatitudeRef", "S");
++
++  EXPECT_TRUE(bitmap.ExifLatitude(&latitude));
++  EXPECT_EQ(latitude, -46.75);
++}
++
++TEST(Bitmap, ExifLongitude) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  double longitude = 0.0;
++  EXPECT_FALSE(bitmap.ExifLongitude(&longitude));
++
++  bitmap.SetMetaData("GPS:LongitudeRef", "W");
++  const float kDegMinSec[3] = {92, 30, 900};
++  bitmap.SetMetaData("GPS:Longitude", "point", kDegMinSec);
++
++  EXPECT_TRUE(bitmap.ExifLongitude(&longitude));
++  EXPECT_EQ(longitude, 92.75);
++
++  bitmap.SetMetaData("GPS:LongitudeRef", "E");
++
++  EXPECT_TRUE(bitmap.ExifLongitude(&longitude));
++  EXPECT_EQ(longitude, -92.75);
++}
++
++TEST(Bitmap, ExifAltitude) {
++  Bitmap bitmap(100, 80, /*as_rgb=*/true);
++
++  double altitude = 0.0;
++  EXPECT_FALSE(bitmap.ExifAltitude(&altitude));
++
++  bitmap.SetMetaData("GPS:AltitudeRef", "0");
++  const float kAltitudeVal = 123.456;
++  bitmap.SetMetaData("GPS:Altitude", "float", &kAltitudeVal);
++
++  EXPECT_TRUE(bitmap.ExifAltitude(&altitude));
++  EXPECT_EQ(altitude, kAltitudeVal);
++
++  bitmap.SetMetaData("GPS:AltitudeRef", "1");
++
++  EXPECT_TRUE(bitmap.ExifAltitude(&altitude));
++  EXPECT_EQ(altitude, -kAltitudeVal);
+ }
+ 
+ TEST(Bitmap, ReadWriteAsRGB) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 3, true);
++  Bitmap bitmap(2, 3, /*as_rgb=*/true);
+   bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+   bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+   bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+@@ -501,30 +459,23 @@ TEST(Bitmap, ReadWriteAsRGB) {
+   EXPECT_TRUE(bitmap.Write(filename));
+ 
+   Bitmap read_bitmap;
+-
+-  // Allocate bitmap with different size to test read overwrites existing data.
+-  read_bitmap.Allocate(bitmap.Width() + 1, bitmap.Height() + 2, true);
+-
+   EXPECT_TRUE(read_bitmap.Read(filename));
+   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
+   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
+   EXPECT_EQ(read_bitmap.Channels(), 3);
+   EXPECT_EQ(read_bitmap.BitsPerPixel(), 24);
+-  EXPECT_EQ(read_bitmap.ConvertToRowMajorArray(),
+-            bitmap.ConvertToRowMajorArray());
++  EXPECT_EQ(read_bitmap.RowMajorData(), bitmap.RowMajorData());
+ 
+   EXPECT_TRUE(read_bitmap.Read(filename, /*as_rgb=*/false));
+   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
+   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
+   EXPECT_EQ(read_bitmap.Channels(), 1);
+   EXPECT_EQ(read_bitmap.BitsPerPixel(), 8);
+-  EXPECT_EQ(read_bitmap.ConvertToRowMajorArray(),
+-            bitmap.CloneAsGrey().ConvertToRowMajorArray());
++  EXPECT_EQ(read_bitmap.RowMajorData(), bitmap.CloneAsGrey().RowMajorData());
+ }
+ 
+ TEST(Bitmap, ReadWriteAsGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 3, false);
++  Bitmap bitmap(2, 3, /*as_rgb=*/false);
+   bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0));
+   bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1));
+   bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2));
+@@ -538,73 +489,92 @@ TEST(Bitmap, ReadWriteAsGrey) {
+   EXPECT_TRUE(bitmap.Write(filename));
+ 
+   Bitmap read_bitmap;
+-
+-  // Allocate bitmap with different size to test read overwrites existing data.
+-  read_bitmap.Allocate(bitmap.Width() + 1, bitmap.Height() + 2, true);
+-
+   EXPECT_TRUE(read_bitmap.Read(filename));
+   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
+   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
+   EXPECT_EQ(read_bitmap.Channels(), 3);
+   EXPECT_EQ(read_bitmap.BitsPerPixel(), 24);
+-  EXPECT_EQ(read_bitmap.ConvertToRowMajorArray(),
+-            bitmap.CloneAsRGB().ConvertToRowMajorArray());
++  EXPECT_EQ(read_bitmap.RowMajorData(), bitmap.CloneAsRGB().RowMajorData());
+ 
+   EXPECT_TRUE(read_bitmap.Read(filename, /*as_rgb=*/false));
+   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
+   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
+   EXPECT_EQ(read_bitmap.Channels(), 1);
+   EXPECT_EQ(read_bitmap.BitsPerPixel(), 8);
+-  EXPECT_EQ(read_bitmap.ConvertToRowMajorArray(),
+-            bitmap.ConvertToRowMajorArray());
++  EXPECT_EQ(read_bitmap.RowMajorData(), bitmap.RowMajorData());
+ }
+ 
+-TEST(Bitmap, ReadRGB16AsGrey) {
+-  Bitmap bitmap;
+-  bitmap.Allocate(2, 3, true);
+-  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
+-  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
+-  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
+-  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
+-  bitmap.SetPixel(0, 2, BitmapColor<uint8_t>(4, 2, 0));
+-  bitmap.SetPixel(1, 2, BitmapColor<uint8_t>(5, 2, 1));
++TEST(Bitmap, ReadWriteAsGreyNonLinear) {
++  Bitmap bitmap(2, 3, /*as_rgb=*/false, /*linear_colorspace=*/false);
++  bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0));
++  bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1));
++  bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2));
++  bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3));
++  bitmap.SetPixel(0, 2, BitmapColor<uint8_t>(4));
++  bitmap.SetPixel(1, 2, BitmapColor<uint8_t>(5));
+ 
+   const std::string test_dir = CreateTestDir();
+   const std::string filename = test_dir + "/bitmap.png";
+ 
+-  // Bitmap class does not support 16 bit color depth
+-  FIBITMAP* converted_rgb16 = FreeImage_ConvertToType(bitmap.Data(), FIT_RGB16);
+-  EXPECT_TRUE(converted_rgb16);
+-  EXPECT_TRUE(FreeImage_Save(FIF_PNG, converted_rgb16, filename.c_str()));
+-  FreeImage_Unload(converted_rgb16);
+-
+-  // Assert the file was written correctly with 16 bit color depth
+-  FIBITMAP* written_image = FreeImage_Load(FIF_PNG, filename.c_str());
+-  EXPECT_TRUE(written_image);
+-  EXPECT_EQ(FreeImage_GetBPP(written_image), 48);
+-  FreeImage_Unload(written_image);
++  EXPECT_TRUE(bitmap.Write(filename, /*delinearize_colorspace=*/false));
+ 
+   Bitmap read_bitmap;
+-
+-  // Allocate bitmap with different size to test read overwrites existing data.
+-  read_bitmap.Allocate(bitmap.Width() + 1, bitmap.Height() + 2, true);
+-
+-  EXPECT_TRUE(read_bitmap.Read(filename));
+-  EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
+-  EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
+-  EXPECT_EQ(read_bitmap.Channels(), 3);
+-  EXPECT_EQ(read_bitmap.BitsPerPixel(), 24);
+-  EXPECT_EQ(read_bitmap.ConvertToRowMajorArray(),
+-            bitmap.ConvertToRowMajorArray());
+-
+-  EXPECT_TRUE(read_bitmap.Read(filename, /*as_rgb=*/false));
++  EXPECT_TRUE(read_bitmap.Read(
++      filename, /*as_rgb=*/false, /*linearize_colorspace=*/false));
+   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
+   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
+   EXPECT_EQ(read_bitmap.Channels(), 1);
+   EXPECT_EQ(read_bitmap.BitsPerPixel(), 8);
+-  EXPECT_EQ(read_bitmap.ConvertToRowMajorArray(),
+-            bitmap.CloneAsGrey().ConvertToRowMajorArray());
+-}
++  EXPECT_EQ(read_bitmap.RowMajorData(), bitmap.RowMajorData());
++}
++
++// TEST(Bitmap, ReadRGB16AsGrey) {
++//   Bitmap bitmap;
++//   bitmap.Allocate(2, 3, /*as_rgb=*/true);
++//   bitmap.SetPixel(0, 0, BitmapColor<uint8_t>(0, 0, 0));
++//   bitmap.SetPixel(0, 1, BitmapColor<uint8_t>(1, 0, 0));
++//   bitmap.SetPixel(1, 0, BitmapColor<uint8_t>(2, 0, 0));
++//   bitmap.SetPixel(1, 1, BitmapColor<uint8_t>(3, 0, 0));
++//   bitmap.SetPixel(0, 2, BitmapColor<uint8_t>(4, 2, 0));
++//   bitmap.SetPixel(1, 2, BitmapColor<uint8_t>(5, 2, 1));
++
++//   const std::string test_dir = CreateTestDir();
++//   const std::string filename = test_dir + "/bitmap.png";
++
++//   // Bitmap class does not support 16 bit color depth
++//   FIBITMAP* converted_rgb16 = FreeImage_ConvertToType(bitmap.Data(),
++//   FIT_RGB16); EXPECT_TRUE(converted_rgb16);
++//   EXPECT_TRUE(FreeImage_Save(FIF_PNG, converted_rgb16, filename.c_str()));
++//   FreeImage_Unload(converted_rgb16);
++
++//   // Assert the file was written correctly with 16 bit color depth
++//   FIBITMAP* written_image = FreeImage_Load(FIF_PNG, filename.c_str());
++//   EXPECT_TRUE(written_image);
++//   EXPECT_EQ(FreeImage_GetBPP(written_image), 48);
++//   FreeImage_Unload(written_image);
++
++//   Bitmap read_bitmap;
++
++//   // Allocate bitmap with different size to test read overwrites existing
++//   data. read_bitmap.Allocate(bitmap.Width() + 1, bitmap.Height() + 2,
++//   /*as_rgb=*/true);
++
++//   EXPECT_TRUE(read_bitmap.Read(filename));
++//   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
++//   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
++//   EXPECT_EQ(read_bitmap.Channels(), 3);
++//   EXPECT_EQ(read_bitmap.BitsPerPixel(), 24);
++//   EXPECT_EQ(read_bitmap.RowMajorData(),
++//             bitmap.RowMajorData());
++
++//   EXPECT_TRUE(read_bitmap.Read(filename, /*as_rgb=*/false));
++//   EXPECT_EQ(read_bitmap.Width(), bitmap.Width());
++//   EXPECT_EQ(read_bitmap.Height(), bitmap.Height());
++//   EXPECT_EQ(read_bitmap.Channels(), 1);
++//   EXPECT_EQ(read_bitmap.BitsPerPixel(), 8);
++//   EXPECT_EQ(read_bitmap.RowMajorData(),
++//             bitmap.CloneAsGrey().RowMajorData());
++// }
+ 
+ }  // namespace
+ }  // namespace colmap
+diff --git a/src/colmap/sensor/database.cc b/src/colmap/sensor/database.cc
+index ab83c83e..03de6e9c 100644
+--- a/src/colmap/sensor/database.cc
++++ b/src/colmap/sensor/database.cc
+@@ -37,7 +37,7 @@ const camera_specs_t CameraDatabase::specs_ = InitializeCameraSpecs();
+ 
+ bool CameraDatabase::QuerySensorWidth(const std::string& make,
+                                       const std::string& model,
+-                                      double* sensor_width) {
++                                      double* sensor_width_mm) {
+   // Clean the strings from all separators.
+   std::string cleaned_make = make;
+   std::string cleaned_model = model;
+@@ -60,7 +60,7 @@ bool CameraDatabase::QuerySensorWidth(const std::string& make,
+       for (const auto& model_elem : make_elem.second) {
+         if (StringContains(cleaned_model, model_elem.first) ||
+             StringContains(model_elem.first, cleaned_model)) {
+-          *sensor_width = model_elem.second;
++          *sensor_width_mm = model_elem.second;
+           if (cleaned_model == model_elem.first) {
+             // Model exactly matches, return immediately.
+             return true;
+diff --git a/src/colmap/sensor/database.h b/src/colmap/sensor/database.h
+index 93af5226..08a86102 100644
+--- a/src/colmap/sensor/database.h
++++ b/src/colmap/sensor/database.h
+@@ -45,7 +45,7 @@ struct CameraDatabase {
+ 
+   bool QuerySensorWidth(const std::string& make,
+                         const std::string& model,
+-                        double* sensor_width);
++                        double* sensor_width_mm);
+ 
+  private:
+   static const camera_specs_t specs_;
+diff --git a/src/colmap/sfm/incremental_mapper.cc b/src/colmap/sfm/incremental_mapper.cc
+index 2a054cdd..671f2a8c 100644
+--- a/src/colmap/sfm/incremental_mapper.cc
++++ b/src/colmap/sfm/incremental_mapper.cc
+@@ -693,9 +693,8 @@ IncrementalMapper::AdjustLocalBundle(
+       num_frames_per_rig[frame.RigId()] += 1;
+     }
+     for (const auto& [rig_id, num_frames] : num_frames_per_rig) {
+-      const size_t num_reg_frames_for_rig =
+-          reg_stats_.num_reg_frames_per_rig.at(rig_id);
+-      if (num_frames < num_reg_frames_for_rig) {
++      if (options.constant_rigs.count(rig_id) ||
++          num_frames < reg_stats_.num_reg_frames_per_rig.at(rig_id)) {
+         const Rig& rig = reconstruction_->Rig(rig_id);
+         for (const auto& [sensor_id, _] : rig.Sensors()) {
+           ba_config.SetConstantSensorFromRigPose(sensor_id);
+@@ -708,14 +707,11 @@ IncrementalMapper::AdjustLocalBundle(
+     num_images_per_camera.reserve(ba_config.NumImages());
+     for (const image_t image_id : ba_config.Images()) {
+       const Image& image = reconstruction_->Image(image_id);
+-      num_frames_per_rig[image.FramePtr()->RigId()] += 1;
+       num_images_per_camera[image.CameraId()] += 1;
+     }
+     for (const auto& [camera_id, num_images] : num_images_per_camera) {
+-      const size_t num_reg_images_for_camera =
+-          reg_stats_.num_reg_images_per_camera.at(camera_id);
+       if (options.constant_cameras.count(camera_id) ||
+-          num_images < num_reg_images_for_camera) {
++          num_images < reg_stats_.num_reg_images_per_camera.at(camera_id)) {
+         ba_config.SetConstantCamIntrinsics(camera_id);
+       }
+     }
+@@ -812,6 +808,13 @@ bool IncrementalMapper::AdjustGlobalBundle(
+     }
+   }
+ 
++  for (const auto& rig_id : options.constant_rigs) {
++    const Rig& rig = reconstruction_->Rig(rig_id);
++    for (const auto& [sensor_id, _] : rig.Sensors()) {
++      ba_config.SetConstantSensorFromRigPose(sensor_id);
++    }
++  }
++
+   for (const auto& camera_id : options.constant_cameras) {
+     ba_config.SetConstantCamIntrinsics(camera_id);
+   }
+diff --git a/src/colmap/sfm/incremental_mapper.h b/src/colmap/sfm/incremental_mapper.h
+index f56cdc96..20fd0f46 100644
+--- a/src/colmap/sfm/incremental_mapper.h
++++ b/src/colmap/sfm/incremental_mapper.h
+@@ -118,6 +118,10 @@ class IncrementalMapper {
+     // If reconstruction is provided as input, fix the existing image poses.
+     bool fix_existing_frames = false;
+ 
++    // List of rigs for which to fix the sensor_from_rig transformation,
++    // independent of ba_refine_sensor_from_rig.
++    std::unordered_set<rig_t> constant_rigs;
++
+     // List of cameras for which to fix the camera parameters independent
+     // of refine_focal_length, refine_principal_point, and refine_extra_params.
+     std::unordered_set<camera_t> constant_cameras;
+diff --git a/src/colmap/ui/CMakeLists.txt b/src/colmap/ui/CMakeLists.txt
+index 591f3682..38e923ee 100644
+--- a/src/colmap/ui/CMakeLists.txt
++++ b/src/colmap/ui/CMakeLists.txt
+@@ -30,6 +30,17 @@
+ 
+ set(FOLDER_NAME "ui")
+ 
++set(COLMAP_UI_QT_LIBS
++    Qt${QT_VERSION_MAJOR}::Core
++    Qt${QT_VERSION_MAJOR}::OpenGL
++    Qt${QT_VERSION_MAJOR}::Widgets
++)
++
++if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
++    list(APPEND COLMAP_UI_QT_LIBS 
++        Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
++endif()
++
+ COLMAP_ADD_LIBRARY(
+     NAME colmap_ui
+     SRCS
+@@ -67,7 +78,5 @@ COLMAP_ADD_LIBRARY(
+         colmap_image
+         colmap_scene
+         colmap_controllers
+-        Qt5::Core
+-        Qt5::OpenGL
+-        Qt5::Widgets
++        ${COLMAP_UI_QT_LIBS}
+ )
+diff --git a/src/colmap/ui/feature_extraction_widget.cc b/src/colmap/ui/feature_extraction_widget.cc
+index 0357a677..b9a6369b 100644
+--- a/src/colmap/ui/feature_extraction_widget.cc
++++ b/src/colmap/ui/feature_extraction_widget.cc
+@@ -79,12 +79,12 @@ SIFTExtractionWidget::SIFTExtractionWidget(QWidget* parent,
+   AddOptionFilePath(&options->image_reader->camera_mask_path,
+                     "camera_mask_path");
+ 
++  AddOptionInt(&options->feature_extraction->max_image_size, "max_image_size");
+   AddOptionInt(&options->feature_extraction->num_threads, "num_threads", -1);
+   AddOptionBool(&options->feature_extraction->use_gpu, "use_gpu");
+   AddOptionText(&options->feature_extraction->gpu_index, "gpu_index");
+ 
+   SiftExtractionOptions& sift_options = *options->feature_extraction->sift;
+-  AddOptionInt(&sift_options.max_image_size, "sift.max_image_size");
+   AddOptionInt(&sift_options.max_num_features, "sift.max_num_features");
+   AddOptionInt(&sift_options.first_octave, "sift.first_octave", -5);
+   AddOptionInt(&sift_options.num_octaves, "sift.num_octaves");
+@@ -115,6 +115,7 @@ void SIFTExtractionWidget::Run() {
+ 
+   ImageReaderOptions reader_options = *options_->image_reader;
+   reader_options.image_path = *options_->image_path;
++  reader_options.as_rgb = options_->feature_extraction->RequiresRGB();
+ 
+   auto extractor = CreateFeatureExtractorController(
+       *options_->database_path, reader_options, *options_->feature_extraction);
+diff --git a/src/colmap/ui/image_viewer_widget.cc b/src/colmap/ui/image_viewer_widget.cc
+index c743351c..9b86723a 100644
+--- a/src/colmap/ui/image_viewer_widget.cc
++++ b/src/colmap/ui/image_viewer_widget.cc
+@@ -120,8 +120,9 @@ void ImageViewerWidget::ShowPixmap(const QPixmap& pixmap) {
+ 
+ void ImageViewerWidget::ReadAndShow(const std::string& path) {
+   Bitmap bitmap;
+-  if (!bitmap.Read(path, true)) {
++  if (!bitmap.Read(path, /*as_rgb=*/true, /*linearize=*/false)) {
+     LOG(ERROR) << "Cannot read image at path " << path;
++    return;
+   }
+ 
+   ShowBitmap(bitmap);
+@@ -167,14 +168,14 @@ FeatureImageViewerWidget::FeatureImageViewerWidget(
+           this,
+           &FeatureImageViewerWidget::ShowOrHide);
+ }
+-
+ void FeatureImageViewerWidget::ReadAndShowWithKeypoints(
+     const std::string& path,
+     const FeatureKeypoints& keypoints,
+     const std::vector<char>& tri_mask) {
+   Bitmap bitmap;
+-  if (!bitmap.Read(path, true)) {
++  if (!bitmap.Read(path, /*as_rgb=*/true, /*linearize=*/false)) {
+     LOG(ERROR) << "Cannot read image at path " << path;
++    return;
+   }
+ 
+   image1_ = QPixmap::fromImage(BitmapToQImageRGB(bitmap));
+@@ -215,7 +216,8 @@ void FeatureImageViewerWidget::ReadAndShowWithMatches(
+     const FeatureMatches& matches) {
+   Bitmap bitmap1;
+   Bitmap bitmap2;
+-  if (!bitmap1.Read(path1, true) || !bitmap2.Read(path2, true)) {
++  if (!bitmap1.Read(path1, /*as_rgb=*/true, /*linearize=*/false) ||
++      !bitmap2.Read(path2, /*as_rgb=*/true, /*linearize=*/false)) {
+     LOG(ERROR) << "Cannot read images at paths " << path1 << " and " << path2;
+     return;
+   }
+diff --git a/src/colmap/ui/match_matrix_widget.cc b/src/colmap/ui/match_matrix_widget.cc
+index 07dcab5f..7298ca60 100644
+--- a/src/colmap/ui/match_matrix_widget.cc
++++ b/src/colmap/ui/match_matrix_widget.cc
+@@ -52,8 +52,7 @@ void MatchMatrixWidget::Show() {
+             });
+ 
+   // Allocate the match matrix image.
+-  Bitmap match_matrix;
+-  match_matrix.Allocate(images.size(), images.size(), true);
++  Bitmap match_matrix(images.size(), images.size(), true);
+   match_matrix.Fill(BitmapColor<uint8_t>(255));
+ 
+   // Map image identifiers to match matrix locations.
+diff --git a/src/colmap/ui/model_viewer_widget.cc b/src/colmap/ui/model_viewer_widget.cc
+index c7015c91..a51e9d7f 100644
+--- a/src/colmap/ui/model_viewer_widget.cc
++++ b/src/colmap/ui/model_viewer_widget.cc
+@@ -734,7 +734,11 @@ QImage ModelViewerWidget::GrabImage() {
+ 
+   EnableCoordinateGrid();
+ 
++#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
++  return image.flipped(Qt::Orientation::Vertical);
++#else
+   return image.mirrored();
++#endif
+ }
+ 
+ void ModelViewerWidget::GrabMovie() { movie_grabber_widget_->show(); }
+diff --git a/src/colmap/ui/model_viewer_widget.h b/src/colmap/ui/model_viewer_widget.h
+index e2a64715..b56618cd 100644
+--- a/src/colmap/ui/model_viewer_widget.h
++++ b/src/colmap/ui/model_viewer_widget.h
+@@ -44,6 +44,9 @@
+ #include <QOpenGLFunctions_3_2_Core>
+ #include <QtCore>
+ #include <QtOpenGL>
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++#include <QOpenGLWidget>
++#endif
+ 
+ namespace colmap {
+ 
+diff --git a/src/colmap/ui/options_widget.cc b/src/colmap/ui/options_widget.cc
+index 2ea0ea84..17cd1b6d 100644
+--- a/src/colmap/ui/options_widget.cc
++++ b/src/colmap/ui/options_widget.cc
+@@ -93,6 +93,7 @@ QSpinBox* OptionsWidget::AddOptionInt(int* option,
+   QSpinBox* spinbox = new QSpinBox(this);
+   spinbox->setMinimum(min);
+   spinbox->setMaximum(max);
++  spinbox->setValue(*option);
+ 
+   AddOptionRow(label_text, spinbox, option);
+ 
+@@ -112,6 +113,7 @@ QDoubleSpinBox* OptionsWidget::AddOptionDouble(double* option,
+   spinbox->setMaximum(max);
+   spinbox->setSingleStep(step);
+   spinbox->setDecimals(decimals);
++  spinbox->setValue(*option);
+ 
+   AddOptionRow(label_text, spinbox, option);
+ 
+@@ -131,6 +133,7 @@ QDoubleSpinBox* OptionsWidget::AddOptionDoubleLog(double* option,
+   spinbox->setMaximum(max);
+   spinbox->setSingleStep(step);
+   spinbox->setDecimals(decimals);
++  spinbox->setValue(*option);
+ 
+   AddOptionRow(label_text, spinbox, option);
+ 
+@@ -142,6 +145,7 @@ QDoubleSpinBox* OptionsWidget::AddOptionDoubleLog(double* option,
+ QCheckBox* OptionsWidget::AddOptionBool(bool* option,
+                                         const std::string& label_text) {
+   QCheckBox* checkbox = new QCheckBox(this);
++  checkbox->setChecked(*option);
+ 
+   AddOptionRow(label_text, checkbox, option);
+ 
+@@ -153,6 +157,7 @@ QCheckBox* OptionsWidget::AddOptionBool(bool* option,
+ QLineEdit* OptionsWidget::AddOptionText(std::string* option,
+                                         const std::string& label_text) {
+   QLineEdit* line_edit = new QLineEdit(this);
++  line_edit->setText(QString::fromStdString(*option));
+ 
+   AddOptionRow(label_text, line_edit, option);
+ 
+@@ -164,6 +169,7 @@ QLineEdit* OptionsWidget::AddOptionText(std::string* option,
+ QLineEdit* OptionsWidget::AddOptionFilePath(std::string* option,
+                                             const std::string& label_text) {
+   QLineEdit* line_edit = new QLineEdit(this);
++  line_edit->setText(QString::fromStdString(*option));
+ 
+   AddOptionRow(label_text, line_edit, option);
+ 
+@@ -184,6 +190,7 @@ QLineEdit* OptionsWidget::AddOptionFilePath(std::string* option,
+ QLineEdit* OptionsWidget::AddOptionDirPath(std::string* option,
+                                            const std::string& label_text) {
+   QLineEdit* line_edit = new QLineEdit(this);
++  line_edit->setText(QString::fromStdString(*option));
+ 
+   AddOptionRow(label_text, line_edit, option);
+ 
+diff --git a/src/colmap/ui/point_viewer_widget.cc b/src/colmap/ui/point_viewer_widget.cc
+index dbb08051..2ce58fa0 100644
+--- a/src/colmap/ui/point_viewer_widget.cc
++++ b/src/colmap/ui/point_viewer_widget.cc
+@@ -192,7 +192,7 @@ void PointViewerWidget::Show(const point3D_t point3D_id) {
+ 
+     Bitmap bitmap;
+     const std::string path = JoinPaths(*options_->image_path, image.Name());
+-    if (!bitmap.Read(path, true)) {
++    if (!bitmap.Read(path, /*as_rgb=*/true, /*linearize=*/false)) {
+       LOG(ERROR) << "Cannot read image at path " << path;
+       continue;
+     }
+diff --git a/src/colmap/ui/qt_utils.cc b/src/colmap/ui/qt_utils.cc
+index 340da967..86f2e8e2 100644
+--- a/src/colmap/ui/qt_utils.cc
++++ b/src/colmap/ui/qt_utils.cc
+@@ -57,7 +57,7 @@ QMatrix4x4 EigenToQMatrix(const Eigen::Matrix4f& matrix) {
+ QImage BitmapToQImageRGB(const Bitmap& bitmap) {
+   QImage image(bitmap.Width(), bitmap.Height(), QImage::Format_RGB32);
+   for (int y = 0; y < image.height(); ++y) {
+-    QRgb* image_line = (QRgb*)image.scanLine(y);
++    QRgb* image_line = reinterpret_cast<QRgb*>(image.scanLine(y));
+     for (int x = 0; x < image.width(); ++x) {
+       BitmapColor<uint8_t> color;
+       if (bitmap.GetPixel(x, y, &color)) {
+diff --git a/src/colmap/util/CMakeLists.txt b/src/colmap/util/CMakeLists.txt
+index 6399bbbb..49260dba 100644
+--- a/src/colmap/util/CMakeLists.txt
++++ b/src/colmap/util/CMakeLists.txt
+@@ -79,7 +79,15 @@ if(DOWNLOAD_ENABLED)
+     endif()
+ endif()
+ if(GUI_ENABLED)
+-    target_link_libraries(colmap_util PUBLIC Qt5::Core Qt5::OpenGL OpenGL::GL)
++    set(COLMAP_UTIL_QT_LIBS
++        Qt${QT_VERSION_MAJOR}::Core
++        Qt${QT_VERSION_MAJOR}::OpenGL
++    )
++    if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
++        list(APPEND COLMAP_UTIL_QT_LIBS 
++            Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
++    endif()
++    target_link_libraries(colmap_util PUBLIC ${COLMAP_UTIL_QT_LIBS} OpenGL::GL)
+ endif()
+ 
+ if(CUDA_ENABLED)
+diff --git a/src/pycolmap/feature/extraction.cc b/src/pycolmap/feature/extraction.cc
+index c5d228c8..481b6710 100644
+--- a/src/pycolmap/feature/extraction.cc
++++ b/src/pycolmap/feature/extraction.cc
+@@ -44,9 +44,9 @@ class Sift {
+                    "settings, explicitly specify them, because the defaults "
+                    "will change in the next major release.",
+                    1);
++      options_.max_image_size = 7000;
+       options_.sift->peak_threshold = 0.01;
+       options_.sift->first_octave = 0;
+-      options_.sift->max_image_size = 7000;
+     }
+     options_.use_gpu = use_gpu_;
+     THROW_CHECK(options_.Check());
+@@ -54,15 +54,11 @@ class Sift {
+   }
+ 
+   sift_output_t Extract(const Eigen::Ref<const pyimage_t<uint8_t>>& image) {
+-    THROW_CHECK_LE(image.rows(), options_.sift->max_image_size);
+-    THROW_CHECK_LE(image.cols(), options_.sift->max_image_size);
++    THROW_CHECK_LE(image.rows(), options_.max_image_size);
++    THROW_CHECK_LE(image.cols(), options_.max_image_size);
+ 
+-    const Bitmap bitmap =
+-        Bitmap::ConvertFromRawBits(const_cast<uint8_t*>(image.data()),
+-                                   /*pitch=*/image.cols(),
+-                                   /*width=*/image.cols(),
+-                                   /*height=*/image.rows(),
+-                                   /*rgb=*/false);
++    Bitmap bitmap(image.cols(), image.rows(), /*as_rgb=*/false);
++    std::memcpy(bitmap.RowMajorData().data(), image.data(), bitmap.NumBytes());
+ 
+     FeatureKeypoints keypoints_;
+     FeatureDescriptors descriptors_;
+@@ -117,10 +113,6 @@ void BindFeatureExtraction(py::module& m) {
+   auto PySiftExtractionOptions =
+       py::classh<SiftExtractionOptions>(m, "SiftExtractionOptions")
+           .def(py::init<>())
+-          .def_readwrite(
+-              "max_image_size",
+-              &SiftExtractionOptions::max_image_size,
+-              "Maximum image size, otherwise image will be down-scaled.")
+           .def_readwrite("max_num_features",
+                          &SiftExtractionOptions::max_num_features,
+                          "Maximum number of features to detect, keeping "
+@@ -173,6 +165,10 @@ void BindFeatureExtraction(py::module& m) {
+   auto PyFeatureExtractionOptions =
+       py::classh<FeatureExtractionOptions>(m, "FeatureExtractionOptions")
+           .def(py::init<>())
++          .def_readwrite(
++              "max_image_size",
++              &FeatureExtractionOptions::max_image_size,
++              "Maximum image size, otherwise image will be down-scaled.")
+           .def_readwrite("num_threads",
+                          &FeatureExtractionOptions::num_threads,
+                          "Number of threads for feature matching and "
+diff --git a/src/pycolmap/sensor/bitmap.cc b/src/pycolmap/sensor/bitmap.cc
+index 7e28ea9d..42d4873b 100644
+--- a/src/pycolmap/sensor/bitmap.cc
++++ b/src/pycolmap/sensor/bitmap.cc
+@@ -36,28 +36,8 @@ void BindBitmap(pybind11::module& m) {
+              py::buffer_info output_into = output.request();
+              uint8_t* output_row_ptr =
+                  reinterpret_cast<uint8_t*>(output.request().ptr);
+-             const size_t output_pitch = output_into.shape[1] * channels;
+-             for (ssize_t y = 0; y < output_into.shape[0]; ++y) {
+-               if (is_rgb) {
+-                 for (ssize_t x = 0; x < output_into.shape[1]; ++x) {
+-                   // Notice that the underlying FreeImage buffer may order
+-                   // the channels as BGR or in any other format and with
+-                   // different striding, so we have to set each pixel
+-                   // separately.
+-                   // We always return the array in the order R, G, B.
+-                   BitmapColor<uint8_t> color;
+-                   THROW_CHECK(self.GetPixel(x, y, &color));
+-                   output_row_ptr[3 * x] = color.r;
+-                   output_row_ptr[3 * x + 1] = color.g;
+-                   output_row_ptr[3 * x + 2] = color.b;
+-                 }
+-               } else {
+-                 // Copy (guaranteed contiguous) row memory directly.
+-                 std::memcpy(
+-                     output_row_ptr, self.GetScanline(y), output_into.shape[1]);
+-               }
+-               output_row_ptr += output_pitch;
+-             }
++             std::memcpy(
++                 output_row_ptr, self.RowMajorData().data(), self.NumBytes());
+              return output;
+            })
+       .def_static(
+@@ -75,47 +55,23 @@ void BindBitmap(pybind11::module& m) {
+             const int height = array.shape(0);
+             if (width == 0 || height == 0) {
+               throw std::runtime_error(
+-                  "Input array must have positive width and height");
++                  "Input array must have positive width and height!");
+             }
+ 
+-            if (channels != 1 && channels != 3 && channels != 4) {
++            if (channels != 1 && channels != 3) {
+               throw std::runtime_error(
+-                  "Input array must have 1, 3, or 4 channels!");
++                  "Input array must have 1 or 3 channels!");
+             }
+ 
+             const bool is_rgb = channels != 1;
+-            const size_t pitch = width * channels;
+ 
+-            Bitmap output;
+-            output.Allocate(width, height, is_rgb);
++            Bitmap output(width, height, is_rgb);
+ 
+             const uint8_t* input_row_ptr =
+                 static_cast<uint8_t*>(array.request().ptr);
+ 
+-            for (int y = 0; y < height; ++y) {
+-              if (is_rgb) {
+-                for (int x = 0; x < width; ++x) {
+-                  // We assume that provided array dimensions are R, G, B.
+-                  // Notice that the underlying FreeImage buffer may order
+-                  // the channels as BGR or in any other format and with
+-                  // different striding, so we have to set each pixel
+-                  // separately.
+-                  output.SetPixel(
+-                      x,
+-                      y,
+-                      BitmapColor<uint8_t>(input_row_ptr[channels * x],
+-                                           input_row_ptr[channels * x + 1],
+-                                           input_row_ptr[channels * x + 2]));
+-                }
+-              } else {
+-                // Copy (guaranteed contiguous) row memory directly.
+-                std::memcpy(const_cast<uint8_t*>(output.GetScanline(y)),
+-                            input_row_ptr,
+-                            width);
+-              }
+-
+-              input_row_ptr += pitch;
+-            }
++            std::memcpy(
++                output.RowMajorData().data(), input_row_ptr, output.NumBytes());
+ 
+             return output;
+           },
+@@ -126,7 +82,7 @@ void BindBitmap(pybind11::module& m) {
+       .def("write",
+            &Bitmap::Write,
+            "path"_a,
+-           "flags"_a = 0,
++           "delinearize_colorspace"_a,
+            "Write bitmap to file.")
+       .def("__repr__", &CreateRepresentation<Bitmap>)
+       .def_static(
+diff --git a/src/pycolmap/sfm/incremental_mapper.cc b/src/pycolmap/sfm/incremental_mapper.cc
+index e31c9ac8..6b80b1ef 100644
+--- a/src/pycolmap/sfm/incremental_mapper.cc
++++ b/src/pycolmap/sfm/incremental_mapper.cc
+@@ -183,6 +183,11 @@ void BindIncrementalPipeline(py::module& m) {
+                      &Opts::fix_existing_frames,
+                      "If reconstruction is provided as input, fix the existing "
+                      "frame poses.")
++      .def_readwrite(
++          "constant_rigs",
++          &Opts::constant_rigs,
++          "List of rigs for which to fix the sensor_from_rig transformation, "
++          "independent of ba_refine_sensor_from_rig.")
+       .def_readwrite("constant_cameras",
+                      &Opts::constant_cameras,
+                      "List of cameras for which to fix the camera parameters "
+@@ -344,6 +349,11 @@ void BindIncrementalMapperOptions(py::module& m) {
+                      &Opts::fix_existing_frames,
+                      "If reconstruction is provided as input, fix the existing "
+                      "frame poses.")
++      .def_readwrite(
++          "constant_rigs",
++          &Opts::constant_rigs,
++          "List of rigs for which to fix the sensor_from_rig transformation, "
++          "independent of ba_refine_sensor_from_rig.")
+       .def_readwrite("constant_cameras",
+                      &Opts::constant_cameras,
+                      "List of cameras for which to fix the camera parameters "
+diff --git a/vcpkg-configuration.json b/vcpkg-configuration.json
+new file mode 100644
+index 00000000..ce7d86ba
+--- /dev/null
++++ b/vcpkg-configuration.json
+@@ -0,0 +1,7 @@
++{
++  "default-registry": {
++    "kind": "git",
++    "repository": "https://github.com/Microsoft/vcpkg",
++    "baseline": "912567f6fdd1883e07b070dcc0aa67cec072042a"
++  }
++}
+diff --git a/vcpkg.json b/vcpkg.json
+index 6adbe3a6..dfc330a2 100644
+--- a/vcpkg.json
++++ b/vcpkg.json
+@@ -20,7 +20,6 @@
+             ]
+         },
+         "eigen3",
+-        "freeimage",
+         "gflags",
+         "glog",
+         {
+@@ -28,6 +27,7 @@
+             "default-features": false
+         },
+         "metis",
++        "openimageio",
+         "sqlite3",
+         {
+             "name": "vcpkg-cmake",
+@@ -38,6 +38,16 @@
+             "host": true
+         }
+     ],
++    "overrides": [
++        {
++            "name": "metis",
++            "version": "2022-07-27"
++        },
++        {
++            "name": "gklib",
++            "version": "2023-03-27"
++        }
++    ],
+     "default-features": [
+         "gui",
+         "download"
+@@ -60,7 +70,7 @@
+             "description": "Build with GUI support.",
+             "dependencies": [
+                 "glew",
+-                "qt5-base"
++                "qtbase"
+             ]
+         },
+         "cgal": {
+@@ -75,7 +85,7 @@
+                 {
+                     "name": "curl",
+                     "features": [
+-                        "schannel"
++                        "sspi"
+                     ],
+                     "platform": "windows"
+                 },
+@@ -97,4 +107,4 @@
+             ]
+         }
+     }
+-}
+\ No newline at end of file
++}

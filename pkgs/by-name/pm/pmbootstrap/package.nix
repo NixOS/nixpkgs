@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.3.1";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
-    repo = pname;
+    repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-2xeUuaxHS2mHuBN3EWGNZwn4S6aRmF6cUQI4LWeXLkE=";
+    hash = "sha256-PbaWqtBcAXnVmB2a2DflQhayvuT3qNBCHaXuDfdrtrY=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -55,9 +55,12 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_pkgrepo_pmaports"
     "test_random_valid_deviceinfos"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # assert chroot.type == ChrootType.BUILDROOT
+    # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
+    "test_valid_chroots"
   ];
-
-  versionCheckProgramArg = "--version";
 
   makeWrapperArgs = [
     "--prefix PATH : ${
@@ -74,11 +77,12 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
-    homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
+    homepage = "https://gitlab.postmarketos.org/postmarketOS/pmbootstrap";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       onny
       lucasew
+      ungeskriptet
     ];
     mainProgram = "pmbootstrap";
   };

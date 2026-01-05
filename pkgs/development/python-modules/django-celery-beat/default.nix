@@ -1,32 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   celery,
   cron-descriptor,
   django-timezone-field,
+  python-crontab,
+  tzdata,
+
+  # tests
   ephem,
-  fetchFromGitHub,
   pytest-django,
   pytest-timeout,
   pytestCheckHook,
-  python-crontab,
-  pythonOlder,
-  setuptools,
-  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "django-celery-beat";
     tag = "v${version}";
-    hash = "sha256-XWcmKQXNw8eoGkld77E3rHpR9ofa1i2qO/JI8Hnpi9M=";
+    hash = "sha256-pakOpch5r2ug0UDSqEU34qr4Tz1/mkuFiHW+IOUuGcc=";
   };
 
   pythonRelaxDeps = [ "django" ];
@@ -34,17 +37,17 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    cron-descriptor
-    python-crontab
     celery
+    cron-descriptor
     django-timezone-field
+    python-crontab
     tzdata
   ];
 
   nativeCheckInputs = [
     ephem
-    pytest-timeout
     pytest-django
+    pytest-timeout
     pytestCheckHook
   ];
 
@@ -53,13 +56,18 @@ buildPythonPackage rec {
     "t/unit/test_schedulers.py"
   ];
 
+  disabledTests = [
+    # AssertionError: 'At 02:00, only on Monday UTC' != 'At 02:00 AM, only on Monday UTC'
+    "test_long_name"
+  ];
+
   pythonImportsCheck = [ "django_celery_beat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Celery Periodic Tasks backed by the Django ORM";
     homepage = "https://github.com/celery/django-celery-beat";
-    changelog = "https://github.com/celery/django-celery-beat/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/celery/django-celery-beat/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

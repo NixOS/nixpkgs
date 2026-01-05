@@ -8,19 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuisky";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "sugyan";
     repo = "tuisky";
-    tag = "v${version}";
-    hash = "sha256-s0eKWP4cga82Fj7KGIG6yLk67yOqGoAqfhvJINzytTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-isS3MDyQ3iv5fYAw/i9V905J+2QnMFx2bebA853fBd4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-F/gEBEpcgNT0Q55zUTf8254yYIZI6RmiW9heCuljAEY=";
+  cargoHash = "sha256-coBP2uItI/PJv4Bt3ILDo4ruyqejGwWjaDw5DmxseXw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,7 +32,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {
@@ -43,9 +41,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TUI client for bluesky";
     homepage = "https://github.com/sugyan/tuisky";
-    changelog = "https://github.com/sugyan/tuisky/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sugyan/tuisky/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "tuisky";
   };
-}
+})

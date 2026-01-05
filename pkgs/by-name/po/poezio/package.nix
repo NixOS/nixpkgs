@@ -48,11 +48,10 @@ python3.pkgs.buildPythonApplication rec {
     rm -r poezio
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
     changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ lsix ];
+    license = lib.licenses.zlib;
   };
 }

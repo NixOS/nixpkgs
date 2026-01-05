@@ -55,20 +55,15 @@ buildPythonPackage rec {
     "lung1_shape2D-original_shape2D"
     "lung2_shape2D-original_shape2D"
   ];
-  # note the above elements of disabledTests are patterns, not exact tests,
-  # so simply setting `disabledTests` does not suffice:
-  pytestFlagsArray = [
-    "-k '${toString (lib.intersperse "and" (lib.forEach disabledTests (t: "not ${t}")))}'"
-  ];
 
   pythonImportsCheck = [ "radiomics" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyradiomics.readthedocs.io";
     description = "Extraction of Radiomics features from 2D and 3D images and binary masks";
     mainProgram = "pyradiomics";
     changelog = "https://github.com/AIM-Harvard/pyradiomics/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

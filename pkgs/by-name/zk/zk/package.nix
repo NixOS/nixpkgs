@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "zk";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "zk-org";
     repo = "zk";
     rev = "v${version}";
-    sha256 = "sha256-aFpn3luIp5tMp9jpBxVCmU+IU9eJg3/5UZFIklauFjI=";
+    sha256 = "sha256-h4q3GG4DPPEJk2G5JDbUhnHpqEdMAkGYSMs9TS5Goco=";
   };
 
   vendorHash = "sha256-2PlaIw7NaW4pAVIituSVWhssSBKjowLOLuBV/wz829I=";
@@ -33,9 +33,9 @@ buildGoModule rec {
 
   tags = [ "fts5" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ pinpox ];
-    license = licenses.gpl3;
+  meta = {
+    maintainers = with lib.maintainers; [ pinpox ];
+    license = lib.licenses.gpl3;
     description = "Zettelkasten plain text note-taking assistant";
     homepage = "https://github.com/mickael-menu/zk";
     mainProgram = "zk";

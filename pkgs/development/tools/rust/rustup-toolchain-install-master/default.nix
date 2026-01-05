@@ -2,70 +2,50 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  runCommand,
   stdenv,
   patchelf,
   zlib,
   pkg-config,
   openssl,
   xz,
-  Security,
+  replaceVars,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup-toolchain-install-master";
-  version = "1.7.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "kennytm";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-J25ER/g8Kylw/oTIEl4Gl8i1xmhR+4JM5M5EHpl1ras=";
+    repo = "rustup-toolchain-install-master";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F2lMUNl+ZQTTaSpzzeIl6ijXou7J6tbPz6eQY9703qU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-yEIkiOn8FTyfoTBFdbdJAfolgai8VFnnwSl/a8vDqbY=";
 
-  patches =
-    let
-      patchelfPatch =
-        runCommand "0001-dynamically-patchelf-binaries.patch"
-          {
-            CC = stdenv.cc;
-            patchelf = patchelf;
-            libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
-          }
-          ''
-            export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-            substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-              --subst-var patchelf \
-              --subst-var dynamicLinker \
-              --subst-var libPath
-          '';
-    in
-    lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
+  patches = lib.optional stdenv.hostPlatform.isLinux (
+    replaceVars ./0001-dynamically-patchelf-binaries.patch {
+      inherit patchelf;
+      dynamicLinker = "${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2";
+      libPath = lib.makeLibraryPath [
+        zlib
+        (placeholder "out" + "/lib")
+      ];
+    }
+  );
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      openssl
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    openssl
+    xz
+  ];
 
-  # update Cargo.lock to work with openssl 3
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Install a rustc master toolchain usable from rustup";
     mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
-    license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

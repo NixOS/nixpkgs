@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # must specify the full path to `libstdoutisatty.so` in the nix store
     (lib.cmakeFeature "CMAKE_C_FLAGS" "-DLIB_FILE='\"${placeholder "out"}/lib/libstdoutisatty.so\"'")
+    # "Compatibility with CMake < 3.5 has been removed from CMake"
+    # "Compatibility with CMake < 3.10 will be removed from a future version of CMake"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   passthru = {

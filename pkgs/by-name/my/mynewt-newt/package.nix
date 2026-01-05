@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newt";
-    rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
+    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] version}_tag";
     sha256 = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
   };
 
@@ -19,7 +20,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mynewt.apache.org/";
     description = "Build and package management tool for embedded development";
     longDescription = ''
@@ -27,7 +28,7 @@ buildGoModule rec {
       designed for C and C++ applications in embedded contexts. Newt
       was developed as a part of the Apache Mynewt Operating System.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pjones ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pjones ];
   };
 }

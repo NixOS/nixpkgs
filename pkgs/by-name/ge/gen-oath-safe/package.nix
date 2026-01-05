@@ -1,6 +1,6 @@
 {
   coreutils,
-  fetchFromGitHub,
+  fetchFromSourcehut,
   file,
   libcaca,
   makeWrapper,
@@ -15,13 +15,13 @@
 stdenv.mkDerivation rec {
   pname = "gen-oath-safe";
   version = "0.11.0";
-  src = fetchFromGitHub {
-    owner = "mcepl";
+
+  src = fetchFromSourcehut {
+    owner = "~mcepl";
     repo = "gen-oath-safe";
-    rev = version;
+    tag = version;
     sha256 = "1914z0jgj7lni0nf3hslkjgkv87mhxdr92cmhmbzhpjgjgr23ydp";
   };
-
   nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/gen-oath-safe \
         --prefix PATH : ${path}
     '';
-  meta = with lib; {
-    homepage = "https://github.com/mcepl/gen-oath-safe";
+  meta = {
+    homepage = "https://git.sr.ht/~mcepl/gen-oath-safe";
     description = "Script for generating HOTP/TOTP keys (and QR code)";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = [ maintainers.makefu ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.makefu ];
     mainProgram = "gen-oath-safe";
   };
 

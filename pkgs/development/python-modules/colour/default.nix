@@ -22,16 +22,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "--doctest-glob=\"*.rst\""
+  pytestFlags = [
+    "--doctest-glob=*.rst"
     "--doctest-modules"
   ];
 
   pythonImportsCheck = [ "colour" ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
     homepage = "https://github.com/vaab/colour";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

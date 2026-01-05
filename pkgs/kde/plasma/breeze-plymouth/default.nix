@@ -38,13 +38,14 @@ mkKdeDerivation {
   # FIXME(later): discuss with upstream
   patches = [ ./install-paths.patch ];
 
-  extraNativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (logoFile != null) [
-      imagemagick
-      netpbm
-      perl
-    ];
+  extraNativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (logoFile != null) [
+    imagemagick
+    netpbm
+    perl
+  ];
   extraBuildInputs = [ plymouth ];
 
   extraCmakeFlags =
@@ -55,15 +56,14 @@ mkKdeDerivation {
     ++ lib.optional (topColor != null) "-DBACKGROUND_TOP_COLOR=${topColor}"
     ++ lib.optional (bottomColor != null) "-DBACKGROUND_BOTTOM_COLOR=${bottomColor}";
 
-  postPatch =
-    ''
-      substituteInPlace cmake/FindPlymouth.cmake --subst-var out
-    ''
-    + lib.optionalString (logoFile != null) ''
-      cp ${logoFile} breeze/images/${resolvedLogoName}.logo.png
+  postPatch = ''
+    substituteInPlace cmake/FindPlymouth.cmake --subst-var out
+  ''
+  + lib.optionalString (logoFile != null) ''
+    cp ${logoFile} breeze/images/${resolvedLogoName}.logo.png
 
-      # conversion for 16bit taken from the breeze-plymouth readme
-      convert ${logoFile} -alpha Background -background "#000000" -fill "#000000" -flatten tmp.png
-      pngtopnm tmp.png | pnmquant 16 | pnmtopng > breeze/images/16bit/${resolvedLogoName}.logo.png
-    '';
+    # conversion for 16bit taken from the breeze-plymouth readme
+    convert ${logoFile} -alpha Background -background "#000000" -fill "#000000" -flatten tmp.png
+    pngtopnm tmp.png | pnmquant 16 | pnmtopng > breeze/images/16bit/${resolvedLogoName}.logo.png
+  '';
 }

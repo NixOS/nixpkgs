@@ -65,8 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-bluetooth;
+    };
     updateScript = gitUpdater { };
-    tests.vm = nixosTests.ayatana-indicators;
   };
 
   meta = {

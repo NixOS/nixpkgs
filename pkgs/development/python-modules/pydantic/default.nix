@@ -1,20 +1,19 @@
 {
   lib,
+  python,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
 
   # build-system
   hatchling,
   hatch-fancy-pypi-readme,
 
-  # native dependencies
-  libxcrypt,
-
   # dependencies
   annotated-types,
   pydantic-core,
   typing-extensions,
+  typing-inspection,
 
   # tests
   cloudpickle,
@@ -23,25 +22,32 @@
   jsonschema,
   pytestCheckHook,
   pytest-mock,
-  eval-type-backport,
-  rich,
+  pytest-run-parallel,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.10.6";
+  version = "2.12.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-vkXvHQ5ipcLfx4qJKY6J4rKXCAfP2rj88GnwGMjM2go=";
+    hash = "sha256-CHJahAgs+vQQzhIZjP+6suvbmRrGZI0H5UxoXg4I90o=";
   };
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  patches = lib.optionals (lib.versionAtLeast python.version "3.14.1") [
+    # Fix build with python 3.14.1
+    (fetchpatch {
+      url = "https://github.com/pydantic/pydantic/commit/53cb5f830207dd417d20e0e55aab2e6764f0d6fc.patch";
+      hash = "sha256-Y1Ob1Ei0rrw0ua+0F5L2iE2r2RdpI9DI2xuiu9pLr5Y=";
+    })
+  ];
+
+  postPatch = ''
+    sed -i "/--benchmark/d" pyproject.toml
+  '';
 
   build-system = [
     hatch-fancy-pypi-readme
@@ -52,43 +58,22 @@ buildPythonPackage rec {
     annotated-types
     pydantic-core
     typing-extensions
+    typing-inspection
   ];
 
   optional-dependencies = {
     email = [ email-validator ];
   };
 
-  nativeCheckInputs =
-    [
-      cloudpickle
-      dirty-equals
-      jsonschema
-      pytest-mock
-      pytestCheckHook
-      rich
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
-    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    substituteInPlace pyproject.toml \
-      --replace-fail "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
-      --replace-fail "'--benchmark-group-by', 'group'," "" \
-      --replace-fail "'--benchmark-warmup', 'on'," "" \
-      --replace-fail "'--benchmark-disable'," ""
-  '';
-
-  pytestFlagsArray = [
-    # suppress warnings with pytest>=8
-    "-Wignore::pydantic.warnings.PydanticDeprecatedSince20"
-    "-Wignore::pydantic.json_schema.PydanticJsonSchemaWarning"
-  ];
-
-  disabledTests = [
-    # disable failing test with pytest>=8
-    "test_assert_raises_validation_error"
-  ];
+  nativeCheckInputs = [
+    cloudpickle
+    dirty-equals
+    jsonschema
+    pytest-mock
+    pytest-run-parallel
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/benchmarks"
@@ -99,11 +84,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydantic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
     changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

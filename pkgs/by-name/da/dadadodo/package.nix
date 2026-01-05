@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Markov chain-based text generator";
     mainProgram = "dadadodo";
     homepage = "http://www.jwz.org/dadadodo";
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.all;
   };
 }

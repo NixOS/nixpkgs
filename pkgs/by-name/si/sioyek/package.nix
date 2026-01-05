@@ -4,7 +4,7 @@
   installShellFiles,
   fetchFromGitHub,
   freetype,
-  nix-update-script,
+  unstableGitUpdater,
   gumbo,
   harfbuzz,
   jbig2dec,
@@ -15,29 +15,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2025-02-20";
+  version = "2.0.0-unstable-2025-12-19";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "a64ad82b2c14e1ef821c13ddf1291ebb6aaafca6";
-    hash = "sha256-aI8GqXAgyh5VkayEQbaXOK+JQKzqVqQs8RO3CdOsgX8=";
+    rev = "ed389b9c3b3b9ee2c777b021c7825416c460ed64";
+    hash = "sha256-bavnyTRNGVSuoxNVsn94AJfbddHYg9skkW/4G/ExNeU=";
   };
 
-  buildInputs =
-    [
-      gumbo
-      harfbuzz
-      jbig2dec
-      mujs
-      mupdf
-      openjpeg
-      qt6.qt3d
-      qt6.qtbase
-      qt6.qtspeech
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
+  buildInputs = [
+    gumbo
+    harfbuzz
+    jbig2dec
+    mujs
+    mupdf
+    openjpeg
+    qt6.qt3d
+    qt6.qtbase
+    qt6.qtspeech
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -74,24 +73,22 @@ stdenv.mkDerivation (finalAttrs: {
         installManPage resources/sioyek.1
       '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "branch=development"
-    ];
+  passthru.updateScript = unstableGitUpdater {
+    branch = "development";
+    tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sioyek.info/";
     description = "PDF viewer designed for research papers and technical books";
     mainProgram = "sioyek";
     changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       podocarp
       stephen-huan
       xyven1
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

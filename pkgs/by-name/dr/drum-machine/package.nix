@@ -13,18 +13,19 @@
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
+  ffmpeg-headless,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "drum-machine";
-  version = "1.3.1";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
     tag = "v${version}";
-    hash = "sha256-/ziI2rRuhGG/7VZbZi6lr+Lmbo2kt9VxH9bqtCdreQs=";
+    hash = "sha256-F3h3BxLNkJq0jpfNOGcTbckpc8CksyA3Bc8GNKviB+I=";
   };
 
   strictDeps = true;
@@ -47,11 +48,15 @@ python3Packages.buildPythonApplication rec {
     mido
     pygame
     pygobject3
+    numpy
   ];
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}"
+  ];
 
   # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase
   # is skipped by `buildPythonApplication`
@@ -69,7 +74,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/DrumMachine";
     changelog = "https://github.com/Revisto/drum-machine/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 }

@@ -11,29 +11,27 @@
   rustPlatform,
   rustc,
   wrapGAppsHook4,
-  darwin,
   gettext,
   glib,
   gtk4,
   libadwaita,
-  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bustle";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "bustle";
-    rev = finalAttrs.version;
-    hash = "sha256-5ZZiRD64OOMtTNxI0uvilGM22rsJv7vU3yPDY8ROrxU=";
+    tag = finalAttrs.version;
+    hash = "sha256-+Pl4ze1nrC27NIfJ4FNc3iqYWBtCBpHp2zZNAxAPbJk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-XCKKzgSqTGF9WoaYnNtXB7e8BvtElmAfKH6s/7h8cGs=";
+    hash = "sha256-el1zVFE8hsmIisHO+btvnA0WVN9bN8iuVPaSF02ovCI=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -68,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       jtojnar
-      aleksana
     ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "bustle";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
   };
 })

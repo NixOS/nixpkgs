@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "ctlptl";
-  version = "0.8.40";
+  version = "0.8.44";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
-    repo = pname;
+    repo = "ctlptl";
     rev = "v${version}";
-    hash = "sha256-O6oAkYzkBUecwAcLjPIR7D/k4REWND8TWdstPNVJ0MU=";
+    hash = "sha256-DIVKwfTSA03Yyservf3TK7y9RKi2t6pELyC0cpoUH3I=";
   };
 
-  vendorHash = "sha256-1BrohvN3Eefuy2y7pjdwhzFQG9YLr9X/CLbOeTBZkjY=";
+  vendorHash = "sha256-bZd2DWQ2utKYctx9KzE5BzF5wkj1rGkka6PsYb7G8Oo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,17 +29,17 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ctlptl \
       --bash <($out/bin/ctlptl completion bash) \
       --fish <($out/bin/ctlptl completion fish) \
       --zsh <($out/bin/ctlptl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for declaratively setting up local Kubernetes clusters";
     homepage = "https://github.com/tilt-dev/ctlptl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ svrana ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ svrana ];
   };
 }

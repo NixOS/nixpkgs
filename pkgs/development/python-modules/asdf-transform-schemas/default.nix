@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-transform-schemas";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "asdf_transform_schemas";
     inherit version;
-    hash = "sha256-gs9MeCV1c0qJUyfyX/WDzpSZ1+K4Nv6IgLLXlhxrRis=";
+    hash = "sha256-D1D44Jb//S0UucgplZASZu8lsj0N/8MK1Bu6RoUalzI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_transform_schemas" ];
 
-  meta = with lib; {
+  meta = {
     description = "ASDF schemas for validating transform tags";
     homepage = "https://github.com/asdf-format/asdf-transform-schemas";
     changelog = "https://github.com/asdf-format/asdf-transform-schemas/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

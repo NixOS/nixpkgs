@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vharfbuzz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for removing hinting data from TrueType and OpenType fonts";
     homepage = "https://github.com/source-foundry/dehinter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

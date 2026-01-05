@@ -45,17 +45,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  propagatedBuildInputs =
-    [
-      libuv
-      speexdsp
-    ]
-    ++ lib.optional openfecSupport openfec
-    ++ lib.optional libunwindSupport libunwind
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional opensslSupport openssl
-    ++ lib.optional soxSupport sox
-    ++ lib.optional libsndfileSupport libsndfile;
+  propagatedBuildInputs = [
+    libuv
+    speexdsp
+  ]
+  ++ lib.optional openfecSupport openfec
+  ++ lib.optional libunwindSupport libunwind
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional opensslSupport openssl
+  ++ lib.optional soxSupport sox
+  ++ lib.optional libsndfileSupport libsndfile;
 
   sconsFlags =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -84,11 +83,11 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-lpthread";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Roc is a toolkit for real-time audio streaming over the network";
     homepage = "https://github.com/roc-streaming/roc-toolkit";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ bgamari ];
+    platforms = lib.platforms.unix;
   };
 }

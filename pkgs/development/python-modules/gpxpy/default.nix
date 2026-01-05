@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tkrajina";
-    repo = pname;
+    repo = "gpxpy";
     rev = "v${version}";
     hash = "sha256-s65k0u4LIwHX9RJMJIYMkNS4/Z0wstzqYVPAjydo2iI=";
   };
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python GPX (GPS eXchange format) parser";
     mainProgram = "gpxinfo";
     homepage = "https://github.com/tkrajina/gpxpy";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

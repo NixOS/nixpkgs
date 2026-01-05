@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "age-plugin-sss";
-  version = "0.2.5";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-sss";
     tag = "v${version}";
-    hash = "sha256-4cLQRG4Al1C3x/D385kb/aYTlQqe/5bS9oMLJmHOJ1I=";
+    hash = "sha256-QNu2Sp0CxYYXuMzf7X0mMYI677ICu5emOM4F9HlKhHA=";
   };
 
-  vendorHash = "sha256-HQavX6X2k/oABnHXAnOwHNkGpCTr539zRk0xwO8zS9o=";
+  vendorHash = "sha256-Aw7dwro6adluhQXPlZ9RZVGBAmNw539Z3c+a8TmPTXU=";
 
   ldflags = [
     "-s"

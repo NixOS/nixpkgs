@@ -43,7 +43,11 @@ buildPythonPackage rec {
     shamir-mnemonic
     slip10
     typing-extensions
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
+
+  # fix "click<8.2,>=7 not satisfied by version 8.3.1"
+  pythonRelaxDeps = [ "click" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -58,13 +62,13 @@ buildPythonPackage rec {
     $out/bin/trezorctl --version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communicating with Trezor Hardware Wallet";
     mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     changelog = "https://github.com/trezor/trezor-firmware/blob/python/v${version}/python/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       np
       prusnak
       mmahut

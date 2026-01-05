@@ -24,10 +24,10 @@ stdenv.mkDerivation {
 
   passthru.tests = nixosTests.hockeypuck;
 
-  meta = with lib; {
+  meta = {
     description = "OpenPGP Key Server web resources";
     homepage = "https://github.com/hockeypuck/hockeypuck";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.etu ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

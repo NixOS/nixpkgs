@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "protego";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,20 +18,20 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = "protego";
     tag = version;
-    hash = "sha256-2vyETqRYeof5CzOCXCGUYb5vSyV/eT5+lm2GNWiuaF0=";
+    hash = "sha256-70/DPap3FgLfh4ldYSve5Pt8o7gM1lME/OmRFaew/38=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "protego" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse robots.txt files with support for modern conventions";
     homepage = "https://github.com/scrapy/protego";
     changelog = "https://github.com/scrapy/protego/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

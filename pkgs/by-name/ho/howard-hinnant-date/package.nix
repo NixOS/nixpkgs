@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, tzdata, fetchpatch, replaceVars }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  tzdata,
+  fetchpatch,
+  replaceVars,
+}:
 
 stdenv.mkDerivation rec {
   pname = "howard-hinnant-date";
@@ -44,7 +52,10 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_TZ_DB=true"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # fixes "cycle detected in build"
   postInstall = lib.optionalString stdenv.hostPlatform.isWindows ''
@@ -52,11 +63,11 @@ stdenv.mkDerivation rec {
     mv $out/CMake $dev/lib/cmake
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     description = "Date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
-    platforms = with platforms; unix ++ windows;
-    maintainers = with maintainers; [ r-burns ];
+    platforms = with lib.platforms; unix ++ windows;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

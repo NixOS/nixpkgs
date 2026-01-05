@@ -27,14 +27,14 @@ assert (svgSupport && svgBackend == "nanosvg") -> enableCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuzzel";
-  version = "1.11.1";
+  version = "1.13.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fuzzel";
     rev = finalAttrs.version;
-    hash = "sha256-FM5HvPfLVmuKpS3/0m2QM/lSRcWsVpnwtJ++L3Uo5Dc=";
+    hash = "sha256-JW6MvLXax7taJfBjJjRkEKCczzO4AYsQ47akJK2pkh0=";
   };
 
   depsBuildBuild = [
@@ -49,18 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      wayland
-      pixman
-      wayland-protocols
-      libxkbcommon
-      tllist
-      fcft
-    ]
-    ++ lib.optional enableCairo cairo
-    ++ lib.optional pngSupport libpng
-    ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
+  buildInputs = [
+    wayland
+    pixman
+    wayland-protocols
+    libxkbcommon
+    tllist
+    fcft
+  ]
+  ++ lib.optional enableCairo cairo
+  ++ lib.optional pngSupport libpng
+  ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
 
   mesonBuildType = "release";
 
@@ -70,19 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "svg-backend" (if svgSupport then svgBackend else "none"))
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${finalAttrs.version}";
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
     mainProgram = "fuzzel";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fionera
       rodrgz
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 })

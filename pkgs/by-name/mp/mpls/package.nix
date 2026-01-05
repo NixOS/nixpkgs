@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "mpls";
-  version = "0.12.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "mhersson";
     repo = "mpls";
     tag = "v${version}";
-    hash = "sha256-Cipxs3wlnus2GE9ZLE4mkSDM0WHdJPL4FxFt5adSPY4=";
+    hash = "sha256-O//9AeJ9x8WF+0ub6KK91efPr9Hdbx1Ab4X0oaUhwss=";
   };
 
-  vendorHash = "sha256-6iXZWLCF0LfchcGSFrCtILLeR1Yx7oxD/7JIYyrrkHM=";
+  vendorHash = "sha256-QtNQnJtYLmSTTLwKKQ8P6O6wyctgwN8OcGZkMXa+Ark=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,6 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

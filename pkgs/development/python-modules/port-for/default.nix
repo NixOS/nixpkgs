@@ -26,12 +26,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "port_for" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kmike/port-for";
     description = "Command-line utility and library that helps with TCP port managment";
     mainProgram = "port-for";
     changelog = "https://github.com/kmike/port-for/blob/v${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -79,11 +79,11 @@ stdenv.mkDerivation {
   dontFixup = true;
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gapophustu/4D-Minesweeper";
     description = "4D Minesweeper game written in Godot";
-    license = licenses.mpl20;
-    platforms = platforms.linux;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "4d-minesweeper";
   };

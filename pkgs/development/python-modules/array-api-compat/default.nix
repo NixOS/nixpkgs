@@ -1,52 +1,61 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
-  numpy,
-  jaxlib,
-  jax,
-  torch,
-  dask,
-  sparse,
+  setuptools-scm,
+
+  # tests
   array-api-strict,
-  config,
-  cudaSupport ? config.cudaSupport,
+  dask,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  sparse,
+  torch,
   cupy,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.11.1";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = version;
-    hash = "sha256-TB1aBad6Pl687nGblSraHmWl/tnnkoo1g6DDZHKhOaM=";
+    hash = "sha256-4ZoYtqkY/xPRyBP1xeMR80zMfwiaKtXX/3XzqiweCtc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    numpy
-    jaxlib
-    jax
-    torch
-    dask
-    sparse
     array-api-strict
-  ] ++ lib.optionals cudaSupport [ cupy ];
+    dask
+    jax
+    jaxlib
+    numpy
+    pytestCheckHook
+    sparse
+    torch
+  ]
+  ++ lib.optionals cudaSupport [ cupy ];
 
   pythonImportsCheck = [ "array_api_compat" ];
 
   # CUDA (used via cupy) is not available in the testing sandbox
-  pytestFlagsArray = [
-    "-k"
-    "'not cupy'"
+  disabledTests = [
+    "cupy"
   ];
 
   meta = {

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.5.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VKDPiSdufWwrNcZSRTByFU4YGoJrm48TDm1nt4VyclA=";
+    hash = "sha256-eqduw1nMHMiMIvhzXA1Zg2foqQscQwFLhgm9aJYvmuo=";
   };
 
   build-system = [ setuptools ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ge25519" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of Ed25519 group elements and operations";
     homepage = "https://github.com/nthparty/ge25519";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

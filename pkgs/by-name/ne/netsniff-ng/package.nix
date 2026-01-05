@@ -53,9 +53,13 @@ stdenv.mkDerivation rec {
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
+    runHook preConfigure
+
     patchShebangs configure
     substituteInPlace configure --replace "which" "command -v"
     NACL_INC_DIR=${libsodium.dev}/include/sodium NACL_LIB=sodium ./configure
+
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
@@ -80,7 +84,7 @@ stdenv.mkDerivation rec {
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance
@@ -90,7 +94,7 @@ stdenv.mkDerivation rec {
       development and analysis, debugging, auditing or network reconnaissance.
     '';
     homepage = "http://netsniff-ng.org/";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.linux;
   };
 }

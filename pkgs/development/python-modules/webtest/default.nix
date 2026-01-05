@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "webtest";
-  version = "3.0.4";
+  version = "3.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lHeNGaN+Wr1ziNrU2Th0QQ7M7VOhc5qOX/Lby6HPwMQ=";
+    hash = "sha256-Qlb9UkJEj1bFdby5r+J14wWm8HI8SwFDjb3U3VNElEs=";
   };
 
   build-system = [ setuptools ];
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webtest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper to test WSGI applications";
     homepage = "https://webtest.readthedocs.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -18,6 +18,12 @@ stdenv.mkDerivation {
     sha256 = "0kranb0x1k5qad8rwxnn1w9963sbfj2cfzdgpfmlivb04544m2j7";
   };
 
+  # Upstream doesn't yet support CMake 4, remove once fixed
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -25,11 +31,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb1 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ken.tossell.net/libuvc/";
     description = "Cross-platform library for USB video devices";
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ prusnak ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

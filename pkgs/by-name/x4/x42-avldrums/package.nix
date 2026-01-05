@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "x42";
     repo = "avldrums.lv2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AZKHjzgw0TtLHh4TF+yOUSa+GlNVwyHCpJWAZikXTy4=";
     fetchSubmodules = true;
   };
@@ -37,15 +37,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Drum sample player LV2 plugin dedicated to Glen MacArthur's AVLdrums";
     homepage = "https://x42-plugins.com/x42/x42-avldrums";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       magnetophon
-      orivej
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

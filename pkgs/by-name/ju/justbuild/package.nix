@@ -2,8 +2,9 @@
   gccStdenv,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
 
-  fmt_10,
+  fmt,
   nlohmann_json,
   cli11,
   microsoft-gsl,
@@ -33,24 +34,32 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.5.0";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HewKW2yezsc7mYZ6r3c0w/M3ybPzXqLPUL8N+plqE8o=";
+    hash = "sha256-ZTwe6S0AH1yQt5mABtIeWuMbiVSKeOZWMFI26fthLsM=";
   };
 
   bazelapi = fetchurl {
-    url = "https://github.com/bazelbuild/remote-apis/archive/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz";
-    hash = "sha256:1zh5i2dx7qkg5dqfihqf2z3v3xx1px6kliah41y95krc6pasn8bl";
+    url = "https://github.com/bazelbuild/remote-apis/archive/9ef19c6b5fbf77d6dd9d84d75fbb5a20a6b62ef1.tar.gz";
+    hash = "sha256-zPV1ObY0fOsKp+k+5Duf/xrrSW02zAl9qRjEo172WDk=";
   };
 
   googleapi = fetchurl {
     url = "https://github.com/googleapis/googleapis/archive/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz";
     hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "blob-tree-add-hash.patch";
+      url = "https://github.com/just-buildsystem/justbuild/commit/c54a46de7df0c6b26b7d8f4a10d380103da634fb.patch?full_index=1";
+      hash = "sha256-hAi4YJmNAwfSl2SWjVCWBhk7VbQeNN1JhmHS9dy2GdU=";
+    })
+  ];
 
   nativeBuildInputs = [
     # Tools for the bootstrap process
@@ -63,12 +72,7 @@ stdenv.mkDerivation rec {
 
     # Dependencies of just
     cli11
-    # Using fmt 10 because this is the same version upstream currently
-    # uses for bundled builds
-    # For future updates: The currently used version can be found in the file
-    # etc/repos.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.json
-    # under the key .repositories.fmt
-    fmt_10
+    fmt
     microsoft-gsl
     nlohmann_json
 
@@ -85,20 +89,19 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  postPatch =
-    ''
-      sed -i -e 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
-      sed -i -e 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.json > etc/repos.json.patched
-      mv etc/repos.json.patched etc/repos.json
-      jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
-      mv etc/repos.json.patched etc/repos.json
-      jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
-      mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i -e 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
-    '';
+  postPatch = ''
+    sed -i -e 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
+    sed -i -e 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
+    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.in.json > etc/repos.in.json.patched
+    mv etc/repos.in.json.patched etc/repos.in.json
+    jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.in.json > etc/repos.in.json.patched
+    mv etc/repos.in.json.patched etc/repos.in.json
+    jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
+    mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i -e 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
+  '';
 
   /*
     The build phase follows the bootstrap procedure that is explained in
@@ -121,7 +124,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     mkdir .distfiles
-    ln -s ${bazelapi} .distfiles/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz
+    ln -s ${bazelapi} .distfiles/9ef19c6b5fbf77d6dd9d84d75fbb5a20a6b62ef1.tar.gz
     ln -s ${googleapi} .distfiles/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz
 
     mkdir .pkgconfig

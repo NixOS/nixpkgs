@@ -31,13 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "binary2strings" ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to extract Ascii, Utf8, and Unicode strings from binary data";
     homepage = "https://github.com/glmcdona/binary2strings";
     changelog = "https://github.com/glmcdona/binary2strings/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

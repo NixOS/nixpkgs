@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7sRzf3SA9RSBf4O36olXgka8c6Bufdb0qsuTofVe55s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HUNBGG1+LsjaDsJS4p5aAdCRyltylQUtdydGSoUdNgo=";
 
   buildInputs = [
@@ -32,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File picker used by VDHCoApp";
     homepage = "https://github.com/paulrouget/static-filepicker";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "filepicker";
-    maintainers = with maintainers; [ hannesgith ];
+    maintainers = with lib.maintainers; [ hannesgith ];
   };
 }

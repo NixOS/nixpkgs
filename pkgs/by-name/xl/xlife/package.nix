@@ -27,10 +27,11 @@ stdenv.mkDerivation {
     install -Dm755 lifeconv -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://litwr2.atspace.eu/xlife.php";
     description = "Conway's Game of Life and other cellular automata, for X";
-    license = licenses.hpndSellVariant;
-    maintainers = with maintainers; [ djanatyn ];
+    license = lib.licenses.hpndSellVariant;
+    maintainers = with lib.maintainers; [ djanatyn ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

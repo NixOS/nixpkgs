@@ -34,15 +34,15 @@ mkDerivation rec {
     rm -fr $out/{bin,share}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, smart log explorer";
     mainProgram = "glogg";
     longDescription = ''
       A multi-platform GUI application to browse and search through long or complex log files. It is designed with programmers and system administrators in mind. glogg can be seen as a graphical, interactive combination of grep and less.
     '';
     homepage = "https://glogg.bonnefon.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ c0bw3b ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ c0bw3b ];
   };
 }

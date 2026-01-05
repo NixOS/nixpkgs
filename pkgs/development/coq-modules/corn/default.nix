@@ -52,18 +52,18 @@
   configureScript = "./configure.sh";
   dontAddPrefix = true;
 
-  mlPlugin = true;  /* uses coq-bignums.plugin */
+  mlPlugin = true; # uses coq-bignums.plugin
 
   propagatedBuildInputs = [
     bignums
     math-classes
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://c-corn.github.io/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     description = "Coq library for constructive analysis";
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }).overrideAttrs
   (o: {

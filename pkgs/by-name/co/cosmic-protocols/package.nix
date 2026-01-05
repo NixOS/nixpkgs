@@ -4,27 +4,38 @@
   fetchFromGitHub,
   wayland-scanner,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
   pname = "cosmic-protocols";
-  version = "0-unstable-2025-03-05";
+  version = "0-unstable-2025-09-26";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-protocols";
-    rev = "6b05c2a157118979cb472a38455ba78ca9729196";
-    hash = "sha256-ozyReur1jjMl8fDUrdWbgcKedf+RDH5xCRsmEcnPQ9U=";
+    rev = "d0e95be25e423cfe523b11111a3666ed7aaf0dc4";
+    hash = "sha256-KvXQJ/EIRyrlmi80WKl2T9Bn+j7GCfQlcjgcEVUxPkc=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   nativeBuildInputs = [ wayland-scanner ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "branch=HEAD"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "branch=HEAD"
+      ];
+    };
   };
 
   meta = {
@@ -34,10 +45,7 @@ stdenv.mkDerivation {
       mit
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 }

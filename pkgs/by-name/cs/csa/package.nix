@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # so we remove one of them:
   postInstall = "rm $out/lib/ladspa/celllm_3890.*";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/csa/";
     description = "Group of LADSPA Audio plugins for FM broadcast and more";
     longDescription = ''
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
       It contains the following plugins:
       Emphazised Limiter, Cellular Leveler, Simple right/left amplifier. Blind Peak Meter.
     '';
-    license = licenses.gpl3;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
 }

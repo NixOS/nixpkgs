@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile --replace /usr/local/bin $out/bin
+    substituteInPlace lib/Makefile \
+      --replace-fail 'ar cr' '${stdenv.cc.targetPrefix}ar cr'
   '';
 
   preInstall = ''

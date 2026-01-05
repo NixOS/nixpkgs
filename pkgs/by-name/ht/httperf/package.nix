@@ -21,10 +21,14 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ openssl ];
 
   configurePhase = ''
+    runHook preConfigure
+
     autoreconf -i
     mkdir -pv build
     cd build
     ../configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''
@@ -32,12 +36,12 @@ stdenv.mkDerivation {
     mv -v src/httperf $out/bin
   '';
 
-  meta = with lib; {
-    description = "Httperf HTTP load generator";
+  meta = {
+    description = "HTTP load generator";
     homepage = "https://github.com/httperf/httperf";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     mainProgram = "httperf";
   };
 

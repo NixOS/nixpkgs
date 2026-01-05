@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-9e66qSrKpczatZY9lPAzi/6f7lHChnl2+Pih53oa28Y=";
   };
 
+  patches = [
+    # Update CMake minimum required version for CMake 4 compatibility
+    # https://github.com/analogdevicesinc/libad9361-iio/pull/134
+    ./cmake-3.10.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libiio ];
@@ -29,11 +35,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IIO AD9361 library for filter design and handling, multi-chip sync, etc";
     homepage = "http://analogdevicesinc.github.io/libad9361-iio/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

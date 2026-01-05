@@ -3,6 +3,7 @@
   cairo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   libuv,
   libXdmcp,
   libpthreadstubs,
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "polybar";
     repo = "polybar";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-5PYKl6Hi4EYEmUBwkV0rLiwxNqIyR5jwm495YnNs0gI=";
     fetchSubmodules = true;
   };
@@ -58,37 +59,46 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.sphinx
     removeReferencesTo
-  ] ++ lib.optional i3Support makeWrapper;
+  ]
+  ++ lib.optional i3Support makeWrapper;
 
-  buildInputs =
-    [
-      cairo
-      libuv
-      libXdmcp
-      libpthreadstubs
-      libxcb
-      pcre
-      python3
-      xcbproto
-      xcbutil
-      xcbutilcursor
-      xcbutilimage
-      xcbutilrenderutil
-      xcbutilwm
-      xcbutilxrm
-    ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional githubSupport curl
-    ++ lib.optional mpdSupport libmpdclient
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional iwSupport wirelesstools
-    ++ lib.optional nlSupport libnl
-    ++ lib.optionals i3Support [
-      jsoncpp
-      i3
-    ];
+  buildInputs = [
+    cairo
+    libuv
+    libXdmcp
+    libpthreadstubs
+    libxcb
+    pcre
+    python3
+    xcbproto
+    xcbutil
+    xcbutilcursor
+    xcbutilimage
+    xcbutilrenderutil
+    xcbutilwm
+    xcbutilxrm
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional githubSupport curl
+  ++ lib.optional mpdSupport libmpdclient
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional iwSupport wirelesstools
+  ++ lib.optional nlSupport libnl
+  ++ lib.optionals i3Support [
+    jsoncpp
+    i3
+  ];
 
-  patches = [ ./remove-hardcoded-etc.diff ];
+  patches = [
+    # FIXME: remove after version update
+    (fetchpatch {
+      name = "gcc15-cstdint-fix.patch";
+      url = "https://github.com/polybar/polybar/commit/f99e0b1c7a5b094f5a04b14101899d0cb4ece69d.patch";
+      sha256 = "sha256-Mf9R4u1Kq4yqLqTFD5ZoLjrK+GmlvtSsEyRFRCiQ72U=";
+    })
+
+    ./remove-hardcoded-etc.diff
+  ];
 
   # Replace hardcoded /etc when copying and reading the default config.
   postPatch = ''
@@ -96,16 +106,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAllInPlace src/utils/file.cpp
   '';
 
-  postInstall =
-    ''
-      remove-references-to -t ${stdenv.cc} $out/bin/polybar
-    ''
-    + (lib.optionalString i3Support ''
-      wrapProgram $out/bin/polybar \
-        --prefix PATH : "${i3}/bin"
-    '');
+  postInstall = ''
+    remove-references-to -t ${stdenv.cc} $out/bin/polybar
+  ''
+  + (lib.optionalString i3Support ''
+    wrapProgram $out/bin/polybar \
+      --prefix PATH : "${i3}/bin"
+  '');
 
-  meta = with lib; {
+  meta = {
     homepage = "https://polybar.github.io/";
     changelog = "https://github.com/polybar/polybar/releases/tag/${finalAttrs.version}";
     description = "Fast and easy-to-use tool for creating status bars";
@@ -114,13 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
       status bars for their desktop environment, without the need of
       having a black belt in shell scripting.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       afldcr
-      Br1ght0ne
       moni
     ];
     mainProgram = "polybar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -5,9 +5,7 @@ Digital Bitbox is a hardware wallet and second-factor authenticator.
 The `digitalbitbox` programs module may be installed by setting
 `programs.digitalbitbox` to `true` in a manner similar to
 ```nix
-{
-  programs.digitalbitbox.enable = true;
-}
+{ programs.digitalbitbox.enable = true; }
 ```
 and bundles the `digitalbitbox` package (see [](#sec-digitalbitbox-package)),
 which contains the `dbb-app` and `dbb-cli` binaries, along with the hardware
@@ -24,11 +22,7 @@ For more information, see <https://digitalbitbox.com/start_linux>.
 The binaries, `dbb-app` (a GUI tool) and `dbb-cli` (a CLI tool), are available
 through the `digitalbitbox` package which could be installed as follows:
 ```nix
-{
-  environment.systemPackages = [
-    pkgs.digitalbitbox
-  ];
-}
+{ environment.systemPackages = [ pkgs.digitalbitbox ]; }
 ```
 
 ## Hardware {#sec-digitalbitbox-hardware-module}
@@ -36,9 +30,7 @@ through the `digitalbitbox` package which could be installed as follows:
 The digitalbitbox hardware package enables the udev rules for Digital Bitbox
 devices and may be installed as follows:
 ```nix
-{
-  hardware.digitalbitbox.enable = true;
-}
+{ hardware.digitalbitbox.enable = true; }
 ```
 
 In order to alter the udev rules, one may provide different values for the
@@ -47,9 +39,7 @@ In order to alter the udev rules, one may provide different values for the
 {
   programs.digitalbitbox = {
     enable = true;
-    package = pkgs.digitalbitbox.override {
-      udevRule51 = "something else";
-    };
+    package = pkgs.digitalbitbox.override { udevRule51 = "something else"; };
   };
 }
 ```

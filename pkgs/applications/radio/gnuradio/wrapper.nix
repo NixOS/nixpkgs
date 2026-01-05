@@ -37,6 +37,7 @@
   soapyaudio,
   soapybladerf,
   soapyhackrf,
+  soapyplutosdr,
   soapyremote,
   soapyrtlsdr,
   soapyuhd,
@@ -46,6 +47,7 @@
     soapyaudio
     soapybladerf
     soapyhackrf
+    soapyplutosdr
     soapyremote
     soapyrtlsdr
     soapyuhd
@@ -65,7 +67,7 @@ let
       (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
     ]
     # Add the extraPackages as python modules as well
-    ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
+    ++ (map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (
       lib.mapAttrsToList (
         feat: info:
@@ -77,7 +79,7 @@ let
   pythonEnv = unwrapped.python.withPackages (ps: pythonPkgs);
 
   pname = unwrapped.pname + "-wrapped";
-  inherit (unwrapped) version;
+  inherit (unwrapped) outputs version;
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
     ]
@@ -165,7 +167,7 @@ let
               "QT_PLUGIN_PATH"
               ":"
               "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix (
-                builtins.map lib.getBin (
+                map lib.getBin (
                   [
                     unwrapped.qt.qtbase
                   ]
@@ -178,7 +180,7 @@ let
               "QML2_IMPORT_PATH"
               ":"
               "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix (
-                builtins.map lib.getBin (
+                map lib.getBin (
                   [
                     unwrapped.qt.qtbase
                   ]
@@ -212,18 +214,24 @@ let
   self =
     if doWrap then
       stdenv.mkDerivation {
-        inherit pname version passthru;
-        nativeBuildInputs = [ makeWrapper ];
-        buildInputs = [
+        inherit
+          pname
+          outputs
+          version
+          passthru
+          ;
+        nativeBuildInputs = [
+          makeWrapper
           xorg.lndir
         ];
         buildCommand = ''
           mkdir $out
           cd $out
-          lndir -silent ${unwrapped}
+          lndir -silent ${unwrapped.out}
+          lndir -silent ${unwrapped.man}
           ${lib.optionalString (extraPackages != [ ]) (
             builtins.concatStringsSep "\n" (
-              builtins.map (pkg: ''
+              map (pkg: ''
                 if [[ -d ${lib.getBin pkg}/bin/ ]]; then
                   lndir -silent ${pkg}/bin ./bin
                 fi

@@ -1,17 +1,18 @@
-{ bash
-, binutils
-, buildGoModule
-, fetchFromGitHub
-, kbd
-, lib
-, libfido2
-, lvm2
-, lz4
-, makeWrapper
-, mdadm
-, unixtools
-, xz
-, zfs
+{
+  bash,
+  binutils,
+  buildGoModule,
+  fetchFromGitHub,
+  kbd,
+  lib,
+  libfido2,
+  lvm2,
+  lz4,
+  makeWrapper,
+  mdadm,
+  unixtools,
+  xz,
+  zfs,
 }:
 
 buildGoModule rec {
@@ -20,8 +21,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "anatol";
-    repo = pname;
-    rev = version;
+    repo = "booster";
+    tag = version;
     hash = "sha256-uHxPzuD3PxKAI2JOZd7lcLvcqYqk9gW9yeZgOS1Y7x4=";
   };
 
@@ -41,18 +42,28 @@ buildGoModule rec {
     xz
   ];
 
-  postInstall = let
-    runtimeInputs = [ bash binutils kbd libfido2 lvm2 mdadm zfs ];
-  in ''
-    wrapProgram $out/bin/generator --prefix PATH : ${lib.makeBinPath runtimeInputs}
-    wrapProgram $out/bin/init --prefix PATH : ${lib.makeBinPath runtimeInputs}
-  '';
+  postInstall =
+    let
+      runtimeInputs = [
+        bash
+        binutils
+        kbd
+        libfido2
+        lvm2
+        mdadm
+        zfs
+      ];
+    in
+    ''
+      wrapProgram $out/bin/generator --prefix PATH : ${lib.makeBinPath runtimeInputs}
+      wrapProgram $out/bin/init --prefix PATH : ${lib.makeBinPath runtimeInputs}
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and secure initramfs generator";
     homepage = "https://github.com/anatol/booster";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "init";
   };
 }

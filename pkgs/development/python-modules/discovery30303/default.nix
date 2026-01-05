@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -22,27 +23,23 @@ buildPythonPackage rec {
     hash = "sha256-QIGLRe+nUV3tUOs+pu6Qk/2Amh9IVcQq89o2JeKiTvM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=discovery30303" ""
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "discovery30303" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to discover devices that respond on port 30303";
     homepage = "https://github.com/bdraco/discovery30303";
     changelog = "https://github.com/bdraco/discovery30303/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

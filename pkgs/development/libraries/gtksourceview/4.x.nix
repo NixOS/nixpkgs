@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) pname version;
     in
     fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor version}/gtksourceview-${version}.tar.xz";
       sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
     };
 
@@ -126,12 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-4" ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

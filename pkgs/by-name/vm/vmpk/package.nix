@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     ln -s ${qt6Packages.drumstick}/share/drumstick $out/share/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual MIDI Piano Keyboard";
     mainProgram = "vmpk";
     homepage = "http://vmpk.sourceforge.net/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

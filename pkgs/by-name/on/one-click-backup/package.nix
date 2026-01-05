@@ -21,23 +21,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     ninja
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     qt6.qtdeclarative
-    extra-cmake-modules
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Program to backup folders to an external location by copying them";
     homepage = "https://gitlab.com/dev-nis/nis-one-click-backup-qt";
     changelog = "https://gitlab.com/dev-nis/nis-one-click-backup-qt/-/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ NIS ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ NIS ];
     mainProgram = "NIS_One-Click-Backup_Qt";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

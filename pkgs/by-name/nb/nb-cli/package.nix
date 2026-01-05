@@ -8,14 +8,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nb-cli";
-  version = "1.4.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
     inherit version;
-    hash = "sha256-HZey1RVpx/fHNxdEue1LczYbwYUxEb3i3fHpkKHhn+8=";
+    hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
   };
+
+  pythonRelaxDeps = [
+    "watchfiles"
+    "noneprompt"
+  ];
 
   build-system = [
     python3.pkgs.babel
@@ -31,8 +36,11 @@ python3.pkgs.buildPythonApplication rec {
     importlib-metadata
     jinja2
     noneprompt
+    nonestorage
+    packaging
     pydantic
     pyfiglet
+    textual
     tomlkit
     typing-extensions
     virtualenv
@@ -43,7 +51,15 @@ python3.pkgs.buildPythonApplication rec {
   # no test
   doCheck = false;
 
-  pythonImportsCheck = [ "nb_cli" ];
+  pythonImportsCheck = [
+    "nb_cli"
+    "nb_cli.cli"
+    "nb_cli.compat"
+    "nb_cli.config"
+    "nb_cli.handlers"
+    "nb_cli.i18n"
+    "nb_cli.log"
+  ];
 
   passthru.tests = {
     version = testers.testVersion { package = nb-cli; };

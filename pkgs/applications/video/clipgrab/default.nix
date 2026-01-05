@@ -43,17 +43,16 @@ mkDerivation rec {
     ./yt-dlp-path.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace youtube_dl.cpp \
-        --replace 'QString YoutubeDl::path = QString();' \
-                  'QString YoutubeDl::path = QString("${yt-dlp}/bin/yt-dlp");'
-    ''
-    + lib.optionalString (ffmpeg != null) ''
-      substituteInPlace converter_ffmpeg.cpp \
-        --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
-        --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
-    '';
+  postPatch = ''
+    substituteInPlace youtube_dl.cpp \
+      --replace 'QString YoutubeDl::path = QString();' \
+                'QString YoutubeDl::path = QString("${yt-dlp}/bin/yt-dlp");'
+  ''
+  + lib.optionalString (ffmpeg != null) ''
+    substituteInPlace converter_ffmpeg.cpp \
+      --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
+      --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
+  '';
 
   qmakeFlags = [ "clipgrab.pro" ];
 
@@ -80,7 +79,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video downloader for YouTube and other sites";
     longDescription = ''
       ClipGrab is a free downloader and converter for YouTube, Vimeo, Metacafe,
@@ -88,8 +87,8 @@ mkDerivation rec {
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
     homepage = "https://clipgrab.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "clipgrab";
   };
 }

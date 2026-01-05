@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "pitch-black";
-  version = "unstable-2019-07-23";
+  version = "0-unstable-2019-07-23";
 
   src = fetchFromGitHub {
     repo = "pitch-black";
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     mv * $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dark plasma theme built with usability in mind";
     homepage = "https://github.com/freefreeno/Pitch-Black";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.pasqui23 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.pasqui23 ];
   };
 }

@@ -8,7 +8,7 @@
   alsa-lib,
   bzip2,
   zlib,
-  libsForQt5,
+  kdePackages,
   libgcc,
   makeWrapper,
   copyDesktopItems,
@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stereotool";
-  version = "10.41";
+  version = "10.71";
 
   srcs =
     let
@@ -37,19 +37,19 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_64_${versionNoPoint}";
-            hash = "sha256-v+e24IHcGBEu/jHw52tzxxb9F7V39N7XYQt0Ln5YAP8=";
+            hash = "sha256-YDrB7MX2EbG9Eknx5XlOAaW/2sPTZzPIGXzFcwKGqK8=";
           })
           # Jack version for 64bits.
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_64_${versionNoPoint}";
-            hash = "sha256-v+e24IHcGBEu/jHw52tzxxb9F7V39N7XYQt0Ln5YAP8=";
+            hash = "sha256-YDrB7MX2EbG9Eknx5XlOAaW/2sPTZzPIGXzFcwKGqK8=";
           })
           # Cmd version for 64bits
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_64_${versionNoPoint}";
-            hash = "sha256-jYxmwh7L4XCDnhj+hTAGTlm7rjanUk76CtXmhFS8vPU=";
+            hash = "sha256-+hm8G5jwgFqDzy7BsYSfJh3x9asx7voc4NdIqkBDGmE=";
           })
         ];
         # Sources if the system is aarch64-linux
@@ -57,17 +57,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_64_${versionNoPoint}";
-            hash = "sha256-zKRum8jU5tqgpDjs6ZY0aUnoRXi+tfyOi9ZZDUIGhi4=";
+            hash = "sha256-nr3VlRpWELe4vlaKenPa3ZtOHjD66BXbGDd2WjTI70E=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_64_${versionNoPoint}";
-            hash = "sha256-zKRum8jU5tqgpDjs6ZY0aUnoRXi+tfyOi9ZZDUIGhi4=";
+            hash = "sha256-nr3VlRpWELe4vlaKenPa3ZtOHjD66BXbGDd2WjTI70E=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_64_${versionNoPoint}";
-            hash = "sha256-Z/xfNKN8GxHJ+9OoHw76JWmTWClz0ZJxtwlmg+8wZ3A=";
+            hash = "sha256-QyJ/BulqWEIpGfbd6qGT4ejOtdVJ0/M2pEvJasRZUNE=";
           })
         ];
         # Sources if the system is aarch32-linux
@@ -75,17 +75,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_${versionNoPoint}";
-            hash = "sha256-DHsWEr7k+QVwkoKndkuDEGDKcH0jGikESfg/5qREjdE=";
+            hash = "sha256-ryw4m08Ru2GI/Wq0UZwjmect7OAHaftfy+0J1S1bYh8=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_${versionNoPoint}";
-            hash = "sha256-DHsWEr7k+QVwkoKndkuDEGDKcH0jGikESfg/5qREjdE=";
+            hash = "sha256-ryw4m08Ru2GI/Wq0UZwjmect7OAHaftfy+0J1S1bYh8=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_${versionNoPoint}";
-            hash = "sha256-fL8nlmp8ZFvcZL9KlH2zcOrDapXMGTdP6wIQ0TxRZZE=";
+            hash = "sha256-l9VWraDHJXfNJVb8/VvHENvdknT6ccPBmt/mGlwND00=";
           })
         ];
         # Sources if the system is 32bits i686
@@ -94,17 +94,17 @@ stdenv.mkDerivation rec {
             # The name is the name of this source in the build directory
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_${versionNoPoint}";
-            hash = "sha256-IaLNl1a3IVjlCh566xeT9UlgzHA6NEwBacTuFLrEFxs=";
+            hash = "sha256-OnGn/OUkXFZ4SnmibpF/0kxeq8YZIWMMVafy6i96GeA=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_${versionNoPoint}";
-            hash = "sha256-IaLNl1a3IVjlCh566xeT9UlgzHA6NEwBacTuFLrEFxs=";
+            hash = "sha256-OnGn/OUkXFZ4SnmibpF/0kxeq8YZIWMMVafy6i96GeA=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_${versionNoPoint}";
-            hash = "sha256-oCGhxQkpT0jNwbWoBnC5nmvVrDjYmr75s3Qq+NftZy0=";
+            hash = "sha256-GDpfSeL14XkvroIF6pm5CzNYiEz/v5uzfyjw+7K1idE=";
           })
         ];
       }
@@ -162,19 +162,19 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 alsa $out/bin/stereo_tool_gui
-    wrapProgram $out/bin/stereo_tool_gui --prefix PATH : ${lib.makeBinPath [ libsForQt5.kdialog ]}
+    wrapProgram $out/bin/stereo_tool_gui --prefix PATH : ${lib.makeBinPath [ kdePackages.kdialog ]}
     install -Dm755 jack $out/bin/stereo_tool_gui_jack
-    wrapProgram $out/bin/stereo_tool_gui_jack --prefix PATH : ${lib.makeBinPath [ libsForQt5.kdialog ]}
+    wrapProgram $out/bin/stereo_tool_gui_jack --prefix PATH : ${lib.makeBinPath [ kdePackages.kdialog ]}
     install -Dm755 cmd $out/bin/stereo_tool_cmd
     mkdir -p $out/share/icons/hicolor/48x48/apps
     cp stereo-tool-icon.png $out/share/icons/hicolor/48x48/apps/stereo-tool-icon.png
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.thimeo.com/stereo-tool/";
     description = "Stereo Tool is a software-based audio processor which offers outstanding audio quality and comes with many unique features";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "stereo_tool_gui";
     platforms = [
       "aarch64-linux"
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ RudiOnTheAir ];
+    maintainers = with lib.maintainers; [ RudiOnTheAir ];
   };
 
 }

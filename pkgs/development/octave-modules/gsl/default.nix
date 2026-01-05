@@ -19,10 +19,10 @@ buildOctavePackage rec {
     gsl
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/gsl/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/gsl/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Octave bindings to the GNU Scientific Library";
     # error: use of undeclared identifier 'feval'; did you mean 'octave::feval'?
     # error: no member named 'is_real_type' in 'octave_value'

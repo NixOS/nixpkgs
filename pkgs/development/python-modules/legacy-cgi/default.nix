@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "legacy-cgi";
-  version = "2.6.2";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = "legacy-cgi";
     tag = "v${version}";
-    hash = "sha256-unVD8gUnF0sP360y/wWT2AkicEZ8nKy7tUK5tcCpQuc=";
+    hash = "sha256-2CCYRRWP8FP54AcLnehJ0Kj3F3U4cz8vnesSj5EakdA=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   pythonImportsCheck = [
     "cgi"
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    changelog = "https://github.com/jackrosenthal/legacy-cgi/releases/tag/${src.tag}";
     description = "Fork of the standard library cgi and cgitb modules, being deprecated in PEP-594";
     homepage = "https://github.com/jackrosenthal/legacy-cgi";
     license = lib.licenses.psfl;

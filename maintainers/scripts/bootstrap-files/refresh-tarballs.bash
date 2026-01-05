@@ -92,11 +92,13 @@ CROSS_TARGETS=(
     mips64el-unknown-linux-gnuabi64
     mips64el-unknown-linux-gnuabin32
     mipsel-unknown-linux-gnu
+    powerpc64-unknown-linux-gnuabielfv1
     powerpc64-unknown-linux-gnuabielfv2
     powerpc64le-unknown-linux-gnu
     riscv64-unknown-linux-gnu
     s390x-unknown-linux-gnu
     x86_64-unknown-freebsd
+    loongarch64-unknown-linux-gnu
 )
 
 is_cross() {
@@ -264,14 +266,14 @@ EOF
 
             # individual file entries
             cat <<EOF
-$attr = import <nix/fetchurl.nix> {
+  $attr = import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/${s3_prefix}/${nixpkgs_revision}/$fname";
     hash = "${sri}";$(
     [[ -n ${executable_nix} ]] && printf "\n    %s" "${executable_nix}"
     [[ -n ${name_nix} ]]       && printf "\n    %s" "${name_nix}"
     [[ -n ${unpack_nix} ]]     && printf "\n    %s" "${unpack_nix}"
     )
-};
+  };
 EOF
     done
     # footer

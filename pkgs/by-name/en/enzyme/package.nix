@@ -7,13 +7,13 @@
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "enzyme";
-  version = "0.0.172";
+  version = "0.0.234";
 
   src = fetchFromGitHub {
     owner = "EnzymeAD";
     repo = "Enzyme";
     rev = "v${version}";
-    hash = "sha256-/FxjXCML7hBNYOVf1PLG+VwCdaNGYwwirRJSQxIvLcg=";
+    hash = "sha256-FK1/Ezld9U+xWuQ92ekOighDFUJQ0WOweSHHIq+ZyvA=";
   };
 
   postPatch = ''
@@ -23,8 +23,8 @@ llvmPackages.stdenv.mkDerivation rec {
   llvm = llvmPackages.llvm;
   clang = llvmPackages.clang-unwrapped;
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    cmake
     git
     llvm
     clang

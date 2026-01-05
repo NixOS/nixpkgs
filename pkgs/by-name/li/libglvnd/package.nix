@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit (addDriverRunpath) driverLink; };
 
-  meta = with lib; {
+  meta = {
     description = "GL Vendor-Neutral Dispatch library";
     longDescription = ''
       libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
@@ -102,16 +102,16 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
     changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd1
       bsd3
       gpl3Only
       asl20
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

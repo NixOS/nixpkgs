@@ -56,14 +56,15 @@ buildPythonPackage rec {
     all = [
       py7zr
       rarfile
-    ] ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
 
     cbr = [ rarfile ];
 
     icu = lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonRelaxDeps = [ "pycountry" ];
 

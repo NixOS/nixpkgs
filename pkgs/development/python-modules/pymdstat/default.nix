@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "unitest.py" ];
+  enabledTestPaths = [ "unitest.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic library to parse Linux /proc/mdstat file";
     homepage = "https://github.com/nicolargo/pymdstat";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.mit;
   };
 }

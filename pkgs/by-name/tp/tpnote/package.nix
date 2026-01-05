@@ -1,30 +1,28 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   cmake,
   pkg-config,
   oniguruma,
-  darwin,
   installShellFiles,
   tpnote,
-  testers,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpnote";
-  version = "1.25.5";
+  version = "1.25.17";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
-    tag = "v${version}";
-    hash = "sha256-UNWnjcwIVRCmRp+i02sDKE9nF2YBc9TQuXLNjkpRZhc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XOoqPhWS50kj2n48A0SyOuUZHsoP7YxMrWpzgpTr/DY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/VRVFDzUqMS3y6e5I+ZX8ULxJ2kL8ycesWEYUeZSujo=";
+  cargoHash = "sha256-4e06W8Q+pJTcUgfDSHU1ZTMG/55mYvJ6DAX3QeAa9TI=";
 
   nativeBuildInputs = [
     cmake
@@ -32,18 +30,19 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    oniguruma
+  ];
+
+  postPatch = ''
+    # In these `Cargo.toml`s, local dependencies should be specified by path,
+    # otherwise they will be looked up in vendored dependencies.
+    substituteInPlace tpnote/Cargo.toml \
+      --replace-fail 'tpnote-lib = { version =' 'tpnote-lib = { path = "../tpnote-lib", version ='
+
+    substituteInPlace tpnote-lib/Cargo.toml \
+      --replace-fail 'tpnote-html2md = { version =' 'tpnote-html2md = { path = "../tpnote-html2md", version ='
+  '';
 
   postInstall = ''
     installManPage docs/build/man/man1/tpnote.1
@@ -51,19 +50,29 @@ rustPlatform.buildRustPackage rec {
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
-  passthru.tests.version = testers.testVersion { package = tpnote; };
-
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
   cargoTestFlags = "--package tpnote-lib";
   doCheck = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://github.com/getreu/tp-note/releases/tag/v${version}";
+    changelog = "https://github.com/getreu/tp-note/releases/tag/v${finalAttrs.version}";
     description = "Markup enhanced granular note-taking";
     homepage = "https://blog.getreu.net/projects/tp-note/";
     license = lib.licenses.mit;
     mainProgram = "tpnote";
-    maintainers = with lib.maintainers; [ getreu ];
+    maintainers = with lib.maintainers; [
+      getreu
+      starryreverie
+    ];
   };
-}
+})

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.15.5";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "sparse";
     tag = version;
-    hash = "sha256-W4rcq7G/bQsT9oTLieOzWNst5LnIAelRMbm+uUPeQgs=";
+    hash = "sha256-LYJ7YnR7WtzamK6py1NRPBe+h28L7JT+52wmourAc/c=";
   };
 
   build-system = [
@@ -56,10 +56,5 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # Most tests fail with: Fatal Python error: Segmentation fault
-      # numba/typed/typedlist.py", line 344 in append
-      "aarch64-linux"
-    ];
   };
 }

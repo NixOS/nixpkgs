@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "openslide";
-  version = "1.4.1";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "openslide";
     repo = "openslide-python";
     tag = "v${version}";
-    hash = "sha256-V4vOeeXGng1zunSLbIfqbGePNkWqf0HEOyv40OVPw1Y=";
+    hash = "sha256-v8JrZdDwZPtnWYOmvJXbq22k6/MQqMzWweD86Eof0e4=";
   };
 
   postPatch = ''

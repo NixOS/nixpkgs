@@ -10,18 +10,18 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "br0xen";
-    repo = pname;
-    rev = version;
+    repo = "boltbrowser";
+    tag = version;
     sha256 = "sha256-3t0U1bSJbo3RJZe+PwaUeuzSt23Gs++WRe/uehfa4cA=";
   };
 
   vendorHash = "sha256-lLSjAO0sK2zwl+id/e15XWYbLPCa7qK8J6tdvaBMLPs=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI Browser for BoltDB files";
     homepage = "https://github.com/br0xen/boltbrowser";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "boltbrowser";
   };
 }

@@ -18,23 +18,23 @@
   util-linux,
   xwininfo,
   zenity,
-  zig_0_13,
+  zig_0_14,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mepo";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mepo";
     rev = finalAttrs.version;
-    hash = "sha256-hEsQpTrj2WCoRgNWdhcUnQRzhI/6BydcbG9kRePstgg=";
+    hash = "sha256-1NE8lADvcxWGi01kxYW2tCOhnVee+T76ITvwSj6M5DM=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_13.hook
+    zig_0_14.hook
     makeWrapper
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     for program in $out/bin/* ; do
       wrapProgram $program \
         --suffix PATH : $out/bin:${
-          lib.makeBinPath ([
+          lib.makeBinPath [
             busybox
             curl
             gpsd
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
             util-linux
             xwininfo
             zenity
-          ])
+          ]
         }
     done
   '';

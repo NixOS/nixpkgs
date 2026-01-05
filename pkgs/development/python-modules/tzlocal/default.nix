@@ -33,15 +33,16 @@ buildPythonPackage rec {
     "test_conflicting"
     "test_noconflict"
     "test_symlink_localtime"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "test_assert_tz_offset";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "test_assert_tz_offset";
 
   pythonImportsCheck = [ "tzlocal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tzinfo object for the local timezone";
     homepage = "https://github.com/regebro/tzlocal";
     changelog = "https://github.com/regebro/tzlocal/blob/${version}/CHANGES.txt";
-    license = licenses.cddl;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.cddl;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

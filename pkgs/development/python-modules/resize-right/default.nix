@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Correct way to resize images or tensors. For Numpy or Pytorch (differentiable";
     homepage = "https://github.com/assafshocher/ResizeRight";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

@@ -45,10 +45,10 @@ buildPythonPackage rec {
     "launchpadlib.credentials"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

@@ -30,6 +30,8 @@ buildPythonPackage rec {
     hash = "sha256-P/6BbUsyda7iG4/90Isua+TXWQzYixifczy8aZbWN4Y=";
   };
 
+  pythonRelaxDeps = [ "packaging" ];
+
   outputs = [
     "out"
     "man"
@@ -70,12 +72,12 @@ buildPythonPackage rec {
     installManPage rst2pdf.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert reStructured Text to PDF via ReportLab";
     mainProgram = "rst2pdf";
     homepage = "https://rst2pdf.org/";
     changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pyrox0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }

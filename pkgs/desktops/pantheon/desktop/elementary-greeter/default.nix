@@ -1,43 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, linkFarm
-, replaceVars
-, elementary-greeter
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, gnome-desktop
-, gnome-settings-daemon
-, mutter
-, elementary-icon-theme
-, wingpanel-with-indicators
-, elementary-gtk-theme
-, nixos-artwork
-, lightdm
-, gdk-pixbuf
-, dbus
-, accountsservice
-, wayland-scanner
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  linkFarm,
+  replaceVars,
+  elementary-greeter,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libgee,
+  libhandy,
+  gala,
+  gnome-desktop,
+  gnome-settings-daemon,
+  mutter,
+  elementary-icon-theme,
+  elementary-settings-daemon,
+  wingpanel-with-indicators,
+  elementary-gtk-theme,
+  nixos-artwork,
+  lightdm,
+  gdk-pixbuf,
+  dbus,
+  wayland-scanner,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "8.0.1";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
-    rev = version;
-    sha256 = "sha256-T/tI8WRVbTLdolDYa98M2Vm26p0xhGiai74lXAlpQ8k=";
+    tag = version;
+    hash = "sha256-eoZ4WkIUesWTFipC6ji1QdU0dy9iMGCbQSkI74c0VRA=";
   };
 
   patches = [
@@ -61,8 +63,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    accountsservice
     elementary-icon-theme
+    elementary-settings-daemon
+    gala # for io.elementary.desktop.background
     gnome-desktop
     gnome-settings-daemon
     gdk-pixbuf
@@ -102,30 +105,27 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    # Use NixOS default wallpaper
-    substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
-      --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
-      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
-
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
-      --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
+      --replace-fail "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
   passthru = {
     updateScript = nix-update-script { };
 
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [
+      {
+        path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+        name = "io.elementary.greeter.desktop";
+      }
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.greeter";
   };
 }

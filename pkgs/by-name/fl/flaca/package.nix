@@ -3,46 +3,40 @@
   fetchFromGitHub,
   rustPlatform,
   fetchurl,
-  runCommand,
-  lndir,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flaca";
-  version = "3.2.3";
+  version = "3.5.3";
 
-  src =
-    let
-      source = fetchFromGitHub {
-        owner = "Blobfolio";
-        repo = "flaca";
-        rev = "v${version}";
-        hash = "sha256-GpxOTu7yjJ9IFMKVkgjLeKGNEUiKw0ZeWQorfhaOTsg=";
-      };
-      lockFile = fetchurl {
-        url = "https://github.com/Blobfolio/flaca/releases/download/v${version}/Cargo.lock";
-        hash = "sha256-SaqQ4U8JXTFlp1EqkNZ6VV8KyPXHYtEycfZn/68SeHY=";
-      };
-    in
-    runCommand "source-with-lock" { nativeBuildInputs = [ lndir ]; } ''
-      mkdir -p $out
-      ln -s ${lockFile} $out/Cargo.lock
-      lndir -silent ${source} $out
-    '';
+  lockFile = fetchurl {
+    url = "https://github.com/Blobfolio/flaca/releases/download/v${finalAttrs.version}/Cargo.lock";
+    hash = "sha256-NNeq8qr+z0s98mgFYyUu9aNRqaAi2CZfQx0vQzSzOc8=";
+  };
+
+  src = fetchFromGitHub {
+    owner = "Blobfolio";
+    repo = "flaca";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Fh+nWnAG87NL3scr/y2jCNqaeJtEwi4nCYTGwnmEsIQ=";
+  };
+
+  postUnpack = ''
+    ln -s ${finalAttrs.lockFile} ${finalAttrs.src.name}/Cargo.lock
+  '';
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-MdPPLv0836rVxVrl8PXMDufHdTtmBBhJ/EuG4qcK3Kk=";
+  cargoHash = "sha256-yHkUsxJppHhIpgX7Vtrs8TCy43xaNpqoVkMZ0msr02k=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to losslessly compress JPEG and PNG images";
     longDescription = "A CLI tool for x86-64 Linux machines that simplifies the task of maximally, losslessly compressing JPEG and PNG images for use in production web environments";
     homepage = "https://github.com/Blobfolio/flaca";
-    changelog = "https://github.com/Blobfolio/flaca/releases/tag/v${version}";
-    maintainers = with maintainers; [ zzzsy ];
-    platforms = platforms.linux;
-    license = licenses.wtfpl;
+    changelog = "https://github.com/Blobfolio/flaca/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ zzzsy ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.wtfpl;
     mainProgram = "flaca";
   };
-}
+})

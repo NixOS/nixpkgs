@@ -25,7 +25,8 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $dev/include
-    mv $out/include/${python.libPrefix}*/CXX/ $dev/include/CXX/
+    mv $out/include/${python.libPrefix}*/* $dev/include
+    ln -s $dev/include/cxx $dev/include/CXX # pysvn compat
     mv $out/CXX $dev/src
     sed -i "s|Src|$dev/src|" $dev/src/cxxextensions.c $dev/src/cxxsupport.cxx
   '';
@@ -34,6 +35,6 @@ buildPythonPackage rec {
     description = "Set of classes to help create extensions of Python in the C++ language";
     homepage = "https://sourceforge.net/projects/cxx/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

@@ -27,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cmacrae
       lnl7
-      periklis
       khaneliman
     ];
     platforms = lib.platforms.darwin;

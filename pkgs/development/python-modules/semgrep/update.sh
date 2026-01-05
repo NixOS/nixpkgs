@@ -34,11 +34,6 @@ NEW_VERSION=$(
 NEW_VERSION="${NEW_VERSION:1}"
 OLD_VERSION="$(instantiateClean semgrep.passthru.common.version)"
 
-if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
-    echo "Already up to date"
-    exit
-fi
-
 replace() {
     sed -i "s@$1@$2@g" "$3"
 }
@@ -48,22 +43,6 @@ fetchgithub() {
     nix-build -A "$1" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g'
     set -eo pipefail
 }
-
-fetch_arch() {
-  VERSION=$1
-  PLATFORM=$2
-  nix-prefetch "{ fetchPypi }:
-fetchPypi rec {
-  pname = \"semgrep\";
-  version = \"$VERSION\";
-  format = \"wheel\";
-  dist = python;
-  python = \"cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311\";
-  platform = \"$PLATFORM\";
-}
-"
-}
-
 replace "$OLD_VERSION" "$NEW_VERSION" "$COMMON_FILE"
 
 echo "Updating src"
@@ -86,8 +65,9 @@ update_core_platform() {
     PLATFORM="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.platform")"
 
     OLD_HASH="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.hash")"
+    URL="$(nix-instantiate -A "semgrep.passthru.semgrep-core.src.url" --raw --eval --strict --argstr system "$SYSTEM")"
     echo "Old core hash $OLD_HASH"
-    NEW_HASH="$(fetch_arch "$NEW_VERSION" "$PLATFORM")"
+    NEW_HASH="$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url $URL))"
     echo "New core hash $NEW_HASH"
     replace "$OLD_HASH" "$NEW_HASH" "$COMMON_FILE"
 
@@ -144,4 +124,3 @@ done
 rm -rf "$TMPDIR"
 
 echo "Finished"
-

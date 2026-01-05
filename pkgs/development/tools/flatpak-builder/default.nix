@@ -34,7 +34,6 @@
   gnutar,
   json-glib,
   libcap,
-  libsoup_2_4,
   libyaml,
   ostree,
   patch,
@@ -109,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json-glib
     libcap
-    libsoup_2_4
     libxml2
     libyaml
     ostree
@@ -151,12 +149,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to build flatpaks from source";
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ arthsmn ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ arthsmn ];
+    platforms = lib.platforms.linux;
   };
 })

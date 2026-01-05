@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     sed -i 's,-DLIBREVENGE_BUILD,\0 -DBOOST_ERROR_CODE_HEADER_ONLY,g' src/lib/Makefile.in
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Base library for writing document import filters";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

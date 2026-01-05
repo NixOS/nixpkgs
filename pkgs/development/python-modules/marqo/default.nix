@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   name = "marqo";
-  version = "3.11.0";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marqo-ai";
     repo = "py-marqo";
     rev = "refs/tags/${version}";
-    hash = "sha256-8BcYJZ7tXkuvtQzopZO9bvLXAJQdd8MnQflVTawTaw0=";
+    hash = "sha256-phO7aR7kQJHw5qxrpMI5DtOaXlaHMsKfaC3UquyD/Rw=";
   };
 
   build-system = [ setuptools ];
@@ -61,18 +61,17 @@ buildPythonPackage rec {
     packaging
     pydantic
     requests
-
   ];
 
   pythonRemoveDeps = [ "urllib3" ];
 
   pythonImportsCheck = [ "marqo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified embedding generation and search engine";
     homepage = "https://marqo.ai";
     changelog = "https://github.com/marqo-ai/py-marqo/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ naufik ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ naufik ];
   };
 }

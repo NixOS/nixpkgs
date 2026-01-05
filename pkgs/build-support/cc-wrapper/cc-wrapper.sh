@@ -140,6 +140,15 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     params=(${kept+"${kept[@]}"})
 fi
 
+# Some build systems such as Bazel and SwiftPM use `clang` instead of `clang++`,
+# which will find the libc++ headers in the sysroot for C++ files.
+if [[ "$isCxx" = 0 && "@isClang@" ]]; then
+# This duplicates the behavior of a native toolchain, which can find the
+# libc++ headers but requires `-lc++` to be specified explicitly when linking.
+    isCxx=1
+    cxxLibrary=0
+fi
+
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
         #
@@ -249,7 +258,7 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-PATH="$path_backup"
+export PATH="$path_backup"
 # Old bash workaround, see above.
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then

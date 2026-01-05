@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
-, lv2, jdk_headless
-, vamp-plugin-sdk, ladspaH, meson, ninja, darwin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsamplerate,
+  libsndfile,
+  fftw,
+  lv2,
+  jdk_headless,
+  vamp-plugin-sdk,
+  ladspaH,
+  meson,
+  ninja,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rubberband";
@@ -11,9 +23,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-rwUDE+5jvBizWy4GTl3OBbJ2qvbRqiuKgs7R/i+AKOk=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja jdk_headless ];
-  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    jdk_headless
+  ];
+  buildInputs = [
+    libsamplerate
+    libsndfile
+    fftw
+    vamp-plugin-sdk
+    ladspaH
+    lv2
+  ];
   makeFlags = [ "AR:=$(AR)" ];
 
   # TODO: package boost-test, so we can run the test suite. (Currently it fails
@@ -21,12 +44,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dtests=disabled" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High quality software library for audio time-stretching and pitch-shifting";
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.all;
   };
 }

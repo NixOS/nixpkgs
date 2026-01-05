@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
 import os
+import urllib
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump
@@ -22,11 +23,28 @@ def ensure_is_list(x):
     return x
 
 def add_entries(sources, targets, hashes):
-    for num, artefact in enumerate(sources):
+    for artefact in sources:
+        target = None
+        base_jar_name = os.path.basename(urllib.parse.urlparse(artefact["@url"]).path)
+        for candidate in targets:
+            if candidate["@url"].endswith(base_jar_name + "!/"):
+                target = candidate
+                break
+        if target is None:
+            raise ValueError(f"Did not find target for source {artefact}")
+
+        url = artefact["@url"].removeprefix("file://$MAVEN_REPOSITORY$/")
+        if url == artefact["@url"]:
+            raise ValueError(f"Unexpected artefact URL {url}")
+
+        path = target["@url"].removeprefix("jar://$MAVEN_REPOSITORY$/").removesuffix("!/")
+        if path == target["@url"]:
+            raise ValueError(f"Unexpected target path {path}")
+
         hashes.append({
-            "url": artefact["@url"][26:],
+            "url": url,
             "hash": artefact["sha256sum"],
-            "path": targets[num]["@url"][25:-2]
+            "path": path
         })
 
 

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, cmake
-, git
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qtsvg
-, qtwebengine
+{
+  stdenv,
+  lib,
+  cmake,
+  git,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  qtwebengine,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,14 +35,15 @@ stdenv.mkDerivation rec {
     qtwebengine
   ];
 
-  meta = with lib; {
+  meta = {
     # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/graphia.x86_64-darwin
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "Visualisation tool for the creation and analysis of graphs";
     homepage = "https://graphia.app";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "Graphia";
-    maintainers = [ maintainers.bgamari ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.bgamari ];
+    platforms = lib.platforms.all;
   };
 }

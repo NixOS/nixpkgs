@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
   kmod,
@@ -9,15 +10,17 @@
 }:
 
 let
-  version = "3.1";
+  version = "3.2.2";
 in
 
 stdenv.mkDerivation {
+  pname = "netatop";
+  inherit version;
   name = "netatop-${kernel.version}-${version}";
 
   src = fetchurl {
-    url = "http://www.atoptool.nl/download/netatop-${version}.tar.gz";
-    sha256 = "0qjw8glfdmngfvbn1w63q128vxdz2jlabw13y140ga9i5ibl6vvk";
+    url = "https://www.atoptool.nl/download/netatop-${version}.tar.gz";
+    hash = "sha256-UIqJd809HN1nWHoTwl46QUZHtI+S0c44/BOLWRSuo/Y=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -27,34 +30,30 @@ stdenv.mkDerivation {
   ];
 
   hardeningDisable = [ "pic" ];
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
 
   patches = [
     # fix paths in netatop.service
     ./fix-paths.patch
-    # Specify PIDFile in /run, not /var/run to silence systemd warning
-    ./netatop.service.patch
+    # fix install paths and install the .ko instead of trying to invoke dkms
+    ./fix-makefile-install.patch
+    # replace init_module as needed by Linux 6.15 and above (backwards compatible)
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/netatop_kernel_6.15.patch?h=netatop-dkms&id=e5da6fa4fee5499c3e437cdd34281dd2b200508f";
+      hash = "sha256-JyNQNyDJQkM/hLpb/hp3Sw2tMA8XnYogduGDFqTQ3nQ=";
+    })
   ];
   preConfigure = ''
     patchShebangs mkversion
-    sed -i -e 's,^KERNDIR.*,KERNDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build,' \
-        */Makefile
-    sed -i -e 's,/lib/modules.*extra,'$out'/lib/modules/${kernel.modDirVersion}/extra,' \
-        -e s,/usr,$out, \
-        -e /init.d/d \
-        -e /depmod/d \
-        -e s,/lib/systemd,$out/lib/systemd, \
-        Makefile
-
     kmod=${kmod} substituteAllInPlace netatop.service
   '';
 
-  makeFlags = kernelModuleMakeFlags;
-
-  preInstall = ''
-    mkdir -p $out/lib/systemd/system $out/bin $out/sbin $out/share/man/man{4,8}
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/extra
-  '';
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KERNDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "KMODDIRVERSION=${kernel.modDirVersion}"
+    # netatop builds both the module and daemon at once, and the daemon needs a wrapped cc to build
+    # pkgs/os-specific/linux/kernel/common-flags.nix unwraps the cc for kernel build, but we need the wrapped one
+    "CC=${stdenv.cc}/bin/cc"
+  ];
 
   meta = {
     description = "Network monitoring module for atop";

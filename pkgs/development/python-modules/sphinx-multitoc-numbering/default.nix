@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_multitoc_numbering" ];
 
-  meta = with lib; {
+  meta = {
     description = "Supporting continuous HTML section numbering";
     homepage = "https://github.com/executablebooks/sphinx-multitoc-numbering";
     changelog = "https://github.com/executablebooks/sphinx-multitoc-numbering/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

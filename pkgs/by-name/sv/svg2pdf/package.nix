@@ -15,24 +15,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-A3lUX2q5D1Z5Q3sZOl2uvaOLTuLRdtJyR9tmfPkE7TI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Fr4UC12WpJiIkLKcxk9D7AdBD+VSyS4NQVfqn/p6NqM=";
 
   cargoBuildFlags = [
     "-p=svg2pdf-cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert SVG files to PDFs";
     homepage = "https://github.com/typst/svg2pdf";
     changelog = "https://github.com/typst/svg2pdf/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       doronbehar
-      figsoda
     ];
     mainProgram = "svg2pdf";
   };

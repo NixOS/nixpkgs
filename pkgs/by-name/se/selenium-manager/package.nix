@@ -1,8 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,24 +21,19 @@ rustPlatform.buildRustPackage rec {
     ./disable-telemetry.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MgnmEJif4Z4CcmBFkC5BJR67DMGm1ttObtl4LhAFw4g=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
 
   # TODO: enable tests
   # The test suite depends on a number of browsers and network requests,
   # check the Gentoo package for inspiration
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Browser automation framework and ecosystem";
     homepage = "https://github.com/SeleniumHQ/selenium";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "selenium-manager";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

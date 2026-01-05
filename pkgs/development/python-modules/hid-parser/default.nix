@@ -1,35 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pytest7CheckHook,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
   hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "hid-parser";
-  version = "0.0.3";
-  format = "pyproject";
+  version = "0.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zbm+h+ieDmd1K0uH+9B8EWtYScxqYJXVpY9bXdBivA4=";
+  src = fetchFromGitHub {
+    owner = "usb-tools";
+    repo = "python-hid-parser";
+    tag = version;
+    hash = "sha256-8aGyLTsBK5etwbqFkNinbLHCt20fsQEmuBvu3RrwCDA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [
-    pytest7CheckHook
+    pytestCheckHook
     hypothesis
   ];
 
   pythonImportsCheck = [ "hid_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typed pure Python library to parse HID report descriptors";
     homepage = "https://github.com/usb-tools/python-hid-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

@@ -2,32 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
   ollama,
-  poetry-core,
-  pythonOlder,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-ollama";
-  version = "0.6.0";
+  version = "0.8.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
     inherit version;
-    hash = "sha256-7GL6vymKzrNNIFpQmKLcK9eSTT2bVmwkyh69ZLw9/pA=";
+    hash = "sha256-UYS3L2RjEJodPF1y6s/4CESde8GRqVmhlrlHHASWh7g=";
   };
 
   pythonRelaxDeps = [ "ollama" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
     ollama
+    pytest-asyncio
   ];
 
   # Tests are only available in the mono repo
@@ -35,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.embeddings.ollama" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Llms Integration for Ollama";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/embeddings/llama-index-embeddings-ollama";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

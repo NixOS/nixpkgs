@@ -8,7 +8,7 @@
   glib,
   gtk3,
   libgee,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   clutter-gtk,
   clutter-gst,
   ninja,
@@ -39,18 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libgee
-    webkitgtk_4_0
+    # webkitgtk_4_0
     clutter-gtk
     clutter-gst
   ];
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Beautiful and customizable wallpaper manager for Linux";
     homepage = "https://github.com/Komorebi-Fork/komorebi";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kranzes ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kranzes ];
+    platforms = lib.platforms.linux;
   };
 })

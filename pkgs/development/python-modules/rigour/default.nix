@@ -1,32 +1,34 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
+  ahocorasick-rs,
   babel,
   banal,
+  buildPythonPackage,
+  fetchFromGitHub,
   fingerprints,
+  hatchling,
   jellyfish,
   jinja2,
   normality,
+  orjson,
+  pytestCheckHook,
   python-stdnum,
   pytz,
   pyyaml,
   rapidfuzz,
   typing-extensions,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rigour";
-  version = "0.8.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensanctions";
     repo = "rigour";
     tag = "v${version}";
-    hash = "sha256-endggriOj+DBWfcYDQ034OvzxVCaHV9QUMAk0qtSYPg=";
+    hash = "sha256-meeM/ylRJkZ1/Oh16oX572AkqxtU6gf8QtMIe8cCf8Y=";
   };
 
   build-system = [
@@ -34,12 +36,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    ahocorasick-rs
     babel
     banal
     fingerprints
     jellyfish
     jinja2
     normality
+    orjson
     python-stdnum
     pytz
     pyyaml

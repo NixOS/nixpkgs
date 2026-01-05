@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "reaper-oss";
     repo = "sws";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-37pBbNACQuuEk1HJTiUHdb0mDiR2+ZsEQUOhz7mrPPg=";
+    hash = "sha256-J2igVacDClHgKGZ2WATcd5XW2FkarKtALxVLgqa90Cs=";
     fetchSubmodules = true;
   };
 

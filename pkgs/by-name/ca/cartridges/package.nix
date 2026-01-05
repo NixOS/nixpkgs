@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
-  version = "2.11.1";
+  version = "2.12.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     tag = "v${version}";
-    hash = "sha256-2w7qHTEaRnVDRa0e39Dg9H7pjhgM2UATe8pGYncYILE=";
+    hash = "sha256-pGEh9ugDWjaAjVL8mFUVqU+WFwcpRcstc11ikDxhihI=";
   };
 
   strictDeps = true;
@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Cartridges/";
     changelog = "https://github.com/kra-mo/cartridges/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "cartridges";
     platforms = lib.platforms.linux;
   };

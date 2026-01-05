@@ -3,8 +3,8 @@
   lib,
   go,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  fetchurl,
   nixosTests,
   enableAWS ? true,
   enableAzure ? true,
@@ -29,18 +29,65 @@
   enableVultr ? true,
   enableXDS ? true,
   enableZookeeper ? true,
+  versionCheckHook,
 }:
 
 let
-  version = "3.1.0";
-  webUiStatic = fetchurl {
-    url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    hash = "sha256-05DaaDIFtADnkLFqdHe5eUvo6LRz6BduMvGVmzOeurM=";
+  source = import ./source.nix;
+
+  inherit (source) version vendorHash;
+
+  pname = "prometheus";
+
+  src = fetchFromGitHub {
+    owner = "prometheus";
+    repo = "prometheus";
+    tag = "v${version}";
+    hash = source.hash;
+  };
+
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    inherit version;
+
+    src = "${src}/web/ui";
+
+    npmDepsHash = source.npmDepsHash;
+
+    patches = [
+      # Disable old React app as it depends on deprecated create-react-apps
+      # script
+      ./disable-react-app.diff
+    ];
+
+    env.CI = true;
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+
+      npm test
+
+      runHook postCheck
+    '';
+
+    postInstall = ''
+      mkdir -p $out/static
+      cp -r $out/lib/node_modules/prometheus-io/static/* $out/static
+      find $out/static -type f -exec gzip -f9 {} \;
+
+      # Remove node_modules
+      rm -rf $out/lib
+    '';
   };
 in
-buildGoModule rec {
-  pname = "prometheus";
-  inherit version;
+buildGoModule (finalAttrs: {
+  inherit
+    pname
+    version
+    vendorHash
+    src
+    ;
 
   outputs = [
     "out"
@@ -48,22 +95,14 @@ buildGoModule rec {
     "cli"
   ];
 
-  src = fetchFromGitHub {
-    owner = "prometheus";
-    repo = "prometheus";
-    tag = "v${version}";
-    hash = "sha256-Q3f0L6cRVQRL1AHgUI3VNbMG9eTfcApbXfSjOTHr7Go=";
-  };
-
-  vendorHash = "sha256-vQwBnSxoyIYTeWLk3GD9pKDuUjjsMfwPptgyVnzcTok=";
-
   excludedPackages = [
     "documentation/prometheus-mixin"
+    "internal/tools"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 
   postPatch = ''
-    tar -C web/ui -xzf ${webUiStatic}
+    cp -r ${assets}/static web/ui/static/
 
     patchShebangs scripts
 
@@ -97,7 +136,18 @@ buildGoModule rec {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then GOARCH= make -o assets plugins; fi
+
+    # Recreate the `make assets-compress` target here - workaround permissions
+    # errors
+    cp web/ui/embed.go.tmpl web/ui/embed.go
+
+    find web/ui/static -type f -name '*.gz' -print0 | sort -z | xargs -0 echo //go:embed >> web/ui/embed.go
+
+    echo 'var EmbedFS embed.FS' >> web/ui/embed.go
+
+    # EmbedFS requires relative paths
+    substituteInPlace web/ui/embed.go --replace-fail "web/ui/" ""
   '';
 
   tags = [ "builtinassets" ];
@@ -108,8 +158,7 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -130,16 +179,35 @@ buildGoModule rec {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
-  passthru.tests = { inherit (nixosTests) prometheus; };
+  checkFlags = [
+    # Skip for issue during TSDB compaction
+    "-skip=TestBlockRanges"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-skip=TestEvaluations/testdata/aggregators.test"
+  ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) prometheus; };
+    updateScript = ./update.sh;
+  };
+
+  meta = {
     description = "Service monitoring system and time series database";
     homepage = "https://prometheus.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    changelog = "https://github.com/prometheus/prometheus/blob/v${version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       fpletz
-      willibutz
       Frostman
+      jpds
     ];
+    mainProgram = "prometheus";
   };
-}
+})

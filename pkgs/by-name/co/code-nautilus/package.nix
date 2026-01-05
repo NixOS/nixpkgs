@@ -5,7 +5,7 @@
   nautilus-python,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "code-nautilus";
   version = "0-unstable-2024-09-11";
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VSCode extension for Nautilus: 'Open in Code'";
     homepage = "https://github.com/harry-cpp/code-nautilus";
-    license = licenses.unlicense;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ berrij ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ berrij ];
   };
 
 }

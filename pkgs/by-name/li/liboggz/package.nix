@@ -8,18 +8,18 @@
 
 stdenv.mkDerivation rec {
   pname = "liboggz";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/liboggz/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yX5PunlUqfr3ndz0Bpksb3uwIU6W1JV6B6L9oCZeWrI=";
+    sha256 = "sha256-JGbQO2fvC8ug4Q+zUtGp/9n5aRFlerzjy7a6Qpxlbi8=";
   };
 
   propagatedBuildInputs = [ libogg ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xiph.org/oggz/";
     description = "C library and tools for manipulating with Ogg files and streams";
     longDescription = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       interleaving data container developed by Monty at Xiph.Org, originally to
       support the Ogg Vorbis audio format but now used for many free codecs
       including Dirac, FLAC, Speex and Theora.'';
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
 }

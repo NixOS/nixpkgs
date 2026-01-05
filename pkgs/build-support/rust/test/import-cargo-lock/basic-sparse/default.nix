@@ -1,23 +1,13 @@
-{ lib, rustPlatform }:
-let
-  fs = lib.fileset;
-in
+{ rustPlatform }:
+
 rustPlatform.buildRustPackage {
   pname = "basic-sparse";
   version = "0.1.0";
 
-  src = fs.toSource {
-    root = ./.;
-    fileset = fs.unions [
-      ./.cargo/config.toml
-      ./Cargo.toml
-      ./Cargo.lock
-      ./src
-    ];
-  };
+  src = ./package;
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = ./package/Cargo.lock;
     extraRegistries = {
       "sparse+https://index.crates.io/" = "https://static.crates.io/crates";
     };

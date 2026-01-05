@@ -5,15 +5,17 @@
   ...
 }:
 
-let
-  perlWrapped = pkgs.perl.withPackages (
-    p: with p; [
-      ConfigIniFiles
-      FileSlurp
-    ]
-  );
-in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "system" "switch" "enableNg" ] ''
+      This option controlled the usage of the new switch-to-configuration-ng,
+      which is now the only switch-to-configuration implementation. This option
+      can be removed from configuration. If there are outstanding issues
+      preventing you from using the new implementation, please open an issue on
+      GitHub.
+    '')
+  ];
+
   options.system.switch = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -29,61 +31,22 @@ in
       '';
     };
 
-    enableNg = lib.mkOption {
-      type = lib.types.bool;
-      default = config.system.switch.enable;
-      defaultText = lib.literalExpression "config.system.switch.enable";
+    inhibitors = lib.mkOption {
+      type = lib.types.listOf lib.types.pathInStore;
+      default = [ ];
       description = ''
-        Whether to use `switch-to-configuration-ng`, the Rust-based
-        re-implementation of the original Perl `switch-to-configuration`.
+        List of derivations that will prevent switching into a configuration when
+        they change.
+        This can be manually overridden on the command line if required.
       '';
     };
   };
 
-  config = lib.mkMerge [
-    (lib.mkIf (config.system.switch.enable && !config.system.switch.enableNg) {
-      warnings = [
-        ''
-          The Perl implementation of switch-to-configuration will be deprecated
-          and removed in the 25.05 release of NixOS. Please migrate to the
-          newer implementation by removing `system.switch.enableNg = false`
-          from your configuration. If you are unable to migrate due to any
-          issues with the new implementation, please create an issue and tag
-          the maintainers of `switch-to-configuration-ng`.
-        ''
-      ];
-
-      system.activatableSystemBuilderCommands = ''
-        mkdir $out/bin
-        substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \
-          --subst-var out \
-          --subst-var-by toplevel ''${!toplevelVar} \
-          --subst-var-by coreutils "${pkgs.coreutils}" \
-          --subst-var-by distroId ${lib.escapeShellArg config.system.nixos.distroId} \
-          --subst-var-by installBootLoader ${lib.escapeShellArg config.system.build.installBootLoader} \
-          --subst-var-by preSwitchCheck ${lib.escapeShellArg config.system.preSwitchChecksScript} \
-          --subst-var-by localeArchive "${config.i18n.glibcLocales}/lib/locale/locale-archive" \
-          --subst-var-by perl "${perlWrapped}" \
-          --subst-var-by shell "${pkgs.bash}/bin/sh" \
-          --subst-var-by su "${pkgs.shadow.su}/bin/su" \
-          --subst-var-by systemd "${config.systemd.package}" \
-          --subst-var-by utillinux "${pkgs.util-linux}" \
-          ;
-
-        chmod +x $out/bin/switch-to-configuration
-        ${lib.optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
-          if ! output=$(${perlWrapped}/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
-            echo "switch-to-configuration syntax is not valid:"
-            echo "$output"
-            exit 1
-          fi
-        ''}
-      '';
-    })
-    (lib.mkIf config.system.switch.enableNg {
-      # Use a subshell so we can source makeWrapper's setup hook without
-      # affecting the rest of activatableSystemBuilderCommands.
-      system.activatableSystemBuilderCommands = ''
+  config = lib.mkIf config.system.switch.enable {
+    # Use a subshell so we can source makeWrapper's setup hook without
+    # affecting the rest of activatableSystemBuilderCommands.
+    system = {
+      activatableSystemBuilderCommands = ''
         (
           source ${pkgs.buildPackages.makeWrapper}/nix-support/setup-hook
 
@@ -99,7 +62,83 @@ in
             --set SYSTEMD ${config.systemd.package}
         )
       '';
-    })
-  ];
 
+      systemBuilderCommands = ''
+        ln -s ${config.system.build.inhibitSwitch} $out/switch-inhibitors
+      '';
+
+      build.inhibitSwitch = pkgs.writeTextFile {
+        name = "switch-inhibitors";
+        text = lib.concatMapStringsSep "\n" (drv: drv.outPath) config.system.switch.inhibitors;
+      };
+
+      preSwitchChecks.switchInhibitors =
+        let
+          realpath = lib.getExe' pkgs.coreutils "realpath";
+          sha256sum = lib.getExe' pkgs.coreutils "sha256sum";
+          diff = lib.getExe' pkgs.diffutils "diff";
+        in
+        # bash
+        ''
+          incoming="''${1-}"
+          action="''${2-}"
+
+          if [ "$action" == "boot" ]; then
+            echo "Not checking switch inhibitors (action = $action)"
+            exit
+          fi
+
+          echo -n "Checking switch inhibitors..."
+
+          booted_inhibitors="$(${realpath} /run/booted-system)/switch-inhibitors"
+          booted_inhibitors_sha="$(
+            if [ -f "$booted_inhibitors" ]; then
+              ${sha256sum} - < "$booted_inhibitors"
+            else
+              echo 'none'
+            fi
+          )"
+
+          if [ "$booted_inhibitors_sha" == "none" ]; then
+            echo
+            echo "The previous configuration did not specify switch inhibitors, nothing to check."
+            exit
+          fi
+
+          new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
+          new_inhibitors_sha="$(
+            if [ -f "$new_inhibitors" ]; then
+              ${sha256sum} - < "$new_inhibitors"
+            else
+              echo 'none'
+            fi
+          )"
+
+          if [ "$new_inhibitors_sha" == "none" ]; then
+            echo
+            echo "The new configuration does not specify switch inhibitors, nothing to check."
+            exit
+          fi
+
+          if [ "$new_inhibitors_sha" != "$booted_inhibitors_sha" ]; then
+            echo
+            echo "Found diff in switch inhibitors:"
+            echo
+            ${diff} --color "$booted_inhibitors" "$new_inhibitors"
+            echo
+            echo "The new configuration contains changes to packages that were"
+            echo "listed as switch inhibitors."
+            echo
+            echo "If you really want to switch into this configuration directly, then"
+            echo "you can set NIXOS_NO_CHECK=1 to ignore these pre-switch checks."
+            echo
+            echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
+            echo
+            exit 1
+          else
+            echo " done"
+          fi
+        '';
+    };
+  };
 }

@@ -10,14 +10,14 @@
 
 buildPythonPackage {
   pname = "migen";
-  version = "0.9.2-unstable-2025-02-07";
+  version = "0.9.2-unstable-2025-10-03";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "migen";
-    rev = "2828df54594673653a641ab551caf6c6b1bfeee5";
-    hash = "sha256-GproDJowtcgbccsT+I0mObzFhE483shcS8MSszKXwlc=";
+    rev = "147f003fb7076ac4c7cf76a9a5ce152dc10e0ca6";
+    hash = "sha256-gRAvl5cUvrjq4t7htXsDBt4F8MEbHXFZoS0jbhrEs1I=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -31,9 +31,9 @@ buildPythonPackage {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = " A Python toolbox for building complex digital hardware";
+    description = "Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ l-as ];
+    maintainers = [ ];
   };
 }

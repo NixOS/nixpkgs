@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prometheus_pandas" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dcoles/prometheus-pandas";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Pandas integration for Prometheus";
-    maintainers = with maintainers; [ viktornordling ];
+    maintainers = with lib.maintainers; [ viktornordling ];
   };
 }

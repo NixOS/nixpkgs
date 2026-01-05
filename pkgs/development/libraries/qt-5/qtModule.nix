@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   mkDerivation,
-  apple-sdk_13,
   perl,
   qmake,
   patches,
@@ -29,12 +28,7 @@ mkDerivation (
     inherit pname version src;
     patches = (args.patches or [ ]) ++ (patches.${pname} or [ ]);
 
-    buildInputs =
-      args.buildInputs or [ ]
-      # Per https://doc.qt.io/qt-5/macos.html#supported-versions
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        apple-sdk_13
-      ];
+    buildInputs = args.buildInputs or [ ];
 
     nativeBuildInputs =
       (args.nativeBuildInputs or [ ])
@@ -66,31 +60,30 @@ mkDerivation (
       . ${./hooks/fix-qt-builtin-paths.sh}
     '';
 
-    preConfigure =
-      ''
-        ${args.preConfigure or ""}
+    preConfigure = ''
+      ${args.preConfigure or ""}
 
-        fixQtBuiltinPaths . '*.pr?'
-      ''
-      +
-        lib.optionalString (builtins.compareVersions "5.15.0" version <= 0)
-          # Note: We use ${version%%-*} to remove any tag from the end of the version
-          # string. Version tags are added by Nixpkgs maintainers and not reflected in
-          # the source version.
-          ''
-            if [[ -z "$dontCheckQtModuleVersion" ]] \
-                && grep -q '^MODULE_VERSION' .qmake.conf 2>/dev/null \
-                && ! grep -q -F "''${version%%-*}" .qmake.conf 2>/dev/null
-            then
-              echo >&2 "error: could not find version ''${version%%-*} in .qmake.conf"
-              echo >&2 "hint: check .qmake.conf and update the package version in Nixpkgs"
-              exit 1
-            fi
+      fixQtBuiltinPaths . '*.pr?'
+    ''
+    +
+      lib.optionalString (builtins.compareVersions "5.15.0" version <= 0)
+        # Note: We use ${version%%-*} to remove any tag from the end of the version
+        # string. Version tags are added by Nixpkgs maintainers and not reflected in
+        # the source version.
+        ''
+          if [[ -z "$dontCheckQtModuleVersion" ]] \
+              && grep -q '^MODULE_VERSION' .qmake.conf 2>/dev/null \
+              && ! grep -q -F "''${version%%-*}" .qmake.conf 2>/dev/null
+          then
+            echo >&2 "error: could not find version ''${version%%-*} in .qmake.conf"
+            echo >&2 "hint: check .qmake.conf and update the package version in Nixpkgs"
+            exit 1
+          fi
 
-            if [[ -z "$dontSyncQt" && -f sync.profile ]]; then
-              syncqt.pl -version "''${version%%-*}"
-            fi
-          '';
+          if [[ -z "$dontSyncQt" && -f sync.profile ]]; then
+            syncqt.pl -version "''${version%%-*}"
+          fi
+        '';
 
     dontWrapQtApps = args.dontWrapQtApps or true;
 
@@ -121,10 +114,10 @@ mkDerivation (
       maintainers = with maintainers; [
         qknight
         ttuegel
-        periklis
         bkchr
       ];
       platforms = platforms.unix;
-    } // (args.meta or { });
+    }
+    // (args.meta or { });
   }
 )

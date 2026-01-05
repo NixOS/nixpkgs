@@ -13,27 +13,18 @@
   libXrandr,
   pkg-config,
   zlib,
-  Accelerate,
-  AGL,
-  Cocoa,
-  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot-audio";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9iHeVMoyzTQae/PVYJqON0qOPo3SJlhrqbcp2u1Y8MA=";
+    hash = "sha256-FTSITx6GoH1cGWeWNWtz1Ih+zozK8aA+u54Y4s0DylQ=";
   };
-
-  patches = [
-    # https://forum.juce.com/t/juce-and-macos-11-arm/40285/24
-    ./0001-undef-fpret-on-aarch64-darwin.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -48,10 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ (
       if stdenv.hostPlatform.isDarwin then
         [
-          Accelerate
-          AGL
-          Cocoa
-          Foundation
           zlib
         ]
       else
@@ -79,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       JUCE library.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

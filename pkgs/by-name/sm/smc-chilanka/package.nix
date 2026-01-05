@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://smc.org.in/fonts/chilanka";
     description = "Chilanka Malayalam Typeface";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ adtya ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ adtya ];
   };
 }

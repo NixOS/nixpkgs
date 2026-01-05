@@ -17,16 +17,17 @@
   util-linux,
   wimlib,
   wget,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.2.4";
   pname = "woeusb";
 
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HB1E7rP/U58dyL3j6YnhF5AOGAcHqmA/ZZ5JNBDibco=";
   };
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
     for file in sbin/woeusb share/man/man1/woeusb.1; do
       substituteInPlace "$file" \
-        --replace '@@WOEUSB_VERSION@@' '${version}'
+        --replace-fail '@@WOEUSB_VERSION@@' '${finalAttrs.version}'
     done
   '';
 
@@ -72,20 +73,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
 
-  postInstallCheck = ''
-    # woeusb --version checks for missing runtime dependencies.
-    out_version="$("$out/bin/woeusb" --version)"
-    [ "$out_version" = '${version}' ]
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Create bootable USB disks from Windows ISO images";
     homepage = "https://github.com/WoeUSB/WoeUSB";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.linux;
     mainProgram = "woeusb";
   };
-}
+})

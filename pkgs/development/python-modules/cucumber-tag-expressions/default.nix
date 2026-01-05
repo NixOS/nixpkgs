@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
-  version = "6.1.2";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "tag-expressions";
     tag = "v${version}";
-    hash = "sha256-ptDsN6loFXrKT1xeR138kXzA5TbHPH1G7I/25ZD8Nj4=";
+    hash = "sha256-m6CmRs/Fz2e9GTtHrE3FF8GPK2vs6i37xcI3BM64rlc=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -34,10 +34,10 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cucumber/tag-expressions";
     description = "Provides tag-expression parser for cucumber/behave";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxxk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxxk ];
   };
 }

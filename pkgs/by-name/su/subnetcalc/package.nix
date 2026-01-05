@@ -4,26 +4,28 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subnetcalc";
-  version = "2.5.1";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = "subnetcalc";
-    rev = "subnetcalc-${finalAttrs.version}";
-    hash = "sha256-uP2T7c5aBvOsuJK648WNWO9WmRN4WCRlAIBFYTYyUkw=";
+    tag = "subnetcalc-${finalAttrs.version}";
+    hash = "sha256-Zv1qrox1Yg6qNg81QVXPZkB5lElaPICue+hc5muzI5Q=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    gettext
   ];
 
   meta = {
-    description = "SubNetCalc is an IPv4/IPv6 subnet address calculator";
+    description = "IPv4/IPv6 subnet address calculator";
     homepage = "https://www.uni-due.de/~be0001/subnetcalc/";
     license = lib.licenses.gpl3Plus;
     longDescription = ''

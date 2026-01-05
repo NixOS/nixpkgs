@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -9,25 +8,23 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.20.1";
+  version = "3.20.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "simplejson";
+    repo = "simplejson";
     tag = "v${version}";
-    hash = "sha256-wE/jqBMXVtmbc/78X4lgfvuj074CrzfLJL1CM6LCfas=";
+    hash = "sha256-err3NWljoC6MxJoFSYuqLHGKfDcst6ya7myP9XIRbFc=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   pythonImportsCheck = [ "simplejson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible JSON encoder/decoder for Python";
     longDescription = ''
       simplejson covers the full JSON specification for both encoding
@@ -37,10 +34,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/simplejson/simplejson";
     changelog = "https://github.com/simplejson/simplejson/blob/v${version}/CHANGES.txt";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       afl21
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

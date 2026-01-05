@@ -10,15 +10,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apkg";
-  version = "0.5.0";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchFromGitLab {
     domain = "gitlab.nic.cz";
     owner = "packaging";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VQNUzbWIDo/cbCdtx8JxN5UUMBW3mQ2B42In4b3AA+A=";
+    repo = "apkg";
+    tag = "v${version}";
+    hash = "sha256-UQHiG6clAt+pmc0MTCkO4NIzr8TZmJ6Yd/T0YTkBxv0=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -31,11 +31,14 @@ python3Packages.buildPythonApplication rec {
     distro # current distro detection
     jinja2 # templating
     packaging # version parsing
+    pyyaml # YAML for serialization
     requests # HTTP for humans™
-    toml # config files
+    toml # TOML for config files
   ];
 
-  nativeBuildInputs = with python3Packages; [ hatchling ];
+  nativeBuildInputs = with python3Packages; [
+    setuptools # required for build
+  ];
 
   makeWrapperArgs = [
     # deps for `srcpkg` operation for other distros; could be optional
@@ -52,7 +55,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytest
-    dunamai
   ];
   checkPhase = ''
     runHook preCheck
@@ -60,12 +62,12 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Upstream packaging automation tool";
     homepage = "https://pkg.labs.nic.cz/pages/apkg";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [
-      maintainers.vcunat # close to upstream
+      lib.maintainers.vcunat # close to upstream
     ];
     mainProgram = "apkg";
   };

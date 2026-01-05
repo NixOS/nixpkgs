@@ -1,14 +1,15 @@
-{ lib
-, bubblewrap
-, cacert
-, fetchFromGitLab
-, git
-, imagemagick
-, openmw
-, python3Packages
-, rustPlatform
-, tes3cmd
-, tr-patcher
+{
+  lib,
+  bubblewrap,
+  cacert,
+  fetchFromGitLab,
+  git,
+  imagemagick,
+  openmw,
+  python3Packages,
+  rustPlatform,
+  tes3cmd,
+  tr-patcher,
 }:
 
 let
@@ -25,7 +26,6 @@ let
     inherit src version;
     pname = "portmod-rust";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
 
     nativeBuildInputs = [
@@ -85,9 +85,12 @@ python3Packages.buildPythonApplication {
     fasteners
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ] ++ bin-programs;
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+    ]
+    ++ bin-programs;
 
   preCheck = ''
     cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
@@ -114,13 +117,13 @@ python3Packages.buildPythonApplication {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
   '';
 
-  meta = with lib; {
-    description = "mod manager for openMW based on portage";
+  meta = {
+    description = "Mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

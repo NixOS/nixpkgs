@@ -1,45 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, replaceVars
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, gettext
-, gnome-settings-daemon
-, granite7
-, gsettings-desktop-schemas
-, gtk4
-, libxml2
-, libgnomekbd
-, libxklavier
-, ibus
-, onboard
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  elementary-settings-daemon,
+  libadwaita,
+  libgee,
+  gettext,
+  gnome-settings-daemon,
+  granite7,
+  gsettings-desktop-schemas,
+  gtk4,
+  libxml2,
+  libgnomekbd,
+  libxklavier,
+  ibus,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-keyboard";
     rev = version;
-    sha256 = "sha256-/jfUftlNL+B4570ajropS7/2fqro380kZzpPwm+A9fA=";
+    sha256 = "sha256-8lgoR7nYqUJfLr9UhqnFJWw9x9l97RxgIkAwodHgrzI=";
   };
 
   patches = [
     # This will try to install packages with apt.
-    # https://github.com/elementary/switchboard-plug-keyboard/issues/324
+    # https://github.com/elementary/settings-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
+    # We no longer ship Pantheon X11 session in NixOS.
+    # https://github.com/elementary/session-settings/issues/91
+    # https://github.com/elementary/session-settings/issues/82
+    ./hide-onscreen-keyboard-settings.patch
+
     (replaceVars ./fix-paths.patch {
-      inherit onboard libgnomekbd;
+      inherit libgnomekbd;
     })
   ];
 
@@ -53,6 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-settings-daemon # io.elementary.settings-daemon.applications
     gnome-settings-daemon # media-keys
     granite7
     gsettings-desktop-schemas
@@ -68,11 +75,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Keyboard Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-keyboard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-keyboard";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

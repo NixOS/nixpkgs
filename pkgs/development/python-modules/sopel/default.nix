@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "8.0.1";
+  version = "8.0.4";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z9Tcn2lb5a7c6aVbhPjuO6trrZQwSBA1iaMiDzpe+DA=";
+    hash = "sha256-16QDzsZCquAPH3FPyBjxeXGcvSdjYLZFTXN0ASneROU=";
   };
 
   build-system = [ setuptools ];
@@ -78,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sopel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and extensible IRC bot";
     homepage = "https://sopel.chat";
-    license = licenses.efl20;
-    maintainers = with maintainers; [ mog ];
+    license = lib.licenses.efl20;
+    maintainers = with lib.maintainers; [ mog ];
     mainProgram = "sopel";
   };
 }

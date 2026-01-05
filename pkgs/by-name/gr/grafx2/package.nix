@@ -52,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = false; # Why??
 
-  makeFlags = [ "-C src" ];
+  makeFlags = [ "--directory=src" ];
   installFlags = [
-    "-C src"
+    "--directory=src"
     "PREFIX=$(out)"
   ];
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "grafx2-sdl";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

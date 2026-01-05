@@ -73,6 +73,9 @@ in
     ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
+    systemd.services.polkit.reloadTriggers = [
+      config.environment.etc."polkit-1/rules.d/10-nixos.rules".source
+    ];
     systemd.services.polkit.stopIfChanged = false;
 
     # The polkit daemon reads action/rule files

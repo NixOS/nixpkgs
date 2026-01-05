@@ -5,37 +5,34 @@
   fetchpatch,
   autoreconfHook,
   libunwind,
-  perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gperftools";
-  version = "2.15";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     owner = "gperftools";
     repo = "gperftools";
-    rev = "gperftools-${version}";
-    sha256 = "sha256-3ibr8AHzo7txX1U+9oOWA60qeeJs/OGeevv+sgBwQa0=";
+    tag = "gperftools-${finalAttrs.version}";
+    hash = "sha256-WCEuiSjNIX/KhEBWndyVhrKlWs7H60mcHoPlWd7YWC4=";
   };
 
   patches = [
     # Add the --disable-general-dynamic-tls configure option:
     # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gperftools/raw/f62d87a34f56f64fb8eb86727e34fbc2d3f5294a/f/gperftools-2.7.90-disable-generic-dynamic-tls.patch";
-      sha256 = "02falhpaqkl27hl1dib4yvmhwsddmgbw0krb46w31fyf3awb2ydv";
+      url = "https://src.fedoraproject.org/rpms/gperftools/raw/88ce8ee43a12b1a8146781a1b4d9abbd8df8af0e/f/gperftools-2.17-disable-generic-dynamic-tls.patch";
+      hash = "sha256-IOLUf9mCEA+fVSJKU94akcnXTIm7+t+S9cjBHsEDwFA=";
     })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM dynamically linked linux
-  buildInputs =
-    [ perl ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic)
-    ) libunwind;
+  buildInputs = lib.optional (
+    stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic)
+  ) libunwind;
 
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
@@ -53,11 +50,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/gperftools/gperftools/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/gperftools/gperftools";
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vcunat ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vcunat ];
   };
-}
+})

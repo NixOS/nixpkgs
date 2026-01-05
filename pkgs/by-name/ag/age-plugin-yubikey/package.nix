@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vfemYGQnn3IzG7Y6iVKHZlYN+55/+A+N/GMG3TLs1h0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-CVbRKKX2A0MrHgjkjKAXhX80db1fimFlNxusvseUnxQ=";
 
   nativeBuildInputs = [
@@ -28,18 +27,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
-  meta = with lib; {
+  meta = {
     description = "YubiKey plugin for age";
     mainProgram = "age-plugin-yubikey";
     homepage = "https://github.com/str4d/age-plugin-yubikey";
     changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kranzes
       vtuan10
       adamcstephens

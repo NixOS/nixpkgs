@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rman";
@@ -15,7 +19,10 @@ stdenv.mkDerivation rec {
       --replace gcc '${stdenv.cc.targetPrefix}cc'
   '';
 
-  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "MANDIR=$(out)/share/man"
+  ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Parse formatted man pages and man page source from most flavors of UNIX and converts them to HTML, ASCII, TkMan, DocBook, and other formats";
-    license = "artistic";
+    license = lib.licenses.artistic1;
     platforms = lib.platforms.all;
     mainProgram = "rman";
   };

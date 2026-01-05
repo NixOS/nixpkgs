@@ -1,46 +1,48 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchFromGitHub
-, SDL2
-, buildFHSEnv
-, cmake
-, copyDesktopItems
-, curl
-, freetype
-, gcc
-, geoip
-, glew
-, gmp
-, libGL
-, libjpeg
-, libogg
-, libopus
-, libpng
-, libvorbis
-, libwebp
-, lua5
-, makeDesktopItem
-, ncurses
-, nettle
-, openal
-, opusfile
-, zlib
-# to download assets
-, aria2
-, cacert
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchFromGitHub,
+  SDL2,
+  buildFHSEnv,
+  cmake,
+  copyDesktopItems,
+  curl,
+  freetype,
+  gcc,
+  geoip,
+  glew,
+  gmp,
+  libGL,
+  libjpeg,
+  libogg,
+  libopus,
+  libpng,
+  libvorbis,
+  libwebp,
+  libX11,
+  lua5,
+  makeDesktopItem,
+  ncurses,
+  nettle,
+  openal,
+  opusfile,
+  zlib,
+  # to download assets
+  aria2,
+  cacert,
 }:
 
 let
-  version = "0.55.0";
+  version = "0.55.3";
   binary-deps-version = "10";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-4ONge+GnrpV/FHKuA66o7uK7jIygBYizZl8JAUr8x/0=";
+    hash = "sha256-wOFSPPEu7AGsEcqHG7xFWzFlYZRWAIvvfTj5FLZ3HFc=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -119,18 +121,22 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-FDDhwBvmv4EvmSh5g6Cb0HYLuY9T++k7q8egxzo04J8=";
+    outputHash = "sha256-6v6NO4Ad4rMFziWAO9x22CHtm/nfOuT0ptBEVhCMqZo=";
     outputHashMode = "recursive";
 
-    nativeBuildInputs = [ aria2 cacert ];
+    nativeBuildInputs = [
+      aria2
+      cacert
+    ];
 
     buildCommand = ''
       bash $src/download-paks --cache=$(pwd) --version=${version} $out
     '';
   };
 
-# this really is the daemon game engine, the game itself is in the assets
-in stdenv.mkDerivation rec {
+  # this really is the daemon game engine, the game itself is in the assets
+in
+stdenv.mkDerivation rec {
   pname = "unvanquished";
   inherit version src binary-deps-version;
 
@@ -166,6 +172,7 @@ in stdenv.mkDerivation rec {
     libvorbis
     libjpeg
     libwebp
+    libX11
     libpng
   ];
 
@@ -184,7 +191,11 @@ in stdenv.mkDerivation rec {
       comment = "FPS/RTS Game - Aliens vs. Humans";
       icon = "unvanquished";
       exec = "unvanquished";
-      categories = [ "Game" "ActionGame" "StrategyGame" ];
+      categories = [
+        "Game"
+        "ActionGame"
+        "StrategyGame"
+      ];
       prefersNonDefaultGPU = true;
     })
     (makeDesktopItem {
@@ -206,9 +217,9 @@ in stdenv.mkDerivation rec {
     install -Dm0644 -t $out/lib/ irt_core-amd64.nexe
 
     mkdir $out/bin/
-    ${wrapBinary "daemon"     "unvanquished"}
+    ${wrapBinary "daemon" "unvanquished"}
     ${wrapBinary "daemon-tty" "unvanquished-tty"}
-    ${wrapBinary "daemonded"  "unvanquished-server"}
+    ${wrapBinary "daemonded" "unvanquished-server"}
 
     for d in ${src}/dist/icons/*; do
       install -Dm0644 -t $out/share/icons/hicolor/$(basename $d)/apps/ $d/unvanquished.png
@@ -224,12 +235,19 @@ in stdenv.mkDerivation rec {
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
-      mit gpl3Plus lib.licenses.zlib bsd3 # engine
-      cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
+      mit
+      gpl3Plus
+      lib.licenses.zlib
+      bsd3 # engine
+      cc-by-sa-25
+      cc-by-sa-30
+      cc-by-30
+      cc-by-sa-40
+      cc0 # assets
     ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode  # unvanquished-binary-deps
+      binaryNativeCode # unvanquished-binary-deps
     ];
     maintainers = with lib.maintainers; [ afontain ];
     platforms = [ "x86_64-linux" ];

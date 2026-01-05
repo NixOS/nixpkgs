@@ -19,18 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-iSvDiae+A2hUok426Lj5TMn3Q9G+vH1G0jajP48PehQ=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    pkg-config
     autoreconfHook
   ];
 
-  configureFlags =
-    [
-      "--enable-i2c"
-    ]
-    ++ lib.optionals debug [
-      "--enable-debug"
-    ];
+  configureFlags = [
+    "--enable-i2c"
+  ]
+  ++ lib.optionals debug [
+    "--enable-debug"
+  ];
   dontStrip = debug;
 
   postInstall = ''

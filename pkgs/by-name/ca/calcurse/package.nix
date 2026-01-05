@@ -1,5 +1,6 @@
 {
   lib,
+  pkg-config,
   stdenv,
   fetchurl,
   ncurses,
@@ -11,14 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
-  version = "4.8.1";
+  version = "4.8.2";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
-    hash = "sha256-2GuzcBT9abjYPMuQSsl5xrjd9Z7j28gPWidFJeTVgwo=";
+    hash = "sha256-hJuoUsfze2dyNlywxCqUzeD+de+6kTY+lqDn73l7pWU=";
   };
 
   buildInputs = [
+    pkg-config
     ncurses
     gettext
     python3
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/bin/calcurse-caldav
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Calendar and scheduling application for the command line";
     longDescription = ''
       calcurse is a calendar and scheduling application for the command line. It helps
@@ -43,8 +45,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://calcurse.org/";
     changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${version}";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

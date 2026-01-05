@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-i011oL7Xa2e0Vu9wEfTrbJilVsn4N2Qt8iAscxL8zBo=";
   };
 
-  pythonRelaxDeps = [ "readme-renderer" ];
+  pythonRelaxDeps = [ "readme_renderer" ];
 
   build-system = [ setuptools ];
 
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "rest_to_html"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
     changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ koral ];
     mainProgram = "restview";
   };
 }

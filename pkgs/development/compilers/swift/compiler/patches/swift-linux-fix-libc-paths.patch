@@ -5,15 +5,15 @@ patch it to also consider `-idirafter` and `-isystem` as added by cc-wrapper.
 
 --- a/lib/ClangImporter/ClangIncludePaths.cpp
 +++ b/lib/ClangImporter/ClangIncludePaths.cpp
-@@ -120,6 +120,7 @@ static clang::driver::Driver createClangDriver(const ASTContext &ctx) {
+@@ -142,6 +142,7 @@
  /// \return a path without dots (`../`, './').
- static llvm::Optional<Path>
- findFirstIncludeDir(const llvm::opt::InputArgList &args,
-+                    const llvm::opt::ArgList &DriverArgs,
-                     const ArrayRef<const char *> expectedFileNames) {
+ static llvm::Optional<Path> findFirstIncludeDir(
+     const llvm::opt::InputArgList &args,
++    const llvm::opt::ArgList &DriverArgs,
+     const ArrayRef<const char *> expectedFileNames,
+     const llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem> &vfs) {
    // C++ stdlib paths are added as `-internal-isystem`.
-   std::vector<std::string> includeDirs =
-@@ -128,6 +129,14 @@ findFirstIncludeDir(const llvm::opt::InputArgList &args,
+@@ -151,6 +152,14 @@
    llvm::append_range(includeDirs,
                       args.getAllArgValues(
                           clang::driver::options::OPT_internal_externc_isystem));
@@ -28,21 +28,21 @@ patch it to also consider `-idirafter` and `-isystem` as added by cc-wrapper.
  
    for (const auto &includeDir : includeDirs) {
      Path dir(includeDir);
-@@ -193,7 +202,7 @@ getGlibcFileMapping(ASTContext &ctx) {
-   // Ideally we would check that all of the headers referenced from the
+@@ -218,7 +227,7 @@
    // modulemap are present.
    Path glibcDir;
--  if (auto dir = findFirstIncludeDir(parsedIncludeArgs,
-+  if (auto dir = findFirstIncludeDir(parsedIncludeArgs, clangDriverArgs,
-                                      {"inttypes.h", "unistd.h", "stdint.h"})) {
+   if (auto dir = findFirstIncludeDir(
+-          parsedIncludeArgs, {"inttypes.h", "unistd.h", "stdint.h"}, vfs)) {
++          parsedIncludeArgs, clangDriverArgs, {"inttypes.h", "unistd.h", "stdint.h"}, vfs)) {
      glibcDir = dir.value();
    } else {
-@@ -251,7 +260,7 @@ getLibStdCxxFileMapping(ASTContext &ctx) {
+     ctx.Diags.diagnose(SourceLoc(), diag::glibc_not_found, triple.str());
+@@ -276,7 +285,7 @@
    auto parsedStdlibArgs = parseClangDriverArgs(clangDriver, stdlibArgStrings);
  
    Path cxxStdlibDir;
 -  if (auto dir = findFirstIncludeDir(parsedStdlibArgs,
 +  if (auto dir = findFirstIncludeDir(parsedStdlibArgs, clangDriverArgs,
-                                      {"cstdlib", "string", "vector"})) {
+                                      {"cstdlib", "string", "vector"}, vfs)) {
      cxxStdlibDir = dir.value();
    } else {

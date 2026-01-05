@@ -46,7 +46,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cairo
     cffi
-  ] ++ lib.optional withXcffib xcffib;
+  ]
+  ++ lib.optional withXcffib xcffib;
 
   nativeCheckInputs = [
     numpy
@@ -60,10 +61,10 @@ buildPythonPackage rec {
   # It's surfaced as a Cairo "out of memory" error in tests.
   __impureHostDeps = [ "/System/Library/Fonts" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };

@@ -30,11 +30,13 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  # Exclude tests which require network access
   disabledTests = [
+    # Exclude tests which require network access
     "testCanPostBinaryData"
     "test_content_type_override"
     "test_url_is_native_str"
+    # too narrow time comparison
+    "test_fetch_access_token"
   ];
 
   # Requires selenium and chrome
@@ -42,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_oauthlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "OAuthlib authentication support for Requests";
     homepage = "https://github.com/requests/requests-oauthlib";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ prikhi ];
+    license = with lib.licenses; [ isc ];
+    maintainers = with lib.maintainers; [ prikhi ];
   };
 }

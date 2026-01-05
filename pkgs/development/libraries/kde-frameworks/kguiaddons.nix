@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   extra-cmake-modules,
   wayland-scanner,
@@ -13,10 +15,14 @@ mkDerivation {
 
   nativeBuildInputs = [
     extra-cmake-modules
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
   buildInputs = [
     qtx11extras
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     plasma-wayland-protocols
   ];

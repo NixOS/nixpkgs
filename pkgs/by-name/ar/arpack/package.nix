@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja
-, gfortran, blas, lapack, eigen
-, useMpi ? false
-, mpi
-, mpiCheckPhaseHook
-, igraph
-, useAccel ? false #use Accelerate framework on darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  gfortran,
+  blas,
+  lapack,
+  eigen,
+  useMpi ? false,
+  mpi,
+  mpiCheckPhaseHook,
+  igraph,
+  useAccel ? false, # use Accelerate framework on darwin
 }:
 
 # MPI version can only be built with LP64 interface.
@@ -23,12 +31,22 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ninja ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    ninja
+  ];
   buildInputs = [
     eigen
-  ] ++ lib.optionals (!useAccel) (assert (blas.isILP64 == lapack.isILP64); [
-    blas lapack
-  ]) ++ lib.optional useMpi mpi;
+  ]
+  ++ lib.optionals (!useAccel) (
+    assert (blas.isILP64 == lapack.isILP64);
+    [
+      blas
+      lapack
+    ]
+  )
+  ++ lib.optional useMpi mpi;
 
   nativeCheckInputs = lib.optional useMpi mpiCheckPhaseHook;
   checkInputs =
@@ -57,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
     (lib.cmakeBool "MPI" useMpi)
     (lib.cmakeBool "TESTS" finalAttrs.finalPackage.doCheck)
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
   ];
 
@@ -71,12 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
     changelog = "https://github.com/opencollab/arpack-ng/blob/${finalAttrs.version}/CHANGES";
-    description = ''
-      A collection of Fortran77 subroutines to solve large scale eigenvalue
-      problems.
-    '';
+    description = "Collection of Fortran77 subroutines to solve large scale eigenvalue problems";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ttuegel dotlambda ];
+    maintainers = with lib.maintainers; [
+      ttuegel
+      dotlambda
+    ];
     platforms = lib.platforms.unix;
   };
 })

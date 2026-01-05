@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "graphql-python";
-    repo = pname;
+    repo = "graphql-server-core";
     rev = "v${version}";
     sha256 = "1w3biv2za2m1brwjy0z049c2m94gm1zfwxzgc6lwrsci724jv9fr";
   };
@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Core package for using GraphQL in a custom server easily";
     homepage = "https://github.com/graphql-python/graphql-server-core";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

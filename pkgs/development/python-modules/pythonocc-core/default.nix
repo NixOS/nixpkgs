@@ -4,7 +4,6 @@
   python,
   fetchFromGitHub,
   cmake,
-  Cocoa,
   fontconfig,
   freetype,
   libGL,
@@ -30,12 +29,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-0o2PQEN0/Z7FUPZEo2HxFFa+mN2bZnYI++HVu4ONpNA=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-    --replace "/usr/X11R6/lib/libGL.dylib" "${libGL}/lib/libGL.dylib" \
-    --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
-  '';
-
   nativeBuildInputs = [
     cmake
     swig
@@ -53,7 +46,7 @@ stdenv.mkDerivation rec {
     fontconfig
     numpy
     rapidjson
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   cmakeFlags = [
     "-Wno-dev"
@@ -67,12 +60,12 @@ stdenv.mkDerivation rec {
     skipBulkUpdate = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -12,25 +12,17 @@
 
 buildPythonPackage rec {
   pname = "sensorpush-api";
-  version = "2.1.1";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sstallion";
     repo = "sensorpush-api";
     tag = "v${version}";
-    hash = "sha256-Gkvd0MbySk4jdl+hJd0wFGqj2/qOkq/jThe+5b4n0XM=";
+    hash = "sha256-T/qROLlzgiRN4T8lwyXoD/8EtTqQY2+D8AXNKu5MeNE=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
-
-  pythonRemoveDeps = [
-    "aenum" # https://github.com/sstallion/sensorpush-api/pull/3
-  ];
 
   dependencies = [
     aiohttp

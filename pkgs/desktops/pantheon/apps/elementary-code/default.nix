@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  appstream,
-  desktop-file-utils,
   meson,
   ninja,
   pkg-config,
@@ -13,32 +11,33 @@
   wrapGAppsHook3,
   editorconfig-core-c,
   granite,
+  gsettings-desktop-schemas,
   gtk3,
   gtksourceview4,
   gtkspell3,
   libgee,
   libgit2-glib,
   libhandy,
-  libpeas,
-  libsoup_2_4,
+  libpeas2,
+  libsoup_3,
   vte,
   ctags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "7.4.0";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
-    rev = version;
-    sha256 = "sha256-KoRpGBYen1eOdMBHOTBMopC+mPMOkD+iYWV3JA21mKc=";
+    tag = version;
+    hash = "sha256-DZ6smq339VgR33jQm0OFD9CM8sQ0Rz7aHKL1EWFSyBM=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -50,14 +49,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     editorconfig-core-c
     granite
+    gsettings-desktop-schemas
     gtk3
     gtksourceview4
     gtkspell3
     libgee
     libgit2-glib
     libhandy
-    libpeas
-    libsoup_2_4
+    libpeas2
+    libsoup_3
+    vala # for ValaSymbolResolver provided by libvala
     vte
   ];
 
@@ -72,12 +73,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Code editor designed for elementary OS";
     homepage = "https://github.com/elementary/code";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.code";
   };
 }

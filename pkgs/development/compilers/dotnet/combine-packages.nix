@@ -26,6 +26,7 @@ mkWrapper "sdk" (
     paths = dotnetPackages;
     pathsToLink = map (x: "/share/dotnet/${x}") [
       "host"
+      "metadata"
       "packs"
       "sdk"
       "sdk-manifests"
@@ -34,17 +35,16 @@ mkWrapper "sdk" (
     ];
     ignoreCollisions = true;
     nativeBuildInputs = [ makeWrapper ];
-    postBuild =
-      ''
-        mkdir -p "$out"/share/dotnet
-        cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
-        cp -R "${cli}"/nix-support "$out"/
-        mkdir "$out"/bin
-        ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
-      ''
-      + lib.optionalString (cli ? man) ''
-        ln -s ${cli.man} $man
-      '';
+    postBuild = ''
+      mkdir -p "$out"/share/dotnet
+      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
+      cp -R "${cli}"/nix-support "$out"/
+      mkdir "$out"/bin
+      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+    ''
+    + lib.optionalString (cli ? man) ''
+      ln -s ${cli.man} $man
+    '';
     passthru = {
       pname = "dotnet";
       version = "combined";

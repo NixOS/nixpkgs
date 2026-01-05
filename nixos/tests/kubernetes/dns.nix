@@ -1,34 +1,55 @@
-{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../../.. { inherit system; },
+}:
 with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
 
-  redisPod = pkgs.writeText "redis-pod.json" (builtins.toJSON {
-    kind = "Pod";
-    apiVersion = "v1";
-    metadata.name = "redis";
-    metadata.labels.name = "redis";
-    spec.containers = [{
-      name = "redis";
-      image = "redis";
-      args = ["--bind" "0.0.0.0"];
-      imagePullPolicy = "Never";
-      ports = [{
-        name = "redis-server";
-        containerPort = 6379;
-      }];
-    }];
-  });
+  redisPod = pkgs.writeText "redis-pod.json" (
+    builtins.toJSON {
+      kind = "Pod";
+      apiVersion = "v1";
+      metadata.name = "redis";
+      metadata.labels.name = "redis";
+      spec.containers = [
+        {
+          name = "redis";
+          image = "redis";
+          args = [
+            "--bind"
+            "0.0.0.0"
+          ];
+          imagePullPolicy = "Never";
+          ports = [
+            {
+              name = "redis-server";
+              containerPort = 6379;
+            }
+          ];
+        }
+      ];
+    }
+  );
 
-  redisService = pkgs.writeText "redis-service.json" (builtins.toJSON {
-    kind = "Service";
-    apiVersion = "v1";
-    metadata.name = "redis";
-    spec = {
-      ports = [{port = 6379; targetPort = 6379;}];
-      selector = {name = "redis";};
-    };
-  });
+  redisService = pkgs.writeText "redis-service.json" (
+    builtins.toJSON {
+      kind = "Service";
+      apiVersion = "v1";
+      metadata.name = "redis";
+      spec = {
+        ports = [
+          {
+            port = 6379;
+            targetPort = 6379;
+          }
+        ];
+        selector = {
+          name = "redis";
+        };
+      };
+    }
+  );
 
   redisImage = pkgs.dockerTools.buildImage {
     name = "redis";
@@ -36,24 +57,31 @@ let
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
       pathsToLink = [ "/bin" ];
-      paths = [ pkgs.redis pkgs.bind.host ];
+      paths = [
+        pkgs.redis
+        pkgs.bind.host
+      ];
     };
-    config.Entrypoint = ["/bin/redis-server"];
+    config.Entrypoint = [ "/bin/redis-server" ];
   };
 
-  probePod = pkgs.writeText "probe-pod.json" (builtins.toJSON {
-    kind = "Pod";
-    apiVersion = "v1";
-    metadata.name = "probe";
-    metadata.labels.name = "probe";
-    spec.containers = [{
-      name = "probe";
-      image = "probe";
-      args = [ "-f" ];
-      tty = true;
-      imagePullPolicy = "Never";
-    }];
-  });
+  probePod = pkgs.writeText "probe-pod.json" (
+    builtins.toJSON {
+      kind = "Pod";
+      apiVersion = "v1";
+      metadata.name = "probe";
+      metadata.labels.name = "probe";
+      spec.containers = [
+        {
+          name = "probe";
+          image = "probe";
+          args = [ "-f" ];
+          tty = true;
+          imagePullPolicy = "Never";
+        }
+      ];
+    }
+  );
 
   probeImage = pkgs.dockerTools.buildImage {
     name = "probe";
@@ -61,18 +89,28 @@ let
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
       pathsToLink = [ "/bin" ];
-      paths = [ pkgs.bind.host pkgs.busybox ];
+      paths = [
+        pkgs.bind.host
+        pkgs.busybox
+      ];
     };
-    config.Entrypoint = ["/bin/tail"];
+    config.Entrypoint = [ "/bin/tail" ];
   };
 
-  extraConfiguration = { config, pkgs, lib, ... }: {
-    environment.systemPackages = [ pkgs.bind.host ];
-    services.dnsmasq.enable = true;
-    services.dnsmasq.settings.server = [
-      "/cluster.local/${config.services.kubernetes.addons.dns.clusterIp}#53"
-    ];
-  };
+  extraConfiguration =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      environment.systemPackages = [ pkgs.bind.host ];
+      services.dnsmasq.enable = true;
+      services.dnsmasq.settings.server = [
+        "/cluster.local/${config.services.kubernetes.addons.dns.clusterIp}#53"
+      ];
+    };
 
   base = {
     name = "dns";
@@ -153,7 +191,8 @@ let
       machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest (base // singleNodeTest);
   multinode = mkKubernetesMultiNodeTest (base // multiNodeTest);
 }

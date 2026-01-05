@@ -65,7 +65,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.59.1";
+  version = "3.64.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     tag = version;
-    hash = "sha256-WmOWqG2qPi1eP3khj+ryQZBNED1S1+WDHdkuhF2o7Lg=";
+    hash = "sha256-zbqxJ6rlxiYZWFYmdqAlu00jkMLS0aIabVqMy5NAvUk=";
   };
 
   pythonRelaxDeps = [
@@ -86,60 +86,59 @@ buildPythonPackage rec {
     substituteInPlace dvc/analytics.py \
       --replace-fail 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
+      --subst-var-by dvc "$out/bin/dvc"
   '';
 
   build-system = [ setuptools-scm ];
 
-  dependencies =
-    [
-      attrs
-      celery
-      colorama
-      configobj
-      distro
-      dpath
-      dulwich
-      dvc-data
-      dvc-http
-      dvc-render
-      dvc-studio-client
-      dvc-task
-      flatten-dict
-      flufl-lock
-      fsspec
-      funcy
-      grandalf
-      gto
-      hydra-core
-      iterative-telemetry
-      kombu
-      networkx
-      omegaconf
-      packaging
-      pathspec
-      platformdirs
-      psutil
-      pydot
-      pygtrie
-      pyparsing
-      requests
-      rich
-      ruamel-yaml
-      scmrepo
-      shortuuid
-      shtab
-      tabulate
-      tomlkit
-      tqdm
-      typing-extensions
-      voluptuous
-      zc-lockfile
-    ]
-    ++ lib.optionals enableGoogle optional-dependencies.gs
-    ++ lib.optionals enableAWS optional-dependencies.s3
-    ++ lib.optionals enableAzure optional-dependencies.azure
-    ++ lib.optionals enableSSH optional-dependencies.ssh;
+  dependencies = [
+    attrs
+    celery
+    colorama
+    configobj
+    distro
+    dpath
+    dulwich
+    dvc-data
+    dvc-http
+    dvc-render
+    dvc-studio-client
+    dvc-task
+    flatten-dict
+    flufl-lock
+    fsspec
+    funcy
+    grandalf
+    gto
+    hydra-core
+    iterative-telemetry
+    kombu
+    networkx
+    omegaconf
+    packaging
+    pathspec
+    platformdirs
+    psutil
+    pydot
+    pygtrie
+    pyparsing
+    requests
+    rich
+    ruamel-yaml
+    scmrepo
+    shortuuid
+    shtab
+    tabulate
+    tomlkit
+    tqdm
+    typing-extensions
+    voluptuous
+    zc-lockfile
+  ]
+  ++ lib.optionals enableGoogle optional-dependencies.gs
+  ++ lib.optionals enableAWS optional-dependencies.s3
+  ++ lib.optionals enableAzure optional-dependencies.azure
+  ++ lib.optionals enableSSH optional-dependencies.ssh;
 
   optional-dependencies = {
     azure = [ dvc-azure ];
@@ -163,12 +162,12 @@ buildPythonPackage rec {
     "dvc.api"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cmcdragonkai
       fab
     ];

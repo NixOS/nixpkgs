@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
+    repo = "myst-parser";
     tag = "v${version}";
     hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
   };
@@ -51,7 +51,8 @@ buildPythonPackage rec {
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
-  ] ++ markdown-it-py.optional-dependencies.linkify;
+  ]
+  ++ markdown-it-py.optional-dependencies.linkify;
 
   disabledTests = [
     # sphinx 8.2 compat
@@ -67,11 +68,11 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "docutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
     changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

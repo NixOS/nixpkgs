@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage {
   src = yabridge.src;
   sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-VcBQxKjjs9ESJrE4F1kxEp4ah3j9jiNPq/Kdz/qPvro=";
 
   patches = [
@@ -37,12 +36,12 @@ rustPlatform.buildRustPackage {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "${yabridge.src.meta.homepage}/tree/${yabridge.version}/tools/yabridgectl";
     changelog = yabridge.meta.changelog;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;
     mainProgram = "yabridgectl";
   };

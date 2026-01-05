@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aXAxx9FB/dIVxr5QkLZuIQamO7PlLwnugSDo78bAiiE=";
   };
 
+  postPatch = ''
+    substituteInPlace {,booster/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
     python3
@@ -34,11 +39,11 @@ stdenv.mkDerivation rec {
     "--no-warn-unused-cli"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cppcms.com";
     description = "High Performance C++ Web Framework";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

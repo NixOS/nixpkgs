@@ -52,24 +52,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      itstool
-      pkg-config
-      libxml2
-      wrapGAppsHook3
-      gobject-introspection
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      python3
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    itstool
+    pkg-config
+    libxml2
+    wrapGAppsHook3
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    python3
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -101,12 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
     description = "Application that let you manage Bluetooth in the GNOME destkop";
     mainProgram = "bluetooth-sendto";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 })

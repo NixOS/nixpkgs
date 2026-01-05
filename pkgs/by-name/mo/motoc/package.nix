@@ -8,22 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "motoc";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
     tag = "v${version}";
-    hash = "sha256-CAKgh9uddDhaFp2O62o1nNZ/ZWJbCR/7dMaI9V992Xk=";
+    hash = "sha256-ozC7Az7G7qGsGURJ6UaM6VZH4PEUTknYDPShtXEKmrA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-bbbo/Mkix6nUGLwplvj6m8IXOcZY5UoWc1xZnI67IlU=";
-      "openxr-0.19.0" = "sha256-kbEYoN4UvUEaZA9LJWEKx1X1r+l91GjTWs1hNXhr7cw=";
-    };
-  };
+  cargoHash = "sha256-Owv0OTbBpsd6xvadVOu3F3JAmo6SPdwzT3MOAP54nPY=";
 
   buildInputs = [
     openxr-loader

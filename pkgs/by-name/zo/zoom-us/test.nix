@@ -22,7 +22,7 @@ let
             | tee window-names
         grep -q "Zoom Workplace" window-names
       }
-      # don't let zoom eat all RAM, like it did
+      # Don't let zoom eat all RAM, like it did, cf.
       # https://github.com/NixOS/nixpkgs/issues/371488
       prlimit --{as,data}=$((4*2**30)):$((4*2**30)) zoom-us &
       for _ in {0..900} ; do
@@ -31,8 +31,8 @@ let
         fi
         sleep 1
       done
-      # if libraries are missing, the window still appears,
-      # but disappears again immediatelly; check for that too:
+      # If libraries are missing, the window still appears,
+      # but then disappears again immediately; check for that also.
       sleep 20
       is_zoom_window_present
     '';

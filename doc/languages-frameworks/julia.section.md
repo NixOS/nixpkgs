@@ -4,7 +4,7 @@
 
 Nixpkgs includes Julia as the `julia` derivation.
 You can get specific versions by looking at the other `julia*` top-level derivations available.
-For example, `julia_19` corresponds to Julia 1.9.
+For example, `julia_112` corresponds to Julia 1.12.
 We also provide the current stable version as `julia-stable`, and an LTS version as `julia-lts`.
 
 Occasionally, a Julia version has been too difficult to build from source in Nixpkgs and has been fetched prebuilt instead.
@@ -19,7 +19,7 @@ This function accepts a list of strings representing Julia package names.
 For example, you can build a Julia environment with the `Plots` package as follows.
 
 ```nix
-julia.withPackages ["Plots"]
+julia.withPackages [ "Plots" ]
 ```
 
 Arguments can be passed using `.override`.
@@ -28,7 +28,8 @@ For example:
 ```nix
 (julia.withPackages.override {
   precompile = false; # Turn off precompilation
-}) ["Plots"]
+})
+  [ "Plots" ]
 ```
 
 Here's a nice way to run a Julia environment with a shell one-liner:
@@ -74,7 +75,7 @@ nix-shell -p 'julia.withPackages ["Plots"]' --run julia
   different CPUs.
 
   Why? Julia will detect the CPU microarchitecture of the build machine and include this information in the precompiled
-  `*.ji` files. Starting in 1.10 Julia became more strict about checking the CPU target compatibility, so it may reject
+  `*.ji` files. Starting in 1.10, Julia became more strict about checking the CPU target compatibility, so it may reject
   your precompiled files if they were compiled on a different machine.
   A good option to provide wide compatibility is to set this to `"generic"`, although this may reduce performance.
   You can also set a semicolon-separated list of multiple different targets. See the Julia documentation for details.

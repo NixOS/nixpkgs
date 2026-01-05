@@ -30,7 +30,7 @@ lib.makeOverridable (
     buildCommandPath = ./build-command.sh;
 
     meta = {
-      description = "A wrapper around testers.testBuildFailure to simplify common use cases";
+      description = "Wrapper around testers.testBuildFailure to simplify common use cases";
       maintainers = [ lib.maintainers.connorbaker ];
     };
   })

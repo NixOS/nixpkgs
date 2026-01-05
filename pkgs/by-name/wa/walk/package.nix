@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-a66vA6eFzckxBpVtHaX0PBtulTBPbh7c6HY3dIZAym8=";
 
-  meta = with lib; {
+  meta = {
     description = "Terminal file manager";
     homepage = "https://github.com/antonmedv/walk";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       portothree
       surfaceflinger
     ];

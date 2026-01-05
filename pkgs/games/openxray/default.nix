@@ -54,15 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
   ];
 
-  cmakeFlags =
-    [
-      # Breaks on Darwin
-      (lib.cmakeBool "USE_LTO" (!stdenv.hostPlatform.isDarwin))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # This seemingly only gets set properly by CMake when using the XCode generator
-      (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "${stdenv.hostPlatform.darwinMinVersion}")
-    ];
+  cmakeFlags = [
+    # Breaks on Darwin
+    (lib.cmakeBool "USE_LTO" (!stdenv.hostPlatform.isDarwin))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # This seemingly only gets set properly by CMake when using the XCode generator
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "${stdenv.hostPlatform.darwinMinVersion}")
+  ];
 
   # Crashes can happen, we'd like them to be reasonably debuggable
   cmakeBuildType = "RelWithDebInfo";
@@ -81,14 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "xr_3da";
     description = "Improved version of the X-Ray Engine, the game engine used in the world-famous S.T.A.L.K.E.R. game series by GSC Game World";
     homepage = "https://github.com/OpenXRay/xray-16/";
-    license = licenses.unfree // {
+    license = lib.licenses.unfree // {
       url = "https://github.com/OpenXRay/xray-16/blob/${finalAttrs.version}/License.txt";
     };
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

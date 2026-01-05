@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GwWDH3np/YKUx7BLmKxUui2CXLYbHjivWC1av9jaccA=";
 
   # requires access to /root

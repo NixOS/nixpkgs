@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "swilson";
-    repo = pname;
+    repo = "aqualogic";
     rev = version;
     hash = "sha256-hBg02Wypd+MyqM2SUD53djhm5OMP2QAmsp8Stf+UT2c=";
   };
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aqualogic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interface with Hayward/Goldline AquaLogic/ProLogic pool controllers";
     homepage = "https://github.com/swilson/aqualogic";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

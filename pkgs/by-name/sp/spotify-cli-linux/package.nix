@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, dbus }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  dbus,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
   version = "1.9.1";
@@ -18,17 +23,20 @@ python3Packages.buildPythonApplication rec {
 
   disabled = !python3Packages.isPy3k;
   build-system = with python3Packages; [ setuptools ];
-  propagatedBuildInputs = with python3Packages; [ lyricwikia jeepney ];
+  propagatedBuildInputs = with python3Packages; [
+    lyricwikia
+    jeepney
+  ];
 
   # upstream has no code tests, but uses its "tests" for linting and formatting checks
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pwittchen.github.io/spotify-cli-linux/";
-    maintainers = [ maintainers.kmein ];
+    maintainers = [ lib.maintainers.kmein ];
     description = "Command line interface to Spotify on Linux";
     mainProgram = "spotifycli";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

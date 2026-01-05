@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.9.0";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OCGLyVUHytdWvGIaX+enekHrjZwSE4Vd6OS6Croo558=";
+    hash = "sha256-XTJ4iSzh+Sp01r+IjMhSXZ9or4Xb4zbJXRyH+49CMGk=";
   };
 
   patchPhase = ''
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evdev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides bindings to the generic input event interface in Linux";
     homepage = "https://python-evdev.readthedocs.io/";
     changelog = "https://github.com/gvalkov/python-evdev/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

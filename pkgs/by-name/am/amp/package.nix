@@ -1,56 +1,48 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  openssl,
+  pkgsBuildBuild,
+  oniguruma,
+  stdenv,
+  zlib,
   pkg-config,
-  python3,
-  xorg,
-  cmake,
-  libgit2,
-  darwin,
-  curl,
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amp";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = "amp";
-    tag = version;
-    hash = "sha256-xNadwz2agPbxvgUqrUf1+KsWTmeNh8hJIWcNwTzzM/M=";
+    tag = finalAttrs.version;
+    hash = "sha256-YK+HSWTtSVLK8n7NDiif3bBqp/dQW2UTYo3yYcZ5cIA=";
   };
 
-  cargoPatches = [ ./update_time_crate.patch ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4lYywaPTfoOHEYHy+h7HfWn+OaDdk166tQ8ZFx9XZK0=";
+  cargoHash = "sha256-6enFOmIAYOgOdoeA+pk37+BobI5AGPBxjp73Gd4C+gI=";
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3
+    # git rev-parse --short HEAD
+    (pkgsBuildBuild.writeShellScriptBin "git" "echo 0000000")
   ];
-  buildInputs =
-    [
-      openssl
-      xorg.libxcb
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        curl
-        Security
-        AppKit
-      ]
-    );
+
+  buildInputs = [
+    oniguruma
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ]);
+
+  # Needing libgit2 <=1.8.0
+  #env.LIBGIT2_NO_VENDOR = 1;
+
+  # bundled oniguruma failed on gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   nativeCheckInputs = [
+    pkg-config
     writableTmpDirAsHomeHook
   ];
 
@@ -64,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "amp";
   };
-}
+})

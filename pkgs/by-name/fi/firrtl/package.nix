@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     grep -qFe "module test" -e "endmodule" test.v
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flexible Intermediate Representation for RTL";
     mainProgram = "firrtl";
     longDescription = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       designed as a platform for writing circuit-level transformations.
     '';
     homepage = "https://www.chisel-lang.org/firrtl/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

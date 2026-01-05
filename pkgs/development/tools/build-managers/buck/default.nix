@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://buck.build/";
     description = "High-performance build tool";
     mainProgram = "buck";
-    maintainers = [ maintainers.jgertm ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.jgertm ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     # https://github.com/facebook/buck/issues/2666
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

@@ -5,38 +5,51 @@
   pkg-config,
   sqlite,
   openssl,
-  buildllvmsparse ? false,
-  buildc2xml ? false,
   libllvm,
   libxml2,
+  replaceVars,
+  llvmPackages,
+  buildllvmsparse ? false,
+  buildc2xml ? false,
 }:
 let
   version = "1.73";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smatch";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "error27";
     repo = "smatch";
-    rev = version;
-    sha256 = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
+    tag = finalAttrs.version;
+    hash = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [
-    "-Wno-incompatible-function-pointer-types"
+  patches = [
+    ./remove_const.patch
+    (
+      let
+        clang-major = lib.versions.major (lib.getVersion llvmPackages.clang-unwrapped);
+        clang-lib = lib.getLib llvmPackages.clang-unwrapped;
+      in
+      replaceVars ./fix_include_path.patch {
+        clang = "${clang-lib}/lib/clang/${clang-major}/include";
+        libc = "${lib.getDev stdenv.cc.libc}/include";
+      }
+    )
   ];
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      sqlite
-      openssl
-    ]
-    ++ lib.optionals buildllvmsparse [ libllvm ]
-    ++ lib.optionals buildc2xml [ libxml2.dev ];
+  buildInputs = [
+    sqlite
+    openssl
+  ]
+  ++ lib.optionals buildllvmsparse [ libllvm ]
+  ++ lib.optionals buildc2xml [ libxml2.dev ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -50,4 +63,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   requests,
@@ -26,10 +27,10 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "dopy" ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Digital Ocean API python wrapper";
     homepage = "https://github.com/Wiredcraft/dopy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

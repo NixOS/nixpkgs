@@ -50,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.16.0";
+  version = "2.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -59,10 +59,13 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${version}";
-    hash = "sha256-At7jYWrMcMVb2rWoQbtSAAqw1WRKLndPtn9qgmg03oI=";
+    hash = "sha256-tzAfynPyIqvWHxzLZ67r/Q5hNBKZAJhllhEVJ69L43k=";
   };
 
-  pythonRelaxDeps = [ "bokeh" ];
+  pythonRelaxDeps = [
+    "azure-kusto-data"
+    "bokeh"
+  ];
 
   build-system = [ setuptools ];
 
@@ -117,7 +120,7 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Threat Intelligence Security Tools";
     homepage = "https://github.com/microsoft/msticpy";
-    changelog = "https://github.com/microsoft/msticpy/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/msticpy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

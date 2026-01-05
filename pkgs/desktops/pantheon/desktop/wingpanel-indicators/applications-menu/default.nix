@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, replaceVars
-, meson
-, ninja
-, pkg-config
-, vala
-, granite
-, libgee
-, gettext
-, gtk3
-, json-glib
-, switchboard-with-plugs
-, wingpanel
-, zeitgeist
-, bc
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  granite,
+  libgee,
+  gettext,
+  gtk3,
+  json-glib,
+  switchboard-with-plugs,
+  wingpanel,
+  zeitgeist,
+  bc,
+  libhandy,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "applications-menu";
     rev = version;
-    sha256 = "sha256-bwQI41Znm75GFoXxSbWkY9daAJTMvUo+UHyyPmvzOUA=";
+    sha256 = "sha256-uc+enFOeYL91fFWaDY+43EJ4VomGqZQ7uZ3+dYm66SI=";
   };
 
   patches = [
@@ -53,13 +54,14 @@ stdenv.mkDerivation rec {
     switchboard-with-plugs
     wingpanel
     zeitgeist
-  ] ++
-  # applications-menu has a plugin to search switchboard plugins
-  # see https://github.com/NixOS/nixpkgs/issues/100209
-  # wingpanel's wrapper will need to pick up the fact that
-  # applications-menu needs a version of switchboard with all
-  # its plugins for search.
-  switchboard-with-plugs.buildInputs;
+  ]
+  ++
+    # applications-menu has a plugin to search switchboard plugins
+    # see https://github.com/NixOS/nixpkgs/issues/100209
+    # wingpanel's wrapper will need to pick up the fact that
+    # applications-menu needs a version of switchboard with all
+    # its plugins for search.
+    switchboard-with-plugs.buildInputs;
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
@@ -71,11 +73,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and stylish app launcher for Pantheon";
     homepage = "https://github.com/elementary/applications-menu";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

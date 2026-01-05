@@ -23,15 +23,17 @@
   file,
   wrapGAppsHook3,
   xdg-utils,
+  libevdev,
+  pulseaudio,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vice";
-  version = "3.8";
+  version = "3.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
-    sha256 = "sha256-HX3E0PK7zCqHG7lU/0pd9jBI3qnBb18em8gmD6QaEAQ=";
+    sha256 = "sha256-QCArY0VeJrh+zGPrWlIyLG+j9XyrEqzwwifPn02uw3A=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
     SDL_image
     xa
     xdg-utils
+    libevdev
+    pulseaudio
   ];
   dontDisableStatic = true;
   configureFlags = [
@@ -83,7 +87,6 @@ stdenv.mkDerivation rec {
     description = "Emulators for a variety of 8-bit Commodore computers";
     homepage = "https://vice-emu.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
   };
 }

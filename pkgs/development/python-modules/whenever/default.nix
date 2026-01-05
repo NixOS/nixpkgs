@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.7.3";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     owner = "ariebovenberg";
     repo = "whenever";
     tag = version;
-    hash = "sha256-J5FpY/vmaZ5TGQEPi+pQFz295tb02BZcCOvlX6zqM6o=";
+    hash = "sha256-b4xxh2Pva5+Qwv5DyifJohEY73wOO/eFc1dJeQSN3QY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-LUzb2cTnJIlL9USAJv8eZ56TpWuoUjYepRps6SV+mBo=";
+    hash = "sha256-2VXS6SQjYx61D8b42TjS5OJxcg4+e+T6dEsZfRA/gRk=";
   };
 
   build-system = [
@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Strict, predictable, and typed datetimes";
     homepage = "https://github.com/ariebovenberg/whenever";
-    changelog = "https://github.com/ariebovenberg/whenever/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    changelog = "https://github.com/ariebovenberg/whenever/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

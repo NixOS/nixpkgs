@@ -4,52 +4,60 @@
   apscheduler,
   azure-identity,
   azure-keyvault-secrets,
+  azure-storage-blob,
   backoff,
+  boto3,
   buildPythonPackage,
   click,
   cryptography,
-  email-validator,
   fastapi,
   fastapi-sso,
+  fastuuid,
   fetchFromGitHub,
+  google-cloud-iam,
   google-cloud-kms,
   gunicorn,
+  httpx,
   importlib-metadata,
   jinja2,
   jsonschema,
+  mcp,
   openai,
   orjson,
   poetry-core,
+  polars,
   prisma,
   pydantic,
   pyjwt,
   pynacl,
+  python,
   python-dotenv,
   python-multipart,
-  pythonOlder,
   pyyaml,
   requests,
   resend,
+  rich,
   rq,
+  soundfile,
   tiktoken,
   tokenizers,
   uvloop,
   uvicorn,
+  websockets,
   nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.63.11";
+  version = "1.80.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable";
-    hash = "sha256-j2RfuVffmWoeAAVcT579S9pU06haKEYYa7FcpMzu9uA=";
+    tag = "v${version}-stable.1";
+    hash = "sha256-W1tckXXQ9PlqTW5S4ml0X5rcPXSCioubDaSkQxHQrMY=";
   };
 
   build-system = [ poetry-core ];
@@ -57,7 +65,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
-    email-validator
+    fastuuid
+    httpx
     importlib-metadata
     jinja2
     jsonschema
@@ -72,36 +81,68 @@ buildPythonPackage rec {
   optional-dependencies = {
     proxy = [
       apscheduler
+      azure-identity
+      azure-storage-blob
       backoff
+      boto3
       cryptography
       fastapi
       fastapi-sso
       gunicorn
+      # FIXME package litellm-enterprise
+      # FIXME package litellm-proxy-extras
+      mcp
       orjson
+      polars
       pyjwt
+      pynacl
       python-multipart
       pyyaml
+      rich
       rq
+      soundfile
       uvloop
       uvicorn
+      websockets
     ];
+
     extra_proxy = [
       azure-identity
       azure-keyvault-secrets
+      google-cloud-iam
       google-cloud-kms
       prisma
-      pynacl
+      # FIXME package redisvl
       resend
     ];
   };
 
-  pythonImportsCheck = [ "litellm" ];
+  pythonImportsCheck = [
+    "litellm"
+    "litellm_enterprise"
+  ];
+
+  # Relax dependency check on openai, may not be needed in the future
+  pythonRelaxDeps = [ "openai" ];
 
   # access network
   doCheck = false;
 
-  passthru.tests = {
-    inherit (nixosTests) litellm;
+  postFixup = ''
+    # Symlink litellm_enterprise to make it discoverable
+    pushd $out/lib/python${python.pythonVersion}/site-packages
+    ln -s enterprise/litellm_enterprise litellm_enterprise
+    popd
+  '';
+
+  passthru = {
+    tests = { inherit (nixosTests) litellm; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)-stable"
+      ];
+    };
   };
 
   meta = {

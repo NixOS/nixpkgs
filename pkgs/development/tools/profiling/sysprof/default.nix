@@ -3,6 +3,7 @@
   lib,
   desktop-file-utils,
   fetchurl,
+  elfutils,
   gettext,
   glib,
   gtk4,
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "47.2";
+  version = "49.0";
 
   outputs = [
     "out"
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5LXt6f2XjsPw1aDUTQQpptIBw2K/bLRScxkDGuRixU8=";
+    hash = "sha256-/wQTljd4XIQZSIYgh6QyO5gWgNlCKWQJMhtXT8soKHg=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    elfutils
     glib
     gtk4
     json-glib
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System-wide profiler for Linux";
     homepage = "https://gitlab.gnome.org/GNOME/sysprof";
     longDescription = ''
@@ -84,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

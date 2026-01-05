@@ -16,28 +16,28 @@
   # run the compiled `generate-book` utility to prepare the files for mdbook
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  version = "1.45.0";
+in
+rustPlatform.buildRustPackage {
+  inherit version;
   pname = "just";
-  version = "1.40.0";
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals installManPages [
-      "man"
-    ]
-    ++ lib.optionals withDocumentation [ "doc" ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals installManPages [
+    "man"
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-pmuwZoBIgUsKWFTXo8HYHVxrDWPMO8cumD/UHajFS6A=";
+    hash = "sha256-D+xMPpn8JLX88eIO9zY051K81KPGBhcFvhBIwuTDymk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mQQGxtSgNuRbz/83eWru+dmtWiLSKdVH+3z88BNugQE=";
+  cargoHash = "sha256-zokI+mWyI/HmzP7GuO59usEsscl3tpeyhNT2tXmLny8=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -72,7 +72,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--package=just"
-  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
+  ]
+  ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
@@ -90,8 +91,8 @@ rustPlatform.buildRustPackage rec {
       # No linkcheck in sandbox
       echo 'optional = true' >> book/en/book.toml
       mdbook build book/en
-      mkdir -p $doc/share/doc/$name
-      mv ./book/en/build/html $doc/share/doc/$name
+      mkdir -p $doc/share/doc/$name/html
+      mv ./book/en/build/* $doc/share/doc/$name/html
     ''
     + lib.optionalString installManPages ''
       $out/bin/just --man > ./just.1
@@ -108,14 +109,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/casey/just";
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       xrelkd
       jk
+      ryan4yin
     ];
     mainProgram = "just";
   };

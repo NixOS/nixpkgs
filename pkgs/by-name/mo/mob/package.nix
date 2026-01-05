@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "mob";
-  version = "5.3.3";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
     repo = "mob";
     rev = "v${version}";
-    hash = "sha256-ibsaejhqvndeIJMCDIuTwrITtFrI+LJT8IZuAlTZE3E=";
+    hash = "sha256-OTKlasXswrZPfhdHD6tJt8z/e+BbgWa9LrKYhMbG/N4=";
   };
 
   vendorHash = null;
@@ -37,11 +37,11 @@ buildGoModule rec {
       --set MOB_VOICE_COMMAND "${lib.getBin espeak-ng}/bin/espeak"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for smooth git handover";
     mainProgram = "mob";
     homepage = "https://github.com/remotemobprogramming/mob";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ericdallo ];
   };
 }

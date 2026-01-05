@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  crystal,
+  crystal_1_16,
   fetchFromGitHub,
   librsvg,
   pkg-config,
@@ -20,11 +20,14 @@
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
+  # Broken versions:
+  #   * 20250517 (`Missing hash key: "videoDetails" (KeyError)`)
   versions ? lib.importJSON ./versions.json,
 }:
 let
   # normally video.js is downloaded at build time
   videojs = callPackage ./videojs.nix { inherit versions; };
+  crystal = crystal_1_16;
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
@@ -137,7 +140,6 @@ crystal.buildCrystalPackage rec {
       _999eagle
       GaetanLepage
       sbruder
-      pbsds
     ];
   };
 }

@@ -5,23 +5,23 @@
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_8,
+  gradle_9,
   which,
   copyDesktopItems,
 }:
 
 let
   pname = "freeplane";
-  version = "1.12.8";
+  version = "1.12.14";
 
   jdk = jdk17;
-  gradle = gradle_8;
+  gradle = gradle_9;
 
   src = fetchFromGitHub {
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-yzjzaobXuQH8CHz183ditL2LsCXU5xLh4+3El4Ffu20=";
+    hash = "sha256-hoQFtxJ5FghvSKSOzcf1Yt8H948Ij/r+MKifvnkUjvA=";
   };
 
 in
@@ -40,7 +40,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk}" "-x" "test" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk}"
+    "-x"
+    "test"
+  ];
 
   # share/freeplane/core/org.freeplane.core/META-INF doesn't
   # always get generated with parallel building enabled
@@ -88,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';

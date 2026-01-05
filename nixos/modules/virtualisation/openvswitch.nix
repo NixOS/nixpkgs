@@ -48,7 +48,7 @@ in
         name = "vswitch.db";
         dontUnpack = true;
         buildPhase = "true";
-        buildInputs = with pkgs; [
+        buildInputs = [
           cfg.package
         ];
         installPhase = "mkdir -p $out";

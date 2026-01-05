@@ -64,15 +64,15 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) minidlna; };
 
-  meta = with lib; {
+  meta = {
     description = "Media server software";
     longDescription = ''
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully
       compliant with DLNA/UPnP-AV clients.
     '';
     homepage = "https://sourceforge.net/projects/minidlna/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "minidlnad";
   };
 }

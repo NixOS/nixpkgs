@@ -2,21 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "nine";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8a96b6326341637d25ca9c257c1d2af4033c957946438d9d37bf6eb798d3bbe";
+    sha256 = "sha256-NSp9/hGVO39NEoqEeuAe50sdnfyVL4Lzyx8dvUHmbKk=";
   };
 
-  meta = with lib; {
-    description = "Let's write Python 3 right now!";
+  build-system = [ poetry-core ];
+
+  meta = {
+    description = "Let's write Python 3 right now";
     homepage = "https://github.com/nandoflorestan/nine";
-    license = licenses.free;
+    license = lib.licenses.free;
   };
 }

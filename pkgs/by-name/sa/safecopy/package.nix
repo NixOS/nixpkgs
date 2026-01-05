@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.bluescreen303 ];
     mainProgram = "safecopy";
   };
 }

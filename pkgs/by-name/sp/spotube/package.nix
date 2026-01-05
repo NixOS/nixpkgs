@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spotube";
-  version = "4.0.0";
+  version = "5.1.0";
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libappindicator
     libnotify
     libsoup_3
-    mpv-unwrapped
     webkitgtk_4_1
   ];
 
@@ -54,58 +53,53 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out
-      cp -r usr/* $out
-    ''}
-
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r Spotube.app $out/Applications
-      makeBinaryWrapper $out/Applications/Spotube.app/Contents/MacOS/Spotube $out/bin/spotube
-    ''}
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out
+    cp -r usr/* $out
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r Spotube.app $out/Applications
+    makeBinaryWrapper $out/Applications/Spotube.app/Contents/MacOS/Spotube $out/bin/spotube
+  ''
+  + ''
     runHook postInstall
-  '';
-
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf $out/share/spotube/lib/libmedia_kit_native_event_loop.so \
-        --replace-needed libmpv.so.1 libmpv.so
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper $out/share/spotube/spotube $out/bin/spotube \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix LD_LIBRARY_PATH : $out/share/spotube/lib:${lib.makeLibraryPath [ mpv-unwrapped ]} \
-        --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : $out/share/spotube/lib:${lib.makeLibraryPath [ mpv-unwrapped ]} \
+      --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   passthru.sources =
     let
       fetchArtifact =
-        { filename, hash }:
+        { suffix, hash }:
         fetchurl {
-          url = "https://github.com/KRTirtho/spotube/releases/download/v${finalAttrs.version}/${filename}";
+          name = "Spotube-${finalAttrs.version}-${suffix}";
+          url = "https://github.com/KRTirtho/spotube/releases/download/v${finalAttrs.version}/Spotube-${suffix}";
           inherit hash;
         };
     in
     {
       "aarch64-linux" = fetchArtifact {
-        filename = "Spotube-linux-aarch64.deb";
-        hash = "sha256-q+0ah6C83zVdrWWMmaBvZebRQP0Ie83Ewp7hjnp2NPw=";
+        suffix = "linux-aarch64.deb";
+        hash = "sha256-b+4IeZNWgU5psqDN4F1VDvF6nSf5B7i9XG1GdOTswYU=";
       };
       "x86_64-linux" = fetchArtifact {
-        filename = "Spotube-linux-x86_64.deb";
-        hash = "sha256-pk+xi7y0Qilmzk70T4u747zzFn4urZ6Kwuiqq+/q8uM=";
+        suffix = "linux-x86_64.deb";
+        hash = "sha256-tCuOhThuyIcjJJyIpbpK+3eTCfrQMsIiNt3jZxYL5pU=";
       };
       "x86_64-darwin" = fetchArtifact {
-        filename = "Spotube-macos-universal.dmg";
-        hash = "sha256-ielRdH+D1QdrKH4OxQFdw6rpzURBs/dRf/synS/Vrdk=";
+        suffix = "macos-universal.dmg";
+        hash = "sha256-OqFlyv9sR7yG5GqkZjfFb0xMzDeRNNzJOBap7Pa2etw=";
       };
       "aarch64-darwin" = fetchArtifact {
-        filename = "Spotube-macos-universal.dmg";
-        hash = "sha256-ielRdH+D1QdrKH4OxQFdw6rpzURBs/dRf/synS/Vrdk=";
+        suffix = "macos-universal.dmg";
+        hash = "sha256-OqFlyv9sR7yG5GqkZjfFb0xMzDeRNNzJOBap7Pa2etw=";
       };
     };
 

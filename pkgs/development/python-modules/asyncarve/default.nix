@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncarve" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Arve library";
     homepage = "https://github.com/arvetech/asyncarve";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ pyrox0 ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }

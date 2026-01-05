@@ -216,7 +216,7 @@ in
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo ${config.security.pki.caBundle}
         ${pkgs.jre}/bin/java ${lib.concatStringsSep " " cfg.startupOptions} \
                         ${lib.concatStringsSep " " cfg.extraOptions} \
-                              -jar ${pkgs.gocd-agent}/go-agent/agent-bootstrapper.jar \
+                              -jar ${pkgs.gocd-agent}/go-agent/lib/agent-bootstrapper.jar \
                               -serverUrl ${cfg.goServer}
       '';
 

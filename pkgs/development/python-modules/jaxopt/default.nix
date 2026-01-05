@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -24,31 +23,15 @@
 
 buildPythonPackage rec {
   pname = "jaxopt";
-  version = "0.8.3";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
     tag = "jaxopt-v${version}";
-    hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
+    hash = "sha256-vPXrs8J81O+27w9P/fEFr7w4xClKb8T0IASD+iNhztQ=";
   };
-
-  patches = [
-    # fix failing tests from scipy 1.12 update
-    # https://github.com/google/jaxopt/pull/574
-    (fetchpatch {
-      name = "scipy-1.12-fix-tests.patch";
-      url = "https://github.com/google/jaxopt/commit/48b09dc4cc93b6bc7e6764ed5d333f9b57f3493b.patch";
-      hash = "sha256-v+617W7AhxA1Dzz+DBtljA4HHl89bRTuGi1QfatobNY=";
-    })
-    # fix invalid string escape sequences
-    (fetchpatch {
-      name = "fix-escape-sequences.patch";
-      url = "https://github.com/google/jaxopt/commit/f5bb530f5f000d0739c9b26eee2d32211eb99f40.patch";
-      hash = "sha256-E0ZXIfzWxKHuiBn4lAWf7AjNtll7OJU/NGZm6PTmhzo=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  ayatana-indicator-datetime,
   libsForQt5,
 }:
 
@@ -41,6 +42,7 @@ let
       deviceinfo = callPackage ./development/deviceinfo { };
       geonames = callPackage ./development/geonames { };
       gmenuharness = callPackage ./development/gmenuharness { };
+      gsettings-qt = callPackage ./development/gsettings-qt { };
       libusermetrics = callPackage ./development/libusermetrics { };
       lomiri-api = callPackage ./development/lomiri-api { };
       lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
@@ -63,6 +65,7 @@ let
       hfd-service = callPackage ./services/hfd-service { };
       lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
+      lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };

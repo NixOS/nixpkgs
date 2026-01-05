@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lyra";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "bfgroup";
     repo = "lyra";
     rev = version;
-    sha256 = "sha256-tS2SPLiKaL8C35AmOXyJPstFUfynkE/A53rurqiySbI=";
+    sha256 = "sha256-X8wJwSfOo7v2SKYrKJ4RhpEmOdEkS8lPHIqCxP46VF4=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     cp -R $src/include/* $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bfgroup/Lyra";
     description = "Simple to use, composable, command line parser for C++ 11 and beyond";
-    platforms = platforms.unix;
-    license = licenses.boost;
-    maintainers = with maintainers; [ davidtwco ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.boost;
+    maintainers = [ ];
   };
 }

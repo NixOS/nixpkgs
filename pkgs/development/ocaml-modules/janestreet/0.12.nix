@@ -140,7 +140,7 @@ with self;
   ppx_hash = janePackage {
     pname = "ppx_hash";
     hash = "1dfsfvhiyp1mnf24mr93svpdn432kla0y7x631lssacxxp2sadbg";
-    meta.description = "A ppx rewriter that generates hash functions from type expressions and definitions";
+    meta.description = "PPX rewriter that generates hash functions from type expressions and definitions";
     propagatedBuildInputs = [
       ppx_compare
       ppx_sexp_conv
@@ -178,7 +178,7 @@ with self;
   ppx_sexp_message = janePackage {
     pname = "ppx_sexp_message";
     hash = "0yskd6v48jc6wa0nhg685kylh1n9qb6b7d1wglr9wnhl9sw990mc";
-    meta.description = "A ppx rewriter for easy construction of s-expressions";
+    meta.description = "PPX rewriter for easy construction of s-expressions";
     propagatedBuildInputs = [
       ppx_here
       ppx_sexp_conv
@@ -227,7 +227,7 @@ with self;
   bin_prot = janePackage {
     pname = "bin_prot";
     hash = "0hh6s7g9s004z35hsr8z6nw5phlcvcd6g2q3bj4f0s1s0anlsswm";
-    meta.description = "A binary protocol generator";
+    meta.description = "Binary protocol generator";
     propagatedBuildInputs = [
       ppx_compare
       ppx_custom_printf
@@ -309,14 +309,14 @@ with self;
   ppx_pipebang = janePackage {
     pname = "ppx_pipebang";
     hash = "1p4pdpl8h2bblbhpn5nk17ri4rxpz0aih0gffg3cl1186irkj0xj";
-    meta.description = "A ppx rewriter that inlines reverse application operators `|>` and `|!`";
+    meta.description = "PPX rewriter that inlines reverse application operators `|>` and `|!`";
     propagatedBuildInputs = [ ppxlib ];
   };
 
   ppx_sexp_value = janePackage {
     pname = "ppx_sexp_value";
     hash = "1mg81834a6dx1x7x9zb9wc58438cabjjw08yhkx6i386hxfy891p";
-    meta.description = "A ppx rewriter that simplifies building s-expressions from ocaml values";
+    meta.description = "PPX rewriter that simplifies building s-expressions from ocaml values";
     propagatedBuildInputs = [
       ppx_here
       ppx_sexp_conv

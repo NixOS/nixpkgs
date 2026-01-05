@@ -6,33 +6,35 @@
   nix-update-script,
   pkg-config,
   openssl,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bt0WCmnk/DAEuQeEvBe5Vdk/AxpfRAafPiEJ7v8HK8Y=";
+    hash = "sha256-lbdyE/k28fJzrOQEKDL8ZLnm6tNcAM4tsfHpcGlJB9s=";
   };
 
-  # remove if updating to rust 1.85
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]'\
-      --replace-fail 'rust-version = "1.85.0"' ""
-  '';
+  cargoHash = "sha256-smoUGJSMmRKdnUz4L+LvPOH/A6CHVmkiHxdyesu+BTw=";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BxJmoJbnGfsA+YCvzUvgnkoHl/ClrwHoE3NjlctjCxA=";
-
-  env.RUSTC_BOOTSTRAP = 1;
+  buildNoDefaultFeatures = true;
+  # Would be cleaner with an "--all-features" option
+  buildFeatures = [ "full" ];
 
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+    # When invoked in postInstall, alistral tries to write logfiles to its config dir on invocation, and fails if it can't find a writable one.
+    # The config dir falls back to a directory relative to $HOME on both Darwin and Linux, so setting a writable $HOME is enough.
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -44,12 +46,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd alistral \
+      --bash <($out/bin/alistral --generate bash) \
+      --fish <($out/bin/alistral --generate fish) \
+      --zsh <($out/bin/alistral --generate zsh)
+  '';
+
   meta = {
     homepage = "https://rustynova016.github.io/Alistral/";
     changelog = "https://github.com/RustyNova016/Alistral/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Power tools for Listenbrainz";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [
+      jopejoe1
+      RustyNova
+    ];
     mainProgram = "alistral";
   };
 })

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
+    repo = "datasette-template-sql";
     rev = version;
     hash = "sha256-VmdIEDk3iCBFrTPMm6ud00Z5CWqO0Wk707IQ4oVx5ak=";
   };
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasette_template_sql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Datasette plugin for executing SQL queries from templates";
     homepage = "https://datasette.io/plugins/datasette-template-sql";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ MostAwesomeDude ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };
 }

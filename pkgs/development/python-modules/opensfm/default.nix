@@ -9,6 +9,7 @@
   suitesparse,
   metis,
   eigen,
+  setuptools,
   pkg-config,
   pybind11,
   numpy,
@@ -27,6 +28,7 @@
   joblib,
   repoze-lru,
   xmltodict,
+  distutils,
   cloudpickle,
   scipy,
   sphinx,
@@ -34,13 +36,10 @@
   fpdf,
 }:
 
-let
-  ceresSplit = (builtins.length ceres-solver.outputs) > 1;
-  ceres' = if ceresSplit then ceres-solver.dev else ceres-solver;
-in
 buildPythonPackage rec {
   pname = "opensfm";
   version = "unstable-2023-12-09";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";
@@ -48,13 +47,19 @@ buildPythonPackage rec {
     rev = "7f170d0dc352340295ff480378e3ac37d0179f8e";
     sha256 = "sha256-l/HTVenC+L+GpMNnDgnSGZ7+Qd2j8b8cuTs3SmORqrg=";
   };
+
   patches = [
     ./0002-cmake-find-system-distributed-gtest.patch
     ./0003-cmake-use-system-pybind11.patch
     ./0004-pybind_utils.h-conflicts-with-nixpkgs-pybind.patch
+    ./0005-fix-numpy-2-test-failures.patch # not upstreamed due to cla, but you're free upstream it -@pbsds
     ./fix-scripts.patch
   ];
+
   postPatch = ''
+    substituteInPlace opensfm/src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+
     rm opensfm/src/cmake/FindGlog.cmake
     rm opensfm/src/cmake/FindGflags.cmake
 
@@ -64,16 +69,22 @@ buildPythonPackage rec {
     echo 'feature_type: SIFT' >> data/berlin/config.yaml
     echo 'feature_type: HAHOG' >> data/lund/config.yaml
 
+    # make opensfm correctly import glog headers
+    export CXXFLAGS=-DGLOG_USE_GLOG_EXPORT
+
     sed -i -e 's/^.*BuildDoc.*$//' setup.py
   '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     sphinx
   ];
+
   buildInputs = [
-    ceres'
+    ceres-solver
     suitesparse
     metis
     eigen
@@ -83,7 +94,8 @@ buildPythonPackage rec {
     glog
     pybind11
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
     scipy
     pyyaml
@@ -101,7 +113,11 @@ buildPythonPackage rec {
     xmltodict
     cloudpickle
   ];
-  nativeCheckInputs = [ pytestCheckHook ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    distutils
+  ];
 
   dontUseCmakeBuildDir = true;
   cmakeFlags = [
@@ -109,20 +125,23 @@ buildPythonPackage rec {
     "-Sopensfm/src"
   ];
 
-  disabledTests =
-    [
-      "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_reconstruction_incremental"
-      "test_reconstruction_triangulation"
-    ];
+  disabledTests = [
+    "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
+    "test_match_candidates_from_metadata_bow" # flaky
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_reconstruction_incremental"
+    "test_reconstruction_triangulation"
+  ];
 
   pythonImportsCheck = [ "opensfm" ];
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = [ lib.maintainers.SomeoneSerge ];
+    maintainers = [
+      lib.maintainers.pbsds
+      lib.maintainers.SomeoneSerge
+    ];
     license = lib.licenses.bsd2;
     changelog = "https://github.com/mapillary/OpenSfM/blob/${src.rev}/CHANGELOG.md";
     description = "Open source Structure-from-Motion pipeline from Mapillary";

@@ -6,7 +6,7 @@
   isPy27,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyxl3";
   version = "1.4";
   format = "setuptools";
@@ -14,17 +14,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gvanrossum";
-    repo = pname;
+    repo = "pyxl3";
     rev = "e6588c12caee49c43faf6aa260f04d7e971f6aa8";
     hash = "sha256-8nKQgwLXPVgPxNRF4CryKJb7+llDsZHis5VctxqpIRo=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 port of pyxl for writing structured and reusable inline HTML";
     homepage = "https://github.com/gvanrossum/pyxl3";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

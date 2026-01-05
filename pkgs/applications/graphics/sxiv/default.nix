@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "muennich";
-    repo = pname;
+    repo = "sxiv";
     rev = "v${version}";
     sha256 = "0xaawlfdy7b277m38mgg4423kd7p1ffn0dq4hciqs6ivbb3q9c4f";
   };
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     install -Dt $out/share/applications sxiv.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple X Image Viewer";
     homepage = "https://github.com/muennich/sxiv";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ h7x4 ];
+    maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "sxiv";
   };
 }

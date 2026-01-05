@@ -1,44 +1,52 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
-  qtbase,
-  qtx11extras,
+  fetchpatch,
+  qt6,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreshot";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XPECvwZkJIoN/r5oFWJpgl/WASpybgLjCK/F0XVMHyU=";
+    repo = "coreshot";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5KGaMCL9BCGZwK7HQz87B1qrNvx5SQyMooZw4MwMdCc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-building-with-Qt-610";
+      url = "https://gitlab.com/cubocore/coreapps/coreshot/-/commit/a01c943bec46eea261f545957dbafafc3ea370bb.patch";
+      hash = "sha256-SD4bYM8nBnGPO8iS8htFZZFUdimbLmpqxgWPioLMjsM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
+    qt6.qtbase
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screen capture utility from the C Suite";
     mainProgram = "coreshot";
     homepage = "https://gitlab.com/cubocore/coreapps/coreshot";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    hash = "sha256-T17XkR6AUvOerg9FN4SxTfoMavVXnxujtrA4p4GEnFE=";
+    hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
   postPatch = ''
@@ -52,15 +52,14 @@ stdenv.mkDerivation rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
-      bluescreen303
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "duperemove";
   };
 }

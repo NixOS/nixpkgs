@@ -4,7 +4,7 @@
   buildPythonPackage,
   sphinx,
   pytest-cov-stub,
-  pytest,
+  pytestCheckHook,
   mako,
   numpy,
   funcsigs,
@@ -27,28 +27,23 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     sphinx
     pytest-cov-stub
-    pytest
+    pytestCheckHook
   ];
 
-  propagatedBuildInputs =
-    [
-      mako
-      numpy
-      funcsigs
-    ]
-    ++ lib.optional withCuda pycuda
-    ++ lib.optional withOpenCL pyopencl;
-
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [
+    mako
+    numpy
+    funcsigs
+  ]
+  ++ lib.optional withCuda pycuda
+  ++ lib.optional withOpenCL pyopencl;
 
   # Requires device
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "GPGPU algorithms for PyCUDA and PyOpenCL";
     homepage = "https://github.com/fjarri/reikna";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

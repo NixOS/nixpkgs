@@ -1,32 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, cmake
-, deltachat-desktop
-, deltachat-repl
-, deltachat-rpc-server
-, openssl
-, perl
-, pkg-config
-, python3
-, rustPlatform
-, sqlcipher
-, sqlite
-, fixDarwinDylibNames
-, darwin
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  cmake,
+  deltachat-desktop,
+  deltachat-repl,
+  deltachat-rpc-server,
+  openssl,
+  perl,
+  pkg-config,
+  python3,
+  rustPlatform,
+  sqlcipher,
+  sqlite,
+  fixDarwinDylibNames,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.157.3";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
     tag = "v${version}";
-    hash = "sha256-J9Tm35xuyIbHH2HGcctENYbArIlRWe7xzKyF3hGbwNA=";
+    hash = "sha256-tcH9F+FKXfFozk6PcbEE37HFIojhDR672bfcPXfKnCs=";
   };
 
   patches = [
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    pname = "deltachat-core-rust";
+    pname = "chatmail-core";
     inherit version src;
-    hash = "sha256-BX0TpyG2OJkD5BUIPCij5/g3aRf6FuF9E8y9GM12o7U=";
+    hash = "sha256-p1E7K1EiEftpNSyE41LpMYmkZwjeasZzrXbYxKK/IgI=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     pkg-config
     rustPlatform.cargoSetupHook
     cargo
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -53,10 +54,8 @@ stdenv.mkDerivation rec {
     openssl
     sqlcipher
     sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -84,12 +83,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/chatmail/core";
     changelog = "https://github.com/chatmail/core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
   };
 }

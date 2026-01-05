@@ -47,31 +47,30 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "lib"
-  ] ++ lib.optional withDevdoc "devdoc";
+  ]
+  ++ lib.optional withDevdoc "devdoc";
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      docbook_xsl
-      libtool
-      libxslt
-      pkg-config
+  nativeBuildInputs = [
+    autoconf
+    automake
+    docbook_xsl
+    libtool
+    libxslt
+    pkg-config
 
-      docbook_xml_dtd_42 # for the man pages
-    ]
-    ++ lib.optionals withDevdoc [
-      docbook_xml_dtd_43
-      gtk-doc
-    ];
-  buildInputs =
-    [
-      xz
-      zstd
-    ]
-    # gtk-doc is looked for with pkg-config
-    ++ lib.optionals withDevdoc [ gtk-doc ];
+    docbook_xml_dtd_42 # for the man pages
+  ]
+  ++ lib.optionals withDevdoc [
+    docbook_xml_dtd_43
+    gtk-doc
+  ];
+  buildInputs = [
+    xz
+    zstd
+  ]
+  # gtk-doc is looked for with pkg-config
+  ++ lib.optionals withDevdoc [ gtk-doc ];
 
   preConfigure = ''
     ./autogen.sh
@@ -83,7 +82,8 @@ stdenv.mkDerivation rec {
     "--with-zstd"
     "--with-modulesdirs=${modulesDirs}"
     (lib.enableFeature withDevdoc "gtk-doc")
-  ] ++ lib.optional withStatic "--enable-static";
+  ]
+  ++ lib.optional withStatic "--enable-static";
 
   patches = [
     ./module-dir.patch
@@ -92,7 +92,8 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
       hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
     })
-  ] ++ lib.optional withStatic ./enable-static.patch;
+  ]
+  ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do
@@ -109,7 +110,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for loading and managing Linux kernel modules";
     longDescription = ''
       kmod is a set of tools to handle common tasks with Linux kernel modules
@@ -120,11 +121,11 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
     downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ]; # GPLv2+ for tools
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

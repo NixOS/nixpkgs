@@ -8,6 +8,7 @@
   mygui,
   ois,
   SDL2,
+  libX11,
   libvorbis,
   pkg-config,
   makeWrapper,
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     stuntrally_mygui
     ois
     SDL2
+    libX11
     libvorbis
     enet
     libXcursor
@@ -81,11 +83,11 @@ stdenv.mkDerivation rec {
     tinyxml-2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = "http://stuntrally.tuxfamily.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

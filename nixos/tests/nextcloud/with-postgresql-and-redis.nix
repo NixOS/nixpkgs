@@ -11,12 +11,7 @@ runTest (
   { config, lib, ... }:
   {
     inherit name;
-    meta = with lib.maintainers; {
-      maintainers = [
-        eqyiel
-        ma27
-      ];
-    };
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 
@@ -44,7 +39,7 @@ runTest (
             };
             extraAppsEnable = true;
             extraApps = with config.services.nextcloud.package.packages.apps; {
-              inherit notify_push notes;
+              inherit notes;
             };
             settings.trusted_proxies = [ "::1" ];
           };

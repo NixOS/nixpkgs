@@ -14,7 +14,6 @@
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_0,
 }:
 
 let
@@ -24,7 +23,7 @@ let
 
   src = fetchFromGitHub {
     owner = "kimlimjustin";
-    repo = pname;
+    repo = "xplorer";
     rev = "8d69a281cbceda277958796cb6b77669fb062ee3";
     sha256 = "sha256-VFRdkSfe2mERaYYtZlg9dvH1loGWVBGwiTRj4AoNEAo=";
   };
@@ -54,20 +53,11 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-window-state-0.1.0" = "sha256-DkKiwBwc9jrxMaKWOyvl9nsBJW0jBe8qjtqIdKJmsnc=";
-      "window-shadows-0.2.0" = "sha256-e1afzVjVUHtckMNQjcbtEQM0md+wPWj0YecbFvD0LKE=";
-      "window-vibrancy-0.3.0" = "sha256-0psa9ZtdI0T6sC1RJ4GeI3w01FdO2Zjypuk9idI5pBY=";
-    };
-  };
+  cargoHash = "sha256-D7qgmxDYQEgOkEYKDSLA875bXeTKDvAntF7kB4esn24=";
 
   # copy the frontend static resources to final build directory
   # Also modify tauri.conf.json so that it expects the resources at the new location
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-
     mkdir -p frontend-build
     cp -R ${frontend-build}/src frontend-build
 
@@ -84,7 +74,7 @@ rustPlatform.buildRustPackage {
     freetype
     libsoup_2_4
     gtk3
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   checkFlags = [
@@ -96,11 +86,13 @@ rustPlatform.buildRustPackage {
     mv $out/bin/app $out/bin/xplorer
   '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "xplorer";
   };
 }

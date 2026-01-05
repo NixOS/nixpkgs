@@ -5,6 +5,7 @@
   extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
+  installShellFiles,
   llvmPackages,
   nix-update-script,
   openssl,
@@ -17,27 +18,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.4.5-canary.4";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tQ/Xocpk48eRhCyfRZx2rkAVqNn115rO3MRYF5fC2nI=";
+    hash = "sha256-NQjN3u+xTQkU9cenBTHRwGyMsy8Sm1xbHckaq/DYHJk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-pngzlmkntTCv5/aw1UNbDGNQOVtMgFZHc2woj6R0vys=";
+  cargoHash = "sha256-ear1NoKgOOiC0wvbzrhxh0t23m0Bl5AtcKi0DmVw3f8=";
 
-  nativeBuildInputs =
-    [
-      capnproto
-      extra-cmake-modules
-      pkg-config
-      protobuf
-    ]
-    # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
+  nativeBuildInputs = [
+    capnproto
+    extra-cmake-modules
+    installShellFiles
+    pkg-config
+    protobuf
+  ]
+  # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
+  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs = [
     fontconfig
@@ -53,6 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turbo \
+      --bash <($out/bin/turbo completion bash) \
+      --fish <($out/bin/turbo completion fish) \
+      --zsh <($out/bin/turbo completion zsh)
+  '';
 
   env = {
     # nightly features are used
@@ -74,7 +81,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dlip
       getchoo
     ];
     mainProgram = "turbo";

@@ -3,17 +3,16 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_relusage";
   version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "adept";
     repo = "pg_relusage";
-    tag = "${version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-8hJNjQ9MaBk3J9a73l+yQMwMW/F2N8vr5PO2o+5GvYs=";
   };
 
@@ -24,4 +23,4 @@ postgresqlBuildExtension rec {
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };
-}
+})

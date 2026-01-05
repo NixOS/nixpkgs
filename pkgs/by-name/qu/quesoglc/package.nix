@@ -10,13 +10,15 @@
   fribidi,
   libX11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quesoglc";
   version = "0.7.2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0cf9ljdzii5d4i2m23gdmf3kn521ljcldzq69lsdywjid3pg5zjl";
+    url = "mirror://sourceforge/quesoglc/quesoglc-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-VP7y7mhRct80TQb/RpmkQRQ7h6vtDVFFJK3E+JukyTE=";
   };
+
   buildInputs = [
     libGLU
     libGL
@@ -26,8 +28,18 @@ stdenv.mkDerivation rec {
     fribidi
     libX11
   ];
+
+  # required for cross builds
+  configureFlags = [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   # FIXME: Configure fails to use system glew.
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the OpenGL Character Renderer";
     longDescription = ''
       QuesoGLC is a free (as in free speech) implementation of the OpenGL
@@ -36,8 +48,7 @@ stdenv.mkDerivation rec {
       platform that supports both FreeType and the OpenGL API.
     '';
     homepage = "https://quesoglc.sourceforge.net/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

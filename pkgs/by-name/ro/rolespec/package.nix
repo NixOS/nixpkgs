@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nickjj/rolespec";
     description = "Test library for testing Ansible roles";
     mainProgram = "rolespec";
@@ -45,8 +45,8 @@ stdenv.mkDerivation {
       Travis-CI.
     '';
     downloadPage = "https://github.com/nickjj/rolespec";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.dochang ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.dochang ];
+    platforms = lib.platforms.unix;
   };
 }

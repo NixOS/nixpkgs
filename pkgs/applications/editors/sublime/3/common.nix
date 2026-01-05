@@ -42,7 +42,7 @@ let
   ];
   downloadUrl = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
-  versionFile = builtins.toString ./packages.nix;
+  versionFile = toString ./packages.nix;
   archSha256 = if stdenv.hostPlatform.system == "i686-linux" then x32sha256 else x64sha256;
   arch = if stdenv.hostPlatform.system == "i686-linux" then "x32" else "x64";
 
@@ -140,7 +140,7 @@ let
     '';
   };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation {
   inherit pname;
   version = buildVersion;
 
@@ -150,37 +150,36 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase =
-    ''
-      mkdir -p "$out/bin"
-      makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-    ''
-    + builtins.concatStringsSep "" (
-      map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
-    )
-    + ''
-      mkdir -p "$out/share/applications"
-      substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-      for directory in ''$${primaryBinary}/Icon/*; do
-        size=$(basename $directory)
-        mkdir -p "$out/share/icons/hicolor/$size/apps"
-        ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-      done
-    '';
+  installPhase = ''
+    mkdir -p "$out/bin"
+    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+  ''
+  + builtins.concatStringsSep "" (
+    map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+  )
+  + ''
+    mkdir -p "$out/share/applications"
+    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    for directory in ''$${primaryBinary}/Icon/*; do
+      size=$(basename $directory)
+      mkdir -p "$out/share/icons/hicolor/$size/apps"
+      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+    done
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       wmertens
       demin-dmitriy
       zimbatm
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
   };
-})
+}

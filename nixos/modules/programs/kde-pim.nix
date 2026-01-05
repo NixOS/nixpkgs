@@ -33,8 +33,14 @@ in
       ++ lib.optionals cfg.kontact [
         kontact
       ]
-      ++ lib.optionals cfg.merkuro [
-        merkuro
-      ];
+      ++ lib.optionals cfg.merkuro (
+        [
+          merkuro
+        ]
+        # Only needed when using the Merkuro Contacts widget in Plasma.
+        ++ lib.optionals config.services.desktopManager.plasma6.enable [
+          kcontacts
+        ]
+      );
   };
 }

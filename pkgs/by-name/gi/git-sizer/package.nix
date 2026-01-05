@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "github";
-    repo = pname;
+    repo = "git-sizer";
     rev = "v${version}";
     sha256 = "sha256-On7QBTzKfnuuzwMQ8m1odxGqfIKL+EDg5V05Kxuhmqw=";
   };
@@ -31,11 +31,11 @@ buildGoModule rec {
     package = git-sizer;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Compute various size metrics for a Git repository";
     homepage = "https://github.com/github/git-sizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "git-sizer";
   };
 }

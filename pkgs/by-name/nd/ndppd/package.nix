@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, gzip, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gzip,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ndppd";
@@ -28,12 +34,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ndppd; };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
     homepage = "https://github.com/DanielAdolfsson/ndppd";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fadenb ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "ndppd";
   };
 }

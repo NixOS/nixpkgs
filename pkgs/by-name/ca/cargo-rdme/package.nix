@@ -2,32 +2,25 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rdme";
-  version = "1.4.8";
+  version = "1.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-lVu9w8l3+SeqiMoQ8Bjoslf7tWz49jrrE4g/pDU1axI=";
+    hash = "sha256-TmV6Fc5vlc4fm9w4+iuxmnonwsEbqoJ3jvpIyQOuxjg=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  cargoHash = "sha256-EjIvKf1XgHubvyWPOAjysNH4nD0xqOWYg1FeiPSYh4c=";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W800jepxDv6OjbcxRKphAnDU2OuBGGGSLELe8gAfTr8=";
-
-  meta = with lib; {
+  meta = {
     description = "Cargo command to create the README.md from your crate's documentation";
     mainProgram = "cargo-rdme";
     homepage = "https://github.com/orium/cargo-rdme";
     changelog = "https://github.com/orium/cargo-rdme/blob/v${version}/release-notes.md";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ GoldsteinE ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ GoldsteinE ];
   };
 }

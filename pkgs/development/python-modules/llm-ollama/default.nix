@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -16,29 +15,28 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-mock,
   writableTmpDirAsHomeHook,
+  llm-ollama,
 }:
 
 buildPythonPackage rec {
   pname = "llm-ollama";
-  version = "0.9.1";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "taketwo";
     repo = "llm-ollama";
     tag = version;
-    hash = "sha256-NAJ0tfGRQOxYVAi2X0AI2d9+wyUS3ro1bfMSViZjaR0=";
+    hash = "sha256-8ELjUpHaIC8BOcmyQNeyQDPxQ5vO4Pj6FFnHFhvP+r0=";
   };
 
-  build-system = [
-    setuptools
-    # Follows the reasoning from https://github.com/NixOS/nixpkgs/pull/327800#discussion_r1681586659 about including llm in build-system
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
+    llm
     ollama
     pydantic
   ];
@@ -46,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-mock
     writableTmpDirAsHomeHook
   ];
 
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     "llm_ollama"
   ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-ollama;
 
   meta = {
     description = "LLM plugin providing access to Ollama models using HTTP API";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fioctl \
       --bash <($out/bin/fioctl completion bash) \
       --fish <($out/bin/fioctl completion fish) \
@@ -41,11 +42,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI to manage your Foundries Factory";
     homepage = "https://github.com/foundriesio/fioctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nixinator
       matthewcroughan
     ];

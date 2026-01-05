@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
     install -m644 LICENSE "$out/share/licenses/extrace/LICENSE"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/leahneukirchen/extrace";
     description = "Trace exec() calls system-wide";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       bsd2
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.leahneukirchen ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.leahneukirchen ];
   };
 }

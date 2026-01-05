@@ -10,13 +10,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-sdkutils";
   # nixpkgs-update: no auto update
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-sdkutils";
     rev = "v${version}";
-    hash = "sha256-Z9c+uBiGMXW5v+khdNaElhno16ikBO4voTzwd2mP6rA=";
+    hash = "sha256-zc8E5ESZxXBJ6WA/V5i2Us61UcNf9wXa2k63NWqGRtI=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK utility library";
     homepage = "https://github.com/awslabs/aws-c-sdkutils";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

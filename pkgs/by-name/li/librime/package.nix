@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.13.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
     rev = version;
-    sha256 = "sha256-pv1I/YFzPLOmBDcT4HcrJWSikPEErEB5UzGrGqfJBvg=";
+    sha256 = "sha256-B3mhHv8fk8TGXu+jJSYJ2R8QW+nG5RJx6kFtP5ILhYY=";
   };
 
   nativeBuildInputs = [
@@ -53,15 +53,16 @@ stdenv.mkDerivation rec {
     yaml-cpp
     gtest
     capnproto
-  ] ++ plugins; # for propagated build inputs
+  ]
+  ++ plugins; # for propagated build inputs
 
   preConfigure = copyPlugins;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vonfry ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vonfry ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

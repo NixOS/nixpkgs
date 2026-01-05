@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bftpd";
-  version = "6.2";
+  version = "6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lZGFsUV6LNjkBNUpV9UYedVt1yt1qTBJUorxGt4ApsI=";
+    sha256 = "sha256-f7XZCSrGwmQqyf5C4xtJ46Q4SDHxbr15rDzcAK1PvB4=";
   };
 
   # utmp has been replaced by utmpx since Mac OS X 10.6 (Snow Leopard):
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Minimal ftp server";
     mainProgram = "bftpd";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.all;
   };
 }

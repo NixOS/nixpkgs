@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "timescaledb-tune";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
-    repo = pname;
+    repo = "timescaledb-tune";
     rev = "v${version}";
-    sha256 = "sha256-SW+JCH+oxAHAmgPO7XmSVFFug7NOvslblMViG+oooAo=";
+    sha256 = "sha256-SC91yO3P2Q2QachSfAAzz7ldcnZedZfcnVXHcFXNrIk=";
   };
 
   vendorHash = "sha256-7u3eceVDnzjhGguijJXbm40qyCPO/Q101Zr5vEcGEqs=";
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for tuning your TimescaleDB for better performance";
     mainProgram = "timescaledb-tune";
     homepage = "https://github.com/timescale/timescaledb-tune";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aliyunsdkcdn" ];
 
-  meta = with lib; {
+  meta = {
     description = "CDN module of Aliyun Python SDK";
     homepage = "https://github.com/aliyun/aliyun-openapi-python-sdk";
     changelog = "https://github.com/aliyun/aliyun-openapi-python-sdk/blob/master/aliyun-python-sdk-cdn/ChangeLog.txt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,34 +1,62 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  mock,
+  isPy312,
+  fetchFromGitHub,
+  flaky,
+  hypothesis,
+  pytest-xdist,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.6.10";
+  version = "7.13.1";
   pyproject = true;
 
-  # uses f strings
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-f7EFMnyPjwaC4phD4v+Wr53L5bq47rSzmMajOhbYCiM=";
+  src = fetchFromGitHub {
+    owner = "coveragepy";
+    repo = "coveragepy";
+    tag = version;
+    hash = "sha256-xdbgHUE+vbSiqLRDhd5G5u90VU5+TxLehAuwdhdGzBQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  # No tests in archive
-  doCheck = false;
-  nativeCheckInputs = [ mock ];
+  optional-dependencies = {
+    toml = lib.optionals (pythonOlder "3.11") [
+      tomli
+    ];
+  };
+
+  nativeCheckInputs = [
+    flaky
+    hypothesis
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin"
+    # import from $out
+    rm -r coverage
+  '';
+
+  disabledTests = [
+    # tests expect coverage source to be there
+    "test_all_our_source_files"
+    "test_real_code_regions"
+  ];
 
   meta = {
-    description = "Code coverage measurement for python";
-    homepage = "https://coverage.readthedocs.io/";
-    license = lib.licenses.bsd3;
+    changelog = "https://github.com/coveragepy/coveragepy/blob/${src.tag}/CHANGES.rst";
+    description = "Code coverage measurement for Python";
+    homepage = "https://github.com/coveragepy/coveragepy";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

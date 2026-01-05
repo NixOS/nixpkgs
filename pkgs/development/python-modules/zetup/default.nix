@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zetup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zimmermann's Extensible Tools for Unified Project setups";
     homepage = "https://github.com/zimmermanncode/zetup";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

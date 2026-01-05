@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "replacement";
   version = "0.4.4";
+  pyproject = true;
 
   disabled = python3Packages.isPy27;
 
@@ -17,7 +18,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0j4lvn3rx1kqvxcsd8nhc2lgk48jyyl7qffhlkvakhy60f9lymj3";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     ruamel-yaml
   ];
 
@@ -26,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     sh
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/siriobalmelli/replacement";
     description = "Tool to execute yaml templates and output text";
     mainProgram = "replacement";
@@ -42,7 +47,7 @@ python3Packages.buildPythonApplication rec {
       This tool is useful in generating configuration files,
       static websites and the like.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

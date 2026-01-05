@@ -57,11 +57,11 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = builtins.head executables;
     description = "MQTT traffic monitor";
-    license = licenses.free;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

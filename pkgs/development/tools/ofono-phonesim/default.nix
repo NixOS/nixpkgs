@@ -30,12 +30,12 @@ mkDerivation {
     "UIC=${qtbase.dev}/bin/uic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Phone Simulator for modem testing";
     mainProgram = "phonesim";
     homepage = "https://01.org/ofono";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

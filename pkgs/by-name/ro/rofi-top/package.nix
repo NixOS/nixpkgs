@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "rofi-top";
-  version = "unstable-2017-10-16";
+  version = "0-unstable-2017-10-16";
 
   src = fetchFromGitHub {
     owner = "davatorium";
@@ -42,11 +42,11 @@ stdenv.mkDerivation {
     rofi-unwrapped
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for rofi that emulates top behaviour";
     homepage = "https://github.com/davatorium/rofi-top";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aacebedo ];
+    platforms = lib.platforms.linux;
   };
 }

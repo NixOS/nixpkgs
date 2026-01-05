@@ -2,38 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  build,
   setuptools,
+
+  nose2,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "inotify";
-  version = "unstable-2020-08-27";
+  version = "0.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsoprea";
     repo = "PyInotify";
-    rev = "f77596ae965e47124f38d7bd6587365924dcd8f7";
-    hash = "sha256-X0gu4s1R/Kg+tmf6s8SdZBab2HisJl4FxfdwKktubVc=";
+    tag = version;
+    hash = "sha256-x6wvrwLDH/9UMTsAIHwCKR5Avv1givlJFFeBM//FOdg=";
   };
 
-  postPatch = ''
-    # Needed because assertEquals was removed in python 3.12
-    substituteInPlace tests/test_inotify.py \
-      --replace-fail "assertEquals" "assertEqual" \
-  '';
+  build-system = [
+    build
+    setuptools
+  ];
 
-  build-system = [ setuptools ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  # Disable these tests as they're flaky.
-  # The returned list can be in a different order, which causes the tests to fail.
-  disabledTests = [
-    "test__automatic_new_watches_on_new_paths"
-    "test__cycle"
-    "test__renames"
+  nativeCheckInputs = [
+    nose2
+    pytestCheckHook
   ];
 
   meta = {

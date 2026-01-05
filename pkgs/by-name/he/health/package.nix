@@ -13,7 +13,6 @@
   libadwaita,
   libsecret,
   tinysparql,
-  darwin,
   nix-update-script,
 }:
 
@@ -30,8 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-eR1ZGtTZQNhofFUEjI7IX16sMKPJmAl7aIFfPJukecg=";
   };
 
@@ -46,16 +44,11 @@ stdenv.mkDerivation rec {
     blueprint-compiler
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libsecret
-      tinysparql
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    libadwaita
+    libsecret
+    tinysparql
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -67,12 +60,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Health tracking app for the GNOME desktop";
     homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "dev.Cogitri.Health";
-    maintainers = lib.teams.gnome-circle.members;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.unix;
   };
 }

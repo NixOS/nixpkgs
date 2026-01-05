@@ -41,9 +41,15 @@ let
   # The directory to store mutable data within dataDir.
   mutableDataDir = "${cfg.dataDir}/data";
 
-  # The plugin directory. Note that this is the *post-unpack* plugin directory,
-  # since Mattermost unpacks plugins to put them there. (Hence, mutable data.)
-  pluginDir = "${mutableDataDir}/plugins";
+  # The plugin directory. Note that this is the *pre-unpack* plugin directory,
+  # since Mattermost looks in mutableDataDir for a directory called "plugins".
+  # If Mattermost is installed with plugins defined in a Nix configuration, the plugins
+  # are symlinked here. Otherwise, this is a real directory and the tarballs are uploaded here.
+  pluginTarballDir = "${mutableDataDir}/plugins";
+
+  # We need a different unpack directory for Mattermost to sync things to at launch,
+  # since the above may be a symlink to the store.
+  pluginUnpackDir = "${mutableDataDir}/.plugins";
 
   # Mattermost uses this as a staging directory to unpack plugins, among possibly other things.
   # Ensure that it's inside mutableDataDir since it can get rather large.
@@ -107,7 +113,8 @@ let
           path = escapeURL cfg.database.name;
           query = {
             host = cfg.database.socketPath;
-          } // cfg.database.extraConnectionOptions;
+          }
+          // cfg.database.extraConnectionOptions;
         }
       else
         mkDatabaseUri {
@@ -147,34 +154,34 @@ let
     else
       throw "Invalid database driver: ${cfg.database.driver}";
 
-  mattermostPluginDerivations =
-    with pkgs;
-    map (
-      plugin:
-      stdenv.mkDerivation {
-        name = "mattermost-plugin";
-        installPhase = ''
-          mkdir -p $out/share
-          cp ${plugin} $out/share/plugin.tar.gz
-        '';
-        dontUnpack = true;
-        dontPatch = true;
-        dontConfigure = true;
-        dontBuild = true;
-        preferLocalBuild = true;
-      }
-    ) cfg.plugins;
+  mattermostPluginDerivations = map (
+    plugin:
+    pkgs.stdenvNoCC.mkDerivation {
+      name = "${cfg.package.name}-plugin";
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/share
+        ln -sf ${plugin} $out/share/plugin.tar.gz
+        runHook postInstall
+      '';
+      dontUnpack = true;
+      dontPatch = true;
+      dontConfigure = true;
+      dontBuild = true;
+      preferLocalBuild = true;
+    }
+  ) cfg.plugins;
 
   mattermostPlugins =
-    with pkgs;
     if mattermostPluginDerivations == [ ] then
       null
     else
-      stdenv.mkDerivation {
+      pkgs.stdenvNoCC.mkDerivation {
         name = "${cfg.package.name}-plugins";
-        nativeBuildInputs = [ autoPatchelfHook ] ++ mattermostPluginDerivations;
+        nativeBuildInputs = [ pkgs.autoPatchelfHook ] ++ mattermostPluginDerivations;
         buildInputs = [ cfg.package ];
         installPhase = ''
+          runHook preInstall
           mkdir -p $out
           plugins=(${
             escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)
@@ -187,6 +194,7 @@ let
             GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/$hash.tar.gz" .
             rm -rf "$hash"
           done
+          runHook postInstall
         '';
 
         dontUnpack = true;
@@ -231,9 +239,12 @@ let
           services.mattermost.environmentFile = "<your environment file>";
           services.mattermost.database.fromEnvironment = true;
         '' database;
-    FileSettings.Directory = cfg.dataDir;
-    PluginSettings.Directory = "${pluginDir}/server";
-    PluginSettings.ClientDirectory = "${pluginDir}/client";
+
+    # Note that the plugin tarball directory is not configurable, and is expected to be in FileSettings.Directory/plugins.
+    FileSettings.Directory = mutableDataDir;
+    PluginSettings.Directory = "${pluginUnpackDir}/server";
+    PluginSettings.ClientDirectory = "${pluginUnpackDir}/client";
+
     LogSettings = {
       FileLocation = cfg.logDir;
 
@@ -254,8 +265,8 @@ let
       }
   );
 
-  mattermostConfJSON = pkgs.writeText "mattermost-config.json" (builtins.toJSON mattermostConf);
-
+  format = pkgs.formats.json { };
+  finalConfig = format.generate "mattermost-config.json" mattermostConf;
 in
 {
   imports = [
@@ -454,9 +465,9 @@ in
           the options specified in services.mattermost will be generated
           but won't be overwritten on changes or rebuilds.
 
-          If this option is disabled, changes in the system console won't
-          be possible (default). If an config.json is present, it will be
-          overwritten!
+          If this option is disabled, persistent changes in the system
+          console won't be possible (the default). If a config.json is
+          present, it will be overwritten at service start!
         '';
       };
 
@@ -480,7 +491,20 @@ in
         description = ''
           Plugins to add to the configuration. Overrides any installed if non-null.
           This is a list of paths to .tar.gz files or derivations evaluating to
-          .tar.gz files.
+          .tar.gz files. You can use `mattermost.buildPlugin` to build plugins;
+          see the NixOS documentation for more details.
+        '';
+      };
+
+      pluginsBundle = mkOption {
+        type = with types; nullOr package;
+        default = mattermostPlugins;
+        defaultText = ''
+          All entries in {config}`services.mattermost.plugins`, repacked
+        '';
+        description = ''
+          Derivation building to a directory of plugin tarballs.
+          This overrides {option}`services.mattermost.plugins` if provided.
         '';
       };
 
@@ -508,7 +532,8 @@ in
         type = with types; attrsOf (either int str);
         default = { };
         description = ''
-          Extra environment variables to export to the Mattermost process, in the systemd unit.
+          Extra environment variables to export to the Mattermost process
+          from the systemd unit configuration.
         '';
         example = {
           MM_SERVICESETTINGS_SITEURL = "http://example.com";
@@ -524,11 +549,11 @@ in
           for mattermost (see [the Mattermost documentation](https://docs.mattermost.com/configure/configuration-settings.html#environment-variables)).
 
           Settings defined in the environment file will overwrite settings
-          set via nix or via the {option}`services.mattermost.extraConfig`
+          set via Nix or via the {option}`services.mattermost.extraConfig`
           option.
 
           Useful for setting config options without their value ending up in the
-          (world-readable) nix store, e.g. for a database password.
+          (world-readable) Nix store, e.g. for a database password.
         '';
       };
 
@@ -639,13 +664,13 @@ in
             if cfg.database.driver == "postgres" then
               {
                 sslmode = "disable";
-                connect_timeout = 30;
+                connect_timeout = 60;
               }
             else if cfg.database.driver == "mysql" then
               {
-                charset = "utf8mb4,utf8";
-                writeTimeout = "30s";
-                readTimeout = "30s";
+                charset = "utf8mb4";
+                writeTimeout = "60s";
+                readTimeout = "60s";
               }
             else
               throw "Invalid database driver ${cfg.database.driver}";
@@ -653,13 +678,13 @@ in
             if config.mattermost.database.driver == "postgres" then
               {
                 sslmode = "disable";
-                connect_timeout = 30;
+                connect_timeout = 60;
               }
             else if config.mattermost.database.driver == "mysql" then
               {
-                charset = "utf8mb4,utf8";
-                writeTimeout = "30s";
-                readTimeout = "30s";
+                charset = "utf8mb4";
+                writeTimeout = "60s";
+                readTimeout = "60s";
               }
             else
               throw "Invalid database driver";
@@ -687,7 +712,7 @@ in
       };
 
       settings = mkOption {
-        type = types.attrs;
+        inherit (format) type;
         default = { };
         description = ''
           Additional configuration options as Nix attribute set in config.json schema.
@@ -774,50 +799,48 @@ in
         };
       };
 
-      systemd.tmpfiles.rules =
-        [
-          "d ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${cfg.logDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${cfg.configDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${mutableDataDir} 0750 ${cfg.user} ${cfg.group} - -"
+      systemd.tmpfiles.rules = [
+        "d ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${cfg.logDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${cfg.configDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${mutableDataDir} 0750 ${cfg.user} ${cfg.group} - -"
 
-          # Make sure tempDir exists and is not a symlink.
-          "R- ${tempDir} - - - - -"
-          "d= ${tempDir} 0750 ${cfg.user} ${cfg.group} - -"
+        # Make sure tempDir exists and is not a symlink.
+        "R- ${tempDir} - - - - -"
+        "d= ${tempDir} 0750 ${cfg.user} ${cfg.group} - -"
 
-          # Ensure that pluginDir is a directory, as it could be a symlink on prior versions.
-          "r- ${pluginDir} - - - - -"
-          "d= ${pluginDir} 0750 ${cfg.user} ${cfg.group} - -"
+        # Ensure that pluginUnpackDir is a directory.
+        # Don't remove or clean it out since it should be persistent, as this is where plugins are unpacked.
+        "d= ${pluginUnpackDir} 0750 ${cfg.user} ${cfg.group} - -"
 
-          # Ensure that the plugin directories exist.
-          "d= ${mattermostConf.PluginSettings.Directory} 0750 ${cfg.user} ${cfg.group} - -"
-          "d= ${mattermostConf.PluginSettings.ClientDirectory} 0750 ${cfg.user} ${cfg.group} - -"
+        # Ensure that the plugin directories exist.
+        "d= ${mattermostConf.PluginSettings.Directory} 0750 ${cfg.user} ${cfg.group} - -"
+        "d= ${mattermostConf.PluginSettings.ClientDirectory} 0750 ${cfg.user} ${cfg.group} - -"
 
-          # Link in some of the immutable data directories.
-          "L+ ${cfg.dataDir}/bin - - - - ${cfg.package}/bin"
-          "L+ ${cfg.dataDir}/fonts - - - - ${cfg.package}/fonts"
-          "L+ ${cfg.dataDir}/i18n - - - - ${cfg.package}/i18n"
-          "L+ ${cfg.dataDir}/templates - - - - ${cfg.package}/templates"
-          "L+ ${cfg.dataDir}/client - - - - ${cfg.package}/client"
-        ]
-        ++ (
-          if mattermostPlugins == null then
-            # Create the plugin tarball directory if it's a symlink.
-            [
-              "r- ${cfg.dataDir}/plugins - - - - -"
-              "d= ${cfg.dataDir}/plugins 0750 ${cfg.user} ${cfg.group} - -"
-            ]
-          else
-            # Symlink the plugin tarball directory, removing anything existing.
-            [ "L+ ${cfg.dataDir}/plugins - - - - ${mattermostPlugins}" ]
-        );
+        # Link in some of the immutable data directories.
+        "L+ ${cfg.dataDir}/bin - - - - ${cfg.package}/bin"
+        "L+ ${cfg.dataDir}/fonts - - - - ${cfg.package}/fonts"
+        "L+ ${cfg.dataDir}/i18n - - - - ${cfg.package}/i18n"
+        "L+ ${cfg.dataDir}/templates - - - - ${cfg.package}/templates"
+        "L+ ${cfg.dataDir}/client - - - - ${cfg.package}/client"
+      ]
+      ++ (
+        if cfg.pluginsBundle == null then
+          # Create the plugin tarball directory to allow plugin uploads.
+          [
+            "d= ${pluginTarballDir} 0750 ${cfg.user} ${cfg.group} - -"
+          ]
+        else
+          # Symlink the plugin tarball directory, removing anything existing, since it's managed by Nix.
+          [ "L+ ${pluginTarballDir} - - - - ${cfg.pluginsBundle}" ]
+      );
 
       systemd.services.mattermost = rec {
         description = "Mattermost chat service";
         wantedBy = [ "multi-user.target" ];
         after = mkMerge [
           [ "network.target" ]
-          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.service" ])
+          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.target" ])
           (mkIf (cfg.database.driver == "mysql" && cfg.database.create) [ "mysql.service" ])
         ];
         requires = after;
@@ -830,49 +853,49 @@ in
           cfg.environment
         ];
 
-        preStart =
-          ''
-            dataDir=${escapeShellArg cfg.dataDir}
-            configDir=${escapeShellArg cfg.configDir}
-            logDir=${escapeShellArg cfg.logDir}
-            package=${escapeShellArg cfg.package}
-            nixConfig=${escapeShellArg mattermostConfJSON}
-          ''
-          + optionalString (versionAtLeast config.system.stateVersion "25.05") ''
-            # Migrate configs in the pre-25.05 directory structure.
-            oldConfig="$dataDir/config/config.json"
-            newConfig="$configDir/config.json"
-            if [ "$oldConfig" != "$newConfig" ] && [ -f "$oldConfig" ] && [ ! -f "$newConfig" ]; then
-              # Migrate the legacy config location to the new config location
-              echo "Moving legacy config at $oldConfig to $newConfig" >&2
-              mkdir -p "$configDir"
-              mv "$oldConfig" "$newConfig"
-              touch "$configDir/.initial-created"
-            fi
+        preStart = ''
+          dataDir=${escapeShellArg cfg.dataDir}
+          configDir=${escapeShellArg cfg.configDir}
+          logDir=${escapeShellArg cfg.logDir}
+          package=${escapeShellArg cfg.package}
+          nixConfig=${escapeShellArg finalConfig}
+        ''
+        + optionalString (versionAtLeast config.system.stateVersion "25.05") ''
+          # Migrate configs in the pre-25.05 directory structure.
+          oldConfig="$dataDir/config/config.json"
+          newConfig="$configDir/config.json"
+          if [ "$oldConfig" != "$newConfig" ] && [ -f "$oldConfig" ] && [ ! -f "$newConfig" ]; then
+            # Migrate the legacy config location to the new config location
+            echo "Moving legacy config at $oldConfig to $newConfig" >&2
+            mkdir -p "$configDir"
+            mv "$oldConfig" "$newConfig"
+            touch "$configDir/.initial-created"
+          fi
 
-            # Logs too.
-            oldLogs="$dataDir/logs"
-            newLogs="$logDir"
-            if [ "$oldLogs" != "$newLogs" ] && [ -d "$oldLogs" ]; then
-              # Migrate the legacy log location to the new log location.
-              # Allow this to fail if there aren't any logs to move.
-              echo "Moving legacy logs at $oldLogs to $newLogs" >&2
-              mkdir -p "$newLogs"
-              mv "$oldLogs"/* "$newLogs" || true
-            fi
-          ''
-          + optionalString (!cfg.mutableConfig) ''
+          # Logs too.
+          oldLogs="$dataDir/logs"
+          newLogs="$logDir"
+          if [ "$oldLogs" != "$newLogs" ] && [ -d "$oldLogs" ] && [ ! -f "$newLogs/.initial-created" ]; then
+            # Migrate the legacy log location to the new log location.
+            # Allow this to fail if there aren't any logs to move.
+            echo "Moving legacy logs at $oldLogs to $newLogs" >&2
+            mkdir -p "$newLogs"
+            mv "$oldLogs"/* "$newLogs" || true
+            touch "$newLogs/.initial-created"
+          fi
+        ''
+        + optionalString (!cfg.mutableConfig) ''
+          ${getExe pkgs.jq} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
+        ''
+        + optionalString cfg.mutableConfig ''
+          if [ ! -e "$configDir/.initial-created" ]; then
             ${getExe pkgs.jq} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
-          ''
-          + optionalString cfg.mutableConfig ''
-            if [ ! -e "$configDir/.initial-created" ]; then
-              ${getExe pkgs.jq} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
-              touch "$configDir/.initial-created"
-            fi
-          ''
-          + optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
-            echo "$(${getExe pkgs.jq} -s '.[0] * .[1]' "$configDir/config.json" "$nixConfig")" > "$configDir/config.json"
-          '';
+            touch "$configDir/.initial-created"
+          fi
+        ''
+        + optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
+          echo "$(${getExe pkgs.jq} -s '.[0] * .[1]' "$configDir/config.json" "$nixConfig")" > "$configDir/config.json"
+        '';
 
         serviceConfig = mkMerge [
           {
@@ -922,7 +945,7 @@ in
         ];
 
         unitConfig.JoinsNamespaceOf = mkMerge [
-          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.service" ])
+          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.target" ])
           (mkIf (cfg.database.driver == "mysql" && cfg.database.create) [ "mysql.service" ])
         ];
       };
@@ -941,6 +964,13 @@ in
           message = ''
             services.mattermost.host should not include a port. Use services.mattermost.host for the address
             or hostname, and services.mattermost.port to specify the port separately.
+          '';
+        }
+        {
+          # Can't use MySQL on version 11.
+          assertion = versionAtLeast cfg.package.version "11" -> cfg.database.driver == "postgres";
+          message = ''
+            Only Postgres is supported as the database driver in Mattermost 11 and later.
           '';
         }
       ];

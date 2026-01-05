@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "miguelmota";
-    repo = pname;
+    repo = "cointop";
     rev = "v${version}";
     sha256 = "sha256-NAw1uoBL/FnNLJ86L9aBCOY65aJn1DDGK0Cd0IO2kr0=";
   };
@@ -22,7 +22,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fastest and most interactive terminal based UI application for tracking cryptocurrencies";
     longDescription = ''
       cointop is a fast and lightweight interactive terminal based UI
@@ -32,8 +32,8 @@ buildGoModule rec {
       The interface is inspired by htop and shortcut keys are inspired by vim.
     '';
     homepage = "https://cointop.sh";
-    maintainers = with maintainers; [ sarcasticadmin ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    license = lib.licenses.asl20;
     mainProgram = "cointop";
   };
 }

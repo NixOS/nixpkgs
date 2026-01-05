@@ -7,17 +7,18 @@
   liburcu,
   libtirpc,
   libnsl,
+  prometheus-cpp-lite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ntirpc";
-  version = "6.3";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${version}";
-    sha256 = "sha256-e4eF09xwX2Qf/y9YfOGy7p6yhDFnKGI5cnrQy3o8c98=";
+    hash = "sha256-4E6wDAwinCNn7arRgBulg7e0x9S/steh+mjwNY4X3Vc=";
   };
 
   outputs = [
@@ -25,8 +26,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
   postPatch = ''
-    substituteInPlace ntirpc/netconfig.h --replace "/etc/netconfig" "$out/etc/netconfig"
-    sed '1i#include <assert.h>' -i src/work_pool.c
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6.3)" \
+      "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace ntirpc/netconfig.h --replace-fail \
+      "/etc/netconfig" "$out/etc/netconfig"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -34,6 +39,11 @@ stdenv.mkDerivation rec {
     krb5
     liburcu
     libnsl
+    prometheus-cpp-lite
+  ];
+
+  cmakeFlags = [
+    "-DUSE_MONITORING=ON"
   ];
 
   postInstall = ''
@@ -44,11 +54,11 @@ stdenv.mkDerivation rec {
     cp ${libtirpc}/etc/netconfig $out/etc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transport-independent RPC (TI-RPC)";
     homepage = "https://github.com/nfs-ganesha/ntirpc";
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

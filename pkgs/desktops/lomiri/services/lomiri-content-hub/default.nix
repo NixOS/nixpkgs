@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   testers,
   cmake,
   cmake-extras,
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
-  version = "2.0.0";
+  version = "2.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
     rev = finalAttrs.version;
-    hash = "sha256-eA5oCoAZB7fWyWm0Sy6wXh0EW+h76bdfJ2dotr7gUC0=";
+    hash = "sha256-L0CX383AMu8XlNbGL01VvBxvawJwAWHhTh3ak0sjo20=";
   };
 
   outputs = [
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace import/*/Content/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # Look for peer files in running system
     substituteInPlace src/com/lomiri/content/service/registry-updater.cpp \
@@ -58,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
       --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+
+    # https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/54
+    substituteInPlace src/com/lomiri/content/service/registry.h \
+      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;
@@ -101,9 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_DOC" true)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
+    (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
   preBuild =
@@ -145,7 +152,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # Tests content-hub functionality, up to the point where one app receives a content exchange request
+      # from another and changes into a mode to pick the content to send
+      vm = nixosTests.lomiri.desktop-appinteractions;
+    };
     updateScript = gitUpdater { };
   };
 
@@ -162,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
     ];
     mainProgram = "lomiri-content-hub-service";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-content-hub"

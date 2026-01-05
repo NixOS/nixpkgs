@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
+    repo = "pyspnego";
     tag = "v${version}";
-    hash = "sha256-5aGHCw0d1aFcHLPRMkya0hlHV30aTKshbcOjfPMOFko=";
+    hash = "sha256-dkss+8Z0dS4MTunBZWEH+WK1+kGikCHf7VPCR1reMS0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jborean93/pyspnego/blob/${src.tag}/CHANGELOG.md";
     description = "Python SPNEGO authentication library";
     mainProgram = "pyspnego-parse";
     homepage = "https://github.com/jborean93/pyspnego";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

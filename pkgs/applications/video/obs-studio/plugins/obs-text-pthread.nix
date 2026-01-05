@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-text-pthread";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-text-pthread";
     rev = version;
-    sha256 = "sha256-zrgxKs3jmrwQJiEgKfZz1BOVToTLauQXtFYcuFlV71o=";
+    sha256 = "sha256-YjMZfDSO5VRIY+HBGniNV3HG5vs+zbiqfbrPKs9v804=";
   };
 
   nativeBuildInputs = [
@@ -37,14 +37,11 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rich text source plugin for OBS Studio";
     homepage = "https://github.com/norihiro/obs-text-pthread";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
+    inherit (obs-studio.meta) platforms;
   };
 }

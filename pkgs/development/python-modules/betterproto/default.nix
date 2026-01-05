@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
   poetry-core,
   grpclib,
   python-dateutil,
@@ -10,8 +9,9 @@
   jinja2,
   isort,
   python,
+  cachelib,
   pydantic,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
   typing-extensions,
@@ -19,33 +19,16 @@
   grpcio-tools,
 }:
 
-let
-  # using a older version of pytest-asyncio only for tests
-  # https://github.com/pytest-dev/pytest-asyncio/issues/928
-  pytest-asyncio_23_8 = (
-    pytest-asyncio.overridePythonAttrs (old: rec {
-      version = "0.23.8";
-      src = fetchFromGitHub {
-        inherit (old.src) owner repo;
-        tag = "v${version}";
-        hash = "sha256-kMv0crYuYHi1LF+VlXizZkG87kSL7xzsKq9tP9LgFVY=";
-      };
-    })
-  );
-in
-
 buildPythonPackage rec {
   pname = "betterproto";
-  version = "2.0.0b6";
+  version = "2.0.0b7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
     tag = "v.${version}";
-    hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
+    hash = "sha256-T7QSPH8MFa1hxJOhXc3ZMM62/FxHWjCJJ59IpeM41rI=";
   };
 
   postPatch = ''
@@ -68,13 +51,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cachelib
     grpcio-tools
     pydantic
-    pytest-asyncio_23_8
+    pytest-asyncio
     pytest-mock
-    pytest7CheckHook
+    pytestCheckHook
     tomlkit
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "betterproto" ];
 
@@ -87,13 +72,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m tests.generate
   '';
 
-  disabledTestPaths = [
-    # https://github.com/danielgtaylor/python-betterproto/issues/530
-    "tests/inputs/oneof/test_oneof.py"
-  ];
-
   disabledTests = [
-    "test_pydantic_no_value"
+    # incompatible with pytest 8:
+    #     TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_message_with_deprecated_field_not_set"
+    "test_service_with_deprecated_method"
     # Test is flaky
     "test_binary_compatibility"
   ];

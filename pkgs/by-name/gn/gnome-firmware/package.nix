@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-firmware";
-  version = "47.0";
+  version = "49.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
     rev = finalAttrs.version;
-    sha256 = "sha256-dI9tE/I+14IhYZ+IDLErPunlT4L29AudbZXh0at4jKQ=";
+    sha256 = "sha256-3uU0N40O1eoK5JHWMwacSrBzOTq/c+qYwoH9kBOsqrM=";
   };
 
   nativeBuildInputs = [
@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "(alpha|beta|rc).*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gnome-firmware";
     description = "Tool for installing firmware on devices";
     mainProgram = "gnome-firmware";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

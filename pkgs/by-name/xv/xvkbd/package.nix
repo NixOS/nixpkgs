@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/X11
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual keyboard for X window system";
     longDescription = ''
       xvkbd is a virtual (graphical) keyboard program for X Window System which provides
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
       keyboard displayed on the screen.
     '';
     homepage = "http://t-sato.in.coocan.jp/xvkbd";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bennofs ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.bennofs ];
+    platforms = lib.platforms.linux;
     mainProgram = "xvkbd";
   };
 }

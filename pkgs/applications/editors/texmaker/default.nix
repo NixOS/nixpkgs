@@ -15,12 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/texmaker-${version}.tar.bz2";
-    hash = "sha256-l3zlgOJcGrbgvD2hA74LQ+v2C4zg0nJzEE/df1hhd/w=";
+    hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
   };
+
+  patches = [
+    # Check if the patch can be removed next release
+    ./fix-build-with-qt-6-10.patch
+  ];
 
   buildInputs = [
     poppler
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "TeX and LaTeX editor";
     longDescription = ''
       This editor is a full fledged IDE for TeX and
@@ -50,9 +55,9 @@ stdenv.mkDerivation rec {
       spell checking and support of any compilation chain.
     '';
     homepage = "http://www.xm1math.net/texmaker/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       cfouche
       markuskowa
     ];

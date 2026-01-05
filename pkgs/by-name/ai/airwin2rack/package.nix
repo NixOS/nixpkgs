@@ -13,7 +13,7 @@
   libGLU,
   libjack2,
   juce,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libsysprof-capture,
   pcre2,
   util-linux,
@@ -23,9 +23,12 @@
   libxkbcommon,
   libdatrie,
   libepoxy,
-  libsoup_2_4,
+  libsoup_3,
   lerc,
   sqlite,
+  libdeflate,
+  xz,
+  libwebp,
   glib,
   gtk3-x11,
   curl,
@@ -46,14 +49,14 @@ let
   clapJuceExtensions = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap-juce-extensions";
-    rev = "4f33b4930b6af806018c009f0f24b3a50808af99";
-    hash = "sha256-M+T7ll3Ap6VIP5ub+kfEKwT2RW2IxxY4wUPRQKFIotk=";
+    rev = "645ed2fd0949d36639e3d63333f26136df6df769";
+    hash = "sha256-Lx88nyEFjPLA5yh8rrqBdyZIxe/j0FgIHoyKcbjuuI4=";
     fetchSubmodules = true;
   };
 
   vcvRackSdk = srcOnly vcv-rack;
   pname = "airwin2rack";
-  version = "2.13.0";
+  version = "2.13.0-unstable-2025-12-07";
 in
 stdenv.mkDerivation {
   inherit pname;
@@ -62,8 +65,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "baconpaul";
     repo = "airwin2rack";
-    tag = "DAWPlugin";
-    hash = "sha256-xjE9M5fMeOOYncq7xe+v++XvfUL6QZc2tF0jnYWSwKQ=";
+    rev = "a797d6c7a453006c6a08db32d7bb373ecccb572b";
+    hash = "sha256-+xGLVp4eR7Xb2dSEyfyHfAcoZGRSzL49l/U89N2VX+w=";
     fetchSubmodules = true;
   };
 
@@ -83,71 +86,71 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      copyDesktopItems
-    ]
-    ++ lib.optionals enableVCVRack [
-      jq
-      zstd
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    copyDesktopItems
+  ]
+  ++ lib.optionals enableVCVRack [
+    jq
+    zstd
+  ];
 
-  buildInputs =
-    [
-      alsa-lib
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libXdmcp
-      libGLU
-      libjack2
-      freetype
-      webkitgtk_4_0
-      glib
-      gtk3-x11
-      curl
-      libsysprof-capture
-      pcre2
-      util-linux
-      libselinux
-      libsepol
-      libthai
-      libxkbcommon
-      libdatrie
-      libepoxy
-      libsoup_2_4
-      lerc
-      sqlite
-    ]
-    ++ lib.optionals enableVCVRack [
-      vcv-rack
-      jansson
-      glew
-      glfw
-      libarchive
-      speexdsp
-      libpulseaudio
-      libsamplerate
-      rtmidi
-      zstd
-    ];
+  buildInputs = [
+    alsa-lib
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libXdmcp
+    libGLU
+    libjack2
+    freetype
+    webkitgtk_4_1
+    glib
+    gtk3-x11
+    curl
+    libsysprof-capture
+    pcre2
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libxkbcommon
+    libdatrie
+    libepoxy
+    libsoup_3
+    lerc
+    sqlite
+    libdeflate
+    xz # liblzma
+    libwebp
+  ]
+  ++ lib.optionals enableVCVRack [
+    vcv-rack
+    jansson
+    glew
+    glfw
+    libarchive
+    speexdsp
+    libpulseaudio
+    libsamplerate
+    rtmidi
+    zstd
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_JUCE_PLUGIN" true)
-      (lib.cmakeBool "USE_JUCE_PROGRAMS" true)
-    ]
-    ++ lib.optionals enableVCVRack [
-      (lib.cmakeBool "BUILD_RACK_PLUGIN" true)
-      (lib.cmakeFeature "RACK_SDK_DIR" "${vcvRackSdk}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_JUCE_PLUGIN" true)
+    (lib.cmakeBool "USE_JUCE_PROGRAMS" true)
+  ]
+  ++ lib.optionals enableVCVRack [
+    (lib.cmakeBool "BUILD_RACK_PLUGIN" true)
+    (lib.cmakeFeature "RACK_SDK_DIR" "${vcvRackSdk}")
+  ];
 
   cmakeBuildType = "Release";
 

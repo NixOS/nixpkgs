@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, relic
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  relic,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sassoftware";
-    repo = pname;
+    repo = "relic";
     rev = "v${version}";
     sha256 = "sha256-dXvKbuAJCL+H0Gh0ZF1VvtY+7cgjq7gs8zwtenI3JuI=";
   };
@@ -35,11 +36,11 @@ buildGoModule rec {
   # https://github.com/NixOS/nixpkgs/pull/374824
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sassoftware/relic";
     description = "Service and a tool for adding digital signatures to operating system packages for Linux and Windows";
     mainProgram = "relic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ strager ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ strager ];
   };
 }

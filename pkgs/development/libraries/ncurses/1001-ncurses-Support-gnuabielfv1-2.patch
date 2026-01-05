@@ -1,0 +1,72 @@
+diff '--color=auto' -ruN a/aclocal.m4 b/aclocal.m4
+--- a/aclocal.m4	2025-07-19 18:19:51.000000000 +0200
++++ b/aclocal.m4	2025-07-25 14:11:19.900876172 +0200
+@@ -10290,7 +10290,7 @@
+ 	cf_xopen_source="-D_SGI_SOURCE"
+ 	cf_XOPEN_SOURCE=
+ 	;;
+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnuabielfv*|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
+ 	CF_GNU_SOURCE($cf_XOPEN_SOURCE)
+ 	;;
+ linux*musl)
+diff '--color=auto' -ruN a/Ada95/aclocal.m4 b/Ada95/aclocal.m4
+--- a/Ada95/aclocal.m4	2025-07-19 18:38:31.000000000 +0200
++++ b/Ada95/aclocal.m4	2025-07-25 14:11:57.495783459 +0200
+@@ -5430,7 +5430,7 @@
+ 	cf_xopen_source="-D_SGI_SOURCE"
+ 	cf_XOPEN_SOURCE=
+ 	;;
+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnuabielfv*|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
+ 	CF_GNU_SOURCE($cf_XOPEN_SOURCE)
+ 	;;
+ linux*musl)
+diff '--color=auto' -ruN a/Ada95/configure b/Ada95/configure
+--- a/Ada95/configure	2025-07-19 18:40:05.000000000 +0200
++++ b/Ada95/configure	2025-07-25 14:11:49.981449762 +0200
+@@ -13955,7 +13955,7 @@
+ 	cf_xopen_source="-D_SGI_SOURCE"
+ 	cf_XOPEN_SOURCE=
+ 	;;
+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnuabielfv*|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
+ 
+ cf_gnu_xopen_source=$cf_XOPEN_SOURCE
+ 
+diff '--color=auto' -ruN a/configure b/configure
+--- a/configure	2025-07-19 19:00:40.000000000 +0200
++++ b/configure	2025-07-25 14:11:02.884551699 +0200
+@@ -10737,7 +10737,7 @@
+ 	cf_xopen_source="-D_SGI_SOURCE"
+ 	cf_XOPEN_SOURCE=
+ 	;;
+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnuabielfv*|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
+ 
+ cf_gnu_xopen_source=$cf_XOPEN_SOURCE
+ 
+diff '--color=auto' -ruN a/test/aclocal.m4 b/test/aclocal.m4
+--- a/test/aclocal.m4	2025-07-19 18:42:37.000000000 +0200
++++ b/test/aclocal.m4	2025-07-25 14:11:41.551475534 +0200
+@@ -4658,7 +4658,7 @@
+ 	cf_xopen_source="-D_SGI_SOURCE"
+ 	cf_XOPEN_SOURCE=
+ 	;;
+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnuabielfv*|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
+ 	CF_GNU_SOURCE($cf_XOPEN_SOURCE)
+ 	;;
+ linux*musl)
+diff '--color=auto' -ruN a/test/configure b/test/configure
+--- a/test/configure	2025-06-14 15:40:22.000000000 +0200
++++ b/test/configure	2025-07-25 14:11:34.529155110 +0200
+@@ -4183,7 +4183,7 @@
+ 	cf_xopen_source="-D_SGI_SOURCE"
+ 	cf_XOPEN_SOURCE=
+ 	;;
+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnuabielfv*|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
+ 
+ cf_gnu_xopen_source=$cf_XOPEN_SOURCE
+ 

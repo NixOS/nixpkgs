@@ -6,22 +6,23 @@
   google-cloud-core,
   mock,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
-  version = "0.35.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.36.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CsRNqesPoLEilRPNiIB0q9AhGZLEBCMAr9HBbUFHRVM=";
+    pname = "google_cloud_dns";
+    inherit version;
+    hash = "sha256-SwpOx2wnOQHUixtzEyw/3NMYdIUMpkJM115tYxrjcR4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
   ];
@@ -37,17 +38,17 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_quota"
   ];
 
   pythonImportsCheck = [ "google.cloud.dns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud DNS API client library";
     homepage = "https://github.com/googleapis/python-dns";
     changelog = "https://github.com/googleapis/python-dns/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

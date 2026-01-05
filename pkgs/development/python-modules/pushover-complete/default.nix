@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
+  setuptools,
   requests,
-  six,
   pytestCheckHook,
   requests-toolbelt,
   responses,
@@ -12,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "pushover-complete";
-  version = "1.1.1";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pushover_complete";
     inherit version;
-    sha256 = "8a8f867e1f27762a28a0832c33c6003ca54ee04c935678d124b4c071f7cf5a1f";
+    hash = "sha256-JPx9hNc0JoQOdnj+6A029A3wEUyzA1K6T5mrOELtIac=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
-    six
   ];
 
   nativeCheckInputs = [
@@ -35,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pushover_complete" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for interacting with *all* aspects of the Pushover API";
     homepage = "https://github.com/scolby33/pushover_complete";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

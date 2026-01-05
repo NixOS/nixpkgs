@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "world-wall-clock";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ddelabru";
     repo = "world-wall-clock";
     tag = "v${version}";
-    hash = "sha256-OTBYSStCFBrZ8JutrhyyJpi7vRvBAUK0EKTtjvbi13I=";
+    hash = "sha256-gwJvoXSq8H+sMTyBEA1N+KxnkGxyt5Ev+V3awCBiILg=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -24,12 +24,16 @@ python3.pkgs.buildPythonApplication rec {
     xdg-base-dirs
   ];
 
+  pythonRelaxDeps = [
+    "urwid"
+  ];
+
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/*" ];
+  enabledTestPaths = [ "tests/*" ];
 
   meta = {
-    description = "TUI application that provides a multi-timezone graphical clock in a terminal environment.";
+    description = "TUI application that provides a multi-timezone graphical clock in a terminal environment";
     homepage = "https://github.com/ddelabru/world-wall-clock";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ddelabru ];

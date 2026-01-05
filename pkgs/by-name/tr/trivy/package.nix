@@ -2,28 +2,27 @@
   lib,
   stdenv,
   buildPackages,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
   trivy,
 }:
-
-buildGo124Module rec {
+buildGoModule rec {
   pname = "trivy";
-  version = "0.60.0";
+  version = "0.68.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     tag = "v${version}";
-    hash = "sha256-9JArivz+4GWfU2R7e4pFI/cWJgNFhMj/cQ09a4ESoy8=";
+    hash = "sha256-0s9N7BHLJOTnOfa9tQ70D5tfTDSEHsiLUYHpWZjuoEU=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-EF2oq3iYVhdeXjAYYLqtcF0OwDh6vgDay1y8z5w/S4k=";
+  vendorHash = "sha256-0HbMMzkxDbDb/Q7s490JfjK63tPdWDuEbV2oQjvD1zI=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -33,25 +32,19 @@ buildGo124Module rec {
     "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${version}"
   ];
 
+  env.GOEXPERIMENT = "jsonv2";
+
   nativeBuildInputs = [ installShellFiles ];
 
   # Tests require network access
   doCheck = false;
 
-  postInstall =
-    let
-      trivy =
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          placeholder "out"
-        else
-          buildPackages.trivy;
-    in
-    ''
-      installShellCompletion --cmd trivy \
-        --bash <(${trivy}/bin/trivy completion bash) \
-        --fish <(${trivy}/bin/trivy completion fish) \
-        --zsh <(${trivy}/bin/trivy completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd trivy \
+      --bash <($out/bin/trivy completion bash) \
+      --fish <($out/bin/trivy completion fish) \
+      --zsh <($out/bin/trivy completion zsh)
+  '';
 
   doInstallCheck = true;
 
@@ -61,7 +54,7 @@ buildGo124Module rec {
     version = "Version: ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     homepage = "https://github.com/aquasecurity/trivy";
     changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
@@ -73,8 +66,8 @@ buildGo124Module rec {
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
     mainProgram = "trivy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pysol-cards";
-  version = "0.18.1";
+  version = "0.24.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "pysol_cards";
-    hash = "sha256-EDx8DDGecug24Jm7tH/1S+cp2XXjXBG6dNSsXkKGuOs=";
+    hash = "sha256-qYVJLagaoViN/AVtmnxsqD9mJUwLkPJa/GgqcHE9TUs=";
   };
 
   propagatedBuildInputs = [
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     random2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generates Solitaire deals";
     mainProgram = "pysol_cards";
     homepage = "https://github.com/shlomif/pysol_cards";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mwolfe ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mwolfe ];
   };
 }

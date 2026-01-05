@@ -13,7 +13,6 @@
   iconv,
   pillow,
   pyperclip,
-  pythonOlder,
   rustPlatform,
   rustc,
   setuptools,
@@ -24,23 +23,28 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.11";
+  version = "0.2.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    rev = "0586591e948977ca5945252c893ba8f766ff8d28";
-    hash = "sha256-daDxkQ7N0+yS2JOLfXJq4jv+5VQNnwtqIMy2p8j+Sag=";
+    tag = version;
+    hash = "sha256-8QXPvfVeT3qadxTvt/LQX3XM5tGj6SpfOhP/9xcZHW4=";
   };
 
+  patches = [ ./update-pyo3.patch ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    name = "${pname}-${version}";
-    hash = "sha256-doBraJQtekrO/ZZV9KFz7BdIgBVVWtQztUS2Gz8dDdA=";
+    hash = "sha256-n28jzS2+zbXsdR7rT0PBvcqNacuFMJKUug0mBYc4eFE=";
+    patchFlags = [ "-p4" ]; # strip i/aardwolf/utils/rlers/ prefix
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -67,19 +71,20 @@ buildPythonPackage rec {
     pyperclip
     tqdm
     unicrypto
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;
 
   pythonImportsCheck = [ "aardwolf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous RDP protocol implementation";
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

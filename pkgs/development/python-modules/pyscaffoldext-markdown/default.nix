@@ -11,7 +11,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   twine,
@@ -46,7 +46,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox
@@ -57,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.markdown" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyScaffold extension which uses Markdown instead of reStructuredText";
     homepage = "https://pypi.org/project/pyscaffoldext-markdown/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

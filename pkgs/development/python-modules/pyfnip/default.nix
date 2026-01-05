@@ -22,17 +22,18 @@ buildPythonPackage rec {
 
   dependencies = [
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyfnip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to get fido account data";
     homepage = "https://github.com/juhaniemi/pyfnip";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

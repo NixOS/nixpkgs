@@ -6,7 +6,6 @@
   gmp,
   zlib,
   libiconv,
-  darwin,
   installShellFiles,
 }:
 
@@ -41,37 +40,35 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
+  installPhase = ''
+    mkdir -p $out/bin
 
-      PSC_PACKAGE=$out/bin/psc-package
+    PSC_PACKAGE=$out/bin/psc-package
 
-      install -D -m555 -T psc-package $PSC_PACKAGE
-      chmod u+w $PSC_PACKAGE
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool \
-        -change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib \
-        -change /usr/lib/libiconv.2.dylib ${libiconv}/libiconv.2.dylib \
-        $PSC_PACKAGE
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PSC_PACKAGE
-    ''
-    + ''
-      chmod u-w $PSC_PACKAGE
+    install -D -m555 -T psc-package $PSC_PACKAGE
+    chmod u+w $PSC_PACKAGE
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool \
+      -change /usr/lib/libiconv.2.dylib ${libiconv}/libiconv.2.dylib \
+      $PSC_PACKAGE
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PSC_PACKAGE
+  ''
+  + ''
+    chmod u-w $PSC_PACKAGE
 
-      installShellCompletion --cmd psc-package \
-        --bash <($PSC_PACKAGE --bash-completion-script $PSC_PACKAGE) \
-        --fish <($PSC_PACKAGE --fish-completion-script $PSC_PACKAGE) \
-        --zsh <($PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE)
-    '';
+    installShellCompletion --cmd psc-package \
+      --bash <($PSC_PACKAGE --bash-completion-script $PSC_PACKAGE) \
+      --fish <($PSC_PACKAGE --fish-completion-script $PSC_PACKAGE) \
+      --zsh <($PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE)
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for PureScript based on package sets";
     mainProgram = "psc-package";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [
       "x86_64-darwin"

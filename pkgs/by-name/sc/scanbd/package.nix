@@ -28,18 +28,17 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  configureFlags =
-    [
-      "--disable-Werror"
-      "--enable-udev"
-      "--with-scanbdconfdir=/etc/scanbd"
-      "--with-systemdsystemunitdir=$out/lib/systemd/system"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # AC_FUNC_MALLOC is broken on cross builds.
-      "ac_cv_func_malloc_0_nonnull=yes"
-      "ac_cv_func_realloc_0_nonnull=yes"
-    ];
+  configureFlags = [
+    "--disable-Werror"
+    "--enable-udev"
+    "--with-scanbdconfdir=/etc/scanbd"
+    "--with-systemdsystemunitdir=$out/lib/systemd/system"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # AC_FUNC_MALLOC is broken on cross builds.
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   enableParallelBuilding = true;
 
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scanner button daemon";
     longDescription = ''
       scanbd polls a scanner's buttons, looking for button presses, function
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://scanbd.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/scanbd/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

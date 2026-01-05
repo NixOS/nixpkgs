@@ -2,21 +2,25 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "loco";
-  version = "0.14.0";
+  version = "0.16.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-d13BuDPXZJ2cOgaNhX95Us+T4SoJZJAyCugSySHh7U8=";
+    hash = "sha256-DdrLABMiTutIhUHvUw29DYZIT+YHLNJjoTT5kWMeAkU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-g7zfPO0/8a9PPdd8CPDWRUTWdQ29tFZ3uOSux8hcExo=";
+  cargoHash = "sha256-01IQxfeOzxOHqRovmNV3q/ZSdESWi7Gb6F7o51Rbkw4=";
 
   #Skip trycmd integration tests
   checkFlags = [ "--skip=cli_tests" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites";

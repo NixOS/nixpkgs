@@ -1,68 +1,58 @@
 {
   lib,
-  attrs,
-  botocore,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  hypothesis,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
+  click,
   inquirer,
   jmespath,
-  mock,
-  mypy-extensions,
   pip,
-  pytest7CheckHook,
-  pythonOlder,
   pyyaml,
-  requests,
-  setuptools,
   six,
-  typing-extensions,
-  watchdog,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+  requests,
   websocket-client,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.28.0";
-  format = "setuptools";
+  version = "1.32.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = pname;
+    repo = "chalice";
     tag = version;
-    hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
+    hash = "sha256-7qmE78aFfq9XCl2zcx1dAVKZZb96Bu47tSW1Qp2vFl4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
-      --replace "pip>=9,<23.1" "pip" \
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     botocore
     click
     inquirer
     jmespath
-    mypy-extensions
     pip
     pyyaml
-    setuptools
+    # setuptools
     six
-    typing-extensions
-    wheel
-    watchdog
   ];
 
   nativeCheckInputs = [
     hypothesis
-    mock
-    pytest7CheckHook
+    pytestCheckHook
     requests
     websocket-client
   ];
@@ -88,23 +78,22 @@ buildPythonPackage rec {
     # Don't build
     "test_can_generate_pipeline_for_all"
     "test_build_wheel"
-    # https://github.com/aws/chalice/issues/1850
-    "test_resolve_endpoint"
-    "test_endpoint_from_arn"
     # Tests require dist
     "test_setup_tar_gz_hyphens_in_name"
     "test_both_tar_gz"
     "test_both_tar_bz2"
+    # AssertionError
+    "test_no_error_message_printed_on_empty_reqs_file"
   ];
 
   pythonImportsCheck = [ "chalice" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Serverless Microframework for AWS";
     mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
-    changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    changelog = "https://github.com/aws/chalice/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

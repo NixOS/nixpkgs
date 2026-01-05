@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
-    rev = version;
+    tag = version;
     hash = "sha256-lokz7klAQAascij0T/T43/PrbMh6ZUAvFnIqg13pVUk=";
   };
 
@@ -60,11 +60,11 @@ python3.pkgs.buildPythonApplication rec {
       containerexec-version = testVersion "containerexec";
     };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for Reliable Benchmarking and Resource Measurement";
     homepage = "https://github.com/sosy-lab/benchexec";
-    maintainers = with maintainers; [ lorenzleutgeb ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
+    license = lib.licenses.asl20;
     mainProgram = "benchexec";
   };
 }

@@ -24,6 +24,8 @@ luarocks_bootstrap.overrideAttrs (old: {
 
   patches = [ ];
 
+  doInstallCheck = false;
+
   passthru = {
     updateScript = unstableGitUpdater {
       # tags incompletely inherited from regular luarocks

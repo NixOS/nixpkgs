@@ -17,13 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YOTTwkmYLU9+7FHw3EhIWFK2oDOwm+pGqCAqa4Ywuew=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to identify potentially unused code";
     homepage = "https://unused.codes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

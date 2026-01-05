@@ -13,7 +13,8 @@ package.overrideAttrs (
   finalAttrs: oldAttrs: {
     passthru = {
       updateScript = ./update.sh;
-    } // oldAttrs.passthru or { };
+    }
+    // oldAttrs.passthru or { };
 
     # Point `nix edit`, etc. to the file that defines the attribute, not this
     # entry point
@@ -27,6 +28,7 @@ package.overrideAttrs (
       mainProgram = "krunker";
       platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    } // oldAttrs.meta or { };
+    }
+    // oldAttrs.meta or { };
   }
 )

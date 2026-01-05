@@ -51,17 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i '/set(OPENSSL_USE_STATIC_LIBS TRUE)/d' CMakeLists.txt
+    substituteInPlace ./CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" \
+      "cmake_minimum_required(VERSION 4.0)"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS IoT Secure Tunneling Local Proxy Reference Implementation C++";
     homepage = "https://github.com/aws-samples/aws-iot-securetunneling-localproxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ spalf ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ spalf ];
+    platforms = lib.platforms.unix;
     mainProgram = "localproxy";
   };
 })

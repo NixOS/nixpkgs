@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
@@ -7,42 +8,102 @@
   joblib,
   regex,
   tqdm,
+
+  # preInstallCheck
+  nltk,
+
+  # nativeCheckInputs
+  matplotlib,
+  numpy,
+  pyparsing,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "nltk";
-  version = "3.9.1";
+  version = "3.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h9EnvT3kvYmk+BJl5fpZyxsZmydEAXU3D3QX0rx66Gg=";
+    hash = "sha256-D0CemwacpBd8GQPD6EPu+Qx+kpkvpJMa5gfabeSeFBk=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     joblib
     regex
     tqdm
   ];
 
-  # Tests require some data, the downloading of which is impure. It would
-  # probably make sense to make the data another derivation, but then feeding
-  # that into the tests (given that we need nltk itself to download the data,
-  # unless there's an easy way to download it without nltk's downloader) might
-  # be complicated. For now let's just disable the tests and hope for the
-  # best.
-  doCheck = false;
+  # Use new passthru function to pass dependencies required for testing
+  preInstallCheck = ''
+    export NLTK_DATA=${
+      nltk.dataDir (
+        d: with d; [
+          averaged-perceptron-tagger-eng
+          averaged-perceptron-tagger-rus
+          brown
+          cess-cat
+          cess-esp
+          conll2007
+          floresta
+          gutenberg
+          inaugural
+          indian
+          large-grammars
+          nombank-1-0
+          omw-1-4
+          pl196x
+          porter-test
+          ptb
+          punkt-tab
+          rte
+          sinica-treebank
+          stopwords
+          tagsets-json
+          treebank
+          twitter-samples
+          udhr
+          universal-tagset
+          wmt15-eval
+          wordnet
+          wordnet-ic
+          words
+        ]
+      )
+    }
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    numpy
+    pyparsing
+    pytest-mock
+
+    pkgs.which
+  ];
+
+  disabledTestPaths = [
+    "nltk/test/unit/test_downloader.py" # Touches network
+  ];
 
   pythonImportsCheck = [ "nltk" ];
 
-  meta = with lib; {
+  passthru = {
+    data = pkgs.nltk-data;
+    dataDir = pkgs.callPackage ./data-dir.nix { };
+  };
+
+  meta = {
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
     homepage = "http://nltk.org/";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bengsparks ];
   };
 }

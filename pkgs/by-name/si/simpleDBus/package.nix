@@ -10,13 +10,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "simpleDBus";
 
-  version = "0.9.0";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "OpenBluetoothToolbox";
     repo = "SimpleBLE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-suVaiFE60g2OlIF4DLGoHKr7ehUtThLcB/GoVCOfxJg=";
+    hash = "sha256-KNSrw+NhfHRuvDwkWpWTSnP6LWoSVWAa33fVikb60A8=";
   };
 
   outputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ wrapper for libdbus-1";
     homepage = "https://github.com/OpenBluetoothToolbox/SimpleBLE";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 })

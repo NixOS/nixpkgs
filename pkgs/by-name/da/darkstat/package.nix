@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Network statistics web interface";
     longDescription = ''
       Captures network traffic, calculates statistics about usage, and serves
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://unix4lyfe.org/darkstat";
     changelog = "https://github.com/emikulic/darkstat/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Only;
+    platforms = with lib.platforms; unix;
     mainProgram = "darkstat";
   };
 }

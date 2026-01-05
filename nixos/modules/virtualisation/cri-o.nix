@@ -166,7 +166,7 @@ in
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/crio";
-        ExecReload = "/bin/kill -s HUP $MAINPID";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         TasksMax = "infinity";
         LimitNOFILE = "1048576";
         LimitNPROC = "1048576";

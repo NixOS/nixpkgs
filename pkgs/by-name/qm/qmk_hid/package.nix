@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wJi7FQrvMbdTwvbbjBnzmxupMbEuM8TeZ0JIK5ulQKI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ytg4pgPzl9dKyCWgRRVRg1noNRvBhBnWNf9bmNcHnjY=";
 
   nativeBuildInputs = [
@@ -33,10 +32,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=src/lib.rs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tool for interactng with QMK devices over HID";
     homepage = "https://github.com/FrameworkComputer/qmk_hid";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
     mainProgram = "qmk_hid";
   };

@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
-  jdk17,
+  gradle_9,
+  jdk21,
   fontconfig,
   libXinerama,
   libXrandr,
@@ -15,17 +15,20 @@
   alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
+  libglvnd,
+  autoPatchelfHook,
+  writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.10.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20250226.1";
-    hash = "sha256-yDg3Ge+eI3UPVfvBUzDG1fmthgSaDkOMjPa9v90Bi+U=";
+    tag = "r20260102.2";
+    hash = "sha256-LmK1FnMd8udAfkfe1QyJd0kVSUfs1xAmzTiz80USlpo=";
   };
 
   postPatch = ''
@@ -34,25 +37,28 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'resourcesTask.dependsOn(":desktopLibNative:''${Tasks.compileNativeUniversal}")' ""
   '';
 
-  gradleBuildTask = ":desktopApp:createDistributable";
+  gradleBuildTask = ":desktopApp:createReleaseDistributable";
 
   gradleUpdateTask = finalAttrs.gradleBuildTask;
 
-  mitmCache = gradle.fetchDeps {
+  gradleInitScript = writeText "empty-init-script.gradle" "";
+
+  mitmCache = gradle_9.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
     silent = false;
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jdk17;
+  env.JAVA_HOME = jdk21;
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk21}" ];
 
   nativeBuildInputs = [
-    gradle
-    jdk17
+    gradle_9
+    jdk21
     copyDesktopItems
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -65,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     lcms2
     alsa-lib
+    libglvnd
   ];
 
   doCheck = false;
@@ -74,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       name = "keyguard";
       exec = "Keyguard";
       icon = "keyguard";
-      comment = "Keyguard";
       desktopName = "Keyguard";
     })
   ];
@@ -82,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -r desktopApp/build/compose/binaries/main/app/Keyguard $out
-    install -Dm0644 $out/lib/Keyguard.png $out/share/pixmaps/keyguard.png
+    cp --recursive desktopApp/build/compose/binaries/main-release/app/Keyguard $out
+    install -D --mode=0644 $out/lib/Keyguard.png $out/share/icons/hicolor/512x512/apps/keyguard.png
 
     runHook postInstall
   '';
@@ -95,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AChep/keyguard-app";
     mainProgram = "Keyguard";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode

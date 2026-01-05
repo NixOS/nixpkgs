@@ -61,12 +61,12 @@ mkDerivation rec {
     # "-DWITH_DIAMONDCARD=On" seems ancient and broken
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/LubosD/twinkle/blob/${version}/NEWS";
     description = "SIP-based VoIP client";
     homepage = "http://twinkle.dolezel.info/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.mkg20001 ];
+    platforms = lib.platforms.linux;
   };
 }

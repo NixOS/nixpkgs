@@ -29,13 +29,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 
+  patches = [
+    ./odp-dpdk_25.03.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
   buildInputs = [
-    dpdk
+    (dpdk.overrideAttrs {
+      patches = [
+        ./dpdk_25.03.patch
+      ];
+    })
     libconfig
     libpcap
     numactl
@@ -54,11 +62,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.abuibrahim ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.abuibrahim ];
   };
 }

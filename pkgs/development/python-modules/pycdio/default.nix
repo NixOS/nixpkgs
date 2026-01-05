@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   setuptools,
   pkg-config,
   swig,
@@ -40,7 +41,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/test-*.py" ];
+  enabledTestPaths = [ "test/test-*.py" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/libcdio/";

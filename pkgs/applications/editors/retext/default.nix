@@ -84,7 +84,7 @@ python3.pkgs.buildPythonApplication rec {
     cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons
 
     substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
-      --replace-fail "Exec=ReText-${version}.data/scripts/retext %F" "Exec=retext %F" \
+      --replace-fail "Exec=retext-${version}.data/scripts/retext %F" "Exec=retext %F" \
       --replace-fail "Icon=./ReText/icons/retext.svg" "Icon=retext"
   '';
 

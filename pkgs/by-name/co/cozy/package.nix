@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "geigi";
     repo = "cozy";
-    rev = version;
+    tag = version;
     hash = "sha256-oMgdz2dny0u1XV13aHu5s8/pcAz8z/SAOf4hbCDsdjw";
   };
 
@@ -43,17 +43,16 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-good
-      gst-plugins-ugly
-      gst-plugins-base
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-base
+    gst-plugins-bad
+  ]);
 
   propagatedBuildInputs = with python3Packages; [
     distro
@@ -74,15 +73,15 @@ python3Packages.buildPythonApplication rec {
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern audio book player for Linux";
     homepage = "https://cozy.geigi.de/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       makefu
       aleksana
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.geigi.cozy";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

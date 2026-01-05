@@ -43,25 +43,28 @@ stdenv.mkDerivation {
     gfortran
     pkg-config
   ];
-  buildInputs =
-    [
-      apfel
-      blas
-      ceres-solver
-      lhapdf
-      lapack
-      libyaml
-      root
-      qcdnum
-      gsl
-      yaml-cpp
-      zlib
-    ]
-    ++ lib.optionals ("5" == lib.versions.major root.version) [
-      apfelgrid
-      applgrid
-    ]
-    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
+  buildInputs = [
+    apfel
+    apfelgrid
+    applgrid
+    blas
+    ceres-solver
+    lhapdf
+    lapack
+    libyaml
+    root
+    qcdnum
+    gsl
+    yaml-cpp
+    zlib
+  ]
+  ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
+
+  preConfigure = ''
+    substituteInPlace "CMakeLists.txt" \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12.2)' \
+                     'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"
@@ -75,11 +78,11 @@ stdenv.mkDerivation {
     ln -sv "$out/lib/xfitter/"* "$out/lib/"
   '';
 
-  meta = with lib; {
-    description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
-    license = licenses.gpl3;
+  meta = {
+    description = "Open source QCD fit framework designed to extract PDFs and assess the impact of new data";
+    license = lib.licenses.gpl3;
     homepage = "https://www.xfitter.org/xFitter";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

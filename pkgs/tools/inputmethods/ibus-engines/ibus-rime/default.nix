@@ -42,18 +42,24 @@ stdenv.mkDerivation rec {
   rimeDataDrv = symlinkJoin {
     name = "ibus-rime-data";
     paths = rimeDataPkgs;
+    postBuild = ''
+      mkdir -p $out/share/rime-data
+
+      # Ensure default.yaml exists
+      [ -e "$out/share/rime-data/default.yaml" ] || touch "$out/share/rime-data/default.yaml"
+    '';
   };
 
   postInstall = ''
     cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
   '';
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Rime input method engine for IBus";
     homepage = "https://rime.im/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pmy ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pmy ];
   };
 }

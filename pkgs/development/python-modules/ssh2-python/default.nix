@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "ssh2-python";
   version = "1.1.2.post1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ParallelSSH";

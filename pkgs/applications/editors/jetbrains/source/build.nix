@@ -1,46 +1,51 @@
-{ fetchFromGitHub
-, fetchurl
-, fetchzip
-, lib
-, linkFarm
-, makeWrapper
-, runCommand
-, stdenv
-, stdenvNoCC
-, rustPlatform
+{
+  fetchFromGitHub,
+  fetchurl,
+  fetchzip,
+  lib,
+  linkFarm,
+  makeWrapper,
+  runCommand,
+  stdenv,
+  stdenvNoCC,
+  rustPlatform,
+  callPackage,
 
-, ant
-, cmake
-, glib
-, glibc
-, jetbrains
-, kotlin
-, libdbusmenu
-, maven
-, p7zip
-, pkg-config
-, xorg
+  ant,
+  cmake,
+  fsnotifier,
+  glib,
+  glibc,
+  jetbrains,
+  kotlin,
+  libdbusmenu,
+  maven,
+  p7zip,
+  pkg-config,
+  xorg,
 
-, version
-, buildNumber
-, buildType
-, ideaHash
-, androidHash
-, jpsHash
-, restarterHash
-, mvnDeps
+  version,
+  buildNumber,
+  buildType,
+  ideaHash,
+  androidHash,
+  jpsHash,
+  restarterHash,
+  mvnDeps,
+  repositories,
+  kotlin-jps-plugin,
 }:
 
 let
-  kotlin_2_0_21 = kotlin.overrideAttrs (oldAttrs: {
-    version = "2.0.21";
+  kotlin' = kotlin.overrideAttrs (oldAttrs: {
+    version = "2.2.20";
     src = fetchurl {
       url = oldAttrs.src.url;
-      sha256 = "sha256-A1LApFvSL4D2sm5IXNBNqAR7ql3lSGUoH7n4mkp7zyo=";
+      hash = "sha256-gfAmTJBztcu9s/+EGM8sXawHaHn8FW+hpkYvWlrMRCA=";
     };
   });
 
-  jbr = jetbrains.jdk-no-jcef-17;
+  jbr = jetbrains.jdk-no-jcef;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -86,12 +91,24 @@ let
   libdbm = stdenv.mkDerivation {
     pname = "libdbm";
     version = buildNumber;
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ glib xorg.libX11 libdbusmenu ];
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+    buildInputs = [
+      glib
+      xorg.libX11
+      libdbusmenu
+    ];
     inherit src;
     sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
-    postPatch = "cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a";
+    postPatch = ''
+      # Fix the build with CMake 4.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 2.6.0)' 'cmake_minimum_required(VERSION 3.10)'
+      cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a
+    '';
     passthru.patched-libdbusmenu = libdbusmenu-jb;
     installPhase = ''
       runHook preInstall
@@ -103,72 +120,49 @@ let
     '';
   };
 
-  fsnotifier = stdenv.mkDerivation {
-    pname = "fsnotifier";
-    version = buildNumber;
-    inherit src;
-    sourceRoot = "${src.name}/native/fsNotifier/linux";
-    buildPhase = ''
-      runHook preBuild
-      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildNumber}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/bin
-      mv fsnotifier $out/bin
-      runHook postInstall
-    '';
-  };
-
   restarter = rustPlatform.buildRustPackage {
     pname = "restarter";
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/restarter";
-    useFetchCargoVendor = true;
+
     cargoHash = restarterHash;
 
     # Allow static linking
-    buildInputs = [ glibc glibc.static ];
+    buildInputs = [
+      glibc
+      glibc.static
+    ];
   };
 
-  jpsRepo = runCommand "jps-bootstrap-repository"
-    {
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-      outputHash = jpsHash;
-      nativeBuildInputs = [ ant jbr ];
-    } ''
-    ant -Duser.home=$out -Dbuild.dir=/build/tmp -f ${src}/platform/jps-bootstrap/jps-bootstrap-classpath.xml
-    find $out -type f \( \
-      -name \*.lastUpdated \
-      -o -name resolver-status.properties \
-      -o -name _remote.repositories \) \
-      -delete
-  '';
+  jpsRepo = callPackage ./jps_repo.nix { inherit jpsHash src jbr; };
 
   jps-bootstrap = stdenvNoCC.mkDerivation {
     pname = "jps-bootstrap";
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/platform/jps-bootstrap";
-    nativeBuildInputs = [ ant makeWrapper jbr ];
+    nativeBuildInputs = [
+      ant
+      makeWrapper
+      jbr
+    ];
     patches = [ ../patches/kotlinc-path.patch ];
-    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin_2_0_21}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
+    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
-      runHook preInstall
+      runHook preBuild
 
-      ant -Duser.home=${jpsRepo} -Dbuild.dir=/build/out -f jps-bootstrap-classpath.xml
+      BUILD_HOME=$(mktemp -d)
+      ant -Duser.home=${jpsRepo} -Dbuild.dir="$BUILD_HOME" -f jps-bootstrap-classpath.xml
 
-      runHook postInstall
+      runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/share/java/
-      cp /build/out/jps-bootstrap.classes.jar $out/share/java/jps-bootstrap.jar
-      cp -r /build/out/jps-bootstrap.out.lib $out/share/java/jps-bootstrap-classpath
+      cp "$BUILD_HOME/jps-bootstrap.classes.jar" $out/share/java/jps-bootstrap.jar
+      cp -r "$BUILD_HOME/jps-bootstrap.out.lib" $out/share/java/jps-bootstrap-classpath
       makeWrapper ${jbr}/bin/java $out/bin/jps-bootstrap \
         --add-flags "-cp $out/share/java/jps-bootstrap-classpath/'*' org.jetbrains.jpsBootstrap.JpsBootstrapMain"
 
@@ -180,19 +174,12 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = [
-        "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/${entry.url}"
-        "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ij/intellij-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public/${entry.url}"
-        "https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/kpm/public/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/ki/maven/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/dpgpv/maven/${entry.url}"
-        "https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev/${entry.url}"
-      ];
+      urls = lib.concatMap (url: [
+        "https://cache-redirector.jetbrains.com/${url}/${entry.url}"
+        "https://${url}/${entry.url}"
+      ]) repositories;
+      # Do not try to retry 4xx errors
+      curlOptsList = [ "--no-retry-all-errors" ];
       sha256 = entry.hash;
     };
   };
@@ -200,37 +187,60 @@ let
 
   kotlin-jps-plugin-classpath =
     let
-      repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
-      groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
+      repoBaseUrl = "packages.jetbrains.team/maven/p/ij/intellij-dependencies";
+      repoUrls = [
+        "https://cache-redirector.jetbrains.com/${repoBaseUrl}"
+        "https://${repoBaseUrl}"
+      ];
+      groupId = "org/jetbrains/kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "2.0.21-RC";
+      version = kotlin-jps-plugin.version;
     in
     fetchurl {
-      url = repoUrl + "/" + groupId + "/" + artefactId + "/" + version + "/" + artefactId + "-" + version + ".jar";
-      hash = "sha256-jFjxP1LGjrvc1x2XqF5gg/SeKdSFNefxABBlrYl81zA=";
+      urls = map (
+        url:
+        lib.concatStringsSep "/" [
+          url
+          groupId
+          artefactId
+          version
+          "${artefactId}-${version}.jar"
+        ]
+      ) repoUrls;
+      hash = kotlin-jps-plugin.hash;
     };
 
-    targetClass = if buildType == "pycharm" then "intellij.pycharm.community.build" else "intellij.idea.community.build";
-    targetName = if buildType == "pycharm" then "PyCharmCommunityInstallersBuildTarget" else "OpenSourceCommunityInstallersBuildTarget";
+  targetClass =
+    if buildType == "pycharm" then
+      "intellij.pycharm.community.build"
+    else
+      "intellij.idea.community.build";
+  targetName =
+    if buildType == "pycharm" then
+      "PyCharmCommunityInstallersBuildTarget"
+    else
+      "OpenSourceCommunityInstallersBuildTarget";
 
   xplat-launcher = fetchzip {
-    url = "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz";
+    urls = [
+      "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
+      "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
+    ];
     hash = "sha256-ttrQZUbBvvyH1BSVt1yWOoD82WwRi/hkoRfrsdCjwTA=";
     stripRoot = false;
   };
 
-  brokenPlugins = fetchurl {
-    url = "https://web.archive.org/web/20250224030717if_/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
-    hash = "sha256-wQO+qmFfBn32F//bs/a5Q/H4Kpc171jKA9EMmeatc6w=";
-  };
-
 in
 stdenvNoCC.mkDerivation rec {
-  pname = "${buildType}-community";
+  pname = "${buildType}-oss";
   inherit version buildNumber;
   name = "${pname}-${version}.tar.gz";
   inherit src;
-  nativeBuildInputs = [ p7zip jbr jps-bootstrap ];
+  nativeBuildInputs = [
+    p7zip
+    jbr
+    jps-bootstrap
+  ];
   repo = mvnRepo;
 
   patches = [
@@ -239,6 +249,9 @@ stdenvNoCC.mkDerivation rec {
     ../patches/bump-jackson-core-in-source.patch
   ];
 
+  # Regarding brokenPlugins.json:
+  #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
+  #  downloaded without hash changes. The file is not important for the IDEs to function properly.
   postPatch = ''
     cp ${restarter}/bin/restarter bin/linux/amd64/restarter
     cp ${fsnotifier}/bin/fsnotifier bin/linux/amd64/fsnotifier
@@ -247,13 +260,13 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt \
       --replace-fail 'JPS_PLUGIN_CLASSPATH_HERE' '${kotlin-jps-plugin-classpath}' \
-      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin_2_0_21}'
+      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin'}'
     substituteInPlace \
       platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt \
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
-      --replace-fail 'BROKEN_PLUGINS_HERE' '${brokenPlugins}'
+      --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'
@@ -268,17 +281,17 @@ stdenvNoCC.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    ln -s "$repo"/.m2 /build/.m2
-    export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source
+    ln -s "$repo"/.m2 ../.m2
+    export JPS_BOOTSTRAP_COMMUNITY_HOME="$PWD"
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
-      -Djps.kotlin.home=${kotlin_2_0_21} \
+      -Djps.kotlin.home=${kotlin'} \
       -Dintellij.build.target.os=linux \
       -Dintellij.build.target.arch=x64 \
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
       -Dintellij.build.unix.snaps=false \
       --java-argfile-target=java_argfile \
-      /build/source \
+      "$PWD" \
       ${targetClass} \
       ${targetName}
 
@@ -288,7 +301,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preBuild
 
     java \
-      -Djps.kotlin.home=${kotlin_2_0_21} \
+      -Djps.kotlin.home=${kotlin'} \
       "@java_argfile"
 
     runHook postBuild

@@ -62,8 +62,8 @@ let
   withRedis = cfg.settings.redis.location != null;
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ hexa ];
+  meta = {
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
   options.services.pretix = {
@@ -533,7 +533,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''
@@ -574,7 +574,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {

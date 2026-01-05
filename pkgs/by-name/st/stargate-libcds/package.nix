@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C data structure library";
     homepage = "https://github.com/stargateaudio/libcds";
-    maintainers = with maintainers; [ yuu ];
-    license = licenses.lgpl3Only;
+    maintainers = [ ];
+    license = lib.licenses.lgpl3Only;
   };
 }

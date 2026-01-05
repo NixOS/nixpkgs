@@ -38,44 +38,42 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.34";
+  version = "7.55";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-Z3m9qwNFH4bHNG1DD4Lbcr7N9b2swwE73iIh6NPX0l4="
+        "sha256-meTuaGH9zwx/sT+h0I7JRSCRPD8AryGPvoHUKbyzpHA="
       else
         {
-          x86_64-linux = "sha256-R6nFi6OPBTIJhg752o9r0lGb24VYobiaWgp5bfvFykg=";
-          aarch64-linux = "sha256-uoPf9rfYk0JyHcbqV3hXBqzmInuUd0xrrWCAYiT3/9I=";
+          x86_64-linux = "sha256-BOjS39GySB6ptiEJvwlShL4ZcDot2nsKXCAU/CeMEIc=";
+          aarch64-linux = "sha256-oqEwEQKFhpaFMqzcSc28v0njuiMi5CAGjP3fLDECUXU=";
         }
         .${stdenv.hostPlatform.system};
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      which
-      autoPatchelfHook
-      xdg-utils # Required for desktop integration
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      undmg
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    which
+    autoPatchelfHook
+    xdg-utils # Required for desktop integration
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    undmg
+  ];
 
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Reaper.app";
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk3
-      alsa-lib
-    ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    alsa-lib
+  ];
 
   runtimeDependencies =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -129,27 +127,29 @@ stdenv.mkDerivation rec {
         mkdir $out/bin
         ln -s $out/opt/REAPER/reaper $out/bin/
 
+        # Avoid store path in Exec, since we already link to $out/bin
+        substituteInPlace $out/share/applications/cockos-reaper.desktop \
+          --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
         runHook postInstall
       '';
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atinba
       ilian
-      orivej
-      uniquepointer
       viraptor
     ];
   };

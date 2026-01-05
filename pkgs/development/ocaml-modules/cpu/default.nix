@@ -6,17 +6,15 @@
   autoconf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cpu";
   version = "2.0.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "UnixJunkie";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1vir6gh1bhvxgj2fcn69c38yhw3jgk7dyikmw789m5ld2csnyjiv";
+    repo = "cpu";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O0pvNRONlprQ4XVG3858cnDo0WDJWOaEfH3DFeAzOe4=";
   };
 
   preConfigure = ''
@@ -28,10 +26,10 @@ buildDunePackage rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "strictoverflow";
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    homepage = "https://github.com/UnixJunkie/cpu";
     description = "Core pinning library";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl2;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl2;
   };
-}
+})

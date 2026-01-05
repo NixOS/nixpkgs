@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, cmake, pkg-config
-, liblxi, readline, lua, bash-completion
-, wrapGAppsHook4
-, glib, gtk4, gtksourceview5, libadwaita, json-glib
-, desktop-file-utils, appstream-glib
-, gsettings-desktop-schemas
-, withGui ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  liblxi,
+  readline,
+  lua,
+  bash-completion,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  json-glib,
+  desktop-file-utils,
+  appstream-glib,
+  gsettings-desktop-schemas,
+  withGui ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +34,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja cmake pkg-config
-  ] ++ lib.optional withGui wrapGAppsHook4;
+    meson
+    ninja
+    cmake
+    pkg-config
+  ]
+  ++ lib.optional withGui wrapGAppsHook4;
 
   buildInputs = [
-    liblxi readline lua bash-completion
-  ] ++ lib.optionals withGui [
-    glib gtk4 gtksourceview5 libadwaita json-glib
-    desktop-file-utils appstream-glib
+    liblxi
+    readline
+    lua
+    bash-completion
+  ]
+  ++ lib.optionals withGui [
+    glib
+    gtk4
+    gtksourceview5
+    libadwaita
+    json-glib
+    desktop-file-utils
+    appstream-glib
     gsettings-desktop-schemas
   ];
 
@@ -35,10 +62,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = lib.optional (!withGui) "-Dgui=false";
 
-  postInstall = lib.optionalString withGui
-    "glib-compile-schemas $out/share/glib-2.0/schemas";
+  postInstall = lib.optionalString withGui "glib-compile-schemas $out/share/glib-2.0/schemas";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for communicating with LXI compatible instruments";
     longDescription = ''
       lxi-tools is a collection of open source software tools
@@ -47,9 +73,9 @@ stdenv.mkDerivation rec {
       spectrum analyzers etc.
     '';
     homepage = "https://lxi-tools.github.io/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vq ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vq ];
     mainProgram = "lxi";
   };
 }

@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-+EFvYloLm/cDOflqj6ZIgjFoljKhYBVIKxD8L9j2Hj4=";
+    hash = "sha256-ZKSyMNc+EHY4QBTLtUiWiTMEcmAAbrV1xqxmvNF96f8=";
   };
 
   postPatch = ''
@@ -41,30 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      boost
-      bzip2
-      cli11
-      expat
-      fmt_11
-      libosmium
-      libpq
-      nlohmann_json
-      opencv
-      potrace
-      proj
-      protozero
-      (python3.withPackages (
-        p: with p; [
-          psycopg2
-          pyosmium
-        ]
-      ))
-      zlib
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  buildInputs = [
+    boost
+    bzip2
+    cli11
+    expat
+    fmt_11
+    libosmium
+    libpq
+    nlohmann_json
+    opencv
+    potrace
+    proj
+    protozero
+    (python3.withPackages (
+      p: with p; [
+        psycopg2
+        pyosmium
+      ]
+    ))
+    zlib
+  ]
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     (lib.cmakeBool "EXTERNAL_LIBOSMIUM" true)
@@ -82,11 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://osm2pgsql.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers =
-      lib.teams.geospatial.members
-      ++ (with lib.maintainers; [
-        jglukasik
-        das-g
-      ]);
+    maintainers = with lib.maintainers; [
+      jglukasik
+      das-g
+    ];
+    teams = [ lib.teams.geospatial ];
   };
 })

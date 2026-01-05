@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.1.1";
+  version = "3.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-Z9xTuRm4go/FGrM7norRHVHgjcOqssNgFQ8R/Mh1yXo=";
+    hash = "sha256-AeHZWzgV0pqlKNdDCuAglpTDm3M8PWKDGvPw3lyQdF8=";
   };
 
   build-system = [
@@ -46,9 +46,10 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     pytest-mock
-  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
+  ]
+  ++ lib.optional (pythonAtLeast "3.12") distutils;
 
-  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
+  enabledTestPaths = [ "ipi_tests/unit_tests" ];
   disabledTests = [
     "test_driver_base"
     "test_driver_forcebuild"
@@ -59,14 +60,14 @@ buildPythonPackage rec {
       --set IPI_ROOT $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal force engine for ab initio and force field driven (path integral) molecular dynamics";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       mit
     ];
-    homepage = "http://ipi-code.org/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    homepage = "https://ipi-code.org/";
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

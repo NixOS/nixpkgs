@@ -44,34 +44,32 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs =
-    [
-      lua52Packages.lua
-      ncurses
-      readline
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libXft
-    ];
+  buildInputs = [
+    lua52Packages.lua
+    ncurses
+    readline
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libXft
+  ];
 
   # To be able to find <Xft.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-I${libXft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
-  postInstall =
-    ''
-      wrapProgram $out/bin/wordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/wordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Text-based word processor";
     homepage = "https://cowlark.com/wordgrinder";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "rawpy";
-  version = "0.24.0";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
     tag = "v${version}";
-    hash = "sha256-u/KWbviyhbMts40Gc/9shXSESwihWZQQaf3Z44gMgvs=";
+    hash = "sha256-d3TxPW3GdCQT8bBbnveSxtWHkf5zinM8nSy4m/P7m7Q=";
   };
 
   build-system = [
@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # rawpy._rawpy.LibRawFileUnsupportedError: b'Unsupported file format or not RAW file'
+    "testCropSizeSigma"
     "testFoveonFileOpenAndPostProcess"
     "testThumbExtractBitmap"
   ];

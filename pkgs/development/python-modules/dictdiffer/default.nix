@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "inveniosoftware";
-    repo = pname;
+    repo = "dictdiffer";
     rev = "v${version}";
     hash = "sha256-lQyPs3lQWtsvNPuvvwJUTDzrFaOX5uwGuRHe3yWUheU=";
   };
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dictdiffer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to diff and patch dictionaries";
     homepage = "https://github.com/inveniosoftware/dictdiffer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

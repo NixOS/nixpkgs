@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mani";
-  version = "0.30.0";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-LxW9LPK4cXIXhBWPhOYWLeV5PIf+o710SWX8JVpZhPI=";
+    sha256 = "sha256-vQpwU+zU4xplN2Rp1v/uXIWgIYRb47s/HWREyHH226k=";
   };
 
-  vendorHash = "sha256-8ckflry+KsEu+QgqjocXg6yyfS9R7fCfCMXwUqUSlhE=";
+  vendorHash = "sha256-Ob3yD7UblWMRc7EyvEStrLStTT3wV/XssUPTos/olyI=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitxray";
-  version = "1.0.17.3";
+  version = "1.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kulkansecurity";
     repo = "gitxray";
     tag = version;
-    hash = "sha256-MfYK6D6QkIQRTsnNAiJsfPeYcUTO/BTe0AtczeONSsg=";
+    hash = "sha256-jdN91oiKMr8ozjsQG2+lI55nPbjBa+ipWG9GYeFXCDw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

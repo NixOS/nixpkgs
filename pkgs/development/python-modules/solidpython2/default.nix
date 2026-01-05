@@ -41,10 +41,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jeff-dh/SolidPython";
-    description = "A python frontend for solid modelling that compiles to OpenSCAD";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ jonboh ];
+    description = "Python frontend for solid modelling that compiles to OpenSCAD";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ jonboh ];
   };
 }

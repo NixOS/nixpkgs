@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny program to interact with wmderland";
     homepage = "https://github.com/aesophor/wmderland/tree/master/ipc-client";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ takagiy ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ takagiy ];
     mainProgram = "wmderlandc";
   };
 })

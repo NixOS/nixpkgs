@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-+jrD+QatTrMaAdbxy5mpCm8lF37XDIy1GFyEiUibA2k=";
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for V2Ray daemon";
     mainProgram = "v2ray-exporter";
     homepage = "https://github.com/wi1dcard/v2ray-exporter";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

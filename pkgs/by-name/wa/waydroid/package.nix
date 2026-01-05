@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
   dnsmasq,
   gawk,
@@ -12,32 +11,26 @@
   lxc,
   iproute2,
   iptables,
+  nftables,
   util-linux,
   wrapGAppsHook3,
   wl-clipboard,
   runtimeShell,
   nix-update-script,
+  withNftables ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.4.3";
+  version = "1.6.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     tag = version;
-    hash = "sha256-LejyuGYgW46++95XROuWc13Q+w0l+AzGAl9ekfmAIEk=";
+    hash = "sha256-2ywAgWYMQ7N2P4x/0maNUSn3pdaRAWyATaraRAGafxI=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/waydroid/waydroid/commit/af296c90a788dde0b33813b12607cfab2fa65b98.patch";
-      hash = "sha256-1vkEKk00dbBLbbBxZIhcoOYUP976SJlaWyzYSWBy0nU=";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -61,10 +54,11 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   installFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
     "USE_SYSTEMD=0"
-    "SYSCONFDIR=$(out)/etc"
-  ];
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ]
+  ++ lib.optional withNftables "USE_NFTABLES=1";
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -76,7 +70,7 @@ python3Packages.buildPythonApplication rec {
           dnsmasq
           getent
           iproute2
-          iptables
+          (if withNftables then nftables else iptables)
         ]
       }
 
@@ -96,8 +90,8 @@ python3Packages.buildPythonApplication rec {
       )
     }"
 
-    substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
-      --replace '"sh"' '"${runtimeShell}"'
+    substituteInPlace $out/lib/waydroid/tools/helpers/run.py $out/lib/waydroid/tools/helpers/lxc.py \
+      --replace-fail '"sh"' '"${runtimeShell}"'
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -108,6 +102,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/waydroid/waydroid";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

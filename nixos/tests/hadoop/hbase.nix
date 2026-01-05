@@ -116,6 +116,9 @@ import ../make-test-python.nix (
       zookeeper.wait_for_unit("zookeeper")
       zookeeper.wait_for_open_port(2181)
 
+      # wait for HDFS cluster to be RW
+      datanode.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
+
       # wait for HBase to start up
       master.wait_for_unit("hbase-master")
       regionserver.wait_for_unit("hbase-regionserver")

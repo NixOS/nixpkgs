@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/2.0/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/goocanvas/2.0/goocanvas-${version}.tar.xz";
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
@@ -55,23 +55,26 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-python"
   ];
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
+
+  env = {
+    PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
+    PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
+  };
 
   passthru = {
     updateScript = gnome.updateScript {
-      attrPath = "${pname}${lib.versions.major version}";
-      packageName = pname;
+      attrPath = "goocanvas${lib.versions.major version}";
+      packageName = "goocanvas";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = "https://gitlab.gnome.org/Archive/goocanvas";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

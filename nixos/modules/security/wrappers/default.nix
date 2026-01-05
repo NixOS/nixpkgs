@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   inherit (config.security) wrapperDir;
@@ -11,26 +16,30 @@ let
   # musl is security-focused and generally more minimal, so it's a better choice here.
   # The dynamic linker is still a fairly complex piece of code, and the wrappers are
   # quite small, so linking it statically is more appropriate.
-  securityWrapper = sourceProg : pkgs.pkgsStatic.callPackage ./wrapper.nix {
-    inherit sourceProg;
+  securityWrapper =
+    sourceProg:
+    pkgs.pkgsStatic.callPackage ./wrapper.nix {
+      inherit sourceProg;
 
-    # glibc definitions of insecure environment variables
-    #
-    # We extract the single header file we need into its own derivation,
-    # so that we don't have to pull full glibc sources to build wrappers.
-    #
-    # They're taken from pkgs.glibc so that we don't have to keep as close
-    # an eye on glibc changes. Not every relevant variable is in this header,
-    # so we maintain a slightly stricter list in wrapper.c itself as well.
-    unsecvars = lib.overrideDerivation (pkgs.srcOnly pkgs.glibc)
-      ({ name, ... }: {
-        name = "${name}-unsecvars";
-        installPhase = ''
-          mkdir $out
-          cp sysdeps/generic/unsecvars.h $out
-        '';
-      });
-  };
+      # glibc definitions of insecure environment variables
+      #
+      # We extract the single header file we need into its own derivation,
+      # so that we don't have to pull full glibc sources to build wrappers.
+      #
+      # They're taken from pkgs.glibc so that we don't have to keep as close
+      # an eye on glibc changes. Not every relevant variable is in this header,
+      # so we maintain a slightly stricter list in wrapper.c itself as well.
+      unsecvars = lib.overrideDerivation (pkgs.srcOnly pkgs.glibc) (
+        { name, ... }:
+        {
+          name = "${name}-unsecvars";
+          installPhase = ''
+            mkdir $out
+            cp sysdeps/generic/unsecvars.h $out
+          '';
+        }
+      );
+    };
 
   fileModeType =
     let
@@ -39,45 +48,46 @@ let
       numeric = "[-+=]?[0-7]{0,4}";
       mode = "((${symbolic})(,${symbolic})*)|(${numeric})";
     in
-     lib.types.strMatching mode
-     // { description = "file mode string"; };
+    lib.types.strMatching mode // { description = "file mode string"; };
 
-  wrapperType = lib.types.submodule ({ name, config, ... }: {
-    options.enable = lib.mkOption
-      { type = lib.types.bool;
+  wrapperType = lib.types.submodule (
+    { name, config, ... }:
+    {
+      options.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to enable the wrapper.";
       };
-    options.source = lib.mkOption
-      { type = lib.types.path;
+      options.source = lib.mkOption {
+        type = lib.types.path;
         description = "The absolute path to the program to be wrapped.";
       };
-    options.program = lib.mkOption
-      { type = with lib.types; nullOr str;
+      options.program = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = name;
         description = ''
           The name of the wrapper program. Defaults to the attribute name.
         '';
       };
-    options.owner = lib.mkOption
-      { type = lib.types.str;
+      options.owner = lib.mkOption {
+        type = lib.types.str;
         description = "The owner of the wrapper program.";
       };
-    options.group = lib.mkOption
-      { type = lib.types.str;
+      options.group = lib.mkOption {
+        type = lib.types.str;
         description = "The group of the wrapper program.";
       };
-    options.permissions = lib.mkOption
-      { type = fileModeType;
-        default  = "u+rx,g+x,o+x";
+      options.permissions = lib.mkOption {
+        type = fileModeType;
+        default = "u+rx,g+x,o+x";
         example = "a+rx";
         description = ''
           The permissions of the wrapper program. The format is that of a
           symbolic or numeric file mode understood by {command}`chmod`.
         '';
       };
-    options.capabilities = lib.mkOption
-      { type = lib.types.commas;
+      options.capabilities = lib.mkOption {
+        type = lib.types.commas;
         default = "";
         description = ''
           A comma-separated list of capability clauses to be given to the
@@ -96,27 +106,29 @@ let
           :::
         '';
       };
-    options.setuid = lib.mkOption
-      { type = lib.types.bool;
+      options.setuid = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to add the setuid bit the wrapper program.";
       };
-    options.setgid = lib.mkOption
-      { type = lib.types.bool;
+      options.setgid = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to add the setgid bit the wrapper program.";
       };
-  });
+    }
+  );
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
-    { program
-    , capabilities
-    , source
-    , owner
-    , group
-    , permissions
-    , ...
+    {
+      program,
+      capabilities,
+      source,
+      owner,
+      group,
+      permissions,
+      ...
     }:
     ''
       cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
@@ -136,14 +148,15 @@ let
 
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
-    { program
-    , source
-    , owner
-    , group
-    , setuid
-    , setgid
-    , permissions
-    , ...
+    {
+      program,
+      source,
+      owner,
+      group,
+      setuid,
+      setgid,
+      permissions,
+      ...
     }:
     ''
       cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
@@ -155,13 +168,9 @@ let
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
     '';
 
-  mkWrappedPrograms =
-    builtins.map
-      (opts:
-        if opts.capabilities != ""
-        then mkSetcapProgram opts
-        else mkSetuidProgram opts
-      ) (lib.attrValues wrappers);
+  mkWrappedPrograms = builtins.map (
+    opts: if opts.capabilities != "" then mkSetcapProgram opts else mkSetuidProgram opts
+  ) (lib.attrValues wrappers);
 in
 {
   imports = [
@@ -178,35 +187,34 @@ in
 
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
-      default = {};
-      example = lib.literalExpression
-        ''
-          {
-            # a setuid root program
-            doas =
-              { setuid = true;
-                owner = "root";
-                group = "root";
-                source = "''${pkgs.doas}/bin/doas";
-              };
+      default = { };
+      example = lib.literalExpression ''
+        {
+          # a setuid root program
+          doas =
+            { setuid = true;
+              owner = "root";
+              group = "root";
+              source = "''${pkgs.doas}/bin/doas";
+            };
 
-            # a setgid program
-            locate =
-              { setgid = true;
-                owner = "root";
-                group = "mlocate";
-                source = "''${pkgs.locate}/bin/locate";
-              };
+          # a setgid program
+          locate =
+            { setgid = true;
+              owner = "root";
+              group = "mlocate";
+              source = "''${pkgs.locate}/bin/locate";
+            };
 
-            # a program with the CAP_NET_RAW capability
-            ping =
-              { owner = "root";
-                group = "root";
-                capabilities = "cap_net_raw+ep";
-                source = "''${pkgs.iputils.out}/bin/ping";
-              };
-          }
-        '';
+          # a program with the CAP_NET_RAW capability
+          ping =
+            { owner = "root";
+              group = "root";
+              capabilities = "cap_net_raw+ep";
+              source = "''${pkgs.iputils.out}/bin/ping";
+            };
+        }
+      '';
       description = ''
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
@@ -226,9 +234,9 @@ in
     };
 
     security.wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/run/wrappers/bin";
-      internal    = true;
+      type = lib.types.path;
+      default = "/run/wrappers/bin";
+      internal = true;
       description = ''
         This option defines the path to the wrapper programs. It
         should not be overridden.
@@ -239,29 +247,26 @@ in
   ###### implementation
   config = lib.mkIf config.security.enableWrappers {
 
-    assertions = lib.mapAttrsToList
-      (name: opts:
-        { assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
-          message = ''
-            The security.wrappers.${name} wrapper is not valid:
-                setuid/setgid and capabilities are mutually exclusive.
-          '';
-        }
-      ) wrappers;
+    assertions = lib.mapAttrsToList (name: opts: {
+      assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+      message = ''
+        The security.wrappers.${name} wrapper is not valid:
+            setuid/setgid and capabilities are mutually exclusive.
+      '';
+    }) wrappers;
 
     security.wrappers =
       let
-        mkSetuidRoot = source:
-          { setuid = true;
-            owner = "root";
-            group = "root";
-            inherit source;
-          };
+        mkSetuidRoot = source: {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          inherit source;
+        };
       in
-      { # These are mount related wrappers that require the +s permission.
-        fusermount  = mkSetuidRoot "${lib.getBin pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${lib.getBin pkgs.fuse3}/bin/fusermount3";
-        mount  = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
+      {
+        # These are mount related wrappers that require the +s permission.
+        mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
 
@@ -272,33 +277,46 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
-    security.apparmor.includes = lib.mapAttrs' (wrapName: wrap: lib.nameValuePair
-     "nixos/security.wrappers/${wrapName}" ''
-      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers.${wrapName}"; } [
-        (securityWrapper wrap.source)
-      ]}"
-      mrpx ${wrap.source},
-    '') wrappers;
+    security.apparmor.includes = lib.mapAttrs' (
+      wrapName: wrap:
+      lib.nameValuePair "nixos/security.wrappers/${wrapName}" ''
+        include "${
+          pkgs.apparmorRulesFromClosure { name = "security.wrappers.${wrapName}"; } [
+            (securityWrapper wrap.source)
+          ]
+        }"
+        mrpx ${wrap.source},
+      ''
+    ) wrappers;
 
-    systemd.mounts = [{
-      where = parentWrapperDir;
-      what = "tmpfs";
-      type = "tmpfs";
-      options = lib.concatStringsSep "," ([
-        "nodev"
-        "mode=755"
-        "size=${config.security.wrapperDirSize}"
-      ]);
-    }];
+    systemd.mounts = [
+      {
+        where = parentWrapperDir;
+        what = "tmpfs";
+        type = "tmpfs";
+        options = lib.concatStringsSep "," [
+          "nodev"
+          "mode=755"
+          "size=${config.security.wrapperDirSize}"
+        ];
+      }
+    ];
 
     systemd.services.suid-sgid-wrappers = {
       description = "Create SUID/SGID Wrappers";
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" "shutdown.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
       conflicts = [ "shutdown.target" ];
       after = [ "systemd-sysusers.service" ];
       unitConfig.DefaultDependencies = false;
-      unitConfig.RequiresMountsFor = [ "/nix/store" "/run/wrappers" ];
+      unitConfig.RequiresMountsFor = [
+        "/nix/store"
+        "/run/wrappers"
+      ];
+      serviceConfig.RestrictSUIDSGID = false;
       serviceConfig.Type = "oneshot";
       script = ''
         chmod 755 "${parentWrapperDir}"
@@ -327,31 +345,34 @@ in
     };
 
     ###### wrappers consistency checks
-    system.checks = lib.singleton (pkgs.runCommand "ensure-all-wrappers-paths-exist" {
-      preferLocalBuild = true;
-    } ''
-        # make sure we produce output
-        mkdir -p $out
+    system.checks = lib.singleton (
+      pkgs.runCommand "ensure-all-wrappers-paths-exist"
+        {
+          preferLocalBuild = true;
+        }
+        ''
+          # make sure we produce output
+          mkdir -p $out
 
-        echo -n "Checking that Nix store paths of all wrapped programs exist... "
+          echo -n "Checking that Nix store paths of all wrapped programs exist... "
 
-        declare -A wrappers
-        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v:
-          "wrappers['${n}']='${v.source}'") wrappers)}
+          declare -A wrappers
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
 
-        for name in "''${!wrappers[@]}"; do
-          path="''${wrappers[$name]}"
-          if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
-            test -t 1 && echo -ne '\033[1;31m'
-            echo "FAIL"
-            echo "The path $path does not exist!"
-            echo 'Please, check the value of `security.wrappers."'$name'".source`.'
-            test -t 1 && echo -ne '\033[0m'
-            exit 1
-          fi
-        done
+          for name in "''${!wrappers[@]}"; do
+            path="''${wrappers[$name]}"
+            if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
+              test -t 1 && echo -ne '\033[1;31m'
+              echo "FAIL"
+              echo "The path $path does not exist!"
+              echo 'Please, check the value of `security.wrappers."'$name'".source`.'
+              test -t 1 && echo -ne '\033[0m'
+              exit 1
+            fi
+          done
 
-        echo "OK"
-      '');
+          echo "OK"
+        ''
+    );
   };
 }

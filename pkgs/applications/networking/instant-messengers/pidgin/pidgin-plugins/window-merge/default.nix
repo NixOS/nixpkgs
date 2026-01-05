@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pidgin ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dm0-/window_merge";
     description = "Pidgin plugin that merges the Buddy List window with a conversation window";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

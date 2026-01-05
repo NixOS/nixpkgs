@@ -6,26 +6,28 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
+  libX11,
   SDL2,
 }:
 
 buildDotnetModule rec {
   pname = "mesen";
-  version = "2.0.0-unstable-2024-12-25";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "SourMesen";
     repo = "Mesen2";
-    rev = "6820db37933002089a04d356d8469481e915a359";
-    hash = "sha256-TzGMZr351XvVj/wARWJxRisRb5JlkyzdjCVYbwydBVE=";
+    tag = version;
+    hash = "sha256-vBwAPAnp6HIgI49vAZIqnzw8xHQ7ZMuALjf7G+acCXg=";
   };
 
   patches = [
-    # the nightly avalonia repository url is still queried, which errors out
-    # even if we don't actually need any nightly versions
-    ./dont-use-alternative-restore-sources.patch
+    # patch out the usage of nightly avalonia builds, since we can't use alternative restore sources
+    ./dont-use-nightly-avalonia.patch
     # upstream has a weird library loading mechanism, which we override with a more sane alternative
     ./dont-zip-libraries.patch
+    # without this the generated .desktop file uses an absolute (and incorrect) path for the binary
+    ./desktop-make-non-absolute-exec.patch
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -60,7 +62,7 @@ buildDotnetModule rec {
 
     nativeBuildInputs = [ SDL2 ];
 
-    buildInputs = [ SDL2 ];
+    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libX11 ];
 
     makeFlags = [ "core" ];
 
@@ -72,8 +74,7 @@ buildDotnetModule rec {
   };
 
   meta = {
-    badPlatforms = [ "aarch64-linux" ]; # not sure what the issue is
-    description = "Multi-system emulator that supports NES, SNES, Game Boy (Color) and PC Engine games";
+    description = "Multi-system emulator that supports NES, SNES, Game Boy, Game Boy Advance, PC Engine, SMS/Game Gear and WonderSwan games";
     homepage = "https://www.mesen.ca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Mesen";

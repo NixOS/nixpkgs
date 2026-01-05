@@ -43,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "natsort" ];
 
-  meta = with lib; {
+  meta = {
     description = "Natural sorting for Python";
     mainProgram = "natsort";
     homepage = "https://github.com/SethMMorton/natsort";
     changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

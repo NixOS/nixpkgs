@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "soldag";
-    repo = pname;
+    repo = "pyflic";
     rev = version;
     sha256 = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
   };
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyflic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with Flic buttons";
     homepage = "https://github.com/soldag/pyflic";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ cc0 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -15,7 +15,7 @@
   shared-mime-info,
   stdenv,
   unzip,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   zlib,
 }:
 
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
       --prefix PATH : ${jdk}/bin \
       --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath ([
+        lib.makeLibraryPath [
           glib
           gtk3
           libXtst
-          webkitgtk_4_0
-        ])
+          webkitgtk_4_1
+        ]
       } \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
@@ -108,13 +108,13 @@ stdenv.mkDerivation rec {
     libXtst
     zlib
     shared-mime-info
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   dontBuild = true;
   dontConfigure = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast and feature-rich Java heap analyzer";
     mainProgram = "eclipse-mat";
     longDescription = ''
@@ -126,9 +126,9 @@ stdenv.mkDerivation rec {
       run a report to automatically extract leak suspects.
     '';
     homepage = "https://www.eclipse.org/mat";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.epl20;
-    maintainers = [ maintainers.ktor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.epl20;
+    maintainers = [ lib.maintainers.ktor ];
     platforms = [ "x86_64-linux" ];
   };
 

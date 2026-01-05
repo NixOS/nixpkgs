@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     command = "rinetd --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "TCP/UDP port redirector";
     homepage = "https://github.com/samhocevar/rinetd";
     changelog = "https://github.com/samhocevar/rinetd/blob/${src.rev}/CHANGES.md";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "rinetd";
   };

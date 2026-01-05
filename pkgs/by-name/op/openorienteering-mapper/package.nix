@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenOrienteering/mapper/commit/d1f214ee2abf140ae3615a2995f08c19ad81418a.patch";
       hash = "sha256-eJZpHdFPW7A69aazI+WRSK9N87d4A6x973hMYTHdw5I=";
     })
+    # https://github.com/OpenOrienteering/mapper/pull/2227
+    (fetchpatch {
+      url = "https://github.com/OpenOrienteering/mapper/commit/fa694d74f2840d7f18976d7f35debcb99bd173eb.patch";
+      hash = "sha256-GVlNeIFiCG7anPsJR2nDCbgXEeUEAUvTcSaJ53Q/eV4=";
+    })
   ];
 
   postPatch = ''
@@ -64,25 +69,24 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags =
-    [
-      # Building the manual and bundling licenses fails
-      # See https://github.com/NixOS/nixpkgs/issues/85306
-      (lib.cmakeBool "LICENSING_PROVIDER" false)
-      (lib.cmakeBool "Mapper_MANUAL_QTHELP" false)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # FindGDAL is broken and always finds /Library/Framework unless this is
-      # specified
-      (lib.cmakeFeature "GDAL_INCLUDE_DIR" "${gdal}/include")
-      (lib.cmakeFeature "GDAL_CONFIG" "${gdal}/bin/gdal-config")
-      (lib.cmakeFeature "GDAL_LIBRARY" "${gdal}/lib/libgdal.dylib")
-      # Don't bundle libraries
-      (lib.cmakeBool "Mapper_PACKAGE_PROJ" false)
-      (lib.cmakeBool "Mapper_PACKAGE_QT" false)
-      (lib.cmakeBool "Mapper_PACKAGE_ASSISTANT" false)
-      (lib.cmakeBool "Mapper_PACKAGE_GDAL" false)
-    ];
+  cmakeFlags = [
+    # Building the manual and bundling licenses fails
+    # See https://github.com/NixOS/nixpkgs/issues/85306
+    (lib.cmakeBool "LICENSING_PROVIDER" false)
+    (lib.cmakeBool "Mapper_MANUAL_QTHELP" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # FindGDAL is broken and always finds /Library/Framework unless this is
+    # specified
+    (lib.cmakeFeature "GDAL_INCLUDE_DIR" "${gdal}/include")
+    (lib.cmakeFeature "GDAL_CONFIG" "${gdal}/bin/gdal-config")
+    (lib.cmakeFeature "GDAL_LIBRARY" "${gdal}/lib/libgdal.dylib")
+    # Don't bundle libraries
+    (lib.cmakeBool "Mapper_PACKAGE_PROJ" false)
+    (lib.cmakeBool "Mapper_PACKAGE_QT" false)
+    (lib.cmakeBool "Mapper_PACKAGE_ASSISTANT" false)
+    (lib.cmakeBool "Mapper_PACKAGE_GDAL" false)
+  ];
 
   postInstall =
     with stdenv;
@@ -92,16 +96,16 @@ stdenv.mkDerivation rec {
       ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/Mapper
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openorienteering.org/apps/mapper/";
     description = "Orienteering mapmaking program";
     changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mpickering
       sikmir
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
     mainProgram = "Mapper";
   };
 }

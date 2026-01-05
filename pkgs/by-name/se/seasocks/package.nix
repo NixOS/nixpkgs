@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mattgodbolt";
-    repo = pname;
+    repo = "seasocks";
     rev = "v${version}";
     sha256 = "sha256-R1McxZm2qsUoggFGfL587g+8eQf7si56xVkR8B8nehQ=";
   };
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mattgodbolt/seasocks";
     description = "Tiny embeddable C++ HTTP and WebSocket server";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fredeb ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fredeb ];
   };
 }

@@ -16,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fields" ];
 
-  meta = with lib; {
+  meta = {
     description = "Container class boilerplate killer";
     homepage = "https://github.com/ionelmc/python-fields";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

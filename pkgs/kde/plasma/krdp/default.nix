@@ -3,11 +3,10 @@
   mkKdeDerivation,
   replaceVars,
   openssl,
+  pam,
   pkg-config,
   qtwayland,
   freerdp,
-  wayland,
-  wayland-protocols,
 }:
 mkKdeDerivation {
   pname = "krdp";
@@ -21,8 +20,8 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwayland
+
     freerdp
-    wayland
-    wayland-protocols
+    pam
   ];
 }

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-swagger";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "go-swagger";
-    repo = pname;
+    repo = "go-swagger";
     tag = "v${version}";
-    hash = "sha256-PeH9bkRObsw4+ttuWhaPfPQQTOAw8pwlgTEtPoUBiIQ=";
+    hash = "sha256-CVfGKkqneNgSJZOptQrywCioSZwJP0XGspVM3S45Q/k=";
   };
 
-  vendorHash = "sha256-PBzJMXPZ2gVdrW3ZeerhR1BeT9vWIIS1vCTjz3UFHes=";
+  vendorHash = "sha256-x3fTIXmI5NnOKph1D84MHzf1Kod+WLYn1JtnWLr4x+U=";
 
   doCheck = false;
 
@@ -28,12 +28,12 @@ buildGoModule rec {
     "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Golang implementation of Swagger 2.0, representation of your RESTful API";
     homepage = "https://github.com/go-swagger/go-swagger";
     changelog = "https://github.com/go-swagger/go-swagger/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "swagger";
   };
 }

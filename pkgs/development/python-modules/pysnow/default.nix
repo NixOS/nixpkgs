@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rbw";
-    repo = pname;
+    repo = "pysnow";
     rev = version;
     hash = "sha256-nKOPCkS2b3ObmBnk/7FTv4o4vwUX+tOtZI5OQQ4HSTY=";
   };
@@ -66,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnow" ];
 
-  meta = with lib; {
+  meta = {
     description = "ServiceNow HTTP client library written in Python";
     homepage = "https://github.com/rbw/pysnow";
-    license = licenses.mit;
-    maintainers = with maintainers; [ almac ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ almac ];
   };
 }

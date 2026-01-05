@@ -1,32 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python3
-, unstableGitUpdater
-, makeWrapper
-, writeShellScript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+  extraPythonPackages ? ps: [ ],
+  unstableGitUpdater,
+  makeWrapper,
+  writeShellScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.12.0-unstable-2025-03-12";
+  version = "0.13.0-unstable-2026-01-02";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "d886c1761bbdfd23833996489afba6b75f312a4a";
-    sha256 = "sha256-I8Epwh0NcWtz2T2qAuKOv6iXBO8GmNdCR86HOgUPKCU=";
+    rev = "e60fe3d99b545d7e42ff2f5278efa5822668a57c";
+    sha256 = "sha256-ab3Z+J3wR/j5j6GS7vwcH42isn7xVPm+eH1pWQ2J8D0=";
   };
 
   sourceRoot = "${src.name}/klippy";
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages ( p: with p; [ cffi ] ))
+    (python3.withPackages (p: with p; [ cffi ]))
     makeWrapper
   ];
 
-  buildInputs = [ (python3.withPackages (p: with p; [ python-can cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
+  buildInputs = [
+    (python3.withPackages (
+      p:
+      with p;
+      [
+        python-can
+        cffi
+        pyserial
+        greenlet
+        jinja2
+        markupsafe
+        numpy
+      ]
+      ++ extraPythonPackages p
+    ))
+  ];
 
   # we need to run this to prebuild the chelper.
   postBuild = ''
@@ -93,12 +110,16 @@ stdenv.mkDerivation rec {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Klipper 3D printer firmware";
     mainProgram = "klippy";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault zhaofengli cab404 ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      zhaofengli
+      cab404
+    ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
   };
 }

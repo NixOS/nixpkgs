@@ -74,22 +74,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       fi
 
       DOWNLOAD_URL="https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_$NEW_VERSION_DATE.tar.gz"
-      NIX_HASH=$(nix hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
+      NIX_HASH=$(nix --extra-experimental-features nix-command hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
 
       update-source-version "dynamodb-local" "$NEW_VERSION" "$NIX_HASH" "$DOWNLOAD_URL"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service";
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "dynamodb-local";
-    maintainers = with maintainers; [
-      shyim
+    maintainers = with lib.maintainers; [
       martinjlowm
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode

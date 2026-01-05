@@ -52,12 +52,12 @@ buildDotnetModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mattpannella/pupdate";
-    description = "Pupdate - A thing for updating your Analogue Pocket";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ p-rintz ];
+    description = "Update utility for the openFPGA cores, firmware, and other stuff on your Analogue Pocket";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ p-rintz ];
     mainProgram = "pupdate";
   };
 }

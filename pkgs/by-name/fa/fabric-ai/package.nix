@@ -2,26 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "fabric-ai";
-  version = "1.4.122";
+  version = "1.4.369";
 
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "fabric";
-    rev = "v${version}";
-    hash = "sha256-wFVb2IdYB1T7wozQcjxLE7uVRsIFkPL5rS/8V0LnRcg=";
+    tag = "v${version}";
+    hash = "sha256-azji8qBX+pxhUo3kH2WdyfMSJSDKEjLSzb5JnweHefU=";
   };
 
-  vendorHash = "sha256-eV+Wb3IL8veO7NF5Y5zLgTW9eHJF6ke/0SrDojHF3X8=";
+  vendorHash = "sha256-147i0ZnNtph5DhaxK330kyUkDA4MBcpzrtIJGBEJHHQ=";
+
+  # Fabric introduced plugin tests that fail in the nix build sandbox.
+  doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion \
+      --bash ./completions/fabric.bash \
+      --zsh ./completions/_fabric \
+      --fish ./completions/fabric.fish
+  '';
 
   passthru.updateScript = nix-update-script { };
 

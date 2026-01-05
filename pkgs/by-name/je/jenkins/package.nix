@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   common-updater-scripts,
   coreutils,
@@ -8,7 +8,7 @@
   gnused,
   makeWrapper,
   nix,
-  openjdk,
+  jdk21,
   writeScript,
   nixosTests,
   jq,
@@ -16,13 +16,13 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.492.2";
+  version = "2.528.3";
 
   src = fetchurl {
-    url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
-    hash = "sha256-rmD71fB8pM1COkc37XHztU7PFGZruYoMv/anc1QMInU=";
+    url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
+    hash = "sha256-v6MfHjqs67W849UHbHPfl78MBWfuuNhzj1T2usSKvXQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${openjdk}/bin/jar -xf "$src" WEB-INF/lib/cli-${version}.jar \
-      && mv WEB-INF/lib/cli-${version}.jar "$out/share/jenkins-cli.jar"
+    ${jdk21}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
+      && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${openjdk}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) jenkins jenkins-cli; };
 
     updateScript = writeScript "update.sh" ''
-      #!${stdenv.shell}
+      #!${stdenvNoCC.shell}
       set -o errexit
       PATH=${
         lib.makeBinPath [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
       version="$(jq -r .version <<<$core_json)"
       sha256="$(jq -r .sha256 <<<$core_json)"
-      hash="$(nix hash to-sri --type sha256 "$sha256")"
+      hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256")"
 
       if [ ! "$oldVersion" = "$version" ]; then
         update-source-version jenkins "$version" "$hash"
@@ -74,18 +74,17 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extendable open source continuous integration server";
     homepage = "https://jenkins.io/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      coconnor
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       earldouglas
-      nequissimus
+      felixsinger
     ];
-    changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
+    changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
     mainProgram = "jenkins-cli";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

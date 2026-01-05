@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/host";
 
+  patches = [
+    # https://github.com/greatscottgadgets/ubertooth/pull/546
+    ./fix-cmake4-build.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -41,11 +46,13 @@ stdenv.mkDerivation rec {
     "-DUDEV_RULES_GROUP=${udevGroup}"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Open source wireless development platform suitable for Bluetooth experimentation";
     homepage = "https://github.com/greatscottgadgets/ubertooth";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ oxzi ];
+    platforms = lib.platforms.linux;
   };
 }

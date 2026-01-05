@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "blivet";
-  version = "3.12.0";
+  version = "3.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
     tag = "blivet-${version}";
-    hash = "sha256-09Fs9lwZksfAIH26bHyewr7ALuVo/cpMhb5xWaifXUg=";
+    hash = "sha256-ppX2rd1rFkRhca7F56JVQUDEQzW7Cg8ifV60URs2IMY=";
   };
 
   postPatch = ''
@@ -51,9 +51,9 @@ buildPythonPackage rec {
         --replace \
           'gi.require_version("BlockDev",' \
           'import gi.repository
-    gi.require_version("GIRepository", "2.0")
+    gi.require_version("GIRepository", "3.0")
     from gi.repository import GIRepository
-    GIRepository.Repository.prepend_search_path("${libblockdev}/lib/girepository-1.0")
+    GIRepository.Repository.dup_default().prepend_search_path("${libblockdev}/lib/girepository-1.0")
     gi.require_version("BlockDev",'
     done
   '';

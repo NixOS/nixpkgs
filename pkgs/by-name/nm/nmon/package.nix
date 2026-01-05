@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     cp nmon $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AIX & Linux Performance Monitoring tool";
     mainProgram = "nmon";
     homepage = "https://nmon.sourceforge.net";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sveitser ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sveitser ];
   };
 }

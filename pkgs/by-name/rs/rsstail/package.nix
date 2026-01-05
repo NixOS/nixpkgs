@@ -28,7 +28,7 @@ stdenv.mkDerivation (final: {
   # just runs cppcheck linter
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Monitor RSS feeds for new entries";
     mainProgram = "rsstail";
     longDescription = ''
@@ -36,8 +36,8 @@ stdenv.mkDerivation (final: {
       detects a new entry it'll emit only that new entry.
     '';
     homepage = "https://www.vanheusden.com/rsstail/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.Necior ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.Necior ];
+    platforms = lib.platforms.unix;
   };
 })

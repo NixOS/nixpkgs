@@ -21,13 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "1wi0hdmhk7l8nrz4j3kaa177mmxyklmzhj7sq1gj4q6fb8v1yr6n";
   };
 
-  preConfigure =
-    ''
-      export SYBASE=${freetds}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace "libct.so" "libct.dylib"
-    '';
+  preConfigure = ''
+    export SYBASE=${freetds}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace "libct.so" "libct.dylib"
+  '';
 
   enableParallelBuilding = true;
 
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for querying Sybase/MSSQL databases";
     mainProgram = "sqsh";
     longDescription = ''
@@ -58,8 +57,8 @@ stdenv.mkDerivation rec {
       it is intended as a replacement for the venerable 'isql' program supplied
       by Sybase.
     '';
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://sourceforge.net/projects/sqsh/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

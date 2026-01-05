@@ -10,12 +10,12 @@
   hidapi,
   libpng,
   libsamplerate,
+  libusb1,
   minizip,
   nasm,
   pkg-config,
   qt6Packages,
-  SDL2,
-  SDL2_net,
+  sdl3,
   speexdsp,
   vulkan-headers,
   vulkan-loader,
@@ -25,17 +25,18 @@
   withWayland ? false,
   # Affects final license
   withAngrylionRdpPlus ? false,
+  withDiscordRpc ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
-  version = "0.7.6";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KnLQvfbCwQbC+ofbIOnxuMK57Nc3HuqPJJtpLidjb8I=";
+    hash = "sha256-d2kUUJTZhm5m7MIZ8Ym0wyBvX2+h/FsrRQoyLTi0/N8=";
   };
 
   nativeBuildInputs = [
@@ -46,32 +47,31 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =
+  buildInputs = [
+    boost
+    freetype
+    hidapi
+    libpng
+    libsamplerate
+    libusb1
+    minizip
+    sdl3
+    speexdsp
+    vulkan-headers
+    vulkan-loader
+    xdg-user-dirs
+    zlib
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc
+  ++ (
+    with qt6Packages;
     [
-      boost
-      discord-rpc
-      freetype
-      hidapi
-      libpng
-      libsamplerate
-      minizip
-      SDL2
-      SDL2_net
-      speexdsp
-      vulkan-headers
-      vulkan-loader
-      xdg-user-dirs
-      zlib
+      qtbase
+      qtsvg
+      qtwebsockets
     ]
-    ++ (
-      with qt6Packages;
-      [
-        qtbase
-        qtsvg
-        qtwebsockets
-      ]
-      ++ lib.optional withWayland qtwayland
-    );
+    ++ lib.optional withWayland qtwayland
+  );
 
   cmakeFlags = [
     (lib.cmakeBool "PORTABLE_INSTALL" false)
@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     # everything else.
     (lib.cmakeBool "NO_RUST" true)
     (lib.cmakeBool "USE_ANGRYLION" withAngrylionRdpPlus)
+    (lib.cmakeBool "DISCORD_RPC" withDiscordRpc) # Remove with 0.8.4 update
   ];
 
   qtWrapperArgs =
@@ -100,6 +101,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = if withAngrylionRdpPlus then lib.licenses.unfree else lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "RMG";
-    maintainers = with lib.maintainers; [ slam-bert ];
   };
 })

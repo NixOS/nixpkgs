@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     "--enable-shared"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Web server log file analysis program";
     homepage = "https://webalizer.net/";
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -22,21 +22,19 @@
   # nativeCheckInputs
   pytestCheckHook,
   pytest-asyncio,
-  coverage,
 }:
 
 buildPythonPackage rec {
   pname = "atproto";
-  version = "0.0.59";
+  version = "0.0.65";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
 
   # use GitHub, pypi does not include tests
   src = fetchFromGitHub {
     owner = "MarshalX";
     repo = "atproto";
     tag = "v${version}";
-    hash = "sha256-Q+ZJMbchz3u7kXAR9fJpzJd6Zdc44LkntPmEE7IeW6A=";
+    hash = "sha256-0NogKxYO+lCtNhK2ZWwRLQTV7rHU5Oz+lnE4awsoPsM=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -58,13 +56,13 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "cryptography"
     "websockets"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    coverage
   ];
 
   disabledTestPaths = [

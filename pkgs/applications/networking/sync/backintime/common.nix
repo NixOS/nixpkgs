@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "backintime-common";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "sha256-byJyRsjZND0CQAfx45jQa3PNHhqzF2O0cFGSfN4o/QA=";
+    sha256 = "sha256-y9uo/6R9OXK9hqUD0pCLJXF2B80lr2gXf6v8+Ca6u5M=";
   };
 
   nativeBuildInputs = [

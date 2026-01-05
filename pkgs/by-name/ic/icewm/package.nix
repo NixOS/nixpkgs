@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   cmake,
   expat,
@@ -37,18 +37,17 @@
   pcre2,
   perl,
   pkg-config,
-  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.7.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
-    rev = finalAttrs.version;
-    hash = "sha256-4JF2ZAp8dx2fpSYRUz4I8US3oIZrSS90oljuxQDm38A=";
+    tag = finalAttrs.version;
+    hash = "sha256-CbIQICov0h3lBDT54dEODkINNXou6CUEhRQAPZwfYK0=";
   };
 
   strictDeps = true;
@@ -95,21 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/385959
-    # https://github.com/bbidulock/icewm/issues/794
-    # TODO: remove this patch when it is included in a release
-    (fetchpatch {
-      name = "fdomenu-icons-quoted";
-      url = "https://github.com/bbidulock/icewm/commit/74bb0a2989127a3ff87d2932ff547713bc710cfe.patch";
-      hash = "sha256-/rMSJYGAJs9cgNu5j4Mov/PfO7ocXQeNRq0vasfRcKA=";
-    })
-  ];
-
   cmakeFlags = [
     "-DPREFIX=$out"
     "-DCFGDIR=/etc/icewm"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString gccStdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
   # install legacy themes
   postInstall = ''
@@ -117,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/icewm/themes/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ice-wm.org/";
     description = "Simple, lightweight X window manager";
     longDescription = ''
@@ -133,8 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
       optional external background wallpaper manager with transparency support,
       a simple session manager and a system tray.
     '';
-    license = licenses.lgpl2Only;
+    license = lib.licenses.lgpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

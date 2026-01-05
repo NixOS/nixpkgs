@@ -8,10 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "termtekst";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zevv";
-    repo = pname;
+    repo = "termtekst";
     rev = "v${version}";
     sha256 = "1gm7j5d49a60wm7px82b76f610i8pl8ccz4r6qsz90z4mp3lyw9b";
   };
@@ -28,7 +29,7 @@ python3Packages.buildPythonApplication rec {
       --replace "locale.setlocale" "#locale.setlocale"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Console NOS Teletekst viewer in Python";
     mainProgram = "tt";
     longDescription = ''
@@ -38,8 +39,7 @@ python3Packages.buildPythonApplication rec {
       as a workaround the braille set is abused to approximate the
       graphics.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

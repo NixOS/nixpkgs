@@ -32,11 +32,10 @@ stdenv.mkDerivation rec {
     sed s/\-mno\-ieee\-fp// -i {configure,configure.ac}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vorbis audio compression reference implementation";
     homepage = "https://xiph.org/vorbis/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ehmry ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

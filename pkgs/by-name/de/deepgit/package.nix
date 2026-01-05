@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to investigate the history of source code";
     homepage = "https://www.syntevo.com/deepgit";
     changelog = "https://www.syntevo.com/deepgit/changelog.txt";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ urandom ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ urandom ];
+    platforms = lib.platforms.linux;
     mainProgram = "deepgit";
   };
 }

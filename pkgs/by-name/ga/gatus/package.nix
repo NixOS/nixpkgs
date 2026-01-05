@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gatus";
-  version = "5.17.0";
+  version = "5.34.0";
 
   src = fetchFromGitHub {
     owner = "TwiN";
     repo = "gatus";
     rev = "v${version}";
-    hash = "sha256-/YOC13ut1k48vx/LapcShNfi83LxbC62yxKuanlUI9k=";
+    hash = "sha256-+Ulttz13SzPnB+EFsyK2H/bv2vXn+uA/zv6UY9HKrgY=";
   };
 
-  vendorHash = "sha256-gr/GmZaaNwp/jQwnDiU/kfDWaciQloxP9vNlVTwMQjE=";
+  vendorHash = "sha256-xN38oaMcErkq4FtWi/Kzp9fhC5dk8CeJYehlwtVgf0M=";
 
   subPackages = [ "." ];
 
@@ -24,11 +24,11 @@ buildGoModule rec {
     inherit (nixosTests) gatus;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automated developer-oriented status page";
     homepage = "https://gatus.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ undefined-moe ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ undefined-moe ];
     mainProgram = "gatus";
   };
 }

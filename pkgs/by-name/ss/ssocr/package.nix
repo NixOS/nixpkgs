@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ssocr";
-  version = "2.24.1";
+  version = "2.25.0";
 
   src = fetchFromGitHub {
     owner = "auerswal";
     repo = "ssocr";
     rev = "v${version}";
-    sha256 = "sha256-5v97v9sBoHDCH2onpmBI7otK9UuhqJbM1TMapKp4XsM=";
+    sha256 = "sha256-yQPjs4kGvp6C7kFcWQ3EzoFhwEAhm2nC7yXu9RbU4os=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,12 +26,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Seven Segment Optical Character Recognition";
     homepage = "https://github.com/auerswal/ssocr";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.kroell ];
+    license = lib.licenses.gpl3;
     mainProgram = "ssocr";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

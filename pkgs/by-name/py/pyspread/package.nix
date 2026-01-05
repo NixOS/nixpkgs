@@ -8,20 +8,20 @@
 }:
 
 let
-  # get rid of rec
-  pname = "pyspread";
-  version = "2.3.1";
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l6b02CIUqPnT16zqOWl6gDdAobkhiqBMFvT+R1Dvtek=";
-  };
   inherit (libsForQt5)
     qtsvg
     wrapQtAppsHook
     ;
 in
-python3.pkgs.buildPythonApplication {
-  inherit pname version src;
+python3.pkgs.buildPythonApplication (finalAttrs: {
+  format = "setuptools";
+  pname = "pyspread";
+  version = "2.4";
+  src = fetchPypi {
+    pname = "pyspread";
+    inherit (finalAttrs) version;
+    hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
+  };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -83,6 +83,6 @@ python3.pkgs.buildPythonApplication {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

@@ -14,32 +14,39 @@
 
 buildGoModule rec {
   pname = "mautrix-whatsapp";
-  version = "0.11.4";
+  version = "25.12";
+  tag = "v0.2512.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
-    rev = "v${version}";
-    hash = "sha256-6Fnkw/lf64T0EXpWvSSnIRBuHJVt01Ft8Ks43/jvtZ0=";
+    inherit tag;
+    hash = "sha256-gVQSACXQ384MYOptRKGSIzCjOgyWW+8/YrxKCaCqhuA=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-zMS6zZvJQAcnoklCi5qoM+aMMCSaeTQmQBxawgC67P8=";
+  vendorHash = "sha256-eyukS+rEysjhaywxzgqKP11IJF2SY9FSluQIOESZ6mk=";
 
-  doCheck = false;
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://github.com/tulir/mautrix-whatsapp";
-    description = "Matrix <-> Whatsapp hybrid puppeting/relaybot bridge";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+  meta = {
+    homepage = "https://github.com/mautrix/whatsapp";
+    description = "Matrix-WhatsApp puppeting bridge";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       vskilet
       ma27
       chvp
+      SchweGELBin
     ];
     mainProgram = "mautrix-whatsapp";
   };

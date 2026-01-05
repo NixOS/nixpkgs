@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   gdal,
   openssl,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-oZZrR86/acoyMX3vC1JGrpc8G+DEuplqfEAnaP+TBGU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-z0YpX1dMWcn2N6fKDbT7lYEQC5PaDNNHi4CW88d/dgI=";
 
   nativeBuildInputs = [
@@ -31,16 +28,16 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     gdal
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Vector tile server specialized on publishing MVT tiles";
     homepage = "https://t-rex.tileserver.ch/";
     changelog = "https://github.com/t-rex-tileserver/t-rex/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.geospatial ];
     mainProgram = "t_rex";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = true; # see https://github.com/t-rex-tileserver/t-rex/issues/320
   };
 }

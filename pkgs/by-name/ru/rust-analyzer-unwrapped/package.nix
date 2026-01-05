@@ -8,19 +8,20 @@
   useMimalloc ? false,
   doCheck ? true,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2025-03-17";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XiTq3Qpk996Rmp9KUSeKnzSggkx/1ntLd5Xgx3lVaek=";
+  version = "2025-12-29";
+
+  cargoHash = "sha256-WRhLSZpKBwvWwfbbegjHdMbducXJqqHKxAo5ztEDhXo=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    hash = "sha256-fqc6tqBGq83Q1SY37EDKf085WKtsSzf0vKgsqla8r3s=";
+    hash = "sha256-gq96i+4i2QEK94stPLzMeDdpKPOTOvw4Zicy+qLe7p8=";
   };
 
   cargoBuildFlags = [
@@ -55,14 +56,10 @@ rustPlatform.buildRustPackage rec {
     export RUST_SRC_PATH=${rustPlatform.rustLibSrc}
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    versionOutput="$($out/bin/rust-analyzer --version)"
-    echo "'rust-analyzer --version' returns: $versionOutput"
-    [[ "$versionOutput" == "rust-analyzer ${version}" ]]
-    runHook postInstallCheck
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -72,14 +69,14 @@ rustPlatform.buildRustPackage rec {
     # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
   };
 
-  meta = with lib; {
-    description = "Modular compiler frontend for the Rust language";
+  meta = {
+    description = "Language server for the Rust language";
     homepage = "https://rust-analyzer.github.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with lib.maintainers; [ oxalica ];
     mainProgram = "rust-analyzer";
   };
 }

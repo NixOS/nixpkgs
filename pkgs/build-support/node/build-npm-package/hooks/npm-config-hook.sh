@@ -16,6 +16,8 @@ npmConfigHook() {
     export HOME="$TMPDIR"
     export npm_config_nodedir="@nodeSrc@"
     export npm_config_node_gyp="@nodeGyp@"
+    export npm_config_arch="@npmArch@"
+    export npm_config_platform="@npmPlatform@"
 
     if [ -z "${npmDeps-}" ]; then
         echo
@@ -27,7 +29,11 @@ npmConfigHook() {
     fi
 
     local -r cacheLockfile="$npmDeps/package-lock.json"
-    local -r srcLockfile="$PWD/package-lock.json"
+    if [[ -f npm-shrinkwrap.json ]]; then
+        local -r srcLockfile="$PWD/npm-shrinkwrap.json"
+    else
+        local -r srcLockfile="$PWD/package-lock.json"
+    fi
 
     echo "Validating consistency between $srcLockfile and $cacheLockfile"
 

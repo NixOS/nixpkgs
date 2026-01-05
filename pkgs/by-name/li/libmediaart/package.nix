@@ -31,20 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "K0Pdn1Tw2NC4nirduDNBqwbXuYyxsucEODWEr5xWD2s=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      vala
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_412
-      gobject-introspection
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+    gobject-introspection
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -62,10 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library tasked with managing, extracting and handling media art caches";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 })

@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal loop based midi sequencer";
     homepage = "http://www.filter24.org/seq24";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "seq24";
   };

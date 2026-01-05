@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyprosegur" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Prosegur Residential Alarms";
     homepage = "https://github.com/dgomes/pyprosegur";
     changelog = "https://github.com/dgomes/pyprosegur/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyprosegur";
   };
 }

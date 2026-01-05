@@ -10,7 +10,7 @@
   wayland-scanner,
   cairo,
   libGL,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libdrm,
   libevdev,
   libinput,
@@ -73,65 +73,63 @@ stdenv.mkDerivation rec {
     python3
     wayland-scanner
   ];
-  buildInputs =
-    [
-      cairo
-      libGL
-      libdisplay-info
-      libdrm
-      libevdev
-      libinput
-      libxkbcommon
-      libgbm
-      seatd
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional lcmsSupport lcms2
-    ++ lib.optional pangoSupport pango
-    ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional rdpSupport freerdp
-    ++ lib.optionals remotingSupport [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-    ]
-    ++ lib.optional vaapiSupport libva
-    ++ lib.optionals vncSupport [
-      aml
-      neatvnc
-      pam
-    ]
-    ++ lib.optional webpSupport libwebp
-    ++ lib.optionals xwaylandSupport [
-      libXcursor
-      xcbutilcursor
-      xwayland
-    ];
+  buildInputs = [
+    cairo
+    libGL
+    libdisplay-info_0_2
+    libdrm
+    libevdev
+    libinput
+    libxkbcommon
+    libgbm
+    seatd
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional jpegSupport libjpeg
+  ++ lib.optional lcmsSupport lcms2
+  ++ lib.optional pangoSupport pango
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional rdpSupport freerdp
+  ++ lib.optionals remotingSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]
+  ++ lib.optional vaapiSupport libva
+  ++ lib.optionals vncSupport [
+    aml
+    neatvnc
+    pam
+  ]
+  ++ lib.optional webpSupport libwebp
+  ++ lib.optionals xwaylandSupport [
+    libXcursor
+    xcbutilcursor
+    xwayland
+  ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
-      (lib.mesonBool "backend-pipewire" pipewireSupport)
-      (lib.mesonBool "backend-rdp" rdpSupport)
-      (lib.mesonBool "backend-vnc" vncSupport)
-      (lib.mesonBool "color-management-lcms" lcmsSupport)
-      (lib.mesonBool "demo-clients" demoSupport)
-      (lib.mesonBool "image-jpeg" jpegSupport)
-      (lib.mesonBool "image-webp" webpSupport)
-      (lib.mesonBool "pipewire" pipewireSupport)
-      (lib.mesonBool "remoting" remotingSupport)
-      (lib.mesonOption "simple-clients" "")
-      (lib.mesonBool "test-junit-xml" false)
-      (lib.mesonBool "xwayland" xwaylandSupport)
-    ]
-    ++ lib.optionals xwaylandSupport [
-      (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
-    ];
+  mesonFlags = [
+    (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
+    (lib.mesonBool "backend-pipewire" pipewireSupport)
+    (lib.mesonBool "backend-rdp" rdpSupport)
+    (lib.mesonBool "backend-vnc" vncSupport)
+    (lib.mesonBool "color-management-lcms" lcmsSupport)
+    (lib.mesonBool "demo-clients" demoSupport)
+    (lib.mesonBool "image-jpeg" jpegSupport)
+    (lib.mesonBool "image-webp" webpSupport)
+    (lib.mesonBool "pipewire" pipewireSupport)
+    (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonOption "simple-clients" "")
+    (lib.mesonBool "test-junit-xml" false)
+    (lib.mesonBool "xwayland" xwaylandSupport)
+  ]
+  ++ lib.optionals xwaylandSupport [
+    (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
+  ];
 
   passthru.providedSessions = [ "weston" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
@@ -144,11 +142,10 @@ stdenv.mkDerivation rec {
       provided.
     '';
     homepage = "https://gitlab.freedesktop.org/wayland/weston";
-    license = licenses.mit; # Expat version
-    platforms = platforms.linux;
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
     mainProgram = "weston";
-    maintainers = with maintainers; [
-      primeos
+    maintainers = with lib.maintainers; [
       qyliss
     ];
   };

@@ -9,8 +9,6 @@
   libX11,
   libXau,
   libXdmcp,
-  Carbon,
-  Cocoa,
   cppunit,
 }:
 
@@ -52,20 +50,15 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glfw
-      libvgm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-    ];
+  buildInputs = [
+    glfw
+    libvgm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXau
+    libXdmcp
+  ];
 
   checkInputs = [
     cppunit
@@ -93,12 +86,12 @@ stdenv.mkDerivation {
     url = "https://github.com/superctr/mmlgui.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/superctr/mmlgui";
     description = "MML (Music Macro Language) editor and compiler GUI, powered by the ctrmml framework";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
     mainProgram = "mmlgui";
   };
 }

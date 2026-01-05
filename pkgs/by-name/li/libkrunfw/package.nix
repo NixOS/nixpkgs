@@ -10,23 +10,29 @@
   perl,
   elfutils,
   python3,
-  sevVariant ? false,
+  variant ? null,
 }:
 
+assert lib.elem variant [
+  null
+  "sev"
+  "tdx"
+];
+
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libkrunfw";
-  version = "4.5.1";
+  pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GFfBiGMOyBwMKjpD1kj3vRpvjR0ydji3QNDyoOQoQsw=";
+    hash = "sha256-mq2gw0+xL6qUZE/fk0vLT3PEpzPV8p+iwRFJHXVOMnk=";
   };
 
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.6.59.tar.xz";
-    hash = "sha256-I2FoCNjAjxKBX/iY9O20wROXorKEPQKe5iRS0hgzp20=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.34.tar.xz";
+    hash = "sha256-p/P+OB9n7KQXLptj77YaFL1/nhJ44DYD0P9ak/Jwwk0=";
   };
 
   postPatch = ''
@@ -48,30 +54,33 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
   ];
 
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-    ]
-    ++ lib.optionals sevVariant [
-      "SEV=1"
-    ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (variant == "sev") [
+    "SEV=1"
+  ]
+  ++ lib.optionals (variant == "tdx") [
+    "TDX=1"
+  ];
 
   # Fixes https://github.com/containers/libkrunfw/issues/55
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.targetPlatform.isAarch64 "-march=armv8-a+crypto";
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic library bundling the guest payload consumed by libkrun";
     homepage = "https://github.com/containers/libkrunfw";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       lgpl21Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nickcao
       RossComputerGuy
+      nrabulinski
     ];
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.optionals (variant == null) [ "aarch64-linux" ];
   };
 })

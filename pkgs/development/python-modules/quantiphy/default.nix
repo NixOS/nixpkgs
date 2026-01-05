@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "quantiphy";
-  version = "2.20";
+  version = "2.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "quantiphy";
     tag = "v${version}";
-    hash = "sha256-QXCs93plNSVNiCLEoXx2raH6EbH1rXyjvpBfl+8eXjc=";
+    hash = "sha256-TQMSktRW0xjihrDxOqHa2AB0HgbNOn4debHV6/Z76bI=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantiphy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for physical quantities (numbers with units)";
     homepage = "https://quantiphy.readthedocs.io";
     changelog = "https://github.com/KenKundert/quantiphy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

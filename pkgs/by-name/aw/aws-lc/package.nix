@@ -1,26 +1,23 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   cmakeMinimal,
   fetchFromGitHub,
   ninja,
   testers,
   aws-lc,
+  nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
 }:
-let
-  awsStdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-awsStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.47.0";
+  version = "1.66.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Nf+UmtXbtWwkVT63eui5kINyzsmTYqCWXh8JlMHz1h8=";
+    hash = "sha256-OO9TWwaV/GlyrLl4C6oCFxIAeYfWjzvY7o//7OuoRDc=";
   };
 
   outputs = [
@@ -57,26 +54,24 @@ awsStdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  postFixup = ''
-    for f in $out/lib/crypto/cmake/*/crypto-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
+  __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = aws-lc;
-      command = "bssl version";
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = aws-lc;
+        command = "bssl version";
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = aws-lc;
+        moduleNames = [
+          "libcrypto"
+          "libssl"
+          "openssl"
+        ];
+      };
     };
-    pkg-config = testers.hasPkgConfigModules {
-      package = aws-lc;
-      moduleNames = [
-        "libcrypto"
-        "libssl"
-        "openssl"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

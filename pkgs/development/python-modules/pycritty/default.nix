@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycritty" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for changing your alacritty configuration on the fly";
     mainProgram = "pycritty";
     homepage = "https://github.com/antoniosarosi/pycritty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jperras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jperras ];
   };
 }

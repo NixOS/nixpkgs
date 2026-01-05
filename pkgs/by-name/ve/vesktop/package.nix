@@ -13,7 +13,9 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nix-update-script,
   withTTS ? true,
@@ -24,43 +26,45 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.5";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z2MKnCWDWUczoz39zzBYRB6wiSU1SRRHLpeUZeJqbLc=";
+    hash = "sha256-Ceo66G9Dhz6cL4PlXXrM0Es9QrqFCvlaHgvP/c1aJfQ=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    hash = "sha256-xn3yE2S6hfCijV+Edx3PYgGro8eF76/GqarOIRj9Tbg=";
+    pnpm = pnpm_10;
+    fetcherVersion = 2;
+    hash = "sha256-H5O08/2cWNj1KfYV1be+uYobDYGEdEfO0nlazbtiqvc=";
   };
 
-  nativeBuildInputs =
-    [
-      nodejs
-      pnpm_9.configHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # vesktop uses venmic, which is a shipped as a prebuilt node module
-      # and needs to be patched
-      autoPatchelfHook
-      copyDesktopItems
-      # we use a script wrapper here for environment variable expansion at runtime
-      # https://github.com/NixOS/nixpkgs/issues/172583
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # on macos we don't need to expand variables, so we can use the faster binary wrapper
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm_10
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # vesktop uses venmic, which is a shipped as a prebuilt node module
+    # and needs to be patched
+    autoPatchelfHook
+    copyDesktopItems
+    # we use a script wrapper here for environment variable expansion at runtime
+    # https://github.com/NixOS/nixpkgs/issues/172583
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # on macos we don't need to expand variables, so we can use the faster binary wrapper
+    makeBinaryWrapper
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -68,16 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches =
-    [
-      ./disable_update_checking.patch
-      ./fix_read_only_settings.patch
-    ]
-    ++ lib.optional withSystemVencord (
-      replaceVars ./use_system_vencord.patch {
-        inherit vencord;
-      }
-    );
+  patches = lib.optional withSystemVencord (
+    replaceVars ./use_system_vencord.patch {
+      inherit vencord;
+    }
+  );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -89,11 +88,16 @@ stdenv.mkDerivation (finalAttrs: {
     export CSC_IDENTITY_AUTO_DISCOVERY=false
   '';
 
-  # electron builds must be writable on darwin
-  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -r ${electron.dist}/Electron.app .
-    chmod -R u+w Electron.app
-  '';
+  # electron builds must be writable
+  preBuild =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      cp -r ${electron.dist}/Electron.app .
+      chmod -R u+w Electron.app
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      cp -r ${electron.dist} electron-dist
+      chmod -R u+w electron-dist
+    '';
 
   buildPhase = ''
     runHook preBuild
@@ -102,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -114,32 +118,34 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/opt/Vesktop
-      cp -r dist/*unpacked/resources $out/opt/Vesktop/
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/opt/Vesktop
+    cp -r dist/*unpacked/resources $out/opt/Vesktop/
 
-      for file in build/icon_*x32.png; do
-        file_suffix=''${file//build\/icon_}
-        install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
-    ''
-    + ''
-      runHook postInstall
-    '';
+    for file in build/icon_*x32.png; do
+      file_suffix=''${file//build\/icon_}
+      install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
         --add-flags $out/opt/Vesktop/resources/app.asar \
-        ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        ${lib.strings.optionalString withTTS ''
+          --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
+          --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
+        ''} \
         ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     ''

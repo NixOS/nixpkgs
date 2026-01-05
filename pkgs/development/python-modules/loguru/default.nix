@@ -3,30 +3,34 @@
   stdenv,
   buildPythonPackage,
   colorama,
-  exceptiongroup,
   fetchFromGitHub,
+  fetchpatch,
   flit-core,
   freezegun,
   pytest-mypy-plugins,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "loguru";
   version = "0.7.3";
-
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Delgan";
-    repo = pname;
+    repo = "loguru";
     tag = version;
     hash = "sha256-tccEzzs9TtFAZM9s43cskF9llc81Ng28LqedjLiE1m4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # python 3.14 compat
+      url = "https://github.com/Delgan/loguru/commit/84023e2bd8339de95250470f422f096edcb8f7b7.patch";
+      hash = "sha256-yXRSwI7Yjm1myL20EoU/jVuEdadmbMlCpP19YKn1MAU=";
+    })
+  ];
 
   build-system = [ flit-core ];
 
@@ -36,24 +40,27 @@ buildPythonPackage rec {
     colorama
     freezegun
     pytest-mypy-plugins
-  ] ++ lib.optional (pythonOlder "3.10") exceptiongroup;
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_multiprocessing.py" ];
 
-  disabledTests =
-    [
-      # fails on some machine configurations
-      # AssertionError: assert '' != ''
-      "test_file_buffering"
-      # Slow test
-      "test_time_rotation"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_rotation_and_retention"
-      "test_rotation_and_retention_timed_file"
-      "test_renaming"
-      "test_await_complete_inheritance"
-    ];
+  disabledTests = [
+    # fails on some machine configurations
+    # AssertionError: assert '' != ''
+    "test_file_buffering"
+    # Slow test
+    "test_time_rotation"
+    # broken on latest mypy, fixed upstream, but does not apply cleanly
+    # https://github.com/Delgan/loguru/commit/7608a014df0fa5c3322dec032345482aa5305a56
+    # FIXME: remove in next update
+    "typesafety"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_rotation_and_retention"
+    "test_rotation_and_retention_timed_file"
+    "test_renaming"
+    "test_await_complete_inheritance"
+  ];
 
   pythonImportsCheck = [ "loguru" ];
 

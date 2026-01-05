@@ -211,21 +211,19 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       lgpl2Only
-      licenses.zlib
+      lib.licenses.zlib
     ];
-    platforms = platforms.linux;
-    maintainers =
-      with maintainers;
-      [
-        matejc
-        ftrvxmtrx
-      ]
-      ++ teams.enlightenment.members;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

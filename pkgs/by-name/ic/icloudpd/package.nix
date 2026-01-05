@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.27.1";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     tag = "v${version}";
-    hash = "sha256-gJ1Vx0p8GiJ4esJuOanojlCHvqzOz8ttgAVn6idrLPM=";
+    hash = "sha256-GZhc5AeOxfSPxloN630lQguh63ha63Wnuh0H6pMkPyE=";
   };
 
   pythonRelaxDeps = true;
@@ -72,21 +72,20 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "setuptools==80.9.0" "setuptools" \
       --replace-fail "wheel==0.45.1" "wheel"
 
     substituteInPlace src/foundation/__init__.py \
       --replace-fail "0.0.1" "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/icloud-photos-downloader/icloud_photos_downloader";
     description = "iCloud Photos Downloader";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "icloudpd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       anpin
-      jnsgruk
     ];
   };
 }

@@ -31,6 +31,20 @@ stdenv.mkDerivation {
       sha256 = "060mvqn9y8lsn4l20q9rhamkymzsgh0r1vzkjw78gnj8kjw67jl5";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+
+    # 'class lean::static_matrix<T, X>' has no member named 'get'
+    substituteInPlace src/util/lp/static_matrix.h \
+      --replace-fail "m_matrix.get(" "m_matrix.get_elem("
+
+    # 'const class lean::static_matrix<T, X>' has no member named 'get_value_of_column_cell'
+    substituteInPlace src/util/lp/static_matrix.cpp \
+     --replace-fail "A.get_value_of_column_cell(col)" "A[col]"
+  '';
+
   nativeBuildInputs = [
     cmake
     makeWrapper
@@ -54,12 +68,12 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic and interactive theorem prover (version with HoTT support)";
     homepage = "http://leanprover.github.io";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
     broken = stdenv.hostPlatform.isAarch64;

@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
-  version = "0.9.24";
+  version = "0.9.26";
 
   src = fetchFromGitHub {
     owner = "jclehner";
     repo = "nmrpflash";
     rev = "v${version}";
-    hash = "sha256-WneKImWEQQHBFEw/ABE7wA8ZFIvh2t5nJkfviq1fH4M=";
+    hash = "sha256-I+6bZtiwR1DbZ8ykIBVBqo1LdQftUaU301aMh01StqU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Netgear Unbrick Utility";
     homepage = "https://github.com/jclehner/nmrpflash";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dadada ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ dadada ];
     mainProgram = "nmrpflash";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

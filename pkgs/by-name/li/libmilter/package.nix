@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
-  version = "8.18.1";
+  version = "8.18.2";
 
   src = fetchurl {
     url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
-    sha256 = "sha256-y/HzCcOOSAb3zz6tJCYPF9H+j7YyVtE+2zzdGgmPB3A=";
+    sha256 = "sha256-GghfqorOUs/94vXpvGEb21+BSByqq/RvBDe3GcoInS8=";
   };
 
   buildPhase = ''
@@ -50,10 +50,10 @@ stdenv.mkDerivation rec {
     fixDarwinDylibNames $out/lib/libmilter.*.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sendmail Milter mail filtering API library";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
-    license = licenses.sendmail;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.sendmail;
   };
 }

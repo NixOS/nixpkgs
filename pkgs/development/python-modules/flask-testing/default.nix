@@ -29,8 +29,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Some of the tests use localhost networking on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # RuntimeError and NotImplementedError
@@ -48,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_testing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extension provides unit testing utilities for Flask";
     homepage = "https://pythonhosted.org/Flask-Testing/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

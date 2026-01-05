@@ -32,7 +32,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  # Tests against stdlib behavior which changed in https://github.com/python/cpython/pull/139070
+  disabledTests = [
+    "test_wrap_multiword_non_wide"
+  ];
 
   meta = {
     description = "Pretty-print tabular data";

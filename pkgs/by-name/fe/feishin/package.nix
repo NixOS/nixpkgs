@@ -3,78 +3,74 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_33,
+  electron_39,
+  dart-sass,
+  mpv,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
-  ...
 }:
 let
   pname = "feishin";
-  version = "0.12.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
-    rev = "v${version}";
-    hash = "sha256-Tjh68b+41YrMNB14AZ3jXqBXDOmaaOYQKXJOyTUF474=";
+    tag = "v${version}";
+    hash = "sha256-acNUXvmj964pO8h2fsGfex2BeIshExMWe0w/QmtikkM=";
   };
 
-  electron = electron_33;
+  electron = electron_39;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-KZsxKDAQ7UTnEemr6S9rqKtqPeTvqrhfxURSGTKkMMM=";
 
-  npmFlags = [ "--legacy-peer-deps" ];
-  makeCacheWritable = true;
+  npmConfigHook = pnpmConfigHook;
+
+  npmDeps = null;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-gQooubVt2kDOGq4GEZIT+pQcPnzss9QmqTO9kD5Kx58=";
+  };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [
+    pnpm
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
-  postPatch =
-    ''
-      # release/app dependencies are installed on preConfigure
-      substituteInPlace package.json \
-        --replace-fail "electron-builder install-app-deps &&" ""
+  postPatch = ''
+    # release/app dependencies are installed on preConfigure
+    substituteInPlace package.json \
+      --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # https://github.com/electron/electron/issues/31121
+    substituteInPlace src/main/index.ts \
+      --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
+  '';
 
-      # Don't check for updates.
-      substituteInPlace src/main/main.ts \
-        --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # https://github.com/electron/electron/issues/31121
-      substituteInPlace src/main/main.ts \
-        --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
-    '';
+  preBuild = ''
+    rm -r node_modules/.pnpm/sass-embedded-*
 
-  preConfigure =
-    let
-      releaseAppDeps = buildNpmPackage {
-        pname = "${pname}-release-app";
-        inherit version;
-
-        src = "${src}/release/app";
-        npmDepsHash = "sha256-98P2dNmWcp8Hc8Xe43LM3dtxye7myhp1bHucKoKEcjI=";
-
-        npmFlags = [ "--ignore-scripts" ];
-        dontNpmBuild = true;
-
-        env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-      };
-      releaseNodeModules = "${releaseAppDeps}/lib/node_modules/feishin/node_modules";
-    in
-    ''
-      for release_module_path in "${releaseNodeModules}"/*; do
-        rm -rf node_modules/"$(basename "$release_module_path")"
-        ln -s "$release_module_path" node_modules/
-      done
-    '';
+    test -d node_modules/.pnpm/sass-embedded@*
+    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
+    mkdir -p "$dir"
+    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
+  '';
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -95,65 +91,72 @@ buildNpmPackage {
         -c.npmRebuild=false
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      cp -r release/build/**/Feishin.app $out/Applications/
-      makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/share/feishin
-      pushd release/build/*/
-      cp -r locales resources{,.pak} $out/share/feishin
-      popd
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -r dist/**/Feishin.app $out/Applications/
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --set DISABLE_AUTO_UPDATES 1
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/feishin
 
-      # Code relies on checking app.isPackaged, which returns false if the executable is electron.
-      # Set ELECTRON_FORCE_IS_PACKAGED=1.
-      # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
-      makeWrapper ${lib.getExe electron} $out/bin/feishin \
-        --add-flags $out/share/feishin/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --set ELECTRON_FORCE_IS_PACKAGED=1 \
-        --inherit-argv0
+    pushd dist/*-unpacked/
+    cp -r locales resources{,.pak} $out/share/feishin
+    popd
 
-      for size in 32 64 128 256 512 1024; do
-        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        ln -s \
-          $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
-          $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
-      done
-    ''
-    + ''
-      runHook postInstall
-    '';
+    # Code relies on checking app.isPackaged, which returns false if the executable is electron.
+    # Set ELECTRON_FORCE_IS_PACKAGED=1.
+    # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
+    makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --add-flags $out/share/feishin/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set DISABLE_AUTO_UPDATES 1 \
+      --inherit-argv0
+
+    for size in 32 64 128 256 512 1024; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      ln -s \
+        $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
+    done
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
-      comment = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+      comment = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
       icon = "feishin";
       exec = "feishin %u";
       categories = [
         "Audio"
         "AudioVideo"
+        "Player"
+        "Music"
       ];
       mimeTypes = [ "x-scheme-handler/feishin" ];
     })
   ];
 
-  meta = with lib; {
-    description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+  meta = {
+    description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "feishin";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
+      BatteredBunny
       onny
       jlbribeiro
     ];

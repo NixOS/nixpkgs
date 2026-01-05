@@ -26,7 +26,6 @@
   vulkan-loader,
   glslang,
   spirv-tools,
-  gtest,
   glew,
 }:
 let
@@ -34,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.1.2";
+  version = "10.7.0";
 
   src = fetchFromGitHub {
-    owner = "sjrc6";
-    repo = "taterclient-ddnet";
+    owner = "TaterClient";
+    repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-0N4nzGcmHrWkIFHEREtSBCTHPBE4UI8RmCuRsehX1YU=";
+    hash = "sha256-9d4vKrWuDW2E1PXs4yRAyR6zNPfYEclW8RfHNnpkpyc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -58,9 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     glslang # for glslangValidator
     python3
   ];
-
-  nativeCheckInputs = [ gtest ];
-  checkInputs = [ gtest ];
 
   buildInputs = [
     curl
@@ -80,13 +76,19 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     spirv-tools
     glew
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   strictDeps = true;
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace-fail /usr/ $out/
+      --replace-fail "/usr/" "$out/"
+
+    # Substitute date and time CMake macros. It avoids to the client being banned on some Teeworlds servers.
+    substituteInPlace src/engine/client/client.cpp \
+      --replace-fail "__DATE__" "\"$(date +'%b %e %Y')\"" \
+      --replace-fail "__TIME__" "\"$(date +'%H:%M:%S')\""
   '';
 
   cmakeFlags = [
@@ -98,10 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
-  doCheck = true;
-  checkTarget = "run_tests";
-
-  __darwinAllowLocalNetworking = true; # for tests
+  # Since we are not building the server executable, the `run_tests` Makefile target
+  # will not be generated.
+  #
+  # See https://github.com/TaterClient/TClient/blob/V10.7.0/CMakeLists.txt#L3207
+  doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet

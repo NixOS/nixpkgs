@@ -33,10 +33,10 @@ buildPythonPackage rec {
   doCheck = false; # upstream has no test
   pythonImportsCheck = [ "rsskey" ];
 
-  meta = with lib; {
+  meta = {
     description = "RSS feed mirror on Misskey";
     homepage = "https://sr.ht/~cnx/rsskey";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ McSinyx ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ McSinyx ];
   };
 }

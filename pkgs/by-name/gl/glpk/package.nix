@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  fetchDebianPatch,
   libmysqlclient,
   # Excerpt from glpk's INSTALL file:
   # This feature allows the exact simplex solver to use the GNU MP
@@ -24,13 +25,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 
-  buildInputs =
-    [
-      libmysqlclient
-    ]
-    ++ lib.optionals withGmp [
-      gmp
-    ];
+  buildInputs = [
+    libmysqlclient
+  ]
+  ++ lib.optionals withGmp [
+    gmp
+  ];
 
   configureFlags = lib.optionals withGmp [
     "--with-gmp"
@@ -52,6 +52,14 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/sagemath/sage/d3c1f607e32f964bf0cab877a63767c86fd00266/build/pkgs/glpk/patches/error_recovery.patch";
       sha256 = "sha256-2hNtUEoGTFt3JgUvLH3tPWnz+DZcXNhjXzS+/V89toA=";
     })
+
+    # Fix build with gcc15
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "2";
+      patch = "gcc-15.patch";
+      hash = "sha256-wuWPYqJKIKJAJaeJXW7lhvapu8Fd3zHjLAv7Ve7q8Qw=";
+    })
   ];
 
   postPatch =
@@ -63,7 +71,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Linear Programming Kit";
 
     longDescription = ''
@@ -74,10 +82,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/glpk/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ ] ++ teams.sage.members;
+    teams = [ lib.teams.sage ];
     mainProgram = "glpsol";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

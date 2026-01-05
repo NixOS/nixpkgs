@@ -1,0 +1,13 @@
+diff --git a/installed-tests/js/testGIMarshalling.js b/installed-tests/js/testGIMarshalling.js
+index b94aa7c8..8f79fe71 100644
+--- a/installed-tests/js/testGIMarshalling.js
++++ b/installed-tests/js/testGIMarshalling.js
+@@ -2931,7 +2931,7 @@ describe('Filename tests', function () {
+     });
+ 
+     it('various types of path existing', function () {
+-        const paths = ['foo-2', 'öäü-3'];
++        const paths = ['foo-2'];
+         for (const path of paths) {
+             const file = workdir.get_child(path);
+             const stream = file.create(Gio.FileCreateFlags.NONE, null);

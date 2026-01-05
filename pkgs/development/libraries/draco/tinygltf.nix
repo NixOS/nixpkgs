@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Header only C++11 tiny glTF 2.0 library";
     homepage = "https://github.com/syoyo/tinygltf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jansol ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jansol ];
+    platforms = lib.platforms.all;
   };
 }

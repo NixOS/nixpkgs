@@ -3,8 +3,8 @@
 callPackage ./generic.nix (
   args
   // {
-    version = "8.4.0-2";
-    hash = "sha256-ClW/B175z/sxF/MT9iHW1Wtr0ere63tIgUpcMp1IfTs=";
+    version = "8.4.0-4";
+    hash = "sha256-ws+si8bpalL8y7l9W+R4B02GnnGOou50txtS6ktntP4=";
 
     # includes https://github.com/Percona-Lab/libkmip.git
     fetchSubmodules = true;

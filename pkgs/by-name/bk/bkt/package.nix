@@ -11,11 +11,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dimo414";
     repo = "bkt";
-    rev = version;
+    tag = version;
     sha256 = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4CY2A6mPTfGhqUh+nNg6eaTIVwA9ZtgH5jHQDGHnK4c=";
 
   meta = {

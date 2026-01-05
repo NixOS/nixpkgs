@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -43,6 +44,14 @@ buildPythonPackage rec {
     hash = "sha256-Prj1saT0yoPAP8rDE0ipBEpR3QMk4PS12VSJlxc22p8=";
   };
 
+  patches = [
+    # Compatibility with torch >= 2.5 (arg_constraints is now a property)
+    (fetchpatch {
+      url = "https://github.com/pyro-ppl/funsor/commit/c5e2a48d73cad4e98058147af4090171272a44e5.patch";
+      hash = "sha256-sTR+hbJtS0Th5sIqlvB2bReEC0wnEbnB7gAiZKiqjAQ=";
+    })
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -74,19 +83,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "funsor" ];
 
-  disabledTests =
-    [
-      # `test_torch_save` got broken by the update of torch (2.3.1 -> 2.4.0):
-      # FutureWarning: You are using `torch.load` with `weights_only=False`...
-      # TODO: Try to re-enable this test at next release
-      "test_torch_save"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Failures related to JIT
-      # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
-      "test_local_param_ok"
-      "test_plate_ok"
-    ];
+  disabledTests = [
+    # `test_torch_save` got broken by the update of torch (2.3.1 -> 2.4.0):
+    # FutureWarning: You are using `torch.load` with `weights_only=False`...
+    # TODO: Try to re-enable this test at next release
+    "test_torch_save"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Failures related to JIT
+    # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
+    "test_local_param_ok"
+    "test_plate_ok"
+  ];
 
   meta = {
     description = "Functional tensors for probabilistic programming";

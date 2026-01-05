@@ -6,6 +6,7 @@
   libjpeg,
   perl,
   zlib,
+  ctestCheckHook,
 
   # for passthru.tests
   cups-filters,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "11.10.0";
+  version = "12.2.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-X5VF7kwnpNNWuQ7iA12qh6JwGU/40EKnGxWst0U+T8k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tzOZVQ/XO2mWNtz3mFTdrpdD2PvvCwje5nbEyiIkcZw=";
   };
 
   outputs = [
@@ -45,8 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
   ];
 
+  nativeCheckInputs = [ ctestCheckHook ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "SHOW_FAILED_TEST_OUTPUT" true)
+  ];
 
   preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
@@ -56,6 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  # Cursed system‐dependent(?!) failure with libc++ because another
+  # test in the same process sets the global locale; skip for now.
+  #
+  # See:
+  # * <https://github.com/llvm/llvm-project/issues/39399>
+  # * <https://github.com/llvm/llvm-project/issues/123309>
+  ${if stdenv.cc.libcxx != null then "patches" else null} = [
+    ./disable-timestamp-test.patch
+  ];
 
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
@@ -71,10 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://qpdf.sourceforge.io/";
     description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = lib.licenses.asl20; # as of 7.0.0, people may stay at artistic2
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ lib.maintainers.dotlambda ];
     mainProgram = "qpdf";
     platforms = lib.platforms.all;
-    changelog = "https://github.com/qpdf/qpdf/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://qpdf.readthedocs.io/en/${lib.versions.majorMinor finalAttrs.version}/release-notes.html";
     pkgConfigModules = [ "libqpdf" ];
   };
 })

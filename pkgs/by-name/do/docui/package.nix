@@ -18,11 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-5xQ5MmGpyzVh4gXZAhCY16iVw8zbCMzMA5IOsPdn7b0=";
 
-  meta = with lib; {
+  meta = {
     description = "TUI Client for Docker";
     homepage = "https://github.com/skanehira/docui";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aethelz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aethelz ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "docui";
   };

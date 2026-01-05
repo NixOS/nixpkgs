@@ -37,7 +37,7 @@ in
 
         # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
         type = lib.types.listOf (
-          lib.types.enum ([
+          lib.types.enum [
             "main"
             "brackets"
             "pattern"
@@ -45,7 +45,7 @@ in
             "regexp"
             "root"
             "line"
-          ])
+          ]
         );
 
         description = ''

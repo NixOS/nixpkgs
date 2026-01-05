@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  python3,
   jq,
   glslang,
   libffi,
@@ -25,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.4.304.0";
+  version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-n7fbhi5NCQRsj/sAjLfaW6EBFBqGutN5Cnl/CtnnVPY=";
+    hash = "sha256-FRxr33epHe+HIH/7Y7ms+6E9L0yzaNnFzN3YnswZfRo=";
   };
 
   strictDeps = true;
@@ -39,27 +40,27 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     jq
   ];
 
-  buildInputs =
-    [
-      glslang
-      robin-hood-hashing
-      spirv-headers
-      spirv-tools
-      vulkan-headers
-      vulkan-utility-libraries
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-      libXrandr
-      libffi
-      libxcb
-      wayland
-    ];
+  buildInputs = [
+    glslang
+    robin-hood-hashing
+    spirv-headers
+    spirv-tools
+    vulkan-headers
+    vulkan-utility-libraries
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXau
+    libXdmcp
+    libXrandr
+    libffi
+    libxcb
+    wayland
+  ];
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
@@ -82,11 +83,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Khronos Vulkan validation layers";
     homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

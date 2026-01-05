@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "django-types";
-  version = "0.20.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_types";
     inherit version;
-    hash = "sha256-TlXSxWFV49addd756x2VqJEwPyrBn8z2/oBW2kKT+uc=";
+    hash = "sha256-TOzJ7uhG5/8qOYvsnf5lQ+du+5IqeljF1gZLyw5qPcU=";
   };
 
   build-system = [ poetry-core ];

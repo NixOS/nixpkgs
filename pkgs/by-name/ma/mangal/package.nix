@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "metafates";
-    repo = pname;
+    repo = "mangal";
     rev = "v${version}";
     hash = "sha256-nbJdePlzZFM2ihbvFIMKyYZ9C0uKjU3TE5VLduLvtKE=";
   };
@@ -37,11 +37,11 @@ buildGoModule rec {
 
   doCheck = false; # test fail because of sandbox
 
-  meta = with lib; {
+  meta = {
     description = "CLI app written in Go which scrapes, downloads and packs manga into different formats";
     homepage = "https://github.com/metafates/mangal";
-    license = licenses.mit;
-    maintainers = [ maintainers.bertof ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.bertof ];
     mainProgram = "mangal";
   };
 }

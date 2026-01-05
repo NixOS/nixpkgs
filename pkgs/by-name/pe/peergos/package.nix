@@ -14,7 +14,7 @@
 let
   tweetnacl = stdenv.mkDerivation {
     pname = "tweetnacl";
-    version = "0-unstable-12-02-2020";
+    version = "0-unstable-2020-02-12";
 
     src = fetchFromGitHub {
       owner = "ianopolous";
@@ -41,12 +41,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peergos";
-  version = "1.0.0";
+  version = "1.17.0";
   src = fetchFromGitHub {
     owner = "Peergos";
     repo = "web-ui";
     rev = "v${version}";
-    hash = "sha256-TSvhp/9nneXGADiDPgGvA78emVcQG0UzHsFfVS9k7mo=";
+    hash = "sha256-9dBTa/qrrEb5eMIXK0kt7x8zTbwCeRDXpTS58EezS0A=";
     fetchSubmodules = true;
   };
 

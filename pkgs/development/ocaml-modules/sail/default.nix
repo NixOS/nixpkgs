@@ -16,7 +16,7 @@
   lem,
   linksem,
   yojson,
-  version ? "0.18",
+  version ? "0.20",
 }:
 
 buildDunePackage {
@@ -25,21 +25,20 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
-    hash = "sha256-/NvaFPHtWfow4j2jSr4CVHQW48KoP77uVgbhAKXtzzU=";
+    hash = "sha256-WTmYltCrNkt/OeST79Z1xMC2YDgN2HxLJ3PrE7k+R9M=";
   };
 
   minimalOCamlVersion = "4.08";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      ott
-      menhir
-      lem
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.sigtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    ott
+    menhir
+    lem
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.sigtool
+  ];
 
   propagatedBuildInputs = [
     base64
@@ -77,10 +76,10 @@ buildDunePackage {
     wrapProgram $out/bin/sail --set SAIL_DIR $out/share/sail
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rems-project/sail";
     description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    license = lib.licenses.bsd2;
   };
 }

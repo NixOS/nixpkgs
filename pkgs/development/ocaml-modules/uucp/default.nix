@@ -14,14 +14,14 @@
 
 let
   pname = "uucp";
-  version = "16.0.0";
+  version = "17.0.0";
   webpage = "https://erratique.ch/software/${pname}";
   minimalOCamlVersion = "4.03";
   doCheck = true;
 in
 
 if lib.versionOlder ocaml.version minimalOCamlVersion then
-  builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
+  throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
 else
 
   stdenv.mkDerivation {
@@ -30,7 +30,7 @@ else
 
     src = fetchurl {
       url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-5//UGI4u3OROYdxtwz9K2vCTzYiN16mOyEFhUQWtgEQ=";
+      hash = "sha256-mSQtTn4DYa15pYWFt0J+/BEpJRaa+6uIKnifMV4Euhs=";
     };
 
     nativeBuildInputs = [
@@ -66,11 +66,11 @@ else
     '';
     checkInputs = [ uucd ];
 
-    meta = with lib; {
+    meta = {
       description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
       homepage = webpage;
       inherit (ocaml.meta) platforms;
-      license = licenses.bsd3;
-      maintainers = [ maintainers.vbgl ];
+      license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.vbgl ];
     };
   }

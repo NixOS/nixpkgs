@@ -1,36 +1,51 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  fetchpatch2,
   lv2,
+  lv2lint,
   pkg-config,
-  python3,
-  wafHook,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fomp";
-  version = "1.2.2";
+  version = "1.2.4";
 
-  src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-xnGijydiO3B7BjSlryFuH1j/OPio9hCYbniq2IXp2W8=";
+  src = fetchFromGitLab {
+    owner = "drobilla";
+    repo = "fomp";
+    tag = "v${version}";
+    hash = "sha256-8rkAV+RJS9vQV+9+swclAP0QBjBDT2tKeLWHxwpUrlk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.com/drobilla/fomp/-/commit/f8e4e1e0b1abe3afd2ea17b13795bbe871fccece.patch";
+      hash = "sha256-uJpUwTEBOp0Zo7zKT9jekhtkg9okUvGTavLIQmNKutU=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
-    wafHook
-  ];
-  buildInputs = [
-    lv2
-    python3
+    meson
+    ninja
+    lv2lint
   ];
 
-  meta = with lib; {
+  buildInputs = [
+    lv2
+  ];
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://drobilla.net/software/fomp.html";
     description = "LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

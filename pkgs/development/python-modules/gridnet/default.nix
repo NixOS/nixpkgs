@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   yarl,
@@ -27,8 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace "0.0.0" "${version}"
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -41,16 +41,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "gridnet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for NET2GRID devices";
     homepage = "https://github.com/klaasnicolaas/python-gridnet";
     changelog = "https://github.com/klaasnicolaas/python-gridnet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

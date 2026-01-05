@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  stdenv,
 
   # build-system
   setuptools,
@@ -22,20 +21,22 @@
   pyopenssl,
   pytestCheckHook,
   pytest-trio,
+  pyyaml,
   trustme,
-  yapf,
 }:
 
 let
   # escape infinite recursion with pytest-trio
   pytest-trio' = (pytest-trio.override { trio = null; }).overrideAttrs {
+    # `pythonRemoveDeps` is not working properly
+    dontCheckRuntimeDeps = true;
     doCheck = false;
     pythonImportsCheck = [ ];
   };
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.29.0";
+  version = "0.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-f77HXhXkPu2GMKCFqahfiP0EgpjyRqWaxzduqM2oXtA=";
+    hash = "sha256-kZKP5TFg9M+NCx9V9B0qNbGiwZtBPtgVKgZYjX5w1ok=";
   };
 
   build-system = [ setuptools ];
@@ -55,20 +56,22 @@ buildPythonPackage rec {
     outcome
     sniffio
     sortedcontainers
-  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
-  # tests are failing on Darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     astor
-    jedi
     pyopenssl
     pytestCheckHook
     pytest-trio'
+    pyyaml
     trustme
-    yapf
-  ];
+  ]
+  # jedi has no compatibility with python 3.14 yet
+  # https://github.com/davidhalter/jedi/issues/2064
+  ++ lib.optional (pythonOlder "3.14") jedi;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -76,9 +79,8 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
@@ -107,6 +109,5 @@ buildPythonPackage rec {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ catern ];
   };
 }

@@ -89,6 +89,10 @@ done
 # `--no-flake`
 # /etc/nixos/flake.nix (if exists)
 
+if [[ -n "${NIXOS_CONFIG:-}" ]] || nix-instantiate --find-file nixos-config >/dev/null 2>&1; then
+  no_flake=true
+fi
+
 if [[ -z "$flake" ]] && [[ -e /etc/nixos/flake.nix ]] && [[ "$no_flake" == "false" ]]; then
   flake="$(dirname "$(realpath /etc/nixos/flake.nix)")"
 fi

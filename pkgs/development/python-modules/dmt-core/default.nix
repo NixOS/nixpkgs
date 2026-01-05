@@ -80,5 +80,6 @@ buildPythonPackage rec {
       jasonodoom
       jleightcap
     ];
+    teams = with lib.teams; [ ngi ];
   };
 }

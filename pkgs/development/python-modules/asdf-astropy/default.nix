@@ -9,26 +9,25 @@
   fetchFromGitHub,
   numpy,
   packaging,
-  pytest-astropy,
+  pytest-astropy-header,
+  pytest-doctestplus,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "asdf-astropy";
-  version = "0.7.1";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "asdf-astropy";
     tag = version;
-    hash = "sha256-hP77qhNTE89cuz9Z8vWlWYo2En0SV4uoHaBnxQDNEvI=";
+    hash = "sha256-JYzC1dEnq1caNSPffWCgk7c3mgUERywP0ladS+RwEnk=";
   };
 
   build-system = [
@@ -47,22 +46,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-astropy
+    pytest-astropy-header
+    pytest-doctestplus
     pytestCheckHook
     scipy
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "asdf_astropy" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Extension library for ASDF to provide support for Astropy";
     homepage = "https://github.com/astropy/asdf-astropy";
     changelog = "https://github.com/astropy/asdf-astropy/blob/${src.tag}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

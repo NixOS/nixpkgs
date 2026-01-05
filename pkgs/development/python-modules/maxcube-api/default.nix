@@ -35,10 +35,10 @@ buildPythonPackage rec {
     "maxcube.cube"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "eQ-3/ELV MAX! Cube Python API";
     homepage = "https://github.com/hackercowboy/python-maxcube-api";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

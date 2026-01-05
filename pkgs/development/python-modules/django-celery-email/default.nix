@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pmclanahan";
-    repo = pname;
+    repo = "django-celery-email";
     rev = version;
     hash = "sha256-LBavz5Nh2ObmIwLCem8nHvsuKgPwkzbS/OzFPmSje/M=";
   };
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "djcelery_email" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pmclanahan/django-celery-email";
     description = "Django email backend that uses a celery task for sending the email";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

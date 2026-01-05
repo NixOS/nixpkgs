@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
   python3Packages,
   perl,
   ffmpeg,
@@ -21,7 +22,7 @@ let
     requests-mock
     ;
 
-  version = "4.103";
+  version = "4.167";
 
 in
 
@@ -33,8 +34,8 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
-    rev = version;
-    hash = "sha256-pSTYrDgHmx4V+Y9iGRj3fCHiyoBP9FUf/XIRJyoUvMY=";
+    tag = version;
+    hash = "sha256-iQMH5IMMv8pYb/iXZvBRLVqhbxkihYFayygnmUJhQJk=";
   };
 
   build-system = [ setuptools ];
@@ -58,8 +59,11 @@ buildPythonApplication {
     requests-mock
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--doctest-modules"
+  ];
+
+  enabledTestPaths = [
     "lib"
   ];
 
@@ -75,6 +79,8 @@ buildPythonApplication {
   postInstallCheck = ''
     $out/bin/svtplay-dl --help > /dev/null
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/spaam/svtplay-dl";

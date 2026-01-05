@@ -9,14 +9,13 @@
 
 runCommand "netlify-cli-test"
   {
-    nativeBuildInputs =
-      [
-        netlify-cli
-        curl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.ps
-      ];
+    nativeBuildInputs = [
+      netlify-cli
+      curl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.ps
+    ];
     meta.timeout = 600;
   }
   ''
@@ -28,10 +27,15 @@ runCommand "netlify-cli-test"
     echo '/with-redirect /' >_redirects
 
     # Start a local server and wait for it to respond
-    netlify dev --offline --port 8888 2>&1 | tee log &
+    # Edge functions require specific version of Deno and internet access for other Netlify stuff
+    netlify dev --offline --internal-disable-edge-functions --port 8888 --debug 2>&1 | tee log &
     sleep 0.1 || true
     for (( i=0; i<300; i++ )); do
-      if grep --ignore-case 'Server now ready' <log; then
+      if ! jobs %% > /dev/null; then
+        echo "Server died before starting" >&2
+        exit 1
+      fi
+      if grep --ignore-case 'Local dev server ready' <log; then
         break
       else
         sleep 1

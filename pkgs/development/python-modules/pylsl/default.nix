@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylsl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings (pylsl) for liblsl";
     homepage = "https://github.com/labstreaminglayer/pylsl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abcsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ abcsds ];
   };
 }

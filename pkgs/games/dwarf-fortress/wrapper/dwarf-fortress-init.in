@@ -112,24 +112,48 @@ go() {
   cd "$NIXPKGS_DF_HOME"
   debug "Executing: $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE"
 
+  # Only mess with the library paths if we're starting Dwarf Fortress (not Soundsense).
+  if [ "$NIXPKGS_DF_GAME" -eq 1 ]; then
+    # Handle library paths on Darwin.
+    if [ "$NIXPKGS_DF_PLATFORM" == df_osx ]; then
+      if [ "${NIXPKGS_DF_PLATFORM_REV%%.*}" -ge 11 ]; then
+        export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+        export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+      else
+        export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+        export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+      fi
+    fi
+
+    if [ "$NIXPKGS_DF_PLATFORM" == df_linux ]; then
+      # We have to preload the audio plugin for audio to work. See Nix Pill #12 for this pattern:
+      # https://nixos.org/guides/nix-pills/12-inputs-design-pattern.html
+      if [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ] && [ -f "$NIXPKGS_DF_HOME/libfmod.so.13" ]; then
+        export LD_PRELOAD="$NIXPKGS_DF_HOME/libfmod.so.13${LD_PRELOAD:+:}${LD_PRELOAD:-}"
+      else
+        export LD_PRELOAD="@SDL2_mixer@${LD_PRELOAD:+:}${LD_PRELOAD:-}"
+      fi
+    fi
+  fi
+
   # If we make it past here, we want to log.
   # shellcheck disable=SC2093
-  exec -a "$NIXPKGS_DF_EXE" "$NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE"
+  exec -a "$NIXPKGS_DF_EXE" "$NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE" "$@"
   log "Execution of $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE failed!"
   exit 1
 }
 
+# Figure out the Dwarf Fortress directory (df_linux or df_osx).
 os_name="$(@uname@)"
-os_rev="$(@uname@ -r)"
-
 if [ "$os_name" == Linux ]; then
-  df_dir="df_linux"
+  export NIXPKGS_DF_PLATFORM="df_linux"
 elif [ "$os_name" == Darwin ]; then
-  df_dir="df_osx"
+  export NIXPKGS_DF_PLATFORM="df_osx"
 else
   log "Unknown platform: $os_name"
   exit 1
 fi
+export NIXPKGS_DF_PLATFORM_REV="$(@uname@ -r)"
 
 if [[ -v DF_DIR ]] && [ -n "$DF_DIR" ] && { [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; }; then
   # Compatibility for users that were using DF_DIR, since the dfhack script clobbers this variable.
@@ -137,7 +161,7 @@ if [[ -v DF_DIR ]] && [ -n "$DF_DIR" ] && { [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "
 fi
 
 if [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; then
-  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/$df_dir"
+  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/$NIXPKGS_DF_PLATFORM"
 fi
 
 # Compatibility.
@@ -166,33 +190,3 @@ export DF_DIR="$NIXPKGS_DF_HOME"
 EOF
 
 cd "$NIXPKGS_DF_ENV"
-
-# All potential important files in DF 50 and below.
-for path in dwarfort dwarfort.exe df *.so libs raw data/init/* data/!(init|index|announcement); do
-  force_delete=0
-  if [[ "$path" == libfmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
-    force_delete=1
-  fi
-
-  if [ -e "$path" ] && [ "$force_delete" -eq 0 ]; then
-    update_path "$path"
-  else
-    cleanup_path "$path"
-  fi
-done
-
-# These need to be copied due to read only flags on older versions of DF.
-for path in index announcement help dipscript; do
-  forcecopy_path "data/$path"
-done
-
-# Handle library paths on Darwin.
-if [ "$os_name" == Darwin ]; then
-  if [ "${os_rev%%.*}" -ge 11 ]; then
-    export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
-    export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
-  else
-    export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
-    export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
-  fi
-fi

@@ -22,9 +22,9 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ppxlib ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/johnwhitington/ppx_blob";
     description = "OCaml ppx to include binary data from a file as a string";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
   };
 }

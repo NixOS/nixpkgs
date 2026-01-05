@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "naggie";
-    repo = pname;
+    repo = "dstask";
     rev = "v${version}";
     sha256 = "sha256-xZFQQDK+yGAv4IbuNe2dvNa3GDASeJY2mOYw94goAIM=";
   };
@@ -35,11 +35,11 @@ buildGoModule rec {
     "-X github.com/naggie/dstask.GIT_COMMIT=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ stianlagstad ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stianlagstad ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -10,19 +10,19 @@
 
 buildGoModule rec {
   pname = "godns";
-  version = "3.2.2";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     tag = "v${version}";
-    hash = "sha256-2VBgc+cp1IF3GprSt0oc5WOAepmV8dGhKjwodZ2JS6k=";
+    hash = "sha256-nahX1XEiH7o+r6XxTAhT4kLTx9oGC+YVnw/U0PvzCO8=";
   };
 
-  vendorHash = "sha256-cR+hlIGRPffP21lqDZmqBF4unS6ZyEvEvRlTrswg+js=";
+  vendorHash = "sha256-n56e4kU2BorBwdsjI68V+Kpxby6t/foRP8yQ1RPQuog=";
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-lchAfi97a97TPs22ML3sMrlSZdvWMMC+wBrGbvke5rg=";
+    hash = "sha256-4QH0jI2KAf935EFNVEwuojZPW10rSAnr5Zr+CNm0DGM=";
   };
 
   npmRoot = "web";
@@ -54,12 +54,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";
     homepage = "https://github.com/TimothyYe/godns";
     changelog = "https://github.com/TimothyYe/godns/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yinfeng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yinfeng ];
     mainProgram = "godns";
   };
 }

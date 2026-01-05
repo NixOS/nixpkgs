@@ -73,10 +73,7 @@ in
 
         description = "LXD Image Server";
 
-        script = ''
-          ${pkgs.lxd-image-server}/bin/lxd-image-server init
-          ${pkgs.lxd-image-server}/bin/lxd-image-server watch
-        '';
+        reloadTriggers = [ config.environment.etc."lxd-image-server/config.toml".source ];
 
         serviceConfig = {
           User = "lxd-image-server";
@@ -84,6 +81,8 @@ in
           DynamicUser = true;
           LogsDirectory = "lxd-image-server";
           RuntimeDirectory = "lxd-image-server";
+          ExecStartPre = "${pkgs.lxd-image-server}/bin/lxd-image-server init";
+          ExecStart = "${pkgs.lxd-image-server}/bin/lxd-image-server watch";
           ExecReload = "${pkgs.lxd-image-server}/bin/lxd-image-server reload";
           ReadWritePaths = [ location ];
         };

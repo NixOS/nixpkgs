@@ -6,23 +6,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "choose";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "theryangeary";
     repo = "choose";
     rev = "v${version}";
-    sha256 = "sha256-ojmib9yri/Yj1VSwwssbXv+ThnZjUXLTmOpfPGdGFaU=";
+    sha256 = "sha256-nqL8CAnpqOaecC6vHlCtVXFRO0OAGZAn12TdOM5iUFA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SecWDujJu68K1LMQJQ55LeW51Ag/aCt1YKcdWeRp22c=";
+  cargoHash = "sha256-NVpkCs1QY2e+WiI9nk1uz/j3pOtsJpMwgAMspB6Bs1E=";
 
-  meta = with lib; {
+  meta = {
     description = "Human-friendly and fast alternative to cut and (sometimes) awk";
     mainProgram = "choose";
     homepage = "https://github.com/theryangeary/choose";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ sohalt ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ sohalt ];
   };
 }

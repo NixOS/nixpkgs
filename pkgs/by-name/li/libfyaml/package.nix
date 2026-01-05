@@ -42,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fully feature complete YAML parser and emitter, supporting the latest YAML spec and passing the full YAML testsuite";
     homepage = "https://github.com/pantoniou/libfyaml";
     changelog = "https://github.com/pantoniou/libfyaml/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     pkgConfigModules = [ "libfyaml" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

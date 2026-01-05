@@ -62,11 +62,11 @@ mkCoqDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://coq.inria.fr";
     description = "CoqIDE user interface for the Coq proof assistant";
     mainProgram = "coqide";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.Zimmi48 ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.Zimmi48 ];
   };
 }

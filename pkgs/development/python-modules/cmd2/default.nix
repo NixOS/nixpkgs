@@ -1,54 +1,42 @@
 {
   lib,
   stdenv,
-  attrs,
   buildPythonPackage,
-  colorama,
   fetchPypi,
   glibcLocales,
   gnureadline,
-  importlib-metadata,
   pyperclip,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  rich-argparse,
   setuptools-scm,
-  typing-extensions,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.5.11";
+  version = "2.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MKDThQIfvkpBFmcoReVpW75W62gvkJYGZ3Y5T5VKdCk=";
+    hash = "sha256-gdgTW0YhDh0DpagQuvhZBppiIUeIzu7DWI9E7thvvus=";
   };
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Fake the impure dependencies pbpaste and pbcopy
-    mkdir bin
-    echo '#!${stdenv.shell}' > bin/pbpaste
-    echo '#!${stdenv.shell}' > bin/pbcopy
-    chmod +x bin/{pbcopy,pbpaste}
-    export PATH=$(realpath bin):$PATH
-  '';
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    attrs
-    colorama
     pyperclip
+    rich-argparse
     wcwidth
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   nativeCheckInputs = [
     glibcLocales
@@ -65,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cmd2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
     changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ teto ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

@@ -1,51 +1,54 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # optional-dependencies
-  # cudf,
   dask,
-  # modin,
+  duckdb,
+  fetchFromGitHub,
+  hatchling,
+  hypothesis,
+  ibis-framework,
+  packaging,
   pandas,
   polars,
+  pyarrow-hotfix,
   pyarrow,
-
-  # tests
-  duckdb,
-  hypothesis,
+  pyspark,
   pytest-env,
   pytestCheckHook,
+  rich,
+  sqlframe,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.30.0";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-jqrrQRviWllzZQEnlOTZ6oJM3WYQ3YlDvareTTBcNl4=";
+    hash = "sha256-5yynyaY5NuxSGEro4pDzFFkf0PsYArzlB23lXYmzydY=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
-    dask = [
-      dask
-    ] ++ dask.optional-dependencies.dataframe;
+    dask = [ dask ] ++ dask.optional-dependencies.dataframe;
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];
     pyarrow = [ pyarrow ];
+    pyspark = [ pyspark ];
+    ibis = [
+      ibis-framework
+      rich
+      packaging
+      pyarrow-hotfix
+    ];
+    sqlframe = [ sqlframe ];
   };
 
   nativeCheckInputs = [
@@ -53,13 +56,40 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "narwhals" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  disabledTests = [
+    # Flaky
+    "test_rolling_var_hypothesis"
+    # Missing file
+    "test_pyspark_connect_deps_2517"
+    # Timezone issue
+    "test_to_datetime"
+    "test_unary_two_elements"
+    # Test requires pyspark binary
+    "test_datetime_w_tz_pyspark"
+    "test_convert_time_zone_to_connection_tz_pyspark"
+    "test_replace_time_zone_to_connection_tz_pyspark"
+    "test_lazy"
+    # Incompatible with ibis 11
+    "test_unique_3069"
+    # DuckDB 1.4.x compatibility - empty result schema handling with PyArrow
+    "test_skew_expr"
+    # ibis improvements cause strict XPASS failures (tests expected to fail now pass)
+    "test_empty_scalar_reduction_with_columns"
+    "test_collect_empty"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Segfault in included polars/lazyframe
+    "tests/tpch_q1_test.py"
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

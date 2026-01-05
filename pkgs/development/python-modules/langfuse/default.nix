@@ -9,6 +9,9 @@
   langchain,
   llama-index,
   openai,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
   packaging,
   poetry-core,
   pydantic,
@@ -18,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.60.0";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     tag = "v${version}";
-    hash = "sha256-POafeO7MqPnNp+kVSOCMJxV0Q6IDuEG9Kusb69dHtbo=";
+    hash = "sha256-3hL29Gu1lonkWAOyTqH2q03joXwVQimbVF0R2nYZUIs=";
   };
 
   build-system = [ poetry-core ];
@@ -37,6 +40,9 @@ buildPythonPackage rec {
     backoff
     httpx
     idna
+    opentelemetry-api
+    opentelemetry-sdk
+    opentelemetry-exporter-otlp
     packaging
     pydantic
     requests

@@ -16,6 +16,10 @@ let
   repo = "analysis";
   owner = "math-comp";
 
+  release."1.14.0".sha256 = "sha256-FFcfxnF1wtz2e9Rdqu4Wd0rtLW0DYoXswCTji//RSCQ=";
+  release."1.13.0".sha256 = "sha256-nn2gl6cAO93QEdMvLGlB9WAPddQiOdeRtk1pLO+gxII=";
+  release."1.12.0".sha256 = "sha256-PF10NlZ+aqP3PX7+UsZwgJT9PEaDwzvrS/ZGzjP64Wo=";
+  release."1.11.0".sha256 = "sha256-1apbzBvaLNw/8ARLUhGGy89CyXW+/6O4ckdxKPraiVc=";
   release."1.9.0".sha256 = "sha256-zj7WSDUg8ISWxcipGpjEwvvnLp1g8nm23BZiib/15+g=";
   release."1.8.0".sha256 = "sha256-2ZafDmZAwGB7sxdUwNIE3xvwBRw1kFDk0m5Vz+onWZc=";
   release."1.7.0".sha256 = "sha256-GgsMIHqLkWsPm2VyOPeZdOulkN00IoBz++qA6yE9raQ=";
@@ -44,109 +48,35 @@ let
 
   defaultVersion =
     let
-      inherit (lib.versions) range;
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
     in
+    with lib.versions;
     lib.switch
-      [ coq.version mathcomp.version ]
+      [ coq.coq-version mathcomp.version ]
       [
-        {
-          cases = [
-            (range "8.19" "8.20")
-            (range "2.1.0" "2.3.0")
-          ];
-          out = "1.9.0";
-        }
-        {
-          cases = [
-            (range "8.17" "8.20")
-            (range "2.0.0" "2.2.0")
-          ];
-          out = "1.1.0";
-        }
-        {
-          cases = [
-            (range "8.17" "8.19")
-            (range "1.17.0" "1.19.0")
-          ];
-          out = "0.7.0";
-        }
-        {
-          cases = [
-            (range "8.17" "8.18")
-            (range "1.15.0" "1.18.0")
-          ];
-          out = "0.6.7";
-        }
-        {
-          cases = [
-            (range "8.17" "8.18")
-            (range "1.15.0" "1.18.0")
-          ];
-          out = "0.6.6";
-        }
-        {
-          cases = [
-            (range "8.14" "8.18")
-            (range "1.15.0" "1.17.0")
-          ];
-          out = "0.6.5";
-        }
-        {
-          cases = [
-            (range "8.14" "8.18")
-            (range "1.13.0" "1.16.0")
-          ];
-          out = "0.6.1";
-        }
-        {
-          cases = [
-            (range "8.14" "8.18")
-            (range "1.13" "1.15")
-          ];
-          out = "0.5.2";
-        }
-        {
-          cases = [
-            (range "8.13" "8.15")
-            (range "1.13" "1.14")
-          ];
-          out = "0.5.1";
-        }
-        {
-          cases = [
-            (range "8.13" "8.15")
-            (range "1.12" "1.14")
-          ];
-          out = "0.3.13";
-        }
-        {
-          cases = [
-            (range "8.11" "8.14")
-            (range "1.12" "1.13")
-          ];
-          out = "0.3.10";
-        }
-        {
-          cases = [
-            (range "8.10" "8.12")
-            "1.11.0"
-          ];
-          out = "0.3.3";
-        }
-        {
-          cases = [
-            (range "8.10" "8.11")
-            "1.11.0"
-          ];
-          out = "0.3.1";
-        }
-        {
-          cases = [
-            (range "8.8" "8.11")
-            (range "1.8" "1.10")
-          ];
-          out = "0.2.3";
-        }
+        (case (range "8.20" "9.1") (range "2.4.0" "2.5.0") "1.14.0")
+        (case (range "8.20" "9.1") (range "2.1.0" "2.4.0") "1.13.0")
+        (case (range "8.20" "9.1") (range "2.1.0" "2.4.0") "1.12.0")
+        (case (range "8.19" "8.20") (range "2.1.0" "2.3.0") "1.9.0")
+        (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "1.1.0")
+        (case (range "8.17" "8.19") (range "1.17.0" "1.19.0") "0.7.0")
+        (case (range "8.17" "8.18") (range "1.15.0" "1.18.0") "0.6.7")
+        (case (range "8.17" "8.18") (range "1.15.0" "1.18.0") "0.6.6")
+        (case (range "8.14" "8.18") (range "1.15.0" "1.17.0") "0.6.5")
+        (case (range "8.14" "8.18") (range "1.13.0" "1.16.0") "0.6.1")
+        (case (range "8.14" "8.18") (range "1.13" "1.15") "0.5.2")
+        (case (range "8.13" "8.15") (range "1.13" "1.14") "0.5.1")
+        (case (range "8.13" "8.15") (range "1.12" "1.14") "0.3.13")
+        (case (range "8.11" "8.14") (range "1.12" "1.13") "0.3.10")
+        (case (range "8.10" "8.12") "1.11.0" "0.3.3")
+        (case (range "8.10" "8.11") "1.11.0" "0.3.1")
+        (case (range "8.8" "8.11") (range "1.8" "1.10") "0.2.3")
       ]
       null;
 
@@ -167,6 +97,7 @@ let
     package:
     let
       classical-deps = [
+        mathcomp.ssreflect
         mathcomp.algebra
         mathcomp-finmap
       ];
@@ -177,14 +108,29 @@ let
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
-        { case = "single"; out = "."; }
-        { case = "analysis"; out = "theories"; }
-        { case = "experimental-reals"; out = "experimental_reals"; }
-        { case = "reals-stdlib"; out = "reals_stdlib"; }
-        { case = "analysis-stdlib"; out = "analysis_stdlib"; }
+        {
+          case = "single";
+          out = ".";
+        }
+        {
+          case = "analysis";
+          out = "theories";
+        }
+        {
+          case = "experimental-reals";
+          out = "experimental_reals";
+        }
+        {
+          case = "reals-stdlib";
+          out = "reals_stdlib";
+        }
+        {
+          case = "analysis-stdlib";
+          out = "analysis_stdlib";
+        }
       ] package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
-      derivation = mkCoqDerivation ({
+      derivation = mkCoqDerivation {
         inherit
           version
           pname
@@ -230,7 +176,7 @@ let
         };
 
         passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
-      });
+      };
       # split packages didn't exist before 0.6, so building nothing in that case
       patched-derivation1 = derivation.overrideAttrs (
         o:

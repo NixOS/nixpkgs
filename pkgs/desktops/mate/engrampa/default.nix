@@ -12,18 +12,18 @@
   json-glib,
   mate-desktop,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
   # can be defaulted to true once switch to meson
   withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "engrampa";
   version = "1.28.2";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/engrampa-${finalAttrs.version}.tar.xz";
     hash = "sha256-Hpl3wjdFv4hDo38xUXHZr5eBSglxrqw9d08BdlCsCe8=";
   };
 
@@ -35,40 +35,42 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      caja
-      gtk3
-      hicolor-icon-theme
-      json-glib
-      mate-desktop
-    ]
-    ++ lib.optionals withMagic [
-      file
-    ];
+  buildInputs = [
+    caja
+    gtk3
+    hicolor-icon-theme
+    json-glib
+    mate-desktop
+  ]
+  ++ lib.optionals withMagic [
+    file
+  ];
 
-  configureFlags =
-    [
-      "--with-cajadir=$$out/lib/caja/extensions-2.0"
-    ]
-    ++ lib.optionals withMagic [
-      "--enable-magic"
-    ];
+  configureFlags = [
+    "--with-cajadir=$$out/lib/caja/extensions-2.0"
+  ]
+  ++ lib.optionals withMagic [
+    "--enable-magic"
+  ];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/engrampa";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Archive Manager for MATE";
     mainProgram = "engrampa";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
       fdl11Plus
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

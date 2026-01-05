@@ -31,11 +31,11 @@ buildPythonPackage rec {
   # No Tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Communicate with an Amazon Fire TV device via ADB over a network";
     mainProgram = "firetv-server";
     homepage = "https://github.com/happyleavesaoc/python-firetv/";
-    license = licenses.mit;
-    maintainers = [ maintainers.makefu ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.makefu ];
   };
 }

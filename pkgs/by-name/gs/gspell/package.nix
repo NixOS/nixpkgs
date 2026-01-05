@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.14.0";
+  version = "1.14.2";
 
   outputs = [
     "out"
@@ -31,23 +31,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZOodjp7cHCW0WpIOgNr2dVnRhm/81/hDL+z+ptD+iJc=";
+    sha256 = "TsflrMyQEygbrNa7wAAGvnM4GLgbo/4zLB6HbH4eFHc=";
   };
 
-  nativeBuildInputs =
-    [
-      docbook-xsl-nons
-      glib # glib-mkenums
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    glib # glib-mkenums
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     gtk3
@@ -66,12 +65,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Spell-checking library for GTK applications";
     mainProgram = "gspell-app1";
     homepage = "https://gitlab.gnome.org/GNOME/gspell";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

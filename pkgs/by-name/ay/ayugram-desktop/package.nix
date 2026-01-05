@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   nix-update-script,
   telegram-desktop,
@@ -13,20 +12,20 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "5.12.3";
+      version = "6.2.4";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-Zjik+9J0YtabVW1VEkJr/Bl3SIakVQ8EiTLYm28rEIk=";
+        hash = "sha256-bFGk8lqPlNlaxbrulYe0+8ayj33frctruce3/TZ+W2c=";
         fetchSubmodules = true;
       };
 
       passthru.updateScript = nix-update-script { };
 
       meta = previousAttrs.meta // {
-        mainProgram = if stdenv.hostPlatform.isLinux then "ayugram-desktop" else "AyuGram";
+        mainProgram = "AyuGram";
         description = "Desktop Telegram client with good customization and Ghost mode";
         longDescription = ''
           The best that could be in the world of Telegram clients.

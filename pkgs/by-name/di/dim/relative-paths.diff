@@ -1,7 +1,7 @@
-diff --git a/dim-core/src/routes/settings.rs b/dim-core/src/routes/settings.rs
+diff --git a/dim-web/src/routes/settings.rs b/dim-web/src/routes/settings.rs
 index f577eaf6..67da9448 100644
---- a/dim-core/src/routes/settings.rs
-+++ b/dim-core/src/routes/settings.rs
+--- a/dim-web/src/routes/settings.rs
++++ b/dim-web/src/routes/settings.rs
 @@ -1,5 +1,3 @@
 -use crate::utils::ffpath;
 -

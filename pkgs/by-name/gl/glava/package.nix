@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     libXrender
     libpulseaudio
     libXcomposite
-  ] ++ optional enableGlfw glfw;
+  ]
+  ++ optional enableGlfw glfw;
 
   nativeBuildInputs = [
     python3
@@ -90,15 +91,15 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/glava
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       OpenGL audio spectrum visualizer
     '';
     mainProgram = "glava";
     homepage = "https://github.com/wacossusca34/glava";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       eadwu
     ];
   };

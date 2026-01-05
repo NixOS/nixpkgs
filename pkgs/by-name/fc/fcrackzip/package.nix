@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   # Do not clash with unizp/zipinfo
   postInstall = "mv $out/bin/zipinfo $out/bin/fcrackzip-zipinfo";
 
-  meta = with lib; {
-    description = "zip password cracker, similar to fzc, zipcrack and others";
+  meta = {
+    description = "Zip password cracker, similar to fzc, zipcrack and others";
     homepage = "http://oldhome.schmorp.de/marc/fcrackzip.html";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nico202 ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nico202 ];
+    platforms = with lib.platforms; unix;
   };
 }

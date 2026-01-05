@@ -13,16 +13,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-83EAe6O8ETsuGJ5MK6kt68OnJL+r+BAYkFzvzlxHyp4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ep7gXTWHRhWpGo6n/EgjY0d/vqIqd3yEikzy9sLTtf8=";
 
   buildFeatures = [ "tool" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal plotting written in Rust";
     homepage = "https://github.com/loony-bean/textplots-rs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "textplots";
   };
 }

@@ -13,16 +13,19 @@
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "ivan";
-  version = "059";
+  version = "059-unstable-2025-02-20";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
-    rev = "v${version}";
-    sha256 = "sha256-5Ijy28LLx1TGnZE6ZNQXPYfvW2KprF+91fKx2MzLEms=";
+    rev = "0000b8621bb767b594802e663686d3a1da2c5060";
+    hash = "sha256-vqrQozsNrqW4oqoJ4V5E15AsMEuHq+pyZz7EtiA5euE=";
   };
+
+  patches = [
+    ./cmake.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +79,7 @@ stdenv.mkDerivation rec {
     cp ${ivanDesktop}/share/applications/* $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical roguelike game";
     longDescription = ''
       Iter Vehemens ad Necem (IVAN) is a graphical roguelike game, which currently
@@ -86,8 +89,8 @@ stdenv.mkDerivation rec {
       This is a fan continuation of IVAN by members of Attnam.com
     '';
     homepage = "https://attnam.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "ivan";
   };

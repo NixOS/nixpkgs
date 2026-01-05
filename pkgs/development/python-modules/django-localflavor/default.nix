@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-localflavor";
-  version = "4.0";
+  version = "5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django-localflavor";
     tag = version;
-    hash = "sha256-UWp3ei1VlEsEfjbJIE+MpffSzYF4X1HEQw+z+5kZoP0=";
+    hash = "sha256-eYhkWfxoZlnxhCIaqBhoEt0+SbkZKkUNUAy4p3tYf4A=";
   };
 
   build-system = [ setuptools ];
@@ -52,10 +52,11 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/django/django-localflavor/blob/${src.tag}/docs/changelog.rst";
     description = "Country-specific Django helpers";
     homepage = "https://github.com/django/django-localflavor";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-fsFYcfbLeYV6tpOGgNrFmYjcUAmdsx5zwUbvcctwFVs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     installShellFiles
   ];
 
@@ -73,12 +73,12 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Nike-Inc/gimme-aws-creds";
     changelog = "https://github.com/Nike-Inc/gimme-aws-creds/releases";
     description = "CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
     mainProgram = "gimme-aws-creds";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

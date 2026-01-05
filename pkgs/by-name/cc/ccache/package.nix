@@ -15,12 +15,14 @@
   doctest,
   xcodebuild,
   makeWrapper,
+  ctestCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.11.1";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-oYuvcM1BkOh+fj6FmZ8GiiyMyNCAHNp+zQdYvoAb/lU=";
+    hash = "sha256-oWzVCrNgYtOeN4+KJmIynT3jiFZfxrsLkoIm0lK3MBo=";
   };
 
   outputs = [
@@ -58,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
+
+  postPatch = ''
+    patchShebangs --build test/fake-compilers
+  '';
 
   strictDeps = true;
 
@@ -82,31 +88,24 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
+    ctestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
   ];
 
-  checkPhase =
-    let
-      badTests =
-        [
-          "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "test.basedir"
-          "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
-          "test.multi_arch"
-          "test.nocpp2"
-        ];
-    in
-    ''
-      runHook preCheck
-      export HOME=$(mktemp -d)
-      ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
-      runHook postCheck
-    '';
+  disabledTests = [
+    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+    "test.fileclone" # flaky on hydra, also seems to fail on zfs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test.basedir"
+    "test.multi_arch"
+    "test.nocpp2"
+  ];
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
@@ -163,24 +162,28 @@ stdenv.mkDerivation (finalAttrs: {
               ln -s ${unwrappedCC}/$file $out/$file
             done
           '';
+
+        meta = {
+          inherit (unwrappedCC.meta) mainProgram;
+        };
       };
 
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
     changelog = "https://ccache.dev/releasenotes.html#_ccache_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kira-bruneau
       r-burns
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "ccache";
   };
 })

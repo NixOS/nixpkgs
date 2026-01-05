@@ -6,27 +6,27 @@
 
 buildGoModule rec {
   pname = "gungnir";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "gungnir";
     rev = "v${version}";
-    hash = "sha256-a3qELEkScfqrAS5di4+k+mvUf/VHV+z16Ns2zHwSUHo=";
+    hash = "sha256-rmv/EmG8tsno8GVPY079zS9UZ8UE/uxbtO+D/Co/eWs=";
   };
 
-  vendorHash = "sha256-heuJZbWZBEt4GvkixaYdgRb8mAj6w7dp4ZvdQYzs89U=";
+  vendorHash = "sha256-1JAGkrzW2RzGK47Y/YMbXclJqCkbGK8XJEimbg8ETL8=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool that continuously monitors certificate transparency (CT) logs for newly issued SSL/TLS certificates";
     homepage = "https://github.com/g0ldencybersec/gungnir";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cherrykitten ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "gungnir";
   };
 }
