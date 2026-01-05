@@ -15654,6 +15654,8 @@ self: super: with self; {
 
   python3-saml = callPackage ../development/python-modules/python3-saml { };
 
+  python3-sipsimple = callPackage ../development/python-modules/python3-sipsimple { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
@@ -17323,8 +17325,6 @@ self: super: with self; {
   siphash24 = callPackage ../development/python-modules/siphash24 { };
 
   siphashc = callPackage ../development/python-modules/siphashc { };
-
-  sipsimple = callPackage ../development/python-modules/sipsimple { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 

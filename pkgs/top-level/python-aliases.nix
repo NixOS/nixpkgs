@@ -451,6 +451,7 @@ mapAliases {
   sharkiqpy = throw "'sharkiqpy' has been renamed to/replaced by 'sharkiq'"; # Converted to throw 2025-10-29
   shippai = throw "shippai has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   sip_4 = throw "'sip_4' has been renamed to/replaced by 'sip4'"; # Converted to throw 2025-10-29
+  sipsimple = lib.warnOnInstantiate "'sipsimple' has been renamed to 'python3-sipsimple' to fit upstream naming" python3-sipsimple; # added 2026-01-05
   slackclient = throw "'slackclient' has been renamed to/replaced by 'slack-sdk'"; # Converted to throw 2025-10-29
   smart_open = throw "'smart_open' has been renamed to/replaced by 'smart-open'"; # Converted to throw 2025-10-29
   smpp_pdu = throw "'smpp_pdu' has been renamed to/replaced by 'smpp-pdu'"; # Converted to throw 2025-10-29
