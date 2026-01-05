@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "django-cryptography";
-  version = "1.1-unstable-2024-02-16";
+  version = "1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
