@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/schischi/xcwd";
     license = lib.licenses.bsd3;
     mainProgram = "xcwd";
-    maintainers = [ lib.maintainers.grburst ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })
