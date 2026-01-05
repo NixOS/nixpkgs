@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   protobuf,
   rustPlatform,
@@ -10,17 +10,16 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
-  gurk-rs,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
   version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1vnyzKissOciLopWzWN2kmraFevYW/w32KVmP8qgUM4=";
   };
 
@@ -38,24 +37,19 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   env = {
-    NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "-framework"
-      "AppKit"
-    ];
+    NIX_LDFLAGS = lib.optionalString (
+      with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
+    ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
+    PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
   };
-
-  PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
 
   useNextest = true;
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
 
   passthru.updateScript = nix-update-script { };
 
@@ -66,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ devhell ];
   };
-}
+})
