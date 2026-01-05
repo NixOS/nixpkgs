@@ -5,7 +5,7 @@
   p7zip,
 }:
 let
-  version = "1.024";
+  version = "1.027";
 
   source =
     with lib.attrsets;
@@ -18,10 +18,10 @@ let
         })
       )
       {
-        Mono = "sha256-JSGr3/q5Ca0AphQlfWYKOnKYt2Nr0CtNmv/j27WxBz8=";
-        Round = "sha256-DDMGf+QK8MIRfGFb7QY4sycyGUGmoZAq1OhMQ2VgBbY=";
-        Sans = "sha256-V+fabg4yC1TBVePs4+mpv6LBqq5bH6dTSHtX+SWFR3E=";
-        Serif = "sha256-z55QTCtpVljW+JMdGJJLAm6TIq70maRiegehxoTvhWI=";
+        Mono = "sha256-Q1vFGfnVbZgpuk/dHNGIhQ8eZTMOChGjG2x7H/a/z9c=";
+        Round = "sha256-DtrXQsBPZM+LFZUBwlRni0oCTU30h+dF5pL1Bkb/y6A=";
+        Sans = "sha256-3vDFtygo3lNznhI/WDEvvYi1mz19zGi0yq6DzrTSgFs=";
+        Serif = "sha256-4xVMHgUXBjroehu01G3IP7gSlkjkx9SR7PwDwoVKWoo=";
       };
 
   extraOutputs = builtins.attrNames source;
