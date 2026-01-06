@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   python,
   pythonAtLeast,
   pythonOlder,
@@ -37,7 +36,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.3.5";
+  version = "2.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -47,28 +46,15 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
+    hash = "sha256-3UjvAQZEvsA/1s2mqFMnvi2E9MBHG27xf91FqiMGHmo=";
   };
 
-  patches =
-    lib.optionals python.hasDistutilsCxxPatch [
-      # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-      # Patching of numpy.distutils is needed to prevent it from undoing the
-      # patch to distutils.
-      ./numpy-distutils-C++.patch
-    ]
-    ++
-      lib.optionals
-        (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-        [
-          # don't assert RecursionError in monster dtype test
-          # see https://github.com/numpy/numpy/pull/30375
-          (fetchpatch2 {
-            url = "https://github.com/numpy/numpy/commit/eeaf04662e07cc8e2041f3e25bbd3698949a0c02.patch?full_index=1";
-            excludes = [ ".github/workflows/macos.yml" ];
-            hash = "sha256-bLPLExlKnX18MXhbZxzCHniaAE0yTSyK9WuQyFyYHOI=";
-          })
-        ];
+  patches = lib.optionals python.hasDistutilsCxxPatch [
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
+    ./numpy-distutils-C++.patch
+  ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
