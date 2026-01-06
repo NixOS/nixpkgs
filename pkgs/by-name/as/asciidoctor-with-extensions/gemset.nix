@@ -676,6 +676,16 @@
     };
     version = "0.3.6";
   };
+  tilt = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0w27v04d7rnxjr3f65w1m7xyvr6ch6szjj2v5wv1wz6z5ax9pa9m";
+      type = "gem";
+    };
+    version = "2.6.1";
+  };
   time = {
     dependencies = [ "date" ];
     groups = [ "default" ];
