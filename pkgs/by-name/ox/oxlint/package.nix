@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "1.12.0";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-HH98Q4mvCrylnRmvmfqKksF3ECT3rkoT93bSTqV4xOY=";
+    hash = "sha256-WHSdT4IMl/TUnMJycL3sYfA8aVLtag54dOYSXrDuN9g=";
   };
 
-  cargoHash = "sha256-lAEAOB6JkIkwckhwXU2/fRMkGOkEZnNtiyx/Xm+0JKc=";
+  cargoHash = "sha256-OTxSxDjNDN8MZV7hVg914xQDl199+yjAMukN9jTmQsU=";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -37,7 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^oxlint_v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Collection of JavaScript tools written in Rust";

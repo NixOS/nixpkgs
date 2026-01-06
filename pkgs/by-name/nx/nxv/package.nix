@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-7c1LryJvrOsSiLPYNvGIFaTONhA0c99n918/yNRKkxo=";
 
+  # Tests use mockito which needs to bind to localhost
+  __darwinAllowLocalNetworking = true;
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
