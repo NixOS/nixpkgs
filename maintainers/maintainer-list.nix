@@ -19353,6 +19353,12 @@
     githubId = 5047052;
     name = "Niclas Hirschfeld";
   };
+  nwf = {
+    email = "nwf-nix-m78e@cmx.ietfng.org";
+    github = "nwf";
+    githubId = 156882;
+    name = "Nat Filardo";
+  };
   nwjsmith = {
     email = "nate@theinternate.com";
     github = "nwjsmith";
