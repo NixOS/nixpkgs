@@ -78,12 +78,6 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    make -j$NIX_BUILD_CORES
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
