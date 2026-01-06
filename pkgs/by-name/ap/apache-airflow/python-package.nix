@@ -1,14 +1,23 @@
 {
   lib,
   stdenv,
-  python,
-  buildPythonPackage,
   fetchFromGitHub,
+  writeScript,
+
+  # javascript
+  fetchYarnDeps,
+  nodejs,
+  webpack-cli,
+  yarnBuildHook,
+  yarnConfigHook,
+
+  # python
   alembic,
   argcomplete,
   asgiref,
   attrs,
   blinker,
+  buildPythonPackage,
   cached-property,
   cattrs,
   clickclick,
@@ -21,20 +30,21 @@
   deprecated,
   dill,
   flask,
-  flask-login,
   flask-appbuilder,
   flask-caching,
+  flask-login,
   flask-session,
   flask-wtf,
+  freezegun,
   gitpython,
   google-re2,
   graphviz,
   gunicorn,
   httpx,
-  iso8601,
-  importlib-resources,
   importlib-metadata,
+  importlib-resources,
   inflection,
+  iso8601,
   itsdangerous,
   jinja2,
   jsonschema,
@@ -56,6 +66,9 @@
   pydantic,
   pygments,
   pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python,
   python-daemon,
   python-dateutil,
   python-nvd3,
@@ -72,19 +85,10 @@
   tabulate,
   tenacity,
   termcolor,
+  time-machine,
   typing-extensions,
   unicodecsv,
   werkzeug,
-  freezegun,
-  pytest-asyncio,
-  pytestCheckHook,
-  time-machine,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  webpack-cli,
-  fetchYarnDeps,
-  writeScript,
 
   # Extra airflow providers to enable
   enabledProviders ? [ ],
@@ -174,17 +178,17 @@ buildPythonPackage rec {
     flask
     flask-appbuilder
     flask-caching
+    flask-login
     flask-session
     flask-wtf
-    flask-login
     gitpython
     google-re2
     graphviz
     gunicorn
     httpx
-    iso8601
     importlib-resources
     inflection
+    iso8601
     itsdangerous
     jinja2
     jsonschema
