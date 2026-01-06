@@ -15,21 +15,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amber-lang";
-  version = "0.4.0-alpha";
+  version = "0.5.1-alpha";
 
   src = fetchFromGitHub {
     owner = "amber-lang";
     repo = "amber";
     tag = version;
-    hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
+    hash = "sha256-v1uJe3vVGKXaZcQzdoYzu/bJKMQnS4IYET4QLPW+J8Y=";
   };
 
   patches = [
-    # https://github.com/amber-lang/amber/pull/686
-    ./fix_gnused_detection.patch
+    # Upstreamed in #995, can be removed in >= 0.5.2
+    # github.com/amber-lang/amber/pull/995
+    ./fix_word_boundaries.patch
   ];
 
-  cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
+  cargoHash = "sha256-aXcxlmmDYLFbyRJYyGE1gbQMbdysHx4iWXsrUj10Eco=";
 
   preConfigure = ''
     substituteInPlace src/compiler.rs \

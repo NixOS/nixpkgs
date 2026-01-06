@@ -4,6 +4,7 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   replaceVars,
@@ -24,6 +25,7 @@
   pytest-asyncio,
   pytest-httpx,
   pytest-recording,
+  sqlite,
   sqlite-utils,
   syrupy,
   llm-echo,
@@ -179,7 +181,17 @@ let
       hash = "sha256-PMQGyBwP6UCIz7p94atWgepbw9IwW6ym60sfP/PBrCA=";
     };
 
-    patches = [ ./001-disable-install-uninstall-commands.patch ];
+    patches = [
+      ./001-disable-install-uninstall-commands.patch
+    ]
+    # See https://github.com/NixOS/nixpkgs/issues/476258 and https://github.com/simonw/llm/pull/1334
+    # TODO: Remove when sqlite 3.52.x is released.
+    ++ lib.optionals (sqlite.version == "3.51.1") [
+      (fetchpatch {
+        url = "https://github.com/simonw/llm/commit/6e24b883c3e3c4ddd2ec9006714d0a9ec17b59da.patch";
+        hash = "sha256-4AKQdZCr6qxuWnjWoSW6I44hPL5e7tnvREx2Ns0WwNc=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace llm/cli.py \

@@ -1591,7 +1591,6 @@ assertNoAdditions {
       dependencies = [ kulala-http-grammar ];
       buildInputs = [ curl ];
 
-      patches = [ ./patches/kulala-nvim/do-not-install-grammar.patch ];
       postPatch = ''
         substituteInPlace lua/kulala/config/defaults.lua \
           --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
