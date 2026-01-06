@@ -10187,10 +10187,6 @@ with pkgs;
     protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
   };
 
-  shaderc = callPackage ../development/compilers/shaderc {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   scheherazade-new = scheherazade.override {
     version = "4.400";
   };

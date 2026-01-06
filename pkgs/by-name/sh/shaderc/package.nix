@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   python3,
-  autoSignDarwinBinariesHook,
+  darwin,
   cctools,
 }:
 # Like many google projects, shaderc doesn't gracefully support separately
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   postInstall = ''
