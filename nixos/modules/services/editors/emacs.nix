@@ -90,7 +90,7 @@ in
       editorScript
     ];
 
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
+    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
   };
 
   meta.doc = ./emacs.md;
