@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g2nJYiGukgi6CEhIJRuqqpPT9XbfQGFVmQD4Ne8gul0=";
   };
 
@@ -37,6 +37,7 @@ buildGoModule rec {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
+    changelog = "https://github.com/inspektor-gadget/inspektor-gadget/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kranurag7
