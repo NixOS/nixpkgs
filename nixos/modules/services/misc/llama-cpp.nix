@@ -22,12 +22,14 @@ in
         type = lib.types.nullOr lib.types.path;
         example = "/models/mistral-instruct-7b/ggml-model-q4_0.gguf";
         description = "Model path.";
+        default = null;
       };
 
       modelsDir = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         example = "/models/";
         description = "Models directory.";
+        default = null;
       };
 
       extraFlags = lib.mkOption {
