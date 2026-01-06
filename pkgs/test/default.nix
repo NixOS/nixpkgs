@@ -191,6 +191,8 @@ in
 
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix { };
 
+  vmTools = callPackage ../build-support/vm/test.nix { };
+
   writers = callPackage ../build-support/writers/test.nix { };
 
   testers = callPackage ../build-support/testers/test/default.nix { };
