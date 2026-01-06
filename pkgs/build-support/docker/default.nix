@@ -1,5 +1,5 @@
 {
-  bashInteractive,
+  bash,
   buildPackages,
   cacert,
   callPackage,
@@ -969,11 +969,11 @@ rec {
     ln -s ${coreutils}/bin/env $out/usr/bin
   '';
 
-  # This provides /bin/sh, pointing to bashInteractive.
-  # The use of bashInteractive here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
+  # This provides /bin/sh, pointing to bash (interactive).
+  # The use of bash (interactive) here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
-    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+    ln -s ${bash}/bin/bash $out/bin/sh
   '';
 
   # This provides the ca bundle in common locations
@@ -1268,7 +1268,7 @@ rec {
       #
       # https://github.com/NixOS/nix/issues/6379
       homeDirectory ? "/build",
-      shell ? bashInteractive + "/bin/bash",
+      shell ? bash + "/bin/bash",
       command ? null,
       run ? null,
     }:

@@ -62,6 +62,7 @@ buildPythonPackage rec {
   passthru.skipBulkUpdate = true;
 
   meta = {
+    broken = lib.versionAtLeast lsprotocol.version "2024";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
     changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";

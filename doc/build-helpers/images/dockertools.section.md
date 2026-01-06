@@ -1194,7 +1194,7 @@ This is currently implemented by linking to the `env` binary from the `coreutils
 
 ### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
 
-This provides a `/bin/sh` link to the `bash` binary from the `bashInteractive` package.
+This provides a `/bin/sh` link to the `bash` binary from the `bash` package.
 Because of this, it supports cases such as running a command interactively in a container (for example by running `docker container run -it <image_name>`).
 
 ### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
@@ -1498,7 +1498,7 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
   This shell is started when running the image.
   This can be seen as an equivalent of the `NIX_BUILD_SHELL` [environment variable](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html#environment-variables) for {manpage}`nix-shell(1)`.
 
-  _Default value:_ the `bash` binary from the `bashInteractive` package.
+  _Default value:_ the `bash` binary from the `bash` package.
 
 `command` (String or Null; _optional_)
 
