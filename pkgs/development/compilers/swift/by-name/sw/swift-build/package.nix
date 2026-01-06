@@ -25,6 +25,7 @@
   xcbuild,
   swift_release,
   swift_sources,
+  re-derq,
 }:
 
 let
@@ -96,6 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Use the path to `swift` to find the plugin server binary
     substituteInPlace Sources/SWBCore/Settings/Settings.swift \
       --replace-fail '\(toolchain.path.str)/usr/bin/swift-plugin-server' ${lib.getExe' swift.swiftc "swift-plugin-server"}
+    substituteInPlace Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift \
+      --replace-fail '/usr/bin/derq' ${lib.getExe re-derq}
+    substituteInPlace Sources/SwiftBuildTestSupport/CoreQualificationTester.swift \
+      --replace-fail '/usr/bin/derq' ${lib.getExe re-derq}
+    substituteInPlace Tests/SWBTaskConstructionTests/PlatformTaskConstructionTests.swift \
+      --replace-fail '/usr/bin/derq' ${lib.getExe re-derq}
+    substituteInPlace Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift \
+      --replace-fail '/bin/mkdir' 'mkdir'
   '';
 
   strictDeps = true;
