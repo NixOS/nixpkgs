@@ -9,6 +9,7 @@
   flutter332,
   flutter335,
   pulseaudio,
+  webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
 
@@ -32,13 +33,13 @@ in
 flutter335.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.2.0";
+    version = "2.3.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-+puhKlg+ZJVjmL0hoWUXm7JU5hpoKqPZ3T5rWy+rPsQ=";
+      hash = "sha256-jQdWy/oo8WS6DU7VD4n4smL6P+aoqJvN+Yb2gt3hpyY=";
     };
 
     inherit pubspecLock;
@@ -69,6 +70,7 @@ flutter335.buildFlutterApplication (
     nativeBuildInputs = [
       imagemagick
       copyDesktopItems
+      webkitgtk_4_1
     ];
 
     runtimeDependencies = [ pulseaudio ];
@@ -114,6 +116,15 @@ flutter335.buildFlutterApplication (
           '';
         };
     };
+
+    # Temporary fix for json deprecation error
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    postPatch = ''
+      substituteInPlace linux/CMakeLists.txt \
+        --replace-fail \
+        "PRIVATE -Wall -Werror" \
+        "PRIVATE -Wall -Werror -Wno-deprecated"
+    '';
 
     postInstall = ''
       FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png
