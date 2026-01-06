@@ -61,7 +61,11 @@ let
           ;
         command = "fetch";
         outputHashMode = "recursive";
-        commandArgs = [ "--repository_cache=repo_cache" ] ++ commandArgs;
+        commandArgs = [
+          "--repository_cache=repo_cache"
+          "--repo_contents_cache="
+        ]
+        ++ commandArgs;
         bazelPreBuild = ''
           mkdir repo_cache
         '';
