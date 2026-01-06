@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
+  stdenv_32bit,
   makeWrapper,
-  fetchurl,
+  fetchFromGitHub,
   cabextract,
   gettext,
   gnupg,
@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "4.4";
+  stdenv = stdenv_32bit;
 
   binpath = lib.makeBinPath [
     cabextract
@@ -80,13 +80,15 @@ let
   );
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "playonlinux";
-  inherit version;
+  version = "4.4-unstable-2025-11-07";
 
-  src = fetchurl {
-    url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "0n40927c8cnjackfns68zwl7h4d7dvhf7cyqdkazzwwx4k2xxvma";
+  src = fetchFromGitHub {
+    owner = "PlayOnLinux";
+    repo = "POL-POM-4";
+    rev = "a91f598837b3d77ead6f418ec300fd4d284fdfa4";
+    hash = "sha256-rFZ1+30aOgNH4G+i08lfy7dCoYmN7VFlG48zxHpXOQQ=";
   };
 
   patches = [
@@ -173,4 +175,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "playonlinux";
   };
-}
+})

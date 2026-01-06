@@ -11373,8 +11373,6 @@ with pkgs;
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
 
-  opcua-client-gui = libsForQt5.callPackage ../misc/opcua-client-gui { };
-
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
     protobuf = protobuf_21;
   };
@@ -11390,8 +11388,6 @@ with pkgs;
   pinegrow = callPackage ../applications/editors/pinegrow { };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
-
-  playonlinux = callPackage ../applications/misc/playonlinux { stdenv = stdenv_32bit; };
 
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
