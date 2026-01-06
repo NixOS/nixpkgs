@@ -45,6 +45,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ xfnw ];
     # SQLAlchemy >= 2.0.0 is unsupported
     # https://github.com/pudo/dataset/issues/411
-    broken = true;
+    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };
 }
