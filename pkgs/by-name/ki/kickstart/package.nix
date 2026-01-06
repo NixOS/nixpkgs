@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Keats/kickstart";
     changelog = "https://github.com/Keats/kickstart/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "kickstart";
   };
 })

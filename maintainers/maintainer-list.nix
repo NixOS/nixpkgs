@@ -9251,14 +9251,6 @@
     github = "gaelj";
     githubId = 8884632;
   };
-  gaelreyrol = {
-    email = "me@gaelreyrol.dev";
-    matrix = "@Zevran:matrix.org";
-    name = "Gaël Reyrol";
-    github = "gaelreyrol";
-    githubId = 498465;
-    keys = [ { fingerprint = "3492 D8FA ACFF 4C5F A56E  50B7 DFB9 B69A 2C42 7F61"; } ];
-  };
   GaetanLepage = {
     email = "gaetan@glepage.com";
     github = "GaetanLepage";
