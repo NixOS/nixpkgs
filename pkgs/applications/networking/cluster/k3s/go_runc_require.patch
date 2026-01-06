@@ -1,3 +1,6 @@
+# Adds explicit require of opencontainers/runc to go.mod before version.sh is called and
+# removes it afterwards so that later build commands don't complain about inconsistent
+# vendoring.
 diff --git a/scripts/package-cli b/scripts/package-cli
 index a15d754926..bc450dbe4e 100755
 --- a/scripts/package-cli

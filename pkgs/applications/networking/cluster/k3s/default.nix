@@ -43,11 +43,6 @@ in
       }
     ) extraArgs).overrideAttrs
       {
-        patches = [
-          # Adds explicit require of opencontainers/runc to go.mod before version.sh is called and
-          # removes it afterwards so that later build commands don't complain about inconsistent
-          # vendoring.
-          ./1_34/go_runc_require.patch
-        ];
+        patches = [ ./go_runc_require.patch ];
       };
 }
