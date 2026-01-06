@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonAtLeast,
 
   # build inputs
   cargo,
@@ -77,9 +76,6 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-1saQEMaGuhXT+3bSlxl7yCXYptsOiYh3Uyn4Izn5Q4M=";
   };
-
-  # https://github.com/chroma-core/chroma/issues/5996
-  disabled = pythonAtLeast "3.14";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
