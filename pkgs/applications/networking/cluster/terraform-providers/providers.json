@@ -1382,13 +1382,13 @@
     "vendorHash": "sha256-6QgkZp3Ay5bRLwy8dxT5904KW2rBcz5yrYqIlvQToJk="
   },
   "trozz_pocketid": {
-    "hash": "sha256-rUCjvJKLZE+cSsHZdntBF9WpZDtIkVkukmLGEvGVC8s=",
+    "hash": "sha256-+YR1m81CoOj1uS7nQvrsYHfYyOovD+X/XlItaqXdVeE=",
     "homepage": "https://registry.terraform.io/providers/Trozz/pocketid",
     "owner": "Trozz",
     "repo": "terraform-provider-pocketid",
-    "rev": "v0.1.5",
+    "rev": "v0.1.6",
     "spdx": "MIT",
-    "vendorHash": "sha256-0oX7f4L5eljmOL8+g6KYdBcoIwng87+pi3XCXKDEb3w="
+    "vendorHash": "sha256-ozAYLFkilSK0Nygdglhz3VNtRVKoLDGRnrVvg4nWyH4="
   },
   "turbot_turbot": {
     "hash": "sha256-hUiILS5OVpa5MurChW2U9DQElQxzXo8yQfHRjWcd8cc=",
