@@ -1,8 +1,8 @@
 {
   lib,
   async-timeout,
-  buildPythonPackage,
   base36,
+  buildPythonPackage,
   chacha20poly1305-reuseable,
   cryptography,
   fetchFromGitHub,
@@ -12,6 +12,7 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
   zeroconf,
@@ -55,6 +56,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.QRCode;
 
   pythonImportsCheck = [ "pyhap" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/ikalchev/HAP-python/issues/490
+    "test_start_from_sync"
+  ];
 
   meta = {
     description = "HomeKit Accessory Protocol implementation";
