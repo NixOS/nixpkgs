@@ -666,6 +666,16 @@
     };
     version = "3.1.8";
   };
+  text-hyphen = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "01js0wxz84cc5hzxgqbcqnsa0y6crhdi6plmgkzyfm55p0rlajn4";
+      type = "gem";
+    };
+    version = "1.5.0";
+  };
   thread_safe = {
     groups = [ "default" ];
     platforms = [ ];
