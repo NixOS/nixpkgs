@@ -18,7 +18,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "upsies";
-  version = "2025.12.22";
+  version = "2026.01.03";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "plotski";
     repo = "upsies";
     tag = "v${version}";
-    hash = "sha256-wVQleIpPZHlb4FFyteaEvHu6M3WuuOXZ0ChqqlABJsQ=";
+    hash = "sha256-Ya1v0DR5a4fPsFVJKVSDbgy+hWE136aRV3pFMExlRhU=";
   };
 
   patches = [
