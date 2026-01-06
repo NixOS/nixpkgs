@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index 536fc31..13622e7 100755
+--- a/configure
++++ b/configure
+@@ -4559,7 +4559,7 @@ else
+   echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+-ac_cv_type_signal=int
++ac_cv_type_signal=void
+ fi
+ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+ fi
+diff --git a/signal.c b/signal.c
+index 8cbb774..2f16e30 100644
+--- a/signal.c
++++ b/signal.c
+@@ -47,7 +47,7 @@ unblock (void)
+ }
+ 
+ static void
+-install_signal (int signum, RETSIGTYPE (*handler) ())
++install_signal (int signum, RETSIGTYPE (*handler) (int))
+ /* Emulate the `signal' function via `sigaction'.  */
+ {
+   struct sigaction  action;
