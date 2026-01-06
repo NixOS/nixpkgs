@@ -72,12 +72,6 @@ stdenv.mkDerivation {
     }
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake PREFIX=$out
-    runHook postConfigure
-  '';
-
   installPhase = ''
     runHook preInstall
 
