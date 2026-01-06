@@ -346,7 +346,6 @@ buildPythonPackage rec {
     changelog = "https://airflow.apache.org/docs/apache-airflow/${version}/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      gbpdt
       taranarmo
     ];
   };
