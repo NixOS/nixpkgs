@@ -1,27 +1,34 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python312,
+  xorg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   pname = "angr-management";
-  version = "9.2.147";
+  version = "9.2.154";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr-management";
     tag = "v${version}";
-    hash = "sha256-WPnrLgYae8rRwdhciGrc+z+OjYtkGFslODmBZx+3KPU=";
+    hash = "sha256-ZaQRXCt6u5FGApiXTToJdIXBnBLv3emo13YG5ip0lJA=";
   };
 
-  pythonRelaxDeps = [ "binsync" ];
+  pythonRelaxDeps = [
+    "angr"
+    "binsync"
+    "qtawesome"
+  ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  buildInputs = [ xorg.xcbutilcursor ];
+
+  build-system = with python312.pkgs; [ setuptools ];
 
   dependencies =
-    with python3.pkgs;
+    with python312.pkgs;
     (
       [
         # requirements from setup.cfg
@@ -47,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
         pyzmq
         traitlets
       ]
-      ++ angr.optional-dependencies.AngrDB
+      ++ angr.optional-dependencies.angrdb
       ++ requests.optional-dependencies.socks
       ++ thefuzz.optional-dependencies.speedup
     );
@@ -55,11 +62,14 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "angrmanagement" ];
 
   meta = {
-    description = "The official angr GUI";
+    description = "Graphical binary analysis tool powered by the angr binary analysis platform";
     homepage = "https://github.com/angr/angr-management";
     changelog = "https://github.com/angr/angr-management/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ scoder12 ];
+    maintainers = with lib.maintainers; [
+      connornelson
+      scoder12
+    ];
     mainProgram = "angr-management";
   };
 }
