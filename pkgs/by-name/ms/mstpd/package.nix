@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "--libexecdir=$(out)/lib"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = with lib; {
     description = "Multiple Spanning Tree Protocol daemon";
     homepage = "https://github.com/mstpd/mstpd";
