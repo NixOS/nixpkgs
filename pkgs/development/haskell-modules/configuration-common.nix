@@ -2587,6 +2587,24 @@ with haskellLib;
     ];
   }) super.reanimate-svg;
 
+  # 2026-01-06: modernize to GHC 9.10.3
+  reanimate = overrideCabal (drv: {
+    # file in Hackage but not on github, need to remove here
+    # test relies on hegometry but that was removed as a dependency
+    # https://github.com/reanimate/reanimate/commit/f58a00e
+    prePatch = drv.prePatch or "" + ''
+      rm -f examples/decompose.hs
+    '';
+    patches = (drv.patches or [ ]) ++ [
+      # variant of PR https://github.com/reanimate/reanimate/pull/317
+      (pkgs.fetchpatch2 {
+        name = "modernize-to-ghc-9.10.3";
+        url = "https://github.com/reanimate/reanimate/commit/273f48c2b82dcfa027481133a6a606e73a22461b.patch";
+        sha256 = "sha256-aibbIoc54I4Ibg6t2o8vykL8MqzmxLvayUNa8MiibEw=";
+      })
+    ];
+  }) super.reanimate;
+
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;

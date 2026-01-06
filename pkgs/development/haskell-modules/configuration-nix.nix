@@ -871,6 +871,15 @@ builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
+  reanimate = overrideCabal (drv: {
+    buildTools = (drv.buildTools or [ ]) ++ [
+      # needed for testsuite
+      pkgs.ffmpeg
+      pkgs.librsvg
+      pkgs.texliveFull
+    ];
+  }) super.reanimate;
+
   reanimate-svg = overrideCabal (drv: {
     buildTools = (drv.buildTools or [ ]) ++ [
       # needed for testsuite
