@@ -12,7 +12,7 @@
   nixosTests,
   libargon2,
   systemd,
-  withLuks2ExternalTokens ? true,
+  withLuks2ExternalTokens ? !stdenv.hostPlatform.isStatic,
   withInternalArgon2 ? false,
 
   # Programs enabled by default upstream are implicitly enabled unless
@@ -71,10 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!withInternalArgon2) [
     "--enable-libargon2"
   ]
-  ++ lib.optionals (withLuks2ExternalTokens && !stdenv.hostPlatform.isStatic) [
+  ++ lib.optionals withLuks2ExternalTokens [
     "--with-luks2-external-tokens-path=${systemd}/lib/cryptsetup"
   ]
-  ++ lib.optionals (!withLuks2ExternalTokens || stdenv.hostPlatform.isStatic) [
+  ++ lib.optionals (!withLuks2ExternalTokens) [
     "--disable-external-tokens"
     # We have to override this even though we're removing token
     # support, because the path still gets included in the binary even
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postFixup = lib.optionals (withLuks2ExternalTokens && !stdenv.hostPlatform.isStatic) ''
+  postFixup = lib.optionals withLuks2ExternalTokens ''
     patchelf --add-rpath "${systemd}/lib/cryptsetup" $out/lib/libcryptsetup.so
   '';
 
