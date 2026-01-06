@@ -1399,6 +1399,25 @@ assertNoAdditions {
     dependencies = [ self.guard-nvim ];
   };
 
+  guihua-lua = super.guihua-lua.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd lua/fzy
+      make
+      popd
+
+      runHook postBuild
+    '';
+
+    nvimSkipModules = [
+      # lua module '.init' not found
+      "fzy.fzy-lua-native"
+    ];
+  };
+
   gx-nvim = super.gx-nvim.overrideAttrs {
     patches = lib.optionals stdenv.hostPlatform.isLinux [
       (replaceVars ./patches/gx-nvim/fix-paths.patch {
