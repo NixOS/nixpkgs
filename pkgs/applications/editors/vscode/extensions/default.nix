@@ -2656,8 +2656,8 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.67";
-          hash = "sha256-cevda4fpNcZqnkN80Cjw4mDAzCvG2yWp95cr4i9zNKU=";
+          version = "0.6.68";
+          hash = "sha256-yLeCyq3aZI/WbwJpGxqy5fEY5s8kZETKYzusss5iYAY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/kahole.magit/changelog";
