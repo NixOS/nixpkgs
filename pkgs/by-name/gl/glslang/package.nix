@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bison,
   cmake,
-  jq,
   python3,
   spirv-headers,
   spirv-tools,
@@ -29,8 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python3
-    bison
-    jq
   ];
 
   propagatedBuildInputs = [
