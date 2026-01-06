@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   applyPatches,
   bundlerEnv,
   callPackage,
@@ -28,6 +29,12 @@ let
     src = fetchFromGitHub (lib.importJSON ./source.json);
     patches = [
       ./fix-sendmail-location.diff
+      # Fix mail fetch failing with OpenSSL 3.6
+      # https://github.com/zammad/zammad/pull/5888
+      (fetchpatch {
+        url = "https://github.com/zammad/zammad/commit/01376d45f48df057e4377518e6f7e4a0db7de624.patch";
+        hash = "sha256-uH1/t0dP5nvh12GsJz6Yf/RXpf8+hkYoVJnLJAXqpuc=";
+      })
     ];
 
     postPatch = ''
