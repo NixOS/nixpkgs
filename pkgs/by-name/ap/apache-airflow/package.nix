@@ -8,12 +8,12 @@ let
   python = python3.override {
     self = python;
     packageOverrides = pySelf: pySuper: {
-      connexion = pySuper.connexion.overridePythonAttrs (o: rec {
+      connexion = pySuper.connexion.overridePythonAttrs rec {
         version = "2.14.2";
         src = fetchFromGitHub {
           owner = "spec-first";
           repo = "connexion";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
         };
         nativeBuildInputs = with pySelf; [
@@ -62,19 +62,19 @@ let
       });
       # flask-appbuilder doesn't work with sqlalchemy 2.x, flask-appbuilder 3.x
       # https://github.com/dpgaspar/Flask-AppBuilder/issues/2038
-      flask-appbuilder = pySuper.flask-appbuilder.overridePythonAttrs (o: {
+      flask-appbuilder = pySuper.flask-appbuilder.overridePythonAttrs {
         meta.broken = false;
-      });
+      };
       # a knock-on effect from overriding the sqlalchemy version
-      flask-sqlalchemy = pySuper.flask-sqlalchemy.overridePythonAttrs (o: {
+      flask-sqlalchemy = pySuper.flask-sqlalchemy.overridePythonAttrs {
         src = fetchPypi {
           pname = "Flask-SQLAlchemy";
           version = "2.5.1";
           hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
         };
         format = "setuptools";
-      });
-      httpcore = pySuper.httpcore.overridePythonAttrs (o: {
+      };
+      httpcore = pySuper.httpcore.overridePythonAttrs {
         # nullify upstream's pytest flags which cause
         # "TLS/SSL connection has been closed (EOF)"
         # with pytest-httpbin 1.x
@@ -82,16 +82,16 @@ let
           substituteInPlace pyproject.toml \
             --replace '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
         '';
-      });
-      pytest-httpbin = pySuper.pytest-httpbin.overridePythonAttrs (o: rec {
+      };
+      pytest-httpbin = pySuper.pytest-httpbin.overridePythonAttrs rec {
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "kevin1024";
           repo = "pytest-httpbin";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-S4ThQx4H3UlKhunJo35esPClZiEn7gX/Qwo4kE1QMTI=";
         };
-      });
+      };
       # apache-airflow doesn't work with sqlalchemy 2.x
       # https://github.com/apache/airflow/issues/28723
       sqlalchemy = pySuper.sqlalchemy_1_4;
