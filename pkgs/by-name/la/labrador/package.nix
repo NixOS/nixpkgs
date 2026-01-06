@@ -97,8 +97,7 @@ stdenv.mkDerivation {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       # Install icons (Linux only)
-      mkdir -p $out/share/icons/hicolor/48x48/apps
-      mkdir -p $out/share/icons/hicolor/256x256/apps
+      mkdir -p $out/share/icons/hicolor/{48x48,256x256}/apps
       cp build_linux/icon48/espotek-labrador.png $out/share/icons/hicolor/48x48/apps/
       cp build_linux/icon256/espotek-labrador.png $out/share/icons/hicolor/256x256/apps/
 
