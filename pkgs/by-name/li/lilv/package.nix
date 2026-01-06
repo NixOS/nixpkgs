@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.26.0";
+  version = "0.26.2";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-kS+dAlprXZYkTY3FHnXb/GeT45h2tTwZbboWYjCNt/A=";
+    hash = "sha256-nHEvfES6ix/b+buqeTu/doRL5As2HEMivapcTtNsa4k=";
   };
 
   nativeBuildInputs = [
