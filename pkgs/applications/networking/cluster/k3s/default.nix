@@ -45,4 +45,18 @@ in
       {
         patches = [ ./go_runc_require.patch ];
       };
+
+  k3s_1_35 =
+    (common (
+      (import ./1_35/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "35"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        patches = [ ./go_runc_require.patch ];
+      };
 }
