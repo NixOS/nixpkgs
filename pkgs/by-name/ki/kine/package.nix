@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kine";
-  version = "0.14.5";
+  version = "0.14.9";
 
   src = fetchFromGitHub {
     owner = "k3s-io";
     repo = "kine";
     rev = "v${version}";
-    hash = "sha256-2I/igT7AjiPhLpK1pM5V2FvOF4Oc897HbsBMiwCnx/o=";
+    hash = "sha256-urstgYdmfWenpRIlvh0i91Ir97c6ZZo+G+YGyMHEfIE=";
   };
 
-  vendorHash = "sha256-Qx4yId072JhuXjF0Xd1/DnsnbsMlfuiwFqDKKw4rDLM=";
+  vendorHash = "sha256-JDduMpE5+EfIs+Q1zbqmk3hcoQFvxJSkCbFw7KZJsCk=";
 
   ldflags = [
     "-s"
@@ -27,6 +27,13 @@ buildGoModule rec {
   env = {
     "CGO_CFLAGS" = "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_USE_ALLOCA=1";
   };
+
+  # TestBackend_List in the NATS driver is flaky due to race conditions in test
+  # Fixed with https://github.com/k3s-io/kine/commit/52aa8b86cc0b91dee2049202dacb21b136edcf24
+  # Remove skip after next Kine release
+  checkFlags = [
+    "-skip=^TestBackend_List$"
+  ];
 
   meta = {
     description = "etcdshim that translates etcd API to RDMS";
