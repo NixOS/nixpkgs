@@ -4,7 +4,9 @@
   python3Packages,
   fetchPypi,
   apksigner,
+  gradlew-fdroid,
   installShellFiles,
+  withLibvirt ? true,
 }:
 
 let
@@ -16,22 +18,16 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.4.3";
+  version = "2.4.3-unstable-2026-01-05";
 
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    tag = version;
-    hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
+    rev = "0382fd5a896b3629868f0f78f9bbc6297c48d469";
+    hash = "sha256-U9NGUfEDRneV4SFMTQMo3JZen8imG/LpphduZt1udBo=";
   };
-
-  pythonRelaxDeps = [
-    "androguard"
-    "pyasn1"
-    "pyasn1-modules"
-  ];
 
   pythonRemoveDeps = [
     "puremagic" # Only used as a fallback when magic is not installed
@@ -47,8 +43,6 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    patchShebangs gradlew-fdroid
-    install -m 0755 gradlew-fdroid $out/bin
     installShellCompletion --cmd fdroid \
       --bash completion/bash-completion
   '';
@@ -60,47 +54,50 @@ pythonPackages.buildPythonApplication rec {
     babel
   ];
 
-  dependencies = with pythonPackages; [
-    androguard
-    biplist
-    clint
-    defusedxml
-    gitpython
-    libcloud
-    libvirt
-    magic
-    mwclient
-    oscrypto
-    paramiko
-    pillow
-    platformdirs
-    pyasn1
-    pyasn1-modules
-    pycountry
-    python-vagrant
-    pyyaml
-    qrcode
-    requests
-    (ruamel-yaml.overrideAttrs (old: {
-      src = fetchPypi {
-        pname = "ruamel.yaml";
-        version = "0.17.21";
-        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-      };
-    }))
-    sdkmanager
-    yamllint
-  ];
+  dependencies =
+    with pythonPackages;
+    [
+      androguard
+      clint
+      defusedxml
+      gitpython
+      magic
+      oscrypto
+      paramiko
+      pillow
+      platformdirs
+      asn1crypto
+      pyyaml
+      python-vagrant
+      qrcode
+      requests
+      (ruamel-yaml.overrideAttrs (old: {
+        src = fetchPypi {
+          pname = "ruamel.yaml";
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
+        };
+      }))
+      sdkmanager
+      yamllint
+    ]
+    ++ lib.optionals withLibvirt [
+      libvirt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      biplist
+      pycountry
+    ];
 
   makeWrapperArgs = [
     "--prefix"
     "PATH"
     ":"
-    "${lib.makeBinPath [ apksigner ]}"
+    "${lib.makeBinPath [
+      apksigner
+      gradlew-fdroid
+    ]}"
   ];
-
-  # no tests
-  doCheck = false;
 
   pythonImportsCheck = [ "fdroidserver" ];
 
