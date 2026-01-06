@@ -8,8 +8,10 @@
   boost,
   eigen_3_4_0,
   glm,
+  gcc,
   libGL,
   libpng,
+  makeWrapper,
   openexr,
   onetbb,
   xorg,
@@ -36,6 +38,7 @@ stdenv.mkDerivation {
     cmake
     git
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
@@ -73,6 +76,18 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace extern/googletest/googletest/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  ## support runtime compilation with -Ojit
+  fixupPhase = ''
+    wrapProgram $out/bin/curv \
+      --set NIX_CFLAGS_COMPILE_${gcc.suffixSalt} "$NIX_CFLAGS_COMPILE" \
+      --set NIX_LDFLAGS_${gcc.suffixSalt} "$NIX_LDFLAGS" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gcc
+        ]
+      }"
   '';
 
   passthru.updateScript = unstableGitUpdater { };
