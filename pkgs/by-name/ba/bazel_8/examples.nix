@@ -34,7 +34,8 @@ in
     commandArgs = [
       "--extra_toolchains=@@rules_java++toolchains+local_jdk//:all"
       "--tool_java_runtime_version=local_jdk_21"
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--spawn_strategy=local";
     env = {
       JAVA_HOME = jdk_headless.home;
       USE_BAZEL_VERSION = bazel_8.version;
@@ -70,6 +71,7 @@ in
     commandArgs = lib.optionals (stdenv.hostPlatform.isDarwin) [
       "--host_cxxopt=-xc++"
       "--cxxopt=-xc++"
+      "--spawn_strategy=local"
     ];
     env = {
       USE_BAZEL_VERSION = bazel_8.version;
@@ -104,6 +106,7 @@ in
       libgcc
     ];
     nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
+    commandArgs = lib.optional stdenv.hostPlatform.isDarwin "--spawn_strategy=local";
     autoPatchelfIgnoreMissingDeps = [ "librustc_driver-*.so" ];
     bazelVendorDepsFOD = {
       outputHash =
