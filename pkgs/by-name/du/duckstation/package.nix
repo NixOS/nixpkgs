@@ -28,7 +28,7 @@
   spirv-cross,
   udev,
   libbacktrace,
-  ffmpeg_8-headless,
+  ffmpeg-headless,
   cubeb,
   fetchurl,
   zip,
@@ -61,14 +61,14 @@ let
 
   linuxDrv = llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pname = "duckstation";
-    version = "0.1-10339";
+    version = "0.1-10413";
 
     src = fetchFromGitHub {
       owner = "stenzek";
       repo = "duckstation";
       tag = "v${finalAttrs.version}";
       deepClone = true;
-      hash = "sha256-U/RYyXazuu5qTMC+q4r8oGJN0vMaVBONRk0STcSJl9A=";
+      hash = "sha256-ytJ0vaXXbbgSmZ42gQPlQY7p30hz7hx/+09TSvCKyEg=";
 
       postFetch = ''
         cd $out
@@ -255,7 +255,7 @@ let
       qt6.qtbase
       udev
       libbacktrace
-      ffmpeg_8-headless
+      ffmpeg-headless
       cubeb
     ]
     ++ [
@@ -270,12 +270,12 @@ let
       mkdir -p $out/{lib,bin,share/{applications,icons/hicolor/512x512/apps}}
       cp -r bin $out/lib/duckstation
       ln -s $out/lib/duckstation/duckstation-qt $out/bin/duckstation-qt
-      ln -s $out/lib/duckstation/resources/org.duckstation.DuckStation.desktop \
-            $out/share/applications
-      ln -s $out/lib/duckstation/resources/org.duckstation.DuckStation.png \
-            $out/share/icons/hicolor/512x512/apps
 
       pushd ..
+      install -Dm644 scripts/packaging/org.duckstation.DuckStation.desktop \
+        -t $out/share/applications
+      install -Dm644 scripts/packaging/org.duckstation.DuckStation.png \
+        -t $out/share/icons/hicolor/512x512/apps
       install -Dm644 LICENSE -t $out/share/doc/duckstation
       install -Dm644 README.* -t $out/share/doc/duckstation
       install -Dm644 CONTRIBUTORS.md -t $out/share/doc/duckstation
@@ -287,7 +287,7 @@ let
     qtWrapperArgs = [
       "--prefix LD_LIBRARY_PATH : ${
         (lib.makeLibraryPath [
-          ffmpeg_8-headless
+          ffmpeg-headless
           finalAttrs.vendorShaderc
         ])
       }"
