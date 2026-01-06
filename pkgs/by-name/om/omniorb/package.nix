@@ -9,11 +9,11 @@
 stdenv.mkDerivation rec {
 
   pname = "omniorb";
-  version = "4.3.3";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
-    hash = "sha256-rM0l4stwxOM+0iew2T6WaeOMRgGWN4h8dxOYhw7UXno=";
+    hash = "sha256-eXINQV0jzY2pkoek702gqhvTTT5MexUwcVYArcXtPcM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
