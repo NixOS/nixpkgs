@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (fetchpatch {
       url = "https://github.com/lakinduakash/linux-wifi-hotspot/commit/a3fce4b3ee9371eeb7b300fa7e9f291d93986db3.patch";
-      hash = "sha256-tvWoYvQELYVq1Cr6NG+9kafYFHZloNMuOvaPeIbYlSI=";
+      hash = "sha256-4xQ3iRUlkNpoxHXABhMIgsoDY9nENN/9FtHD3UMyAhc=";
     })
   ];
 

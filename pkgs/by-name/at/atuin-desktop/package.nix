@@ -62,6 +62,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # Used upstream: https://github.com/atuinsh/desktop/blob/6ddebdf66c70042defe5587f7f6c433f889b9ef4/.envrc#L1
     NODE_OPTIONS = "--max-old-space-size=6144";
+
+    # TMP: Fix build failure with GCC 15.
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
 
   # Otherwise tauri will look for a private key we don't have.

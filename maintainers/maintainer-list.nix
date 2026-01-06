@@ -1120,6 +1120,13 @@
     githubId = 82811;
     name = "Aldo Borrero";
   };
+  aleclearmind = {
+    email = "ale.nix@clearmind.me";
+    matrix = "@bake.monorail:matrix.org";
+    github = "aleclearmind";
+    githubId = 2545644;
+    name = "Alessandro Di Federico";
+  };
   alejandrosame = {
     email = "alejandrosanchzmedina@gmail.com";
     matrix = "@alejandrosame:matrix.org";

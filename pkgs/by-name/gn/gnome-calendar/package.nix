@@ -17,6 +17,7 @@
   libical,
   libsoup_3,
   glib,
+  glib-networking,
   gsettings-desktop-schemas,
   libadwaita,
 }:
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     libical
     libsoup_3
     glib
+    glib-networking
     libgweather
     geoclue2
     gsettings-desktop-schemas

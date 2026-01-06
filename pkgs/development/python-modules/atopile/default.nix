@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -74,6 +75,14 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "migrate-to-pygls-v2.patch";
+      url = "https://github.com/atopile/atopile/pull/1533.patch";
+      hash = "sha256-yyRtYFwwcwliz38l7WkzT+zvi+uxWzHdZ06cl8q09Ec=";
+    })
+  ];
 
   build-system = [
     hatchling
