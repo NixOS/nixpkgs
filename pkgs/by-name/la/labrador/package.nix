@@ -20,7 +20,7 @@ let
       "i686-linux" = "i386";
       "armv7l-linux" = "arm";
     }
-    .${stdenv.hostPlatform.system} or null;
+    .${stdenv.hostPlatform.system} or (throw "labrador: unsupported system ${stdenv.hostPlatform.system}");
 
 
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
