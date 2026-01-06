@@ -89,11 +89,9 @@ stdenv.mkDerivation {
       cp Labrador $out/bin/labrador
     fi
 
-    # Install firmware
     mkdir -p $out/share/EspoTek/Labrador/firmware
     cp resources/firmware/labrafirm* $out/share/EspoTek/Labrador/firmware/
 
-    # Install waveforms
     mkdir -p $out/share/EspoTek/Labrador/waveforms
     cp resources/waveforms/* $out/share/EspoTek/Labrador/waveforms/
 
