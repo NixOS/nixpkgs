@@ -1365,10 +1365,13 @@ assertNoAdditions {
   };
 
   go-nvim = super.go-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      guihua-lua
+    ];
     checkInputs = with self; [
       luasnip
       null-ls-nvim
-      nvim-treesitter
     ];
     nvimSkipModules = [
       "init"
