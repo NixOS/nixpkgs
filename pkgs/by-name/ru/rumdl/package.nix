@@ -10,25 +10,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
-  version = "0.0.210";
+  version = "0.0.211";
 
   src = fetchFromGitHub {
     owner = "rvben";
     repo = "rumdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AxJzCRZCfm8DbybWgYnAb8kQEYXA0FCfvI8OxQwrcgI=";
+    hash = "sha256-EW/JQlzve46eKCuDqXmvdeU1X3khtuk/WiUD5XoD+N4=";
   };
 
-  cargoHash = "sha256-4PNacVB31uVtyNfQbYpgUmu8RxXbbXvaWS0bzYEAaOI=";
+  cargoHash = "sha256-dres1qO4YqmGwnjFDp6alh5+QTQa4liDBv6iMXFBlck=";
 
   cargoBuildFlags = [
     "--bin=rumdl"
   ];
-
-  postPatch = ''
-    substituteInPlace tests/cli_alias_test.rs --replace-fail \
-      'target/debug' "target/${stdenvNoCC.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType"
-  '';
 
   # Non-specific tests often fail on Darwin (especially aarch64-darwin),
   # on both Hydra and GitHub-hosted runners, even with __darwinAllowLocalNetworking enabled.
