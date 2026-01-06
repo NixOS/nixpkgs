@@ -1,16 +1,3 @@
-# EspoTek Labrador - USB oscilloscope, signal generator, logic analyzer, and more
-#
-# This package builds the Qt5 desktop application for the Labrador hardware.
-# The bundled libdfuprog library is included for firmware updates.
-#
-# Note: udev rules are required for non-root USB access on Linux.
-# On NixOS, add to configuration.nix:
-#   services.udev.extraRules = ''
-#     ENV{ID_VENDOR_ID}=="03eb", ENV{ID_MODEL_ID}=="ba94", MODE="0666"
-#     ENV{ID_VENDOR_ID}=="03eb", ENV{ID_MODEL_ID}=="a000", MODE="0666"
-#     ENV{ID_VENDOR_ID}=="03eb", ENV{ID_MODEL_ID}=="2fe4", MODE="0666"
-#   '';
-#
 {
   lib,
   stdenv,
