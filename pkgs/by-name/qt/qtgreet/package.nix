@@ -34,7 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    kdePackages.wayqt
+    (kdePackages.wayqt.overrideAttrs (_: {
+      src = fetchFromGitLab {
+        owner = "desktop-frameworks";
+        repo = "wayqt";
+        rev = "2750cd93a3110bff6345f9e2a1a3090a3e3f7203";
+        hash = "sha256-WGIZ3OgeGkQWEzc/m0/Moo9Qgr3vg4dFfQhba2vx0do=";
+      };
+      patches = [ ];
+    }))
     qt6.qtbase
     dfl-ipc
     dfl-utils
@@ -46,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "dynpath" "${placeholder "out"}/var/lib/qtgreet")
   ];
+
+  NIX_LDFLAGS = "-lwayqt-utils-qt6";
 
   meta = {
     description = "Qt based greeter for greetd, to be run under wayfire or similar wlr-based compositors";
