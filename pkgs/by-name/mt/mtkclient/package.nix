@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "mtkclient";
-  version = "2.0.1-unstable-2025-09-26";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
