@@ -4,26 +4,22 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  libplist,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sigtool";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
-    owner = "thefloweringash";
+    owner = "nix-community";
     repo = "sigtool";
     rev = "v${version}";
-    sha256 = "sha256-K3VSFaqcZEomF7kROJz+AwxdW1MmxxEFDaRnWnzcw54=";
+    sha256 = "sha256-Wo79MS9s70jZ9Z9J3XUrjED3zO2gaDtYc03Peqi0Gyk=";
   };
 
-  patches = [
-    # Fix missing `UINT64_C` when building with GCC on Linux
-    ./0001-fix-build-with-gcc.patch
-  ];
-
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl libplist ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
