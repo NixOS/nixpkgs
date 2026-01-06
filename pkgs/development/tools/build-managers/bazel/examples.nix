@@ -1,13 +1,13 @@
 {
   fetchFromGitHub,
   lib,
-  bazel_8,
   libgcc,
   cctools,
   stdenv,
   jdk_headless,
   callPackage,
   zlib,
+  bazel_package,
 }:
 let
   bazelPackage = callPackage ./build-support/bazelPackage.nix { };
@@ -30,7 +30,7 @@ in
     sourceRoot = "source/java-tutorial";
     name = "java-tutorial";
     targets = [ "//:ProjectRunner" ];
-    bazel = bazel_8;
+    bazel = bazel_package;
     commandArgs = [
       "--extra_toolchains=@@rules_java++toolchains+local_jdk//:all"
       "--tool_java_runtime_version=local_jdk_21"
@@ -38,7 +38,7 @@ in
     ++ lib.optional stdenv.hostPlatform.isDarwin "--spawn_strategy=local";
     env = {
       JAVA_HOME = jdk_headless.home;
-      USE_BAZEL_VERSION = bazel_8.version;
+      USE_BAZEL_VERSION = bazel_package.version;
     };
     installPhase = ''
       mkdir $out
@@ -62,7 +62,7 @@ in
     sourceRoot = "source/cpp-tutorial/stage3";
     name = "cpp-tutorial";
     targets = [ "//main:hello-world" ];
-    bazel = bazel_8;
+    bazel = bazel_package;
     installPhase = ''
       mkdir $out
       cp bazel-bin/main/hello-world $out/
@@ -74,7 +74,7 @@ in
       "--spawn_strategy=local"
     ];
     env = {
-      USE_BAZEL_VERSION = bazel_8.version;
+      USE_BAZEL_VERSION = bazel_package.version;
     };
     bazelRepoCacheFOD = {
       outputHash =
@@ -93,9 +93,9 @@ in
     sourceRoot = "source/rust-examples/01-hello-world";
     name = "rust-examples-01-hello-world";
     targets = [ "//:bin" ];
-    bazel = bazel_8;
+    bazel = bazel_package;
     env = {
-      USE_BAZEL_VERSION = bazel_8.version;
+      USE_BAZEL_VERSION = bazel_package.version;
     };
     installPhase = ''
       mkdir $out
