@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pdfminer-six";
-  version = "20251107";
+  version = "20251227";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
     tag = version;
-    hash = "sha256-PuRxiKL1rLpfdabH3cMywkwBoeImu/yNgEhckLzr0Z4=";
+    hash = "sha256-O/9B04lLFNoqvvyGAFADuqzIGnthN50V1+PMAFt1ysc=";
   };
 
   build-system = [
