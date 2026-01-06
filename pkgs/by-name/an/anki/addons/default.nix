@@ -22,5 +22,7 @@
 
   review-heatmap = callPackage ./review-heatmap { };
 
+  syntax-highlighting-ng = callPackage ./syntax-highlighting-ng { };
+
   yomichan-forvo-server = callPackage ./yomichan-forvo-server { };
 }
