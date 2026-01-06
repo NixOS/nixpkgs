@@ -22,9 +22,8 @@ let
     }
     .${stdenv.hostPlatform.system} or null;
 
-  # Library file extension differs between platforms
-  libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
 
+  libExt = stdenv.hostPlatform.extensions.sharedLibrary;
   # Build directory differs between platforms
   buildDir = if stdenv.hostPlatform.isDarwin then "build_mac" else "build_linux";
 in
