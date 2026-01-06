@@ -11,28 +11,28 @@
 
 buildGoModule rec {
   pname = "resticprofile";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
     tag = "v${version}";
-    hash = "sha256-ezelvyroQG1EW3SU63OVHJ/T4qjN5DRllvPIXnei1Z4=";
+    hash = "sha256-fmYsoGYppNgbtoX18aF5UHBG9ieYorBJ9JZkwrR+UBI=";
   };
 
+  # substituteInPlace util/executable_linux.go \
+  #   --replace-fail "return resolveExecutable(os.Args[0])" "return \"$out/bin/resticprofile\", nil"
+  # substituteInPlace util/executable.go \
+  #   --replace-fail "return os.Executable()" "return \"$out/bin/resticprofile\", nil"
   postPatch = ''
-    substituteInPlace schedule_jobs.go \
-        --replace-fail "os.Executable()" "\"$out/bin/resticprofile\", nil"
-
     substituteInPlace shell/command.go \
-        --replace-fail '"bash"' '"${lib.getExe bash}"'
+      --replace-fail '"bash"' '"${lib.getExe bash}"'
 
     substituteInPlace filesearch/filesearch.go \
-        --replace-fail 'paths := getSearchBinaryLocations()' 'return "${lib.getExe restic}", nil; paths := getSearchBinaryLocations()'
-
+      --replace-fail 'paths := getSearchBinaryLocations()' 'return "${lib.getExe restic}", nil; paths := getSearchBinaryLocations()'
   '';
 
-  vendorHash = "sha256-M9S6F/Csz7HnOq8PSWjpENKm1704kVx9zDts1ieraTE=";
+  vendorHash = "sha256-/GVWjOvkYe7xMRjANKIKV6FSU0F5VY1ZP/ppgAJyhvw=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -63,8 +63,8 @@ buildGoModule rec {
     install -Dm755 $GOPATH/bin/resticprofile -t $out/bin
 
     installShellCompletion --cmd resticprofile \
-        --bash <($out/bin/resticprofile generate --bash-completion) \
-        --zsh <($out/bin/resticprofile generate --zsh-completion)
+      --bash <($out/bin/resticprofile generate --bash-completion) \
+      --zsh <($out/bin/resticprofile generate --zsh-completion)
 
     runHook postInstall
   '';
