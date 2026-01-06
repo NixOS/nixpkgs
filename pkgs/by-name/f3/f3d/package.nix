@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.3.0";
+  version = "3.4.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-nZXz5FiGAcDqTi5hlSH7rq2QazhqYg1IoNDog35dygA=";
+    hash = "sha256-lkcTdudTskrHk+a/8w/4eTpRELvzuwECztp/lRlft6Y=";
     fetchLFS = true;
   };
 
