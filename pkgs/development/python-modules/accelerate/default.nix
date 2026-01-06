@@ -162,7 +162,15 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"
-  ];
+  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && (pythonAtLeast "3.14"))
+      [
+        # https://github.com/huggingface/accelerate/issues/3899
+        "test_accelerate_test"
+        "test_cpu"
+      ];
 
   disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
