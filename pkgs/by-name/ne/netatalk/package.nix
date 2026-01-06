@@ -25,6 +25,7 @@
   dbus,
   iniparser,
   pandoc,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     iniparser
     pandoc
+    sqlite
   ];
 
   mesonFlags = [
