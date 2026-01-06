@@ -15,7 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-GAEyhECToKnIWBxnYTSOsYKZBjl50b/82mZ68i8I2ug=";
   };
 
-  buildInputs = [ pdfrw ];
+  dependencies = [
+    pdfrw
+  ];
 
   # upstream doesn't contain tests
   doCheck = false;
