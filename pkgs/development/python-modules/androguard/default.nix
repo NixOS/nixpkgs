@@ -70,8 +70,6 @@ buildPythonPackage rec {
     pygments
     pyyaml
   ]
-  ++ networkx.optional-dependencies.default
-  ++ networkx.optional-dependencies.extra
   ++ lib.optionals withGui [
     pyqt5
   ];
