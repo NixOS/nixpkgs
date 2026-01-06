@@ -31,16 +31,16 @@
   wcwidth,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meshtastic";
-  version = "2.7.5";
+  version = "2.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
-    tag = version;
-    hash = "sha256-Vc8m5qc2vKQ4ZwP/TQWJhottBANqEaSUNFCbCNPmQnI=";
+    tag = finalAttrs.version;
+    hash = "sha256-5MvIv9/v5feqbLN60PFps0xr+k+AOczVsLwnlCJJDZI=";
   };
 
   pythonRelaxDeps = [
@@ -91,7 +91,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -123,8 +123,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
-    changelog = "https://github.com/meshtastic/python/releases/tag/${src.tag}";
+    changelog = "https://github.com/meshtastic/python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
