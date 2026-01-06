@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   perl,
   gitUpdater,
 }:
@@ -14,6 +15,19 @@ stdenv.mkDerivation rec {
     url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/${pname}-${version}.tar.xz";
     hash = "sha256-tzJMvobnZ7ZfJvRn7YsSrYDhJOPMuJB2hVyY5Dqe3dQ=";
   };
+
+  patches = [
+    # Backport patches fixing nasm with gcc 15 and musl (and other?) platforms
+    # https://github.com/netwide-assembler/nasm/issues/169
+    (fetchpatch {
+      url = "https://github.com/netwide-assembler/nasm/commit/44e89ba9b650b5e1533bca43682e167f51a3511f.patch";
+      hash = "sha256-zVeMFhoSY/HGYr4meIWBgt5Unq1fA8lM6h1Cl5fpbxo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/netwide-assembler/nasm/commit/746e7c9efa37cec9a44d84a1e96b8c38f385cc1f.patch";
+      hash = "sha256-aXVS70O/wUkW8xtkwF7uwrQfTgGcNvxHrtGC0sjIPto=";
+    })
+  ];
 
   nativeBuildInputs = [ perl ];
 
