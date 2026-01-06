@@ -5456,6 +5456,8 @@ with pkgs;
     lua5_3_compat
     lua5_4
     lua5_4_compat
+    lua5_5
+    lua5_5_compat
     luajit_2_1
     luajit_2_0
     luajit_openresty
@@ -5468,6 +5470,7 @@ with pkgs;
   lua52Packages = recurseIntoAttrs lua5_2.pkgs;
   lua53Packages = recurseIntoAttrs lua5_3.pkgs;
   lua54Packages = recurseIntoAttrs lua5_4.pkgs;
+  lua55Packages = recurseIntoAttrs lua5_5.pkgs;
   luajitPackages = recurseIntoAttrs luajit.pkgs;
 
   luaPackages = lua52Packages;
