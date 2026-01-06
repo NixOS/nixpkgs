@@ -16,6 +16,7 @@
   libxkbcommon,
   glib,
   pipewire,
+  wayland,
   nix-update-script,
 }:
 
@@ -55,6 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxkbcommon
   ];
+
+  postInstall = ''
+    patchelf \
+      --add-needed libwayland-client.so.0 \
+      --add-rpath ${lib.makeLibraryPath [ wayland ]} \
+      $out/libexec/xdg-desktop-portal-luminous
+  '';
 
   passthru.updateScript = nix-update-script { };
 
