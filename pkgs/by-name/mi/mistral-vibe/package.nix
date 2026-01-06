@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
   pytestFlags = [ "tests/cli/test_clipboard.py" ];
 
   disabledTests = [
-    # AssertionError: assert '/nix/store/rlq03x4cwf8zn73hxaxnx0zn5q9kifls-bash-5.3p3/bin/sh:
+    # AssertionError: assert '/nix/store/00000000000000000000000000000000-bash-5.3p3/bin/sh:
     # warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory\n' == ''
     "test_decodes_non_utf8_bytes"
     "test_runs_echo_successfully"
