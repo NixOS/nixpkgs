@@ -26,12 +26,6 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  # These get set at all-packages, keep onto them for child drvs
-  passthru = {
-    spirv-tools = spirv-tools;
-    spirv-headers = spirv-headers;
-  };
-
   nativeBuildInputs = [
     cmake
     python3
@@ -39,28 +33,18 @@ stdenv.mkDerivation rec {
     jq
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  propagatedBuildInputs = [
+    spirv-tools
+    spirv-headers
   ];
 
-  postPatch = ''
-    cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools
-    ln -s "${spirv-headers.src}" External/spirv-tools/external/spirv-headers
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_EXTERNAL" false)
+    (lib.cmakeBool "ALLOW_EXTERNAL_SPIRV_TOOLS" true)
+  ];
 
-  # This is a dirty fix for lib/cmake/SPIRVTargets.cmake:51 which includes this directory
   postInstall = ''
-    mkdir -p $dev/include/External
-    moveToOutput lib/pkgconfig "''${!outputDev}"
-    moveToOutput lib/cmake "''${!outputDev}"
-  '';
-
-  # Fix the paths in .pc, even though it's unclear if these .pc are really useful.
-  postFixup = ''
-    substituteInPlace $dev/lib/pkgconfig/*.pc \
-      --replace-fail '=''${prefix}//' '=/' \
-      --replace-fail "includedir=$dev/$dev" "includedir=$dev"
-
     # add a symlink for backwards compatibility
     ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
