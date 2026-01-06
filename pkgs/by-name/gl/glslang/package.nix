@@ -6,6 +6,7 @@
   python3,
   spirv-headers,
   spirv-tools,
+  config,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "glslang";
@@ -44,6 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
     # add a symlink for backwards compatibility
     ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
+
+  passthru = lib.optionalAttrs config.allowAliases {
+    # Added 2026-01-06, https://github.com/NixOS/nixpkgs/pull/477412
+    spirv-tools = throw "'glslang' no longer pins to specific 'spirv-tools'";
+
+    # Added 2026-01-06, https://github.com/NixOS/nixpkgs/pull/477412
+    spirv-headers = throw "'glslang' no longer pins to specific 'spirv-headers'";
+  };
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;
