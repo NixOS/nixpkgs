@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
-  version = "1.5.1";
+  version = "1.5.2";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2q34twATQ4jH6TPgtiNYaqp/L76LOmJZOHUTMDuYduY=";
+    hash = "sha256-ppVlwetd2ezTkmi78UNeqlGlsCjtDGUqC2uTZ+BMk4Y=";
   };
 
   patches = [
