@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--workspace"
-    "--bins"
-    "--lib" # Integration tests require root.
     "--exclude"
     "hypervisor" # /dev/kvm
     "--exclude"
