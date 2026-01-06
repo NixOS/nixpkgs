@@ -9,22 +9,17 @@
   secp256k1,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "secp256k1";
-  version = "0.4.4";
+  version = "0.5.0";
 
-  minimalOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.12";
 
   src = fetchFromGitHub {
     owner = "dakk";
     repo = "secp256k1-ml";
-    rev = version;
-    hash = "sha256-22+dZb3MC1W5Qvsz3+IHV1/XiGCRmJHTH+6IW2QX2hU=";
-  };
-
-  patches = fetchpatch {
-    url = "https://github.com/dakk/secp256k1-ml/commit/9bde90a401746dcecdab68a2fdb95659d16a3022.patch";
-    hash = "sha256-QndtZJtPKPjuv84jDmXc9Q/xGLb/mNUGL4AvRecSFlQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PD+4+OE0ttQsyG+i5Ez9kdo1A2DPNxvUjRQHXXSxaKo=";
   };
 
   buildInputs = [
@@ -40,4 +35,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vyorkin ];
   };
-}
+})
