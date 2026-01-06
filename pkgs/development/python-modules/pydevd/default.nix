@@ -10,24 +10,24 @@
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   trio,
   untangle,
 }:
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabioz";
     repo = "PyDev.Debugger";
-    rev = "pydev_debugger_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-V5pM0xnMFnpR1oK0purHFCV3wu+4fOmd72kmy7pVeyk=";
+    tag = "pydev_debugger_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-srcYeN4IsnX/B0AWLynr62UC5o+DcjnUrGjcTpvHTCM=";
   };
+
+  # https://github.com/fabioz/PyDev.Debugger/issues/316
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     sed -i '/addopts/d' pytest.ini
@@ -47,6 +47,10 @@ buildPythonPackage rec {
     pytestCheckHook
     trio
     untangle
+  ];
+
+  enabledTestPaths = [
+    "tests/"
   ];
 
   disabledTests = [
