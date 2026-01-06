@@ -11,9 +11,9 @@
   # dependencies
   docstring-to-markdown,
   jedi,
-  lsprotocol_2025,
+  lsprotocol,
   cattrs,
-  pygls_2,
+  pygls,
 
   # tests
   pytestCheckHook,
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   dependencies = [
     docstring-to-markdown
     jedi
-    lsprotocol_2025
+    lsprotocol
     cattrs
-    pygls_2
+    pygls
   ];
 
   nativeCheckInputs = [
