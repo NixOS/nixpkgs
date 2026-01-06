@@ -39,7 +39,9 @@ stdenv.mkDerivation rec {
     jq
   ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools
