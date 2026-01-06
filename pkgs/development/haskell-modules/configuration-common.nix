@@ -2529,9 +2529,17 @@ with haskellLib;
     doJailbreak
   ];
 
-  # Test suite doesn't support hspec 2.8
-  # https://github.com/zellige/hs-geojson/issues/29
-  geojson = dontCheck super.geojson;
+  # 2026-01-16: upper bounds on:
+  # - containers (0.7)
+  # - deepseq    (1.5)
+  # - text       (2.1)
+  # are too strict, these bounds have already been bumped to:
+  # - containers (0.8)
+  # - deepseq    (1.6)
+  # - text       (2.2)
+  # but not in Nix
+  # https://github.com/zellige/hs-geojson/commit/2a5ce5a
+  geojson = doJailbreak super.geojson;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
