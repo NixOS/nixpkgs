@@ -63,15 +63,11 @@ stdenv.mkDerivation {
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
-          if [ -f "${buildDir}/libdfuprog/lib/libdfuprog-0.9.${libExt}" ]; then
-            cp ${buildDir}/libdfuprog/lib/libdfuprog-0.9.${libExt} $out/lib/
-          fi
+          cp ${buildDir}/libdfuprog/lib/libdfuprog-0.9${libExt} $out/lib/
         ''
       else
-        lib.optionalString (dfuprogArch != null) ''
-          if [ -f "${buildDir}/libdfuprog/lib/${dfuprogArch}/libdfuprog-0.9.${libExt}" ]; then
-            cp ${buildDir}/libdfuprog/lib/${dfuprogArch}/libdfuprog-0.9.${libExt} $out/lib/
-          fi
+        ''
+          cp ${buildDir}/libdfuprog/lib/${dfuprogArch}/libdfuprog-0.9${libExt} $out/lib/
         ''
     }
   '';
