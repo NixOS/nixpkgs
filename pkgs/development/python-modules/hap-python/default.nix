@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   base36,
   buildPythonPackage,
   chacha20poly1305-reuseable,
@@ -38,9 +37,6 @@ buildPythonPackage rec {
     h11
     orjson
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   optional-dependencies.QRCode = [
