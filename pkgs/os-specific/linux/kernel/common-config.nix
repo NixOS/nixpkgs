@@ -989,6 +989,10 @@ let
       # passthrough.
       VFIO_DEVICE_CDEV = whenAtLeast "6.6" yes;
       VFIO_NOIOMMU = whenAtLeast "6.6" yes;
+
+      # Loongson Binary Translation extension, required for running
+      # x86 and x86_64 binaries via LATX or similar emulators
+      CPU_HAS_LBT = lib.mkIf stdenv.hostPlatform.isLoongArch64 (option yes);
     };
 
     media = {

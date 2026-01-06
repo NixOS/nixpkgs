@@ -101,7 +101,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Ignore subcrate releases (fox, aqua-registry)
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+      ];
+    };
     tests = {
       version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
