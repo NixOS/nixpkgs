@@ -59,6 +59,70 @@ let
       opt = map (x: x.plugin) pluginsPartitioned.right;
     };
 
+  /**
+    * Builds a vim package (see ':h packages') with additionnal info:
+    - the user lua configuration (specified by user)
+    - the advised and advised by nixpkgs in passthru.initLua)
+    - runtime dependencies (specified in plugins' "runtimeDeps")
+    - plugin dependencies (vim plugins, python deps)
+  */
+  makeVimPackageInfo =
+    # a list of neovim plugin derivations, for instance
+    #  plugins = [
+    # { plugin=vimPlugins.far-vim; config = "let g:far#source='rg'"; optional = false; }
+    # vimPlugins.vim-fugitive
+    # ]
+    plugins:
+
+    let
+      pluginsNormalized = normalizePlugins plugins;
+
+      vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
+
+      userPluginLua = lib.foldl (
+        acc: p: if p.config != null then acc ++ [ p.config ] else acc
+      ) [ ] pluginsNormalized;
+
+      pluginAdvisedLua =
+        let
+          op =
+            acc: normalizedPlugin:
+            acc
+            ++ lib.optional (
+              normalizedPlugin.plugin.passthru ? initLua
+            ) normalizedPlugin.plugin.passthru.initLua;
+        in
+        lib.foldl' op [ ] pluginsNormalized;
+
+      getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
+
+      requiredPlugins = vimUtils.requiredPluginsForPackage vimPackage;
+      pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
+    in
+    {
+      # plugins' python dependencies
+      inherit pluginPython3Packages;
+
+      # lua config set by the user along with the plugin
+      inherit userPluginLua;
+
+      # recommanded configuration set in vim plugins ".passthru.initLua"
+      inherit pluginAdvisedLua;
+
+      # A Vim "package", see ':h packages'
+      # You most likely want to use vimPackage as follows:
+      #     packpathDirs.myNeovimPackages = vimPackage;
+      #     finalPackdir = neovimUtils.packDir packpathDirs;
+      inherit vimPackage;
+
+      runtimeDeps =
+        let
+          op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [ ];
+        in
+        lib.foldl' op [ ] pluginsNormalized;
+
+    };
+
   /*
     returns everything needed for the caller to wrap its own neovim:
     - the generated content of the future init.vim
@@ -297,7 +361,6 @@ let
     packages:
     let
       rawPackDir = vimUtils.packDir packages;
-
     in
     rawPackDir.override {
       postBuild = ''
@@ -311,6 +374,7 @@ let
 in
 {
   inherit makeNeovimConfig;
+  inherit makeVimPackageInfo;
   inherit generateProviderRc;
   inherit legacyWrapper;
   inherit grammarToPlugin;

@@ -18100,9 +18100,12 @@ with self;
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz";
       hash = "sha256-34tRQ9mn3pnEe1XxoXC9H2n3EZNcGGptwKtW3QV1jjU=";
     };
-    # Do not abort cross-compilation on failure to load native JSON module into host perl
+    # Force core provided JSON::PP backend when cross building since dynamic
+    # loading attempts of other backends presumably fail
     preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Makefile.PL --replace "exit 0;" ""
+      substituteInPlace lib/JSON.pm \
+        --replace-fail 'my $backend = exists $ENV{PERL_JSON_BACKEND} ? $ENV{PERL_JSON_BACKEND} : 1;' \
+                       'my $backend = "JSON::PP";'
     '';
     buildInputs = [ TestPod ];
     meta = {
