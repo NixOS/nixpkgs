@@ -34,6 +34,9 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
+  pythonRelaxDeps = [
+    "markdown-it-py"
+  ];
   dependencies = [
     docutils
     jinja2
@@ -62,11 +65,10 @@ buildPythonPackage rec {
     "test_extended_syntaxes"
     "test_fieldlist_extension"
     "test_includes"
+    "test_commonmark"
   ];
 
   pythonImportsCheck = [ "myst_parser" ];
-
-  pythonRelaxDeps = [ "docutils" ];
 
   meta = {
     description = "Sphinx and Docutils extension to parse MyST";
