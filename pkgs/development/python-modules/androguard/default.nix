@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   apkinspector,
   networkx,
@@ -45,6 +46,14 @@ buildPythonPackage rec {
     sha256 = "sha256-qz6x7UgYXal1DbQGzi4iKnSGEn873rKibKme/pF7tLk=";
   };
 
+  patches = [
+    # Make matplotlib optional
+    (fetchpatch {
+      url = "https://github.com/androguard/androguard/commit/fb336d750c397746edbde728df8b8b89757eb9de.patch";
+      hash = "sha256-u7zaKzZ9nPvD+iyM3BMQEnfsgcZKGC+E3xp2NcnDQ4g=";
+    })
+  ];
+
   build-system = [
     poetry-core
   ];
@@ -62,7 +71,6 @@ buildPythonPackage rec {
     ipython
     loguru
     lxml
-    matplotlib
     mutf8
     networkx
     oscrypto
@@ -71,6 +79,7 @@ buildPythonPackage rec {
     pyyaml
   ]
   ++ lib.optionals withGui [
+    matplotlib
     pyqt5
   ];
 
