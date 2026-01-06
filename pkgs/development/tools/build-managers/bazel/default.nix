@@ -111,16 +111,13 @@ let
   ]
   ++ lib.optionals isDarwin [
     "--macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion}"
-    "--cxxopt=-isystem"
-    "--cxxopt=${lib.getDev stdenv.cc.libcxx}/include/c++/v1"
-    "--host_cxxopt=-isystem"
-    "--host_cxxopt=${lib.getDev stdenv.cc.libcxx}/include/c++/v1"
-    "--copt=-isystem"
-    "--copt=${lib.getDev darwin.libresolv}/include"
-    "--host_copt=-isystem"
-    "--host_copt=${lib.getDev darwin.libresolv}/include"
+    "--action_env=NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt}"
   ];
 
+  extraCflags = lib.optionals isDarwin [
+    "-isystem ${lib.getDev darwin.libresolv}/include"
+    "-isystem ${lib.getDev stdenv.cc.libcxx}/include/c++/v1"
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "bazel";
@@ -176,6 +173,8 @@ stdenv.mkDerivation rec {
     #       but for string variable they become literal single quote chars,
     #       compile.sh will not unquote them either and command will be invalid.
     export EXTRA_BAZEL_ARGS="${lib.strings.concatStringsSep " " commandArgs}"
+    export NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt}="${lib.strings.concatStringsSep " " extraCflags}"
+
 
     ${bash}/bin/bash ./compile.sh
 
