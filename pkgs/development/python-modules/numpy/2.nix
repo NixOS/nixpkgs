@@ -30,7 +30,8 @@
   typing-extensions,
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+# Verify these are compatible
+assert blas.isILP64 == lapack.isILP64;
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
@@ -62,7 +63,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
-  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
+  mesonFlags = [
+    # See https://numpy.org/devdocs/building/blas_lapack.html
+    "-Duse-ilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
     # This is required to support CPUs with feature-sets earlier than x86-64-v2
     # (before 2009). This will still build optimizations for newer features, but
     # allow for importing with older machines. See:
