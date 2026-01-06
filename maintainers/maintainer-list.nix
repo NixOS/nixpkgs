@@ -11277,12 +11277,6 @@
     name = "Silvan Mosberger";
     keys = [ { fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170"; } ];
   };
-  ingenieroariel = {
-    email = "ariel@nunez.co";
-    github = "ingenieroariel";
-    githubId = 54999;
-    name = "Ariel Nunez";
-  };
   insipx = {
     email = "github@andrewplaza.dev";
     github = "insipx";
