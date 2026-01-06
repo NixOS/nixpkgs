@@ -1,0 +1,101 @@
+diff --git a/tests/test_support/audio_support.cc b/tests/test_support/audio_support.cc
+index c26022e9..5f50d035 100644
+--- a/tests/test_support/audio_support.cc
++++ b/tests/test_support/audio_support.cc
+@@ -16,6 +16,7 @@
+ // along with arc_unpacker. If not, see <http://www.gnu.org/licenses/>.
+ 
+ #include "test_support/audio_support.h"
++#include <cstdlib>
+ #include "algo/format.h"
+ #include "algo/range.h"
+ #include "dec/microsoft/wav_audio_decoder.h"
+@@ -44,13 +45,42 @@ res::Audio tests::get_test_audio()
+ void tests::compare_audio(
+     const res::Audio &actual, const res::Audio &expected)
+ {
++    // Allow for minor variances in audio samples within the specified
++    // threshold. Floating point calculations in some audio decoders yields
++    // slightly differing results across different CPU architectures.
++    //
++    // Affected tests:
++    //   * tests/dec/cri/hca_audio_decoder_test.cc
++    //   * tests/dec/entis/mio_audio_decoder_test.cc
++    static constexpr int tolerance = 1;
++
+     REQUIRE(actual.codec == expected.codec);
+     REQUIRE(actual.channel_count == expected.channel_count);
+     REQUIRE(actual.sample_rate == expected.sample_rate);
+     REQUIRE(actual.bits_per_sample == expected.bits_per_sample);
+     REQUIRE(actual.extra_codec_headers == expected.extra_codec_headers);
+     REQUIRE(actual.samples.size() == expected.samples.size());
++
++#ifdef __x86_64__
+     tests::compare_binary(actual.samples, expected.samples);
++#else
++    tests::compare_binary(
++      actual.samples,
++      expected.samples,
++      [](const bstr& bytes1, const bstr& bytes2) -> bool {
++        const auto samples1 = reinterpret_cast<const s16*>(bytes1.c_str());
++        const auto samples2 = reinterpret_cast<const s16*>(bytes2.c_str());
++        const auto n_samples = bytes1.size() / sizeof(*samples1);
++        // algo::range is a bit incomplete to work with std::all_of
++        for (const int i : algo::range(n_samples)) {
++          if (std::abs(samples1[i] - samples2[i]) > tolerance) {
++            return false;
++          }
++        }
++        return true;
++      }
++    );
++#endif
+ 
+     REQUIRE(actual.loops.size() == expected.loops.size());
+     for (const auto i : algo::range(expected.loops.size()))
+diff --git a/tests/test_support/common.cc b/tests/test_support/common.cc
+index b63ffa89..265ef7b1 100644
+--- a/tests/test_support/common.cc
++++ b/tests/test_support/common.cc
+@@ -40,3 +40,19 @@ void au::tests::compare_binary(const bstr &actual, const bstr &expected)
+     INFO(actual_dump << " != " << expected_dump);
+     REQUIRE(actual == expected);
+ }
++
++void au::tests::compare_binary(
++    const bstr &actual,
++    const bstr &expected,
++    std::function<bool(const bstr &, const bstr &)> compare)
++{
++    const auto max_size = 10000;
++    auto actual_dump = algo::hex(actual);
++    auto expected_dump = algo::hex(expected);
++    if (actual_dump.size() > max_size)
++        actual_dump = actual_dump.substr(0, max_size) + "(...)";
++    if (expected_dump.size() > max_size)
++        expected_dump = expected_dump.substr(0, max_size) + "(...)";
++    INFO(actual_dump << " != " << expected_dump);
++    REQUIRE(compare(actual, expected));
++}
+diff --git a/tests/test_support/common.h b/tests/test_support/common.h
+index 7d8be579..ecd5dcf8 100644
+--- a/tests/test_support/common.h
++++ b/tests/test_support/common.h
+@@ -17,6 +17,7 @@
+ 
+ #pragma once
+ 
++#include <functional>
+ #include "io/path.h"
+ #include "types.h"
+ 
+@@ -27,4 +28,9 @@ namespace tests {
+ 
+     void compare_binary(const bstr &actual, const bstr &expected);
+ 
++    void compare_binary(
++        const bstr &actual,
++        const bstr &expected,
++        std::function<bool(const bstr &, const bstr &)> compare);
++
+ } }

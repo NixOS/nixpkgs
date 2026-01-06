@@ -1,0 +1,447 @@
+From 444acef17881cbc27057bd85b7dc07b332c03d67 Mon Sep 17 00:00:00 2001
+From: Emil Renner Berthing <systemd@esmil.dk>
+Date: Sat, 22 May 2021 20:26:24 +0200
+Subject: [PATCH 09/30] musl: add fallback parse_printf_format() implementation
+
+musl does not provide parse_printf_format(). Let's introduce a fallback
+method.
+
+Co-authored-by: Yu Watanabe <watanabe.yu+github@gmail.com>
+---
+ src/include/musl/printf.h |  35 +++++
+ src/libc/musl/meson.build |   1 +
+ src/libc/musl/printf.c    | 276 ++++++++++++++++++++++++++++++++++++++
+ src/test/meson.build      |   6 +
+ src/test/test-printf.c    |  67 +++++++++
+ 5 files changed, 385 insertions(+)
+ create mode 100644 src/include/musl/printf.h
+ create mode 100644 src/libc/musl/printf.c
+ create mode 100644 src/test/test-printf.c
+
+diff --git a/src/include/musl/printf.h b/src/include/musl/printf.h
+new file mode 100644
+index 0000000000..4242392c89
+--- /dev/null
++++ b/src/include/musl/printf.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++/* Copyright 2014 Emil Renner Berthing <systemd@esmil.dk> */
++#pragma once
++
++#include <features.h>
++#include <stddef.h>
++
++#ifdef __GLIBC__
++#include_next <printf.h>
++#else
++
++enum {              /* C type: */
++        PA_INT,     /* int */
++        PA_CHAR,    /* int, cast to char */
++        PA_WCHAR,   /* wide char */
++        PA_STRING,  /* const char *, a '\0'-terminated string */
++        PA_WSTRING, /* const wchar_t *, wide character string */
++        PA_POINTER, /* void * */
++        PA_FLOAT,   /* float */
++        PA_DOUBLE,  /* double */
++        PA_LAST,
++};
++
++/* Flag bits that can be set in a type returned by `parse_printf_format'.  */
++#  define PA_FLAG_MASK        0xff00
++#  define PA_FLAG_LONG_LONG   (1 << 8)
++#  define PA_FLAG_LONG_DOUBLE PA_FLAG_LONG_LONG
++#  define PA_FLAG_LONG        (1 << 9)
++#  define PA_FLAG_SHORT       (1 << 10)
++#  define PA_FLAG_PTR         (1 << 11)
++
++#  define parse_printf_format missing_parse_printf_format
++#endif
++
++size_t missing_parse_printf_format(const char *fmt, size_t n, int *types);
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+index 8d06d919ef..3e205e1eb1 100644
+--- a/src/libc/musl/meson.build
++++ b/src/libc/musl/meson.build
+@@ -5,5 +5,6 @@ if get_option('libc') != 'musl'
+ endif
+ 
+ libc_wrapper_sources += files(
++        'printf.c',
+         'stdio.c',
+ )
+diff --git a/src/libc/musl/printf.c b/src/libc/musl/printf.c
+new file mode 100644
+index 0000000000..33c4acd27f
+--- /dev/null
++++ b/src/libc/musl/printf.c
+@@ -0,0 +1,276 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++/* Copyright 2014 Emil Renner Berthing <systemd@esmil.dk> */
++
++#include <limits.h>
++#include <../musl/printf.h> /* This file is also compiled when built with glibc. */
++#include <stdint.h>
++#include <string.h>
++
++static const char* consume_nonarg(const char *fmt) {
++        do {
++                if (*fmt == '\0')
++                        return fmt;
++        } while (*fmt++ != '%');
++        return fmt;
++}
++
++static const char* consume_num(const char *fmt) {
++        for (;*fmt >= '0' && *fmt <= '9'; fmt++)
++                /* do nothing */;
++        return fmt;
++}
++
++static const char* consume_argn(const char *fmt, size_t *arg) {
++        const char *p = fmt;
++        size_t val = 0;
++
++        if (*p < '1' || *p > '9')
++                return fmt;
++        do {
++                val = 10*val + (*p++ - '0');
++        } while (*p >= '0' && *p <= '9');
++
++        if (*p != '$')
++                return fmt;
++        *arg = val;
++        return p+1;
++}
++
++static const char* consume_flags(const char *fmt) {
++        for (;;)
++                switch (*fmt) {
++                case '#':
++                case '0':
++                case '-':
++                case ' ':
++                case '+':
++                case '\'':
++                case 'I':
++                        fmt++;
++                        continue;
++                default:
++                        return fmt;
++                }
++}
++
++enum state {
++        BARE,
++        LPRE,
++        LLPRE,
++        HPRE,
++        HHPRE,
++        BIGLPRE,
++        ZTPRE,
++        JPRE,
++        STOP,
++};
++
++enum type {
++        NONE,
++        PTR,
++        STR,
++        WSTR,
++        INT,
++        LONG,
++        LLONG,
++        SHORT,
++        IMAX,
++        SIZET,
++        CHAR,
++        WCHAR,
++        PDIFF,
++        DBL,
++        LDBL,
++        NPTR,
++        MAXTYPE,
++};
++
++static const short pa_types[MAXTYPE] = {
++        [NONE]   = PA_INT,
++        [PTR]    = PA_POINTER,
++        [STR]    = PA_STRING,
++        [WSTR]   = PA_WSTRING,
++        [INT]    = PA_INT,
++        [SHORT]  = PA_INT | PA_FLAG_SHORT,
++        [LONG]   = PA_INT | PA_FLAG_LONG,
++        [CHAR]   = PA_CHAR,
++        [WCHAR]  = PA_WCHAR,
++        [DBL]    = PA_DOUBLE,
++        [LDBL]   = PA_DOUBLE | PA_FLAG_LONG_DOUBLE,
++        [NPTR]   = PA_FLAG_PTR,
++};
++
++static int state_to_pa_type(unsigned state) {
++        switch (state) {
++        case LLONG:
++#if LONG_MAX != LLONG_MAX
++                return PA_INT | PA_FLAG_LONG_LONG;
++#else
++                return PA_INT | PA_FLAG_LONG;
++#endif
++
++        case IMAX:
++#if LONG_MAX != LLONG_MAX
++                if (sizeof(intmax_t) > sizeof(long))
++                        return PA_INT | PA_FLAG_LONG_LONG;
++#endif
++                if (sizeof(intmax_t) > sizeof(int))
++                        return PA_INT | PA_FLAG_LONG;
++                return PA_INT;
++
++        case SIZET:
++#if LONG_MAX != LLONG_MAX
++                if (sizeof(size_t) > sizeof(long))
++                        return PA_INT | PA_FLAG_LONG_LONG;
++#endif
++                if (sizeof(size_t) > sizeof(int))
++                        return PA_INT | PA_FLAG_LONG;
++                return PA_INT;
++        default:
++                return pa_types[state];
++        }
++}
++
++#define S(x) [(x)-'A']
++#define E(x) (STOP + (x))
++
++static const unsigned char states[]['z'-'A'+1] = {
++        { /* 0: bare types */
++                S('d') = E(INT),    S('i') = E(INT),
++                S('o') = E(INT),    S('u') = E(INT),    S('x') = E(INT),    S('X') = E(INT),
++                S('e') = E(DBL),    S('f') = E(DBL),    S('g') = E(DBL),    S('a') = E(DBL),
++                S('E') = E(DBL),    S('F') = E(DBL),    S('G') = E(DBL),    S('A') = E(DBL),
++                S('c') = E(CHAR),   S('C') = E(WCHAR),
++                S('s') = E(STR),    S('S') = E(WSTR),   S('p') = E(PTR),
++                S('n') = E(NPTR),
++                S('m') = E(NONE),
++                S('l') = LPRE,      S('q') = LLPRE,     S('h') = HPRE,      S('L') = BIGLPRE,
++                S('z') = ZTPRE,     S('Z') = ZTPRE,     S('j') = JPRE,      S('t') = ZTPRE,
++        },
++        { /* 1: l-prefixed */
++                S('d') = E(LONG),   S('i') = E(LONG),
++                S('o') = E(LONG),   S('u') = E(LONG),   S('x') = E(LONG),   S('X') = E(LONG),
++                S('e') = E(DBL),    S('f') = E(DBL),    S('g') = E(DBL),    S('a') = E(DBL),
++                S('E') = E(DBL),    S('F') = E(DBL),    S('G') = E(DBL),    S('A') = E(DBL),
++                S('c') = E(CHAR),   S('s') = E(STR),
++                S('n') = E(NPTR),
++                S('l') = LLPRE,
++        },
++        { /* 2: ll-prefixed */
++                S('d') = E(LLONG),  S('i') = E(LLONG),
++                S('o') = E(LLONG),  S('u') = E(LLONG),  S('x') = E(LLONG),  S('X') = E(LLONG),
++                S('n') = E(NPTR),
++        },
++        { /* 3: h-prefixed */
++                S('d') = E(SHORT),  S('i') = E(SHORT),
++                S('o') = E(SHORT),  S('u') = E(SHORT),  S('x') = E(SHORT),  S('X') = E(SHORT),
++                S('n') = E(NPTR),
++                S('h') = HHPRE,
++        },
++        { /* 4: hh-prefixed */
++                S('d') = E(CHAR),   S('i') = E(CHAR),
++                S('o') = E(CHAR),   S('u') = E(CHAR),   S('x') = E(CHAR),   S('X') = E(CHAR),
++                S('n') = E(NPTR),
++        },
++        { /* 5: L-prefixed */
++                S('e') = E(LDBL),   S('f') = E(LDBL),   S('g') = E(LDBL),   S('a') = E(LDBL),
++                S('E') = E(LDBL),   S('F') = E(LDBL),   S('G') = E(LDBL),   S('A') = E(LDBL),
++        },
++        { /* 6: z- or t-prefixed (assumed to be same size) */
++                S('d') = E(SIZET),  S('i') = E(SIZET),
++                S('o') = E(SIZET),  S('u') = E(SIZET),  S('x') = E(SIZET),  S('X') = E(SIZET),
++                S('n') = E(NPTR),
++        },
++        { /* 7: j-prefixed */
++                S('d') = E(IMAX),   S('i') = E(IMAX),
++                S('o') = E(IMAX),   S('u') = E(IMAX),   S('x') = E(IMAX),   S('X') = E(IMAX),
++                S('n') = E(NPTR),
++        },
++};
++
++size_t missing_parse_printf_format(const char *fmt, size_t n, int *types) {
++        size_t i = 0;
++        size_t last = 0;
++
++        memset(types, 0, n);
++
++        for (;;) {
++                size_t arg;
++
++                fmt = consume_nonarg(fmt);
++                if (*fmt == '\0')
++                        break;
++                if (*fmt == '%') {
++                        fmt++;
++                        continue;
++                }
++                arg = 0;
++                fmt = consume_argn(fmt, &arg);
++                /* flags */
++                fmt = consume_flags(fmt);
++                /* width */
++                if (*fmt == '*') {
++                        size_t warg = 0;
++                        fmt = consume_argn(fmt+1, &warg);
++                        if (warg == 0)
++                                warg = ++i;
++                        if (warg > last)
++                                last = warg;
++                        if (warg <= n && types[warg-1] == NONE)
++                                types[warg-1] = INT;
++                } else
++                        fmt = consume_num(fmt);
++                /* precision */
++                if (*fmt == '.') {
++                        fmt++;
++                        if (*fmt == '*') {
++                                size_t parg = 0;
++                                fmt = consume_argn(fmt+1, &parg);
++                                if (parg == 0)
++                                        parg = ++i;
++                                if (parg > last)
++                                        last = parg;
++                                if (parg <= n && types[parg-1] == NONE)
++                                        types[parg-1] = INT;
++                        } else {
++                                if (*fmt == '-')
++                                        fmt++;
++                                fmt = consume_num(fmt);
++                        }
++                }
++                /* length modifier and conversion specifier */
++                unsigned state = BARE;
++                for (;;) {
++                        unsigned char c = *fmt;
++
++                        if (c == '\0')
++                                break;
++
++                        fmt++;
++
++                        if (c < 'A' || c > 'z')
++                                break;
++
++                        state = states[state]S(c);
++                        if (state == 0 || state >= STOP)
++                                break;
++                }
++
++                if (state <= STOP) /* %m or invalid format */
++                        continue;
++
++                if (arg == 0)
++                        arg = ++i;
++                if (arg > last)
++                        last = arg;
++                if (arg <= n)
++                        types[arg-1] = state - STOP;
++        }
++
++        if (last > n)
++                last = n;
++        for (i = 0; i < last; i++)
++                types[i] = state_to_pa_type(types[i]);
++
++        return last;
++}
+diff --git a/src/test/meson.build b/src/test/meson.build
+index da04b82d47..1dd61effc0 100644
+--- a/src/test/meson.build
++++ b/src/test/meson.build
+@@ -403,6 +403,12 @@ executables += [
+                 'dependencies' : libacl,
+                 'type' : 'manual',
+         },
++        test_template + {
++                'sources' : files(
++                        'test-printf.c',
++                        '../libc/musl/printf.c'
++                ),
++        },
+         test_template + {
+                 'sources' : files('test-process-util.c'),
+                 'dependencies' : threads,
+diff --git a/src/test/test-printf.c b/src/test/test-printf.c
+new file mode 100644
+index 0000000000..28497e902d
+--- /dev/null
++++ b/src/test/test-printf.c
+@@ -0,0 +1,67 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++
++#include <../musl/printf.h>
++
++#include "memory-util.h"
++#include "strv.h"
++#include "tests.h"
++
++static void test_parse_printf_format_one(const char *fmt) {
++        int arg_types_x[128] = {}, arg_types_y[128] = {};
++        size_t x, y;
++
++        log_debug("/* %s(%s) */", __func__, fmt);
++
++        x = parse_printf_format(fmt, ELEMENTSOF(arg_types_x), arg_types_x);
++        y = missing_parse_printf_format(fmt, ELEMENTSOF(arg_types_y), arg_types_y);
++
++        for (size_t i = 0; i < x; i++)
++                log_debug("x[%zu]=%i", i, arg_types_x[i]);
++        for (size_t i = 0; i < y; i++)
++                log_debug("y[%zu]=%i", i, arg_types_y[i]);
++
++        ASSERT_EQ(memcmp_nn(arg_types_x, x * sizeof(int), arg_types_y, y * sizeof(int)), 0);
++}
++
++TEST(parse_printf_format) {
++        FOREACH_STRING(s, "d", "i", "o", "u", "x", "X", "n")
++                FOREACH_STRING(p, "", "hh", "h", "l", "ll", "j", "z", "Z", "t") {
++                        _cleanup_free_ char *fmt = NULL;
++
++                        ASSERT_NOT_NULL(fmt = strjoin("%", p, s));
++                        test_parse_printf_format_one(fmt);
++                }
++
++        FOREACH_STRING(s, "e", "E", "f", "F", "g", "G", "a", "A")
++                FOREACH_STRING(p, "", "L") {
++                        _cleanup_free_ char *fmt = NULL;
++
++                        ASSERT_NOT_NULL(fmt = strjoin("%", p, s));
++                        test_parse_printf_format_one(fmt);
++                }
++
++        FOREACH_STRING(s, "c", "s")
++                FOREACH_STRING(p, "", "l") {
++                        _cleanup_free_ char *fmt = NULL;
++
++                        ASSERT_NOT_NULL(fmt = strjoin("%", p, s));
++                        test_parse_printf_format_one(fmt);
++                }
++
++        FOREACH_STRING(s, "C", "S", "p", "m", "%") {
++                _cleanup_free_ char *fmt = NULL;
++
++                ASSERT_NOT_NULL(fmt = strjoin("%", s));
++                test_parse_printf_format_one(fmt);
++        }
++
++        test_parse_printf_format_one("asfhghejmlahpgakdmsalc");
++        test_parse_printf_format_one("%d%i%o%u%x%X");
++        test_parse_printf_format_one("%e%E%f%F%g%G%a%A");
++        test_parse_printf_format_one("%c%s%C%S%p%n%m%%");
++        test_parse_printf_format_one("%03d%-05d%+i%hhu%hu%hx%lx");
++        test_parse_printf_format_one("%llx%x%LE%ji%zi%zu%zi%zu%Zi%Zu%tu");
++        test_parse_printf_format_one("%l");
++}
++
++DEFINE_TEST_MAIN(LOG_DEBUG);
+-- 
+2.51.0
+

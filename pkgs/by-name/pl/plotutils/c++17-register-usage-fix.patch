@@ -1,0 +1,44 @@
+diff -ur a/pic2plot/gram.cc b/pic2plot/gram.cc
+--- a/pic2plot/gram.cc	2000-06-28 00:23:21.000000000 -0400
++++ b/pic2plot/gram.cc	2023-09-07 22:59:47.004460065 -0400
+@@ -1229,9 +1229,9 @@
+      char *from;
+      unsigned int count;
+ {
+-  register char *f = from;
+-  register char *t = to;
+-  register int i = count;
++  char *f = from;
++  char *t = to;
++  int i = count;
+
+   while (i-- > 0)
+     *t++ = *f++;
+@@ -1244,9 +1244,9 @@
+ static void
+ __yy_memcpy (char *to, char *from, unsigned int count)
+ {
+-  register char *t = to;
+-  register char *f = from;
+-  register int i = count;
++  char *t = to;
++  char *f = from;
++  int i = count;
+
+   while (i-- > 0)
+     *t++ = *f++;
+@@ -1289,10 +1289,10 @@
+ yyparse(YYPARSE_PARAM_ARG)
+      YYPARSE_PARAM_DECL
+ {
+-  register int yystate;
+-  register int yyn;
+-  register short *yyssp;
+-  register YYSTYPE *yyvsp;
++  int yystate;
++  int yyn;
++  short *yyssp;
++  YYSTYPE *yyvsp;
+   int yyerrstatus;	/*  number of tokens to shift before error messages enabled */
+   int yychar1 = 0;		/*  lookahead token as an internal (translated) token number */
+ 

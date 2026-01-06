@@ -1,0 +1,28 @@
+Swift parses .pc files manually, but this means it bypasses our pkg-config
+wrapper. That wrapper normally takes care of introducing the correct
+PKG_CONFIG_PATH for cross compiling.
+
+--- a/Sources/PackageLoading/PkgConfig.swift
++++ b/Sources/PackageLoading/PkgConfig.swift
+@@ -123,14 +123,17 @@ public struct PkgConfig {
+ 
+     private static var envSearchPaths: [AbsolutePath] {
+         get throws {
+-            if let configPath = ProcessEnv.vars["PKG_CONFIG_PATH"] {
++            var result: [AbsolutePath] = []
++            for envVar in ["PKG_CONFIG_PATH", "PKG_CONFIG_PATH_FOR_TARGET"] {
++            if let configPath = ProcessEnv.vars[envVar] {
+                 #if os(Windows)
+-                return try configPath.split(separator: ";").map({ try AbsolutePath(validating: String($0)) })
++                result += try configPath.split(separator: ";").map({ try AbsolutePath(validating: String($0)) })
+                 #else
+-                return try configPath.split(separator: ":").map({ try AbsolutePath(validating: String($0)) })
++                result += try configPath.split(separator: ":").map({ try AbsolutePath(validating: String($0)) })
+                 #endif
+             }
+-            return []
++            }
++            return result
+         }
+     }
+ }

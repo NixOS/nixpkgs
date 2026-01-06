@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a05c447..20a5c98 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -276,8 +276,8 @@ endif()
+ 
+ # link glslang
+ find_package(glslang CONFIG REQUIRED)
+-target_link_libraries(${PROJECT_NAME} PRIVATE glslang::OSDependent glslang::glslang 
+-    glslang::MachineIndependent glslang::GenericCodeGen glslang::glslang-default-resource-limits 
++target_link_libraries(${PROJECT_NAME} PRIVATE glslang::glslang 
++    glslang::glslang-default-resource-limits 
+-    glslang::SPVRemapper glslang::SPIRV)
++    glslang::SPIRV)
+ 
+ # link SPIRV-Cross

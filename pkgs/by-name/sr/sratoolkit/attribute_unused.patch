@@ -1,0 +1,14 @@
+diff --git a/libs/kxml/xml.c b/libs/kxml/xml.c
+index ce445424..41e21612 100644
+--- a/libs/kxml/xml.c
++++ b/libs/kxml/xml.c
+@@ -46,6 +46,9 @@ struct s_KNodeNamelist;
+ #include <assert.h>
+ #include <string.h>
+ 
++#ifndef ATTRIBUTE_UNUSED
++#define ATTRIBUTE_UNUSED
++#endif
+ 
+ #define XML_DEBUG(msg) DBGMSG (DBG_XML, DBG_FLAG(DBG_XML_XML), msg)
+ 

@@ -1,0 +1,12 @@
+diff --git a/sat_solver.cpp b/sat_solver.cpp
+index e191881..07c0926 100644
+--- a/sat_solver.cpp
++++ b/sat_solver2.cpp
+@@ -43,6 +43,7 @@
+ #include <vector>
+ #include <dirent.h>
+ #include "SAT.h"
++#include <cstring>
+ 
+ using namespace std;
+ 

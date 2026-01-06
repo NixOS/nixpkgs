@@ -1,0 +1,33 @@
+diff --git a/taskpolicy/taskpolicy.c b/taskpolicy/taskpolicy.c
+index b031f944b2..4ad82018ed 100644
+--- a/taskpolicy/taskpolicy.c
++++ b/taskpolicy/taskpolicy.c
+@@ -126,7 +126,12 @@
+ 				flag_s = true;
+ 				break;
+ 			case 'S':
+-				sec_transition_shims = parse_sec_transition_shims(optarg);
++				if (__builtin_available(macOS 15.2, *)) {
++					sec_transition_shims = parse_sec_transition_shims(optarg);
++				} else {
++					fprintf(stderr, "Running with security transition shims is only supported on macOS 15.2 and newer.\n");
++					exit(EX_USAGE);
++				}
+ 				break;
+ 			case '?':
+ 			default:
+@@ -246,9 +251,11 @@
+ 		if (ret != 0) errc(EX_NOINPUT, ret, "posix_spawnattr_set_darwin_role_np");
+ 	}
+
+-	if (sec_transition_shims) {
+-		ret = posix_spawnattr_set_use_sec_transition_shims_np(&attr, sec_transition_shims);
+-		if (ret != 0) errc(EX_NOINPUT, ret, "setting security transition shims");
++	if (__builtin_available(macOS 15.2, *)) {
++		if (sec_transition_shims) {
++			ret = posix_spawnattr_set_use_sec_transition_shims_np(&attr, sec_transition_shims);
++			if (ret != 0) errc(EX_NOINPUT, ret, "setting security transition shims");
++		}
+ 	}
+
+ 	ret = posix_spawnp(&pid, argv[0], NULL, &attr, argv, environ);

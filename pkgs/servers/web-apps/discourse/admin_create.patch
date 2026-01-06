@@ -1,0 +1,48 @@
+diff --git a/lib/tasks/admin.rake b/lib/tasks/admin.rake
+index 37ef651f2b..b775129498 100644
+--- a/lib/tasks/admin.rake
++++ b/lib/tasks/admin.rake
+@@ -107,3 +107,43 @@ task "admin:create" => :environment do
+   end
+ 
+ end
++
++desc "Creates a forum administrator noninteractively"
++task "admin:create_noninteractively" => :environment do
++  email = ENV["ADMIN_EMAIL"]
++  existing_user = User.find_by_email(email)
++
++  # check if user account already exixts
++  if existing_user
++    admin = existing_user
++  else
++    # create new user
++    admin = User.new
++  end
++
++  admin.email = email
++  admin.name = ENV["ADMIN_NAME"]
++  admin.username = ENV["ADMIN_USERNAME"]
++
++  password = ENV["ADMIN_PASSWORD"]
++  unless admin.confirm_password?(password)
++    admin.password = password
++    puts "Admin password set!"
++  end
++
++  admin.active = true
++
++  # save/update user account
++  saved = admin.save
++  raise admin.errors.full_messages.join("\n") unless saved
++
++  puts "Account created successfully with username #{admin.username}" unless existing_user
++
++  # grant admin privileges
++  admin.grant_admin!
++  if admin.trust_level < 1
++    admin.change_trust_level!(1)
++  end
++  admin.email_tokens.update_all confirmed: true
++  admin.activate
++end

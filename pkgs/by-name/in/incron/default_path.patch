@@ -1,0 +1,36 @@
+diff --git usertable.cpp usertable.cpp
+index 11fd04b..a8681bd 100644
+--- a/usertable.cpp
++++ b/usertable.cpp
+@@ -43,9 +43,6 @@
+ #define DONT_FOLLOW(mask) (false)
+ #endif // IN_DONT_FOLLOW
+ 
+-// this is not enough, but...
+-#define DEFAULT_PATH "/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin"
+-
+ 
+ PROC_MAP UserTable::s_procMap;
+ 
+@@ -597,12 +594,20 @@ void UserTable::RunAsUser(std::string cmd) const
+     if (clearenv() != 0)
+       goto failed;
+ 
++    // try to recreate the user path as best as possible
++    std::string DEFAULT_PATH;
++    DEFAULT_PATH += "/run/wrappers/bin:";
++    DEFAULT_PATH += pwd->pw_dir;
++    DEFAULT_PATH += "/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/etc/profiles/per-user/";
++    DEFAULT_PATH += pwd->pw_name;
++    DEFAULT_PATH += "/bin";
++
+     if (    setenv("LOGNAME",   pwd->pw_name,   1) != 0
+         ||  setenv("USER",      pwd->pw_name,   1) != 0
+         ||  setenv("USERNAME",  pwd->pw_name,   1) != 0
+         ||  setenv("HOME",      pwd->pw_dir,    1) != 0
+         ||  setenv("SHELL",     pwd->pw_shell,  1) != 0
+-        ||  setenv("PATH",      DEFAULT_PATH,   1) != 0)
++        ||  setenv("PATH",      DEFAULT_PATH.c_str(),   1) != 0)
+     {
+       goto failed;
+     }

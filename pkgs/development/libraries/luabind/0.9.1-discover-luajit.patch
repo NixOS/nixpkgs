@@ -1,0 +1,22 @@
+diff --git a/cmake/Modules/FindLua52.cmake b/cmake/Modules/FindLua52.cmake
+index f4398e4..17377c0 100644
+--- a/cmake/Modules/FindLua52.cmake
++++ b/cmake/Modules/FindLua52.cmake
+@@ -61,7 +61,7 @@ FIND_PATH(LUA_INCLUDE_DIR lua.h
+ )
+ 
+ FIND_LIBRARY(_LUA_LIBRARY_RELEASE
+-  NAMES lua52 lua5.2 lua-5.2 lua
++  NAMES lua52 lua5.2 lua-5.2 lua luajit-5.1
+   HINTS
+   $ENV{LUA_DIR}
+   PATH_SUFFIXES lib64 lib
+@@ -75,7 +75,7 @@ FIND_LIBRARY(_LUA_LIBRARY_RELEASE
+ )
+ 
+ FIND_LIBRARY(_LUA_LIBRARY_DEBUG
+-  NAMES lua52-d lua5.2-d lua-5.2-d lua-d
++  NAMES lua52-d lua5.2-d lua-5.2-d lua-d luajit-5.1-d
+   HINTS
+   $ENV{LUA_DIR}
+   PATH_SUFFIXES lib64 lib

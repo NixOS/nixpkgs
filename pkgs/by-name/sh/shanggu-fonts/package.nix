@@ -1,0 +1,71 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  p7zip,
+}:
+let
+  version = "1.024";
+
+  source =
+    with lib.attrsets;
+    mapAttrs'
+      (
+        name: hash:
+        nameValuePair (lib.strings.toLower name) (fetchurl {
+          url = "https://github.com/GuiWonder/Shanggu/releases/download/${version}/Shanggu${name}TTCs.7z";
+          inherit hash;
+        })
+      )
+      {
+        Mono = "sha256-JSGr3/q5Ca0AphQlfWYKOnKYt2Nr0CtNmv/j27WxBz8=";
+        Round = "sha256-DDMGf+QK8MIRfGFb7QY4sycyGUGmoZAq1OhMQ2VgBbY=";
+        Sans = "sha256-V+fabg4yC1TBVePs4+mpv6LBqq5bH6dTSHtX+SWFR3E=";
+        Serif = "sha256-z55QTCtpVljW+JMdGJJLAm6TIq70maRiegehxoTvhWI=";
+      };
+
+  extraOutputs = builtins.attrNames source;
+in
+stdenvNoCC.mkDerivation {
+  pname = "shanggu-fonts";
+  inherit version;
+
+  outputs = [ "out" ] ++ extraOutputs;
+
+  nativeBuildInputs = [ p7zip ];
+
+  unpackPhase = ''
+    runHook preUnpack
+  ''
+  + lib.strings.concatLines (
+    lib.attrsets.mapAttrsToList (name: value: ''
+      7z x ${value} -o${name}
+    '') source
+  )
+  + ''
+    runHook postUnpack
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+  ''
+  + lib.strings.concatLines (
+    lib.lists.forEach extraOutputs (name: ''
+      install -Dm444 ${name}/*.ttc -t ${placeholder name}/share/fonts/truetype
+      ln -s "${placeholder name}" /share/fonts/truetype/*.ttc $out/share/fonts/truetype
+    '')
+  )
+  + ''
+    runHook postInstall
+  '';
+
+  meta = {
+    homepage = "https://github.com/GuiWonder/Shanggu";
+    description = "Heritage glyph (old glyph) font based on Siyuan";
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Cryolitia ];
+  };
+}

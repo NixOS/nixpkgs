@@ -1,0 +1,14 @@
+diff --git a/configure.in b/configure.in
+index d71fc6a..fd14845 100644
+--- a/configure.in
++++ b/configure.in
+@@ -7,6 +7,9 @@ AM_MAINTAINER_MODE
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_HEADER(config.h)
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ AC_PROG_CC
+ AC_PROG_INTLTOOL(, no-xml)
+ AC_ISC_POSIX

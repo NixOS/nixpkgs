@@ -1,0 +1,7 @@
+    --append-flags "-foo -bar" \
+    --add-flags "-x -y -z" \
+    --add-flags -abc \
+    --add-flag 'test var here' \
+    --add-flags "-g *.txt" \
+    --add-flags "-a *" \
+    --append-flag 'test var 2 here'

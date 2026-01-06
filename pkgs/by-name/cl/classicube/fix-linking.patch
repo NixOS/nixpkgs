@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index a10eb5214..70e2f720e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -55,7 +55,7 @@ endif
+ 
+ ifeq ($(PLAT),linux)
+ 	CFLAGS  += -DCC_BUILD_ICON
+-	LIBS    =  -lX11 -lXi -lpthread -lGL -ldl
++	LIBS    =  -lX11 -lXi -lpthread -lGL -ldl -lcurl -lopenal
+ 	BUILD_DIR = build-linux
+ endif
+ 
+
