@@ -85,15 +85,25 @@ in
       serviceConfig = {
         Type = "idle";
         KillSignal = "SIGINT";
-        ExecStart = let
-          args = [
-            "--host" cfg.host
-            "--port" (toString cfg.port)
-          ]
-          ++ lib.optionals (cfg.model != null) [ "-m" cfg.model ]
-          ++ lib.optionals (cfg.modelsDir != null) [ "--models-dir" cfg.modelsDir ]
-          ++ cfg.extraFlags;
-        in "${cfg.package}/bin/llama-server ${utils.escapeSystemdExecArgs args}";
+        ExecStart =
+          let
+            args = [
+              "--host"
+              cfg.host
+              "--port"
+              (toString cfg.port)
+            ]
+            ++ lib.optionals (cfg.model != null) [
+              "-m"
+              cfg.model
+            ]
+            ++ lib.optionals (cfg.modelsDir != null) [
+              "--models-dir"
+              cfg.modelsDir
+            ]
+            ++ cfg.extraFlags;
+          in
+          "${cfg.package}/bin/llama-server ${utils.escapeSystemdExecArgs args}";
         Restart = "on-failure";
         RestartSec = 300;
 
