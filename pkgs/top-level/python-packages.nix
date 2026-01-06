@@ -9126,11 +9126,9 @@ self: super: with self; {
 
   lsp-tree-sitter = callPackage ../development/python-modules/lsp-tree-sitter { };
 
-  lsprotocol = lsprotocol_2023;
+  lsprotocol = callPackage ../development/python-modules/lsprotocol { };
 
   lsprotocol_2023 = callPackage ../development/python-modules/lsprotocol/2023.nix { };
-
-  lsprotocol_2025 = callPackage ../development/python-modules/lsprotocol/2025.nix { };
 
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
@@ -13492,15 +13490,9 @@ self: super: with self; {
 
   pyglossary = callPackage ../development/python-modules/pyglossary { };
 
-  pygls = pygls_1;
+  pygls = callPackage ../development/python-modules/pygls { };
 
-  pygls_1 = callPackage ../development/python-modules/pygls/1.nix {
-    lsprotocol = lsprotocol_2023;
-  };
-
-  pygls_2 = callPackage ../development/python-modules/pygls/2.nix {
-    lsprotocol = lsprotocol_2025;
-  };
+  pygls_1 = callPackage ../development/python-modules/pygls/1.nix { };
 
   pygltflib = callPackage ../development/python-modules/pygltflib { };
 
