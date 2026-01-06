@@ -1207,6 +1207,7 @@ in
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
   pdns-recursor = runTest ./pdns-recursor.nix;
+  peerbanhelper = runTest ./peerbanhelper.nix;
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
