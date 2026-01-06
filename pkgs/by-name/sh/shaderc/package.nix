@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
+  versionCheckHook,
   cmake,
   python3,
   darwin,
@@ -63,10 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = {
     description = "Collection of tools, libraries and tests for shader compilation";
     inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+    mainProgram = "glslc";
   };
 })
