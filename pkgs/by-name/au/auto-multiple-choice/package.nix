@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
         netpbm
       ]
     } \
-    --set TEXINPUTS ":.:$out/tex/latex"
+    --set TEXINPUTS ".:$out/tex/latex:"
   '';
 
   nativeBuildInputs = [
