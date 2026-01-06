@@ -5,13 +5,13 @@
   pdfrw,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pagelabels";
   version = "1.2.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "sha256-GAEyhECToKnIWBxnYTSOsYKZBjl50b/82mZ68i8I2ug=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.gpl3;
   };
-}
+})
