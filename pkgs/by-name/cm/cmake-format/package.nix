@@ -11,7 +11,8 @@ python3Packages.buildPythonApplication rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     pname = "cmakelang";
     sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
   };

@@ -17,7 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
