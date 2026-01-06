@@ -241,6 +241,26 @@ buildPythonPackage (finalAttrs: {
 
 See the [general documentation on fixed-point arguments](#chap-build-helpers-finalAttrs) for more details on the benefits of this pattern.
 
+::: {.note}
+
+Some `buildPythonPackage`/`buildPythonApplication` arguments are passed down indirectly to `stdenv.mkDerivation` via `passthru`.
+Therefore the final states of these attributes can be accessed via `finalAttrs.passthru.${name}`, and they can be overridden via [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs) under the `passthru` attribute.
+Such arguments include:
+
+- `disabled`
+- `pyproject`
+- `format`
+- `build-system`, `dependencies` and `optional-dependencies`
+
+<!--
+TODO(@doronbehar): When [#258246][1] will be resolved, or when
+`.overridePythonAttrs` will be removed, the above text might need to be revised.
+
+- [1]: https://github.com/NixOS/nixpkgs/issues/258246
+
+-->
+:::
+
 The [`stdenv.mkDerivation`](#sec-using-stdenv) function accepts various parameters for describing
 build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
