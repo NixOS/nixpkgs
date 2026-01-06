@@ -75,6 +75,10 @@ mapAliases {
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
   backports_shutil_get_terminal_size = throw "'backports_shutil_get_terminal_size' has been renamed to/replaced by 'backports-shutil-get-terminal-size'"; # Converted to throw 2025-10-29
+  basedmypy =
+    lib.warnOnInstantiate
+      "basedmypy has been deprecated by upstream. Use instead 'basedpyright' or 'ty'" # added 2026-01-06
+      (callPackage ../development/python-modules/basedmypy { });
   basewood-av = throw "'basewood-av' has been removed due to being archived upstream and unused"; # added 2025-11-26
   bash_kernel = throw "'bash_kernel' has been renamed to/replaced by 'bash-kernel'"; # Converted to throw 2025-10-29
   beancount_docverif = throw "'beancount_docverif' has been renamed to/replaced by 'beancount-docverif'"; # Converted to throw 2025-10-29

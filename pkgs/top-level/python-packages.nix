@@ -1788,8 +1788,6 @@ self: super: with self; {
 
   base64io = callPackage ../development/python-modules/base64io { };
 
-  basedmypy = callPackage ../development/python-modules/basedmypy { };
-
   basedtyping = callPackage ../development/python-modules/basedtyping { };
 
   baseline = callPackage ../development/python-modules/baseline { };
