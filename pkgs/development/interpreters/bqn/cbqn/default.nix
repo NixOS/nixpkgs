@@ -113,16 +113,8 @@ stdenv.mkDerivation {
     # main test suite from mlochbaum/BQN
     $out/bin/BQN ${mbqn-source}/test/this.bqn
 
-    # CBQN tests that do not require compiling with test-only flags
-    $out/bin/BQN test/cmp.bqn
-    $out/bin/BQN test/equal.bqn
-    $out/bin/BQN test/copy.bqn
-    $out/bin/BQN test/bit.bqn
-    $out/bin/BQN test/hash.bqn
-    $out/bin/BQN test/squeezeValid.bqn
-    $out/bin/BQN test/squeezeExact.bqn
-    $out/bin/BQN test/various.bqn
-    $out/bin/BQN test/random.bqn
+    # run tests in test/cases/
+    $out/bin/BQN test/run.bqn lint
 
     runHook postInstallCheck
   '';
