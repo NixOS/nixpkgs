@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "walrus";
   version = "0.9.6";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "walrus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9YUN1OJKOmAHpMnM9gQ0J2sy/iYuadrT/fgH9d1RIZ8=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight Python utilities for working with Redis";
     homepage = "https://github.com/coleifer/walrus";
-    changelog = "https://github.com/coleifer/walrus/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/coleifer/walrus/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
