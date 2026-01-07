@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "shrinkray";
-  version = "25.9.1-unstable-2025-09-11";
+  version = "26.1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
