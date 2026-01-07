@@ -4356,6 +4356,8 @@ self: super: with self; {
 
   django-sekizai = callPackage ../development/python-modules/django-sekizai { };
 
+  django-select2 = callPackage ../development/python-modules/django-select2 { };
+
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
