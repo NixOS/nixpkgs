@@ -19,6 +19,7 @@ let
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       armv7l-linux = "linux-armhf";
+      loongarch64-linux = "linux-loong64";
     }
     .${system} or throwSystem;
 
@@ -31,6 +32,7 @@ let
       aarch64-linux = "sha256-32WP74IJYVIKuhmsMi0EFqjTlWAO4DgC24ptm3BqSpg=";
       aarch64-darwin = "sha256-2hYTrkCNzVy6wXT+cGWkDEAy+g/KSkWsLltMSuSSBTk=";
       armv7l-linux = "sha256-bNjc91zjVXnQ763GHmlVTNDD5ynlJhrtGR7Xzciq7tA=";
+      loongarch64-linux = "sha256-RaxzbawVYT1V0u+RU0gaWTrn2X3uRxEO9T8IAmPJTds=";
     }
     .${system} or throwSystem;
 
@@ -89,6 +91,7 @@ callPackage ./generic.nix rec {
       "aarch64-linux"
       "aarch64-darwin"
       "armv7l-linux"
+      "loongarch64-linux"
     ];
     # requires libc.so.6 and other glibc specifics
     broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu;
