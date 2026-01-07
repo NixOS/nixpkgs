@@ -5,7 +5,6 @@
   graphviz,
   stdlib-list,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   toml,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pydeps";
   version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "thebjorn";
