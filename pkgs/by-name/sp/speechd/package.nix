@@ -15,29 +15,37 @@
   glib,
   dotconf,
   libsndfile,
-  runtimeShell,
+
   withLibao ? true,
   libao,
+
+  withPipewire ? true,
+  pipewire,
+
   withPulse ? false,
   libpulseaudio,
+
   withAlsa ? false,
   alsa-lib,
+
   withOss ? false,
+
   withFlite ? true,
   flite,
+
   withEspeak ? true,
   espeak,
   sonic,
   pcaudiolib,
   mbrola,
+
   withPico ? true,
   svox,
+  runtimeShell,
+
   libsOnly ? false,
 }:
 
-let
-  inherit (python3Packages) python pyxdg wrapPython;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "speech-dispatcher";
   version = "0.12.1";
@@ -68,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     itstool
     texinfo
-    wrapPython
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -77,10 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libao
     libpulseaudio
-    python
+    python3Packages.python
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemdMinimal # libsystemd
+  ]
+  ++ lib.optionals withPipewire [
+    pipewire
   ]
   ++ lib.optionals withAlsa [
     alsa-lib
@@ -98,37 +109,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pythonPath = [
-    pyxdg
+    python3Packages.pyxdg
   ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    # Audio method falls back from left to right.
-    "--with-default-audio-method=\"libao,pulse,alsa,oss\""
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ]
-  ++ lib.optionals withPulse [
-    "--with-pulse"
-  ]
-  ++ lib.optionals withAlsa [
-    "--with-alsa"
-  ]
-  ++ lib.optionals withLibao [
-    "--with-libao"
-  ]
-  ++ lib.optionals withOss [
-    "--with-oss"
-  ]
-  ++ lib.optionals withEspeak [
-    "--with-espeak-ng"
-  ]
-  ++ lib.optionals withPico [
-    "--with-pico"
-  ];
+  configureFlags =
+    let
+      inherit (lib) withFeature;
+    in
+    [
+      "--sysconfdir=/etc"
+      # Audio method falls back from left to right.
+      "--with-default-audio-method=\"libao,pulse,pipewire,alsa,oss\""
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+      (withFeature withPipewire "pipewire")
+      (withFeature withPulse "pulse")
+      (withFeature withLibao "libao")
+      (withFeature withAlsa "alsa")
+      (withFeature withOss "oss")
+      (withFeature withEspeak "espeak-ng")
+      (withFeature withFlite "flite")
+      (withFeature withPico "pico")
+    ];
 
   postPatch = lib.optionalString withPico ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace-fail "/usr/share/pico/lang" "${svox}/share/pico/lang"
     substituteInPlace src/modules/generic.c --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
@@ -150,13 +155,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description =
-      "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
+      "Common high-level interface to speech synthesis"
+      + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
+    changelog = "https://github.com/brailcom/speechd/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       berce
       jtojnar
     ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
     platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";
