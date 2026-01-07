@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-messaging-eventhubs-checkpointstore-blob_1.0.0-beta.1";
     hash = "sha256-487IwzlxnKd09ztf9NQESbp/kZzsT18JXKgMwsG5W/Y=";
   };
-  sourceRoot = "source/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob";
+  sourceRoot = "${finalAttrs.src.name}/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt
