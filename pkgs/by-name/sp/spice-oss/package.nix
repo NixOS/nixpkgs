@@ -2,9 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  ensureNewerSourcesForZipFilesHook,
-  makeDesktopItem,
-  copyDesktopItems,
   cmake,
   pkg-config,
   alsa-lib,
@@ -32,27 +29,23 @@
   nix-update-script,
 }:
 let
-  version = "0.9.1";
+  version = "1.0.0";
 in
 stdenv.mkDerivation {
-  pname = "plugdata";
+  pname = "spice-oss";
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "plugdata-team";
-    repo = "plugdata";
-    tag = "v${version}";
-    hash = "sha256-dcggq455lZiwl1lps11fuKX6sx0A8UtFwFoiBJWtwFQ=";
-    fetchSubmodules = true;
+      owner = "DatanoiseTV";
+      repo = "spice-oss";
+      rev = "5fba7517263343d5e296f0a329507add1118046f";
+      hash = "sha256-NUd58Y2RdpdGnddTyqiv/qCAtKbeL+IXt+5hVzITsq8=";
+      fetchSubmodules =  true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    ensureNewerSourcesForZipFilesHook
-    copyDesktopItems
-    python3
-    makeWrapper
   ];
 
   buildInputs = [
@@ -85,21 +78,6 @@ stdenv.mkDerivation {
     sqlite
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "PlugData";
-      desktopName = "PlugData";
-      exec = "plugdata";
-      icon = "plugdata_logo";
-      comment = "Pure Data as a plugin, with a new GUI";
-      type = "Application";
-      categories = [
-        "AudioVideo"
-        "Music"
-      ];
-    })
-  ];
-
   NIX_LDFLAGS = (
     toString [
       "-lX11"
@@ -113,10 +91,6 @@ stdenv.mkDerivation {
     ]
   );
 
-  patches = [
-    ./fix-fiddle.patch
-  ];
-
   preBuild = ''
     # fix LV2 build
     HOME=$(mktemp -d)
@@ -125,26 +99,10 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    cd .. # build artifacts are placed inside the source directory for some reason
-    mkdir -p $out/bin $out/lib/clap $out/lib/lv2 $out/lib/vst3
-    cp    Plugins/Standalone/plugdata      $out/bin
-    cp -r Plugins/CLAP/plugdata{,-fx}.clap $out/lib/clap
-    cp -r Plugins/VST3/plugdata{,-fx}.vst3 $out/lib/vst3
-    cp -r Plugins/LV2/plugdata{,-fx}.lv2   $out/lib/lv2
-
-    install -Dm444 $src/Resources/Icons/plugdata_logo_linux.png $out/share/pixmaps/plugdata_logo.png
-
     runHook postInstall
   '';
 
   postInstall = ''
-    # Ensure zenity is available, or it won't be able to open new files.
-    wrapProgram $out/bin/plugdata \
-      --prefix PATH : '${
-        lib.makeBinPath [
-          zenity
-        ]
-      }'
   '';
 
   passthru.updateScript = nix-update-script { };
