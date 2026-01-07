@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = lib.licenses.mit;
+    changelog = "https://prosody.im/doc/release/${finalAttrs.version}";
     homepage = "https://prosody.im";
     platforms = lib.platforms.linux;
     mainProgram = "prosody";
