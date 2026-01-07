@@ -16933,6 +16933,12 @@
     github = "metalmatze";
     githubId = 872251;
   };
+  metaspartan = {
+    email = "carsenk@gmail.com";
+    github = "metaspartan";
+    githubId = 10162347;
+    name = "Carsen Klock";
+  };
   mevatron = {
     email = "mevatron@gmail.com";
     name = "mevatron";
