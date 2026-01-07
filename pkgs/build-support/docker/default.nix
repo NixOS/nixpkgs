@@ -574,6 +574,10 @@ rec {
       '';
     };
 
+  # Wrapper around `streamLayeredImage` to build an image from the result.
+  #
+  # To support image stream overrides, use `streamLayeredImage` with
+  # `writeImageStream` instead.
   buildLayeredImage = lib.makeOverridable (
     {
       name,
@@ -581,24 +585,15 @@ rec {
       meta ? { },
       ...
     }@args:
-    let
+    writeImageStream {
+      inherit compressor meta name;
       stream = streamLayeredImage (
         removeAttrs args [
           "compressor"
           "meta"
         ]
       );
-      compress = compressorForImage compressor name;
-    in
-    runCommand "${baseNameOf name}.tar${compress.ext}" {
-      inherit (stream) imageName;
-      passthru = stream.passthru // {
-        inherit (stream) imageTag;
-        inherit stream;
-      };
-      nativeBuildInputs = compress.nativeInputs;
-      inherit meta;
-    } "${stream} | ${compress.compress} > $out"
+    }
   );
 
   # 1. extract the base image
@@ -1423,6 +1418,9 @@ rec {
 
   # Wrapper around `streamNixShellImage` to build an image from the result.
   #
+  # To support image stream overrides, use `streamNixShellImage` with
+  # `writeImageStream` instead.
+  #
   # Docs: doc/build-helpers/images/dockertools.section.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage =
@@ -1431,13 +1429,32 @@ rec {
       compressor ? "gz",
       ...
     }@args:
-    let
+    writeImageStream {
+      inherit compressor;
+      name = drv.name;
       stream = streamNixShellImage (removeAttrs args [ "compressor" ]);
-      compress = compressorForImage compressor drv.name;
+    };
+
+  # Writes out an image tarball stream with optional compression.
+  #
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  writeImageStream =
+    {
+      name,
+      stream,
+      compressor ? "gz",
+      meta ? { },
+    }:
+    let
+      compress = compressorForImage compressor stream.name;
     in
-    runCommand "${drv.name}-env.tar${compress.ext}" {
+    runCommand "${baseNameOf name}.tar${compress.ext}" {
       inherit (stream) imageName;
-      passthru = { inherit (stream) imageTag; };
+      passthru = stream.passthru // {
+        inherit (stream) imageTag;
+        inherit stream;
+      };
       nativeBuildInputs = compress.nativeInputs;
+      inherit meta;
     } "${stream} | ${compress.compress} > $out";
 }
