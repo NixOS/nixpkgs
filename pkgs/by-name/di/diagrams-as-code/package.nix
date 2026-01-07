@@ -6,7 +6,7 @@
   diagrams-as-code,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "diagrams-as-code";
   version = "0.0.4";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmytrostriletskyi";
     repo = "diagrams-as-code";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cd602eQvNCUQuCdn/RpcfURcDHjXLZ0gAG+SObB++Q0=";
   };
 
@@ -55,4 +55,4 @@ python3Packages.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "diagrams-as-code";
   };
-}
+})

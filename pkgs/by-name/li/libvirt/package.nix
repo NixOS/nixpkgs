@@ -413,6 +413,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       fpletz
       lovesegfault
+      phip1611
     ];
   };
 }
