@@ -46,6 +46,9 @@ tcl.mkTclDerivation {
     description = "OpenGL drawing surface for Tk 8 and 9";
     homepage = "https://github.com/3-manifolds/TkGL";
     license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }
