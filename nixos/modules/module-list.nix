@@ -1905,6 +1905,7 @@
   ./services/web-apps/windmill.nix
   ./services/web-apps/wordpress.nix
   ./services/web-apps/writefreely.nix
+  ./services/web-apps/yamtrack.nix
   ./services/web-apps/yopass.nix
   ./services/web-apps/your_spotify.nix
   ./services/web-apps/youtrack.nix
