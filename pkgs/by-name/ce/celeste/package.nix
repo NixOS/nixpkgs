@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
       --replace-warn 'edition = "2021"' 'edition = "2024"'
   '';
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
     just
