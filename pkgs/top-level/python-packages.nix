@@ -4607,6 +4607,8 @@ self: super: with self; {
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
+  django-decorator-include = callPackage ../development/python-modules/django-decorator-include { };
+
   django-dynamic-preferences =
     callPackage ../development/python-modules/django-dynamic-preferences
       { };
