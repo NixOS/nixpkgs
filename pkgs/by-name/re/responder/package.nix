@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "responder";
   version = "3.2.0.0";
   format = "other";
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2E1V5rnIvshSYV7F1iMr/1yGdSGQRCUdEwsTzJvVhaw=";
   };
 
@@ -55,4 +55,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "responder";
   };
-}
+})
