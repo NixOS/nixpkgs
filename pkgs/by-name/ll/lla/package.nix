@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   installShellFiles,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
@@ -24,7 +26,15 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     makeBinaryWrapper
     installShellFiles
+    pkg-config
   ];
+
+  buildInputs = [
+    oniguruma
+  ];
+
+  # Do not vendor Oniguruma
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   cargoHash = "sha256-qKeNSaZMpyQpI7oGqn416pfBINMsIE+0sjzg38roxc8=";
 
