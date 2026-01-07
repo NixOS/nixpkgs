@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.4.3";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-mab6YZPOq6DerBrHK3UQrccrM8Jtp9nu2bzUus2zLYs=";
+    hash = "sha256-kEGUPlFCU2kKgVJHobVP+DFmAcMc/ZDP+u0w03DnhSo=";
   };
 
-  vendorHash = "sha256-NGwCTEh1/5dJWOCSe18FZYYu8v7Mj6MWVEWyNNA1T68=";
+  vendorHash = "sha256-FbAt/HsjoxqAKWQqqWN2xuyyTG2Ic4DcyEU4O0rjpQE=";
 
   ldflags = [
     "-X main.version=${version}"
