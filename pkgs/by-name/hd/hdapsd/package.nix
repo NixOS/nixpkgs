@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://hdaps.sf.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ starryreverie ];
   };
 })
