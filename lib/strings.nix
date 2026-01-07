@@ -1581,141 +1581,142 @@ rec {
       # Split the string into individual bytes.
       byteList = stringToCharacters allBytes;
 
-      # Create attribute set mapping each byte to its Python stringitem (see
-      # below).
-      # We know the file contains bytes 0x01 through 0xFF in order.
-      stringItemTableAttrs = genList (
-        i:
-        let
-          byte = elemAt byteList i;
-          byteValueAsInteger = i + 1;
-        in
-        {
-          name = byte;
-          # This next part sets value to an ASCII-encoded Python stringitem. A
-          # Python stringitem is either a single character or an escape
-          # sequence. This code tries to only use escape sequences when they
-          # are needed in single-quoted bytes literals. That begs the question
-          # though, when is it necessary to use escape sequences in
-          # single-quoted bytes literals?
-          #
-          # The rules for writing Python bytes literals is listed in The Python
-          # Language Reference section of the Python documentation [1]. The
-          # Python Language Reference describes bytes literals as a kind of
-          # string literal. Regular string literals create str objects and
-          # bytes literals create bytes objects. The str type does not inherit
-          # from the bytes type, and the bytes type does not inherit from the
-          # str type. This line of Python code can be run to verify that they
-          # don’t inherit from each other:
-          #
-          # assert not isinstance("Example string literal", bytes) and not isinstance(b'Example bytes literal', str)
-          #
-          # This means that bytes literals are a type of string literal, but
-          # bytes objects are not a type of string object. This is kind of
-          # confusing.
-          #
-          # With that in mind, section 2.5.3 of The Python Language Reference
-          # says [2]:
-          #
-          # > String literals, except “f-strings” and “t-strings”, are
-          # > described by the following lexical definitions.
-          # >
-          # > These definitions use negative lookaheads (!) to indicate that an
-          # > ending quote ends the literal.
-          # >
-          # > STRING:          [stringprefix] (stringcontent)
-          # > stringprefix:    <("r" | "u" | "b" | "br" | "rb"), case-insensitive>
-          # > stringcontent:
-          # >    | "'''" ( !"'''" longstringitem)* "'''"
-          # >    | '"""' ( !'"""' longstringitem)* '"""'
-          # >    | "'" ( !"'" stringitem)* "'"
-          # >    | '"' ( !'"' stringitem)* '"'
-          # > stringitem:      stringchar | stringescapeseq
-          # > stringchar:      <any source_character, except backslash and newline>
-          # > longstringitem:  stringitem | newline
-          # > stringescapeseq: "\" <any source_character>
-          #
-          # The return value of escapePythonBytes always uses single-quoted
-          # bytes literals, and it always uses a lowercase b for bytes
-          # literals. With that in mind, we can simplify that grammar so that
-          # it only deals with "b'" bytes literals:
-          #
-          # SIMPLEBYTES:     "b'" ( !"'" stringitem)* "'"
-          # stringitem:      stringchar | stringescapeseq
-          # stringchar:      <any source_character, except backslash and newline>
-          # stringescapeseq: "\" <any source_character>
-          #
-          # newline is defined in section 2.1.2 [3]:
-          #
-          # > newline: <ASCII LF> | <ASCII CR> <ASCII LF> | <ASCII CR>
-          #
-          # source_character is defined in section 2.1.4 [4]:
-          #
-          # > source_character:  <any Unicode code point, except NUL>
-          #
-          # Section 2.5.5 gives us an additional rule that bytes literals must
-          # follow [5]:
-          #
-          # > Bytes literals are always prefixed with ‘b’ or ‘B’; they produce an
-          # > instance of the bytes type instead of the str type. They may only
-          # > contain ASCII characters; bytes with a numeric value of 128 or
-          # > greater must be expressed with escape sequences (typically
-          # > Hexadecimal character or Octal character):[…]
-          #
-          # We can incorporate those three rules into our previous simplification:
-          #
-          # SIMPLEBYTES:      "b'" ( !"'" stringitem)* "'"
-          # stringitem:       stringchar | stringescapeseq
-          # stringchar:       <any ASCII source_character, except backslash and newline>
-          # newline:          <ASCII LF> | <ASCII CR> <ASCII LF> | <ASCII CR>
-          # stringescapeseq:  "\" <any source_character>
-          # source_character: <any Unicode code point, except NUL>
-          #
-          # With the above grammar in mind, we can finally answer the original
-          # question: when is it necessary to use escape sequences in
-          # single-quoted bytes literals? For an ASCII-encoded Python file, the
-          # following bytes must always be escaped when they are put in a
-          # single-quoted bytes literal:
-          #
-          # • 0x00* (ASCII NUL, disallowed by the source_character rule)
-          # • 0x0A (ASCII LF, disallowed by the stringchar rule)
-          # • 0x0D (ASCII CR, disallowed by the stringchar rule)
-          # • 0x27 (ASCII single quote, disallowed by the SIMPLEBYTES rule)
-          # • 0x5C (ASCII backslash, disallowed by the stringchar rule)
-          # • All bytes that are greater than or equal to 0x80 (non-ASCII
-          #   bytes, disallowed by the stringchar rule)
-          #
-          # *At the moment, Nix strings can’t contain null bytes so the below
-          # code doesn’t actually handle 0x00. If this feature request [7] gets
-          # implemented, then the below code will need to be updated in order
-          # to handle 0x00 bytes.
-          #
-          # [1]: <https://docs.python.org/3.14/reference/index.html>
-          # [2]: <https://docs.python.org/3.14/reference/lexical_analysis.html#formal-grammar>
-          # [3]: <https://docs.python.org/3.14/reference/lexical_analysis.html#physical-lines>
-          # [4]: <https://docs.python.org/3.14/reference/lexical_analysis.html#encoding-declarations>
-          # [5]: <https://docs.python.org/3.14/reference/lexical_analysis.html#bytes-literals>
-          # [6]: <https://docs.python.org/3.14/reference/lexical_analysis.html#escape-sequences>
-          # [7]: <https://github.com/NixOS/nix/issues/1307>
-          value =
-            if (byte == "\n") then
-              "\\n"
-            else if (byte == "\r") then
-              "\\r"
-            else if (byte == "'") then
-              "\\'"
-            else if (byte == "\\") then
-              "\\\\"
-            else if (byteValueAsInteger >= 128) then
-              "\\x${toTwoDigitHexString byteValueAsInteger}"
-            else
-              byte;
-        }
-      ) 255;
       # A lookup table mapping bytes (as one-byte-long Nix strings) to their
       # Python stringitem representation (as one-, two- or four-byte-long Nix
-      # strings).
-      byteToStringItemTable = builtins.listToAttrs stringItemTableAttrs;
+      # strings). See below for the definition of “stringitem”. The lookup
+      # table is generated from a file that we know contains bytes 0x01 through
+      # 0xFF in order.
+      byteToStringItemTable = builtins.listToAttrs (
+        genList (
+          i:
+          let
+            byte = elemAt byteList i;
+            byteValueAsInteger = i + 1;
+          in
+          {
+            name = byte;
+            # This next part sets value to an ASCII-encoded Python stringitem.
+            # A Python stringitem is either a single character or an escape
+            # sequence. This code tries to only use escape sequences when they
+            # are needed in single-quoted bytes literals. That begs the
+            # question though, when is it necessary to use escape sequences in
+            # single-quoted bytes literals?
+            #
+            # The rules for writing Python bytes literals is listed in The
+            # Python Language Reference section of the Python documentation
+            # [1]. The Python Language Reference describes bytes literals as a
+            # kind of string literal. Regular string literals create str
+            # objects and bytes literals create bytes objects. The str type
+            # does not inherit from the bytes type, and the bytes type does not
+            # inherit from the str type. This line of Python code can be run to
+            # verify that they don’t inherit from each other:
+            #
+            # assert not isinstance("Example string literal", bytes) and not isinstance(b'Example bytes literal', str)
+            #
+            # This means that bytes literals are a type of string literal, but
+            # bytes objects are not a type of string object. This is kind of
+            # confusing.
+            #
+            # With that in mind, section 2.5.3 of The Python Language Reference
+            # says [2]:
+            #
+            # > String literals, except “f-strings” and “t-strings”, are
+            # > described by the following lexical definitions.
+            # >
+            # > These definitions use negative lookaheads (!) to indicate that
+            # > an ending quote ends the literal.
+            # >
+            # > STRING:          [stringprefix] (stringcontent)
+            # > stringprefix:    <("r" | "u" | "b" | "br" | "rb"), case-insensitive>
+            # > stringcontent:
+            # >    | "'''" ( !"'''" longstringitem)* "'''"
+            # >    | '"""' ( !'"""' longstringitem)* '"""'
+            # >    | "'" ( !"'" stringitem)* "'"
+            # >    | '"' ( !'"' stringitem)* '"'
+            # > stringitem:      stringchar | stringescapeseq
+            # > stringchar:      <any source_character, except backslash and newline>
+            # > longstringitem:  stringitem | newline
+            # > stringescapeseq: "\" <any source_character>
+            #
+            # The return value of escapePythonBytes always uses single-quoted
+            # bytes literals, and it always uses a lowercase b for bytes
+            # literals. With that in mind, we can simplify that grammar so that
+            # it only deals with "b'" bytes literals:
+            #
+            # SIMPLEBYTES:     "b'" ( !"'" stringitem)* "'"
+            # stringitem:      stringchar | stringescapeseq
+            # stringchar:      <any source_character, except backslash and newline>
+            # stringescapeseq: "\" <any source_character>
+            #
+            # newline is defined in section 2.1.2 [3]:
+            #
+            # > newline: <ASCII LF> | <ASCII CR> <ASCII LF> | <ASCII CR>
+            #
+            # source_character is defined in section 2.1.4 [4]:
+            #
+            # > source_character:  <any Unicode code point, except NUL>
+            #
+            # Section 2.5.5 gives us an additional rule that bytes literals must
+            # follow [5]:
+            #
+            # > Bytes literals are always prefixed with ‘b’ or ‘B’; they
+            # > produce an instance of the bytes type instead of the str type.
+            # > They may only contain ASCII characters; bytes with a numeric
+            # > value of 128 or greater must be expressed with escape sequences
+            # > (typically Hexadecimal character or Octal character):[…]
+            #
+            # We can incorporate those three rules into our previous
+            # simplification:
+            #
+            # SIMPLEBYTES:      "b'" ( !"'" stringitem)* "'"
+            # stringitem:       stringchar | stringescapeseq
+            # stringchar:       <any ASCII source_character, except backslash and newline>
+            # newline:          <ASCII LF> | <ASCII CR> <ASCII LF> | <ASCII CR>
+            # stringescapeseq:  "\" <any source_character>
+            # source_character: <any Unicode code point, except NUL>
+            #
+            # With the above grammar in mind, we can finally answer the
+            # original question: when is it necessary to use escape sequences
+            # in single-quoted bytes literals? For an ASCII-encoded Python
+            # file, the following bytes must always be escaped when they are
+            # put in a single-quoted bytes literal:
+            #
+            # • 0x00* (ASCII NUL, disallowed by the source_character rule)
+            # • 0x0A (ASCII LF, disallowed by the stringchar rule)
+            # • 0x0D (ASCII CR, disallowed by the stringchar rule)
+            # • 0x27 (ASCII single quote, disallowed by the SIMPLEBYTES rule)
+            # • 0x5C (ASCII backslash, disallowed by the stringchar rule)
+            # • All bytes that are greater than or equal to 0x80 (non-ASCII
+            #   bytes, disallowed by the stringchar rule)
+            #
+            # *At the moment, Nix strings can’t contain null bytes so the below
+            # code doesn’t actually handle 0x00. If this feature request [7]
+            # gets implemented, then the below code will need to be updated in
+            # order to handle 0x00 bytes.
+            #
+            # [1]: <https://docs.python.org/3.14/reference/index.html>
+            # [2]: <https://docs.python.org/3.14/reference/lexical_analysis.html#formal-grammar>
+            # [3]: <https://docs.python.org/3.14/reference/lexical_analysis.html#physical-lines>
+            # [4]: <https://docs.python.org/3.14/reference/lexical_analysis.html#encoding-declarations>
+            # [5]: <https://docs.python.org/3.14/reference/lexical_analysis.html#bytes-literals>
+            # [6]: <https://docs.python.org/3.14/reference/lexical_analysis.html#escape-sequences>
+            # [7]: <https://github.com/NixOS/nix/issues/1307>
+            value =
+              if (byte == "\n") then
+                "\\n"
+              else if (byte == "\r") then
+                "\\r"
+              else if (byte == "'") then
+                "\\'"
+              else if (byte == "\\") then
+                "\\\\"
+              else if (byteValueAsInteger >= 128) then
+                "\\x${toTwoDigitHexString byteValueAsInteger}"
+              else
+                byte;
+          }
+        ) 255
+      );
 
       byteToStringItem = byte: byteToStringItemTable.${byte};
 
