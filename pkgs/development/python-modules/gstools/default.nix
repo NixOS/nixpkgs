@@ -26,7 +26,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gstools";
   version = "1.7.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rQ7mSa1BWAaRiiE6aQD6jl8BktihY9bjFJV+5eT9n/M=";
   };
 
@@ -65,13 +65,13 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
     description = "Geostatistical toolbox";
     homepage = "https://github.com/GeoStat-Framework/GSTools";
-    changelog = "https://github.com/GeoStat-Framework/GSTools/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/GeoStat-Framework/GSTools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

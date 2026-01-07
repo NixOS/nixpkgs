@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.2";
   pname = "ewmhlib";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "EWMHlib";
-    rev = "refs/tags/v${version}";
+    tag = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-NELOgUV8KuN+CqmoSbLYImguHlp8dyhGmJtoxJjOBkA=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     description = "Extended Window Manager Hints implementation in Python 3";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})
