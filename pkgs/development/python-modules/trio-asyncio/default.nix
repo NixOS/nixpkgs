@@ -10,6 +10,7 @@
   exceptiongroup,
   pytest-trio,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
 }:
 
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # https://github.com/python-trio/trio-asyncio/issues/160
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "python-trio";

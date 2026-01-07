@@ -11884,13 +11884,6 @@ with pkgs;
     # renamed in KF5 -> KF6
     plasma-framework = kdePackages.libplasma;
   };
-  syncthingtray-minimal = syncthingtray.override {
-    webviewSupport = false;
-    jsSupport = false;
-    kioPluginSupport = false;
-    plasmoidSupport = false;
-    systemdSupport = true;
-  };
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 

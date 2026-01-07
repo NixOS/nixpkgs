@@ -9100,6 +9100,8 @@ self: super: with self; {
 
   loompy = callPackage ../development/python-modules/loompy { };
 
+  looptime = callPackage ../development/python-modules/looptime { };
+
   loopy = callPackage ../development/python-modules/loopy { };
 
   looseversion = callPackage ../development/python-modules/looseversion { };
@@ -19453,6 +19455,7 @@ self: super: with self; {
     types-aiobotocore-account
     types-aiobotocore-acm
     types-aiobotocore-acm-pca
+    types-aiobotocore-aiops
     types-aiobotocore-alexaforbusiness
     types-aiobotocore-amp
     types-aiobotocore-amplify
@@ -19509,6 +19512,7 @@ self: super: with self; {
     types-aiobotocore-codebuild
     types-aiobotocore-codecatalyst
     types-aiobotocore-codecommit
+    types-aiobotocore-codeconnections
     types-aiobotocore-codedeploy
     types-aiobotocore-codeguru-reviewer
     types-aiobotocore-codeguru-security
@@ -19579,6 +19583,7 @@ self: super: with self; {
     types-aiobotocore-forecast
     types-aiobotocore-forecastquery
     types-aiobotocore-frauddetector
+    types-aiobotocore-freetier
     types-aiobotocore-fsx
     types-aiobotocore-gamelift
     types-aiobotocore-gamesparks
@@ -19683,6 +19688,7 @@ self: super: with self; {
     types-aiobotocore-neptune
     types-aiobotocore-network-firewall
     types-aiobotocore-networkmanager
+    types-aiobotocore-networkmonitor
     types-aiobotocore-nimble
     types-aiobotocore-oam
     types-aiobotocore-omics
@@ -19709,6 +19715,9 @@ self: super: with self; {
     types-aiobotocore-pricing
     types-aiobotocore-privatenetworks
     types-aiobotocore-proton
+    types-aiobotocore-qapps
+    types-aiobotocore-qbusiness
+    types-aiobotocore-qconnect
     types-aiobotocore-qldb
     types-aiobotocore-qldb-session
     types-aiobotocore-quicksight
