@@ -90,9 +90,11 @@ in
         ];
       };
 
-    server-lazy-socket = {
+    # IP addresses are allocated according to the alphabetical order of the machine name, and since tests rely on the IP address of this machine, let's name it so it's order (and thus address) is predictable.
+    aaa-server-lazy-socket = {
       virtualisation.vlans = [
         1
+        # Allocate another VLAN so we can exercise listening on a non-standard address.
         2
       ];
       services.openssh = {
@@ -302,7 +304,7 @@ in
 
     server_lazy.wait_for_unit("sshd.socket", timeout=60)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=60)
-    server_lazy_socket.wait_for_unit("sshd.socket", timeout=60)
+    aaa_server_lazy_socket.wait_for_unit("sshd.socket", timeout=60)
 
     # sshd-keygen is a oneshot unit, so just wait for multi-user.target, which
     # pulls it in.
@@ -340,14 +342,14 @@ in
             timeout=30
         )
 
-    with subtest("socket activation on a non-standard port"):
+    with subtest("socket activation on a non-standard address and port"):
         client.succeed(
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
         )
         client.succeed("chmod 600 privkey.snakeoil")
         # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
         client.succeed(
-            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
+            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.1 true",
             timeout=30
         )
 
