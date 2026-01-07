@@ -107,6 +107,9 @@ stdenvNoCC.mkDerivation (
     meta = {
       description = "Frameworks and libraries required for building packages on Darwin";
       homepage = "https://developer.apple.com";
+      # NOTE: We only strip the SDK to only symbol lists & header files for interoperability all encumbered binary code is removed.
+      # Please see ....
+      license = lib.licenses.free;
       teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
       badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
