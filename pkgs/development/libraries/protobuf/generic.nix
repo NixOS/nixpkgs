@@ -87,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  separateDebugInfo = true;
+
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
   cmakeFlags = [
     "-Dprotobuf_USE_EXTERNAL_GTEST=ON"

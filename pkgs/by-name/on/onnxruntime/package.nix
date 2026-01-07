@@ -211,6 +211,8 @@ effectiveStdenv.mkDerivation rec {
   ]
   ++ lib.optionals pythonSupport [ "dist" ];
 
+  separateDebugInfo = true;
+
   enableParallelBuilding = true;
 
   cmakeDir = "../cmake";
@@ -335,6 +337,8 @@ effectiveStdenv.mkDerivation rec {
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
+
+  __structuredAttrs = true;
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module
