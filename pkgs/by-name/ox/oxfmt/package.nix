@@ -6,12 +6,14 @@
   cargo,
   cmake,
   makeBinaryWrapper,
+  nodejs_24,
   nodejs-slim,
   pnpmConfigHook,
   pnpm_10,
   rustPlatform,
   rustc,
   versionCheckHook,
+  nix-update-script,
 }:
 
 # Build with pnpm instead of buildRustPackage because Prettier integration
@@ -19,13 +21,13 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.18.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-AatmbW8UE8UbV533I2nhijHNlqIsgvtlE7X98uT7aTA=";
+    hash = "sha256-kMCGKbc7qaY0KUOR+67mLvKW4J5CuvYUmC6Aj9xlzSk=";
   };
 
   # Remove patchedDependencies from both workspace and lockfile
@@ -37,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-4G52/8WZgNFM/vcHXBbtWabBZwWo3ZBVadFjOI2SmUk=";
+    hash = "sha256-cesj9jwWHIFxpFV62QDgYl22EUE8qVjIbb2nRObAyLo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-Do2sFEK/8Axj9B9M/W9zqMboPrAo5Zm/zdrMXZvmFg0=";
+    hash = "sha256-cPswWCksQ5TyR9M2Maj5mg9I+UltR0WN3U4ClBvwG68=";
     prePnpmInstall = finalAttrs.postPatch;
   };
 
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cmake
     makeBinaryWrapper
-    nodejs-slim
+    nodejs_24
     pnpmConfigHook
     pnpm_10
     rustPlatform.cargoSetupHook
@@ -94,6 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^oxfmt_v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "JavaScript formatter with Prettier integration";

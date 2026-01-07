@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "1.35.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-WHSdT4IMl/TUnMJycL3sYfA8aVLtag54dOYSXrDuN9g=";
+    hash = "sha256-kMCGKbc7qaY0KUOR+67mLvKW4J5CuvYUmC6Aj9xlzSk=";
   };
 
-  cargoHash = "sha256-OTxSxDjNDN8MZV7hVg914xQDl199+yjAMukN9jTmQsU=";
+  cargoHash = "sha256-cesj9jwWHIFxpFV62QDgYl22EUE8qVjIbb2nRObAyLo=";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "--bin=oxlint"
-    "--bin=oxc_language_server"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
