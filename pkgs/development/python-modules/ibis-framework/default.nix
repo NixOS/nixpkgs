@@ -186,6 +186,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # ExceptionGroup: multiple unraisable exception warnings (4 sub-exceptions)
+    "test_non_roundtripable_str_type"
     "test_parse_dtype_roundtrip"
 
     # AssertionError: value does not match the expected value in snapshot ...
