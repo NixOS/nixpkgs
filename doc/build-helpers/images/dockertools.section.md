@@ -413,6 +413,10 @@ Even though some of the arguments may seem related, they cannot be interchanged.
 You can load the result of this function in Docker with `docker image load`.
 See [](#ex-dockerTools-buildLayeredImage-hello) to see how to do that.
 
+:::{.note}
+To support image stream overrides, use [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage) with [`writeImageStream`](#ssec-pkgs-dockerTools-writeImageStream).
+:::
+
 ### Examples {#ssec-pkgs-dockerTools-buildLayeredImage-examples}
 
 :::{.example #ex-dockerTools-buildLayeredImage-hello}
@@ -1381,6 +1385,10 @@ Basically, `buildNixShellImage` runs the script created by `streamNixShellImage`
 
 `buildNixShellImage` supports the same options as `streamNixShellImage`, see [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) for details.
 
+:::{.note}
+To support image stream overrides, use [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) with [`writeImageStream`](#ssec-pkgs-dockerTools-writeImageStream).
+:::
+
 []{#ssec-pkgs-dockerTools-buildNixShellImage-example}
 ### Examples {#ssec-pkgs-dockerTools-buildNixShellImage-examples}
 
@@ -1515,6 +1523,87 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
   This can be seen as an equivalent of the `--run` option in {manpage}`nix-shell(1)`.
 
   _Default value:_ `null`.
+
+## writeImageStream {#ssec-pkgs-dockerTools-writeImageStream}
+
+`writeImageStream` takes an executable that outputs an image stream (e.g. `streamLayeredImage`, `streamNixShellImage`) and writes a Docker-compatible repository tarball with optional compression.
+
+While helper functions are available that both configure the image and write it out, these do not support configuration overrides, so it may be preferable to use `writeImageStream` at the boundary of your expressions, while working with streaming derivations internally.
+
+This way, you have more opportunities to override the image configurations.
+
+### Inputs {#ssec-pkgs-dockerTools-writeImageStream-inputs}
+
+`stream` (Path)
+
+: Path to the executable that outputs an image stream.
+
+`compressor` (String; _optional_)
+
+: Selects the algorithm used to compress the image.
+
+  _Default value:_ `"gz"`.\
+  _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
+
+`meta` (Attribute Set)
+
+: The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
+
+### Passthru outputs {#ssec-pkgs-dockerTools-writeImageStream-passthru-outputs}
+
+`writeImageStream` also defines its own [`passthru`](#chap-passthru) attributes:
+
+`stream` (Derivation)
+
+: Path to the executable that outputs an image stream.
+
+`imageTag` (String)
+
+: The tag of the generated image from the input image stream.
+  This is useful if no tag was specified in the attributes of the argument to the function, because an automatic tag will be used instead.
+  `imageTag` allows you to retrieve the value of the tag used in this case.
+
+### Examples {#ssec-pkgs-dockerTools-writeImageStream-examples}
+
+:::{.example #ex-dockerTools-writeImageStream-streamNixShellImage}
+# Writing a Nix shell image stream
+
+Without image stream attribute overrides.
+
+```nix
+{
+  dockerTools,
+  hello,
+}:
+dockerTools.writeImageStream {
+  stream = dockerTools.streamNixShellImage {
+    drv = hello;
+  };
+}
+```
+
+With image stream attribute overrides.
+
+```nix
+{
+  lib,
+  stdenv,
+  dockerTools,
+  hello,
+}:
+dockerTools.writeImageStream {
+  stream =
+    (dockerTools.streamNixShellImage {
+      drv = hello;
+    }).override
+      (prev: {
+        config = prev.config // {
+          Env = prev.config.Env ++ [ "LD_LIBRARY_PATH=${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" ];
+        };
+      });
+}
+```
+:::
 
 ### Examples {#ssec-pkgs-dockerTools-streamNixShellImage-examples}
 
