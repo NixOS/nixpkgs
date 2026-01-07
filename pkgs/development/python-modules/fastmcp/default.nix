@@ -18,13 +18,17 @@
   openai,
   openapi-core,
   openapi-pydantic,
+  platformdirs,
   pydantic,
+  pydocket,
   pyperclip,
   python-dotenv,
+  py-key-value-aio,
   rich,
   websockets,
 
   # tests
+  anthropic,
   dirty-equals,
   email-validator,
   fastapi,
@@ -37,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.12.5";
+  version = "2.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-F8NCp1Ku1EeI/YjbHuHcDYytTgqOFyLp+sZGBqayv6s=";
+    hash = "sha256-JqDsHmhuRom4CPmQd0sMaBtgypHDtwVJ4I3fnOLjnd8=";
   };
 
   build-system = [
@@ -60,13 +64,19 @@ buildPythonPackage rec {
     mcp
     openapi-core
     openapi-pydantic
+    platformdirs
     pydantic
+    pydocket
     pyperclip
     python-dotenv
+    py-key-value-aio
     rich
     websockets
   ]
-  ++ pydantic.optional-dependencies.email;
+  ++ pydantic.optional-dependencies.email
+  ++ py-key-value-aio.optional-dependencies.disk
+  ++ py-key-value-aio.optional-dependencies.keyring
+  ++ py-key-value-aio.optional-dependencies.memory;
 
   optional-dependencies = {
     openai = [ openai ];
@@ -75,6 +85,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastmcp" ];
 
   nativeCheckInputs = [
+    anthropic
     dirty-equals
     email-validator
     fastapi
@@ -109,6 +120,9 @@ buildPythonPackage rec {
     "test_uv_transport"
     "test_uv_transport_module"
     "test_github_api_schema_performance"
+    "test_log_file_captures_stderr_output_with_path"
+    "test_log_file_captures_stderr_output_with_textio"
+    "test_log_file_none_uses_default_behavior"
 
     # RuntimeError: Client failed to connect: Timed out while waiting for response
     "test_timeout"
@@ -133,8 +147,6 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
     "tests/client/auth/test_oauth_client.py"
-    "tests/client/test_openapi_experimental.py"
-    "tests/client/test_openapi_legacy.py"
     "tests/client/test_sse.py"
     "tests/client/test_streamable_http.py"
     "tests/server/auth/test_jwt_provider.py"
