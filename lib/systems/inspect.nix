@@ -431,6 +431,10 @@ rec {
       }
     ];
 
+    isUefi = [
+      { kernel = kernels.uefi; }
+    ];
+
     isElf = {
       kernel.execFormat = execFormats.elf;
     };

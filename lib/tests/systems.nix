@@ -55,6 +55,7 @@ lib.runTests (
       ++ js
       ++ genode
       ++ redox
+      ++ uefi
     );
 
     testarm = mseteq arm [
@@ -83,6 +84,7 @@ lib.runTests (
       "i686-cygwin"
       "i686-windows"
       "i686-none"
+      "i686-uefi"
     ];
     testmips = mseteq mips [
       "mips-none"
@@ -136,6 +138,7 @@ lib.runTests (
       "x86_64-solaris"
       "x86_64-windows"
       "x86_64-none"
+      "x86_64-uefi"
     ];
 
     testcygwin = mseteq cygwin [
