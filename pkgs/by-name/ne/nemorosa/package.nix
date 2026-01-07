@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nixosTests,
   python3Packages,
 }:
 
@@ -53,6 +54,10 @@ python3Packages.buildPythonApplication rec {
     ++ uvicorn.optional-dependencies.standard;
 
   pythonImportsCheck = [ "nemorosa" ];
+
+  passthru = {
+    tests.testService = nixosTests.nemorosa;
+  };
 
   meta = {
     description = "Specialized cross-seeding tool designed for music torrents";
