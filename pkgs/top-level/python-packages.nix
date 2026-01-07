@@ -9100,6 +9100,8 @@ self: super: with self; {
 
   loompy = callPackage ../development/python-modules/loompy { };
 
+  looptime = callPackage ../development/python-modules/looptime { };
+
   loopy = callPackage ../development/python-modules/loopy { };
 
   looseversion = callPackage ../development/python-modules/looseversion { };
