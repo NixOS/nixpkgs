@@ -6,6 +6,7 @@
   testers,
   nodejs,
   node-gyp,
+  gnutar,
   inter,
   python3,
   srcOnly,
@@ -16,21 +17,25 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.27.0";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
+    hash = "sha256-MmurmQ/z8ME7Y6lpEWGaf7sFRSYhwd8flM4f0GBbUIM=";
   };
 
   patches = [
     ./patches/use-local-font.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
+
   postPatch = ''
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
+
+    substituteInPlace apps/cli/src/commands/dump.ts \
+      --replace-fail 'spawn("tar"' 'spawn("${lib.getExe gnutar}"'
   '';
 
   nativeBuildInputs = [
@@ -40,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm_9
   ];
+
+  buildInputs = [
+    gnutar
+  ];
+
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
     pnpm = pnpm_9;
@@ -53,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    fetcherVersion = 1;
-    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
+    fetcherVersion = 3;
+    hash = "sha256-LEdI9chVuOli4XiA0VRV9h8L3ho0IRbPsXtAyQM6Du8=";
   };
   buildPhase = ''
     runHook preBuild
@@ -110,9 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
       HELPER_SCRIPT_NAME="$(basename "$HELPER_SCRIPT")"
       cp "$HELPER_SCRIPT" "$KARAKEEP_LIB_PATH/"
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
-        --replace-warn "KARAKEEP_LIB_PATH=" "KARAKEEP_LIB_PATH=$KARAKEEP_LIB_PATH" \
-        --replace-warn "RELEASE=" "RELEASE=${finalAttrs.version}" \
-        --replace-warn "NODEJS=" "NODEJS=${nodejs}"
+        --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
+        --subst-var-by VERSION "${finalAttrs.version}" \
+        --subst-var-by NODEJS "${nodejs}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
@@ -138,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
         # version
-        version = "0.25.0";
+        version = "0.27.1";
       };
     };
     updateScript = nix-update-script { };
