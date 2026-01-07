@@ -20,7 +20,7 @@
   vega-datasets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "altair";
   version = "5.5.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
   };
 
@@ -90,4 +90,4 @@ buildPythonPackage rec {
       vinetos
     ];
   };
-}
+})
