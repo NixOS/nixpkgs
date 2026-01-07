@@ -9,9 +9,11 @@
   pyqt6,
   pyside2,
   pyside6,
+  pytestCheckHook,
   setuptools,
   traits,
   traitsui,
+  writableTmpDirAsHomeHook,
   wxpython,
 }:
 
@@ -59,7 +61,23 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  doCheck = false; # Needs X server
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  enabledTestPaths = "pyface/tests";
+
+  disabledTestPaths = [
+    # tests need an X server
+    "pyface/tests/test_beep.py"
+    "pyface/tests/test_clipboard.py"
+    "pyface/tests/test_font.py"
+    "pyface/tests/test_image_cache.py"
+    "pyface/tests/test_image_resource.py"
+    "pyface/tests/test_system_metrics.py"
+    "pyface/tests/test_widget.py"
+  ];
 
   pythonImportsCheck = [ "pyface" ];
 
