@@ -43,7 +43,7 @@ buildNpmPackage (finalAttrs: {
     ./package-lock-fix.patch
   ];
 
-  npmDepsHash = "sha256-NEUDQm4hzhGJyEdiBBrSWa8fMw3DcnnPJJo0m+HgZ5U=";
+  npmDepsHash = "sha256-w+KGPWPaIwIqr1HFAb9Nfq1s9/kDTESVzsw/Xky5R40=";
 
   nativeBuildInputs = [ esbuild' ];
 
