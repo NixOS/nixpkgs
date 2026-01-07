@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
+  env.LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
 
   buildInputs = [
     ncurses

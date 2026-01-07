@@ -64,7 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ devExtraCmakeFlags;
 
   # Musl's default stack size is too small for lld to be able to link Firefox.
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    LDFLAGS = "-Wl,-z,stack-size=2097152";
+  };
 
   outputs = [
     "out"
