@@ -6,13 +6,15 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdapsd";
   version = "20250908";
 
-  src = fetchurl {
-    url = "https://github.com/evgeni/hdapsd/releases/download/${version}/hdapsd-${version}.tar.gz";
-    sha256 = "sha256-qENcOFJ9x5CkN72ZkTx/OL+gpwAYJlJomKvAjTklDYQ=";
+  src = fetchFromGitHub {
+    owner = "linux-thinkpad";
+    repo = "hdapsd";
+    tag = finalAttrs.version;
+    hash = "sha256-/62E10fmv8idQFLVLgKkDomhBQk+DOc9167lkVBiRns=";
   };
 
   nativeBuildInputs = [
@@ -31,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})
