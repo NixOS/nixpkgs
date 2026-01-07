@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   jdk_headless,
+  jre_minimal,
   gradle_8,
   makeWrapper,
   bashNonInteractive,
@@ -10,6 +11,17 @@
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.logging"
+      "java.naming"
+      "java.security.jgss"
+      "java.sql"
+      "jdk.unsupported"
+    ];
+  };
 in
 stdenv.mkDerivation rec {
   pname = "apksigner";
@@ -53,7 +65,7 @@ stdenv.mkDerivation rec {
     mv apksigner $out/opt
     mkdir -p $out/bin
     makeWrapper $out/opt/apksigner/bin/apksigner $out/bin/apksigner \
-      --set JAVA_HOME ${jdk_headless.home}
+      --set JAVA_HOME ${jre.home}
 
     runHook postInstall
   '';
