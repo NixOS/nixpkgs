@@ -28,6 +28,6 @@ buildPecl {
     description = "Memory profiler for PHP. Helps finding memory leaks in PHP scripts";
     homepage = "https://github.com/arnaud-lb/php-memory-profiler";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
   };
 }

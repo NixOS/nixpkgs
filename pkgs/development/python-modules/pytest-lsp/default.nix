@@ -3,7 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   hatchling,
-  pygls_2,
+  pygls,
   pytestCheckHook,
   pytest-asyncio,
   packaging,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    pygls_2
+    pygls
     pytest-asyncio
     packaging
   ];

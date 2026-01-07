@@ -88,6 +88,11 @@ buildPythonPackage rec {
     "tests/unit_tests/test_index.py"
   ];
 
+  pytestFlags = [
+    # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated
+    "-Wignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "langchain_mongodb" ];
 
   passthru = {

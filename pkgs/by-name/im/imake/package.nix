@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "imake";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchurl {
     url = "mirror://xorg/individual/util/imake-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dd7LzqjXs1TPNq3JZ15TxHkO495WoUvYe0LI6KrS7PU=";
+    hash = "sha256-VZVVJ+rr6UYz5Ag9T+XyFgpl/kxtr97ki4n+pfHKing=";
   };
 
   patches = [
@@ -39,16 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     # ELF interpreter path. (Which arguably, is a bug in its own.)
     # (copied from the commit message on 0100b270694ecab8aaa13fa5f3d30639b50d7777)
     ./cc-wrapper-uberhack.patch
-    # Add support for RISC-V
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/util/imake/-/commit/a37ee515742f58359b4248742fa06d504f2dce1b.patch";
-      hash = "sha256-2aoXBm1JmNjS5vqGKEyX/qYUVJ8kYIzh/eq3WKU3uQ4=";
-    })
-    # Add support for LoongArch
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/util/imake/-/commit/b4d568b7aa2db5525f63b1bc9486dc5e2ed36bd0.patch";
-      hash = "sha256-m35H3v5IFslqx5QaszPFAJ+g2HfDYyxbX+h+7/8/59M=";
-    })
   ];
 
   strictDeps = true;
