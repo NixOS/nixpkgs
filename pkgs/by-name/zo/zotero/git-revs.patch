@@ -1,17 +1,27 @@
+diff --git a/app/scripts/dir_build b/app/scripts/dir_build
+index 493288ad47..213b6d45b0 100755
+--- a/app/scripts/dir_build
++++ b/app/scripts/dir_build
+@@ -86,7 +86,7 @@ fi
+ 
+ CHANNEL="source"
+ 
+-hash=$(git -C "$ROOT_DIR" rev-parse --short HEAD)
++hash="8c8da79116b97a8221d4ab223c769ce3e0f26332"
+ 
+ build_dir=$(mktemp -d)
+ cleanup() { rm -rf "$build_dir"; }
 diff --git a/js-build/build.js b/js-build/build.js
-index 5e920db6d8..befe280606 100644
+index 6b39260812..910b715298 100644
 --- a/js-build/build.js
 +++ b/js-build/build.js
-@@ -36,9 +36,9 @@ if (require.main === module) {
+@@ -36,9 +36,6 @@ if (require.main === module) {
  				...scssFiles.map(scf => getSass(scf, { ignore: ignoreMask }, signatures)),
  				getSymlinks(symlinks, { nodir: true, ignore: ignoreMask }, signatures),
  				getSymlinks(symlinkDirs, { ignore: ignoreMask }, signatures),
--				getPDFReader(signatures),
+-				getReader(signatures),
 -				getPDFWorker(signatures),
 -				getZoteroNoteEditor(signatures)
-+				//getPDFReader(signatures),
-+				//getPDFWorker(signatures),
-+				//getZoteroNoteEditor(signatures)
  			]);
  
  			await writeSignatures(signatures);

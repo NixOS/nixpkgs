@@ -1,0 +1,56 @@
+diff --git a/app/build.sh b/app/build.sh
+index de092bde16..b2d92287a7 100755
+--- a/app/build.sh
++++ b/app/build.sh
+@@ -244,7 +244,7 @@ if [ -z "$UPDATE_CHANNEL" ]; then UPDATE_CHANNEL="default"; fi
+ BUILD_ID=`date +%Y%m%d%H%M%S`
+ 
+ # Paths to Gecko runtimes
+-MAC_RUNTIME_PATH="$CALLDIR/xulrunner/Firefox.app"
++MAC_RUNTIME_PATH="$CALLDIR/xulrunner/firefox"
+ WIN_RUNTIME_PATH_PREFIX="$CALLDIR/xulrunner/firefox-"
+ LINUX_RUNTIME_PATH_PREFIX="$CALLDIR/xulrunner/firefox-linux-"
+ 
+@@ -272,8 +272,8 @@ cd "$app_dir"
+ # This works around https://bugzilla.mozilla.org/show_bug.cgi?id=1772900
+ set +e
+ if [ $BUILD_MAC == 1 ]; then
+-	cp -Rp "$MAC_RUNTIME_PATH"/Contents/Resources/browser/omni "$app_dir"
+-	unzip -qj "$MAC_RUNTIME_PATH"/Contents/Resources/omni.ja "hyphenation/*" -d "$app_dir"/hyphenation/
++	cp -Rp "$MAC_RUNTIME_PATH"/browser/omni "$app_dir"
++	unzip -qj "$MAC_RUNTIME_PATH"/omni.ja "hyphenation/*" -d "$app_dir"/hyphenation/
+ 
+ elif [[ $BUILD_WIN == 1 ]]; then
+ 	# These are non-arch-specific files, so just find a runtime we fetched:
+@@ -644,11 +644,6 @@ if [ $BUILD_MAC == 1 ]; then
+ 		cp "$MAC_RUNTIME_PATH/../MacOS/XUL" "$CONTENTSDIR/MacOS/"
+ 	fi
+ 
+-	# Use our own updater, because Mozilla's requires updates signed by Mozilla
+-	cd "$CONTENTSDIR/MacOS"
+-	check_lfs_file "$CALLDIR/mac/updater.tar.xz"
+-	tar xf "$CALLDIR/mac/updater.tar.xz"
+-
+ 	# Modify Info.plist
+ 	perl -pi -e "s/\{\{VERSION\}\}/$VERSION/" "$CONTENTSDIR/Info.plist"
+ 	perl -pi -e "s/\{\{VERSION_NUMERIC\}\}/$VERSION_NUMERIC/" "$CONTENTSDIR/Info.plist"
+@@ -1028,11 +1023,6 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		cp "$CALLDIR/linux/zotero.desktop" "$APPDIR"
+ 		cp "$CALLDIR/linux/set_launcher_icon" "$APPDIR"
+ 		
+-		# Use our own updater, because Mozilla's requires updates signed by Mozilla
+-		check_lfs_file "$CALLDIR/linux/updater.tar.xz"
+-		tar xf "$CALLDIR/linux/updater.tar.xz" --to-stdout updater-$arch > "$APPDIR/updater"
+-		chmod 755 "$APPDIR/updater"
+-
+ 		# Copy app files
+ 		rsync -a "$base_dir/" "$APPDIR/"
+ 		
+@@ -1041,6 +1031,7 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		cp -RH "$CALLDIR/modules/zotero-libreoffice-integration/install" "$APPDIR/integration/libreoffice"
+ 		
+ 		# Copy icons
++		mkdir "$APPDIR/icons/"
+ 		cp "$CALLDIR/linux/icons/icon32.png" "$APPDIR/icons/"
+ 		cp "$CALLDIR/linux/icons/icon64.png" "$APPDIR/icons/"
+ 		cp "$CALLDIR/linux/icons/icon128.png" "$APPDIR/icons/"
