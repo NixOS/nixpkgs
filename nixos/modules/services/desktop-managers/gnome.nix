@@ -75,6 +75,8 @@ let
   notExcluded =
     pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
 
+  removeExcluded =
+    pkgList: utils.removePackagesByName pkgList config.environment.gnome.excludePackages;
 in
 
 {
@@ -416,9 +418,9 @@ in
 
       services.orca.enable = notExcluded pkgs.orca;
 
-      fonts.packages = utils.removePackagesByName [
+      fonts.packages = removeExcluded [
         pkgs.adwaita-fonts
-      ] config.environment.gnome.excludePackages;
+      ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
@@ -442,13 +444,12 @@ in
             pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
           ];
         in
-        mandatoryPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+        mandatoryPackages ++ removeExcluded optionalPackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.baobab
         pkgs.decibels
         pkgs.epiphany
@@ -473,7 +474,7 @@ in
         pkgs.simple-scan
         pkgs.snapshot
         pkgs.yelp
-      ] config.environment.gnome.excludePackages;
+      ];
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
@@ -507,7 +508,7 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.aisleriot
         pkgs.atomix
         pkgs.five-or-more
@@ -528,12 +529,12 @@ in
         pkgs.quadrapassel
         pkgs.swell-foop
         pkgs.tali
-      ] config.environment.gnome.excludePackages;
+      ];
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.dconf-editor
         pkgs.devhelp
         pkgs.d-spy
@@ -544,7 +545,7 @@ in
         # https://github.com/NixOS/nixpkgs/issues/60908
         # pkgs.gnome-boxes
         pkgs.sysprof
-      ] config.environment.gnome.excludePackages;
+      ];
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })
