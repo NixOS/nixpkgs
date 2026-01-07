@@ -4,6 +4,7 @@
   python3,
   fetchFromGitHub,
   makeWrapper,
+  nixosTests,
 }:
 let
   python = python3.withPackages (
@@ -115,6 +116,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) yamtrack;
+    };
     inherit python;
     staticFiles = "${finalAttrs.finalPackage}/lib/yamtrack/staticfiles";
   };
