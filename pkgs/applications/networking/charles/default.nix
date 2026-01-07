@@ -98,8 +98,8 @@ in
 {
   charles5 = (
     generic {
-      version = "5.0";
-      hash = "sha256-gvspRI3uF7bjE4UBuTGS5+n2h0nKudLtW3sqs2GZIyM=";
+      version = "5.0.3";
+      hash = "sha256-SiZ15ekuAW7AyXBHN5Zel4ZFL/4oNy1td64NQ0GNUhE=";
       platform = "_x86_64";
       jdk = openjdk17-bootstrap;
 
