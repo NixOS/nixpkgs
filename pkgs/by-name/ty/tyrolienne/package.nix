@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   rustPlatform,
+  cargo-bundle,
   copyDesktopItems,
   fetchFromGitea,
   ffmpeg,
@@ -10,7 +12,6 @@
   nix-update-script,
   pkg-config,
   wrapGAppsHook4,
-  zenity,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tyrolienne";
@@ -27,10 +28,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-J/gS8tyy+5ZG1xl4NrYCU26lD0yvsVyRUoOXntCgVSE=";
 
   nativeBuildInputs = [
-    copyDesktopItems
-    imagemagick
     pkg-config
     wrapGAppsHook4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+    imagemagick
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
   ];
 
   buildInputs = [ libadwaita ];
@@ -38,7 +44,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Tests are disabled because there are none, avoids having to recompile everything twice
   doCheck = false;
 
-  postInstall = ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    # cargo-bundle expects the binary in target/release
+    release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+    mv $release_target/tyrolienne target/release/tyrolienne
+
+    export CARGO_BUNDLE_SKIP_BUILD=true
+    app_path=$(cargo bundle --release | xargs)
+    mkdir -p $out/Applications
+    mv $app_path $out/Applications/
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     for size in 16 32 48 128 256; do
       dir="$out/share/icons/hicolor/''${size}x''${size}/apps"
       mkdir -p "$dir"
@@ -46,14 +67,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${
-        lib.makeBinPath [
-          ffmpeg
-          zenity
-        ]
-      }
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
     )
   '';
 
@@ -75,7 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple tool to convert, upload, and embed videos to Zipline";
     homepage = "https://git.uku3lig.net/uku/tyrolienne";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ uku3lig ];
     mainProgram = "tyrolienne";
   };
