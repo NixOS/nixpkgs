@@ -7,6 +7,7 @@
   openjdk17-bootstrap,
   jdk11,
   jdk8,
+  writeScript,
 }:
 
 let
@@ -16,6 +17,7 @@ let
       hash,
       platform ? "",
       jdk,
+      updateScript ? null,
       ...
     }@attrs:
     let
@@ -89,6 +91,7 @@ let
         license = lib.licenses.unfree;
         platforms = lib.platforms.unix;
       };
+      passthru.updateScript = updateScript;
     };
 
 in
@@ -99,6 +102,17 @@ in
       hash = "sha256-gvspRI3uF7bjE4UBuTGS5+n2h0nKudLtW3sqs2GZIyM=";
       platform = "_x86_64";
       jdk = openjdk17-bootstrap;
+
+      updateScript = writeScript "update-charles" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+
+        set -eu -o pipefail
+
+        version=$(curl -A "Mozilla/5.0" -s https://www.charlesproxy.com/download/ | grep -oP 'Version \K[0-9.]+' | head -n1)
+
+        update-source-version charles5 "$version"
+      '';
     }
   );
   charles4 = (
