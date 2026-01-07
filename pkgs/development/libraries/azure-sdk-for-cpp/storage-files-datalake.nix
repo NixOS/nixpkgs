@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-storage-files-datalake_12.13.0";
     hash = "sha256-u+zaMoX64GcTKE7QIF5WyENTogLBMTCenoI8hPY7m08=";
   };
-  sourceRoot = "source/sdk/storage/azure-storage-files-datalake";
+  sourceRoot = "${finalAttrs.src.name}/sdk/storage/azure-storage-files-datalake";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

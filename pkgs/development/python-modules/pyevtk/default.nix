@@ -8,13 +8,13 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyevtk";
   version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
 
     hash = "sha256-H2vnh2o6AFyCWIYVUdpP5+RP8aLn/yqT1txR3u39pfQ=";
   };
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

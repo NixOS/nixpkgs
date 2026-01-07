@@ -12,7 +12,7 @@
   pynacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hikari-crescent";
   version = "1.4.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-86NCAlN5/JGrxPVIMs6ARr6H4G3shPcgxASwukptyJo=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "hikari-crescent";
   };
-}
+})

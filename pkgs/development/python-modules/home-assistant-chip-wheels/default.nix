@@ -54,6 +54,7 @@
   sphinx-design,
   stdenv,
   tabulate,
+  tomli,
   tornado,
   types-pyyaml,
   types-requests,
@@ -232,6 +233,7 @@ stdenv.mkDerivation rec {
         sphinx-argparse
         sphinx-design
         tabulate
+        tomli
         tornado
         types-pyyaml
         types-requests
