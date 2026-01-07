@@ -83,6 +83,7 @@ let
         maintainers = with lib.maintainers; [
           kalbasit
           kashw2
+          Misaka13514
         ];
         sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
         license = lib.licenses.unfree;
