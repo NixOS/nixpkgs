@@ -145,6 +145,10 @@ stdenv.mkDerivation (
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       glibcLocales
       procps
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
+      # Provide libintl for non-glibc platforms
+      gettext
     ];
 
     doCheck = false;
