@@ -2,28 +2,31 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   django,
   coreschema,
   itypes,
   uritemplate,
   requests,
   standard-cgi,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coreapi";
   version = "2.3.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "python-client";
     owner = "core-api";
-    rev = version;
-    sha256 = "1c6chm3q3hyn8fmjv23qgc79ai1kr3xvrrkp4clbqkssn10k7mcw";
+    tag = version;
+    hash = "sha256-nNUzQbBaT7woI3fmvPvIM0SVDnt4iC2rQ9bDgUeFzLA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     coreschema
     itypes
@@ -32,11 +35,7 @@ buildPythonPackage rec {
     standard-cgi
   ];
 
-  nativeCheckInputs = [ pytest ];
-  checkPhase = ''
-    cd ./tests
-    pytest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python client library for Core API";
