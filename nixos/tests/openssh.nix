@@ -193,12 +193,32 @@ in
               path = "/etc/ssh/ssh_host_ed25519_key";
             }
           ];
+          # The NixOS-curated algorithms require OpenSSL, and so since this test is against an OpenSSH-without-OpenSSL, we have to use the default algorithms, which adapt to not having OpenSSL.
+          enableRecommendedAlgorithms = false;
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilEd25519PublicKey
+        ];
+      };
+
+    server-default-algorithms =
+      { ... }:
+      {
+        services.openssh = {
+          enable = true;
+          enableRecommendedAlgorithms = false;
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilEd25519PublicKey
+        ];
+      };
+
+    server-null-algorithms =
+      { ... }:
+      {
+        services.openssh = {
+          enable = true;
           settings = {
-            # Since this test is against an OpenSSH-without-OpenSSL,
-            # we have to override NixOS's defaults ciphers (which require OpenSSL)
-            # and instead set these to null, which will mean OpenSSH uses its defaults.
-            # Expectedly, OpenSSH's defaults don't require OpenSSL when it's compiled
-            # without OpenSSL.
             Ciphers = null;
             KexAlgorithms = null;
             Macs = null;
@@ -294,10 +314,12 @@ in
 
     server.wait_for_unit("sshd", timeout=60)
     server_allowed_users.wait_for_unit("sshd", timeout=60)
+    server_default_algorithms.wait_for_unit("sshd", timeout=60)
     server_localhost_only.wait_for_unit("sshd", timeout=60)
     server_match_rule.wait_for_unit("sshd", timeout=60)
     server_no_openssl.wait_for_unit("sshd", timeout=60)
     server_no_pam.wait_for_unit("sshd", timeout=60)
+    server_null_algorithms.wait_for_unit("sshd", timeout=60)
     server_null_pam.wait_for_unit("sshd", timeout=60)
     server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
     server_sftp.wait_for_unit("sshd", timeout=60)
@@ -399,6 +421,26 @@ in
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-openssl true",
+            timeout=30
+        )
+
+    with subtest("null-algorithms"):
+        client.succeed(
+            "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-null-algorithms true",
+            timeout=30
+        )
+
+    with subtest("no-openssl"):
+        client.succeed(
+            "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-default-algorithms true",
             timeout=30
         )
 
