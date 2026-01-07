@@ -1,32 +1,35 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  dill,
   fetchFromGitHub,
+  # build-system
+  setuptools,
+
+  # dependencies
+  dill,
+  filelock,
   fsspec,
+  httpx,
   huggingface-hub,
   multiprocess,
   numpy,
-  packaging,
   pandas,
   pyarrow,
+  pyyaml,
   requests,
-  responses,
-  setuptools,
   tqdm,
   xxhash,
 }:
 buildPythonPackage rec {
   pname = "datasets";
-  version = "4.0.0";
+  version = "4.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
     tag = version;
-    hash = "sha256-Cr25PgLNGX/KcFZE5h1oiaDW9J50ccMqA5z3q4sITus=";
+    hash = "sha256-4uKGbT/EtPD1nk66SZu0r4lqGSQXMHkZh8q8x6g3YqU=";
   };
 
   build-system = [
@@ -34,17 +37,17 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    aiohttp
     dill
+    filelock
     fsspec
+    httpx
     huggingface-hub
     multiprocess
     numpy
-    packaging
     pandas
     pyarrow
+    pyyaml
     requests
-    responses
     tqdm
     xxhash
   ];
@@ -53,10 +56,6 @@ buildPythonPackage rec {
     # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
     # "pin until dill has official support for determinism"
     "dill"
-    "multiprocess"
-    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L129
-    # "to support protocol=kwargs in fsspec's `open`, `get_fs_token_paths`"
-    "fsspec"
   ];
 
   # Tests require pervasive internet access
