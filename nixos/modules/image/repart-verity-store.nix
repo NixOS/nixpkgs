@@ -123,7 +123,11 @@ in
           (
             _: previousAttrs: {
               # make it easier to identify the intermediate image in build logs
-              pname = "${previousAttrs.pname}-intermediate";
+              name =
+                if previousAttrs ? pname then
+                  "${previousAttrs.pname}-${previousAttrs.version}-intermediate"
+                else
+                  "${previousAttrs.name}-intermediate";
 
               # do not prepare the ESP, this is done in the final image
               systemdRepartFlags = previousAttrs.systemdRepartFlags ++ [ "--defer-partitions=esp" ];
