@@ -9,17 +9,14 @@
   versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "0.5.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lla";
-  inherit version;
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "chaqchase";
     repo = "lla";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xbXTiOr3c9PX0SRfjO+3Kib5S0fruFhjHO2Mf00BVBg=";
   };
 
@@ -65,10 +62,10 @@ rustPlatform.buildRustPackage {
       Git integration, and a robust plugin system with an extensible list of plugins to add more functionality.
     '';
     homepage = "https://lla.chaqchase.com";
-    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;
     mainProgram = "lla";
   };
-}
+})
