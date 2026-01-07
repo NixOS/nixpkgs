@@ -4,10 +4,10 @@
   fetchFromGitHub,
   systemd,
   runtimeShell,
-  python3,
+  python3Packages,
   nixosTests,
+  versionCheckHook,
 }:
-
 let
   version = "2.6.0";
 
@@ -18,28 +18,26 @@ let
     hash = "sha256-l7yjGpicX1ly4UwF7gcOTaaHPRnxVUMwZkH70NDLL5M=";
   };
 
-  pypkgs = python3.pkgs;
-
-  appMap = pypkgs.buildPythonApplication rec {
+  appMap = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "keyd-application-mapper";
     inherit version src;
     pyproject = false;
 
     postPatch = ''
-      substituteInPlace scripts/${pname} \
+      substituteInPlace scripts/${finalAttrs.pname} \
         --replace-fail /bin/sh ${runtimeShell}
     '';
 
-    propagatedBuildInputs = with pypkgs; [ xlib ];
+    propagatedBuildInputs = with python3Packages; [ xlib ];
 
     dontBuild = true;
 
     installPhase = ''
-      install -Dm555 -t $out/bin scripts/${pname}
+      install -Dm555 -t $out/bin scripts/${finalAttrs.pname}
     '';
 
     meta.mainProgram = "keyd-application-mapper";
-  };
+  });
 
 in
 stdenv.mkDerivation {
@@ -58,10 +56,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ systemd ];
 
-  enableParallelBuilding = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  # post-2.4.2 may need this to unbreak the test
-  # makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
+  enableParallelBuilding = true;
 
   postInstall = ''
     ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
@@ -74,6 +72,7 @@ stdenv.mkDerivation {
     description = "Key remapping daemon for Linux";
     homepage = "https://github.com/rvaiya/keyd";
     license = lib.licenses.mit;
+    mainProgram = "keyd";
     maintainers = with lib.maintainers; [ alfarel ];
     platforms = lib.platforms.linux;
   };
