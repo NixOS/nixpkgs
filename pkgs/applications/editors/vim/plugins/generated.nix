@@ -6218,6 +6218,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  guihua-lua = buildVimPlugin {
+    pname = "guihua.lua";
+    version = "0.1-unstable-2025-11-12";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "guihua.lua";
+      rev = "ef44ba40f12e56c1c9fa45967f2b4d142e4b97a0";
+      hash = "sha256-9iFqh12orsGnQniDloO+aXoBYuTqOW4pGHi3LBB2m4Q=";
+    };
+    meta.homepage = "https://github.com/ray-x/guihua.lua/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gundo-vim = buildVimPlugin {
     pname = "gundo.vim";
     version = "2.6.2-unstable-2021-02-21";
