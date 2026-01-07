@@ -8,6 +8,7 @@
   pillow,
   prettytable,
   pytestCheckHook,
+  pythonAtLeast,
   requests,
   setuptools,
   simplejson,
@@ -52,6 +53,10 @@ buildPythonPackage rec {
     "test_render_embed_js"
     "test_display_javascript_v2"
     "test_lines3d_base"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/pyecharts/pyecharts/issues/2452
+    "test_wordcloud_encode_image_to_base64_os_error"
   ];
 
   meta = {
