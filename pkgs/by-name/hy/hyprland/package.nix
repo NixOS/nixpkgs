@@ -194,7 +194,7 @@ customStdenv.mkDerivation (finalAttrs: {
     "NO_XWAYLAND" = !enableXWayland;
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
-    "NO_UWSM" = true;
+    "NO_UWSM" = !withSystemd;
     "NO_HYPRPM" = true;
     "TRACY_ENABLE" = false;
   };
