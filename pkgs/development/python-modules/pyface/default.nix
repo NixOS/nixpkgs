@@ -2,8 +2,17 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  numpy,
+  pillow,
+  pygments,
+  pyqt5,
+  pyqt6,
+  pyside2,
+  pyside6,
   setuptools,
   traits,
+  traitsui,
+  wxpython,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,6 +32,32 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     traits
   ];
+
+  optional-dependencies = {
+    pillow = [ pillow ];
+    pyqt5 = [
+      pygments
+      pyqt5
+    ];
+    pyqt6 = [
+      pygments
+      pyqt6
+    ];
+    pyside2 = [
+      pygments
+      pyside2
+    ];
+    pyside6 = [
+      pygments
+      pyside6
+    ];
+    numpy = [ numpy ];
+    traitsui = [ traitsui ];
+    wx = [
+      wxpython
+      numpy
+    ];
+  };
 
   doCheck = false; # Needs X server
 
