@@ -2677,6 +2677,8 @@ assertNoAdditions {
     checkInputs = [
       # Optional telescope picker
       self.telescope-nvim
+      # Optional fzf-lua integration
+      self.fzf-lua
     ];
   };
 
@@ -2953,6 +2955,7 @@ assertNoAdditions {
       # Optional integration
       neotest
       toggleterm-nvim
+      nodejs
       nvim-dap
     ];
     checkPhase = ''
