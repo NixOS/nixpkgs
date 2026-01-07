@@ -1,22 +1,25 @@
 {
   stdenvNoCC,
   lib,
+  fetchurl,
+  rustPlatform,
   makeWrapper,
-  installShellFiles,
+  makeSetupHook,
+  pkg-config,
   nodejsInstallManuals,
   nodejsInstallExecutables,
-  coreutils,
-  nix-prefetch-git,
-  fetchurl,
-  jq,
+  curl,
+  gnutar,
+  gzip,
   nodejs,
   nodejs-slim,
-  prefetch-yarn-deps,
-  fixup-yarn-lock,
+  jq,
   diffutils,
   yarn,
-  makeSetupHook,
   cacert,
+  prefetch-yarn-deps,
+  fixup-yarn-lock,
+  config,
   callPackage,
 }:
 
@@ -29,6 +32,48 @@ let
   tests = callPackage ./tests { };
 in
 {
+  prefetch-yarn-deps = rustPlatform.buildRustPackage {
+    pname = "prefetch-yarn-deps";
+    version = (lib.importTOML ./Cargo.toml).package.version;
+
+    src = lib.cleanSourceWith {
+      src = ./.;
+      filter =
+        name: type:
+        let
+          name' = baseNameOf name;
+        in
+        name' != "default.nix" && name' != "target";
+    };
+
+    cargoLock.lockFile = ./Cargo.lock;
+
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+    ];
+    buildInputs = [ curl ];
+
+    postInstall = ''
+      wrapProgram "$out/bin/prefetch-yarn-deps" --prefix PATH : ${
+        lib.makeBinPath [
+          gnutar
+          gzip
+        ]
+      }
+    '';
+
+    passthru = {
+      inherit tests;
+    };
+
+    meta = {
+      description = "Prefetch dependencies from yarn (for use with `fetchYarnDeps`)";
+      mainProgram = "prefetch-yarn-deps";
+      license = lib.licenses.mit;
+    };
+  };
+
   fixup-yarn-lock = stdenvNoCC.mkDerivation {
     name = "fixup-yarn-lock";
 
@@ -57,6 +102,102 @@ in
       inherit tests;
     };
   };
+
+  fetchYarnDeps =
+    {
+      name ? "yarn-deps",
+      src ? null,
+      yarnLock ? "",
+      hash ? "",
+      sha256 ? "",
+      forceEmptyCache ? false,
+      nativeBuildInputs ? [ ],
+      # A string with a JSON attrset specifying registry mirrors, for example
+      #   {"registry.example.org": "my-mirror.local/registry.example.org"}
+      npmRegistryOverridesString ? config.npmRegistryOverridesString,
+      ...
+    }@args:
+    let
+      hash_ =
+        if hash != "" then
+          {
+            outputHash = hash;
+            outputHashAlgo = null;
+          }
+        else if sha256 != "" then
+          {
+            outputHash = sha256;
+            outputHashAlgo = "sha256";
+          }
+        else
+          {
+            outputHash = lib.fakeSha256;
+            outputHashAlgo = "sha256";
+          };
+
+      forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
+    in
+    stdenvNoCC.mkDerivation (
+      args
+      // {
+        inherit name;
+
+        dontUnpack = src == null;
+        dontInstall = true;
+
+        nativeBuildInputs = nativeBuildInputs ++ [ prefetch-yarn-deps ];
+
+        buildPhase = ''
+          runHook preBuild
+
+          if [[ -f '${yarnLock}' ]]; then
+            echo "Using specified ${yarnLock}."
+            local -r lockfile=${yarnLock}
+          elif [[ -f yarn.lock ]]; then
+            echo "Using source supplied yarn.lock."
+            local -r lockfile="./yarn.lock"
+          else
+            echo
+            echo "ERROR: No lock file!"
+            echo
+            echo "yarn.lock is required to build a deterministic cache so that"
+            echo "that no suprised changes occur when packages are updated."
+            echo
+            echo "Hint: You can copy a vendored yarn.lock file via postPatch."
+            echo
+
+            exit 1
+          fi
+
+          prefetch-yarn-deps $lockfile $out
+
+          runHook postBuild
+        '';
+
+        # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
+        # `{ "registry.example.com": "example-registry-bearer-token", ... }`
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+
+        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
+
+        SSL_CERT_FILE =
+          if
+            (
+              hash_.outputHash == ""
+              || hash_.outputHash == lib.fakeSha256
+              || hash_.outputHash == lib.fakeSha512
+              || hash_.outputHash == lib.fakeHash
+            )
+          then
+            "${cacert}/etc/ssl/certs/ca-bundle.crt"
+          else
+            "/no-cert-file.crt";
+
+        outputHashMode = "recursive";
+      }
+      // hash_
+      // forceEmptyCache_
+    );
 
   yarnConfigHook = makeSetupHook {
     name = "yarn-config-hook";
