@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   redis,
   redisTestHook,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "walrus";
   version = "0.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
