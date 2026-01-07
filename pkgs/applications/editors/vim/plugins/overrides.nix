@@ -2772,6 +2772,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter-legacy ];
   };
 
+  nvim-treesitter-textobjects-legacy = super.nvim-treesitter-textobjects.overrideAttrs {
+    dependencies = [ self.nvim-treesitter-legacy ];
+  };
+
   nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
     dependencies = [ self.nvim-treesitter-legacy ];
   };
