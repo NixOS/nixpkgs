@@ -1,12 +1,15 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   libpq,
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+# Work around issue reported in https://github.com/NixOS/nixpkgs/issues/476278.
+# Should be solved when libpqxx 8.x is released.
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
   version = "7.10.5";
 
