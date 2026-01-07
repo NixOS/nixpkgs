@@ -78,67 +78,69 @@
           sha256sum = lib.getExe' pkgs.coreutils "sha256sum";
           diff = lib.getExe' pkgs.diffutils "diff";
         in
-        # bash
-        ''
-          incoming="''${1-}"
-          action="''${2-}"
+        lib.mkIf (lib.length config.system.switch.inhibitors > 0)
+          # bash
+          ''
+            incoming="''${1-}"
+            action="''${2-}"
 
-          if [ "$action" == "boot" ]; then
-            echo "Not checking switch inhibitors (action = $action)"
-            exit
-          fi
-
-          echo -n "Checking switch inhibitors..."
-
-          booted_inhibitors="$(${realpath} /run/booted-system)/switch-inhibitors"
-          booted_inhibitors_sha="$(
-            if [ -f "$booted_inhibitors" ]; then
-              ${sha256sum} - < "$booted_inhibitors"
-            else
-              echo 'none'
+            if [ "$action" == "boot" ]; then
+              echo "Not checking switch inhibitors (action = $action)"
+              exit
             fi
-          )"
 
-          if [ "$booted_inhibitors_sha" == "none" ]; then
-            echo
-            echo "The previous configuration did not specify switch inhibitors, nothing to check."
-            exit
-          fi
+            echo -n "Checking switch inhibitors..."
 
-          new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
-          new_inhibitors_sha="$(
-            if [ -f "$new_inhibitors" ]; then
-              ${sha256sum} - < "$new_inhibitors"
-            else
-              echo 'none'
+            booted_inhibitors="$(${realpath} /run/booted-system)/switch-inhibitors"
+            booted_inhibitors_sha="$(
+              if [ -f "$booted_inhibitors" ]; then
+                ${sha256sum} - < "$booted_inhibitors"
+              else
+                echo 'none'
+              fi
+            )"
+
+            if [ "$booted_inhibitors_sha" == "none" ]; then
+              echo
+              echo "The previous configuration did not specify switch inhibitors, nothing to check."
+              exit
             fi
-          )"
 
-          if [ "$new_inhibitors_sha" == "none" ]; then
-            echo
-            echo "The new configuration does not specify switch inhibitors, nothing to check."
-            exit
-          fi
+            new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
+            new_inhibitors_sha="$(
+              if [ -f "$new_inhibitors" ]; then
+                ${sha256sum} - < "$new_inhibitors"
+              else
+                echo 'none'
+              fi
+            )"
 
-          if [ "$new_inhibitors_sha" != "$booted_inhibitors_sha" ]; then
-            echo
-            echo "Found diff in switch inhibitors:"
-            echo
-            ${diff} --color "$booted_inhibitors" "$new_inhibitors"
-            echo
-            echo "The new configuration contains changes to packages that were"
-            echo "listed as switch inhibitors."
-            echo
-            echo "If you really want to switch into this configuration directly, then"
-            echo "you can set NIXOS_NO_CHECK=1 to ignore these pre-switch checks."
-            echo
-            echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
-            echo
-            exit 1
-          else
-            echo " done"
-          fi
-        '';
+            if [ "$new_inhibitors_sha" == "none" ]; then
+              echo
+              echo "The new configuration does not specify switch inhibitors, nothing to check."
+              exit
+            fi
+
+            if [ "$new_inhibitors_sha" != "$booted_inhibitors_sha" ]; then
+              echo
+              echo "Found diff in switch inhibitors:"
+              echo
+              ${diff} --color "$booted_inhibitors" "$new_inhibitors"
+              echo
+              echo "The new configuration contains changes to packages that were"
+              echo "listed as switch inhibitors."
+              echo "You probably want to run 'nixos-rebuild boot' and reboot your system."
+              echo
+              echo "If you really want to switch into this configuration directly, then"
+              echo "you can set NIXOS_NO_CHECK=1 to ignore pre-switch checks."
+              echo
+              echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
+              echo
+              exit 1
+            else
+              echo " done"
+            fi
+          '';
     };
   };
 }

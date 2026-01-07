@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
+  testers,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   autoreconfHook,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "2.15.2";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-XUf4lqWwNC0bYSb1AdX2zZ46+0Ki1001XAjFOh7EAJ0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IZFF3ft04+wweknX2iQ+pyuqkogxcVB1aUYiOWLSAVU=";
   };
 
   strictDeps = true;
@@ -54,7 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "rc$";
+    };
   };
 
   meta = {

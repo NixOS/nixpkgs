@@ -12,7 +12,6 @@
   onetbb,
   openssl,
   boost,
-  libpqxx,
   clang-tools,
   catch2_3,
   python3,
@@ -110,7 +109,6 @@ stdenv.mkDerivation rec {
     onetbb
     openssl
     boost
-    libpqxx
     libpng
     file
     rapidcheck'
