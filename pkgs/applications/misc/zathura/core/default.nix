@@ -28,6 +28,7 @@
   librsvg,
   gtk-mac-integration,
   webp-pixbuf-loader,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "landlock" stdenv.hostPlatform.isLinux)
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pwmt/zathura/commit/8e5f1580c3baa629da56cfa42cb2b1c5d0d4ce9d.patch";
+      hash = "sha256-p1Cvszs+9O0qU+FKtgG4YGxf1W0S4nCpjd0MN5TF+pA=";
+    })
   ];
 
   nativeBuildInputs = [
