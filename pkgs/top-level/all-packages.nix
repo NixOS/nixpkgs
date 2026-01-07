@@ -3678,6 +3678,8 @@ with pkgs;
 
   reuse = with python3.pkgs; toPythonApplication reuse;
 
+  rmate = rubyPackages.rmate;
+
   rmlint = callPackage ../tools/misc/rmlint {
     inherit (python3Packages) sphinx;
   };
@@ -5232,7 +5234,6 @@ with pkgs;
   # prolog
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
-  yosys-synlig = callPackage ../development/compilers/yosys/plugins/synlig.nix { };
   yosys-symbiflow = callPackage ../development/compilers/yosys/plugins/symbiflow.nix { };
 
   inherit
@@ -6199,14 +6200,6 @@ with pkgs;
   fffuu = haskell.lib.compose.justStaticExecutables (
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
-
-  flow = callPackage ../development/tools/analysis/flow {
-    ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
-      self: super: {
-        ppxlib = super.ppxlib.override { version = "0.33.0"; };
-      }
-    );
-  };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
