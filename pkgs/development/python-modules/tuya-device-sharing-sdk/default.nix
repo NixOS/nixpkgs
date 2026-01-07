@@ -9,7 +9,7 @@
 }:
 let
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.7";
+  version = "0.2.8";
 in
 buildPythonPackage {
   inherit pname version;
