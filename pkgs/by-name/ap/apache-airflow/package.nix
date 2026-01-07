@@ -55,7 +55,7 @@ let
         ];
         postPatch = ''
           substituteInPlace connexion/__init__.py \
-            --replace "2020.0.dev1" "${version}"
+            --replace-fail "2020.0.dev1" "${version}"
         '';
       };
       werkzeug = pySuper.werkzeug.overridePythonAttrs rec {
@@ -155,7 +155,7 @@ let
         # with pytest-httpbin 1.x
         preCheck = ''
           substituteInPlace pyproject.toml \
-            --replace '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
+            --replace-fail '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
         '';
       };
       pytest-httpbin = pySuper.pytest-httpbin.overridePythonAttrs rec {
@@ -221,7 +221,7 @@ let
         src = fetchFromGitHub {
           owner = "gitpython-developers";
           repo = "smmap";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-0Y175kjv/8UJpSxtLpWH4/VT7JrcVPAq79Nf3rtHZZM=";
         };
       };

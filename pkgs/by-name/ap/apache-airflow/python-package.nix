@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   writeScript,
+  writableTmpDirAsHomeHook,
 
   # javascript
   fetchYarnDeps,
@@ -92,10 +93,10 @@ let
     };
 
     nativeBuildInputs = [
-      yarnConfigHook
-      yarnBuildHook
       nodejs
       webpack-cli
+      yarnBuildHook
+      yarnConfigHook
     ];
 
     # The webpack license plugin tries to create /3rd-party-licenses when given the
@@ -205,7 +206,9 @@ buildPythonPackage rec {
   src = airflow-src;
   pyproject = true;
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     alembic
@@ -283,8 +286,6 @@ buildPythonPackage rec {
 
   postInstall = ''
     cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
-    # Needed for pythonImportsCheck below
-    export HOME=$(mktemp -d)
   '';
 
   pythonImportsCheck = [
@@ -293,9 +294,7 @@ buildPythonPackage rec {
   ++ providerImports;
 
   preCheck = ''
-    export AIRFLOW_HOME=$HOME
     export AIRFLOW__CORE__UNIT_TEST_MODE=True
-    export AIRFLOW_DB="$HOME/airflow.db"
     export PATH=$PATH:$out/bin
   '';
 
