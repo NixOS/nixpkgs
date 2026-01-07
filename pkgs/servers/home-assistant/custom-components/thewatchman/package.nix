@@ -40,10 +40,10 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Keep track of missing entities and services in your config files";
     homepage = "https://github.com/dummylabs/thewatchman";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
   };
 }
