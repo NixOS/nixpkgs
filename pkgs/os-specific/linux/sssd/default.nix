@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix Kerberos Support version for PAC responder
+    ./fix-kerberos-version.patch
+
     (replaceVars ./fix-ldb-modules-path.patch {
       inherit ldb;
       out = null; # will be replaced in postPatch https://github.com/NixOS/nixpkgs/pull/446589#discussion_r2384899857
