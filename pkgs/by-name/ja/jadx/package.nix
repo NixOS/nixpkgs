@@ -106,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     mainProgram = "jadx-gui";
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      Misaka13514
+    ];
   };
 })
