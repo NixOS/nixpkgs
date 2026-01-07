@@ -176,5 +176,5 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ gaelreyrol ];
+  meta.maintainers = [ ];
 }

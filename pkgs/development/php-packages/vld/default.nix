@@ -29,7 +29,7 @@ buildPecl {
     description = "Vulcan Logic Dumper hooks into the Zend Engine and dumps all the opcodes (execution units) of a script";
     homepage = "https://github.com/derickr/vld";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     broken = lib.versionOlder php.version "8.2";
   };
 }

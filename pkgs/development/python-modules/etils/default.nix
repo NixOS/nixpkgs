@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
 
   # tests
@@ -20,7 +19,6 @@
   packaging,
   protobuf,
   fsspec,
-  importlib-resources,
   typing-extensions,
   zipp,
   absl-py,
@@ -39,14 +37,20 @@ buildPythonPackage rec {
   version = "1.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pbYMcflbzS1D1On7PcOHkSDB9gRyu1zhn3qGCx1E9gc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    # https://github.com/google/etils/pull/722
+    substituteInPlace etils/epath/resource_utils.py \
+      --replace-fail importlib_resources importlib.resources
+    substituteInPlace pyproject.toml \
+      --replace-fail '"importlib_resources",' ""
+  '';
+
+  build-system = [ flit-core ];
 
   optional-dependencies = rec {
     array-types = enp;
@@ -73,7 +77,6 @@ buildPythonPackage rec {
     ++ epy;
     epath = [
       fsspec
-      importlib-resources
       typing-extensions
       zipp
     ]
