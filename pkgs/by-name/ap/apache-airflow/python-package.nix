@@ -73,14 +73,8 @@ let
     owner = "apache";
     repo = "airflow";
     tag = version;
-    # Download using the git protocol rather than using tarballs, because the
-    # GitHub archive tarballs don't appear to include tests
-    forceFetchGit = true;
-    hash = "sha256-q5/CM+puXE31+15F3yZmcrR74LrqHppdCDUqjLQXPfk=";
+    hash = "sha256-APmZ/ylAcZuW5du2JJdMeAQ9g0VNAsXB+ZBPr0OEprg=";
   };
-
-  # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
-  # This replicates this shell script, fixing bugs in yarn.lock and package.json
 
   airflow-frontend = stdenv.mkDerivation rec {
     name = "airflow-frontend";
@@ -103,10 +97,6 @@ let
     # original relative path
     postPatch = ''
       sed -i 's!../../../../3rd-party-licenses/LICENSES-ui.txt!/3rd-party-licenses/LICENSES-ui.txt!' webpack.config.js
-    '';
-
-    postBuild = ''
-      find package.json yarn.lock static/css static/js -type f | sort | xargs md5sum > static/dist/sum.md5
     '';
 
     installPhase = ''
