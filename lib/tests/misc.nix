@@ -4909,4 +4909,17 @@ runTests {
       targetTarget = "prefix-tt";
     };
   };
+
+  testReplaceElemAt = {
+    expr = lib.replaceElemAt [ 1 2 3 ] 1 "a";
+    expected = [
+      1
+      "a"
+      3
+    ];
+  };
+
+  testReplaceElemAtOutOfRange = testingThrow (lib.replaceElemAt [ 1 2 3 ] 5 "a");
+
+  testReplaceElemAtNegative = testingThrow (lib.replaceElemAt [ 1 2 3 ] (-1) "a");
 }

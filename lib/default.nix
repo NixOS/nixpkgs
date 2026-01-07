@@ -295,6 +295,7 @@ let
         elemAt
         isList
         concatAttrValues
+        replaceElemAt
         ;
       inherit (self.strings)
         concatStrings
