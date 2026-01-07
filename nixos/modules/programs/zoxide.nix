@@ -52,16 +52,22 @@ in
     environment.systemPackages = [ cfg.package ];
 
     programs = {
-      zsh.interactiveShellInit = mkIf cfg.enableZshIntegration ''
-        eval "$(${getExe cfg.package} init zsh ${cfgFlags} )"
-      '';
-      bash.interactiveShellInit = mkIf cfg.enableBashIntegration ''
-        eval "$(${getExe cfg.package} init bash ${cfgFlags} )"
-      '';
-      fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
-        ${getExe cfg.package} init fish ${cfgFlags} | source
-      '';
-      xonsh.config = ''
+      zsh.interactiveShellInit = mkIf cfg.enableZshIntegration (
+        lib.mkAfter ''
+          eval "$(${getExe cfg.package} init zsh ${cfgFlags} )"
+        ''
+      );
+      bash.interactiveShellInit = mkIf cfg.enableBashIntegration (
+        lib.mkAfter ''
+          eval "$(${getExe cfg.package} init bash ${cfgFlags} )"
+        ''
+      );
+      fish.interactiveShellInit = mkIf cfg.enableFishIntegration (
+        lib.mkAfter ''
+          ${getExe cfg.package} init fish ${cfgFlags} | source
+        ''
+      );
+      xonsh.config = lib.mkAfter ''
         execx($(${getExe cfg.package} init xonsh ${cfgFlags}), 'exec', __xonsh__.ctx, filename='zoxide')
       '';
     };
