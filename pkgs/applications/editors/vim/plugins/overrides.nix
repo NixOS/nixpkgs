@@ -796,7 +796,7 @@ assertNoAdditions {
     };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   colorful-menu-nvim = super.colorful-menu-nvim.overrideAttrs {
@@ -1543,7 +1543,7 @@ assertNoAdditions {
   };
 
   iswap-nvim = super.iswap-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   jdd-nvim = super.jdd-nvim.overrideAttrs {
@@ -1684,7 +1684,7 @@ assertNoAdditions {
   leap-ast-nvim = super.leap-ast-nvim.overrideAttrs {
     dependencies = with self; [
       leap-nvim
-      nvim-treesitter
+      nvim-treesitter-legacy
     ];
   };
 
@@ -2677,6 +2677,8 @@ assertNoAdditions {
     checkInputs = [
       # Optional telescope picker
       self.telescope-nvim
+      # Optional fzf-lua integration
+      self.fzf-lua
     ];
   };
 
@@ -2953,6 +2955,7 @@ assertNoAdditions {
       # Optional integration
       neotest
       toggleterm-nvim
+      nodejs
       nvim-dap
     ];
     checkPhase = ''
