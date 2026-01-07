@@ -88,6 +88,7 @@ let
         inherit rockspecVersion;
 
         __structuredAttrs = true;
+        strictDeps = true;
         env = {
           LUAROCKS_CONFIG = self.configFile;
         }

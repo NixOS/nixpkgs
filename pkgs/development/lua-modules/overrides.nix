@@ -390,6 +390,7 @@ in
   };
 
   lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (old: {
+    strictDeps = false;
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
@@ -418,6 +419,10 @@ in
       glibc.dev
     ];
   });
+
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+    strictDeps = false;
+  };
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -450,6 +455,7 @@ in
   };
 
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
+    strictDeps = false;
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
@@ -859,6 +865,10 @@ in
     '';
   });
 
+  nfd = prev.nfd.overrideAttrs {
+    strictDeps = false;
+  };
+
   nlua = prev.nlua.overrideAttrs {
 
     # patchShebang removes the nvim in nlua's shebang so we hardcode one
@@ -885,6 +895,7 @@ in
   };
 
   orgmode = prev.orgmode.overrideAttrs {
+    strictDeps = false;
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
       substituteInPlace lua/orgmode/config/init.lua \
@@ -985,6 +996,10 @@ in
       };
     }
   ) { };
+
+  rest-nvim = prev.rest-nvim.overrideAttrs {
+    strictDeps = false;
+  };
 
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
@@ -1118,6 +1133,7 @@ in
   });
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
+    strictDeps = false;
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
@@ -1149,6 +1165,7 @@ in
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
+    strictDeps = false;
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
