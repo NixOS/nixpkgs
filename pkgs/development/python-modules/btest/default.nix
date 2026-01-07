@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "btest";
-  version = "1.2";
+  version = "1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "zeek";
     repo = "btest";
     tag = "v${version}";
-    hash = "sha256-c+iWzqq0RiRkZlRYjUCXIaFqgnyFdbMAWDNrVYZUvgw=";
+    hash = "sha256-hd/o79GFlmSS4u1IeEkK6l+apw8pinINxPkAZUe8U9U=";
   };
 
   build-system = [ setuptools ];
