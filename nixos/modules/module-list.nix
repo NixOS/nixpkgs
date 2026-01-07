@@ -1551,6 +1551,7 @@
   ./services/torrent/flexget.nix
   ./services/torrent/flood.nix
   ./services/torrent/magnetico.nix
+  ./services/torrent/nemorosa.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/qbittorrent.nix
