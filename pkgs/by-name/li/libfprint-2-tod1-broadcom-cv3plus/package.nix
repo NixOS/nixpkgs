@@ -8,18 +8,15 @@
   stdenv,
 }:
 
-# Based on ideas from (using a wrapper library to redirect fopen() calls to firmware files):
-#   * https://tapesoftware.net/replace-symbol/
-#   * https://github.com/NixOS/nixpkgs/pull/260715
 let
-  pname = "libfprint-2-tod1-broadcom";
-  version = "5.15.285-5.15.010.0";
+  pname = "libfprint-2-tod1-broadcom-cv3plus";
+  version = "6.3.299-6.3.040.0";
 
   src = fetchgit {
-    url = "git://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-broadcom/";
+    url = "git://git.launchpad.net/~oem-solutions-engineers/pc-enablement/+git/libfprint-2-tod1-broadcom-cv3plus/";
     branchName = "ubuntu/latest";
-    rev = "4372071d7296f40050b67e62ab256db71bd9ea30";
-    hash = "sha256-zJiRos0SrU1FxX8SfEnIv0cVy3snkRuTWaLy+MywF+Q=";
+    rev = "ac7a8ab2318216e603c8c23b279bbad28a301d3";
+    hash = "sha256-4JwoUuvskj8GqTUQpKBECCL+jkSfxpaukqRTTVTmSLk=";
   };
 
   wrapperLibName = "wrapper-lib.so";
@@ -38,7 +35,7 @@ let
 
     postPatch = ''
       substitute ${wrapperLibSource} lib.c \
-        --subst-var-by to "${src}/var/lib/fprint/fw"
+        --subst-var-by to "${src}/var/lib/fprint/.broadcomCv3plusFW"
       cc -fPIC -shared lib.c -o ${wrapperLibName}
     '';
 
@@ -65,8 +62,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -D -t "$out/lib/libfprint-2/tod-1/" -m 644 -v usr/lib/x86_64-linux-gnu/libfprint-2/tod-1/libfprint-2-tod-1-broadcom.so
-    install -D -t "$out/lib/udev/rules.d/"      -m 644 -v lib/udev/rules.d/60-libfprint-2-device-broadcom.rules
+    install -D -t "$out/lib/libfprint-2/tod-1/" -m 644 -v usr/lib/x86_64-linux-gnu/libfprint-2/tod-1/libfprint-2-tod-1-broadcom-cv3plus.so
+    install -D -t "$out/lib/udev/rules.d/"      -m 644 -v lib/udev/rules.d/60-libfprint-2-device-broadcom-cv3plus.rules
     runHook postInstall
   '';
 
@@ -75,20 +72,20 @@ stdenv.mkDerivation {
     patchelf \
       --rename-dynamic-symbols fopen_name_map \
       --add-needed ${wrapperLibName} \
-      "$out/lib/libfprint-2/tod-1/libfprint-2-tod-1-broadcom.so"
+      "$out/lib/libfprint-2/tod-1/libfprint-2-tod-1-broadcom-cv3plus.so"
   '';
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
-  meta = {
-    description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver for Dell ControlVault v3";
-    homepage = "https://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-broadcom/";
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
+  meta = with lib; {
+    description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver for Dell ControlVault v3+";
+    homepage = "https://git.launchpad.net/~oem-solutions-engineers/pc-enablement/+git/libfprint-2-tod1-broadcom-cv3plus/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
       aionescu
       pitkling
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
