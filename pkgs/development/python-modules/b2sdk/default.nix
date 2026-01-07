@@ -3,8 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  glibcLocales,
-  importlib-metadata,
   logfury,
   annotated-types,
   packaging,
@@ -12,25 +10,25 @@
   pyfakefs,
   pytest-lazy-fixtures,
   pytest-mock,
+  pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   requests,
+  responses,
   tqdm,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.9.4";
+  version = "2.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-VXdvRJvmozrDsUu1J5Jz9I2733Cwe8OBbafc1fCEuGw=";
+    hash = "sha256-RWHD1ARPSKHmGKY0xdCBn3Qj4GxAfn4o8eacMQ5RT1k=";
   };
 
   build-system = [ pdm-backend ];
@@ -41,33 +39,19 @@ buildPythonPackage rec {
     logfury
     requests
   ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
   ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-lazy-fixtures
     pytest-mock
+    pytest-timeout
     pytestCheckHook
+    responses
     tqdm
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
-
-  disabledTestPaths = [
-    # requires aws s3 auth
-    "test/integration/test_download.py"
-    "test/integration/test_upload.py"
-
-    # Requires backblaze auth
-    "test/integration/test_bucket.py"
   ];
 
-  disabledTests = [
-    # Test requires an API key
-    "test_raw_api"
-    "test_files_headers"
-    "test_large_file"
-    "test_file_info_b2_attributes"
-    "test_sync_folder"
+  enabledTestPaths = [
+    "test/unit"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];
