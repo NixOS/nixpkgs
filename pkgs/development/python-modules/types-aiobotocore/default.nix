@@ -895,7 +895,7 @@ buildPythonPackage (finalAttrs: {
     forecast = [ types-aiobotocore-forecast ];
     forecastquery = [ types-aiobotocore-forecastquery ];
     frauddetector = [ types-aiobotocore-frauddetector ];
-    freetier = [types-aiobotocore-freetier];
+    freetier = [ types-aiobotocore-freetier ];
     fsx = [ types-aiobotocore-fsx ];
     gamelift = [ types-aiobotocore-gamelift ];
     gamesparks = [ types-aiobotocore-gamesparks ];
