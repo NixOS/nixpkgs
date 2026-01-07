@@ -16695,6 +16695,8 @@ self: super: with self; {
 
   requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
 
+  requests-ratelimiter_0_8 = callPackage ../development/python-modules/requests-ratelimiter_0_8 { };
+
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
