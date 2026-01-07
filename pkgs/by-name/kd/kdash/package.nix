@@ -31,6 +31,9 @@ rustPlatform.buildRustPackage rec {
     xorg.xcbutil
   ];
 
+  # Fix for build failure with gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cargoHash = "sha256-72DuM64wj8WW6soagodOFIeHvVn1CPpb1T3Y7GQYsbs=";
 
   meta = {
