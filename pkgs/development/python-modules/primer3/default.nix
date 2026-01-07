@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "primer3";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libnano";
     repo = "primer3-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GrVYYjS/+LZScZETfk7YcSy2yrWc3SPumXvyQeEpFUg=";
+    hash = "sha256-HL/kFpz5xvFDKgef2+AI/qjs2jakl00qfPSABYMGyrI=";
   };
 
   build-system = [

@@ -6476,6 +6476,8 @@ self: super: with self; {
 
   gpustat = callPackage ../development/python-modules/gpustat { };
 
+  gputil = callPackage ../development/python-modules/gputil { };
+
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
   gpytorch = callPackage ../development/python-modules/gpytorch { };
@@ -11279,6 +11281,8 @@ self: super: with self; {
   opencensus-ext-azure = callPackage ../development/python-modules/opencensus-ext-azure { };
 
   opencontainers = callPackage ../development/python-modules/opencontainers { };
+
+  opencv-contrib-python = callPackage ../development/python-modules/opencv-contrib-python { };
 
   opencv-python = callPackage ../development/python-modules/opencv-python { };
 
