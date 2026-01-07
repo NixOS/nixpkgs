@@ -343,6 +343,7 @@ buildPythonPackage rec {
   meta = {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "https://airflow.apache.org/";
+    changelog = "https://airflow.apache.org/docs/apache-airflow/${version}/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       gbpdt
