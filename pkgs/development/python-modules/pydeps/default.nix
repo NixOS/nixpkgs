@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "thebjorn";
     repo = "pydeps";
     tag = "v${version}";
-    hash = "sha256-N/WTamT981eQqxhz51Ry2OOPIecnAnYmMHlASmPpFWA=";
+    hash = "sha256-ZHD8ux3GLm5OsTkaEZfix5zgsdbLHpIxVtwKByduEzk=";
   };
 
   build-system = [ setuptools ];
