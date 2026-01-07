@@ -31,12 +31,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "StreamDeck" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     # This is a fork of abcminiuser/python-elgato-streamdeck targeted at StreamController.
     description = "Python library to control the Elgato Stream Deck";
     homepage = "https://github.com/StreamController/streamcontroller-python-elgato-streamdeck";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       majiir
       sifmelcara
     ];
