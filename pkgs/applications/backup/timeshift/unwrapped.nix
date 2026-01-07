@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timeshift";
-  version = "25.12.1";
+  version = "25.12.3";
   outputs = [
     "out"
     "man"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxmint";
     repo = "timeshift";
     tag = finalAttrs.version;
-    hash = "sha256-m+eSF+cALWSaNt/0V0XTrDZiocddsLqK1YDU7yBdXjw=";
+    hash = "sha256-yrPeaGdt32bmP8lV+eYZb2H3OmVl3G5AH7eeGZ3LM3k=";
   };
 
   postPatch = ''
