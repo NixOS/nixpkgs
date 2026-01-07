@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2025.12.2";
+  version = "2026.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
