@@ -160,6 +160,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/jlowin/fastmcp/releases/tag/${src.tag}";
     homepage = "https://github.com/jlowin/fastmcp";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      amadejkastelic
+      GaetanLepage
+    ];
   };
 }
