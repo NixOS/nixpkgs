@@ -338,6 +338,24 @@ rec {
   };
 
   #
+  # UEFI
+  #
+
+  x86_64-unknown-uefi = {
+    config = "x86_64-unknown-uefi";
+    libc = null;
+    useLLVM = true;
+    linker = "lld";
+  };
+
+  aarch64-unknown-uefi = {
+    config = "aarch64-unknown-uefi";
+    libc = null;
+    useLLVM = true;
+    linker = "lld";
+  };
+
+  #
   # Windows
   #
 
