@@ -6,17 +6,17 @@
 }:
 buildGoModule {
   pname = "mozhi";
-  version = "0-unstable-2025-09-19";
+  version = "0-unstable-2026-01-10";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "aryak";
     repo = "mozhi";
-    rev = "67f216b3fa9edb3b3ec995a4a6fb6777ea934177";
-    hash = "sha256-fQkOyfuBbRLvCzwv7kT1AEJUAWQshWOZDTYfp7plkag=";
+    rev = "6b3f675b8d4c8fb852e88f0696d0c4d72516e618";
+    hash = "sha256-O+heptNxkckcYxUi1QZUBun0F3zquGp5gPVsuWThajQ=";
   };
 
-  vendorHash = "sha256-ptwP+ZuuzxRpIuNDoXnAML1KYEh9zTBcOs9YTI8z63A=";
+  vendorHash = "sha256-PiduR6mEATCKMi1lvKx4lpuSvNAyMhdeI/pRrsgGNx8=";
 
   passthru.updateScript = unstableGitUpdater { };
 
