@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonAtLeast,
   django,
   coreschema,
   itypes,
   uritemplate,
   requests,
+  standard-cgi,
   pytest,
 }:
 
@@ -15,9 +15,6 @@ buildPythonPackage rec {
   pname = "coreapi";
   version = "2.3.3";
   format = "setuptools";
-
-  # cgi module was removed in 3.13, upstream repo archived since 2019
-  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     repo = "python-client";
@@ -32,6 +29,7 @@ buildPythonPackage rec {
     itypes
     uritemplate
     requests
+    standard-cgi
   ];
 
   nativeCheckInputs = [ pytest ];
