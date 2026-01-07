@@ -13,6 +13,7 @@
   gtk3,
   jdk25,
   openjfx25,
+  jre25_minimal,
   gradle_9,
   python3,
   postgresql,
@@ -22,6 +23,31 @@
 let
   jdk = jdk25;
   openjfx = openjfx25;
+  jre = jre25_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.datatransfer"
+      "java.desktop"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.net.http"
+      "java.prefs"
+      "java.scripting"
+      "java.sql"
+      "java.sql.rowset"
+      "java.xml"
+      "jdk.httpserver"
+      "jdk.incubator.vector"
+      "jdk.jsobject"
+      "jdk.net"
+      "jdk.security.auth"
+      "jdk.unsupported"
+      "jdk.unsupported.desktop"
+      "jdk.xml.dom"
+    ];
+  };
   gradle = gradle_9;
   ltwaUrl = "https://www.issn.org/wp-content/uploads/2021/07/ltwa_20210702.csv";
   ltwa = fetchurl {
@@ -30,14 +56,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "6.0-alpha.3";
+  version = "6.0-alpha.4";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     tag = "v${version}";
-    hash = "sha256-ZX4LQe8xKZCDJqVh+L9BHkJK82Pz/qPhlaE8SrAin6o=";
+    hash = "sha256-ZhyWYZD8QT3dH6MwG2kMjTAjkxaVFIMR4C9aAvi3FJQ=";
     fetchSubmodules = true;
   };
 
@@ -62,10 +88,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -e '/vendor/d' -e '/JavaLanguageVersion/s/24/25/' build-logic/src/main/kotlin/org.jabref.gradle.feature.compile.gradle.kts
-    sed -i -e '/javafx-base/s/24.0.1/25/' build-support/src/main/java/*.java
-
-    substituteInPlace build-support/src/main/java/*.java \
-      --replace-fail 'JAVA 24' 'JAVA 25'
+    sed -i -e '/javafx-base/s/24.0.2/25/' build-support/src/main/java/*.java
+    sed -i -e 's/javafx = .*/javafx = "25"/' versions/build.gradle.kts
 
     sed -i -e '1a //REPOS file://${mitmCache}/https/repo.maven.apache.org/maven2,file://${mitmCache}/https/plugins.gradle.org/m2' build-support/src/main/java/*.java
 
@@ -135,8 +159,14 @@ stdenv.mkDerivation rec {
       tar xf $tarball -C $out --strip-components=1
     done
 
+    # Replace .so files with the ones from nixpkgs
+    cp ${openjfx}/modules_libs/javafx.graphics/*.so $out/lib
     # Temp fix: openjfx doesn't build with webkit
     unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
+
+    zip -d $out/lib/javafx-media-*-*.jar "*.so"
+    zip -d $out/lib/javafx-graphics-*-*.jar "*.so"
+    zip -d $out/lib/javafx-web-*-*.jar "*.so"
 
     # Use postgresql from nixpkgs since the bundled binary doesn't work on NixOS
     ARCH1=${if stdenv.isAarch64 then "arm64v8" else "amd64"}
@@ -169,7 +199,7 @@ stdenv.mkDerivation rec {
       rm $out/bin/$bin*
 
       # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
-      makeWrapper ${jdk}/bin/java $out/bin/$bin \
+      makeWrapper ${jre}/bin/java $out/bin/$bin \
         "''${gappsWrapperArgs[@]}" \
         --suffix PATH : ${
           lib.makeBinPath [
@@ -178,7 +208,7 @@ stdenv.mkDerivation rec {
           ]
         } \
         --add-flags "$DEFAULT_JVM_OPTS \
-          -Djava.library.path=$out/lib/:${openjfx}/modules_libs/javafx.graphics:${openjfx}/modules_libs/javafx.media \
+          -Djava.library.path=$out/lib/ \
           --module-path $MODULE_PATH \
           --module $MODULE"
     done
