@@ -134,6 +134,7 @@
   xf86-input-void,
   xf86-video-apm,
   xf86-video-ark,
+  xf86-video-ast,
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-s3virge,
@@ -350,6 +351,7 @@ self: with self; {
   xf86inputvoid = xf86-input-void;
   xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
+  xf86videoast = xf86-video-ast;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
@@ -586,44 +588,6 @@ self: with self; {
         libGL
         libdrm
         udev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoast = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-ast";
-      version = "1.2.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-ast-1.2.0.tar.xz";
-        sha256 = "14sx6dm0nmbf1fs8cazmak0aqjpjpv9wv7v09w86ff04m7f4gal6";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
         xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
