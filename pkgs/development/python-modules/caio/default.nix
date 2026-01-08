@@ -1,33 +1,30 @@
 {
   lib,
   stdenv,
-  aiomisc,
+  aiomisc-pytest,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-aiohttp,
-  pytest-asyncio_0,
-  pytest8_3CheckHook,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "caio";
-  version = "0.9.22";
+  version = "0.9.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "caio";
     tag = finalAttrs.version;
-    hash = "sha256-O86SLZ+8bzPYtvLnmY5gLPYLWvNaktQwIEQckJR15LI=";
+    hash = "sha256-uKQJWGYtBdpcfFD6yDKjIz0H0FEq4dmCP50sbVGYRGU=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    aiomisc
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
-    pytest8_3CheckHook
+    aiomisc-pytest
+    pytestCheckHook
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
