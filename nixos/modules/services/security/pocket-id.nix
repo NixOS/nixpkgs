@@ -143,6 +143,29 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = (
+      map
+        (
+          # Converted to assert 2026-01-08
+          setting: {
+            assertion = !(cfg.settings ? "${setting}");
+            message = ''
+              `services.pocket-id.settings.${setting}` is deprecated.
+              See [v1 migration guide](https://pocket-id.org/docs/setup/major-releases/migrate-v1).
+            '';
+          })
+        [
+          "PUBLIC_APP_URL"
+          "PUBLIC_UI_CONFIG_DISABLED"
+          "CADDY_DISABLED"
+          "CADDY_PORT"
+          "BACKEND_PORT"
+          "POSTGRES_CONNECTION_STRING"
+          "SQLITE_DB_PATH"
+          "INTERNAL_BACKEND_URL"
+        ]
+    );
+
     warnings =
       (concatMap
         (
@@ -156,26 +179,6 @@ in
           "MAXMIND_LICENSE_KEY"
           "SMTP_PASSWORD"
           "LDAP_BIND_PASSWORD"
-        ]
-      )
-      ++ (concatMap
-        (
-          # Added 2025-05-27
-          setting:
-          optional (cfg.settings ? "${setting}") ''
-            `services.pocket-id.settings.${setting}` is deprecated.
-            See [v1 migration guide](https://pocket-id.org/docs/setup/major-releases/migrate-v1).
-          ''
-        )
-        [
-          "PUBLIC_APP_URL"
-          "PUBLIC_UI_CONFIG_DISABLED"
-          "CADDY_DISABLED"
-          "CADDY_PORT"
-          "BACKEND_PORT"
-          "POSTGRES_CONNECTION_STRING"
-          "SQLITE_DB_PATH"
-          "INTERNAL_BACKEND_URL"
         ]
       )
       ++ (concatMap
