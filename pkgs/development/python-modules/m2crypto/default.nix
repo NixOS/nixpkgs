@@ -10,13 +10,13 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "m2crypto";
   version = "0.45.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0PyBqIKO2/QwhDKzBAvwa7JrrZWruefUaQthGFUeduw=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
-    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
