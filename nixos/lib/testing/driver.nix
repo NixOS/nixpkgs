@@ -14,12 +14,15 @@ let
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
     tesseract4 = hostPkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
+    # We want `pkgs.systemd`, *not* `python3Packages.system`.
+    systemd = hostPkgs.systemd;
   };
 
   vlans = map (
     m: (m.virtualisation.vlans ++ (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))
-  ) (lib.attrValues config.nodes);
+  ) ((lib.attrValues config.nodes) ++ (lib.attrValues config.containers));
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
+  containers = map (m: m.system.build.nspawn) (lib.attrValues config.containers);
 
   pythonizeName =
     name:
@@ -34,15 +37,27 @@ let
   vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
 
   vmMachineNames = map (c: c.system.name) (lib.attrValues config.nodes);
+  containerMachineNames = map (c: c.system.name) (lib.attrValues config.containers);
+  allMachineNames =
+    let
+      overlappingNames = lib.intersectLists vmMachineNames containerMachineNames;
+    in
+    assert (
+      lib.asserts.assertMsg (overlappingNames == [ ]) "vm names and container names must not overlap"
+    );
+    vmMachineNames ++ containerMachineNames;
 
   theOnlyMachine =
     let
       exactlyOneMachine = lib.length (lib.attrValues config.nodes) == 1;
     in
-    lib.optional (exactlyOneMachine && !lib.elem "machine" vmMachineNames) "machine";
+    lib.optional (exactlyOneMachine && !lib.elem "machine" allMachineNames) "machine";
 
   pythonizedVmNames = map pythonizeName (vmMachineNames ++ theOnlyMachine);
   vmMachineTypeHints = map (name: "${name}: QemuMachine;") pythonizedVmNames;
+
+  pythonizedContainerNames = map pythonizeName containerMachineNames;
+  containerMachineTypeHints = map (name: "${name}: NspawnMachine;") pythonizedContainerNames;
 
   withChecks = lib.warnIf config.skipLint "Linting is disabled";
 
@@ -67,11 +82,14 @@ let
 
         vmNames=(${lib.escapeShellArgs vmMachineNames})
         vmStartScripts=(${lib.escapeShellArgs (map lib.getExe vms)})
+        containerNames=(${lib.escapeShellArgs containerMachineNames})
+        containerStartScripts=(${lib.escapeShellArgs (map lib.getExe containers)})
 
         ${lib.optionalString (!config.skipTypeCheck) ''
           # prepend type hints so the test script can be type checked with mypy
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
           echo "${toString vmMachineTypeHints}" >> testScriptWithTypes
+          echo "${toString containerMachineTypeHints}" >> testScriptWithTypes
           echo "${toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
@@ -94,7 +112,9 @@ let
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipLint"
 
           PYFLAKES_BUILTINS="$(
-            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedVmNames)},
+            echo -n ${
+              lib.escapeShellArg (lib.concatStringsSep "," (pythonizedVmNames ++ pythonizedContainerNames))
+            },
             cat ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
@@ -104,6 +124,8 @@ let
         wrapProgram $out/bin/nixos-test-driver \
           --set vmStartScripts "''${vmStartScripts[*]}" \
           --set vmNames "''${vmNames[*]}" \
+          --set containerStartScripts "''${containerStartScripts[*]}" \
+          --set containerNames "''${containerNames[*]}" \
           --set testScript "$out/test-script" \
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \

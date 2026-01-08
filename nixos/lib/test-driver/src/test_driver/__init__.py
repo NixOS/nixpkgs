@@ -87,6 +87,22 @@ def main() -> None:
         help="start scripts for participating virtual machines",
     )
     arg_parser.add_argument(
+        "--container-names",
+        metavar="CONTAINER-NAME",
+        action=EnvDefault,
+        envvar="containerNames",
+        nargs="*",
+        help="names of participating containers",
+    )
+    arg_parser.add_argument(
+        "--container-start-scripts",
+        metavar="CONTAINER-START-SCRIPT",
+        action=EnvDefault,
+        envvar="containerStartScripts",
+        nargs="*",
+        help="start scripts for participating containers",
+    )
+    arg_parser.add_argument(
         "--vlans",
         metavar="VLAN",
         action=EnvDefault,
@@ -150,10 +166,16 @@ def main() -> None:
         assert len(args.vm_names) == len(args.vm_start_scripts), (
             f"the number of vm names and vm start scripts must be the same: {args.vm_names} vs. {args.vm_start_scripts}"
         )
+    if args.container_names is not None and args.container_start_scripts is not None:
+        assert len(args.container_names) == len(args.container_start_scripts), (
+            f"the number of container names and container start scripts must be the same: {args.container_names} vs. {args.container_start_scripts}"
+        )
 
     with Driver(
         vm_names=args.vm_names,
         vm_start_scripts=args.vm_start_scripts or [],
+        container_names=args.container_names,
+        container_start_scripts=args.container_start_scripts or [],
         vlans=args.vlans,
         tests=args.testscript.read_text(),
         out_dir=output_directory,
@@ -187,6 +209,8 @@ def generate_driver_symbols() -> None:
     d = Driver(
         vm_names=[],
         vm_start_scripts=[],
+        container_names=[],
+        container_start_scripts=[],
         vlans=[],
         tests="",
         out_dir=Path(),

@@ -56,11 +56,12 @@ in
               # reuse memoized config
               v
           ) config.nodesCompat;
+          containers = config.containers;
         }
       else
         config.testScript;
 
-    defaults =
+    nodeDefaults =
       { config, name, ... }:
       {
         # Make sure all derivations referenced by the test
