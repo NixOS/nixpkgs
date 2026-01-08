@@ -49,7 +49,7 @@ in
   ];
 
   ###### interface
-  options.services.kubernetes.apiserver = with lib.types; {
+  options.services.kubernetes.apiserver = let inherit (lib.types) nullOr str bool listOf enum attrs path separatedString attrsOf int; in {
 
     advertiseAddress = lib.mkOption {
       description = ''
@@ -164,26 +164,26 @@ in
       servers = lib.mkOption {
         description = "List of etcd servers.";
         default = [ "http://127.0.0.1:2379" ];
-        type = types.listOf types.str;
+        type = listOf str;
       };
 
       keyFile = lib.mkOption {
         description = "Etcd key file.";
         default = null;
-        type = types.nullOr types.path;
+        type = nullOr path;
       };
 
       certFile = lib.mkOption {
         description = "Etcd cert file.";
         default = null;
-        type = types.nullOr types.path;
+        type = nullOr path;
       };
 
       caFile = lib.mkOption {
         description = "Etcd ca file.";
         default = top.caFile;
         defaultText = lib.literalExpression "config.${otop.caFile}";
-        type = types.nullOr types.path;
+        type = nullOr path;
       };
     };
 
