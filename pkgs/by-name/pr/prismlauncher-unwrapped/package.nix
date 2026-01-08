@@ -5,55 +5,41 @@
   cmake,
   cmark,
   extra-cmake-modules,
-  fetchpatch2,
   gamemode,
-  ghc_filesystem,
   jdk17,
   kdePackages,
+  libarchive,
   ninja,
   nix-update-script,
+  qrencode,
   stripJavaArchivesHook,
   tomlplusplus,
   zlib,
   msaClientID ? null,
-  gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "23b955121b8217c1c348a9ed2483167a6f3ff4ad";
-    hash = "sha256-yy0q+bky80LtK1GWzz7qpM+aAGrOqLuewbid8WT1ilk=";
+    rev = "531449ba1c930c98e0bcf5d332b237a8566f9d78";
+    hash = "sha256-qhmjaRkt+O7A+gu6HjUkl7QzOEb4r8y8vWZMG2R/C6o=";
   };
 in
-assert lib.assertMsg (
-  gamemodeSupport -> stdenv.hostPlatform.isLinux
-) "gamemodeSupport is only available on Linux.";
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "9.4";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-q8ln54nepwbJhC212vGODaafsbOCtdXar7F2NacKWO4=";
+    hash = "sha256-wQ8+9mo4R88da/ZZcBSSvVmznl1GxIso3eynyZhkh7g=";
   };
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
     ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
-
-  patches = [
-    # https://github.com/PrismLauncher/PrismLauncher/pull/3622
-    # https://github.com/NixOS/nixpkgs/issues/400119
-    (fetchpatch2 {
-      name = "fix-qt6.9-compatibility.patch";
-      url = "https://github.com/PrismLauncher/PrismLauncher/commit/8bb9b168fb996df9209e1e34be854235eda3d42a.diff";
-      hash = "sha256-hOqWBrUrVUhMir2cfc10gu1i8prdNxefTyr7lH6KA2c=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -65,14 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmark
-    ghc_filesystem
     kdePackages.qtbase
     kdePackages.qtnetworkauth
-    kdePackages.quazip
+    libarchive
+    qrencode
     tomlplusplus
     zlib
   ]
-  ++ lib.optional gamemodeSupport gamemode;
+  ++ lib.optional stdenv.hostPlatform.isLinux gamemode;
 
   cmakeFlags = [
     # downstream branding
@@ -80,9 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (msaClientID != null) [
     (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
-  ]
-  ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
-    (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # we wrap our binary manually
