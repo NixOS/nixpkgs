@@ -36,9 +36,8 @@ let
         cfg.openTelemetry.grpcURL != null
       ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
     ))
-    ++ (lib.optionals cfg.prometheus.enable [
-      "--prometheus-enabled"
-    ])
+    ++ (lib.optional cfg.prometheus.enable "--prometheus-enabled")
+    ++ (lib.optional (!cfg.analytics.reporting.enable) "--analytics-reporting-enabled=false")
   );
 
   serveFlags = lib.concatStringsSep " " (
@@ -107,6 +106,14 @@ in
   options = {
     services.ncps = {
       enable = lib.mkEnableOption "ncps: Nix binary cache proxy service implemented in Go";
+
+      analytics.reporting.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Enable reporting anonymous usage statistics (DB type, Lock type, Total Size) to the project maintainers.
+        '';
+      };
 
       package = lib.mkPackageOption pkgs "ncps" { };
 
