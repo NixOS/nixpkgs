@@ -3,10 +3,10 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
   mashumaro,
   orjson,
-  poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pyportainer";
-  version = "1.0.16";
+  version = "1.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${version}";
-    hash = "sha256-sLjNCSPzEtws6mzvVYRPUq/TsJ6q4Oui5li6L0uU/Qg=";
+    hash = "sha256-rbRXrfORFxU0ar4scmAA1Rgaaci5zHSceItTwOOTogQ=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

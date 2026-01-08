@@ -10,6 +10,7 @@
   poetry-core,
 
   # dependencies
+  bumble,
   dbus-fast,
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
@@ -18,6 +19,7 @@
   async-timeout,
 
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -62,7 +64,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    bumble
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

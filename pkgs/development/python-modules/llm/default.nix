@@ -6,7 +6,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   replaceVars,
   setuptools,
@@ -250,13 +249,6 @@ let
       # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr
       # https://github.com/simonw/llm/issues/1293
       "test_embed_multi_files_encoding"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.14") [
-      # Index out of range
-      # https://github.com/simonw/llm/issues/1335
-      "test_logs_fragments"
-      "test_expand_fragment_json"
-      "test_expand_fragment_markdown"
     ];
 
     pythonImportsCheck = [ "llm" ];

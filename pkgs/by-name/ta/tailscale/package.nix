@@ -84,6 +84,9 @@ buildGoModule (finalAttrs: {
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
 
+  # Tests are in the `tests` passthru derivation because they are flaky, frequently causing build failures.
+  doCheck = false;
+
   preCheck = ''
     # feed in all tests for testing
     # subPackages above limits what is built to just what we
@@ -215,6 +218,7 @@ buildGoModule (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests) headscale;
     inherit tailscale-nginx-auth;
+    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
   meta = {
