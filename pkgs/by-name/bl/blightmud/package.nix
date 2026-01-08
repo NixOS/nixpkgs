@@ -35,6 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
+  env = lib.optionalAttrs (!stdenv.cc.isClang) {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   checkFlags =
     let
       # Most of Blightmud's unit tests pass without trouble in the isolated
