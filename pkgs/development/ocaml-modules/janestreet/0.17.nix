@@ -686,6 +686,27 @@ with self;
     ];
   };
 
+  hardcaml = janePackage {
+    pname = "hardcaml";
+    hash = "sha256-GfKU6Vdsgplf7FLX2IlD2a1zMdJKO/N4C60397eFLcU=";
+    meta.description = "Hardcaml is an OCaml library for designing hardware";
+    propagatedBuildInputs = [
+      bignum
+      bin_prot
+      core
+      core_kernel
+      jane_rope
+      ppx_compare
+      ppx_sexp_conv
+      sexplib
+      splittable_random
+      stdio
+      ppxlib_jane
+      ppx_jane
+    ];
+    doCheck = false; # hardcaml_waveterm as recursve checkInput dependency
+  };
+
   hex_encode = janePackage {
     pname = "hex_encode";
     hash = "sha256-5DqaCJllphdEreOpzAjT61qb3M6aN9b2xhiUjHVLrvE=";
