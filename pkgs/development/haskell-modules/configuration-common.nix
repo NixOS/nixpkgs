@@ -79,7 +79,7 @@ with haskellLib;
           }
         )
       );
-  Cabal_3_16_0_0 =
+  Cabal_3_16_1_0 =
     overrideCabal
       (drv: {
         # Revert increased lower bound on unix since we have backported
@@ -90,8 +90,8 @@ with haskellLib;
       })
       (
         doDistribute (
-          super.Cabal_3_16_0_0.override {
-            Cabal-syntax = self.Cabal-syntax_3_16_0_0;
+          super.Cabal_3_16_1_0.override {
+            Cabal-syntax = self.Cabal-syntax_3_16_1_0;
           }
         )
       );
@@ -113,8 +113,8 @@ with haskellLib;
       let
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_16_0_0;
-          Cabal-syntax = cself.Cabal-syntax_3_16_0_0;
+          Cabal = cself.Cabal_3_16_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
         };
       in
       {
