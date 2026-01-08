@@ -19,7 +19,9 @@
   qemu_test,
   setuptools,
   socat,
+  systemd,
   tesseract4,
+  util-linux,
   vde2,
 
   enableOCR ? false,
@@ -51,7 +53,9 @@ buildPythonApplication {
     netpbm
     qemu_pkg
     socat
+    util-linux
     vde2
+    systemd
   ]
   ++ lib.optionals enableOCR [
     imagemagick_light

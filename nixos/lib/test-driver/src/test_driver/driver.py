@@ -1,6 +1,7 @@
 import os
 import re
 import signal
+import subprocess
 import sys
 import tempfile
 import threading
@@ -16,7 +17,12 @@ from colorama import Style
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
-from test_driver.machine import BaseMachine, QemuMachine, retry
+from test_driver.machine import (
+    BaseMachine,
+    NspawnMachine,
+    QemuMachine,
+    retry,
+)
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
@@ -64,6 +70,7 @@ class Driver:
     tests: str
     vlans: list[VLan]
     vm_machines: list[QemuMachine]
+    container_machines: list[NspawnMachine]
     polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
@@ -74,6 +81,8 @@ class Driver:
         self,
         vm_names: list[str] | None,
         vm_start_scripts: list[str],
+        container_names: list[str] | None,
+        container_start_scripts: list[str],
         vlans: list[int],
         tests: str,
         out_dir: Path,
@@ -112,10 +121,75 @@ class Driver:
             )
         ]
 
+        if len(container_start_scripts) > 0:
+            self._init_nspawn_environment()
+
+        self.container_machines = [
+            NspawnMachine(
+                name=name,
+                start_command=container_start_script,
+                tmp_dir=tmp_dir,
+                logger=self.logger,
+                keep_vm_state=keep_vm_state,
+                callbacks=[self.check_polling_conditions],
+                out_dir=self.out_dir,
+            )
+            for name, container_start_script in zip(
+                container_names or (len(container_start_scripts) * [None]),
+                container_start_scripts,
+            )
+        ]
+
+    def _init_nspawn_environment(self) -> None:
+        assert os.geteuid() == 0, (
+            f"systemd-nspawn requires root to work. You are {os.geteuid()}"
+        )
+
+        # set up prerequisites for systemd-nspawn containers.
+        # these are not guaranteed to be set up in the Nix sandbox.
+        # if running interactively as root, these will already be set up.
+
+        # check if /run is writable by root
+        if not os.access("/run", os.W_OK):
+            Path("/run").mkdir(parents=True, exist_ok=True)
+            subprocess.run(["mount", "-t", "tmpfs", "none", "/run"], check=True)
+            Path("/run/netns").mkdir(parents=True, exist_ok=True)
+
+        # check if /var/run is a symlink to /run
+        if not (os.path.exists("/var/run") and os.path.samefile("/var/run", "/run")):
+            Path("/var").mkdir(parents=True, exist_ok=True)
+            subprocess.run(["ln", "-s", "/run", "/var/run"], check=True)
+
+        # check if /sys/fs/cgroup is mounted as cgroup2
+        with open("/proc/mounts", encoding="utf-8") as mounts:
+            for line in mounts:
+                parts = line.split()
+                if len(parts) >= 3 and parts[1] == "/sys/fs/cgroup":
+                    if parts[2] == "cgroup2":
+                        break
+            else:
+                Path("/sys/fs/cgroup").mkdir(parents=True, exist_ok=True)
+                subprocess.run(
+                    ["mount", "-t", "cgroup2", "none", "/sys/fs/cgroup"], check=True
+                )
+
+        # ensure /etc/os-release exists
+        if not os.path.isfile("/etc/os-release"):
+            subprocess.run(["touch", "/etc/os-release"], check=True)
+
+        # ensure /etc/machine-id exists and is non-empty
+        if (
+            not os.path.isfile("/etc/machine-id")
+            or os.path.getsize("/etc/machine-id") == 0
+        ):
+            subprocess.run(
+                ["systemd-machine-id-setup"], check=True
+            )  # set up /etc/machine-id
+
     @property
-    def machines(self) -> list[QemuMachine]:
-        machines = self.vm_machines
-        # Sort the machines by name for consistency with `nodes` in <nixos/lib/testing/network.nix>.
+    def machines(self) -> list[QemuMachine | NspawnMachine]:
+        machines = self.vm_machines + self.container_machines
+        # Sort the machines by name for consistency with `nodesAndContainers` in <nixos/lib/testing/network.nix>.
         machines.sort(key=lambda machine: machine.name)
         return machines
 
@@ -155,6 +229,7 @@ class Driver:
             start_all=self.start_all,
             test_script=self.test_script,
             vm_machines=self.vm_machines,
+            container_machines=self.container_machines,
             vlans=self.vlans,
             driver=self,
             log=self.logger,
@@ -286,13 +361,16 @@ class Driver:
         *,
         name: str | None = None,
         keep_vm_state: bool = False,
-    ) -> QemuMachine:
+    ) -> BaseMachine:
+        """
+        Create a `QemuMachine`. This currently only supports qemu "nodes", not containers.
+        """
         tmp_dir = get_tmp_dir()
 
         return QemuMachine(
-            start_command=start_command,
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
+            start_command=start_command,
             name=name,
             keep_vm_state=keep_vm_state,
             logger=self.logger,
