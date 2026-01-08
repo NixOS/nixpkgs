@@ -4148,6 +4148,8 @@ self: super: with self; {
 
   django-currentuser = callPackage ../development/python-modules/django-currentuser { };
 
+  django-dbbackup = callPackage ../development/python-modules/django-dbbackup { };
+
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
   django-dynamic-preferences =
