@@ -2,8 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  fetchurl,
+  fetchFromGitLab,
   openssl,
   pytestCheckHook,
   pythonOlder,
@@ -18,9 +17,12 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
+  src = fetchFromGitLab {
     inherit pname version;
-    hash = "sha256-0PyBqIKO2/QwhDKzBAvwa7JrrZWruefUaQthGFUeduw=";
+    owner = "m2crypto";
+    repo = "m2crypto";
+    tag = version;
+    hash = "sha256-jg7XcYE7oTOkePDJPXyM/X+vE8F2pIvJbwrVj6KJ3eM=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +46,14 @@ buildPythonPackage rec {
     pytestCheckHook
     openssl
   ];
+
+  disabledTests = [
+    # Connection refused
+    "test_makefile_err"
+  ];
+
+  # Tests require localhost access
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "M2Crypto" ];
 
