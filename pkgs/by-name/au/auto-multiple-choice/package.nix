@@ -32,6 +32,10 @@ let
       CairoGObject
       DBDSQLite
       DBI
+      EmailAddress
+      EmailMIME
+      EmailSender
+      EmailSimple
       Glib
       GlibObjectIntrospection
       Gtk3
