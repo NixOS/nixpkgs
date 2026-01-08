@@ -58,12 +58,19 @@ logFailure() {
 evalConfig() {
     local attr=$1
     shift
-    local script="import ./default.nix { modules = [ $* ];}"
+
+    local nix_args=()
+
     if [ "${ABORT_ON_WARN-0}" = "1" ]; then
-      local-nix-instantiate --option abort-on-warn true -E "$script" -A "$attr"
-    else
-      local-nix-instantiate -E "$script" -A "$attr"
+        nix_args+=(--option abort-on-warn true)
     fi
+
+    if [ "${STRICT_EVAL-0}" = "1" ]; then
+        nix_args+=(--strict)
+    fi
+
+    local script="import ./default.nix { modules = [ $* ];}"
+    local-nix-instantiate "${nix_args[@]}" -E "$script" -A "$attr"
 }
 
 reportFailure() {
