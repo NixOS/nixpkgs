@@ -5450,6 +5450,8 @@ self: super: with self; {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fitbit-web-api = callPackage ../development/python-modules/fitbit-web-api { };
+
   fitdecode = callPackage ../development/python-modules/fitdecode { };
 
   fitfile = callPackage ../development/python-modules/fitfile { };
