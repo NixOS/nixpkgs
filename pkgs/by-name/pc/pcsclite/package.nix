@@ -68,8 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "libudev" false)
   ];
 
-  # disable building pcsc-wirecheck{,-gen} when cross compiling
-  # see also: https://github.com/LudovicRousseau/PCSC/issues/25
   postPatch = ''
     substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
       --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
