@@ -135,6 +135,7 @@
   xf86-video-apm,
   xf86-video-ark,
   xf86-video-ast,
+  xf86-video-ati,
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-s3virge,
@@ -352,6 +353,7 @@ self: with self; {
   xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
   xf86videoast = xf86-video-ast;
+  xf86videoati = xf86-video-ati;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
@@ -588,52 +590,6 @@ self: with self; {
         libGL
         libdrm
         udev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoati = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libgbm,
-      libGL,
-      libdrm,
-      udev,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-ati";
-      version = "22.0.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-ati-22.0.0.tar.xz";
-        sha256 = "0vdznwx78alhbb05paw2xd65hcsila2kqflwwnbpq8pnsdbbpj68";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libgbm
-        libGL
-        libdrm
-        udev
-        libpciaccess
         xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

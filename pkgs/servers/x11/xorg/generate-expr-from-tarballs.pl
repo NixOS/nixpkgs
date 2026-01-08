@@ -467,6 +467,7 @@ print OUT <<EOF;
   xf86-video-apm,
   xf86-video-ark,
   xf86-video-ast,
+  xf86-video-ati,
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-s3virge,
@@ -684,6 +685,7 @@ self: with self; {
   xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
   xf86videoast = xf86-video-ast;
+  xf86videoati = xf86-video-ati;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
