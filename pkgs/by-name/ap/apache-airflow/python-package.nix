@@ -208,7 +208,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
-  build-system = [ hatchling ];
+  build-system = [
+    gitdb
+    gitpython
+    hatchling
+    packaging
+    pathspec
+    pluggy
+    smmap
+    tomli
+    trove-classifiers
+  ];
 
   dependencies = [
     alembic
@@ -224,8 +234,6 @@ buildPythonPackage rec {
     flask-login
     flask-session
     fsspec
-    gitdb
-    gitpython
     gunicorn
     lazy-object-proxy
     linkify-it-py
@@ -234,25 +242,19 @@ buildPythonPackage rec {
     methodtools
     opentelemetry-api
     opentelemetry-exporter-otlp
-    packaging
     pandas
-    pathspec
     pendulum
-    pluggy
     psutil
     python-daemon
     python-nvd3
     python-slugify
     rich-argparse
     setproctitle
-    smmap
     sqlalchemy
     sqlalchemy-jsonfield
     tabulate
     tenacity
     termcolor
-    tomli
-    trove-classifiers
     universal-pathlib
   ]
   ++ providerPackages;
