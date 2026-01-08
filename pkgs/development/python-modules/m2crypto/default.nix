@@ -58,6 +58,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 })
