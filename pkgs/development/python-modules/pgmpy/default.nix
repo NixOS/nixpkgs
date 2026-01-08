@@ -24,7 +24,7 @@
   pytest-cov-stub,
   mock,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgmpy";
   version = "1.0.0";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pgmpy";
     repo = "pgmpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WmRtek3lN7vEfXqoaZDiaNjMQ7R2PmJ/OEwxOV7m5sE=";
   };
 
@@ -81,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Library for learning (Structure and Parameter), inference (Probabilistic and Causal), and simulations in Bayesian Networks";
     homepage = "https://github.com/pgmpy/pgmpy";
-    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})
