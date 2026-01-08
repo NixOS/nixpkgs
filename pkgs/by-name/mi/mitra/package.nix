@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   # require running database
   doCheck = false;
 
-  RUSTFLAGS = [
+  env.RUSTFLAGS = toString [
     # MEMO: mitra use ammonia crate with unstable rustc flag
     "--cfg=ammonia_unstable"
   ];

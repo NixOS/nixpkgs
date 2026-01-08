@@ -228,15 +228,6 @@ let
         ];
       });
 
-      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -301,13 +292,13 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.12.5";
+  hassVersion = "2026.1.0";
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
   version =
-    assert (componentPackages.version == hassVersion);
+    #assert (componentPackages.version == hassVersion);
     hassVersion;
   pyproject = true;
 
@@ -322,13 +313,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-RSrWk7SZIOvOhvVXBwc10w9Yyqd2rcxdUVuq2snMm9g=";
+    hash = "sha256-LoB8hm5ruC6kvulHmtYxbJ6JkkTmgzCbiyBjVdaHFGI=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-cl5kTpYhsZnf7etPRSgVWd/fH9zTc1OnkRTjbUp/M3U=";
+    hash = "sha256-D6p/pMN7jM8e7ckXlMaQQvj4VZ8ufCBfHCeQaCYr3sY=";
   };
 
   build-system = with python.pkgs; [

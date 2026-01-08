@@ -77,14 +77,18 @@ rustPlatform.buildRustPackage rec {
     wayland
   ];
 
-  # force linking to all the dlopen()ed dependencies
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lfontconfig"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
+  env = {
+    # force linking to all the dlopen()ed dependencies
+    RUSTFLAGS = toString (
+      map (a: "-C link-arg=${a}") [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lfontconfig"
+        "-lwayland-client"
+        "-Wl,--pop-state"
+      ]
+    );
+  };
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
