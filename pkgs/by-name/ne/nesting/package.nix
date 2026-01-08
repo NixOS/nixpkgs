@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nesting";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org/fleeting";
     repo = "nesting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W4Pv990X3R4ksHGfwycdTYvUfjwm5sxh0AeoG9EZ/0A=";
+    hash = "sha256-Cdn01R1Jr2npqeKrA8CiC6r85LNfQvq0EONrmMPY0ds=";
   };
 
-  vendorHash = "sha256-YYHiyNg15VdijyrR5t1PwIjHWXmofHcVD6YMrbwn4Qk=";
+  vendorHash = "sha256-PjsS+lTEuReA+alzZsrx6c7JIPaZldgGi/a/Xh4k5w4=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
