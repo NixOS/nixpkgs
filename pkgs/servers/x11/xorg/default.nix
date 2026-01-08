@@ -134,6 +134,7 @@
   xf86-input-void,
   xf86-video-ark,
   xf86-video-geode,
+  xf86-video-i128,
   xf86-video-nouveau,
   xf86-video-s3virge,
   xf86-video-v4l,
@@ -349,6 +350,7 @@ self: with self; {
   xf86inputvoid = xf86-input-void;
   xf86videoark = xf86-video-ark;
   xf86videogeode = xf86-video-geode;
+  xf86videoi128 = xf86-video-i128;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
   xf86videov4l = xf86-video-v4l;
@@ -846,44 +848,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.1.tar.xz";
         sha256 = "11zk8whari4m99ad3w30xwcjkgya4xbcpmg8710q14phkbxw0aww";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoi128 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-i128";
-      version = "1.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-i128-1.4.1.tar.xz";
-        sha256 = "0imwmkam09wpp3z3iaw9i4hysxicrrax7i3p0l2glgp3zw9var3h";
       };
       hardeningDisable = [
         "bindnow"
