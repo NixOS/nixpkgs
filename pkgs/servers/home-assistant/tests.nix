@@ -144,6 +144,7 @@ let
     unifiprotect = getComponentDeps "camera";
     universal = getComponentDeps "camera" ++ getComponentDeps "conversation";
     uvc = getComponentDeps "camera";
+    vivotek = getComponentDeps "camera";
     voicerss = getComponentDeps "tts";
     weather = getComponentDeps "conversation";
     websocket_api = getComponentDeps "camera" ++ getComponentDeps "conversation";

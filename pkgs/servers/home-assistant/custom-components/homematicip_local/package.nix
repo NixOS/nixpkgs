@@ -13,13 +13,13 @@
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-lbmhC2vpHWGLweTXlpA9Bz8kO4SsxtcL7xzDfmOl4S0=";
+    hash = "sha256-BlA3PAR8tJZbYqzlt5iah7BY2LnVyfNnKm8NxjrPJ2c=";
   };
 
   postPatch = ''
