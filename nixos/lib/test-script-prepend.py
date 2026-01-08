@@ -4,7 +4,7 @@
 from test_driver.debug import DebugAbstract
 from test_driver.driver import Driver
 from test_driver.vlan import VLan
-from test_driver.machine import BaseMachine, QemuMachine
+from test_driver.machine import BaseMachine, NspawnMachine, QemuMachine
 from test_driver.logger import AbstractLogger
 from typing import Callable, Iterator, ContextManager, Optional, List, Dict, Any, Union
 from typing_extensions import Protocol

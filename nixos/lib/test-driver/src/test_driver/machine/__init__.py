@@ -1,5 +1,6 @@
 import base64
 import io
+import json
 import os
 import platform
 import queue
@@ -16,6 +17,7 @@ import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Generator
 from contextlib import _GeneratorContextManager, contextmanager, nullcontext
+from functools import cached_property
 from pathlib import Path
 from queue import Queue
 from typing import Any
@@ -218,7 +220,6 @@ class BaseMachine(ABC):
     name: str
     callbacks: list[Callable]
     tmp_dir: Path
-
     keep_vm_state: bool
 
     def __repr__(self) -> str:
@@ -239,7 +240,7 @@ class BaseMachine(ABC):
         self.callbacks = callbacks if callbacks is not None else []
         self.tmp_dir = tmp_dir
 
-        # Note: "vm" is a bit of a misnomer here.
+        # Note: "vm" is a bit of a misnomer here as we support both QEMU vms and nspawn containers.
         # Consider renaming to something more generic ("machine"?)
         self.keep_vm_state = keep_vm_state
 
@@ -269,26 +270,13 @@ class BaseMachine(ABC):
         return self.logger.nested(msg, my_attrs)
 
     @abstractmethod
-    def is_up(self) -> bool:
-        """
-        Check whether the machine is running.
-        """
-        pass
+    def is_up(self) -> bool: ...
 
     @abstractmethod
-    def start(self) -> None:
-        """
-        Start the machine.
-        """
-        pass
+    def start(self) -> None: ...
 
     @abstractmethod
-    def wait_for_shutdown(self) -> None:
-        """
-        Wait for the machine to power off. This does *not* initiate a shutdown;
-        that's usually done via `shutdown()`.
-        """
-        pass
+    def wait_for_shutdown(self) -> None: ...
 
     def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
         """
@@ -1421,3 +1409,174 @@ class QemuMachine(BaseMachine):
         )
         self.connected = False
         self.connect()
+
+
+class NspawnMachine(BaseMachine):
+    """
+    A handle to a systemd-nspawn container machine with this name, that also
+    knows how to manage the machine lifecycle with the help of a start script / command.
+    """
+
+    start_command: str
+    tmp_dir: Path
+    process: subprocess.Popen | None
+    pid: int | None
+
+    @staticmethod
+    def machine_name_from_start_command(start_command: str) -> str:
+        match = re.search("run-(.+)-nspawn", os.path.basename(start_command))
+        assert match is not None, f"Could not extract node name from {start_command}"
+        return match.group(1)
+
+    def __init__(
+        self,
+        out_dir: Path,
+        name: str | None,
+        start_command: str,
+        tmp_dir: Path,
+        logger: AbstractLogger,
+        callbacks: list[Callable] | None = None,
+        keep_vm_state: bool = False,
+    ):
+        # TODO: don't compute `name` from `start_command` path, instead thread it down explicitly.
+        # See analogous TODO in `QemuStartCommand::machine_name`.
+        super().__init__(
+            out_dir=out_dir,
+            name=name or self.machine_name_from_start_command(start_command),
+            logger=logger,
+            callbacks=callbacks,
+            tmp_dir=tmp_dir,
+            keep_vm_state=keep_vm_state,
+        )
+
+        self.start_command = start_command
+        self.process = None
+        self.pid = None
+
+    def ssh_backdoor_command(self, index: int) -> str:
+        # get IP from `ip addr` inside the container:
+        ip_status, ip_output = self._execute("ip -j addr show")
+        assert ip_status == 0, "Failed to get IP addresses from container"
+        ip_output_data = json.loads(ip_output)
+        ip_addresses = [
+            addr_info.get("local")
+            for iface in ip_output_data
+            if iface.get("ifname") != "lo"
+            for addr_info in iface.get("addr_info", [])
+            if addr_info.get("family") == "inet"
+        ]
+
+        return "\n".join(f"ssh -o User=root {addr}" for addr in ip_addresses)
+
+    def release(self) -> None:
+        if self.pid is None:
+            return
+
+        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
+        assert self.process is not None
+        self.process.terminate()
+        self.process = None
+
+    def is_up(self) -> bool:
+        return self.process is not None
+
+    @cached_property
+    def get_systemd_process(self) -> int:
+        assert self.process is not None, "Machine not started"
+        assert self.process.stdout is not None, "Machine has no stdout"
+
+        systemd_nspawn_pid = None
+        for line_bytes in self.process.stdout:
+            line = line_bytes.decode()
+            print(line, end="")
+
+            systemd_nspawn_pid_prefix = "systemd-nspawn's PID is "
+            if line.startswith(systemd_nspawn_pid_prefix):
+                systemd_nspawn_pid = int(line.removeprefix(systemd_nspawn_pid_prefix))
+
+            if (
+                line.startswith("systemd[1]: Startup finished in")
+                or "Welcome to NixOS" in line
+            ):
+                assert systemd_nspawn_pid is not None, "Must find systemd-nspawn PID"
+                break
+        else:
+            raise RuntimeError(f"Failed to start container {self.name}")
+
+        childs = (
+            Path(f"/proc/{systemd_nspawn_pid}/task/{systemd_nspawn_pid}/children")
+            .read_text()
+            .split()
+        )
+        assert len(childs) == 1, (
+            f"Expected exactly one child process for systemd-nspawn, got {childs}"
+        )
+        (child,) = childs
+
+        try:
+            return int(child)
+        except ValueError as e:
+            raise RuntimeError(f"Failed to parse child process id {child}") from e
+
+    def _execute(
+        self,
+        command: str,
+        check_return: bool = True,
+        check_output: bool = True,
+        timeout: int | None = 900,
+    ) -> tuple[int, str]:
+        self.start()
+
+        container_pid = self.get_systemd_process
+        nsenter = shutil.which("nsenter")
+        assert nsenter is not None
+
+        # Pull in /etc/profile, and some shell sanity.
+        command = f"set -eo pipefail; source /etc/profile; set -xu; {command}"
+        cp = subprocess.run(
+            [
+                nsenter,
+                "--target",
+                str(container_pid),
+                "--mount",
+                "--uts",
+                "--ipc",
+                "--net",
+                "--pid",
+                "--cgroup",
+                "/bin/sh",
+                "-c",
+                command,
+            ],
+            env={},
+            timeout=timeout,
+            stdout=subprocess.PIPE,
+            text=True,
+        )
+        return (cp.returncode, cp.stdout)
+
+    def start(self) -> None:
+        if self.process is not None:
+            return
+
+        self.process = subprocess.Popen(
+            [self.start_command],
+            env={
+                "RUN_NSPAWN_ROOT_DIR": str(self.state_dir),
+                "RUN_NSPAWN_SHARED_DIR": str(self.shared_dir),
+            },
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+
+        self.pid = self.process.pid
+
+        self.log(f"system-nspawn running (pid {self.pid})")
+
+    def wait_for_shutdown(self) -> None:
+        if self.process is None:
+            return
+
+        with self.nested("waiting for the container to power off"):
+            self.process.wait()
+            self.process = None
