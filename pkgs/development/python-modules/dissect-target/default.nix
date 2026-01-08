@@ -34,6 +34,7 @@
   paho-mqtt,
   pycryptodome,
   pytestCheckHook,
+  pythonAtLeast,
   ruamel-yaml,
   setuptools,
   setuptools-scm,
@@ -54,6 +55,8 @@ buildPythonPackage rec {
     hash = "sha256-i1oA7UVo880dHJkf19YRcmPV3Lwp1a8RokfRNDZ9gG0=";
     fetchLFS = true;
   };
+
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
