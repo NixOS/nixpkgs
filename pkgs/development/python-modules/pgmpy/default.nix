@@ -83,6 +83,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/pgmpy/pgmpy";
     changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      sarahec
+    ];
   };
 })
