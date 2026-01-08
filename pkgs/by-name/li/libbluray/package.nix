@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   stdenv,
   fetchurl,
   pkg-config,
@@ -22,15 +21,12 @@
   libbluray-full, # Used for tests
 }:
 
-# Info on how to use:
-# https://wiki.archlinux.org/index.php/BluRay
-
 stdenv.mkDerivation rec {
   pname = "libbluray";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.xz";
+    url = "https://get.videolan.org/libbluray/${version}/libbluray-${version}.tar.xz";
     hash = "sha256-d5N7rwfq3aSysxHPOvTFAmnS6jFlBB9YQ9lkdsTJJ3c=";
   };
 
@@ -63,18 +59,19 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withMetadata) "-dlibxml2=disabled"
     ++ lib.optional (!withFonts) "-Dfreetype=disabled";
 
-  meta = {
-    homepage = "http://www.videolan.org/developers/libbluray.html";
-    description = "Library to access Blu-Ray disks for video playback";
-    license = lib.licenses.lgpl21;
-    maintainers = [ ];
-    platforms = lib.platforms.unix;
-  };
-
   passthru = {
     tests = {
       # Verify the "full" package when verifying changes to this package
       inherit libbluray-full;
     };
+  };
+
+  meta = {
+    homepage = "http://www.videolan.org/developers/libbluray.html";
+    description = "Library to access Blu-Ray disks for video playback";
+    longDescription = "See <https://wiki.archlinux.org/title/Blu-ray> hot to use";
+    license = lib.licenses.lgpl21;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }
