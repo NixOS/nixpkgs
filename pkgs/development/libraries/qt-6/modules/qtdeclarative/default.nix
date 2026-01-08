@@ -58,13 +58,18 @@ qtModule {
   ];
 
   cmakeFlags = [
-    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
+    # QtQuick (and related modules) are only built if the build-machine `qsb` tool is found
+    # (see qtdeclarative's `src/CMakeLists.txt` gating on `TARGET Qt::qsb`).
+    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
     # for some reason doesn't get found automatically on Darwin
     "-DPython_EXECUTABLE=${lib.getExe pkgsBuildBuild.python3}"
   ]
   # Conditional is required to prevent infinite recursion during a cross build
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
+    # Required for cross builds: qtdeclarative builds host tools (e.g. `svgtoqml`) via
+    # `qt_internal_find_tool()` which locates them in the host-side Qt6QuickTools package.
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
   ];
 
   meta.maintainers = with lib.maintainers; [
