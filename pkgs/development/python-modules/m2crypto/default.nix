@@ -2,8 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  fetchurl,
+  fetchFromGitLab,
   openssl,
   pytestCheckHook,
   setuptools,
@@ -15,9 +14,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.45.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-0PyBqIKO2/QwhDKzBAvwa7JrrZWruefUaQthGFUeduw=";
+  src = fetchFromGitLab {
+    owner = "m2crypto";
+    repo = "m2crypto";
+    tag = finalAttrs.version;
+    hash = "sha256-jg7XcYE7oTOkePDJPXyM/X+vE8F2pIvJbwrVj6KJ3eM=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +42,14 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     openssl
   ];
+
+  disabledTests = [
+    # Connection refused
+    "test_makefile_err"
+  ];
+
+  # Tests require localhost access
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "M2Crypto" ];
 
