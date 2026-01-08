@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   # Use rust nightly features
-  env.RUSTC_BOOTSTRAP = 1;
+  RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
     cmake

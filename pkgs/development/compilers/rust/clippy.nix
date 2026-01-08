@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [ rustc.llvm ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
-  env.RUSTC_BOOTSTRAP = 1;
+  RUSTC_BOOTSTRAP = 1;
 
   # Without disabling the test the build fails with:
   # error: failed to run custom build command for `rustc_llvm v0.0.0
