@@ -148,6 +148,7 @@
   xf86-video-geode,
   xf86-video-i128,
   xf86-video-i740,
+  xf86-video-intel,
   xf86-video-mga,
   xf86-video-neomagic,
   xf86-video-nouveau,
@@ -397,6 +398,7 @@ self: with self; {
   xf86videogeode = xf86-video-geode;
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;
+  xf86videointel = xf86-video-intel;
   xf86videomga = xf86-video-mga;
   xf86videoneomagic = xf86-video-neomagic;
   xf86videonouveau = xf86-video-nouveau;
@@ -417,76 +419,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videointel = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      cairo,
-      xorgproto,
-      libdrm,
-      libpng,
-      udev,
-      libpciaccess,
-      libX11,
-      xcbutil,
-      libxcb,
-      libXcursor,
-      libXdamage,
-      libXext,
-      libXfixes,
-      xorgserver,
-      libXrandr,
-      libXrender,
-      libxshmfence,
-      libXtst,
-      libXvMC,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-intel";
-      version = "2.99.917";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2";
-        sha256 = "1jb7jspmzidfixbc0gghyjmnmpqv85i7pi13l4h2hn2ml3p83dq0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        cairo
-        xorgproto
-        libdrm
-        libpng
-        udev
-        libpciaccess
-        libX11
-        xcbutil
-        libxcb
-        libXcursor
-        libXdamage
-        libXext
-        libXfixes
-        xorgserver
-        libXrandr
-        libXrender
-        libxshmfence
-        libXtst
-        libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonv = callPackage (
