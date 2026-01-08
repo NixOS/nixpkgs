@@ -41,19 +41,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CSI6GrTDBoYR6RFAQvgNjwzkMk8oXatEMpsv5FYB5eE=";
   };
 
-  patches = [
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # Disable schema presence detection, it would fail because it cannot be autopatched,
-    # and it will be hardcoded by the next patch anyway.
-    ./skip-gsettings-detection.patch
+  patches =
+    # On Windows/MinGW, libproxy loads backend modules via the DLL search path.
+    # Installing the backend into bindir makes it discoverable at runtime (MSYS2 does this).
+    lib.optionals stdenv.hostPlatform.isMinGW [
+      ./install-backend-bindir.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # Disable schema presence detection, it would fail because it cannot be autopatched,
+      # and it will be hardcoded by the next patch anyway.
+      ./skip-gsettings-detection.patch
 
-    # Hardcode path to Settings schemas for GNOME & related desktops.
-    # Otherwise every app using libproxy would need to be wrapped individually.
-    (replaceVars ./hardcode-gsettings.patch {
-      gds = glib.getSchemaPath gsettings-desktop-schemas;
-    })
-  ];
+      # Hardcode path to Settings schemas for GNOME & related desktops.
+      # Otherwise every app using libproxy would need to be wrapped individually.
+      (replaceVars ./hardcode-gsettings.patch {
+        gds = glib.getSchemaPath gsettings-desktop-schemas;
+      })
+    ];
 
   postPatch = ''
     # Fix running script that will try to install git hooks.
@@ -98,7 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dconfig-gnome=false"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Don't try to run tests when the build machine can't execute host binaries
+  # (e.g. MinGW cross builds).
+  doCheck = !stdenv.hostPlatform.isDarwin && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -132,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
     license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
     badPlatforms = [
       # Mandatory libpxbackend-1.0 shared library.
       lib.systems.inspect.platformPatterns.isStatic

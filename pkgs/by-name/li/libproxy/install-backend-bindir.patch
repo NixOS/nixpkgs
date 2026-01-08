@@ -1,0 +1,13 @@
+--- a/src/backend/meson.build
++++ b/src/backend/meson.build
+@@ -38,8 +38,7 @@
+   dependencies: px_backend_deps,
+   c_args: px_backend_c_args,
+   install: true,
+-  install_dir: pkglibdir,
+-  install_rpath: pkglibdir
++  install_dir: get_option('bindir')
+ )
+ 
+ px_backend_dep = declare_dependency(
+
