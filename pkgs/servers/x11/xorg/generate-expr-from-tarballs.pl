@@ -475,6 +475,7 @@ print OUT <<EOF;
   xf86-video-ati,
   xf86-video-chips,
   xf86-video-cirrus,
+  xf86-video-dummy,
   xf86-video-geode,
   xf86-video-i128,
   xf86-video-i740,
@@ -722,6 +723,7 @@ self: with self; {
   xf86videoati = xf86-video-ati;
   xf86videochips = xf86-video-chips;
   xf86videocirrus = xf86-video-cirrus;
+  xf86videodummy = xf86-video-dummy;
   xf86videogeode = xf86-video-geode;
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;

@@ -55,23 +55,9 @@
   mesa-gl-headers,
   dri-pkgconfig-stub,
 }:
-
-let
-  inherit (stdenv.hostPlatform) isDarwin;
-
-  brokenOnDarwin =
-    pkg:
-    pkg.overrideAttrs (attrs: {
-      meta = attrs.meta // {
-        broken = isDarwin;
-      };
-    });
-in
 self: super:
 {
   mkfontdir = xorg.mkfontscale;
-
-  xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
   xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
