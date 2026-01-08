@@ -126,6 +126,7 @@ def mk_veth(
 def run(
     container_name: str,
     root_dir_str: str,
+    shared_dir_str: typing.Optional[str],
     interfaces: dict,
     nspawn_options: list[str],
     init: str,
@@ -166,12 +167,19 @@ def run(
                 flush=True,
             )
 
+        shared_dir = Path(shared_dir_str) if shared_dir_str else None
+
         cp = subprocess.Popen(
             [
                 "@systemd-nspawn@",
                 *nspawn_options,
                 f"--directory={root_dir}",
                 f"--network-namespace-path={netns.path}",
+                *(
+                    [f"--bind={shared_dir}:/tmp/shared"]
+                    if shared_dir is not None
+                    else []
+                ),
                 init,
                 *cmdline,
             ],
@@ -219,6 +227,11 @@ def main():
         help="Path to container root directory (overridable with RUN_NSPAWN_ROOT_DIR)",
     )
     arg_parser.add_argument(
+        "--shared-dir",
+        required=False,
+        help="Path to a shared directory to bind-mount into the container at /tmp/shared (overridable with RUN_NSPAWN_SHARED_DIR)",
+    )
+    arg_parser.add_argument(
         "--interfaces-json",
         dest="interfaces",
         type=json.loads,
@@ -239,6 +252,7 @@ def main():
     run(
         container_name=args.container_name,
         root_dir_str=os.getenv("RUN_NSPAWN_ROOT_DIR", default=args.root_dir),
+        shared_dir_str=os.getenv("RUN_NSPAWN_SHARED_DIR", default=args.shared_dir),
         interfaces=args.interfaces,
         nspawn_options=nspawn_options,
         init=args.init,
