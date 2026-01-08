@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open h.265 video codec implementation";
     mainProgram = "dec265";
     license = lib.licenses.lgpl3;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
   };
 })
