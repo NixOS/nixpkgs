@@ -1,4 +1,4 @@
-use anyhow::{anyhow, bail, Context};
+use anyhow::{Context, anyhow, bail};
 use lock::UrlOrString;
 use log::debug;
 use rayon::prelude::*;
@@ -7,7 +7,7 @@ use std::{
     io::Write,
     process::{Command, Stdio},
 };
-use tempfile::{tempdir, TempDir};
+use tempfile::{TempDir, tempdir};
 use url::Url;
 
 use crate::util;
@@ -28,7 +28,9 @@ pub fn lockfile(content: &str, force_empty_cache: bool) -> anyhow::Result<Vec<Pa
         .collect::<anyhow::Result<Vec<_>>>()?;
 
     if packages.is_empty() && !force_empty_cache {
-        bail!("No cacheable dependencies were found. Please inspect the upstream `package-lock.json` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it via a tool like <https://github.com/jeslie0/npm-lockfile-fix>. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`.");
+        bail!(
+            "No cacheable dependencies were found. Please inspect the upstream `yarn.lock` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`."
+        );
     }
 
     Ok(packages)
@@ -57,7 +59,7 @@ impl Package {
             UrlOrString::Url(u) => u,
             UrlOrString::String(_) => panic!("at this point, all packages should have URLs"),
         };
-        let mut filename: String = "".to_string();
+        let filename;
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
@@ -163,10 +165,7 @@ impl Package {
                     "-C",
                 ])
                 .arg(workdir.path().join("package"))
-                .args([
-                    "-c",
-                    ".",
-                ])
+                .args(["-c", "."])
                 .output()?
                 .stdout),
         }
@@ -288,7 +287,9 @@ fn get_hosted_git_url(url: &Url) -> anyhow::Result<Option<Url>> {
 
         match get_url() {
             Some(u) => Ok(Some(u)),
-            None => Err(anyhow!("This lockfile either contains a Git dependency with an unsupported host, or a malformed URL in the lockfile: {url}"))
+            None => Err(anyhow!(
+                "This lockfile either contains a Git dependency with an unsupported host, or a malformed URL in the lockfile: {url}"
+            )),
         }
     } else {
         Ok(None)
@@ -305,15 +306,17 @@ mod tests {
         for (input, expected) in [
             (
                 "git+ssh://git@github.com/castlabs/electron-releases.git#fc5f78d046e8d7cdeb66345a2633c383ab41f525",
-                Some("https://codeload.github.com/castlabs/electron-releases/tar.gz/fc5f78d046e8d7cdeb66345a2633c383ab41f525"),
+                Some(
+                    "https://codeload.github.com/castlabs/electron-releases/tar.gz/fc5f78d046e8d7cdeb66345a2633c383ab41f525",
+                ),
             ),
             (
                 "git+ssh://bitbucket.org/foo/bar#branch",
-                Some("https://bitbucket.org/foo/bar/get/branch.tar.gz")
+                Some("https://bitbucket.org/foo/bar/get/branch.tar.gz"),
             ),
             (
                 "git+ssh://git.sr.ht/~foo/bar#branch",
-                Some("https://git.sr.ht/~foo/bar/archive/branch.tar.gz")
+                Some("https://git.sr.ht/~foo/bar/archive/branch.tar.gz"),
             ),
         ] {
             assert_eq!(

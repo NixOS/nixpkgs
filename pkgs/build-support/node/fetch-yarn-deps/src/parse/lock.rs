@@ -2,7 +2,7 @@ use anyhow::{anyhow, bail};
 use rayon::slice::ParallelSliceMut;
 use std::{cmp::Ordering, collections::HashSet, fmt, string::String};
 use url::Url;
-use yarn_lock_parser::{parse_str, Lockfile};
+use yarn_lock_parser::{Lockfile, parse_str};
 
 pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
     let lockfile: Lockfile = parse_str(&content)?;
@@ -21,7 +21,7 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
                         _ => p.integrity,
                     };
                     match HashCollection::from_str(h) {
-                        Ok(Collection) => Some(Collection),
+                        Ok(collection) => Some(collection),
                         Err(_) => None
                     }
                 },
@@ -125,7 +125,7 @@ impl Hash {
             .ok_or_else(|| anyhow!("expected SRI hash, got {:?}", s.as_ref()))?
             .0;
 
-        if ALGOS.iter().any(|&a| algo == a) {
+        if ALGOS.contains(&algo) {
             Ok(Hash(s.as_ref().to_string()))
         } else {
             Err(anyhow!("unknown hash algorithm {algo:?}"))
@@ -164,7 +164,7 @@ impl Ord for Hash {
 
 #[cfg(test)]
 mod tests {
-    use super::{packages, Hash, HashCollection, Package, UrlOrString};
+    use super::{Hash, HashCollection, UrlOrString, packages};
     use std::{cmp::Ordering, collections::HashSet};
     use url::Url;
 
