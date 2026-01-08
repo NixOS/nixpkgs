@@ -177,6 +177,22 @@ in
           "SQLITE_DB_PATH"
           "INTERNAL_BACKEND_URL"
         ]
+      )
+      ++ (concatMap
+        (
+          # Added 2026-01-08
+          setting:
+          optional (cfg.settings ? "${setting}") ''
+            `services.pocket-id.settings.${setting}` is deprecated.
+            See [v2 migration guide](https://pocket-id.org/docs/setup/major-releases/migrate-v2).
+          ''
+        )
+        [
+          "DB_PROVIDER"
+          "KEYS_PATH"
+          "KEYS_STORAGE"
+          "LDAP_ATTRIBUTE_ADMIN_GROUP"
+        ]
       );
 
     systemd.tmpfiles.rules = [

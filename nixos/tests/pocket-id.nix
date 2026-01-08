@@ -36,7 +36,6 @@ in
           enable = true;
           settings = {
             PORT = 10001;
-            DB_PROVIDER = "postgres";
             DB_CONNECTION_STRING = "host=/run/postgresql user=${username} database=${username}";
           };
           credentials = {

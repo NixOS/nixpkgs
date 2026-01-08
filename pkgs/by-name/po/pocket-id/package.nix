@@ -12,18 +12,18 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.16.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2tGd/gl0Pm5b5GfkTsChvZoWov4dwljwqDcitX5NKCY=";
+    hash = "sha256-tBjo5evQVRG0oembk1VfAfM3M/FJ4zPWV/9vgAWH9Kc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-ttbiuYRWbn8KRZtg499R4NF/E9+B+fOylxZcMwNg69M=";
+  vendorHash = "sha256-hMhOG/2xnI/adjg8CnA0tRBD8/OFDsTloFXC8iwxlV0=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -56,8 +56,8 @@ buildGo125Module (finalAttrs: {
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 1;
-      hash = "sha256-drXGcUHP7J7keGra7/x1tr9Pfh/wjzmtUE1yAybYXLQ=";
+      fetcherVersion = 3;
+      hash = "sha256-jhlHrekVk0sNLwo8LFQY6bgX9Ic0xbczM6UTzmZTnPI=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
