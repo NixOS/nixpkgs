@@ -58,6 +58,8 @@ in
       services.ncps = {
         enable = true;
 
+        analytics.reporting.enable = false;
+
         cache = {
           hostName = "ncps";
 
