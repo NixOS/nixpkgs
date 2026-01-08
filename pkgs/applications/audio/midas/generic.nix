@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     vmTools.debClosureGenerator {
       name = "x32edit-dependencies";
       inherit (distro) urlPrefix;
-      packagesLists = [ distro.packagesList ];
+      packagesLists = [ distro.packagesLists ];
       packages = [
         "libstdc++6"
         "libcurl4"
