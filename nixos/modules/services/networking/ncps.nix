@@ -202,7 +202,7 @@ in
         };
 
         secretKeyPath = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
+          type = lib.types.nullOr lib.types.path;
           default = null;
           description = ''
             The path to load the secretKey for signing narinfos. Leave this
@@ -212,7 +212,7 @@ in
 
         storage = {
           local = lib.mkOption {
-            type = lib.types.str;
+            type = lib.types.path;
             default = "/var/lib/ncps";
             description = ''
               The local directory for storing configuration and cached store
@@ -257,14 +257,14 @@ in
                   };
 
                   accessKeyIdPath = lib.mkOption {
-                    type = lib.types.str;
+                    type = lib.types.path;
                     description = ''
                       The path to a file containing only the access-key-id.
                     '';
                   };
 
                   secretAccessKeyPath = lib.mkOption {
-                    type = lib.types.str;
+                    type = lib.types.path;
                     description = ''
                       The path to a file containing only the secret-access-key.
                     '';
@@ -280,7 +280,7 @@ in
         };
 
         tempPath = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.path;
           default = "/tmp";
           description = ''
             The path to the temporary directory that is used by the cache to download NAR files
@@ -347,7 +347,7 @@ in
       };
 
       netrcFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/etc/nix/netrc";
         description = ''
