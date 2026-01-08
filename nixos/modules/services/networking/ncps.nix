@@ -119,6 +119,12 @@ in
       [ "services" "ncps" "upstream" "publicKeys" ]
       [ "services" "ncps" "cache" "upstream" "publicKeys" ]
     )
+
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ncps"
+      "dbmatePackage"
+    ] "dbmate is now wrapped within ncps package, you need to override ncps to change dbmate package")
   ];
 
   options = {
@@ -134,8 +140,6 @@ in
       };
 
       package = lib.mkPackageOption pkgs "ncps" { };
-
-      dbmatePackage = lib.mkPackageOption pkgs "dbmate" { };
 
       openTelemetry = {
         enable = lib.mkEnableOption "Enable OpenTelemetry logs, metrics, and tracing";
@@ -501,7 +505,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ${lib.getExe cfg.dbmatePackage} --migrations-dir=${cfg.package}/share/ncps/db/migrations/sqlite --url=${cfg.cache.databaseURL} up
+        ${cfg.package}/bin/dbmate-ncps --url="${cfg.cache.databaseURL}" up
       '';
 
       serviceConfig = lib.mkMerge [
