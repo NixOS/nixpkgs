@@ -45,7 +45,10 @@ stdenv.mkDerivation {
     '';
     # license unknown: https://github.com/guysherman/jack-passthrough/issues/2
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ PowerUser64 l1npengtul ];
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "jack-passthru";
   };
