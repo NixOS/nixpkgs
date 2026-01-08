@@ -1,17 +1,16 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   logfury,
   annotated-types,
   packaging,
   pdm-backend,
-  pyfakefs,
   pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   responses,
@@ -52,6 +51,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "test/unit"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # -     'could not be accessed (no permissions to read?)',
+    # +     'could not be accessed (broken symlink?)',
+    "test_dir_without_exec_permission"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];
