@@ -14,6 +14,7 @@
   rustc,
   versionCheckHook,
   nix-update-script,
+  tsgolint,
 }:
 
 # Build with pnpm instead of buildRustPackage because Prettier integration
@@ -89,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp npm/oxfmt/configuration_schema.json $outPath/
 
     makeWrapper ${lib.getExe nodejs-slim} $out/bin/oxfmt \
+      --prefix PATH : "${lib.makeBinPath [ tsgolint ]}" \
       --add-flags $outPath/dist/cli.js
 
     runHook postInstall
