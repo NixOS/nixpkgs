@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yacreader";
-  version = "9.15.0";
+  version = "9.16.3";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = "yacreader";
     tag = version;
-    hash = "sha256-5vCjr8WRwa7Q/84Itgg07K1CJKGnWA1z53et2IxxReE=";
+    hash = "sha256-3mLmH6HJnH+LH/NkqI4G8Si5od3YiWnQ/kv5rmPFhlE=";
   };
 
   patches = [
