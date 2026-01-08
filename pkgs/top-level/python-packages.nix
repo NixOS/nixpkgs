@@ -11459,6 +11459,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy
       { };
 
+  opentelemetry-instrumentation-sqlite3 =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-sqlite3
+      { };
+
   opentelemetry-instrumentation-system-metrics =
     callPackage ../development/python-modules/opentelemetry-instrumentation-system-metrics
       { };
