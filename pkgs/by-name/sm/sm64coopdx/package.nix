@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = finalAttrs.pname;
-      desktopName = "Super Mario 64 Coop Deluxe";
+      desktopName = "sm64coopdx";
       exec = "sm64coopdx";
       icon = finalAttrs.pname;
       categories = [ "Game" ];
