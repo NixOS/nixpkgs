@@ -4324,6 +4324,8 @@ self: super: with self; {
 
   django-storages = callPackage ../development/python-modules/django-storages { };
 
+  django-structlog = callPackage ../development/python-modules/django-structlog { };
+
   django-stubs = callPackage ../development/python-modules/django-stubs { };
 
   django-stubs-ext = callPackage ../development/python-modules/django-stubs-ext { };
