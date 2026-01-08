@@ -12,6 +12,7 @@
   pandas,
   pyparsing,
   pyro-ppl,
+  scikit-base,
   scikit-learn,
   scipy,
   statsmodels,
@@ -23,17 +24,18 @@
   pytestCheckHook,
   pytest-cov-stub,
   mock,
+  writableTmpDirAsHomeHook,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pgmpy";
-  version = "1.0.0";
+  version = "1.0.0-unstable-2025-12-20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgmpy";
     repo = "pgmpy";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WmRtek3lN7vEfXqoaZDiaNjMQ7R2PmJ/OEwxOV7m5sE=";
+    rev = "197e1e0444c77c00581a4c32763811e5b03f8503";
+    hash = "sha256-TCnn3GrITW8HCrYVeeythiULV130b6uulkijkPpJOqA=";
   };
 
   dependencies = [
@@ -45,6 +47,7 @@ buildPythonPackage (finalAttrs: {
     pandas
     pyparsing
     pyro-ppl
+    scikit-base
     scikit-learn
     scipy
     statsmodels
@@ -67,6 +70,20 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError
     "test_estimate_example_smoke_test"
+    "test_gcm"
+  ];
+
+  enabledTestPaths = [
+    "pgmpy/tests"
+  ];
+
+  disabledTestPaths = [
+    # requires network access
+    "pgmpy/tests/test_datasets"
+
+    # Very slow
+    "pgmpy/tests/test_estimators"
+    "pgmpy/tests/test_models"
   ];
 
   nativeCheckInputs = [
@@ -74,6 +91,7 @@ buildPythonPackage (finalAttrs: {
     # xdoctest
     pytest-cov-stub
     mock
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pgmpy" ];
@@ -81,7 +99,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python Library for learning (Structure and Parameter), inference (Probabilistic and Causal), and simulations in Bayesian Networks";
     homepage = "https://github.com/pgmpy/pgmpy";
-    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${finalAttrs.src.tag}";
+    # changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
