@@ -684,6 +684,8 @@ let
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
       FS_ENCRYPTION = yes;
+      FS_VERITY = yes;
+      FS_VERITY_BUILTIN_SIGNATURES = yes;
 
       EXT2_FS_XATTR = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -795,6 +797,12 @@ let
       # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
       # This does not have any effect if a program does not support it
       SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
+
+      # IPE (Integrity Policy Enforcement) - LSM that can enforce file integrity based on
+      # fs-verity measurements or dm-verity. Useful for verified boot and immutable /nix/store.
+      SECURITY_IPE = whenAtLeast "6.12" yes;
+      IPE_PROP_FS_VERITY = whenAtLeast "6.12" yes;
+      IPE_PROP_FS_VERITY_BUILTIN_SIG = whenAtLeast "6.12" yes;
 
       DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
 

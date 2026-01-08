@@ -1,3 +1,5 @@
+# Linux-specific base builder.
+
 {
   stdenv,
   lib,
@@ -23,18 +25,20 @@
 {
   pname,
   product,
-  productShort ? product,
+  productShort,
   version,
   src,
   wmClass,
-  buildNumber,
   jdk,
   meta,
+  passthru,
+
   libdbm,
   fsnotifier,
+
   extraLdPath ? [ ],
   extraWrapperArgs ? [ ],
-  extraBuildInputs ? [ ],
+  buildInputs ? [ ],
   ...
 }@args:
 
@@ -47,13 +51,18 @@ in
 with stdenv;
 lib.makeOverridable mkDerivation (
   rec {
-    inherit pname version src;
-    passthru.buildNumber = buildNumber;
-    passthru.tests = args.passthru.tests;
+    inherit
+      pname
+      version
+      src
+      buildInputs
+      passthru
+      ;
     meta = args.meta // {
       mainProgram = pname;
     };
 
+    # FIXME: Do not use meta attributes, see README (`TODO` section)
     desktopItem = makeDesktopItem {
       name = pname;
       exec = pname;
@@ -74,7 +83,6 @@ lib.makeOverridable mkDerivation (
       unzip
       autoPatchelfHook
     ];
-    buildInputs = extraBuildInputs;
 
     postPatch = ''
       rm -rf jbr

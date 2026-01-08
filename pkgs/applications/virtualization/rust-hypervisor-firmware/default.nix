@@ -44,13 +44,14 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249
   auditable = false;
 
-  RUSTC_BOOTSTRAP = 1;
+  env = {
+    RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "-C linker=lld -C linker-flavor=ld.lld";
+  };
 
   nativeBuildInputs = [
     lld
   ];
-
-  RUSTFLAGS = "-C linker=lld -C linker-flavor=ld.lld";
 
   # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
   doCheck = false;
