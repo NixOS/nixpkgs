@@ -5676,6 +5676,8 @@ self: super: with self; {
 
   flowmc = callPackage ../development/python-modules/flowmc { };
 
+  flowsint-types = callPackage ../development/python-modules/flowsint-types { };
+
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
   fluent-pygments = callPackage ../development/python-modules/python-fluent/fluent-pygments.nix { };
