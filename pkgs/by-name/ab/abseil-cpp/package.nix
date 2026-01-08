@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   gtest,
+  windows,
   static ? stdenv.hostPlatform.isStatic,
   cxxStandard ? null,
 }:
@@ -32,7 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gtest ];
+  buildInputs = [
+    gtest
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    # Abseil uses pthread APIs on MinGW (see thread_identity.cc), so provide
+    # winpthreads headers/libs.
+    windows.pthreads
+  ];
 
   meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
