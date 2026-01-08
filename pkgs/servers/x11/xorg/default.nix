@@ -137,6 +137,7 @@
   xf86-video-ast,
   xf86-video-ati,
   xf86-video-chips,
+  xf86-video-cirrus,
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-s3virge,
@@ -356,6 +357,7 @@ self: with self; {
   xf86videoast = xf86-video-ast;
   xf86videoati = xf86-video-ati;
   xf86videochips = xf86-video-chips;
+  xf86videocirrus = xf86-video-cirrus;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
@@ -592,44 +594,6 @@ self: with self; {
         libGL
         libdrm
         udev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videocirrus = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-cirrus";
-      version = "1.6.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-cirrus-1.6.0.tar.xz";
-        sha256 = "00b468w01hqjczfqz42v2vqhb14db4wazcqi1w29lgfyhc0gmwqf";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
         xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
