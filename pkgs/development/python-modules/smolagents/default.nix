@@ -47,13 +47,14 @@
   # tests
   ipython,
   pytest-datadir,
+  pytest-timeout,
   pytestCheckHook,
   wikipedia-api,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "smolagents";
-  version = "1.21.3";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -129,6 +130,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     wikipedia-api
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ pytest-timeout ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
@@ -173,6 +175,16 @@ buildPythonPackage (finalAttrs: {
     "test_init_agent_with_different_toolsets"
     "test_multiagents_save"
     "test_new_instance"
+
+    # Requires optional "blaxel" dependencies
+    "test_blaxel_executor_instantiation_with_blaxel_sdk"
+    "test_blaxel_executor_custom_parameters"
+    "test_blaxel_executor_cleanup"
+    # Requires optional "modal" dependencies
+    "test_sandbox_lifecycle"
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+
   ];
 
   __darwinAllowLocalNetworking = true;
