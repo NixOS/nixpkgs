@@ -51,7 +51,7 @@ def main() -> None:
 
     class_definitions = (node for node in module.body if isinstance(node, ast.ClassDef))
 
-    machine_class = next(filter(lambda x: x.name == "Machine", class_definitions))
+    machine_class = next(filter(lambda x: x.name == "BaseMachine", class_definitions))
     assert machine_class is not None
 
     function_definitions = [

@@ -71,10 +71,18 @@ def main() -> None:
         help="Enable interactive debugging breakpoints for sandboxed runs",
     )
     arg_parser.add_argument(
-        "--start-scripts",
-        metavar="START-SCRIPT",
+        "--vm-names",
+        metavar="VM-NAME",
         action=EnvDefault,
-        envvar="startScripts",
+        envvar="vmNames",
+        nargs="*",
+        help="names of participating virtual machines",
+    )
+    arg_parser.add_argument(
+        "--vm-start-scripts",
+        metavar="VM-START-SCRIPT",
+        action=EnvDefault,
+        envvar="vmStartScripts",
         nargs="*",
         help="start scripts for participating virtual machines",
     )
@@ -138,14 +146,20 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
+    if args.vm_names is not None and args.vm_start_scripts is not None:
+        assert len(args.vm_names) == len(args.vm_start_scripts), (
+            f"the number of vm names and vm start scripts must be the same: {args.vm_names} vs. {args.vm_start_scripts}"
+        )
+
     with Driver(
-        args.start_scripts,
-        args.vlans,
-        args.testscript.read_text(),
-        output_directory,
-        logger,
-        args.keep_vm_state,
-        args.global_timeout,
+        vm_names=args.vm_names,
+        vm_start_scripts=args.vm_start_scripts or [],
+        vlans=args.vlans,
+        tests=args.testscript.read_text(),
+        out_dir=output_directory,
+        logger=logger,
+        keep_vm_state=args.keep_vm_state,
+        global_timeout=args.global_timeout,
         debug=debugger,
     ) as driver:
         if offset := args.dump_vsocks:
@@ -170,7 +184,14 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "", Path(), CompositeLogger([]))
+    d = Driver(
+        vm_names=[],
+        vm_start_scripts=[],
+        vlans=[],
+        tests="",
+        out_dir=Path(),
+        logger=CompositeLogger([]),
+    )
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))

@@ -4,7 +4,7 @@
 from test_driver.debug import DebugAbstract
 from test_driver.driver import Driver
 from test_driver.vlan import VLan
-from test_driver.machine import Machine
+from test_driver.machine import BaseMachine, QemuMachine
 from test_driver.logger import AbstractLogger
 from typing import Callable, Iterator, ContextManager, Optional, List, Dict, Any, Union
 from typing_extensions import Protocol
@@ -35,7 +35,7 @@ class CreateMachineProtocol(Protocol):
         *,
         name: Optional[str] = None,
         keep_vm_state: bool = False,
-    ) -> Machine:
+    ) -> BaseMachine:
         raise Exception("This is just type information for the Nix test driver")
 
 
@@ -43,7 +43,7 @@ start_all: Callable[[], None]
 subtest: Callable[[str], ContextManager[None]]
 retry: RetryProtocol
 test_script: Callable[[], None]
-machines: List[Machine]
+machines: List[BaseMachine]
 vlans: List[VLan]
 driver: Driver
 log: AbstractLogger
