@@ -1,0 +1,21 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6329,6 +6329,8 @@
+ endif()
+ 
+ 
++if(gRPC_BUILD_CODEGEN)
++
+ add_library(grpc_plugin_support
+   src/compiler/cpp_generator.cc
+   src/compiler/csharp_generator.cc
+@@ -6426,6 +6428,8 @@
+   )
+ endif()
+ 
++endif()
++
+ 
+ # grpcpp_channelz doesn't build with protobuf-lite
+ # See https://github.com/grpc/grpc/issues/19473
+

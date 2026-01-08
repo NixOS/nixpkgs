@@ -1,0 +1,179 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2141,20 +2141,22 @@
+   SOVERSION ${gRPC_CORE_SOVERSION}
+ )
+ 
+-if(WIN32 AND MSVC)
+-  set_target_properties(gpr PROPERTIES COMPILE_PDB_NAME "gpr"
+-    COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+-  )
++if(WIN32)
+   if(BUILD_SHARED_LIBS)
+     target_compile_definitions(gpr
+     PRIVATE
+       "GPR_DLL_EXPORTS"
+     )
+   endif()
+-  if(gRPC_INSTALL)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpr.pdb
+-      DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
+-    )
++  if(MSVC)
++    set_target_properties(gpr PROPERTIES COMPILE_PDB_NAME "gpr"
++      COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
++    )
++    if(gRPC_INSTALL)
++      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpr.pdb
++        DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
++      )
++    endif()
+   endif()
+ endif()
+ 
+@@ -3083,10 +3085,7 @@
+   SOVERSION ${gRPC_CORE_SOVERSION}
+ )
+ 
+-if(WIN32 AND MSVC)
+-  set_target_properties(grpc PROPERTIES COMPILE_PDB_NAME "grpc"
+-    COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+-  )
++if(WIN32)
+   if(BUILD_SHARED_LIBS)
+     target_compile_definitions(grpc
+     PRIVATE
+@@ -3094,10 +3093,15 @@
+       "GPR_DLL_IMPORTS"
+     )
+   endif()
+-  if(gRPC_INSTALL)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc.pdb
+-      DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
+-    )
++  if(MSVC)
++    set_target_properties(grpc PROPERTIES COMPILE_PDB_NAME "grpc"
++      COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
++    )
++    if(gRPC_INSTALL)
++      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc.pdb
++        DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
++      )
++    endif()
+   endif()
+ endif()
+ 
+@@ -3779,10 +3783,7 @@
+   SOVERSION ${gRPC_CORE_SOVERSION}
+ )
+ 
+-if(WIN32 AND MSVC)
+-  set_target_properties(grpc_unsecure PROPERTIES COMPILE_PDB_NAME "grpc_unsecure"
+-    COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+-  )
++if(WIN32)
+   if(BUILD_SHARED_LIBS)
+     target_compile_definitions(grpc_unsecure
+     PRIVATE
+@@ -3790,10 +3791,15 @@
+       "GPR_DLL_IMPORTS"
+     )
+   endif()
+-  if(gRPC_INSTALL)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc_unsecure.pdb
+-      DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
+-    )
++  if(MSVC)
++    set_target_properties(grpc_unsecure PROPERTIES COMPILE_PDB_NAME "grpc_unsecure"
++      COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
++    )
++    if(gRPC_INSTALL)
++      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc_unsecure.pdb
++        DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
++      )
++    endif()
+   endif()
+ endif()
+ 
+@@ -3810,6 +3816,7 @@
+     ${_gRPC_XXHASH_INCLUDE_DIR}
+     ${_gRPC_ZLIB_INCLUDE_DIR}
+ )
++find_package(OpenSSL REQUIRED)
+ target_link_libraries(grpc_unsecure
+   ${_gRPC_ALLTARGETS_LIBRARIES}
+   upb_mini_descriptor_lib
+@@ -3834,6 +3841,8 @@
+   ${_gRPC_CARES_LIBRARIES}
+   gpr
+   ${_gRPC_ADDRESS_SORTING_LIBRARIES}
++  grpc
++  OpenSSL::SSL
+ )
+ if(_gRPC_PLATFORM_IOS OR _gRPC_PLATFORM_MAC)
+   target_link_libraries(grpc_unsecure "-framework CoreFoundation")
+ endif()
+
+@@ -4644,10 +4653,7 @@
+   SOVERSION ${gRPC_CPP_SOVERSION}
+ )
+ 
+-if(WIN32 AND MSVC)
+-  set_target_properties(grpc++ PROPERTIES COMPILE_PDB_NAME "grpc++"
+-    COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+-  )
++if(WIN32)
+   if(BUILD_SHARED_LIBS)
+     target_compile_definitions(grpc++
+     PRIVATE
+@@ -4656,10 +4662,15 @@
+       "GRPC_DLL_IMPORTS"
+     )
+   endif()
+-  if(gRPC_INSTALL)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc++.pdb
+-      DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
+-    )
++  if(MSVC)
++    set_target_properties(grpc++ PROPERTIES COMPILE_PDB_NAME "grpc++"
++      COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
++    )
++    if(gRPC_INSTALL)
++      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc++.pdb
++        DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
++      )
++    endif()
+   endif()
+ endif()
+ 
+@@ -5390,10 +5401,7 @@
+   SOVERSION ${gRPC_CPP_SOVERSION}
+ )
+ 
+-if(WIN32 AND MSVC)
+-  set_target_properties(grpc++_unsecure PROPERTIES COMPILE_PDB_NAME "grpc++_unsecure"
+-    COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+-  )
++if(WIN32)
+   if(BUILD_SHARED_LIBS)
+     target_compile_definitions(grpc++_unsecure
+     PRIVATE
+@@ -5402,10 +5410,15 @@
+       "GRPC_DLL_IMPORTS"
+     )
+   endif()
+-  if(gRPC_INSTALL)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc++_unsecure.pdb
+-      DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
+-    )
++  if(MSVC)
++    set_target_properties(grpc++_unsecure PROPERTIES COMPILE_PDB_NAME "grpc++_unsecure"
++      COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
++    )
++    if(gRPC_INSTALL)
++      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/grpc++_unsecure.pdb
++        DESTINATION ${gRPC_INSTALL_LIBDIR} OPTIONAL
++      )
++    endif()
+   endif()
+ endif()
