@@ -16490,6 +16490,12 @@
     githubId = 2075353;
     name = "Matt Polzin";
   };
+  mattrobenolt = {
+    email = "m@robenolt.com";
+    github = "mattrobenolt";
+    githubId = 375744;
+    name = "Matt Robenolt";
+  };
   MattSturgeon = {
     email = "matt@sturgeon.me.uk";
     github = "MattSturgeon";
