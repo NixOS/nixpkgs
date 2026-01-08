@@ -21,6 +21,7 @@
   nix-update-script,
   pname ? "pcsclite",
   polkitSupport ? false,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -110,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      nixos = nixosTests.pcsclite;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
