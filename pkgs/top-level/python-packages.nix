@@ -4189,6 +4189,8 @@ self: super: with self; {
 
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
+  django-money = callPackage ../development/python-modules/django-money { };
+
   django-mptt = callPackage ../development/python-modules/django-mptt { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
