@@ -60,7 +60,10 @@ let
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-hzeioXrO9kdFFTGhhY4klrCxRgS1eoGY7+7fTGsN4cY=";
+    hash = "sha256-r1RB6vtG2mdRJifaKNrmQvxJxXOqkpHoWivvPPpesow=";
+    postCheckout = ''
+      git -C "$out" show -s --format=%ct > "$out"/GIT_COMMIT_TIME
+    '';
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -127,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     # it at runtime.
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+
+    # https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace ts/util/version.std.ts \
+      --replace-fail 'isAdhoc(version)' 'true'
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -148,8 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1766066770;
   };
+
+  preConfigure = ''
+    export SOURCE_DATE_EPOCH=`cat GIT_COMMIT_TIME`
+  '';
 
   preBuild = ''
     if [ "`jq -r '.engines.node' < package.json | cut -d. -f1`" != "${lib.versions.major nodejs.version}" ]
