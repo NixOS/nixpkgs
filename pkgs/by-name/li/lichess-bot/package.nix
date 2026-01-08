@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication {
@@ -42,6 +43,12 @@ python3Packages.buildPythonApplication {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--disable_auto_logging";
+  doInstallCheck = true;
 
   meta = {
     description = "Bridge between lichess.org and bots";
