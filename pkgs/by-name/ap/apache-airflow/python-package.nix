@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  writeScript,
   writableTmpDirAsHomeHook,
 
   # javascript
@@ -298,27 +297,7 @@ buildPythonPackage rec {
     "bash_operator_kill" # psutil.AccessDenied
   ];
 
-  # Updates yarn.lock and package.json
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl "python3.withPackages (ps: with ps; [ pyyaml ])" yarn2nix
-
-    set -euo pipefail
-
-    # Get new version
-    new_version="$(curl -s https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html |
-      grep -oE 'Airflow [0-9.]+' | head -1 | grep -oE '[0-9.]+')"
-    update-source-version ${pname} "$new_version"
-
-    # Update frontend
-    cd ./pkgs/servers/apache-airflow
-    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
-    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
-    yarn2nix > yarn.nix
-
-    # update provider dependencies
-    ./update-providers.py
-  '';
+  passthru.updateScript = ./update.sh;
 
   # Note on testing the web UI:
   # You can (manually) test the web UI as follows:
