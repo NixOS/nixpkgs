@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--workspace"
   ];
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   doCheck = false;
 
