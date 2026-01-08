@@ -16,7 +16,7 @@ from test_driver.logger import (
 
 
 class EnvDefault(argparse.Action):
-    """An argpars Action that takes values from the specified
+    """An argparse Action that takes values from the specified
     environment variable as the flags default value.
     """
 
