@@ -27,12 +27,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   env.YARN_ENABLE_SCRIPTS = 0;
 
+  preConfigure = ''
+    printYarnErrors() {
+      cat /build/*.log
+    }
+    failureHooks+=(printYarnErrors)
+  '';
+
   postConfigure = ''
     substituteInPlace .ember-cli \
       --replace-fail "../http/web_ui" "$out"
   '';
 
-  buildPhase = "yarn run ember build --environment=production";
+  buildPhase = ''
+    runHook preBuild
+    yarn run ember build --environment=production
+    runHook postBuild
+  '';
 
   dontInstall = true;
+
+  meta = (builtins.removeAttrs openbao.meta [ "mainProgram" ]) // {
+    description = openbao.meta.description + " - web UI";
+  };
 })
