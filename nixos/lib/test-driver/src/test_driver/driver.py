@@ -16,7 +16,7 @@ from colorama import Style
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
-from test_driver.machine import Machine, NixStartScript, retry
+from test_driver.machine import BaseMachine, QemuMachine, retry
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
@@ -63,7 +63,7 @@ class Driver:
 
     tests: str
     vlans: list[VLan]
-    machines: list[Machine]
+    vm_machines: list[QemuMachine]
     polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
@@ -72,7 +72,8 @@ class Driver:
 
     def __init__(
         self,
-        start_scripts: list[str],
+        vm_names: list[str] | None,
+        vm_start_scripts: list[str],
         vlans: list[int],
         tests: str,
         out_dir: Path,
@@ -94,24 +95,29 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
 
-        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
-            for s in scripts:
-                yield NixStartScript(s)
-
         self.polling_conditions = []
 
-        self.machines = [
-            Machine(
-                start_command=cmd,
+        self.vm_machines = [
+            QemuMachine(
+                name=name,
+                start_command=vm_start_script,
                 keep_vm_state=keep_vm_state,
-                name=cmd.machine_name,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
                 logger=self.logger,
             )
-            for cmd in cmd(start_scripts)
+            for name, vm_start_script in zip(
+                vm_names or (len(vm_start_scripts) * [None]), vm_start_scripts
+            )
         ]
+
+    @property
+    def machines(self) -> list[QemuMachine]:
+        machines = self.vm_machines
+        # Sort the machines by name for consistency with `nodes` in <nixos/lib/testing/network.nix>.
+        machines.sort(key=lambda machine: machine.name)
+        return machines
 
     def __enter__(self) -> "Driver":
         return self
@@ -148,7 +154,7 @@ class Driver:
         general_symbols = dict(
             start_all=self.start_all,
             test_script=self.test_script,
-            machines=self.machines,
+            vm_machines=self.vm_machines,
             vlans=self.vlans,
             driver=self,
             log=self.logger,
@@ -161,7 +167,7 @@ class Driver:
             serial_stdout_off=self.serial_stdout_off,
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
-            Machine=Machine,  # for typing
+            BaseMachine=BaseMachine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
         )
@@ -186,14 +192,14 @@ class Driver:
     def dump_machine_ssh(self, offset: int) -> None:
         print("SSH backdoor enabled, the machines can be accessed like this:")
         print(
-            f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
+            f"{Style.BRIGHT}Note:{Style.RESET_ALL} vsocks require {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
         )
-        names = [machine.name for machine in self.machines]
-        longest_name = len(max(names, key=len))
-        for num, name in enumerate(names, start=offset + 1):
+        longest_name = len(max((machine.name for machine in self.machines), key=len))
+        for index, machine in enumerate(self.machines, start=offset + 1):
+            name = machine.name
             spaces = " " * (longest_name - len(name) + 2)
             print(
-                f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock/{num}{Style.RESET_ALL}"
+                f"    {name}:{spaces}{Style.BRIGHT}{machine.ssh_backdoor_command(index)}{Style.RESET_ALL}"
             )
 
     def test_script(self) -> None:
@@ -280,16 +286,13 @@ class Driver:
         *,
         name: str | None = None,
         keep_vm_state: bool = False,
-    ) -> Machine:
+    ) -> QemuMachine:
         tmp_dir = get_tmp_dir()
 
-        cmd = NixStartScript(start_command)
-        name = name or cmd.machine_name
-
-        return Machine(
+        return QemuMachine(
+            start_command=start_command,
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
-            start_command=cmd,
             name=name,
             keep_vm_state=keep_vm_state,
             logger=self.logger,
