@@ -200,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [
       daru-san
+      Misaka13514
       moraxyc
     ];
     inherit (hmclJdk.meta) platforms;
