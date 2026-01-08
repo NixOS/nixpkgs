@@ -44,9 +44,10 @@ in
     environmentFile = mkOption {
       type = path;
       description = ''
-        Path to an environment file loaded for the Pocket ID service.
-
+        Path to an environment file to be loaded.
         This can be used to securely store tokens and secrets outside of the world-readable Nix store.
+
+        See [PocketID environment variables](https://pocket-id.org/docs/configuration/environment-variables).
 
         Example contents of the file:
         MAXMIND_LICENSE_KEY=your-license-key
@@ -81,7 +82,7 @@ in
             description = ''
               Whether to disable analytics.
 
-              See [docs page](https://pocket-id.org/docs/configuration/analytics/).
+              See the [analytics documentation](https://pocket-id.org/docs/configuration/analytics/).
             '';
             default = false;
           };
@@ -91,9 +92,9 @@ in
       default = { };
 
       description = ''
-        Environment variables that will be passed to Pocket ID, see
-        [configuration options](https://pocket-id.org/docs/configuration/environment-variables)
-        for supported values.
+        Environment variables to be passed.
+
+        See [PocketID environment variables](https://pocket-id.org/docs/configuration/environment-variables).
       '';
     };
 
@@ -101,7 +102,7 @@ in
       type = path;
       default = "/var/lib/pocket-id";
       description = ''
-        The directory where Pocket ID will store its data, such as the database.
+        The directory where Pocket ID will store its data, such as the database when using SQLite.
       '';
     };
 
@@ -121,15 +122,15 @@ in
   config = mkIf cfg.enable {
     warnings =
       optional (cfg.settings ? MAXMIND_LICENSE_KEY)
-        "config.services.pocket-id.settings.MAXMIND_LICENSE_KEY will be stored as plaintext in the Nix store. Use config.services.pocket-id.environmentFile instead."
+        "`services.pocket-id.settings.MAXMIND_LICENSE_KEY` will be stored as plaintext in the Nix store. Use `services.pocket-id.environmentFile` instead."
       ++
         concatMap
           (
             # Added 2025-05-27
             setting:
             optional (cfg.settings ? "${setting}") ''
-              config.services.pocket-id.settings.${setting} is deprecated.
-              See https://pocket-id.org/docs/setup/migrate-to-v1/ for migration instructions.
+              `services.pocket-id.settings.${setting}` is deprecated.
+              See [v1 migration guide](https://pocket-id.org/docs/setup/major-releases/migrate-v1).
             ''
           )
           [
