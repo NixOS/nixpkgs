@@ -1546,7 +1546,16 @@ with haskellLib;
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
-    patches = (drv.patches or [ ]) ++ [ ./patches/portmidi-alsa-plugins.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      ./patches/portmidi-alsa-plugins.patch
+      # Fixes compilation with GCC15 which defaults to C23
+      # https://github.com/PortMidi/PortMidi-haskell/pull/24
+      (pkgs.fetchpatch {
+        name = "PortMidi-C23.patch";
+        url = "https://github.com/PortMidi/PortMidi-haskell/commit/24b6ce1c77137b055ae57a99080d5f1616490197.patch";
+        sha256 = "sha256-PqnWA/DMW00Gtfa4YDV6iC/MXwQ3gFsNESbx+daw4C4=";
+      })
+    ];
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
         --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"

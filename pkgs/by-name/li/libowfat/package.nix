@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
+
   meta = {
     description = "GPL reimplementation of libdjb";
     homepage = "https://www.fefe.de/libowfat/";

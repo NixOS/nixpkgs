@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  RUSTFLAGS = "--cfg tracing_unstable";
+  env.RUSTFLAGS = "--cfg tracing_unstable";
 
   meta = {
     description = "User-friendly, lightweight TUI for disk imaging";

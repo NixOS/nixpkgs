@@ -124,12 +124,13 @@ rustPlatform.buildRustPackage {
     "--bin=pxar"
   ];
 
-  RUSTFLAGS = [ "-L.dep-stubs" ];
+  env = {
+    RUSTFLAGS = toString [ "-L.dep-stubs" ];
+    # pbs-buildcfg requires this set, would be the git commit id
+    REPOID = "";
+  };
 
   doCheck = false;
-
-  # pbs-buildcfg requires this set, would be the git commit id
-  REPOID = "";
 
   nativeBuildInputs = [
     pkgconf

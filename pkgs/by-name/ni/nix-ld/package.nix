@@ -21,10 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   hardeningDisable = [ "stackprotector" ];
 
-  env = {
-    NIX_SYSTEM = stdenv.system;
-    RUSTC_BOOTSTRAP = "1";
-  };
+  NIX_SYSTEM = stdenv.system;
+  RUSTC_BOOTSTRAP = "1";
 
   preCheck = ''
     export NIX_LD=${stdenv.cc.bintools.dynamicLinker}
