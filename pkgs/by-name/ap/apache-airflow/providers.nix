@@ -209,13 +209,13 @@
   common_compat = {
     deps = [ ];
     imports = [ "airflow.providers.common.compat.get_provider_info" ];
-    version = "1.7.3";
+    version = "1.7.4";
   };
 
   common_io = {
     deps = [ ];
     imports = [ "airflow.providers.common.io.get_provider_info" ];
-    version = "1.6.2";
+    version = "1.6.3";
   };
 
   common_messaging = {
@@ -233,7 +233,7 @@
       "sqlparse"
     ];
     imports = [ "airflow.providers.common.sql.get_provider_info" ];
-    version = "1.28.0";
+    version = "1.28.1";
   };
 
   databricks = {
@@ -377,6 +377,7 @@
       "google-cloud-monitoring"
       "google-cloud-pubsub"
       "google-cloud-redis"
+      "google-cloud-run"
       "google-cloud-secret-manager"
       "google-cloud-spanner"
       "google-cloud-speech"
@@ -709,7 +710,7 @@
   smtp = {
     deps = [ ];
     imports = [ "airflow.providers.smtp.get_provider_info" ];
-    version = "2.2.1";
+    version = "2.3.1";
   };
 
   snowflake = {
@@ -741,7 +742,7 @@
   standard = {
     deps = [ ];
     imports = [ "airflow.providers.standard.get_provider_info" ];
-    version = "1.7.0";
+    version = "1.9.0";
   };
 
   tableau = {

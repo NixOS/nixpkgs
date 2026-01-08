@@ -17,6 +17,7 @@
   argcomplete,
   asgiref,
   attrs,
+  babel,
   buildPythonPackage,
   cadwyn,
   colorlog,
@@ -82,17 +83,18 @@
   typing-extensions,
   universal-pathlib,
   uuid6,
+  uvicorn,
 
   enabledProviders,
 }:
 let
-  version = "3.1.0";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-bg7PYW2xjDVWgBr8IduF+duIm5QnM23E23zY+fcKkns=";
+    hash = "sha256-C6QujoXUHN3xLHjLhjgcecdT1VQQMQ9v2f3x97i0NpM=";
   };
 
   airflowUi = stdenv.mkDerivation rec {
@@ -110,7 +112,7 @@ let
       pname = "airflow-ui";
       inherit sourceRoot src version;
       fetcherVersion = 1;
-      hash = "sha256-bGWt9KKvseuwDe7I+GbAUGUz3yGjDA2semKX5EmoNPM=";
+      hash = "sha256-oB6fbQ9FwBJNkbXVN1ovMYvegbmyG1xDSYBYqHKKh+M=";
     };
 
     buildPhase = ''
@@ -139,7 +141,7 @@ let
       pname = "simple-auth-manager-ui";
       inherit sourceRoot src version;
       fetcherVersion = 1;
-      hash = "sha256-XXA6Ynxvt/KnVT8EsV4z5Nxd5QejZO8iDDEcS04B57A=";
+      hash = "sha256-rUmrDHdC/Pqpe9njAM7cmoBLuPSgh36yLCT9j8ImN58=";
     };
 
     buildPhase = ''
@@ -242,6 +244,7 @@ let
       lockfile
       methodtools
       msgspec
+      natsort
       opentelemetry-api
       opentelemetry-exporter-otlp
       packaging
@@ -275,8 +278,15 @@ let
       typing-extensions
       universal-pathlib
       uuid6
+      uvicorn
     ]
     ++ (map buildProvider requiredProviders);
+
+    pythonRelaxDeps = [
+      # Temporary to fix CI only:
+      # https://github.com/apache/airflow/commit/c474be9ff06cf16bf96f93de9a09e30ffc476bee
+      "fastapi"
+    ];
   };
 
   taskSdk = buildPythonPackage {
@@ -298,6 +308,7 @@ let
     dependencies = [
       asgiref
       attrs
+      babel
       colorlog
       fsspec
       greenback
@@ -346,7 +357,6 @@ buildPythonPackage rec {
 
   dependencies = [
     airflowCore # subpackage from airflow src
-    natsort
     taskSdk # subpackage from airflow src
   ]
   ++ (map buildProvider enabledProviders);
