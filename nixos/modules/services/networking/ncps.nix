@@ -372,34 +372,23 @@ in
     };
     users.groups.ncps = { };
 
-    systemd.services.ncps-create-directories = {
-      description = "Created required directories by ncps";
-      serviceConfig = {
-        Type = "oneshot";
-        UMask = "0066";
-      };
-      script =
-        (lib.optionalString (cfg.cache.storage.s3 == null && cfg.cache.storage.local != "/var/lib/ncps") ''
-          if ! test -d ${cfg.cache.storage.local}; then
-            mkdir -p ${cfg.cache.storage.local}
-            chown ncps:ncps ${cfg.cache.storage.local}
-          fi
-        '')
-        + (lib.optionalString isSqlite ''
-          if ! test -d ${dbDir}; then
-            mkdir -p ${dbDir}
-            chown ncps:ncps ${dbDir}
-          fi
-        '')
-        + (lib.optionalString (cfg.cache.tempPath != "/tmp") ''
-          if ! test -d ${cfg.cache.tempPath}; then
-            mkdir -p ${cfg.cache.tempPath}
-            chown ncps:ncps ${cfg.cache.tempPath}
-          fi
-        '');
-      wantedBy = [ "ncps.service" ];
-      before = [ "ncps.service" ];
-    };
+    systemd.tmpfiles.settings.ncps =
+      let
+        perms = {
+          group = "ncps";
+          mode = "0700";
+          user = "ncps";
+        };
+      in
+      lib.mkMerge [
+        (lib.mkIf (cfg.cache.storage.s3 == null && cfg.cache.storage.local != "/var/lib/ncps") {
+          "${cfg.cache.storage.local}".d = perms;
+        })
+
+        (lib.mkIf (isSqlite) { "${dbDir}".d = perms; })
+
+        (lib.mkIf (cfg.cache.tempPath != "/tmp") { "${cfg.cache.tempPath}".d = perms; })
+      ];
 
     systemd.services.ncps = {
       description = "ncps binary cache proxy service";
