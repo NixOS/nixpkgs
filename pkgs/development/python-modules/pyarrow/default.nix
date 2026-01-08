@@ -150,7 +150,13 @@ buildPythonPackage rec {
     "pyarrow/tests/test_fs.py::test_filesystem_from_uri_gcs"
   ];
 
-  disabledTests = [ "GcsFileSystem" ];
+  disabledTests = [
+    "GcsFileSystem"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Operation not permitted: '/usr/share/zoneinfo'
+    "test_timezone_absent"
+  ];
 
   preCheck = ''
     export PARQUET_TEST_DATA="${arrow-cpp.PARQUET_TEST_DATA}"
