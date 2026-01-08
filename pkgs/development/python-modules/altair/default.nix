@@ -3,10 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  anywidget,
   ipython,
   ipywidgets,
   jinja2,
   jsonschema,
+  mistune,
   narwhals,
   numpy,
   packaging,
@@ -17,21 +19,20 @@
   pythonOlder,
   toolz,
   typing-extensions,
-  vega-datasets,
+  vl-convert-python,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "altair";
-  version = "5.5.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
+    hash = "sha256-+Qc51L4tL1pRDpWwadxPpTE4tDH3FTO/wH67FtXMN7k=";
   };
 
   build-system = [ hatchling ];
@@ -48,15 +49,22 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optional (pythonOlder "3.14") typing-extensions;
 
   nativeCheckInputs = [
+    anywidget
     ipython
     ipywidgets
+    mistune
     polars
     pytest-xdist
     pytestCheckHook
-    vega-datasets
+    vl-convert-python
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "altair" ];
+
+  enabledTestPaths = [
+    "tests/"
+  ];
 
   disabledTests = [
     # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
@@ -66,13 +74,17 @@ buildPythonPackage (finalAttrs: {
     "test_dataframe_to_csv[pandas]"
     # Network access
     "test_theme_remote_lambda"
+    "test_chart_validation_errors"
+    "test_multiple_field_strings_in_condition"
   ];
 
   disabledTestPaths = [
     # Disabled because it requires internet connectivity
     "tests/test_examples.py"
+    "tests/test_datasets.py"
+    "altair/datasets/_data.py"
     # TODO: Disabled because of missing altair_viewer package
-    "tests/vegalite/v5/test_api.py"
+    "tests/vegalite/v6/test_api.py"
     # avoid updating files and dependency on black
     "tests/test_toplevel.py"
     # require vl-convert package
