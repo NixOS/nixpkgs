@@ -3632,6 +3632,12 @@
     github = "bmwalters";
     githubId = 4380777;
   };
+  bnjmnt4n = {
+    name = "Benjamin Tan";
+    github = "bnjmnt4n";
+    githubId = 813865;
+    email = "benjamin@dev.ofcr.se";
+  };
   bnlrnz = {
     github = "bnlrnz";
     githubId = 11310385;
