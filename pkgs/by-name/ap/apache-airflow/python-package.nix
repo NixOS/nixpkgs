@@ -83,8 +83,7 @@
   universal-pathlib,
   uuid6,
 
-  # Extra airflow providers to enable
-  enabledProviders ? [ ],
+  enabledProviders,
 }:
 let
   version = "3.1.0";

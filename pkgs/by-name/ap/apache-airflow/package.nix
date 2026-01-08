@@ -3,6 +3,9 @@
   fetchpatch,
   fetchPypi,
   python3,
+
+  # Extra airflow providers to enable
+  enabledProviders ? [ ],
 }:
 
 let
@@ -34,7 +37,7 @@ let
             pretend
           ];
       });
-      apache-airflow = pySelf.callPackage ./python-package.nix { };
+      apache-airflow = pySelf.callPackage ./python-package.nix { inherit enabledProviders; };
     };
   };
 in
