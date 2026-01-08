@@ -65,6 +65,7 @@ qtModule {
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./windows-no-uppercase-libs.patch
     ./windows-resolve-function-name.patch
+    ./windows-lowercase-d3d11-headers.patch
   ];
 
   cmakeFlags = [
