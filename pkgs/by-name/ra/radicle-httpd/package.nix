@@ -23,8 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    node = "z6MkwPUeUS2fJMfc2HZN1RQTQcTTuhw4HhPySB8JeUg2mVvx";
-    tag = "v${finalAttrs.version}";
+    tag = "releases/${finalAttrs.version}";
     sparseCheckout = [ "radicle-httpd" ];
     hash = "sha256-NA5U+Ac6imbtNabvaeYATfUbbmT48uqWAcbJ+ukJcDs=";
   };
