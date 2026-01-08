@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromGitLab,
   autoreconfHook,
   validatePkgConfig,
   geos,
@@ -16,12 +16,11 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  src = fetchFromGitea {
-    domain = "git.osgeo.org/gitea";
+  src = fetchFromGitLab {
     owner = "rttopo";
-    repo = "librttopo";
+    repo = "rttopo";
     rev = "librttopo-${version}";
-    sha256 = "0h7lzlkn9g4xky6h81ndy0aa6dxz8wb6rnl8v3987jy1i6pr072p";
+    hash = "sha256-VxyQr4nBy4PS2IjabBZHvzejFPDNBgSNn528ZCf99EA=";
   };
 
   nativeBuildInputs = [
