@@ -1029,6 +1029,10 @@ in
   nbd = runTest ./nbd.nix;
   ncdns = runTest ./ncdns.nix;
   ncps = runTest ./ncps.nix;
+  ncps-custom-sqlite-directory = runTest {
+    imports = [ ./ncps.nix ];
+    defaults.services.ncps.cache.databaseURL = "sqlite:/path/to/ncps/db.sqlite";
+  };
   ncps-custom-storage-local = runTest {
     imports = [ ./ncps.nix ];
     defaults.services.ncps.cache.storage.local = "/path/to/ncps";
