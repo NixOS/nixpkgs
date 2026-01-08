@@ -2,23 +2,27 @@
   stdenvNoCC,
   openbao,
   yarn-berry_3,
-  nodejs,
+  nodejs_22,
 }:
+let
 
+  yarn = yarn-berry_3.override { nodejs = nodejs_22; };
+
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = openbao.pname + "-ui";
   inherit (openbao) version src;
   sourceRoot = "${finalAttrs.src.name}/ui";
 
-  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+  offlineCache = yarn.fetchYarnBerryDeps {
     inherit (finalAttrs) src sourceRoot;
     hash = "sha256-ZG/br4r2YzPPgsysx7MBy1WtUBkar1U84nkKecZ5bvU=";
   };
 
   nativeBuildInputs = [
-    yarn-berry_3.yarnBerryConfigHook
-    nodejs
-    yarn-berry_3
+    yarn.yarnBerryConfigHook
+    nodejs_22
+    yarn
   ];
 
   env.YARN_ENABLE_SCRIPTS = 0;
