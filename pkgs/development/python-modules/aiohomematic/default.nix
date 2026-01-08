@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2026.1.17";
+  version = "2026.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-pkjSo2yc4mWbvpYJDc6vK4ugZSSv1mTED8IHWJvL/so=";
+    hash = "sha256-kMDkNd7Rm2MbGn//BOScZ3UhyO3142w6260+sMU4EUs=";
   };
 
   build-system = [ setuptools ];
