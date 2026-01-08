@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tobagin/karere";
     changelog = "https://github.com/tobagin/karere/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ marcel ];
+    maintainers = with lib.maintainers; [
+      marcel
+      aleksana
+    ];
     mainProgram = "karere";
   };
 })
