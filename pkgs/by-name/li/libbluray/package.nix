@@ -18,7 +18,6 @@
   libxml2,
   withFonts ? true,
   freetype,
-  libbluray-full, # Used for tests
 }:
 
 # Info on how to use:
@@ -76,12 +75,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.amarshall ];
     platforms = lib.platforms.unix;
-  };
-
-  passthru = {
-    tests = {
-      # Verify the "full" package when verifying changes to this package
-      inherit libbluray-full;
-    };
   };
 }
