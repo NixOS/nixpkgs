@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.45.1";
+  version = "0.46.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "m2crypto";
     repo = "m2crypto";
     tag = version;
-    hash = "sha256-jg7XcYE7oTOkePDJPXyM/X+vE8F2pIvJbwrVj6KJ3eM=";
+    hash = "sha256-XV9aILSWfQ/xKDySflG3wiNRP4YVPVujuhIz2VdPuBc=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
-    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/tags/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
