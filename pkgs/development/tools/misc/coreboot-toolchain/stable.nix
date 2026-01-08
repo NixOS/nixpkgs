@@ -29,17 +29,80 @@
     };
   }
   {
-    name = "binutils-2.44.tar.xz";
+    name = "binutils-2.45.tar.xz";
     archive = fetchurl {
-      sha256 = "0dvj6zs7fcfm5bln1k9ma1h96a4wqi79s3i4p7fnfgnnb7h1f86f";
-      url = "mirror://gnu/binutils/binutils-2.44.tar.xz";
+      sha256 = "1lpmpszs3lk9mcg7yn0m312745kbc8vlazn95h79i25ikizhw365";
+      url = "mirror://gnu/binutils/binutils-2.45.tar.xz";
     };
   }
   {
-    name = "acpica-unix-20250404.tar.gz";
+    name = "acpica-unix-20250807.tar.gz";
     archive = fetchurl {
-      sha256 = "0593dicbdx5qcx13ari1c0rhsay09bwwsq6w94pcjbfbws4m92f0";
-      url = "https://downloadmirror.intel.com/852044/acpica-unix-20250404.tar.gz";
+      sha256 = "0cwfm7i5a2fqq35hznnal38pgxgmnkm0v2xkb82jm1yv9014rjpa";
+      url = "https://downloadmirror.intel.com/864114/acpica-unix-20250807.tar.gz";
+    };
+  }
+  {
+    name = "lld-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0scpr70lzc4v29x1asfvy9w9zhf40rnry6bsix1bhgk1zc2nh3l0";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/lld-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "llvm-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "13g2nawibrd5rz3fpw3g7lbbqkdk1h5qc3d7icax1iwv6q7zk37n";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "clang-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "06a5kzhq0j4gr7dgr83rzc9a445wngwd5vac21wmaz882c5gw92p";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "cmake-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0dz884dsn8qgy87iiiq55m2hp6da78r2pm0rscy8jd6xjbsxxfjr";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/cmake-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "compiler-rt-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0bw9vy7yqyfzsfx8c0pgy6scifrs6r9cn9z92q374h4jkjdfjm70";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/compiler-rt-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "clang-tools-extra-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "1wd7y1a0db4y51swlq6dmm9hrv8pvmv158yi9f10dlayv7y7g275";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang-tools-extra-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "libunwind-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0xv83v7r7azpflxkhjpalxcv99ck93vm3xrf8w7dmc3qd78pf5f3";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/libunwind-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "runtimes-18.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "1cvwy3ccww46imrk4mjkcys88lsvv0cm1fh66fbf4f2l3vlw55wr";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/runtimes-18.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "cmake-4.0.3.tar.gz";
+    archive = fetchurl {
+      sha256 = "1yrzkwkr2nxl8hcjkk333l9ycbw9prkg363k4km609kknyvkfdcd";
+      url = "https://cmake.org/files/v4.0/cmake-4.0.3.tar.gz";
     };
   }
   {
