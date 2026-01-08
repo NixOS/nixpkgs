@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   lib,
+  windows,
 
   # runtime dependencies
   openssl,
@@ -12,7 +13,6 @@
   # build dependencies
   bison,
   flex,
-  makeWrapper,
   perl,
   pkg-config,
 
@@ -23,6 +23,9 @@
   # Curl
   curlSupport ?
     lib.meta.availableOn stdenv.hostPlatform curl
+    # libpq's client-side OAuth support is not available on Windows/MinGW in upstream
+    # configure logic (errors out during ./configure).
+    && !stdenv.hostPlatform.isWindows
     # Building statically fails with:
     # configure: error: library 'curl' does not provide curl_multi_init
     # https://www.postgresql.org/message-id/487dacec-6d8d-46c0-a36f-d5b8c81a56f1%40technowledgy.de
@@ -68,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     openssl
   ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ]
   ++ lib.optionals curlSupport [ curl ]
   ++ lib.optionals gssSupport [ libkrb5 ]
   ++ lib.optionals nlsSupport [ gettext ];
@@ -75,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     flex
-    makeWrapper
     perl
     pkg-config
   ];
@@ -154,7 +157,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "$out" "@out@"
 
     install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
-    moveToOutput "lib/*.a" "$dev"
+    # Keep MinGW import libraries (e.g. libpq.dll.a) in $out/lib so CMake find_library()
+    # can locate them for consumers (Qt FindPostgreSQL.cmake). Move only "real" static libs.
+    is_mingw=${if stdenv.hostPlatform.isMinGW then "1" else "0"}
+    if [ -d "$out/lib" ]; then
+      for a in "$out"/lib/*.a; do
+        [ -e "$a" ] || continue
+        case "$a" in
+          *.dll.a) ;; # keep
+          */libpq.a)
+            # On MinGW the import library for libpq.dll is named libpq.a; keep it in $out/lib
+            # so downstreams can locate it via CMake find_library().
+            if [ "$is_mingw" = "1" ]; then
+              :
+            else
+              moveToOutput "lib/$(basename "$a")" "$dev"
+            fi
+            ;;
+          *) moveToOutput "lib/$(basename "$a")" "$dev" ;;
+        esac
+      done
+    fi
 
     rm -rfv $out/share
     rm -rfv $dev/lib/*_shlib.a
@@ -179,10 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
       homepage
       license
       teams
-      platforms
       ;
     description = "C application programmer's interface to PostgreSQL";
     changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
     pkgConfigModules = [ "libpq" ];
+    # postgresql (server) is Unix-only in nixpkgs today, but libpq is a client library and
+    # is available on Windows/MinGW (MSYS2 ships it). Enable libpq independently for Qt6
+    platforms = postgresql.meta.platforms ++ lib.platforms.windows;
   };
 })
