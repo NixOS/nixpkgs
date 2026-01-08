@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyradiomics";
-  version = "3.1.0";
+  version = "3.1.1a3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "AIM-Harvard";
     repo = "pyradiomics";
     tag = "v${version}";
-    hash = "sha256-/qFNN63Bbq4DUZDPmwUGj1z5pY3ujsbqFJpVXbO+b8E=";
+    hash = "sha256-o+bwgS668cGUZKDLjyeqTzYc01EFGkg36t1sTDZn5rI=";
     name = "pyradiomics";
   };
 
