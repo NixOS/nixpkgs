@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.shelvacu ];
     mainProgram = "sm64coopdx";
     homepage = "https://sm64coopdx.com/";
-    changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/v1.3";
+    changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       # The lua engine, discord sdk, and coopnet library are vendored pre-built. See https://github.com/coop-deluxe/sm64coopdx/tree/v1.0.3/lib
