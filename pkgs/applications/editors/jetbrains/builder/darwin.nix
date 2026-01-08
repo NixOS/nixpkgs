@@ -1,3 +1,8 @@
+# Darwin-specific base builder.
+# TODO:
+#   This actually just ignores a lot of options passed to it... (e.g. buildInputs)
+#   - not entirely sure how this hasn't caused big problems yet.
+
 {
   lib,
   stdenvNoCC,
@@ -9,13 +14,14 @@
   meta,
   pname,
   product,
-  productShort ? product,
+  productShort,
   src,
   version,
+  passthru,
+
   plugins ? [ ],
-  buildNumber,
   ...
-}@args:
+}:
 
 let
   loname = lib.toLower productShort;
@@ -26,10 +32,8 @@ stdenvNoCC.mkDerivation {
     src
     version
     plugins
+    passthru
     ;
-  passthru.buildNumber = buildNumber;
-  passthru.product = product;
-  passthru.tests = args.passthru.tests;
   meta = meta // {
     mainProgram = loname;
   };

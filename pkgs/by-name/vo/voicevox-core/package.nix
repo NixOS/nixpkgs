@@ -21,8 +21,11 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voicevox-core";
+
+  # Update only together with voicevox and voicevox-engine
+  # nixpkgs-update: no auto update
   version = "0.16.2";
-  modelVersion = "0.16.1";
+  passthru.modelVersion = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
@@ -61,13 +64,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.models = stdenv.mkDerivation {
     pname = "voicevox-models";
-    version = finalAttrs.modelVersion;
+    version = finalAttrs.passthru.modelVersion;
 
     src = fetchFromGitHub {
       owner = "VOICEVOX";
       repo = "voicevox_vvm";
-      tag = finalAttrs.modelVersion;
-      hash = "sha256-OY+xuvNjgmH/bxhL61XJZ3JVOxyec6kifkoGD4eN7HA=";
+      tag = finalAttrs.passthru.modelVersion;
+      hash = "sha256-VqSNEHJV/g9R+4XknRGi/s4C7/uXEGCK5/NC2XwiPcI=";
     };
 
     nativeBuildInputs = [ python3 ];
@@ -77,6 +80,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       # convert multipart zip archive into single file
       python scripts/merge_vvm.py
+
+      # Exclude VOICEVOX Nemo models similar to upstream's CI, as voicevox-engine doesn't use them
+      rm vvms/n*
+
       mkdir -p "$out"
       cp vvms/* "$out"
 

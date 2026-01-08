@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     make gatling
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
+
   meta = {
     description = "High performance web server";
     homepage = "http://www.fefe.de/gatling/";
