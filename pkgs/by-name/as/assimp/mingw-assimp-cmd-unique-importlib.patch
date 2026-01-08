@@ -1,0 +1,17 @@
+--- a/tools/assimp_cmd/CMakeLists.txt
++++ b/tools/assimp_cmd/CMakeLists.txt
+@@ -73,6 +73,12 @@
+ 
+ SET_PROPERTY(TARGET assimp_cmd PROPERTY DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
+ 
+ TARGET_LINK_LIBRARIES( assimp_cmd assimp ${ZLIB_LIBRARIES} )
++# MinGW: keep the user-facing executable name as `assimp`, but avoid clobbering
++# the assimp DLL import library (libassimp.dll.a). CMake emits an import library
++# for executables on MinGW; give that archive a distinct name.
++IF (MINGW)
++  SET_TARGET_PROPERTIES(assimp_cmd PROPERTIES ARCHIVE_OUTPUT_NAME assimp_cmd)
++ENDIF()
+ SET_TARGET_PROPERTIES( assimp_cmd PROPERTIES
+   OUTPUT_NAME assimp
+ )
+

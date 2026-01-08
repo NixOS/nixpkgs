@@ -1,0 +1,15 @@
+--- a/code/CMakeLists.txt
++++ b/code/CMakeLists.txt
+@@ -1402,6 +1402,11 @@
+ # Add or remove dllexport tags depending on the library type.
+ IF (BUILD_SHARED_LIBS)
+   TARGET_COMPILE_DEFINITIONS(assimp PRIVATE ASSIMP_BUILD_DLL_EXPORT)
++  # On Windows, consumers must define ASSIMP_DLL so headers use dllimport
++  # semantics. Export it via the CMake target for downstreams (e.g. Qt3D).
++  IF (WIN32)
++    TARGET_COMPILE_DEFINITIONS(assimp INTERFACE ASSIMP_DLL)
++  ENDIF()
+ ELSE ()
+   TARGET_COMPILE_DEFINITIONS(assimp PRIVATE OPENDDL_STATIC_LIBARY P2T_STATIC_EXPORTS)
+ ENDIF ()
+

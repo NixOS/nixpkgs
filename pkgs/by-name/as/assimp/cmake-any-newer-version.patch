@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -506,7 +506,7 @@
+ include(CMakePackageConfigHelpers)
+ 
+ # Note: PROJECT_VERSION is used as a VERSION
+-write_basic_package_version_file("${VERSION_CONFIG}" COMPATIBILITY SameMajorVersion)
++write_basic_package_version_file("${VERSION_CONFIG}" COMPATIBILITY AnyNewerVersion)
+ 
+ configure_package_config_file(
+     ${CMAKE_CONFIG_TEMPLATE_FILE}
+

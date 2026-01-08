@@ -1,0 +1,28 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -460,7 +460,7 @@
+   ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+ ENDIF()
+ 
+-IF( UNIX )
++IF( UNIX OR MINGW )
+   # Use GNUInstallDirs for Unix predefined directories
+   INCLUDE(GNUInstallDirs)
+ 
+   SET( ASSIMP_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
+   SET( ASSIMP_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
+   SET( ASSIMP_BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
+ ELSE()
+   # Cache these to allow the user to override them on non-Unix platforms
+   SET( ASSIMP_LIB_INSTALL_DIR "lib" CACHE STRING
+     "Path the built library files are installed to." )
+   SET( ASSIMP_INCLUDE_INSTALL_DIR "include" CACHE STRING
+     "Path the header files are installed to." )
+   SET( ASSIMP_BIN_INSTALL_DIR "bin" CACHE STRING
+     "Path the tool executables are installed to." )
+ 
+   SET(CMAKE_INSTALL_FULL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/${ASSIMP_INCLUDE_INSTALL_DIR})
+   SET(CMAKE_INSTALL_FULL_LIBDIR ${CMAKE_INSTALL_PREFIX}/${ASSIMP_LIB_INSTALL_DIR})
+   SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${ASSIMP_BIN_INSTALL_DIR})
+ ENDIF()
+
