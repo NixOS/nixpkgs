@@ -6,13 +6,13 @@
   cpio,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "middledrag";
-  version = "1.3.8.1";
+  version = "1.3.8.2";
 
-  scr = fetchurl {
-    url = "https://github.com/m1dugh/middledrag/releases/download/v${version}/middledrag-${version}.dmg";
-    sha256 = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+  src = fetchurl {
+    url = "https://github.com/NullPointerDepressiveDisorder/MiddleDrag/releases/download/v${version}/MiddleDrag-${version}.pkg";
+    hash = "sha256-JdNm6r8OrKJMOTSZ6mW1uxBXvGzJmV+0RruSlPn/VCI=";
   };
 
   nativeBuildInputs = [
@@ -22,16 +22,15 @@ stdenvNoCC.mkDerivation {
 
   unpackPhase = ''
     xar -x -f $src
-    cd middledrag.pkg
-    gunzip -dc Payload | cpio -i
+    cat Payload | gunzip -dc | cpio -i
   '';
 
-  sourceRoot = "MiddleDrag.app";
+  sourceRoot = "Applications/MiddleDrag.app";
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/Applications
-    cp -r $sourceRoot $out/Applications/MiddleDrag.app
+    cp -r . $out/Applications/MiddleDrag.app
     runHook postInstall
   '';
 
@@ -44,6 +43,7 @@ stdenvNoCC.mkDerivation {
       "aarch64-darwin"
     ];
     maintainers = with maintainers; [ nullpointerdepressivedisorder ];
-    sourceProvenance = with sourceProvenance; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "MiddleDrag";
   };
 }
