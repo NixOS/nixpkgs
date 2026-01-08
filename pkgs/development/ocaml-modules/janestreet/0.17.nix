@@ -707,6 +707,27 @@ with self;
     doCheck = false; # hardcaml_waveterm as recursve checkInput dependency
   };
 
+  hardcaml_waveterm = janePackage {
+    pname = "hardcaml_waveterm";
+    hash = "sha256-R7NTEJel52KjdzRrTtJaX0dx1kuzxVqNHGwi4ORaR9k=";
+    meta.description = "Hardcaml is an OCaml library for designing hardware";
+    propagatedBuildInputs = [
+      async
+      base
+      bignum
+      core
+      core_unix
+      cryptokit
+      hardcaml
+      notty
+      notty_async
+      ppx_jane
+      re
+      stdio
+      num
+    ];
+  };
+
   hex_encode = janePackage {
     pname = "hex_encode";
     hash = "sha256-5DqaCJllphdEreOpzAjT61qb3M6aN9b2xhiUjHVLrvE=";
