@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  hypothesis,
+  hypothesis_6_136,
   mypy,
   poetry-core,
   pytest-aio,
@@ -45,14 +45,7 @@ buildPythonPackage rec {
     anyio
     httpx
     # https://github.com/dry-python/returns/issues/2224
-    (hypothesis.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "HypothesisWorks";
-        repo = "hypothesis";
-        tag = "hypothesis-python-6.136.9";
-        hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
-      };
-    }))
+    hypothesis_6_136
     mypy
     pytestCheckHook
     pytest-aio
