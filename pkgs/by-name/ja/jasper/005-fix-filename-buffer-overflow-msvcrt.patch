@@ -1,0 +1,15 @@
+diff -u a/src/libjasper/include/jasper/jas_stream.h b/src/libjasper/include/jasper/jas_stream.h
+--- a/src/libjasper/include/jasper/jas_stream.h
++++ b/src/libjasper/include/jasper/jas_stream.h
+@@ -254,6 +254,10 @@
+ typedef struct {
+ 	int fd;
+ 	int flags;
++#ifndef _UCRT
++#undef L_tmpnam
++#define L_tmpnam FILENAME_MAX
++#endif
+ #if defined(JAS_WASI_LIBC)
+ #define L_tmpnam 4096
+ #endif
+

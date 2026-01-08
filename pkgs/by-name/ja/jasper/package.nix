@@ -8,9 +8,9 @@
   libjpeg,
   pkg-config,
   stdenv,
-  enableHEIFCodec ? true,
+  enableHEIFCodec ? stdenv.hostPlatform.isUnix,
   enableJPGCodec ? true,
-  enableOpenGL ? true,
+  enableOpenGL ? stdenv.hostPlatform.isUnix,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    ./001-mingw-cmake.patch
+    ./004-jasper-exports.patch
+    ./005-fix-filename-buffer-overflow-msvcrt.patch
+  ];
+
   buildInputs = [
   ]
   ++ lib.optionals enableHEIFCodec [
@@ -45,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableJPGCodec [
     libjpeg
   ]
-  ++ lib.optionals enableOpenGL [
+  ++ lib.optionals (enableOpenGL && stdenv.hostPlatform.isUnix) [
     libglut
     libGL
   ];
@@ -96,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })
 # TODO: investigate opengl support

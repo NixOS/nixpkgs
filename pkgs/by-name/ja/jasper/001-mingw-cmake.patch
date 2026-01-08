@@ -1,0 +1,29 @@
+diff -u a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -805,9 +805,11 @@
+ # Check for the Math library.
+ ################################################################################
+ 
++if(NOT WIN32)
+ find_library(MATH_LIBRARY m)
+ if(NOT MATH_LIBRARY)
+ 	set(MATH_LIBRARY "")
+ endif()
++endif()
+ 
+ ################################################################################
+ # Perform shared library setup.
+diff -u a/src/libjasper/CMakeLists.txt b/src/libjasper/CMakeLists.txt
+--- a/src/libjasper/CMakeLists.txt
++++ b/src/libjasper/CMakeLists.txt
+@@ -196,7 +196,7 @@
+ 	target_compile_definitions(libjasper PRIVATE _CRT_NONSTDC_NO_DEPRECATE)
+ endif()
+ 
+-if(UNIX)
++if(UNIX OR MINGW)
+ 	set_target_properties(libjasper PROPERTIES
+ 	  VERSION ${JAS_SO_NAME} SOVERSION ${JAS_SO_VERSION})
+ endif()
+
