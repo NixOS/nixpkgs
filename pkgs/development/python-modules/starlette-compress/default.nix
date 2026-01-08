@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  isPyPy,
   brotli,
   brotlicffi,
   starlette,
@@ -27,8 +28,7 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    brotli
-    brotlicffi
+    (if isPyPy then brotlicffi else brotli)
     starlette
     zstandard
   ];
