@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "0xproto";
-  version = "2.500";
+  version = "2.501";
 
   src =
     let
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     in
     fetchzip {
       url = "https://github.com/0xType/0xProto/releases/download/${version}/0xProto_${underscoreVersion}.zip";
-      hash = "sha256-AmD5lUV341222gu/cCLnKWO87mjPn7gFkeklrV3OlOs=";
+      hash = "sha256-l1+fRPMo3k9EEGXiMw+8Z78KxjO3AGgvyqSfsN188vQ=";
       stripRoot = false;
     };
 
