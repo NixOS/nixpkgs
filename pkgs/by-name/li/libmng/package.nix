@@ -1,5 +1,8 @@
 {
   lib,
+  cmake,
+  ninja,
+  pkg-config,
   stdenv,
   fetchurl,
   zlib,
@@ -20,15 +23,28 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-    "devdoc"
   ];
-  outputMan = "devdoc";
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
     zlib
     libpng
     libjpeg
     lcms2
+  ];
+
+  cmakeFlags = [
+    # libmng's CMakeLists uses an old cmake_minimum_required(VERSION ...) which
+    # CMake 4 rejects. This opts into a compatible policy floor.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_STATIC_LIBS=OFF"
+    "-DCMAKE_DLL_NAME_WITH_SOVERSION=ON"
   ];
 
   meta = {
