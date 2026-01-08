@@ -117,4 +117,6 @@ in
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
+
+  meta.maintainers = with lib.maintainers; [ diogotcorreia ];
 }
