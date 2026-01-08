@@ -108,7 +108,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      dawnofmidnight
+      whispersofthedawn
       zstg
     ];
     platforms = lib.platforms.linux;
