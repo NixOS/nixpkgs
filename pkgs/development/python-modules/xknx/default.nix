@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";
     tag = version;
-    hash = "sha256-Sb/qPLINeYt96s7NkRARcb0ZrcE6A0ByyENVd5aiHxk=";
+    hash = "sha256-mfcPbxThl69XqTSUwPz/m+wiAAOOuaQe8PSgBJRMdzM=";
   };
 
   build-system = [ setuptools ];
@@ -34,6 +34,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "xknx" ];
 
