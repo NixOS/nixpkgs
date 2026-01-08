@@ -27,7 +27,10 @@ buildDunePackage rec {
       this part is currently work in progress).
     '';
     homepage = "https://github.com/Chris00/ANSITerminal";
-    license = lib.licenses.lgpl3;
+    license = with lib.licenses; [
+      lgpl3Plus
+      ocamlLgplLinkingException
+    ];
     maintainers = [ lib.maintainers.jirkamarsik ];
   };
 }
