@@ -25,28 +25,19 @@
   ninja,
   writableTmpDirAsHomeHook,
   nix-update-script,
-  # Disable VST building by default, since NixOS doesn't have a VST license
+  # Disable VST building by default, since its unfree
   enableVST2 ? false,
 }:
-let
-  version = "1.2.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "socalabs-papu";
-  inherit version;
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "FigBug";
     repo = "PAPU";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-psSwQJwfCvsSgF72/K0WZQRqt0CoasVITLH69V4XcUg=";
     fetchSubmodules = true;
-    preFetch = ''
-      # can't clone using ssh
-      export GIT_CONFIG_COUNT=1
-      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
-      export GIT_CONFIG_VALUE_0=git@github.com:
-    '';
   };
 
   desktopItems = [
@@ -120,7 +111,7 @@ stdenv.mkDerivation {
     cp -r PAPU_artefacts/Release/LV2/PAPU.lv2 $out/lib/lv2
     cp -r PAPU_artefacts/Release/VST3/PAPU.vst3 $out/lib/vst3
 
-    install -Dm755 PAPU_artefacts/Release/Standalone/PAPU $out/bin
+    install -Dm555 PAPU_artefacts/Release/Standalone/PAPU $out/bin
 
     install -Dm444 $src/plugin/Resources/icon.png $out/share/pixmaps/PAPU.png
 
@@ -150,4 +141,4 @@ stdenv.mkDerivation {
     license = [ lib.licenses.gpl2 ] ++ lib.optional enableVST2 lib.licenses.unfree;
     maintainers = [ lib.maintainers.l1npengtul ];
   };
-}
+})
