@@ -17,6 +17,7 @@
   dbus,
   glib,
   dconf,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
   libX11,
   libxml2,
   libXtst,
@@ -55,8 +56,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
     libxml2
+  ]
+  ++ lib.optionals x11Support [
+    libX11
     # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
     libXtst
     libXi
@@ -84,6 +87,7 @@ stdenv.mkDerivation rec {
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+    (lib.mesonEnable "x11" x11Support)
   ]
   ++ lib.optionals systemdSupport [
     # Same as the above, but for dbus-broker
