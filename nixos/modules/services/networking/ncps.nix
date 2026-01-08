@@ -23,6 +23,10 @@ let
       export CACHE_STORAGE_S3_SECRET_ACCESS_KEY="$(cat "$CREDENTIALS_DIRECTORY/s3SecretAccessKey")"
     ''}
 
+    ${lib.optionalString (cfg.cache.redis != null && cfg.cache.redis.passwordFile != null) ''
+      export CACHE_REDIS_PASSWORD="$(cat "$CREDENTIALS_DIRECTORY/redisPassword")"
+    ''}
+
     exec ${lib.getExe cfg.package} "$@"
   '';
 
@@ -47,6 +51,20 @@ let
       "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
     ]
+    ++ (lib.optionals (cfg.cache.redis != null) (
+      [
+        "--cache-redis-addrs='${builtins.concatStringsSep "," cfg.cache.redis.addresses}'"
+        "--cache-redis-db='${builtins.toString cfg.cache.redis.database}'"
+        "--cache-redis-pool-size='${builtins.toString cfg.cache.redis.poolSize}'"
+      ]
+      ++ (lib.optional (
+        cfg.cache.redis.username != null
+      ) "--cache-redis-username='${cfg.cache.redis.username}'")
+      ++ (lib.optional (
+        cfg.cache.redis.password != null
+      ) "--cache-redis-password='${cfg.cache.redis.password}'")
+      ++ (lib.optional cfg.cache.redis.useTLS "--cache-redis-use-tls")
+    ))
     ++ (lib.optional (
       cfg.cache.storage.s3 == null
     ) "--cache-storage-local='${cfg.cache.storage.local}'")
@@ -205,6 +223,79 @@ in
           description = ''
             The maximum size of the store. It can be given with units such as
             5K, 10G etc. Supported units: B, K, M, G, T.
+          '';
+        };
+
+        redis = lib.mkOption {
+          type = lib.types.nullOr (
+            lib.types.submodule {
+              options = {
+                addresses = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  example = ''
+                    ["redis0:6379" "redis1:6379"]
+                  '';
+                  description = ''
+                    A list of host:port for the Redis servers that are part of a cluster.
+                    To use a single Redis instance, just set this to its single address.
+                  '';
+                };
+
+                database = lib.mkOption {
+                  type = lib.types.int;
+                  default = 0;
+                  description = ''
+                    Redis database number (0-15)
+                  '';
+                };
+
+                username = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = ''
+                    Redis username for authentication (for Redis ACL).
+                  '';
+                };
+
+                password = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = ''
+                    Redis password for authentication (for Redis ACL).
+                  '';
+                };
+
+                passwordFile = lib.mkOption {
+                  type = lib.types.nullOr lib.types.path;
+                  default = null;
+                  description = ''
+                    File containing the redis password for authentication (for Redis ACL).
+                  '';
+                };
+
+                poolSize = lib.mkOption {
+                  type = lib.types.int;
+                  default = 10;
+                  description = ''
+                    Redis connection pool size.
+                  '';
+                };
+
+                useTLS = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Use TLS for Redis connection.
+                  '';
+                };
+              };
+            }
+          );
+
+          default = null;
+
+          description = ''
+            Configure Redis.
           '';
         };
 
@@ -371,6 +462,11 @@ in
         assertion = cfg.cache.lru.schedule == null || cfg.cache.maxSize != null;
         message = "You must specify config.ncps.cache.lru.schedule when config.ncps.cache.maxSize is set";
       }
+      {
+        assertion =
+          cfg.cache.redis == null || cfg.cache.redis.password == null || cfg.cache.redis.passwordFile == null;
+        message = "You cannot specify both config.ncps.cache.redis.password and config.ncps.cache.redis.passwordFile";
+      }
     ];
 
     users.users.ncps = {
@@ -428,6 +524,11 @@ in
             "s3AccessKeyId:${cfg.cache.storage.s3.accessKeyIdPath}"
             "s3SecretAccessKey:${cfg.cache.storage.s3.secretAccessKeyPath}"
           ];
+        })
+
+        # credentials for Redis
+        (lib.mkIf (cfg.cache.redis != null && cfg.cache.redis.passwordFile != null) {
+          LoadCredential = lib.singleton "redisPassword:${cfg.cache.redis.passwordFile}";
         })
 
         # ensure permissions on required directories
