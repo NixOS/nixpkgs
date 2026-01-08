@@ -5,7 +5,6 @@
   extras ? [
     "hjson"
     "json5"
-    "toml"
     "xml"
     "yaml"
   ],
@@ -13,20 +12,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jinja2-cli";
-  version = "0.8.2";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mattrobenolt";
     repo = "jinja2-cli";
-    rev = version;
-    hash = "sha256-67gYt0nZX+VTVaoSxVXGzbRiXD7EMsVBFWC8wHo+Vw0=";
+    rev = "v${version}";
+    hash = "sha256-m7auOnk618sXet4paRJmQKVEp0LLi+7PIWx8P8IUQf0=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.9.21,<0.10.0' 'uv_build>=0.9.9,<0.10.0'
+  '';
+
+  build-system = [ python3.pkgs.uv-build ];
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
@@ -44,16 +45,15 @@ python3.pkgs.buildPythonApplication rec {
   optional-dependencies = with python3.pkgs; {
     hjson = [ hjson ];
     json5 = [ json5 ];
-    toml = [ toml ];
     xml = [ xmltodict ];
     yaml = [ pyyaml ];
   };
 
   meta = {
-    description = "CLI for Jinja2";
+    description = "The CLI for Jinja2";
     homepage = "https://github.com/mattrobenolt/jinja2-cli";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.mattrobenolt ];
     mainProgram = "jinja2";
   };
 }
