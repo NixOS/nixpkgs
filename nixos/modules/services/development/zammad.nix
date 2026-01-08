@@ -183,6 +183,12 @@ in
         };
       };
 
+      gpg = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether the zammad web service needs to use the gpg integration.";
+      };
+
       secretKeyBaseFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -330,6 +336,7 @@ in
         # loading all the gems takes time
         TimeoutStartSec = 1200;
       };
+      path = lib.optionals cfg.gpg [ pkgs.gnupg ];
       after = [
         "network.target"
         "systemd-tmpfiles-setup.service"
