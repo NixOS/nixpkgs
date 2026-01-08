@@ -16614,6 +16614,8 @@ self: super: with self; {
 
   reconplogger = callPackage ../development/python-modules/reconplogger { };
 
+  reconspread = callPackage ../development/python-modules/reconspread { };
+
   recontrack = callPackage ../development/python-modules/recontrack { };
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
