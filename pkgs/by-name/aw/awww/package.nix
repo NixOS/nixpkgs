@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland-scanner
   ];
 
-  doCheck = false; 
+  doCheck = false; # Integration tests do not work in sandbox environment
 
   nativeBuildInputs = [
     pkg-config
