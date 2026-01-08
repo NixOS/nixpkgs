@@ -897,6 +897,18 @@ with self;
     ];
   };
 
+  notty_async = janePackage {
+    pname = "notty_async";
+    hash = "sha256-zD9V2vtgCJfjj4DAQLReGIno2SLeryukCPgScyoQFP0=";
+    meta.description = "An Async driver for Notty";
+    propagatedBuildInputs = [
+      ppx_jane
+      notty
+      async
+      core_unix
+    ];
+  };
+
   numeric_string = janePackage {
     pname = "numeric_string";
     hash = "sha256-cU5ETGfavkkiqZOjehCYg06YdDk8W+ZDqz17FGWHey8=";
