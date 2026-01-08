@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ada";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "ada-url";
     repo = "ada";
     tag = "v${version}";
-    hash = "sha256-MzQ8Tefwct4/LlTWA8BpnnHMSzWmKvnf0OO5exAzIfI=";
+    hash = "sha256-AzMu+zdSI9OpsJa3+CcGClHBfreo3KpKEVnizW9F2yk=";
   };
 
   nativeBuildInputs = [ cmake ];
