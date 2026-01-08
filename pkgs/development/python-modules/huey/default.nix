@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "huey";
-  version = "2.5.5";
+  version = "2.6.0";
 
   format = "pyproject";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = "huey";
     tag = version;
-    hash = "sha256-fpnaf0hk26Sm+d3pggW/GfT0oSbYpSm5xotejbOWeJY=";
+    hash = "sha256-vXp8xISf8g1VjIus/Xr4wKFFaVg5x4CXgP8IUUKYl+o=";
   };
 
   nativeBuildInputs = [
