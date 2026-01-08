@@ -3,6 +3,7 @@
   stdenv,
   clang_20,
   buildNpmPackage,
+  nodejs_22,
   bruno,
   pkg-config,
   pango,
@@ -20,6 +21,9 @@ buildNpmPackage {
   # we lie about bruno-cli's version and say it's the same as bruno's
   # to keep them in sync with easier maintenance
   inherit (bruno) version src npmDepsHash;
+
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   npmWorkspace = "packages/bruno-cli";
   npmFlags = [ "--legacy-peer-deps" ];
