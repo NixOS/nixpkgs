@@ -26,10 +26,8 @@ buildPythonPackage {
     patch -p1 < tmp.diff
   '';
 
-  env = {
-    RUSTFLAGS = "-C target-feature=";
-    RUSTC_BOOTSTRAP = 1;
-  };
+  RUSTFLAGS = "-C target-feature=";
+  RUSTC_BOOTSTRAP = 1;
 
   buildAndTestSubdir = "mitmproxy-linux";
 

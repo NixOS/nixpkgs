@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  env.RUSTC_BOOTSTRAP = true;
+  RUSTC_BOOTSTRAP = true;
   buildInputs = [ sqlite ];
 
   meta = {

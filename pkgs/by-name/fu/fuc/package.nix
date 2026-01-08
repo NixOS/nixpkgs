@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-OoTWGeF96BpPDx1Y9AEVOIBK7kCz6pjw24pLiNcKmOc=";
 
-  env.RUSTC_BOOTSTRAP = 1;
+  RUSTC_BOOTSTRAP = 1;
 
   cargoBuildFlags = [
     "--workspace"

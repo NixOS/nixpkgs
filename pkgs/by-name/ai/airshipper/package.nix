@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  env.RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
   postInstall = ''
     install -Dm444 -t "$out/share/applications" "client/assets/net.veloren.airshipper.desktop"

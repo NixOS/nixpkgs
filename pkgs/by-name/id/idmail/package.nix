@@ -34,10 +34,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UcS2gAoa2fzPu6hh8I5sXSHHbAmzsecT44Ju2CVsK0Q=";
 
-  env = {
-    RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg=web_sys_unstable_apis";
-  };
+  RUSTC_BOOTSTRAP = 1;
+  RUSTFLAGS = "--cfg=web_sys_unstable_apis";
 
   nativeBuildInputs = [
     wasm-bindgen-cli_0_2_100
