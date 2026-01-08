@@ -16219,6 +16219,8 @@ self: super: with self; {
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
+  reconcrawl = callPackage ../development/python-modules/reconcrawl { };
+
   reconplogger = callPackage ../development/python-modules/reconplogger { };
 
   recontrack = callPackage ../development/python-modules/recontrack { };
