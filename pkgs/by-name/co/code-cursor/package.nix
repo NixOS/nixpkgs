@@ -70,6 +70,7 @@ in
     maintainers = with lib.maintainers; [
       aspauldingcode
       prince213
+      qweered
     ];
     platforms = [
       "aarch64-linux"
