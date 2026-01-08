@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   writeScript,
   writeShellScriptBin,
   gradio,
@@ -20,37 +21,34 @@
   pnpmConfigHook,
 
   # dependencies
-  setuptools,
   aiofiles,
   anyio,
+  audioop-lts,
   brotli,
-  diffusers,
   fastapi,
   ffmpy,
   gradio-client,
   groovy,
   httpx,
   huggingface-hub,
-  importlib-resources,
   jinja2,
   markupsafe,
-  matplotlib,
   numpy,
   orjson,
   packaging,
   pandas,
   pillow,
-  polars,
   pydantic,
   python-multipart,
   pydub,
   pyyaml,
   safehttpx,
   semantic-version,
+  starlette,
+  tomlkit,
+  typer,
   typing-extensions,
   uvicorn,
-  typer,
-  tomlkit,
 
   # oauth
   authlib,
@@ -61,11 +59,13 @@
   hypothesis,
   altair,
   boto3,
+  diffusers,
   docker,
   gradio-pdf,
   ffmpeg,
   ipython,
   mcp,
+  polars,
   pytest-asyncio,
   respx,
   scikit-image,
@@ -129,37 +129,36 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    setuptools # needed for 'pkg_resources'
     aiofiles
     anyio
     brotli
-    diffusers
     fastapi
     ffmpy
     gradio-client
     groovy
     httpx
     huggingface-hub
-    importlib-resources
     jinja2
     markupsafe
-    matplotlib
     numpy
     orjson
     packaging
     pandas
     pillow
-    polars
     pydantic
     python-multipart
     pydub
     pyyaml
     safehttpx
     semantic-version
+    starlette
+    tomlkit
+    typer
     typing-extensions
     uvicorn
-    typer
-    tomlkit
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
   ];
 
   optional-dependencies.oauth = [
@@ -171,12 +170,14 @@ buildPythonPackage rec {
     altair
     boto3
     brotli
+    diffusers
     docker
     ffmpeg
     gradio-pdf
     hypothesis
     ipython
     mcp
+    polars
     pytest-asyncio
     pytestCheckHook
     respx

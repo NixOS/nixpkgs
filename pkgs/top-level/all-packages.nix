@@ -10038,8 +10038,6 @@ with pkgs;
     useQt6 = true;
   };
 
-  androguard = with python3.pkgs; toPythonApplication androguard;
-
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
@@ -11884,13 +11882,6 @@ with pkgs;
   syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
     # renamed in KF5 -> KF6
     plasma-framework = kdePackages.libplasma;
-  };
-  syncthingtray-minimal = syncthingtray.override {
-    webviewSupport = false;
-    jsSupport = false;
-    kioPluginSupport = false;
-    plasmoidSupport = false;
-    systemdSupport = true;
   };
 
   synergyWithoutGUI = synergy.override { withGUI = false; };

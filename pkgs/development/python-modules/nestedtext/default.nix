@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nestedtext";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "nestedtext";
     tag = "v${version}";
-    hash = "sha256-lNqSmEmzuRGdXs/4mwKSh7yDGHnAykpIDIR+abbLCns=";
+    hash = "sha256-eg5Q11dl9ikGpNYx2Sd47MBPC9S4W2M6PpehFpowzdk=";
   };
 
   nativeBuildInputs = [ flit-core ];

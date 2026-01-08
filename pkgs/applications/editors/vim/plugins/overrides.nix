@@ -796,7 +796,7 @@ assertNoAdditions {
     };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   colorful-menu-nvim = super.colorful-menu-nvim.overrideAttrs {
@@ -1365,10 +1365,13 @@ assertNoAdditions {
   };
 
   go-nvim = super.go-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      guihua-lua
+    ];
     checkInputs = with self; [
       luasnip
       null-ls-nvim
-      nvim-treesitter
     ];
     nvimSkipModules = [
       "init"
@@ -1397,6 +1400,25 @@ assertNoAdditions {
 
   guard-collection = super.guard-collection.overrideAttrs {
     dependencies = [ self.guard-nvim ];
+  };
+
+  guihua-lua = super.guihua-lua.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd lua/fzy
+      make
+      popd
+
+      runHook postBuild
+    '';
+
+    nvimSkipModules = [
+      # lua module '.init' not found
+      "fzy.fzy-lua-native"
+    ];
   };
 
   gx-nvim = super.gx-nvim.overrideAttrs {
@@ -1543,7 +1565,7 @@ assertNoAdditions {
   };
 
   iswap-nvim = super.iswap-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   jdd-nvim = super.jdd-nvim.overrideAttrs {
@@ -1684,7 +1706,7 @@ assertNoAdditions {
   leap-ast-nvim = super.leap-ast-nvim.overrideAttrs {
     dependencies = with self; [
       leap-nvim
-      nvim-treesitter
+      nvim-treesitter-legacy
     ];
   };
 
@@ -2677,6 +2699,8 @@ assertNoAdditions {
     checkInputs = [
       # Optional telescope picker
       self.telescope-nvim
+      # Optional fzf-lua integration
+      self.fzf-lua
     ];
   };
 
@@ -2769,7 +2793,7 @@ assertNoAdditions {
   };
 
   nvim-treesitter-textobjects = super.nvim-treesitter-textobjects.overrideAttrs {
-    dependencies = [ self.nvim-treesitter-legacy ];
+    dependencies = [ self.nvim-treesitter ];
   };
 
   nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
@@ -2953,6 +2977,7 @@ assertNoAdditions {
       # Optional integration
       neotest
       toggleterm-nvim
+      nodejs
       nvim-dap
     ];
     checkPhase = ''
