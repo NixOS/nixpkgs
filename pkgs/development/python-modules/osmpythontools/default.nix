@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   beautifulsoup4,
   geojson,
   lxml,
@@ -24,6 +25,9 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-ajZJSuMbku08vHvn4fqsLqCS/E2XR3uVqiH7R1GHH5o=";
   };
+
+  # Will require an update to support 3.14
+  disabled = pythonAtLeast "3.14";
 
   build-system = [ setuptools ];
 
