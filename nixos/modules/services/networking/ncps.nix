@@ -409,7 +409,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ${lib.getExe cfg.dbmatePackage} --migrations-dir=${cfg.package}/share/ncps/db/migrations --url=${cfg.cache.databaseURL} up
+        ${lib.getExe cfg.dbmatePackage} --migrations-dir=${cfg.package}/share/ncps/db/migrations/sqlite --url=${cfg.cache.databaseURL} up
       '';
 
       serviceConfig = lib.mkMerge [
