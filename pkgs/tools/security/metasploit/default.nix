@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fab
       makefu
+      Misaka13514
     ];
     mainProgram = "msfconsole";
   };
