@@ -4425,6 +4425,8 @@ self: super: with self; {
 
   django-types = callPackage ../development/python-modules/django-types { };
 
+  django-user-sessions = callPackage ../development/python-modules/django-user-sessions { };
+
   django-valkey = callPackage ../development/python-modules/django-valkey { };
 
   django-versatileimagefield =
