@@ -5,6 +5,7 @@
   dill,
   fetchFromGitHub,
   fsspec,
+  httpx,
   huggingface-hub,
   multiprocess,
   numpy,
@@ -19,14 +20,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "datasets";
-  version = "4.0.0";
+  version = "4.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
     tag = finalAttrs.version;
-    hash = "sha256-Cr25PgLNGX/KcFZE5h1oiaDW9J50ccMqA5z3q4sITus=";
+    hash = "sha256-4lJ3j9Eg4Xi8Pp6J3cqz8+JNiybPqHLUpqVCIwskaM8=";
   };
 
   build-system = [
@@ -37,6 +38,7 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     dill
     fsspec
+    httpx
     huggingface-hub
     multiprocess
     numpy
