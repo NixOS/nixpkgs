@@ -338,8 +338,6 @@ self: super:
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
-  xclock = addMainProgram super.xclock { };
-
   xinit =
     (super.xinit.override {
       stdenv = if isDarwin then clangStdenv else stdenv;
@@ -423,8 +421,6 @@ self: super:
     ];
   });
 
-  xfd = addMainProgram super.xfd { };
-  xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
