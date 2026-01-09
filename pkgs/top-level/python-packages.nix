@@ -15940,7 +15940,7 @@ self: super: with self; {
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
 
-  pyzstd = callPackage ../development/python-modules/pyzstd { zstd-c = pkgs.zstd; };
+  pyzstd = callPackage ../development/python-modules/pyzstd { };
 
   pyzx = callPackage ../development/python-modules/pyzx { };
 
