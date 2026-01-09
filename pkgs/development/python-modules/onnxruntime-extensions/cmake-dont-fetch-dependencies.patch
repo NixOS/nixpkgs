@@ -1,0 +1,91 @@
+diff --git a/cmake/ext_ortlib.cmake b/cmake/ext_ortlib.cmake
+index f3f5f2d..cc615d5 100644
+--- a/cmake/ext_ortlib.cmake
++++ b/cmake/ext_ortlib.cmake
+@@ -82,7 +82,7 @@ else()
+       endif()
+     endif()
+ 
+-    set(ort_fetch_URL "https://github.com/microsoft/onnxruntime/releases/download/${ONNXRUNTIME_URL}")
++    set(ort_fetch_URL @onnxruntime-src@)
+   endif()
+ 
+   message(STATUS "ONNX Runtime URL: ${ort_fetch_URL}")
+diff --git a/cmake/externals/dlib.cmake b/cmake/externals/dlib.cmake
+index 645905e..94d8956 100644
+--- a/cmake/externals/dlib.cmake
++++ b/cmake/externals/dlib.cmake
+@@ -1,9 +1,6 @@
+ FetchContent_Declare(
+     dlib
+-    URL https://github.com/davisking/dlib/archive/refs/tags/v19.24.7.zip
+-    URL_HASH SHA1=6c63ea576e2b525751b0dead27c6c1139c5100ae
+-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+-    SOURCE_SUBDIR  not_set
++    URL @dlib-src@
+ )
+ 
+ FetchContent_MakeAvailable(dlib)
+diff --git a/cmake/externals/dr_libs.cmake b/cmake/externals/dr_libs.cmake
+index f7811b4..d46e9a7 100644
+--- a/cmake/externals/dr_libs.cmake
++++ b/cmake/externals/dr_libs.cmake
+@@ -1,7 +1,5 @@
+ FetchContent_Declare(dr_libs
+-    URL         https://github.com/mackron/dr_libs/archive/660795b2834aebb2217c9849d668b6e4bd4ef810.zip
+-    URL_HASH    SHA1=af554b21dcd1ab3c7c8d946638682a2cbccf3e16
+-    SOURCE_SUBDIR not_set
++    URL @dr-libs-src@
+ )
+ 
+ FetchContent_MakeAvailable(dr_libs)
+diff --git a/cmake/externals/googlere2.cmake b/cmake/externals/googlere2.cmake
+index 296736d..b7e4c92 100644
+--- a/cmake/externals/googlere2.cmake
++++ b/cmake/externals/googlere2.cmake
+@@ -1,8 +1,6 @@
+ FetchContent_Declare(
+   googlere2
+-  GIT_REPOSITORY https://github.com/google/re2.git
+-  GIT_TAG        2021-06-01
+-  EXCLUDE_FROM_ALL
++  URL @googlere2-src@
+ )
+ 
+ FetchContent_MakeAvailable(googlere2)
+diff --git a/cmake/externals/gsl.cmake b/cmake/externals/gsl.cmake
+index 69ff4d2..4620522 100644
+--- a/cmake/externals/gsl.cmake
++++ b/cmake/externals/gsl.cmake
+@@ -1,11 +1,7 @@
+ if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24.0")
+     FetchContent_Declare(
+         GSL
+-        URL https://github.com/microsoft/GSL/archive/refs/tags/v4.0.0.zip
+-        URL_HASH SHA1=cf368104cd22a87b4dd0c80228919bb2df3e2a14
+-        FIND_PACKAGE_ARGS 4.0 NAMES Microsoft.GSL
+-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+-        SOURCE_SUBDIR not_set
++        URL @gsl-src@
+     )
+ else()
+     FetchContent_Declare(
+diff --git a/cmake/externals/sentencepieceproject.cmake b/cmake/externals/sentencepieceproject.cmake
+index dfef576..859d0ab 100644
+--- a/cmake/externals/sentencepieceproject.cmake
++++ b/cmake/externals/sentencepieceproject.cmake
+@@ -8,12 +8,10 @@ if(NOT _ONNXRUNTIME_EMBEDDED)
+   message(STATUS "Fetch protobuf")
+   FetchContent_Declare(
+     protobuf
+-    GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+-    GIT_TAG v21.12
+-    EXCLUDE_FROM_ALL
++    URL @protobuf-src@
+     PATCH_COMMAND git checkout . && git apply --ignore-space-change --ignore-whitespace ${PROJECT_SOURCE_DIR}/cmake/externals/protobuf_cmake.patch
+   )
+-  
++
+   set(protobuf_BUILD_TESTS OFF CACHE BOOL "Build tests")
+   set(protobuf_WITH_ZLIB OFF CACHE BOOL "Use zlib")
+ 
