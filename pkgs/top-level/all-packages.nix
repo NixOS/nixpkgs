@@ -9426,10 +9426,6 @@ with pkgs;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
 
-  quartz-wm = callPackage ../servers/x11/quartz-wm {
-    stdenv = clangStdenv;
-  };
-
   xorg =
     let
       # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
