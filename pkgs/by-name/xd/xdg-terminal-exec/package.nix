@@ -4,6 +4,7 @@
   fetchFromGitHub,
   dash,
   scdoc,
+  makeBinaryWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xdg-terminal-exec";
@@ -16,25 +17,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-RgyXdrJEiPXOHpnUUuu7UVNC+RE36WgyXuuDgA8H1EQ=";
   };
 
-  nativeBuildInputs = [ scdoc ];
+  strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-    scdoc < xdg-terminal-exec.1.scd > xdg-terminal-exec.1
-    runHook postBuild
-  '';
+  nativeBuildInputs = [
+    scdoc
+    makeBinaryWrapper
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm555 xdg-terminal-exec -t $out/bin
-    install -Dm444 xdg-terminal-exec.1 -t $out/share/man/man1
-    runHook postInstall
-  '';
+  buildInputs = [ dash ];
+
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   dontPatchShebangs = true;
   postFixup = ''
+    # use dash posix sh implementation as recommended by upstream
     substituteInPlace $out/bin/xdg-terminal-exec \
       --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
+
+    # add default config to XDG_DATA_DIRS
+    wrapProgram $out/bin/xdg-terminal-exec \
+      --suffix XDG_DATA_DIRS : '${placeholder "out"}/share'
   '';
 
   meta = {
