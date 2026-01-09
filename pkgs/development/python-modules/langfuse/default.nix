@@ -19,7 +19,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langfuse";
   version = "3.11.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3hL29Gu1lonkWAOyTqH2q03joXwVQimbVF0R2nYZUIs=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument your LLM app with decorators or low-level SDK and get detailed tracing/observability";
     homepage = "https://github.com/langfuse/langfuse-python";
-    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})
