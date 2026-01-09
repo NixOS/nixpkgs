@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "validobj";
-  version = "1.5";
+  version = "1.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n2CEcZTPr57tbRhw5uFmcWZ1kHdBt2VzG/fS4+LDSyc=";
+    hash = "sha256-dXUvInNYkl10zdGQhJ6h1JqCNlZ+VsvwnEMb2xj6qOA=";
   };
 
   nativeBuildInputs = [ flit ];
