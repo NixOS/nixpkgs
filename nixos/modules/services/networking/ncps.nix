@@ -27,6 +27,10 @@ let
       export CACHE_REDIS_PASSWORD="$(cat "$CREDENTIALS_DIRECTORY/redisPassword")"
     ''}
 
+    ${lib.optionalString (cfg.cache.databaseURLFile != null) ''
+      export CACHE_DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
+    ''}
+
     exec ${lib.getExe cfg.package} "$@"
   '';
 
@@ -47,10 +51,10 @@ let
   serveFlags = lib.concatStringsSep " " (
     [
       "--cache-hostname='${cfg.cache.hostName}'"
-      "--cache-database-url='${cfg.cache.databaseURL}'"
       "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
     ]
+    ++ (lib.optional (cfg.cache.databaseURL != null) "--cache-database-url='${cfg.cache.databaseURL}'")
     ++ (lib.optionals (cfg.cache.redis != null) (
       [
         "--cache-redis-addrs='${builtins.concatStringsSep "," cfg.cache.redis.addresses}'"
@@ -98,10 +102,10 @@ let
     ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
   );
 
-  isSqlite = lib.strings.hasPrefix "sqlite:" cfg.cache.databaseURL;
+  isSqlite = cfg.cache.databaseURL != null && lib.strings.hasPrefix "sqlite:" cfg.cache.databaseURL;
 
-  dbPath = lib.removePrefix "sqlite:" cfg.cache.databaseURL;
-  dbDir = dirOf dbPath;
+  dbPath = if isSqlite then lib.removePrefix "sqlite:" cfg.cache.databaseURL else null;
+  dbDir = if isSqlite then dirOf dbPath else null;
 in
 {
   imports = [
@@ -187,11 +191,19 @@ in
         };
 
         databaseURL = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.nullOr lib.types.str;
           default = "sqlite:${cfg.cache.storage.local}/db/db.sqlite";
           defaultText = "sqlite:/var/lib/ncps/db/db.sqlite";
           description = ''
             The URL of the database (currently only SQLite is supported)
+          '';
+        };
+
+        databaseURLFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = ''
+            File containing the URL of the database.
           '';
         };
 
@@ -463,6 +475,10 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
+        assertion = lib.xor (cfg.cache.databaseURL != null) (cfg.cache.databaseURLFile != null);
+        message = "You must specify exactly one of config.ncps.cache.databaseURL or config.ncps.cache.databaseURLFile";
+      }
+      {
         assertion = cfg.cache.lru.schedule == null || cfg.cache.maxSize != null;
         message = "You must specify config.ncps.cache.lru.schedule when config.ncps.cache.maxSize is set";
       }
@@ -492,7 +508,7 @@ in
           "${cfg.cache.storage.local}".d = perms;
         })
 
-        (lib.mkIf (isSqlite) { "${dbDir}".d = perms; })
+        (lib.mkIf isSqlite { "${dbDir}".d = perms; })
 
         (lib.mkIf (cfg.cache.tempPath != "/tmp") { "${cfg.cache.tempPath}".d = perms; })
       ];
@@ -505,7 +521,14 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ${cfg.package}/bin/dbmate-ncps --url="${cfg.cache.databaseURL}" up
+        ${lib.optionalString (cfg.cache.databaseURLFile != null) ''
+          export DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
+        ''}
+        ${lib.optionalString (cfg.cache.databaseURL != null) ''
+          export DATABASE_URL="${cfg.cache.databaseURL}"
+        ''}
+        echo ${cfg.package}/bin/dbmate-ncps up
+        ${cfg.package}/bin/dbmate-ncps up
       '';
 
       serviceConfig = lib.mkMerge [
@@ -533,6 +556,10 @@ in
         # credentials for Redis
         (lib.mkIf (cfg.cache.redis != null && cfg.cache.redis.passwordFile != null) {
           LoadCredential = lib.singleton "redisPassword:${cfg.cache.redis.passwordFile}";
+        })
+
+        (lib.mkIf (cfg.cache.databaseURLFile != null) {
+          LoadCredential = lib.singleton "databaseURL:${cfg.cache.databaseURLFile}";
         })
 
         # ensure permissions on required directories

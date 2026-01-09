@@ -120,7 +120,13 @@ in
       ];
     };
 
-    ncps0 = ncpsAttrs "ncps0";
+    ncps0 = lib.mkMerge [
+      (ncpsAttrs "ncps0")
+      {
+        services.ncps.cache.databaseURL = lib.mkForce null;
+        services.ncps.cache.databaseURLFile = builtins.toFile "db-url" "postgres://ncps:${lib.escapeURL postgresPassword}@postgres:5432/ncps?sslmode=disable";
+      }
+    ];
     ncps1 = ncpsAttrs "ncps1";
 
     postgres = {
