@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lbdyE/k28fJzrOQEKDL8ZLnm6tNcAM4tsfHpcGlJB9s=";
+    hash = "sha256-X+yTt/oaV0ev0yexTcS0egcv0SQHFMysqSNEhZgikV0=";
   };
 
-  cargoHash = "sha256-smoUGJSMmRKdnUz4L+LvPOH/A6CHVmkiHxdyesu+BTw=";
+  cargoHash = "sha256-XFBBtTF9V5l2CIyCRbvJqNkbPAT+Yi6PtnN1hjpKrsI=";
 
   buildNoDefaultFeatures = true;
   # Would be cleaner with an "--all-features" option
