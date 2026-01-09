@@ -7,6 +7,7 @@
   nodejs,
   yarnConfigHook,
   yarnBuildHook,
+  nixosTests,
   envLocalPath ? "/var/lib/part-db/env.local",
   cachePath ? "/var/cache/part-db/",
   logPath ? "/var/log/part-db/",
@@ -83,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${logPath} $out/var/log
     ln -s ${cachePath} $out/var/cache
   '';
+
+  passthru.tests = { inherit (nixosTests) part-db; };
 
   meta = {
     description = "Open source inventory management system for your electronic components";
