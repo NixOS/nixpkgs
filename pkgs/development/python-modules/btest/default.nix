@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   multiprocess,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "btest";
   version = "1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zeek";
