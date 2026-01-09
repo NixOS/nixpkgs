@@ -1157,6 +1157,11 @@ builtins.intersectAttrs super {
         }
       );
 
+  # Don't use vendored copy of zxcvbn-c
+  zxcvbn-c = addBuildDepends [
+    pkgs.zxcvbn-c
+  ] (enableCabalFlag "use-shared-lib" super.zxcvbn-c);
+
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
 
