@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "caio";
   version = "0.9.22";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "caio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-O86SLZ+8bzPYtvLnmY5gLPYLWvNaktQwIEQckJR15LI=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/caio";
-    changelog = "https://github.com/mosquito/caio/releases/tag/${version}";
+    changelog = "https://github.com/mosquito/caio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
