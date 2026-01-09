@@ -93,6 +93,14 @@ lib.fix (self: {
       verify =
         # attrsOf<any> can be optimised to just isAttrs
         if t == self.any then isAttrs else attrs: isAttrs attrs && all verify (attrValues attrs);
+      errors =
+        ctx: attrs:
+        if !isAttrs attrs then
+          self.errors self.attrs ctx attrs
+        else
+          concatMap (
+            name: lib.optionals (!verify attrs.${name}) (self.errors t "${ctx}.${name}" attrs.${name})
+          ) (attrNames attrs);
     };
 
   listOf =
@@ -106,6 +114,19 @@ lib.fix (self: {
       verify =
         # listOf<any> can be optimised to just isList
         if t == self.any then isList else v: isList v && all verify v;
+      errors =
+        ctx: v:
+        if !isList v then
+          self.errors self.list ctx v
+        else
+          lib.concatMap ({ valid, errors }: errors) (
+            lib.filter ({ valid, errors }: !valid) (
+              lib.imap0 (i: el: {
+                valid = verify el;
+                errors = self.errors t "${ctx}.${toString i}" el;
+              }) v
+            )
+          );
     };
 
   union =
