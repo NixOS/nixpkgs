@@ -1452,6 +1452,13 @@ won't take effect until you reboot the system.
             .map(|mut child| child.wait());
 
         // Handle the activation script requesting the restart or reload of a unit.
+
+        if std::fs::exists(DRY_RESTART_BY_ACTIVATION_LIST_FILE)?
+            || std::fs::exists(DRY_RELOAD_BY_ACTIVATION_LIST_FILE)?
+        {
+            eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+        }
+
         for unit in std::fs::read_to_string(DRY_RESTART_BY_ACTIVATION_LIST_FILE)
             .unwrap_or_default()
             .lines()
@@ -1614,6 +1621,12 @@ won't take effect until you reboot the system.
             eprintln!("Failed to run activate script");
             exit_code = 2;
         }
+    }
+
+    if std::fs::exists(RESTART_BY_ACTIVATION_LIST_FILE)?
+        || std::fs::exists(RELOAD_BY_ACTIVATION_LIST_FILE)?
+    {
+        eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
     }
 
     // Handle the activation script requesting the restart or reload of a unit.
