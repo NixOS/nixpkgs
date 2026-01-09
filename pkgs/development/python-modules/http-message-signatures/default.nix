@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
     tag = "v${version}";
-    hash = "sha256-c5zwH28FFbEmLfL4nBBE2S1YEbwicoJo3UAYn/0zXEM=";
+    hash = "sha256-uHsH/kYph50cpLcy4lnu466odexUVvQAYk0ydgtcsM8=";
   };
 
   build-system = [
