@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynintendoparental";
   version = "2.3.2";
   pyproject = true;
@@ -15,13 +15,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pynintendoparental";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jF1hoGNDwbbacJuLiFAdtaXOykzioUt++RQrYO1skkA=";
   };
 
   postPatch = ''
     substituteInPlace pynintendoparental/_version.py \
-      --replace-fail '__version__ = "0.0.0"' '__version__ = "${version}"'
+      --replace-fail '__version__ = "0.0.0"' '__version__ = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/pantherale0/pynintendoparental/releases/tag/${src.tag}";
+    changelog = "https://github.com/pantherale0/pynintendoparental/releases/tag/${finalAttrs.src.tag}";
     description = "Python module to interact with Nintendo Parental Controls";
     homepage = "https://github.com/pantherale0/pynintendoparental";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
