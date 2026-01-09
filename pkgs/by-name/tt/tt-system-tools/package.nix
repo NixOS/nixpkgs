@@ -3,8 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
-  # Remove "? null" once https://github.com/NixOS/nixpkgs/pull/444714 is merged
-  tt-smi ? null,
+  tt-smi,
   pstree,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
