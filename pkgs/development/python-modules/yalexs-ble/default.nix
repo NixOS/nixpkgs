@@ -14,16 +14,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yalexs-ble";
-  version = "3.2.4";
+  version = "3.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs-ble";
-    tag = "v${version}";
-    hash = "sha256-BijvtiMAAP2lA43HFrGCt9qd7W2QBlzjfOCC8hhcu0k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kk9D6433xh4MRbpdJpep7XdEEO0rsEUS3I94iBjQ6kM=";
   };
 
   build-system = [ poetry-core ];
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/bdraco/yalexs-ble";
-    changelog = "https://github.com/bdraco/yalexs-ble/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/yalexs-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
