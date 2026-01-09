@@ -173,7 +173,7 @@ buildDotnetModule (finalAttrs: {
       PixiEditor is a universal 2D platform that aims to provide you with tools and features for all your 2D needs.
       Create beautiful sprites for your games, animations, edit images, create logos. All packed in an eye-friendly dark theme
     '';
-    homepage = "https://pixieditor.com";
+    homepage = "https://pixieditor.net/";
     changelog = "https://github.com/PixiEditor/PixiEditor/releases/tag/${finalAttrs.version}";
     mainProgram = "pixieditor";
     license = lib.licenses.lgpl3Only;
