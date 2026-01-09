@@ -53,12 +53,14 @@ in
     libgcc
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/go/";
     description = "Go IDE from JetBrains";
-    longDescription = "Goland is the codename for a new commercial IDE by JetBrains aimed at providing an ergonomic environment for Go development.
-          The new IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language";
+    longDescription = ''
+      Goland is a commercial IDE by JetBrains aimed at providing an ergonomic environment for Go development.
+      The IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language.
+    '';
     maintainers = with lib.maintainers; [ tymscar ];
     license = lib.licenses.unfree;
     sourceProvenance =
