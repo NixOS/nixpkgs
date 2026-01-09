@@ -5718,13 +5718,11 @@ self: super: with self; {
 
   fontfeatures = callPackage ../development/python-modules/fontfeatures { };
 
-  fontforge = disabledIf (pythonOlder "3.10") (
-    toPythonModule (
-      pkgs.fontforge.override {
-        withPython = true;
-        python3 = python;
-      }
-    )
+  fontforge = toPythonModule (
+    pkgs.fontforge.override {
+      withPython = true;
+      python3 = python;
+    }
   );
 
   fontmake = callPackage ../development/python-modules/fontmake { };
