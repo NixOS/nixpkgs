@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "monitorcontrol";
-  version = "4.1.1";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "monitorcontrol";
     tag = version;
-    hash = "sha256-4A7Cj2PWANZOmMSB9rH++TAf6SgyQd0OFULKa4JRu0s=";
+    hash = "sha256-KyVLNZLpzmxABQQiHGniCcND7DwZwpT4gJC+sJihoag=";
   };
 
   build-system = [ setuptools ];
