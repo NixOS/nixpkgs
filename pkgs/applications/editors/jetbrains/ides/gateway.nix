@@ -50,11 +50,11 @@ mkJetBrainsProduct {
     libgcc
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/remote-development/gateway/";
     description = "Remote development for JetBrains products";
-    longDescription = "JetBrains Gateway is a lightweight launcher that connects a remote server with your local machine, downloads necessary components on the backend, and opens your project in JetBrains Client.";
+    longDescription = "JetBrains Gateway is a lightweight launcher that connects a remote server with your local machine and opens your project in JetBrains Client.";
     maintainers = [ ];
     license = lib.licenses.unfree;
     sourceProvenance =

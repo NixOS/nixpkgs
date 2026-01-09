@@ -78,11 +78,15 @@ in
     libX11
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/rider/";
     description = ".NET IDE from JetBrains";
-    longDescription = "JetBrains Rider is a new .NET IDE based on the IntelliJ platform and ReSharper. Rider supports .NET Core, .NET Framework and Mono based projects. This lets you develop a wide array of applications including .NET desktop apps, services and libraries, Unity games, ASP.NET and ASP.NET Core web applications.";
+    longDescription = ''
+      JetBrains Rider is a new .NET IDE based on the IntelliJ platform and ReSharper.
+      Rider supports .NET Core, .NET Framework and Mono based projects.
+      This lets you develop a wide array of applications including .NET desktop apps, services and libraries, Unity games, ASP.NET and ASP.NET Core web applications.
+    '';
     maintainers = with lib.maintainers; [ raphaelr ];
     license = lib.licenses.unfree;
     sourceProvenance =
