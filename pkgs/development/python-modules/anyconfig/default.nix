@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -29,6 +30,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # OSError: /build/anyconfig-0.12.0/tests/res/cli/no_template/10/e/10.* should exists but not
     "test_runs_for_datasets"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Python 3.14: output format has changed
+    "test_dumps"
+    "test_dump"
   ];
 
   disabledTestPaths = [
