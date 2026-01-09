@@ -424,6 +424,14 @@ let
         p.overridePythonAttrs (previousAttrs: {
           overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
         });
+      applyOverridePythonAttrsFP =
+        p:
+        p.overridePythonAttrs (
+          finalAttrs: previousAttrs: {
+            overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+            overridePythonAttrsFlagP1 = finalAttrs.overridePythonAttrsFlag + 1;
+          }
+        );
       overrideAttrsFooBar =
         drv:
         drv.overrideAttrs (
@@ -458,6 +466,18 @@ let
       overridePythonAttrs-plain = {
         expr = (package-stub.overridePythonAttrs { overridePythonAttrsFlag = 0; }).overridePythonAttrsFlag;
         expected = 0;
+      };
+      overridePythonAttrs-finalAttrs = {
+        expr = {
+          inherit (applyOverridePythonAttrsFP package-stub)
+            overridePythonAttrsFlag
+            overridePythonAttrsFlagP1
+            ;
+        };
+        expected = {
+          overridePythonAttrsFlag = 1;
+          overridePythonAttrsFlagP1 = 2;
+        };
       };
       overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
         expr = {
