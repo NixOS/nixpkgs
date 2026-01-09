@@ -7,26 +7,31 @@
   makeDesktopItem,
   copyDesktopItems,
   icoutils,
+  fetchpatch2,
 }:
 
 buildNpmPackage rec {
   pname = "antares";
-  version = "0.7.29";
+  version = "0.7.35";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
     tag = "v${version}";
-    hash = "sha256-3zgr3Eefx3WDUW9/1NOaneUbFy3GTnJ3tGgivtW1K/g=";
+    hash = "sha256-A/ievIKXfFGu90aijxhmEWvfg2RqDtd7AtU+iyma3lU=";
   };
 
-  npmDepsHash = "sha256-WJ5HVVa4rEOsvr52L/OGk+vlxRiKLJTxWmUnpN1FnbY=";
+  npmDepsHash = "sha256-X2dG75fpeXeU40wb22KAI7tDBybFwWUpKVj0Mlo3xhc=";
 
   patches = [
     # Since version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
     # This patch will probably be removed in the next version
     # If it does not build without it, you just need to do a npm update in the antares project and copy the patch
-    ./npm-lock.patch
+    # https://github.com/antares-sql/antares/pull/1005
+    (fetchpatch2 {
+      url = "https://github.com/antares-sql/antares/commit/6b2a45d93cf7fefdc92e0d87f390cd21a069b9a4.patch?full_index=1";
+      hash = "sha256-2dOGY0K6jMxSLNLDhwy/+ysTRB24XRXSoDu1AVxi4w4=";
+    })
   ];
 
   nodejs = nodejs_22;
