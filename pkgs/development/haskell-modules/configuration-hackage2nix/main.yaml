@@ -766,6 +766,7 @@ unsupported-platforms:
   sockets:                                      [ platforms.darwin ] # depends on posix-api
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
+  system-linux-proc:                            [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
