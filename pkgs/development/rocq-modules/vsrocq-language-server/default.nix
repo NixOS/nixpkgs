@@ -74,7 +74,6 @@ ocamlPackages.buildDunePackage {
     license = lib.licenses.mit;
   }
   // lib.optionalAttrs (fetched.broken or false) {
-    rocqFilter = true;
     broken = true;
   };
 }
