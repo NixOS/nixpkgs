@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage rec {
       xyven1
       _71zenith
       caperren
+      mattkang
     ];
   };
 }
