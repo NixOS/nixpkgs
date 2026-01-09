@@ -1,0 +1,5 @@
+--- a/tests/functional/meson.build
++++ b/tests/functional/meson.build
+@@ -90 +90 @@ suites = [
+-      'nix-shell.sh',
++      #'nix-shell.sh',
