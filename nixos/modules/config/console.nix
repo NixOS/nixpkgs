@@ -77,7 +77,9 @@ in
     };
 
     colors = lib.mkOption {
-      type = with lib.types; listOf (strMatching "[[:xdigit:]]{6}");
+      type =
+        with lib.types;
+        addCheck (listOf (strMatching "[[:xdigit:]]{6}")) (list: list == [ ] || builtins.length list == 16);
       default = [ ];
       example = [
         "002b36"
