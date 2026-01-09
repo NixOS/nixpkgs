@@ -24,7 +24,6 @@ let
   # We're using Debian's binary package, and patching it into a usable-in-Nixpkgs state.
   ghcDebs = {
     powerpc64-linux = {
-      variantSuffix = "";
       src = {
         urls = [
           "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb"
@@ -79,7 +78,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit version;
-  pname = "ghc-debian-binary${debUsed.variantSuffix}";
+  pname = "ghc-debian-binary";
 
   src = fetchurl debUsed.src;
 
