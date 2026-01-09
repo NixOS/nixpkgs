@@ -185,8 +185,7 @@ lib.makeExtensible (
           };
         }).appendPatches
           (
-            patches_common
-            ++ [
+            [
               (fetchpatch2 {
                 name = "nix-2.31-14692-mdbook-0.5-support.patch";
                 url = "https://github.com/NixOS/nix/commit/a4f5f365090980a6eeb2ef483e49c04bdefd71a8.patch";
