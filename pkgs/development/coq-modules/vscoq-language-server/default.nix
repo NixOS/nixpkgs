@@ -16,7 +16,6 @@ let
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.18" "9.1") "2.3.3")
       (case (range "8.18" "9.1") "2.2.6")
       (case (range "8.18" "8.20") "2.2.1")
       (case (range "8.18" "8.19") "2.1.2")
@@ -42,8 +41,7 @@ let
     release."2.2.5".sha256 = "sha256-XyIjwem/yS7UIpQATNixgKkrMOHHs74nkAOvpU5WG1k=";
     release."2.2.6".rev = "v2.2.6";
     release."2.2.6".sha256 = "sha256-J8nRTAwN6GBEYgqlXa2kkkrHPatXsSObQg9QUQoZhgE=";
-    release."2.3.3".rev = "v2.3.3";
-    release."2.3.3".sha256 = "sha256-wgn28wqWhZS4UOLUblkgXQISgLV+XdSIIEMx9uMT/ig=";
+    # This is the last version of VsCoq. Now, new versions are for VsRocq.
     inherit location;
   };
   fetched = fetch (if version != null then version else defaultVersion);
