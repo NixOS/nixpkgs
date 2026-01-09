@@ -5407,6 +5407,12 @@
     githubId = 1573344;
     name = "Andrey Pavlov";
   };
+  cowburrs = {
+    email = "brycetabangcura@gmail.com";
+    github = "cowburrs";
+    githubId = 135399339;
+    name = "Bryce Tabangcura";
+  };
   cpages = {
     email = "page@ruiec.cat";
     github = "cpages";
