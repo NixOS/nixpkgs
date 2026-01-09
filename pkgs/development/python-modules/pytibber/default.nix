@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.34.1";
+  version = "0.34.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-LfEAn5kCRGUtliHug1ME+ds5AlKKJhZjcnGBcokHPLI=";
+    hash = "sha256-iIh6nowT/lScQfYleKYEj40loKkBsFZTOvUsvTF0RPo=";
   };
 
   build-system = [ setuptools ];
