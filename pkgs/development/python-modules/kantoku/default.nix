@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   flit-core,
   gevent,
   mock,
@@ -52,6 +53,13 @@ buildPythonPackage (finalAttrs: {
     # Assertion error when test_socketstats hits a permission error
     "test_resource_watcher_max_mem"
     "test_resource_watcher_max_mem_abs"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_help_invalid_command"
+    "test_venv"
+    "test_venv_site_packages"
+    # Times out
+    "test_handler"
   ];
 
   __darwinAllowLocalNetworking = true;
