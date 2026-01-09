@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   pytestCheckHook,
   setuptools,
@@ -11,9 +11,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.14.0";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-LN9Ur12ujpF0Pe2CxU7Z2Krvo6lyL11F6bX3S2A+AU0=";
+  src = fetchFromGitHub {
+    owner = "ssato";
+    repo = "python-anyconfig";
+    tag = "RELEASE_${finalAttrs.version}";
+    hash = "sha256-ngXj/KzErz81T09j6tlV9OYDX3DqW5I8xo/ulLNokpQ=";
   };
 
   postPatch = ''
