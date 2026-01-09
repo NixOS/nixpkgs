@@ -97,6 +97,7 @@ in
       ];
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+        copy_bin_and_libs ${pkgs.btrfs-progs}/bin/mkfs.btrfs
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
