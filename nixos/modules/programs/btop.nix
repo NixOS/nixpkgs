@@ -11,7 +11,8 @@ in
 {
   options = {
     programs.btop = {
-      enable = lib.mkEnableOption "a setcap wrapper for btop that fixes CPU wattage and Intel GPU usage";
+      enable = lib.mkEnableOption "a setcap wrapper for btop";
+      package = lib.mkPackageOption pkgs "btop" { extraDescription = "can use btop-cuda or btop-rocm"; };
     };
   };
 
@@ -19,9 +20,10 @@ in
     security.wrappers.btop = {
       owner = "root";
       group = "root";
-      source = "${pkgs.btop}/bin/btop";
+      source = "${cfg.package}/bin/btop";
       capabilities = "cap_perfmon+ep";
     };
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta = {
