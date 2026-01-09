@@ -422,11 +422,6 @@ self: super:
   });
 
   xinput = addMainProgram super.xinput { };
-  xkbevd = addMainProgram super.xkbevd { };
-  xkbprint = addMainProgram super.xkbprint { };
-  xload = addMainProgram super.xload { };
-
-  xpr = addMainProgram super.xpr { };
 
   xwd = addMainProgram super.xwd { };
 }
