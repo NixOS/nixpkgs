@@ -5461,6 +5461,7 @@ with pkgs;
     luajit_2_1
     luajit_2_0
     luajit_openresty
+    luajit_koreader
     ;
 
   lua5 = lua5_2_compat;

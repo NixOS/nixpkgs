@@ -179,4 +179,9 @@ rec {
     self = luajit_openresty;
     inherit callPackage fetchFromGitHub passthruFun;
   };
+
+  luajit_koreader = import ../luajit/koreader.nix {
+    self = luajit_koreader;
+    inherit callPackage fetchFromGitHub passthruFun;
+  };
 }
