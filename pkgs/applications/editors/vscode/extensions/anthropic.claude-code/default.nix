@@ -1,5 +1,6 @@
 {
   lib,
+  claude-code,
   vscode-utils,
 }:
 
@@ -10,6 +11,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "2.1.3";
     hash = "sha256-UH4f3SZbKQTJS4w0AsZMLpmHg0+kyUYZkHOzy2R5Amo=";
   };
+
+  postInstall = ''
+    rm -f "$out/$installPrefix/resources/native-binary/claude"*
+    ln -s "${claude-code}/bin/claude" "$out/$installPrefix/resources/native-binary/claude"
+  '';
 
   meta = {
     description = "Harness the power of Claude Code without leaving your IDE";
