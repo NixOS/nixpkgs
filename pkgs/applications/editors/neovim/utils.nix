@@ -68,10 +68,14 @@ let
   */
   makeVimPackageInfo =
     # a list of neovim plugin derivations, for instance
-    #  plugins = [
-    # { plugin=vimPlugins.far-vim; config = "let g:far#source='rg'"; optional = false; }
-    # vimPlugins.vim-fugitive
-    # ]
+    #  [
+    #     {
+    #       plugin   = vimPlugins.grug-far-nvim;
+    #       config   = "let g:grug_far = { 'startInInsertMode': v:false }";
+    #       optional = false;
+    #     }
+    #     vimPlugins.vim-fugitive
+    #  ]
     plugins:
 
     let
@@ -79,7 +83,7 @@ let
 
       vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
 
-      userPluginLua = lib.foldl (
+      userPluginViml = lib.foldl (
         acc: p: if p.config != null then acc ++ [ p.config ] else acc
       ) [ ] pluginsNormalized;
 
@@ -103,8 +107,8 @@ let
       # plugins' python dependencies
       inherit pluginPython3Packages;
 
-      # lua config set by the user along with the plugin
-      inherit userPluginLua;
+      # viml config set by the user along with the plugin
+      inherit userPluginViml;
 
       # recommanded configuration set in vim plugins ".passthru.initLua"
       inherit pluginAdvisedLua;
