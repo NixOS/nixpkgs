@@ -12,7 +12,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysma";
   version = "1.1.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kellerza";
     repo = "pysma";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fRYpWr3eny9Ore2uQhPgVDSb+M1KYy1cy9bE2+Em3xU=";
   };
 
@@ -47,10 +47,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysma" ];
 
   meta = {
-    changelog = "https://github.com/kellerza/pysma/blob/${src.tag}/CHANGELOG.md";
     description = "Python library for interacting with SMA Solar's WebConnect";
     homepage = "https://github.com/kellerza/pysma";
+    changelog = "https://github.com/kellerza/pysma/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
