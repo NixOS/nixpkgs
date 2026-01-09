@@ -15,17 +15,15 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tldextract";
   version = "5.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "john-kurkowski";
     repo = "tldextract";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WPf996EVVEKxD+ZFDB8nIrrd1Sxr+IOI8I19J+KMPRg=";
   };
 
@@ -57,9 +55,9 @@ buildPythonPackage rec {
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
-    changelog = "https://github.com/john-kurkowski/tldextract/blob/${src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/john-kurkowski/tldextract/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tldextract";
   };
-}
+})
