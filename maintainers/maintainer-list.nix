@@ -9994,6 +9994,13 @@
     githubId = 9705357;
     name = "Guillaume Bouchard";
   };
+  guildedthorn = {
+    name = "Jamie Duddleston";
+    email = "admin@guildedthorn.com";
+    github = "GuildedThorn";
+    githubId = 34840091;
+    keys = [ { fingerprint = "3E2A D2D2 A175 671C 2924  D74E CDDB 953C D893 FC5C"; } ];
+  };
   guilhermenl = {
     email = "acc.guilhermenl@gmail.com";
     github = "guilherme-n-l";
