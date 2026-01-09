@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
 			that will perform much better at small text sizes and
 			in long texts.
     '';
-    homepage = "https://github.com/googlefonts/karla";
+    homepage = "https://github.com/googlefonts/Exo-2.0";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ cowburrs ];
