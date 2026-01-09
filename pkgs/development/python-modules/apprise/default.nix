@@ -17,6 +17,8 @@
   requests,
   requests-oauthlib,
   setuptools,
+  stdenv,
+  terminal-notifier,
   testers,
 }:
 
@@ -31,6 +33,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-jzvjGLtCnCAXRw4zkoouMTy/dgD8dLgYR4KjcGDbNmo=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace apprise/plugins/macosx.py \
+    --replace-fail "/opt/homebrew/bin/terminal-notifier" "${lib.getExe' terminal-notifier "terminal-notifier"}"
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
