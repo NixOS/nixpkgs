@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   python-dateutil,
   pytz,
@@ -34,6 +35,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-cUbY6c0JFzs1oZJOTnMXz3uCah2f50g8/3uWQXtwiGY=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/scrapinghub/dateparser/pull/1294
+      url = "https://github.com/scrapinghub/dateparser/commit/6b23348b9367d43bebc9a40b00dda3363eb2acd5.patch";
+      hash = "sha256-LriRbGdYxF51Nwrm7Dp4kivyMikzmhytNQo0txMGsVI=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
