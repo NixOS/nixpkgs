@@ -431,6 +431,8 @@ in
 
         ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers { };
 
+        ipu7-drivers = callPackage ../os-specific/linux/ipu7-drivers { };
+
         ivsc-driver = callPackage ../os-specific/linux/ivsc-driver { };
 
         ixgbevf = callPackage ../os-specific/linux/ixgbevf { };
