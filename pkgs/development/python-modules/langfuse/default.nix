@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   anyio,
   backoff,
   httpx,
@@ -30,6 +31,9 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-CZa1nzgGHQSx/cPkOxbDsfkWpgr/veWRN8zgHeYrJOw=";
   };
+
+  # https://github.com/langfuse/langfuse/issues/9618
+  disabled = pythonAtLeast "3.14";
 
   build-system = [ poetry-core ];
 
