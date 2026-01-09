@@ -14,18 +14,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.22.5";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3d9Lq3IulIgp4QGNtSvkwz10kfygX6vsmVdlU3lE6Gw=";
+    hash = "sha256-tl9Iy1M0YxPvUpbIQRl7/P2iRIb5n1cvHEqK2k3OR5I=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-6NqpkUgez7CqQAMDQW3Zdi86sF5qXseKXMw1Vw/5zWU=";
+  npmDepsHash = "sha256-gPmH/Ym6+UxbpH8CEuDmdZtbR6HqWPjMchs1zlDELDU=";
 
   nativeBuildInputs = [
     jq
@@ -88,6 +88,8 @@ buildNpmPackage (finalAttrs: {
     cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
     cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
+
+    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core/dist/docs/CONTRIBUTING.md
 
     ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
     chmod +x "$out/bin/gemini"
