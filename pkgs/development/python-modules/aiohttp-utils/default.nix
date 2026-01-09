@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   aiohttp,
   python-mimeparse,
@@ -46,6 +47,13 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: assert None == 'application/octet-stream'
     "test_renders_to_json_by_default"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/test_examples.py"
+    "tests/test_negotiation.py"
+    "tests/test_routing.py"
   ];
 
   meta = {
