@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-egrxcnDVKKgk1sL5WNMIR2FPwQbjjMy20VWizcTBEtM=";
 
   # requires nightly features
-  env.RUSTC_BOOTSTRAP = 1;
+  RUSTC_BOOTSTRAP = 1;
 
   meta = {
     description = "Tool for unit testing tree sitter highlights for nvim-treesitter";

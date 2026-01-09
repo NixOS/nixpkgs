@@ -23,10 +23,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   # skip tests that require network access
-  checkFlags = [
-    "-skip=TestClient"
-    "-skip=TestResolvesToPrivateIP"
-  ];
+  checkFlags = [ "-skip=TestResolvesToPrivateIP" ];
 
   ldflags = [
     "-s"

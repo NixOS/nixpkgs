@@ -23,7 +23,8 @@
   p7zip,
   pkg-config,
   xorg,
-
+}:
+{
   version,
   buildNumber,
   buildType,
@@ -35,7 +36,6 @@
   repositories,
   kotlin-jps-plugin,
 }:
-
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
     version = "2.2.20";
@@ -313,6 +313,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    inherit libdbm fsnotifier jps-bootstrap;
+    inherit
+      version
+      buildNumber
+      libdbm
+      fsnotifier
+      jps-bootstrap
+      ;
   };
 }
