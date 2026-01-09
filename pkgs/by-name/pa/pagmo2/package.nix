@@ -1,54 +1,67 @@
 {
-  fetchFromGitHub,
   lib,
   stdenv,
+  fetchFromGitHub,
   cmake,
   eigen,
   nlopt,
   ipopt,
   boost,
   onetbb,
-  # tests pass but take 30+ minutes
-  runTests ? false,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pagmo2";
   version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "esa";
     repo = "pagmo2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    eigen
-    nlopt
-    boost
-    onetbb
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) ipopt;
-
-  cmakeFlags = [
-    "-DPAGMO_BUILD_TESTS=${if runTests then "ON" else "OFF"}"
-    "-DPAGMO_WITH_EIGEN3=yes"
-    "-DPAGMO_WITH_NLOPT=yes"
-    "-DNLOPT_LIBRARY=${nlopt}/lib/libnlopt${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-DPAGMO_WITH_IPOPT=yes"
-    "-DCMAKE_CXX_FLAGS='-fuse-ld=gold'"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # FIXME: fails ipopt test with Invalid_Option on darwin, so disable.
-    "-DPAGMO_WITH_IPOPT=no"
-    "-DLLVM_USE_LINKER=gold"
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  doCheck = runTests;
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    onetbb
+  ];
+
+  propagatedBuildInputs = [
+    eigen
+    nlopt
+    ipopt
+    boost
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "PAGMO_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "PAGMO_WITH_EIGEN3" true)
+    (lib.cmakeBool "PAGMO_WITH_NLOPT" true)
+    (lib.cmakeBool "PAGMO_WITH_IPOPT" true)
+  ];
+
+  env = {
+    # Workaround clang17+ / lto bug
+    # See https://github.com/esa/pagmo2/pull/585
+    # Should be removed in new release
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-fno-assume-unique-vtables";
+  };
+
+  doCheck = true;
+
+  passthru = {
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "pagmo" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://esa.github.io/pagmo2/";
@@ -57,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.costrouc ];
   };
-}
+})
