@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-otbr-api";
     tag = version;
-    hash = "sha256-irQ4QvpGIAYYKq0UqLuo7Nrnde905+GJFd4HkxsCDmQ=";
+    hash = "sha256-hFWFi64mRJL5487N6Xm6EQVVaYEzsdg9P2QZYEn758k=";
   };
 
   build-system = [ setuptools ];
