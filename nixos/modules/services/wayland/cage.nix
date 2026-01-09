@@ -14,6 +14,13 @@ in
   options.services.cage = {
     enable = mkEnableOption "cage kiosk service";
 
+    restartIfChanged = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to restart the 'cage-tty1' service when its configuration changes.";
+    };
+
     user = mkOption {
       type = types.str;
       default = "demo";
@@ -74,7 +81,7 @@ in
       wantedBy = [ "graphical.target" ];
       conflicts = [ "getty@tty1.service" ];
 
-      restartIfChanged = false;
+      restartIfChanged = cfg.restartIfChanged;
       unitConfig.ConditionPathExists = "/dev/tty1";
       serviceConfig = {
         ExecStart = ''
