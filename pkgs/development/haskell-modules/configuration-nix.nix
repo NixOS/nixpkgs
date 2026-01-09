@@ -1980,6 +1980,7 @@ builtins.intersectAttrs super {
     gi-gtksource5
     gi-gsk
     gi-adwaita
+    gi-ostree
     sdl2-ttf
     sdl2
     dear-imgui
