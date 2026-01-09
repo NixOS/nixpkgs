@@ -3311,9 +3311,6 @@ with haskellLib;
   # Test suite no longer compiles with hspec-hedgehog >= 0.3
   finitary = dontCheck super.finitary;
 
-  # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
-  ktx-codec = warnAfterVersion "0.0.2.1" (doJailbreak super.ktx-codec);
-
   # 2025-04-13: jailbreak to allow template-haskell >= 2.17
   sr-extra = warnAfterVersion "1.88" (
     overrideCabal (drv: {
