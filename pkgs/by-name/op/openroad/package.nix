@@ -96,6 +96,9 @@ stdenv.mkDerivation rec {
     patchShebangs --build etc/find_messages.py
     # Disable two tests that are failing curently.
     sed 's/^.*partition_gcd/# \0/g' -i src/par/test/CMakeLists.txt
+    # fix build with gcc15
+    sed -e '39i #include <cstdint>' -i src/gpl/src/placerBase.h
+    sed -e '37i #include <cstdint>' -i src/gpl/src/routeBase.h
   '';
 
   cmakeFlags = [

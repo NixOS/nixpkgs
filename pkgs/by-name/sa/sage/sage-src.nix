@@ -89,6 +89,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/fa00696112fde95e0c4241ad6063936200ce6f68.patch?full_index=1";
       hash = "sha256-eFDpNu/2gcQATELmQ7/VzXI35xIzaVrD8bhhJ57e2gc=";
     })
+
+    # https://github.com/sagemath/sage/pull/41233, landed in 10.8.rc0
+    (fetchpatch2 {
+      name = "flint-3.4-update.patch";
+      url = "https://github.com/sagemath/sage/commit/9bd5304f1a222e215d7006a04854ff66616748bf.patch?full_index=1";
+      hash = "sha256-7bgouXV3pM20IX5PM24ZpJWOBlZjQksGtjopgouEbyg=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
