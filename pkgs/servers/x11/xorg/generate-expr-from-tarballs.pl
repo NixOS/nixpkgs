@@ -442,6 +442,7 @@ print OUT <<EOF;
   transset,
   util-macros,
   viewres,
+  wrapWithXFileSearchPathHook,
   x11perf,
   xauth,
   xbacklight,
@@ -531,6 +532,7 @@ self: with self; {
     smproxy
     transset
     viewres
+    wrapWithXFileSearchPathHook
     x11perf
     xauth
     xbacklight
