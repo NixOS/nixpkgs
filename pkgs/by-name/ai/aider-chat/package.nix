@@ -35,6 +35,10 @@ let
 
     pythonRelaxDeps = true;
 
+    pythonRemoveDeps = [
+      "importlib-resources"
+    ];
+
     build-system = with python3Packages; [ setuptools-scm ];
 
     dependencies = with python3Packages; [
@@ -70,7 +74,6 @@ let
       httpx
       huggingface-hub
       idna
-      importlib-resources
       jinja2
       jiter
       json5
@@ -148,6 +151,9 @@ let
 
     patches = [
       ./fix-tree-sitter.patch
+
+      # https://github.com/Aider-AI/aider/pull/4755
+      ./replace-importlib_resources.patch
 
       (replaceVars ./fix-flake8-invoke.patch {
         flake8 = lib.getExe python3Packages.flake8;

@@ -96,6 +96,9 @@ self: super: {
     ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
+  # Later versions require unix >= 2.8 which is tricky to provide with GHC 9.4
+  crypton-x509-store = doDistribute self.crypton-x509-store_1_6_11;
+
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
@@ -141,6 +144,8 @@ self: super: {
     lib.throwIf pkgs.config.allowAliases
       "haskell-language-server has dropped support for ghc 9.4 in version 2.12.0.0, please use a newer ghc version or an older nixpkgs"
       (markBroken super.haskell-language-server);
+
+  hlint = doDistribute self.hlint_3_6_1;
 
   # directory-ospath-streaming requires the ospath API in core packages
   # filepath, directory and unix.

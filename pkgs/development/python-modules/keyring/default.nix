@@ -19,16 +19,20 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "25.6.0";
+  version = "25.7.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "keyring";
     tag = "v${version}";
-    hash = "sha256-qu9HAlZMLlIVs8c9ClzWUljezhrt88gu1kouklMNxMY=";
+    hash = "sha256-v9s28vwx/5DJRa3dQyS/mdZppfvFcfBtafjBRi2c1oQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"coherent.licensed",' ""
+  '';
 
   build-system = [ setuptools-scm ];
 

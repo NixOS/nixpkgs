@@ -75,7 +75,6 @@ let
         addBinToPathHook
         versionCheckHook
       ];
-    versionCheckProgramArg = "--version";
 
     disabledTests = [
       # Test data not found

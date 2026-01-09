@@ -1,26 +1,26 @@
 {
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
   curl,
-  pkg-config,
+  fetchFromGitHub,
+  lib,
   libgit2,
   openssl,
+  pkg-config,
+  rustPlatform,
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-codspeed";
-  version = "3.0.5";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
-    rev = "v${version}";
-    hash = "sha256-vQGPROaTkEwvKw+4aPpS1whUwfeqBcYWJTIKm4KnIiw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ljq9d9T3Cx5hDAjP4dbhSnbCYaU1KB42aDhQvRyI7Ws=";
   };
 
-  cargoHash = "sha256-1bFd35JScS3x0ttfSyNUgtB9xgtVUMRl4oUOn2r+t5M=";
+  cargoHash = "sha256-ryKZyl5CuxFsX1dLadJnCyorssVoD2w5kueKDJP80qU=";
 
   nativeBuildInputs = [
     curl
@@ -35,10 +35,17 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "-p=cargo-codspeed" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
   checkFlags = [
     # requires an extra dependency, blit
     "--skip=test_package_in_deps_build"
+
+    # requires criteron, which requires additional dependencies
+    "--skip=test_cargo_config_rustflags"
+
+    # requires additional dependencies
+    "--skip=test_criterion_build_and_run_filtered_by_name"
+    "--skip=test_criterion_build_and_run_filtered_by_name_single"
   ];
 
   env = {
@@ -46,14 +53,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/v${finalAttrs.version}";
     description = "Cargo extension to build & run your codspeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/codspeed-rust";
-    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${src.rev}";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = [ ];
     mainProgram = "cargo-codspeed";
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

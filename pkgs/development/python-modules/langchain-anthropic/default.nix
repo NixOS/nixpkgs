@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-anthropic";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${version}";
-    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
+    hash = "sha256-/CqnpeQXYdafkly8shen72dIZU3I9o/2TwM903Nw9DA=";
   };
 
   sourceRoot = "${src.name}/libs/partners/anthropic";
@@ -57,10 +57,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # TypeError from Pydantic
-    # https://github.com/langchain-ai/langchain/issues/34068
-    "test_creates_bash_tool"
-    "test_replaces_tool_with_claude_descriptor"
+    # Fails when langchain-core gets ahead of this
+    "test_serdes"
   ];
 
   pythonImportsCheck = [ "langchain_anthropic" ];

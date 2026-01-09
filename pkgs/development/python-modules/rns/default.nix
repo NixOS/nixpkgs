@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "1.0.4";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "Reticulum";
     tag = version;
-    hash = "sha256-55fCmd1ihwvXQpsvEQ4xJH1p5aFEiUJZI7kE0LQX6WQ=";
+    hash = "sha256-aoKiTdv5r3Z20D6znFLVf/8C4WpDBjKKnaYJQ8zaGVI=";
   };
 
   patches = [
@@ -45,7 +45,6 @@ buildPythonPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rncp";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Cryptography-based networking stack for wide-area networks";

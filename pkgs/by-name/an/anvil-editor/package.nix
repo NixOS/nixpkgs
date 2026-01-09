@@ -16,13 +16,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "anvil-editor";
-  version = "0.6.3";
+  version = "0.7";
 
   # has to update vendorHash of extra package manually
   # nixpkgs-update: no auto update
   src = fetchzip {
     url = "https://anvil-editor.net/releases/anvil-src-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-GPzd1oKkf160ya0sxUd72wego0BvwCerZ5SiY2q0EDE=";
+    hash = "sha256-9lJg8IMt6+GJm5a7j7ZyhbwvAmlBKvtdOv9FD9MQdrA=";
   };
 
   modRoot = "anvil/editor";
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
   anvilExtras = buildGoModule {
     pname = "anvil-editor-extras";
     inherit (finalAttrs) version src meta;
-    vendorHash = "sha256-q/PunSBe+gWTWyf8rjfikK56rP2PeZqpuiFG9HIVMTk=";
+    vendorHash = "sha256-Hnq1aq1DGM7IJwjU38yEk6yXmQQLyisMeaktNZNysy8=";
     modRoot = "anvil/extras";
     # Include dependency on anvil api
     postPatch = ''

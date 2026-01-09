@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
-  version = "0.4.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GptP8iw3yqXKJiYv7cJEdNCTib7HAhveFCwMKvfv+3I=";
+    hash = "sha256-OBdVnKt3XkuzztgNcwla/EGqmAhNuRGkT6boJw5UITQ=";
   };
 
-  vendorHash = "sha256-uhqa850dHRHNZLXUMGg9Hb8skEY/5CrGmxSmnBytW/s=";
+  vendorHash = "sha256-kDZRT/Ua+SaxyZ6RI9ZY2tqBgQBWo755fvQVRupBsUc=";
 
   ldflags = [
     "-s"

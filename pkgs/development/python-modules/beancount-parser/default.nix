@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beancount-parser";
   version = "1.2.3";
   format = "pyproject";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beancount-parser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8YcrsLdSRTixKXU/IM821kNcBo0jB/8DXA1/KiedsBY=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standalone Lark based Beancount syntax parser";
     homepage = "https://github.com/LaunchPlatform/beancount-parser/";
-    changelog = "https://github.com/LaunchPlatform/beancount-parser/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/beancount-parser/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

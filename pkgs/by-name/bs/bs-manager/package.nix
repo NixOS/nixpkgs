@@ -8,6 +8,7 @@
   fetchNpmDeps,
   fetchFromGitHub,
   makeDesktopItem,
+  nodejs_22,
 
   autoPatchelfHook,
   copyDesktopItems,
@@ -17,7 +18,7 @@
   steam-run-free,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "bs-manager";
   version = "1.5.4";
 

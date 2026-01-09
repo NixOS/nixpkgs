@@ -1,12 +1,13 @@
 {
   lib,
   callPackage,
+  symlinkJoin,
+  vimUtils,
   tree-sitter,
   neovim,
   neovimUtils,
   runCommand,
   vimPlugins,
-  tree-sitter-grammars,
   writableTmpDirAsHomeHook,
 }:
 
@@ -15,18 +16,43 @@ self: super:
 let
   inherit (neovimUtils) grammarToPlugin;
 
-  overrides = prev: {
+  buildQueries =
+    { language }:
+    vimUtils.toVimPlugin (
+      runCommand "nvim-treesitter-queries-${language}"
+        {
+          passthru = { inherit language; };
+          meta.description = "Queries for ${language} from nvim-treesitter";
+        }
+        ''
+          mkdir -p "$out/queries"
+          if [ -d "${super.nvim-treesitter.src}/runtime/queries/${language}" ]; then
+            ln -s "${super.nvim-treesitter.src}/runtime/queries/${language}" "$out/queries/${language}"
+          else
+            echo "Error: there are no queries for ${language}."
+            exit 1
+          fi
+        ''
+    );
+
+  generated = callPackage ./generated.nix {
+    inherit (tree-sitter) buildGrammar;
+    inherit buildQueries;
   };
 
-  generatedGrammars =
-    let
-      generated = callPackage ./generated.nix {
-        inherit (tree-sitter) buildGrammar;
-      };
-    in
-    lib.overrideExisting generated (overrides generated);
+  inherit (generated) parsers queries;
 
-  generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
+  parsersWithMeta = lib.mapAttrs (
+    lang: parser:
+    if lib.hasAttr lang queries then
+      parser.overrideAttrs (old: {
+        passthru = (old.passthru or { }) // {
+          associatedQuery = queries.${lang};
+        };
+      })
+    else
+      parser
+  ) parsers;
 
   # add aliases so grammars from `tree-sitter` are overwritten in `withPlugins`
   # for example, for ocaml_interface, the following aliases will be added
@@ -34,7 +60,7 @@ let
   #   tree-sitter-ocaml-interface
   #   tree-sitter-ocaml_interface
   builtGrammars =
-    generatedGrammars
+    parsersWithMeta
     // lib.concatMapAttrs (
       k: v:
       let
@@ -47,9 +73,9 @@ let
         ${replaced} = v;
         "tree-sitter-${replaced}" = v;
       }
-    ) generatedDerivations;
+    ) parsersWithMeta;
 
-  allGrammars = lib.attrValues generatedDerivations;
+  allGrammars = lib.attrValues parsersWithMeta;
 
   # Usage:
   # pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.c p.java ... ])
@@ -57,28 +83,44 @@ let
   # pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   withPlugins =
     f:
+    let
+      selectedGrammars = f (tree-sitter.builtGrammars // builtGrammars);
+
+      grammarPlugins = map grammarToPlugin selectedGrammars;
+
+      queryPlugins = lib.pipe selectedGrammars [
+        (map (g: g.passthru.associatedQuery or null))
+        (lib.filter (q: q != null))
+      ];
+    in
     self.nvim-treesitter.overrideAttrs {
-      passthru.dependencies = map grammarToPlugin (f (tree-sitter.builtGrammars // builtGrammars));
+      passthru.dependencies = [
+        (symlinkJoin {
+          name = "nvim-treesitter-grammars";
+          paths = grammarPlugins ++ queryPlugins;
+        })
+      ];
     };
 
   withAllGrammars = withPlugins (_: allGrammars);
+  grammarPlugins = lib.mapAttrs (_: grammarToPlugin) parsersWithMeta;
 in
-
 {
-  postPatch = ''
-    rm -r parser
-  '';
+  nvimSkipModules = [ "nvim-treesitter._meta.parsers" ];
 
-  passthru = (super.nvim-treesitter.passthru or { }) // {
+  passthru = super.nvim-treesitter.passthru or { } // {
     inherit
+      buildQueries
       builtGrammars
       allGrammars
+      grammarPlugins
       grammarToPlugin
       withPlugins
       withAllGrammars
+      queries
       ;
 
-    grammarPlugins = lib.mapAttrs (_: grammarToPlugin) generatedDerivations;
+    parsers = grammarPlugins;
 
     tests = {
       check-queries =
@@ -100,7 +142,7 @@ in
             ln -s ${withAllGrammars}/CONTRIBUTING.md .
             export ALLOWED_INSTALLATION_FAILURES=ipkg,norg,verilog
 
-            nvim --headless "+luafile ${withAllGrammars}/scripts/check-queries.lua" | tee log
+            nvim --headless -l "${withAllGrammars}/scripts/check-queries.lua" | tee log
 
             if grep -q Warning log; then
               echo "WARNING: warnings were emitted by the check"
@@ -108,45 +150,9 @@ in
             fi
           '';
 
-      tree-sitter-queries-are-present-for-custom-grammars =
-        let
-          pluginsToCheck =
-            map (grammar: grammarToPlugin grammar)
-              # non-derivations are here because there is a `recurseForDerivations = true`
-              (lib.filter lib.isDerivation (lib.attrValues tree-sitter-grammars));
-        in
-        runCommand "nvim-treesitter-test-queries-are-present-for-custom-grammars" { CI = true; } ''
-          touch "$out"
-
-          function check_grammar {
-            local grammar_name="$1"
-            local grammar_path="$2"
-
-            local grammar_queries=$(find -L "$grammar_path/queries/$grammar_name" -name '*.scm')
-            local EXPECTED_FILES="$grammar_path/parser/$grammar_name.so $grammar_queries"
-
-            echo ""
-            echo "expected files for $grammar_name:"
-            echo "$EXPECTED_FILES"
-
-            # the derivation has only symlinks, and `find` doesn't count them as files
-            # so we cannot use `-type f`, thus we use `-not -type d`
-            for file in $(find -L $2 -not -type d); do
-              echo "checking $file"
-              # see https://stackoverflow.com/a/8063284
-              if ! echo "$EXPECTED_FILES" | grep -wqF "$file"; then
-                echo "$file is unexpected, exiting"
-                exit 1
-              fi
-            done
-          }
-
-          ${lib.concatLines (lib.forEach pluginsToCheck (g: "check_grammar \"${g.grammarName}\" \"${g}\""))}
-        '';
-
       no-queries-for-official-grammars =
         let
-          pluginsToCheck = lib.filter lib.isDerivation (lib.attrValues vimPlugins.nvim-treesitter-parsers);
+          pluginsToCheck = lib.filter lib.isDerivation (lib.attrValues vimPlugins.nvim-treesitter.parsers);
         in
         runCommand "nvim-treesitter-test-no-queries-for-official-grammars" { CI = true; } ''
           touch "$out"
@@ -168,10 +174,8 @@ in
     };
   };
 
-  meta =
-
-    (super.nvim-treesitter.meta or { }) // {
-      license = lib.licenses.asl20;
-      maintainers = [ ];
-    };
+  meta = super.nvim-treesitter.meta or { } // {
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+  };
 }

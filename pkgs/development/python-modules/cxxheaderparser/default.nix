@@ -1,22 +1,23 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
+  hatch-vcs,
+  hatchling,
   pcpp,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cxxheaderparser";
-  version = "1.6.0";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robotpy";
     repo = "cxxheaderparser";
-    rev = version;
-    hash = "sha256-3nQCUb2sgF91ilREHj/fb8IoMTHjPoOFWGzkbssGqFY=";
+    tag = version;
+    hash = "sha256-AvSwt8ED+w1WlLwa8DPP9+zG8g5c8p51mvQx8ZfDMqk=";
   };
 
   postPatch = ''
@@ -24,15 +25,21 @@ buildPythonPackage rec {
     echo "__version__ = '${version}'" > cxxheaderparser/version.py
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   checkInputs = [ pcpp ];
+
   nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "cxxheaderparser" ];
 
   meta = {
-    description = "Modern pure python C++ header parser";
+    description = "Modern pure Python C++ header parser";
     homepage = "https://github.com/robotpy/cxxheaderparser";
+    changelog = "https://github.com/robotpy/cxxheaderparser/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix;

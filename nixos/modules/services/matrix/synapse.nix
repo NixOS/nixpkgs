@@ -1441,6 +1441,10 @@ in
       gid = config.ids.gids.matrix-synapse;
     };
 
+    systemd.slices.system-synapse = {
+      description = "Matrix reference homeserver";
+    };
+
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
@@ -1480,6 +1484,7 @@ in
             ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
             Restart = "on-failure";
             UMask = "0077";
+            Slice = "system-synapse.slice";
 
             # Security Hardening
             # Refer to systemd.exec(5) for option descriptions.

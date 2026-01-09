@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "snitch";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "karol-broda";
     repo = "snitch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V9YoyDAdH/TODVP5nGfOIh0KfsPyZVQg9Mkj7cjy3Xo=";
+    hash = "sha256-SssAiRUfUaDgAoVO2rDacru8e914Wl+4sA4JQ4Mv4eA=";
   };
 
   vendorHash = "sha256-fX3wOqeOgjH7AuWGxPQxJ+wbhp240CW8tiF4rVUUDzk=";

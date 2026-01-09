@@ -14,13 +14,13 @@
 
 gcc15Stdenv.mkDerivation {
   pname = "libresplit";
-  version = "0-unstable-2025-12-22";
+  version = "0-unstable-2025-12-26";
 
   src = fetchFromGitHub {
     owner = "LibreSplit";
     repo = "LibreSplit";
-    rev = "63ed87a8eb1d8d188b613bc9b8c48d7223a37dbb";
-    hash = "sha256-n8kKdv6e//v0yst6PW9PAnmB73W2lzlTdvvuELCePFY=";
+    rev = "11fcc57ff3ebbf58b3bb91b69575afbe4a8409b1";
+    hash = "sha256-b743CPRpBZI5H+jFRn1O/s0LZzp8B5QWhjZ2N3iSz+g=";
   };
 
   nativeBuildInputs = [

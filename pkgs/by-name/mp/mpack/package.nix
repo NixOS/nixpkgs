@@ -73,6 +73,9 @@ stdenv.mkDerivation rec {
       --replace-fail "char buf[1024], buf2[1024];" "char buf[1024], buf2[1066];"
   '';
 
+  # fix build with gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [ autoreconfHook ];
 
   postInstall = ''

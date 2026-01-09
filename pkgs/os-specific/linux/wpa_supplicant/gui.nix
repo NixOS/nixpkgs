@@ -10,7 +10,7 @@
 
 mkDerivation {
   pname = "wpa_gui";
-  inherit (wpa_supplicant) version src;
+  inherit (wpa_supplicant) version src patches;
 
   buildInputs = [ qtbase ];
   nativeBuildInputs = [

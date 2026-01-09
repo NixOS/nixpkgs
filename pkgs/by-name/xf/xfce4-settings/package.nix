@@ -24,6 +24,7 @@
   # https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
   withUpower ? false,
   wlr-protocols,
+  xapp,
   xfconf,
   xf86inputlibinput,
   colord,
@@ -33,14 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-settings";
-  version = "4.20.2";
+  version = "4.20.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-settings";
     tag = "xfce4-settings-${finalAttrs.version}";
-    hash = "sha256-hx1ilXPcwWWDwNR/k2b+9vR5aCv9UlPR0d42OE6JxEk=";
+    hash = "sha256-dQyALVooaie2vkETghddKM4HqAZQmx3E9UJ+ChKtydc=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfce4util
     libxklavier
     wlr-protocols
+    xapp # org.x.apps.portal
     xf86inputlibinput
     xfconf
   ]

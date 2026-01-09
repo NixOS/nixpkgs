@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gelly";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "Fingel";
     repo = "gelly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0iqBAwSWcYJyu7YbFvlSzGvRKYAXyDzDzy0yWjL4eu0=";
+    hash = "sha256-tjJIIKv4+ElmhLIaZAC/MIqhsZI6RzZBAkXZoN4nLeM=";
   };
 
-  cargoHash = "sha256-1bPmSz20UOAGvIbWwsB6BoNxXcOxg+f0dpnLw3V80CM=";
+  cargoHash = "sha256-sQJrhkyRYTfk2qQ7FXG6IQ4js9Jq4BSWAh9z0V0jdm8=";
 
   nativeBuildInputs = [
     pkg-config

@@ -47,6 +47,8 @@ buildPythonPackage rec {
       url = "https://github.com/antocuni/pypytools/commit/c6aed496ec35a6ef7ce9e95084849eebc16bafef.patch";
       hash = "sha256-YoYRZmgueQmxRtGaeP4zEVxuA0U7TB0PmoYHHVI7ICQ=";
     })
+    # Fix ast.Num/ast.Index removal in Python 3.14, https://github.com/antocuni/pypytools/pull/5
+    ./fix-ast-314.patch
   ];
 
   pythonImportsCheck = [ "pypytools" ];

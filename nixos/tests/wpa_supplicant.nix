@@ -96,16 +96,27 @@ let
 
         # Note: secrets are stored outside /etc/ and /nix/store to
         # test for accessibility of these paths
-        system.activationScripts.wpa-secrets = {
-          deps = [
-            "users"
-            "specialfs"
+        systemd.services.wpa-secrets = {
+          wantedBy = [
+            "network.target"
+            "multi-user.target"
           ];
-          text = ''
-            install -Dm600 -o wpa_supplicant ${pkgs.writeText "wpa" ''
-              psk_nixos_test=${naughtyPassphrase}
-            ''} /var/lib/secrets/wpa
-          '';
+          before = [
+            "network.target"
+            "multi-user.target"
+          ];
+          serviceConfig = {
+            Type = "oneshot";
+          };
+          script =
+            let
+              secretFile = pkgs.writeText "wpa" ''
+                psk_nixos_test=${naughtyPassphrase}
+              '';
+            in
+            ''
+              install -Dm600 -o wpa_supplicant ${secretFile} /var/lib/secrets/wpa
+            '';
         };
 
         # wireless client

@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/gren";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     backend = haskellPackages.callPackage ./generated-backend-package.nix { };

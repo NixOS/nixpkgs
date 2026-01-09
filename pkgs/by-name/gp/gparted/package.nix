@@ -16,13 +16,29 @@
   gpart,
   hdparm,
   procps,
-  util-linuxMinimal,
   polkit,
   wrapGAppsHook3,
   replaceVars,
   mtools,
-  dosfstools,
   xhost,
+  dosfstools,
+  e2fsprogs,
+  util-linuxMinimal,
+  withAllTools ? false,
+  bcachefs-tools,
+  btrfs-progs,
+  exfatprogs,
+  f2fs-tools,
+  hfsprogs,
+  jfsutils,
+  cryptsetup,
+  lvm2,
+  nilfs-utils,
+  ntfs3g,
+  reiserfsprogs,
+  udftools,
+  xfsprogs,
+  xfsdump,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +81,28 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
+  runtimeDeps = [
+    dosfstools
+    e2fsprogs
+    util-linuxMinimal
+  ]
+  ++ lib.optionals withAllTools [
+    bcachefs-tools
+    btrfs-progs
+    exfatprogs
+    f2fs-tools
+    hfsprogs
+    jfsutils
+    cryptsetup
+    lvm2
+    nilfs-utils
+    ntfs3g
+    reiserfsprogs
+    udftools
+    xfsprogs
+    xfsdump
+  ];
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
@@ -73,18 +111,19 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
        --prefix PATH : "${
-         lib.makeBinPath [
-           gpart
-           hdparm
-           util-linuxMinimal
-           procps
-           coreutils
-           gnused
-           gnugrep
-           mtools
-           dosfstools
-           xhost
-         ]
+         lib.makeBinPath (
+           [
+             gpart
+             hdparm
+             procps
+             coreutils
+             gnused
+             gnugrep
+             mtools
+             xhost
+           ]
+           ++ finalAttrs.runtimeDeps
+         )
        }"
     )
   '';

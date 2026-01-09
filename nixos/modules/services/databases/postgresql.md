@@ -485,6 +485,35 @@ with hardening, it's considered a bug.
 When using extensions that are not packaged in `nixpkgs`, hardening adjustments may
 become necessary.
 
+## `postgresql.service` vs `postgresql.target` {#module-services-postgresql-target-vs-service}
+
+In order to delay a service's startup until the local PostgreSQL instance is up, one usually uses a combination of `wants`/`after`, i.e.
+
+```nix
+{
+  systemd.services.myservice = {
+    wants = [ "postgresql.target" ];
+    after = [ "postgresql.target" ];
+  };
+}
+```
+
+::: {.note}
+`wants` makes sure that `postgresql.target` is being started when `myservice.service` is started.
+If it's necessary to restart `myservice` when `postgresql.target` gets restarted and `myservice.service` fails to start if `postgresql.service` fails to start, use `requires` instead.
+
+See also {manpage}`systemd.unit(5)`.
+:::
+
+It's also possible to wait for `postgresql.service` instead, however that has a slightly different meaning:
+
+* `postgresql.service` is `active` if the database is __at least__ in read-only mode.
+* `postgresql.target` is `active` if the database is either in __read-write__ mode or a standby server.
+
+This is implemented by making `postgresql.target` wait for `postgresql-setup.service` which waits for the database to be fully up and applies the changes necessary for `ensureUsers`.
+
+Restarting `postgresql.service` by hand also triggers a restart of `postgresql.target`.
+
 ## Notable differences to upstream {#module-services-postgres-upstream-deviation}
 
 - To avoid circular dependencies between default and -dev outputs, the output of the `pg_config` system view has been removed.

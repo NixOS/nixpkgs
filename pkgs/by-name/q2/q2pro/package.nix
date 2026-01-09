@@ -107,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   preVersionCheck = ''
     export version='${finalAttrs.internalVersion}'
   '';

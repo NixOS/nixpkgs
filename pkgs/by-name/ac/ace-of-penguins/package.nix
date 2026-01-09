@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     # make-imglib.c:205:5: error: 'return' with no value, in function returning non-void [-Wreturn-mismatch]
     # imagelib.c:109:17: error: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
     ./fix-gcc-14.patch
+    # error: initialization of 'void (*)(int,  int,  int)' from incompatible pointer type 'void (*)(void)' [-Wincompatible-pointer-types]
+    ./fix-gcc-15.patch
   ];
 
   nativeBuildInputs = [

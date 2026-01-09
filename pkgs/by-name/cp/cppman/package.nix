@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication rec {
   ];
   # Writable $HOME is required for `cppman --version` to work
   versionCheckKeepEnvironment = "HOME";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

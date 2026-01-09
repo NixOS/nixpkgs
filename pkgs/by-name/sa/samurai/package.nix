@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       mit
       asl20
     ]; # see LICENSE
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "samu";
     platforms = lib.platforms.all;
   };

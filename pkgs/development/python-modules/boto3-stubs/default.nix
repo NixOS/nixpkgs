@@ -358,13 +358,13 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.42.17";
+  version = "1.42.24";
   pyproject = true;
 
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;
-    hash = "sha256-hHVnEH1liqAUPdCQdLupy2RkUyUahvuWxf4Ss7DlBO4=";
+    hash = "sha256-ehxEk2ss1kr7niYmrSZAZWXgHxYviLeokOWj/65C0Ok=";
   };
 
   build-system = [ setuptools ];
@@ -1096,7 +1096,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
-      mbalatsko
     ];
   };
 }

@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gcc-14.patch
+    ./gcc-15.patch
     ./macos-10_7-getline.patch
   ];
 

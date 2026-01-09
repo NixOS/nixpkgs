@@ -1,4 +1,5 @@
 {
+  bootstrapTools,
   stdenv,
   pkgs,
   lib,
@@ -28,36 +29,65 @@
         [[ -e $out/share/man/small-man.1.gz ]]
       '';
     };
-  make-symlinks-relative = stdenv.mkDerivation {
-    name = "test-make-symlinks-relative";
-    outputs = [
-      "out"
-      "man"
-    ];
-    buildCommand = ''
-      mkdir -p $out/{bar,baz}
-      mkdir -p $man/share/{x,y}
-      source1="$out/bar/foo"
-      destination1="$out/baz/foo"
-      source2="$man/share/x/file1"
-      destination2="$man/share/y/file2"
-      echo foo > $source1
-      echo foo > $source2
-      ln -s $source1 $destination1
-      ln -s $source2 $destination2
-      echo "symlink before patching: $(readlink $destination1)"
-      echo "symlink before patching: $(readlink $destination2)"
+  # test based on bootstrapTools to minimize rebuilds
+  make-symlinks-relative =
+    (derivation {
+      name = "test-make-symlinks-relative";
+      system = stdenv.system;
+      builder = "${bootstrapTools}/bin/bash";
+      initialPath = "${bootstrapTools}";
+      outputs = [
+        "out"
+        "out2"
+      ];
+      args = [
+        "-c"
+        ''
+          set -euo pipefail
+          . ${../../stdenv/generic/setup.sh}
+          . ${../../build-support/setup-hooks/make-symlinks-relative.sh}
 
-      _makeSymlinksRelativeInAllOutputs
+          mkdir -p $out $out2
 
-      echo "symlink after patching: $(readlink $destination1)"
-      ([[ -e $destination1 ]] && echo "symlink isn't broken") || (echo "symlink is broken" && exit 1)
-      ([[ $(readlink $destination1) == "../bar/foo" ]] && echo "absolute symlink was made relative") || (echo "symlink was not made relative" && exit 1)
-      echo "symlink after patching: $(readlink $destination2)"
-      ([[ -e $destination2 ]] && echo "symlink isn't broken") || (echo "symlink is broken" && exit 1)
-      ([[ $(readlink $destination2) == "../x/file1" ]] && echo "absolute symlink was made relative") || (echo "symlink was not made relative" && exit 1)
-    '';
-  };
+          # create symlink targets
+          touch $out/target $out2/target
+
+          # link within out
+          ln -s $out/target $out/linkToOut
+
+          # link across different outputs
+          ln -s $out2/target $out/linkToOut2
+
+          # broken link
+          ln -s $out/does-not-exist $out/brokenLink
+
+          # call hook
+          _makeSymlinksRelative
+
+          # verify link within out became relative
+          echo "readlink linkToOut: $(readlink $out/linkToOut)"
+          if test "$(readlink $out/linkToOut)" != 'target'; then
+            echo "Expected relative link, got: $(readlink $out/linkToOut)"
+            exit 1
+          fi
+
+          # verify link across outputs is still absolute
+          if test "$(readlink $out/linkToOut2)" != "$out2/target"; then
+            echo "Expected absolute link, got: $(readlink $out/linkToOut2)"
+            exit 1
+          fi
+
+          # verify broken link was made relative
+          if test "$(readlink $out/brokenLink)" != 'does-not-exist'; then
+            echo "Expected relative broken link, got: $(readlink $out/brokenLink)"
+            exit 1
+          fi
+        ''
+      ];
+    })
+    // {
+      meta = { };
+    };
   move-docs = stdenv.mkDerivation {
     name = "test-move-docs";
     buildCommand = ''

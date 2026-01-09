@@ -106,7 +106,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.217.3";
+  version = "0.218.6";
 
   outputs = [
     "out"
@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-flUkt39vttnF1HjzxLQ4pizFqxHxlIkaV+mb/GtxphU=";
+    hash = "sha256-fNwJWC48DqUECadQ12p+iCHR7pIueFFdu6QRdomJ6/o=";
   };
 
   postPatch = ''
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-ZUHz93ImWj3S5kRaWsiLz4Xc0sdaWzy+4CxCW5cvEf0=";
+  cargoHash = "sha256-+8L4BaR7J+j7ytQ7JM8XbuAYDKzq8Hv3oKQFnN0TdK0=";
 
   nativeBuildInputs = [
     cmake
@@ -208,9 +208,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
+    RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
   };
-
-  RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
 
   preBuild = ''
     bash script/generate-licenses
@@ -311,7 +310,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -141,7 +141,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     # From sundials, build only the CVODE solver. C.f.

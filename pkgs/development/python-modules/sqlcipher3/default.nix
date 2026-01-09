@@ -8,7 +8,7 @@
 }:
 let
   pname = "sqlcipher3";
-  version = "0.5.4";
+  version = "0.6.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -16,7 +16,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4w/1jWTdQ+Gezt3RARahonrR2YiMxCRcdfK9qbA4Tnc=";
+    hash = "sha256-o1GuYwvWFMLBDtiYtCD3vIF+Q4FT9oP4g0jERdazqbE=";
   };
 
   build-system = [

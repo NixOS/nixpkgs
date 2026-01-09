@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   patches = [
     # fix compile error regarding packed attribute in 3rd party juice library
     ./juice-cxx-packing-fix.diff
+    ./add-missing-cstdint-includes.patch
   ];
 
   nativeBuildInputs = [

@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   makeWrapper,
   pkg-config,
@@ -233,6 +231,7 @@ rec {
     npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
 
     makeCacheWritable = true;
+    npmFlags = [ "--legacy-peer-deps" ];
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.

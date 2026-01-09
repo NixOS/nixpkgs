@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
+  patches = [
+    # Newer GCC will reject function parameters with an implicit type of `int` and undefined
+    # references to undeclared functions.
+    ./function-declarations.patch
+  ];
+
   buildInputs = [
     ncurses
     fontconfig
@@ -59,7 +65,11 @@ stdenv.mkDerivation rec {
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  # Workaround build failure on "function definitions with identifier lists":
+  #   C23 throws errors on "function definitions with identifier lists". As it is pervasively used
+  #   in the upstream codebase, it's impossible to fix that legacy syntax without a full treewide
+  #   refactor. So the currently fix is to pin the standard to C17.
+  env.NIX_CFLAGS_COMPILE = "-fcommon --std=gnu17";
 
   preConfigure = ''
     configureFlagsArray=(

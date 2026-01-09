@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "contact";
-  version = "1.4.6";
+  version = "1.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdxlocations";
     repo = "contact";
     tag = version;
-    hash = "sha256-Mnb4SMU+pUWyyhacANG6MOz3u3FOZaVJZQbRCENR/U8=";
+    hash = "sha256-Zn0aODPVgzrZdnW1IkUNyjz+PEtTVqiur+qT9I2tcj4=";
   };
 
   dependencies = [ python3Packages.meshtastic ];

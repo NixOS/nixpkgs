@@ -35,19 +35,21 @@
   responses,
   syrupy,
   toml,
+
+  # update
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-classic";
-  version = "1.0.0-unstable-2025-11-11";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    # no tagged releases avaialble
-    rev = "3dfea96ec1d2dac4e506d287860ee943c183c9f1";
-    hash = "sha256-U3UllSSa4tFz+nXAP6aNoYceU/xCPbwKSP2F2et+qgQ=";
+    tag = "langchain-classic==${version}";
+    hash = "sha256-4DlKOxt5OoPm38szMEJpw6gDl247eRsx4LZpofUKpUk=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -103,10 +105,12 @@ buildPythonPackage rec {
     "test_socket_disabled"
   ];
 
-  # Bulk updater selects wrong tag (there is no tag for this yet)
+  # Bulk updater selects wrong tag
   passthru = {
     skipBulkUpdate = true;
-    updateScript = false;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-classic==";
+    };
   };
 
   pythonImportsCheck = [ "langchain_classic" ];

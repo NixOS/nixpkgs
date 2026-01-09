@@ -1,8 +1,6 @@
 {
   lib,
   clangStdenv,
-  buildPackages,
-  runCommand,
   fetchurl,
   perl,
   python3,
@@ -65,7 +63,7 @@
   bubblewrap,
   libseccomp,
   libbacktrace,
-  systemd,
+  systemdLibs,
   xdg-dbus-proxy,
   replaceVars,
   glib,
@@ -74,7 +72,7 @@
   enableGeoLocation ? true,
   enableExperimental ? false,
   withLibsecret ? true,
-  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
   fetchpatch,
 }:
@@ -191,7 +189,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     xorg.libX11
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals enableGeoLocation [
     geoclue2

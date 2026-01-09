@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "re-Isearch";
-  version = "2.20220925.4.0a-unstable-2025-12-10";
+  version = "2.20220925.4.0a-unstable-2025-12-30";
 
   src = fetchFromGitHub {
     owner = "re-Isearch";
     repo = "re-Isearch";
-    rev = "dfd0c39f62d83708b72ebc9332e7029c1d9be5b6";
-    hash = "sha256-BGlpXOL5TBui+5OTaxLAsiRCIcp9Rg8J2IFtXn6EeoU=";
+    rev = "cff7cd6d0fdcc42e87f6e1ffb24a51f2880c061f";
+    hash = "sha256-VxWhEhxTfWU4Gfsq8PY3SCxb7Gvckh0pr7GsNSdCl2w=";
   };
 
   patches = [

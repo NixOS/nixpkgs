@@ -89,7 +89,7 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeWrapper
 makeCWrapper() {
     local argv0 inherit_argv0 n params cmd main flags executable length
-    local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
+    local uses_sep_surround_check uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
     local flagsBefore=() flagsAfter=()
     executable=$(escapeStringLiteral "$1")
     params=("$@")
@@ -122,9 +122,11 @@ makeCWrapper() {
             --prefix)
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main$cmd"$'\n'
+                uses_sep_surround_check=1
                 uses_prefix=1
                 uses_asprintf=1
                 uses_stdio=1
+                uses_string=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -133,9 +135,11 @@ makeCWrapper() {
             --suffix)
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main$cmd"$'\n'
+                uses_sep_surround_check=1
                 uses_suffix=1
                 uses_asprintf=1
                 uses_stdio=1
+                uses_string=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -208,6 +212,7 @@ makeCWrapper() {
     [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
     [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
+    [ -z "$uses_sep_surround_check" ] || printf '\n%s\n' "$(setSepSurroundCheck)"
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     [ -z "$resolve_argv0" ] || printf '\n%s\n' "$(resolveArgv0Fn)"
@@ -318,18 +323,59 @@ assertValidEnvName() {
     esac
 }
 
+setSepSurroundCheck() {
+    printf '%s' "\
+int is_surrounded_by_sep(char *env, char *ptr, unsigned long len, char *sep) {
+  unsigned long sep_len = strlen(sep);
+
+  // Check left side (if not at start)
+  if (env != ptr) {
+    if (ptr - env < sep_len)
+      return 0;
+    if (strncmp(sep, ptr - sep_len, sep_len) != 0) {
+      return 0;
+    }
+  }
+  // Check right side (if not at end)
+  char *end_ptr = ptr + len;
+  if (*end_ptr != '\0') {
+    if (strncmp(sep, ptr + len, sep_len) != 0) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+"
+}
+
 setEnvPrefixFn() {
     printf '%s' "\
 void set_env_prefix(char *env, char *sep, char *prefix) {
-    char *existing = getenv(env);
-    if (existing) {
-        char *val;
-        assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing));
-        assert_success(setenv(env, val, 1));
-        free(val);
+  char *existing_env = getenv(env);
+  if (existing_env) {
+    char *val;
+
+    char *existing_prefix = strstr(existing_env, prefix);
+    unsigned long prefix_len = strlen(prefix);
+    // If the prefix already exists, remove the original
+    if (existing_prefix && is_surrounded_by_sep(existing_env, existing_prefix, prefix_len, sep)) {
+      if (existing_env == existing_prefix) {
+        return;
+      }
+      unsigned long sep_len = strlen(sep);
+      int n_before = existing_prefix - existing_env;
+      assert_success(asprintf(&val, \"%s%s%.*s%s\", prefix, sep,
+                              n_before, existing_env,
+                              existing_prefix + prefix_len + sep_len));
     } else {
-        assert_success(setenv(env, prefix, 1));
+      assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing_env));
     }
+    assert_success(setenv(env, val, 1));
+    free(val);
+  } else {
+    assert_success(setenv(env, prefix, 1));
+  }
 }
 "
 }
@@ -337,15 +383,32 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
 setEnvSuffixFn() {
     printf '%s' "\
 void set_env_suffix(char *env, char *sep, char *suffix) {
-    char *existing = getenv(env);
-    if (existing) {
-        char *val;
-        assert_success(asprintf(&val, \"%s%s%s\", existing, sep, suffix));
-        assert_success(setenv(env, val, 1));
-        free(val);
+  char *existing_env = getenv(env);
+  if (existing_env) {
+    char *val;
+
+    char *existing_suffix = strstr(existing_env, suffix);
+    unsigned long suffix_len = strlen(suffix);
+    // If the suffix already exists, remove the original
+    if (existing_suffix && is_surrounded_by_sep(existing_env, existing_suffix, suffix_len, sep)) {
+      char *end_ptr = existing_suffix + suffix_len;
+      if (*end_ptr == '\0') {
+        return;
+      }
+      unsigned long sep_len = strlen(sep);
+      int n_before = existing_suffix - existing_env;
+      assert_success(asprintf(&val, \"%.*s%s%s%s\",
+                              n_before, existing_env,
+                              existing_suffix + suffix_len + sep_len,
+                              sep, suffix));
     } else {
-        assert_success(setenv(env, suffix, 1));
+      assert_success(asprintf(&val, \"%s%s%s\", existing_env, sep, suffix));
     }
+    assert_success(setenv(env, val, 1));
+    free(val);
+  } else {
+    assert_success(setenv(env, suffix, 1));
+  }
 }
 "
 }

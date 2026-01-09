@@ -1,12 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  perl538Packages,
+  perlPackages,
   makeWrapper,
 }:
-let
-  perlPackages = perl538Packages;
-in
 perlPackages.buildPerlPackage {
   pname = "cope";
   version = "0-unstable-2025-06-20";
@@ -70,5 +67,6 @@ perlPackages.buildPerlPackage {
       gpl1Plus
     ];
     maintainers = with lib.maintainers; [ deftdawg ];
+    broken = true; # requires old Perl we don't ship anymore
   };
 }

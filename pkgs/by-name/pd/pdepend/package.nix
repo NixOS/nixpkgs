@@ -21,7 +21,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/pdepend/pdepend/releases/tag/${finalAttrs.version}";

@@ -5,6 +5,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
@@ -219,6 +220,9 @@ buildMattermost rec {
         substituteInPlace channels/webpack.config.js \
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
+
+      # https://github.com/NixOS/nixpkgs/issues/474535
+      nodejs = nodejs_22;
 
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;

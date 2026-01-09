@@ -58,6 +58,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "outlines_core"
+  ];
   dependencies = [
     cloudpickle
     datasets

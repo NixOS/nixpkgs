@@ -4,6 +4,16 @@ let
     PublicKey = "3e91ec9e861960d86e1ce88051f97c435bdf2859640ab681dfa906eb45ad5182";
     PrivateKey = "a867f9e078e4ce58d310cf5acd4622d759e2a21df07e1d6fc380a2a26489480d3e91ec9e861960d86e1ce88051f97c435bdf2859640ab681dfa906eb45ad5182";
   };
+  # Frank has a legacy keys.json that should be migrated
+  # This is the same key as Alice but in the old hex format
+  frankIp6 = aliceIp6; # Should get same IP after migration
+  frankLegacyKeys = {
+    # The old format stored PrivateKey as 128 hex chars (64 bytes = seed + pubkey)
+    # This corresponds to Alice's key
+    PrivateKey =
+      "a867f9e078e4ce58d310cf5acd4622d759e2a21df07e1d6fc380a2a264894809" + aliceKeys.PublicKey;
+    PublicKey = aliceKeys.PublicKey;
+  };
   bobIp6 = "202:a483:73a4:9f2d:a559:4a19:bc9:8458";
   bobPrefix = "302:a483:73a4:9f2d";
   bobConfig = {
@@ -153,6 +163,62 @@ in
           persistentKeys = true;
         };
       };
+
+    # Eve uses persistentKeys for automatic key generation.
+    eve =
+      { ... }:
+      {
+        networking.firewall.allowedTCPPorts = [ 43211 ];
+        services.yggdrasil = {
+          enable = true;
+          persistentKeys = true;
+          openMulticastPort = true;
+          settings = {
+            IfName = "ygg0";
+            MulticastInterfaces = [
+              {
+                Regex = ".*";
+                Beacon = true;
+                Listen = true;
+                Port = 43211;
+              }
+            ];
+          };
+        };
+      };
+
+    # Frank tests migration from legacy keys.json format
+    frank =
+      { pkgs, ... }:
+      {
+        networking.firewall.allowedTCPPorts = [ 43212 ];
+
+        # Pre-populate the legacy keys.json file before the service starts
+        system.activationScripts.yggdrasil-legacy-keys = ''
+          mkdir -p /var/lib/yggdrasil
+          cat > /var/lib/yggdrasil/keys.json << 'EOF'
+          ${builtins.toJSON frankLegacyKeys}
+          EOF
+          chmod 600 /var/lib/yggdrasil/keys.json
+        '';
+
+        services.yggdrasil = {
+          enable = true;
+          persistentKeys = true;
+          openMulticastPort = true;
+          settings = {
+            IfName = "ygg0";
+            MulticastInterfaces = [
+              {
+                Regex = ".*";
+                Beacon = true;
+                Listen = true;
+                Port = 43212;
+              }
+            ];
+          };
+        };
+      };
   };
 
   testScript = ''
@@ -164,12 +230,37 @@ in
 
     bob.start()
     carol.start()
+    eve.start()
+    frank.start()
     bob.wait_for_unit("default.target")
     carol.wait_for_unit("yggdrasil.service")
+
+    # Eve uses persistentKeys - verify the key generation service ran
+    eve.wait_for_unit("yggdrasil-persistent-keys.service")
+    eve.wait_for_unit("yggdrasil.service")
+    eve.succeed("test -f /var/lib/yggdrasil/private.pem")
+    eve.succeed("grep -q 'BEGIN PRIVATE KEY' /var/lib/yggdrasil/private.pem")
+
+    # Frank tests migration from legacy keys.json format
+    frank.wait_for_unit("yggdrasil-persistent-keys.service")
+    frank.wait_for_unit("yggdrasil.service")
+    # Verify migration happened: private.pem should exist
+    frank.succeed("test -f /var/lib/yggdrasil/private.pem")
+    frank.succeed("grep -q 'BEGIN PRIVATE KEY' /var/lib/yggdrasil/private.pem")
+    # Legacy file should still exist (not deleted, user should verify and remove)
+    frank.succeed("test -f /var/lib/yggdrasil/keys.json")
 
     ip_addr_show = "ip -o -6 addr show dev ygg0 scope global"
     carol.wait_until_succeeds(f"[ `{ip_addr_show} | grep -v tentative | wc -l` -ge 1 ]")
     carol_ip6 = re.split(" +|/", carol.succeed(ip_addr_show))[3]
+
+    eve.wait_until_succeeds(f"[ `{ip_addr_show} | grep -v tentative | wc -l` -ge 1 ]")
+    eve_ip6 = re.split(" +|/", eve.succeed(ip_addr_show))[3]
+
+    # Verify Frank got the expected IP after migration (same key as Alice = same IP)
+    frank.wait_until_succeeds(f"[ `{ip_addr_show} | grep -v tentative | wc -l` -ge 1 ]")
+    frank_ip6 = re.split(" +|/", frank.succeed(ip_addr_show))[3]
+    assert frank_ip6 == "${frankIp6}", f"Frank's IP {frank_ip6} doesn't match expected ${frankIp6} after migration"
 
     # If Alice can talk to Carol, then Bob's outbound peering and Carol's
     # local peering have succeeded and everybody is connected.
@@ -185,6 +276,10 @@ in
     carol.succeed("ping -c 8 ${danIp6}")
 
     carol.fail("journalctl -u dhcpcd | grep ygg0")
+
+    # Eve should be able to communicate with the network via multicast peering
+    eve.wait_until_succeeds(f"ping -c 1 {carol_ip6}")
+    carol.wait_until_succeeds(f"ping -c 1 {eve_ip6}")
 
     alice.wait_for_unit("httpd.service")
     carol.succeed("curl --fail -g http://[${aliceIp6}]")

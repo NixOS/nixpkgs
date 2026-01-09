@@ -30,7 +30,6 @@ python3Packages.buildPythonApplication rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "nvitop" ];
 

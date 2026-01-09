@@ -38,6 +38,7 @@ buildGoModule rec {
     description = "Experiment in scalable routing as an encrypted IPv6 overlay network";
     homepage = "https://yggdrasil-network.github.io/";
     license = lib.licenses.lgpl3;
+    mainProgram = "yggdrasil";
     maintainers = with lib.maintainers; [
       gazally
       lassulus

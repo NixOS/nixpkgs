@@ -6,6 +6,7 @@
   makeWrapper,
   writeTextFile,
   replaceVars,
+  fetchpatch,
   writeShellApplication,
   makeBinaryWrapper,
   autoPatchelfHook,
@@ -387,6 +388,12 @@ stdenv.mkDerivation rec {
     # override this path to a builtin one
     (replaceVars ./bazel_rc.patch {
       bazelSystemBazelRCPath = bazelRC;
+    })
+
+    # Fix build with gcc 15 by adding missing headers
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel/commit/1d206cac050b6c7d9ce65403e6a9909a49bfe4bc.patch";
+      hash = "sha256-Tg5o1Va7dd5hvXbWhZiog+VtuiqngqbbYOkCafVudDs=";
     })
   ]
   # See enableNixHacks argument above.

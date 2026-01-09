@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   stdenv,
   cmake,
@@ -19,6 +20,15 @@ stdenv.mkDerivation rec {
     tag = version;
     sha256 = "sha256-GuvmKHJknudyn7ahrn/8+kKUA4NW5UjCfkYoX3aTE+Q=";
   };
+
+  patches = [
+    # https://github.com/apache/cassandra-cpp-driver/pull/580
+    (fetchpatch {
+      name = "fix-cmake-version.patch";
+      url = "https://github.com/apache/cassandra-cpp-driver/commit/a4061051bcdfa0a67117b546897552c38493d545.patch?full_index=1";
+      hash = "sha256-hQhm2SYLd8uPC85/iOH3sEM2KvoIGwV+9NGIJFnZJhc=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

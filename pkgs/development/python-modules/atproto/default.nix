@@ -22,7 +22,6 @@
   # nativeCheckInputs
   pytestCheckHook,
   pytest-asyncio,
-  coverage,
 }:
 
 buildPythonPackage rec {
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    coverage
   ];
 
   disabledTestPaths = [

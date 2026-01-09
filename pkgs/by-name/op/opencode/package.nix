@@ -9,16 +9,17 @@
   nix-update-script,
   ripgrep,
   testers,
+  installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 let
   pname = "opencode";
-  version = "1.0.184";
+  version = "1.1.8";
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256-qEVFORKMoaLTsBbs2D9aLaD1W4vbQppJ6fB+bHWLcgM=";
+    hash = "sha256-i0PYcI3qM52jcl72dqHxiBUQH5n4oBXTlxJqvWNS8CQ=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -70,7 +71,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-NaLKlLke9K2/1+2NhrWIlsNRFL674PraWmBCbzkEk6c=";
+    outputHash = "sha256-NbKp1XXTirox/UnBSn/VfLtPXnjrDJxU94MaAh22wk4=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -85,8 +86,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bun
+    installShellFiles
     makeBinaryWrapper
     models-dev
+    writableTmpDirAsHomeHook
   ];
 
   patches = [
@@ -197,6 +200,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           $out/lib/opencode/node_modules/@opentui/$pkgName
       fi
     done
+
+    ${lib.optionalString
+      (
+        (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform)
+        && (stdenvNoCC.hostPlatform.system != "x86_64-darwin")
+      )
+      ''
+        installShellCompletion --cmd opencode \
+          --bash <($out/bin/opencode completion)
+      ''
+    }
   '';
 
   passthru = {
@@ -221,7 +235,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       It combines a TypeScript/JavaScript core with a Go-based TUI
       to provide an interactive AI coding experience.
     '';
-    homepage = "https://github.com/sst/opencode";
+    homepage = "https://github.com/anomalyco/opencode";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ delafthi ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];

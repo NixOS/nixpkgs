@@ -17,7 +17,7 @@
   usort,
 
   # optional-dependencies
-  pygls_2,
+  pygls,
   ruff-api,
 
   # tests
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    lsp = [ pygls_2 ];
+    lsp = [ pygls ];
     ruff = [ ruff-api ];
   };
 
@@ -60,7 +60,6 @@ buildPythonPackage rec {
     versionCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "ufmt" ];
 

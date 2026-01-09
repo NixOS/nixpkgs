@@ -17,6 +17,7 @@
   ncurses,
   clangStdenv,
   nixpkgs-review,
+  nixpkgs-reviewFull,
   nix-direnv,
   nix-fast-build,
   haskell,
@@ -30,6 +31,14 @@
   confDir ? "/etc",
 }:
 let
+  # Support for mdbook >= 0.5, https://git.lix.systems/lix-project/lix/issues/1051
+  lixMdbookPatch = fetchpatch2 {
+    name = "lix-mdbook-0.5-support.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
+    excludes = [ "package.nix" ];
+    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -105,6 +114,14 @@ let
 
           nixpkgs-review = nixpkgs-review.override {
             nix = self.lix;
+          };
+
+          # surprisingly nixpkgs-reviewFull.override { nix = self.lix; }
+          # doesn't work, as the way nix-reviewFull is defined uses callPackage
+          # which does it's own makeOverridable and hides the .override
+          # from the derivation.
+          nixpkgs-reviewFull = nixpkgs-reviewFull.override {
+            nixpkgs-review = self.nixpkgs-review;
           };
 
           nix-direnv = nix-direnv.override {
@@ -214,6 +231,8 @@ lib.makeExtensible (
             url = "https://git.lix.systems/lix-project/lix/commit/b6d5670bcffebdd43352ea79b36135e35a8148d9.patch";
             hash = "sha256-f4s0TR5MhNMNM5TYLOR7K2/1rtZ389KDjTCKFVK0OcE=";
           })
+
+          lixMdbookPatch
         ];
       };
     };
@@ -237,6 +256,8 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
+
+        patches = [ lixMdbookPatch ];
       };
     };
 
@@ -244,14 +265,14 @@ lib.makeExtensible (
       attrName = "git";
 
       lix-args = rec {
-        version = "2.95.0-pre-20251121_${builtins.substring 0 12 src.rev}";
+        version = "2.95.0-pre-20260103_${builtins.substring 0 12 src.rev}";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
-          rev = "b707403a308030739dfeacc5b0aaaeef8ba3f633";
-          hash = "sha256-kas7FT2J86DVJlPH5dNNHM56OgdQQyfCE/dX/EOKDp8=";
+          rev = "d387c9113c73f04bed46dbdd59b6c36de2253d73";
+          hash = "sha256-jYUcmXA4FNwoJtxRgH+Be96wQv8h9Y9dByYf+KmcgK4=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {

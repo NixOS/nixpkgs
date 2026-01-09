@@ -264,7 +264,8 @@ let
     ]
     ++ lib.optional buildIde "coqide"
     ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
-    enableParallelBuilding = true;
+    # workaround for irreproducible build error in https://github.com/NixOS/nixpkgs/pull/474970
+    enableParallelBuilding = coqAtLeast "8.14";
 
     createFindlibDestdir = true;
 

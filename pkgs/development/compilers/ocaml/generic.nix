@@ -118,6 +118,12 @@ stdenv.mkDerivation (
       ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
+    env =
+      lib.optionalAttrs (lib.versionOlder version "4.14" || lib.versions.majorMinor version == "5.0")
+        {
+          NIX_CFLAGS_COMPILE = "-std=gnu11";
+        };
+
     # on aarch64-darwin using --host and --target causes the build to invoke
     # `aarch64-apple-darwin-clang` while using assembler. However, such binary
     # does not exist. So, disable these configure flags on `aarch64-darwin`.

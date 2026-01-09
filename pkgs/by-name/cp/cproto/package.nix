@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     urls = [
       "mirror://debian/pool/main/c/cproto/cproto_${version}.orig.tar.gz"
       # No version listings and apparently no versioned tarball over http(s).
-      "ftp://ftp.invisible-island.net/cproto/cproto-${version}.tgz"
+      "https://invisible-island.net/archives/cproto/cproto-${version}.tgz"
     ];
     sha256 = "sha256-C9HYvo/wpMpD+Uf5V1DTT2TtqTyeLKeRAP1gFAt8YzE=";
   };

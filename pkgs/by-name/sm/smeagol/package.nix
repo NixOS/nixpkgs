@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/smeagol-wiki";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

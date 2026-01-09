@@ -47,7 +47,6 @@ buildPythonPackage rec {
     redisTestHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 

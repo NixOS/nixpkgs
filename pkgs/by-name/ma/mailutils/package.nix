@@ -90,6 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/223967
     # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
     ./don-t-use-descrypt-password-in-the-test-suite.patch
+    # Fix build with gcc15
+    # https://lists.gnu.org/archive/html/bug-mailutils/2025-06/msg00000.html
+    (fetchpatch {
+      name = "mailutils-fix-sighandler-incompatible-pointer-types-gcc15.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/mailutils/-/raw/87c3614083260f52dd1222e872a1836f0ff9abe1/fix-build.patch";
+      hash = "sha256-RN62l5mYqtViEjXpAlQKWhFez1TPynRMj/1nvZkq5Gs=";
+    })
   ];
 
   enableParallelBuilding = true;

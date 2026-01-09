@@ -49,6 +49,12 @@ mkDerivation rec {
       url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
       hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
     })
+
+    # Fixes the build with GCC 15
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/edfac5e24959b12286938a9402326e521c2d2b63.patch";
+      hash = "sha256-8DNCO5VEX6V0Q29A/v5tFC7u835bwNHvcNlZzmS0ADg=";
+    })
   ];
 
   postPatch = ''

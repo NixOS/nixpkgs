@@ -748,6 +748,7 @@ in
   hydra = runTest ./hydra;
   i18n = runTest ./i18n.nix;
   i3wm = runTest ./i3wm.nix;
+  icecast = runTest ./icecast.nix;
   icingaweb2 = runTest ./icingaweb2.nix;
   ifm = runTest ./ifm.nix;
   ifstate = import ./ifstate { inherit runTest; };
@@ -1105,6 +1106,7 @@ in
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
+  nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
@@ -1153,6 +1155,7 @@ in
   onlyoffice = runTest ./onlyoffice.nix;
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
+  openafs = runTest ./openafs.nix;
   openarena = runTest ./openarena.nix;
   openbao = runTest ./openbao.nix;
   opencloud = runTest ./opencloud.nix;
@@ -1311,6 +1314,14 @@ in
   pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
+  qemu-vm-credentials-fwcfg = runTest {
+    imports = [ ./qemu-vm-credentials.nix ];
+    _module.args.mechanism = "fw_cfg";
+  };
+  qemu-vm-credentials-smbios = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./qemu-vm-credentials.nix ];
+    _module.args.mechanism = "smbios";
+  };
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix { };
   qemu-vm-store = runTest ./qemu-vm-store.nix;

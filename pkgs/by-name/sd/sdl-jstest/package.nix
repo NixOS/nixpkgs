@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "sdl-jstest";
-  version = "0.2.2-unstable-2025-12-05";
+  version = "0.2.2-unstable-2025-11-28";
 
   src = fetchFromGitHub {
     owner = "Grumbel";

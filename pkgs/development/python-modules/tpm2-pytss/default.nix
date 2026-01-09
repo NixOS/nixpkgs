@@ -54,6 +54,16 @@ buildPythonPackage rec {
       url = "https://github.com/tpm2-software/tpm2-pytss/commit/afdee627d0639eb05711a2191f2f76e460793da9.patch?full_index=1";
       hash = "sha256-Y6drcBg4gnbSvnCGw69b42Q/QfLI3u56BGRUEkpdB0M=";
     })
+    # Fix build with gcc15 by using c99 for preprocessing
+    # The first patch is needed to apply the second; it doesn't affect us
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/55d28b259f1a68f60c937ea8be7815685d32757f.patch";
+      hash = "sha256-sGxUyQ2W2Jl9ROSt1w0E0dVTgFPAmYWlNgcpHcTVv90=";
+    })
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/61d00b4dcca131b3f03f674ceabf4260bdbd6a61.patch";
+      hash = "sha256-0dwfyW0Fi5FkzYnaMOb2ua9O6eyCnMgJqT09tTT56vY=";
+    })
   ]
   ++ lib.optionals isCross [
     # pytss will regenerate files from headers of tpm2-tss.

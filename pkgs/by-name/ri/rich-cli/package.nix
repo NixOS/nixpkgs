@@ -56,7 +56,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rich";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

@@ -15,7 +15,7 @@ buildDunePackage rec {
     owner = "ocamllibs";
     repo = "pyml";
     tag = version;
-    hash = "sha256-WPtmj9EEs7P72OXWJg1syIrbLuh7u4V4W4nyozXmSa0=";
+    hash = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
 
   buildInputs = [

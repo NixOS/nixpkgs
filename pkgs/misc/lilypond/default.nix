@@ -45,6 +45,10 @@
 stdenv.mkDerivation rec {
   pname = "lilypond";
   version = "2.24.4";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchzip {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";

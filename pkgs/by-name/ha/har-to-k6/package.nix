@@ -22,7 +22,6 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-RuK3CzcMkPt5MFEZpYBDtMMShHTT/115pRk1CmRkiek=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

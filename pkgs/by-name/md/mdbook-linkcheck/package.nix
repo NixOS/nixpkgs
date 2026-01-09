@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   doCheck = false; # tries to access network to test broken web link functionality
 

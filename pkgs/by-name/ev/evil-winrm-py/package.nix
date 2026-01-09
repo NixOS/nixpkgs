@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = lib.optionals enableKerberos [ libkrb5 ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

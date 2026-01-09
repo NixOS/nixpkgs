@@ -117,6 +117,8 @@ python3Packages.buildPythonApplication rec {
     "test/functional/util/test_cmd_args_to_string.py"
     "test/performance/test_large_graph.py"
     "test/unittests/tools/env/test_env_files.py"
+    # pipenv will attempt to access the network.
+    "test/functional/tools/system/pip_manager_test.py"
   ];
 
   meta = {

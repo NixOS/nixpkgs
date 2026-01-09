@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   meta = {
     description = "Beautiful, useful MOTD generation with zero runtime dependencies";

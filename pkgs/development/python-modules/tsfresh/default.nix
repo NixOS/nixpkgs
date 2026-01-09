@@ -108,6 +108,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/blue-yonder/tsfresh";
     changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

@@ -12,7 +12,6 @@
   onetbb,
   openssl,
   boost,
-  libpqxx,
   clang-tools,
   catch2_3,
   python3,
@@ -55,6 +54,14 @@ stdenv.mkDerivation rec {
       relative = "tiledb/sm/serialization";
       extraPrefix = "tiledb/sm/serialization/";
       hash = "sha256-5z/eJEHl+cnWRf1sMULodJyhmNh5KinDLlL1paMNiy4=";
+    })
+
+    # Fix build with gcc15
+    # https://github.com/TileDB-Inc/TileDB/pull/5612
+    (fetchpatch {
+      name = "tiledb-set-c-version-to-c99.patch";
+      url = "https://github.com/TileDB-Inc/TileDB/commit/4f946ad57fe823c3f53c06bf29dc18799ec6395a.patch";
+      hash = "sha256-chdaa6Ysqeb3p+FcWp7GTnAzgShoPGSCErmIGn+Q4tA=";
     })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
@@ -102,7 +109,6 @@ stdenv.mkDerivation rec {
     onetbb
     openssl
     boost
-    libpqxx
     libpng
     file
     rapidcheck'

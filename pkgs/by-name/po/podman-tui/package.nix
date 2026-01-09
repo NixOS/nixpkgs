@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/containers/podman-tui";
     description = "Podman Terminal UI";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "podman-tui";
   };
 })

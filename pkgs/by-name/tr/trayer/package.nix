@@ -5,6 +5,7 @@
   pkg-config,
   gdk-pixbuf,
   gtk2,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,15 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs configure
   '';
+
+  patches = [
+    # Adding missing arg in function decleration
+    (fetchpatch {
+      name = "fix_function_dec.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/x11-misc/trayer-srg/files/trayer-srg-1.1.8-fix-define.patch?id=94ae89d1b044c24138d5c8903df68e9654a5462f";
+      hash = "sha256-LighVaBDePheBO+dWG6JHhm/Y6sxdtvTrBar8VrPRH4=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   intltool,
   pkg-config,
   gtk3,
@@ -18,6 +19,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnupg/gpa/gpa-${version}.tar.bz2";
     hash = "sha256-Jqj6W/cFQct0Hwxxt8/ikbHqVuq2jusHqpYs71zfM8w=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remove-trust_item-stuff-to-make-it-build-with-gpgme-2.x.patch";
+      url = "https://dev.gnupg.org/rGPAb6ba8bcc6db7765667cd6c49b7edc9a2073bc74f?diff=1";
+      hash = "sha256-A3Cx4zub3Um09yjZ1mu0PZe/v7rmhXjND0Hg5WkcIf8=";
+    })
+  ];
 
   nativeBuildInputs = [
     intltool

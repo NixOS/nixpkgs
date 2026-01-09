@@ -38,7 +38,6 @@ stdenv.mkDerivation {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

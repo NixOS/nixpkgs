@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   makeWrapper,
   clang,
   llvm,
@@ -21,6 +22,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-/ra6g0qjjC8Lo8/n2XEbwnZ95yDHcGhYd5+TTvQ6FAc=";
   };
+
+  patches = [
+    # [PATCH] mangle: support gcc-15 with __attribute__((nonstring))
+    (fetchpatch2 {
+      url = "https://github.com/google/honggfuzz/commit/4cfa62f4fdb56e3027c1cb3aecf04812e786f0fd.patch?full_index=1";
+      hash = "sha256-79/GZfqTH1o/21P7At5ZPmvcCSYWAsVakSv5dNCT+XI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace hfuzz_cc/hfuzz-cc.c \

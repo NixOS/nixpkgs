@@ -7,22 +7,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-code-runner";
-  version = "0.2.3";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "markdown-code-runner";
     tag = finalAttrs.version;
-    hash = "sha256-fmyjrsEBUskN/cYmsqOprw56vpjonXETRdBH3y0ypkA=";
+    hash = "sha256-0AIW9rRIGKOCVdOmWH+vs4T3k++joo8DQpdiok6aAX0=";
   };
 
-  cargoHash = "sha256-hBFUsluSZluWJIbvJjFSFe+Y2ICr+mug0Mxrz4pLW5E=";
+  cargoHash = "sha256-Q2KhNPrUU8X95Z7qsWqwkFDzJlLAmpH1Fn5f47fYr1o=";
 
   dontUseCargoParallelTests = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Configurable Markdown code runner that executes and optionally replaces code blocks using external commands";

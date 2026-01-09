@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.27.0";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${version}";
-    hash = "sha256-Jn8wy5UmuzqEputujGJQtAe8AoGCLYpSwZWHpDGlSWg=";
+    hash = "sha256-56Z0peJcjBbNX51MLLaIKcD9Qg+5q+5I0gKRu84/8TM=";
   };
 
   pythonRelaxDeps = [

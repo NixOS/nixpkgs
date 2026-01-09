@@ -45,6 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
         'cmake_minimum_required(VERSION 3.5)'
   '';
 
+  cmakeFlags = [
+    # Be more permissive to compiler warnings
+    # Fix the new -Wrestrict warning in gcc 15 blocking build
+    # https://github.com/schrodinger/coordgenlibs/issues/137
+    (lib.cmakeBool "COORDGEN_RIGOROUS_BUILD" false)
+  ];
+
   doCheck = true;
 
   # Fix the build with Clang 20.

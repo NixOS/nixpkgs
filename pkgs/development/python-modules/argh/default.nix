@@ -18,6 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-8wAj2L4Uyl7msbPuq4KRUde72kZK4H3E3VNHkZxYkvk=";
   };
 
+  patches = [
+    # python3.14 introduced a breaking change which caused a test to fail. A
+    # fix has been commited upstream in a pull request by the author, but has
+    # since been kept unmerged
+    # https://github.com/neithere/argh/pull/240
+    ./pr240-699568ad-06-01-2025-test_integration.patch
+  ];
+
   nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [

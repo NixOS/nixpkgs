@@ -21,6 +21,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  # Fix gcc15 build failures due to missing <cstdint>
+  postPatch = ''
+    sed -i '1i #include <cstdint>' sentencepiece/src/sentencepiece_processor.h
+  '';
+
   build-system = [
     cython
     setuptools

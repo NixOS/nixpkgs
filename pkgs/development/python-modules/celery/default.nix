@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.6.0";
+  version = "5.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "celery";
     tag = "v${version}";
-    hash = "sha256-BKF+p35Z5r/WRjuOaSFtESkbo+N+tbd0R40EWl0iU9I=";
+    hash = "sha256-S84hLGwVVgxnUB6wnqU58tN56t/tQ79ZUni/iP5sx94=";
   };
 
   patches = lib.optionals (!withAmqpRepl) [

@@ -97,55 +97,67 @@ buildPythonPackage rec {
     find "$PWD/pyarrow/src/arrow" -type f -name '*.h' -exec cp {} "$pyarrow_include/arrow/python" \;
   '';
 
-  pytestFlagsArray = [
-    # A couple of tests are missing fixture imports, luckily pytest offers a
-    # clean solution.
-    "--fixtures pyarrow/tests/conftest.py"
-    # Deselect a single test because pyarrow prints a 2-line error message where
-    # only a single line is expected. The additional line of output comes from
-    # the glog library which is an optional dependency of arrow-cpp that is
-    # enabled in nixpkgs.
-    # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
-    "--deselect=pyarrow/tests/test_memory.py::test_env_var"
-    # these tests require access to s3 via the internet
-    "--deselect=pyarrow/tests/test_fs.py::test_resolve_s3_region"
-    "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws"
-    "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws_region_selection"
-    "--deselect=pyarrow/tests/test_fs.py::test_s3_options"
+  disabledTestPaths = [
+    # These tests require access to s3 via the internet.
+    "pyarrow/tests/test_fs.py::test_resolve_s3_region"
+    "pyarrow/tests/test_fs.py::test_s3_finalize"
+    "pyarrow/tests/test_fs.py::test_s3_finalize_region_resolver"
+    "pyarrow/tests/test_fs.py::test_s3_real_aws"
+    "pyarrow/tests/test_fs.py::test_s3_real_aws_region_selection"
+    "pyarrow/tests/test_fs.py::test_s3_options"
     # Flaky test
-    "--deselect=pyarrow/tests/test_flight.py::test_roundtrip_errors"
-    "--deselect=pyarrow/tests/test_pandas.py::test_threaded_pandas_import"
-    # Flaky test, works locally but not on Hydra
-    "--deselect=pyarrow/tests/test_csv.py::TestThreadedCSVTableRead::test_cancellation"
-    # expects arrow-cpp headers to be bundled
-    "--deselect=pyarrow/tests/test_cpp_internals.py::test_pyarrow_include"
+    "pyarrow/tests/test_flight.py::test_roundtrip_errors"
+    "pyarrow/tests/test_pandas.py::test_threaded_pandas_import"
+    # Flaky test, works locally but not on Hydra.
+    "pyarrow/tests/test_csv.py::TestThreadedCSVTableRead::test_cancellation"
+    # expects arrow-cpp headers to be bundled.
+    "pyarrow/tests/test_cpp_internals.py::test_pyarrow_include"
+    # Searches for TZDATA in /usr.
+    "pyarrow/tests/test_orc.py::test_example_using_json"
+    # AssertionError: assert 'Europe/Monaco' == 'Europe/Paris'
+    "pyarrow/tests/test_types.py::test_dateutil_tzinfo_to_string"
+    # These fail with xxx_fixture not found.
+    # xxx = unary_func, unary_agg_func, varargs_agg_func
+    "pyarrow/tests/test_substrait.py::test_udf_via_substrait"
+    "pyarrow/tests/test_substrait.py::test_scalar_aggregate_udf_basic"
+    "pyarrow/tests/test_substrait.py::test_hash_aggregate_udf_basic"
+    "pyarrow/tests/test_udf.py::test_hash_agg_basic"
+    "pyarrow/tests/test_udf.py::test_hash_agg_empty"
+    "pyarrow/tests/test_udf.py::test_input_lifetime"
+    "pyarrow/tests/test_udf.py::test_scalar_agg_basic"
+    "pyarrow/tests/test_udf.py::test_scalar_agg_empty"
+    "pyarrow/tests/test_udf.py::test_scalar_agg_varargs"
+    "pyarrow/tests/test_udf.py::test_scalar_input"
+    "pyarrow/tests/test_udf.py::test_scalar_udf_context"
+    "pyarrow/tests/test_udf.py::test_udf_array_unary"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Requires loopback networking
-    "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
-    "--deselect=pyarrow/tests/test_flight.py::test_never_sends_data"
-    "--deselect=pyarrow/tests/test_flight.py::test_large_descriptor"
-    "--deselect=pyarrow/tests/test_flight.py::test_large_metadata_client"
-    "--deselect=pyarrow/tests/test_flight.py::test_none_action_side_effect"
-    # fails to compile
-    "--deselect=pyarrow/tests/test_cython.py::test_cython_api"
+    # Requires loopback networking.
+    "pyarrow/tests/test_ipc.py::test_socket_"
+    "pyarrow/tests/test_flight.py::test_never_sends_data"
+    "pyarrow/tests/test_flight.py::test_large_descriptor"
+    "pyarrow/tests/test_flight.py::test_large_metadata_client"
+    "pyarrow/tests/test_flight.py::test_none_action_side_effect"
+    # Fails to compile.
+    "pyarrow/tests/test_cython.py::test_cython_api"
   ]
   ++ lib.optionals (pythonAtLeast "3.11") [
     # Repr output is printing number instead of enum name so these tests fail
-    "--deselect=pyarrow/tests/test_fs.py::test_get_file_info"
+    "pyarrow/tests/test_fs.py::test_get_file_info"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # this test requires local networking
-    "--deselect=pyarrow/tests/test_fs.py::test_filesystem_from_uri_gcs"
+    # This test requires local networking.
+    "pyarrow/tests/test_fs.py::test_filesystem_from_uri_gcs"
   ];
 
   disabledTests = [ "GcsFileSystem" ];
 
   preCheck = ''
+    export PARQUET_TEST_DATA="${arrow-cpp.PARQUET_TEST_DATA}"
     shopt -s extglob
     rm -r pyarrow/!(conftest.py|tests)
     mv pyarrow/conftest.py pyarrow/tests/parent_conftest.py
-    substituteInPlace pyarrow/tests/conftest.py --replace ..conftest .parent_conftest
+    substituteInPlace pyarrow/tests/conftest.py --replace-fail ..conftest .parent_conftest
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # OSError: [Errno 24] Too many open files

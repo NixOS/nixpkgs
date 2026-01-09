@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/datavaluepeople/kotsu";
     changelog = "https://github.com/datavaluepeople/kotsu/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

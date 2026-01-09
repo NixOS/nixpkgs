@@ -55,8 +55,6 @@ buildNpmPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

@@ -3,6 +3,7 @@
   lib,
   options,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -81,6 +82,28 @@ in
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
             slurm to work properly (see `services.munge.password`).
+          '';
+        };
+
+        flags = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.oneOf [
+              lib.types.str
+              lib.types.bool
+              lib.types.float
+              lib.types.int
+            ]
+          );
+          default = { };
+          example = {
+            "i" = true;
+            "systemd" = true;
+            "L" = "/var/log/file with space.log";
+            "n" = 10;
+          };
+          description = ''
+            Flags passed to `slurmctld` daemon, see {manpage}`slurmctld(8)`.
+            Special characters are properly escaped.
           '';
         };
       };
@@ -484,7 +507,17 @@ in
 
           serviceConfig = {
             Type = "forking";
-            ExecStart = "${wrappedSlurm}/bin/slurmctld";
+            ExecStart =
+              let
+                isLong = optionName: builtins.stringLength optionName > 1;
+                flagFormat = optionName: {
+                  option = if isLong optionName then "--${optionName}" else "-${optionName}";
+                  sep = null;
+                  explicitBool = false;
+                };
+                cli = [ "${wrappedSlurm}/bin/slurmctld" ] ++ lib.cli.toCommandLine flagFormat cfg.server.flags;
+              in
+              utils.escapeSystemdExecArgs cli;
             PIDFile = "/run/slurmctld.pid";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };

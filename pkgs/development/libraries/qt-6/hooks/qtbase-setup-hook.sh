@@ -77,11 +77,10 @@ else # Only set up Qt once.
     fi
 
     qtPreHook() {
-        # Check that wrapQtAppsHook/wrapQtAppsNoGuiHook is used, or it is explicitly disabled.
+        # Check that wrapQtAppsHook is used, or it is explicitly disabled.
         if [[ -z "$__nix_wrapQtAppsHook" && -z "$dontWrapQtApps" ]]; then
             echo >&2 "Error: this derivation depends on qtbase, but no wrapping behavior was specified."
-            echo >&2 "  - If this is a graphical application, add wrapQtAppsHook to nativeBuildInputs"
-            echo >&2 "  - If this is a CLI application, add wrapQtAppsNoGuiHook to nativeBuildInputs"
+            echo >&2 "  - If this is an application, add wrapQtAppsHook to nativeBuildInputs"
             echo >&2 "  - If this is a library or you need custom wrapping logic, set dontWrapQtApps = true"
             exit 1
         fi

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "quantiphy";
-  version = "2.20";
+  version = "2.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "quantiphy";
     tag = "v${version}";
-    hash = "sha256-QXCs93plNSVNiCLEoXx2raH6EbH1rXyjvpBfl+8eXjc=";
+    hash = "sha256-TQMSktRW0xjihrDxOqHa2AB0HgbNOn4debHV6/Z76bI=";
   };
 
   nativeBuildInputs = [ flit-core ];

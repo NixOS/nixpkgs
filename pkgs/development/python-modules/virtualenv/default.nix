@@ -3,29 +3,28 @@
   buildPythonPackage,
   pythonOlder,
   isPyPy,
-  cython,
   distlib,
-  fetchPypi,
+  fetchFromGitHub,
   filelock,
   flaky,
   hatch-vcs,
   hatchling,
   platformdirs,
-  pytest-freezegun,
   pytest-mock,
-  pytest-timeout,
   pytestCheckHook,
   time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.33.1";
+  version = "20.35.4";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-G0RHjZ4mGz+4uqXnSgyjvA4F8hqjYWe/nL+FDlQnZbg=";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = "virtualenv";
+    tag = version;
+    hash = "sha256-0PWIYU1/zXiOBUV/45rJsJwVlcqHeac68nRM2tvEPHo=";
   };
 
   build-system = [
@@ -40,34 +39,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    cython
     flaky
-    pytest-freezegun
     pytest-mock
-    pytest-timeout
     pytestCheckHook
   ]
   ++ lib.optionals (!isPyPy) [ time-machine ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [
     # Ignore tests which require network access
     "tests/unit/create/test_creator.py"
-    "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
+    "tests/unit/create/via_global_ref/test_build_c_ext.py"
   ];
 
   disabledTests = [
     # Network access
-    "test_create_no_seed"
     "test_seed_link_via_app_data"
-    # Permission Error
-    "test_bad_exe_py_info_no_raise"
-    # https://github.com/pypa/virtualenv/issues/2933
-    # https://github.com/pypa/virtualenv/issues/2939
-    "test_py_info_cache_invalidation_on_py_info_change"
   ]
   ++ lib.optionals (pythonOlder "3.11") [ "test_help" ]
   ++ lib.optionals isPyPy [

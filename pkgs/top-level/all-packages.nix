@@ -830,8 +830,9 @@ with pkgs;
     inherit (darwin) signingUtils;
   };
 
-  # No callPackage.  In particular, we don't want `img` *package* in parameters.
-  vmTools = makeOverridable (import ../build-support/vm) { inherit pkgs lib; };
+  vmTools = callPackage ../build-support/vm {
+    img = stdenv.hostPlatform.linux-kernel.target;
+  };
 
   releaseTools = callPackage ../build-support/release { };
 
@@ -1670,11 +1671,6 @@ with pkgs;
     charles5
     ;
 
-  quaternion-qt6 =
-    qt6Packages.callPackage ../applications/networking/instant-messengers/quaternion
-      { };
-  quaternion = quaternion-qt6;
-
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
@@ -2386,7 +2382,6 @@ with pkgs;
       pslSupport = true;
       zstdSupport = true;
       http3Support = true;
-      c-aresSupport = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
       brotliSupport = true;
@@ -2718,6 +2713,8 @@ with pkgs;
   };
 
   google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
+
+  gparted-full = gparted.override { withAllTools = true; };
 
   gdown = with python3Packages; toPythonApplication gdown;
 
@@ -3073,8 +3070,8 @@ with pkgs;
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = nodejs_22;
-  nodejs-slim = nodejs-slim_22;
+  nodejs = nodejs_24;
+  nodejs-slim = nodejs-slim_24;
 
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
@@ -3681,6 +3678,8 @@ with pkgs;
 
   reuse = with python3.pkgs; toPythonApplication reuse;
 
+  rmate = rubyPackages.rmate;
+
   rmlint = callPackage ../tools/misc/rmlint {
     inherit (python3Packages) sphinx;
   };
@@ -3898,10 +3897,6 @@ with pkgs;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
 
-  video2midi = callPackage ../tools/audio/video2midi {
-    pythonPackages = python3Packages;
-  };
-
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
@@ -4013,7 +4008,7 @@ with pkgs;
   # https://github.com/NixOS/nixpkgs/issues/227327
   wafHook = waf.hook;
 
-  web-eid-app = libsForQt5.callPackage ../tools/security/web-eid-app { };
+  web-eid-app = qt6Packages.callPackage ../tools/security/web-eid-app { };
 
   wio = callPackage ../by-name/wi/wio/package.nix {
     wlroots = wlroots_0_19;
@@ -4252,7 +4247,7 @@ with pkgs;
   gerbilPackages-unstable = pkgs.gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
   glow-lang = pkgs.gerbilPackages-unstable.glow-lang;
 
-  default-gcc-version = 14;
+  default-gcc-version = 15;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
@@ -4741,8 +4736,8 @@ with pkgs;
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
 
-  openjfx17 = openjfx;
-  openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
+  openjfx17 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "17"; };
+  openjfx21 = openjfx;
   openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -5053,7 +5048,6 @@ with pkgs;
 
   inherit (rustPackages)
     cargo
-    cargo-auditable
     cargo-auditable-cargo-wrapper
     clippy
     rustc
@@ -5241,7 +5235,6 @@ with pkgs;
   # prolog
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
-  yosys-synlig = callPackage ../development/compilers/yosys/plugins/synlig.nix { };
   yosys-symbiflow = callPackage ../development/compilers/yosys/plugins/symbiflow.nix { };
 
   inherit
@@ -5352,15 +5345,6 @@ with pkgs;
     cpp2a-kernel
     xeus-cling
     ;
-
-  clojure = callPackage ../development/interpreters/clojure {
-    # set this to an LTS version of java
-    # Be careful if you remove this, out-of-tree consumers expect to
-    # be able to override `jdk`.
-    jdk = jdk21;
-  };
-
-  clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   dhall = haskell.lib.compose.justStaticExecutables haskellPackages.dhall;
 
@@ -5631,9 +5615,9 @@ with pkgs;
   python27Packages = python27.pkgs;
   python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
-  python312Packages = recurseIntoAttrs python312.pkgs;
+  python312Packages = python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
-  python314Packages = python314.pkgs;
+  python314Packages = recurseIntoAttrs python314.pkgs;
   python315Packages = python315.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
@@ -6215,14 +6199,6 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
-  flow = callPackage ../development/tools/analysis/flow {
-    ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
-      self: super: {
-        ppxlib = super.ppxlib.override { version = "0.33.0"; };
-      }
-    );
-  };
-
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
@@ -6537,7 +6513,6 @@ with pkgs;
 
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
-    texinfo6
     texinfo7
     ;
   texinfo = texinfo7;
@@ -6993,7 +6968,7 @@ with pkgs;
     else if libc == "bionic" then
       bionic
     else if libc == "uclibc" then
-      uclibc
+      uclibc-ng
     else if libc == "avrlibc" then
       avrlibc
     else if libc == "newlib" && stdenv.hostPlatform.isMsp430 then
@@ -7103,8 +7078,6 @@ with pkgs;
     util-linux = util-linuxMinimal; # break the cyclic dependency
     autoconf = buildPackages.autoconf269;
   };
-
-  gpgme = callPackage ../development/libraries/gpgme { };
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
@@ -7905,7 +7878,6 @@ with pkgs;
   openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
-  opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
@@ -8687,13 +8659,12 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
-  inherit (perlInterpreters) perl538 perl540;
+  inherit (perlInterpreters) perl5;
 
-  perl538Packages = recurseIntoAttrs perl538.pkgs;
-  perl540Packages = recurseIntoAttrs perl540.pkgs;
+  perl5Packages = recurseIntoAttrs perl5.pkgs;
 
-  perl = perl540;
-  perlPackages = perl540Packages;
+  perl = perl5;
+  perlPackages = perl5Packages;
 
   ack = perlPackages.ack;
 
@@ -10068,8 +10039,6 @@ with pkgs;
     useQt6 = true;
   };
 
-  androguard = with python3.pkgs; toPythonApplication androguard;
-
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
@@ -10370,8 +10339,6 @@ with pkgs;
   blackbox = callPackage ../applications/version-management/blackbox {
     pinentry = pinentry-curses;
   };
-
-  blender-hip = blender.override { hipSupport = true; };
 
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -10756,6 +10723,7 @@ with pkgs;
 
   gimp2 = callPackage ../applications/graphics/gimp/2.0 {
     lcms = lcms2;
+    stdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
   };
 
   gimp2-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
@@ -11358,9 +11326,6 @@ with pkgs;
     withConplay = false;
   };
 
-  # a somewhat more maintained fork of ympd
-  memento = qt6Packages.callPackage ../applications/video/memento { };
-
   mplayer = callPackage ../applications/video/mplayer (
     {
       libdvdnav = libdvdnav_4_2_1;
@@ -11368,14 +11333,7 @@ with pkgs;
     // (config.mplayer or { })
   );
 
-  mpv-unwrapped = callPackage ../applications/video/mpv {
-    stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
-  };
-
-  # Wrap avoiding rebuild
-  mpv = mpv-unwrapped.wrapper { mpv = mpv-unwrapped; };
-
-  mpvScripts = mpv-unwrapped.scripts;
+  mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
@@ -11406,8 +11364,6 @@ with pkgs;
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
 
-  opcua-client-gui = libsForQt5.callPackage ../misc/opcua-client-gui { };
-
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
     protobuf = protobuf_21;
   };
@@ -11423,8 +11379,6 @@ with pkgs;
   pinegrow = callPackage ../applications/editors/pinegrow { };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
-
-  playonlinux = callPackage ../applications/misc/playonlinux { stdenv = stdenv_32bit; };
 
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
@@ -11930,13 +11884,6 @@ with pkgs;
     # renamed in KF5 -> KF6
     plasma-framework = kdePackages.libplasma;
   };
-  syncthingtray-minimal = syncthingtray.override {
-    webviewSupport = false;
-    jsSupport = false;
-    kioPluginSupport = false;
-    plasmoidSupport = false;
-    systemdSupport = true;
-  };
 
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
@@ -12067,7 +12014,7 @@ with pkgs;
 
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
-  typstPackages = typst.packages;
+  typstPackages = recurseIntoAttrs typst.packages;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
@@ -12607,8 +12554,6 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
-
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
   inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
@@ -12711,12 +12656,6 @@ with pkgs;
     tlsSupport = true;
     pythonSupport = true;
   };
-
-  liquidwar = callPackage ../games/liquidwar {
-    guile = guile_2_0;
-  };
-
-  liquidwar5 = callPackage ../games/liquidwar/5.nix { };
 
   mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;

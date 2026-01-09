@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2025.11.25";
+  version = "2026.01.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-WCG+jCkNPb6Mv7Mn1ivA5iwteR+vsfdGeo77HiQiQYc=";
+    hash = "sha256-odkIwuh2VxDliRd6cPTCBSz19zxIBOBlVN0Sisngkn0=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];

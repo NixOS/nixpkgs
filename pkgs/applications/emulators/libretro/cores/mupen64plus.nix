@@ -39,6 +39,8 @@ mkLibretroCore {
       url = "https://github.com/libretro/mupen64plus-libretro-nx/commit/3c3e7fbc70b8f533c09c964cf468ba5e8d61351c.patch?full_index=1";
       hash = "sha256-PCJLNYhhccnWLcnPaHL6tz+5qdjogJRYfzZIh3r+Vlk=";
     })
+    # Fix for GCC 15. See https://github.com/libretro/GLideN64/pull/1.
+    ./patches/mupen64plus-gcc-15.patch
   ];
 
   extraNativeBuildInputs = [

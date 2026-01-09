@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "numatop";
     homepage = "https://01.org/numatop";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

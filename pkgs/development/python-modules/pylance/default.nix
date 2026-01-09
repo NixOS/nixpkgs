@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # nativeBuildInputs
   pkg-config,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-SPvJHa8oVgydWSvTR7RWF3ojKmz4BOJgo1fiwjCtYLU=";
+    hash = "sha256-S/zVpsfoQG9NYnJyAJm+a0LllVE/lfaCua+NA9DGIsw=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -52,7 +53,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-dPfj8Zd5+pW4Xe6IFaOcvcJdzcuC6qURSNJRcbceoHg=";
+    hash = "sha256-5ngkyjzxQ2NVxst3t7U18hdZ5zHNo0gjv0dif9HlyhU=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +101,11 @@ buildPythonPackage rec {
   preCheck = ''
     cd python/tests
   '';
+
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    "-Wignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # Hangs indefinitely

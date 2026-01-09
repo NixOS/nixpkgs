@@ -55,9 +55,6 @@
   "83/1c/25b79fc3ec99b19b0a0730cc47356f7e2959863bf9f3cd314332bddb4f68/pywin32-306-cp312-cp312-win_amd64": {
    "whl": "sha256-NyV3lMGtOe6b5lLaBGLcLjlMgVnf2ROopOjrb9NG2g4="
   },
-  "8d/14/619e24a4c70df2901e1f4dbc50a6291eb63a759172558df326347dce1f0d/protobuf-3.20.3-py2.py3-none-any": {
-   "whl": "sha256-p8ptSIqo/38ynUxUWy262KwxRk8dixyHrRNGcXcx5Ns="
-  },
   "8d/e4/0c27352e8222dcc0e3ce44b298015072d2057d08dd353541c980a31d26c9/jpype1-1.5.2-cp312-cp312-macosx_10_9_universal2": {
    "whl": "sha256-Hh25rJCa0q4OQLBMKqiMsUJQ1SRdaXFVYVB2gfKwiy8="
   },
@@ -94,6 +91,9 @@
   "ec/1a/610693ac4ee14fcdf2d9bf3c493370e4f2ef7ae2e19217d7a237ff42367d/packaging-23.2-py3-none-any": {
    "whl": "sha256-jEkRkAM6mvfh2THQtdrMLvR1CbNN0N5n7SCbUgP8iMc="
   },
+  "ee/01/1ed1d482960a5718fd99c82f6d79120181947cfd4667ec3944d448ed44a3/protobuf-6.31.0-py3-none-any": {
+   "whl": "sha256-asLoJVboIsF6jSOqEZC7wdBu+5wmGYHalcccnaCeniM="
+  },
   "fa/4c/e0200a6e3fed5cda79e926c2a8a610676f04948f89d7e38d93c7d4b21be9/jpype1-1.5.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64": {
    "whl": "sha256-mU+3sxm0U/d61Lav8B4N1BgOp0pv5aAx5OnbktvpU3Y="
   }
@@ -103,42 +103,54 @@
    "tar.gz": "sha256-r9wisKblvse2VyN1a5DUTqkR5hsvewHE3FUkq4E7TYk="
   }
  },
- "https://github.com/NationalSecurityAgency/ghidra-data/raw/Ghidra_11.4.2": {
-  "Debugger/dbgmodel": {
+ "https://github.com": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/Debugger/dbgmodel": {
    "tlb": "sha256-jPXzouuBFgqjSQVqXKTCxyaxtumL8wl81BNRRxYzQ8c="
   },
-  "FunctionID/vs2012_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2012_x64": {
    "fidb": "sha256-1OmKs/eQuDF5MhhDC7oNiySl+/TaZbDB/6jLDPvrDNw="
   },
-  "FunctionID/vs2012_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2012_x86": {
    "fidb": "sha256-pJDtfi7SHlh0Wf6urOcDa37eTOhOcuEN/YxXQ0ppGLY="
   },
-  "FunctionID/vs2015_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2015_x64": {
    "fidb": "sha256-4E6eQPnstgHIX02E7Zv2a0U2O+HR6CwWLkyZArjLUI8="
   },
-  "FunctionID/vs2015_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2015_x86": {
    "fidb": "sha256-tm7mlmU+LtNlkZ3qrviFEDEgx5LiLnmvcNEgnX4dhkQ="
   },
-  "FunctionID/vs2017_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2017_x64": {
    "fidb": "sha256-1fpfaXKYF0+lPSR9NZnmoSiEYFrRgce5VOI4DsHwvYk="
   },
-  "FunctionID/vs2017_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2017_x86": {
    "fidb": "sha256-04nLjXb/SlnKNfiRuFIccq1fDfluJTlzotIahhSkzIE="
   },
-  "FunctionID/vs2019_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2019_x64": {
    "fidb": "sha256-FQAHeW/DakBpZgrWJEmq2q890Rs4ZKXvIeeYMcnOkRg="
   },
-  "FunctionID/vs2019_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vs2019_x86": {
    "fidb": "sha256-62MKNvqlhqNx63NNwLvY0TzK72l/PbWHJZY1jz3SQyo="
   },
-  "FunctionID/vsOlder_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vsOlder_x64": {
    "fidb": "sha256-jDtR9GYM0n4aDWEKnz8tX7yDOmasnuQ5PuLySB6FWGY="
   },
-  "FunctionID/vsOlder_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/FunctionID/vsOlder_x86": {
    "fidb": "sha256-mGBca2uSFKlF2ETkHIWGDVRkmkW8p4c+9pkcDpNyB4c="
   },
-  "lib/java-sarif-2.1-modified": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_12.0/lib/java-sarif-2.1-modified": {
    "jar": "sha256-f3NlZklHVtJxql5LGvbIncUNB0qxxjdKR9+CImQiawE="
+  },
+  "Z3Prover/z3/releases/download/z3-4.13.0/z3-4.13.0-arm64-osx-11.0": {
+   "zip": "sha256-580yXLIhDTskHQ1VF6KTZ3Aw9YwXceGWxFdO+Z3EUWg="
+  },
+  "Z3Prover/z3/releases/download/z3-4.13.0/z3-4.13.0-x64-glibc-2.31": {
+   "zip": "sha256-vDGtEkRtfbG9nQrILeyde1EpuLjdbkS1cag6xgENL5s="
+  },
+  "Z3Prover/z3/releases/download/z3-4.13.0/z3-4.13.0-x64-osx-11.7.10": {
+   "zip": "sha256-DDPYV099zQQfH05/4wGEDbalJ/hmy3SwtHUYv4BTUC0="
+  },
+  "Z3Prover/z3/releases/download/z3-4.13.0/z3-4.13.0-x64-win": {
+   "zip": "sha256-K80UtoSf3erT0LPLZxzJ0TSo7wsdPv8+/X11pbvwDdM="
   }
  },
  "https://repo.maven.apache.org/maven2": {
@@ -249,19 +261,29 @@
    "jar": "sha256-8CqV+hpele2z7YWf0Pt99wnRIaNSkO/4t03OKrf01u0=",
    "pom": "sha256-N/h3mLGDhRE8kYv6nhJ2/lBzXvj6hJtYAMUZ1U2/Efg="
   },
-  "com/google/protobuf#protobuf-bom/3.21.8": {
-   "pom": "sha256-+7Ds/DyjGFddtifjOuRUwT1qTcp68UXRTT9m4IY8PPo="
+  "com/google/protobuf#protobuf-bom/3.17.3": {
+   "pom": "sha256-bf431vImF9VqQUzNrf+NmFhaH3kXEr6HbCYWZxDR2N0="
+  },
+  "com/google/protobuf#protobuf-bom/4.31.0": {
+   "pom": "sha256-Y9iGmhie8C2+3XxnN+FsGYa0aYOufQyNG+8s92sz2Ac="
   },
   "com/google/protobuf#protobuf-gradle-plugin/0.8.18": {
    "jar": "sha256-RP2JrzepsvHdQcCUqbtzPAe/f8eg4jhooQuvbjUfpeA=",
    "pom": "sha256-Gwqekab09LYqWmB4wibudwqo3FdnueRzwvwY8KOImAQ="
   },
-  "com/google/protobuf#protobuf-java/3.21.8": {
-   "jar": "sha256-C4WBrYENLfrv0Nz78VabFFBEhlAjjX4v1rF2yTLQjJU=",
-   "pom": "sha256-OJBUBuApx6MYaW8O4RnFXM7HizN+oR5MMZWfDgardAg="
+  "com/google/protobuf#protobuf-java/3.17.3": {
+   "jar": "sha256-SsVJsZJpQUGVgEnwYKHIJqMzQvYZ4QjO2MF9mHf14+0=",
+   "pom": "sha256-Km8izVJli4uxTBANs+F5NT+MNR0ENzo79voKOzlGStw="
   },
-  "com/google/protobuf#protobuf-parent/3.21.8": {
-   "pom": "sha256-bHKyrDl1sAnR5FdQlVnp+onyV4vShD3LTWo+XPgRFws="
+  "com/google/protobuf#protobuf-java/4.31.0": {
+   "jar": "sha256-aHc9zNbMWDWvenSHWc7PXqIP8IMTbjhH++lFcrjg7Wo=",
+   "pom": "sha256-aElbKMVNzVwyTQxRb7igjQoaJWvNrIFIN+ciYfEqCdM="
+  },
+  "com/google/protobuf#protobuf-parent/3.17.3": {
+   "pom": "sha256-T09Q5moqvM/o7SCbU/q3C4k+NfQ77FqB98GESbY+hrE="
+  },
+  "com/google/protobuf#protobuf-parent/4.31.0": {
+   "pom": "sha256-H1mhQuar05Jar9Fo25tU0QhP7MhPW4DU3jVPrJ4I/Lg="
   },
   "com/h2database#h2/2.2.220": {
    "jar": "sha256-l4q4YwGNP5ZeOIgFccNik+qLEKgIYZQVnE1dILUPClc=",

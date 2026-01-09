@@ -1,5 +1,6 @@
 {
   buildNpmPackage,
+  nodejs_22,
   fetchFromGitHub,
   lib,
 }:
@@ -16,6 +17,9 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-mpe00J5iRwaH7hJIDP3fDuJSUOKk01COpOOvF1YJMyg=";
+
+  # https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   # don't fetch playwright binary
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";

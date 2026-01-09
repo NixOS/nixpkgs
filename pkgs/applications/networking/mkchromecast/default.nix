@@ -11,7 +11,7 @@
   vorbis-tools,
   pulseaudio,
   nodejs,
-  youtube-dl,
+  yt-dlp,
   opusTools,
   gst_all_1,
   enableSonos ? true,
@@ -27,21 +27,21 @@ let
     gst_all_1.gstreamer
     nodejs
     ffmpeg
-    youtube-dl
+    yt-dlp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2022-10-31";
+  version = "2025-12-21";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
-    sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
+    rev = "9cdc5f3f9060ef4078522366ce896356515d8e52";
+    hash = "sha256-UMzOIxgeTpAFQZtYirOYPoVcKgiKdGx2zwVyWmo32w4=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;

@@ -68,6 +68,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # not updated to django 5.x
+    broken = lib.versionAtLeast django.version "5";
     description = "Content management platform built using the Django framework";
     mainProgram = "mezzanine-project";
     longDescription = ''

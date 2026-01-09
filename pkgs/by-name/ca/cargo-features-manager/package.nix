@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-features-manager";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ToBinio";
     repo = "cargo-features-manager";
     rev = "v${version}";
-    hash = "sha256-NjXJCrLsX52M7CBg8wdgwlK3gaGiznfdRGz7BAbVVPk=";
+    hash = "sha256-ay6nhRmGRBURisfr7qnnWCKn8JCnFh9x0TJ7vK2p4PU=";
   };
 
-  cargoHash = "sha256-1/bCyScvWQYeGZRitvksww4uvrzhifRBYcYPgGY2GRo=";
+  cargoHash = "sha256-QB+0ezc7IQPzSym/Lfqjnh24tHKKwLqIpnGPNFQxI5M=";
 
   meta = {
     description = "TUI-like cli tool to manage the features of your rust-projects dependencies";

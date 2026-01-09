@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/smarie/python-pytest-harvest";
     changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

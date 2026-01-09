@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "ssl" ];
 
   # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   # The wrapping is required so that the "sh-c" option of websocat works even
   # if sh is not in the PATH (as can happen, for instance, when websocat is

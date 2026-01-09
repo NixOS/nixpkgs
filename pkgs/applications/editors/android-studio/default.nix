@@ -20,12 +20,12 @@ let
     sha256Hash = "sha256-xs9ABQ9f8/gtxcoiZkf/xEtmTOj6rb4Ty+w70/+C4Ss=";
   };
   betaVersion = {
-    version = "2025.2.3.6"; # "Android Studio Otter 3 Feature Drop | 2025.2.3 RC 1"
-    sha256Hash = "sha256-UysTlKH2h+8FElFgYYTiP4LCPYCssMRSrSA4lwsk6ek=";
+    version = "2025.2.3.7"; # "Android Studio Otter 3 Feature Drop | 2025.2.3 RC 2"
+    sha256Hash = "sha256-d5BcAUkYV7O25wyoifiZxfUsANPxLa/QkuT9u1qqfP8=";
   };
   latestVersion = {
-    version = "2025.3.1.1"; # "Android Studio Panda 1 | 2025.3.1 Canary 1"
-    sha256Hash = "sha256-hCWt8wMxqA4So/oZL6RzRRY3Kg6vAYr9xDAzQ/5ZXow=";
+    version = "2025.3.1.2"; # "Android Studio Panda 1 | 2025.3.1 Canary 2"
+    sha256Hash = "sha256-kgYPwMF/CypkCq4w/y+HnraNdPNHf53198x35S0i7OA=";
   };
 in
 {

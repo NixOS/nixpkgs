@@ -9,6 +9,7 @@
   gdk-pixbuf,
   glib,
   gobject-introspection,
+  askalono,
   borgbackup,
   writeText,
   nixosTests,
@@ -23,7 +24,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.14.3";
+  version = "5.15.1";
 
   pyproject = true;
 
@@ -36,7 +37,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-DwoJ24yGLJt+bItN/9SW0ruf+Lz3A9JxvD4QjlKaqzw=";
+    hash = "sha256-9k6H9/XW7vbXix+zadxHCNl9UJ3yE1ONa/+VRvIGk28=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -68,6 +69,7 @@ python.pkgs.buildPythonApplication rec {
     "certifi"
     "cyrtranslit"
     "django-appconf"
+    "urllib3"
   ];
 
   dependencies =
@@ -80,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
       celery
       certifi
       charset-normalizer
+      confusable-homoglyphs
       crispy-bootstrap3
       crispy-bootstrap5
       cryptography
@@ -104,6 +107,7 @@ python.pkgs.buildPythonApplication rec {
       docutils
       drf-spectacular
       drf-standardized-errors
+      fedora-messaging
       filelock
       fluent-syntax
       gitpython
@@ -118,6 +122,7 @@ python.pkgs.buildPythonApplication rec {
       packaging
       phply
       pillow
+      pyaskalono
       pycairo
       pygments
       pygobject3
@@ -133,7 +138,6 @@ python.pkgs.buildPythonApplication rec {
       siphashc
       social-auth-app-django
       social-auth-core
-      standardwebhooks
       tesserocr
       translate-toolkit
       translation-finder
@@ -145,7 +149,10 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
-    ++ drf-standardized-errors.optional-dependencies.openapi;
+    ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ translate-toolkit.optional-dependencies.toml
+    ++ urllib3.optional-dependencies.brotli
+    ++ urllib3.optional-dependencies.zstd;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];

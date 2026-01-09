@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "cocoon";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "haileyok";
     repo = "cocoon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kYBYdMoo7ToeljiW7AafL5cHzzeuaiL6MFE4Zw5Taqw=";
+    hash = "sha256-ztP/Nvv9kRr4bFI8oveJ6pk3LOZ9H4pqhVnBMt1kbew=";
   };
 
   ldflags = [
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-5WnME+AVrXfvHX2yPbFoL6QgZoCMAJmBj47OM7miOfc=";
+  vendorHash = "sha256-cNL9H8cXFEiBKwyZcg1AwFUDXzMINi+vjYecyP8KNP0=";
 
   passthru.updateScript = nix-update-script { };
 

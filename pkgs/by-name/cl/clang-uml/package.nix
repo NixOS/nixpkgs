@@ -79,7 +79,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Customizable automatic UML diagram generator for C++ based on Clang";

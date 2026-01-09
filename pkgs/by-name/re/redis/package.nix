@@ -114,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/redis-server";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests.redis = nixosTests.redis;

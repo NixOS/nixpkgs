@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.90.9";
+  version = "1.92.5";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gfpjP1i9077VR/sDclnz+QXJcCffuS0i33m75zo91kM=";
+    hash = "sha256-S0aD+x8dUPHaNb5MdB41oeID/8eERB3FKKuuqlCqJkU=";
   };
 
-  vendorHash = "sha256-AUOjLomba75qfzb9Vxc0Sktyeces6hBSuOMgboWcDnE=";
+  vendorHash = "sha256-jJSSXMyUqcJoZuqfSlBsKDQezyqS+jDkRglMMjG1K8g=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -83,6 +83,9 @@ buildGoModule (finalAttrs: {
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+
+  # Tests are in the `tests` passthru derivation because they are flaky, frequently causing build failures.
+  doCheck = false;
 
   preCheck = ''
     # feed in all tests for testing
@@ -215,6 +218,7 @@ buildGoModule (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests) headscale;
     inherit tailscale-nginx-auth;
+    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
   meta = {

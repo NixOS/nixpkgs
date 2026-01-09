@@ -4,6 +4,7 @@
   cmake,
   python3,
   fetchFromGitHub,
+  fetchpatch2,
   emscripten,
   gtest,
   lit,
@@ -28,6 +29,17 @@ stdenv.mkDerivation rec {
     rev = "version_${version}";
     hash = "sha256-QG8ZhvjcTbhIfYkVfrjxd97v9KaG/A8jO69rPg99/ME=";
   };
+
+  patches = [
+    # TODO: remove at next release
+    # fix build on aarch64/riscv64 with gcc15 but bug exists on all platforms.
+    (fetchpatch2 {
+      name = "fix-uninitialized-small-vector.patch";
+      # https://github.com/WebAssembly/binaryen/pull/8094
+      url = "https://github.com/WebAssembly/binaryen/commit/3ff3762bf7c83edcdfccad522de640f2b0928ae2.patch?full_index=1";
+      hash = "sha256-lhrXQJAaQ/4ofnpyVqhD08IuDxPRc7UPyZ8DoCfM9NE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

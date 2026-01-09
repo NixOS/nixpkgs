@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cymem";
     tag = "release-v${version}";
-    hash = "sha256-4srwdQS06KeBAIaJm6XxmsHEZto0eiXBznrCHgT/BAc=";
+    hash = "sha256-kZHnfUNbDyw+LD/7GgtXa6ZssTkJG2PkcM+6YLFK5RQ=";
   };
 
   build-system = [

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/lynx/tarballs/lynx${version}.tar.bz2"
+      "https://invisible-island.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
       "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
     ];
     hash = "sha256-c3S4mTbZkWaeEB9Ol/LJWSA24ejNqnuvwlmnerb7B84=";

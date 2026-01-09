@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.dtzWill ];
+    maintainers = [ ];
   };
 }

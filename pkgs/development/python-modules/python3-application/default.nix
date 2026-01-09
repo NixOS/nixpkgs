@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
+  setuptools,
   zope-interface,
   twisted,
 }:
@@ -21,6 +22,8 @@ buildPythonPackage rec {
     rev = "release-${version}";
     hash = "sha256-79Uu9zaBIuuc+1O5Y7Vp4Qg2/aOrwvmdi5G/4AvL+T4=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     zope-interface

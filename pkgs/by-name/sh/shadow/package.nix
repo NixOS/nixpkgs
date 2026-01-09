@@ -19,6 +19,7 @@
   libbsd,
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
+  cmocka,
 }:
 let
   glibc' =
@@ -68,10 +69,17 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTcb tcb;
 
   patches = [
+    # Don't set $PATH to /bin:/usr/bin but inherit the $PATH of the caller.
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
+    # Avoid a chown during install to fix installation with tcb enabled
+    # Would have to be done as part of the NixOS modules,
+    # see https://github.com/NixOS/nixpkgs/issues/109457
     ./fix-install-with-tcb.patch
+    # This unit test fails: https://github.com/shadow-maint/shadow/issues/1382
+    # Can be removed after the next release
+    ./disable-xaprintf-test.patch
   ];
 
   postPatch = ''
@@ -104,6 +112,11 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd
   '';
 
+  doCheck = true;
+  nativeCheckInputs = [
+    cmocka
+  ];
+
   postInstall = ''
     # Move the su binary into the su package
     mkdir -p $su/bin
@@ -125,6 +138,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/nologin";
+    # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
   };
 }

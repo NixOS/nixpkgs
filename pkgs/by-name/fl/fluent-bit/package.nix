@@ -113,8 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) fluent-bit;

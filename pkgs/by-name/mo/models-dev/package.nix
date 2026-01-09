@@ -9,12 +9,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2025-12-23";
+  version = "0-unstable-2026-01-04";
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "models.dev";
-    rev = "d54bc052ebe97f8fc494e9fbb47a5d6266d20066";
-    hash = "sha256-HiIHiiP2AzMkUtshFBgZJ+wheOO0L+eOn44+C7xzYxA=";
+    rev = "65b43b44c1aefb37483a03f1859f10f6718b7b31";
+    hash = "sha256-yh1OeKZ1JBR6Z1+ebCvdssjy2bBGgo1KNQFmVkycM7E=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -112,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/sst/models-dev";
+    homepage = "https://github.com/anomalyco/models-dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

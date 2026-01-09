@@ -3,32 +3,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  zope-testrunner,
   unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-i18nmessageid";
-  version = "7.0";
+  version = "8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.i18nmessageid";
     tag = version;
-    hash = "sha256-rdTs1pNMKpPAR2CewXdg1KmI61Sw5r62OobYlJHsUaQ=";
+    hash = "sha256-lMHmKWwR9D9HW+paV1mDVAirOe0wBD8VrJ67NZoROtg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     unittestCheckHook
-    zope-testrunner
   ];
 
   unittestFlagsArray = [ "src/zope/i18nmessageid" ];

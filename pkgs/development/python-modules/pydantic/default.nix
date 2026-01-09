@@ -1,8 +1,9 @@
 {
   lib,
+  python,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -20,26 +21,29 @@
   dirty-equals,
   jsonschema,
   pytestCheckHook,
-  pytest-codspeed,
   pytest-mock,
   pytest-run-parallel,
-  eval-type-backport,
-  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.11.7";
+  version = "2.12.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-5EQwbAqRExApJvVUJ1C6fsEC1/rEI6/bQEQkStqgf/Q=";
+    hash = "sha256-CHJahAgs+vQQzhIZjP+6suvbmRrGZI0H5UxoXg4I90o=";
   };
+
+  patches = lib.optionals (lib.versionAtLeast python.version "3.14.1") [
+    # Fix build with python 3.14.1
+    (fetchpatch {
+      url = "https://github.com/pydantic/pydantic/commit/53cb5f830207dd417d20e0e55aab2e6764f0d6fc.patch";
+      hash = "sha256-Y1Ob1Ei0rrw0ua+0F5L2iE2r2RdpI9DI2xuiu9pLr5Y=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/--benchmark/d" pyproject.toml
@@ -65,18 +69,11 @@ buildPythonPackage rec {
     cloudpickle
     dirty-equals
     jsonschema
-    pytest-codspeed
     pytest-mock
     pytest-run-parallel
     pytestCheckHook
-    rich
   ]
-  ++ lib.concatAttrValues optional-dependencies
-  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/benchmarks"

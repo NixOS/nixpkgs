@@ -577,6 +577,8 @@ let
 
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
 
+        ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
+
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
         ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
@@ -657,6 +659,8 @@ let
         };
 
         frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
+
+        frama-c-luncov = callPackage ../development/ocaml-modules/frama-c-luncov { };
 
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
@@ -1090,6 +1094,8 @@ let
         logs = callPackage ../development/ocaml-modules/logs { };
 
         logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
+
+        lreplay = callPackage ../development/ocaml-modules/lreplay { };
 
         lru = callPackage ../development/ocaml-modules/lru { };
 

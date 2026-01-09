@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/vassal";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Free, open-source boardgame engine";

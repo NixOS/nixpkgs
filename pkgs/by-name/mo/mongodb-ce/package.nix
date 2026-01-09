@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     sources = {

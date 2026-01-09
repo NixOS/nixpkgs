@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";

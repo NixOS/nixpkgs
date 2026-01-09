@@ -148,11 +148,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     xz.bin
-  ]
-  ++ optionals stdenv.hostPlatform.isCygwin [
-    # due to patch
-    autoreconfHook
-    texinfo
   ];
 
   buildInputs =
@@ -222,7 +217,8 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
     # gnulib does not consider Clang-specific warnings to be bugs:
     # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
-    ++ optional stdenv.cc.isClang "-Wno-error=format-security"
+    # TODO: find out why these are happening on cygwin, which is gcc
+    ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
   );
 
   # Works around a bug with 8.26:
@@ -273,7 +269,10 @@ stdenv.mkDerivation rec {
       are expected to exist on every operating system.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = with lib.maintainers; [
+      das_j
+      mdaniels5757
+    ];
     platforms = with lib.platforms; unix ++ windows;
     priority = 10;
   };

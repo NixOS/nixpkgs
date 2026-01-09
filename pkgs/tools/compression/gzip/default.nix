@@ -5,7 +5,6 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
-  directoryListingUpdater,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -53,6 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
   ''
+  # avoid wrapping the actual executable on cygwin because changing the
+  # extension will break dll linking
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    mv $out/bin/{,.}gzip.exe
+    ln -s .gzip.exe $out/bin/gzip
+  ''
   # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
   # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
   # if changing so that there's no longer a .gzip-wrapped then update copy in make-bootstrap-tools.nix
@@ -60,13 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/gzip \
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
-
-  passthru = {
-    updateScript = directoryListingUpdater {
-      inherit (finalAttrs) pname version;
-      url = "https://ftp.gnu.org/gnu/gzip/";
-    };
-  };
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";

@@ -13,8 +13,6 @@ releaseInfo="`curl_github \
   "https://api.github.com/repos/signalapp/Signal-Desktop/releases/latest"`"
 
 releaseTag="`jq -r ".tag_name" <<< $releaseInfo`"
-releaseDate="`jq -r ".created_at" <<< $releaseInfo`"
-releaseEpoch=`date -d $releaseDate +%s`
 
 packageJson="`curl_github "https://raw.githubusercontent.com/signalapp/Signal-Desktop/refs/tags/$releaseTag/package.json"`"
 
@@ -29,7 +27,6 @@ webrtcVersion="`grep --only-matching "^webrtc.version=.*$" <<< $ringrtcVersionPr
 
 sed -E -i "s/(nodejs_)../\1$nodeVersion/" $SCRIPT_DIR/package.nix
 sed -E -i "s/(electron_)../\1$electronVersion/" $SCRIPT_DIR/package.nix
-sed -E -i "s/(SOURCE_DATE_EPOCH = )[0-9]+/\1$releaseEpoch/" $SCRIPT_DIR/package.nix
 
 sed -E -i "s/(withAppleEmojis \? )false/\1true/" $SCRIPT_DIR/package.nix
 nix-update signal-desktop --subpackage sticker-creator --version="$latestVersion"

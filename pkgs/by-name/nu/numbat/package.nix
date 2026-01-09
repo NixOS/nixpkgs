@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "numbat";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
     tag = "v${version}";
-    hash = "sha256-1CAUl9NB1QjduXgwOIcMclXA6SpaTP+kd3j25BK5Q/8=";
+    hash = "sha256-uRzjaDYPvAQwvUeE6NI1QKNFqBVUFcXK3gm3dRkyWw0=";
   };
 
-  cargoHash = "sha256-EBfhi7puB2To/1GLbXW6Tz1zazDswvh+NqqBkeqRtAI=";
+  cargoHash = "sha256-wKY/StWKiTK8/oFV0tlqNakk+zqqTFVAEauBrGar2bY=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "go-judge";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "criyle";
     repo = "go-judge";
     rev = "v${version}";
-    hash = "sha256-Hk2PlpoKEpSxFwar0n5bT4skCqIVheIhq8xs3EoV9w0=";
+    hash = "sha256-qSTtXLjtrwwp6ipnquzoDM6yzAtoE3WIAXqWFCuOI9s=";
   };
 
   vendorHash = "sha256-+KPbY63wF+zh7R7OVyfBI7Nuf8kAh35dxJIIRrP5Js0=";

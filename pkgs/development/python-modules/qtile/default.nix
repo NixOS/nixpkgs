@@ -36,7 +36,7 @@
   extraPackages ? [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile";
   version = "0.34.1";
   pyproject = true;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PPyI+IGvHBQusVmU3D26VjYjLaa9+94KUqNwbQSzeaI=";
   };
 
@@ -142,4 +142,4 @@ buildPythonPackage rec {
       doronbehar
     ];
   };
-}
+})

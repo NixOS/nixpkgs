@@ -51,6 +51,7 @@ let
     "yazi"
     "theme"
     "keymap"
+    "vfs"
   ];
 
   configHome =

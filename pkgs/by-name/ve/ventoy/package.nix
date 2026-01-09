@@ -59,16 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     "ventoy"
     + optionalString (defaultGuiType == "gtk3") "-gtk3"
     + optionalString (defaultGuiType == "qt5") "-qt5";
-  version = "1.1.07";
+  version = "1.1.10";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-T/q85GiwPWNXzl9FlOIJcU0VCdBl2hApOAltrWZUw24=";
+    hash = "sha256-EROr5uG7cSg0/ldKlmYhqRKFgAT0/v1wFmbsl8W+sgg=";
   };
-
-  patches = [
-    ./000-nixos-sanitization.patch
-  ];
 
   postPatch = ''
     # Fix permissions.

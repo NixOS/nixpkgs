@@ -3,7 +3,7 @@
   fetchFromGitea,
   fetchNpmDeps,
   buildGoModule,
-  nodejs,
+  nodejs_22,
   npmHooks,
   python3,
 }:
@@ -20,12 +20,8 @@ buildGoModule rec {
     hash = "sha256-9M9Bgl1CJ35x/Onlk5xUNCFkZKW40efF6qMOM+2/HR0=";
   };
 
-  postPatch = ''
-    sed -i -e '/^go /s/1.25.5/1.25.4/' go.mod
-  '';
-
   nativeBuildInputs = [
-    nodejs
+    nodejs_22
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
   ];

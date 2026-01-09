@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchfossil,
+  fetchpatch2,
   docutils,
   pkg-config,
   freetype,
@@ -18,6 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-YA36wfj7owKu/KyWgCj6U8EJEh831cFtQj4/JtH6kVg=";
   };
+
+  patches = [
+    # fix build with C23
+    #   'bool' is a keyword with '-std=c23' onwards
+    #   error: 'bool' cannot be used here
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/debian/abcm2ps/-/raw/f741931567bb8cac8c9ed8e73b7ba838e4c17eb3/debian/patches/c23.diff";
+      hash = "sha256-+2LuHqY5+nWykCYGEOazDeJAf9sggPNp2yiqMQRepfM=";
+    })
+  ];
 
   configureFlags = [
     "--INSTALL=install"

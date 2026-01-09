@@ -277,7 +277,6 @@ in
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
