@@ -23,8 +23,8 @@ let
     ] null;
   location = {
     domain = "github.com";
-    owner = "coq-community";
-    repo = "vscoq";
+    owner = "rocq-prover";
+    repo = "vsrocq";
   };
   fetch = metaFetch {
     release."2.0.3+coq8.18".sha256 = "sha256-VXhHCP6Ni5/OcsgoI1EbJfYCpXzwkuR8kbbKrl6dfjU=";
@@ -77,7 +77,7 @@ ocamlPackages.buildDunePackage {
 
   meta = {
     description = "Language server for the vscoq vscode/codium extension";
-    homepage = "https://github.com/coq-community/vscoq";
+    homepage = "https://github.com/rocq-prover/vsrocq";
     maintainers = with lib.maintainers; [ cohencyril ];
     license = lib.licenses.mit;
   }
