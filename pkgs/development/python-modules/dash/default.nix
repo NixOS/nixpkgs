@@ -22,12 +22,15 @@
   nest-asyncio,
 
   celery,
+  kombu,
   redis,
   diskcache,
   multiprocess,
   psutil,
   flask-compress,
 
+  flaky,
+  numpy,
   pytestCheckHook,
   pytest-mock,
   mock,
@@ -36,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "3.0.4";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${version}";
-    hash = "sha256-KCGVdD1L+U2KbktU2GU19BQ6wRcmEeYtC/v8UrFTyto=";
+    hash = "sha256-8Vt109x4T+DhBXfQf7MKoexmWFc23uuU0Nn3Ia/Xm5I=";
   };
 
   nativeBuildInputs = [
@@ -96,8 +99,10 @@ buildPythonPackage rec {
   optional-dependencies = {
     celery = [
       celery
+      kombu
       redis
-    ];
+    ]
+    ++ celery.optional-dependencies.redis;
     diskcache = [
       diskcache
       multiprocess
@@ -107,16 +112,23 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    flaky
+    numpy
+    psutil
     pytestCheckHook
     pytest-mock
     mock
     pyyaml
+    redis
+  ];
+
+  enabledTestPaths = [
+    "tests/unit"
   ];
 
   disabledTestPaths = [
     "tests/unit/test_browser.py"
     "tests/unit/test_app_runners.py" # Uses selenium
-    "tests/integration"
   ];
 
   pythonImportsCheck = [ "dash" ];
