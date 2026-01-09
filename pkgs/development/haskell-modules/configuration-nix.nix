@@ -1005,6 +1005,11 @@ builtins.intersectAttrs super {
     '';
   }) super.sbv;
 
+  # Don't use vendored (and outdated) c-blosc library
+  hblosc = addPkgconfigDepends [
+    pkgs.c-blosc
+  ] (enableCabalFlag "externalBlosc" super.hblosc);
+
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
