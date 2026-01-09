@@ -10,10 +10,8 @@
 let
   inherit (lib)
     all
-    attrNames
     attrValues
     concatMapStrings
-    concatMapStringsSep
     concatStrings
     filter
     findFirst
@@ -26,7 +24,8 @@ let
     optionalString
     isAttrs
     isString
-    mapAttrs
+    warn
+    foldl'
     ;
 
   inherit (lib.lists)
@@ -49,15 +48,17 @@ let
 
   inherit (builtins)
     getEnv
-    trace
     ;
+
+  inherit (import ./problems.nix { inherit lib; })
+    problemsType
+    genCheckProblems
+    ;
+  checkProblems = genCheckProblems config;
 
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
-  # Allow the user to opt-into additional warnings, e.g.
-  # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
-  showWarnings = config.showDerivationWarnings;
 
   getNameWithVersion =
     attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
@@ -117,21 +118,6 @@ let
       any (l: !(l.free or true)) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
-
-  hasNoMaintainers =
-    # To get usable output, we want to avoid flagging "internal" derivations.
-    # Because we do not have a way to reliably decide between internal or
-    # external derivation, some heuristics are required to decide.
-    #
-    # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
-    # If `description` is not defined, the derivation is probably not a package.
-    # Simply checking whether `meta` is defined is insufficient,
-    # as some fetchers and trivial builders do define meta.
-    attrs:
-    (!attrs ? outputHash)
-    && (attrs ? meta.description)
-    && (attrs.meta.maintainers or [ ] == [ ])
-    && (attrs.meta.teams or [ ] == [ ]);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -362,6 +348,8 @@ let
       unfree = bool;
       unsupported = bool;
       insecure = bool;
+      # This is checked in more detail further down
+      problems = problemsType;
       tests = {
         name = "test";
         verify =
@@ -489,18 +477,6 @@ let
         reason = "insecure";
         errormsg = "is marked as insecure";
         remediation = remediate_insecure attrs;
-      }
-    else
-      null;
-
-  # Please also update the type in /pkgs/top-level/config.nix alongside this.
-  checkWarnings =
-    attrs:
-    if hasNoMaintainers attrs then
-      {
-        reason = "maintainerless";
-        errormsg = "has no maintainers or teams";
-        remediation = "";
       }
     else
       null;
@@ -661,54 +637,74 @@ let
         && ((config.checkMetaRecursively or false) -> all (d: d.meta.available or true) references);
     };
 
-  validYes = {
-    valid = "yes";
-    handled = true;
-  };
-
-  assertValidity =
-    { meta, attrs }:
+  handle =
+    {
+      attrs,
+      meta,
+      warnings ? [ ],
+      error ? null,
+    }:
     let
-      invalid = checkValidity attrs;
-      warning = checkWarnings attrs;
-    in
-    if isNull invalid then
-      if isNull warning then
-        validYes
-      else
+      withError =
+        if isNull error then
+          true
+        else
+          let
+            msg =
+              if inHydra then
+                "Failed to evaluate ${getNameWithVersion attrs}: «${error.reason}»: ${error.errormsg}"
+              else
+                ''
+                  Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${error.errormsg}, refusing to evaluate.
+
+                ''
+                + error.remediation;
+          in
+          if config ? handleEvalIssue then config.handleEvalIssue error.reason msg else throw msg;
+
+      giveWarning =
+        acc: warning:
         let
           msg =
             if inHydra then
               "Warning while evaluating ${getNameWithVersion attrs}: «${warning.reason}»: ${warning.errormsg}"
             else
-              "Package ${getNameWithVersion attrs} in ${pos_str meta} ${warning.errormsg}, continuing anyway."
-              + (optionalString (warning.remediation != "") "\n${warning.remediation}");
-
-          handled = if elem warning.reason showWarnings then trace msg true else true;
+              "Package ${getNameWithVersion attrs} in ${pos_str meta} ${warning.errormsg} Continuing anyway."
+              + (optionalString (warning.remediation != "") " ${warning.remediation}");
         in
-        warning
-        // {
-          valid = "warn";
-          handled = handled;
+        warn msg acc;
+    in
+    # Give all warnings first, then error if any
+    builtins.seq (foldl' giveWarning null warnings) withError;
+
+  assertValidity =
+    { meta, attrs }:
+    let
+      invalid = checkValidity attrs;
+      problems = checkProblems attrs;
+    in
+    if isNull invalid then
+      if isNull problems then
+        {
+          valid = "yes";
+          handled = true;
+        }
+      else
+        {
+          valid = if isNull problems.error then "warn" else "no";
+          handled = handle {
+            inherit attrs meta;
+            inherit (problems) error warnings;
+          };
         }
     else
-      let
-        msg =
-          if inHydra then
-            "Failed to evaluate ${getNameWithVersion attrs}: «${invalid.reason}»: ${invalid.errormsg}"
-          else
-            ''
-              Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${invalid.errormsg}, refusing to evaluate.
-
-            ''
-            + invalid.remediation;
-
-        handled = if config ? handleEvalIssue then config.handleEvalIssue invalid.reason msg else throw msg;
-      in
       invalid
       // {
         valid = "no";
-        handled = handled;
+        handled = handle {
+          inherit attrs meta;
+          error = invalid;
+        };
       };
 
 in

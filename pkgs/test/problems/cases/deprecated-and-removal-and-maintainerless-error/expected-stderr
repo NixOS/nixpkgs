@@ -1,0 +1,39 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:18 has the following problems that must be acknowledged: [ "deprecated" "maintainerless" "removal" ], refusing to evaluate.
+
+
+Package problems:
+
+- deprecated: Package is deprecated and replaced by b.
+- maintainerless: This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.
+- removal: Package will be removed.
+
+You can use it anyway by ignoring its problems, using one of the
+following methods:
+
+a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+  `nixpkgs.config.problems.handlers` inside configuration.nix,
+  like this:
+
+    {
+      nixpkgs.config.problems.handlers = {
+        a.deprecated = "warn";
+        a.maintainerless = "warn";
+        a.removal = "warn";
+      };
+    }
+
+b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+  "warn" or "ignore" to `problems.handlers` in
+  ~/.config/nixpkgs/config.nix, like this:
+
+    {
+      problems.handlers = {
+        a.deprecated = "warn";
+        a.maintainerless = "warn";
+        a.removal = "warn";
+      };
+    }
+
+See this page for more details: https://nixos.org/manual/nixpkgs/unstable#sec-problems

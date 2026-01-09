@@ -167,7 +167,7 @@ lib.fix (self: {
           concatMap (
             k:
             if fieldVerifiers ? ${k} then
-              lib.optionals (fieldVerifiers.${k} v.${k}) (self.errors fields.${k} (ctx + ".${k}") v.${k})
+              lib.optionals (!fieldVerifiers.${k} v.${k}) (self.errors fields.${k} "${ctx}.${k}" v.${k})
             else
               [
                 "${ctx}: key '${k}' is unrecognized; expected one of: \n  [${
