@@ -49,11 +49,11 @@ mkJetBrainsProduct {
     musl
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/phpstorm/";
     description = "PHP IDE from JetBrains";
-    longDescription = "PhpStorm provides an editor for PHP, HTML and JavaScript with on-the-fly code analysis, error prevention and automated refactorings for PHP and JavaScript code. ";
+    longDescription = "PhpStorm provides an editor for PHP, HTML and JavaScript with on-the-fly code analysis, error prevention and automated refactorings for PHP and JavaScript code.";
     maintainers = with lib.maintainers; [
       dritter
       tymscar

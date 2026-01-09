@@ -57,11 +57,14 @@ mkJetBrainsProduct {
     ''--set M2 "${maven}/maven/bin"''
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/idea/";
-    description = "Free Java, Kotlin, Groovy and Scala IDE from Jetbrains (built from source)";
-    longDescription = "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.";
+    description = "Free Java, Kotlin, Groovy and Scala IDE from JetBrains (built from source)";
+    longDescription = ''
+      IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven.
+      Also known as IntelliJ.
+    '';
     maintainers = with lib.maintainers; [
       gytis-ivaskevicius
       tymscar

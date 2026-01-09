@@ -55,11 +55,14 @@ mkJetBrainsProduct {
     '')
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/dataspell/";
     description = "Data science IDE from JetBrains";
-    longDescription = "DataSpell is a new IDE from JetBrains built for Data Scientists. Mainly it integrates Jupyter notebooks in the IntelliJ platform.";
+    longDescription = ''
+      DataSpell is an IDE from JetBrains built for Data Scientists.
+      Mainly it integrates Jupyter notebooks in the IntelliJ platform.
+    '';
     maintainers = with lib.maintainers; [ leona ];
     license = lib.licenses.unfree;
     sourceProvenance =

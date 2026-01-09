@@ -56,8 +56,6 @@ Any comments or other manual changes between these markers will be removed when 
  - Add it to `default.nix`
 
 ### TODO:
- - remove the usage of `meta.` properties for building the Linux desktop files
-   (JetBrains already provides their own Desktop files, we can just use those probably?)
  - drop the community IDEs
  - Switch `mkJetbrainsProduct` to use `lib.extendMkDerivation`, see also:
    - https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655305961
