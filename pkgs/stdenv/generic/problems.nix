@@ -1,4 +1,15 @@
-# Implementation of RFC 127
+/*
+  This file implements everything around meta.problems, including:
+  - automaticProblems: Which problems get added automatically based on some condition
+  - configOptions: Module system options for config.problems
+  - problemsType: The check for meta.problems
+  - genHandlerSwitch: The logic to determine the handler for a specific problem based on config.problems
+  - genCheckProblems: The logic to determine which problems need to be handled and how the messages should look like
+
+  There are tests to cover pretty much this entire file, so please run them when making changes ;)
+
+      nix-build -A tests.problems
+*/
 
 { lib }:
 
@@ -40,6 +51,7 @@ rec {
     ;
 
   handlers = rec {
+    # Ordered from less to more
     levels = [
       "ignore"
       "warn"
@@ -173,6 +185,7 @@ rec {
               };
               config = {
                 assertions = [
+                  # TODO: Does it really matter if we let people specify this? Maybe not, so consider removing this assertion
                   {
                     assertion = !(config.package != null && config.name != null);
                     message = ''A matcher cannot match on both a package and problem name as this would not be a wildcard, for that use `problems.handlers = { ${toString config.package}.${toString config.name} = "${toString config.handler}"; };` instead'';
@@ -212,6 +225,7 @@ rec {
       inherit (types)
         str
         listOf
+        attrsOf
         record
         enum
         ;
@@ -221,55 +235,57 @@ rec {
         message = str;
         urls = listOf str;
       };
+      simpleType = attrsOf subRecord;
     in
     {
       name = "problems";
       verify =
         v:
-        if v == { } then
-          true
-        else
-          let
-            kinds'' = groupBy (p: p) (mapAttrsToList (name: p: p.kind or name) v);
-          in
-          subRecord.verify v
-          && all (k: kinds.manual' ? ${k} && (kinds.unique' ? ${k} -> length kinds''.${k} == 1)) (
-            attrNames kinds''
+        v == { }
+        ||
+          simpleType.verify v
+          && all (problem: problem ? message) (attrValues v)
+          && (
+            let
+              kindGroups = groupBy (kind: kind) (mapAttrsToList (name: problem: problem.kind or name) v);
+            in
+            all (kind: kinds.manual' ? ${kind} && (kinds.unique' ? ${kind} -> length kindGroups.${kind} == 1)) (
+              attrNames kindGroups
+            )
           );
       errors =
         ctx: v:
         let
-          kinds'' = groupBy (p: p.kind) (
-            mapAttrsToList (name: p: {
+          kindGroups = groupBy (attrs: attrs.kind) (
+            mapAttrsToList (name: problem: {
               inherit name;
-              explicit = p ? kind;
-              kind = p.kind or name;
+              explicit = problem ? kind;
+              kind = problem.kind or name;
             }) v
           );
         in
-        concatLists (
-          mapAttrsToList (
-            name: p:
-            optional (!p ? message) "${ctx}.${name}: `.message` not specified"
-            ++ subRecord.errors "${ctx}.${name}" p
-          ) v
-        )
-        ++ concatLists (
-          mapAttrsToList (
-            k: ks:
-            optionals (!kinds.manual' ? ${k}) (
-              map (
-                k':
-                "${ctx}.${k'.name}: Problem kind ${k}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${k'.name}.kind`"
-              ) (filter (k': !k'.explicit) ks)
-            )
-            ++
-              optional (kinds.unique' ? ${k} && length ks > 1)
-                "${ctx}: Problem kind ${k} should be unique, but is used for these problems: ${
-                  concatMapStringsSep ", " (k': k'.name) ks
-                }"
-          ) kinds''
-        );
+        if !simpleType.verify v then
+          simpleType.errors ctx v
+        else
+          concatLists (
+            mapAttrsToList (name: p: optional (!p ? message) "${ctx}.${name}: `.message` not specified") v
+          )
+          ++ concatLists (
+            mapAttrsToList (
+              k: ks:
+              optionals (!kinds.manual' ? ${k}) (
+                map (
+                  k':
+                  "${ctx}.${k'.name}: Problem kind ${k}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${k'.name}.kind`"
+                ) (filter (k': !k'.explicit) ks)
+              )
+              ++
+                optional (kinds.unique' ? ${k} && length ks > 1)
+                  "${ctx}: Problem kind ${k} should be unique, but is used for these problems: ${
+                    concatMapStringsSep ", " (k': k'.name) ks
+                  }"
+            ) kindGroups
+          );
     };
 
   /*
@@ -382,6 +398,8 @@ rec {
             (filterAttrs (name: res: res != fallback))
           ];
         in
+        # Optimisation in case it's always the same handler,
+        # can propagate up for the entire switch to just be a string
         if specific == { } && isString fallback then
           fallback
         else
@@ -393,14 +411,25 @@ rec {
     in
     {
       inherit switch;
-      # Mainly for manual problems
       handlerForProblem =
-        pname: name: kind:
-        let
-          switch' = switch.kindSpecific.${kind} or switch.kindFallback or switch;
-          switch'' = switch'.nameSpecific.${name} or switch'.nameFallback or switch';
-        in
-        switch''.packageSpecific.${pname} or switch''.packageFallback or switch'';
+        if isString switch then
+          pname: name: kind:
+          switch
+        else
+          pname: name: kind:
+          let
+            switch' = switch.kindSpecific.${kind} or switch.kindFallback;
+          in
+          if isString switch' then
+            switch'
+          else
+            let
+              switch'' = switch'.nameSpecific.${name} or switch'.nameFallback;
+            in
+            if isString switch'' then
+              switch''
+            else
+              switch''.packageSpecific.${pname} or switch''.packageFallback;
     };
 
   genCheckProblems =

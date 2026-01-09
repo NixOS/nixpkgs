@@ -7,7 +7,10 @@
 }:
 let
   nixpkgs = lib.cleanSource path;
+  unitResult = import ./unit.nix { inherit lib; };
 in
+assert lib.assertMsg (unitResult == [ ])
+  "problems/unit.nix failing: ${lib.generators.toPretty { } unitResult}";
 lib.mapAttrs (
   name: _:
   let

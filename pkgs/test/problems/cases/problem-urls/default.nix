@@ -18,4 +18,11 @@ pkgs.stdenvNoCC.mkDerivation {
   version = "0";
   meta.maintainers = [ "hello" ];
   meta.description = "Some package";
+  meta.problems.removal = {
+    message = "Removed because of XYZ.";
+    urls = [
+      "https://example.com"
+      "https://anotherexample.com"
+    ];
+  };
 }

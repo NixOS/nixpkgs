@@ -16,6 +16,6 @@ in
 pkgs.stdenvNoCC.mkDerivation {
   pname = "a";
   version = "0";
-  meta.maintainers = [ "hello" ];
   meta.description = "Some package";
+  outputHash = pkgs.lib.fakeHash;
 }

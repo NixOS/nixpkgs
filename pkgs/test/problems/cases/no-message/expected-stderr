@@ -1,0 +1,5 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:20 has an invalid meta attrset:
+  - a.meta.problems.removal: `.message` not specified
+, refusing to evaluate.

@@ -24,7 +24,9 @@ let
     mapAttrs
     ;
   isTypeDef = t: isAttrs t && t ? name && isString t.name && t ? verify && isFunction t.verify;
+  pretty = lib.generators.toPretty { indent = "    "; };
 
+  # TODO: Add errors to all types
 in
 lib.fix (self: {
   string = {
@@ -67,13 +69,21 @@ lib.fix (self: {
     t:
     assert isTypeDef t;
     let
-      inherit (t) verify;
+      inherit (t) verify errors;
     in
     {
       name = "attrsOf<${t.name}>";
       verify =
         # attrsOf<any> can be optimised to just isAttrs
         if t == self.any then isAttrs else attrs: isAttrs attrs && all verify (attrValues attrs);
+      errors =
+        ctx: attrs:
+        if !isAttrs attrs then
+          [ "${ctx}: Invalid value; expected an attribute set, got\n    ${pretty attrs}" ]
+        else
+          concatMap (name: lib.optionals (!verify attrs.${name}) (errors "${ctx}.${name}" attrs.${name})) (
+            attrNames attrs
+          );
     };
 
   listOf =
@@ -118,29 +128,30 @@ lib.fix (self: {
     in
     {
       name = "record";
-      verify = v: all (k: fieldVerifiers ? ${k} && fieldVerifiers.${k} v.${k}) (attrNames v);
+      verify = v: isAttrs v && all (k: fieldVerifiers ? ${k} && fieldVerifiers.${k} v.${k}) (attrNames v);
       errors =
         ctx: v:
-        concatMap (
-          k:
-          if fieldVerifiers ? ${k} then
-            if fieldVerifiers.${k} v.${k} then
-              [ ]
+        if !isAttrs v then
+          [ "${ctx}: Invalid value; expected attribute set, got\n    ${pretty v}" ]
+        else
+          concatMap (
+            k:
+            if fieldVerifiers ? ${k} then
+              if fieldVerifiers.${k} v.${k} then
+                [ ]
+              else
+                (fields.${k}.errors or (ctx': v': [
+                  "${ctx'}: Invalid value; expected ${fields.${k}.name}, got\n    ${pretty v'}"
+                ])
+                )
+                  (ctx + ".${k}")
+                  v.${k}
             else
-              (fields.${k}.errors or (ctx': v': [
-                "${ctx'}: Invalid value; expected ${fields.${k}.name}, got\n    ${
-                  lib.generators.toPretty { indent = "    "; } v'
-                }"
-              ])
-              )
-                (ctx + ".${k}")
-                v.${k}
-          else
-            [
-              "${ctx}: key '${k}' is unrecognized; expected one of: \n  [${
-                concatMapStringsSep ", " (x: "'${x}'") (attrNames fields)
-              }]"
-            ]
-        ) (attrNames v);
+              [
+                "${ctx}: key '${k}' is unrecognized; expected one of: \n  [${
+                  concatMapStringsSep ", " (x: "'${x}'") (attrNames fields)
+                }]"
+              ]
+          ) (attrNames v);
     };
 })
