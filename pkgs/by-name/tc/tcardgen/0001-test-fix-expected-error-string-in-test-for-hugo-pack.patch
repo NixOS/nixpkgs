@@ -1,0 +1,25 @@
+From 962df00b9323b73c70ca1bfaa42c99700e56b0a0 Mon Sep 17 00:00:00 2001
+From: Akihiro Saiki <sk@myuu.dev>
+Date: Sat, 3 Jan 2026 11:52:02 +0900
+Subject: [PATCH] test: fix expected error string in test for `hugo` package
+
+---
+ pkg/hugo/frontmatter_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pkg/hugo/frontmatter_test.go b/pkg/hugo/frontmatter_test.go
+index a8f103d..0124c0b 100644
+--- a/pkg/hugo/frontmatter_test.go
++++ b/pkg/hugo/frontmatter_test.go
+@@ -63,7 +63,7 @@ content`,
+ 			input: `---
+ title = "invalid format'
+ ---`,
+-			expectErr: errors.New("failed to unmarshal YAML: yaml: unmarshal errors:\n  line 1: cannot unmarshal !!str `title =...` into map[string]interface {}"),
++			expectErr: errors.New("\"_stream.yaml:1:1\": failed to unmarshal YAML: yaml: unmarshal errors:\n  line 1: cannot unmarshal !!str `title =...` into map[string]interface {}"),
+ 		},
+ 		{
+ 			desc: "Title is missing",
+-- 
+2.52.0
+
