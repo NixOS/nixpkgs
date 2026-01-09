@@ -30,5 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/Tinkoff/libvirt-exporter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ farcaller ];
+    mainProgram = "libvirt-exporter";
   };
 }
