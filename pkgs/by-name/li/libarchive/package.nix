@@ -23,6 +23,7 @@
   cmake,
   nix,
   samba,
+  testers,
 
   # for passthru.lore
   binlore,
@@ -140,10 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = lib.platforms.all;
     inherit (acl.meta) badPlatforms;
+    pkgConfigModules = [ "libarchive" ];
   };
 
   passthru.tests = {
     inherit cmake nix samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   # bsdtar is detected as "cannot" because its exec is internal to
