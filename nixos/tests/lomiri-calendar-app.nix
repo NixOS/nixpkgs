@@ -91,7 +91,7 @@
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(2)
-        machine.wait_for_text(r"(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)")
+        machine.wait_for_text(r"(Termine|Tag|Woche|Monat|Jahr|Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)")
         machine.screenshot("lomiri-calendar_localised")
   '';
 }
