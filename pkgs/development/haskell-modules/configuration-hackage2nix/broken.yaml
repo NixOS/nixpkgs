@@ -3349,6 +3349,7 @@ broken-packages:
   - integer-pure # failure in job https://hydra.nixos.org/build/233216037 at 2023-09-02
   - integer-simple # failure in job https://hydra.nixos.org/build/233192893 at 2023-09-02
   - integer-types # failure in job https://hydra.nixos.org/build/252734448 at 2024-03-16
+  - intelli-monad # failure in job https://hydra.nixos.org/build/318374656 at 2026-01-09
   - intensional-datatys # failure in job https://hydra.nixos.org/build/233218337 at 2023-09-02
   - interact # failure in job https://hydra.nixos.org/build/233228146 at 2023-09-02
   - interactive-plot # failure in job https://hydra.nixos.org/build/233212280 at 2023-09-02
@@ -6376,6 +6377,7 @@ broken-packages:
   - subleq-toolchain # failure in job https://hydra.nixos.org/build/233239415 at 2023-09-02
   - submark # failure in job https://hydra.nixos.org/build/233231701 at 2023-09-02
   - subsample # failure in job https://hydra.nixos.org/build/233201324 at 2023-09-02
+  - substrate-protocol # failure in job https://hydra.nixos.org/build/318377131 at 2026-01-09
   - subwordgraph # failure in job https://hydra.nixos.org/build/233229131 at 2023-09-02
   - success # failure in job https://hydra.nixos.org/build/252718360 at 2024-03-16
   - successors # failure in job https://hydra.nixos.org/build/295097331 at 2025-04-22

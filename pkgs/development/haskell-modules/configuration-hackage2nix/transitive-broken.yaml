@@ -3384,6 +3384,7 @@ dont-distribute-packages:
  - stunts
  - stutter
  - subhask
+ - substrate-synapse
  - substring-parser
  - sugar-data
  - sugar-json
