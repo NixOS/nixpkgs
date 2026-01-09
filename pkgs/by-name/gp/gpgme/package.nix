@@ -17,6 +17,7 @@
   libsForQt5,
   qt6Packages,
   python3,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -95,6 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     python = python3.pkgs.gpgme;
     qt5 = libsForQt5.qgpgme;
     qt6 = qt6Packages.qgpgme;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
@@ -113,5 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
+    pkgConfigModules = [
+      "gpgme-glib"
+      "gpgme"
+    ];
   };
 })
