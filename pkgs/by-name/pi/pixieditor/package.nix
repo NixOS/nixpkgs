@@ -44,13 +44,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "pixieditor";
-  version = "2.0.1.18";
+  version = "2.0.1.19";
 
   src = fetchFromGitHub {
     owner = "PixiEditor";
     repo = "PixiEditor";
     tag = finalAttrs.version;
-    hash = "sha256-mGgFr7K9/vs7g6yugmw2QR+PG2/itb048Su4AdkzBNc=";
+    hash = "sha256-gtbgcgTyPmx8wI0XaZ4pC0s7vR7qZBAQonUObQXAQpk=";
     fetchSubmodules = true;
   };
 
@@ -173,7 +173,7 @@ buildDotnetModule (finalAttrs: {
       PixiEditor is a universal 2D platform that aims to provide you with tools and features for all your 2D needs.
       Create beautiful sprites for your games, animations, edit images, create logos. All packed in an eye-friendly dark theme
     '';
-    homepage = "https://pixieditor.com";
+    homepage = "https://pixieditor.net/";
     changelog = "https://github.com/PixiEditor/PixiEditor/releases/tag/${finalAttrs.version}";
     mainProgram = "pixieditor";
     license = lib.licenses.lgpl3Only;
