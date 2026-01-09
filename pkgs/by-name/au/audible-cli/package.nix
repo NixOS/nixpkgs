@@ -50,7 +50,6 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd audible \
       --bash <(source utils/code_completion/audible-complete-bash.sh) \
-      --fish <(source utils/code_completion/audible-complete-zsh-fish.sh) \
       --zsh <(source utils/code_completion/audible-complete-zsh-fish.sh)
   '';
 
