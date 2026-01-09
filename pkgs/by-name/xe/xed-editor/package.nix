@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.8.8";
+  version = "3.8.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    hash = "sha256-BbakdZwigC/im9Il5sCeRF0SJuLCPtqe7/mcYmPcCRI=";
+    hash = "sha256-ZTrTCyyyUDbt+/kjb1+I/bOjwXcsYGYd5K9ebPjJTA8=";
   };
 
   patches = [
