@@ -55,8 +55,8 @@ update-if-needed() {
         echo "$nixattr: $cur (up-to-date)"
         return
     fi
-    khash=$(nix-prefetch-url "$mirror/v${major}.x/linux-${kversion}.tar.xz" | nix-hash --type sha256 --to-sri)
-    phash=$(nix-prefetch-url "$mirror/projects/rt/${branch}/older/patch-${new}.patch.xz" | nix-hash --type sha256 --to-sri)
+    khash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type sha256 "$mirror/v${major}.x/linux-${kversion}.tar.xz")")"
+    phash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type sha256 "$mirror/projects/rt/${branch}/older/patch-${new}.patch.xz")")"
     if [ "$cur" ]; then
         msg="$nixattr: $cur -> $new"
     else
