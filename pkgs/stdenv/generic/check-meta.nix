@@ -305,7 +305,7 @@ let
       ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  metaTypes =
+  metaType =
     let
       types = import ./meta-types.nix { inherit lib; };
       inherit (types)
@@ -317,13 +317,14 @@ let
         any
         listOf
         bool
+        record
         ;
       platforms = listOf (union [
         str
         (attrsOf any)
       ]); # see lib.meta.platformMatch
     in
-    {
+    record {
       # These keys are documented
       description = str;
       mainProgram = str;
@@ -400,34 +401,7 @@ let
       identifiers = attrs;
     };
 
-  # Map attrs directly to the verify function for performance
-  metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
-
-  checkMetaAttr =
-    k: v:
-    if metaTypes ? ${k} then
-      if metaTypes'.${k} v then
-        [ ]
-      else
-        [
-          "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
-            toPretty { indent = "    "; } v
-          }"
-        ]
-    else
-      [
-        "key 'meta.${k}' is unrecognized; expected one of: \n  [${
-          concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
-        }]"
-      ];
-
-  checkMeta = meta: concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta);
-
-  metaInvalid =
-    if config.checkMeta then
-      meta: !all (attr: metaTypes ? ${attr} && metaTypes'.${attr} meta.${attr}) (attrNames meta)
-    else
-      meta: false;
+  metaInvalid = if config.checkMeta then meta: !metaType.verify meta else meta: false;
 
   checkOutputsToInstall =
     if config.checkMeta then
@@ -455,7 +429,7 @@ let
       {
         reason = "unknown-meta";
         errormsg = "has an invalid meta attrset:${
-          concatMapStrings (x: "\n  - " + x) (checkMeta attrs.meta)
+          concatMapStrings (x: "\n  - " + x) (metaType.errors "${getName attrs}.meta" attrs.meta)
         }\n";
         remediation = "";
       }
