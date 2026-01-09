@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anyconfig";
   version = "0.14.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LN9Ur12ujpF0Pe2CxU7Z2Krvo6lyL11F6bX3S2A+AU0=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tboerger ];
   };
-}
+})
