@@ -12,25 +12,34 @@
   gtk4,
   libadwaita,
   pango,
-  cargo-make,
+  just,
+  sqlite,
+  wayland,
+  libxkbcommon,
+  libGL,
+  libX11,
+  libXcursor,
+  libXi,
+  autoPatchelfHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "open-scq30";
-  version = "1.12.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${version}";
-    hash = "sha256-DL2hYm1j27K0nnBvE3iGnguqm0m1k56bkuG+6+u4u4c=";
+    hash = "sha256-2dvdR9dd0VaMlPOacTMN1BzDtIdFfd7sNVpWFuQp8j8=";
   };
 
   nativeBuildInputs = [
     pkg-config
     protobuf
     wrapGAppsHook4
-    cargo-make
+    just
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -41,21 +50,38 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libadwaita
     pango
+    sqlite
+    libxkbcommon
   ];
 
-  cargoHash = "sha256-3K+/CpTGWSjCRa2vOEcDvLIiZMdntugIqnzkXF4wkng=";
+  # Wayland and X11 libs are required at runtime since winit uses dlopen
+  runtimeDependencies = [
+    wayland
+    libxkbcommon
+    libGL
+    libX11
+    libXcursor
+    libXi
+  ];
+
+  cargoHash = "sha256-2iPazXFpa2SnI8LTm/BnttIQ+sYDUPRNHTFEw6jBMuQ=";
 
   INSTALL_PREFIX = placeholder "out";
 
   # Requires headphones
   doCheck = false;
 
+  postPatch = ''
+    patchShebangs ./gui/scripts ./cli/scripts ./scripts
+  '';
+
   buildPhase = ''
-    cargo make --profile release build
+    just build-cli
+    just build-gui
   '';
 
   installPhase = ''
-    cargo make --profile release install
+    just install ${placeholder "out"}
   '';
 
   meta = {
