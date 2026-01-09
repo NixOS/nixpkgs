@@ -12,7 +12,7 @@
   webtest-aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp-utils";
   version = "3.2.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "aiohttp-utils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CGKka6nGQ9o4wn6o3YJ3hm8jGbg16NKkCdBA1mKz4bo=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Handy utilities for building aiohttp.web applications";
     homepage = "https://github.com/sloria/aiohttp-utils";
-    changelog = "https://github.com/sloria/aiohttp-utils/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/sloria/aiohttp-utils/tags/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
