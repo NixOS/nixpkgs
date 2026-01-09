@@ -137,6 +137,7 @@
   xf86-video-i128,
   xf86-video-i740,
   xf86-video-mga,
+  xf86-video-neomagic,
   xf86-video-nouveau,
   xf86-video-s3virge,
   xf86-video-v4l,
@@ -355,6 +356,7 @@ self: with self; {
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;
   xf86videomga = xf86-video-mga;
+  xf86videoneomagic = xf86-video-neomagic;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
   xf86videov4l = xf86-video-v4l;
@@ -933,44 +935,6 @@ self: with self; {
         libxshmfence
         libXtst
         libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoneomagic = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-neomagic";
-      version = "1.3.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-neomagic-1.3.1.tar.xz";
-        sha256 = "153lzhq0vahg3875wi8hl9rf4sgizs41zmfg6hpfjw99qdzaq7xn";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

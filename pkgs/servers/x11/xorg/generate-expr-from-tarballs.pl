@@ -469,6 +469,7 @@ print OUT <<EOF;
   xf86-video-i128,
   xf86-video-i740,
   xf86-video-mga,
+  xf86-video-neomagic,
   xf86-video-nouveau,
   xf86-video-s3virge,
   xf86-video-v4l,
@@ -687,6 +688,7 @@ self: with self; {
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;
   xf86videomga = xf86-video-mga;
+  xf86videoneomagic = xf86-video-neomagic;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
   xf86videov4l = xf86-video-v4l;
