@@ -26,7 +26,10 @@ let
     powerpc64-linux = {
       variantSuffix = "";
       src = {
-        url = "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb";
+        urls = [
+          "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb"
+          "https://snapshot.debian.org/archive/debian-ports/20250917T193713Z/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb"
+        ];
         sha256 = "722cc301b6ba70b342e5e3d9d0671440bcd749cd2f13dcccbd23c3f6a6060171";
       };
       exePathForLibraryCheck = null;
