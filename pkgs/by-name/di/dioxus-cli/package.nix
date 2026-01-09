@@ -6,6 +6,8 @@
   cacert,
   openssl,
   rustfmt,
+  makeWrapper,
+  wasm-bindgen-cli_0_2_106,
   nix-update-script,
   testers,
   dioxus-cli,
@@ -35,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cacert
+    makeWrapper
   ];
 
   buildInputs = [
@@ -65,6 +68,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
+  postInstall = ''
+    wrapProgram $out/bin/dx \
+      --prefix PATH : ${lib.makeBinPath [ wasm-bindgen-cli_0_2_106 ]}
+  '';
+
   meta = {
     description = "CLI for building fullstack web, desktop, and mobile apps with a single codebase.";
     homepage = "https://dioxus.dev";
@@ -75,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       cathalmullan
+      anish
     ];
     platforms = lib.platforms.all;
     mainProgram = "dx";
