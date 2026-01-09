@@ -1,0 +1,18 @@
+diff --git a/src/lock.rs b/src/lock.rs
+--- a/src/lock.rs
++++ b/src/lock.rs
+@@ -132,10 +132,10 @@ impl ScopedDirLock {
+ 
+         // Lock
+         match (opts.exclusive, opts.non_blocking) {
+-            (true, false) => file.lock_exclusive(),
+-            (true, true) => file.try_lock_exclusive(),
+-            (false, false) => file.lock_shared(),
+-            (false, true) => file.try_lock_shared(),
++            (true, false) => fs2::FileExt::lock_exclusive(&file),
++            (true, true) => fs2::FileExt::try_lock_exclusive(&file),
++            (false, false) => fs2::FileExt::lock_shared(&file),
++            (false, true) => fs2::FileExt::try_lock_shared(&file),
+         }
+         .context(&path, || {
+             format!(

@@ -1,0 +1,26 @@
+diff --git a/external/CppMicroServices/framework/src/bundle/BundleResourceContainer.cpp b/external/CppMicroServices/framework/src/bundle/BundleResourceContainer.cpp
+index aee499e9..13fa89d4 100644
+--- a/external/CppMicroServices/framework/src/bundle/BundleResourceContainer.cpp
++++ b/external/CppMicroServices/framework/src/bundle/BundleResourceContainer.cpp
+@@ -105,7 +105,7 @@ bool BundleResourceContainer::GetStat(int index,
+                    const_cast<mz_zip_archive*>(&m_ZipArchive), index)
+                    ? true
+                    : false;
+-    stat.modifiedTime = zipStat.m_time;
++    stat.modifiedTime = 0;
+     stat.crc32 = zipStat.m_crc32;
+     // This will limit the size info from uint64 to uint32 on 32-bit
+     // architectures. We don't care because we assume resources > 2GB
+diff --git a/external/CppMicroServices/third_party/miniz.c b/external/CppMicroServices/third_party/miniz.c
+index 6b0ebd7a..fa2aebca 100644
+--- a/external/CppMicroServices/third_party/miniz.c
++++ b/external/CppMicroServices/third_party/miniz.c
+@@ -170,7 +170,7 @@
+ // If MINIZ_NO_TIME is specified then the ZIP archive functions will not be able to get the current time, or
+ // get/set file times, and the C run-time funcs that get/set times won't be called.
+ // The current downside is the times written to your archives will be from 1979.
+-//#define MINIZ_NO_TIME
++#define MINIZ_NO_TIME
+
+ // Define MINIZ_NO_ARCHIVE_APIS to disable all ZIP archive API's.
+ //#define MINIZ_NO_ARCHIVE_APIS

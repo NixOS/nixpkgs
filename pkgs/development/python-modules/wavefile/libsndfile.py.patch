@@ -1,0 +1,26 @@
+diff --git a/wavefile/libsndfile.py b/wavefile/libsndfile.py
+index 89c670f..fa19e1d 100644
+--- a/wavefile/libsndfile.py
++++ b/wavefile/libsndfile.py
+@@ -17,20 +17,7 @@ import ctypes as ct
+ import numpy as np
+ 
+ def _libfilename():
+-    for system, libname in [
+-        ('win32', 'libsndfile-1'),
+-        ('cygwin', 'libsndfile-1.dll'),
+-        ('darwin', 'libsndfile.dylib'),
+-        ('linux', 'libsndfile.so.1'),
+-        ('freebsd', 'libsndfile.so.1'),
+-        ('', 'libsndfile'),
+-    ]:
+-        if system in sys.platform:
+-            return libname
+-    raise Exception(
+-        'No libsndfile dll name mapping for platform {}.'
+-        .format(sys.platform)
+-    )
++    return "@libsndfile@"
+ 
+ dllName = _libfilename()
+ _lib=None

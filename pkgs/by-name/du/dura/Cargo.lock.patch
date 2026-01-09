@@ -1,0 +1,13 @@
+diff --git i/Cargo.lock w/Cargo.lock
+index e037758..e039531 100644
+--- i/Cargo.lock
++++ w/Cargo.lock
+@@ -106,7 +106,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "dura"
+-version = "0.2.0-snapshot"
++version = "0.2.0"
+ dependencies = [
+  "chrono",
+  "clap",

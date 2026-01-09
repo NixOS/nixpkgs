@@ -1,0 +1,17 @@
+diff --git a/build/electron/main.js b/build/electron/main.js
+index ca36c4b..dbea8c6 100644
+--- a/build/electron/main.js
++++ b/build/electron/main.js
+@@ -324,12 +324,6 @@ const readEnvVars = async () => {
+             disableStartup = envVariables.SF_DISABLE_STARTUP;
+         }
+ 
+-        try {
+-            await fsPromises.unlink(configFileName, { force: true });
+-        } catch (err) {
+-            log.error(`failed to delete env file (${configFileName})`, err.toString());
+-        }
+-
+         log.info(`Env vars loaded from file. (${configFileName}) `);
+ 
+         return { url, id };

@@ -1,0 +1,71 @@
+Initial patch version retrieved from
+https://git.stikonas.eu/andrius/live-bootstrap/src/commit/cd361e63f77842d9780303d63382eb686843c76b/sysa/musl-1.1.24/patches/stdio_flush_on_exit.patch
+
+SPDX-FileCopyrightText: 2021 Paul Dersey <pdersey@gmail.com>
+SPDX-FileCopyrightText: 2025 Luna Nova <git@lunnova.dev>
+
+SPDX-License-Identifier: MIT
+
+Make sure real __stdio_exit() is called on exit and not the dummy
+noop versions.  This fixes the issue of truncated output when redirecting
+output to a file or pipe.  It also fixes truncated output on programs
+that forget to call fclose()
+
+Adds forward declarations to avoid implicit declaration error.
+
+diff --git a/src/exit/exit.c b/src/exit/exit.c
+index a6869b37..a4164682 100644
+--- src/exit/exit.c
++++ src/exit/exit.c
+@@ -2,16 +2,10 @@
+ #include <stdint.h>
+ #include "libc.h"
+ 
+-static void dummy()
+-{
+-}
+-
+-/* atexit.c and __stdio_exit.c override these. the latter is linked
+- * as a consequence of linking either __toread.c or __towrite.c. */
+-weak_alias(dummy, __funcs_on_exit);
+-weak_alias(dummy, __stdio_exit);
+-weak_alias(dummy, _fini);
++void __funcs_on_exit(void);
++void __stdio_exit(void);
++void _fini(void);
+ 
+ extern weak hidden void (*const __fini_array_start)(void), (*const __fini_array_end)(void);
+ 
+ static void libc_exit_fini(void)
+diff --git a/src/internal/stdio_impl.h b/src/internal/stdio_impl.h
+index d7398f59..69141813 100644
+--- src/internal/stdio_impl.h
++++ src/internal/stdio_impl.h
+@@ -47,9 +47,9 @@ struct _IO_FILE {
+ 	struct __locale_struct *locale;
+ };
+ 
+-extern hidden FILE *volatile __stdin_used;
+-extern hidden FILE *volatile __stdout_used;
+-extern hidden FILE *volatile __stderr_used;
++extern FILE *volatile __stdin_used;
++extern FILE *volatile __stdout_used;
++extern FILE *volatile __stderr_used;
+ 
+ hidden int __lockfile(FILE *);
+ hidden void __unlockfile(FILE *);
+diff --git a/src/stdio/__stdio_exit.c b/src/stdio/__stdio_exit.c
+index a5e42c67..5947a141 100644
+--- src/stdio/__stdio_exit.c
++++ src/stdio/__stdio_exit.c
+@@ -1,10 +1,5 @@
+ #include "stdio_impl.h"
+ 
+-static FILE *volatile dummy_file = 0;
+-weak_alias(dummy_file, __stdin_used);
+-weak_alias(dummy_file, __stdout_used);
+-weak_alias(dummy_file, __stderr_used);
+-
+ static void close_file(FILE *f)
+ {
+ 	if (!f) return;

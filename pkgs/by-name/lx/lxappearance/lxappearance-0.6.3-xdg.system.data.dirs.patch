@@ -1,0 +1,27 @@
+--- lxappearance-0.6.3/src/widget-theme.c.orig	2016-02-20 20:48:38.000000000 -0200
++++ lxappearance-0.6.3/src/widget-theme.c	2017-06-09 17:37:53.369555085 -0300
+@@ -66,6 +66,7 @@
+ static void load_themes()
+ {
+     char* dir;
++    const gchar * const * dirs;
+     GSList* themes = NULL, *l;
+     GtkTreeIter sel_it = {0};
+     GtkTreeSelection* tree_sel;
+@@ -85,6 +86,16 @@
+     themes = load_themes_in_dir(dir, themes);
+     g_free(dir);
+ 
++    /* load from sharedata theme dirs */
++    dirs = g_get_system_data_dirs();
++    while (*dirs != NULL)
++    {
++        dir = g_build_filename(*dirs, "themes", NULL);
++        themes = load_themes_in_dir(dir, themes);
++        g_free(dir);
++        dirs++;
++    }
++
+     themes = g_slist_sort(themes, (GCompareFunc)strcmp);
+     for(l = themes; l; l=l->next)
+     {

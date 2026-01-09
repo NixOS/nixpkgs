@@ -1,0 +1,35 @@
+diff -rc --exclude=texmf.in tetex-src-3.0.orig/texk/kpathsea/texmf.in-teTeX tetex-src-3.0/texk/kpathsea/texmf.in-teTeX
+*** tetex-src-3.0.orig/texk/kpathsea/texmf.in-teTeX	2006-01-27 17:33:11.000000000 +0100
+--- tetex-src-3.0/texk/kpathsea/texmf.in-teTeX	2006-01-27 17:38:35.000000000 +0100
+***************
+*** 104,109 ****
+--- 104,115 ----
+  %   TEXMFCONFIG = @texmf@-config
+  TEXMFCONFIG = $HOME/.texmf-config
+  
++ % TEXMFNIX is supposed to be unset. It's used by the Nix
++ % system to add trees during the build of nix-expressions.
++ 
++ % TEXMFNIXHOME, for packages in the user environment.
++ TEXMFNIXHOME = $HOME/.nix-profile/share/texmf-nix
++ 
+  % Now, list all the texmf trees. If you have multiple trees you can
+  % use shell brace notation, like this:
+  %   TEXMF = {$TEXMFHOME,!!$TEXMFLOCAL,!!$TEXMFMAIN}
+***************
+*** 111,117 ****
+  %
+  % For texconfig to work properly, TEXMFCONGIG and TEXMFVAR should be named
+  % explicitly and before all other trees.
+! TEXMF = {!!$TEXMFCONFIG,!!$TEXMFVAR,$TEXMFHOME,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFMAIN,!!$TEXMFLOCAL,!!$TEXMFDIST}
+  
+  % The system trees.  These are the trees that are shared by all the users.
+  SYSTEXMF = $TEXMFLOCAL;$TEXMFMAIN;$TEXMFDIST
+--- 117,123 ----
+  %
+  % For texconfig to work properly, TEXMFCONGIG and TEXMFVAR should be named
+  % explicitly and before all other trees.
+! TEXMF = {!!$TEXMFCONFIG,!!$TEXMFVAR,$TEXMFNIX,$TEXMFHOME,$TEXMFNIXHOME,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFMAIN,!!$TEXMFLOCAL,!!$TEXMFDIST}
+  
+  % The system trees.  These are the trees that are shared by all the users.
+  SYSTEXMF = $TEXMFLOCAL;$TEXMFMAIN;$TEXMFDIST
