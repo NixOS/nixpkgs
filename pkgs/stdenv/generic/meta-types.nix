@@ -141,6 +141,14 @@ lib.fix (self: {
       verify = v: any (func: func v) funcs;
     };
 
+  enum =
+    values:
+    assert isList values && all isString values;
+    {
+      name = "enum<${concatStringsSep "," values}>";
+      verify = v: isString v && elem v values;
+    };
+
   record =
     fields:
     assert isAttrs fields && all isTypeDef (attrValues fields);
