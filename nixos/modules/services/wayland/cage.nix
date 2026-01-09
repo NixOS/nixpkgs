@@ -11,43 +11,45 @@ let
   cfg = config.services.cage;
 in
 {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage = {
+    enable = mkEnableOption "cage kiosk service";
 
-  options.services.cage.user = mkOption {
-    type = types.str;
-    default = "demo";
-    description = ''
-      User to log-in as.
-    '';
-  };
-
-  options.services.cage.extraArguments = mkOption {
-    type = types.listOf types.str;
-    default = [ ];
-    defaultText = literalExpression "[]";
-    description = "Additional command line arguments to pass to Cage.";
-    example = [ "-d" ];
-  };
-
-  options.services.cage.environment = mkOption {
-    type = types.attrsOf types.str;
-    default = { };
-    example = {
-      WLR_LIBINPUT_NO_DEVICES = "1";
+    user = mkOption {
+      type = types.str;
+      default = "demo";
+      description = ''
+        User to log-in as.
+      '';
     };
-    description = "Additional environment variables to pass to Cage.";
-  };
 
-  options.services.cage.program = mkOption {
-    type = types.path;
-    default = "${pkgs.xterm}/bin/xterm";
-    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = ''
-      Program to run in cage.
-    '';
-  };
+    extraArguments = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      defaultText = literalExpression "[]";
+      description = "Additional command line arguments to pass to Cage.";
+      example = [ "-d" ];
+    };
 
-  options.services.cage.package = mkPackageOption pkgs "cage" { };
+    environment = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        WLR_LIBINPUT_NO_DEVICES = "1";
+      };
+      description = "Additional environment variables to pass to Cage.";
+    };
+
+    program = mkOption {
+      type = types.path;
+      default = "${pkgs.xterm}/bin/xterm";
+      defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+      description = ''
+        Program to run in cage.
+      '';
+    };
+
+    package = mkPackageOption pkgs "cage" { };
+  };
 
   config = mkIf cfg.enable {
 
