@@ -7,6 +7,7 @@
   brotli,
   brotlicffi,
   starlette,
+  pythonOlder,
   zstandard,
   pytestCheckHook,
   httpx,
@@ -30,6 +31,8 @@ buildPythonPackage rec {
   dependencies = [
     (if isPyPy then brotlicffi else brotli)
     starlette
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
     zstandard
   ];
 
