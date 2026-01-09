@@ -24,10 +24,24 @@ let
       let
         result = f origArgs;
         overrideWith =
+          # Preserve the plain arguments whenever possible,
+          # as `overrideStdenvCompat` works more reliably with `args.stdenv`
+          # than `result.__stdenvPythonCompat`.
+          # TODO(@ShamrockLee): After `overrideStdenvCompat` is fully deprecated,
+          # simplify as
+          # ```nix
+          # newArgs: lib.extends (lib.toExtension newArgs) origArgs
+          # ```
           if lib.isFunction origArgs then
-            newArgs: lib.extends (_: lib.toFunction newArgs) origArgs
+            newArgs: lib.extends (lib.toExtension newArgs) origArgs
           else
-            newArgs: origArgs // lib.toFunction newArgs origArgs;
+            newArgs:
+            if !(lib.isFunction newArgs) then
+              origArgs // newArgs
+            else if !(lib.isFunction (newArgs origArgs)) then
+              origArgs // newArgs origArgs
+            else
+              finalAttrs: origArgs // newArgs finalAttrs origArgs;
       in
       if lib.isAttrs result then
         result
