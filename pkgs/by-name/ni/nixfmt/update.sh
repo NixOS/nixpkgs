@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cabal2nix curl jq
+#!nix-shell --pure -i bash -p cabal2nix curl cacert jq nix
 #
 # This script will update the nixfmt derivation to the latest version using
 # cabal2nix.
@@ -23,5 +23,8 @@ EOF
 cabal2nix --jailbreak \
   "https://github.com/nixos/nixfmt/archive/${release_tag}.tar.gz" \
   >> "$derivation_file"
+
+nix-shell "$script_dir/../../../../" \
+  --run "treefmt --no-cache $derivation_file"
 
 echo "Finished."
