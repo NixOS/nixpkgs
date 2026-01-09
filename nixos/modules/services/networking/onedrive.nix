@@ -53,7 +53,7 @@ in
     };
 
     systemd.user.services.onedrive-launcher = {
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "network-online.target" ];
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${onedriveLauncher}/bin/onedrive-launcher";
