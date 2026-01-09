@@ -103,7 +103,6 @@ in
         Colors must be in hexadecimal format and listed in
         order from color 0 to color 15.
       '';
-
     };
 
     packages = lib.mkOption {
