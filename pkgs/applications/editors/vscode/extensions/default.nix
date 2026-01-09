@@ -3939,6 +3939,7 @@ let
         mktplcRef = {
           publisher = "rocq-prover";
           name = "vsrocq";
+          # When updating the version here, also update the language server vsrocq-language-server
           version = "2.3.4";
           hash = "sha256-2zYoCUtyhboQt68UJEmWOvrTrIOV2QmpaXU5mUhJfsA=";
         };
