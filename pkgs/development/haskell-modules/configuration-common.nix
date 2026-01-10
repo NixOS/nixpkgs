@@ -79,7 +79,7 @@ with haskellLib;
           }
         )
       );
-  Cabal_3_16_0_0 =
+  Cabal_3_16_1_0 =
     overrideCabal
       (drv: {
         # Revert increased lower bound on unix since we have backported
@@ -90,8 +90,8 @@ with haskellLib;
       })
       (
         doDistribute (
-          super.Cabal_3_16_0_0.override {
-            Cabal-syntax = self.Cabal-syntax_3_16_0_0;
+          super.Cabal_3_16_1_0.override {
+            Cabal-syntax = self.Cabal-syntax_3_16_1_0;
           }
         )
       );
@@ -113,8 +113,8 @@ with haskellLib;
       let
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_16_0_0;
-          Cabal-syntax = cself.Cabal-syntax_3_16_0_0;
+          Cabal = cself.Cabal_3_16_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
         };
       in
       {
@@ -3319,9 +3319,6 @@ with haskellLib;
 
   # Test suite no longer compiles with hspec-hedgehog >= 0.3
   finitary = dontCheck super.finitary;
-
-  # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
-  ktx-codec = warnAfterVersion "0.0.2.1" (doJailbreak super.ktx-codec);
 
   # 2025-04-13: jailbreak to allow template-haskell >= 2.17
   sr-extra = warnAfterVersion "1.88" (
