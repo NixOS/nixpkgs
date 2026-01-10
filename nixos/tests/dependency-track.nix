@@ -5,7 +5,10 @@ in
 {
   name = "dependency-track";
   meta = {
-    maintainers = pkgs.lib.teams.cyberus.members;
+    maintainers = with pkgs.lib.maintainers; [
+      e1mo
+      xanderio
+    ];
   };
 
   nodes = {
