@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       https://datatracker.ietf.org/doc/html/rfc7932
     '';
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"
