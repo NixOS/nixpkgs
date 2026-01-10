@@ -93,7 +93,6 @@
   libxxf86vm,
   listres,
   lndir,
-  luit,
   makedepend,
   mkfontscale,
   oclock,
@@ -222,7 +221,6 @@ self: with self; {
     libxshmfence
     listres
     lndir
-    luit
     makedepend
     mkfontscale
     oclock

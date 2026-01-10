@@ -11,6 +11,7 @@
   nixosTests,
   pkgsCross,
   gitUpdater,
+  luit,
   enableDecLocator ? true,
 }:
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     ncurses
     freetype
     xorg.libXft
-    xorg.luit
+    luit
   ];
 
   configureFlags = [
