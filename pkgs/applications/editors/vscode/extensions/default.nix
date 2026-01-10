@@ -1965,8 +1965,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.62.1";
-          hash = "sha256-Sbtrmla1vRZ7isSvr5QhDiP519/IG/VJ5zI9Y28UFx4=";
+          version = "6.64.1";
+          hash = "sha256-kJqn7xNI6DF10h+CemsO0E80oJBifMdKKxpKJ3Y6PJ4=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -3196,8 +3196,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.28";
-          hash = "sha256-5O0WxTuAIDeTk2/YospejjvHWVkCcMvVwiVYQWQYZKc=";
+          version = "1.3.29";
+          hash = "sha256-FzNVg925O76GTmc/14W/IjC5VLkKoRIlK1p/b+xRsiw=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3854,8 +3854,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.50.0";
-          hash = "sha256-QF9CTfhhwq+Ld3M31VRaZaAUsBDiUTNdbbOwjlE66Zk=";
+          version = "1.51.0";
+          hash = "sha256-uOTvQjLDkMjzTfc98cq+WlvKwRQfPpTrlXKbWG7Gy+c=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -5048,8 +5048,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.17.1";
-          hash = "sha256-3AGa1S6WN7zVaKxjHVba+CjXhEq8PjTD5HU5WY9pF4c=";
+          version = "3.17.2";
+          hash = "sha256-oBtUDkuGMu7/CvxiHxvbiHHTQ2dG85VY08es9u3xKJk=";
         };
 
         meta = {

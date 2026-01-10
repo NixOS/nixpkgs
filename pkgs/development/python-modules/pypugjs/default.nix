@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestCheckFlags = [ "pypugjs/testsuite" ];
+  pytestFlags = [ "pypugjs/testsuite" ];
 
   pythonImportsCheck = [
     "pypugjs"

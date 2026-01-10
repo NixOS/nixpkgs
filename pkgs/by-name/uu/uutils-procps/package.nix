@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-procps";
-  version = "0.0.1-unstable-2025-12-31";
+  version = "0.0.1-unstable-2026-01-08";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "procps";
-    rev = "644666759ec3e8f038a0d376b594e67a8780dc29";
-    hash = "sha256-U/5thGk/1h4CkI63DllLUc3scrHbV4+djcxLiTC+3lM=";
+    rev = "d0dd746491844b5de4724bcb7d0a28674a8b33f9";
+    hash = "sha256-gRkXVc3+0dqlvt/hAsAXnDFsOeN83ozPjieU4yLlOms=";
   };
 
-  cargoHash = "sha256-kWT5PYE68TUcYnz82zxhiMIZFAn8Rf00Oj7oLsmzsG8=";
+  cargoHash = "sha256-wh9GHj/F/v1kTyZim7nGuuuFm92OsX8Mxj01GL0H/CE=";
 
   nativeBuildInputs = [
     pkg-config
