@@ -7,7 +7,6 @@ let
     isAttrs
     isPath
     isString
-    nixVersion
     pathExists
     readDir
     split
@@ -21,7 +20,6 @@ let
     attrValues
     mapAttrs
     mapAttrsToList
-    optionalAttrs
     zipAttrsWith
     ;
 
@@ -48,7 +46,6 @@ let
     append
     splitRoot
     hasStorePathPrefix
-    splitStorePath
     ;
 
   inherit (lib.path.subpath)
@@ -62,11 +59,6 @@ let
     substring
     stringLength
     hasSuffix
-    versionAtLeast
-    ;
-
-  inherit (lib.trivial)
-    inPureEvalMode
     ;
 in
 # Rare case of justified usage of rec:

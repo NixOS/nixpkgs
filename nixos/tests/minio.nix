@@ -37,9 +37,6 @@ let
     minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
   '';
   rootCredentialsFile = "/etc/nixos/minio-root-credentials";
-  credsPartial = pkgs.writeText "minio-credentials-partial" ''
-    MINIO_ROOT_USER=${accessKey}
-  '';
   credsFull = pkgs.writeText "minio-credentials-full" ''
     MINIO_ROOT_USER=${accessKey}
     MINIO_ROOT_PASSWORD=${secretKey}

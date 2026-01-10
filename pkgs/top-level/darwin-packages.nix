@@ -35,7 +35,7 @@ makeScopeWithSplicing' {
   f = lib.extends aliases (
     self:
     let
-      inherit (self) mkDerivation callPackage;
+      inherit (self) callPackage;
 
       # Open source packages that are built from source
       apple-source-packages = lib.packagesFromDirectoryRecursive {

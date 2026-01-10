@@ -12,12 +12,6 @@ let
     "panthor"
     "v3d"
   ];
-  # these GPU families are partially supported upstream, they are also tricky to build in nixpkgs
-  # volunteers with specific hardware needed to build and test these package variants
-  additionalGPUFamilies = [
-    "ascend"
-    "tpu"
-  ];
   defaultSupport = builtins.listToAttrs (
     # apple can only build on darwin, and it can't build everything else, and vice versa
     map (gpu: {

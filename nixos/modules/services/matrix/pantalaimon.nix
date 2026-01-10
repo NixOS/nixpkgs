@@ -5,8 +5,6 @@
   ...
 }:
 let
-  cfg = config.services.pantalaimon-headless;
-
   iniFmt = pkgs.formats.ini { };
 
   mkConfigFile =

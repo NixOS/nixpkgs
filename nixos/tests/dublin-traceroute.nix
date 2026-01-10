@@ -4,19 +4,6 @@
 # router connected to both that performs Network Address Translation
 # for the client.
 { pkgs, lib, ... }:
-let
-  routerBase = lib.mkMerge [
-    {
-      virtualisation.vlans = [
-        2
-        1
-      ];
-      networking.nftables.enable = true;
-      networking.nat.internalIPs = [ "192.168.1.0/24" ];
-      networking.nat.externalInterface = "eth1";
-    }
-  ];
-in
 {
   name = "dublin-traceroute";
   meta = with pkgs.lib.maintainers; {

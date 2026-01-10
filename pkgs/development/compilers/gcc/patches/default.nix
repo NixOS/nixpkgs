@@ -30,7 +30,6 @@ let
   atLeast14 = lib.versionAtLeast version "14";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
-  is13 = majorVersion == "13";
 
   # We only apply these patches when building a native toolchain for
   # aarch64-darwin, as it breaks building a foreign one:

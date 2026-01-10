@@ -37,7 +37,6 @@ assert libmathdxSupport -> cudaSupport;
 
 let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
-  stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
   version = "1.10.0";
 

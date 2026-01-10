@@ -7,9 +7,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
 }:
-let
-  pnpm = pnpm_9;
-in
 buildNpmPackage rec {
   pname = "piped";
   version = "0-unstable-2024-11-04";

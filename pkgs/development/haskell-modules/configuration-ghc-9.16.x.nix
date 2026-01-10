@@ -1,10 +1,5 @@
 { pkgs, haskellLib }:
 
-let
-  inherit (pkgs) lib;
-
-in
-
 self: super: {
   # Disable GHC core libraries
   array = null;

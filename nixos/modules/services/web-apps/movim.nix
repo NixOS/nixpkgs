@@ -878,18 +878,9 @@ in
             ${package}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
           fi
         ''
-        + lib.optionalString (podConfigFlags != "") (
-          let
-            flags = lib.concatStringsSep " " (
-              [ "--no-interaction" ]
-              ++ lib.optional cfg.debug "-vvv"
-              ++ lib.optional (!cfg.debug && cfg.verbose) "-v"
-            );
-          in
-          ''
-            ${lib.getExe package} config ${podConfigFlags}
-          ''
-        );
+        + lib.optionalString (podConfigFlags != "") ''
+          ${lib.getExe package} config ${podConfigFlags}
+        '';
       };
 
       services.${phpExecutionUnit} = {

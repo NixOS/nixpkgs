@@ -66,10 +66,6 @@ let
     else
       null;
 
-  buCellServDB = pkgs.writeText "backup-cellServDB-${cfg.cellName}" (
-    mkCellServDB cfg.roles.backup.cellServDB
-  );
-
   useBuCellServDB = (cfg.roles.backup.cellServDB != { }) && (!cfg.roles.backup.enableFabs);
 
   cfg = config.services.openafsServer;

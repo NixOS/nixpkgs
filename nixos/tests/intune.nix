@@ -25,9 +25,6 @@
     };
   nodes.pam =
     { nodes, ... }:
-    let
-      user = nodes.machine.users.users.alice;
-    in
     {
       services.intune.enable = true;
       imports = [ ./common/user-account.nix ];

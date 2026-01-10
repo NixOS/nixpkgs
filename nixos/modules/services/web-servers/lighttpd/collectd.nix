@@ -10,7 +10,6 @@ with lib;
 
 let
   cfg = config.services.lighttpd.collectd;
-  opt = options.services.lighttpd.collectd;
 
   collectionConf = pkgs.writeText "collection.conf" ''
     datadir: "${config.services.collectd.dataDir}"

@@ -36,12 +36,10 @@ let
     toINIWithGlobalSection
     toKeyValue
     toLua
-    mkLuaInline
     ;
 
   inherit (lib.types)
     attrsOf
-    atom
     bool
     coercedTo
     either

@@ -10,11 +10,9 @@
 let
   inherit (lib)
     concatStrings
-    foldl
     foldl'
     genAttrs
     literalExpression
-    maintainers
     mapAttrs
     mapAttrsToList
     mkDefault
@@ -22,9 +20,7 @@ let
     mkIf
     mkMerge
     mkOption
-    optional
     types
-    mkOptionDefault
     flip
     attrNames
     xor

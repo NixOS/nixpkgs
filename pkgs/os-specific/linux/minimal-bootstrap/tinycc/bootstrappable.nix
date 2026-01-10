@@ -22,13 +22,6 @@ let
   version = "unstable-2024-07-07";
   rev = "ea3900f6d5e71776c5cfabcabee317652e3a19ee";
 
-  arch =
-    {
-      i686-linux = "x86";
-      x86_64-linux = "x86_64";
-    }
-    .${buildPlatform.system};
-
   tccTarget =
     {
       i686-linux = "I386";

@@ -24,15 +24,12 @@ let
     removePrefix
     replaceStrings
     stringLength
-    sub
     substring
     toList
-    trace
     ;
 
   inherit (lib.strings) match split typeOf;
 
-  debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
 in
 rec {

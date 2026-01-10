@@ -8,10 +8,6 @@
   pytest-benchmark,
   pythonOlder,
 }:
-let
-  owner = "whtsky";
-  repo = "pixelmatch-py";
-in
 buildPythonPackage rec {
   pname = "pixelmatch";
   version = "0.3.0";

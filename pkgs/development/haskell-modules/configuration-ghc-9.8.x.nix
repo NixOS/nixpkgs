@@ -5,17 +5,8 @@ self: super:
 with haskellLib;
 
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (pkgs) lib;
-
-  warnAfterVersion =
-    ver: pkg:
-    lib.warnIf (lib.versionOlder ver
-      super.${pkg.pname}.version
-    ) "override for haskell.packages.ghc98.${pkg.pname} may no longer be needed" pkg;
-
 in
-
 {
 
   # Disable GHC core libraries.

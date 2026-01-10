@@ -24,7 +24,6 @@ let
     ;
 
   inherit (lib.strings)
-    concatMapStrings
     concatMapStringsSep
     optionalString
     ;

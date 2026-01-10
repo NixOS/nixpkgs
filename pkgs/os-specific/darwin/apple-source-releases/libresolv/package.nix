@@ -10,7 +10,6 @@ let
   dyld = apple-sdk.sourceRelease "dyld";
   Libinfo = apple-sdk.sourceRelease "Libinfo";
   Libnotify = apple-sdk.sourceRelease "Libnotify";
-  xnu = apple-sdk.sourceRelease "xnu";
 
   # `arpa/nameser_compat.h` is included in the Libc source release instead of libresolv.
   Libc = apple-sdk.sourceRelease "Libc";

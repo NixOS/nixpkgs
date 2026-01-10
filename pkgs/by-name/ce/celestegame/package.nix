@@ -38,7 +38,6 @@
 
 let
   pname = "celeste";
-  phome = "$out/${celesteHomeRelative}";
   executableName = "Celeste";
 
   writableDir' =

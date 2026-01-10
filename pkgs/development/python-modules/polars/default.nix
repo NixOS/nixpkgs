@@ -42,10 +42,6 @@
 
 let
   version = "1.36.1";
-
-  # Hide symbols to prevent accidental use
-  rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
-  jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
 buildPythonPackage rec {

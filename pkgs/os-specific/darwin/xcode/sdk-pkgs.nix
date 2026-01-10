@@ -11,13 +11,6 @@
   xcode,
   lib,
 }:
-
-let
-
-  minSdkVersion = stdenv.targetPlatform.minSdkVersion or "9.0";
-
-in
-
 rec {
   sdk = rec {
     name = "ios-sdk";

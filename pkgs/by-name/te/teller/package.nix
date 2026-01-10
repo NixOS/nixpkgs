@@ -10,7 +10,6 @@
 let
   pname = "teller";
   version = "2.0.7";
-  date = "2024-05-19";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;

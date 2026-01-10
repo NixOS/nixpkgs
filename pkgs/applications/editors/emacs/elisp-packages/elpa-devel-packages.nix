@@ -29,10 +29,6 @@
 self:
 let
 
-  inherit (import ./lib-override-helper.nix pkgs lib)
-    markBroken
-    ;
-
   # Use custom elpa url fetcher with fallback/uncompress
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
 

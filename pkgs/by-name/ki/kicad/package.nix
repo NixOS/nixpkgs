@@ -128,12 +128,6 @@ let
 
   libSrc = name: if srcOverridep name then srcs.${name} else libSrcFetch name;
   # TODO does it make sense to only have one version for all libs?
-  libVersion =
-    if srcOverridep "libVersion" then
-      srcs.libVersion
-    else
-      versionsImport.${baseName}.libVersion.version;
-
   wxGTK = wxGTK32;
   python = python3;
   wxPython = python.pkgs.wxpython;

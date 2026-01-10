@@ -10,7 +10,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    singleton
     types
     ;
   inherit (pkgs) coreutils charybdis;

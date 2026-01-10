@@ -35,7 +35,6 @@ let
     cmakeBool
     cmakeFeature
     optionals
-    optionalString
     ;
 
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;

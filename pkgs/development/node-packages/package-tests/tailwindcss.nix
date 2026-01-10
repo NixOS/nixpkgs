@@ -6,7 +6,7 @@
 
 let
 
-  inherit (tailwindcss) packageName version;
+  inherit (tailwindcss) packageName;
 
   tailwindcssInput = builtins.toFile "input.css" ''
     @tailwind base;

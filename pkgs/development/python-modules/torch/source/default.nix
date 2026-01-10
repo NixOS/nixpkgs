@@ -113,8 +113,6 @@ let
     ;
   inherit (cudaPackages) cudnn flags nccl;
 
-  triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
-
   setBool = v: if v then "1" else "0";
 
   # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414

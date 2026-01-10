@@ -18,7 +18,6 @@ let
     tarballHash
     artifactsUrl
     artifactsHash
-    bootstrapSdk
     ;
 
   pkgs = callPackage ./stage1.nix {

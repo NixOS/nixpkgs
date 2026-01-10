@@ -11,7 +11,6 @@ let
   # this is intended as a client test since you shouldn't use NetworkManager for a router or server
   # so using systemd-networkd for the router vm is fine in these tests.
   router = import ./router.nix { networkd = true; };
-  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
   clientConfig =
     extraConfig:
     lib.recursiveUpdate {

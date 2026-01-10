@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     let
-      inherit (finalAttrs) pname version;
+      inherit (finalAttrs) version;
     in
     fetchurl {
       url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor version}/gtksourceview-${version}.tar.xz";

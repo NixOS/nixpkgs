@@ -12,12 +12,9 @@ let
     literalExpression
     literalMD
     mapAttrs
-    mkDefault
     mkIf
     mkMerge
     mkOption
-    mkForce
-    optional
     optionalAttrs
     types
     ;

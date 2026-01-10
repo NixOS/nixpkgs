@@ -5,7 +5,6 @@
   ...
 }:
 let
-  name = "networkaudiod";
   cfg = config.services.networkaudiod;
 in
 {
