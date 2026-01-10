@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ revol-xut ];
   };
 }
