@@ -16058,13 +16058,6 @@
     githubId = 7802795;
     name = "Manoj Karthick";
   };
-  manveru = {
-    email = "m.fellinger@gmail.com";
-    matrix = "@manveru:matrix.org";
-    github = "manveru";
-    githubId = 3507;
-    name = "Michael Fellinger";
-  };
   maolonglong = {
     email = "shaolong.chen@outlook.it";
     github = "maolonglong";

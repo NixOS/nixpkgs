@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
     maintainers = with lib.maintainers; [
-      manveru
       bobby285271
     ];
     license = lib.licenses.lgpl3Plus;
