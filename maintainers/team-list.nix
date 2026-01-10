@@ -742,16 +742,20 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  # same as https://github.com/orgs/NixOS/teams/nix-team
+  # keep in-sync with ci/OWNERS
   nix = {
     members = [
-      mic92
-      tomberek
-      roberth
+      artturin
       ericson2314
+      lovesegfault
+      mic92
+      philiptaron
+      roberth
+      tomberek
+      xokdvium
     ];
-    scope = "Maintain the Nix package manager.";
-    shortName = "Nix/nix-cli ecosystem";
+    scope = "Maintain the packaging for the Nix package manager itself.";
+    shortName = "Nix packaging";
     enableFeatureFreezePing = true;
   };
 
