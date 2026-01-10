@@ -235,15 +235,6 @@ with lib.maintainers;
     shortName = "D. E. Shaw employees";
   };
 
-  determinatesystems = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      cole-h
-    ];
-    scope = "Group registration for packages maintained by Determinate Systems.";
-    shortName = "Determinate Systems employees";
-  };
-
   dhall = {
     members = [
       Gabriella439
