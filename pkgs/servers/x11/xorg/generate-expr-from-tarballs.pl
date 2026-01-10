@@ -468,6 +468,30 @@ print OUT <<EOF;
   xf86-input-synaptics,
   xf86-input-vmmouse,
   xf86-input-void,
+  xf86-video-apm,
+  xf86-video-ark,
+  xf86-video-ast,
+  xf86-video-ati,
+  xf86-video-chips,
+  xf86-video-cirrus,
+  xf86-video-geode,
+  xf86-video-i128,
+  xf86-video-i740,
+  xf86-video-mga,
+  xf86-video-neomagic,
+  xf86-video-nouveau,
+  xf86-video-qxl,
+  xf86-video-r128,
+  xf86-video-s3virge,
+  xf86-video-sis,
+  xf86-video-sisusb,
+  xf86-video-suncg6,
+  xf86-video-sunffb,
+  xf86-video-sunleo,
+  xf86-video-tdfx,
+  xf86-video-v4l,
+  xf86-video-vbox,
+  xf86-video-vesa,
   xfd,
   xfontsel,
   xfs,
@@ -690,6 +714,30 @@ self: with self; {
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
+  xf86videoapm = xf86-video-apm;
+  xf86videoark = xf86-video-ark;
+  xf86videoast = xf86-video-ast;
+  xf86videoati = xf86-video-ati;
+  xf86videochips = xf86-video-chips;
+  xf86videocirrus = xf86-video-cirrus;
+  xf86videogeode = xf86-video-geode;
+  xf86videoi128 = xf86-video-i128;
+  xf86videoi740 = xf86-video-i740;
+  xf86videomga = xf86-video-mga;
+  xf86videoneomagic = xf86-video-neomagic;
+  xf86videonouveau = xf86-video-nouveau;
+  xf86videoqxl = xf86-video-qxl;
+  xf86videor128 = xf86-video-r128;
+  xf86videos3virge = xf86-video-s3virge;
+  xf86videosis = xf86-video-sis;
+  xf86videosisusb = xf86-video-sisusb;
+  xf86videosuncg6 = xf86-video-suncg6;
+  xf86videosunffb = xf86-video-sunffb;
+  xf86videosunleo = xf86-video-sunleo;
+  xf86videotdfx = xf86-video-tdfx;
+  xf86videov4l = xf86-video-v4l;
+  xf86videovboxvideo = xf86-video-vbox;
+  xf86videovesa = xf86-video-vesa;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
