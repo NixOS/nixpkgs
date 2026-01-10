@@ -17,9 +17,9 @@ appimageTools.wrapType2 rec {
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+    install -m 444 -D ${appimageContents}/deckboard.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/deckboard.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=deckboard'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
@@ -38,7 +38,7 @@ appimageTools.wrapType2 rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A Stream-deck alternative that turns tablet devices into a stream deck";
+    description = "Stream-deck alternative that turns tablet devices into a stream deck";
     homepage = "https://deckboard.app/";
     changelog = "https://github.com/rivafarabi/deckboard/releases/tag/v${version}";
     license = lib.licenses.unfree;
