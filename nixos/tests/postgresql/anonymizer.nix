@@ -11,7 +11,6 @@ let
     package:
     makeTest {
       name = "postgresql_anonymizer-${package.name}";
-      meta.maintainers = lib.teams.flyingcircus.members;
 
       nodes.machine =
         { pkgs, ... }:

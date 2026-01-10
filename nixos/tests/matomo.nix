@@ -46,13 +46,10 @@
       machine.wait_for_unit("phpfpm-matomo.service")
   '';
 
-  meta.maintainers =
-    with lib.maintainers;
-    [
-      florianjacob
-      mmilata
-      twey
-      boozedog
-    ]
-    ++ lib.teams.flyingcircus.members;
+  meta.maintainers = with lib.maintainers; [
+    florianjacob
+    mmilata
+    twey
+    boozedog
+  ];
 }

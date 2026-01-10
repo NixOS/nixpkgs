@@ -143,7 +143,6 @@ let
       maintainers = [
         lib.maintainers.vcunat # upstream developer
       ];
-      teams = [ lib.teams.flyingcircus ];
       mainProgram = "kresd";
     };
   });

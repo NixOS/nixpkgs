@@ -136,7 +136,6 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = lib.licenses.bsd2;
-        teams = [ lib.teams.flyingcircus ];
         platforms = lib.platforms.unix;
       };
     };

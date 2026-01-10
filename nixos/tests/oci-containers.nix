@@ -73,7 +73,7 @@ let
     type:
     makeTest {
       name = "oci-containers-podman-rootless-${type}";
-      meta.maintainers = lib.teams.flyingcircus.members ++ [ lib.maintainers.ma27 ];
+      meta.maintainers = [ lib.maintainers.ma27 ];
       nodes = {
         podman =
           { pkgs, ... }:
