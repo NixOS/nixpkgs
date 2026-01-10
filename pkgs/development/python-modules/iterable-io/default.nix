@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "iterable-io";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pR0Ps";
     repo = "iterable-io";
     tag = "v${version}";
-    hash = "sha256-+PSINKS7/FeGHYvkOASA5m+1pBpKfURfylZ8CwKijgA=";
+    hash = "sha256-mS8x3M0DNnwW6Ov3TG8b2J702rjOnZT9r38fsIUXkro=";
   };
 
   nativeBuildInputs = [ setuptools ];
