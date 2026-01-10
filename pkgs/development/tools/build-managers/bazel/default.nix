@@ -250,7 +250,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      inherit (callPackage (versionInfo.injectPackage ./examples.nix) { }) cpp java rust;
+      inherit (callPackage (versionInfo.injectPackage ./examples.nix) { })
+        cpp
+        java
+        rust
+        ;
     };
   };
 }

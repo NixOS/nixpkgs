@@ -7,13 +7,44 @@
   jdk_headless,
   addFilePatch,
 }:
-{
-
-  "8" = {
+rec {
+  bazel8Info = {
     version = "8.5.0";
     hash = "sha256-L8gnWpQAeHMUbydrrEtZ6WGIzhunDBWCNWMA+3dAKT0=";
 
-    injectPackage = pkg: { bazel_8, callPackage }: callPackage pkg { bazel_package = bazel_8; };
+    examples = {
+      javaFODHashes = {
+        aarch64-darwin = "sha256-FVTyDxSYfcsK0f0/QiRVD3tkPEr6xpTJpATuuBe2Gb0=";
+        aarch64-linux = "sha256-OPoV2hFgebgZCWaYD76cT5PSlmjCpSJNE366eumU3PA=";
+        x86_64-darwin = "sha256-FWj/LiruyP6tyByx0mt782U5EtGqt+FxfXmRVFX5fC0=";
+        x86_64-linux = "sha256-W/mrULm1wk9iRtns0yo8YPht2QGHQFpbvPRaAG/YK4A=";
+      };
+
+      cppFODHashes = {
+        aarch64-darwin = "sha256-LrQy27ghyXhZFhDP//0GzDQzlwAPwJuvp82nUfUmMdM=";
+        aarch64-linux = "sha256-LrQy27ghyXhZFhDP//0GzDQzlwAPwJuvp82nUfUmMdM=";
+        x86_64-darwin = "sha256-LrQy27ghyXhZFhDP//0GzDQzlwAPwJuvp82nUfUmMdM=";
+        x86_64-linux = "sha256-LrQy27ghyXhZFhDP//0GzDQzlwAPwJuvp82nUfUmMdM=";
+      };
+
+      rustFODHashes = {
+        aarch64-darwin = "sha256-Tp36jLnw+2U2QANMNZZ01iLfYG2n8xJ/k2mDgL3tDU8=";
+        aarch64-linux = "sha256-UhutemsgZE6FI9awHPZcGGcDkXzSUEYmAr1mHbjKC58=";
+        x86_64-darwin = "sha256-fhGgDGDUOD75madRFzWT+pbUYsn0o1GBy907ClmP/Ac=";
+        x86_64-linux = "sha256-5HoHlX3+0LMB/tWP3rFbaglp7sfJhhULdQaSLPcxFI8=";
+      };
+    };
+
+    injectPackage =
+      pkg:
+      {
+        bazel_8,
+        callPackage,
+      }:
+      callPackage pkg {
+        bazel_package = bazel_8;
+        versionInfo = bazel8Info;
+      };
 
     darwinPatches = [
       # Bazel integrates with apple IOKit to inhibit and track system sleep.
@@ -112,5 +143,7 @@
       })
     ];
   };
+
+  "8" = bazel8Info;
 }
 .${majorVersion}

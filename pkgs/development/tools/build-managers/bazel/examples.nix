@@ -8,20 +8,22 @@
   callPackage,
   zlib,
   bazel_package,
+  versionInfo,
+  libxcrypt-legacy,
 }:
 let
   bazelPackage = callPackage ./build-support/bazelPackage.nix { };
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "722299976c97e5191045c8016b7c8532189fc3f6";
-    sha256 = "sha256-hi5BKI94am2LCXD93GBeT0gsODxGeSsd0OrhTwpNAgM=";
+    rev = "1dcd9c0e730ad4415d1dfc25e64ae9e9d33bfc75";
+    sha256 = "sha256-vVoVnHgvJ9lsP8OjN7636HL++mucAXRumD8EUNl4nN4=";
   };
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "examples";
-    rev = "9d6a2e67d29b8b6208d22d70cb22880345bb6803";
-    sha256 = "sha256-NQqXsmX7hyTqLINkz1rnavx15jQTdIKpotw42rGc5mc=";
+    rev = "2a8db5804341036b393ff7e1ba88edb30c8a82c7";
+    sha256 = "sha256-/+rU73WPIKguoEOJDCodE3pUGSGju0VhixIcr0zBVmY=";
   };
 in
 {
@@ -44,16 +46,14 @@ in
       mkdir $out
       cp bazel-bin/ProjectRunner.jar $out/
     '';
+    buildInputs = [
+      libgcc
+      libxcrypt-legacy
+      stdenv.cc.cc.lib
+    ];
     nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
-    bazelRepoCacheFOD = {
-      outputHash =
-        {
-          aarch64-darwin = "sha256-FwHsg9P65Eu/n8PV7UW90bvBNG+U67zizRy6Krk32Yg=";
-          aarch64-linux = "sha256-W8h2tCIauGnEvPpXje19bZUE/izHaCQ0Wj4nMaP3nkc=";
-          x86_64-darwin = "sha256-XIrGRmYDDRN3Kkt1dFWex1bPRMeIHAR+XWLqB/PpOAM=";
-          x86_64-linux = "sha256-VBckTQAK5qeyi2ublk+Dcga5O5XZg3bfHR6Yaw6vSp0=";
-        }
-        .${stdenv.hostPlatform.system};
+    bazelVendorDepsFOD = {
+      outputHash = versionInfo.examples.javaFODHashes.${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
     };
   };
@@ -77,14 +77,7 @@ in
       USE_BAZEL_VERSION = bazel_package.version;
     };
     bazelRepoCacheFOD = {
-      outputHash =
-        {
-          aarch64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          aarch64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          x86_64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          x86_64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-        }
-        .${stdenv.hostPlatform.system};
+      outputHash = versionInfo.examples.cppFODHashes.${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
     };
   };
@@ -109,14 +102,7 @@ in
     commandArgs = lib.optional stdenv.hostPlatform.isDarwin "--spawn_strategy=local";
     autoPatchelfIgnoreMissingDeps = [ "librustc_driver-*.so" ];
     bazelVendorDepsFOD = {
-      outputHash =
-        {
-          aarch64-darwin = "sha256-0QtaPtcBljyhiJGwA8ctSpi+UQp/9q/ZoHUHORizmlY=";
-          aarch64-linux = "sha256-zpiwQ8OB8KhY+kxSXlSOd/zmoH1VGYDGgojf4Or04pQ=";
-          x86_64-darwin = "sha256-+tCDSuYkon1DEARwWTYABJbmysSNAK9vy0tCm8YsGjQ=";
-          x86_64-linux = "sha256-wCWSRc20Yr/hdXn8szbhLAX7Oy3G5keyHTTdO0msnks=";
-        }
-        .${stdenv.hostPlatform.system};
+      outputHash = versionInfo.examples.rustFODHashes.${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
     };
   };
