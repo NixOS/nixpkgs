@@ -464,7 +464,12 @@ print OUT <<EOF;
   xf86-input-synaptics,
   xf86-input-vmmouse,
   xf86-input-void,
+  xf86-video-apm,
   xf86-video-ark,
+  xf86-video-ast,
+  xf86-video-ati,
+  xf86-video-chips,
+  xf86-video-cirrus,
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-s3virge,
@@ -679,7 +684,12 @@ self: with self; {
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
+  xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
+  xf86videoast = xf86-video-ast;
+  xf86videoati = xf86-video-ati;
+  xf86videochips = xf86-video-chips;
+  xf86videocirrus = xf86-video-cirrus;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
