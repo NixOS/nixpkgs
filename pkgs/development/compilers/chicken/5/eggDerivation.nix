@@ -24,7 +24,6 @@ let
       assert nameVersionAssertion (args ? name && !args ? version);
       lib.getName args.name;
   version = if args ? version then args.version else lib.getVersion args.name;
-  name = if args ? name then args.name else "${args.pname}-${args.version}";
   overrides = callPackage ./overrides.nix { };
   override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
 in

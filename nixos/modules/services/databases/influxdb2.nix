@@ -29,7 +29,6 @@ let
     optional
     subtractLists
     types
-    unique
     ;
 
   format = pkgs.formats.json { };
@@ -161,33 +160,27 @@ let
           description = "Buckets to provision in this organization.";
           default = { };
           type = types.attrsOf (
-            types.submodule (
-              bucketSubmod:
-              let
-                bucket = bucketSubmod.config._module.args.name;
-              in
-              {
-                options = {
-                  present = mkOption {
-                    description = "Whether to ensure that this bucket is present or absent.";
-                    type = types.bool;
-                    default = true;
-                  };
-
-                  description = mkOption {
-                    description = "Optional description for the bucket.";
-                    default = null;
-                    type = types.nullOr types.str;
-                  };
-
-                  retention = mkOption {
-                    type = types.ints.unsigned;
-                    default = 0;
-                    description = "The duration in seconds for which the bucket will retain data (0 is infinite).";
-                  };
+            types.submodule (bucketSubmod: {
+              options = {
+                present = mkOption {
+                  description = "Whether to ensure that this bucket is present or absent.";
+                  type = types.bool;
+                  default = true;
                 };
-              }
-            )
+
+                description = mkOption {
+                  description = "Optional description for the bucket.";
+                  default = null;
+                  type = types.nullOr types.str;
+                };
+
+                retention = mkOption {
+                  type = types.ints.unsigned;
+                  default = 0;
+                  description = "The duration in seconds for which the bucket will retain data (0 is infinite).";
+                };
+              };
+            })
           );
         };
 
@@ -386,28 +379,21 @@ in
             }
           '';
           type = types.attrsOf (
-            types.submodule (
-              userSubmod:
-              let
-                user = userSubmod.config._module.args.name;
-                org = userSubmod.config.org;
-              in
-              {
-                options = {
-                  present = mkOption {
-                    description = "Whether to ensure that this user is present or absent.";
-                    type = types.bool;
-                    default = true;
-                  };
-
-                  passwordFile = mkOption {
-                    description = "Password for the user. If unset, the user will not be able to log in until a password is set by an operator! Don't use a file from the nix store!";
-                    default = null;
-                    type = types.nullOr types.path;
-                  };
+            types.submodule (userSubmod: {
+              options = {
+                present = mkOption {
+                  description = "Whether to ensure that this user is present or absent.";
+                  type = types.bool;
+                  default = true;
                 };
-              }
-            )
+
+                passwordFile = mkOption {
+                  description = "Password for the user. If unset, the user will not be able to log in until a password is set by an operator! Don't use a file from the nix store!";
+                  default = null;
+                  type = types.nullOr types.path;
+                };
+              };
+            })
           );
         };
       };

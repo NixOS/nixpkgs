@@ -16,7 +16,6 @@ let
     ;
 
   cfg = config.services.go2rtc;
-  opt = options.services.go2rtc;
 
   format = pkgs.formats.yaml { };
   configFile = format.generate "go2rtc.yaml" cfg.settings;

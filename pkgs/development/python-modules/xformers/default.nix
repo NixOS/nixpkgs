@@ -30,7 +30,7 @@
   openmp,
 }:
 let
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+  inherit (torch) cudaPackages cudaSupport;
 
   # version 0.0.32.post2 was confirmed to break CUDA.
   # Remove this note once the latest published revision "just works".

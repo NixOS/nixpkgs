@@ -13,7 +13,6 @@ let
     mkIf
     mkDefault
     mkPackageOption
-    mkRemovedOptionModule
     literalExpression
     getExe
     makeBinPath

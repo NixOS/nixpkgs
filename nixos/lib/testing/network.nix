@@ -3,7 +3,6 @@
 let
   inherit (lib)
     attrNames
-    concatMap
     concatMapStrings
     flip
     forEach

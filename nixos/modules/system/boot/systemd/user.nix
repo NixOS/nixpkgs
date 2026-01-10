@@ -12,10 +12,7 @@ with lib;
 let
   cfg = config.systemd.user;
 
-  systemd = config.systemd.package;
-
   inherit (systemdUtils.lib)
-    makeUnit
     generateUnits
     targetToUnit
     serviceToUnit

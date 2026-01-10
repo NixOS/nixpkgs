@@ -137,52 +137,6 @@ let
       };
     };
 
-  tests-fetchgit =
-    let
-      src-with-sha256 = pkgs.fetchgit {
-        url = "https://example.com/source.git";
-        sha256 = lib.fakeSha256;
-      };
-    in
-    {
-      test-fetchgit-hash-compat = {
-        expr = {
-          inherit (src-with-sha256)
-            outputHash
-            outputHashAlgo
-            ;
-        };
-        expected = {
-          outputHash = lib.fakeSha256;
-          outputHashAlgo = "sha256";
-        };
-      };
-      test-fetchgit-overrideAttrs-hash = {
-        expr = {
-          inherit (src-with-sha256.overrideAttrs { hash = pkgs.nix.src.hash; })
-            outputHash
-            outputHashAlgo
-            ;
-        };
-        expected = {
-          outputHash = pkgs.nix.src.hash;
-          outputHashAlgo = null;
-        };
-      };
-      test-fetchurl-overrideAttrs-hash-empty = {
-        expr = {
-          inherit (src-with-sha256.overrideAttrs { hash = ""; })
-            outputHash
-            outputHashAlgo
-            ;
-        };
-        expected = {
-          outputHash = lib.fakeHash;
-          outputHashAlgo = null;
-        };
-      };
-    };
-
   tests-fetchurl =
     let
       src-with-sha256 = pkgs.fetchurl {

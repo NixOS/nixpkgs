@@ -108,7 +108,6 @@ let
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
-  stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
 
   src = fetchFromGitHub {

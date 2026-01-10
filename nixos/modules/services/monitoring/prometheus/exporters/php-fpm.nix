@@ -7,7 +7,6 @@
 }:
 
 let
-  logPrefix = "services.prometheus.exporter.php-fpm";
   cfg = config.services.prometheus.exporters.php-fpm;
 in
 {

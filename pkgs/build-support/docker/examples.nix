@@ -783,7 +783,6 @@ rec {
 
   etc =
     let
-      inherit (pkgs) lib;
       nixosCore = (
         evalMinimalConfig (
           { config, ... }:

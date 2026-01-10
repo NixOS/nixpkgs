@@ -7,14 +7,12 @@
 # Tested in lib/tests/filesystem.sh
 let
   inherit (builtins)
-    readDir
     pathExists
     toString
     ;
 
   inherit (lib.filesystem)
     pathIsDirectory
-    pathIsRegularFile
     pathType
     packagesFromDirectoryRecursive
     ;
@@ -362,7 +360,6 @@ in
     let
       inherit (lib)
         concatMapAttrs
-        id
         makeScope
         recurseIntoAttrs
         removeSuffix

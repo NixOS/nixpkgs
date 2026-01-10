@@ -1,9 +1,5 @@
 { pkgs, lib, ... }:
 
-let
-  chipVersion = pkgs.python311Packages.home-assistant-chip-core.version;
-in
-
 {
   name = "matter-server";
   meta.maintainers = with lib.maintainers; [ leonm1 ];

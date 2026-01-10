@@ -41,9 +41,6 @@ in
 
   testScript =
     { nodes, ... }:
-    let
-      user = nodes.machine.config.users.users.alice;
-    in
     ''
       start_all()
       machine.wait_for_x()

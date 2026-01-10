@@ -5,8 +5,6 @@
 }:
 
 let
-  inherit (pkgs) lib;
-
   makeTestFor =
     package:
     makeTest {

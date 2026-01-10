@@ -7,7 +7,6 @@
 }:
 
 let
-  logPrefix = "services.prometheus.exporter.scaphandre";
   cfg = config.services.prometheus.exporters.scaphandre;
 in
 {

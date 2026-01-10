@@ -305,7 +305,6 @@ let
 
   # LLVM tools packages are staged separately (xclang, stage3) from LLVM libs (xclang).
   llvmLibrariesPackages = prevStage: { inherit (prevStage.llvmPackages) compiler-rt libcxx; };
-  llvmLibrariesDarwinDepsNoCC = prevStage: { inherit (prevStage.darwin) libcxx; };
   llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {

@@ -6,15 +6,9 @@ let
   inherit (pkgs)
     stdenv
     lib
-    callPackage
     fetchFromGitHub
-    fetchurl
     fetchpatch
-    nixosTests
     ;
-
-  since = version: lib.versionAtLeast nodejs.version version;
-  before = version: lib.versionOlder nodejs.version version;
 in
 
 final: prev: {

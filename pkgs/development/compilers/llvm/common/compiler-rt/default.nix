@@ -41,7 +41,7 @@ let
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
-  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
+  inherit (stdenv.hostPlatform) isMusl isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 in
 

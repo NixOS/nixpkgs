@@ -154,7 +154,6 @@ let
     }:
     let
       stackClashStr = "Stack clash protection: yes";
-      expectFailureClause = lib.optionalString expectFailure " && echo 'ERROR: Expected hardening-check to fail, but it passed!' >&2 && false";
     in
     runCommandCC "check-test-bin"
       {

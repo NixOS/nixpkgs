@@ -8,7 +8,6 @@
 let
 
   cfg = config.security.acme;
-  opt = options.security.acme;
   user = if cfg.useRoot then "root" else "acme";
 
   # Used to calculate timer accuracy for coalescing
@@ -185,7 +184,6 @@ let
     let
       acmeServer = data.server;
       useDns = data.dnsProvider != null;
-      destPath = "/var/lib/acme/${cert}";
 
       # Minica and lego have a "feature" which replaces * with _. We need
       # to make this substitution to reference the output files from both programs.

@@ -12,7 +12,6 @@
   gitUpdater,
 }:
 let
-  inherit (_cuda.lib) _mkMetaBadPlatforms;
   inherit (lib) licenses maintainers teams;
 in
 backendStdenv.mkDerivation (finalAttrs: {

@@ -15,15 +15,6 @@
 
 let
   version = "0.9.3";
-  # list of all theoretically available targets
-  targets = [
-    "genode"
-    "hvt"
-    "muen"
-    "spt"
-    "virtio"
-    "xen"
-  ];
 in
 stdenv.mkDerivation {
   pname = "solo5";

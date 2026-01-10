@@ -1,9 +1,5 @@
 { lib, pkgs, ... }:
 
-let
-  lib = pkgs.lib;
-
-in
 {
   name = "chromadb";
   meta.maintainers = [ ];

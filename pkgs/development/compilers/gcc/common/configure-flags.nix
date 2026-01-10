@@ -48,7 +48,6 @@ assert !enablePlugin -> disableGdbPlugin;
 
 let
   inherit (stdenv)
-    buildPlatform
     hostPlatform
     targetPlatform
     ;

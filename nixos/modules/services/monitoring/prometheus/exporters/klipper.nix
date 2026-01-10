@@ -13,10 +13,8 @@ let
     mkIf
     types
     concatStringsSep
-    any
     optionalString
     ;
-  moonraker = config.services.moonraker;
 in
 {
   port = 9101;

@@ -59,45 +59,40 @@ in
 
       enableOCR = true;
 
-      testScript =
-        let
-          qrLabel = "Feed";
-          qrContent = "Test";
-        in
-        ''
-          machine.wait_for_x()
+      testScript = ''
+        machine.wait_for_x()
 
-          with subtest("lomiri camera launches"):
-              machine.succeed("lomiri-camera-app >&2 &")
-              # emitted twice
-              machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
-              machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
-              machine.sleep(10)
-              machine.send_key("alt-f10")
-              machine.sleep(5)
-              machine.wait_for_text("Cannot access")
-              machine.screenshot("lomiri-camera_open")
+        with subtest("lomiri camera launches"):
+            machine.succeed("lomiri-camera-app >&2 &")
+            # emitted twice
+            machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
+            machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
+            machine.sleep(10)
+            machine.send_key("alt-f10")
+            machine.sleep(5)
+            machine.wait_for_text("Cannot access")
+            machine.screenshot("lomiri-camera_open")
 
-          machine.succeed("pgrep -afx lomiri-camera-app >&2")
-          machine.succeed("pkill -efx lomiri-camera-app >&2")
-          machine.wait_until_fails("pgrep -afx lomiri-camera-app >&2")
+        machine.succeed("pgrep -afx lomiri-camera-app >&2")
+        machine.succeed("pkill -efx lomiri-camera-app >&2")
+        machine.wait_until_fails("pgrep -afx lomiri-camera-app >&2")
 
-          # Sometimes, GStreamer errors out on camera init with: CameraBin error: "Failed to allocate required memory."
-          # Adding more VM memory didn't affect this. Maybe flaky in general?
-          # Current assumption: Camera access gets requested in a weird/still-in-use state, so sleep abit
-          machine.sleep(10)
+        # Sometimes, GStreamer errors out on camera init with: CameraBin error: "Failed to allocate required memory."
+        # Adding more VM memory didn't affect this. Maybe flaky in general?
+        # Current assumption: Camera access gets requested in a weird/still-in-use state, so sleep abit
+        machine.sleep(10)
 
-          with subtest("lomiri camera localisation works"):
-              machine.succeed("env LANG=de_DE.UTF-8 lomiri-camera-app >&2 &")
-              # emitted twice
-              machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
-              machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
-              machine.sleep(10)
-              machine.send_key("alt-f10")
-              machine.sleep(5)
-              machine.wait_for_text("Zugriff auf")
-              machine.screenshot("lomiri-camera_localised")
-        '';
+        with subtest("lomiri camera localisation works"):
+            machine.succeed("env LANG=de_DE.UTF-8 lomiri-camera-app >&2 &")
+            # emitted twice
+            machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
+            machine.wait_for_console_text("updateViewfinderResolution: viewfinder resolutions is not known yet")
+            machine.sleep(10)
+            machine.send_key("alt-f10")
+            machine.sleep(5)
+            machine.wait_for_text("Zugriff auf")
+            machine.screenshot("lomiri-camera_localised")
+      '';
     }
   );
 

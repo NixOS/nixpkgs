@@ -14,10 +14,6 @@ let
       extraMakeWrapperArgs ? "",
     }:
     let
-
-      initialMakeWrapperArgs = [
-      ];
-
       pluginsDir = symlinkJoin {
         name = "helm-plugins";
         paths = plugins;

@@ -10,7 +10,6 @@ with lib;
 let
 
   cfg = config.services.sabnzbd;
-  inherit (pkgs) sabnzbd;
 
 in
 

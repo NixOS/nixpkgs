@@ -115,18 +115,6 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch =
-    {
-      commit,
-      hash,
-      revert ? false,
-      excludes ? [ ],
-    }:
-    fetchpatch {
-      url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-      inherit hash revert excludes;
-    };
-
   mkGnFlags =
     let
       # Serialize Nix types into GN types according to this document:

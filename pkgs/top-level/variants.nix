@@ -12,16 +12,6 @@
   overlays,
   makeMuslParsedPlatform,
 }:
-let
-  makeLLVMParsedPlatform =
-    parsed:
-    (
-      parsed
-      // {
-        abi = lib.systems.parse.abis.llvm;
-      }
-    );
-in
 self: super: {
   pkgsLLVM = nixpkgsFun {
     overlays = [

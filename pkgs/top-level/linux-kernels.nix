@@ -30,20 +30,6 @@ let
     rpiPackages
     ;
 
-  markBroken =
-    drv:
-    drv.overrideAttrs (
-      {
-        meta ? { },
-        ...
-      }:
-      {
-        meta = meta // {
-          broken = true;
-        };
-      }
-    );
-
   # Hardened Linux
   hardenedKernelFor =
     kernel': overrides:

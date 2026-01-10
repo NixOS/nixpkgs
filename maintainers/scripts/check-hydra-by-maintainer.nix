@@ -70,7 +70,6 @@ pkgs.stdenvNoCC.mkDerivation {
     let
       # trying to only add spaces as necessary for optional args
       # with optStr don't need spaces between nix templating
-      optStr = cond: string: lib.optionalString cond "${string} ";
       args = [
         "hydra-check"
       ]

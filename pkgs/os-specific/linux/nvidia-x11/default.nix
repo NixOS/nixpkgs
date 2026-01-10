@@ -40,26 +40,11 @@ let
     hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
   };
 
-  # Fixes drm device not working with linux 6.12
-  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/712
-  drm_fop_flags_linux_612_patch = fetchpatch {
-    url = "https://github.com/Binary-Eater/open-gpu-kernel-modules/commit/8ac26d3c66ea88b0f80504bdd1e907658b41609d.patch";
-    hash = "sha256-+SfIu3uYNQCf/KXhv4PWvruTVKQSh4bgU1moePhe57U=";
-  };
-
   # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
   aurPatches = fetchgit {
     url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
     rev = "cf1a1c571c425b4b66d12e468fc4ce45a397c583";
     hash = "sha256-SERB5ihOroagJn7apAiqjUckbrfP2FZPCuTLWcBccoM=";
-  };
-
-  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/840
-  gpl_symbols_linux_615_patch = fetchpatch {
-    url = "https://github.com/CachyOS/kernel-patches/raw/914aea4298e3744beddad09f3d2773d71839b182/6.15/misc/nvidia/0003-Workaround-nv_vm_flags_-calling-GPL-only-code.patch";
-    hash = "sha256-YOTAvONchPPSVDP9eJ9236pAPtxYK5nAePNtm2dlvb4=";
-    stripLen = 1;
-    extraPrefix = "kernel/";
   };
 in
 rec {

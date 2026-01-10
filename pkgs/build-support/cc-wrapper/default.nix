@@ -106,7 +106,7 @@ let
     versionAtLeast
     ;
 
-  inherit (stdenvNoCC) buildPlatform hostPlatform targetPlatform;
+  inherit (stdenvNoCC) hostPlatform targetPlatform;
 
   includeFortifyHeaders' =
     if includeFortifyHeaders != null then

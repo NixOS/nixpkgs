@@ -8,7 +8,6 @@ let
   inherit (lib) types mkRemovedOptionModule;
 
   cfg = config.services.tabby;
-  format = pkgs.formats.toml { };
   tabbyPackage = cfg.package.override {
     inherit (cfg) acceleration;
   };

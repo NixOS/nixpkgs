@@ -10,7 +10,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    optionalString
     types
     ;
 

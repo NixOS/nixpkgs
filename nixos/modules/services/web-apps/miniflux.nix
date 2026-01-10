@@ -13,7 +13,6 @@ let
     types
     literalExpression
     mkIf
-    mkDefault
     ;
   cfg = config.services.miniflux;
 

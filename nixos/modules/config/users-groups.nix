@@ -11,10 +11,8 @@ let
     any
     attrNames
     attrValues
-    boolToString
     concatMap
     concatMapStringsSep
-    concatStrings
     elem
     filter
     filterAttrs
@@ -39,12 +37,10 @@ let
     mkRenamedOptionModule
     optional
     optionals
-    sort
     stringAfter
     stringLength
     trace
     types
-    versionOlder
     xor
     ;
 

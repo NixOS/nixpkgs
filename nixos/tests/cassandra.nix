@@ -14,7 +14,6 @@ let
       password = "password";
     }
   ];
-  jmxRolesFile = ./cassandra-jmx-roles;
   jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
   jmxPort = 7200; # Non-standard port so it doesn't accidentally work
   jmxPortStr = toString jmxPort;

@@ -96,7 +96,7 @@ let
           old.passthru or { }
           // (
             let
-              inherit (vmr) targetRid updateScript;
+              inherit (vmr) targetRid;
               otherRids = lib.remove targetRid (
                 map (system: dotnetCorePackages.systemToDotnetRid system) vmr.meta.platforms
               );

@@ -35,7 +35,6 @@ let
   inherit (lib)
     attrNames
     concatLists
-    recursiveUpdate
     zipAttrsWithNames
     ;
 

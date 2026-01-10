@@ -9,9 +9,6 @@
   pnpmConfigHook,
   testers,
 }:
-let
-  pnpm = pnpm_10;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
   version = "0.2.10";

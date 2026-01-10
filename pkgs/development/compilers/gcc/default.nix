@@ -58,9 +58,6 @@
 let
   inherit (lib)
     callPackageWith
-    filter
-    getBin
-    maintainers
     makeLibraryPath
     makeSearchPathOutput
     mapAttrs
@@ -69,8 +66,6 @@ let
     optionals
     optionalString
     pipe
-    platforms
-    versionAtLeast
     versions
     ;
 
@@ -78,8 +73,6 @@ let
   version = gccVersions.fromMajorMinor majorMinorVersion;
 
   majorVersion = versions.major version;
-  atLeast14 = versionAtLeast version "14";
-  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1

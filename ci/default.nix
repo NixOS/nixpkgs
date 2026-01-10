@@ -99,7 +99,6 @@ let
             "--ignore=sema-unused-def-lambda-noarg-formal"
             "--ignore=sema-unused-def-lambda-witharg-arg"
             "--ignore=sema-unused-def-lambda-witharg-formal"
-            "--ignore=sema-unused-def-let"
             # Keep this rule, because we have `lib.or`.
             "--ignore=or-identifier"
           ];

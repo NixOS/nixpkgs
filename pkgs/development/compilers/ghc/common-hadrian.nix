@@ -321,7 +321,7 @@ assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
   "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let
-  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+  inherit (stdenv) hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";

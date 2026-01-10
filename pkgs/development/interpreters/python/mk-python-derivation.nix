@@ -40,7 +40,6 @@ let
     flip
     getName
     hasSuffix
-    head
     isBool
     max
     optional
@@ -48,7 +47,6 @@ let
     optionals
     optionalString
     removePrefix
-    splitString
     stringLength
     ;
 

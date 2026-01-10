@@ -40,7 +40,6 @@
 let
 
   majorVersion = lib.versions.major version;
-  minorVersion = lib.versions.minor version;
 
   pname = if enableNpm then "nodejs" else "nodejs-slim";
 
