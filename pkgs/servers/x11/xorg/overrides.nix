@@ -71,42 +71,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # to get rid of xorgserver.dev; man is tiny
-    preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-    ];
-  });
-
-  xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
-    configureFlags = [
-      "--with-sdkdir=${placeholder "out"}/include/xorg"
-    ];
-    meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
-    };
-  });
-
-  xf86inputkeyboard = super.xf86inputkeyboard.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      platforms = lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;
-    };
-  });
-
-  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-    ];
-  });
-
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
