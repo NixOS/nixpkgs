@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchgit,
   autoreconfHook,
   pixman,
@@ -13,7 +13,7 @@
   libXext,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "quartz-wm";
   version = "1.3.2";
 

@@ -62,11 +62,10 @@ lib.makeOverridable mkDerivation (
       mainProgram = pname;
     };
 
-    # FIXME: Do not use meta attributes, see README (`TODO` section)
     desktopItem = makeDesktopItem {
       name = pname;
       exec = pname;
-      comment = lib.replaceStrings [ "\n" ] [ " " ] meta.longDescription;
+      comment = lib.trim (lib.replaceString "\n" " " meta.longDescription);
       desktopName = product;
       genericName = meta.description;
       categories = [ "Development" ];

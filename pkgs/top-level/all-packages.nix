@@ -8421,8 +8421,6 @@ with pkgs;
   xcb-util-cursor = xorg.xcbutilcursor;
   xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
 
-  xcbutilxrm = callPackage ../servers/x11/xorg/xcb-util-xrm.nix { };
-
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
   zlib = callPackage ../development/libraries/zlib {
@@ -9427,10 +9425,6 @@ with pkgs;
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
-
-  quartz-wm = callPackage ../servers/x11/quartz-wm {
-    stdenv = clangStdenv;
-  };
 
   xorg =
     let
