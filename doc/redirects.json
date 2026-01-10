@@ -311,7 +311,12 @@
     "release-notes.html#sec-nixpkgs-release-26.05-highlights"
   ],
   "sec-nixpkgs-release-26.05-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities",
+    "index.html#sec-xorg",
+    "index.html#katamari-tarballs",
+    "index.html#individual-tarballs",
+    "index.html#generating-nix-expressions",
+    "index.html#overriding-the-generator"
   ],
   "sec-nixpkgs-release-26.05-lib": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib"
@@ -4494,21 +4499,6 @@
   ],
   "sec-weechat": [
     "index.html#sec-weechat"
-  ],
-  "sec-xorg": [
-    "index.html#sec-xorg"
-  ],
-  "katamari-tarballs": [
-    "index.html#katamari-tarballs"
-  ],
-  "individual-tarballs": [
-    "index.html#individual-tarballs"
-  ],
-  "generating-nix-expressions": [
-    "index.html#generating-nix-expressions"
-  ],
-  "overriding-the-generator": [
-    "index.html#overriding-the-generator"
   ],
   "sec-build-support": [
     "index.html#sec-build-support"
