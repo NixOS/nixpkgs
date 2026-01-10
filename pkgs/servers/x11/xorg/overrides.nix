@@ -59,10 +59,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
-  });
-
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
