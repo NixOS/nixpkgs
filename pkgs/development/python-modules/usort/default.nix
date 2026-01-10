@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "usort";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "usort";
     tag = "v${version}";
-    hash = "sha256-QnhpnuEt6j/QPmX29A0523QDh4o2QfaCoDI0YJpTc8Y=";
+    hash = "sha256-sSc6TpsErz+93+dlKk+RZnyZFAp7qjpNYMVCEW9lXds=";
   };
 
   build-system = [
