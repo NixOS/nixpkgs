@@ -187,7 +187,7 @@ in
       type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
-        Alternative to `clientSecret`: path to a file containing the OAuth Client Secret.
+        Alternative to `clientSecret` and `keyFile`: path to a file containing the OAuth Client Secret.
       '';
       example = "/run/keys/oauth2-client-secret";
     };
@@ -445,7 +445,7 @@ in
         type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
-          Alternative to `secret`: path to a file containing the cookie secret.
+          Alternative to `secret` and `keyFile`: path to a file containing the cookie secret.
         '';
         example = "/run/keys/oauth2-cookie-secret";
       };
