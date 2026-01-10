@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-aio";
-  version = "2.0.0";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
