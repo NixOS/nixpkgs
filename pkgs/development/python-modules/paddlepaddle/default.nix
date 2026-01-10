@@ -39,8 +39,9 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
   systemSources = sources."${stdenv.hostPlatform.system}" or throwSystem;
 
-  supportedCudaVersions = lib.concatStringsSep ", " (builtins.attrNames systemSources.gpu);
-  throwCuda = throw "Unsupported CUDA version: ${cudaVersion}. Supported versions: ${supportedCudaVersions}";
+  supportedCudaVersions = builtins.attrNames systemSources.gpu;
+  supportedCudaVersionsString = lib.concatStringsSep ", " supportedCudaVersions;
+  throwCuda = throw "Unsupported CUDA version: ${cudaVersion}. Supported versions: ${supportedCudaVersionsString}";
   platformSources =
     if cudaSupport then systemSources.gpu.${cudaVersion} or throwCuda else systemSources.cpu;
 
@@ -157,5 +158,6 @@ buildPythonPackage {
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    broken = cudaSupport && (!(builtins.elem cudaVersion supportedCudaVersions));
   };
 }
