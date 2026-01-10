@@ -3098,8 +3098,6 @@ with pkgs;
     inherit (llvmPackages) stdenv;
   };
 
-  namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
-
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
   update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
@@ -3158,8 +3156,6 @@ with pkgs;
     pname = "pcsclite-with-polkit";
     polkitSupport = true;
   };
-
-  pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
