@@ -8,7 +8,6 @@
   rustfmt,
   makeWrapper,
   wasm-bindgen-cli_0_2_106,
-  nix-update-script,
   testers,
   dioxus-cli,
   withTelemetry ? false,
@@ -56,7 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
         package = dioxus-cli;
