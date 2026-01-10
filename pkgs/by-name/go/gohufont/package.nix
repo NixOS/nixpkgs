@@ -6,6 +6,7 @@
   bdf2psf,
   bdftopcf,
   libfaketime,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
     xorg.mkfontscale
     bdf2psf
     bdftopcf
-    xorg.fonttosfnt
+    fonttosfnt
     libfaketime
   ];
 

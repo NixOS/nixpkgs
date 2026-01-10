@@ -5,6 +5,7 @@
   fontforge,
   bdftopcf,
   xorg,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     fontforge
     bdftopcf
     xorg.mkfontscale
-    xorg.fonttosfnt
+    fonttosfnt
   ];
 
   buildPhase = ''

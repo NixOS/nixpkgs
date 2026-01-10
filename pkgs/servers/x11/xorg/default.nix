@@ -35,7 +35,6 @@
   font-screen-cyrillic,
   font-sony-misc,
   font-sun-misc,
-  fonttosfnt,
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
@@ -210,7 +209,6 @@
 self: with self; {
 
   inherit
-    fonttosfnt
     gccmakedep
     iceauth
     ico

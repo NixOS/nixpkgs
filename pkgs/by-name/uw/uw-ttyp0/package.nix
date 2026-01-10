@@ -6,6 +6,7 @@
   bdftopcf,
   bdf2psf,
   xorg,
+  fonttosfnt,
   targetsDat ? null,
   variantsDat ? null,
 }:
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     perl
     bdftopcf
     bdf2psf
-    xorg.fonttosfnt
+    fonttosfnt
     xorg.mkfontdir
   ];
 

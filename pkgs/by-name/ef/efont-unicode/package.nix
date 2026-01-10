@@ -5,6 +5,7 @@
   libfaketime,
   xorg,
   bdftopcf,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     libfaketime
     bdftopcf
-  ] ++ (with xorg; [
     fonttosfnt
-    mkfontscale
-  ]);
+    xorg.mkfontscale
+  ];
 
   buildPhase = ''
     runHook preBuild

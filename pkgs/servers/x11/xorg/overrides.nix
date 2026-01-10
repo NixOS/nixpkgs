@@ -109,6 +109,7 @@ self: super:
   editres = lib.warnOnInstantiate "editres has been removed from xorg namespace, use pkgs.editres instead" pkgs.editres; # added 2026-01-10
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
   libXtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
+  fonttosfnt = lib.warnOnInstantiate "fonttosfnt has been removed from xorg namespace, use pkgs.fonttosfnt instead" pkgs.fonttosfnt; # added 2026-01-10
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
   xf86videoglint = throw ''
     The Xorg GLINT/Permedia video driver has been broken since xorg 21.

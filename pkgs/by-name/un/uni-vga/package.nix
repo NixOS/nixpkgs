@@ -7,6 +7,7 @@
   bdftopcf,
   libfaketime,
   xorg,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation {
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     bdftopcf
     libfaketime
-    xorg.fonttosfnt
+    fonttosfnt
     xorg.mkfontscale
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
