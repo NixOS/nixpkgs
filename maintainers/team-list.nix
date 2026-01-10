@@ -142,7 +142,6 @@ with lib.maintainers;
   };
 
   cloudposse = {
-    members = [ dudymas ];
     scope = "Maintain atmos and applications made by the Cloud Posse team.";
     shortName = "CloudPosse";
     enableFeatureFreezePing = true;

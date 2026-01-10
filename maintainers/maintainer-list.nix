@@ -7188,12 +7188,6 @@
     name = "Louis Orleans";
     keys = [ { fingerprint = "llSOkL8Tn5+LOmWa4PDci+dQXZIRy11NSumDiFzNkAM"; } ];
   };
-  dudymas = {
-    email = "jeremy.white@cloudposse.com";
-    github = "dudymas";
-    githubId = 928448;
-    name = "Jeremy White";
-  };
   dukc = {
     email = "ajieskola@gmail.com";
     github = "dukc";
