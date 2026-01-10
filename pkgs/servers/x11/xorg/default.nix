@@ -136,6 +136,7 @@
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-qxl,
+  xf86-video-r128,
   xf86-video-s3virge,
   xf86-video-v4l,
   xfd,
@@ -352,6 +353,7 @@ self: with self; {
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videoqxl = xf86-video-qxl;
+  xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
@@ -1207,46 +1209,6 @@ self: with self; {
         libXext
         xorgserver
         libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videor128 = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-r128";
-      version = "6.13.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-r128-6.13.0.tar.xz";
-        sha256 = "0igpfgls5nx4sz8a7yppr42qi37prqmxsy08zqbxbv81q9dfs2zj";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        libpciaccess
-        xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
