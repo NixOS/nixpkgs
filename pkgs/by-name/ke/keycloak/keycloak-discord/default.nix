@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "wadahiro";
     repo = "keycloak-discord";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BA7x28k/aMI3VPQmEgNhKD9N34DdYqadAD/m4cxLSYg=";
   };
 

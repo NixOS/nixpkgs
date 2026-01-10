@@ -10,7 +10,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "justin-stephenson";
     repo = "scim-keycloak-user-storage-spi";
-    rev = version;
+    tag = version;
     hash = "sha256-xEnYblL5lxs1pebxGy4pXiZrMJT0KwIZqB4dztRyz/A=";
   };
 
