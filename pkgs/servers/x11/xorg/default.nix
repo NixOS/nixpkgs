@@ -165,6 +165,7 @@
   xf86-video-sunffb,
   xf86-video-sunleo,
   xf86-video-tdfx,
+  xf86-video-trident,
   xf86-video-v4l,
   xf86-video-vbox,
   xf86-video-vesa,
@@ -419,6 +420,7 @@ self: with self; {
   xf86videosunffb = xf86-video-sunffb;
   xf86videosunleo = xf86-video-sunleo;
   xf86videotdfx = xf86-video-tdfx;
+  xf86videotrident = xf86-video-trident;
   xf86videov4l = xf86-video-v4l;
   xf86videovboxvideo = xf86-video-vbox;
   xf86videovesa = xf86-video-vesa;
@@ -467,44 +469,6 @@ self: with self; {
         libXext
         xorgserver
         libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videotrident = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-trident";
-      version = "1.4.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-trident-1.4.0.tar.xz";
-        sha256 = "16qqn1brz50mwcy42zi1wsw9af56qadsaaiwm9hn1p6plyf22xkz";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

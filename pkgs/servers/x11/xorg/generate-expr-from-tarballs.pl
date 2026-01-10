@@ -497,6 +497,7 @@ print OUT <<EOF;
   xf86-video-sunffb,
   xf86-video-sunleo,
   xf86-video-tdfx,
+  xf86-video-trident,
   xf86-video-v4l,
   xf86-video-vbox,
   xf86-video-vesa,
@@ -751,6 +752,7 @@ self: with self; {
   xf86videosunffb = xf86-video-sunffb;
   xf86videosunleo = xf86-video-sunleo;
   xf86videotdfx = xf86-video-tdfx;
+  xf86videotrident = xf86-video-trident;
   xf86videov4l = xf86-video-v4l;
   xf86videovboxvideo = xf86-video-vbox;
   xf86videovesa = xf86-video-vesa;
