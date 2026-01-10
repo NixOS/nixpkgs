@@ -24,7 +24,8 @@ maven.buildMavenPackage rec {
         "x86_64-linux" = "sha256-oHMkzXHR4mETH6VsxhFuap3AcjvTXytNkKlLY/mzT3g=";
       };
     in
-    mvnHashes.${stdenv.hostPlatform.system};
+    mvnHashes.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   installPhase = ''
     runHook preInstall
