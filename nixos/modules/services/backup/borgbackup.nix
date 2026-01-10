@@ -971,7 +971,7 @@ in
       environment.systemPackages = [
         config.services.borgbackup.package
       ]
-      ++ (lib.flatten (lib.mapAttrsToList mkBorgWrapper jobs));
+      ++ lib.flatten (lib.mapAttrsToList mkBorgWrapper jobs);
     }
   );
 }
