@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hyper-connections";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "hyper-connections";
     tag = version;
-    hash = "sha256-GRP4ODCs/MMx9S/6LYFMpIoZNJinkcMeY73x4aFacsg=";
+    hash = "sha256-nMNAuHOLOgrWNrMFko5ARBOyp9TyUhJfldPihV012K4=";
   };
 
   build-system = [ hatchling ];
