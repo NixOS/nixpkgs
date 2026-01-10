@@ -57,7 +57,6 @@ buildGoModule rec {
     homepage = "https://github.com/ekristen/aws-nuke";
     changelog = "https://github.com/ekristen/aws-nuke/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "aws-nuke";
     # fork/exec exe/mockgen: exec format error
     # resources/autoscaling_mock_test.go:1: running "../mocks/generate_mocks.sh": exit status 1

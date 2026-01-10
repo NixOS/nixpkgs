@@ -9853,12 +9853,6 @@
     githubId = 10908649;
     name = "Graham Bennett";
   };
-  grahamc = {
-    email = "graham@grahamc.com";
-    github = "grahamc";
-    githubId = 76716;
-    name = "Graham Christensen";
-  };
   grahamnorris = {
     email = "oss@grahamjnorris.com";
     github = "grahamnorris";
