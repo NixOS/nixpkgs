@@ -152,6 +152,7 @@
   xf86-video-mga,
   xf86-video-neomagic,
   xf86-video-nouveau,
+  xf86-video-nv,
   xf86-video-qxl,
   xf86-video-r128,
   xf86-video-s3virge,
@@ -402,6 +403,7 @@ self: with self; {
   xf86videomga = xf86-video-mga;
   xf86videoneomagic = xf86-video-neomagic;
   xf86videonouveau = xf86-video-nouveau;
+  xf86videonv = xf86-video-nv;
   xf86videoqxl = xf86-video-qxl;
   xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;
@@ -419,44 +421,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videonv = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-nv";
-      version = "2.1.23";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-nv-2.1.23.tar.xz";
-        sha256 = "1jlap6xjn4pfwg9ab8fxm5mwf4dqfywp70bgc0071m7k66jbv3f6";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoomap = callPackage (
