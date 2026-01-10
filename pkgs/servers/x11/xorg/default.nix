@@ -137,6 +137,7 @@
   xf86-video-nouveau,
   xf86-video-s3virge,
   xf86-video-sis,
+  xf86-video-sisusb,
   xf86-video-v4l,
   xfd,
   xfontsel,
@@ -353,6 +354,7 @@ self: with self; {
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
   xf86videosis = xf86-video-sis;
+  xf86videosisusb = xf86-video-sisusb;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
@@ -1356,44 +1358,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.10.tar.xz";
         sha256 = "1h4g2mqxshaxii416ldw0aqy6cxnsbnzayfin51xm2526dw9q18n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videosisusb = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-sisusb";
-      version = "0.9.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-sisusb-0.9.7.tar.bz2";
-        sha256 = "090lfs3hjz3cjd016v5dybmcsigj6ffvjdhdsqv13k90p4b08h7l";
       };
       hardeningDisable = [
         "bindnow"

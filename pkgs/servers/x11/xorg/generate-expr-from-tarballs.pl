@@ -469,6 +469,7 @@ print OUT <<EOF;
   xf86-video-nouveau,
   xf86-video-s3virge,
   xf86-video-sis,
+  xf86-video-sisusb,
   xf86-video-v4l,
   xfd,
   xfontsel,
@@ -685,6 +686,7 @@ self: with self; {
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
   xf86videosis = xf86-video-sis;
+  xf86videosisusb = xf86-video-sisusb;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
