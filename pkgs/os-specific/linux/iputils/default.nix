@@ -12,6 +12,7 @@
   libidn2,
   iproute2,
   apparmorRulesFromClosure,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     }
     EOF
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/iputils/iputils";
