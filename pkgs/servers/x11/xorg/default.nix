@@ -1,7 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  bitmap,
   editres,
   font-adobe-100dpi,
   font-adobe-75dpi,
@@ -212,7 +211,6 @@
 self: with self; {
 
   inherit
-    bitmap
     editres
     fonttosfnt
     gccmakedep

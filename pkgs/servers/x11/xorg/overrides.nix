@@ -105,6 +105,7 @@ self: super:
   # keep-sorted start
   appres = lib.warnOnInstantiate "appres has been removed from xorg namespace, use pkgs.appres instead" pkgs.appres; # added 2026-01-10
   bdftopcf = lib.warnOnInstantiate "bdftopcf has been removed from xorg namespace, use pkgs.bdftopcf instead" pkgs.bdftopcf; # added 2026-01-10
+  bitmap = lib.warnOnInstantiate "bitmap has been removed from xorg namespace, use pkgs.bitmap instead" pkgs.bitmap; # added 2026-01-10
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
   libXtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
