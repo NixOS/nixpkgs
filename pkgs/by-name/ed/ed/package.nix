@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "ed";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.unix;
   };
 })
