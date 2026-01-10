@@ -27,6 +27,7 @@ let
     maintainers = with lib.maintainers; [
       jcouyang
       MoritzBoehme
+      nivalux
     ];
     platforms = [
       "x86_64-linux"
