@@ -86,9 +86,15 @@ let
     let
       selectedGrammars = f (tree-sitter.builtGrammars // builtGrammars);
 
-      grammarPlugins = map grammarToPlugin selectedGrammars;
+      selectedGrammarPlugins = map grammarToPlugin selectedGrammars;
+      grammarDependencies = lib.pipe selectedGrammars [
+        (map (grammar: grammar.passthru.requires or [ ]))
+        lib.flatten
+        lib.uniqueStrings
+        (map (name: grammarPlugins.${name} or queries.${name}))
+      ];
 
-      queryPlugins = lib.pipe selectedGrammars [
+      queryPlugins = lib.pipe (selectedGrammars ++ grammarDependencies) [
         (map (g: g.passthru.associatedQuery or null))
         (lib.filter (q: q != null))
       ];
@@ -97,7 +103,7 @@ let
       passthru.dependencies = [
         (symlinkJoin {
           name = "nvim-treesitter-grammars";
-          paths = grammarPlugins ++ queryPlugins;
+          paths = selectedGrammarPlugins ++ grammarDependencies ++ queryPlugins;
         })
       ];
     };

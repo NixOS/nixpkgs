@@ -52,6 +52,10 @@
         rev = "3bd2036e710f609ea08fcfca5a1eb1169ecc114f";
         hash = "sha256-VdfPZ39AEjvl+9r/LZNRGNIQsiTB9S065AnUc4MeohU=";
       };
+      passthru.requires = [
+        "html"
+        "html_tags"
+      ];
       meta.homepage = "https://github.com/dlvandenberg/tree-sitter-angular";
     };
     apex = buildGrammar {
@@ -75,6 +79,9 @@
         rev = "53eb391da4c6c5857f8defa2c583c46c2594f565";
         hash = "sha256-qQVUWCOZ4y9FTsIf0FI3vmYBhLYz4hcqRTo+5C2MYvc=";
       };
+      passthru.requires = [
+        "cpp"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-arduino";
     };
     asm = buildGrammar {
@@ -97,6 +104,10 @@
         rev = "213f6e6973d9b456c6e50e86f19f66877e7ef0ee";
         hash = "sha256-TpXs3jbYn39EHxTdtSfR7wLA1L8v9uyK/ATPp5v4WqE=";
       };
+      passthru.requires = [
+        "html"
+        "html_tags"
+      ];
       meta.homepage = "https://github.com/virchau13/tree-sitter-astro";
     };
     authzed = buildGrammar {
@@ -405,6 +416,9 @@
         rev = "12bd6f7e96080d2e70ec51d4068f2f66120dde35";
         hash = "sha256-vmXTv6Idf0Le5ZVa8Rc1DVefqzUxkGeLGsYcSDNBpQU=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-cpp";
     };
     css = buildGrammar {
@@ -428,6 +442,9 @@
         hash = "sha256-9mW0kT4av/ULFqLXdMuyLrMPtQxrIOKY60GQ4QDB33o=";
       };
       location = "csv";
+      passthru.requires = [
+        "tsv"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-csv";
     };
     cuda = buildGrammar {
@@ -439,6 +456,9 @@
         rev = "48b066f334f4cf2174e05a50218ce2ed98b6fd01";
         hash = "sha256-sX9AOe8dJJsRbzGq20qakWBnLiwYQ90mQspAuYxQzoQ=";
       };
+      passthru.requires = [
+        "cpp"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-cuda";
     };
     cue = buildGrammar {
@@ -882,6 +902,9 @@
         rev = "69086d7627c03e1f4baf766bcef14c60d9e92331";
         hash = "sha256-U0P9QoOZST1h6XI83CI0/6/CDTvqkv1Yiq62h6YdHpI=";
       };
+      passthru.requires = [
+        "gap"
+      ];
       meta.homepage = "https://github.com/gap-system/tree-sitter-gaptst";
     };
     gdscript = buildGrammar {
@@ -992,6 +1015,9 @@
         rev = "5cc865a2a0a77cbfaf5062c8fcf2a9919bd54f87";
         hash = "sha256-4MSBaGdX5lvhvz2LyQb+NuQY9Vc5CFL0C6S3sO3Tz2U=";
       };
+      passthru.requires = [
+        "ecma"
+      ];
       meta.homepage = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-javascript";
     };
     glimmer_typescript = buildGrammar {
@@ -1003,6 +1029,9 @@
         rev = "12d98944c1d5077b957cbdb90d663a7c4d50118c";
         hash = "sha256-3cJI6vcbU62kUIhphprNeAl9RyY9TThrzVeArdLfxnI=";
       };
+      passthru.requires = [
+        "typescript"
+      ];
       meta.homepage = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-typescript";
     };
     glsl = buildGrammar {
@@ -1014,6 +1043,9 @@
         rev = "24a6c8ef698e4480fecf8340d771fbcb5de8fbb4";
         hash = "sha256-TjF79WH3bX4nueYr8CbPptkNb2lNkHQNB0VZoMB35Nk=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-glsl";
     };
     gn = buildGrammar {
@@ -1268,6 +1300,9 @@
         rev = "02fa3b79b3ff9a296066da6277adfc3f26cbc9e0";
         hash = "sha256-NsTf3DR3gHVMYZDmTNvThB5bJcDwTcJ1+3eJhvsiDn8=";
       };
+      passthru.requires = [
+        "json"
+      ];
       meta.homepage = "https://github.com/winston0410/tree-sitter-hjson";
     };
     hlsl = buildGrammar {
@@ -1279,6 +1314,9 @@
         rev = "bab9111922d53d43668fabb61869bec51bbcb915";
         hash = "sha256-BWjgXtMN6y/0ahD44Cm8a+MxxVMpCNhkf33V/vsCBTU=";
       };
+      passthru.requires = [
+        "cpp"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-hlsl";
     };
     hlsplaylist = buildGrammar {
@@ -1323,6 +1361,9 @@
         rev = "73a3947324f6efddf9e17c0ea58d454843590cc0";
         hash = "sha256-WT8ZHU4wDNovIAWbHNSvjx6zmaTn8XH3IobsckIVXxg=";
       };
+      passthru.requires = [
+        "html_tags"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-html";
     };
     htmldjango = buildGrammar {
@@ -1422,6 +1463,9 @@
         rev = "9b2f9aec2106b94b4e099fe75e73ebd8ae707c04";
         hash = "sha256-vxe+g7o0gXgB4GjhjkxqLqcLL2+8wqMB3tm1xQFSitI=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-ispc";
     };
     janet_simple = buildGrammar {
@@ -1466,6 +1510,10 @@
         rev = "58404d8cf191d69f2674a8fd507bd5776f46cb11";
         hash = "sha256-+fbTNX7qz6Ew1NrXF49wQh3RVl2ZQ3R7YXMkclUoNT8=";
       };
+      passthru.requires = [
+        "ecma"
+        "jsx"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-javascript";
     };
     jinja = buildGrammar {
@@ -1478,6 +1526,9 @@
         hash = "sha256-a4/+tsouuYkkVEStpOEUiIos9H4Hw7NhJOFaasylWUk=";
       };
       location = "tree-sitter-jinja";
+      passthru.requires = [
+        "jinja_inline"
+      ];
       meta.homepage = "https://github.com/cathaysia/tree-sitter-jinja";
     };
     jinja_inline = buildGrammar {
@@ -1788,6 +1839,9 @@
         rev = "a8914d6c1fc5131f8e1c13f769fa704c9f5eb02f";
         hash = "sha256-5qbZA2mxTvrsfUrpgD+4y3oeJsifA91c/hfcVwQBRgI=";
       };
+      passthru.requires = [
+        "lua"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-luau";
     };
     m68k = buildGrammar {
@@ -1822,6 +1876,9 @@
         hash = "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek=";
       };
       location = "tree-sitter-markdown";
+      passthru.requires = [
+        "markdown_inline"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
     };
     markdown_inline = buildGrammar {
@@ -1945,6 +2002,9 @@
         rev = "4ad352773688deb84a95eeaa9872acda5b466439";
         hash = "sha256-dinMmbD36o1QkcLk2mgycgHZ9sW5Mg6lfnxssynaj58=";
       };
+      passthru.requires = [
+        "nim_format_string"
+      ];
       meta.homepage = "https://github.com/alaviss/tree-sitter-nim";
     };
     nim_format_string = buildGrammar {
@@ -2011,6 +2071,9 @@
         rev = "181a81b8f23a2d593e7ab4259981f50122909fda";
         hash = "sha256-7W8ozhQJL+f+tQYz61EZexk9NkMu1pCAP5IIy1m3qak=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-objc";
     };
     objdump = buildGrammar {
@@ -2046,6 +2109,9 @@
         hash = "sha256-8u1jtUFMjykVG6aCDzqcb4vFCY401CZ2o+JPGMadg6o=";
       };
       location = "grammars/interface";
+      passthru.requires = [
+        "ocaml"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-ocaml";
     };
     ocamllex = buildGrammar {
@@ -2125,6 +2191,9 @@
         hash = "sha256-XEKlsqC7HJ3mShmcwmfpezNP9DHE8f73f7/ru4MuxEo=";
       };
       location = "php";
+      passthru.requires = [
+        "php_only"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-php";
     };
     php_only = buildGrammar {
@@ -2259,6 +2328,9 @@
         hash = "sha256-SEqqmkfV/wsr1ObcBN5My29RY9TWfxnQlsnEEIZyR18=";
       };
       location = "grammars/problog";
+      passthru.requires = [
+        "prolog"
+      ];
       meta.homepage = "https://github.com/foxyseta/tree-sitter-prolog";
     };
     prolog = buildGrammar {
@@ -2327,6 +2399,9 @@
         hash = "sha256-9mW0kT4av/ULFqLXdMuyLrMPtQxrIOKY60GQ4QDB33o=";
       };
       location = "psv";
+      passthru.requires = [
+        "tsv"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-csv";
     };
     pug = buildGrammar {
@@ -2415,6 +2490,9 @@
         rev = "0bec4359a7eb2f6c9220cd57372d87d236f66d59";
         hash = "sha256-tV4lipey+OAQwygRFp9lQAzgCNiZzSu7p3Mr6CCBH1g=";
       };
+      passthru.requires = [
+        "ecma"
+      ];
       meta.homepage = "https://github.com/yuja/tree-sitter-qmljs";
     };
     query = buildGrammar {
@@ -2712,6 +2790,9 @@
         rev = "c478c6868648eff49eb04a4df90d703dc45b312a";
         hash = "sha256-BFtMT6eccBWUyq6b8UXRAbB1R1XD3CrrFf1DM3aUI5c=";
       };
+      passthru.requires = [
+        "css"
+      ];
       meta.homepage = "https://github.com/serenadeai/tree-sitter-scss";
     };
     sflog = buildGrammar {
@@ -2980,6 +3061,9 @@
         rev = "ae5199db47757f785e43a14b332118a5474de1a2";
         hash = "sha256-cH9h7i6MImw7KlcuVQ6XVKNjd9dFjo93J1JdTWmEpV4=";
       };
+      passthru.requires = [
+        "html_tags"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-svelte";
     };
     sway = buildGrammar {
@@ -3126,6 +3210,9 @@
         hash = "sha256-Kq0KtkF6xtZcN2s8KzYGyguJH2iOTlA2WRytZ+KGTUE=";
       };
       location = "dialects/terraform";
+      passthru.requires = [
+        "hcl"
+      ];
       meta.homepage = "https://github.com/MichaHoffmann/tree-sitter-hcl";
     };
     textproto = buildGrammar {
@@ -3227,6 +3314,11 @@
         hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
       };
       location = "tsx";
+      passthru.requires = [
+        "ecma"
+        "jsx"
+        "typescript"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-typescript";
     };
     turtle = buildGrammar {
@@ -3261,6 +3353,9 @@
         hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
       };
       location = "typescript";
+      passthru.requires = [
+        "ecma"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-typescript";
     };
     typespec = buildGrammar {
@@ -3450,6 +3545,9 @@
         rev = "22bdfa6c9fc0f5ffa44c6e938ec46869ac8a99ff";
         hash = "sha256-LnmUtJJpBIZPTJqrQQ7WI8V44hPw3yxR+j2jR0pHIdY=";
       };
+      passthru.requires = [
+        "html_tags"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-vue";
     };
     wgsl = buildGrammar {
@@ -3528,6 +3626,9 @@
         hash = "sha256-0ztP30xWqVWy5upWPp0JwhpQphOJufzlcYn+KvLejVs=";
       };
       location = "xml";
+      passthru.requires = [
+        "dtd"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-xml";
     };
     xresources = buildGrammar {

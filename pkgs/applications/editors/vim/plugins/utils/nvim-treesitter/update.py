@@ -46,9 +46,17 @@ def generate_grammar(lang, parser_info):
         generated += f"""
       location = "{location}";"""
 
-    if install_info.get("generate", False):
+    if "generate" in install_info:
         generated += """
       generate = true;"""
+
+    if "requires" in parser_info:
+        generated += """
+      passthru.requires = ["""
+        for grammar in parser_info["requires"]:
+            generated += f'\n        "{grammar}"'
+        generated += """
+      ];"""
 
     generated += f"""
       meta.homepage = "{url}";
