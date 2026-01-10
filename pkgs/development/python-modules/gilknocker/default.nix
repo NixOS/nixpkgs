@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gilknocker";
-  version = "0.4.2";
+  version = "0.4.2-post3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "gilknocker";
     tag = "v${version}";
-    hash = "sha256-RFLThZRxAXqF/Yzjpmafn2dVavOGJrM9U258FfLej/I=";
+    hash = "sha256-GSybOILOP0lwxUPB9a8whQvEPS7OdeHcm0pxky7gwkg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
