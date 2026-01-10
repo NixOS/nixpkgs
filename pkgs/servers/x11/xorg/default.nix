@@ -38,7 +38,6 @@
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
-  iceauth,
   ico,
   imake,
   libapplewm,
@@ -207,7 +206,6 @@
 self: with self; {
 
   inherit
-    iceauth
     ico
     imake
     libdmx

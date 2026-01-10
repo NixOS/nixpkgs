@@ -111,6 +111,7 @@ self: super:
   libXtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
   fonttosfnt = lib.warnOnInstantiate "fonttosfnt has been removed from xorg namespace, use pkgs.fonttosfnt instead" pkgs.fonttosfnt; # added 2026-01-10
   gccmakedep = lib.warnOnInstantiate "gccmakedep has been removed from xorg namespace, use pkgs.gccmakedep instead" pkgs.gccmakedep; # added 2026-01-10
+  iceauth = lib.warnOnInstantiate "iceauth has been removed from xorg namespace, use pkgs.iceauth instead" pkgs.iceauth; # added 2026-01-10
   luit = lib.warnOnInstantiate "luit has been removed from xorg namespace, use pkgs.luit instead" pkgs.luit; # added 2026-01-10
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
   xf86videoglint = throw ''
