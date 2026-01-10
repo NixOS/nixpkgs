@@ -1,13 +1,11 @@
 {
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  i3ipc,
   lib,
-  poetry-core,
   writeScript,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kitti3";
   version = "0.5.1-unstable-2021-09-10";
   pyproject = true;
@@ -25,12 +23,12 @@ buildPythonApplication rec {
     ./kitti3-fix-build-system.patch
   ];
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    python3Packages.poetry-core
   ];
 
-  propagatedBuildInputs = [
-    i3ipc
+  dependencies = [
+    python3Packages.i3ipc
   ];
 
   passthru.updateScript = writeScript "update-kitti3" ''
@@ -38,7 +36,7 @@ buildPythonApplication rec {
     #!nix-shell -i bash -p git common-updater-scripts perl tomlq
     tmpdir="$(mktemp -d)"
     trap "rm -rf $tmpdir" EXIT
-    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+    git clone --depth=1 "${finalAttrs.src.gitRepoUrl}" "$tmpdir"
     pushd "$tmpdir"
     newVersionNumber=$(perl -ne 'print if s/version = "([\d.]+)"/$1/' pyproject.toml)
     newRevision=$(git show -s --pretty='format:%H')
@@ -59,4 +57,4 @@ buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
