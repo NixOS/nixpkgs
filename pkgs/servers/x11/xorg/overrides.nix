@@ -113,6 +113,7 @@ self: super:
   gccmakedep = lib.warnOnInstantiate "gccmakedep has been removed from xorg namespace, use pkgs.gccmakedep instead" pkgs.gccmakedep; # added 2026-01-10
   iceauth = lib.warnOnInstantiate "iceauth has been removed from xorg namespace, use pkgs.iceauth instead" pkgs.iceauth; # added 2026-01-10
   ico = lib.warnOnInstantiate "ico has been removed from xorg namespace, use pkgs.ico instead" pkgs.ico; # added 2026-01-10
+  imake = lib.warnOnInstantiate "imake has been removed from xorg namespace, use pkgs.imake instead" pkgs.imake; # added 2026-01-10
   luit = lib.warnOnInstantiate "luit has been removed from xorg namespace, use pkgs.luit instead" pkgs.luit; # added 2026-01-10
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
   xf86videoglint = throw ''

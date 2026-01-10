@@ -16,7 +16,7 @@ cat $(PRINT_PATH=1 nix-prefetch-url $url | tail -n 1) \
 
 ## Individual Tarballs {#individual-tarballs}
 
-The upstream release process for [X11R7.8](https://x.org/wiki/Releases/7.8/) does not include a planned katamari. Instead, each component of X.org is released as its own tarball. We maintain `pkgs/servers/x11/xorg/tarballs.list` as a list of tarballs for each individual package. This list includes X.org core libraries and protocol descriptions, extra newer X11 interface libraries, like `xorg.libxcb`, and classic utilities which are largely unused but still available if needed, like `xorg.imake`.
+The upstream release process for [X11R7.8](https://x.org/wiki/Releases/7.8/) does not include a planned katamari. Instead, each component of X.org is released as its own tarball. We maintain `pkgs/servers/x11/xorg/tarballs.list` as a list of tarballs for each individual package. This list includes X.org core libraries and protocol descriptions, extra newer X11 interface libraries, like `xorg.libxcb`, and classic utilities which are largely unused but still available if needed, like `imake`.
 
 ## Generating Nix Expressions {#generating-nix-expressions}
 

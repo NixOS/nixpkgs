@@ -13,6 +13,7 @@
   pkg-config,
   which,
   xorg,
+  imake,
   libtirpc,
 }:
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     gccmakedep
-    xorg.imake
+    imake
   ];
   buildInputs = [
     libjpeg_turbo

@@ -4,6 +4,7 @@
   fetchsvn,
   xorg,
   gccmakedep,
+  imake,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    xorg.imake
+    imake
     gccmakedep
   ];
   buildInputs = [ xorg.libX11 ];
