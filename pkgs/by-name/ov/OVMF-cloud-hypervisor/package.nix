@@ -140,8 +140,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     description = "Sample UEFI firmware for Cloud Hypervisor and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
-    teams = with lib.teams; [
-      ctrl-os
+    maintainers = with lib.maintainers; [
+      messemar
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };

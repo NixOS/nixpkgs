@@ -177,18 +177,6 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
-  ctrl-os = {
-    # Existing members may approve additions.
-    members = [
-      blitz
-      messemar
-      flyfloh
-    ];
-
-    scope = "Team of Cyberus Technology employees that maintain packages relevant to CTRL-OS";
-    shortName = "CTRL-OS";
-  };
-
   cuda = {
     github = "cuda-maintainers";
   };
