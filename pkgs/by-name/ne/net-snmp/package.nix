@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   file,
   openssl,
   perl,
@@ -23,31 +22,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "net-snmp";
-  version = "5.9.4";
+  version = "5.9.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-i03gE5HnTjxwFL60OWGi1tb6A6zDQoC5WF9JMHRbBUQ=";
+    hash = "sha256-FnB3GfgzGEpLcoNdrDWa4YgSOwa15CgXwAeQ19wThL8=";
   };
-
-  patches =
-    let
-      fetchAlpinePatch =
-        name: sha256:
-        fetchurl {
-          url = "https://git.alpinelinux.org/aports/plain/main/net-snmp/${name}?id=ebb21045c31f4d5993238bcdb654f21d8faf8123";
-          inherit name sha256;
-        };
-    in
-    [
-      (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
-      (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-      (fetchpatch {
-        name = "configure-musl.patch";
-        url = "https://github.com/net-snmp/net-snmp/commit/a62169f1fa358be8f330ea8519ade0610fac525b.patch";
-        hash = "sha256-+vWH095fFL3wE6XLsTaPXgMDya0LRWdlL6urD5AIBUs=";
-      })
-    ];
 
   outputs = [
     "bin"
@@ -69,7 +49,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
-    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${net-tools}/bin/netstat"
+    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace-fail "/bin/netstat" "${net-tools}/bin/netstat"
   '';
 
   postConfigure = ''
@@ -105,5 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.net-snmp.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    changelog = "https://github.com/net-snmp/net-snmp/blob/v${version}/NEWS";
   };
 }
