@@ -10,7 +10,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "Herdo";
     repo = "keycloak-remember-me-authenticator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zIFWbv02wbf3D6Weyc8N4YM+fFFxnve0ti5yS52KN3c=";
   };
 
