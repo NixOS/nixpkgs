@@ -398,7 +398,6 @@ with lib.maintainers;
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       lpostula
-      NthTensor
     ];
     scope = "Group registration for packages maintained by Foresight Spatial Labs.";
     shortName = "Foresight Spatial Labs employees";
