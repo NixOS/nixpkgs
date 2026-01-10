@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libpciaccess,
   xkeyboard_config,
   zlib,
   libjpeg_turbo,
@@ -134,8 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
-    [
+    [ libpciaccess ]
+    ++ (with xorg; [
       nettle
       pam
       perl
@@ -151,11 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
       libXft
       libxkbfile
       libXfont2
-      libpciaccess
       libGLU
       libXrandr
       libXdamage
-    ]
+    ])
     ++ xorg.xorgserver.buildInputs
   );
 

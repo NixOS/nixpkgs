@@ -41,7 +41,6 @@
   libapplewm,
   libfs,
   libice,
-  libpciaccess,
   libpthread-stubs,
   libsm,
   libwindowswm,
@@ -202,7 +201,6 @@
 self: with self; {
 
   inherit
-    libpciaccess
     libxcb
     libxcvt
     libxkbfile

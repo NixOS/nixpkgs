@@ -21,6 +21,7 @@
   pkgsBuildBuild,
 
   xorg,
+  libpciaccess,
   libXcursor,
   libXScrnSaver,
   libXrandr,
@@ -381,7 +382,7 @@ qtModule (
       libXScrnSaver
       libXcursor
       libXrandr
-      xorg.libpciaccess
+      libpciaccess
       libXtst
       xorg.libXcomposite
       xorg.libXdamage
