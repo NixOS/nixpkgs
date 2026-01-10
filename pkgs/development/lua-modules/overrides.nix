@@ -89,10 +89,6 @@ in
     nativeBuildInputs = old.nativeBuildInputs ++ [
       installShellFiles
     ];
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace-fail "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0-1',"
-    '';
     postInstall = ''
       installShellCompletion --cmd busted \
         --zsh completions/zsh/_busted \

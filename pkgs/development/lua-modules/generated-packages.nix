@@ -215,17 +215,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "busted";
-      version = "2.2.0-1";
+      version = "2.3.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/busted-2.2.0-1.rockspec";
-          sha256 = "0h4zk4lcm40wg3l0vgjn6lsyh9yayhljx65a0pz5n99dxal8lgnf";
+          url = "mirror://luarocks/busted-2.3.0-1.rockspec";
+          sha256 = "1df41k03r0fy8l62dqywqjlxwmjhifk2krqq675w1cra28z8hb14";
         }).outPath;
       src = fetchFromGitHub {
         owner = "lunarmodules";
         repo = "busted";
-        rev = "v2.2.0";
-        hash = "sha256-5LxPqmoUwR3XaIToKUgap0L/sNS9uOV080MIenyLnl8=";
+        rev = "v2.3.0";
+        hash = "sha256-ZSfnbsDiaIo/abVpwb/LV5Ktp5wFSZQNO0OdbnjqVSs=";
       };
 
       disabled = luaOlder "5.1";
@@ -880,8 +880,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "lewis6991";
         repo = "gitsigns.nvim";
-        rev = "30e5c516f03e0a0a4f71300c52abad481ee90337";
-        hash = "sha256-Vs+SQx5hxYcWe6FADa4BltMM1KS9TP6y8RImfirL9no=";
+        rev = "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e";
+        hash = "sha256-L89x9n2OKCyUuWaNXPkuNGBEU9EBX+9zRlzS1Kfw428=";
       };
 
       disabled = lua.luaversion != "5.1";
@@ -3010,22 +3010,22 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luarocks-build-treesitter-parser";
-      version = "6.0.1-1";
+      version = "6.0.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luarocks-build-treesitter-parser-6.0.1-1.rockspec";
-          sha256 = "1sck7xjk0mpavq54n0qv0j08345mg5n6rhmi1p5kk77566kl8644";
+          url = "mirror://luarocks/luarocks-build-treesitter-parser-6.0.2-1.rockspec";
+          sha256 = "0lwz15983gp29smykm3z6blhfd3ah3yi96j0g6di74nkz2kmfqk7";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser/archive/v6.0.1.zip";
-        sha256 = "1lagh03s6h7069p03g82r87xddpifhg5ifhahzrcmyafm564rwvm";
+        url = "https://github.com/lumen-oss/luarocks-build-treesitter-parser/archive/v6.0.2.zip";
+        sha256 = "17877av310icqrv961ffhq852xx90wnpcxvqnylm476pndi1bf0f";
       };
 
       disabled = luaOlder "5.1";
       propagatedBuildInputs = [ luafilesystem ];
 
       meta = {
-        homepage = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser";
+        homepage = "https://github.com/lumen-oss/luarocks-build-treesitter-parser";
         description = "A luarocks build backend for tree-sitter parsers.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
@@ -3043,22 +3043,22 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luarocks-build-treesitter-parser-cpp";
-      version = "2.0.5-1";
+      version = "2.0.6-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-2.0.5-1.rockspec";
-          sha256 = "05hx146gmrn8c6ndgnqq521h66cd4lmpjkclvdlfpp5inck22cdd";
+          url = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-2.0.6-1.rockspec";
+          sha256 = "10js4km023lc3876jr1j6gyzyni8v3dizzmc352sxhz9gz9kinia";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp/archive/v2.0.5.zip";
-        sha256 = "12q6kfnrw9cy0r8l3h79fnvfq5faapxgjmhf1xksb5kf077l0g7j";
+        url = "https://github.com/lumen-oss/luarocks-build-treesitter-parser-cpp/archive/v2.0.6.zip";
+        sha256 = "1kr56cvxryxxkwvd69ywplw80hyaasyzmx842zzsncac3191vwpl";
       };
 
       disabled = luaOlder "5.1";
       propagatedBuildInputs = [ luafilesystem ];
 
       meta = {
-        homepage = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp";
+        homepage = "https://github.com/lumen-oss/luarocks-build-treesitter-parser-cpp";
         description = "A luarocks build backend for tree-sitter parsers written in C++.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
@@ -3878,8 +3878,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "moonscript";
-        rev = "b9768c893bd25c514c6404767fadec29dfd01060";
-        hash = "sha256-wU3zfDS5Df/4VyNPAjKfCs/dK3vm3ln/rCn4i4jCvDw=";
+        rev = "74e1e55cef028f7a1ef5dc80c116cea4cec45545";
+        hash = "sha256-iUQO3u16eB8ZhnTKwFt4gi8Y/U36ApQHTu1gWCALIb0=";
       };
 
       disabled = luaOlder "5.1";
