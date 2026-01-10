@@ -93,15 +93,6 @@ self: super:
     ];
   });
 
-  xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--with-sdkdir=${placeholder "out"}/include/xorg"
-    ];
-    meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
-    };
-  });
-
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
@@ -127,33 +118,6 @@ self: super:
     ];
   });
 
-  xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # *.pc pulls xorgserver.dev
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-    ];
-  });
-
-  xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--sysconfdir=${placeholder "out"}/etc"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-      "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
-    ];
-
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
-
-  xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
