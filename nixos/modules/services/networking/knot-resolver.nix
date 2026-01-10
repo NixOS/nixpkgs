@@ -33,8 +33,7 @@ in
 {
   meta.maintainers = [
     lib.maintainers.vcunat # upstream developer
-  ]
-  ++ lib.teams.flyingcircus.members;
+  ];
 
   ###### interface
   options.services.knot-resolver = {

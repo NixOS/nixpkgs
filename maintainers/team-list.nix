@@ -318,18 +318,6 @@ with lib.maintainers;
     github = "flutter";
   };
 
-  flyingcircus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      theuni
-      frlan
-      leona
-      osnyx
-    ];
-    scope = "Team for Flying Circus employees who collectively maintain packages.";
-    shortName = "Flying Circus employees";
-  };
-
   forgejo = {
     members = [
       adamcstephens

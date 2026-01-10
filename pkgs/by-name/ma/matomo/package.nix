@@ -118,6 +118,5 @@ stdenv.mkDerivation (finalAttrs: {
       boozedog
       niklaskorz
     ];
-    teams = [ lib.teams.flyingcircus ];
   };
 })

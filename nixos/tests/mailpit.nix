@@ -1,7 +1,6 @@
 { lib, ... }:
 {
   name = "mailpit";
-  meta.maintainers = lib.teams.flyingcircus.members;
 
   nodes.machine =
     { pkgs, ... }:
