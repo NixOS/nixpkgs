@@ -52,13 +52,11 @@ buildDotnetModule rec {
     gtk3
     openssl
     xinput
-  ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libX11
-    libXi
-  ]);
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libXi
+  ];
 
   autoPatchelfIgnoreMissingDeps = [
     "libc.musl-x86_64.so.1"

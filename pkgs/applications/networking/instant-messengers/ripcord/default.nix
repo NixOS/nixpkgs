@@ -47,20 +47,16 @@ mkDerivation rec {
     libopus
     libGL
     alsa-lib
-  ]
-  ++ [
     qtbase
     qtsvg
     qtmultimedia
     qtwebsockets
     qtimageformats
-  ]
-  ++ (with xorg; [
-    libX11
-    libXScrnSaver
-    libXcursor
-    xkeyboardconfig
-  ]);
+    xorg.libX11
+    xorg.libXScrnSaver
+    xorg.libXcursor
+    xorg.xkeyboardconfig
+  ];
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];

@@ -86,15 +86,12 @@ stdenv.mkDerivation rec {
     libpng
   ]
   ++ lib.optional enableSDL SDL
-  ++ lib.optionals enableX11 (
-    with xorg;
-    [
-      xorgproto
-      libX11
-      libXext
-      libXrender
-    ]
-  );
+  ++ lib.optionals enableX11 [
+    xorg.xorgproto
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+  ];
 
   env = {
     NIX_LDFLAGS = "-lgcc_s";

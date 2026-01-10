@@ -71,19 +71,19 @@ stdenv.mkDerivation (
     ];
     buildInputs =
       extraBuildInputs
-      ++ (with xorg; [
-        libXi
-        libXcursor
-        libXdamage
-        libXrandr
-        libXcomposite
-        libXext
-        libXfixes
-        libXrender
-        libX11
-        libXtst
-        libXScrnSaver
-      ])
+      ++ [
+        xorg.libXi
+        xorg.libXcursor
+        xorg.libXdamage
+        xorg.libXrandr
+        xorg.libXcomposite
+        xorg.libXext
+        xorg.libXfixes
+        xorg.libXrender
+        xorg.libX11
+        xorg.libXtst
+        xorg.libXScrnSaver
+      ]
       ++ [
         libgbm
         gtk3

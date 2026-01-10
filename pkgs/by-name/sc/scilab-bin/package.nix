@@ -88,18 +88,16 @@ let
       alsa-lib
       ncurses5
       stdenv.cc.cc
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcursor
-      libXext
-      libXft
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      libXxf86vm
-    ]);
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXft
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libXxf86vm
+    ];
 
     installPhase = ''
       runHook preInstall

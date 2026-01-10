@@ -20,18 +20,18 @@ let
   pname = "hover";
   version = "0.47.2";
 
-  libs = with xorg; [
-    libX11.dev
-    libXcursor.dev
-    libXext.dev
-    libXi.dev
-    libXinerama.dev
-    libXrandr.dev
-    libXrender.dev
-    libXfixes.dev
-    libXxf86vm
+  libs = [
+    xorg.libX11.dev
+    xorg.libXcursor.dev
+    xorg.libXext.dev
+    xorg.libXi.dev
+    xorg.libXinerama.dev
+    xorg.libXrandr.dev
+    xorg.libXrender.dev
+    xorg.libXfixes.dev
+    xorg.libXxf86vm
     libglvnd.dev
-    xorgproto
+    xorg.xorgproto
   ];
   hover = buildGoModule {
     inherit pname version;

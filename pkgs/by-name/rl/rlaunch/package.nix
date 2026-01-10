@@ -21,14 +21,11 @@ rustPlatform.buildRustPackage rec {
   # The x11_dl crate dlopen()s these libraries, so we have to inject them into rpath.
   postFixup = ''
     patchelf --set-rpath ${
-      lib.makeLibraryPath (
-        with xorg;
-        [
-          libX11
-          libXft
-          libXinerama
-        ]
-      )
+      lib.makeLibraryPath [
+        xorg.libX11
+        xorg.libXft
+        xorg.libXinerama
+      ]
     } $out/bin/rlaunch
   '';
 

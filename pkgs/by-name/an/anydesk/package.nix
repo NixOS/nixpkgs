@@ -63,23 +63,21 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     polkit_gnome
     pulseaudio
-  ]
-  ++ (with xorg; [
-    libxcb
-    libxkbfile
-    libX11
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXmu
-    libXrandr
-    libXtst
-    libXt
-    libICE
-    libSM
-    libXrender
-  ]);
+    xorg.libxcb
+    xorg.libxkbfile
+    xorg.libX11
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXmu
+    xorg.libXrandr
+    xorg.libXtst
+    xorg.libXt
+    xorg.libICE
+    xorg.libSM
+    xorg.libXrender
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems

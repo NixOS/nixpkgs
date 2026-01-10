@@ -43,14 +43,14 @@ stdenv.mkDerivation {
     ./declare-missing-prototype.patch
   ];
 
-  buildInputs = with xorg; [
+  buildInputs = [
     cairo
     ghostscript
-    libSM
-    libXt
-    libICE
-    libX11
-    libXpm
+    xorg.libSM
+    xorg.libXt
+    xorg.libICE
+    xorg.libX11
+    xorg.libXpm
     tcl
     tk
     zlib

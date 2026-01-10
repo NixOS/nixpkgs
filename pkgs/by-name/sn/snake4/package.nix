@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 
-  buildInputs = with xorg; [
+  buildInputs = [
     shhmsg
     shhopt
-    libX11
-    libXt
-    libXpm
-    libXaw
-    libXext
+    xorg.libX11
+    xorg.libXt
+    xorg.libXpm
+    xorg.libXaw
+    xorg.libXext
   ];
 
   preInstall = ''

@@ -15,9 +15,9 @@ stdenv.mkDerivation {
     sha256 = "1gadlcp32s179kd7ypxr8cymd6s060p6z4c2vnx94i8bmiw3nn8h";
   };
 
-  nativeBuildInputs = with xorg; [
-    imake
-    gccmakedep
+  nativeBuildInputs = [
+    xorg.imake
+    xorg.gccmakedep
   ];
   buildInputs = [ xorg.libX11 ];
 

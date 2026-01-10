@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildPhase =
-    with xorg;
     let
       stunnelBinary =
         if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -44,11 +43,11 @@ stdenv.mkDerivation rec {
 
       patchelf --set-rpath "${
         lib.makeLibraryPath [
-          libX11
-          libXext
-          libXrender
-          libXtst
-          libXi
+          xorg.libX11
+          xorg.libXext
+          xorg.libXrender
+          xorg.libXtst
+          xorg.libXi
         ]
       }" ./jre/lib/libawt_xawt.so
       patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so

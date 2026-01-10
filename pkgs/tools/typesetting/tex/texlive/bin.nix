@@ -751,17 +751,15 @@ rec {
       core # kpathsea
       freetype
       ghostscript
-    ]
-    ++ (with xorg; [
-      libX11
-      libXaw
-      libXi
-      libXpm
-      libXmu
-      libXaw
-      libXext
-      libXfixes
-    ]);
+      xorg.libX11
+      xorg.libXaw
+      xorg.libXi
+      xorg.libXpm
+      xorg.libXmu
+      xorg.libXaw
+      xorg.libXext
+      xorg.libXfixes
+    ];
 
     preConfigure = "cd texk/xdvik";
 

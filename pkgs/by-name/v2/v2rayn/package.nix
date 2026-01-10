@@ -72,14 +72,14 @@ buildDotnetModule (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = with xorg; [
-    libX11
-    libXrandr
-    libXi
-    libICE
-    libSM
-    libXcursor
-    libXext
+  runtimeDeps = [
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libICE
+    xorg.libSM
+    xorg.libXcursor
+    xorg.libXext
   ];
 
   desktopItems = [

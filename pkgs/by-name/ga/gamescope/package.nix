@@ -174,10 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
     # --debug-layers flag expects these in the path
     wrapProgram "$out/bin/gamescope" \
       --prefix PATH : ${
-        with xorg;
         lib.makeBinPath [
-          xprop
-          xwininfo
+          xorg.xprop
+          xorg.xwininfo
         ]
       }
 

@@ -28,18 +28,16 @@ buildGoModule rec {
   buildInputs = [
     libGL
     nssmdns
-  ]
-  ++ (with xorg; [
-    libX11
-    libX11.dev
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
-    xinput
-  ]);
+    xorg.libX11
+    xorg.libX11.dev
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXxf86vm
+    xorg.xinput
+  ];
 
   meta = {
     description = "Desktop application to control Elgato Keylights";

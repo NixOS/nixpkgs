@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
-  buildInputs = with xorg; [
-    libX11
-    libXext
-    libXi
+  buildInputs = [
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
     libev
   ];
   nativeBuildInputs = [ pkg-config ];

@@ -24,15 +24,15 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs = with xorg; [
+  buildInputs = [
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXxf86vm
   ];
 
   postInstall = ''

@@ -70,16 +70,14 @@ stdenv.mkDerivation rec {
     xercesc
     zlib
     python3
-  ]
-  ++ (with xorg; [
     libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXft
-    libXrandr
-    libXrender
-  ]);
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXft
+    xorg.libXrandr
+    xorg.libXrender
+  ];
 
   meta = {
     description = "SUMO traffic simulator";

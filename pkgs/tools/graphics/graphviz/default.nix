@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     pango
     bash
   ]
-  ++ optionals withXorg (with xorg; [ libXrender ]);
+  ++ optionals withXorg [ xorg.libXrender ];
 
   hardeningDisable = [ "fortify" ];
 

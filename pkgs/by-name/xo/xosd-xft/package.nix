@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs = with xorg; [
-    libXft
-    libXrandr
-    libXinerama
+  buildInputs = [
+    xorg.libXft
+    xorg.libXrandr
+    xorg.libXinerama
   ];
 
   nativeInstallCheckInputs = [

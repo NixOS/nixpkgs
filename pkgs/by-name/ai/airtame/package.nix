@@ -31,12 +31,12 @@
   pciutils,
 }:
 let
-  xorgDeps = with xorg; [
-    libXdamage
-    libXext
-    libXfixes
-    libXcomposite
-    libXrandr
+  xorgDeps = [
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXcomposite
+    xorg.libXrandr
   ];
 
   deps = [

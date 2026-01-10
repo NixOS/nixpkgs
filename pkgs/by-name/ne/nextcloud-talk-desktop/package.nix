@@ -91,15 +91,13 @@ let
       libgbm
       libGL
       libglvnd
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXrandr
-      libXfixes
-      libXcursor
-    ]);
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXrandr
+      xorg.libXfixes
+      xorg.libXcursor
+    ];
 
     # Required to launch the application and proceed past the zygote_linux fork() process
     # Fixes `Zygote could not fork`

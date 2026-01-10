@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fT7SsYlV3dCQrf0IZfiNI1grj3ngDgr8IkWdg+f9m3M=";
   };
 
-  nativeBuildInputs = with xorg; [
+  nativeBuildInputs = [
     libfaketime
-    bdftopcf
-    fonttosfnt
-    mkfontscale
+    xorg.bdftopcf
+    xorg.fonttosfnt
+    xorg.mkfontscale
   ];
 
   buildPhase = ''

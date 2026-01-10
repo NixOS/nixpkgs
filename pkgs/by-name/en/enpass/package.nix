@@ -42,38 +42,35 @@ let
   baseUrl = "https://apt.enpass.io";
 
   # used of both wrappers and libpath
-  libPath = lib.makeLibraryPath (
-    with xorg;
-    [
-      libGLU
-      libGL
-      fontconfig
-      freetype
-      libpulseaudio
-      zlib
-      dbus
-      libX11
-      libXi
-      libSM
-      libICE
-      libXrender
-      libXScrnSaver
-      libxcb
-      libcap
-      glib
-      gtk3
-      pango
-      curl
-      libuuid
-      cups
-      xcbutilwm # libxcb-icccm.so.4
-      xcbutilimage # libxcb-image.so.0
-      xcbutilkeysyms # libxcb-keysyms.so.1
-      xcbutilrenderutil # libxcb-render-util.so.0
-      xz
-      libxkbcommon
-    ]
-  );
+  libPath = lib.makeLibraryPath [
+    libGLU
+    libGL
+    fontconfig
+    freetype
+    libpulseaudio
+    zlib
+    dbus
+    xorg.libX11
+    xorg.libXi
+    xorg.libSM
+    xorg.libICE
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libxcb
+    libcap
+    glib
+    gtk3
+    pango
+    curl
+    libuuid
+    cups
+    xorg.xcbutilwm # libxcb-icccm.so.4
+    xorg.xcbutilimage # libxcb-image.so.0
+    xorg.xcbutilkeysyms # libxcb-keysyms.so.1
+    xorg.xcbutilrenderutil # libxcb-render-util.so.0
+    xz
+    libxkbcommon
+  ];
   package = stdenv.mkDerivation {
 
     inherit (data) version;

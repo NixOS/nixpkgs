@@ -39,24 +39,24 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
     cairo
     freetype
     gdk-pixbuf
     glib
     gtk3
-    libxcb
-    xcbutil
-    xcbutilwm
+    xorg.libxcb
+    xorg.xcbutil
+    xorg.xcbutilwm
     zlib
-    libXtst
+    xorg.libXtst
     libxkbcommon
     pulseaudio
     libjack2
-    libX11
+    xorg.libX11
     libglvnd
-    libXcursor
+    xorg.libXcursor
     (lib.getLib stdenv.cc.cc)
   ];
 

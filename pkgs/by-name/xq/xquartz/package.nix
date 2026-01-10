@@ -100,7 +100,7 @@ let
     inherit stdenv xorg fontDirs;
   };
   # any X related programs expected to be available via $PATH
-  pkgs = with xorg; [
+  pkgs = [
     # non-xorg
     quartz-wm
     xterm
@@ -108,53 +108,53 @@ let
     # xorg
     xlsfonts
     xfontsel
-    bdftopcf
-    fontutil
-    iceauth
-    libXpm
-    lndir
-    luit
-    makedepend
-    mkfontdir
-    mkfontscale
-    sessreg
-    setxkbmap
-    smproxy
-    twm
-    x11perf
-    xauth
-    xbacklight
-    xclock
-    xcmsdb
-    xcursorgen
-    xdm
-    xdpyinfo
-    xdriinfo
-    xev
-    xeyes
-    xfs
-    xgamma
-    xhost
-    xinput
-    xkbcomp
-    xkbevd
-    xkbutils
-    xkill
-    xlsatoms
-    xlsclients
-    xmessage
-    xmodmap
-    xpr
-    xprop
-    xrandr
-    xrdb
-    xrefresh
-    xset
-    xsetroot
-    xvinfo
-    xwd
-    xwininfo
-    xwud
+    xorg.bdftopcf
+    xorg.fontutil
+    xorg.iceauth
+    xorg.libXpm
+    xorg.lndir
+    xorg.luit
+    xorg.makedepend
+    xorg.mkfontdir
+    xorg.mkfontscale
+    xorg.sessreg
+    xorg.setxkbmap
+    xorg.smproxy
+    xorg.twm
+    xorg.x11perf
+    xorg.xauth
+    xorg.xbacklight
+    xorg.xclock
+    xorg.xcmsdb
+    xorg.xcursorgen
+    xorg.xdm
+    xorg.xdpyinfo
+    xorg.xdriinfo
+    xorg.xev
+    xorg.xeyes
+    xorg.xfs
+    xorg.xgamma
+    xorg.xhost
+    xorg.xinput
+    xorg.xkbcomp
+    xorg.xkbevd
+    xorg.xkbutils
+    xorg.xkill
+    xorg.xlsatoms
+    xorg.xlsclients
+    xorg.xmessage
+    xorg.xmodmap
+    xorg.xpr
+    xorg.xprop
+    xorg.xrandr
+    xorg.xrdb
+    xorg.xrefresh
+    xorg.xset
+    xorg.xsetroot
+    xorg.xvinfo
+    xorg.xwd
+    xorg.xwininfo
+    xorg.xwud
   ];
 in
 stdenv.mkDerivation {

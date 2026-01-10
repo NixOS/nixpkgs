@@ -66,21 +66,19 @@ let
     libGL
     vulkan-loader
     libasyncns
-  ]
-  ++ (with xorg; [
-    libX11
-    libxcb
-    libXau
-    libXdmcp
-    libXext
-    libXcursor
-    libXrender
-    libXfixes
-    libXinerama
-    libXi
-    libXrandr
-    libXScrnSaver
-  ]);
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.libXext
+    xorg.libXcursor
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXinerama
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXScrnSaver
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;

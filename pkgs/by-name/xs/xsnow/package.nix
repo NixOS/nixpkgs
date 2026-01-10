@@ -28,13 +28,11 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxml2
     gsl
-  ]
-  ++ (with xorg; [
-    libX11
-    libXpm
-    libXt
-    libXtst
-  ]);
+    xorg.libX11
+    xorg.libXpm
+    xorg.libXt
+    xorg.libXtst
+  ];
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 
