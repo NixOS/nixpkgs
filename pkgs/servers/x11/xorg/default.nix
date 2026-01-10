@@ -1,7 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  bdftopcf,
   bitmap,
   editres,
   font-adobe-100dpi,
@@ -213,7 +212,6 @@
 self: with self; {
 
   inherit
-    bdftopcf
     bitmap
     editres
     fonttosfnt

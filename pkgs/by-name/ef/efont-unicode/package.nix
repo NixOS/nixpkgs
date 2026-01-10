@@ -4,6 +4,7 @@
   fetchurl,
   libfaketime,
   xorg,
+  bdftopcf,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fT7SsYlV3dCQrf0IZfiNI1grj3ngDgr8IkWdg+f9m3M=";
   };
 
-  nativeBuildInputs = with xorg; [
+  nativeBuildInputs = [
     libfaketime
     bdftopcf
+  ] ++ (with xorg; [
     fonttosfnt
     mkfontscale
-  ];
+  ]);
 
   buildPhase = ''
     runHook preBuild
