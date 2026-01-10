@@ -59,17 +59,6 @@
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  addMainProgram =
-    pkg:
-    {
-      mainProgram ? pkg.pname,
-    }:
-    pkg.overrideAttrs (attrs: {
-      meta = attrs.meta // {
-        inherit mainProgram;
-      };
-    });
-
   brokenOnDarwin =
     pkg:
     pkg.overrideAttrs (attrs: {
@@ -274,13 +263,6 @@ self: super:
     };
   });
 
-  xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
-    configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
-    meta = attrs.meta // {
-      mainProgram = "xkbcomp";
-    };
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
@@ -338,42 +320,6 @@ self: super:
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
-  xinit =
-    (super.xinit.override {
-      stdenv = if isDarwin then clangStdenv else stdenv;
-    }).overrideAttrs
-      (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ lib.optional isDarwin bootstrap_cmds;
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
-        configureFlags = [
-          "--with-xserver=${xorg.xorgserver.out}/bin/X"
-        ]
-        ++ lib.optionals isDarwin [
-          "--with-bundle-id-prefix=org.nixos.xquartz"
-          "--with-launchdaemons-dir=\${out}/LaunchDaemons"
-          "--with-launchagents-dir=\${out}/LaunchAgents"
-        ];
-        postPatch = ''
-          # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
-          substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
-        '';
-        propagatedBuildInputs =
-          attrs.propagatedBuildInputs or [ ]
-          ++ [ xorg.xauth ]
-          ++ lib.optionals isDarwin [
-            xorg.libX11
-            xorg.xorgproto
-          ];
-        postFixup = ''
-          sed -i $out/bin/startx \
-            -e '/^sysserverrc=/ s:=.*:=/etc/X11/xinit/xserverrc:' \
-            -e '/^sysclientrc=/ s:=.*:=/etc/X11/xinit/xinitrc:'
-        '';
-        meta = attrs.meta // {
-          mainProgram = "xinit";
-        };
-      });
-
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
     name = "xf86-video-intel-2024-05-06";
@@ -420,15 +366,13 @@ self: super:
       })
     ];
   });
-
-  xinput = addMainProgram super.xinput { };
-
-  xwd = addMainProgram super.xwd { };
 }
 
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
+  libXtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
+  xtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
   xf86videoglint = throw ''
     The Xorg GLINT/Permedia video driver has been broken since xorg 21.
