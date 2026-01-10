@@ -193,7 +193,6 @@ with lib.maintainers;
     members = [
       de11n
       despsyched
-      invokes-su
     ];
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
     shortName = "D. E. Shaw employees";

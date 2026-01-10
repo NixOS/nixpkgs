@@ -11273,12 +11273,6 @@
     name = "Antoine Labarussias";
     keys = [ { fingerprint = "5CB5 9AA0 D180 1997 2FB3  E0EC 943A 1DE9 372E BE4E"; } ];
   };
-  invokes-su = {
-    email = "nixpkgs-commits@deshaw.com";
-    github = "invokes-su";
-    githubId = 88038050;
-    name = "Souvik Sen";
-  };
   io12 = {
     github = "io12";
     githubId = 7348004;
