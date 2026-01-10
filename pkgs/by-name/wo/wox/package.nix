@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.0.0-beta.7";
+  version = "2.0.0-beta.8";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-uKnuzuR+Qd5yP45kPJELBz8v+LrZEMIHl9I07nNPZpE=";
+    hash = "sha256-eucyQKNuzJCLwAnyQVE/64gth+uVrCgyHLAJNfrUxvk=";
   };
 
   metaCommon = {
@@ -79,7 +79,7 @@ let
         ;
       pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-BO3QsybMxbyBhwM6XVmS6s5jGJljyxE1PRUSAreE17Y=";
+      hash = "sha256-8EovIVJ+uAo9XJIIgRrpkQrcmNkKC2Ruja2md7NFZ4A=";
     };
 
     buildPhase = ''
