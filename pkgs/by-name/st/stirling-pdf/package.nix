@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.1.5";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sYdUcrX0Fr04neDBsKApEg5GQ9aM7y1Jjf49gfWoudE=";
+    hash = "sha256-vFahWnJ7GsRgqSduVW/cqBY5OkKcS66qGX/9QVnzve0=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-379iWiMHHZfPDZ4ks4dchjdLekARS8KgZdjITWU6WMg=";
+    hash = "sha256-zuw3pIvTzV1pr3oQqDJfm6pukMyeX0KYPNsT1vBHojY=";
   };
 
   cargoRoot = "frontend/src-tauri";
