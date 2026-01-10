@@ -497,6 +497,15 @@
     };
   };
 
+  jsonc = {
+    version = "0.3.0";
+    url = "gitlab:WhyNotHugo/tree-sitter-jsonc";
+    hash = "sha256-iWc2ePRiQnZ0FEdMAaAwa3iYt/SY0bEjQrZyqE9EhlU=";
+    meta = {
+      license = lib.licenses.mit;
+    };
+  };
+
   jsonnet = {
     version = "0-unstable-2024-08-15";
     url = "github:sourcegraph/tree-sitter-jsonnet/ddd075f1939aed8147b7aa67f042eda3fce22790";
