@@ -2272,6 +2272,8 @@ let
         };
       };
 
+      idanp.checkpatch = callPackage ./idanp.checkpatch { };
+
       iliazeus.vscode-ansi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-ansi";
