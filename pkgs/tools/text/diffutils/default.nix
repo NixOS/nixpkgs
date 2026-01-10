@@ -83,6 +83,9 @@ stdenv.mkDerivation rec {
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.helsinki-systems.members;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

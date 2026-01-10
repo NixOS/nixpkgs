@@ -70,6 +70,9 @@ stdenv.mkDerivation rec {
       bsd3
       sendmail
     ];
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

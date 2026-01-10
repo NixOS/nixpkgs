@@ -63,6 +63,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nextcloud/notify_push";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

@@ -248,7 +248,10 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://rustdesk.com";
     changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };
