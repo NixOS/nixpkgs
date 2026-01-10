@@ -115,23 +115,22 @@ in
       };
 
       rebootTriggers = lib.mkOption {
-        type = lib.types.listOf lib.types.pathInStore;
-        default = [ ];
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
         description = ''
-          List of derivations that will cause an auto-reboot when changed when
+          Attribute set of strings that will cause an auto-reboot when changed when
           {option}`system.autoUpgrade.allowReboot` is set to true.
         '';
         defaultText = lib.literalExpression ''
-          [
-            config.system.build.initialRamdisk
-            config.system.build.kernel
-            config.hardware.firmware
-            (pkgs.writeTextFile {
+          {
+            kernel = "''${config.system.build.kernel}";
+            firmware = "''${config.hardware.firmware}";
+            kernel-params = "''${pkgs.writeTextFile {
               name = "kernel-params";
               text = lib.concatStringsSep " " config.boot.kernelParams;
-            })
-          ]
-          ++ config.system.switch.inhibitors
+            }}";
+          }
+          // config.system.switch.inhibitors
         '';
       };
 
@@ -236,15 +235,12 @@ in
     }
 
     (lib.mkIf (!config.boot.isContainer) {
-      system.autoUpgrade.rebootTriggers = [
-        config.system.build.initialRamdisk
-        config.system.build.kernel
-        config.hardware.firmware
-        (pkgs.writeTextFile {
-          name = "kernel-params";
-          text = lib.concatStringsSep " " config.boot.kernelParams;
-        })
-      ];
+      system.autoUpgrade.rebootTriggers = {
+        kernel = "${config.system.build.kernel}";
+        firmware = "${config.hardware.firmware}";
+        kernel-params = lib.concatStringsSep " " config.boot.kernelParams;
+      }
+      // config.system.switch.inhibitors;
     })
 
     (lib.mkIf cfg.enable {
@@ -305,6 +301,7 @@ in
         path = with pkgs; [
           coreutils
           gnutar
+          jq
           xz.bin
           gzip
           gitMinimal
@@ -364,22 +361,44 @@ in
                 ''
               }
 
+              # Create a temporary file that we use in case a generation does not have
+              # the reboot-triggers file.
+              empty="$(mktemp -t nixos-reboot-triggers.XXXX)"
+              # shellcheck disable=SC2329
+              clean_up() {
+                rm -f "$empty"
+              }
+              trap clean_up EXIT
+              echo "{}" > "$empty"
+
               booted_triggers="$(realpath /run/booted-system)/reboot-triggers"
-              booted_triggers_sha="$(
-                if [ -f "$booted_triggers" ]; then
-                  sha256sum - < "$booted_triggers"
-                else
-                  echo 'none'
-                fi
-              )"
+              if [ ! -f "$booted_triggers" ]; then
+                booted_triggers="$empty"
+              fi
 
               new_triggers="$(realpath "$new_configuration")/reboot-triggers"
-              new_triggers_sha="$(
-                if [ -f "$new_triggers" ]; then
-                  sha256sum - < "$new_triggers"
-                else
-                  echo 'none'
-                fi
+              if [ ! -f "$new_triggers" ]; then
+                new_triggers="$empty"
+              fi
+
+              diff="$(
+                jq \
+                  --raw-output \
+                  --null-input \
+                  --rawfile current "$booted_triggers" \
+                  --rawfile newgen "$new_triggers" \
+                '
+                  $current | try fromjson catch {} as $old |
+                  $newgen | try fromjson catch {} as $new |
+                  $old |
+                  to_entries |
+                  map(
+                    select(.key | in ($new)) |
+                    select(.value != $new.[.key]) |
+                    [ .key, ":", .value, "->", $new.[.key] ] | join(" ")
+                  ) |
+                  join("\n")
+                ' \
               )"
 
               ${lib.optionalString (cfg.operation == "switch") # bash
@@ -387,7 +406,7 @@ in
                   echo "Running switch-to-configuration check..."
                   if "$switch_to_new_configuration" check; then
                     echo "Checking reboot triggers..."
-                    if [ "$new_triggers_sha" == "$booted_triggers_sha" ]; then
+                    if [ -z "$diff" ]; then
                       echo "Switching into the new generation..."
                       "$switch_to_new_configuration" ${cfg.operation}
                       exit 0
