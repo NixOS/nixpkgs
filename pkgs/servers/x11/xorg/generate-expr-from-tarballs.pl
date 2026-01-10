@@ -37,7 +37,6 @@ $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
 $pcMap{"dmx"} = "libdmx";
-$pcMap{"fontenc"} = "libfontenc";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"ice"} = "libICE";
 $pcMap{"libfs"} = "libFS";
@@ -333,10 +332,6 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  appres,
-  bdftopcf,
-  bitmap,
-  editres,
   font-adobe-100dpi,
   font-adobe-75dpi,
   font-adobe-utopia-100dpi,
@@ -371,20 +366,12 @@ print OUT <<EOF;
   font-screen-cyrillic,
   font-sony-misc,
   font-sun-misc,
-  fonttosfnt,
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
-  gccmakedep,
-  iceauth,
-  ico,
-  imake,
   libapplewm,
-  libdmx,
-  libfontenc,
   libfs,
   libice,
-  libpciaccess,
   libpthread-stubs,
   libsm,
   libwindowswm,
@@ -430,7 +417,6 @@ print OUT <<EOF;
   libxxf86vm,
   listres,
   lndir,
-  luit,
   makedepend,
   mkfontscale,
   oclock,
@@ -546,25 +532,12 @@ print OUT <<EOF;
 self: with self; {
 
   inherit
-    appres
-    bdftopcf
-    bitmap
-    editres
-    fonttosfnt
-    gccmakedep
-    iceauth
-    ico
-    imake
-    libdmx
-    libfontenc
-    libpciaccess
     libxcb
     libxcvt
     libxkbfile
     libxshmfence
     listres
     lndir
-    luit
     makedepend
     mkfontscale
     oclock
