@@ -38,6 +38,8 @@ let
     "plenary-nvim"
     "rest-nvim"
     "rocks-config-nvim"
+    "rocks-dev-nvim"
+    "rocks-git-nvim"
     "rocks-nvim"
     "rtp-nvim"
     "rustaceanvim"
