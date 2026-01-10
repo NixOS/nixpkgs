@@ -110,6 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     dri-pkgconfig-stub
     libdrm
     libgbm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libtirpc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -160,6 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dapple-applications-dir=${placeholder "out"}/Applications"
     "-Dbundle-id-prefix=org.nixos.xquartz"
     "-Dsha1=CommonCrypto"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    # fixed upstream (unreleased)
+    "-Dudev=false"
+    "-Dudev_kms=false"
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

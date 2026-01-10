@@ -1603,6 +1603,7 @@ in
     makeImageTestScript
     modulesClosure
     qemu
+    qemuCommandLinux
     rpmClosureGenerator
     rpmDistros
     runInLinuxImage
