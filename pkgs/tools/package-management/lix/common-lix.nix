@@ -33,6 +33,7 @@ assert lib.assertMsg (
   cargo,
   curl,
   cmake,
+  darwin,
   doxygen,
   editline,
   flex,
@@ -61,6 +62,7 @@ assert lib.assertMsg (
   buildPackages,
   pkg-config,
   rapidcheck,
+  rust-cbindgen,
   sqlite,
   systemtap-sdt,
   util-linuxMinimal,
@@ -152,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.aiohttp
         p.pytest
         p.pytest-xdist
+        p.pyxattr
       ]
       ++ lib.optionals usesCapnp [ p.pycapnp ]
     ))
@@ -187,7 +190,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals parseToYAML [ yq ]
   ++ lib.optionals usesCapnp [ capnproto ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ]
-  ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ];
+  ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ]
+  ++ lib.optionals (lib.versionAtLeast version "2.95") [ rust-cbindgen ]
+  ++ lib.optionals (lib.versionAtLeast version "2.95" && finalAttrs.doInstallCheck) [ curl ];
 
   buildInputs = [
     boost
@@ -303,13 +308,33 @@ stdenv.mkDerivation (finalAttrs: {
       [
         (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
       ]
-  ++
-    lib.optionals
-      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95")
-      [
-        (lib.mesonOption "build-test-env" "${pkgsStatic.busybox}/bin")
-        (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
-      ];
+  ++ (
+    lib.optionals (finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95") (
+      if stdenv.hostPlatform.isLinux then
+        [
+          (lib.mesonOption "build-test-env" (
+            lib.makeBinPath [
+              pkgsStatic.busybox
+              pkgsStatic.acl
+            ]
+          ))
+          (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
+        ]
+      else
+        [
+          (lib.mesonOption "build-test-env" (
+            lib.makeBinPath [
+              darwin.file_cmds
+              darwin.shell_cmds
+              darwin.text_cmds
+            ]
+          ))
+        ]
+    )
+    ++ lib.optionals (lib.versionAtLeast version "2.95") [
+      (lib.mesonBool "enable-contrib-plugins" (!stdenv.hostPlatform.isStatic))
+    ]
+  );
 
   ninjaFlags = [ "-v" ];
 
