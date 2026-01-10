@@ -1832,6 +1832,13 @@
     githubId = 6091755;
     name = "Anirrudh Krishnan";
   };
+  anish = {
+    email = "i@anish.land";
+    github = "ap-1";
+    githubId = 67872951;
+    name = "Anish Pallati";
+    keys = [ { fingerprint = "2A0A 16F5 E026 BE3B A47F B7A6 841A FB68 9A5B ACCB"; } ];
+  };
   ankhers = {
     email = "me@ankhers.dev";
     github = "ankhers";
@@ -18729,6 +18736,20 @@
     github = "nicklewis";
     githubId = 115494;
     name = "Nick Lewis";
+  };
+  nicknb = {
+    name = "nicknb";
+    email = "nicknb@posteo.com";
+    github = "fk29g";
+    githubId = 205353326;
+    keys = [
+      {
+        fingerprint = "8FF0 1BEE BCBF 1D20 ECD3  5FFA D903 84C8 07BC 1FE6";
+      }
+      {
+        fingerprint = "6F9B 47B6 FFB0 823D 2ACF  9ED8 2BF0 FBB4 05AD 6A7C";
+      }
+    ];
   };
   nicknovitski = {
     email = "nixpkgs@nicknovitski.com";
