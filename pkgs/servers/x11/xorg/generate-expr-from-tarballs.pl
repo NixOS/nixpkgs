@@ -467,6 +467,7 @@ print OUT <<EOF;
   xf86-video-ark,
   xf86-video-geode,
   xf86-video-nouveau,
+  xf86-video-qxl,
   xf86-video-s3virge,
   xf86-video-v4l,
   xfd,
@@ -682,6 +683,7 @@ self: with self; {
   xf86videoark = xf86-video-ark;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
+  xf86videoqxl = xf86-video-qxl;
   xf86videos3virge = xf86-video-s3virge;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
