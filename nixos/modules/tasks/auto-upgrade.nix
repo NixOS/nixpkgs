@@ -115,23 +115,19 @@ in
       };
 
       rebootTriggers = lib.mkOption {
-        type = lib.types.listOf lib.types.pathInStore;
-        default = [ ];
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
         description = ''
-          List of derivations that will cause an auto-reboot when changed when
+          Attribute set of strings that will cause an auto-reboot when changed when
           {option}`system.autoUpgrade.allowReboot` is set to true.
         '';
         defaultText = lib.literalExpression ''
-          [
-            config.system.build.initialRamdisk
-            config.system.build.kernel
-            config.hardware.firmware
-            (pkgs.writeTextFile {
-              name = "kernel-params";
-              text = lib.concatStringsSep " " config.boot.kernelParams;
-            })
-          ]
-          ++ config.system.switch.inhibitors
+          {
+            kernel = "''${config.system.build.kernel}";
+            firmware = "''${config.hardware.firmware}";
+            kernel-params = lib.concatStringsSep "," config.boot.kernelParams;
+          }
+          // config.system.switch.inhibitors
         '';
       };
 
@@ -228,23 +224,16 @@ in
           ln -s ${config.system.build.rebootTriggers} $out/reboot-triggers
         '';
 
-        build.rebootTriggers = pkgs.writeTextFile {
-          name = "reboot-triggers";
-          text = lib.concatMapStringsSep "\n" (drv: drv.outPath) config.system.autoUpgrade.rebootTriggers;
-        };
+        build.rebootTriggers = pkgs.writers.writeJSON "reboot-triggers" config.system.autoUpgrade.rebootTriggers;
       };
     }
 
     (lib.mkIf (!config.boot.isContainer) {
-      system.autoUpgrade.rebootTriggers = [
-        config.system.build.initialRamdisk
-        config.system.build.kernel
-        config.hardware.firmware
-        (pkgs.writeTextFile {
-          name = "kernel-params";
-          text = lib.concatStringsSep " " config.boot.kernelParams;
-        })
-      ];
+      system.autoUpgrade.rebootTriggers = {
+        kernel = lib.mkIf config.boot.kernel.enable "${config.system.build.kernel}";
+        firmware = "${config.hardware.firmware}";
+        kernel-params = lib.concatStringsSep "," config.boot.kernelParams;
+      };
     })
 
     (lib.mkIf cfg.enable {
@@ -305,6 +294,7 @@ in
         path = with pkgs; [
           coreutils
           gnutar
+          jq
           xz.bin
           gzip
           gitMinimal
@@ -316,7 +306,8 @@ in
 
         script =
           let
-            upgradeFlag = lib.optional (cfg.channel == null && cfg.flake == null) "--upgrade";
+            upgradeFlag = lib.optional (cfg.channel == null && cfg.flake == null && cfg.upgrade) "--upgrade";
+            emptyTriggers = pkgs.writeText "empty-reboot-triggers" "{}";
           in
           if cfg.allowReboot then
             # bash
@@ -364,36 +355,63 @@ in
                 ''
               }
 
-              booted_triggers="$(realpath /run/booted-system)/reboot-triggers"
-              booted_triggers_sha="$(
-                if [ -f "$booted_triggers" ]; then
-                  sha256sum - < "$booted_triggers"
-                else
-                  echo 'none'
-                fi
+              # Fall back to an empty set when a generation does not have the
+              # reboot-triggers file.
+              booted_triggers="/run/booted-system/reboot-triggers"
+              if [ ! -f "$booted_triggers" ]; then
+                booted_triggers="${emptyTriggers}"
+              fi
+
+              new_triggers="$new_configuration/reboot-triggers"
+              if [ ! -f "$new_triggers" ]; then
+                new_triggers="${emptyTriggers}"
+              fi
+
+              diff="$(
+                jq \
+                  --raw-output \
+                  --null-input \
+                  --rawfile current "$booted_triggers" \
+                  --rawfile newgen "$new_triggers" \
+                '
+                  ($current | fromjson) as $old |
+                  ($newgen | fromjson) as $new |
+                  $old |
+                  to_entries |
+                  map(
+                    select(.key | in ($new)) |
+                    select(.value != $new.[.key]) |
+                    [ .key, ":", .value, "->", $new.[.key] ] | join(" ")
+                  ) |
+                  join("\n")
+                ' \
               )"
 
-              new_triggers="$(realpath "$new_configuration")/reboot-triggers"
-              new_triggers_sha="$(
-                if [ -f "$new_triggers" ]; then
-                  sha256sum - < "$new_triggers"
+              ${
+                if cfg.operation == "switch" then
+                  # bash
+                  ''
+                    echo "Running switch-to-configuration check..."
+                    if "$switch_to_new_configuration" check; then
+                      echo "Checking reboot triggers..."
+                      if [ -z "$diff" ]; then
+                        echo "Switching into the new generation..."
+                        "$switch_to_new_configuration" ${cfg.operation}
+                        exit 0
+                      fi
+                    fi
+                  ''
                 else
-                  echo 'none'
-                fi
-              )"
-
-              ${lib.optionalString (cfg.operation == "switch") # bash
-                ''
-                  echo "Running switch-to-configuration check..."
-                  if "$switch_to_new_configuration" check; then
-                    echo "Checking reboot triggers..."
-                    if [ "$new_triggers_sha" == "$booted_triggers_sha" ]; then
-                      echo "Switching into the new generation..."
-                      "$switch_to_new_configuration" ${cfg.operation}
+                  # operation == "boot": never switch live; reboot whenever the
+                  # toplevel changed at all, but skip pointless reboots when the
+                  # built generation is identical to the booted one.
+                  # bash
+                  ''
+                    if [ "$(realpath /run/booted-system)" = "$(realpath "$new_configuration")" ]; then
+                      echo "New generation is identical to the booted one, nothing to do."
                       exit 0
                     fi
-                  fi
-                ''
+                  ''
               }
               ${lib.optionalString (cfg.rebootWindow != null) # bash
                 ''
@@ -403,6 +421,10 @@ in
                   fi
                 ''
               }
+              if [ -n "$diff" ]; then
+                echo "Reboot triggers changed:"
+                echo "$diff"
+              fi
               echo "Scheduling a reboot to activate the new generation"
               systemctl reboot --when="+2min"
             ''
