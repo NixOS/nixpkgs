@@ -28532,12 +28532,6 @@
     github = "wrrrzr";
     githubId = 161970349;
   };
-  wr0belj = {
-    name = "Jakub Wróbel";
-    email = "wrobel.jakub@protonmail.com";
-    github = "wr0belj";
-    githubId = 40501814;
-  };
   wr7 = {
     name = "wr7";
     email = "d-wr7@outlook.com";
