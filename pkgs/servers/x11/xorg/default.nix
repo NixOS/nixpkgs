@@ -158,6 +158,7 @@
   xf86-video-r128,
   xf86-video-s3virge,
   xf86-video-savage,
+  xf86-video-siliconmotion,
   xf86-video-sis,
   xf86-video-sisusb,
   xf86-video-suncg6,
@@ -411,6 +412,7 @@ self: with self; {
   xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;
   xf86videosavage = xf86-video-savage;
+  xf86videosiliconmotion = xf86-video-siliconmotion;
   xf86videosis = xf86-video-sis;
   xf86videosisusb = xf86-video-sisusb;
   xf86videosuncg6 = xf86-video-suncg6;
@@ -465,44 +467,6 @@ self: with self; {
         libXext
         xorgserver
         libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videosiliconmotion = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-siliconmotion";
-      version = "1.7.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.10.tar.xz";
-        sha256 = "1h4g2mqxshaxii416ldw0aqy6cxnsbnzayfin51xm2526dw9q18n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

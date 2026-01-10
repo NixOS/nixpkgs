@@ -69,15 +69,6 @@ self: super:
     };
   });
 
-  xf86videosiliconmotion = super.xf86videosiliconmotion.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
