@@ -77,10 +77,6 @@ self: super:
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
   });
 
-  xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
-    configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
-  });
-
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {

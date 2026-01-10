@@ -136,6 +136,7 @@
   xf86-input-synaptics,
   xf86-input-vmmouse,
   xf86-input-void,
+  xf86-video-amdgpu,
   xf86-video-apm,
   xf86-video-ark,
   xf86-video-ast,
@@ -382,6 +383,7 @@ self: with self; {
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
+  xf86videoamdgpu = xf86-video-amdgpu;
   xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
   xf86videoast = xf86-video-ast;
@@ -411,50 +413,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoamdgpu = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libgbm,
-      libGL,
-      libdrm,
-      udev,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-amdgpu";
-      version = "23.0.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-amdgpu-23.0.0.tar.xz";
-        sha256 = "0qf0kjh6pww5abxmqa4c9sfa2qq1hq4p8qcgqpfd1kpkcvmg012g";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libgbm
-        libGL
-        libdrm
-        udev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videodummy = callPackage (
