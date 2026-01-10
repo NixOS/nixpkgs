@@ -858,14 +858,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  redcodelabs = {
-    members = [
-      unrooted
-    ];
-    scope = "Maintain Red Code Labs related packages and modules.";
-    shortName = "Red Code Labs";
-  };
-
   rocm = {
     github = "rocm";
   };
