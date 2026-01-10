@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pytestCheckHook,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -22,6 +23,7 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
