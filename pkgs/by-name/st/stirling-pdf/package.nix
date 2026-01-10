@@ -59,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  # See https://github.com/NixOS/nixpkgs/pull/465183#pullrequestreview-3647028893
+  # passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
