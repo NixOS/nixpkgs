@@ -502,7 +502,6 @@ with lib.maintainers;
   iog = {
     members = [
       cleverca22
-      disassembler
     ];
     scope = "Input-Output Global employees, which maintain critical software";
     shortName = "Input-Output Global employees";

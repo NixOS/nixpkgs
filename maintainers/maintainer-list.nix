@@ -6737,12 +6737,6 @@
     githubId = 392583;
     name = "Dirk-Willem van Gulik";
   };
-  disassembler = {
-    email = "disasm@gmail.com";
-    github = "disassembler";
-    githubId = 651205;
-    name = "Samuel Leathers";
-  };
   disserman = {
     email = "disserman@gmail.com";
     github = "divi255";
