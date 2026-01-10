@@ -38,7 +38,6 @@
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
-  gccmakedep,
   iceauth,
   ico,
   imake,
@@ -208,7 +207,6 @@
 self: with self; {
 
   inherit
-    gccmakedep
     iceauth
     ico
     imake

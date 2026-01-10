@@ -5,6 +5,7 @@
   automake,
   fetchFromGitHub,
   fetchpatch,
+  gccmakedep,
   libjpeg_turbo,
   libpng,
   libtool,
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     which
-    xorg.gccmakedep
+    gccmakedep
     xorg.imake
   ];
   buildInputs = [
