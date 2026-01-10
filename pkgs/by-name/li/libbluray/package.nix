@@ -34,6 +34,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-d5N7rwfq3aSysxHPOvTFAmnS6jFlBB9YQ9lkdsTJJ3c=";
   };
 
+  postPatch =
+    lib.optionalString withAACS ''
+      substituteInPlace src/libbluray/disc/aacs.c --replace-fail 'getenv("LIBAACS_PATH")' '"${libaacs}/lib/libaacs"'
+    ''
+    + lib.optionalString withBDplus ''
+      substituteInPlace src/libbluray/disc/bdplus.c --replace-fail 'getenv("LIBBDPLUS_PATH")' '"${libbdplus}/lib/libbdplus"'
+    '';
+
   nativeBuildInputs = [
     meson
     ninja
