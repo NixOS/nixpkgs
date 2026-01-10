@@ -15,15 +15,15 @@
 
 let
   mavenGroupIdUrl = "https://packages.atlassian.com/maven/public/com/atlassian/amps";
-
 in
+
 stdenv.mkDerivation rec {
   pname = "atlassian-plugin-sdk";
-  version = "9.1.1";
+  version = "9.9.1";
 
   src = fetchurl {
     url = "${mavenGroupIdUrl}/atlassian-plugin-sdk/${version}/atlassian-plugin-sdk-${version}.tar.gz";
-    hash = "sha256-sEAe1eif9qXvIOu8RfZ4MWngEO5yCjU74g4Crd85J3Y=";
+    hash = "sha256-6svtGwk9d+/ipPHy/1kCQ5kyt1v9uaTwjYv6/ncCStc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
         ]
       }:$PATH"
 
-      NEW_VERSION=$(curl -s ${mavenGroupIdUrl}/atlassian-plugin-sdk/maven-metadata.xml | xq -r '.metadata.versioning.latest')
+      NEW_VERSION=$(curl -sL ${mavenGroupIdUrl}/atlassian-plugin-sdk/maven-metadata.xml | xq -r '.metadata.versioning.latest')
 
       if [[ "${version}" = "$NEW_VERSION" ]]; then
           echo "The new version same as the old version."
