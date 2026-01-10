@@ -49,6 +49,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://e-imzo.soliq.uz";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    teams = [ lib.teams.uzinfocom ];
   };
 })

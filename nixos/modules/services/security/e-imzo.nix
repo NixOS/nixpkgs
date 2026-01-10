@@ -45,6 +45,4 @@ in
       };
     };
   };
-
-  meta.maintainers = lib.teams.uzinfocom.members;
 }

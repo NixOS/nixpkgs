@@ -77,6 +77,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GTK application for managing E-IMZO keys";
     license = with lib.licenses; [ agpl3Plus ];
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.uzinfocom ];
   };
 })

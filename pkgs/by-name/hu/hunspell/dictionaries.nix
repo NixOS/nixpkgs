@@ -844,7 +844,6 @@ rec {
       license = with lib.licenses; [
         gpl3Plus
       ];
-      teams = [ lib.teams.uzinfocom ];
     };
   };
 
