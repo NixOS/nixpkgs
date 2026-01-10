@@ -255,6 +255,21 @@ resholve.mkDerivation rec {
   meta = {
     homepage = "https://github.com/bats-core/bats-core";
     description = "Bash Automated Testing System";
+    longDescription = ''
+      Bats can be extended with libraries. The available libraries are:
+
+        bats-assert
+        bats-file
+        bats-detik
+        bats-support
+
+      An example of building this package with a few libraries:
+
+        bats.withLibraries (p: [
+          p.bats-assert
+          p.bats-support
+        ])
+    '';
     mainProgram = "bats";
     maintainers = with lib.maintainers; [ abathur ];
     license = lib.licenses.mit;
