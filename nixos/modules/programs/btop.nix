@@ -11,8 +11,8 @@ in
 {
   options = {
     programs.btop = {
-      enable = lib.mkEnableOption "a setcap wrapper for btop";
-      package = lib.mkPackageOption pkgs "btop" { extraDescription = "can use btop-cuda or btop-rocm"; };
+      enable = lib.mkEnableOption "Weather to enable setcap wrapper for btop , needed to show usage for intel GPUs.";
+      package = lib.mkPackageOption pkgs "btop" { extraDescription = "The btop package to use."; };
     };
   };
 
