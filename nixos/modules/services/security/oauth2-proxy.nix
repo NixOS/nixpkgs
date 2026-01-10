@@ -616,14 +616,6 @@ in
         assertion = cfg.clientID != null || cfg.keyFile != null;
         message = "Either services.oauth2-proxy.clientID or services.oauth2-proxy.keyFile must be specified.";
       }
-      {
-        assertion = cfg.clientSecretFile != null || cfg.keyFile != null;
-        message = "Either services.oauth2-proxy.clientSecretFile or services.oauth2-proxy.keyFile must be specified.";
-      }
-      {
-        assertion = cfg.cookie.secretFile != null || cfg.keyFile != null;
-        message = "Either services.oauth2-proxy.cookie.secretFile or services.oauth2-proxy.keyFile must be specified.";
-      }
     ];
 
     users.users.oauth2-proxy = {
