@@ -43,6 +43,7 @@
   replaceVars,
   openssl,
   ostree-full,
+  testers,
 }:
 
 let
@@ -170,6 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
       musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
       inherit ostree-full;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -179,5 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    pkgConfigModules = [ "ostree-1" ];
   };
 })

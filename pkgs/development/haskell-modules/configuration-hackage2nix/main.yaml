@@ -113,30 +113,13 @@ extra-packages:
 # keep-sorted start skip_lines=1 case=no
 package-maintainers:
   alexfmpe:
-    - aeson-gadt-th
-    - android-activity
     - basic-sop
-    - bytestring-aeson-orphans
-    - cli-extras
-    - cli-git
-    - cli-nix
     - commutative-semigroups
-    - constraints-extras
-    - dependent-map
-    - dependent-monoidal-map
-    - dependent-sum
-    - dependent-sum-aeson-orphans
-    - dependent-sum-template
-    - gargoyle
-    - gargoyle-postgresql
-    - gargoyle-postgresql-connect
-    - gargoyle-postgresql-nix
     - generics-sop
     - ghcjs-base
     - ghcjs-dom
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
-    - haveibeenpwned
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
@@ -147,25 +130,15 @@ package-maintainers:
     - large-records
     - lens-sop
     - linux-namespaces
-    - monoid-map
     - monoidal-containers
-    - nix-thunk
-    - patch
     - proto-lens-arbitrary
     - proto3-suite
     - proto3-wire
     - records-sop
-    - reflex
-    - reflex-dom
-    - reflex-dom-core
-    - reflex-gadt-api
-    - reflex-fsnotify
     - th-abstraction
     - universe
     - universe-some
-    - vessel
     - warp
-    - which
   Anton-Latukha:
     - hnix
     - hnix-store-core
