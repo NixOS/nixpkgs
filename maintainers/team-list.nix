@@ -322,7 +322,6 @@ with lib.maintainers;
     # Verify additions by approval of an already existing member of the team.
     members = [
       theuni
-      dpausp
       frlan
       leona
       osnyx

@@ -71,6 +71,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/MyST-Parser";
     changelog = "https://github.com/executablebooks/MyST-Parser/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dpausp ];
   };
 }
