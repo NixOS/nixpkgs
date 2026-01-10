@@ -531,15 +531,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  lumiguide = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      lucus16
-    ];
-    scope = "Group registration for LumiGuide employees who collectively maintain packages.";
-    shortName = "Lumiguide employees";
-  };
-
   lumina = {
     github = "lumina";
     enableFeatureFreezePing = true;
