@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = lib.licenses.lgpl21;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.amarshall ];
     platforms = lib.platforms.unix;
   };
 
