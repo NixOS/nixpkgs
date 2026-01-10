@@ -144,6 +144,7 @@
   xf86-video-chips,
   xf86-video-cirrus,
   xf86-video-dummy,
+  xf86-video-fbdev,
   xf86-video-geode,
   xf86-video-i128,
   xf86-video-i740,
@@ -392,6 +393,7 @@ self: with self; {
   xf86videochips = xf86-video-chips;
   xf86videocirrus = xf86-video-cirrus;
   xf86videodummy = xf86-video-dummy;
+  xf86videofbdev = xf86-video-fbdev;
   xf86videogeode = xf86-video-geode;
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;
@@ -415,44 +417,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videofbdev = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-fbdev";
-      version = "0.5.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.1.tar.xz";
-        sha256 = "11zk8whari4m99ad3w30xwcjkgya4xbcpmg8710q14phkbxw0aww";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videointel = callPackage (
