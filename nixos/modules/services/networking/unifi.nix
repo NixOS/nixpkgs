@@ -94,6 +94,14 @@ in
       '';
     };
 
+    services.unifi.dataDir = lib.mkOption {
+      type = lib.types.str;
+      default = "/var/lib/unifi/data";
+      description = ''
+        Directory used to save all unifi data.
+      '';
+    };
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -215,6 +223,7 @@ in
         BindPaths = [
           "/var/log/unifi:${stateDir}/logs"
           "/run/unifi:${stateDir}/run"
+          "${cfg.dataDir}:${stateDir}/data"
           "${cfg.unifiPackage}/dl:${stateDir}/dl"
           "${cfg.unifiPackage}/lib:${stateDir}/lib"
           "${cfg.mongodbPackage}/bin:${stateDir}/bin"
@@ -230,11 +239,6 @@ in
 
   };
   imports = [
-    (lib.mkRemovedOptionModule [
-      "services"
-      "unifi"
-      "dataDir"
-    ] "You should move contents of dataDir to /var/lib/unifi/data")
     (lib.mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 }
