@@ -143,16 +143,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  c3d2 = {
-    members = [
-      astro
-      SuperSandro2000
-      oxapentane
-    ];
-    scope = "Maintain packages used in the C3D2 hackspace";
-    shortName = "c3d2";
-  };
-
   cachix = {
     # Verify additions to this team with at least one existing member of the team.
     members = [

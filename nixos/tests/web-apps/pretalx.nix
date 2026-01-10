@@ -2,7 +2,6 @@
 
 {
   name = "pretalx";
-  meta.maintainers = lib.teams.c3d2.members;
 
   nodes = {
     pretalx =

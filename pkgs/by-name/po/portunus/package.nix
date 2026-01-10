@@ -29,6 +29,5 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ majewsky ];
-    teams = [ lib.teams.c3d2 ];
   };
 }

@@ -43,7 +43,6 @@ let
     changelog = "https://docs.pretalx.org/changelog/#${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
-    teams = [ lib.teams.c3d2 ];
     platforms = lib.platforms.linux;
   };
 

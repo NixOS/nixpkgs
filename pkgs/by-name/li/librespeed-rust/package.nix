@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "Very lightweight speed test implementation in Rust";
     homepage = "https://github.com/librespeed/speedtest-rust";
     license = lib.licenses.lgpl3Plus;
-    teams = with lib.teams; [ c3d2 ];
     mainProgram = "librespeed-rs";
   };
 }
