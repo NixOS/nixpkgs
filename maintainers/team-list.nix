@@ -534,7 +534,6 @@ with lib.maintainers;
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [
-      roelvandijk
       lucus16
     ];
     scope = "Group registration for LumiGuide employees who collectively maintain packages.";

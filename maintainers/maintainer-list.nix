@@ -22692,12 +22692,6 @@
     githubId = 53882428;
     name = "Erik Rodriguez";
   };
-  roelvandijk = {
-    email = "roel@lambdacube.nl";
-    github = "roelvandijk";
-    githubId = 710906;
-    name = "Roel van Dijk";
-  };
   rogarb = {
     email = "rogarb@rgarbage.fr";
     github = "rogarb";
