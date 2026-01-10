@@ -55,19 +55,19 @@ rustPlatform.buildRustPackage.override
       zlib
     ];
 
-    # cargo uses git-rs which is made for a version of libgit2 from recent master that
-    # is not compatible with the current version in nixpkgs.
-    #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+    env = {
+      # cargo uses git-rs which is made for a version of libgit2 from recent master that
+      # is not compatible with the current version in nixpkgs.
+      #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
 
-    # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
-    RUSTC_BOOTSTRAP = 1;
+      # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
+      RUSTC_BOOTSTRAP = 1;
 
-    RUSTFLAGS =
-      if stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu" then
-        # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
-        "-Clinker-features=-lld -Clink-self-contained=-linker"
-      else
-        null;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu") {
+      # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+      RUSTFLAGS = "-Clinker-features=-lld -Clink-self-contained=-linker";
+    };
 
     postInstall = ''
       wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
