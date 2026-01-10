@@ -15,7 +15,6 @@ gem "activemodel", "~> 8.0.0"
 gem "activerecord", "~> 8.0.0"
 gem "activesupport", "~> 8.0.0"
 gem "railties", "~> 8.0.0"
-gem "openssl", "~> 3.3.1"
 
 gem "propshaft"
 gem "json"
@@ -313,3 +312,4 @@ gem "hashery", require: false
 gem "ttfunk", require: false
 gem "afm", require: false
 gem "pdf-reader", require: false
+gem "openssl", "~> 3.3.1"
