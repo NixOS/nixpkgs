@@ -4,11 +4,14 @@
 # ```
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchzip,
-  procps,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  bubblewrap,
+  procps,
+  socat,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
@@ -44,9 +47,17 @@ buildNpmPackage (finalAttrs: {
       --set DISABLE_AUTOUPDATER 1 \
       --unset DEV \
       --prefix PATH : ${
-        lib.makeBinPath [
-          procps # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
-        ]
+        lib.makeBinPath (
+          [
+            # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
+            procps
+          ]
+          # the following packages are required for the sandbox to work (Linux only)
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            bubblewrap
+            socat
+          ]
+        )
       }
   '';
 
