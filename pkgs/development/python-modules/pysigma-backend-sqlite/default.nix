@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-sqlite";
-  version = "0.2.0-unstable-2025-01-21";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
