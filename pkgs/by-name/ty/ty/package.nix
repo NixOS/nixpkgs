@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-nloCLGxW1T4INzBSx5BJR8sCUWK3c7lGE9D5SgCW7PQ=";
+    hash = "sha256-lelhsc6zl6Qe7W7YsXviqB3NEOuJAzewnOgFPtsCYGA=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-Tg4MYpbRjW9qvIzRCceX0lEMLThe4bo1/+xyNOzb+T0=";
+  cargoHash = "sha256-BceNALWxHXxylbssvAbY0CMcQBHnOX22ckgGta1wTsc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

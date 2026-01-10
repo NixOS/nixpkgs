@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     scdoc
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -81,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     pantheon.granite7
     # systemd # ends with broken permission
-    wayland-scanner
   ];
 
   postPatch = ''
@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build-aux/meson/postinstall.py
     substituteInPlace src/functions.vala --replace "/usr/local/etc/xdg/swaync" "$out/etc/xdg/swaync"
   '';
+
+  strictDeps = true;
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
