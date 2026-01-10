@@ -15,7 +15,7 @@
   volatile,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "usort";
   version = "1.1.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "usort";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sSc6TpsErz+93+dlKk+RZnyZFAp7qjpNYMVCEW9lXds=";
   };
 
@@ -52,9 +52,9 @@ buildPythonPackage rec {
   meta = {
     description = "Safe, minimal import sorting for Python projects";
     homepage = "https://github.com/facebook/usort";
-    changelog = "https://github.com/facebook/usort/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/facebook/usort/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "usort";
   };
-}
+})
