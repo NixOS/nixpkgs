@@ -6,6 +6,7 @@
   lib,
   buildNpmPackage,
   fetchzip,
+  procps,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
@@ -19,6 +20,8 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-KjkwJxukIHvsChuxL8GKdnfDsd70CPEG2MxXHiWJxqw=";
+
+  strictDeps = true;
 
   strictDeps = true;
 
@@ -41,7 +44,12 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
-      --unset DEV
+      --unset DEV \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          procps # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
+        ]
+      }
   '';
 
   doInstallCheck = true;
