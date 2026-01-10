@@ -55,31 +55,9 @@
   mesa-gl-headers,
   dri-pkgconfig-stub,
 }:
-
-let
-  inherit (stdenv.hostPlatform) isDarwin;
-
-  brokenOnDarwin =
-    pkg:
-    pkg.overrideAttrs (attrs: {
-      meta = attrs.meta // {
-        broken = isDarwin;
-      };
-    });
-in
 self: super:
 {
   mkfontdir = xorg.mkfontscale;
-
-  xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
-
-  xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
-  });
-
-  xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
-    configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
-  });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
@@ -156,41 +134,6 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
-
-  xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
-    # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2024-05-06";
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      group = "xorg";
-      owner = "driver";
-      repo = "xf86-video-intel";
-      rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
-      sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
-    };
-    buildInputs = attrs.buildInputs ++ [
-      xorg.libXScrnSaver
-      xorg.libXv
-      xorg.pixman
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      autoreconfHook
-      xorg.utilmacros
-      xorg.xorgserver
-    ];
-    configureFlags = [
-      "--with-default-dri=3"
-      "--enable-tools"
-    ];
-    patches = [ ./use_crocus_and_iris.patch ];
-
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
 
   xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.libXv ];

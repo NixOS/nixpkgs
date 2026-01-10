@@ -468,18 +468,24 @@ print OUT <<EOF;
   xf86-input-synaptics,
   xf86-input-vmmouse,
   xf86-input-void,
+  xf86-video-amdgpu,
   xf86-video-apm,
   xf86-video-ark,
   xf86-video-ast,
   xf86-video-ati,
   xf86-video-chips,
   xf86-video-cirrus,
+  xf86-video-dummy,
+  xf86-video-fbdev,
   xf86-video-geode,
   xf86-video-i128,
   xf86-video-i740,
+  xf86-video-intel,
   xf86-video-mga,
   xf86-video-neomagic,
   xf86-video-nouveau,
+  xf86-video-nv,
+  xf86-video-omap,
   xf86-video-qxl,
   xf86-video-r128,
   xf86-video-s3virge,
@@ -714,18 +720,24 @@ self: with self; {
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
+  xf86videoamdgpu = xf86-video-amdgpu;
   xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
   xf86videoast = xf86-video-ast;
   xf86videoati = xf86-video-ati;
   xf86videochips = xf86-video-chips;
   xf86videocirrus = xf86-video-cirrus;
+  xf86videodummy = xf86-video-dummy;
+  xf86videofbdev = xf86-video-fbdev;
   xf86videogeode = xf86-video-geode;
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;
+  xf86videointel = xf86-video-intel;
   xf86videomga = xf86-video-mga;
   xf86videoneomagic = xf86-video-neomagic;
   xf86videonouveau = xf86-video-nouveau;
+  xf86videonv = xf86-video-nv;
+  xf86videoomap = xf86-video-omap;
   xf86videoqxl = xf86-video-qxl;
   xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;

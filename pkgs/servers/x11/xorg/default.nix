@@ -136,18 +136,24 @@
   xf86-input-synaptics,
   xf86-input-vmmouse,
   xf86-input-void,
+  xf86-video-amdgpu,
   xf86-video-apm,
   xf86-video-ark,
   xf86-video-ast,
   xf86-video-ati,
   xf86-video-chips,
   xf86-video-cirrus,
+  xf86-video-dummy,
+  xf86-video-fbdev,
   xf86-video-geode,
   xf86-video-i128,
   xf86-video-i740,
+  xf86-video-intel,
   xf86-video-mga,
   xf86-video-neomagic,
   xf86-video-nouveau,
+  xf86-video-nv,
+  xf86-video-omap,
   xf86-video-qxl,
   xf86-video-r128,
   xf86-video-s3virge,
@@ -382,18 +388,24 @@ self: with self; {
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
+  xf86videoamdgpu = xf86-video-amdgpu;
   xf86videoapm = xf86-video-apm;
   xf86videoark = xf86-video-ark;
   xf86videoast = xf86-video-ast;
   xf86videoati = xf86-video-ati;
   xf86videochips = xf86-video-chips;
   xf86videocirrus = xf86-video-cirrus;
+  xf86videodummy = xf86-video-dummy;
+  xf86videofbdev = xf86-video-fbdev;
   xf86videogeode = xf86-video-geode;
   xf86videoi128 = xf86-video-i128;
   xf86videoi740 = xf86-video-i740;
+  xf86videointel = xf86-video-intel;
   xf86videomga = xf86-video-mga;
   xf86videoneomagic = xf86-video-neomagic;
   xf86videonouveau = xf86-video-nouveau;
+  xf86videonv = xf86-video-nv;
+  xf86videoomap = xf86-video-omap;
   xf86videoqxl = xf86-video-qxl;
   xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;
@@ -411,270 +423,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoamdgpu = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libgbm,
-      libGL,
-      libdrm,
-      udev,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-amdgpu";
-      version = "23.0.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-amdgpu-23.0.0.tar.xz";
-        sha256 = "0qf0kjh6pww5abxmqa4c9sfa2qq1hq4p8qcgqpfd1kpkcvmg012g";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libgbm
-        libGL
-        libdrm
-        udev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videodummy = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-dummy";
-      version = "0.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-dummy-0.4.1.tar.xz";
-        sha256 = "1byzsdcnlnzvkcqrzaajzc3nzm7y7ydrk9bjr4x9lx8gznkj069m";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videofbdev = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-fbdev";
-      version = "0.5.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.1.tar.xz";
-        sha256 = "11zk8whari4m99ad3w30xwcjkgya4xbcpmg8710q14phkbxw0aww";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videointel = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      cairo,
-      xorgproto,
-      libdrm,
-      libpng,
-      udev,
-      libpciaccess,
-      libX11,
-      xcbutil,
-      libxcb,
-      libXcursor,
-      libXdamage,
-      libXext,
-      libXfixes,
-      xorgserver,
-      libXrandr,
-      libXrender,
-      libxshmfence,
-      libXtst,
-      libXvMC,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-intel";
-      version = "2.99.917";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2";
-        sha256 = "1jb7jspmzidfixbc0gghyjmnmpqv85i7pi13l4h2hn2ml3p83dq0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        cairo
-        xorgproto
-        libdrm
-        libpng
-        udev
-        libpciaccess
-        libX11
-        xcbutil
-        libxcb
-        libXcursor
-        libXdamage
-        libXext
-        libXfixes
-        xorgserver
-        libXrandr
-        libXrender
-        libxshmfence
-        libXtst
-        libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videonv = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-nv";
-      version = "2.1.23";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-nv-2.1.23.tar.xz";
-        sha256 = "1jlap6xjn4pfwg9ab8fxm5mwf4dqfywp70bgc0071m7k66jbv3f6";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoomap = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-omap";
-      version = "0.4.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2";
-        sha256 = "0nmbrx6913dc724y8wj2p6vqfbj5zdjfmsl037v627jj0whx9rwk";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoopenchrome = callPackage (
