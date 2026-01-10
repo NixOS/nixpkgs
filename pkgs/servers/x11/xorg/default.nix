@@ -154,6 +154,7 @@
   xf86-video-nouveau,
   xf86-video-nv,
   xf86-video-omap,
+  xf86-video-openchrome,
   xf86-video-qxl,
   xf86-video-r128,
   xf86-video-s3virge,
@@ -411,6 +412,7 @@ self: with self; {
   xf86videonouveau = xf86-video-nouveau;
   xf86videonv = xf86-video-nv;
   xf86videoomap = xf86-video-omap;
+  xf86videoopenchrome = xf86-video-openchrome;
   xf86videoqxl = xf86-video-qxl;
   xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;
@@ -433,53 +435,5 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoopenchrome = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      udev,
-      libpciaccess,
-      libX11,
-      libXext,
-      xorgserver,
-      libXvMC,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-openchrome";
-      version = "0.6.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-openchrome-0.6.0.tar.bz2";
-        sha256 = "0x9gq3hw6k661k82ikd1y2kkk4dmgv310xr5q59dwn4k6z37aafs";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        udev
-        libpciaccess
-        libX11
-        libXext
-        xorgserver
-        libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
 }

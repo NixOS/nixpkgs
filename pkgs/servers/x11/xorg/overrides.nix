@@ -115,18 +115,6 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
-
-  xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.libXv ];
-    patches = [
-      # Pull upstream fix for -fno-common toolchains.
-      (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/freedesktop/openchrome-xf86-video-openchrome/commit/edb46574d4686c59e80569ba236d537097dcdd0e.patch";
-        sha256 = "0xqawg9zzwb7x5vaf3in60isbkl3zfjq0wcnfi45s3hiii943sxz";
-      })
-    ];
-  });
 }
 
 # deprecate some packages
