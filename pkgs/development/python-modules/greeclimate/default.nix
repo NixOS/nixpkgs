@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "2.1.0";
+  version = "2.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = "greeclimate";
     tag = "v${version}";
-    hash = "sha256-SO7/uheAPVFZ1C2qrzP7jB88u6EH79f1+qMZIgHZaCE=";
+    hash = "sha256-qYgwjVfH9Im0Mxd8YOjV1M4fKhSd3tKyQB2PZ9dkqTU=";
   };
 
   build-system = [ setuptools ];
