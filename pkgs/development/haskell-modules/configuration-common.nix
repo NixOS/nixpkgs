@@ -1002,6 +1002,7 @@ with haskellLib;
   lvmrun = disableHardening [ "format" ] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
   milena = dontCheck super.milena;
+  MIP = dontCheck super.MIP; # https://github.com/msakai/haskell-MIP/issues/87
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   network-dbus = dontCheck super.network-dbus;
