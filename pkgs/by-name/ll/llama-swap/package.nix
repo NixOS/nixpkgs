@@ -17,7 +17,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "llama-swap";
-  version = "176";
+  version = "182";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nfkuaiEITOmpkiLft3iNW1VUexHwZ36c8gwcQKGANbQ=";
+    hash = "sha256-w/VQS8uCpgniwLiJsH/8IG/AGasRxjCv7fADTfpvWLw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-/EbFyuCVFxHTTO0UwSV3B/6PYUpudxB2FD8nNx1Bb+M=";
+  vendorHash = "sha256-XiDYlw/byu8CWvg4KSPC7m8PGCZXtp08Y1velx4BR8U=";
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
 
