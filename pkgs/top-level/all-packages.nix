@@ -3224,8 +3224,6 @@ with pkgs;
 
   minijail = callPackage ../tools/system/minijail { };
 
-  minijail-tools = python3.pkgs.callPackage ../tools/system/minijail/tools.nix { };
-
   mir-qualia = callPackage ../tools/text/mir-qualia {
     pythonPackages = python3Packages;
   };
@@ -3369,8 +3367,6 @@ with pkgs;
   };
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
-
-  nxdomain = python3.pkgs.callPackage ../tools/networking/nxdomain { };
 
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
 
@@ -3714,8 +3710,6 @@ with pkgs;
       fmt = fmt_11;
     };
   };
-
-  scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
 
@@ -5803,10 +5797,6 @@ with pkgs;
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
-
-  fortran-language-server =
-    python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server
-      { };
 
   inherit (callPackages ../development/tools/language-servers/nixd { }) nixf nixt nixd;
 
@@ -8189,8 +8179,6 @@ with pkgs;
     };
   };
 
-  rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
-
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
 
@@ -9023,8 +9011,6 @@ with pkgs;
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
-  mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
-
   moodle = callPackage ../servers/web-apps/moodle { };
 
   moodle-utils = callPackage ../servers/web-apps/moodle/moodle-utils.nix { };
@@ -9352,8 +9338,6 @@ with pkgs;
   prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
 
   public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
-
-  spf-engine = python3.pkgs.callPackage ../servers/mail/spf-engine { };
 
   pypiserver = with python3Packages; toPythonApplication pypiserver;
 
@@ -10925,8 +10909,6 @@ with pkgs;
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
-  kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
-
   waybox = callPackage ../by-name/wa/waybox/package.nix {
     wlroots = wlroots_0_17;
   };
@@ -11211,14 +11193,6 @@ with pkgs;
   };
 
   luddite = with python3Packages; toPythonApplication luddite;
-
-  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
-    inherit (pkgs) meson;
-  };
-  lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
-  lutris-free = lutris.override {
-    steamSupport = false;
-  };
 
   lxi-tools = callPackage ../tools/networking/lxi-tools { };
   lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
@@ -11683,10 +11657,6 @@ with pkgs;
     fltk = fltk13;
   };
 
-  radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK32;
-  };
-
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
   };
@@ -11860,10 +11830,6 @@ with pkgs;
   supersonic-wayland = supersonic.override {
     waylandSupport = true;
   };
-
-  syncplay = python3.pkgs.callPackage ../applications/networking/syncplay { };
-
-  syncplay-nogui = syncplay.override { enableGUI = false; };
 
   inherit
     (callPackages ../applications/networking/syncthing {
@@ -12762,8 +12728,6 @@ with pkgs;
 
   steam-run = steam.run;
   steam-run-free = steam.run-free;
-
-  steamback = python3.pkgs.callPackage ../tools/games/steamback { };
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
@@ -13687,8 +13651,6 @@ with pkgs;
       haskellPackages.nix-serve-ng
     else
       haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
-
-  nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 

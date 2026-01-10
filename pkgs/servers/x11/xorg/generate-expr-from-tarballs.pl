@@ -442,6 +442,7 @@ print OUT <<EOF;
   transset,
   util-macros,
   viewres,
+  wrapWithXFileSearchPathHook,
   x11perf,
   xauth,
   xbacklight,
@@ -459,6 +460,10 @@ print OUT <<EOF;
   xdriinfo,
   xev,
   xeyes,
+  xf86-input-mouse,
+  xf86-input-synaptics,
+  xf86-input-vmmouse,
+  xf86-input-void,
   xfd,
   xfontsel,
   xfs,
@@ -531,6 +536,7 @@ self: with self; {
     smproxy
     transset
     viewres
+    wrapWithXFileSearchPathHook
     x11perf
     xauth
     xbacklight
@@ -663,8 +669,12 @@ self: with self; {
   xcbutil = libxcb-util;
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
-  xkeyboardconfig = xkeyboard-config;
   xcursorthemes = xcursor-themes;
+  xf86inputmouse = xf86-input-mouse;
+  xf86inputsynaptics = xf86-input-synaptics;
+  xf86inputvmmouse = xf86-input-vmmouse;
+  xf86inputvoid = xf86-input-void;
+  xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;

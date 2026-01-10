@@ -54,13 +54,13 @@ let
     '';
   });
 
-  version = "7.83.0";
+  version = "7.84.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-r1RB6vtG2mdRJifaKNrmQvxJxXOqkpHoWivvPPpesow=";
+    hash = "sha256-c76Z+AJCGBXpHPejtZaA2RJpEMy+sd2xvjx+epC1Eqw=";
     postCheckout = ''
       git -C "$out" show -s --format=%ct > "$out"/GIT_COMMIT_TIME
     '';
@@ -147,9 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-taF3A2YcqMzqcS401fxRW9wEC/Ol7bVJ6belF4RTIRk="
+        "sha256-/1/sUHt1J6wv/MuaZdE1XbkIkXfrllBoqt8AXP1d0Pw="
       else
-        "sha256-sWxxANPW0W5/tmowoJ7ZPBEBSurKN6C+wZAcLa2QHz8=";
+        "sha256-x2A4sX7m/zNVTEWRXOKD6VsUR+aGjEFhIv+NQVe+RwQ=";
   };
 
   env = {
