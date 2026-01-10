@@ -60,16 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     cairo
     gtk3-x11
-  ]
-  ++ (with xorg; [
-    libX11
-    libXtst
-    libXrandr
-    libXi
-    libXdmcp
-    libpthreadstubs
-    libxcb
-  ]);
+    xorg.libX11
+    xorg.libXtst
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libXdmcp
+    xorg.libpthreadstubs
+    xorg.libxcb
+  ];
 
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 

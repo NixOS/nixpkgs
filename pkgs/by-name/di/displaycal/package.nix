@@ -41,14 +41,12 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     librsvg
-  ]
-  ++ (with xorg; [
-    libX11
-    libXxf86vm
-    libXext
-    libXinerama
-    libXrandr
-  ]);
+    xorg.libX11
+    xorg.libXxf86vm
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrandr
+  ];
 
   # Workaround for eoyilmaz/displaycal-py3#261
   setupPyGlobalFlags = [ "appdata" ];

@@ -150,18 +150,16 @@ let
         brotli
         libxkbcommon
         libxcb
-      ]
-      ++ (with pkgs.xorg; [
-        libX11
-        libXdamage
-        xrandr
-        libXtst
-        libXcomposite
-        libXext
-        libXfixes
-        libXrandr
-        libxkbfile
-      ]);
+        xorg.libX11
+        xorg.libXdamage
+        xorg.xrandr
+        xorg.libXtst
+        xorg.libXcomposite
+        xorg.libXext
+        xorg.libXfixes
+        xorg.libXrandr
+        xorg.libxkbfile
+      ];
 
     profile = ''
       export QT_QPA_PLATFORM_PLUGIN_PATH=/opt/PixInsight/bin/lib/qt-plugins/platforms

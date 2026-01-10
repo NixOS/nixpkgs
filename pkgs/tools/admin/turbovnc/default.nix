@@ -74,23 +74,21 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pam
     perl
-  ]
-  ++ (with xorg; [
-    libfontenc # for -DTVNC_SYSTEMX11=1
-    libSM
-    libX11
-    libXdamage # for -DTVNC_SYSTEMX11=1
-    libXdmcp # for -DTVNC_SYSTEMX11=1
-    libXext
-    libXfont2 # for -DTVNC_SYSTEMX11=1
-    libxkbfile # for -DTVNC_SYSTEMX11=1
-    libxshmfence
-    libXi
+    xorg.libfontenc # for -DTVNC_SYSTEMX11=1
+    xorg.libSM
+    xorg.libX11
+    xorg.libXdamage # for -DTVNC_SYSTEMX11=1
+    xorg.libXdmcp # for -DTVNC_SYSTEMX11=1
+    xorg.libXext
+    xorg.libXfont2 # for -DTVNC_SYSTEMX11=1
+    xorg.libxkbfile # for -DTVNC_SYSTEMX11=1
+    xorg.libxshmfence
+    xorg.libXi
     mesa-gl-headers # for -DTVNC_SYSTEMX11=1
-    pixman # for -DTVNC_SYSTEMX11=1
-    xorgproto
-    xtrans # for -DTVNC_SYSTEMX11=1
-  ]);
+    xorg.pixman # for -DTVNC_SYSTEMX11=1
+    xorg.xorgproto
+    xorg.xtrans # for -DTVNC_SYSTEMX11=1
+  ];
 
   postPatch = ''
     substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${xorg.libXfont2}/lib/libXfont2.so)  #'

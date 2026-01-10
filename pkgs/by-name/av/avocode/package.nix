@@ -41,46 +41,43 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vNQT4jyMIIAk1pV3Hrp40nawFutWCv7xtwg2gU6ejy0=";
   };
 
-  libPath = lib.makeLibraryPath (
-    with xorg;
-    [
-      stdenv.cc.cc
-      at-spi2-core.out
-      gdk-pixbuf
-      glib
-      gtk3
-      atk
-      at-spi2-atk
-      pango
-      cairo
-      freetype
-      fontconfig
-      dbus
-      nss
-      nspr
-      alsa-lib
-      cups
-      expat
-      udev
-      libX11
-      libxcb
-      libxshmfence
-      libxkbcommon
-      libXi
-      libXcursor
-      libXdamage
-      libXrandr
-      libXcomposite
-      libXext
-      libXfixes
-      libXrender
-      libXtst
-      libXScrnSaver
-      libuuid
-      libdrm
-      libgbm
-    ]
-  );
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    at-spi2-core.out
+    gdk-pixbuf
+    glib
+    gtk3
+    atk
+    at-spi2-atk
+    pango
+    cairo
+    freetype
+    fontconfig
+    dbus
+    nss
+    nspr
+    alsa-lib
+    cups
+    expat
+    udev
+    xorg.libX11
+    xorg.libxcb
+    xorg.libxshmfence
+    libxkbcommon
+    xorg.libXi
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXrandr
+    xorg.libXcomposite
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libXScrnSaver
+    libuuid
+    libdrm
+    libgbm
+  ];
 
   desktopItem = makeDesktopItem {
     name = "Avocode";

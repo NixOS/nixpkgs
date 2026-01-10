@@ -105,15 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       wrapProgram $out/bin/vncserver \
         --prefix PATH : ${
-          lib.makeBinPath (
-            with xorg;
-            [
-              xterm
-              twm
-              xsetroot
-              xauth
-            ]
-          )
+          lib.makeBinPath [
+            xterm
+            xorg.twm
+            xorg.xsetroot
+            xorg.xauth
+          ]
         }
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -134,27 +131,26 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
     [
       nettle
       pam
       perl
-      xorgproto
-      utilmacros
-      libXtst
-      libXext
-      libX11
-      libXext
-      libICE
-      libXi
-      libSM
-      libXft
-      libxkbfile
-      libXfont2
-      libpciaccess
+      xorg.xorgproto
+      xorg.utilmacros
+      xorg.libXtst
+      xorg.libXext
+      xorg.libX11
+      xorg.libXext
+      xorg.libICE
+      xorg.libXi
+      xorg.libSM
+      xorg.libXft
+      xorg.libxkbfile
+      xorg.libXfont2
+      xorg.libpciaccess
       libGLU
-      libXrandr
-      libXdamage
+      xorg.libXrandr
+      xorg.libXdamage
     ]
     ++ xorg.xorgserver.buildInputs
   );
@@ -166,12 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     automake
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
     [
-      fontutil
+      xorg.fontutil
       libtool
       makeWrapper
-      utilmacros
+      xorg.utilmacros
       zlib
     ]
     ++ xorg.xorgserver.nativeBuildInputs

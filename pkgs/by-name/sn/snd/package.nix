@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ]
-  ++ (with xorg; [
-    libXext
-    libXft
-    libXpm
-    libXt
-  ]);
+  ++ [
+    xorg.libXext
+    xorg.libXft
+    xorg.libXpm
+    xorg.libXt
+  ];
 
   configureFlags = [
     "--with-motif"

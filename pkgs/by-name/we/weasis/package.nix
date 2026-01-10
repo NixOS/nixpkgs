@@ -24,12 +24,10 @@ let
 
   runtimeDeps = [
     libGL
-  ]
-  ++ (with xorg; [
-    libX11
-    libXrender
-    libXxf86vm
-  ]);
+    xorg.libX11
+    xorg.libXrender
+    xorg.libXxf86vm
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";

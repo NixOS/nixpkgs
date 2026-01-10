@@ -105,13 +105,11 @@
       ...
     }:
     {
-      buildInputs =
-        buildInputs
-        ++ (with xorg; [
-          libX11
-          libXft
-          libXinerama
-        ]);
+      buildInputs = buildInputs ++ [
+        xorg.libX11
+        xorg.libXft
+        xorg.libXinerama
+      ];
     };
 
   zippy =

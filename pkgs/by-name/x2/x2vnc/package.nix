@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  buildInputs = with xorg; [
-    libX11
-    xorgproto
-    libXext
-    libXrandr
+  buildInputs = [
+    xorg.libX11
+    xorg.xorgproto
+    xorg.libXext
+    xorg.libXrandr
   ];
 
   hardeningDisable = [ "format" ];

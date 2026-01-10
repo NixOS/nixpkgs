@@ -39,21 +39,21 @@ deployAndroidPackage {
         waylandpp.lib
       ]
     )
-    ++ (with pkgs.xorg; [
-      libX11
-      libXext
-      libXdamage
-      libXfixes
-      libxcb
-      libXcomposite
-      libXcursor
-      libXi
-      libXrender
-      libXtst
-      libICE
-      libSM
-      libxkbfile
-      libxshmfence
+    ++ (with pkgs; [
+      xorg.libX11
+      xorg.libXext
+      xorg.libXdamage
+      xorg.libXfixes
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libICE
+      xorg.libSM
+      xorg.libxkbfile
+      xorg.libxshmfence
     ])
     ++ lib.optional (os == "linux" && stdenv.isx86_64) pkgsi686Linux.glibc;
   patchInstructions =

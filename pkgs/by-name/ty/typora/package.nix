@@ -86,16 +86,14 @@ let
         libGL
         expat
         libxkbcommon
-      ])
-      ++ (with pkgs.xorg; [
-        libX11
-        libXcursor
-        libXrandr
-        libXcomposite
-        libXdamage
-        libXext
-        libXfixes
-        libxcb
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXrandr
+        xorg.libXcomposite
+        xorg.libXdamage
+        xorg.libXext
+        xorg.libXfixes
+        xorg.libxcb
       ]);
     runScript = ''
       Typora "$@"

@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withDoc [ "devdoc" ];
 
   # TODO: enable xmodmap support, needs xmodmap DB
-  propagatedBuildInputs = with xorg; [
-    libX11
-    libXi
+  propagatedBuildInputs = [
+    xorg.libX11
+    xorg.libXi
     xkeyboard_config
     libxml2
-    libICE
+    xorg.libICE
     glib
-    libxkbfile
+    xorg.libxkbfile
     isocodes
   ];
 

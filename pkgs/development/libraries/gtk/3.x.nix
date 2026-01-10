@@ -161,20 +161,17 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gsettings-desktop-schemas
   ]
-  ++ lib.optionals x11Support (
-    with xorg;
-    [
-      libICE
-      libSM
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-    ]
-  )
+  ++ lib.optionals x11Support [
+    xorg.libICE
+    xorg.libSM
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+  ]
   ++ [
     # TODO: Reorder me on `staging`.
     pango

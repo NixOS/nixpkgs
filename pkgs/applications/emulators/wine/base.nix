@@ -163,17 +163,17 @@ stdenv.mkDerivation (
           pkgs.libdrm
         ]
         ++ lib.optionals x11Support (
-          with pkgs.xorg;
+          with pkgs;
           [
-            libX11
-            libXcomposite
-            libXcursor
-            libXext
-            libXfixes
-            libXi
-            libXrandr
-            libXrender
-            libXxf86vm
+            xorg.libX11
+            xorg.libXcomposite
+            xorg.libXcursor
+            xorg.libXext
+            xorg.libXfixes
+            xorg.libXi
+            xorg.libXrandr
+            xorg.libXrender
+            xorg.libXxf86vm
           ]
         )
         ++ lib.optionals waylandSupport (

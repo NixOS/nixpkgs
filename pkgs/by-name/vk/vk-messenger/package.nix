@@ -61,18 +61,15 @@ let
       autoPatchelfHook
       wrapGAppsHook3
     ];
-    buildInputs =
-      (with xorg; [
-        libXdamage
-        libXtst
-        libXScrnSaver
-        libxkbfile
-      ])
-      ++ [
-        gtk3
-        nss
-        alsa-lib
-      ];
+    buildInputs = [
+      xorg.libXdamage
+      xorg.libXtst
+      xorg.libXScrnSaver
+      xorg.libxkbfile
+      gtk3
+      nss
+      alsa-lib
+    ];
 
     runtimeDependencies = [
       (lib.getLib udev)

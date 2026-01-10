@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = with xorg; [
+  nativeBuildInputs = [
     at-spi2-core
     atk
     alsa-lib
@@ -72,18 +72,18 @@ stdenv.mkDerivation rec {
     nss
     nspr
     libuuid
-    libX11
-    libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXScrnSaver
-    libXtst
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXtst
     makeWrapper
     wrapGAppsHook3
   ];

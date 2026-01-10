@@ -63,7 +63,7 @@ let
     preferLocalBuild = true;
   };
 
-  wechat-uos-runtime = with xorg; [
+  wechat-uos-runtime = [
     stdenv.cc.cc
     stdenv.cc.libc
     pango
@@ -72,23 +72,23 @@ let
     xcbutilimage
     xcbutilkeysyms
     xcbutilrenderutil
-    libX11
-    libXt
-    libXext
-    libSM
-    libICE
-    libxcb
+    xorg.libX11
+    xorg.libXt
+    xorg.libXext
+    xorg.libSM
+    xorg.libICE
+    xorg.libxcb
     libxkbcommon
-    libxshmfence
-    libXi
-    libXft
-    libXcursor
-    libXfixes
-    libXScrnSaver
-    libXcomposite
-    libXdamage
-    libXtst
-    libXrandr
+    xorg.libxshmfence
+    xorg.libXi
+    xorg.libXft
+    xorg.libXcursor
+    xorg.libXfixes
+    xorg.libXScrnSaver
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXtst
+    xorg.libXrandr
     libnotify
     atk
     atkmm
@@ -105,7 +105,7 @@ let
     libva
     freetype
     fontconfig
-    libXrender
+    xorg.libXrender
     libuuid
     expat
     glib

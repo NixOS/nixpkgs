@@ -141,16 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     fribidi
     harfbuzz
+    xorg.libICE
+    xorg.libSM
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
   ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libXcursor
-    libXdamage
-    libXi
-    libXrandr
-    libXrender
-  ])
   ++ lib.optionals trackerSupport [
     tinysparql
   ]

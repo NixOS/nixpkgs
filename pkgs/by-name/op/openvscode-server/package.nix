@@ -107,11 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ (with xorg; [
-      libX11
-      libxkbfile
+    ++ [
+      xorg.libX11
+      xorg.libxkbfile
       libkrb5
-    ])
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
     ];

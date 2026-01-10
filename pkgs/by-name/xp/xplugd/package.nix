@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "11vjr69prrs4ir9c267zwq4g9liipzrqi0kmw1zg95dbn7r7zmql";
   };
 
-  buildInputs = with xorg; [
-    libX11
-    libXi
-    libXrandr
-    libXext
+  buildInputs = [
+    xorg.libX11
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXext
   ];
   nativeBuildInputs = [
     pkg-config

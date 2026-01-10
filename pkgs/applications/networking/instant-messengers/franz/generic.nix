@@ -67,39 +67,35 @@ stdenv.mkDerivation (
       wrapGAppsHook3
       dpkg
     ];
-    buildInputs =
-      extraBuildInputs
-      ++ (with xorg; [
-        libXi
-        libXcursor
-        libXdamage
-        libXrandr
-        libXcomposite
-        libXext
-        libXfixes
-        libXrender
-        libX11
-        libXtst
-        libXScrnSaver
-      ])
-      ++ [
-        libgbm
-        gtk3
-        atk
-        glib
-        pango
-        gdk-pixbuf
-        cairo
-        freetype
-        fontconfig
-        dbus
-        nss
-        nspr
-        alsa-lib
-        cups
-        expat
-        stdenv.cc.cc
-      ];
+    buildInputs = extraBuildInputs ++ [
+      xorg.libXi
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXrandr
+      xorg.libXcomposite
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrender
+      xorg.libX11
+      xorg.libXtst
+      xorg.libXScrnSaver
+      libgbm
+      gtk3
+      atk
+      glib
+      pango
+      gdk-pixbuf
+      cairo
+      freetype
+      fontconfig
+      dbus
+      nss
+      nspr
+      alsa-lib
+      cups
+      expat
+      stdenv.cc.cc
+    ];
     runtimeDependencies = [
       libglvnd
       (lib.getLib stdenv.cc.cc)

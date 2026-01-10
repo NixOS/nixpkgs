@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with xorg; [
-    libX11
-    libXrandr
-    libXcursor
+  buildInputs = [
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXcursor
     boost
   ];
   nativeCheckInputs = [ gtest ];

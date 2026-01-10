@@ -69,14 +69,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support (
-      with xorg;
-      [
-        libX11
-        libICE
-        libSM
-      ]
-    )
+    lib.optionals x11Support [
+      xorg.libX11
+      xorg.libICE
+      xorg.libSM
+    ]
     ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       audit

@@ -126,57 +126,55 @@ effectiveBuildPythonApplication rec {
   ]
   ++ lib.optional withNvenc cudatoolkit;
 
-  buildInputs =
-    with xorg;
-    [
-      libX11
-      libXcomposite
-      libXdamage
-      libXfixes
-      libXi
-      libxkbfile
-      libXrandr
-      libXrender
-      libXres
-      libXtst
-      xorgproto
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-vaapi
-      gst-plugins-ugly
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ])
-    ++ [
-      atk.out
-      cairo
-      cython
-      ffmpeg
-      gdk-pixbuf
-      glib
-      gtk3
-      libappindicator
-      librsvg
-      libvpx
-      libwebp
-      lz4
-      pam
-      pango
-      x264
-      x265
-      libavif
-      openh264
-      libyuv
-      xxHash
-      systemd
-    ]
-    ++ lib.optional withNvenc [
-      nvencHeaders
-      nvjpegHeaders
-    ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libxkbfile
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXres
+    xorg.libXtst
+    xorg.xorgproto
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-vaapi
+    gst-plugins-ugly
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ])
+  ++ [
+    atk.out
+    cairo
+    cython
+    ffmpeg
+    gdk-pixbuf
+    glib
+    gtk3
+    libappindicator
+    librsvg
+    libvpx
+    libwebp
+    lz4
+    pam
+    pango
+    x264
+    x265
+    libavif
+    openh264
+    libyuv
+    xxHash
+    systemd
+  ]
+  ++ lib.optional withNvenc [
+    nvencHeaders
+    nvjpegHeaders
+  ];
 
   propagatedBuildInputs =
     with python3.pkgs;

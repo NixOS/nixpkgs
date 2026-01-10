@@ -65,13 +65,11 @@ let
       libxslt
       nspr
       nss
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libX11
-      libXScrnSaver
-    ]);
+      xorg.libICE
+      xorg.libSM
+      xorg.libX11
+      xorg.libXScrnSaver
+    ];
 
     unpackPhase = ''
       runHook preUnpack

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
     cairo
     freetype
@@ -52,16 +52,16 @@ stdenv.mkDerivation rec {
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
-    libxcb
-    libXcursor
-    libX11
-    libXtst
+    xorg.libxcb
+    xorg.libXcursor
+    xorg.libX11
+    xorg.libXtst
     libxkbcommon
     pipewire
     pulseaudio
     (lib.getLib stdenv.cc.cc)
-    xcbutil
-    xcbutilwm
+    xorg.xcbutil
+    xorg.xcbutilwm
     zlib
   ];
 

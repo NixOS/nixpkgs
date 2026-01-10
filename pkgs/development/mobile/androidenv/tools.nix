@@ -24,11 +24,9 @@ deployAndroidPackage {
       fontconfig
       fontconfig.lib
       stdenv.cc.cc.libgcc or null # fix for https://github.com/NixOS/nixpkgs/issues/226357
-    ])
-    ++ (with pkgs.xorg; [
-      libX11
-      libXrender
-      libXext
+      xorg.libX11
+      xorg.libXrender
+      xorg.libXext
     ])
     ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
       with pkgsi686Linux;

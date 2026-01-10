@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = with xorg; [
-    xorgproto
-    libXext
+  buildInputs = [
+    xorg.xorgproto
+    xorg.libXext
   ];
 
   propagatedBuildInputs = [ xorg.libX11 ];

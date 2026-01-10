@@ -34,15 +34,12 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
     wayland
   ]
-  ++ lib.optionals enableX11 (
-    with xorg;
-    [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-    ]
-  );
+  ++ lib.optionals enableX11 [
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+  ];
 
   postFixup = lib.optional stdenv.hostPlatform.isLinux ''
     rpath=$(patchelf --print-rpath $out/bin/centerpiece)
