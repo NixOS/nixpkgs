@@ -127,5 +127,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }
