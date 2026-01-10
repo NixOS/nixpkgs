@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
   version = "0.5.0";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "azymohliad";
     repo = "qwertone";
     tag = "v${version}";
