@@ -114,8 +114,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck =
-    !stdenv.hostPlatform.isMusl # iconv binary
-  ;
+    with stdenv.hostPlatform;
+    !isMusl # iconv binary
+    # It's unclear what exactly is happening here, but system log shows lines like:
+    #   XprotectService: [com.apple.xprotect:xprotect] File $buildDir/$name/src/.libs/mandb failed on
+    #   loadCmd $out/lib/man-db/libmandb-$version.dylib (loadCmd resolved to: (path not found), bundleURL: (null))
+    && !(isDarwin && isAarch64);
 
   passthru.tests = {
     nixos = nixosTests.man;

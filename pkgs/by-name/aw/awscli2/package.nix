@@ -61,6 +61,7 @@ let
             setuptools
           ];
           postPatch = null;
+          patches = [ ]; # FIXME: we might be missing security patches!
           src = prev.src.override {
             inherit version;
             hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";

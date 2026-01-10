@@ -85,13 +85,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-9";
+  version = "7.1.2-10";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-bXVVnjJhtmcbczZI9rsy2JQ3p2oYX5g5vp3YdsQkdrE=";
+    hash = "sha256-96lhd0B4yV2s/zVazKrqAcDZvn+yIiXxp8fqyKSfxLc=";
   };
 
   outputs = [

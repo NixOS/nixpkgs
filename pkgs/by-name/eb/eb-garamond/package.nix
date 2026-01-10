@@ -3,22 +3,22 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
-  ttfautohint,
+  ttfautohint-nox,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eb-garamond";
   version = "0.016";
 
   src = fetchFromGitHub {
     owner = "georgd";
     repo = "EB-Garamond";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
 
   nativeBuildInputs = [
     (python3.withPackages (p: [ p.fontforge ]))
-    ttfautohint
+    ttfautohint-nox
   ];
 
   postPatch = ''
@@ -53,4 +53,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})
