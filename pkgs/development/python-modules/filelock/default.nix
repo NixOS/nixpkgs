@@ -28,7 +28,7 @@ buildPythonPackage rec {
     # https://github.com/tox-dev/filelock/commit/4724d7f8c3393ec1f048c93933e6e3e6ec321f0e
     (fetchpatch {
       url = "https://github.com/tox-dev/filelock/commit/4724d7f8c3393ec1f048c93933e6e3e6ec321f0e.patch";
-      hash = "sha256-c46m/2f5KKhJ9zYlFauqZm64dCYU3Rivib6zIyt3EFM=";
+      hash = "sha256-oVXkAiIFCwXpAHkhJC1kFOMBOuXL3KZJVfYLqt24IzQ=";
     })
   ];
 
