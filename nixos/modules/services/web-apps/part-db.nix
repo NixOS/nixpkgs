@@ -17,8 +17,6 @@ let
     ;
 in
 {
-  meta.maintainers = lib.teams.secshell.members;
-
   options.services.part-db = {
     enable = mkEnableOption "PartDB";
 

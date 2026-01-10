@@ -48,6 +48,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/mlebreuil/netbox-contract/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ secshell ];
   };
 }

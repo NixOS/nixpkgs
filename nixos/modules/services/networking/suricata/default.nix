@@ -22,8 +22,6 @@ let
     ;
 in
 {
-  meta.maintainers = lib.teams.secshell.members;
-
   options.services.suricata = {
     enable = mkEnableOption "Suricata";
 
