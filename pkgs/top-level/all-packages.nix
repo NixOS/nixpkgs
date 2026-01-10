@@ -10188,6 +10188,7 @@ with pkgs;
   tex-gyre-math = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre-math { });
 
   xkeyboard_config = xkeyboard-config;
+  xkeyboard-config_custom = callPackage ../by-name/xk/xkeyboard-config/custom.nix { };
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
 
