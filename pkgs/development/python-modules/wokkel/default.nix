@@ -67,6 +67,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/ralphm/wokkel/blob/${version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ethancedwards8 ];
-    teams = [ lib.teams.ngi ];
   };
 }

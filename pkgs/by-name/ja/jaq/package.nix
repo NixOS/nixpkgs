@@ -69,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/01mf02/jaq";
     changelog = "https://github.com/01mf02/jaq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
       siraben
     ];

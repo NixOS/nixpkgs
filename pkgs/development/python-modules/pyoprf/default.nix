@@ -59,7 +59,6 @@ buildPythonPackage rec {
       description
       changelog
       license
-      teams
       ;
   };
 }

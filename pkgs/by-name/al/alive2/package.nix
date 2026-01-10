@@ -67,7 +67,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "alive";
   };
 })

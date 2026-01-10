@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/OkuBrowser/oku/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "oku";
     platforms = lib.platforms.linux;
   };

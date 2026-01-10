@@ -41,7 +41,6 @@ buildPythonPackage rec {
     description = "Fork of high-ctidh as as a portable shared library with Python bindings";
     homepage = "https://codeberg.org/vula/highctidh";
     license = lib.licenses.publicDomain;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [
       lorenzleutgeb
       mightyiam

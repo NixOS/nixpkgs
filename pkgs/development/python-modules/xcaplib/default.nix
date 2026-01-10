@@ -43,7 +43,6 @@ buildPythonPackage {
     description = "XCAP (RFC4825) client library";
     homepage = "https://github.com/AGProjects/python3-xcaplib";
     license = lib.licenses.lgpl21Plus;
-    teams = [ lib.teams.ngi ];
     maintainers = [ lib.maintainers.ethancedwards8 ];
     mainProgram = "xcapclient3";
   };

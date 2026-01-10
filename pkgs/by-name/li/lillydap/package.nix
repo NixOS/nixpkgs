@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/arpa2/lillydap";
     changelog = "https://gitlab.com/arpa2/lillydap/-/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd2;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.unix;
   };

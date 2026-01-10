@@ -9,7 +9,6 @@ let
 in
 {
   name = "mitmproxy";
-  meta.maintainers = lib.teams.ngi.members;
 
   nodes.machine =
     { pkgs, ... }:

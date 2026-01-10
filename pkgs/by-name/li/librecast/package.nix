@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
       jasonodoom
       jleightcap
     ];
-    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.gnu;
   };
 })

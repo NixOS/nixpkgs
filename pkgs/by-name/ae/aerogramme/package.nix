@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://aerogramme.deuxfleurs.fr/";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ supinie ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "aerogramme";
     platforms = lib.platforms.linux;
   };

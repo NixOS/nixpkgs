@@ -56,6 +56,5 @@ buildGoModule (finalAttrs: {
       sarcasticadmin
       matthewcroughan
     ];
-    teams = with lib.teams; [ ngi ];
   };
 })

@@ -85,6 +85,5 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.astro ];
-    teams = [ lib.teams.ngi ];
   };
 }

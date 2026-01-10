@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
     maintainers = with lib.maintainers; [ ppom ];
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
   };
 })

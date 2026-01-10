@@ -60,6 +60,5 @@ buildPythonPackage rec {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ eljamm ];
-    teams = with lib.teams; [ ngi ];
   };
 }

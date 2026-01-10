@@ -43,6 +43,5 @@ buildPythonPackage rec {
     homepage = "https://libervia.org";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.ethancedwards8 ];
-    teams = [ lib.teams.ngi ];
   };
 }

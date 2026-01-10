@@ -17,6 +17,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/teamtype/teamtype/tree/main/vscode-plugin";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.ethancedwards8 ];
-    teams = [ lib.teams.ngi ];
   };
 }

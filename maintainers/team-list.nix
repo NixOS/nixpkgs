@@ -724,19 +724,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  ngi = {
-    members = [
-      eljamm
-      ethancedwards8
-      fricklerhandwerk
-      OPNA2608
-      prince213
-      wegank
-    ];
-    scope = "Maintain NGI-supported software.";
-    shortName = "NGI";
-  };
-
   nim = {
     github = "nim";
     enableFeatureFreezePing = true;

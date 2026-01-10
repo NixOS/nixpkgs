@@ -148,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://misskey-hub.net/";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "misskey";
   };

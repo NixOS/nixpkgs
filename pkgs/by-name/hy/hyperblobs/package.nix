@@ -41,7 +41,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/holepunchto/hyperblobs";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ ];
   };
 })

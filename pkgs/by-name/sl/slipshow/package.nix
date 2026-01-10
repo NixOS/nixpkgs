@@ -61,7 +61,6 @@ ocamlPackages.buildDunePackage rec {
     license = lib.licenses.gpl3Only;
     downloadPage = "https://github.com/panglesd/slipshow";
     maintainers = [ lib.maintainers.ethancedwards8 ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "slipshow";
   };
 }

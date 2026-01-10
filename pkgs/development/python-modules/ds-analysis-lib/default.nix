@@ -52,7 +52,6 @@ buildPythonPackage rec {
       homepage
       license
       maintainers
-      teams
       ;
   };
 }

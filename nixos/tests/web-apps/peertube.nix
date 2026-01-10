@@ -9,7 +9,7 @@ import ../make-test-python.nix (
   in
   {
     name = "peertube";
-    meta.maintainers = with lib.maintainers; [ izorkin ] ++ lib.teams.ngi.members;
+    meta.maintainers = with lib.maintainers; [ izorkin ];
 
     nodes = {
       database = {

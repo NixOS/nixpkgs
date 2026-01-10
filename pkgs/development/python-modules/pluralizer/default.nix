@@ -29,6 +29,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/weixu365/pluralizer-py";
     changelog = "https://github.com/weixu365/pluralizer-py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ngi ];
   };
 }

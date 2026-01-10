@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "dokieli";
   };
 })

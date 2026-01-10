@@ -120,7 +120,6 @@ buildNpmPackage rec {
       rcoeurjoly
       amerino
     ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "icestudio";
     platforms = lib.platforms.linux;
   };

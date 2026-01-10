@@ -84,6 +84,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/metabrainz/troi-recommendation-playground";
     changelog = "https://github.com/metabrainz/troi-recommendation-playground/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
-    teams = [ lib.teams.ngi ];
   };
 }

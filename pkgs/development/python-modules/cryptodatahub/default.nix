@@ -60,6 +60,5 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/coroner/cryptodatahub";
     changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
-    teams = with lib.teams; [ ngi ];
   };
 }

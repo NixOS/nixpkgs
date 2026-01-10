@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/stef/liboprf";
     changelog = "https://github.com/stef/liboprf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
   };
 })

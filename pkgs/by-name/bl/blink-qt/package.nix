@@ -78,7 +78,6 @@ python3Packages.buildPythonApplication rec {
     downloadPage = "https://github.com/agprojects/blink-qt";
     changelog = "https://github.com/AGProjects/blink-qt/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "blink";
   };

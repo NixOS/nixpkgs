@@ -29,7 +29,6 @@ let
     changelog = "https://docs.cortezaproject.org/corteza-docs/${lib.versions.majorMinor version}/changelog/index.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prince213 ];
-    teams = with lib.teams; [ ngi ];
   };
 
   mkWebApp =

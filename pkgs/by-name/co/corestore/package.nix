@@ -34,6 +34,5 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/holepunchto/corestore";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ themadbit ];
-    teams = with lib.teams; [ ngi ];
   };
 })

@@ -174,7 +174,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       hexa
       supinie
     ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

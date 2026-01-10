@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage (finalAttr: {
     homepage = "https://github.com/inko-lang/ivm";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.feathecutie ];
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "ivm";
   };

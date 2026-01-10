@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-40 # docs
       bsd2 # userspace
     ];
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.linux;
     mainProgram = "tlsserver";

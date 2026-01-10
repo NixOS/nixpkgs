@@ -40,6 +40,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/metabrainz/liblistenbrainz";
     changelog = "https://github.com/metabrainz/liblistenbrainz/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
-    teams = [ lib.teams.ngi ];
   };
 }

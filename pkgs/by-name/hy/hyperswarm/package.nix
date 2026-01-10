@@ -35,7 +35,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/holepunchto/hyperswarm";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ ];
   };
 })

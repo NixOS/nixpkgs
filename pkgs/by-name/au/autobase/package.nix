@@ -38,6 +38,5 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/holepunchto/autobase";
     license = lib.licenses.mit;
     maintainers = [ ];
-    teams = with lib.teams; [ ngi ];
   };
 })

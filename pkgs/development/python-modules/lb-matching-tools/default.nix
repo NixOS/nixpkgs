@@ -36,6 +36,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/metabrainz/listenbrainz-matching-tools";
     changelog = "https://github.com/metabrainz/listenbrainz-matching-tools/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
-    teams = [ lib.teams.ngi ];
   };
 }

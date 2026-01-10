@@ -48,7 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Syndace/python-doubleratchet";
     changelog = "https://github.com/Syndace/python-doubleratchet/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ axler1 ];
   };
 }

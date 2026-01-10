@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-40
     ];
     maintainers = with lib.maintainers; [ astro ];
-    teams = with lib.teams; [ ngi ];
     platforms = with lib.platforms; linux;
   };
 })

@@ -73,6 +73,5 @@ buildPythonPackage rec {
     description = "Python client for Typesense, an open source and typo tolerant search engine";
     homepage = "https://github.com/typesense/typesense-python";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.ngi ];
   };
 }

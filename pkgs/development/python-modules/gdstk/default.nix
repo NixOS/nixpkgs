@@ -87,7 +87,6 @@ buildPythonPackage {
       changelog
       license
       maintainers
-      teams
       ;
   };
 }

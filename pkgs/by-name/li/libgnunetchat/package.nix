@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.gnunet.org/libgnunetchat.git/plain/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
 })

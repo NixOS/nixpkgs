@@ -67,7 +67,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://www.ctrlc.hu/~stef/blog/posts/sphinx.html";
     downloadPage = "https://github.com/stef/pwdsphinx";
     changelog = "https://github.com/stef/pwdsphinx/releases/tag/v${version}";
-    teams = [ lib.teams.ngi ];
     license = lib.licenses.gpl3Plus;
     mainProgram = "sphinx";
   };

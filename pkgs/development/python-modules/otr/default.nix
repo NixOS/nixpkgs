@@ -42,8 +42,5 @@ buildPythonPackage rec {
     description = "Off-The-Record Messaging protocol implementation for Python";
     homepage = "https://github.com/AGProjects/python3-otr";
     license = lib.licenses.lgpl21Plus;
-    teams = [
-      lib.teams.ngi
-    ];
   };
 }

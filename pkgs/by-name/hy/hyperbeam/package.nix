@@ -32,7 +32,6 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "hyperbeam";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ davhau ];
   };
 })

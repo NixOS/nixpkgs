@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication rec {
     downloadPage = "https://github.com/AGProjects/sylkserver";
     changelog = "https://github.com/AGProjects/sylkserver/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    teams = [ lib.teams.ngi ];
     mainProgram = "sylk-server";
   };
 }

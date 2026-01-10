@@ -69,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://inko-lang.org/";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.feathecutie ];
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "inko";
   };

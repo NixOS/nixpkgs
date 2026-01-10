@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     teams = with lib.teams; [
       geospatial
-      ngi
     ];
     changelog = "https://github.com/osm-search/nominatim-ui/releases/tag/v${finalAttrs.version}";
   };

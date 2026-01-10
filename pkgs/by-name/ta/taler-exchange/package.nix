@@ -128,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
-    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

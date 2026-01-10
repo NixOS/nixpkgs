@@ -12,9 +12,6 @@ import ../../make-test-python.nix (
     # - run_tests()
 
     name = "GNU Taler Basic Test";
-    meta = {
-      maintainers = lib.teams.ngi.members;
-    };
 
     # Taler components virtual-machine nodes
     nodes = {

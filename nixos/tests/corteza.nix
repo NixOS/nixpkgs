@@ -4,7 +4,6 @@ let
 in
 {
   name = "corteza";
-  meta.maintainers = lib.teams.ngi.members;
 
   nodes.machine = {
     services.corteza = {

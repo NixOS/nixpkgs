@@ -135,7 +135,6 @@ python.pkgs.buildPythonApplication rec {
     ];
     teams = with lib.teams; [
       geospatial
-      ngi
     ];
     mainProgram = "umap";
   };

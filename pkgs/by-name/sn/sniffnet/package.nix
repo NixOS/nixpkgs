@@ -99,7 +99,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = [ ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "sniffnet";
   };
 })

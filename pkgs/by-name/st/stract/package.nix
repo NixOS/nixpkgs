@@ -71,6 +71,5 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       ailsa-sun
     ];
-    teams = [ lib.teams.ngi ];
   };
 }

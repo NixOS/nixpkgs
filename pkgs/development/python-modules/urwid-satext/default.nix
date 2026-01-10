@@ -40,7 +40,6 @@ buildPythonPackage rec {
     homepage = "https://libervia.org";
     changelog = "https://repos.goffi.org/urwid-satext/file/${src.rev}/CHANGELOG";
     license = lib.licenses.lgpl3Plus;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ lib.maintainers.oluchitheanalyst ];
   };
 }

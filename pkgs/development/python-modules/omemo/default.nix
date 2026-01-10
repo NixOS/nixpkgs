@@ -74,7 +74,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Syndace/python-omemo";
     changelog = "https://github.com/Syndace/python-omemo/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ themadbit ];
   };
 }

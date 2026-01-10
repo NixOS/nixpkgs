@@ -69,11 +69,8 @@
   # - run_tests()
   interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
 
-  meta.maintainers =
-    with lib.maintainers;
-    [
-      ppom
-      phanirithvij
-    ]
-    ++ lib.teams.ngi.members;
+  meta.maintainers = with lib.maintainers; [
+    ppom
+    phanirithvij
+  ];
 }

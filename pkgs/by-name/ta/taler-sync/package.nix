@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/sync.git";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
-    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

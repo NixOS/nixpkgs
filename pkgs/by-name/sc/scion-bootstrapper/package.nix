@@ -65,7 +65,6 @@ buildGoModule (finalAttrs: {
       matthewcroughan
       sarcasticadmin
     ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "scion-bootstrapper";
   };
 })

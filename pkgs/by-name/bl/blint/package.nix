@@ -68,7 +68,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "blint";
   };
 }

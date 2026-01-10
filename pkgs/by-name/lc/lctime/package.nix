@@ -95,7 +95,6 @@ python3Packages.buildPythonApplication rec {
       cc0
     ];
     maintainers = with lib.maintainers; [ eljamm ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "lctime";
   };
 }

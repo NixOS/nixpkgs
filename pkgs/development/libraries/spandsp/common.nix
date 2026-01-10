@@ -212,7 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/freeswitch/spandsp";
     platforms = with lib.platforms; unix;
     maintainers = with lib.maintainers; [ misuzu ];
-    teams = [ lib.teams.ngi ];
     license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
   };

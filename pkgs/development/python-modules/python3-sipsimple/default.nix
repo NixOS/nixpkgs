@@ -156,7 +156,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://sipsimpleclient.org/";
     downloadPage = "https://github.com/AGProjects/python3-sipsimple";
     license = lib.licenses.gpl3Plus;
-    teams = [ lib.teams.ngi ];
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
 })

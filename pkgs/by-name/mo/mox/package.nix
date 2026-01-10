@@ -39,6 +39,5 @@ buildGoModule (finalAttrs: {
       dit7ya
       kotatsuyaki
     ];
-    teams = with lib.teams; [ ngi ];
   };
 })

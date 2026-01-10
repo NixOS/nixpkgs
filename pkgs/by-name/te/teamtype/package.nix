@@ -48,7 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/teamtype/teamtype/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     mainProgram = "teamtype";
-    teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
       prince213
       ethancedwards8

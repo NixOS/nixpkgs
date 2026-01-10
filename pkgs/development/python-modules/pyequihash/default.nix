@@ -44,7 +44,6 @@ buildPythonPackage rec {
       description
       homepage
       license
-      teams
       ;
   };
 }

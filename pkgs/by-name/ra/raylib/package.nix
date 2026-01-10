@@ -82,7 +82,6 @@ lib.checkListOfEnum "${pname}: platform"
         downloadPage = "https://github.com/raysan5/raylib";
         license = lib.licenses.zlib;
         maintainers = [ lib.maintainers.diniamo ];
-        teams = [ lib.teams.ngi ];
         platforms = lib.platforms.all;
         changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
       };

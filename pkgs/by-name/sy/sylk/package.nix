@@ -38,7 +38,6 @@ appimageTools.wrapType2 rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "sylk";
     maintainers = with lib.maintainers; [ zimbatm ];
-    teams = with lib.teams; [ ngi ];
     platforms = [
       "i386-linux"
       "x86_64-linux"

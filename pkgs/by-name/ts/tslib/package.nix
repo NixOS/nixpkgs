@@ -27,6 +27,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux; # requires linux headers <linux/input.h>
     maintainers = with lib.maintainers; [ shogo ];
-    teams = with lib.teams; [ ngi ];
   };
 })

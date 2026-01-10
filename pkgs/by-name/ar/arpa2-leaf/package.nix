@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/arpa2/leaf";
     changelog = "https://gitlab.com/arpa2/leaf/-/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd2;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.linux;
   };

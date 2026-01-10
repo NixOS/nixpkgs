@@ -37,6 +37,5 @@ buildPythonPackage rec {
     homepage = "https://dev.funkwhale.audio/funkwhale/requests-http-message-signatures";
     changelog = "https://dev.funkwhale.audio/funkwhale/requests-http-message-signatures/-/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.ngi ];
   };
 }

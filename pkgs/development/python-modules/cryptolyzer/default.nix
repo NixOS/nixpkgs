@@ -76,6 +76,5 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
     maintainers = with lib.maintainers; [ kranzes ];
-    teams = with lib.teams; [ ngi ];
   };
 }

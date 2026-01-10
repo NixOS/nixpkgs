@@ -34,7 +34,6 @@ buildNpmPackage (finalAttrs: {
     description = "Secure, distributed append-only log";
     homepage = "https://github.com/holepunchto/hypercore";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ lib.maintainers.goodylove ];
     platforms = lib.platforms.all;
   };

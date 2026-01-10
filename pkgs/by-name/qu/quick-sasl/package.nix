@@ -52,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/arpa2/Quick-SASL/-/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "qsasl-server";
   };

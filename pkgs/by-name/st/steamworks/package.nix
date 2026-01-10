@@ -74,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/arpa2/steamworks/-/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.ethancedwards8 ];
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.linux;
   };
 })

@@ -48,7 +48,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/jech/galene/raw/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
       rgrunbla
       erdnaxe

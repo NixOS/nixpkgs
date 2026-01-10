@@ -199,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     maintainers = [ ];
-    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.unix;
   };
 })

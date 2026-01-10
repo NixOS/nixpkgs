@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Memory-hard PoW with fast verification";
     homepage = "https://github.com/stef/equihash/";
     license = lib.licenses.cc0;
-    teams = [ lib.teams.ngi ];
     # ld -z not available on darwin
     platforms = lib.platforms.linux;
   };

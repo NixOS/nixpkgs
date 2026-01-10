@@ -52,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/stef/libopaque/";
     changelog = "https://github.com/stef/libopaque/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "libopaque" ];
   };

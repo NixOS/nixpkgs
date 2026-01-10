@@ -251,6 +251,4 @@ in
       ${cfg.group} = { };
     };
   };
-
-  meta.maintainers = lib.teams.ngi.members;
 }

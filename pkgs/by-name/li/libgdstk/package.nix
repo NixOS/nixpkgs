@@ -46,6 +46,5 @@ stdenv.mkDerivation (finalAttrs: {
       eljamm
       gonsolo
     ];
-    teams = with lib.teams; [ ngi ];
   };
 })

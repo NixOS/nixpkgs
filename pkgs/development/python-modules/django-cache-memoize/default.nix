@@ -48,6 +48,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/peterbe/django-cache-memoize";
     changelog = "https://github.com/peterbe/django-cache-memoize/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
-    teams = [ lib.teams.ngi ];
   };
 }

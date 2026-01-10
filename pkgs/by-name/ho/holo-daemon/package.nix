@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "`holo` daemon that provides the routing protocols, tools and policies";
     homepage = "https://github.com/holo-routing/holo";
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ themadbit ];
     license = lib.licenses.mit;
     mainProgram = "holod";

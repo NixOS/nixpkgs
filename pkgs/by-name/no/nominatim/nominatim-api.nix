@@ -58,7 +58,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ mausch ];
     teams = with lib.teams; [
       geospatial
-      ngi
     ];
   };
 }

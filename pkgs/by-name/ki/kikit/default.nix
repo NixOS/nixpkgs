@@ -106,7 +106,6 @@ buildPythonApplication rec {
       jfly
       matusf
     ];
-    teams = with lib.teams; [ ngi ];
     license = lib.licenses.mit;
   };
 }

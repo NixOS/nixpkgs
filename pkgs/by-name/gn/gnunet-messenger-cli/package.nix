@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.gnunet.org/messenger-cli.git";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ lib.maintainers.ethancedwards8 ];
     mainProgram = "gnunet-messenger-cli";
   };

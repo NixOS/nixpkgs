@@ -116,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Integration and sandbox testing for FinTech APIs and data formats";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ atemu ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "libeufin-bank";
     sourceProvenance = with lib.sourceTypes; [
       fromSource

@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Holo` Command Line Interface";
     homepage = "https://github.com/holo-routing/holo-cli";
-    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ themadbit ];
     license = lib.licenses.mit;
     mainProgram = "holo-cli";

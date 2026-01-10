@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     downloadPage = "https://github.com/y-crdt/y-crdt/tags";
     changelog = "https://github.com/y-crdt/y-crdt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ ngi ];
     platforms = with lib.platforms; linux;
   };
 })

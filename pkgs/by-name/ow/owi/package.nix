@@ -87,7 +87,6 @@ ocamlPackages.buildDunePackage {
       ethancedwards8
       redianthus
     ];
-    teams = with lib.teams; [ ngi ];
     mainProgram = "owi";
     badPlatforms = lib.platforms.darwin;
   };

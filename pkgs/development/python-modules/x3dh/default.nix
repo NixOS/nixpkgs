@@ -49,7 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Syndace/python-x3dh";
     changelog = "https://github.com/Syndace/python-x3dh/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ ngi ];
     maintainers = [ ];
   };
 }

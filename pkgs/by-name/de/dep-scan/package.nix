@@ -78,7 +78,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/owasp-dep-scan/dep-scan/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "dep-scan";
   };
 }

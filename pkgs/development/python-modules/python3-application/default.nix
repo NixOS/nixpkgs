@@ -44,7 +44,6 @@ buildPythonPackage rec {
       chanley
       yureien
     ];
-    teams = [ lib.teams.ngi ];
     longDescription = ''
       This package is a collection of modules that are useful when building python applications. Their purpose is to eliminate the need to divert resources into implementing the small tasks that every application needs to do in order to run successfully and focus instead on the application logic itself.
       The modules that the application package provides are:

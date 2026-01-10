@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       supinie
       oluchitheanalyst
     ];
-    teams = [ lib.teams.ngi ];
     mainProgram = "cnspr";
     platforms = lib.platforms.linux;
   };

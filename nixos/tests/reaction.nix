@@ -100,11 +100,8 @@
       ];
     };
 
-  meta.maintainers =
-    with lib.maintainers;
-    [
-      ppom
-      phanirithvij
-    ]
-    ++ lib.teams.ngi.members;
+  meta.maintainers = with lib.maintainers; [
+    ppom
+    phanirithvij
+  ];
 }
