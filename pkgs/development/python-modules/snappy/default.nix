@@ -1,16 +1,22 @@
 {
   lib,
   stdenv,
-  fetchpatch,
+  fetchFromGitHub,
   python,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchpatch,
+
+  # build-time dependencies
   setuptools,
-  cypari,
   cython,
+
+  # non-Python runtime dependencies
+  libGL,
+
+  # Python runtime dependencies
+  cypari,
   fxrays,
   ipython,
-  libGL,
   low-index,
   packaging,
   pickleshare,
@@ -20,9 +26,16 @@
   snappy-15-knots,
   snappy-manifolds,
   spherogram,
+  tkinter-gl,
+
+  # documentation
   sphinxHook,
   sphinx-rtd-theme,
-  tkinter-gl,
+
+  # tests
+  runCommand,
+  sage,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -116,6 +129,25 @@ buildPythonPackage rec {
     ${python.interpreter} -m snappy.test --skip-gui
     runHook postCheck
   '';
+
+  passthru.tests.sage =
+    let
+      sage' = sage.override {
+        extraPythonPackages = ps: [ ps.snappy ];
+        requireSageTests = false;
+      };
+    in
+    runCommand "snappy-sage-tests"
+      {
+        nativeBuildInputs = [
+          sage'
+          writableTmpDirAsHomeHook
+        ];
+      }
+      ''
+        sage -python -m snappy.test --skip-gui
+        touch $out
+      '';
 
   meta = {
     description = "Studying the topology and geometry of 3-manifolds, with a focus on hyperbolic structures";
