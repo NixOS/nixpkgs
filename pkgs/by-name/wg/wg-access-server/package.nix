@@ -11,17 +11,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "wg-access-server";
-  version = "0.12.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "freifunkMUC";
     repo = "wg-access-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AhFqEmHrx9MCdjnB/YA3qU7KsaMyLO+vo53VWUrcL8I=";
+    hash = "sha256-x4QNEn5SR6D1YIiv+mKnQlZ94jZ7BrdIxiLxBqhtBjg=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-YwFq0KxUctU3ElZBo/b68pyp4lJnFGL9ClKIwUzdngM=";
+  vendorHash = "sha256-pjQeF1+1gr/0pF76KNdK7GDX3pYBTqqY3xbJeMLsJIM=";
 
   env.CGO_ENABLED = 1;
 
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
 
     nodejs = nodejs_22;
 
-    npmDepsHash = "sha256-04AkSDSKsr20Jbx5BJy36f8kWNlzzplu/xnoDTkU8OQ=";
+    npmDepsHash = "sha256-UntV5+9E2lyp8IQGKbbnBNdd0JLvM5NsfkLvCSOgyGo=";
 
     sourceRoot = "${finalAttrs.src.name}/website";
 
