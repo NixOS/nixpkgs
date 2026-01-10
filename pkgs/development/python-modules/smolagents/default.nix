@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -50,29 +51,7 @@
   wikipedia-api,
 }:
 
-buildPythonPackage rec {
-  pname = "smolagents";
-  version = "1.21.3";
-  pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "huggingface";
-    repo = "smolagents";
-    tag = "v${version}";
-    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
-  };
-
-  build-system = [ setuptools ];
-
-  dependencies = [
-    huggingface-hub
-    jinja2
-    pillow
-    python-dotenv
-    requests
-    rich
-  ];
-
+let
   optional-dependencies = lib.fix (self: {
     audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
@@ -122,6 +101,32 @@ buildPythonPackage rec {
     # ];
   });
 
+in
+buildPythonPackage (finalAttrs: {
+  pname = "smolagents";
+  version = "1.21.3";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "huggingface";
+    repo = "smolagents";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    huggingface-hub
+    jinja2
+    pillow
+    python-dotenv
+    requests
+    rich
+  ];
+
+  inherit optional-dependencies;
+
   nativeCheckInputs = [
     ipython
     pytest-datadir
@@ -157,6 +162,10 @@ buildPythonPackage rec {
     "test_visit_webpage"
     "test_wikipedia_search"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Missing dependencies
     "test_get_mlx"
@@ -175,8 +184,8 @@ buildPythonPackage rec {
   meta = {
     description = "Barebones library for agents";
     homepage = "https://github.com/huggingface/smolagents";
-    changelog = "https://github.com/huggingface/smolagents/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/smolagents/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
