@@ -1,7 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  appres,
   bdftopcf,
   bitmap,
   editres,
@@ -214,7 +213,6 @@
 self: with self; {
 
   inherit
-    appres
     bdftopcf
     bitmap
     editres
