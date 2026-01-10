@@ -832,6 +832,12 @@ with haskellLib;
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # Needs QuickCheck >= 2.16, but Stackage is currently on 2.15
+  integer-logarithms =
+    lib.warnIf (lib.versionAtLeast super.QuickCheck.version "2.16")
+      "override for haskellPackages.integer-logarithms may no longer be needed"
+      (dontCheck super.integer-logarithms);
+
   # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = appendPatch (pkgs.fetchpatch {
