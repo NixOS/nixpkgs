@@ -110,6 +110,7 @@
   transset,
   util-macros,
   viewres,
+  wrapWithXFileSearchPathHook,
   x11perf,
   xauth,
   xbacklight,
@@ -127,6 +128,10 @@
   xdriinfo,
   xev,
   xeyes,
+  xf86-input-mouse,
+  xf86-input-synaptics,
+  xf86-input-vmmouse,
+  xf86-input-void,
   xfd,
   xfontsel,
   xfs,
@@ -199,6 +204,7 @@ self: with self; {
     smproxy
     transset
     viewres
+    wrapWithXFileSearchPathHook
     x11perf
     xauth
     xbacklight
@@ -331,8 +337,12 @@ self: with self; {
   xcbutil = libxcb-util;
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
-  xkeyboardconfig = xkeyboard-config;
   xcursorthemes = xcursor-themes;
+  xf86inputmouse = xf86-input-mouse;
+  xf86inputsynaptics = xf86-input-synaptics;
+  xf86inputvmmouse = xf86-input-vmmouse;
+  xf86inputvoid = xf86-input-void;
+  xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
@@ -525,160 +535,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xorg-libinput" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputmouse = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-mouse";
-      version = "1.9.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-mouse-1.9.5.tar.xz";
-        sha256 = "0s4rzp7aqpbqm4474hg4bz7i7vg3ir93ck2q12if4lj3nklqmpjg";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-mouse" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputsynaptics = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libevdev,
-      libX11,
-      libXi,
-      xorgserver,
-      libXtst,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-synaptics";
-      version = "1.10.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.10.0.tar.xz";
-        sha256 = "1hmm3g6ab4bs4hm6kmv508fdc8kr2blzb1vsz1lhipcf0vdnmhp0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libevdev
-        libX11
-        libXi
-        xorgserver
-        libXtst
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-synaptics" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputvmmouse = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      udev,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-vmmouse";
-      version = "13.2.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-vmmouse-13.2.0.tar.xz";
-        sha256 = "1f1rlgp1rpsan8k4ax3pzhl1hgmfn135r31m80pjxw5q19c7gw2n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        udev
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputvoid = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgserver,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-void";
-      version = "1.4.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-void-1.4.2.tar.xz";
-        sha256 = "11bqy2djgb82c1g8ylpfwp3wjw4x83afi8mqyn5fvqp03kidh4d2";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgserver
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
         platforms = lib.platforms.unix;
       };
     })

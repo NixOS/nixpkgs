@@ -76,8 +76,8 @@ in
   glib,
   gnum4,
   gtk3,
-  icu73,
   icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
+  icu78,
   libGL,
   libGLU,
   libevent,
@@ -581,7 +581,7 @@ buildStdenv.mkDerivation {
       libdrm
     ]
   ))
-  ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
+  ++ [ (if (lib.versionAtLeast version "147") then icu78 else icu77) ]
   ++ lib.optional gssSupport libkrb5
   ++ lib.optional jemallocSupport jemalloc
   ++ extraBuildInputs;

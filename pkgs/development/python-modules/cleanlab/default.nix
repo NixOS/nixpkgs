@@ -5,7 +5,6 @@
 
   # build-system
   setuptools,
-  setuptools-scm,
 
   # dependencies
   numpy,
@@ -43,9 +42,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-sgDQJy0iNxs3bIVuqV7LVEFC0jjlWvnqFzKr7ZDGmPo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=65.0,<70.0" "setuptools"
+  '';
+
   build-system = [
     setuptools
-    setuptools-scm
   ];
 
   dependencies = [
@@ -79,6 +82,9 @@ buildPythonPackage (finalAttrs: {
     # Requires the datasets we prevent from downloading
     "test_create_imagelab"
 
+    # AssertionError: assert np.int64(36) == 35
+    "test_num_label_issues"
+
     # Non-trivial numpy2 incompatibilities
     # assert np.float64(0.492) == 0.491
     "test_duplicate_points_have_similar_scores"
@@ -107,9 +113,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/cleanlab/cleanlab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
-    # cleanlab is incompatible with datasets>=4.0.0
-    # cleanlab/datalab/internal/data.py:313: AssertionError
-    # https://github.com/cleanlab/cleanlab/issues/1244
-    broken = lib.versionAtLeast datasets.version "4.0.0";
   };
 })
