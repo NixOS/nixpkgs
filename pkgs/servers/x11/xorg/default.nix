@@ -139,6 +139,7 @@
   xf86-video-sis,
   xf86-video-sisusb,
   xf86-video-suncg6,
+  xf86-video-sunffb,
   xf86-video-v4l,
   xfd,
   xfontsel,
@@ -357,6 +358,7 @@ self: with self; {
   xf86videosis = xf86-video-sis;
   xf86videosisusb = xf86-video-sisusb;
   xf86videosuncg6 = xf86-video-suncg6;
+  xf86videosunffb = xf86-video-sunffb;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
@@ -1370,42 +1372,6 @@ self: with self; {
       buildInputs = [
         xorgproto
         libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videosunffb = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-sunffb";
-      version = "1.2.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.3.tar.xz";
-        sha256 = "0pf4ddh09ww7sxpzs5gr9pxh3gdwkg3f54067cp802nkw1n8vypi";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
         xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

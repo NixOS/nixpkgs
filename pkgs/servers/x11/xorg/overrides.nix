@@ -134,12 +134,6 @@ self: super:
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
   });
 
-  xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-  });
-
   xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = isDarwin;
