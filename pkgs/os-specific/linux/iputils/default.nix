@@ -14,14 +14,14 @@
   apparmorRulesFromClosure,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iputils";
   version = "20250605";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
+    owner = "iputils";
+    repo = "iputils";
+    tag = finalAttrs.version;
     hash = "sha256-AJgNPIE90kALu4ihANELr9Dh28LhJ4camLksOIRV8Xo=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "-DNO_SETCAP_OR_SUID=true"
     "-Dsystemdunitdir=etc/systemd/system"
     "-DINSTALL_SYSTEMD_UNITS=true"
-    "-DSKIP_TESTS=${lib.boolToString (!doCheck)}"
+    "-DSKIP_TESTS=${lib.boolToString (!finalAttrs.doCheck)}"
   ]
   # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
   ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/iputils/iputils";
-    changelog = "https://github.com/iputils/iputils/releases/tag/${version}";
+    changelog = "https://github.com/iputils/iputils/releases/tag/${finalAttrs.version}";
     description = "Set of small useful utilities for Linux networking";
     longDescription = ''
       A set of small useful utilities for Linux networking including:
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})
