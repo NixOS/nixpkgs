@@ -161,7 +161,6 @@ dont-distribute-packages:
  - aura
  - authoring
  - AutoForms
- - automaton_1_6
  - autonix-deps-kf5
  - avers
  - avers-api
@@ -421,9 +420,6 @@ dont-distribute-packages:
  - cfopu
  - chainweb-mining-client
  - chalkboard-viewer
- - changeset-containers
- - changeset-lens
- - changeset-reflex
  - chapelure
  - charade
  - chart-cli
@@ -459,8 +455,6 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
- - clash-ghc
- - clash-shake
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -842,9 +836,6 @@ dont-distribute-packages:
  - effect-monad
  - effective-aspects-mzv
  - effects-parser
- - egison
- - egison-quote
- - egison-tutorial
  - ekg-carbon
  - elasticsearch-interchange
  - electrs-client
@@ -1128,7 +1119,6 @@ dont-distribute-packages:
  - geolite-csv
  - geomancy-layout
  - getemx
- - ghc-debugger
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
@@ -1237,7 +1227,6 @@ dont-distribute-packages:
  - graphicsFormats
  - graphicstools
  - graphtype
- - graphula
  - greencard-lib
  - grid-proto
  - gridbounds
@@ -2152,7 +2141,6 @@ dont-distribute-packages:
  - lostcities
  - loup
  - LPPaver
- - lrucaching-haxl
  - ls-usb
  - LslPlus
  - lsm-tree
@@ -2319,7 +2307,6 @@ dont-distribute-packages:
  - morley-client
  - morley-prelude
  - morley-upgradeable
- - morpheus-graphql
  - morphisms-functors-inventory
  - motor
  - motor-diagrams
@@ -2897,12 +2884,10 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
  - reflex-monad-auth
- - reflex-process
  - refractor
  - refurb
  - reg-alloc-graph-color
@@ -3006,7 +2991,6 @@ dont-distribute-packages:
  - roshask
  - rosmsg-bin
  - rounded
- - rounded-hw
  - roundtrip-xml
  - route-generator
  - route-planning
