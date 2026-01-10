@@ -87,7 +87,8 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/magicexec
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  # gnu89 is needed for GCC 15 that is more strict about K&R style prototypes
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   meta = {
