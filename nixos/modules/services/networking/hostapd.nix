@@ -1045,11 +1045,6 @@ in
 
                           ignore_broadcast_ssid = bssCfg.ignoreBroadcastSsid;
 
-                          # IEEE 802.11i (authentication) related configuration
-                          # Encrypt management frames to protect against deauthentication and similar attacks
-                          ieee80211w = mkDefault 1;
-                          sae_require_mfp = mkDefault 1;
-
                           # Only allow WPA by default and disable insecure WEP
                           auth_algs = mkDefault 1;
                           # Always enable QoS, which is required for 802.11n and above
@@ -1079,18 +1074,27 @@ in
                           # Prevent downgrade attacks by indicating to clients that they should
                           # disable any transition modes from now on.
                           transition_disable = "0x01";
+
+                          # Per WPA3 spec, MFP is required.
+                          ieee80211w = 2;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
+
+                          ieee80211w = mkDefault 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK";
+
+                          ieee80211w = mkDefault 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK-SHA256";
+
+                          ieee80211w = mkDefault 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode != "none") {
                           wpa_pairwise = pairwiseCiphers;
