@@ -861,7 +861,6 @@ with lib.maintainers;
   redcodelabs = {
     members = [
       unrooted
-      wintrmvte
     ];
     scope = "Maintain Red Code Labs related packages and modules.";
     shortName = "Red Code Labs";

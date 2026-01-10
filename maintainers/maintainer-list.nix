@@ -28387,12 +28387,6 @@
     githubId = 78392041;
     name = "Winter";
   };
-  wintrmvte = {
-    name = "Jakub Lutczyn";
-    email = "kubalutczyn@gmail.com";
-    github = "wintrmvte";
-    githubId = 41823252;
-  };
   wirew0rm = {
     email = "alex@wirew0rm.de";
     github = "wirew0rm";
