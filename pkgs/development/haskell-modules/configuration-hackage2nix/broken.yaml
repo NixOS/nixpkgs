@@ -1510,6 +1510,7 @@ broken-packages:
   - dual # failure in job https://hydra.nixos.org/build/252724683 at 2024-03-16
   - dualizer # failure in job https://hydra.nixos.org/build/233237592 at 2023-09-02
   - duckdb-ffi # failure in job https://hydra.nixos.org/build/311300709, https://github.com/Tritlo/duckdb-haskell/issues/2
+  - duckdb-haskell # failure in job https://hydra.nixos.org/build/318373036 at 2026-01-10
   - duckling # failure in job https://hydra.nixos.org/build/233247880 at 2023-09-02
   - duet # failure in job https://hydra.nixos.org/build/233219004 at 2023-09-02
   - dump-core # failure in job https://hydra.nixos.org/build/233244428 at 2023-09-02
@@ -2011,6 +2012,7 @@ broken-packages:
   - FTGL-bytestring # failure in job https://hydra.nixos.org/build/233256032 at 2023-09-02
   - ftp-conduit # failure in job https://hydra.nixos.org/build/233244330 at 2023-09-02
   - ftphs # failure in job https://hydra.nixos.org/build/233215550 at 2023-09-02
+  - fudgets # failure in job https://hydra.nixos.org/build/318373386 at 2026-01-10
   - fugue # failure in job https://hydra.nixos.org/build/295093405 at 2025-04-22
   - FULE # failure in job https://hydra.nixos.org/build/252719910 at 2024-03-16
   - full-sessions # failure in job https://hydra.nixos.org/build/233254332 at 2023-09-02
@@ -3020,6 +3022,7 @@ broken-packages:
   - hs2ps # failure in job https://hydra.nixos.org/build/233258362 at 2023-09-02
   - hsakamai # failure in job https://hydra.nixos.org/build/252722933 at 2024-03-16
   - hsaml2 # failure in job https://hydra.nixos.org/build/233252618 at 2023-09-02
+  - HsASA # failure in job https://hydra.nixos.org/build/318371121 at 2026-01-10
   - hsautogui # failure in job https://hydra.nixos.org/build/253687662 at 2024-03-31
   - hsay # failure in job https://hydra.nixos.org/build/233218925 at 2023-09-02
   - hsbc # failure in job https://hydra.nixos.org/build/233206310 at 2023-09-02
@@ -3107,6 +3110,7 @@ broken-packages:
   - hsSqlite3 # failure in job https://hydra.nixos.org/build/233238549 at 2023-09-02
   - hssqlppp # failure in job https://hydra.nixos.org/build/233216888 at 2023-09-02
   - HsSVN # failure in job https://hydra.nixos.org/build/233213151 at 2023-09-02
+  - HsSyck # failure in job https://hydra.nixos.org/build/318371120 at 2026-01-10
   - hstats # failure in job https://hydra.nixos.org/build/233239963 at 2023-09-02
   - hstatsd # failure in job https://hydra.nixos.org/build/233232363 at 2023-09-02
   - hstest # failure in job https://hydra.nixos.org/build/233237803 at 2023-09-02
@@ -4046,6 +4050,7 @@ broken-packages:
   - minilens # failure in job https://hydra.nixos.org/build/233191347 at 2023-09-02
   - minions # failure in job https://hydra.nixos.org/build/233246840 at 2023-09-02
   - miniplex # failure in job https://hydra.nixos.org/build/233241976 at 2023-09-02
+  - minisat-solver # failure in job https://hydra.nixos.org/build/318375250 at 2026-01-10
   - ministg # failure in job https://hydra.nixos.org/build/233214109 at 2023-09-02
   - minizinc-process # failure in job https://hydra.nixos.org/build/233211497 at 2023-09-02
   - minst-idx # failure in job https://hydra.nixos.org/build/233259901 at 2023-09-02
@@ -5940,6 +5945,7 @@ broken-packages:
   - sqlcipher # failure in job https://hydra.nixos.org/build/233259217 at 2023-09-02
   - sqlcli # failure in job https://hydra.nixos.org/build/252719841 at 2024-03-16
   - sqlite # failure in job https://hydra.nixos.org/build/233215839 at 2023-09-02
+  - sqlite-easy # failure in job https://hydra.nixos.org/build/318377025 at 2026-01-10
   - sqlite-simple-errors # failure in job https://hydra.nixos.org/build/233232977 at 2023-09-02
   - sqlvalue-list # failure in job https://hydra.nixos.org/build/233197313 at 2023-09-02
   - sqsd-local # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/237237046 at 2023-10-21
@@ -7045,6 +7051,7 @@ broken-packages:
   - vhd # failure in job https://hydra.nixos.org/build/233230229 at 2023-09-02
   - vhdl # failure in job https://hydra.nixos.org/build/233244814 at 2023-09-02
   - vicinity # failure in job https://hydra.nixos.org/build/233240251 at 2023-09-02
+  - ViennaRNA-bindings # failure in job https://hydra.nixos.org/build/318371301 at 2026-01-10
   - viewprof # failure in job https://hydra.nixos.org/build/233257842 at 2023-09-02
   - views # failure in job https://hydra.nixos.org/build/233203371 at 2023-09-02
   - vikunja-api # failure in job https://hydra.nixos.org/build/295098092 at 2025-04-22

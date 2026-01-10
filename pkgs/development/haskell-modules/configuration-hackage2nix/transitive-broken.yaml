@@ -3846,6 +3846,7 @@ dont-distribute-packages:
  - yam-transaction-odbc
  - yam-transaction-postgresql
  - yam-web
+ - yaml-light
  - yaml-rpc-scotty
  - yaml-rpc-snap
  - yarr-image-io
