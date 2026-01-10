@@ -289,21 +289,14 @@ stdenv.mkDerivation (
           ''
         +
           # fails when run in sandbox
-          optionalString (!stdenv.hostPlatform.isx86) ''
+          ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
       )
       +
-        # dup of above patch with different conditions
         optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
-          # fails when run in sandbox
           (
-            ''
-              substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-            ''
-            +
               # This test fails on darwin x86_64 because `sw_vers` reports a different
               # macOS version than what LLVM finds by reading
               # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
