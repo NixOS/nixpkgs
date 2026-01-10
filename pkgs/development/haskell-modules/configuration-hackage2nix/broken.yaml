@@ -4934,7 +4934,6 @@ broken-packages:
   - posix-acl # failure in job https://hydra.nixos.org/build/233222892 at 2023-09-02
   - posix-filelock # failure in job https://hydra.nixos.org/build/252726822 at 2024-03-16
   - posix-realtime # failure in job https://hydra.nixos.org/build/233191463 at 2023-09-02
-  - posix-waitpid # failure in job https://hydra.nixos.org/build/233206551 at 2023-09-02
   - postcodes # failure in job https://hydra.nixos.org/build/233247290 at 2023-09-02
   - postgis-trivial # failure in job https://hydra.nixos.org/build/295096168 at 2025-04-22
   - postgres-embedded # failure in job https://hydra.nixos.org/build/233246098 at 2023-09-02
