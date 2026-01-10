@@ -38,7 +38,6 @@
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
-  ico,
   imake,
   libapplewm,
   libdmx,
@@ -206,7 +205,6 @@
 self: with self; {
 
   inherit
-    ico
     imake
     libdmx
     libfontenc
