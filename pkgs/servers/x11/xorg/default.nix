@@ -39,7 +39,6 @@
   font-winitzki-cyrillic,
   font-xfree86-type1,
   libapplewm,
-  libdmx,
   libfontenc,
   libfs,
   libice,
@@ -204,7 +203,6 @@
 self: with self; {
 
   inherit
-    libdmx
     libfontenc
     libpciaccess
     libxcb
