@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     ./fix-nix-usernamespace-build.patch
   ];
 
+  # opt out of GCC 15's stricter C standards
+  # https://github.com/NixOS/nixpkgs/issues/475479
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+
   outputs = [
     "out"
     "man"
