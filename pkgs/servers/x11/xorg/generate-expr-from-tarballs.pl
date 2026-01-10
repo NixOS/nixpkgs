@@ -502,6 +502,7 @@ print OUT <<EOF;
   xf86-video-vbox,
   xf86-video-vesa,
   xf86-video-vmware,
+  xf86-video-voodoo,
   xfd,
   xfontsel,
   xfs,
@@ -758,6 +759,7 @@ self: with self; {
   xf86videovboxvideo = xf86-video-vbox;
   xf86videovesa = xf86-video-vesa;
   xf86videovmware = xf86-video-vmware;
+  xf86videovoodoo = xf86-video-voodoo;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;

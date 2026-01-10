@@ -170,6 +170,7 @@
   xf86-video-vbox,
   xf86-video-vesa,
   xf86-video-vmware,
+  xf86-video-voodoo,
   xfd,
   xfontsel,
   xfs,
@@ -426,6 +427,7 @@ self: with self; {
   xf86videovboxvideo = xf86-video-vbox;
   xf86videovesa = xf86-video-vesa;
   xf86videovmware = xf86-video-vmware;
+  xf86videovoodoo = xf86-video-voodoo;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -471,44 +473,6 @@ self: with self; {
         libXext
         xorgserver
         libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videovoodoo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-voodoo";
-      version = "1.2.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz";
-        sha256 = "00pn5826aazsdipf7ny03s1lypzid31fmswl8y2hrgf07bq76ab2";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
