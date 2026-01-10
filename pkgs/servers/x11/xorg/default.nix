@@ -1,7 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
-  editres,
   font-adobe-100dpi,
   font-adobe-75dpi,
   font-adobe-utopia-100dpi,
@@ -211,7 +210,6 @@
 self: with self; {
 
   inherit
-    editres
     fonttosfnt
     gccmakedep
     iceauth
