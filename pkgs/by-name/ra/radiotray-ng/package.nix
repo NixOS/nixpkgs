@@ -18,7 +18,7 @@
   libappindicator-gtk3,
   libnotify,
   libxdg_basedir,
-  wxGTK,
+  wxGTK32,
   # GStreamer
   glib-networking,
   gst_all_1,
@@ -48,15 +48,15 @@ let
     lxml
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radiotray-ng";
-  version = "0.2.9";
+  version = "0.2.10.1";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
-    tag = "v${version}";
-    hash = "sha256-rRD/IfVnOxowr2mO2BB2hcHK5ByZSmTbcgYdULogYUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GYSacYKS0az5sqPqZhnuTZOT9NSzW+P9o5r5p0RhTtI=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     libnotify
     libxdg_basedir
     lsb-release
-    wxGTK
+    wxGTK32
     # for https gstreamer / libsoup
     glib-networking
   ]
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ];
 
   # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.somasis ];
     platforms = lib.platforms.linux;
   };
-}
+})
