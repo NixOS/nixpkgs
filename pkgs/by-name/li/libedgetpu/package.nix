@@ -42,6 +42,7 @@ stdenv.mkDerivation {
       hash = "sha256-mMODpQmikfXtsQvtgh26cy97EiykYNLngSjidOBt/3I=";
     })
     ./fix-abseil-20250512.0.patch
+    ./cstdint.patch
   ];
 
   postPatch = ''
