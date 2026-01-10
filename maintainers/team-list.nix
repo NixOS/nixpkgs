@@ -239,7 +239,6 @@ with lib.maintainers;
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       cole-h
-      grahamc
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
