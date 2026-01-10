@@ -7,6 +7,7 @@
   bc,
   copyDesktopItems,
   icoutils,
+  versionCheckHook,
   makeDesktopItem,
 }:
 
@@ -45,6 +46,9 @@ buildDotnetModule rec {
   ];
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postFixup = ''
     # Icons for the desktop file
