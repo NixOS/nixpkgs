@@ -65,6 +65,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/karpierz/libpcap/";
     changelog = "https://github.com/karpierz/libpcap/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.ororatech ];
   };
 }

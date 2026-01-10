@@ -27,6 +27,5 @@ buildPythonPackage rec {
     '';
     homepage = "https://dronecan.github.io/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ororatech ];
   };
 }

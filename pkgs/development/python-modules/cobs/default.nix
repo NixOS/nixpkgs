@@ -39,6 +39,5 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cmcqueen/cobs-python/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ororatech ];
   };
 }
