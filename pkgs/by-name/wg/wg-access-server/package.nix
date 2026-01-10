@@ -6,6 +6,7 @@
   makeWrapper,
   iptables,
   nixosTests,
+  nodejs_22,
 }:
 
 buildGoModule (finalAttrs: {
@@ -36,6 +37,8 @@ buildGoModule (finalAttrs: {
   ui = buildNpmPackage {
     inherit (finalAttrs) version src;
     pname = "wg-access-server-ui";
+
+    nodejs = nodejs_22;
 
     npmDepsHash = "sha256-04AkSDSKsr20Jbx5BJy36f8kWNlzzplu/xnoDTkU8OQ=";
 
