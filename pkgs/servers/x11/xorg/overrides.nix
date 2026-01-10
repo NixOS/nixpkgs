@@ -103,21 +103,8 @@ self: super:
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {
   # keep-sorted start
-  appres = lib.warnOnInstantiate "appres has been removed from xorg namespace, use pkgs.appres instead" pkgs.appres; # added 2026-01-10
-  bdftopcf = lib.warnOnInstantiate "bdftopcf has been removed from xorg namespace, use pkgs.bdftopcf instead" pkgs.bdftopcf; # added 2026-01-10
-  bitmap = lib.warnOnInstantiate "bitmap has been removed from xorg namespace, use pkgs.bitmap instead" pkgs.bitmap; # added 2026-01-10
-  editres = lib.warnOnInstantiate "editres has been removed from xorg namespace, use pkgs.editres instead" pkgs.editres; # added 2026-01-10
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
   libXtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
-  fonttosfnt = lib.warnOnInstantiate "fonttosfnt has been removed from xorg namespace, use pkgs.fonttosfnt instead" pkgs.fonttosfnt; # added 2026-01-10
-  gccmakedep = lib.warnOnInstantiate "gccmakedep has been removed from xorg namespace, use pkgs.gccmakedep instead" pkgs.gccmakedep; # added 2026-01-10
-  iceauth = lib.warnOnInstantiate "iceauth has been removed from xorg namespace, use pkgs.iceauth instead" pkgs.iceauth; # added 2026-01-10
-  ico = lib.warnOnInstantiate "ico has been removed from xorg namespace, use pkgs.ico instead" pkgs.ico; # added 2026-01-10
-  imake = lib.warnOnInstantiate "imake has been removed from xorg namespace, use pkgs.imake instead" pkgs.imake; # added 2026-01-10
-  libdmx = lib.warnOnInstantiate "libdmx has been removed from xorg namespace, use pkgs.libdmx instead" pkgs.libdmx; # added 2026-01-10
-  libfontenc = lib.warnOnInstantiate "libfontenc has been removed from xorg namespace, use pkgs.libfontenc instead" pkgs.libfontenc; # added 2026-01-10
-  libpciaccess = lib.warnOnInstantiate "libpciaccess has been removed from xorg namespace, use pkgs.libpciaccess instead" pkgs.libpciaccess; # added 2026-01-10
-  luit = lib.warnOnInstantiate "luit has been removed from xorg namespace, use pkgs.luit instead" pkgs.luit; # added 2026-01-10
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
   xf86videoglint = throw ''
     The Xorg GLINT/Permedia video driver has been broken since xorg 21.
@@ -128,3 +115,37 @@ self: super:
   xtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
   # keep-sorted end
 }
+
+# Packages moved to top-level (pkgs/by-name). These aliases provide a clear
+# error message when someone explicitly uses xorg.X. They are excluded from
+# pkgsForCall merge in splice.nix via the deprecatedAliases list.
+// (
+  let
+    # added 2026-01-10
+    movedToToplevel = [
+      "appres"
+      "bdftopcf"
+      "bitmap"
+      "editres"
+      "fonttosfnt"
+      "gccmakedep"
+      "iceauth"
+      "ico"
+      "imake"
+      "libdmx"
+      "libfontenc"
+      "libpciaccess"
+      "luit"
+    ];
+  in
+  lib.optionalAttrs config.allowAliases (
+    lib.genAttrs movedToToplevel (
+      name:
+      lib.warnOnInstantiate "${name} has been removed from xorg namespace, use pkgs.${name} instead"
+        pkgs.${name}
+    )
+  )
+  // {
+    deprecatedAliases = movedToToplevel;
+  }
+)

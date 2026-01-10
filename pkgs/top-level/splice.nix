@@ -106,23 +106,20 @@ let
         ;
     };
 
-  splicedPackagesWithXorg =
-    splicedPackages
-    // removeAttrs splicedPackages.xorg [
-      "callPackage"
-      "newScope"
-      "overrideScope"
-      "packages"
-    ];
+  # Attributes to exclude when merging xorg into pkgsForCall.
+  # deprecatedAliases are packages moved to by-name that are still present in xorg namespace.
+  xorgExcludedAttrs = [
+    "callPackage"
+    "deprecatedAliases"
+    "newScope"
+    "overrideScope"
+    "packages"
+  ]
+  ++ (splicedPackages.xorg.deprecatedAliases or [ ]);
 
-  packagesWithXorg =
-    pkgs
-    // removeAttrs pkgs.xorg [
-      "callPackage"
-      "newScope"
-      "overrideScope"
-      "packages"
-    ];
+  splicedPackagesWithXorg = splicedPackages // removeAttrs splicedPackages.xorg xorgExcludedAttrs;
+
+  packagesWithXorg = pkgs // removeAttrs pkgs.xorg xorgExcludedAttrs;
 
   pkgsForCall = if actuallySplice then splicedPackagesWithXorg else packagesWithXorg;
 
