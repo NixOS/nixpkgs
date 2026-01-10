@@ -1240,49 +1240,6 @@ with haskellLib;
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
 
-  # Build Selda with the latest git version.
-  # See https://github.com/valderman/selda/issues/187
-  inherit
-    (
-      let
-        mkSeldaPackage =
-          name:
-          overrideCabal (drv: {
-            version = "2024-05-05-unstable";
-            src =
-              pkgs.fetchFromGitHub {
-                owner = "valderman";
-                repo = "selda";
-                rev = "50c3ba5c5da72bb758a4112363ba2fe1c0e968ea";
-                hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
-              }
-              + "/${name}";
-            # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
-            # Note: jailbreak ignores constraints under an if(flag)
-            postPatch = ''
-              check_sed() {
-                if ! test -s "$1"; then
-                  echo "sed: pattern '$2' doesn't match anything" >&2
-                  exit 1
-                fi
-              }
-              sed -i ${name}.cabal \
-                -e 's/\(bytestring\) .*/\1/w c1' \
-                -e 's/\(text\) .*/\1/w c2' \
-                -e 's/\(aeson\) .*/\1/w c3'
-              check_sed c1 'bytestring .*'
-              check_sed c2 'text .*'
-              ${lib.optionalString (name == "selda-json") "check_sed c3 'aeson .*'"}
-            '';
-          }) super.${name};
-      in
-      lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
-    )
-    selda
-    selda-sqlite
-    selda-json
-    ;
-
   # 2024-03-10: Getting the test suite to run requires a correctly crafted GHC_ENVIRONMENT variable.
   graphql-client = dontCheck super.graphql-client;
 
