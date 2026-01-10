@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
+      randoneering
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

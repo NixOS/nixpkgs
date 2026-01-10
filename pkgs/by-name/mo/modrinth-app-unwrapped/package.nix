@@ -31,13 +31,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.10.23";
+  version = "0.10.25";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Or2KkcZnZCZOnUd++SmDgbUOwa6ZmRDaoo7gF3XvN6I=";
+    hash = "sha256-e+Oienb0jhz7XT9NZB5IAELi+YU3i60JIWBDG8LCEZw=";
   };
 
   patches = [
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-hWjoNwKA39YYhPSrQUNaM1nS+CtV9vff+aXpoQLPCOM=";
+  cargoHash = "sha256-pZwWqWkcq142iIO0Ier9NH56P1EWXAoRiqDCNyElXCA=";
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-jLuI8qNJgFkuBbKuBNKGuk/6v62iY7fNZX2t3U3olk0=";
+    hash = "sha256-4MRVk5k/HkCMA/OeRMZwwkCyqmSWkujqLe/8sPfYcwc=";
   };
 
   nativeBuildInputs = [
@@ -160,7 +160,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gpl3Plus
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      hythera
+    ];
     mainProgram = "ModrinthApp";
     platforms = with lib.platforms; linux ++ darwin;
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.

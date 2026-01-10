@@ -45,11 +45,14 @@ mkJetBrainsProduct {
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/datagrip/";
     description = "Database IDE from JetBrains";
-    longDescription = "DataGrip is a new IDE from JetBrains built for database admins. It allows you to quickly migrate and refactor relational databases, construct efficient, statically checked SQL queries and much more.";
+    longDescription = ''
+      DataGrip is an IDE from JetBrains built for database admins.
+      It allows you to quickly migrate and refactor relational databases, construct efficient, statically checked SQL queries and much more.
+    '';
     maintainers = [ ];
     license = lib.licenses.unfree;
     sourceProvenance =

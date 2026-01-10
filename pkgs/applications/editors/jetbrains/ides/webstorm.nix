@@ -49,7 +49,7 @@ mkJetBrainsProduct {
     musl
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/webstorm/";
     description = "Web IDE from JetBrains";

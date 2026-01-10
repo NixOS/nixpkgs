@@ -448,6 +448,7 @@ print OUT <<EOF;
   xbitmaps,
   xcalc,
   xcb-proto,
+  xclock,
   xcmsdb,
   xcompmgr,
   xconsole,
@@ -458,14 +459,19 @@ print OUT <<EOF;
   xdriinfo,
   xev,
   xeyes,
+  xfd,
   xfontsel,
+  xfs,
   xfsinfo,
   xgamma,
   xgc,
   xhost,
+  xkbevd,
+  xkbprint,
   xkbutils,
   xkeyboard-config,
   xkill,
+  xload,
   xlsatoms,
   xlsclients,
   xlsfonts,
@@ -478,6 +484,7 @@ print OUT <<EOF;
   xorgproto,
   xorg-server,
   xorg-sgml-doctools,
+  xpr,
   xprop,
   xrandr,
   xrdb,
@@ -529,6 +536,7 @@ self: with self; {
     xbacklight
     xbitmaps
     xcalc
+    xclock
     xcmsdb
     xcompmgr
     xconsole
@@ -538,13 +546,18 @@ self: with self; {
     xdriinfo
     xev
     xeyes
+    xfd
     xfontsel
+    xfs
     xfsinfo
     xgamma
     xgc
     xhost
+    xkbevd
+    xkbprint
     xkbutils
     xkill
+    xload
     xlsatoms
     xlsclients
     xlsfonts
@@ -553,6 +566,7 @@ self: with self; {
     xmodmap
     xmore
     xorgproto
+    xpr
     xprop
     xrandr
     xrdb

@@ -17,20 +17,18 @@
 buildPythonPackage rec {
   pname = "solo-python";
   version = "0.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = "solo-python";
-    rev = version;
+    tag = version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [ flit ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     ecdsa
