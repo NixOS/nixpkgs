@@ -141,6 +141,7 @@
   xf86-video-suncg6,
   xf86-video-sunffb,
   xf86-video-sunleo,
+  xf86-video-tdfx,
   xf86-video-v4l,
   xfd,
   xfontsel,
@@ -361,6 +362,7 @@ self: with self; {
   xf86videosuncg6 = xf86-video-suncg6;
   xf86videosunffb = xf86-video-sunffb;
   xf86videosunleo = xf86-video-sunleo;
+  xf86videotdfx = xf86-video-tdfx;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
@@ -1373,46 +1375,6 @@ self: with self; {
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videotdfx = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-tdfx";
-      version = "1.5.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-tdfx-1.5.0.tar.bz2";
-        sha256 = "0qc5wzwf1n65si9rc37bh224pzahh7gp67vfimbxs0b9yvhq0i9g";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
         libpciaccess
         xorgserver
       ];

@@ -473,6 +473,7 @@ print OUT <<EOF;
   xf86-video-suncg6,
   xf86-video-sunffb,
   xf86-video-sunleo,
+  xf86-video-tdfx,
   xf86-video-v4l,
   xfd,
   xfontsel,
@@ -693,6 +694,7 @@ self: with self; {
   xf86videosuncg6 = xf86-video-suncg6;
   xf86videosunffb = xf86-video-sunffb;
   xf86videosunleo = xf86-video-sunleo;
+  xf86videotdfx = xf86-video-tdfx;
   xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
