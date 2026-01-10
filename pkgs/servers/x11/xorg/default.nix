@@ -169,6 +169,7 @@
   xf86-video-v4l,
   xf86-video-vbox,
   xf86-video-vesa,
+  xf86-video-vmware,
   xfd,
   xfontsel,
   xfs,
@@ -424,6 +425,7 @@ self: with self; {
   xf86videov4l = xf86-video-v4l;
   xf86videovboxvideo = xf86-video-vbox;
   xf86videovesa = xf86-video-vesa;
+  xf86videovmware = xf86-video-vmware;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -469,52 +471,6 @@ self: with self; {
         libXext
         xorgserver
         libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videovmware = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      udev,
-      libpciaccess,
-      libX11,
-      libXext,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-vmware";
-      version = "13.4.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz";
-        sha256 = "06mq7spifsrpbwq9b8kn2cn61xq6mpkq6lvh4qi6xk2yxpjixlxf";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        udev
-        libpciaccess
-        libX11
-        libXext
-        xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

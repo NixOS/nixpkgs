@@ -59,16 +59,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
