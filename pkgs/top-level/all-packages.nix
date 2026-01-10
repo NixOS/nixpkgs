@@ -5834,6 +5834,7 @@ with pkgs;
 
   bazel = bazel_7;
   bazel_8 = callPackage ../development/tools/build-managers/bazel { majorVersion = "8"; };
+  bazel_9 = callPackage ../development/tools/build-managers/bazel { majorVersion = "9"; };
 
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;

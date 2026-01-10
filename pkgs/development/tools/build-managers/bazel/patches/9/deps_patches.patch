@@ -1,0 +1,24 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+index d33fff2e4c..5c1addd419 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -27,10 +27,19 @@ bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf"
+ bazel_dep(name = "re2", version = "2025-11-05.bcr.1")
+ bazel_dep(name = "rules_graalvm", version = "0.11.1")
+ bazel_dep(name = "rules_java", version = "9.0.3")
++single_version_override(
++    module_name = "rules_java",
++    patches = ["//third_party:rules_java.patch"],
++)
+ bazel_dep(name = "rules_jvm_external", version = "6.6")
+ bazel_dep(name = "rules_license", version = "1.0.0")
+ bazel_dep(name = "rules_pkg", version = "1.1.0")
+ bazel_dep(name = "rules_python", version = "1.7.0")
++single_version_override(
++    module_name = "rules_python",
++    patches = ["//third_party:rules_python.patch"],
++    patch_strip = 1,
++)
+ bazel_dep(name = "rules_shell", version = "0.6.1")
+ bazel_dep(name = "rules_testing", version = "0.9.0")
+ bazel_dep(name = "stardoc", version = "0.8.0", repo_name = "io_bazel_skydoc")
