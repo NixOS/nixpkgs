@@ -17,7 +17,7 @@ let
     types
     ;
 
-  cfg = config.services.xserver.desktopManager.budgie;
+  cfg = config.services.desktopManager.budgie;
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.nineish;
   nixos-background-dark = pkgs.nixos-artwork.wallpapers.nineish-dark-gray;
@@ -63,8 +63,15 @@ in
 {
   meta.maintainers = lib.teams.budgie.members;
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "budgie" ]
+      [ "services" "desktopManager" "budgie" ]
+    )
+  ];
+
   options = {
-    services.xserver.desktopManager.budgie = {
+    services.desktopManager.budgie = {
       enable = mkEnableOption "the Budgie desktop";
 
       sessionPath = mkOption {
@@ -128,7 +135,7 @@ in
       };
     };
 
-    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie-desktop-view ];
+    services.desktopManager.budgie.sessionPath = [ pkgs.budgie-desktop-view ];
 
     environment.extraInit = ''
       ${concatMapStrings (p: ''
