@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   alsa-utils,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "notify-py";
   version = "0.3.43";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ms7m";

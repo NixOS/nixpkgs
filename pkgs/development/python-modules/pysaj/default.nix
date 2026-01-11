@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysaj";
   version = "0.0.16";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fredericvl";

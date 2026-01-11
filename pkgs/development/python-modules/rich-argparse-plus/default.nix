@@ -5,15 +5,12 @@
   flit-core,
   rich,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rich-argparse-plus";
   version = "0.3.1.4";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";

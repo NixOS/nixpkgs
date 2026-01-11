@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pulp";
   version = "2.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coin-or";

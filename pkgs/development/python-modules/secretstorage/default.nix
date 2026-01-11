@@ -4,15 +4,12 @@
   cryptography,
   fetchPypi,
   jeepney,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "secretstorage";
   version = "3.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "SecretStorage";

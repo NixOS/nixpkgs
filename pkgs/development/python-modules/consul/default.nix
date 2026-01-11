@@ -5,7 +5,6 @@
   fetchpatch,
   setuptools,
   requests,
-  pythonOlder,
   pytestCheckHook,
   aiohttp,
   pytest-asyncio,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "py-consul";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "criteo";

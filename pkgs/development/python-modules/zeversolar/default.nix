@@ -5,7 +5,6 @@
   poetry-core,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   retry2,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "zeversolar";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "kvanzuijlen";

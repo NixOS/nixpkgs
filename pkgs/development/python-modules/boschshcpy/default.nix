@@ -4,7 +4,6 @@
   cryptography,
   fetchFromGitHub,
   getmac,
-  pythonOlder,
   requests,
   setuptools,
   zeroconf,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "boschshcpy";
   version = "0.2.107";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tschamm";

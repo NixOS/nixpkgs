@@ -6,7 +6,6 @@
   setuptools,
   certifi,
   pytestCheckHook,
-  pythonOlder,
   trio,
   trio-websocket,
   typing-extensions,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "selenium";
   version = "4.29.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";

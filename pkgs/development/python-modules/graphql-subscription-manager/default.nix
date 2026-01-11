@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   websockets,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "graphql-subscription-manager";
   version = "0.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

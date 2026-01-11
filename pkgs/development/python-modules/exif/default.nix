@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   plum-py,
   pytestCheckHook,
   baseline,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "exif";
   version = "1.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "TNThieding";

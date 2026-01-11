@@ -10,7 +10,6 @@
   pytestCheckHook,
   python-dateutil,
   cramjam,
-  pythonOlder,
   setuptools,
   zlib-ng,
   zstandard,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "fastavro";
   version = "1.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "fastavro";

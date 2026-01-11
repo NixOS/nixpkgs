@@ -5,7 +5,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pythonAtLeast,
-  pythonOlder,
   defusedxml,
   setuptools,
   sphinx,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "uqbar";
   version = "0.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

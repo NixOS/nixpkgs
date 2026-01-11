@@ -4,7 +4,6 @@
   fetchPypi,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   tinycss2,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cssselect2";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

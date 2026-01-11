@@ -7,7 +7,6 @@
   httpx,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   six,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "nebula3-python";
   version = "3.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vesoft-inc";

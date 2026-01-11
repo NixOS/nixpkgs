@@ -3,7 +3,6 @@
   buildPythonPackage,
   distutils,
   fetchPypi,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "thrift";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

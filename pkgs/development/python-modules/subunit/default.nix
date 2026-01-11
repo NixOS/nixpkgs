@@ -5,7 +5,6 @@
   cppunit,
   pkg-config,
   subunit,
-  pythonOlder,
 
   # python dependencies
   fixtures,
@@ -20,8 +19,6 @@
 buildPythonPackage {
   inherit (subunit) name src meta;
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   postPatch = ''
     substituteInPlace setup.py \

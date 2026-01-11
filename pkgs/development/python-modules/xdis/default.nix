@@ -4,7 +4,6 @@
   click,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "xdis";
   version = "6.1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";

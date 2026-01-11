@@ -4,7 +4,6 @@
   fetchFromGitHub,
   importlib-resources,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "typeshed-client";
   version = "2.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JelleZijlstra";

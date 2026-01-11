@@ -4,15 +4,12 @@
   buildPythonPackage,
   celery,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-results";
   version = "2.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_celery_results";

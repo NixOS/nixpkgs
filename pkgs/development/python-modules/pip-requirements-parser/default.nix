@@ -5,7 +5,6 @@
   packaging,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pip-requirements-parser";
   version = "32.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nexB";

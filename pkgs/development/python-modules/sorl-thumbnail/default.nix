@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   django,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sorl-thumbnail";
   version = "12.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "sorl_thumbnail";

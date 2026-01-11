@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "6.145.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";

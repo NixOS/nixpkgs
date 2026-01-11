@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pytest-subtests";
   version = "0.14.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pytest_subtests";

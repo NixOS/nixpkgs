@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   pytest-django,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "djangocms-admin-style";
   version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-cms";

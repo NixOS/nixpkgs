@@ -6,7 +6,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyprosegur";
   version = "0.0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dgomes";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   base58,
   py-multibase,
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "py-cid";
   version = "0.3.0";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ipld";

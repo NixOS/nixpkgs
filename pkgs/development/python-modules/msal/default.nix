@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pyjwt,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "msal";
   version = "1.33.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

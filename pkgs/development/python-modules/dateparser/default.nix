@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   setuptools,
@@ -24,8 +23,6 @@
 buildPythonPackage rec {
   pname = "dateparser";
   version = "1.2.2";
-
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 

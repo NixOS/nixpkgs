@@ -6,7 +6,6 @@
   fetchurl,
   openssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   swig,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "m2crypto";
   version = "0.45.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

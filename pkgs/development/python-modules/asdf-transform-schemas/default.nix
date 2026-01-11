@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "asdf_transform_schemas";
     inherit version;

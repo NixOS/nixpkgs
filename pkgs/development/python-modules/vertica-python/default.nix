@@ -6,7 +6,6 @@
   parameterized,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "vertica-python";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

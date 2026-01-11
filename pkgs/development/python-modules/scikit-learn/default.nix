@@ -19,7 +19,6 @@
   pillow,
   joblib,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "scikit-learn";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "scikit_learn";

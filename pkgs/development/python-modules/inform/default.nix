@@ -8,7 +8,6 @@
   hypothesis,
   num2words,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "inform";
   version = "1.35";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";

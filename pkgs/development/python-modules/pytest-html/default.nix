@@ -3,7 +3,6 @@
   buildNpmPackage,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatch-vcs,
   hatchling,
   jinja2,
@@ -39,8 +38,6 @@ in
 buildPythonPackage {
   inherit pname version src;
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   nativeBuildInputs = [
     hatch-vcs

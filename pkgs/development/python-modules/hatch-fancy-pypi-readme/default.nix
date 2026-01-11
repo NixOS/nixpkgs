@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "25.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "hatch_fancy_pypi_readme";
     inherit version;

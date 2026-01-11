@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   reactivex,
   setuptools,
   pandas,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "influxdb3-python";
   version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";

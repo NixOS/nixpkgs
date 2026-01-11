@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
   fetchpatch2,
@@ -17,8 +16,6 @@
 buildPythonPackage rec {
   pname = "pytest-forked";
   version = "1.6.0";
-
-  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 

@@ -10,7 +10,6 @@
   mock,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testfixtures,
   zipfile2,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "okonomiyaki";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "enthought";

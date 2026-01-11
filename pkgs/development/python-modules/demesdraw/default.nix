@@ -8,7 +8,6 @@
   matplotlib,
   numpy,
   scipy,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "demesdraw";
   version = "0.4.1";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

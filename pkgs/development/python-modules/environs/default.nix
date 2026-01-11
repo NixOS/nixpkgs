@@ -9,15 +9,12 @@
   marshmallow,
   pytestCheckHook,
   python-dotenv,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "environs";
   version = "14.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sloria";

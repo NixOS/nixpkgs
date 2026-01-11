@@ -34,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "KotlinIsland";
     repo = "basedmypy";

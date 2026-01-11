@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   pytestCheckHook,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "repeated-test";
   version = "2.3.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "repeated_test";
