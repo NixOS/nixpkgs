@@ -167,6 +167,11 @@ in
           default = "localhost";
           description = ''
             Hostname of the database to connect to.
+
+            For PostgreSQL, this can also be a path to a Unix socket
+            directory (e.g., `/run/postgresql`) to use peer authentication.
+            This requires adding `junixsocket-common` and `junixsocket-native-common`
+            to [](#opt-services.keycloak.plugins).
           '';
         };
 
@@ -189,11 +194,12 @@ in
 
         useSSL = mkOption {
           type = bool;
-          default = cfg.database.host != "localhost";
-          defaultText = literalExpression ''config.${opt.database.host} != "localhost"'';
+          default = cfg.database.host != "localhost" && !hasPrefix "/" cfg.database.host;
+          defaultText = literalExpression ''config.${opt.database.host} != "localhost" && !lib.hasPrefix "/" config.${opt.database.host}'';
           description = ''
-            Whether the database connection should be secured by SSL /
-            TLS.
+            Whether the database connection should be secured by SSL / TLS.
+
+            Defaults to `false` for localhost and Unix socket connections.
           '';
         };
 
@@ -252,11 +258,15 @@ in
         };
 
         passwordFile = mkOption {
-          type = path;
+          type = nullOr path;
+          default = null;
           example = "/run/keys/db_password";
           apply = assertStringPath "passwordFile";
           description = ''
             The path to a file containing the database password.
+
+            Not required when using Unix socket authentication (peer auth)
+            by setting `host` to a socket path like `/run/postgresql`.
           '';
         };
       };
@@ -553,6 +563,13 @@ in
             for more information.
           '';
         }
+        {
+          assertion = cfg.database.passwordFile != null || hasPrefix "/" cfg.database.host;
+          message = ''
+            services.keycloak.database.passwordFile must be set unless using
+            Unix socket authentication (host starting with /).
+          '';
+        }
       ];
 
       environment.systemPackages = [ keycloakBuild ];
@@ -582,19 +599,32 @@ in
               "trustCertificateKeyStorePassword=notsosecretpassword"
             ]
           );
+
+          dbName = if databaseActuallyCreateLocally then "keycloak" else cfg.database.name;
           dbProps = if cfg.database.type == "postgresql" then postgresParams else mariadbParams;
+
+          # Unix socket connection requires junixsocket library and special JDBC URL
+          isUnixSocket = hasPrefix "/" cfg.database.host;
+          unixSocketUrl = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${cfg.database.host}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
         in
         mkMerge [
           {
             db = if cfg.database.type == "postgresql" then "postgres" else cfg.database.type;
             db-username = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
-            db-password._secret = cfg.database.passwordFile;
+            db-password = mkIf (cfg.database.passwordFile != null) {
+              _secret = cfg.database.passwordFile;
+            };
+          }
+          (mkIf isUnixSocket {
+            db-url = unixSocketUrl;
+          })
+          (mkIf (!isUnixSocket) {
             db-url-host = cfg.database.host;
             db-url-port = toString cfg.database.port;
-            db-url-database = if databaseActuallyCreateLocally then "keycloak" else cfg.database.name;
+            db-url-database = dbName;
             db-url-properties = prefixUnlessEmpty "?" dbProps;
             db-url = null;
-          }
+          })
           (mkIf (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
             https-certificate-file = "/run/keycloak/ssl/ssl_cert";
             https-certificate-key-file = "/run/keycloak/ssl/ssl_key";
@@ -778,5 +808,8 @@ in
     };
 
   meta.doc = ./keycloak.md;
-  meta.maintainers = [ maintainers.talyz ];
+  meta.maintainers = with maintainers; [
+    talyz
+    anish
+  ];
 }

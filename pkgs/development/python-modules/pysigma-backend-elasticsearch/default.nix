@@ -10,16 +10,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-elasticsearch";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
-    tag = "v${version}";
-    hash = "sha256-2gWYGu+Xr4R7QKEBiL5rXd/2HNinazyrF1OKzte0B3g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EzqzCCgHnEnBCcoYflBYN5Lb6yHvR7s5B0EtqtvVxtk=";
   };
 
   build-system = [ poetry-core ];
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support Elasticsearch for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch/releases/tag/${src.tag}";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

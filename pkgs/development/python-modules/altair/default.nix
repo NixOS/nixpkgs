@@ -2,23 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
   hatchling,
-  anywidget,
-  ipython,
-  ipywidgets,
+
+  # dependencies
   jinja2,
   jsonschema,
-  mistune,
   narwhals,
   numpy,
   packaging,
   pandas,
+  toolz,
+  typing-extensions,
+
+  # tests
+  anywidget,
+  ipython,
+  ipywidgets,
+  mistune,
   polars,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  toolz,
-  typing-extensions,
+  vega-datasets,
   vl-convert-python,
   writableTmpDirAsHomeHook,
 }:
@@ -46,7 +53,9 @@ buildPythonPackage (finalAttrs: {
     pandas
     toolz
   ]
-  ++ lib.optional (pythonOlder "3.14") typing-extensions;
+  ++ lib.optionals (pythonOlder "3.14") [
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     anywidget
@@ -56,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     polars
     pytest-xdist
     pytestCheckHook
+    vega-datasets
     vl-convert-python
     writableTmpDirAsHomeHook
   ];
@@ -69,26 +79,36 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
     "test_renderer_with_none_embed_options"
+
     # Sometimes conflict due to parallelism
     "test_dataframe_to_csv[polars]"
     "test_dataframe_to_csv[pandas]"
+
     # Network access
-    "test_theme_remote_lambda"
     "test_chart_validation_errors"
+    "test_data_consistency"
+    "test_load_call"
+    "test_loader_call"
     "test_multiple_field_strings_in_condition"
+    "test_no_remote_connection"
+    "test_pandas_date_parse"
+    "test_pandas_date_parse"
+    "test_polars_date_read_json_roundtrip"
+    "test_polars_date_read_json_roundtrip"
+    "test_polars_date_read_json_roundtrip"
+    "test_polars_date_read_json_roundtrip"
+    "test_reader_cache"
+    "test_theme_remote_lambda"
+    "test_tsv"
   ];
 
   disabledTestPaths = [
-    # Disabled because it requires internet connectivity
-    "tests/test_examples.py"
-    "tests/test_datasets.py"
+    # Network access
     "altair/datasets/_data.py"
-    # TODO: Disabled because of missing altair_viewer package
-    "tests/vegalite/v6/test_api.py"
+    "tests/test_examples.py"
+
     # avoid updating files and dependency on black
     "tests/test_toplevel.py"
-    # require vl-convert package
-    "tests/utils/test_compiler.py"
   ];
 
   meta = {
