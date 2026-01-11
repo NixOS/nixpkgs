@@ -8,8 +8,8 @@
 }:
 
 let
-  odoo_version = "19.0";
-  odoo_release = "20260104";
+  odoo_version = "18.0";
+  odoo_release = "20250506";
   python = python312.override {
     self = python;
   };
@@ -24,7 +24,7 @@ python.pkgs.buildPythonApplication rec {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-JsbJ39zPZm4eyRTXkvdCMHwYaA08yUxZXcLglRn3kWs="; # odoo
+    hash = "sha256-rNG0He+51DnRT5g1SovGZ9uiE1HWXtcmAybcadBMjY4="; # odoo
   };
 
   makeWrapperArgs = [
@@ -38,13 +38,13 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    asn1crypto
     babel
-    cbor2
     chardet
     cryptography
-    distutils
+    decorator
     docutils
+    distutils
+    ebaysdk
     freezegun
     geoip2
     gevent
@@ -62,6 +62,7 @@ python.pkgs.buildPythonApplication rec {
     polib
     psutil
     psycopg2
+    pydot
     pyopenssl
     pypdf2
     pyserial
@@ -81,6 +82,9 @@ python.pkgs.buildPythonApplication rec {
     xlsxwriter
     xlwt
     zeep
+
+    setuptools
+    mock
   ];
 
   # takes 5+ minutes and there are not files to strip
