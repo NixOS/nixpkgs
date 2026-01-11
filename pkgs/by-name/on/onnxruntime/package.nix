@@ -211,6 +211,8 @@ effectiveStdenv.mkDerivation rec {
   ]
   ++ lib.optionals pythonSupport [ "dist" ];
 
+  separateDebugInfo = true;
+
   enableParallelBuilding = true;
 
   cmakeDir = "../cmake";
@@ -262,7 +264,10 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
   ];
 
-  env = lib.optionalAttrs rocmSupport {
+  env = {
+    NIX_LDFLAGS = "-z,noexecstack";
+  }
+  // lib.optionalAttrs rocmSupport {
     MIOPEN_PATH = rocmPackages.miopen;
     # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
     # fatal error: 'rocrand/rocrand.h' file not found
@@ -332,6 +337,8 @@ effectiveStdenv.mkDerivation rec {
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
+
+  __structuredAttrs = true;
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module

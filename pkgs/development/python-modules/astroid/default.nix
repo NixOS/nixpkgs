@@ -10,21 +10,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "astroid";
-  version = "4.0.1"; # Check whether the version is compatible with pylint
+  version = "4.0.3"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "astroid";
-    tag = "v${version}";
-    hash = "sha256-Ulifj+ym0j0LqhmKPfM8vVCjz71Gwd483ke3PkMnHb8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5p1xY6EWviSgmrLVOx3w7RcG/Vpx+sUtVndoxXrIFTQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pip
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/PyCQA/astroid/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -26,8 +26,10 @@ buildPythonPackage rec {
 
   dependencies = [ cffi ];
 
-  LDFLAGS = "-L${crc32c}/lib";
-  CFLAGS = "-I${crc32c}/include";
+  env = {
+    LDFLAGS = "-L${crc32c}/lib";
+    CFLAGS = "-I${crc32c}/include";
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -10,7 +10,6 @@
   cmake,
   ninja,
   python3,
-  libllvm,
   jq,
   libcxx,
   linuxHeaders,
@@ -61,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
         + ''
           cp -r ${monorepoSrc}/compiler-rt "$out"
+          cp -r ${monorepoSrc}/llvm "$out"
         ''
       )
     else
@@ -85,12 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
     hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
     relative = "compiler-rt";
+  })
+  ++ lib.optional (lib.strings.versionOlder (lib.versions.major release_version) "20") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/59978b21ad9c65276ee8e14f26759691b8a65763.patch";
+    hash = "sha256-ys5SMLfO3Ay9nCX9GV5yRCQ6pLsseFu/ZY6Xd6OL4p0=";
+    relative = "compiler-rt";
   });
 
   nativeBuildInputs = [
     cmake
     python3
-    libllvm.dev
     ninja
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];

@@ -5,7 +5,6 @@
   faust2jack,
   faust2lv2,
   helmholtz,
-  mrpeach,
   puredata-with-plugins,
   jack-example-tools,
 }:
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
 
   plugins = [
     helmholtz
-    mrpeach
   ];
 
   pitchTracker = puredata-with-plugins plugins;

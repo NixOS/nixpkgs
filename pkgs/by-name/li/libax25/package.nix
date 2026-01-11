@@ -29,10 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  LDFLAGS = lib.optionals stdenv.hostPlatform.isStatic [
-    "-static-libgcc"
-    "-static"
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    LDFLAGS = toString [
+      "-static-libgcc"
+      "-static"
+    ];
+  };
 
   meta = {
     description = "AX.25 library for hamradio applications";

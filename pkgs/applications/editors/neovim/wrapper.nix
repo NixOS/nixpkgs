@@ -198,6 +198,8 @@ let
         inherit pname version;
         inherit plugins;
 
+        strictDeps = true;
+
         __structuredAttrs = true;
         dontUnpack = true;
         inherit

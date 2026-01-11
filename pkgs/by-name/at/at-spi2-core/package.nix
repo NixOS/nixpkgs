@@ -7,6 +7,7 @@
   pkg-config,
   gobject-introspection,
   buildPackages,
+  withDconf ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform dconf,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -90,6 +91,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Duse_systemd=false"
+  ]
+  ++ lib.optionals (!withIntrospection) [
+    (lib.mesonEnable "introspection" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # The adaptor is only available as a shared object, as gtk2 loads it dynamically
+    (lib.mesonBool "gtk2_atk_adaptor" false)
   ];
 
   passthru = {
@@ -102,7 +110,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot use wrapGAppsHook'due to a dependency cycle
     wrapProgram $out/libexec/at-spi-bus-launcher \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      ${lib.optionalString withDconf ''--prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"''} \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 

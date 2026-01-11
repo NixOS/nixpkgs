@@ -4,6 +4,7 @@
   replaceVars,
   pkg-config,
   fetchurl,
+  fetchpatch,
   python3Packages,
   gettext,
   itstool,
@@ -52,6 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
       utillinux = util-linux;
       # patch context
       bindir = null;
+    })
+    (fetchpatch {
+      name = "use-binsh.patch";
+      url = "https://github.com/brailcom/speechd/commit/66d5fe65cffd4c0ce9cfb4c6d292866ed8726999.diff?full_index=1";
+      hash = "sha256-7R5BH6QmxovvtXoH/T76qu6YMfm1HE+CA0eB0mzwmfY=";
     })
   ]
   ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
@@ -129,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
-    substituteInPlace src/modules/generic.c --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
   installFlags = [

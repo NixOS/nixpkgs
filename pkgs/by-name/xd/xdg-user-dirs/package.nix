@@ -1,42 +1,41 @@
 {
   lib,
   stdenv,
-  autoreconfHook,
+  meson,
+  ninja,
   fetchurl,
   libxslt,
   docbook_xsl,
   docbook_xml_dtd_43,
   gettext,
-  makeWrapper,
+  makeBinaryWrapper,
+  libiconv,
+  libintl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-user-dirs";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchurl {
-    url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
+    url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6S3rkpwQ1LKTKTl6+KJYUQEkf35hd6xvHSjoITDtjBk=";
   };
 
-  patches = [
-    # https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/merge_requests/16
-    ./gettext-0.25.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace Makefile.am \
-      --replace-fail 'libraries = $(LIBINTL)' 'libraries = $(LIBICONV) $(LIBINTL)'
-  '';
-
   nativeBuildInputs = [
-    autoreconfHook
-    makeWrapper
+    meson
+    ninja
+    makeBinaryWrapper
     libxslt
     docbook_xsl
     docbook_xml_dtd_43
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
+    gettext
+  ];
+
+  buildInputs = [
+    libiconv
+    libintl
+  ];
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-liconv" else null;
 
@@ -44,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fallback values need to be last
     wrapProgram "$out/bin/xdg-user-dirs-update" \
       --suffix XDG_CONFIG_DIRS : "$out/etc/xdg"
+
+    substituteInPlace "$out/lib/systemd/user/xdg-user-dirs.service" \
+      --replace-fail "/usr/bin/xdg-user-dirs-update" "$out/bin/xdg-user-dirs-update"
   '';
 
   meta = {

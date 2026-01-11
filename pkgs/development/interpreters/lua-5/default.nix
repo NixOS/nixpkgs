@@ -102,6 +102,21 @@ let
 in
 
 rec {
+  lua5_5 = callPackage ./interpreter.nix {
+    self = lua5_5;
+    version = "5.5.0";
+    hash = "sha256-V8zDK7vQBcq3W8xSREBSU1r2kXiduiuQFtXFBkDWiz0=";
+    makeWrapper = makeBinaryWrapper;
+    inherit passthruFun;
+
+    patches = lib.optional stdenv.hostPlatform.isDarwin ./5.5.darwin.patch;
+  };
+
+  lua5_5_compat = lua5_5.override {
+    self = lua5_5_compat;
+    compat = true;
+  };
+
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
     version = "5.4.7";

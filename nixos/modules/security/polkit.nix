@@ -78,6 +78,8 @@ in
     ];
     systemd.services.polkit.stopIfChanged = false;
 
+    systemd.sockets."polkit-agent-helper".wantedBy = [ "sockets.target" ];
+
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
 
@@ -94,19 +96,11 @@ in
 
     security.pam.services.polkit-1 = { };
 
-    security.wrappers = {
-      pkexec = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${cfg.package.bin}/bin/pkexec";
-      };
-      polkit-agent-helper-1 = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${cfg.package.out}/lib/polkit-1/polkit-agent-helper-1";
-      };
+    security.wrappers.pkexec = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${cfg.package.bin}/bin/pkexec";
     };
 
     systemd.tmpfiles.rules = [
