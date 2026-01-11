@@ -54,7 +54,7 @@
   rocmSupport ? config.rocmSupport,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tinygrad";
   version = "0.11.0";
   pyproject = true;
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VG2rhkiwPFN3JYSBbqrwCdqhdGE8GY6oEatMSCydhw8=";
   };
 
@@ -245,7 +245,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple and powerful neural network framework";
     homepage = "https://github.com/tinygrad/tinygrad";
-    changelog = "https://github.com/tinygrad/tinygrad/releases/tag/v${version}";
+    changelog = "https://github.com/tinygrad/tinygrad/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
@@ -254,4 +254,4 @@ buildPythonPackage rec {
       "aarch64-linux"
     ];
   };
-}
+})
