@@ -7,9 +7,9 @@
 lib.makeScope pkgs.newScope (
   self:
   {
-    buildGraalvm = self.callPackage ./community-edition/buildGraalvm.nix;
+    buildGraalvm = self.callPackage ./community-edition/buildGraalvm.nix { };
 
-    buildGraalvmProduct = self.callPackage ./community-edition/buildGraalvmProduct.nix;
+    buildGraalvmProduct = self.callPackage ./community-edition/buildGraalvmProduct.nix { };
 
     graalvm-ce = self.callPackage ./community-edition/graalvm-ce { };
 
