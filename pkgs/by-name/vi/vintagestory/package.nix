@@ -24,7 +24,6 @@
 }:
 
 assert x11Support || waylandSupport;
-assert x11Support -> xorg != null;
 assert waylandSupport -> wayland != null;
 assert waylandSupport -> libxkbcommon != null;
 

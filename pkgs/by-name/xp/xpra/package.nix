@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  xf86-video-dummy,
   xorgserver,
   xxHash,
   clang,
@@ -53,7 +54,7 @@
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+  xf86-video-dummy-with-patches = xf86-video-dummy.overrideDerivation (p: {
     patches = [
       # patch provided by Xpra upstream
       ./0002-Constant-DPI.patch
@@ -67,7 +68,7 @@ let
       ModulePath "${xorgserver}/lib/xorg/modules"
       ModulePath "${xorgserver}/lib/xorg/modules/extensions"
       ModulePath "${xorgserver}/lib/xorg/modules/drivers"
-      ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
+      ModulePath "${xf86-video-dummy-with-patches}/lib/xorg/modules/drivers"
     EndSection
   '';
 
@@ -276,7 +277,9 @@ effectiveBuildPythonApplication rec {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit xf86videodummy;
+    xf86-video-dummy = xf86-video-dummy-with-patches;
+    # old name for backwards compat
+    xf86videodummy = xf86-video-dummy-with-patches;
     updateScript = ./update.sh;
   };
 

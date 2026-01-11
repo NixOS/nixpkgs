@@ -7,7 +7,7 @@
   libX11,
   libXext,
   libXpm,
-  mkfontdir,
+  mkfontscale,
   pkg-config,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXpm
     fontutil
-    mkfontdir
+    mkfontscale
   ];
 
   # There is a bug on --with-font

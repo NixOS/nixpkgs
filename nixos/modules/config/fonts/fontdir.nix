@@ -20,7 +20,7 @@ let
         nativeBuildInputs = [
           gzip
           xorg.mkfontscale
-          xorg.mkfontdir
+          xorg.mkfontscale
         ];
       }
       ''

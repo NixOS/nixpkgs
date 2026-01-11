@@ -19,7 +19,7 @@
   libXScrnSaver,
   bdftopcf,
   ncompress,
-  mkfontdir,
+  mkfontscale,
   tcl,
   libXaw,
   libxcrypt,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     autoreconfHook
     bdftopcf
-    mkfontdir
+    mkfontscale
     xset
     xrdb
     opensp

@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   bdftopcf,
-  mkfontdir,
   mkfontscale,
 }:
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     done
     cp */etc/dosemu.alias "$fontPath/fonts.alias"
     cd "$fontPath"
-    ${mkfontdir}/bin/mkfontdir
+    ${mkfontscale}/bin/mkfontdir
     ${mkfontscale}/bin/mkfontscale
   '';
 

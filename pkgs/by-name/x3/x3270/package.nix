@@ -10,7 +10,7 @@
   libXaw,
   libXmu,
   bdftopcf,
-  mkfontdir,
+  mkfontscale,
   fontadobe100dpi,
   fontadobeutopia100dpi,
   fontbh100dpi,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXaw
     libXmu
     bdftopcf
-    mkfontdir
+    mkfontscale
     fontadobe100dpi
     fontadobeutopia100dpi
     fontbh100dpi

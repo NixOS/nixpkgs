@@ -6,6 +6,9 @@
   gnused,
   writeScript,
   xorg,
+  font-encodings,
+  mkfontscale,
+  font-alias,
   bashInteractive,
   xterm,
   xcbuild,
@@ -97,7 +100,12 @@ let
     ];
   };
   fonts = import ./system-fonts.nix {
-    inherit stdenv xorg fontDirs;
+    inherit
+      stdenv
+      fontDirs
+      mkfontscale
+      font-alias
+      ;
   };
   # any X related programs expected to be available via $PATH
   pkgs = [
@@ -115,7 +123,7 @@ let
     xorg.lndir
     xorg.luit
     xorg.makedepend
-    xorg.mkfontdir
+    xorg.mkfontscale
     xorg.mkfontscale
     xorg.sessreg
     xorg.setxkbmap
@@ -228,9 +236,9 @@ stdenv.mkDerivation {
     substituteInPlace $out/bin/font_cache \
       --subst-var-by "shell"           "${stdenv.shell}" \
       --subst-var-by "PATH"            "$out/bin" \
-      --subst-var-by "ENCODINGSDIR"    "${xorg.encodings}/share/fonts/X11/encodings" \
-      --subst-var-by "MKFONTDIR"       "${xorg.mkfontdir}/bin/mkfontdir" \
-      --subst-var-by "MKFONTSCALE"     "${xorg.mkfontscale}/bin/mkfontscale" \
+      --subst-var-by "ENCODINGSDIR"    "${font-encodings}/share/fonts/X11/encodings" \
+      --subst-var-by "MKFONTDIR"       "${mkfontscale}/bin/mkfontdir" \
+      --subst-var-by "MKFONTSCALE"     "${mkfontscale}/bin/mkfontscale" \
       --subst-var-by "FC_CACHE"        "${fontconfig.bin}/bin/fc-cache" \
       --subst-var-by "FONTCONFIG_FILE" "$fontsConfPath"
   '';

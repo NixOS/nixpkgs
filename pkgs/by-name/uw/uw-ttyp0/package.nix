@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     bdftopcf
     bdf2psf
     xorg.fonttosfnt
-    xorg.mkfontdir
+    xorg.mkfontscale
   ];
 
   # configure sizes, encodings and variants

@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
   ]
-  ++ optional (xorg == null) "--without-x";
+  # TODO: fix this
+  ++ optional false "--without-x";
 
   enableParallelBuilding = true;
 

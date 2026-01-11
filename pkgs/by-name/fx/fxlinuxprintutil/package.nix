@@ -8,7 +8,7 @@
   cups,
   tcl,
   tk,
-  xorg,
+  libx11,
   makeWrapper,
 }:
 let
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
     ./fxlputil.tcl.patch
 
     # replaces the code that looks for X11’s locale.alias in /usr/share/X11/locale or
-    # /usr/lib/X11/locale with /nix/store/libX11/share/X11/locale
+    # /usr/lib/X11/locale with /nix/store/libx11/share/X11/locale
     (replaceVars ./fxlocalechk.tcl.patch {
-      inherit (xorg) libX11;
+      libX11 = libx11;
     })
   ];
 

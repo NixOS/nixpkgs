@@ -14,7 +14,11 @@
   runCommandCC,
   setJavaClassPath,
   unzip,
-  xorg,
+  libx11,
+  libxext,
+  libxi,
+  libxrender,
+  libxtst,
   zlib,
   # extra params
   extraCLibs ? [ ],
@@ -42,7 +46,11 @@ let
     "runCommandCC"
     "setJavaClassPath"
     "unzip"
-    "xorg"
+    "libx11"
+    "libxext"
+    "libxi"
+    "libxrender"
+    "libxtst"
     "zlib"
     "extraCLibs"
     "gtkSupport"
@@ -128,11 +136,11 @@ let
         alsa-lib # libasound.so wanted by lib/libjsound.so
         fontconfig
         (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-        xorg.libX11
-        xorg.libXext
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXtst
+        libx11
+        libxext
+        libxi
+        libxrender
+        libxtst
       ];
 
       postInstall =

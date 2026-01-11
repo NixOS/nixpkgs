@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  mkfontdir,
   mkfontscale,
 }:
 
@@ -19,7 +18,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     mkfontscale
-    mkfontdir
+    mkfontscale
   ];
 
   installPhase = ''

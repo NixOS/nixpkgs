@@ -33,7 +33,7 @@
   libsndfile,
   libtiff,
   libxcb,
-  mkfontdir,
+  mkfontscale,
   pcre2,
   perl,
   pkg-config,
@@ -90,7 +90,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     libsndfile
     libtiff
     libxcb
-    mkfontdir
+    mkfontscale
     pcre2
   ];
 

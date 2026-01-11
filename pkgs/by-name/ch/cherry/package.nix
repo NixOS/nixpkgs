@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     xorg.fonttosfnt
-    xorg.mkfontdir
+    xorg.mkfontscale
   ];
 
   buildPhase = ''

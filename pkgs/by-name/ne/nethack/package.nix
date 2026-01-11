@@ -16,7 +16,7 @@
   libXext,
   libXpm,
   bdftopcf,
-  mkfontdir,
+  mkfontscale,
   pkg-config,
   qt5,
   copyDesktopItems,
@@ -92,12 +92,12 @@ stdenvUsed.mkDerivation (finalAttrs: {
     copyDesktopItems
   ]
   ++ lib.optionals x11Mode [
-    mkfontdir
+    mkfontscale
     bdftopcf
   ]
   ++ lib.optionals qtMode [
     pkg-config
-    mkfontdir
+    mkfontscale
     qt5.qtbase.dev
     qt5.qtmultimedia.dev
     qt5.wrapQtAppsHook
