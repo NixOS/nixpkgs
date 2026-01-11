@@ -1,15 +1,13 @@
-diff --git a/BUILD.gn b/BUILD.gn
-index d5289b8..598bbbc 100644
---- a/BUILD.gn
-+++ b/BUILD.gn
-@@ -138,8 +138,8 @@ config("library_impl_config") {
+--- a/BUILD.gn	2026-01-10 19:22:47.201811909 -0500
++++ b/BUILD.gn	2026-01-10 19:24:36.440918317 -0500
+@@ -143,8 +143,8 @@
  # target_defaults and direct_dependent_settings.
  config("common_inherited_config") {
-   defines = []
+   defines = [ "PROTOBUF_ENABLE_DEBUG_LOGGING_MAY_LEAK_PII=0" ]
 -  cflags = []
 -  ldflags = []
 +  cflags = [ "-fvisibility=default" ]
 +  ldflags = [ "-lavutil", "-lavformat", "-lavcodec" ]
- 
-   if (rtc_dlog_always_on) {
-     defines += [ "DLOG_ALWAYS_ON" ]
+
+   if (rtc_objc_prefix != "") {
+     defines += [ "RTC_OBJC_TYPE_PREFIX=${rtc_objc_prefix}" ]
