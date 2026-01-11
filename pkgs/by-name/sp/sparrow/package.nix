@@ -302,7 +302,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       msgilligan
-      _1000101
     ];
     platforms = [
       "x86_64-linux"
