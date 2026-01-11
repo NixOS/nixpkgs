@@ -538,16 +538,16 @@ rec {
     let
       # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
       # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2025-06-12-14-21-B";
+      context_packaging_release = "2026-01-08-23-30-A";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.07";
+      version = "2.11.08";
 
       src = fetchzip {
         name = "luametatex.src.zip";
         url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
+        hash = "sha256-PY1rrgLFAXR7YRcJMx1ob9dQc1PFoBSpi1xLQGM4Lko=";
         stripRoot = false;
       };
 
@@ -704,7 +704,7 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
+        hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;
