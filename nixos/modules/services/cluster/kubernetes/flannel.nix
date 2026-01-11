@@ -107,6 +107,7 @@ in
             kind = "ClusterRoleBinding";
             metadata = {
               name = "flannel";
+              labels.k8s-app = "flannel";
             };
             roleRef = {
               apiGroup = "rbac.authorization.k8s.io";
