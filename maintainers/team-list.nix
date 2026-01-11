@@ -916,15 +916,6 @@ with lib.maintainers;
     shortName = "Steam";
   };
 
-  stridtech = {
-    # Verify additions by approval of an already existing member of the team
-    members = [
-      ulrikstrid
-    ];
-    scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
-    shortName = "StridTech";
-  };
-
   swift = {
     members = [
       dduan
