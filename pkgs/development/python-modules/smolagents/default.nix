@@ -51,7 +51,29 @@
   wikipedia-api,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
+  pname = "smolagents";
+  version = "1.21.3";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "huggingface";
+    repo = "smolagents";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    huggingface-hub
+    jinja2
+    pillow
+    python-dotenv
+    requests
+    rich
+  ];
+
   optional-dependencies = lib.fix (self: {
     audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
@@ -101,39 +123,13 @@ let
     # ];
   });
 
-in
-buildPythonPackage (finalAttrs: {
-  pname = "smolagents";
-  version = "1.21.3";
-  pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "huggingface";
-    repo = "smolagents";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
-  };
-
-  build-system = [ setuptools ];
-
-  dependencies = [
-    huggingface-hub
-    jinja2
-    pillow
-    python-dotenv
-    requests
-    rich
-  ];
-
-  inherit optional-dependencies;
-
   nativeCheckInputs = [
     ipython
     pytest-datadir
     pytestCheckHook
     wikipedia-api
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 
