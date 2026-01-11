@@ -6752,13 +6752,21 @@ with pkgs;
     factor-unwrapped = callPackage ../development/compilers/factor-lang/0.99.nix { };
   };
   factorPackages-0_100 = callPackage ./factor-packages.nix {
-    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.100.nix { };
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.100.nix {
+      stdenv = clangStdenv;
+    };
+  };
+  factorPackages-0_101 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.101.nix {
+      stdenv = clangStdenv;
+    };
   };
   factorPackages = factorPackages-0_100;
 
   factor-lang-0_99 = factorPackages-0_99.factor-lang;
   factor-lang-0_100 = factorPackages-0_100.factor-lang;
-  factor-lang = factor-lang-0_100;
+  factor-lang-0_101 = factorPackages-0_101.factor-lang;
+  factor-lang = factor-lang-0_101;
 
   farstream = callPackage ../development/libraries/farstream {
     inherit (gst_all_1)
@@ -11042,6 +11050,7 @@ with pkgs;
     k3s_1_32
     k3s_1_33
     k3s_1_34
+    k3s_1_35
     ;
   k3s = k3s_1_34;
 

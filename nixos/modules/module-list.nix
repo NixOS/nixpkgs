@@ -1351,7 +1351,7 @@
   ./services/networking/routinator.nix
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
-  ./services/networking/sabnzbd.nix
+  ./services/networking/sabnzbd
   ./services/networking/scion/scion-control.nix
   ./services/networking/scion/scion-daemon.nix
   ./services/networking/scion/scion-dispatcher.nix

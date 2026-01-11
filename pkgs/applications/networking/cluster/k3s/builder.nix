@@ -399,6 +399,13 @@ buildGoModule (finalAttrs: {
       --replace-fail \
         "go list -mod=readonly -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1" \
         "go list -mod=readonly -e -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1"
+
+    # Can't use curl during the build, we use our own go version anyway.
+    # Fails quiet as this line is only present starting from 1.35
+    substituteInPlace scripts/version.sh \
+      --replace-quiet \
+        'VERSION_GOLANG="go"$(curl -sL "https://raw.githubusercontent.com''${PKG_KUBERNETES_K3S/github.com/}/refs/tags/''${VERSION_K8S_K3S}/.go-version")' \
+        ""
   '';
 
   # Important utilities used by the kubelet, see

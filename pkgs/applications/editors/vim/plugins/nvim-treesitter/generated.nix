@@ -145,12 +145,12 @@
     };
     beancount = buildGrammar {
       language = "beancount";
-      version = "0.0.0+rev=653cce3";
+      version = "0.0.0+rev=23b2125";
       src = fetchFromGitHub {
         owner = "polarmutex";
         repo = "tree-sitter-beancount";
-        rev = "653cce316fbff8d212a2488ae13df648efb542a4";
-        hash = "sha256-SHEGsVac8HMl/PpdZ4GyRHzEti8HXBJrXnx0hoFd9qU=";
+        rev = "23b21252da8b8cb0f03d1d1fc4c8f87d407e1cdf";
+        hash = "sha256-eJ1XAPrVCoGQtrRJdcB/V4ULUmYXemUAE3FQijpH8q8=";
       };
       meta.homepage = "https://github.com/polarmutex/tree-sitter-beancount";
     };
@@ -209,6 +209,17 @@
       };
       meta.homepage = "https://github.com/ambroisie/tree-sitter-bp";
     };
+    bpftrace = buildGrammar {
+      language = "bpftrace";
+      version = "0.0.0+rev=dee4269";
+      src = fetchFromGitHub {
+        owner = "sgruszka";
+        repo = "tree-sitter-bpftrace";
+        rev = "dee4269b564fdf7071ee454e873767fd334f79ae";
+        hash = "sha256-fvsJuRwQTQjpaSOE55EbFLazgrAU/xs0YUffO/z5bJc=";
+      };
+      meta.homepage = "https://github.com/sgruszka/tree-sitter-bpftrace";
+    };
     brightscript = buildGrammar {
       language = "brightscript";
       version = "0.0.0+rev=253fdfa";
@@ -233,12 +244,12 @@
     };
     c3 = buildGrammar {
       language = "c3";
-      version = "0.0.0+rev=805f776";
+      version = "0.0.0+rev=2c04e78";
       src = fetchFromGitHub {
         owner = "c3lang";
         repo = "tree-sitter-c3";
-        rev = "805f776dcfbfef5c9baf4270ec942b3e8dc7ff16";
-        hash = "sha256-XA0jEX4dxA6PmXMoLnaul1DKGn3NoeFm2J3qpkBuCXo=";
+        rev = "2c04e7858d63497152d42f08d3067972618aeedc";
+        hash = "sha256-YqrdnaCh5OnVtQJiBj45n6NYqIthDnNBeYjMCNmFcD0=";
       };
       meta.homepage = "https://github.com/c3lang/tree-sitter-c3";
     };
@@ -808,12 +819,12 @@
     };
     fortran = buildGrammar {
       language = "fortran";
-      version = "0.0.0+rev=e013289";
+      version = "0.0.0+rev=589151a";
       src = fetchFromGitHub {
         owner = "stadelmanma";
         repo = "tree-sitter-fortran";
-        rev = "e0132896b8959c09dc20b56e4a1c5d25bc341697";
-        hash = "sha256-pqbU0abjoonI+04Y2OZeGLWeoYt/PspiOC0rAJlu2Qg=";
+        rev = "589151aab08fdd7404678330e8abacf9b78bb595";
+        hash = "sha256-NlGvYCx0y9zPgziEAF6kpUeUcoCwzdn36tXdgtSsP1s=";
       };
       meta.homepage = "https://github.com/stadelmanma/tree-sitter-fortran";
     };
@@ -952,12 +963,12 @@
     };
     gleam = buildGrammar {
       language = "gleam";
-      version = "0.0.0+rev=0c0c63a";
+      version = "0.0.0+rev=dd4e328";
       src = fetchFromGitHub {
         owner = "gleam-lang";
         repo = "tree-sitter-gleam";
-        rev = "0c0c63a07998767b22f0d2655f903611eca6acd0";
-        hash = "sha256-vL2MyZ3dly5nZqfxlfC9brE8P1tUxdRtJLxlkN7XKi4=";
+        rev = "dd4e328c5fd5f158d47a22339d8ce0f8be918a0b";
+        hash = "sha256-9RoKAtdHmryAiBG6s/Og7qXt2Z0IkrN8cHA+8NZf2FM=";
       };
       meta.homepage = "https://github.com/gleam-lang/tree-sitter-gleam";
     };
@@ -1393,12 +1404,12 @@
     };
     inko = buildGrammar {
       language = "inko";
-      version = "0.0.0+rev=v0.4.0";
+      version = "0.0.0+rev=v0.5.1";
       src = fetchFromGitHub {
         owner = "inko-lang";
         repo = "tree-sitter-inko";
-        rev = "v0.4.0";
-        hash = "sha256-qgB2s/ghmOGjJ+MH7p3ZQKa+RMxx58642Z9lYC1wlq4=";
+        rev = "v0.5.1";
+        hash = "sha256-bt/T6O/7of8r9DrA6DU8pM4vWlBCgWWzw89GZbDyJnw=";
       };
       meta.homepage = "https://github.com/inko-lang/tree-sitter-inko";
     };
@@ -1604,12 +1615,12 @@
     };
     kos = buildGrammar {
       language = "kos";
-      version = "0.0.0+rev=5f11d41";
+      version = "0.0.0+rev=03b261c";
       src = fetchFromGitHub {
         owner = "kos-lang";
         repo = "tree-sitter-kos";
-        rev = "5f11d41b3150b0837e8b3964151ebb7fc4f367e9";
-        hash = "sha256-tdiNHUUTvUpH2JSPxxgx7aw5XTeUmk0hoM9gI/c/WOk=";
+        rev = "03b261c1a78b71c38cf4616497f253c4a4ce118b";
+        hash = "sha256-38i2AbPZNQb5EOUoyNvk20HfesLmbkvNxn/oyGx/W3k=";
       };
       meta.homepage = "https://github.com/kos-lang/tree-sitter-kos";
     };
@@ -1737,12 +1748,12 @@
     };
     lua = buildGrammar {
       language = "lua";
-      version = "0.0.0+rev=e284fce";
+      version = "0.0.0+rev=de08dfd";
       src = fetchFromGitHub {
         owner = "tree-sitter-grammars";
         repo = "tree-sitter-lua";
-        rev = "e284fcec45ead0d477e326fccd2cd4a68a89dae4";
-        hash = "sha256-GCdVwRvAHANeRFpHK1On3xb8ThYDo1wO1VQDNen+rAM=";
+        rev = "de08dfd9640604763558530d2ce703cbe6a16bb6";
+        hash = "sha256-zJaXgnUAbcMS2BwqK/ipLeXgl66HwxPhAb//JENMHxg=";
       };
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-lua";
     };
@@ -1871,12 +1882,12 @@
     };
     mlir = buildGrammar {
       language = "mlir";
-      version = "0.0.0+rev=c7eec06";
+      version = "0.0.0+rev=9edc920";
       src = fetchFromGitHub {
         owner = "artagnon";
         repo = "tree-sitter-mlir";
-        rev = "c7eec06be8a9ddae688e1b03fca2eed79e9801c4";
-        hash = "sha256-5OueN8krwGnMtXF1HCbA4eDINIneLzEA7DkxnMkxUhQ=";
+        rev = "9edc9201736c5a471314b4e28c20d0f0b4642b6f";
+        hash = "sha256-Ptg61FcxAriCFPJlsjCJcYmJFpHv7WPYLCj3AfJN5lQ=";
       };
       generate = true;
       meta.homepage = "https://github.com/artagnon/tree-sitter-mlir";
@@ -2862,12 +2873,12 @@
     };
     sql = buildGrammar {
       language = "sql";
-      version = "0.0.0+rev=2d5dcd1";
+      version = "0.0.0+rev=5129061";
       src = fetchFromGitHub {
         owner = "derekstride";
         repo = "tree-sitter-sql";
-        rev = "2d5dcd16f9ee49cb5a6d99eabb00fd4ea298587f";
-        hash = "sha256-TaM4JWAEvvAEsH2pI+disiWdrBYaMKzq4JtgsfSZqBE=";
+        rev = "5129061608da71146c813e13c32a54f4b13645c8";
+        hash = "sha256-gsWPwWiSr+oo64xtEXNJ4uica8ooA9g4ExVubEXhEe8=";
       };
       meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
     };
@@ -3673,6 +3684,9 @@
     };
     bp = buildQueries {
       language = "bp";
+    };
+    bpftrace = buildQueries {
+      language = "bpftrace";
     };
     brightscript = buildQueries {
       language = "brightscript";
