@@ -9250,10 +9250,6 @@ with pkgs;
     kanidmWithSecretProvisioning_1_8
     ;
 
-  knot-resolver = callPackage ../servers/dns/knot-resolver {
-    systemd = systemdMinimal; # in closure already anyway
-  };
-
   leafnode = callPackage ../servers/news/leafnode { };
 
   leafnode1 = callPackage ../servers/news/leafnode/1.nix { };
