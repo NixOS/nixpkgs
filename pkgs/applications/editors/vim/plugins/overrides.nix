@@ -2788,10 +2788,6 @@ assertNoAdditions {
     nvimSkipModules = [ "install_parsers" ];
   };
 
-  nvim-treesitter-endwise = super.nvim-treesitter-endwise.overrideAttrs {
-    dependencies = [ self.nvim-treesitter-legacy ];
-  };
-
   nvim-treesitter-pairs = super.nvim-treesitter-pairs.overrideAttrs {
     dependencies = [ self.nvim-treesitter-legacy ];
   };
