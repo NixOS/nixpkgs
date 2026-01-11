@@ -7,8 +7,6 @@
   makeDesktopItem,
   unzip,
   libsecret,
-  libXScrnSaver,
-  libxshmfence,
   buildPackages,
   at-spi2-atk,
   autoPatchelfHook,
@@ -24,7 +22,6 @@
   buildFHSEnv,
   wayland,
   libglvnd,
-  libkrb5,
   openssl,
   webkitgtk_4_1,
 
@@ -225,13 +222,10 @@ stdenv.mkDerivation (
 
     buildInputs = [
       libsecret
-      libXScrnSaver
-      libxshmfence
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       alsa-lib
       at-spi2-atk
-      libkrb5
       libgbm
       nss
       nspr
