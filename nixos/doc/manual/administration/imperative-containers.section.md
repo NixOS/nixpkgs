@@ -34,6 +34,30 @@ chosen as container IP. This behavior can be altered by setting
     --local-address 10.235.1.2 --host-address 10.235.1.1
 ```
 
+You can bind mount directories from the host into the container, either read-write or read-only:
+
+```ShellSession
+# nixos-container create foo --bind /host/directory:/container/directory --bind-ro /host/ro-dir:/container/ro-dir
+```
+
+You can restrict system calls using seccomp filters:
+
+```ShellSession
+# nixos-container create foo --system-call-filter="@clock"
+```
+
+Add or drop Linux capabilities for security hardening:
+
+```ShellSession
+# nixos-container create foo --capability="CAP_NET_RAW" --drop-capability="CAP_SYS_ADMIN"
+```
+
+Pass additional flags to systemd-nspawn using `--extra-flags`:
+
+```ShellSession
+# nixos-container create foo --extra-flags="--private-network"
+```
+
 Creating a container does not start it. To start the container, run:
 
 ```ShellSession
