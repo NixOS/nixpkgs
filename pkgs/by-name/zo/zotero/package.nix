@@ -14,6 +14,8 @@
   firefox-esr-140-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
+  xvfb-run,
+  doCheck ? false,
 }:
 let
   # note-editor needs nodejs 20. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
@@ -158,7 +160,20 @@ buildNpmPackage rec {
     rm -rf note-editor
     cp -r ${note-editor} note-editor
 
-    patchShebangs --build app/
+    patchShebangs --build app/ test/
+
+    # Skip some flaky/failing tests
+    rm test/tests/retractionsTest.js
+    for test in \
+      "should throw error on broken symlink" \
+      "should use BrowserDownload for 403 when enforcing file type" \
+      "should use BrowserDownload for a JS redirect page" \
+      "should keep attachments pane status after changing selection" \
+      "should render preview robustly after making dense calls to render and discard" \
+      "should discard attachment pane preview after becoming invisible" \
+    ; do
+      sed -i "s|it(\"$test|it.skip(\"$test|" test/tests/*.js
+    done
   '';
 
   #preBuild = "app/scripts/check_requirements";
@@ -177,6 +192,18 @@ buildNpmPackage rec {
     app/scripts/dir_build
 
     runHook postBuild
+  '';
+
+  inherit doCheck;
+  # Build with test support if `doCheck` is enabled.
+  ZOTERO_TEST = doCheck;
+
+  nativeCheckInputs = [
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    CI=true xvfb-run test/runtests.sh
   '';
 
   desktopItem = makeDesktopItem {
