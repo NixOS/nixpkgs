@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   glib,
   freetype,
@@ -40,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
     hash = "sha256-hmDr08J9lAf8hDO10XK6+6XwMXywu0M58o5TcMk9Qrc=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/harfbuzz/harfbuzz/security/advisories/GHSA-xvjr-f2r9-c7ww
+      name = "CVE-2026-22693.patch";
+      url = "https://github.com/harfbuzz/harfbuzz/commit/1265ff8d990284f04d8768f35b0e20ae5f60daae.patch";
+      hash = "sha256-mdgIhp1ndPSfzplBRB7s+BN2T5Z9dEYZ0bAmSDCUPSE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
