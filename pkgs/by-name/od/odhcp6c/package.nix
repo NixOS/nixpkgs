@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=$out"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
   passthru.updateScript = unstableGitUpdater { };
