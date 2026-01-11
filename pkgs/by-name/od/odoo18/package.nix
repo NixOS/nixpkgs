@@ -17,8 +17,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchzip {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
@@ -28,22 +27,27 @@ python.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    "${lib.makeBinPath [
-      wkhtmltopdf
-      rtlcss
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        wkhtmltopdf
+        rtlcss
+      ]
+    }"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
+    setuptools
+    distutils
+  ];
+
+  dependencies = with python.pkgs; [
+    asn1crypto
     babel
+    cbor2
     chardet
     cryptography
     decorator
     docutils
-    distutils
     ebaysdk
     freezegun
     geoip2
@@ -53,10 +57,10 @@ python.pkgs.buildPythonApplication rec {
     jinja2
     libsass
     lxml
-    lxml-html-clean
     markupsafe
     num2words
     ofxparse
+    openpyxl
     passlib
     pillow
     polib
@@ -82,9 +86,6 @@ python.pkgs.buildPythonApplication rec {
     xlsxwriter
     xlwt
     zeep
-
-    setuptools
-    mock
   ];
 
   # takes 5+ minutes and there are not files to strip
