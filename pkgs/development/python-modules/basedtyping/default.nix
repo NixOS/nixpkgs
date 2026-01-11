@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
+  pythonAtLeast,
 
   # build-system
   poetry-core,
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "KotlinIsland";
