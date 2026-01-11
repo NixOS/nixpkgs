@@ -1,22 +1,34 @@
 {
   lib,
-  asn1crypto,
-  azure-identity,
-  azure-keyvault-keys,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # optional-dependencies
+  # PySPX
+  pyspx,
+  # awskms
   boto3,
   botocore,
-  buildPythonPackage,
   cryptography,
-  ed25519,
-  fetchFromGitHub,
+  # azurekms
+  azure-identity,
+  azure-keyvault-keys,
+  # hsm
+  asn1crypto,
+  # gcpkms
   google-cloud-kms,
-  hatchling,
+  # pynacl
   pynacl,
-  pyspx,
+
+  # tests
+  ed25519,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "securesystemslib";
   version = "1.3.1";
   pyproject = true;
@@ -24,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ERFRLNHD3OhbMEGBEnDLkRYGv4f+bYg9MStS5IarcPA=";
   };
 
@@ -68,7 +80,7 @@ buildPythonPackage rec {
     ed25519
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "securesystemslib" ];
 
@@ -82,8 +94,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cryptographic and general-purpose routines";
     homepage = "https://github.com/secure-systems-lab/securesystemslib";
-    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
