@@ -1,24 +1,24 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "adafruit-ampy";
   version = "1.1.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "f4cba36f564096f2aafd173f7fbabb845365cc3bb3f41c37541edf98b58d3976";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-9Mujb1ZAlvKq/Rc/f7q7hFNlzDuz9Bw3VB7fmLWNOXY=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     python-dotenv
     pyserial
@@ -34,4 +34,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "ampy";
   };
-}
+})

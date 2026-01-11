@@ -1,27 +1,26 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xcat";
   version = "1.2.0";
-  disabled = python3.pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "xcat";
-    rev = "v${version}";
-    sha256 = "01r5998gdvqjdrahpk0ci27lx9yghbddlanqcspr3qp5y5930i0s";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GkQwUvHl4pGvZtgq2tqCz6dOj4gMzAtVbhLv9lBKJQc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     aiodns
     aiohttp
     appdirs
@@ -46,8 +45,8 @@ python3.pkgs.buildPythonApplication rec {
       and directories.
     '';
     homepage = "https://github.com/orf/xcat";
-    changelog = "https://github.com/orf/xcat/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/orf/xcat/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
