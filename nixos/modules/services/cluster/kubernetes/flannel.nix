@@ -77,6 +77,7 @@ in
             kind = "ClusterRole";
             metadata = {
               name = "flannel";
+              labels.k8s-app = "flannel";
             };
             rules = [
               {
@@ -88,6 +89,7 @@ in
                 apiGroups = [ "" ];
                 resources = [ "nodes" ];
                 verbs = [
+                  "get"
                   "list"
                   "watch"
                 ];
