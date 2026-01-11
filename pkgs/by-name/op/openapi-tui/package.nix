@@ -21,8 +21,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-911ARjYvTNqLVVUWxATbtiKXOC9AqalFvDvp/qAef1Q=";
 
   # Do not vendor Oniguruma
-  env.RUSTONIG_SYSTEM_LIBONIG = true;
-  env.OPENSSL_NO_VENDOR = true;
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+    OPENSSL_NO_VENDOR = true;
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
