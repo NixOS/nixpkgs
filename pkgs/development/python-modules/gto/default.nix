@@ -6,7 +6,7 @@
   fetchFromGitHub,
   freezegun,
   funcy,
-  gitMinimal,
+  gitSetupHook,
   pydantic,
   pydantic-settings,
   pytest-cov-stub,
@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     freezegun
-    gitMinimal
+    gitSetupHook
     pytest-cov-stub
     pytest-mock
     pytest-test-utils
@@ -65,18 +65,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = ''
-    git config --global user.email "nobody@example.com"
-    git config --global user.name "Nobody"
-
     # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   disabledTests = [
-    # Tests want to with a remote repo
+    # Tests want to do it with a remote repo
     "remote_repo"
     "remote_git_repo"
     "test_action_doesnt_push_even_if_repo_has_remotes_set"
+    "test_api"
     # ValueError: stderr not separately captured
     "test_register"
     "test_assign"
