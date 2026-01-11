@@ -30,11 +30,11 @@ let
     r13y  reproducibility
   '';
 
-  dwWithAcronyms = pkgs.dokuwiki.overrideAttrs (prev: {
-    installPhase = prev.installPhase or "" + ''
-      ln -sf ${acronymsFile} $out/share/dokuwiki/conf/acronyms.local.conf
-    '';
-  });
+  dwWithAcronyms = pkgs.dokuwiki.combine {
+    extraConfigs = {
+      "acronyms.local.conf" = acronymsFile;
+    };
+  };
 
   mkNode =
     webserver:
