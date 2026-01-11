@@ -85,14 +85,13 @@ buildPythonPackage rec {
         --replace-fail "getenv(\"CC\", 'clang')" "'${lib.getExe llvmPackages.clang-unwrapped}'"
     ''
     + ''
-      substituteInPlace tinygrad/runtime/autogen/libc.py \
-        --replace-fail "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so.6'"
-    ''
-    + ''
       substituteInPlace tinygrad/runtime/support/llvm.py \
         --replace-fail "ctypes.util.find_library('LLVM')" "'${lib.getLib llvmPackages.llvm}/lib/libLLVM.so'"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace tinygrad/runtime/autogen/libc.py \
+        --replace-fail "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so.6'"
+
       substituteInPlace tinygrad/runtime/autogen/opencl.py \
         --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
     ''
@@ -123,6 +122,8 @@ buildPythonPackage rec {
       substituteInPlace tinygrad/runtime/autogen/comgr.py \
         --replace-fail "/opt/rocm/" "${rocmPackages.rocm-comgr}/"
     '';
+
+  __propagatedImpureHostDeps = lib.optional stdenv.hostPlatform.isDarwin "/usr/lib/libc.dylib";
 
   build-system = [ setuptools ];
 
@@ -251,9 +252,6 @@ buildPythonPackage rec {
       # Fatal Python error: Aborted
       # onnxruntime/capi/_pybind_state.py", line 32 in <module>
       "aarch64-linux"
-
-      # Tests segfault on darwin
-      lib.systems.inspect.patterns.isDarwin
     ];
   };
 }
