@@ -19,7 +19,6 @@
   sqlite,
   zstd,
   libcap,
-  darwinMinVersionHook,
   openssl,
   #, libselinux
   rpm-sequoia,
@@ -128,6 +127,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    # Remove links to /nix/store
+    sed -i -e 's|/nix/store/[^/]\+|/usr|' $out/lib/rpm/macros
+  '';
 
   meta = {
     homepage = "https://www.rpm.org/";
