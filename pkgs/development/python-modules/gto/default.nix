@@ -24,7 +24,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gto";
   version = "1.9.0";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "gto";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LXYpOnk9W/ellG70qZLihmvk4kvVcwZfE5buPNU2qzQ=";
   };
 
@@ -89,9 +89,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module for Git Tag Operations";
     homepage = "https://github.com/iterative/gto";
-    changelog = "https://github.com/iterative/gto/releases/tag/${src.tag}";
+    changelog = "https://github.com/iterative/gto/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gto";
   };
-}
+})
