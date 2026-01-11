@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "sysv-ipc";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "sysv_ipc";
     inherit version;
-    sha256 = "0f063cbd36ec232032e425769ebc871f195a7d183b9af32f9901589ea7129ac3";
+    sha256 = "sha256-75arM7ti5NFBQvC+BSTcwMPHDJZELfL8dzxnt8dRQZk=";
   };
 
   meta = {
