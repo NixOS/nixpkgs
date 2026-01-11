@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   python,
-  pythonOlder,
   ua-parser,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-sesame";
   version = "3.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aaugustin";

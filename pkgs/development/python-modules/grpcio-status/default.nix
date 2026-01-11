@@ -5,7 +5,6 @@
   googleapis-common-protos,
   grpcio,
   protobuf,
-  pythonOlder,
 }:
 
 # This package should be updated together with the main grpc package and other
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "grpcio-status";
   version = "1.76.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "grpcio_status";

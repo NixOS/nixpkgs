@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests-oauthlib,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "python-google-nest";
   version = "5.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

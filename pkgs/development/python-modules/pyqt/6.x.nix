@@ -11,7 +11,6 @@
   pyqt6-sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   mesa,
   withMultimedia ? true,
   withWebSockets ? true,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "pyqt6";
   version = "6.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # It looks like a stable release, but is it? Who knows.
   # It's not on PyPI proper yet, at least, and the current

@@ -7,7 +7,6 @@
   scipy,
   scikit-learn,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ let
     pname = "opentsne";
     version = "1.0.4";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pavlin-policar";

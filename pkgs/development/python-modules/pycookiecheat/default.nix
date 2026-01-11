@@ -6,7 +6,6 @@
   fetchFromGitHub,
   keyring,
   pytestCheckHook,
-  pythonOlder,
   playwright,
   setuptools,
   setuptools-scm,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pycookiecheat";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "n8henrie";

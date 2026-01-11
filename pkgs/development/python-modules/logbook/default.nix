@@ -8,7 +8,6 @@
   jinja2,
   pytestCheckHook,
   pytest-rerunfailures,
-  pythonOlder,
   pyzmq,
   redis,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "logbook";
   version = "1.8.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "getlogbook";

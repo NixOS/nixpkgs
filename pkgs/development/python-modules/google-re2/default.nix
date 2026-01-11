@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pybind11,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "google-re2";
   version = "1.1.20250805";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_re2";

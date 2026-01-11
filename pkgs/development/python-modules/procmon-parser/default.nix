@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   six,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "procmon-parser";
   version = "0.3.13";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eronnen";

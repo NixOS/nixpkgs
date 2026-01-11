@@ -5,7 +5,6 @@
   hatchling,
   hatch-requirements-txt,
   setuptools,
-  pythonOlder,
   dnspython,
 
   # for passthru.tests
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pymongo";
   version = "4.13.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

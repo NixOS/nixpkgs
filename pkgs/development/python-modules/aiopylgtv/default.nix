@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
   sqlitedict,
   websockets,
 }:
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "aiopylgtv";
   version = "0.4.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bendavid";

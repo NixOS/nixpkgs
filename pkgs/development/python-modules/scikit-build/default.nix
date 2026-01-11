@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "0.18.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;

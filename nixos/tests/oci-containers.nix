@@ -16,7 +16,7 @@ let
     makeTest {
       name = "oci-containers-${backend}";
 
-      meta.maintainers = lib.teams.serokell.members ++ (with lib.maintainers; [ benley ]);
+      meta.maintainers = with lib.maintainers; [ benley ];
 
       nodes = {
         ${backend} =

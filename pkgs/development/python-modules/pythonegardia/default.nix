@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pythonegardia";
   version = "1.0.52";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jeroenterheerdt";

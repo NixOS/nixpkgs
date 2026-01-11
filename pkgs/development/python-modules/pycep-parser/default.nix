@@ -6,7 +6,6 @@
   lark,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   regex,
   typing-extensions,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pycep-parser";
   version = "0.5.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gruebel";

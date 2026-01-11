@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   lark,
   poetry-core,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "beancount-parser";
   version = "1.2.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

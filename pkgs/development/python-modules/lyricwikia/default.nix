@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   six,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "lyricwikia";
   version = "0.1.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "enricobacis";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   aiohttp,
   async-timeout,
@@ -63,8 +62,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "hikari" ];
-
-  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace hikari/_about.py \

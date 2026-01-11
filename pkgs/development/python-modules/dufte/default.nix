@@ -14,7 +14,6 @@ buildPythonPackage rec {
   pname = "dufte";
   version = "0.2.29";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nschloe";

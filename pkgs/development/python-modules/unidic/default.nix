@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   mecab,
   setuptools-scm,
   requests,
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   pname = "unidic";
   version = "1.1.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "polm";

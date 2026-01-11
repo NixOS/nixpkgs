@@ -11,7 +11,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   scipy,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "dependency-injector";
   version = "4.48.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ets-labs";

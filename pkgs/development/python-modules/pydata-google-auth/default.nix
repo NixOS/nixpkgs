@@ -4,7 +4,6 @@
   fetchFromGitHub,
   google-auth-oauthlib,
   google-auth,
-  pythonOlder,
   setuptools,
   versioneer,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pydata-google-auth";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "pydata-google-auth";

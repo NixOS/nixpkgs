@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   pythonAtLeast,
-  pythonOlder,
   arrow-cpp,
   cffi,
   cloudpickle,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "pyarrow";
   inherit (arrow-cpp) version src;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   sourceRoot = "${src.name}/python";
 

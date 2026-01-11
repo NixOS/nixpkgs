@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
-  pythonOlder,
   rfc3987,
   ruamel-yaml,
   setuptools-scm,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "dtschema";
   version = "2025.08";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devicetree-org";

@@ -5,7 +5,6 @@
   fetchPypi,
   flit-core,
   jinja2,
-  pythonOlder,
   requests,
   sphinx,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-confluencebuilder";
   version = "2.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "sphinxcontrib_confluencebuilder";

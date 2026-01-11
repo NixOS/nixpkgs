@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools-scm,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "commoncode";
   version = "32.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nexB";

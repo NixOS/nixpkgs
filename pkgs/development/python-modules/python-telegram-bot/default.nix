@@ -16,7 +16,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   tornado,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "python-telegram-bot";
   version = "22.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-telegram-bot";

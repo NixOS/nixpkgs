@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   marisa-trie,
-  pythonOlder,
   fetchPypi,
   pytestCheckHook,
   language-data,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "langcodes";
   version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

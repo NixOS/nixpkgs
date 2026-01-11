@@ -7,7 +7,6 @@
   fetchFromGitHub,
   pyee,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   playwright-driver,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   # run ./pkgs/development/python-modules/playwright/update.sh to update
   version = "1.57.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";

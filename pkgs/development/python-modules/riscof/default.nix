@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jinja2,
-  pythonOlder,
   riscv-config,
   riscv-isac,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "riscof";
   version = "1.25.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";

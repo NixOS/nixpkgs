@@ -10,7 +10,6 @@
   pypytools,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   requests-unixsocket,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "cheroot";
   version = "10.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

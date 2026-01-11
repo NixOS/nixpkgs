@@ -10,7 +10,6 @@
   psutil,
   pytest-docker-tools,
   pytest,
-  pythonOlder,
   tenacity,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pytest-celery";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";

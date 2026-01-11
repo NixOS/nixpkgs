@@ -6,7 +6,6 @@
   mock,
   okonomiyaki,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   six,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "simplesat";
   version = "0.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "enthought";

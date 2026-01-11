@@ -5,7 +5,6 @@
   jsonschema,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "polyswarm-api";
   version = "3.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "polyswarm";

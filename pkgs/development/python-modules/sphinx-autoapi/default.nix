@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "3.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";

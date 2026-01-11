@@ -9,7 +9,6 @@
   jinja2,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   round,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "diagrams";
   version = "0.24.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mingrammer";

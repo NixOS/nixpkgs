@@ -5,7 +5,6 @@
   poetry-core,
   pyrate-limiter,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   requests,
   requests-cache,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "requests-ratelimiter";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JWCook";

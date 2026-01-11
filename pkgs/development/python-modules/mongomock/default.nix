@@ -6,7 +6,6 @@
   hatchling,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   sentinels,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "mongomock";
   version = "4.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

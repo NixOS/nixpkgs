@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitLab,
   poetry-core,
   dramatiq,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "periodiq";
   version = "0.13.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitLab {
     owner = "bersace";

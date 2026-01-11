@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   psutil,
   unittestCheckHook,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyperf";
   version = "2.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

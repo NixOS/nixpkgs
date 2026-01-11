@@ -11,7 +11,6 @@
   pathspec,
   pygit2,
   pygtrie,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tqdm,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "scmrepo";
   version = "3.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";

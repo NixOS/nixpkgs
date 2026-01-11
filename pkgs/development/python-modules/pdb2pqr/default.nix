@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   mmcif-pdbx,
   numpy,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pdb2pqr";
   version = "3.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

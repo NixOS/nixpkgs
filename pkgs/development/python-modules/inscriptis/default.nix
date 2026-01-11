@@ -7,7 +7,6 @@
   fastapi,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "inscriptis";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "weblyzard";

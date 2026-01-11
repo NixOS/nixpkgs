@@ -901,13 +901,6 @@ with lib.maintainers;
     shortName = "secshell";
   };
 
-  serokell = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [ balsoft ];
-    scope = "Group registration for Serokell employees who collectively maintain packages.";
-    shortName = "Serokell employees";
-  };
-
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
@@ -921,15 +914,6 @@ with lib.maintainers;
     ];
     scope = "Maintain steam module and packages";
     shortName = "Steam";
-  };
-
-  stridtech = {
-    # Verify additions by approval of an already existing member of the team
-    members = [
-      ulrikstrid
-    ];
-    scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
-    shortName = "StridTech";
   };
 
   swift = {

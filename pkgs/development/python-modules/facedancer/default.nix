@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyusb,
   pyserial,
   prompt-toolkit,
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "facedancer";
   version = "3.1.1";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";

@@ -9,7 +9,6 @@
   moto,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pycognito";
   version = "2024.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pvizeli";

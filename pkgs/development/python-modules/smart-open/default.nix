@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   awscli,
   azure-common,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "smart-open";
   version = "7.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";

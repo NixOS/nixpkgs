@@ -7,7 +7,6 @@
   od,
   pygments,
   python-dateutil,
-  pythonOlder,
   repeated-test,
   setuptools-scm,
   sigtools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "clize";
   version = "5.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

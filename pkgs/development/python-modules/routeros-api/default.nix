@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   mock,
   setuptools,
   tox,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "routeros-api";
   version = "0.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "socialwifi";
