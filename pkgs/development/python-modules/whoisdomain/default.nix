@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "whoisdomain";
-  version = "1.20250929.1";
+  version = "1.20260106.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";
     tag = version;
-    hash = "sha256-dyppd/6cBIkiiGm4S3khaNZ2DDyRrxWjeMqGYOMZ9YM=";
+    hash = "sha256-OQlOqDmBhqHVFs6U3lC1EryNu4UEi8fzKERkOE3uBaw=";
   };
 
   build-system = [ hatchling ];
