@@ -12,15 +12,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qmake2cmake";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";
-    tag = "v${version}";
-    hash = "sha256-Y1HU4bNZY0b1C8HIX43AR24zoIyTEgkVXpnweEBlOYk=";
+    # v1.0.8 is untagged
+    rev = "2ae9ac3a5a657f58d7eea0824ead217e495d048b";
+    hash = "sha256-LLP/sdFNsBYrz9gAh76QymtK71T+ZyknTGJiHGJnanU=";
   };
 
   patches = [
