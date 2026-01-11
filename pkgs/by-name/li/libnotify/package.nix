@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
-  version = "0.8.7";
+  version = "0.8.8";
 
   outputs = [
     "out"
@@ -30,17 +29,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-S+FSAuxBhPzhrBWZfs5VMNK+Mv6Vc4da6xDjtXOFh0g=";
+    hash = "sha256-I0IO9hncLLWuutYT9II6L6QcB+Wh0FYo1A9uxLNb/d0=";
   };
-
-  patches = [
-    # build: Do not use GDesktopAppInfo if not available
-    # https://gitlab.gnome.org/GNOME/libnotify/-/issues/62
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libnotify/-/commit/13de65ad2a76255ffde5d6da91d246cd7226583b.patch";
-      hash = "sha256-a1wiUQnrncPqL2OTY1sUWyvVcoI54bXPvkIkZAcC6kI=";
-    })
-  ];
 
   mesonFlags = [
     # disable tests as we don't need to depend on GTK 4
