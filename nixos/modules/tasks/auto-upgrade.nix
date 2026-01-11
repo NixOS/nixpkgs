@@ -227,18 +227,15 @@ in
           ln -s ${config.system.build.rebootTriggers} $out/reboot-triggers
         '';
 
-        build.rebootTriggers = pkgs.writeTextFile {
-          name = "reboot-triggers";
-          text = lib.concatMapStringsSep "\n" (drv: drv.outPath) config.system.autoUpgrade.rebootTriggers;
-        };
+        build.rebootTriggers = pkgs.writers.writeJSON "reboot-triggers" config.system.autoUpgrade.rebootTriggers;
       };
     }
 
     (lib.mkIf (!config.boot.isContainer) {
       system.autoUpgrade.rebootTriggers = {
-        kernel = "${config.system.build.kernel}";
+        kernel = lib.mkIf (config.system.build.kernel != null) "${config.system.build.kernel}";
         firmware = "${config.hardware.firmware}";
-        kernel-params = lib.concatStringsSep " " config.boot.kernelParams;
+        kernel-params = lib.concatStringsSep "," config.boot.kernelParams;
       }
       // config.system.switch.inhibitors;
     })
