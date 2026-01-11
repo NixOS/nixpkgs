@@ -8,6 +8,7 @@
   libxml2,
   gtk3,
   openssl,
+  gettext,
   gnome,
   gobject-introspection,
   vala,
@@ -46,12 +47,24 @@ stdenv.mkDerivation rec {
 
     # Fix configure detection of features with c99.
     ./0001-gcc14-fix.patch
+
+    # Fix build with gettext 0.25
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/libgda5/raw/945495e5c6cdd98a5360eff77245421876a97a57/f/gettext.patch";
+      hash = "sha256-DOCsCbx+HLZvlpMgSQrW5YoWl/EhDuQEln18YDqgCVk=";
+    })
+    # Fix conflicting types
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/libgda5/raw/76be2c07cb747ce30cc63da21662abb589814404/f/types.patch";
+      hash = "sha256-LdvDQm7p0uWznBCD8qhJ5h44zNWLmI0BoqYPCeTBN9M=";
+    })
   ];
 
   nativeBuildInputs = [
     pkg-config
     intltool
     itstool
+    gettext
     gobject-introspection
     vala
     autoreconfHook
