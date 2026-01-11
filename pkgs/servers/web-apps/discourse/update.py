@@ -236,11 +236,6 @@ def update(rev):
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, version.tag))
 
-    # Workaround for https://github.com/NixOS/nixpkgs/pull/469624
-    # Can be removed when openssl gem is already new enough, i.e. with discourse 2025.11.1
-    with open(rubyenv_dir / "Gemfile", "a") as f:
-        f.write('gem "openssl", "~> 3.3.1"')
-
     # work around https://github.com/nix-community/bundix/issues/8
     os.environ["BUNDLE_FORCE_RUBY_PLATFORM"] = "true"
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
