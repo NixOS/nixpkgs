@@ -23,7 +23,7 @@ let
 
   source = sources.${hostPlatform.system};
 in
-(buildVscode rec {
+buildVscode rec {
   inherit useVSCodeRipgrep;
   inherit (sourcesJson) version vscodeVersion;
   commandLineArgs = finalCommandLineArgs;
@@ -44,6 +44,9 @@ in
       }
     else
       source;
+
+  # for unpacking the DMG
+  extraNativeBuildInputs = lib.optionals hostPlatform.isDarwin [ undmg ];
 
   sourceRoot =
     if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
@@ -78,8 +81,4 @@ in
     ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
-}).overrideAttrs
-  (oldAttrs: {
-    nativeBuildInputs =
-      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
-  })
+}

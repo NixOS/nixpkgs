@@ -58,6 +58,8 @@
   # Populate passthru.tests
   tests,
 
+  extraNativeBuildInputs ? [ ],
+
   # Customize FHS environment
   # Function that takes default buildFHSEnv arguments and returns modified arguments
   customizeFHSEnv ? args: args,
@@ -256,6 +258,7 @@ stdenv.mkDerivation (
       unzip
       imagemagick
     ]
+    ++ extraNativeBuildInputs
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       asar
