@@ -44,6 +44,7 @@ in
           HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
           HBOX_MODE = "production";
           HOME = "/var/lib/homebox";
+          TMPDIR = "/var/lib/homebox/tmp";
         }
       '';
       description = ''
@@ -96,6 +97,9 @@ in
         # Fix this startup issue:
         #   failed to create modcache index dir: mkdir /var/empty/.cache: read-only file system
         HOME = "/var/lib/homebox";
+        # Fix uploading/saving attachments/images:
+        # [...] rename /tmp/ced4804c80b1ed1f6e88060f6d829db421e6dbf3a189715265900b5d6b0243ed.1889b3d16ab36e22.tmp /var/lib/homebox/data/5f42f81b-e9ad-4495-b6a6-9e9f704db30e/documents/ced4804c80b1ed1f6e88060f6d829db421e6dbf3a189715265900b5d6b0243ed: invalid cross-device link" [...]
+        TMPDIR = "/var/lib/homebox/tmp";
       })
 
       (mkIf cfg.database.createLocally {
@@ -121,6 +125,10 @@ in
       requires = lib.optional cfg.database.createLocally "postgresql.target";
       after = lib.optional cfg.database.createLocally "postgresql.target";
       environment = lib.filterAttrs (_: v: v != null) cfg.settings;
+      preStart = ''
+        "${pkgs.coreutils}/bin/rm" -rf /var/lib/homebox/tmp
+        "${pkgs.coreutils}/bin/mkdir" -p /var/lib/homebox/tmp
+      '';
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
