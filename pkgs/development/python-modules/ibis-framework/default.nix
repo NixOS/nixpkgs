@@ -97,7 +97,7 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ibis-framework";
   version = "11.0.0";
   pyproject = true;
@@ -105,7 +105,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hf5guWeX9WQbKaNrs7ALwwDxV1Rgeb5Z0PedTQ4P7S0=";
   };
 
@@ -139,7 +139,7 @@ buildPythonPackage rec {
     pytest-xdist
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+  ++ lib.concatMap (name: finalAttrs.passthru.optional-dependencies.${name}) testBackends;
 
   pytestFlags = [
     "--benchmark-disable"
@@ -372,11 +372,11 @@ buildPythonPackage rec {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${src.tag}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/blob/${finalAttrs.src.tag}/docs/release_notes.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cpcloud
       sarahec
     ];
   };
-}
+})
