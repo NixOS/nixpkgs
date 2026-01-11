@@ -1,14 +1,33 @@
 {
   lib,
+  fetchFromGitHub,
   python,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchurl,
   fetchpatch,
+
+  # build-time dependencies
   setuptools,
   cython,
-  gmp,
-  pari,
   perl,
+
+  # static libraries
+  pkgsStatic,
+  gmpStatic ? pkgsStatic.gmp,
+  pari,
+  pariStatic_2_15 ? pari.overrideAttrs (
+    finalAttrs: oldAttrs: {
+      version = "2.15.4";
+      src = fetchurl {
+        url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor finalAttrs.version}/pari-${finalAttrs.version}.tar.gz";
+        hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
+      };
+      installTargets = [
+        "install"
+        "install-lib-sta"
+      ];
+    }
+  ),
 }:
 
 buildPythonPackage rec {
@@ -38,8 +57,8 @@ buildPythonPackage rec {
 
   preBuild = ''
     mkdir libcache
-    ln -s ${gmp} libcache/gmp
-    ln -s ${pari} libcache/pari
+    ln -s ${gmpStatic} libcache/gmp
+    ln -s ${pariStatic_2_15} libcache/pari
   '';
 
   build-system = [
@@ -62,11 +81,11 @@ buildPythonPackage rec {
   meta = {
     description = "Sage's PARI extension, modified to stand alone";
     homepage = "https://github.com/3-manifolds/CyPari";
+    changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
       alejo7797
     ];
-    changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
   };
 }
