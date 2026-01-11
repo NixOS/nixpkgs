@@ -91,6 +91,7 @@ in
 
     security.pam.services.ly = {
       startSession = true;
+      enableUMask = true;
       unixAuth = true;
       enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
     };

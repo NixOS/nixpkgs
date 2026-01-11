@@ -250,6 +250,7 @@ in
         groupdel.rootOK = true;
         login = {
           startSession = true;
+          enableUMask = true;
           allowNullPassword = true;
           showMotd = true;
           updateWtmp = true;
