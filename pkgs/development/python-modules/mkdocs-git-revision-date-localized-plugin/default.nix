@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   babel,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timvink";

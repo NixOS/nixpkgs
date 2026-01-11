@@ -84,8 +84,6 @@ buildPythonPackage rec {
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-NS7WzPt5mKAIgWkvOLTKCDxpHT4nW0FFQjcEw0yQkHY=";

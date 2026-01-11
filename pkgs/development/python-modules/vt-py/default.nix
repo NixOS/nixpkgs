@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "vt-py";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";

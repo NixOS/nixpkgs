@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pytest-cov-stub,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "duecredit";
   version = "0.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

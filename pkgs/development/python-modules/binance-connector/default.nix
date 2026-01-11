@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   requests,
   setuptools,
   websocket-client,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "binance-connector";
   version = "3.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "binance";

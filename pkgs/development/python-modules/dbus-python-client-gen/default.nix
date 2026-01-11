@@ -5,15 +5,12 @@
   into-dbus-python,
   dbus-python,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dbus-python-client-gen";
   version = "0.8.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";

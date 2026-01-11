@@ -6,15 +6,12 @@
   setuptools,
   twisted,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
   version = "0.22.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "prometheus";

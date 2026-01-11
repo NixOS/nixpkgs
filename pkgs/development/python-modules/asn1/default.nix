@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "asn1";
   version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "andrivet";

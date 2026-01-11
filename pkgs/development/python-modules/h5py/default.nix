@@ -26,8 +26,6 @@ buildPythonPackage rec {
   pname = "h5py";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-I3IRay4NXT5ecFt/Zj98jZb6eaQFLSUEhO+R0k1qCPQ=";

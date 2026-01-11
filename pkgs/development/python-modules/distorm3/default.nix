@@ -3,7 +3,6 @@
   buildPythonPackage,
   distutils,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   yasm,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "distorm3";
   version = "3.5.2b";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "gdabah";

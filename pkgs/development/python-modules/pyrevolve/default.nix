@@ -8,15 +8,12 @@
   cython_0,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrevolve";
   version = "2.2.6";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devitocodes";

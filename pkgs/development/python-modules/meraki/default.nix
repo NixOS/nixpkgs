@@ -6,7 +6,6 @@
   jinja2,
   poetry-core,
   pytest,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "meraki";
   version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "meraki";

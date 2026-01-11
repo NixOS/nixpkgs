@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packageurl-python,
-  pythonOlder,
   rich,
   setuptools,
   versionCheckHook,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "csaf-tool";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";

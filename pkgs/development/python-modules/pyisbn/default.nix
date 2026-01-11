@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   hypothesis,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyisbn";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

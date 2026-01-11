@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-emoji";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hackebrot";

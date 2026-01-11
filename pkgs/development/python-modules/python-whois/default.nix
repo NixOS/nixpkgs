@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   simplejson,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-whois";
   version = "0.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "python_whois";

@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   aiolifx,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "aiolifx-effects";
   version = "0.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

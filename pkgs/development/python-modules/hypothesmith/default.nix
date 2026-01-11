@@ -10,7 +10,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "hypothesmith";
   version = "0.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   inform,
   parametrize-from-file,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "quantiphy";
   version = "2.21";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";

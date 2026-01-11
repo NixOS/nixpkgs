@@ -16,8 +16,6 @@ buildPythonPackage rec {
   pname = "pycairo";
   version = "1.28.0";
 
-  disabled = pythonOlder "3.6";
-
   format = "other";
 
   src = fetchFromGitHub {

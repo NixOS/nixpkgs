@@ -3,7 +3,6 @@
   callPackage,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   replaceVars,
   hatchling,
 }:
@@ -11,7 +10,6 @@
 buildPythonPackage rec {
   pname = "attrs";
   version = "25.4.0";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {

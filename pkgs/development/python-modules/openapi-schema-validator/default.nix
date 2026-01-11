@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "openapi-schema-validator";
   version = "0.6.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";

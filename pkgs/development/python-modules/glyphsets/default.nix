@@ -7,7 +7,6 @@
   gflanguages,
   glyphslib,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools-scm,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "glyphsets";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

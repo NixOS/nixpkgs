@@ -7,7 +7,6 @@
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "niaclass";
   version = "0.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";

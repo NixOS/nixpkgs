@@ -4,7 +4,6 @@
   fetchFromGitHub,
   elasticsearch-dsl,
   django,
-  pythonOlder,
   elastic-transport,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-elasticsearch-dsl";
   version = "8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django-es";

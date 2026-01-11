@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools-scm,
   setuptools,
-  pythonOlder,
   pydantic,
   openai,
   tiktoken,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-OEo6wIaDTktzAsP0rOmhxjFSHygTR/EpcRI6AXsu+6M=";
   };
-
-  disabled = pythonOlder "3.9";
 
   build-system = [
     setuptools

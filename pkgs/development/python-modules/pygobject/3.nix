@@ -11,7 +11,6 @@
   ncurses,
   meson,
   ninja,
-  pythonOlder,
   gnome,
   python,
 }:
@@ -24,8 +23,6 @@ buildPythonPackage rec {
     "out"
     "dev"
   ];
-
-  disabled = pythonOlder "3.9";
 
   format = "other";
 

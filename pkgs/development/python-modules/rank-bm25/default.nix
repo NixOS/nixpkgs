@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   numpy,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage {
     tag = version;
     hash = "sha256-+BxQBflMm2AvCLAFFj52Jpkqn+KErwYXU1wztintgOg=";
   };
-
-  disabled = pythonOlder "3.7";
 
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file

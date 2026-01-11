@@ -11,7 +11,6 @@
   oslo-serialization,
   pbr,
   prettytable,
-  pythonOlder,
   requests-mock,
   setuptools,
   sphinxcontrib-apidoc,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "python-novaclient";
   version = "18.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "python_novaclient";

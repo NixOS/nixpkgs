@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ecs-logging";
   version = "2.2.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "elastic";

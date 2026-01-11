@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "6.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   html5lib,
-  pythonOlder,
   rdflib,
   requests,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyrdfa3";
   version = "3.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

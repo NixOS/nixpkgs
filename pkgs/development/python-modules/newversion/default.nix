@@ -4,7 +4,6 @@
   fetchFromGitHub,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "newversion";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vemel";

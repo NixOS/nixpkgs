@@ -7,7 +7,6 @@
   # Tie withPlugins through the fixed point here, so it will receive an
   # overridden version properly
   buildbot,
-  pythonOlder,
   python,
   twisted,
   jinja2,
@@ -77,8 +76,6 @@ buildPythonApplication rec {
   pname = "buildbot";
   version = "4.3.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "buildbot";

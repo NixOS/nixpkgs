@@ -5,7 +5,6 @@
   sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   pyqt6,
   python,
   mesa,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyqt6-charts";
   version = "6.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pyqt6_charts";

@@ -11,7 +11,6 @@
   pycryptodome,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "bip-utils";
   version = "2.9.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ebellocchia";

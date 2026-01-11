@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   requests-mock,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "flipr-api";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cnico";

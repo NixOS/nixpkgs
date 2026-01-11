@@ -9,7 +9,6 @@
   lxml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   urllib3,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "qualysclient";
   version = "0.0.4.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";

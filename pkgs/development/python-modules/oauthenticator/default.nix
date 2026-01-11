@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   google-api-python-client,
   google-auth-oauthlib,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "oauthenticator";
   version = "17.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

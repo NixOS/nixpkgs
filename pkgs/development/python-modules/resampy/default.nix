@@ -8,7 +8,6 @@
   optuna,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   scipy,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "resampy";
   version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bmcfee";

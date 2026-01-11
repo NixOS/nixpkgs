@@ -1,7 +1,6 @@
 {
   lib,
   isPyPy,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   nix-update-script,
@@ -46,8 +45,6 @@ buildPythonPackage rec {
   pname = "sqlalchemy";
   version = "2.0.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";

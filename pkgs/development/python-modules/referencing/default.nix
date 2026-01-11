@@ -8,7 +8,6 @@
   jsonschema,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   rpds-py,
   typing-extensions,
 }:
@@ -18,8 +17,6 @@ let
     pname = "referencing";
     version = "0.36.2";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "python-jsonschema";

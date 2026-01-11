@@ -5,15 +5,12 @@
   setuptools,
   zope-interface,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "transaction";
   version = "5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zopefoundation";

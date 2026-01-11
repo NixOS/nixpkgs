@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "rx";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   # Use fetchPypi to avoid the updater script to migrate it to `reactivex` which
   # is being developed in the same repository

@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zeroconf,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "aiohttp-asyncmdnsresolver";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";

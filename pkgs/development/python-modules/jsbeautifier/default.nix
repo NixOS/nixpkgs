@@ -4,7 +4,6 @@
   buildPythonPackage,
   editorconfig,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "jsbeautifier";
   version = "1.15.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

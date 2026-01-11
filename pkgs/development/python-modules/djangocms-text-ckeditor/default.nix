@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   html5lib,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "djangocms-text-ckeditor";
   version = "5.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

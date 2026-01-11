@@ -6,15 +6,12 @@
   hatchling,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-metadata";
   version = "3.1.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pytest_metadata";

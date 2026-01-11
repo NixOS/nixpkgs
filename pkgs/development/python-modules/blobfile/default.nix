@@ -5,7 +5,6 @@
   filelock,
   lxml,
   pycryptodomex,
-  pythonOlder,
   urllib3,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "blobfile";
   version = "3.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "christopher-hesse";
