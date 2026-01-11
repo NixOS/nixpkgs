@@ -21,23 +21,6 @@
       hash = "sha256-MHzPwx4N+LLETEZMQz4hmM+1qbwNJjHSISvTWROg+3o=";
     };
 
-    # drop upstreamed cmake-4 patch
-    patches = [ ];
-
-    postPatch =
-      builtins.replaceStrings
-        [
-          "decode_aprs.c"
-          "tocalls.txt"
-          "--replace-fail /etc/udev/rules.d/"
-        ]
-        [
-          "deviceid.c"
-          "tocalls.yaml"
-          "--replace-fail /usr/lib/udev/rules.d/ $out/lib/udev/rules.d/ --replace-fail /etc/udev/rules.d/"
-        ]
-        oldAttrs.postPatch;
-
     dontVersionCheck = true;
 
     passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=dev" ]; };
