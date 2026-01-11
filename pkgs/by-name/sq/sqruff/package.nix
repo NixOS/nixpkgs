@@ -54,6 +54,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/quarylabs/sqruff/releases/tag/${version}";
     license = lib.licenses.asl20;
     mainProgram = "sqruff";
-    maintainers = with lib.maintainers; [ hasnep ];
+    maintainers = with lib.maintainers; [
+      hasnep
+      pyrox0
+    ];
   };
 }
