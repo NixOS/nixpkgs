@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "25.3.0";
+  version = "25.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-tucLXWYPpALQrPYf+aiovKHYf2iouu6jezvNdukEu9w=";
+    hash = "sha256-ygMTULkavd/5Mqxn/iS1TC29hfFcF6q3/kT8S7V1Xdo=";
   };
 
   build-system = [ setuptools ];
@@ -101,6 +101,12 @@ buildPythonPackage rec {
     "test_create_server_trigger_events"
     "test_multiple_uvloop_configs_display_warning"
     "test_uvloop_cannot_never_called_with_create_server"
+    # AssertionError: assert 'text/xml; charset=utf-8' == 'application/xml'
+    "test_guess_content_type"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # KeyError: "getgrnam(): name not found: 'root'"
+    "test_validate_group_sets_gid"
   ];
 
   disabledTestPaths = [
