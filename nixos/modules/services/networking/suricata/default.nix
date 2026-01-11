@@ -22,7 +22,7 @@ let
     ;
 in
 {
-  meta.maintainers = lib.teams.secshell.members;
+  meta.maintainers = with lib.maintainers; [ felbinger ];
 
   options.services.suricata = {
     enable = mkEnableOption "Suricata";
