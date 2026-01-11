@@ -86,6 +86,8 @@ in
           "ocis_5-bin"
           "ocis_70-bin"
           "ocis_71-bin"
+          "ocis_72-bin"
+          "ocis_73-bin"
         ];
       };
 
@@ -210,7 +212,7 @@ in
   config = lib.mkIf cfg.enable {
     warnings =
       let
-        latest = "7.1";
+        latest = "7.3";
         versionToPkgSuffix =
           version: builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version);
         upgradeWarning = majorMinor: nextMajorMinor: nixos: ''
@@ -235,7 +237,9 @@ in
       ));
 
     services.ocis.package = lib.mkDefault (
-      if lib.versionOlder stateVersion "25.11" then pkgs.ocis_5-bin else pkgs.ocis_71-bin
+      if lib.versionOlder stateVersion "25.11" then pkgs.ocis_5-bin else
+      if lib.versionOlder stateVersion "26.11" then pkgs.ocis_71-bin else
+      pkgs.ocis_73-bin
     );
 
     users.users.${defaultUser} = lib.mkIf (cfg.user == defaultUser) {
