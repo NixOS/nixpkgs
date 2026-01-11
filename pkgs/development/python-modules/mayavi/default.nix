@@ -9,7 +9,6 @@
   pyface,
   pygments,
   pyqt5,
-  pythonOlder,
   traitsui,
   vtk,
   wrapQtAppsHook,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "mayavi";
   version = "4.8.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
