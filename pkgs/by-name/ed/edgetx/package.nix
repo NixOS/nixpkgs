@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [
-      elitak
       lopsided98
       wucke13
       xokdvium
