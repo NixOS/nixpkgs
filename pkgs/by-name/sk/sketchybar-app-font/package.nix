@@ -7,6 +7,7 @@
   stdenvNoCC,
   nodejs,
   nix-update-script,
+  fetchpatch,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
@@ -50,6 +51,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  patches = [
+    # TODO: remove on next release
+    (fetchpatch {
+      name = "lua-regression-patch";
+      url = "https://github.com/kvndrsslr/sketchybar-app-font/commit/f6735ef0acacc700b84b31b2cc3f430bf0f01f6e.patch";
+      hash = "sha256-Fj3oqRdEvRcM0Bz6E97lN02H+nRx5vonW1p2jcSig7s=";
+    })
+  ];
 
   passthru.updateScript = nix-update-script { };
 
