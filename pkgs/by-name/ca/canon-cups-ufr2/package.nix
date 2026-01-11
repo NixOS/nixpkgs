@@ -38,15 +38,15 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
-  version = "6.00";
-  dl = "0/0100009240/34";
+  version = "6.20";
+  dl = "8/0100007658/47";
   suffix1 = "m17n";
-  suffix2 = "00";
+  suffix2 = "20";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
     url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-${suffix1}-${suffix2}.tar.gz";
-    hash = "sha256-JQAe/avYG+9TAsH26UGai6u8/upRXwZrGBc/hd4jZe8=";
+    hash = "sha256-6QJaaABubEaERpJxfVGxghB8yIb2pCaQZ6+VoqjmYrk=";
   };
 
   buildInputs = [
