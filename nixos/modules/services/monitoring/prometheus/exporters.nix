@@ -134,6 +134,7 @@ let
         "v2ray"
         "varnish"
         "wireguard"
+        "xray"
         "zfs"
       ]
       (

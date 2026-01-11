@@ -2098,6 +2098,19 @@ let
           wait_until_succeeds("curl -f localhost:9134/metrics | grep 'zfs_scrape_collector_success{.*} 1'")
         '';
       };
+
+    xray =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("prometheus-xray-exporter.service")
+          wait_for_open_port(9550)
+          succeed("curl -sSf http://localhost:9550/metrics | grep 'go_info'")
+        '';
+      };
   };
 in
 lib.mapAttrs (
