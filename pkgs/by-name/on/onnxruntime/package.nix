@@ -296,6 +296,7 @@ effectiveStdenv.mkDerivation rec {
   hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
     "nostrictaliasing"
   ];
+  hardeningDisable = lib.optional effectiveStdenv.hostPlatform.isMusl "fortify";
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
