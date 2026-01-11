@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "faugus-launcher";
-  version = "1.11.8";
+  version = "1.13.9";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = version;
-    hash = "sha256-VgafXX8EuX0WOpG0cxBNlUdLL4HrrcpdblpCMxka2ms=";
+    hash = "sha256-tkCcKnRhIbBXinZsxe7A6UGdzrmcT9l1u4/aopOtA5E=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'Exec={faugus_run}' 'Exec=faugus-run'
 
     substituteInPlace faugus_run.py \
-      --replace-fail "PathManager.find_binary('faugus-components')" "'$out/bin/.faugus-components-wrapped'" \
       --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
   '';
 
