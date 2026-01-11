@@ -258,17 +258,18 @@ resholve.mkDerivation rec {
     longDescription = ''
       Bats can be extended with libraries. The available libraries are:
 
-        bats-assert
-        bats-file
-        bats-detik
-        bats-support
+      - `bats-assert`
+      - `bats-file`
+      - `bats-detik`
+      - `bats-support`
 
       An example of building this package with a few libraries:
-
-        bats.withLibraries (p: [
-          p.bats-assert
-          p.bats-support
-        ])
+      ```nix
+      bats.withLibraries (p: [
+        p.bats-assert
+        p.bats-support
+      ])
+      ```
     '';
     mainProgram = "bats";
     maintainers = with lib.maintainers; [ abathur ];
