@@ -161,6 +161,13 @@ assertNoAdditions {
       vim-rhubarb
       plenary-nvim
     ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "advanced_git_search.fzf.previewers.init"
+      "advanced_git_search.fzf.pickers.init"
+      "advanced_git_search.fzf.pickers.utils"
+    ];
   };
 
   aerial-nvim = super.aerial-nvim.overrideAttrs {
@@ -169,6 +176,11 @@ assertNoAdditions {
       lualine-nvim
       telescope-nvim
       fzf-lua
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "aerial.fzf-lua"
     ];
   };
 
@@ -1495,6 +1507,11 @@ assertNoAdditions {
       fzf-lua
       telescope-nvim
     ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "himalaya.folder.pickers.fzflua"
+    ];
   };
 
   hover-nvim = super.hover-nvim.overrideAttrs {
@@ -1613,7 +1630,6 @@ assertNoAdditions {
       dependencies = [ kulala-http-grammar ];
       buildInputs = [ curl ];
 
-      patches = [ ./patches/kulala-nvim/do-not-install-grammar.patch ];
       postPatch = ''
         substituteInPlace lua/kulala/config/defaults.lua \
           --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
@@ -2864,6 +2880,9 @@ assertNoAdditions {
     nvimSkipModules = [
       # Issue reproduction file
       "minimal"
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "obsidian.picker._fzf"
     ];
   };
 
@@ -4279,6 +4298,11 @@ assertNoAdditions {
       mini-nvim
       snacks-nvim
       telescope-nvim
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "zk.pickers.fzf_lua"
     ];
   };
 
