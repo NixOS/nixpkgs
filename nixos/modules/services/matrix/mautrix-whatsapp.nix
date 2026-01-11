@@ -50,13 +50,6 @@ let
       servers = { };
       secrets = { };
     };
-    # By default, the following keys/secrets are set to `generate`. This would break when the service
-    # is restarted, since the previously generated configuration will be overwritten everytime.
-    # If encryption is enabled, it's recommended to set those keys via `environmentFile`.
-    encryption.pickle_key = "";
-    provisioning.shared_secret = "";
-    public_media.signing_key = "";
-    direct_media.server_key = "";
     logging = {
       min_level = "info";
       writers = lib.singleton {
