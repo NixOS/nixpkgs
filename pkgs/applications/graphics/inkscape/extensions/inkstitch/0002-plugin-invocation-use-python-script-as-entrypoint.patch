@@ -1,0 +1,34 @@
+From c15715af2cfca6603241f4d414b68d43bd4acb98 Mon Sep 17 00:00:00 2001
+From: tropf <tropf@noreply.codeberg.org>
+Date: Mon, 5 Aug 2024 21:26:13 +0200
+Subject: [PATCH 2/4] plugin invocation: use python script as entrypoint
+
+Ink/Stitch is invoked by calling a script with command line parameters.
+Depending on the distribution format, this is bundled into a standalone
+binary -- at least for vanilla Ink/Stitch. For the nix version, we
+follow manual install, which does *not* bundle the file. Hence, the
+generation is patched to treat this packaged install as manual install,
+and to still refer to the python file.
+
+To keep the patchset small, only an if statement is changed, with the
+intent of only using the else path.
+---
+ lib/inx/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/inx/utils.py b/lib/inx/utils.py
+index c4cbf6f0d..6d4774ec0 100755
+--- a/lib/inx/utils.py
++++ b/lib/inx/utils.py
+@@ -21,7 +21,7 @@ def build_environment():
+         extensions=['jinja2.ext.i18n']
+     )
+ 
+-    if "BUILD" in os.environ:
++    if False:
+         # building a ZIP release, with inkstitch packaged as a binary
+         # Command tag and icons path
+         if sys.platform == "win32":
+-- 
+2.49.0
+

@@ -1,0 +1,53 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 43b7231..51c5e9c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -27,7 +27,6 @@ classifiers = [
+ ]
+ keywords = ["cython", "form-data", "forms", "http", "multipart", "streaming", "web"]
+ dependencies = [
+-    "smart-open>=7.0.5",
+ ]
+ 
+ [project.urls]
+diff --git a/src/streaming_form_data/targets.py b/src/streaming_form_data/targets.py
+index fc31f67..219c183 100644
+--- a/src/streaming_form_data/targets.py
++++ b/src/streaming_form_data/targets.py
+@@ -2,7 +2,6 @@ import hashlib
+ from pathlib import Path
+ from typing import Callable, List, Optional, Union
+ 
+-import smart_open  # type: ignore
+ 
+ 
+ class BaseTarget:
+@@ -313,6 +312,7 @@ class SmartOpenTarget(BaseTarget):
+             mode:
+                 The mode in which the file should be opened
+         """
++        raise Exception("Nixpkgs: disabled")
+ 
+         super().__init__(**kwargs)
+ 
+diff --git a/tests/test_targets.py b/tests/test_targets.py
+index 4aa6b57..d768e2f 100644
+--- a/tests/test_targets.py
++++ b/tests/test_targets.py
+@@ -2,8 +2,6 @@ import os.path
+ import tempfile
+ 
+ import pytest
+-from moto import mock_aws
+-import boto3
+ 
+ from streaming_form_data.targets import (
+     BaseTarget,
+@@ -305,6 +303,7 @@ def mock_client():
+         yield client
+ 
+ 
++@pytest.mark.skip
+ def test_s3_upload(mock_client):
+     test_key = "test.txt"
+     path = f"s3://{BUCKET_NAME}/{test_key}"

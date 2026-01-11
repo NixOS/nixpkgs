@@ -1,0 +1,23 @@
+The `-index-store-path` option is an Apple extension not available in our
+Clang. Make it opt-in by default.
+
+(It is assumed the `target.type == test` check is for Xcode support, because
+there is no evidence of it in swift-corelibs-xctest.)
+
+--- a/Sources/Build/BuildPlan/BuildPlan.swift
++++ b/Sources/Build/BuildPlan/BuildPlan.swift
+@@ -111,14 +111,7 @@
+         case .off:
+             addIndexStoreArguments = false
+         case .auto:
+-            if configuration == .debug {
+-                addIndexStoreArguments = true
+-            } else if target.type == .test {
+-                // Test discovery requires an index store for the test target to discover the tests
+-                addIndexStoreArguments = true
+-            } else {
+                 addIndexStoreArguments = false
+-            }
+         }
+ 
+         if addIndexStoreArguments {

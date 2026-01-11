@@ -1,0 +1,23 @@
+From 383e7c826906baedcd12ae7c20a4a5d4b32b104a Mon Sep 17 00:00:00 2001
+From: "Yang, Bo" <bo@preemo.io>
+Date: Wed, 8 Nov 2023 23:08:07 +0000
+Subject: [PATCH] Don't configure sshd
+
+---
+ azurelinuxagent/pa/provision/default.py | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/azurelinuxagent/pa/provision/default.py b/azurelinuxagent/pa/provision/default.py
+index 91fe04edab..48edf01490 100644
+--- a/azurelinuxagent/pa/provision/default.py
++++ b/azurelinuxagent/pa/provision/default.py
+@@ -237,9 +237,6 @@ def config_user_account(self, ovfenv):
+         self.osutil.conf_sudoer(ovfenv.username,
+                                 nopasswd=ovfenv.user_password is None)
+ 
+-        logger.info("Configure sshd")
+-        self.osutil.conf_sshd(ovfenv.disable_ssh_password_auth)
+-
+         self.deploy_ssh_pubkeys(ovfenv)
+         self.deploy_ssh_keypairs(ovfenv)
+ 

@@ -1,0 +1,26 @@
+From 6f52bee7f71e253b0504164fc268750116945108 Mon Sep 17 00:00:00 2001
+From: griffi-gh <prasol258@gmail.com>
+Date: Mon, 4 Nov 2024 00:43:49 +0100
+Subject: [PATCH] fix daemon autostart
+
+---
+ src/daemon_utils.rs | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/daemon_utils.rs b/src/daemon_utils.rs
+index cd8f49b..f56e100 100644
+--- a/src/daemon_utils.rs
++++ b/src/daemon_utils.rs
+@@ -13,7 +13,11 @@ use nix::{
+ pub fn start() -> bool {
+     let curr_exe = env::current_exe().expect("Couldn't get current executable!");
+     let mut cmd = Command::new("nohup");
+-    let cmd = cmd.arg(curr_exe).arg("-d").arg("--no-fork").arg("-q");
++    let cmd = cmd
++        .arg(curr_exe)
++        .arg("--daemon").arg("true")
++        .arg("--no-fork").arg("true")
++        .arg("--quiet").arg("true");
+     cmd.stdout(Stdio::null());
+     cmd.stderr(Stdio::null());
+     let status = cmd.spawn();

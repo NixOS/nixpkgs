@@ -1,0 +1,40 @@
+diff --git a/Libraries/MiKTeX/Core/Session/unx/unxStartupConfig.cpp b/Libraries/MiKTeX/Core/Session/unx/unxStartupConfig.cpp
+index 1728e7af9..727c36d8c 100644
+--- a/Libraries/MiKTeX/Core/Session/unx/unxStartupConfig.cpp
++++ b/Libraries/MiKTeX/Core/Session/unx/unxStartupConfig.cpp
+@@ -90,6 +90,10 @@ InternalStartupConfig SessionImpl::DefaultConfig(MiKTeXConfiguration config, Ver
+   {
+     pos = n - 2;
+   }
++  else if (n > 3 && splittedPrefix[1] == "nix" && splittedPrefix[2] == "store")
++  {
++    pos = 1;
++  }
+   if (pos < n)
+   {
+     PathName destdir;
+@@ -98,10 +102,10 @@ InternalStartupConfig SessionImpl::DefaultConfig(MiKTeXConfiguration config, Ver
+       destdir /= splittedPrefix[i];
+     }
+     MIKTEX_ASSERT(MIKTEX_SYSTEM_VAR_LIB_DIR[0] == '/');
+-    ret.commonConfigRoot = destdir / (MIKTEX_SYSTEM_VAR_LIB_DIR + 1) / MIKTEX_PREFIX "texmf";
++    ret.commonConfigRoot = destdir / (MIKTEX_SYSTEM_VAR_LIB_DIR + 1) / MIKTEX_PREFIX "texmf" / "config";
+     MIKTEX_ASSERT(MIKTEX_SYSTEM_VAR_CACHE_DIR[0] == '/');
+     ret.commonDataRoot = destdir / (MIKTEX_SYSTEM_VAR_CACHE_DIR + 1) / MIKTEX_PREFIX "texmf";
+-    ret.commonInstallRoot = destdir / "usr" / "local" / MIKTEX_INSTALL_DIR;
++    ret.commonInstallRoot = destdir / (MIKTEX_SYSTEM_VAR_LIB_DIR + 1) / MIKTEX_PREFIX "texmf" / "install";
+   }
+ #endif
+   if (ret.commonConfigRoot.Empty())
+@@ -124,9 +128,9 @@ InternalStartupConfig SessionImpl::DefaultConfig(MiKTeXConfiguration config, Ver
+ 
+   PathName myLoc = GetMyLocation(true);
+ #if defined(MIKTEX_MACOS_BUNDLE)
+-  ret.isSharedSetup = Utils::IsParentDirectoryOf(PathName("/usr"), myLoc) || Utils::IsParentDirectoryOf(PathName("/Applications"), myLoc) ? TriState::True : TriState::False;
++  ret.isSharedSetup = Utils::IsParentDirectoryOf(PathName("/nix/store"), myLoc) || Utils::IsParentDirectoryOf(PathName("/usr"), myLoc) || Utils::IsParentDirectoryOf(PathName("/Applications"), myLoc) ? TriState::True : TriState::False;
+ #else
+-  ret.isSharedSetup = Utils::IsParentDirectoryOf(PathName("/usr"), myLoc) || Utils::IsParentDirectoryOf(PathName("/opt"), myLoc) ? TriState::True : TriState::False;
++  ret.isSharedSetup = Utils::IsParentDirectoryOf(PathName("/nix/store"), myLoc) || Utils::IsParentDirectoryOf(PathName("/usr"), myLoc) || Utils::IsParentDirectoryOf(PathName("/opt"), myLoc) ? TriState::True : TriState::False;
+ #endif
+ 
+   return ret;

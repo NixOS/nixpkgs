@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index 14d9a92..9e324d2 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -8,8 +8,6 @@ dist_noinst_DATA = biosdevname.rules.in biosdevname.spec.fedora biosdevname.spec
+ 
+ CLEANFILES = version src/bios_dev_name.h
+ install-data-local:
+-	mkdir -p $(DESTDIR)@RULEDIR@
+-	$(INSTALL_DATA) $(top_srcdir)/biosdevname.rules.in $(DESTDIR)@RULEDEST@
+ 
+ uninstall-local:
+ 	rm -f $(DESTDIR)@RULEDEST@

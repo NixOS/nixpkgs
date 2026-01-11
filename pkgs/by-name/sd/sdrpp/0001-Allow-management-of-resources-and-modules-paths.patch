@@ -1,0 +1,113 @@
+From 89189428a6857bc5607d8e28b9090c0d8bd0f8e3 Mon Sep 17 00:00:00 2001
+From: Francesco Zanini <francesco@zanini.me>
+Date: Mon, 6 Oct 2025 16:19:55 +0200
+Subject: [PATCH] Allow management of resources and modules paths
+
+SDR++ uses the config file to determine the location of modules and
+resources to load. While this is mostly static in other distributions,
+in Nix it changes very often.
+
+This commit adds some functionality to the config manager to replace
+`@prefix@` in the values of the keys `modulesDirectory` and
+`resourcesDirectory` to a dynamic path. On save, the change is reverted.
+
+The prefix path used is either the installation directory, or the
+content of the `SDRPP_PREFIX` environment variable, if present.
+---
+ core/src/config.cpp | 31 ++++++++++++++++++++++++++++++-
+ core/src/config.h   |  4 +++-
+ core/src/core.cpp   | 15 ++-------------
+ 3 files changed, 35 insertions(+), 15 deletions(-)
+
+diff --git a/core/src/config.cpp b/core/src/config.cpp
+index 6de1888fd803d4bbe04c7a4ed2187103dd8a5081..4cab471b24b985ca717afae4322618759ffd47b4 100644
+--- a/core/src/config.cpp
++++ b/core/src/config.cpp
+@@ -41,12 +41,16 @@ void ConfigManager::load(json def, bool lock) {
+         conf = def;
+         save(false);
+     }
++
++    transformPaths(conf, true);
++
+     if (lock) { mtx.unlock(); }
+ }
+ 
+ void ConfigManager::save(bool lock) {
+     if (lock) { mtx.lock(); }
+     std::ofstream file(path.c_str());
++    transformPaths(conf, false);
+     file << conf.dump(4);
+     file.close();
+     if (lock) { mtx.unlock(); }
+@@ -98,4 +102,29 @@ void ConfigManager::autoSaveWorker() {
+             termCond.wait_for(lock, std::chrono::milliseconds(1000), [this]() { return termFlag; });
+         }
+     }
+-}
+\ No newline at end of file
++}
++
++void ConfigManager::transformPaths(json& conf, bool expand) {
++    const char* env_prefix = std::getenv("SDRPP_PREFIX");
++    const std::string prefix = env_prefix ? env_prefix : INSTALL_PREFIX;
++
++    std::vector<std::string> directoryKeys = {
++        "modulesDirectory",
++        "resourcesDirectory"
++    };
++
++    const std::string from = expand ? "@prefix@" : prefix;
++    const std::string to = expand ? prefix : "@prefix@";
++
++    for (const auto& key : directoryKeys) {
++        if (conf.contains(key)) {
++            auto dir = conf[key].get<std::string>();
++
++            size_t pos = dir.find(from);
++            if (pos != std::string::npos) {
++                dir.replace(pos, from.length(), to);
++                conf[key] = dir;
++            }
++        }
++    }
++}
+diff --git a/core/src/config.h b/core/src/config.h
+index fbbdeb4a54e06524a399e35afe8e187732bf851e..f9deef01e8d0850ab65a68ac33c9ed124486a1d5 100644
+--- a/core/src/config.h
++++ b/core/src/config.h
+@@ -33,4 +33,6 @@ class ConfigManager {
+     std::mutex termMtx;
+     std::condition_variable termCond;
+     volatile bool termFlag = false;
+-};
+\ No newline at end of file
++
++    static void transformPaths(json& conf, bool expand);
++};
+diff --git a/core/src/core.cpp b/core/src/core.cpp
+index 37358062ed957e562bf971fa121d885073f2827c..f1b5396cad3154546bb3a2322403b7f3618ad253 100644
+--- a/core/src/core.cpp
++++ b/core/src/core.cpp
+@@ -267,19 +267,8 @@ int sdrpp_main(int argc, char* argv[]) {
+     defConfig["lockMenuOrder"] = false;
+ #endif
+ 
+-#if defined(_WIN32)
+-    defConfig["modulesDirectory"] = "./modules";
+-    defConfig["resourcesDirectory"] = "./res";
+-#elif defined(IS_MACOS_BUNDLE)
+-    defConfig["modulesDirectory"] = "../Plugins";
+-    defConfig["resourcesDirectory"] = "../Resources";
+-#elif defined(__ANDROID__)
+-    defConfig["modulesDirectory"] = root + "/modules";
+-    defConfig["resourcesDirectory"] = root + "/res";
+-#else
+-    defConfig["modulesDirectory"] = INSTALL_PREFIX "/lib/sdrpp/plugins";
+-    defConfig["resourcesDirectory"] = INSTALL_PREFIX "/share/sdrpp";
+-#endif
++    defConfig["modulesDirectory"] = "@prefix@/lib/sdrpp/plugins";
++    defConfig["resourcesDirectory"] = "@prefix@/share/sdrpp";
+ 
+     // Load config
+     flog::info("Loading config");

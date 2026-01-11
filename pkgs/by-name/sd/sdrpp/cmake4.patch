@@ -1,0 +1,27 @@
+diff --git a/core/libcorrect/CMakeLists.txt b/core/libcorrect/CMakeLists.txt
+index 7fce281d..b709255f 100644
+--- a/core/libcorrect/CMakeLists.txt
++++ b/core/libcorrect/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.13)
+ project(Correct C)
+ include(CheckLibraryExists)
+ include(CheckIncludeFiles)
+diff --git a/misc_modules/discord_integration/discord-rpc/CMakeLists.txt b/misc_modules/discord_integration/discord-rpc/CMakeLists.txt
+index 1dc1c913..e9924677 100644
+--- a/misc_modules/discord_integration/discord-rpc/CMakeLists.txt
++++ b/misc_modules/discord_integration/discord-rpc/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.13)
+ project (DiscordRPC)
+ 
+ include(GNUInstallDirs)
+@@ -11,4 +11,4 @@ file(GLOB_RECURSE ALL_SOURCE_FILES
+ 
+ # add subdirs
+ 
+-add_subdirectory(src)
+\ No newline at end of file
++add_subdirectory(src)

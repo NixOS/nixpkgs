@@ -1,0 +1,25 @@
+Swiftpm looks for the Swift stdlib relative to the swift compiler, but that's a
+wrapper in our case. It wants to add the stdlib to the rpath, which is
+necessary for back-deployment of some features.
+
+--- a/Sources/PackageModel/Toolchain.swift
++++ b/Sources/PackageModel/Toolchain.swift
+@@ -53,12 +53,18 @@ extension Toolchain {
+ 
+     public var macosSwiftStdlib: AbsolutePath {
+         get throws {
++            if swiftCompilerPath.pathString.starts(with: "@storeDir@") {
++                return try AbsolutePath(validating: "@swiftLib@/lib/swift/macosx")
++            }
+             return try AbsolutePath(validating: "../../lib/swift/macosx", relativeTo: resolveSymlinks(swiftCompilerPath))
+         }
+     }
+ 
+     public var toolchainLibDir: AbsolutePath {
+         get throws {
++            if swiftCompilerPath.pathString.starts(with: "@storeDir@") {
++                return try AbsolutePath(validating: "@swiftLib@/lib")
++            }
+             // FIXME: Not sure if it's better to base this off of Swift compiler or our own binary.
+             return try AbsolutePath(validating: "../../lib", relativeTo: resolveSymlinks(swiftCompilerPath))
+         }

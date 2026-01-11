@@ -1,0 +1,27 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    abbrev (0.1.2)
+    colorize (0.8.1)
+    commander (4.6.0)
+      highline (~> 2.0.0)
+    diffy (3.4.3)
+    highline (2.0.3)
+    polyglot (0.3.5)
+    terraform_landscape (0.3.4)
+      colorize (~> 0.7)
+      commander (~> 4.4)
+      diffy (~> 3.0)
+      treetop (~> 1.6)
+    treetop (1.6.14)
+      polyglot (~> 0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  abbrev
+  terraform_landscape
+
+BUNDLED WITH
+   2.6.2

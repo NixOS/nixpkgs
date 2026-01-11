@@ -1,0 +1,25 @@
+diff --git a/shared/config.vapi b/shared/config.vapi
+index 1b0d8d7..e25bfbc 100644
+--- a/shared/config.vapi
++++ b/shared/config.vapi
+@@ -9,7 +9,6 @@ namespace Config {
+     public const string VERSION_SUFFIX;
+     public const string VCS_TAG;
+     public const string PROFILE;
+-    public const string CORES_DIR;
+     public const string DATA_DIR;
+     public const string RUNNER_PATH;
+ }
+diff --git a/src/core-register.vala b/src/core-register.vala
+index 892aca7..2485cc7 100644
+--- a/src/core-register.vala
++++ b/src/core-register.vala
+@@ -15,7 +15,7 @@ public class Highscore.CoreRegister : Object {
+         suggested_cores = new HashTable<string, SuggestedCore?> (str_hash, str_equal);
+ 
+         try {
+-            scan_directory (File.new_for_path (Config.CORES_DIR));
++            scan_directory (File.new_for_path (Environment.get_variable ("HIGHSCORE_CORES_DIR")));
+         } catch (Error e) {
+             critical ("Failed to scan cores: %s", e.message);
+         }

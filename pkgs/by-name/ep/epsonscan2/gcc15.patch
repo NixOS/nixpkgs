@@ -1,0 +1,44 @@
+From aac9755fe41725ccf827d4de745fb1215c32329c Mon Sep 17 00:00:00 2001
+From: Sefa Eyeoglu <contact@scrumplex.net>
+Date: Thu, 1 Jan 2026 16:05:41 +0100
+Subject: [PATCH] Fixes for GCC 15 support
+
+Fixes the following compliation failures:
+
+src/ES2Command/Linux/../Src/Utils/ESAccessor.h:177:17: error: 'const class CESAccessor::CSetterFunc<_ValueType>' has no member named 'func'; did you mean 'm_func'? [-Wtemplate-body]
+src/Controller/./Src/Filter/GrayToMono.hpp:27:37: error: 'pow' was not declared in this scope
+
+Signed-off-by: Sefa Eyeoglu <contact@scrumplex.net>
+---
+ src/Controller/Src/Filter/GrayToMono.hpp | 1 +
+ src/ES2Command/Src/Utils/ESAccessor.h    | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/Controller/Src/Filter/GrayToMono.hpp b/src/Controller/Src/Filter/GrayToMono.hpp
+index 0eec964..c21653f 100755
+--- a/src/Controller/Src/Filter/GrayToMono.hpp
++++ b/src/Controller/Src/Filter/GrayToMono.hpp
+@@ -24,6 +24,7 @@
+ #include "ModelInfo.hpp"
+ #include "Filter.hpp"
+ #include "../FileFormat/FFManager.hpp"
++#include <math.h>
+ #define CONVERT_TO_GAMMA22(x) (255.*pow(((x)/255.) , (1.0/2.2)))
+ namespace epsonscan
+ {
+diff --git a/src/ES2Command/Src/Utils/ESAccessor.h b/src/ES2Command/Src/Utils/ESAccessor.h
+index 700a680..b537ba7 100755
+--- a/src/ES2Command/Src/Utils/ESAccessor.h
++++ b/src/ES2Command/Src/Utils/ESAccessor.h
+@@ -174,7 +174,7 @@ protected:
+   {
+   }
+   CSetterFunc(const CSetterFunc& rhs)
+-   : m_func(rhs.func)
++   : m_func(rhs.m_func)
+   {
+   }
+   virtual ISetterFunc* Clone()
+-- 
+2.51.2
+

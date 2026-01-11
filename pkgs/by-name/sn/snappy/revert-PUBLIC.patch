@@ -1,0 +1,11 @@
+https://github.com/google/snappy/issues/206
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -261,7 +261,6 @@ target_sources(snappy
+     "snappy-stubs-internal.cc"
+     "snappy.cc"
+     "${PROJECT_BINARY_DIR}/config.h"
+-  PUBLIC
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/snappy-c.h>
+     $<INSTALL_INTERFACE:include/snappy-c.h>
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/snappy-sinksource.h>

@@ -1,0 +1,13 @@
+Index: kservice-5.21.0/src/sycoca/vfolder_menu.cpp
+===================================================================
+--- kservice-5.21.0.orig/src/sycoca/vfolder_menu.cpp
++++ kservice-5.21.0/src/sycoca/vfolder_menu.cpp
+@@ -415,7 +415,7 @@ VFolderMenu::absoluteDir(const QString &
+     }
+ 
+     if (!relative) {
+-        QString resolved = QDir(dir).canonicalPath();
++      QString resolved = QDir::cleanPath(dir);
+         if (!resolved.isEmpty()) {
+             dir = resolved;
+         }

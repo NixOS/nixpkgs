@@ -1,0 +1,13 @@
+diff --git a/src/FaacEncoder.cpp b/src/FaacEncoder.cpp
+index 1100226..3ab1805 100644
+--- a/src/FaacEncoder.cpp
++++ b/src/FaacEncoder.cpp
+@@ -36,7 +36,7 @@
+ // compile the whole file only if faac support configured in
+ #ifdef HAVE_FAAC_LIB
+ 
+-
++#include <string.h>
+ 
+ #include "Exception.h"
+ #include "Util.h"

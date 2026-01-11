@@ -1,0 +1,11 @@
+--- nss/nss.gyp
++++ nss/nss.gyp
+@@ -280,7 +280,7 @@
+                   'outputs/': [['exclude', 'nssdbm3']]
+                 }],
+               ],
+-              'action': ['<(python)', '<(DEPTH)/coreconf/shlibsign.py', '<@(_inputs)']
++              'action': ['true']
+             }
+           ],
+         },

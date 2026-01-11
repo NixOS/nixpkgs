@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -76,8 +76,8 @@ set_package_properties(KF6Kirigami PROPERTIES
+     TYPE RUNTIME
+ )
+ 
+-ecm_find_qmlmodule(org.kde.kirigamiaddons.formcard REQUIRED)
+-ecm_find_qmlmodule(org.kde.kirigamiaddons.delegates REQUIRED)
++ecm_find_qmlmodule(org.kde.kirigamiaddons.formcard)
++ecm_find_qmlmodule(org.kde.kirigamiaddons.delegates)
+ 
+ find_package(KF6KirigamiAddons)
+ set_package_properties(KF6KirigamiAddons PROPERTIES

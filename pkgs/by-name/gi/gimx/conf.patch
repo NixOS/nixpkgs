@@ -1,0 +1,51 @@
+--- a/core/config_reader.c
++++ b/core/config_reader.c
+@@ -17,7 +17,7 @@
+ #include "../directories.h"
+ #include "macros.h"
+ #include <errno.h>
+-
++#include <stdlib.h>
+ /*
+  * These variables are used to read the configuration.
+  */
+@@ -1355,7 +1355,7 @@
+   char file_path[PATH_MAX];
+ 
+   snprintf(file_path, sizeof(file_path), "%s%s%s%s", gimx_params.homedir, GIMX_DIR, CONFIG_DIR, file);
+-
++  snprintf(file_path, sizeof(file_path), "%s", file);
+   if(read_file(file_path) == -1)
+   {
+     gerror("read_file failed\n");
+--- a/core/gimx.c
++++ b/core/gimx.c
+@@ -8,7 +8,7 @@
+ #include <errno.h> //to print errors
+ #include <string.h> //to print errors
+ #include <limits.h> //PATH_MAX
+-
++#include <stdlib.h>
+ #ifndef WIN32
+ #include <termios.h> //to disable/enable echo
+ #include <unistd.h>
+@@ -192,7 +192,7 @@
+   char file_path[PATH_MAX];
+ 
+   snprintf(file_path, sizeof(file_path), "%s%s%s%s", gimx_params.homedir, GIMX_DIR, CONFIG_DIR, gimx_params.config_file);
+-
++  snprintf(file_path, sizeof(file_path), "%s", gimx_params.config_file);
+   FILE * fp = gfile_fopen(file_path, "r");
+   if (fp == NULL)
+   {
+--- a/core/connectors/bluetooth/linux/bt_mgmt.c
++++ b/core/connectors/bluetooth/linux/bt_mgmt.c
+@@ -322,7 +322,7 @@ static int read_link_keys(uint16_t index, uint16_t nb_keys, bdaddr_t bdaddrs[nb_
+   bdaddr_t ba;
+   char dongle_bdaddr[18];
+ 
+-  if(bt_device_abs_get(bt_abs_value)->get_bdaddr(index, &ba) < 0)
++  if(bt_device_abs_get()->get_bdaddr(index, &ba) < 0)
+   {
+     fprintf(stderr, "can't read device bdaddr\n");
+     return -1;

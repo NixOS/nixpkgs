@@ -1,0 +1,40 @@
+From 6ac72ec84269737626b1f5e43e64729f0922d182 Mon Sep 17 00:00:00 2001
+From: "Ding, Yi" <yi.ding@amd.com>
+Date: Wed, 9 Jul 2025 03:12:39 +0000
+Subject: [PATCH] Avoid compile kernel in host pass
+
+---
+ include/ck_tile/host/kernel_launch.hpp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/include/ck_tile/host/kernel_launch.hpp b/include/ck_tile/host/kernel_launch.hpp
+index 9770e99738..f6ccb6968b 100644
+--- a/include/ck_tile/host/kernel_launch.hpp
++++ b/include/ck_tile/host/kernel_launch.hpp
+@@ -4,11 +4,12 @@
+ #pragma once
+ 
+ #include "ck_tile/core/config.hpp"
+-#include "ck_tile/host/stream_config.hpp"
++#include "ck_tile/core/utility/ignore.hpp"
+ #include "ck_tile/host/hip_check_error.hpp"
++#include "ck_tile/host/stream_config.hpp"
+ #include "ck_tile/host/timer.hpp"
+-#include <hip/hip_runtime.h>
+ #include <cstddef>
++#include <hip/hip_runtime.h>
+ 
+ namespace ck_tile {
+ 
+@@ -24,7 +25,11 @@ __launch_bounds__(MaxThreadPerBlock, MinBlockPerCu)
+ #endif
+     __global__ void kentry(Args... args)
+ {
++#if defined(__HIP_DEVICE_COMPILE__)
+     Kernel{}(args...);
++#else
++    (..., (ignore = args, 0));
++#endif
+ }
+ 
+ //

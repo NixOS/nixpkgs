@@ -1,0 +1,405 @@
+diff --git a/kcms/audio_information/kcm_audio_information.json b/kcms/audio_information/kcm_audio_information.json
+index 7ece92ee..a4fb6664 100644
+--- a/kcms/audio_information/kcm_audio_information.json
++++ b/kcms/audio_information/kcm_audio_information.json
+@@ -82,7 +82,7 @@
+         "Name[zh_CN]": "音频",
+         "Name[zh_TW]": "音訊"
+     },
+-    "TryExec": "pactl",
++    "TryExec": "@pactl@",
+     "X-KDE-KInfoCenter-Category": "device_information",
+     "X-KDE-Keywords": "Pipewire,Audio,PulseAudio,pactl",
+     "X-KDE-Keywords[ar]": "Pipewire,Audio,PulseAudio,pactl,بايبواير,الصوت,بولس أوديو",
+diff --git a/kcms/audio_information/main.cpp b/kcms/audio_information/main.cpp
+index adb196fd..9d6c8675 100644
+--- a/kcms/audio_information/main.cpp
++++ b/kcms/audio_information/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMAudioInformation(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("pactl"), {"list"}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@pactl@"), {"list"}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/block_devices/kcm_block_devices.json b/kcms/block_devices/kcm_block_devices.json
+index f73cf5a5..b18ecbfb 100644
+--- a/kcms/block_devices/kcm_block_devices.json
++++ b/kcms/block_devices/kcm_block_devices.json
+@@ -82,7 +82,7 @@
+         "Name[zh_CN]": "块设备",
+         "Name[zh_TW]": "區塊裝置"
+     },
+-    "TryExec": "lsblk",
++    "TryExec": "@lsblk@",
+     "X-KDE-KInfoCenter-Category": "device_information",
+     "X-KDE-Keywords": "lsblk,block device,partition,disk,drive,hdd,ssd,nvme",
+     "X-KDE-Keywords[ar]": "lsblk,block device,partition,disk,drive,hdd,ssd,nvme,قرص,قسم,قطاع جهاز",
+diff --git a/kcms/block_devices/main.cpp b/kcms/block_devices/main.cpp
+index 2de923f3..6b14f7fb 100644
+--- a/kcms/block_devices/main.cpp
++++ b/kcms/block_devices/main.cpp
+@@ -20,7 +20,7 @@ public:
+     {
+         // NOTE: careful when using -o, it tends to incorrectly print multiple mountpoints as a single path
+         // (e.g. when different btrfs subvolumes are mounted at various points in the system it ought to enumerate all mountpoints)
+-        m_outputContext = new CommandOutputContext(u"lsblk"_s, {}, parent);
++        m_outputContext = new CommandOutputContext(u"@lsblk@"_s, {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/cpu/kcm_cpu.json b/kcms/cpu/kcm_cpu.json
+index e8fb086e..c87b98f8 100644
+--- a/kcms/cpu/kcm_cpu.json
++++ b/kcms/cpu/kcm_cpu.json
+@@ -104,7 +104,7 @@
+         "Name[zh_CN]": "CPU",
+         "Name[zh_TW]": "CPU"
+     },
+-    "TryExec": "lscpu",
++    "TryExec": "@lscpu@",
+     "X-KDE-KInfoCenter-Category": "device_information",
+     "X-KDE-Keywords": "cpu,amd,intel,arm,instructions,cores,architecture,byte order",
+     "X-KDE-Keywords[ar]": "cpu,amd,intel,arm,instructions,cores,architecture,byte order,تعليمات,أنوية,معمارية",
+diff --git a/kcms/cpu/main.cpp b/kcms/cpu/main.cpp
+index 608381eb..8fd7914f 100644
+--- a/kcms/cpu/main.cpp
++++ b/kcms/cpu/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMCPU(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("lscpu"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@lscpu@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/edid/edid.sh b/kcms/edid/edid.sh
+index da803598..4e24eaaf 100755
+--- a/kcms/edid/edid.sh
++++ b/kcms/edid/edid.sh
+@@ -13,7 +13,7 @@ for card in /sys/class/drm/card*; do
+     # Try to read any data. If it fails continue. This prevents errors from di-edid-decode.
+     IFS= read -r data < "$edid" || continue
+ 
+-    data=$(di-edid-decode "$edid" 2>&1) || true
++    data=$(@di_edid_decode@ "$edid" 2>&1) || true
+     printf "# %s #######################\n" "$(basename "$card")"
+     printf "%s\n\n" "$data"
+ done
+diff --git a/kcms/edid/kcm_edid.json b/kcms/edid/kcm_edid.json
+index e180df8d..3d5bbd0b 100644
+--- a/kcms/edid/kcm_edid.json
++++ b/kcms/edid/kcm_edid.json
+@@ -72,7 +72,7 @@
+         "Name[zh_CN]": "EDID",
+         "Name[zh_TW]": "EDID"
+     },
+-    "TryExec": "di-edid-decode",
++    "TryExec": "@di_edid_decode@",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "EDID,Graphics",
+     "X-KDE-Keywords[ar]": "EDID,Graphics,الرسوميات,بيانات تعريف العرض الممتدة",
+diff --git a/kcms/edid/main.cpp b/kcms/edid/main.cpp
+index 9f04e7fd..8ef37d2c 100644
+--- a/kcms/edid/main.cpp
++++ b/kcms/edid/main.cpp
+@@ -20,7 +20,7 @@ public:
+     {
+         const QString executable =
+             QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kinfocenter/edid/edid.sh"), QStandardPaths::LocateFile);
+-        m_outputContext = new CommandOutputContext({QStringLiteral("di-edid-decode")}, QStringLiteral("/bin/sh"), {executable}, parent);
++        m_outputContext = new CommandOutputContext({QStringLiteral("@di_edid_decode@")}, QStringLiteral("/bin/sh"), {executable}, parent);
+     }
+     [[nodiscard]] CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/egl/kcm_egl.json b/kcms/egl/kcm_egl.json
+index 02a90071..64bfb609 100644
+--- a/kcms/egl/kcm_egl.json
++++ b/kcms/egl/kcm_egl.json
+@@ -104,7 +104,7 @@
+         "Name[zh_CN]": "OpenGL (EGL)",
+         "Name[zh_TW]": "OpenGL (EGL)"
+     },
+-    "TryExec": "eglinfo",
++    "TryExec": "@eglinfo@",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "OpenGL,DRI,3D,VideoCard,Hardware Acceleration,Graphics,EGL",
+     "X-KDE-Keywords[ar]": "OpenGL,DRI,3D,VideoCard,Hardware Acceleration,Graphics,EGL,بطاقة الرسوميات,تسريع العتاد,رسوميات",
+diff --git a/kcms/egl/main.cpp b/kcms/egl/main.cpp
+index 1a509dac..886a62d8 100644
+--- a/kcms/egl/main.cpp
++++ b/kcms/egl/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMXServer(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("eglinfo"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@eglinfo@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/firmware_security/main.cpp b/kcms/firmware_security/main.cpp
+index eab20e0f..5a0d2499 100644
+--- a/kcms/firmware_security/main.cpp
++++ b/kcms/firmware_security/main.cpp
+@@ -20,7 +20,7 @@ public:
+         const QString executable = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                           QStringLiteral("kinfocenter/firmware_security/fwupdmgr.sh"),
+                                                           QStandardPaths::LocateFile);
+-        m_outputContext = new CommandOutputContext({QStringLiteral("fwupdmgr"), QStringLiteral("aha")},
++        m_outputContext = new CommandOutputContext({QStringLiteral("fwupdmgr"), QStringLiteral("@aha@")},
+                                                    QStringLiteral("/bin/sh"),
+                                                    {executable},
+                                                    Qt::TextFormat::RichText,
+diff --git a/kcms/glx/kcm_glx.json b/kcms/glx/kcm_glx.json
+index 8a56690a..e2caaec7 100644
+--- a/kcms/glx/kcm_glx.json
++++ b/kcms/glx/kcm_glx.json
+@@ -103,7 +103,7 @@
+         "Name[zh_CN]": "OpenGL (GLX)",
+         "Name[zh_TW]": "OpenGL (GLX)"
+     },
+-    "TryExec": "glxinfo",
++    "TryExec": "@glxinfo@",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "OpenGL,DRI,GLX,3D,VideoCard,Hardware Acceleration,Graphics,X,X11,Xserver,X-Server,XFree86,Display",
+     "X-KDE-Keywords[ar]": "OpenGL,DRI,GLX,3D,VideoCard,Hardware Acceleration,Graphics,X,X11,Xserver,X-Server,XFree86,Display,بطاقة الرسوميات,تسريع العتاد,الرسوميات",
+diff --git a/kcms/glx/main.cpp b/kcms/glx/main.cpp
+index a7317411..a6c5621d 100644
+--- a/kcms/glx/main.cpp
++++ b/kcms/glx/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMXServer(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("glxinfo"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@glxinfo@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/helpers/dmidecode-helper/helper.cpp b/kcms/helpers/dmidecode-helper/helper.cpp
+index 11921934..1160c5f0 100644
+--- a/kcms/helpers/dmidecode-helper/helper.cpp
++++ b/kcms/helpers/dmidecode-helper/helper.cpp
+@@ -20,10 +20,7 @@ auto make_array(Input &&...args) -> std::array<Output, sizeof...(args)> // NB: w
+ DMIDecodeHelper::DMIDecodeHelper(QObject *parent)
+     : QObject(parent)
+ {
+-    // PATH is super minimal when invoked through dbus
+-    setenv("PATH", "/usr/sbin:/sbin:/usr/local/sbin", 1);
+-
+-    m_dmidecodePath = QStandardPaths::findExecutable("dmidecode");
++    m_dmidecodePath = QStringLiteral("@dmidecode@");
+ }
+ 
+ KAuth::ActionReply DMIDecodeHelper::memoryinformation(const QVariantMap &args)
+diff --git a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
+index 9e502d52..f9f26cbd 100644
+--- a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
++++ b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
+@@ -95,6 +95,6 @@
+         "Name[zh_CN]": "窗口管理器",
+         "Name[zh_TW]": "視窗管理員"
+     },
+-    "TryExec": "@QtBinariesDir@/qdbus",
++    "TryExec": "@qdbus@",
+     "X-KDE-KInfoCenter-Category": "graphical_information"
+ }
+diff --git a/kcms/kwinsupportinfo/main.cpp b/kcms/kwinsupportinfo/main.cpp
+index ddb55b5c..8dc6b668 100644
+--- a/kcms/kwinsupportinfo/main.cpp
++++ b/kcms/kwinsupportinfo/main.cpp
+@@ -18,7 +18,7 @@ public:
+     explicit KCMKWinSupportInfo(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QLibraryInfo::path(QLibraryInfo::BinariesPath) + QStringLiteral("/qdbus"),
++        m_outputContext = new CommandOutputContext(QStringLiteral("@qdbus@"),
+                                                    {QStringLiteral("org.kde.KWin"), QStringLiteral("/KWin"), QStringLiteral("supportInformation")},
+                                                    parent);
+     }
+diff --git a/kcms/memory/kcm_memory.json b/kcms/memory/kcm_memory.json
+index 20df9662..6a64c762 100644
+--- a/kcms/memory/kcm_memory.json
++++ b/kcms/memory/kcm_memory.json
+@@ -134,7 +134,7 @@
+         "Name[zh_CN]": "内存",
+         "Name[zh_TW]": "記憶體"
+     },
+-    "TryExec": "pkexec dmidecode",
++    "TryExec": "@dmidecode@",
+     "X-KDE-KInfoCenter-Category": "device_information",
+     "X-KDE-Keywords": "Memory,RAM,dmidecode",
+     "X-KDE-Keywords[ar]": "Memory,RAM,dmidecode,رام,ذاكرة,ذاكرة حية",
+diff --git a/kcms/network/kcm_network.json b/kcms/network/kcm_network.json
+index 5fc677a5..59ec49da 100644
+--- a/kcms/network/kcm_network.json
++++ b/kcms/network/kcm_network.json
+@@ -148,7 +148,7 @@
+         "Name[zh_CN]": "网络接口",
+         "Name[zh_TW]": "網路介面"
+     },
+-    "TryExec": "ip",
++    "TryExec": "@ip@",
+     "X-KDE-KInfoCenter-Category": "network_information",
+     "X-KDE-Keywords": "network,nic,ip,ip address,mac,inet,eth,wlan,wifi",
+     "X-KDE-Keywords[ar]": "network,nic,ip,ip address,mac,inet,eth,wlan,wifi,الشبكة,شبكة الاتصال,عنوان IP,عنوان IP,جهاز Mac,شبكة الإنترنت,شبكة ETH,شبكة WLAN,شبكة Wi-Fi",
+diff --git a/kcms/network/main.cpp b/kcms/network/main.cpp
+index f02577a3..479e18df 100644
+--- a/kcms/network/main.cpp
++++ b/kcms/network/main.cpp
+@@ -18,7 +18,7 @@ public:
+     explicit KCMNetwork(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(u"ip"_s, {u"address"_s}, parent);
++        m_outputContext = new CommandOutputContext(u"@ip@"_s, {u"address"_s}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/opencl/kcm_opencl.json b/kcms/opencl/kcm_opencl.json
+index 61706cb9..b7fb9c59 100644
+--- a/kcms/opencl/kcm_opencl.json
++++ b/kcms/opencl/kcm_opencl.json
+@@ -92,7 +92,7 @@
+         "Name[zh_CN]": "OpenCL",
+         "Name[zh_TW]": "OpenCL"
+     },
+-    "TryExec": "clinfo",
++    "TryExec": "@clinfo@",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "OpenCL,VideoCard,Hardware Acceleration,Graphics",
+     "X-KDE-Keywords[ar]": "OpenCL,VideoCard,Hardware Acceleration,Graphics,بطاقة الفيديو,تسريع العتاد,الرسوميات",
+diff --git a/kcms/opencl/main.cpp b/kcms/opencl/main.cpp
+index d58728ab..88733d46 100644
+--- a/kcms/opencl/main.cpp
++++ b/kcms/opencl/main.cpp
+@@ -18,7 +18,7 @@ public:
+     explicit KCMOpenCL(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("clinfo"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@clinfo@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/pci/CMakeLists.txt b/kcms/pci/CMakeLists.txt
+index 36d82ef8..16ce2703 100644
+--- a/kcms/pci/CMakeLists.txt
++++ b/kcms/pci/CMakeLists.txt
+@@ -19,7 +19,7 @@ else()
+     find_package(lspci)
+     set_package_properties(lspci PROPERTIES TYPE RUNTIME)
+ 
+-    set(PCI_BACKEND lspci)
++    set(PCI_BACKEND @lspci@)
+     set(PCI_BACKEND_ARGUMENTS "-v")
+ endif()
+ 
+diff --git a/kcms/sensors/kcm_sensors.json b/kcms/sensors/kcm_sensors.json
+index e1994f2c..e1c27245 100644
+--- a/kcms/sensors/kcm_sensors.json
++++ b/kcms/sensors/kcm_sensors.json
+@@ -58,7 +58,7 @@
+         "Name[zh_CN]": "传感器",
+         "Name[zh_TW]": "感測器"
+     },
+-    "TryExec": "sensors",
++    "TryExec": "@sensors@",
+     "X-KDE-KInfoCenter-Category": "device_information",
+     "X-KDE-Keywords": "lm_sensors,sensors,temp,temperature,volt,voltage,sensors,fan,fan speed,monitoring,amp,amps,current,power",
+     "X-KDE-Keywords[ar]": "مستشعرات lm,مستشعرات,درجة الحرارة,درجة الحرارة,فولت,جهد,مستشعرات,مروحة,سرعة المروحة,مراقبة,أمبير,أمبير,تيار,طاقة",
+diff --git a/kcms/sensors/main.cpp b/kcms/sensors/main.cpp
+index 8dae9f8f..ee70f381 100644
+--- a/kcms/sensors/main.cpp
++++ b/kcms/sensors/main.cpp
+@@ -18,7 +18,7 @@ public:
+     explicit KCMSensors(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(u"sensors"_s, {}, parent);
++        m_outputContext = new CommandOutputContext(u"@sensors@"_s, {}, parent);
+         m_outputContext->setAutoRefreshMs(1000);
+     }
+     CommandOutputContext *outputContext() const
+diff --git a/kcms/vulkan/kcm_vulkan.json b/kcms/vulkan/kcm_vulkan.json
+index 9a297a07..2c30b20a 100644
+--- a/kcms/vulkan/kcm_vulkan.json
++++ b/kcms/vulkan/kcm_vulkan.json
+@@ -102,7 +102,7 @@
+         "Name[zh_CN]": "Vulkan",
+         "Name[zh_TW]": "Vulkan"
+     },
+-    "TryExec": "vulkaninfo",
++    "TryExec": "@vulkaninfo@",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "Vulkan,VideoCard,Hardware Acceleration,Graphics",
+     "X-KDE-Keywords[ar]": "Vulkan,VideoCard,Hardware Acceleration,Graphics,فولكان,بطاقة الفيديو,تسريع الأجهزة,الرسومات",
+diff --git a/kcms/vulkan/main.cpp b/kcms/vulkan/main.cpp
+index 5665d9d2..008f1bf0 100644
+--- a/kcms/vulkan/main.cpp
++++ b/kcms/vulkan/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMVulkan(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("vulkaninfo"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@vulkaninfo@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/wayland/kcm_wayland.json b/kcms/wayland/kcm_wayland.json
+index 66022b79..1756eb0e 100644
+--- a/kcms/wayland/kcm_wayland.json
++++ b/kcms/wayland/kcm_wayland.json
+@@ -108,7 +108,7 @@
+         "Name[zh_CN]": "Wayland",
+         "Name[zh_TW]": "Wayland"
+     },
+-    "TryExec": "wayland-info",
++    "TryExec": "@waylandinfo@",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "Wayland,Compositor,Display,System Information",
+     "X-KDE-Keywords[ar]": "ويلاند,مراكب,عرض,معلومات النّظام",
+diff --git a/kcms/wayland/main.cpp b/kcms/wayland/main.cpp
+index 3a4825c7..4633927b 100644
+--- a/kcms/wayland/main.cpp
++++ b/kcms/wayland/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMWayland(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("wayland-info"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@waylandinfo@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {
+diff --git a/kcms/xserver/kcm_xserver.json b/kcms/xserver/kcm_xserver.json
+index a5e64d94..81190779 100644
+--- a/kcms/xserver/kcm_xserver.json
++++ b/kcms/xserver/kcm_xserver.json
+@@ -148,7 +148,7 @@
+         "Name[zh_CN]": "X 服务器",
+         "Name[zh_TW]": "X 伺服器"
+     },
+-    "TryExec": "xdpyinfo",
++    "TryExec": "@xdpyinfo@",
+     "X-DocPath": "kinfocenter/graphical.html#xserver",
+     "X-KDE-KInfoCenter-Category": "graphical_information",
+     "X-KDE-Keywords": "X,X-Server,XServer,XFree86,Display,VideoCard,System Information",
+diff --git a/kcms/xserver/main.cpp b/kcms/xserver/main.cpp
+index df9af24a..e5983e22 100644
+--- a/kcms/xserver/main.cpp
++++ b/kcms/xserver/main.cpp
+@@ -16,7 +16,7 @@ public:
+     explicit KCMXServer(QObject *parent, const KPluginMetaData &data)
+         : KQuickConfigModule(parent, data)
+     {
+-        m_outputContext = new CommandOutputContext(QStringLiteral("xdpyinfo"), {}, parent);
++        m_outputContext = new CommandOutputContext(QStringLiteral("@xdpyinfo@"), {}, parent);
+     }
+     CommandOutputContext *outputContext() const
+     {

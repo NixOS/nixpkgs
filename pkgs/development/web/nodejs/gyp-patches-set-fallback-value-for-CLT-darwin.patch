@@ -1,0 +1,64 @@
+Sandboxed builds need a fallback value for the version of the Command Line Tools
+being used. Not calling `CLTVersion()` avoids relying on absolute paths,
+improving the reproducibility of non-sandboxed builds.
+
+diff --git a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
+index 508f6ccac3e..44bcd988c4c 100644
+--- a/tools/gyp/pylib/gyp/xcode_emulation.py
++++ b/tools/gyp/pylib/gyp/xcode_emulation.py
+@@ -1495,24 +1495,8 @@ def XcodeVersion():
+     global XCODE_VERSION_CACHE
+     if XCODE_VERSION_CACHE:
+         return XCODE_VERSION_CACHE
+-    version = ""
++    version = "11.0.0.0.1.1567737322"
+     build = ""
+-    try:
+-        version_list = GetStdoutQuiet(["xcodebuild", "-version"]).splitlines()
+-        # In some circumstances xcodebuild exits 0 but doesn't return
+-        # the right results; for example, a user on 10.7 or 10.8 with
+-        # a bogus path set via xcode-select
+-        # In that case this may be a CLT-only install so fall back to
+-        # checking that version.
+-        if len(version_list) < 2:
+-            raise GypError("xcodebuild returned unexpected results")
+-        version = version_list[0].split()[-1]  # Last word on first line
+-        build = version_list[-1].split()[-1]  # Last word on last line
+-    except (GypError, OSError):
+-        # Xcode not installed so look for XCode Command Line Tools
+-        version = CLTVersion()  # macOS Catalina returns 11.0.0.0.1.1567737322
+-        if not version:
+-            raise GypError("No Xcode or CLT version detected!")
+     # Be careful to convert "4.2.3" to "0423" and "11.0.0" to "1100":
+     version = version.split(".")[:3]  # Just major, minor, micro
+     version[0] = version[0].zfill(2)  # Add a leading zero if major is one digit
+ 
+ 
+--- a/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
++++ b/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+@@ -1495,24 +1495,8 @@ def XcodeVersion():
+     global XCODE_VERSION_CACHE
+     if XCODE_VERSION_CACHE:
+         return XCODE_VERSION_CACHE
+-    version = ""
++    version = "11.0.0.0.1.1567737322"
+     build = ""
+-    try:
+-        version_list = GetStdoutQuiet(["xcodebuild", "-version"]).splitlines()
+-        # In some circumstances xcodebuild exits 0 but doesn't return
+-        # the right results; for example, a user on 10.7 or 10.8 with
+-        # a bogus path set via xcode-select
+-        # In that case this may be a CLT-only install so fall back to
+-        # checking that version.
+-        if len(version_list) < 2:
+-            raise GypError("xcodebuild returned unexpected results")
+-        version = version_list[0].split()[-1]  # Last word on first line
+-        build = version_list[-1].split()[-1]  # Last word on last line
+-    except (GypError, OSError):
+-        # Xcode not installed so look for XCode Command Line Tools
+-        version = CLTVersion()  # macOS Catalina returns 11.0.0.0.1.1567737322
+-        if not version:
+-            raise GypError("No Xcode or CLT version detected!")
+     # Be careful to convert "4.2.3" to "0423" and "11.0.0" to "1100":
+     version = version.split(".")[:3]  # Just major, minor, micro
+     version[0] = version[0].zfill(2)  # Add a leading zero if major is one digit

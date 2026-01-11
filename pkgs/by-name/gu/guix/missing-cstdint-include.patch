@@ -1,0 +1,24 @@
+From bdf4159dd5c1cf925512c0eb8490846c084e3c8c Mon Sep 17 00:00:00 2001
+From: Reepca Russelstein
+Date: Tue, 24 Jun 2025 22:35:04 -0500
+Subject: [PATCH] nix: libutil: add <cstdint> include to seccomp.hh.
+
+* nix/libutil/seccomp.hh (<cstdint>): add include of header.
+
+Change-Id: I0a0b2892d81dbab662eda1ba80f4736178d70c65
+---
+ nix/libutil/seccomp.hh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/nix/libutil/seccomp.hh b/nix/libutil/seccomp.hh
+index 634dfad5f8..a4b449fc66 100644
+--- a/nix/libutil/seccomp.hh
++++ b/nix/libutil/seccomp.hh
+@@ -4,6 +4,7 @@
+ #include <linux/audit.h> /* For AUDIT_ARCH_* */
+ #include <linux/seccomp.h>
+ #include <linux/filter.h>
++#include <cstdint>
+ 
+ 
+ /* This file provides two preprocessor macros (among other things):
