@@ -43,6 +43,7 @@ in
           HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
           HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
           HBOX_MODE = "production";
+          HOME = "/var/lib/homebox";
         }
       '';
       description = ''
@@ -92,6 +93,9 @@ in
         HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
         HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
         HBOX_MODE = "production";
+        # Fix this startup issue:
+        #   failed to create modcache index dir: mkdir /var/empty/.cache: read-only file system
+        HOME = "/var/lib/homebox";
       })
 
       (mkIf cfg.database.createLocally {
