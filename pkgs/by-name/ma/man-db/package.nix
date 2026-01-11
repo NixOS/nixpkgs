@@ -15,6 +15,7 @@
   libpipeline,
   libtool,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   pkg-config,
   stdenv,
@@ -131,8 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     !stdenv.hostPlatform.isMusl # iconv binary
   ;
 
-  passthru.tests = {
-    nixos = nixosTests.man;
+  passthru = {
+    tests = {
+      nixos = nixosTests.man;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
