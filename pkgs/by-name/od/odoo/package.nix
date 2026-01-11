@@ -17,8 +17,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchzip {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
@@ -28,22 +27,25 @@ python.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    "${lib.makeBinPath [
-      wkhtmltopdf
-      rtlcss
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        wkhtmltopdf
+        rtlcss
+      ]
+    }"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
+    setuptools
+    distutils
+  ];
+
+  dependencies = with python.pkgs; [
     asn1crypto
     babel
     cbor2
     chardet
     cryptography
-    distutils
     docutils
     freezegun
     geoip2
@@ -57,6 +59,7 @@ python.pkgs.buildPythonApplication rec {
     markupsafe
     num2words
     ofxparse
+    openpyxl
     passlib
     pillow
     polib
