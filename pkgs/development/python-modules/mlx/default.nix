@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
@@ -56,7 +57,7 @@ let
         --replace-fail "nanobind==2.10.2" "nanobind"
 
       substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
-        --replace-fail "g++" "$CXX"
+        --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
     '';
 
     dontUseCmakeConfigure = true;
