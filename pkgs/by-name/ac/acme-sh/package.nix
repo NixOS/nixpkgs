@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
       - Cron job notifications for renewal or error etc.
     '';
     license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.serokell ];
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";
   };

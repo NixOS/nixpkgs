@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage {
       teutat3s
       jk
     ];
-    teams = [ lib.teams.serokell ];
     mainProgram = "deploy";
   };
 }
