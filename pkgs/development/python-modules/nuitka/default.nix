@@ -1,35 +1,51 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
-  ordered-set,
-  python,
+  pythonAtLeast,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  appdirs,
+  jinja2,
+  pyyaml,
+  tqdm,
   zstandard,
-  wheel,
+
+  # tests
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nuitka";
-  version = "2.8.10";
+  version = "4.0.8";
   pyproject = true;
+
+  disabled =
+    # Requires CPython
+    isPyPy
+    # Test failures
+    || (pythonAtLeast "3.14");
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
-    tag = version;
-    hash = "sha256-+CevWpYvqY3SX3/QE7SPlbsFtXkdlNTg9m91VtZCHvM=";
+    tag = finalAttrs.version;
+    hash = "sha256-f12FAItua3VASk2ipesQEalWYREpXidl7Jo3URczf9g=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
-    ordered-set
+    appdirs
+    jinja2
+    pyyaml
+    tqdm
     zstandard
   ];
 
@@ -43,14 +59,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nuitka" ];
 
-  # Requires CPython
-  disabled = isPyPy;
-
   meta = {
     description = "Python compiler with full language support and CPython compatibility";
     license = lib.licenses.asl20;
     homepage = "https://nuitka.net/";
-    # never built on darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin;
+    downloadPage = "https://github.com/Nuitka/Nuitka";
+    changelog = "https://nuitka.net/changelog/Changelog.html";
+    badPlatforms = [
+      # never built on darwin since first introduction in nixpkgs
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
-}
+})
