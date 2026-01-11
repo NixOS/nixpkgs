@@ -7,7 +7,6 @@
   fetchPypi,
   pyjwt,
   python-jose,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
   version = "5.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";

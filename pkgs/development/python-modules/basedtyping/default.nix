@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -19,8 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "basedtyping";
   version = "0.1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "KotlinIsland";

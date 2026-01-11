@@ -6,7 +6,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
   setuptools,
   click-default-group,
@@ -171,8 +170,6 @@ let
     pyproject = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";

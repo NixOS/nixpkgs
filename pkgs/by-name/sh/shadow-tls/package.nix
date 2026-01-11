@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-1oJCdqBa1pWpQ7QvZ0vZaOd73R+SzR9OPf+yoI+RwCY=";
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   # network required
   doCheck = false;

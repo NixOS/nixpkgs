@@ -9,7 +9,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiowatttime";
   version = "2024.06.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";

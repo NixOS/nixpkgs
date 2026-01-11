@@ -17,7 +17,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   requests-toolbelt,
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   pname = "zeep";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mvantellingen";

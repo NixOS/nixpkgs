@@ -26,7 +26,7 @@
   patchelf,
 }:
 let
-  version = "0.16.0";
+  version = "0.17.0";
   # Patch for airshipper to install veloren
   patch =
     let
@@ -65,10 +65,10 @@ rustPlatform.buildRustPackage {
     owner = "Veloren";
     repo = "airshipper";
     tag = "v${version}";
-    hash = "sha256-MHwyXCAqdBzdJlYzSeUXr6bJdTVHcjJ/kGcuAsZCCW8=";
+    hash = "sha256-M89RswC08MZnNfk2T1+rtDajTpDGTnJoZ2U8bU5U2+0=";
   };
 
-  cargoHash = "sha256-TkeB939zV5VvqICFqJd/7uX+ydXyEQOJ3sYQbHbZhP0=";
+  cargoHash = "sha256-ry0hFvMDnotDQu6mqgyt+6hKOvGRJLmZKs3SxEVtDRg=";
 
   buildInputs = [
     fontconfig
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+  env.RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
   postInstall = ''
     install -Dm444 -t "$out/share/applications" "client/assets/net.veloren.airshipper.desktop"

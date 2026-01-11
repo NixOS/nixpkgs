@@ -6,7 +6,6 @@
   pytest,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytest-httpx";
   version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Colin-b";

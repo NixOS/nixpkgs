@@ -4,7 +4,6 @@
   django,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "django-compressor";

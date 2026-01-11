@@ -154,16 +154,6 @@ with lib.maintainers;
     shortName = "c3d2";
   };
 
-  cachix = {
-    # Verify additions to this team with at least one existing member of the team.
-    members = [
-      domenkozar
-      sandydoo
-    ];
-    scope = "Group registration for packages maintained by Cachix.";
-    shortName = "Cachix employees";
-  };
-
   categorization = {
     github = "categorization";
   };
@@ -742,17 +732,20 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  # same as https://github.com/orgs/NixOS/teams/nix-team
+  # keep in-sync with ci/OWNERS
   nix = {
     members = [
-      eelco
-      mic92
-      tomberek
-      roberth
+      artturin
       ericson2314
+      lovesegfault
+      mic92
+      philiptaron
+      roberth
+      tomberek
+      xokdvium
     ];
-    scope = "Maintain the Nix package manager.";
-    shortName = "Nix/nix-cli ecosystem";
+    scope = "Maintain the packaging for the Nix package manager itself.";
+    shortName = "Nix packaging";
     enableFeatureFreezePing = true;
   };
 
@@ -892,22 +885,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  secshell = {
-    members = [
-      felbinger
-      juli0604
-    ];
-    scope = "Maintain packages and modules created by members of Secure Shell Networks.";
-    shortName = "secshell";
-  };
-
-  serokell = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [ balsoft ];
-    scope = "Group registration for Serokell employees who collectively maintain packages.";
-    shortName = "Serokell employees";
-  };
-
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
@@ -921,15 +898,6 @@ with lib.maintainers;
     ];
     scope = "Maintain steam module and packages";
     shortName = "Steam";
-  };
-
-  stridtech = {
-    # Verify additions by approval of an already existing member of the team
-    members = [
-      ulrikstrid
-    ];
-    scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
-    shortName = "StridTech";
   };
 
   swift = {
@@ -959,17 +927,6 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
-  };
-
-  uzinfocom = {
-    members = [
-      orzklv
-      bahrom04
-      bemeritus
-      shakhzodkudratov
-    ];
-    scope = "Maintain Uzbek Linux state & community packages and modules.";
-    shortName = "Uzinfocom Open Source";
   };
 
   wdz = {

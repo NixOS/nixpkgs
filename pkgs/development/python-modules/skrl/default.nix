@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   gym,
   gymnasium,
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   pname = "skrl";
   version = "1.4.3";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Toni-SM";

@@ -176,7 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
       --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
-      --prefix PATH : "${lib.makeBinPath minecraftJdks}" \
+      --prefix PATH : "${
+        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xorg.xrandr)
+      }" \
       --run 'cd $HOME' \
       ''${gappsWrapperArgs[@]}
   '';

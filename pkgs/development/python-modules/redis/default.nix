@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "redis";
   version = "6.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

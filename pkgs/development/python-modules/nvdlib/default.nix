@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "nvdlib";
   version = "0.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Vehemont";

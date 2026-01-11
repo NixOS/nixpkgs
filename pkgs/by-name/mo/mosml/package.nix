@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  # Version 2.10.1 (dated August 2014) breaks with newer compilers
+  env.NIX_CFLAGS_COMPILE = "-fpermissive -std=gnu17";
 
   src = fetchFromGitHub {
     owner = "kfl";

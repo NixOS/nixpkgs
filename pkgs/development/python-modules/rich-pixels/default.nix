@@ -6,7 +6,6 @@
   pillow,
   rich,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "rich-pixels";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "darrenburns";

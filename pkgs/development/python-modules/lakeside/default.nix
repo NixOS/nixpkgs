@@ -4,7 +4,6 @@
   fetchFromGitHub,
   protobuf,
   pycryptodome,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "lakeside";
   version = "0.13";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nkgilley";

@@ -1,12 +1,17 @@
 {
   stdenv,
   config,
+  coreutils,
   lib,
   fetchFromGitHub,
+  runtimeShell,
   cmake,
+  gnugrep,
+  gawk,
   libusb1,
   nlohmann_json,
   ninja,
+  makeWrapper,
   pkg-config,
   gcc,
   libgbm,
@@ -14,6 +19,7 @@
   glfw,
   libGLU,
   curl,
+  v4l-utils,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
   enablePython ? false,
@@ -82,6 +88,7 @@ stdenv'.mkDerivation rec {
     cmake
     ninja
     pkg-config
+    makeWrapper
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -104,8 +111,66 @@ stdenv'.mkDerivation rec {
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
   postInstall = ''
+    libexec=$out/libexec
+
+    mkdir -p $out/lib/udev/rules.d
+    mkdir -p $libexec
+
+    # To be consumed via services.udev.packages.
+    install -m644 ../config/99-realsense-d4xx-mipi-dfu.rules $out/lib/udev/rules.d
+    install -m644 ../config/99-realsense-libusb.rules $out/lib/udev/rules.d
+
+    # Copy all binaries used by rules.
+    install -m755 ../config/usb-R200-in $libexec
+    install -m755 ../config/usb-R200-in_udev $libexec
+    install -m755 ../scripts/rs-enum.sh $libexec
+    install -m755 ../scripts/rs_ipu6_d457_bind.sh $libexec
+
+    # Patch all shebangs.
+    patchShebangs $libexec
+
+    substituteInPlace $libexec/usb-R200-in_udev \
+      --replace-fail '/usr/local/bin/usb-R200-in' $libexec/usb-R200-i
+
+    substituteInPlace $libexec/usb-R200-in \
+      --replace-fail 'lockdir="/dswork.lock"' 'lockdir="/run/lock/dswork.lock"'
+
+    wrapProgram $libexec/rs-enum.sh \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gawk
+          gnugrep
+          v4l-utils
+        ]
+      }
+
+    wrapProgram $libexec/rs_ipu6_d457_bind.sh \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          v4l-utils
+        ]
+      }
+
+    # Replace plugdev group with uaccess tag for modern systemd behavior
+    substituteInPlace $out/lib/udev/rules.d/99-realsense-libusb.rules \
+      --replace-fail "/bin/sh" "${runtimeShell}" \
+      --replace-fail "chmod" "${coreutils}/bin/chmod" \
+      --replace-fail "uname" "${coreutils}/bin/uname" \
+      --replace-fail "sleep" "${coreutils}/bin/sleep" \
+      --replace-fail "cut" "${coreutils}/bin/cut" \
+      --replace-fail 'GROUP:="plugdev"' 'TAG+="uaccess"' \
+      --replace-fail '/usr/local/bin/usb-R200-in_udev' $libexec/usb-R200-in_udev
+
+    substituteInPlace $out/lib/udev/rules.d/99-realsense-d4xx-mipi-dfu.rules \
+      --replace-fail '/bin/bash' '${runtimeShell}' \
+      --replace-fail 'rs_ipu6_d457_bind.sh' $libexec/rs_ipu6_d457_bind.sh \
+      --replace-fail 'rs-enum.sh' $libexec/rs-enum.sh
+
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
-    --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
+      --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   ''
   + lib.optionalString enablePython ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2

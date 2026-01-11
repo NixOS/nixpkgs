@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gops";
-  version = "0.3.28";
+  version = "0.3.29";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gops";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HNM487WSfNWNF31ccDIdotsEG8Mj2C7V85UI47a9drU=";
+    sha256 = "sha256-2xY/e+lqE1XtMMOJ+WmbMWibQMCIoEouOXNIJKEikvs=";
   };
 
-  vendorHash = "sha256-ptC2G7cXcAjthJcAXvuBqI2ZpPuSMBqzO+gJiyaAUP0=";
+  vendorHash = "sha256-mumni9LEUhnJz6RYp1MjjFQd9iXe7V0RjXR+S266WaE=";
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

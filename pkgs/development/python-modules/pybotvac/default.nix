@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
   requests-oauthlib,
   voluptuous,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pybotvac";
   version = "0.0.28";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

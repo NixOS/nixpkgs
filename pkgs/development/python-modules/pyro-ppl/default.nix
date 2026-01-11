@@ -11,7 +11,6 @@
   pandas,
   pillow,
   pyro-api,
-  pythonOlder,
   scikit-learn,
   scipy,
   seaborn,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "pyro-ppl";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";

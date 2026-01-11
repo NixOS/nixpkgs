@@ -7,15 +7,12 @@
   lxml,
   poetry-core,
   pyasn1,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dploot";
   version = "3.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

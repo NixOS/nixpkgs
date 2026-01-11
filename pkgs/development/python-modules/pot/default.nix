@@ -12,7 +12,6 @@
   pymanopt,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "pot";
   version = "0.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PythonOT";

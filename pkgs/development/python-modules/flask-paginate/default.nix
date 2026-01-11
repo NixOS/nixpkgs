@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flask,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flask-paginate";
   version = "2024.4.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lixxu";

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-d2";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
     rev = "v${version}";
-    hash = "sha256-2mpGufQvnIForU0X96Mi65r2xQ+bIj9MdJugMXVPcnM=";
+    hash = "sha256-+pwPJjjXNre5PduNT8oowP1K4CIT8egA5RxBpp2FmVs=";
   };
 
-  cargoHash = "sha256-K4vovc78MiLkWMVS4YDuSK9L7EmwpGdZXdRqeELcPT8=";
+  cargoHash = "sha256-uEHg404q3mYqQVYBds9oExXe+xxzrfM9duvQ8BzCXUc=";
   doCheck = false;
 
   meta = {

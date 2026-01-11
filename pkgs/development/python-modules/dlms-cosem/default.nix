@@ -8,7 +8,6 @@
   pyserial,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   structlog,
   typing-extensions,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dlms-cosem";
   version = "25.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pwitab";

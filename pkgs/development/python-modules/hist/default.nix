@@ -9,15 +9,12 @@
   numpy,
   pytestCheckHook,
   pytest-mpl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hist";
   version = "2.9.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tensorboard-data-server";
   version = "0.7.2";
   format = "wheel";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "tensorboard_data_server";

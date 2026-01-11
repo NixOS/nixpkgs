@@ -55,10 +55,11 @@ async function checkCommitMessages({ github, context, core }) {
 
     const logMsgStart = `Commit ${commit.sha}'s message's subject ("${firstLine}")`
 
-    if (!firstLine.includes(':')) {
+    if (!firstLine.includes(': ')) {
       core.error(
         `${logMsgStart} was detected as not meeting our guidelines because ` +
-          'it does not contain a colon. There are likely other issues as well.',
+          'it does not contain a colon followed by a whitespace.' +
+          'There are likely other issues as well.',
       )
       failures.add(commit.sha)
     }

@@ -98,7 +98,7 @@ let
 
         # we call vimrcContent without 'packages' to avoid the init.vim generation
         neovimRcContent' = lib.concatStringsSep "\n" (
-          vimPackageInfo.userPluginLua ++ lib.optional (neovimRcContent != null) neovimRcContent
+          vimPackageInfo.userPluginViml ++ lib.optional (neovimRcContent != null) neovimRcContent
         );
 
         packpathDirs.myNeovimPackages = vimPackageInfo.vimPackage;

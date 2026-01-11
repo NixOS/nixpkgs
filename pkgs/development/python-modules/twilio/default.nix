@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.9.0";
+  version = "9.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
     tag = version;
-    hash = "sha256-apdEtXPfpUPtBw129ZF5SDnY/P9YIUkw1bfgVvL3yV4=";
+    hash = "sha256-ewG2VgxK8F2G/wogkGnhqZT9M9vrJu9Rdx4uXYNRhrI=";
   };
 
   build-system = [ setuptools ];

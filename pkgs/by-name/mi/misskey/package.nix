@@ -3,7 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   nodejs,
   pnpm_9,
   fetchPnpmDeps,
@@ -18,19 +18,29 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2025.7.0";
+  version = "2025.12.2";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-LtBggq60buNPnGPSbh+TcFODxCoqX+rFdX0P7dYMYI0=";
+    hash = "sha256-7S6m97wHFeITABLcnQiPVGLg6d1xcPCHCp7/7d/w48E=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./pnpm-lock.yaml.patch
-  ];
+  # Misskey converts its YAML config to JSON at runtime, which doesn't work
+  # because it tries to write it to the Nix store. As a workaround, hardcode
+  # this to a path which the service can write to until a better solution is
+  # supported, upstream.
+  # https://github.com/misskey-dev/misskey/issues/17075
+  postPatch = ''
+    substituteInPlace packages/backend/src/config.ts \
+      --replace-fail \
+        "resolve(_dirname, '../../../built/.config.json')" \
+        "resolve('/run/misskey/default.json')"
+    substituteInPlace {.,packages/backend}/package.json \
+      --replace-fail "pnpm compile-config && " ""
+  '';
 
   nativeBuildInputs = [
     nodejs
@@ -47,11 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      patches
       ;
     pnpm = pnpm_9;
     fetcherVersion = 2;
-    hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
+    hash = "sha256-GVzU5YQe7GHn2ddpaGPyLLmhOv5Fy33RL+gBLl3Oyis=";
   };
 
   buildPhase = ''
@@ -88,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
         fi
       '';
     in
+    # bash
     ''
       runHook preInstall
 
@@ -125,7 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.misskey = nixosTests.misskey;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^([0-9.]+)$"
+      ];
+    };
   };
 
   meta = {

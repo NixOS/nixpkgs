@@ -5,7 +5,6 @@
   fetchFromGitHub,
   freezegun,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-datemath";
   version = "3.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nickmaccarthy";

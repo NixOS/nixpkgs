@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   glfw3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "glfw";
   version = "2.10.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "FlorianRhiem";

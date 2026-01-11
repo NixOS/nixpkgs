@@ -15,7 +15,6 @@
   pytestCheckHook,
   pytest-rerunfailures,
   pytest-xdist,
-  pythonOlder,
   pyyaml,
   redis,
   requests,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "requests-cache";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "requests-cache";

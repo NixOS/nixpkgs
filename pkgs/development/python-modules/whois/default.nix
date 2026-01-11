@@ -4,15 +4,12 @@
   fetchFromGitHub,
   hatchling,
   inetutils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "whois";
   version = "0.99.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DannyCork";

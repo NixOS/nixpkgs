@@ -8,10 +8,10 @@
 let
   src = mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.1";
-    buildNumber = "253.29346.138";
+    version = "2025.3.1.1";
+    buildNumber = "253.29346.240";
     buildType = "idea";
-    ideaHash = "sha256-eAq/lgv6ZcN9SR2E1KYnnhDHe/rBQ3GqqbbF6GstDoU=";
+    ideaHash = "sha256-L5O6QjDY3SqSQ1DnQTjIez7pIvPAdtOXP/+B05bAV+Q=";
     androidHash = "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=";
     jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
@@ -57,11 +57,14 @@ mkJetBrainsProduct {
     ''--set M2 "${maven}/maven/bin"''
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/idea/";
-    description = "Free Java, Kotlin, Groovy and Scala IDE from Jetbrains (built from source)";
-    longDescription = "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.";
+    description = "Free Java, Kotlin, Groovy and Scala IDE from JetBrains (built from source)";
+    longDescription = ''
+      IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven.
+      Also known as IntelliJ.
+    '';
     maintainers = with lib.maintainers; [
       gytis-ivaskevicius
       tymscar

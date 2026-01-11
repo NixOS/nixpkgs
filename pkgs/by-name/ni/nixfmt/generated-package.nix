@@ -5,6 +5,7 @@
   base,
   bytestring,
   cmdargs,
+  containers,
   directory,
   fetchzip,
   file-embed,
@@ -23,15 +24,16 @@
 }:
 mkDerivation {
   pname = "nixfmt";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/v1.1.0.tar.gz";
-    sha256 = "19sydkdw1579qmvzx0zq06s23bm6m6l9wp1kvsfhxawk8pkz2pc2";
+    url = "https://github.com/nixos/nixfmt/archive/v1.2.0.tar.gz";
+    sha256 = "1qvj1sddh7bgggqnj7cnhvfh4iz1pwzc9a9awc1g7y349yvpwad3";
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     base
+    containers
     megaparsec
     mtl
     parser-combinators

@@ -80,35 +80,6 @@ let
 in
 self: super:
 {
-  wrapWithXFileSearchPathHook = callPackage (
-    {
-      makeBinaryWrapper,
-      makeSetupHook,
-      writeScript,
-    }:
-    makeSetupHook
-      {
-        name = "wrapWithXFileSearchPathHook";
-        propagatedBuildInputs = [ makeBinaryWrapper ];
-      }
-      (
-        writeScript "wrapWithXFileSearchPathHook.sh" ''
-          wrapWithXFileSearchPath() {
-            paths=(
-              "$out/share/X11/%T/%N"
-              "$out/include/X11/%T/%N"
-              "${xorg.xbitmaps}/include/X11/%T/%N"
-            )
-            for exe in $out/bin/*; do
-              wrapProgram "$exe" \
-                --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
-            done
-          }
-          postInstallHooks+=(wrapWithXFileSearchPath)
-        ''
-      )
-  ) { };
-
   mkfontdir = xorg.mkfontscale;
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
@@ -120,15 +91,6 @@ self: super:
     configureFlags = [
       "--with-sdkdir=${placeholder "dev"}/include/xorg"
     ];
-  });
-
-  xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--with-sdkdir=${placeholder "out"}/include/xorg"
-    ];
-    meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
-    };
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
@@ -156,64 +118,7 @@ self: super:
     ];
   });
 
-  xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # *.pc pulls xorgserver.dev
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-    ];
-  });
-
-  xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--sysconfdir=${placeholder "out"}/etc"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-      "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
-    ];
-
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
-
-  xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
-
-  xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      badPlatforms = lib.platforms.aarch64;
-    };
-  });
-
-  xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      badPlatforms = lib.platforms.aarch64;
-    };
-  });
-
-  xf86videoi128 = super.xf86videoi128.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      badPlatforms = lib.platforms.aarch64;
-    };
-  });
-
-  xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      badPlatforms = lib.platforms.aarch64;
-    };
-  });
-
-  xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      platforms = lib.platforms.linux;
-    };
-  });
 
   xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
@@ -221,34 +126,6 @@ self: super:
 
   xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
-  });
-
-  xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      autoreconfHook
-      buildPackages.xorg.utilmacros # For xorg-utils.m4 macros
-      buildPackages.xorg.xorgserver # For xorg-server.m4 macros
-    ];
-    # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  });
-
-  xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
-  });
-
-  xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
-  });
-
-  xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = isDarwin;
-    }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
@@ -259,10 +136,6 @@ self: super:
         "x86_64-linux"
       ];
     };
-  });
-
-  xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ spice-protocol ];
   });
 
   xf86videosiliconmotion = super.xf86videosiliconmotion.overrideAttrs (attrs: {
@@ -337,8 +210,6 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
-
-  xclock = addMainProgram super.xclock { };
 
   xinit =
     (super.xinit.override {
@@ -423,14 +294,7 @@ self: super:
     ];
   });
 
-  xfd = addMainProgram super.xfd { };
-  xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
-  xkbevd = addMainProgram super.xkbevd { };
-  xkbprint = addMainProgram super.xkbprint { };
-  xload = addMainProgram super.xload { };
-
-  xpr = addMainProgram super.xpr { };
 
   xwd = addMainProgram super.xwd { };
 }

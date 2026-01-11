@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "6.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pynamodb";
     repo = "PynamoDB";

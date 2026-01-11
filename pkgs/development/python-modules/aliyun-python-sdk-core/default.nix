@@ -4,7 +4,6 @@
   cryptography,
   fetchPypi,
   jmespath,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aliyun-python-sdk-core";
   version = "2.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

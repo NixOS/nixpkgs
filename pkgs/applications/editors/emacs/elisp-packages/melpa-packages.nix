@@ -1765,10 +1765,9 @@ let
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
 
           ws-butler = super.ws-butler.overrideAttrs (old: {
-            # work around https://github.com/NixOS/nixpkgs/issues/436534
-            src = pkgs.fetchFromSavannah {
-              repo = "emacs/nongnu";
-              inherit (old.src) rev outputHash outputHashAlgo;
+            # TODO: Remove override when URL was updated in MELPA.
+            src = old.src.override {
+              url = "https://https.git.savannah.gnu.org/git/elpa/nongnu.git";
             };
           });
 

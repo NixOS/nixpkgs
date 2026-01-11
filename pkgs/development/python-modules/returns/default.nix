@@ -12,7 +12,6 @@
   pytest-mypy-plugins,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
   typing-extensions,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "returns";
   version = "0.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dry-python";

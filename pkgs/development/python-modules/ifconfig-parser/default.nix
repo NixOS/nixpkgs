@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "ifconfig-parser";
   version = "0.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KnightWhoSayNi";

@@ -17,8 +17,6 @@ let
       inherit version;
       pyproject = true;
 
-      disabled = pythonOlder "3.7";
-
       src = fetchPypi {
         pname = "mypy_boto3_${toUnderscore serviceName}";
         inherit version hash;
@@ -229,8 +227,8 @@ in
       "sha256-O9OEm8iaNx1MNoaRU1syAkS6AFec3dY7tYtz8o1w5RA=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.42.3"
-      "sha256-lHK0w3Rkp8PMycprE6lw0KaamPvSQapOLXvBeXRcHRg=";
+    buildMypyBoto3Package "cloudfront" "1.42.25"
+      "sha256-xfXJFIEv8Hd+V0oKEw44pwpYyfRPCGO6jKCcXaq8viQ=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.42.3"
@@ -573,8 +571,8 @@ in
       "sha256-N0kQ7Fc44SFKXhl4V+oAclPNlWhluOs53NDokiXcSNM=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.42.3"
-      "sha256-HjRzAQUvBJ0p1oU6rHwM50gvFFeEWN4P85M5KxR4Wh0=";
+    buildMypyBoto3Package "glue" "1.42.25"
+      "sha256-wzYmHUL7I6KOi7PxXk/bUqkSEWD14hkICD+dLo1Gkrs=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.42.3"
       "sha256-wVeFhJIXV8wFQpCizH8IUh6JAFg+S67aTR60dqWk/3M=";
@@ -864,8 +862,8 @@ in
       "sha256-aRL46lVNdGu/D0xioGFn/pVUioEiLm8+5XTgUPHqguo=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.42.17"
-      "sha256-39EjSHBl2k1WXzbIMFcy53Io0lqnuutREPeSl5vlFyU=";
+    buildMypyBoto3Package "medialive" "1.42.25"
+      "sha256-d4fhwg0JmAlApMmQqHw0XwwVEziIlY8JYB5NswQUdUc=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.42.3"
@@ -1364,8 +1362,8 @@ in
       "sha256-NCC+R+BEAT1bZ+J3zvC/FI7lZkHfR8OiCIQUjVefMxY=";
 
   mypy-boto3-transcribe =
-    buildMypyBoto3Package "transcribe" "1.42.3"
-      "sha256-ACxxfBk7jIyqoZ84jTD955w6L40S1N63QpmNEmS7kFA=";
+    buildMypyBoto3Package "transcribe" "1.42.25"
+      "sha256-RQkxMKk7svSYMoPac44m9X0YyEEQWCz/geSRD2qjlI8=";
 
   mypy-boto3-transfer =
     buildMypyBoto3Package "transfer" "1.42.3"
@@ -1424,8 +1422,8 @@ in
       "sha256-bxh+mhwsHHwt/cx/njegTa/QGHu+xa7YPg4SRos1deM=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.42.3"
-      "sha256-YfqjqAgZDNBUqqhwXG/GXF+rkAaYa1NTkKW02zt7yjE=";
+    buildMypyBoto3Package "workspaces" "1.42.24"
+      "sha256-M+FLFC+5NZyLL9opOIIqXF6H5g3YvbqHJ4rpDKL0uKw=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.42.14"

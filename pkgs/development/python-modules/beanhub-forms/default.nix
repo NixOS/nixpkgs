@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   jinja2,
   multidict,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "beanhub-forms";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

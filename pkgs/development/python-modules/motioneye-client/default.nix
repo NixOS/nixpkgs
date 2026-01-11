@@ -9,15 +9,12 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "motioneye-client";
   version = "0.3.14";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";

@@ -15,7 +15,6 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   typing-extensions,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "proxy-py";
   version = "2.4.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "abhinavsingh";

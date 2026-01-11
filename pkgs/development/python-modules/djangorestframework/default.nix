@@ -29,7 +29,6 @@ buildPythonPackage rec {
   pname = "djangorestframework";
   version = "3.16.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";

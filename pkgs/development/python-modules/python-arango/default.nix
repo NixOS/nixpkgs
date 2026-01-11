@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 
   # build-system
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "python-arango";
   version = "8.2.5";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "arangodb";

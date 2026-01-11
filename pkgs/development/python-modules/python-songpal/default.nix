@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   aiohttp,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-songpal";
   version = "0.16.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rytilahti";

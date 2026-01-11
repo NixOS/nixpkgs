@@ -5,15 +5,12 @@
   google-generativeai,
   llama-index-core,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-google";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_google";

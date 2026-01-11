@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.6.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "PennyDreadfulMTG";
     repo = "pystache";

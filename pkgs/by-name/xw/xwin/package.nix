@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwin";
-  version = "0.6.7";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Jake-Shadle";
     repo = "xwin";
     tag = finalAttrs.version;
-    hash = "sha256-od8QnUC0hU9GYE/gRB74BlQezlt9IZq2A4F331wHm7Q=";
+    hash = "sha256-p7rrZ2yxSpGKNuddcSO2wlvsIFj8LYG91tCK1mWO+NY=";
   };
 
-  cargoHash = "sha256-77ArdZ9mOYEon4nzNUNSL0x0UlE1iVujFLwreAd9iMM=";
+  cargoHash = "sha256-e2uYAE2veYDNZpHr40bpIbplg7orW8oIxgZORhPpbFY=";
 
   strictDeps = true;
   nativeBuildInputs = [

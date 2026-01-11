@@ -6,7 +6,6 @@
   packaging,
   paramiko,
   pexpect,
-  pythonOlder,
   requests,
   six,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "fortiosapi";
   version = "1.0.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fortinet-solutions-cse";
