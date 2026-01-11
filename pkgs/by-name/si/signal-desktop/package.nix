@@ -60,10 +60,7 @@ let
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-c76Z+AJCGBXpHPejtZaA2RJpEMy+sd2xvjx+epC1Eqw=";
-    postCheckout = ''
-      git -C "$out" show -s --format=%ct > "$out"/GIT_COMMIT_TIME
-    '';
+    hash = "sha256-Ay4mMurnEDNoFkEhxPn4SWBhrkNg94+AGFMrNA0mTcE=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -155,11 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
+    SOURCE_DATE_EPOCH = 1767827358;
   };
-
-  preConfigure = ''
-    export SOURCE_DATE_EPOCH=`cat GIT_COMMIT_TIME`
-  '';
 
   preBuild = ''
     if [ "`jq -r '.engines.node' < package.json | cut -d. -f1`" != "${lib.versions.major nodejs.version}" ]

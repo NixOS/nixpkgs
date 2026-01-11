@@ -25,7 +25,7 @@ fluent,,,,,,alerque
 funnyfiles.nvim,,,,,,mrcjkb
 fzf-lua,,,,,,mrcjkb
 fzy,,,,,,mrcjkb
-gitsigns.nvim,https://raw.githubusercontent.com/lewis6991/gitsigns.nvim/main/gitsigns.nvim-scm-1.rockspec,,,,5.1,
+gitsigns.nvim,,,,,5.1,
 grug-far.nvim,,,,,,teto
 haskell-tools.nvim,,,,,,mrcjkb
 http,,,,0.4-0,,vcunat
