@@ -8,12 +8,10 @@
   setuptools,
   click,
   dogpile-cache,
-  importlib-metadata,
   jinja2,
   lockfile,
   pydantic,
   python-dateutil,
-  pytz,
   requests,
   taskw,
   debianbts,
@@ -27,6 +25,7 @@
   docutils,
   pytest-subtests,
   responses,
+  ruff,
   sphinx,
   sphinx-click,
   sphinx-inline-tabs,
@@ -34,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "bugwarrior";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "bugwarrior";
     tag = version;
-    hash = "sha256-VuHTrkxLZmQOxyig2krVU9UZDDbLY08MfB9si08lh3E=";
+    hash = "sha256-Px0yOIdXalIJdXMmjMnpl74aaUzaptS8Esy21NMZH98=";
   };
 
   build-system = [ setuptools ];
@@ -49,17 +48,14 @@ buildPythonPackage rec {
   dependencies = [
     click
     dogpile-cache
-    importlib-metadata
     jinja2
     lockfile
     pydantic
     python-dateutil
-    pytz
     requests
     taskw
   ]
   ++ pydantic.optional-dependencies.email;
-  pythonRemoveDeps = [ "tomli" ];
 
   optional-dependencies = {
     bts = [ debianbts ];
@@ -81,6 +77,7 @@ buildPythonPackage rec {
     docutils
     pytest-subtests
     responses
+    ruff
     sphinx
     sphinx-click
     sphinx-inline-tabs
