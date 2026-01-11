@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
-  vscode-generic,
+  buildVscode,
   fetchurl,
   extraCommandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
@@ -11,7 +10,7 @@
 let
   sources = (lib.importJSON ./sources.json).${stdenv.hostPlatform.system};
 in
-(callPackage vscode-generic {
+(buildVscode {
   inherit useVSCodeRipgrep;
   commandLineArgs = extraCommandLineArgs;
 

@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
-  vscode-generic,
+  buildVscode,
   fetchurl,
   appimageTools,
   undmg,
@@ -24,7 +23,7 @@ let
 
   source = sources.${hostPlatform.system};
 in
-(callPackage vscode-generic rec {
+(buildVscode rec {
   inherit useVSCodeRipgrep;
   inherit (sourcesJson) version vscodeVersion;
   commandLineArgs = finalCommandLineArgs;
@@ -66,7 +65,7 @@ in
     homepage = "https://cursor.com";
     changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       aspauldingcode
       prince213
@@ -83,8 +82,4 @@ in
   (oldAttrs: {
     nativeBuildInputs =
       (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
-
-    passthru = (oldAttrs.passthru or { }) // {
-      inherit sources;
-    };
   })

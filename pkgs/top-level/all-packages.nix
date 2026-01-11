@@ -11856,6 +11856,8 @@ with pkgs;
   vscode-fhs = vscode.fhs;
   vscode-fhsWithPackages = vscode.fhsWithPackages;
 
+  buildVscode = callPackage ../applications/editors/vscode/generic.nix { };
+
   vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix { };
 
   vscode-utils = callPackage ../applications/editors/vscode/extensions/vscode-utils.nix { };
@@ -11870,25 +11872,11 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
-  antigravity = callPackage ../by-name/an/antigravity/package.nix {
-    vscode-generic = ../applications/editors/vscode/generic.nix;
-  };
   antigravity-fhs = antigravity.fhs;
   antigravity-fhsWithPackages = antigravity.fhsWithPackages;
 
-  code-cursor = callPackage ../by-name/co/code-cursor/package.nix {
-    vscode-generic = ../applications/editors/vscode/generic.nix;
-  };
   code-cursor-fhs = code-cursor.fhs;
   code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
-
-  windsurf = callPackage ../by-name/wi/windsurf/package.nix {
-    vscode-generic = ../applications/editors/vscode/generic.nix;
-  };
-
-  kiro = callPackage ../by-name/ki/kiro/package.nix {
-    vscode-generic = ../applications/editors/vscode/generic.nix;
-  };
   kiro-fhs = kiro.fhs;
   kiro-fhsWithPackages = kiro.fhsWithPackages;
 
