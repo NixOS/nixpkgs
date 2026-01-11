@@ -8,7 +8,6 @@
   google-api-python-client,
   oauth2client,
   pyopenssl,
-  pythonOlder,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pydrive2";
   version = "1.21.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

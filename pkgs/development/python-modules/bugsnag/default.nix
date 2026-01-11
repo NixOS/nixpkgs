@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flask,
-  pythonOlder,
   setuptools,
   webob,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "bugsnag";
   version = "4.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bugsnag";

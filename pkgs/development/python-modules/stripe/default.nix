@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
   typing-extensions,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "stripe";
   version = "12.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

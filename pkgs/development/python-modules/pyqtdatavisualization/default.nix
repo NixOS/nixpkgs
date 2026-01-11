@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qtdatavis3d,
   setuptools,
   sip,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyqtdatavisualization";
   version = "5.15.6";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyQtDataVisualization";

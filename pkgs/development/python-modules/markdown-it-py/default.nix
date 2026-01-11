@@ -27,7 +27,7 @@
 buildPythonPackage rec {
   pname = "markdown-it-py";
   version = "4.0.0";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

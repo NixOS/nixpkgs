@@ -10,7 +10,6 @@
   pytestCheckHook,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   statsmodels,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "seaborn";
   version = "0.13.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mwaskom";

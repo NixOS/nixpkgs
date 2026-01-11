@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromSourcehut,
-  pythonOlder,
   cmake,
   cython_0,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "palace";
   version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {
     owner = "~cnx";

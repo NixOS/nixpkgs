@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
-  pythonOlder,
   redis,
   setuptools,
   unittestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "karton-core";
   version = "5.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

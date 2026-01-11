@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   jinja2,
@@ -16,7 +15,6 @@
 buildPythonPackage rec {
   pname = "pdoc";
   version = "15.0.4";
-  disabled = pythonOlder "3.9";
 
   pyproject = true;
 

@@ -17,7 +17,6 @@
   pydantic-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
   ruff,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "clarifai";
   version = "11.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Clarifai";

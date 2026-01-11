@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   ci-info,
   ci-py,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "etelemetry";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sensein";

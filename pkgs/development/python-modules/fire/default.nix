@@ -9,15 +9,12 @@
   levenshtein,
   pytestCheckHook,
   termcolor,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fire";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "google";

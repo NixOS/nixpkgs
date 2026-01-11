@@ -9,7 +9,6 @@
   lz4,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "construct";
   version = "2.10.70";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "construct";

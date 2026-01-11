@@ -9,7 +9,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools-scm,
   standard-telnetlib,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "threat9-test-bed";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "threat9";

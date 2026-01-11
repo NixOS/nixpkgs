@@ -6,7 +6,6 @@
   pytest-timeout,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   bashInteractive,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "shtab";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";

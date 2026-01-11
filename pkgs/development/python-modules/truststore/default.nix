@@ -6,7 +6,6 @@
   flit-core,
   httpx,
   pyopenssl,
-  pythonOlder,
   requests,
   trustme,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "truststore";
   version = "0.10.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";

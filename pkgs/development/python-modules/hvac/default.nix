@@ -5,15 +5,12 @@
   pyhcl,
   requests,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hvac";
   version = "2.4.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

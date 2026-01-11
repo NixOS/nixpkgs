@@ -9,7 +9,6 @@
   pycparser,
   pyqt5,
   pyqtwebengine,
-  pythonOlder,
   withGui ? false,
   wrapQtAppsHook,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "vivisect";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

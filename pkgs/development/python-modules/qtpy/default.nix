@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # propagates
   packaging,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "qtpy";
   version = "2.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

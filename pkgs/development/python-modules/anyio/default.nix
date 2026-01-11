@@ -36,8 +36,6 @@ buildPythonPackage rec {
   version = "4.12.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";

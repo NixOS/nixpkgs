@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";

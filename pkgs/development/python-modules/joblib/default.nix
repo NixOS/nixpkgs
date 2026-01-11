@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   pythonAtLeast,
   stdenv,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "joblib";
   version = "1.5.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   jsonschema,
   peewee,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-bKxf+fqm+6V3JgDluKVpqq5hRL3Z+x8SHMRQmNe8vUA=";
   };
-
-  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [
     poetry-core

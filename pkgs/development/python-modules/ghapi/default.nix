@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fastcore,
   packaging,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ghapi";
   version = "1.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fastai";

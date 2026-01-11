@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   regex,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "somajo";
   version = "2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tsproisl";

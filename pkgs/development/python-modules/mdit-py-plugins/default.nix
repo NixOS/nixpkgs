@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
   version = "0.5.0";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

@@ -6,7 +6,6 @@
   jwcrypto,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   simplejson,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "websockify";
   version = "0.13.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "novnc";

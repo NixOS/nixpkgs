@@ -8,7 +8,6 @@
   pytest-httpx,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   segno,
   setuptools-scm,
   syrupy,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "devolo-plc-api";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "2Fake";

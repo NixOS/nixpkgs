@@ -9,7 +9,6 @@
   packaging,
   prance,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "apispec";
   version = "6.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

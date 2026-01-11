@@ -8,7 +8,6 @@
   httpx,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   starlette,
   trio,
   uvicorn,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "httpx-ws";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "frankie567";

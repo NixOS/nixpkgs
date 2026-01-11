@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "py-nightscout";
   version = "1.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marciogranzotto";

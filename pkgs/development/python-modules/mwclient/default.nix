@@ -5,7 +5,6 @@
   mock,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "0.11.0";
   pname = "mwclient";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mwclient";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   html5lib,
   jsonschema,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "pystac";
   version = "1.14.2";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";

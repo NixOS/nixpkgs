@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airtouch4pyapi";
   version = "1.0.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "LonePurpleWolf";

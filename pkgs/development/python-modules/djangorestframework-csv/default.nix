@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   djangorestframework,
   pytestCheckHook,
   pytest-django,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "djangorestframework-csv";
   version = "3.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mjumbewu";

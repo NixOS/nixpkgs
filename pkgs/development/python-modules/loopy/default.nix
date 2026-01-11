@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
 
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "loopy";
   version = "2025.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "inducer";

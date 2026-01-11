@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   jinja2,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "junit2html";
   version = "30.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

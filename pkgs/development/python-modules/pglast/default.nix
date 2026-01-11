@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-cov-stub,
   pytest,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pglast";
   version = "7.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

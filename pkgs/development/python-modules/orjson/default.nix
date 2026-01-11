@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   rustPlatform,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "orjson";
   version = "3.11.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ijl";

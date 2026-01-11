@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-tornado,
   pytest8_3CheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   setuptools-scm,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "apscheduler";
   version = "3.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "agronholm";

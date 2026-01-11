@@ -4,7 +4,6 @@
   fastcore,
   fetchPypi,
   ipython,
-  pythonOlder,
   setuptools,
   traitlets,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "execnb";
   version = "0.1.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

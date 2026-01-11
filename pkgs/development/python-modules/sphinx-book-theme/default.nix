@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   pydata-sphinx-theme,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   version = "1.1.4";
 
   format = "wheel";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version format;
