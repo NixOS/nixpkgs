@@ -78,6 +78,10 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = lib.fix (self: {
     audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
+    # blaxel = [
+    #   blaxel
+    #   websocket-client
+    # ];
     docker = [
       docker
       websocket-client
@@ -92,6 +96,10 @@ buildPythonPackage (finalAttrs: {
       mcp
       mcpadapt
     ];
+    # modal = [
+    #   modal
+    #   websocket-client
+    # ];
     # mlx-lm = [ mlx-lm ];
     openai = [ openai ];
     # telemetry = [
