@@ -21,6 +21,7 @@
   setuptools,
   tabulate,
   typer,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -60,11 +61,10 @@ buildPythonPackage rec {
     pytest-mock
     pytest-test-utils
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
 
