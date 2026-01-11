@@ -330,7 +330,7 @@ let
           # the course of the day to avoid rate limits.
           AccuracySec = "${toString (_24hSecs / numCerts)}s";
           # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
-          RandomizedDelaySec = "24h";
+          RandomizedDelaySec = data.renewJitter;
           FixedRandomDelay = true;
         };
       };
@@ -637,6 +637,18 @@ let
           description = ''
             Systemd calendar expression when to check for renewal. See
             {manpage}`systemd.time(7)`.
+
+            If you reduce this from daily you might also want to adapt {option}`security.acme.defaults.renewJitter`.
+          '';
+        };
+
+        renewJitter = lib.mkOption {
+          type = lib.types.str;
+          inherit (defaultAndText "renewJitter" "24h") default defaultText;
+          description = ''
+            Maximum jitter applied to a timer to stretch its execution
+            intervals to prevent multiple timers from firing simultaneously. See
+            `RandomizedDelaySecs=` in {manpage}`systemd.timer(5)`.
           '';
         };
 
