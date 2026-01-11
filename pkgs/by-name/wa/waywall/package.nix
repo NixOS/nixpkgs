@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   libGL,
   libspng,
@@ -17,7 +17,7 @@
   xorg,
   xwayland,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "waywall";
   version = "0.2025.12.30";
 
