@@ -4,7 +4,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  grapheme,
+  graphemeu,
   pytestCheckHook,
   python,
   pythonOlder,
@@ -13,16 +13,21 @@
 
 buildPythonPackage rec {
   pname = "alive-progress";
-  version = "3.1.5";
+  version = "3.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rsalmei";
     repo = "alive-progress";
     tag = "v${version}";
-    hash = "sha256-yJhl0QrMHET9ISDc/D5AEQ7dTJkmcV2SWqy/xmG18uY=";
+    hash = "sha256-2ymLdmaV7mO6tp5bjmbL/67xLP7Srfpt5m8YhOHGmWQ=";
+    # Avoid downloading heavy images in img directory
+    sparseCheckout = [
+      "alive_progress"
+      "tests"
+    ];
   };
 
   postInstall = ''
@@ -34,10 +39,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     about-time
-    grapheme
+    graphemeu
   ];
 
-  pythonRelaxDeps = [ "about_time" ];
+  pythonRelaxDeps = [
+    "about_time"
+    "graphemeu"
+  ];
 
   nativeCheckInputs = [
     click
