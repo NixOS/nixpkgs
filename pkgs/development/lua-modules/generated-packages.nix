@@ -870,26 +870,29 @@ final: prev: {
   gitsigns-nvim = callPackage (
     {
       buildLuarocksPackage,
-      fetchFromGitHub,
-      lua,
+      fetchurl,
+      fetchzip,
+      luaOlder,
     }:
     buildLuarocksPackage {
       pname = "gitsigns.nvim";
-      version = "scm-1";
-
-      src = fetchFromGitHub {
-        owner = "lewis6991";
-        repo = "gitsigns.nvim";
-        rev = "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e";
-        hash = "sha256-L89x9n2OKCyUuWaNXPkuNGBEU9EBX+9zRlzS1Kfw428=";
+      version = "2.0.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/gitsigns.nvim-2.0.0-1.rockspec";
+          sha256 = "0k4670aqxa6npyxnw7drsi0jic9vrl5izf5wwpbp2i8v1c702w80";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/lewis6991/gitsigns.nvim/archive/42d6aed4e94e0f0bbced16bbdcc42f57673bd75e.zip";
+        sha256 = "0vz3y2kx9ljw8rryypq1s59l8q1l5vwmr3b6p6a2qa4fgpv73krg";
       };
 
-      disabled = lua.luaversion != "5.1";
+      disabled = luaOlder "5.1";
 
       meta = {
         homepage = "https://github.com/lewis6991/gitsigns.nvim";
-        description = "Git signs written in pure lua";
-        license.fullName = "MIT/X11";
+        description = "Git integration for buffers";
+        license.fullName = "MIT";
       };
     }
   ) { };
