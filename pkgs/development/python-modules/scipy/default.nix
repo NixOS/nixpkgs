@@ -209,15 +209,15 @@ buildPythonPackage (finalAttrs: {
     #
     # To verify the hashes are correct.
     datasetsHashes = {
-      ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
-      ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
-      face = "11i8x29h80y7hhyqhil1fg8mxag5f827g33lhnsf44qk116hp2wx";
+      ascent = "sha256-A84STBr8iA+HtV9rBhEQ4uHpOWeRhPVhTjjazGwZV+I=";
+      ecg = "sha256-8grTNl+5t/hF0OXEi2/mcIE3fuRmw6Igt/afNciVi68=";
+      face = "sha256-nYsLTQgTE+K0hXSMdwRy5ale0XOBRog9hMcDBJPoKIY=";
     };
     datasets = lib.mapAttrs (
       d: hash:
       fetchurl {
         url = "https://raw.githubusercontent.com/scipy/dataset-${d}/main/${d}.dat";
-        sha256 = hash;
+        inherit hash;
       }
     ) finalAttrs.finalPackage.passthru.datasetsHashes;
     # Additional cross compilation related properties that scipy reads in scipy/meson.build
