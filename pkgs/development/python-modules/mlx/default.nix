@@ -38,7 +38,7 @@ let
   };
 
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlx";
   version = "0.30.1";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
   };
 
@@ -128,11 +128,11 @@ buildPythonPackage rec {
           nativeBuildInputs = [ python ];
         }
         ''
-          cp ${src}/examples/python/logistic_regression.py .
+          cp ${finalAttrs.src}/examples/python/logistic_regression.py .
           ${python.interpreter} logistic_regression.py
           rm logistic_regression.py
 
-          cp ${src}/examples/python/linear_regression.py .
+          cp ${finalAttrs.src}/examples/python/linear_regression.py .
           ${python.interpreter} linear_regression.py
           rm linear_regression.py
 
@@ -143,7 +143,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/ml-explore/mlx";
     description = "Array framework for Apple silicon";
-    changelog = "https://github.com/ml-explore/mlx/releases/tag/${src.tag}";
+    changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [
@@ -153,4 +153,4 @@ buildPythonPackage rec {
       viraptor
     ];
   };
-}
+})
