@@ -805,6 +805,7 @@ in
 
       security.pam.services.sshd = lib.mkIf (cfg.settings.UsePAM == true) {
         startSession = true;
+        enableUMask = true;
         showMotd = true;
         unixAuth = if cfg.settings.PasswordAuthentication == true then true else false;
       };

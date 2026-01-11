@@ -120,6 +120,7 @@ in
 
     security.pam.services.cockpit = {
       startSession = true;
+      enableUMask = true;
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
