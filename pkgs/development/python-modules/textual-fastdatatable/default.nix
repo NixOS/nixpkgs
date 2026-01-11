@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
+  pandas,
   pyarrow,
   pytz,
   textual,
@@ -15,19 +16,20 @@
 
 buildPythonPackage rec {
   pname = "textual-fastdatatable";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
     tag = "v${version}";
-    hash = "sha256-aQduVFHsdAMwjJzFPqOGB5Ec16YZ9YOYnEK6Ilf96xM=";
+    hash = "sha256-gm1h+r8rZO1/9sXoNwqVuBbv7CpZm2a3YAMHRHGg5uo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    pandas
     pyarrow
     pytz
     textual
@@ -45,6 +47,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  pythonRelaxDeps = [
+    "numpy"
+    "pyarrow"
+  ];
 
   pythonImportsCheck = [ "textual_fastdatatable" ];
 
