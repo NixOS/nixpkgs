@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.35";
+  version = "1.36";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
     tag = "v${version}";
-    hash = "sha256-FQc8R4MJ5RKJi70ADboy2Lw6IwLaI3hup60GcnPxV60=";
+    hash = "sha256-x2xLEcywMaYhq/SWPVu48zTHJW3/MWujjr4y6/uEClU=";
   };
 
   nativeBuildInputs = [ flit-core ];
