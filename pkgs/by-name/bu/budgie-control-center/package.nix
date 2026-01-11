@@ -70,14 +70,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Je3X1V4U2t0LMxWwtoYZKEI56IS4zK/w6OL615tqKkk=";
+    hash = "sha256-K3eSqdk6NO3dirtlX9qrcyNafwFazX8Kwd1w555qGS4=";
   };
 
   patches = [
