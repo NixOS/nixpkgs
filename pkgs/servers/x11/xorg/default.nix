@@ -1,9 +1,12 @@
-# THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
+  config,
+  # keep-sorted start case=no numeric=no block=yes
   appres,
+  automake,
   bdftopcf,
   bitmap,
+  ed,
   editres,
   font-adobe-100dpi,
   font-adobe-75dpi,
@@ -39,10 +42,10 @@
   font-screen-cyrillic,
   font-sony-misc,
   font-sun-misc,
-  fonttosfnt,
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
+  fonttosfnt,
   gccmakedep,
   iceauth,
   ico,
@@ -121,8 +124,8 @@
   xcmsdb,
   xcompmgr,
   xconsole,
-  xcursorgen,
   xcursor-themes,
+  xcursorgen,
   xdm,
   xdpyinfo,
   xdriinfo,
@@ -154,18 +157,24 @@
   xf86-video-nouveau,
   xf86-video-nv,
   xf86-video-omap,
+  xf86-video-openchrome,
   xf86-video-qxl,
   xf86-video-r128,
   xf86-video-s3virge,
+  xf86-video-savage,
+  xf86-video-siliconmotion,
   xf86-video-sis,
   xf86-video-sisusb,
   xf86-video-suncg6,
   xf86-video-sunffb,
   xf86-video-sunleo,
   xf86-video-tdfx,
+  xf86-video-trident,
   xf86-video-v4l,
   xf86-video-vbox,
   xf86-video-vesa,
+  xf86-video-vmware,
+  xf86-video-voodoo,
   xfd,
   xfontsel,
   xfs,
@@ -180,6 +189,7 @@
   xkbprint,
   xkbutils,
   xkeyboard-config,
+  xkeyboard-config_custom,
   xkill,
   xload,
   xlsatoms,
@@ -191,9 +201,9 @@
   xmore,
   xorg-cf-files,
   xorg-docs,
-  xorgproto,
   xorg-server,
   xorg-sgml-doctools,
+  xorgproto,
   xpr,
   xprop,
   xrandr,
@@ -209,11 +219,12 @@
   xwd,
   xwininfo,
   xwud,
+# keep-sorted end
 }:
-
-self: with self; {
-
+_:
+{
   inherit
+    # keep-sorted start case=no numeric=no block=yes
     appres
     bdftopcf
     bitmap
@@ -296,7 +307,10 @@ self: with self; {
     xwd
     xwininfo
     xwud
+    # keep-sorted end
     ;
+
+  # keep-sorted start case=no numeric=no block=yes
   encodings = font-encodings;
   fontadobe100dpi = font-adobe-100dpi;
   fontadobe75dpi = font-adobe-75dpi;
@@ -349,8 +363,8 @@ self: with self; {
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
-  libXfont2 = libxfont_2;
   libXfont = libxfont_1;
+  libXfont2 = libxfont_2;
   libXft = libxft;
   libXi = libxi;
   libXinerama = libxinerama;
@@ -369,14 +383,15 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  mkfontdir = mkfontscale;
   twm = tab-window-manager;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutil = libxcb-util;
   xcbutilcursor = libxcb-cursor;
   xcbutilerrors = libxcb-errors;
   xcbutilimage = libxcb-image;
   xcbutilkeysyms = libxcb-keysyms;
-  xcbutil = libxcb-util;
   xcbutilrenderutil = libxcb-render-util;
   xcbutilwm = libxcb-wm;
   xcursorthemes = xcursor-themes;
@@ -406,270 +421,45 @@ self: with self; {
   xf86videonouveau = xf86-video-nouveau;
   xf86videonv = xf86-video-nv;
   xf86videoomap = xf86-video-omap;
+  xf86videoopenchrome = xf86-video-openchrome;
   xf86videoqxl = xf86-video-qxl;
   xf86videor128 = xf86-video-r128;
   xf86videos3virge = xf86-video-s3virge;
+  xf86videosavage = xf86-video-savage;
+  xf86videosiliconmotion = xf86-video-siliconmotion;
   xf86videosis = xf86-video-sis;
   xf86videosisusb = xf86-video-sisusb;
   xf86videosuncg6 = xf86-video-suncg6;
   xf86videosunffb = xf86-video-sunffb;
   xf86videosunleo = xf86-video-sunleo;
   xf86videotdfx = xf86-video-tdfx;
+  xf86videotrident = xf86-video-trident;
   xf86videov4l = xf86-video-v4l;
   xf86videovboxvideo = xf86-video-vbox;
   xf86videovesa = xf86-video-vesa;
+  xf86videovmware = xf86-video-vmware;
+  xf86videovoodoo = xf86-video-voodoo;
   xkeyboardconfig = xkeyboard-config;
+  xkeyboardconfig_custom = xkeyboard-config_custom;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
+  # keep-sorted end
+}
 
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoopenchrome = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      udev,
-      libpciaccess,
-      libX11,
-      libXext,
-      xorgserver,
-      libXvMC,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-openchrome";
-      version = "0.6.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-openchrome-0.6.0.tar.bz2";
-        sha256 = "0x9gq3hw6k661k82ikd1y2kkk4dmgv310xr5q59dwn4k6z37aafs";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        udev
-        libpciaccess
-        libX11
-        libXext
-        xorgserver
-        libXvMC
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videosavage = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-savage";
-      version = "2.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-savage-2.4.1.tar.xz";
-        sha256 = "1bqhgldb6yahpgav7g7cyc4kl5pm3mgkq8w2qncj36311hb92hb7";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videosiliconmotion = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-siliconmotion";
-      version = "1.7.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.10.tar.xz";
-        sha256 = "1h4g2mqxshaxii416ldw0aqy6cxnsbnzayfin51xm2526dw9q18n";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videotrident = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-trident";
-      version = "1.4.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-trident-1.4.0.tar.xz";
-        sha256 = "16qqn1brz50mwcy42zi1wsw9af56qadsaaiwm9hn1p6plyf22xkz";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videovmware = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      udev,
-      libpciaccess,
-      libX11,
-      libXext,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-vmware";
-      version = "13.4.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz";
-        sha256 = "06mq7spifsrpbwq9b8kn2cn61xq6mpkq6lvh4qi6xk2yxpjixlxf";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        udev
-        libpciaccess
-        libX11
-        libXext
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videovoodoo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-voodoo";
-      version = "1.2.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz";
-        sha256 = "00pn5826aazsdipf7ny03s1lypzid31fmswl8y2hrgf07bq76ab2";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
+# deprecate some packages
+// lib.optionalAttrs config.allowAliases {
+  # keep-sorted start case=no numeric=no block=yes
+  fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
+  libXtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
+  xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
+  xf86videoglint = throw ''
+    The Xorg GLINT/Permedia video driver has been broken since xorg 21.
+    see https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1''; # added 2025-12-13
+  xf86videonewport = throw "The Xorg Newport video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videotga = throw "The Xorg TGA (aka DEC 21030) video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videowsfb = throw "The Xorg BSD wsdisplay framebuffer video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xtrap = throw "XTrap was a proposed X11 extension that hasn't been in Xorg since X11R6 in 1994, it is deprecated and archived upstream."; # added 2025-12-13
+  # keep-sorted end
 }
