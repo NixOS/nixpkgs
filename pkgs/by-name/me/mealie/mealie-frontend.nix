@@ -1,7 +1,6 @@
 src: version:
 {
   lib,
-  fetchFromGitHub,
   fetchYarnDeps,
   dart-sass,
   nodejs,
@@ -17,7 +16,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-qwxsnl9xKzNJEomMB4p8eaiybmlpeUgSUpJtIRhF1Cw=";
+    hash = "sha256-sZk7OEkJdBZRU9ysRDCetzv09XrK5GhPaxxEBD8k5rw=";
   };
 
   nativeBuildInputs = [
