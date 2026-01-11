@@ -211,18 +211,6 @@
             ./Cabal-3.16-paths-fix-cycle-aarch64-darwin.patch
         )
       ]
-      ++ lib.optionals stdenv.targetPlatform.isWindows [
-        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
-        (fetchpatch {
-          name = "include-modern-utimbuf.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
-          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
-        })
-      ]
-      ++ lib.optionals stdenv.targetPlatform.isGhcjs [
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290
-        ./export-heap-methods.patch
-      ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
       # impossible to import an existing flavour in UserSettings, so patching
@@ -274,8 +262,19 @@
         })
       ]
 
-      # Missing ELF symbols
-      ++ lib.optionals stdenv.targetPlatform.isAndroid [
+      # Unreleased or still in-progress upstream
+      ++ [
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
+        (fetchpatch {
+          name = "include-modern-utimbuf.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
+          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
+        })
+
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290 krank:ignore-line
+        ./export-heap-methods.patch
+
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26518 krank:ignore-line
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
 
