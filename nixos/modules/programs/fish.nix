@@ -33,9 +33,11 @@ let
       passAsFile = [ "text" ];
     } "fish --no-config -c 'fish_indent $textPath' > $out";
 
+  useBabelfish = cfg.useBabelfish || !cfg.useForeignEnv;
+
   sourceEnv =
     file:
-    if cfg.useBabelfish then
+    if useBabelfish then
       "source /etc/fish/${file}.fish"
     else
       ''
@@ -46,9 +48,7 @@ let
 
   babelfishTranslate =
     path: name:
-    pkgs.runCommandLocal "${name}.fish" {
-      nativeBuildInputs = [ pkgs.babelfish ];
-    } "babelfish < ${path} > $out;";
+    pkgs.runCommandLocal "${name}.fish" { } "${lib.getExe pkgs.babelfish} < ${path} > $out;";
 in
 {
   options = {
@@ -67,8 +67,21 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
+          Deprecated: use `useForeignEnv = true` to opt into foreign-env instead.
+
           If enabled, the configured environment will be translated to native fish using [babelfish](https://github.com/bouk/babelfish).
-          Otherwise, [foreign-env](https://github.com/oh-my-fish/plugin-foreign-env) will be used.
+        '';
+      };
+
+      useForeignEnv = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          If enabled, use [foreign-env](https://github.com/oh-my-fish/plugin-foreign-env) to source bash scripts.
+          Otherwise, [babelfish](https://github.com/bouk/babelfish) will be used (the default).
+
+          Warning: foreign-env has O(n²) environment diffing overhead (~130ms per shell startup),
+          even when sourcing empty scripts. Only enable this if you have a specific need for it.
         '';
       };
 
@@ -163,7 +176,7 @@ in
     documentation.man.generateCaches = lib.mkDefault true;
 
     environment = lib.mkMerge [
-      (lib.mkIf cfg.useBabelfish {
+      (lib.mkIf useBabelfish {
         etc."fish/setEnvironment.fish".source =
           babelfishTranslate config.system.build.setEnvironment "setEnvironment";
         etc."fish/shellInit.fish".source = babelfishTranslate envShellInit "shellInit";
@@ -172,7 +185,7 @@ in
           babelfishTranslate envInteractiveShellInit "interactiveShellInit";
       })
 
-      (lib.mkIf (!cfg.useBabelfish) {
+      (lib.mkIf (!useBabelfish) {
         etc."fish/foreign-env/shellInit".source = envShellInit;
         etc."fish/foreign-env/loginShellInit".source = envLoginShellInit;
         etc."fish/foreign-env/interactiveShellInit".source = envInteractiveShellInit;
@@ -180,7 +193,7 @@ in
 
       {
         etc."fish/nixos-env-preinit.fish".source =
-          if cfg.useBabelfish then
+          if useBabelfish then
             indentFishFile "nixos-env-preinit.fish" ''
               # source the NixOS environment config
               if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
