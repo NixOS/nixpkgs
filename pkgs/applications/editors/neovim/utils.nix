@@ -343,7 +343,9 @@ let
 
           nativeBuildInputs = [ toNvimTreesitterGrammar ];
 
-          passthru = grammar.passthru or { };
+          passthru = grammar.passthru or { } // {
+            isTreesitterGrammar = true;
+          };
 
           meta = {
             platforms = lib.platforms.all;
