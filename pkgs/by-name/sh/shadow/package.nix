@@ -31,14 +31,14 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
   version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-M7We3JboNpr9H0ELbKcFtMvfmmVYaX9dYcsQ3sVX0lM=";
   };
 
@@ -142,4 +142,4 @@ stdenv.mkDerivation rec {
     # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
   };
-}
+})
