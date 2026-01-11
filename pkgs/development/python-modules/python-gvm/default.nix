@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "26.6.0";
+  version = "26.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "python-gvm";
     tag = "v${version}";
-    hash = "sha256-n/FYPCJ0Fw2WBLA6dAYUzgwDlol1DRgbCywsvMARTWE=";
+    hash = "sha256-9aqX6/Xb0E4+Ar95NwaCXxPTF0m9zLgzQSSacQqaPyc=";
   };
 
   build-system = [ poetry-core ];
