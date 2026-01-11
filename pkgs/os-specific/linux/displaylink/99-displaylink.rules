@@ -1,1 +1,0 @@
-ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="17e9", ATTR{bInterfaceClass}=="ff", ATTR{bInterfaceProtocol}=="03", TAG+="systemd", ENV{SYSTEMD_WANTS}="dlm.service"

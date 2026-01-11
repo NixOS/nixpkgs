@@ -1,8 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'ipaddr'
-gem 'addressable'
-gem 'json'
-gem 'getoptlong'
-gem 'resolv-replace'
-gem 'rchardet'

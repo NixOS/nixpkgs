@@ -1,1 +1,0 @@
-export ROS_OS_OVERRIDE=nixos

@@ -1,6 +1,0 @@
-{
-  mkPrelude,
-}:
-mkPrelude {
-  name = "prelude";
-}

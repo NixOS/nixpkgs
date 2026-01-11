@@ -1,9 +1,0 @@
-{
-    "name": "org.keepassxc.keepassxc_browser",
-    "description": "KeePassXC integration with native messaging support",
-    "path": "@out@/bin/keepassxc-proxy",
-    "type": "stdio",
-    "allowed_extensions": [
-        "keepassxc-browser@keepassxc.org"
-    ]
-}

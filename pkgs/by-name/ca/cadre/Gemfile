@@ -1,3 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'cadre', '=1.0.4'

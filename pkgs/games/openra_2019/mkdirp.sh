@@ -1,4 +1,0 @@
-mkdirp() {
-  mkdir -p "$@"
-  echo "$@"
-}

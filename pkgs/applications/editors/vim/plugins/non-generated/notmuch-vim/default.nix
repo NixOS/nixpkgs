@@ -1,1 +1,0 @@
-{ notmuch }: notmuch.vim
