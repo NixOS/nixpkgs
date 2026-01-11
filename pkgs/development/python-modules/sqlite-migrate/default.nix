@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlite-utils,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sqlite-migrate";
   version = "0.1b0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

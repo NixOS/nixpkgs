@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "objsize";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "liran-funaro";

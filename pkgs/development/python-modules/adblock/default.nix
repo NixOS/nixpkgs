@@ -8,7 +8,6 @@
   pkg-config,
   openssl,
   publicsuffix-list,
-  pythonOlder,
   libiconv,
   pytestCheckHook,
   toml,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "adblock";
   version = "0.6.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   # Pypi only has binary releases
   src = fetchFromGitHub {

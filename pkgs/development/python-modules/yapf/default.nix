@@ -6,7 +6,6 @@
   importlib-metadata,
   platformdirs,
   tomli,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "yapf";
   version = "0.43.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

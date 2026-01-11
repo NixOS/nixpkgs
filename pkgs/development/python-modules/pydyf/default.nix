@@ -7,15 +7,12 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
   version = "0.11.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

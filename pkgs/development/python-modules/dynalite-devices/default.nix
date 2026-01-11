@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dynalite-devices";
   version = "0.1.48";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ziv1234";

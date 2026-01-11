@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   libiconv,
-  pythonOlder,
   rustPlatform,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dbt-extractor";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "dbt_extractor";

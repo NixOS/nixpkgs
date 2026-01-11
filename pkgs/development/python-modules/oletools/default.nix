@@ -9,15 +9,12 @@
   pcodedmp,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "oletools";
   version = "0.60.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "decalage2";

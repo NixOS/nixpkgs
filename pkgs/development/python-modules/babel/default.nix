@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "babel";
   version = "2.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,6 @@
   fetchPypi,
   gssapi,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "requests-gssapi";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

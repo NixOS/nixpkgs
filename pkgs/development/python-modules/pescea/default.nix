@@ -6,15 +6,12 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "pescea";
   version = "1.0.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lazdavila";

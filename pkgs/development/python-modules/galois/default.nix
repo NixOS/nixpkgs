@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   setuptools-scm,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   pytest-xdist,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "galois";
   version = "0.4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mhostetter";

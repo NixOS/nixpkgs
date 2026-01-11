@@ -4,15 +4,12 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-http-client";
   version = "3.3.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sendgrid";

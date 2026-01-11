@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   netifaces,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "greeclimate";
   version = "2.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cmroche";

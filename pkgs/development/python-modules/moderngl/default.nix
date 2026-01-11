@@ -6,15 +6,12 @@
   libX11,
   setuptools,
   glcontext,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "moderngl";
   version = "5.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

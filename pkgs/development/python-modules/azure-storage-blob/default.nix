@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-storage-blob";
   version = "12.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_storage_blob";

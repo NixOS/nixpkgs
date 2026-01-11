@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pefile,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dnfile";
   version = "0.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "malwarefrank";

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   lz4,
   keyring,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "browser-cookie3";
   version = "0.20.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "borisbabic";

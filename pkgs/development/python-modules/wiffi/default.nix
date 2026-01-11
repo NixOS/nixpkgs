@@ -3,15 +3,12 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "wiffi";
   version = "1.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mampfes";

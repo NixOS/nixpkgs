@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "qiskit-finance";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";

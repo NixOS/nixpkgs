@@ -43,7 +43,6 @@
   pydot,
   pygtrie,
   pyparsing,
-  pythonOlder,
   requests,
   rich,
   ruamel-yaml,
@@ -67,8 +66,6 @@ buildPythonPackage rec {
   pname = "dvc";
   version = "3.64.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";

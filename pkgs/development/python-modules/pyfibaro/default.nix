@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyfibaro";
   version = "0.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rappenze";

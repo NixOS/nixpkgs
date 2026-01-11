@@ -6,7 +6,6 @@
   future,
   python-dateutil,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "py-tes";
   version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ohsu-comp-bio";

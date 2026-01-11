@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   defusedxml,
   pytestCheckHook,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   version = "1.4.1";
   format = "setuptools";
   pyroject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";

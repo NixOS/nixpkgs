@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "docker";
   version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "docker";

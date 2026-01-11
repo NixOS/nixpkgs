@@ -4,7 +4,6 @@
   replaceVars,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   python,
   pkg-config,
   setuptools,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "pygame-ce";
   version = "2.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pygame-community";

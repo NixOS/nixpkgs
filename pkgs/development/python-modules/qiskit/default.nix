@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   cargo,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "qiskit";
   version = "2.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Qiskit";

@@ -9,7 +9,6 @@
   pydantic,
   pydantic-compat,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "app-model";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";

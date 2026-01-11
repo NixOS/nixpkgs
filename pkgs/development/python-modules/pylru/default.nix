@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylru";
   version = "1.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jlhutch";

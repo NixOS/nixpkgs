@@ -10,7 +10,6 @@
   numpy,
   openjpeg,
   pytestCheckHook,
-  pythonOlder,
   scikit-image,
   setuptools,
   replaceVars,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "glymur";
   version = "0.13.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "quintusdias";

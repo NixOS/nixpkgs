@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   scrapy,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage {
   pname = "scrapy-fake-useragent";
   version = "1.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   # PyPi tarball is corrupted
   src = fetchFromGitHub {

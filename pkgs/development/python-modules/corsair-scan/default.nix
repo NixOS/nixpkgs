@@ -5,7 +5,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   tldextract,
   urllib3,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "corsair-scan";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";

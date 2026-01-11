@@ -8,7 +8,6 @@
   mkdocstrings,
   networkx,
   pytestCheckHook,
-  pythonOlder,
   requests,
   typing-extensions,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "canals";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "deepset-ai";

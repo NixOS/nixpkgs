@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   pillow,
   pytestCheckHook,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-barcode";
   version = "0.15.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,6 @@
   jaraco-context,
   keyring,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "keyrings-alt";
   version = "5.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";

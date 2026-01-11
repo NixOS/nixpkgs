@@ -1,5 +1,4 @@
 {
-  pythonOlder,
   buildPythonPackage,
   fetchPypi,
   lib,
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pcbnewtransition";
   version = "0.5.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname;

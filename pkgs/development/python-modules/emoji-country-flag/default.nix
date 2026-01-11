@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   emoji,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "emoji-country-flag";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cvzi";

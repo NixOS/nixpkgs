@@ -5,7 +5,6 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "connect-box";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";

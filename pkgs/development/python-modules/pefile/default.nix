@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pefile";
   version = "2024.8.26";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   # DON'T fetch from github, the repo is >60 MB due to test artifacts, which we cannot use
   src = fetchPypi {

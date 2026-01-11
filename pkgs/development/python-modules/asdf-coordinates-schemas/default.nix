@@ -4,7 +4,6 @@
   asdf,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "asdf-coordinates-schemas";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "asdf-format";

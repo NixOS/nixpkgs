@@ -3,7 +3,6 @@
   buildPythonPackage,
   cerberus,
   fetchFromGitHub,
-  pythonOlder,
   pyyaml,
   ruamel-yaml,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "riscv-config";
   version = "3.18.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";

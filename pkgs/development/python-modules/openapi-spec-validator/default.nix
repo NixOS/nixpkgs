@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "python-openapi";

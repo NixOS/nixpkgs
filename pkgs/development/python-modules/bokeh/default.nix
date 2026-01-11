@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   replaceVars,
   colorama,
   contourpy,
@@ -47,8 +46,6 @@ buildPythonPackage rec {
   # update together with panel which is not straightforward
   version = "3.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

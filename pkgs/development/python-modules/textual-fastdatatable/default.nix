@@ -7,7 +7,6 @@
   pytz,
   textual,
   tzdata,
-  pythonOlder,
   polars,
   pytest-asyncio,
   pytest-textual-snapshot,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "textual-fastdatatable";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tconbeer";

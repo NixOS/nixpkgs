@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "gamble";
   version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jpetrucciani";

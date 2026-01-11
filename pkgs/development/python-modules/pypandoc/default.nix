@@ -5,7 +5,6 @@
   pandoc,
   pandocfilters,
   poetry-core,
-  pythonOlder,
   replaceVars,
   texliveSmall,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.16.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JessicaTegner";

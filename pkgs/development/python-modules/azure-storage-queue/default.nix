@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-storage-queue";
   version = "12.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "azure_storage_queue";

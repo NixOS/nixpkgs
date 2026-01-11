@@ -3,15 +3,12 @@
   requests,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aladdin-connect";
   version = "0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "shoejosh";

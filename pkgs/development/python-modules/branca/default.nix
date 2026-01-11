@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jinja2,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   selenium,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "branca";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-visualization";

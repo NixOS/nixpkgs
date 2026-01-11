@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "httptools";
   version = "0.6.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

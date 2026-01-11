@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   beancount-parser,
   click,
   poetry-core,
@@ -13,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "beancount-black";
   version = "1.0.5";
 
-  disabled = pythonOlder "3.9";
   format = "pyproject";
 
   src = fetchFromGitHub {

@@ -9,7 +9,6 @@
   poetry-core,
   pontos,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "python-gvm";
   version = "26.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";

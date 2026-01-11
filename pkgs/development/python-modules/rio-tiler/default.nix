@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   attrs,
   boto3,
@@ -24,7 +23,6 @@ buildPythonPackage rec {
   pname = "rio-tiler";
   version = "7.8.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";

@@ -8,7 +8,6 @@
   paramiko,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pywinrm,
   salt,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pytest-testinfra";
   version = "10.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_testinfra";
