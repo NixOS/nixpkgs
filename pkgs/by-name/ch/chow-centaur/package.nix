@@ -6,7 +6,7 @@
   pkg-config,
   cairo,
   libxkbcommon,
-  xcbutilcursor,
+  libxcb-cursor,
   xcbutilkeysyms,
   xcbutil,
   libxrandr,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libxkbcommon
-    xcbutilcursor
+    libxcb-cursor
     xcbutilkeysyms
     xcbutil
     libxrandr

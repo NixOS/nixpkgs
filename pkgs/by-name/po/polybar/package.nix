@@ -16,7 +16,7 @@
   stdenv,
   xcb-proto,
   xcbutil,
-  xcbutilcursor,
+  libxcb-cursor,
   xcbutilimage,
   xcbutilrenderutil,
   xcbutilwm,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     xcb-proto
     xcbutil
-    xcbutilcursor
+    libxcb-cursor
     xcbutilimage
     xcbutilrenderutil
     xcbutilwm

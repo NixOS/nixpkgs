@@ -8404,7 +8404,7 @@ with pkgs;
     libmagic = file;
   };
 
-  xcb-util-cursor = xorg.xcbutilcursor;
+  xcb-util-cursor = libxcb-cursor;
   xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
@@ -9411,7 +9411,7 @@ with pkgs;
   xorg = recurseIntoAttrs (makeScopeWithSplicing' {
     otherSplices = generateSplicesForMkScope "xorg";
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
-    # so as not to have the newly bound xorg items already in scope,  which would
+    # so as not to have the newly bound libxcb-cursor,
     # have created a cycle.
     f = lib.callPackageWith __splicedPackages ../servers/x11/xorg { };
   });

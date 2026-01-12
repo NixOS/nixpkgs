@@ -65,7 +65,7 @@ buildFHSEnv {
       xorg.xcbutil
       xorg.xcbutilimage
       xorg.xcbutilrenderutil
-      xorg.xcbutilcursor
+      libxcb-cursor
       xorg.xcbutilkeysyms
       xorg.xcbutilwm
     ];

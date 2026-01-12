@@ -13,7 +13,7 @@
   makeWrapper,
   pcre2,
   pkg-config,
-  xcbutilcursor,
+  libxcb-cursor,
   xcbutilkeysyms,
   xcbutilwm,
   xcbutil,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libxcb
     pcre2
-    xcbutilcursor
+    libxcb-cursor
     xcbutilkeysyms
     xcbutilwm
     xcbutil

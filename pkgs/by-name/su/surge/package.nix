@@ -13,7 +13,7 @@
   libxcb,
   libxkbcommon,
   xcbutil,
-  xcbutilcursor,
+  libxcb-cursor,
   xcbutilkeysyms,
   zenity,
   curl,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libxkbcommon
     xcbutil
-    xcbutilcursor
+    libxcb-cursor
     xcbutilkeysyms
     zenity
     curl

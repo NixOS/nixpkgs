@@ -18,6 +18,7 @@
   openssl,
   stdenv,
   xorg,
+  libxcb-cursor,
   libxrender,
   libxi,
   libxext,
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm
-    xorg.xcbutilcursor
+    libxcb-cursor
     zlib
   ];
   buildInputs = runtimeDependencies;

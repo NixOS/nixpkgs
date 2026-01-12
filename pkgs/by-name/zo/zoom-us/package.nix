@@ -206,7 +206,7 @@ let
       pkgs.libxtst
       pkgs.libxcb
       pkgs.libxshmfence
-      pkgs.xorg.xcbutilcursor
+      pkgs.libxcb-cursor
       pkgs.xorg.xcbutilimage
       pkgs.xorg.xcbutilkeysyms
       pkgs.xorg.xcbutilrenderutil

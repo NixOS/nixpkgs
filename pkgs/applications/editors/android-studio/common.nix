@@ -42,7 +42,7 @@
   xcbutilrenderutil,
   xcbutilkeysyms,
   xcbutilimage,
-  xcbutilcursor,
+  libxcb-cursor,
   libxkbfile,
   libxcomposite,
   libxcursor,
@@ -175,7 +175,7 @@ let
             xcbutilrenderutil
             xcbutilkeysyms
             xcbutilimage
-            xcbutilcursor
+            libxcb-cursor
             libice
             libsm
             libxkbfile
