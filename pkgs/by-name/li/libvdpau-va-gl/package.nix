@@ -7,7 +7,7 @@
   libx11,
   libpthread-stubs,
   libxau,
-  libXdmcp,
+  libxdmcp,
   libXext,
   libvdpau,
   glib,
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     libx11
     libpthread-stubs
     libxau
-    libXdmcp
+    libxdmcp
     libXext
     libvdpau
     glib

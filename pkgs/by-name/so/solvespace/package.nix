@@ -27,6 +27,7 @@
   pcre,
   util-linuxMinimal, # provides libmount
   xorg,
+  libxdmcp,
   libpthread-stubs,
   zlib,
 }:
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     pcre
     util-linuxMinimal
     libpthread-stubs
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
     zlib
   ];

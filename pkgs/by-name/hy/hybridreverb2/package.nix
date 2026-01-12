@@ -12,7 +12,7 @@
   gtk3,
   pcre,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   at-spi2-core,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     gtk3
     pcre
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     at-spi2-core

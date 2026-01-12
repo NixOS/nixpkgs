@@ -18,7 +18,7 @@
   libjack2,
   libxkbcommon,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   qtbase,
   qtsvg,
   speex,
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     libv4l
     libxkbcommon
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     qtbase
     qtsvg
     speex

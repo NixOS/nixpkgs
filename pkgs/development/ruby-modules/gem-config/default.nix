@@ -66,6 +66,7 @@
   lxc,
   libpcap,
   xorg,
+  libxdmcp,
   libpthread-stubs,
   gtk3,
   lerc,
@@ -182,7 +183,7 @@ in
       libsysprof-capture
       pcre2
       libpthread-stubs
-      xorg.libXdmcp
+      libxdmcp
     ];
   };
 
@@ -194,7 +195,7 @@ in
       libsysprof-capture
       pcre2
       libpthread-stubs
-      xorg.libXdmcp
+      libxdmcp
     ];
   };
 
@@ -565,7 +566,7 @@ in
       libthai
       pcre2
       libpthread-stubs
-      xorg.libXdmcp
+      libxdmcp
       xorg.libXtst
       libxkbcommon
       libepoxy
@@ -871,7 +872,7 @@ in
       libsysprof-capture
       pcre2
       libpthread-stubs
-      xorg.libXdmcp
+      libxdmcp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux

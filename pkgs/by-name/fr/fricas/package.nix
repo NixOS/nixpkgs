@@ -9,7 +9,7 @@
   libsm,
   libXt,
   libxau,
-  libXdmcp,
+  libxdmcp,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libsm
     libXt
     libxau
-    libXdmcp
+    libxdmcp
   ];
 
   # Remove when updating to next version

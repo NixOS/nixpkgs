@@ -19,7 +19,7 @@
   doxygen,
   graphviz,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   unixODBC,
   libgit2,
   libsecret,
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     wxGTK
     gtk3
-    libXdmcp
+    libxdmcp
     gettext
     glew
     glm

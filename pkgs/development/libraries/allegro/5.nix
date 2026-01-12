@@ -21,7 +21,7 @@
   libwebp,
   libx11,
   libxcursor,
-  libXdmcp,
+  libxdmcp,
   libXext,
   libXfixes,
   libXi,
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libx11
     libxcursor
-    libXdmcp
+    libxdmcp
     libXext
     libXfixes
     libXi

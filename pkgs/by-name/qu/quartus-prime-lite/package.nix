@@ -53,7 +53,7 @@ buildFHSEnv rec {
       libice
       libsm
       libxau
-      xorg.libXdmcp
+      libxdmcp
       xorg.libXScrnSaver
       libudev0-shim
       bzip2

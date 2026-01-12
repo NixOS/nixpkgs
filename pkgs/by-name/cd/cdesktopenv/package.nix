@@ -15,7 +15,7 @@
   xbitmaps,
   libjpeg,
   libXmu,
-  libXdmcp,
+  libxdmcp,
   libXScrnSaver,
   bdftopcf,
   ncompress,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     xbitmaps
     libjpeg
     libXmu
-    libXdmcp
+    libxdmcp
     libXScrnSaver
     tcl
     libxaw

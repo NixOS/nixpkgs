@@ -715,7 +715,7 @@ builtins.intersectAttrs super {
   pcap = addExtraLibrary pkgs.libpcap super.pcap;
 
   # https://github.com/NixOS/nixpkgs/issues/53336
-  greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
+  greenclip = addExtraLibrary pkgs.libxdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
   libjwt-typed = addExtraLibrary pkgs.libjwt super.libjwt-typed;

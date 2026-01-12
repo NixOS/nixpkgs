@@ -9,7 +9,7 @@
   libxcb,
   lv2,
   pkg-config,
-  xorg,
+  libxdmcp,
   libpthread-stubs,
   libxshmfence,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libxcb
     lv2
     libpthread-stubs
-    xorg.libXdmcp
+    libxdmcp
     libxshmfence
   ];
 

@@ -12,6 +12,7 @@
   libevdev,
   libpulseaudio,
   xorg,
+  libxdmcp,
   libx11,
   libxcb,
   openssl,
@@ -154,7 +155,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libsepol
     libthai
     libdatrie
-    xorg.libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     libva

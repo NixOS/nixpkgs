@@ -22,7 +22,7 @@
   kiconthemes,
   libpthread-stubs,
   pcre,
-  libXdmcp,
+  libxdmcp,
   libx11,
   libxau, # X11 dependencies
   fetchpatch,
@@ -78,7 +78,7 @@ mkDerivation rec {
     frameworkintegration
     libpthread-stubs
     pcre
-    libXdmcp
+    libxdmcp
     libx11
     libxau
   ]

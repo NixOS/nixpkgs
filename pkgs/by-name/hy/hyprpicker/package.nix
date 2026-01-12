@@ -15,7 +15,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  libXdmcp,
+  libxdmcp,
   debug ? false,
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wayland-scanner
-    libXdmcp
+    libxdmcp
   ];
 
   postInstall = ''

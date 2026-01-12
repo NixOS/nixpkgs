@@ -8,7 +8,7 @@
   makeWrapper,
   upx,
   boehmgc,
-  xorg,
+  libxdmcp,
   libxau,
   libx11,
   xorgproto,
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxau
-    xorg.libXdmcp
+    libxdmcp
     xorgproto
   ];
 

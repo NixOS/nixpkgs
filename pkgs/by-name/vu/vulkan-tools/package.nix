@@ -11,7 +11,7 @@
   libx11,
   libxau,
   libxcb,
-  libXdmcp,
+  libxdmcp,
   libXrandr,
   vulkan-headers,
   vulkan-loader,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libx11
     libxau
     libxcb
-    libXdmcp
+    libxdmcp
     libXrandr
     wayland
     wayland-protocols

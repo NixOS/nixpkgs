@@ -21,7 +21,7 @@
   glslang,
   gtest,
   hidapi,
-  libXdmcp,
+  libxdmcp,
   libpulseaudio,
   libspng,
   libusb1,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     gtest
     hidapi
-    libXdmcp
+    libxdmcp
     libpulseaudio
     libspng
     libusb1

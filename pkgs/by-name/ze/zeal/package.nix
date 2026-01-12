@@ -7,7 +7,7 @@
   pkg-config,
   httplib,
   libarchive,
-  libXdmcp,
+  libxdmcp,
   libpthread-stubs,
   xcbutilkeysyms,
   qt6,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     httplib
-    libXdmcp
+    libxdmcp
     libarchive
     libpthread-stubs
     qt6.qtbase

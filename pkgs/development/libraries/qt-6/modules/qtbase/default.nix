@@ -14,6 +14,7 @@
   ninja,
   libproxy,
   xorg,
+  libxdmcp,
   zstd,
   double-conversion,
   util-linux,
@@ -156,7 +157,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy

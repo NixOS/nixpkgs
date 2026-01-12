@@ -5,7 +5,7 @@
   autoreconfHook,
   aalib,
   ncurses,
-  xorg,
+  libxdmcp,
   libxau,
   libx11,
   libmikmod,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ncurses
     libmikmod
     libxau
-    xorg.libXdmcp
+    libxdmcp
     libx11
   ];
 

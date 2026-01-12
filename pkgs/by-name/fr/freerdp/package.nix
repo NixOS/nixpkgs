@@ -22,7 +22,7 @@
   libx11,
   libxcursor,
   libxdamage,
-  libXdmcp,
+  libxdmcp,
   libXext,
   libXi,
   libXinerama,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxdamage
-    libXdmcp
+    libxdmcp
     libXext
     libXi
     libXinerama

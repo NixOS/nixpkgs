@@ -8,7 +8,7 @@
   expat,
   jsoncpp,
   libx11,
-  libXdmcp,
+  libxdmcp,
   libXrandr,
   libffi,
   libxcb,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     expat
     jsoncpp
     libx11
-    libXdmcp
+    libxdmcp
     libXrandr
     libffi
     libxcb

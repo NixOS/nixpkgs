@@ -8,7 +8,7 @@
   libvgm,
   libx11,
   libxau,
-  libXdmcp,
+  libxdmcp,
   cppunit,
 }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxau
-    libXdmcp
+    libxdmcp
   ];
 
   checkInputs = [

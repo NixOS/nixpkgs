@@ -541,7 +541,7 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         expat
-        xorg.libXdmcp
+        libxdmcp
       ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = [ pkgs.libpng.dev ];
@@ -1540,7 +1540,7 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         expat
-        xorg.libXdmcp
+        libxdmcp
       ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [

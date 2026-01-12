@@ -36,6 +36,7 @@
   wayland,
   xfconf,
   xorg,
+  libxdmcp,
   libxau,
   yyjson,
   zlib,
@@ -171,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
           libxcb
           # Required by libxcb messages
           libxau
-          xorg.libXdmcp
+          libxdmcp
           xorg.libXext
         ]
         ++ lib.optionals xfceSupport [

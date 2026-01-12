@@ -7,7 +7,7 @@
   libx11,
   libxcb,
   libxau,
-  libXdmcp,
+  libxdmcp,
   config,
   conf ? config.slstatus.conf or null,
   patches ? config.slstatus.patches or [ ],
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcb
     libxau
-    libXdmcp
+    libxdmcp
   ]
   ++ extraLibs;
 

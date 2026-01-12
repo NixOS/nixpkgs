@@ -11,7 +11,7 @@
   libffi,
   libx11,
   libxau,
-  libXdmcp,
+  libxdmcp,
   libxcb,
   vulkan-headers,
   vulkan-loader,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libx11
     libxau
-    libXdmcp
+    libxdmcp
     libxcb
     vulkan-headers
     vulkan-loader

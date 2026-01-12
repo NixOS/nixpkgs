@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   libuv,
-  libXdmcp,
+  libxdmcp,
   libpthread-stubs,
   libxcb,
   pcre,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libuv
-    libXdmcp
+    libxdmcp
     libpthread-stubs
     libxcb
     pcre

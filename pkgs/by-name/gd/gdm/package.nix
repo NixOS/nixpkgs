@@ -12,7 +12,7 @@
   itstool,
   accountsservice,
   libx11,
-  libXdmcp,
+  libxdmcp,
   libxcb,
   gnome,
   systemd,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     keyutils
     libx11
-    libXdmcp
+    libxdmcp
     libxcb
     libgudev
     libselinux

@@ -12,7 +12,7 @@
   opencv4,
   procps,
   eigen,
-  libXdmcp,
+  libxdmcp,
   libevdev,
   makeDesktopItem,
   wineWowPackages,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     finalAttrs.aruco
     eigen
-    libXdmcp
+    libxdmcp
     libevdev
     onnxruntime
     opencv4

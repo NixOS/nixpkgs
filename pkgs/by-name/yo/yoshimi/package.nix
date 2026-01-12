@@ -11,7 +11,7 @@
   libGLU,
   libjack2,
   libsndfile,
-  libXdmcp,
+  libxdmcp,
   lv2,
   minixml,
   pcre,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libGLU
     libjack2
     libsndfile
-    libXdmcp
+    libxdmcp
     lv2
     minixml
     pcre

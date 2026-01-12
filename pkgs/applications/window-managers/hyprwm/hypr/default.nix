@@ -8,7 +8,7 @@
   gtkmm3,
   harfbuzz,
   libx11,
-  libXdmcp,
+  libxdmcp,
   libxcb,
   makeWrapper,
   pcre2,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     harfbuzz
     libx11
-    libXdmcp
+    libxdmcp
     libxcb
     pcre2
     xcbutilcursor

@@ -12,7 +12,7 @@
   libusb1,
   libjpeg,
   libmodule,
-  libXdmcp,
+  libxdmcp,
   util-linux,
   libpthread-stubs,
   enableDdc ? true,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmodule
     libiio
 
-    libXdmcp
+    libxdmcp
     util-linux
     libpthread-stubs
   ]

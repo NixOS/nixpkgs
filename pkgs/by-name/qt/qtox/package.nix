@@ -8,7 +8,7 @@
   kdePackages,
   libtoxcore,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libXScrnSaver,
   ffmpeg,
   filter-audio,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     kdePackages.sonnet
     libtoxcore
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libXScrnSaver
     ffmpeg
     filter-audio

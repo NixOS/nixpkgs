@@ -12,7 +12,7 @@
   libx11,
   libxau,
   libxcb,
-  libXdmcp,
+  libxdmcp,
   libXrandr,
   spirv-headers,
   spirv-tools,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxau
-    libXdmcp
+    libxdmcp
     libXrandr
     libffi
     libxcb

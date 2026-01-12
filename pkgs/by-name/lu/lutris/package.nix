@@ -33,7 +33,7 @@ let
       xorg.libXmu
       libpthread-stubs
       xorg.libXext
-      xorg.libXdmcp
+      libxdmcp
       xorg.libXxf86vm
       xorg.libXinerama
       libsm

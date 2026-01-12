@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   qtbase,
   qttools,
   qtx11extras,
@@ -13,7 +13,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     qttools
     qtx11extras
   ];

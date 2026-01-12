@@ -13,7 +13,7 @@
   libXinerama,
   libXrandr,
   libXtst,
-  libXdmcp,
+  libxdmcp,
   libXext,
   xvfb,
   freetype,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libXrandr
     libXtst
-    libXdmcp
+    libxdmcp
     libXext
     xvfb
     libGL

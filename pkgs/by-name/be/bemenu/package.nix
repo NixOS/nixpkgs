@@ -18,6 +18,7 @@
   wayland-scanner,
   x11Support ? stdenv.hostPlatform.isLinux,
   xorg,
+  libxdmcp,
   libx11,
   libpthread-stubs,
   libxcb,
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     xorg.libXinerama
     xorg.libXft
-    xorg.libXdmcp
+    libxdmcp
     libpthread-stubs
     libxcb
   ];

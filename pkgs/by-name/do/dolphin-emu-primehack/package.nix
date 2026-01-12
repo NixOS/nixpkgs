@@ -17,7 +17,7 @@
   libGL,
   libGLU,
   libsm,
-  libXdmcp,
+  libxdmcp,
   libXext,
   libXinerama,
   libXrandr,
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libsm
-    libXdmcp
+    libxdmcp
     libXext
     libXinerama
     libXrandr

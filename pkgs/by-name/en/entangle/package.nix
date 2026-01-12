@@ -36,6 +36,7 @@
   udev,
   util-linux,
   xorg,
+  libxdmcp,
   zstd,
 }:
 
@@ -107,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     util-linux
     zstd
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
   ];
 

@@ -7,7 +7,7 @@
   glfw3,
   libx11,
   libxau,
-  libXdmcp,
+  libxdmcp,
   libepoxy,
   libffi,
   libxcb,
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     glfw3
     libx11
     libxau
-    libXdmcp
+    libxdmcp
     libepoxy
     libffi
     libxcb

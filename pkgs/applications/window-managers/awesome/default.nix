@@ -11,6 +11,7 @@
   pkg-config,
   gdk-pixbuf,
   xorg,
+  libxdmcp,
   libxau,
   libxshmfence,
   libxcb,
@@ -126,7 +127,7 @@ stdenv.mkDerivation rec {
     pango
     xcb-util-cursor
     libxau
-    xorg.libXdmcp
+    libxdmcp
     libxcb
     libxshmfence
     xorg.xcbutil

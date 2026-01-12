@@ -28,6 +28,7 @@
   libasyncns,
   pango,
   xorg,
+  libxdmcp,
   libxcursor,
   libxau,
   libx11,
@@ -73,7 +74,7 @@ let
     libx11
     libxcb
     libxau
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXext
     libxcursor
     xorg.libXrender

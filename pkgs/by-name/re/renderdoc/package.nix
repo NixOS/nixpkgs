@@ -7,7 +7,7 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  libXdmcp,
+  libxdmcp,
   libglvnd,
   libpthread-stubs,
   makeWrapper,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXdmcp
+    libxdmcp
     libpthread-stubs
     python312Packages.pyside2
     python312Packages.pyside2-tools

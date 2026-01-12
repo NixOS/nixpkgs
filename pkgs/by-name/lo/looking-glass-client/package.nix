@@ -23,7 +23,7 @@
   libXinerama,
   libxcursor,
   libXpresent,
-  libXdmcp,
+  libxdmcp,
 
   wayland,
   wayland-protocols,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXpresent
     libXext
     libXrandr
-    libXdmcp
+    libxdmcp
   ]
   ++ lib.optionals waylandSupport [
     libxkbcommon

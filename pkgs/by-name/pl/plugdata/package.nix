@@ -13,6 +13,7 @@
   zenity,
   curl,
   xorg,
+  libxdmcp,
   libxcursor,
   libx11,
   xvfb,
@@ -69,7 +70,7 @@ stdenv.mkDerivation {
     xorg.libXinerama
     xorg.libXrender
     xorg.libXrandr
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
     xvfb
     libsysprof-capture

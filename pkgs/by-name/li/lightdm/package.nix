@@ -13,7 +13,7 @@
   libtool,
   libxcb,
   glib,
-  libXdmcp,
+  libxdmcp,
   itstool,
   intltool,
   libxklavier,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     accountsservice
     audit
     glib
-    libXdmcp
+    libxdmcp
     libgcrypt
     libxcb
     libxklavier

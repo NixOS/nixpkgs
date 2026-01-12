@@ -7,7 +7,7 @@
   cmake,
   lv2,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libXft,
   ntk,
   pcre,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     cairomm
     lv2
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libXft
     ntk
     pcre

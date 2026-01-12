@@ -24,6 +24,7 @@
   webkitgtk_4_1,
   wrapGAppsHook3,
   xorg,
+  libxdmcp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     sqlite
     webkitgtk_4_1
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
   ];
 

@@ -18,6 +18,7 @@
   util-linux,
   wayland,
   xorg,
+  libxdmcp,
 
   cmake,
   doxygen,
@@ -49,7 +50,7 @@ mkDerivation {
     pcre
     util-linux
     wayland
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
   ];
 

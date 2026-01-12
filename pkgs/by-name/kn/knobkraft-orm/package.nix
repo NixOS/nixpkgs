@@ -24,6 +24,7 @@
   libthai,
   libdatrie,
   xorg,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     libthai
     libdatrie
-    xorg.libXdmcp
+    libxdmcp
     lerc
     libxkbcommon
     libepoxy

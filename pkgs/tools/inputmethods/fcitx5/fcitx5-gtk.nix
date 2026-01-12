@@ -17,7 +17,7 @@
   libsepol,
   libthai,
   libdatrie,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   dbus,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libsepol
     libthai
     libdatrie
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     dbus

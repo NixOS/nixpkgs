@@ -9,6 +9,7 @@
   pkg-config,
   alsa-lib,
   xorg,
+  libxdmcp,
   libxcursor,
   libxcomposite,
   libx11,
@@ -109,7 +110,7 @@ stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libXdmcp
+    libxdmcp
     libGLU
     libjack2
     freetype

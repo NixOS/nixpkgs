@@ -11,7 +11,7 @@
   libnotify,
   pcre,
   sqlite,
-  xorg,
+  libxdmcp,
   libpthread-stubs,
   harfbuzz,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libnotify
     pcre
     sqlite
-    xorg.libXdmcp
+    libxdmcp
     libpthread-stubs
   ];
 

@@ -39,6 +39,7 @@
   ant,
   cups,
   xorg,
+  libxdmcp,
   libxaw,
   libx11,
   libpthread-stubs,
@@ -439,7 +440,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
       libx11
       libxaw
-      xorg.libXdmcp
+      libxdmcp
       xorg.libXext
       xorg.libXi
       xorg.libXinerama

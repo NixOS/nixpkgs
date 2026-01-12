@@ -8,7 +8,7 @@
   glib,
   libappindicator-gtk3,
   libpthread-stubs,
-  xorg,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   at-spi2-core,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libappindicator-gtk3
     libpthread-stubs
-    xorg.libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     at-spi2-core

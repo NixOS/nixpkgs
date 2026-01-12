@@ -14,7 +14,7 @@
   libnl,
   udev,
   libxau,
-  libXdmcp,
+  libxdmcp,
   pcre2,
   pcre,
   util-linux,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     xcbutil
     xcbutilwm
-    libXdmcp
+    libxdmcp
     libxau
     libpulseaudio
     libnl

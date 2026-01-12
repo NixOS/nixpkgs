@@ -7,7 +7,7 @@
   gitUpdater,
   kwindowsystem,
   layer-shell-qt,
-  libXdmcp,
+  libxdmcp,
   libpthread-stubs,
   libqtxdg,
   lxqt-build-tools,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     kwindowsystem
     layer-shell-qt
-    libXdmcp
+    libxdmcp
     libpthread-stubs
     libqtxdg
     qtbase

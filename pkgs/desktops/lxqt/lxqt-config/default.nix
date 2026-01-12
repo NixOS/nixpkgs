@@ -7,7 +7,7 @@
   kwindowsystem,
   libXScrnSaver,
   libxcursor,
-  libXdmcp,
+  libxdmcp,
   libkscreen,
   liblxqt,
   libpthread-stubs,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     kwindowsystem
     libXScrnSaver
     libxcursor
-    libXdmcp
+    libxdmcp
     libkscreen
     liblxqt
     libpthread-stubs

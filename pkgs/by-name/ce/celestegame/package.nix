@@ -145,7 +145,7 @@ buildFHSEnv {
       xorg.libXScrnSaver
       xorg.libXxf86vm
       libxau
-      xorg.libXdmcp
+      libxdmcp
     ];
 
   targetPkgs = pkgs: [ celeste ];

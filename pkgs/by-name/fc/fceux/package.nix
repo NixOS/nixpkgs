@@ -6,7 +6,7 @@
   fetchFromGitHub,
   ffmpeg,
   libx11,
-  libXdmcp,
+  libxdmcp,
   libxcb,
   lua5_1,
   minizip,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     ffmpeg
     libx11
-    libXdmcp
+    libxdmcp
     libxcb
     lua5_1
     minizip

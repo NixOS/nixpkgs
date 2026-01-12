@@ -18,6 +18,7 @@
   libthai,
   libdatrie,
   xorg,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
@@ -84,7 +85,7 @@ stdenv.mkDerivation {
     lerc
     libxkbcommon
     libepoxy
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
   ];
 

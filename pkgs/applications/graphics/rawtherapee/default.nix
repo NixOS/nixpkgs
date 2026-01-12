@@ -19,7 +19,7 @@
   libpthread-stubs,
   gtkmm3,
   libxau,
-  libXdmcp,
+  libxdmcp,
   lcms2,
   libiptcdata,
   fftw,
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     libpthread-stubs
     gtkmm3
     libxau
-    libXdmcp
+    libxdmcp
     lcms2
     libiptcdata
     fftw

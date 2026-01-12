@@ -102,7 +102,7 @@
   libXtst,
   libXfixes,
   xdpyinfo,
-  libXdmcp,
+  libxdmcp,
   dbusSupport ? true,
   dbus,
   joystickSupport ? true,
@@ -355,7 +355,7 @@ stdenv.mkDerivation (
       libXt
       libXmu
       libXext.dev
-      libXdmcp
+      libxdmcp
       libXinerama
       libXrandr.dev
       libXtst

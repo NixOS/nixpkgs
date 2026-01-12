@@ -13,7 +13,7 @@
   libpng,
   libx11,
   libxau,
-  libXdmcp,
+  libxdmcp,
   libxcb,
   makeWrapper,
   mesa,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libx11
     libxau
-    libXdmcp
+    libxdmcp
     libxcb
     vulkan-headers
     vulkan-utility-libraries

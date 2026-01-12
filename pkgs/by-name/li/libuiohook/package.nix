@@ -10,6 +10,7 @@
   libxkbcommon,
   xinput,
   xorg,
+  libxdmcp,
   libxau,
   libxkbfile,
 }:
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     xinput
     libxau
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXi
     xorg.libXinerama
     xorg.libXt

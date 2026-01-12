@@ -10,7 +10,7 @@
   gettext,
   libx11,
   libxau,
-  libXdmcp,
+  libxdmcp,
   libXext,
   libXft,
   libXinerama,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     freetype
     libx11
     libxau
-    libXdmcp
+    libxdmcp
     libXext
     libXft
     libXinerama

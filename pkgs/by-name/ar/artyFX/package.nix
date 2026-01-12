@@ -6,7 +6,7 @@
   cmake,
   libjack2,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libxshmfence,
   libsndfile,
   lv2,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cairomm
     libjack2
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libxshmfence
     libsndfile
     lv2

@@ -10,7 +10,7 @@
   cmake,
   zlib,
   kmod,
-  libXdmcp,
+  libxdmcp,
   qttools,
   qtx11extras,
   libdbusmenu,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     udev
     qtbase
     zlib
-    libXdmcp
+    libxdmcp
     qttools
     qtx11extras
     libdbusmenu

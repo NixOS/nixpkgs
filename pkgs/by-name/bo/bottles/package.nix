@@ -35,7 +35,7 @@ let
             libxcb
             libxcomposite
             libxcursor
-            xorg.libXdmcp
+            libxdmcp
             xorg.libXext
             xorg.libXi
             xorg.libXinerama

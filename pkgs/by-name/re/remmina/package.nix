@@ -24,7 +24,7 @@
   libappindicator-gtk3,
   libvncserver,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libsecret,
   libsoup_3,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     libvncserver
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libsoup_3
     spice-protocol

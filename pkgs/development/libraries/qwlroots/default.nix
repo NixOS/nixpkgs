@@ -15,6 +15,7 @@
   vulkan-loader,
   libinput,
   xorg,
+  libxdmcp,
   seatd,
   wlroots,
 }:
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     vulkan-loader
     libinput
-    xorg.libXdmcp
+    libxdmcp
     xorg.xcbutilerrors
     seatd
   ];

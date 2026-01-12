@@ -10,7 +10,7 @@
   kwindowsystem,
   layer-shell-qt,
   libxdamage,
-  libXdmcp,
+  libxdmcp,
   libXtst,
   libdbusmenu,
   liblxqt,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     kwindowsystem
     layer-shell-qt
     libxdamage
-    libXdmcp
+    libxdmcp
     libXtst
     libdbusmenu
     liblxqt

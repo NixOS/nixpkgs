@@ -7,7 +7,7 @@
   gtkmm3,
   libGLX,
   libx11,
-  libXdmcp,
+  libxdmcp,
   libXext,
   libXinerama,
   libXrandr,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withGtk [
     gtkmm3
     libepoxy
-    libXdmcp
+    libxdmcp
     libXrandr
     pcre2
     portaudio

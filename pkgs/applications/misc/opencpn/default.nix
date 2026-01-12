@@ -44,6 +44,7 @@
   util-linux,
   wxGTK32,
   xorg,
+  libxdmcp,
   xz,
 }:
 
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     libsepol
     util-linux
-    xorg.libXdmcp
+    libxdmcp
     xorg.libXtst
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [

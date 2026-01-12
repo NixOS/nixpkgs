@@ -68,7 +68,7 @@
   libselinux,
   libsepol,
   libx11,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libXtst,
   ocl-icd,
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     libselinux
     libsepol
     libx11
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libXtst
     ocl-icd
