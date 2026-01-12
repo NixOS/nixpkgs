@@ -170,8 +170,8 @@
       "emilazy": 18535642
     },
     "members": {
-      "reckenrode": 7413633,
       "Samasaur1": 30577766,
+      "reckenrode": 7413633,
       "toonn": 1486805
     },
     "name": "darwin-core"
@@ -212,7 +212,6 @@
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
-      "frogamic": 10263813,
       "gador": 1883533,
       "griff": 4368,
       "groodt": 343415,
@@ -277,9 +276,7 @@
   "documentation-team": {
     "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
     "id": 6590023,
-    "maintainers": {
-      "alejandrosame": 1078000
-    },
+    "maintainers": {},
     "members": {
       "hsjobeki": 50398876,
       "wamirez": 24505474
