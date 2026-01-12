@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pkgutil-resolve-name";
   version = "1.3.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pkgutil_resolve_name";

@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "offensive-azure";
   # nixpkgs-update: no auto update
   version = "0.4.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";

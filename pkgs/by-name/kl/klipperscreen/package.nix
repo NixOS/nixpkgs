@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
   version = "0.4.5";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "KlipperScreen";

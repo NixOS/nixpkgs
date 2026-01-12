@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pipdate";
   version = "0.5.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

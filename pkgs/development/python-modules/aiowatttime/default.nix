@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "aiowatttime";
   version = "2024.06.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";

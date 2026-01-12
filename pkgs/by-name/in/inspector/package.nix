@@ -20,7 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "inspector";
   version = "0.2.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";

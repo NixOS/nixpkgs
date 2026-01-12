@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "hatch-odoo";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acsone";

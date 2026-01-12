@@ -35,7 +35,7 @@
 buildPythonPackage rec {
   pname = "napalm";
   version = "5.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napalm-automation";

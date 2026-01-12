@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "torchsde";
   version = "0.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-research";

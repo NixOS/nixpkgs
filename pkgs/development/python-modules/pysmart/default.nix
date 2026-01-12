@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pysmart";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "truenas";

@@ -56,7 +56,6 @@ buildPerlPackage rec {
     description = "Fast PostgreSQL Log Analyzer";
     changelog = "https://github.com/darold/pgbadger/raw/v${version}/ChangeLog";
     license = lib.licenses.postgresql;
-    teams = [ lib.teams.determinatesystems ];
     mainProgram = "pgbadger";
   };
 }

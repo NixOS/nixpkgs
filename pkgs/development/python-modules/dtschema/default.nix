@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "dtschema";
   version = "2025.08";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devicetree-org";

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "python-xapp";
   version = "3.0.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";

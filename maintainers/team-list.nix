@@ -141,12 +141,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  clevercloud = {
-    members = [ floriansanderscc ];
-    scope = "Maintain Clever Cloud related packages.";
-    shortName = "CleverCloud";
-  };
-
   cloudposse = {
     members = [ dudymas ];
     scope = "Maintain atmos and applications made by the Cloud Posse team.";
@@ -235,16 +229,6 @@ with lib.maintainers;
     shortName = "D. E. Shaw employees";
   };
 
-  determinatesystems = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      cole-h
-      grahamc
-    ];
-    scope = "Group registration for packages maintained by Determinate Systems.";
-    shortName = "Determinate Systems employees";
-  };
-
   dhall = {
     members = [
       Gabriella439
@@ -316,19 +300,6 @@ with lib.maintainers;
   flutter = {
     enableFeatureFreezePing = false;
     github = "flutter";
-  };
-
-  flyingcircus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      theuni
-      dpausp
-      frlan
-      leona
-      osnyx
-    ];
-    scope = "Team for Flying Circus employees who collectively maintain packages.";
-    shortName = "Flying Circus employees";
   };
 
   forgejo = {
@@ -558,16 +529,6 @@ with lib.maintainers;
   lua = {
     github = "lua";
     enableFeatureFreezePing = true;
-  };
-
-  lumiguide = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      roelvandijk
-      lucus16
-    ];
-    scope = "Group registration for LumiGuide employees who collectively maintain packages.";
-    shortName = "Lumiguide employees";
   };
 
   lumina = {

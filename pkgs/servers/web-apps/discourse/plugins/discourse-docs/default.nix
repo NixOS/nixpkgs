@@ -14,7 +14,6 @@ mkDiscoursePlugin {
   };
   meta = {
     homepage = "https://github.com/discourse/discourse-docs";
-    maintainers = with lib.maintainers; [ dpausp ];
     license = lib.licenses.mit;
     description = "Find and filter knowledge base topics";
   };

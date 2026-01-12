@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-material-extensions";
   version = "1.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";

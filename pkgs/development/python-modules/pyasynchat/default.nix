@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyasynchat";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonrob";
     repo = "pyasynchat";
     rev = "v${version}";
-    hash = "sha256-Cep8tsapLjhPbVhMrC1ZUgd4jZZLOliL4yF0OX2KrYs=";
+    hash = "sha256-KJmUou1llxUhDrMCOpJxqYNnPpJ0OoQv5VwYs/PJXbs=";
   };
 
   build-system = [

@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "libipld";
   version = "3.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   # use pypi, GitHub does not include Cargo.lock
   src = fetchPypi {
