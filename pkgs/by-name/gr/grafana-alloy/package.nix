@@ -17,17 +17,17 @@
 
 buildGoModule (finalAttrs: rec {
   pname = "grafana-alloy";
-  version = "1.12.1";
+  version = "1.12.2";
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DfezWaLbCty8FiFA+oEqiDoZ1QKIdYGtywQ6t2vm/N0=";
+    hash = "sha256-C/yqsUjEwKnGRkxMOQkKfGdeERbvO/e7D7c3CyJ+cVY=";
   };
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/internal/web/ui";
-    hash = "sha256-mEcPH+kuj+o60sK+JsRAwHauT7vHnZQZ+KBhKcDSeok=";
+    hash = "sha256-3J1Slka5bi+72NUaHBmDTtG1faJWRkOlkClKnUyiUsk=";
   };
 
   frontend = buildNpmPackage {
@@ -48,7 +48,7 @@ buildGoModule (finalAttrs: rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-pZNPJ4rSsvOHubCYKx+CblOUwI6eb6ckHwzRRtyRNu4=";
+  vendorHash = "sha256-Bq/6ld2LldSDhksNqGMHXZAeNHh74D07o2ETpQqMcP4=";
 
   nativeBuildInputs = [
     installShellFiles
