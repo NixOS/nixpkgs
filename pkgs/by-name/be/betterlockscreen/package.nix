@@ -17,6 +17,7 @@
   imagemagick,
   procps,
   xorg,
+  xrandr,
   xdpyinfo,
 }:
 
@@ -32,7 +33,7 @@ let
     imagemagick
     procps
     xdpyinfo
-    xorg.xrandr
+    xrandr
     xorg.xset
   ]
   ++ lib.optionals withDunst [ dunst ];

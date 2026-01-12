@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  xrandr,
   libxshmfence,
 }:
 let
@@ -77,7 +78,7 @@ let
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.xcbutilwm
-      xorg.xrandr
+      xrandr
     ];
 
     strictDeps = true;

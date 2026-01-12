@@ -7,6 +7,7 @@
   openjdk17,
   stdenv,
   xorg,
+  xrandr,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${
         lib.makeBinPath [
           openjdk
-          xorg.xrandr
+          xrandr
         ]
       } \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \

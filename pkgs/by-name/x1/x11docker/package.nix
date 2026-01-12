@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nx-libs,
-  xorg,
+  xrandr,
   xinit,
   xhost,
   xdpyinfo,
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
           xdotool
           xclip
           xpra
-          xorg.xrandr
+          xrandr
           xauth
           weston
           xwayland

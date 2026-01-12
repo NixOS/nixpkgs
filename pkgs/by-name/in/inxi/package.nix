@@ -25,7 +25,7 @@
   pciutils,
   withRecommendedDisplayInformationPrograms ? withRecommends,
   mesa-demos,
-  xorg,
+  xrandr,
   xprop,
   xdpyinfo,
 }:
@@ -52,7 +52,7 @@ let
     mesa-demos
     xdpyinfo
     xprop
-    xorg.xrandr
+    xrandr
   ];
   programs = [
     ps

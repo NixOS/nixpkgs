@@ -16,6 +16,7 @@
   which,
   nodejs,
   xorg,
+  xrandr,
   libxkbfile,
   libpciaccess,
   libXcursor,
@@ -256,7 +257,7 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
+    xrandr
     libXScrnSaver
     libXcursor
     libXrandr

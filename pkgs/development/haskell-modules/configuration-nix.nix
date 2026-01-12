@@ -584,7 +584,7 @@ builtins.intersectAttrs super {
         ++ map lib.getBin [
           pkgs.xorg.xorgserver
           pkgs.xprop
-          pkgs.xorg.xrandr
+          pkgs.xrandr
           pkgs.xdummy
           pkgs.xterm
           pkgs.dbus

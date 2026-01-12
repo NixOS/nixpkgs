@@ -15,7 +15,7 @@ in
   arandr.propagatedBuildInputs = [
     py.tkinter
     pkgs.arandr
-    pkgs.xorg.xrandr
+    pkgs.xrandr
   ];
   # checkupdates is unpackaged
   # arch-update.propagatedBuildInputs = [checkupdates];
@@ -162,7 +162,7 @@ in
   redshift.propagatedBuildInputs = [ pkgs.redshift ];
   # rofication is unpackaged
   # rofication.propagatedBuildInputs = [rofication];
-  rotation.propagatedBuildInputs = [ pkgs.xorg.xrandr ];
+  rotation.propagatedBuildInputs = [ pkgs.xrandr ];
   rss = { };
   sensors.propagatedBuildInputs = [ pkgs.lm_sensors ];
   sensors2.propagatedBuildInputs = [ pkgs.lm_sensors ];
@@ -205,7 +205,7 @@ in
   weather.propagatedBuildInputs = [ py.requests ];
   xkcd = { };
   # i3 is optional
-  xrandr.propagatedBuildInputs = [ pkgs.xorg.xrandr ];
+  xrandr.propagatedBuildInputs = [ pkgs.xrandr ];
   yubikey.propagatedBuildInputs = [ pkgs.yubico ];
   zpool = { };
 }

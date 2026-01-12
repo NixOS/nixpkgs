@@ -177,7 +177,7 @@ buildFHSEnv {
       flex
 
       # WINE
-      xorg.xrandr
+      xrandr
       perl
       which
       p7zip

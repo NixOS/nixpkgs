@@ -15,6 +15,7 @@
   gnugrep,
   findutils,
   xorg,
+  xrandr,
   xmodmap,
   xkbcomp,
   xinit,
@@ -93,7 +94,7 @@ let
     sshfs
     xauth
     xinit
-    xorg.xrandr
+    xrandr
     xmodmap
     xorg.xwininfo
     xorg.fontutil

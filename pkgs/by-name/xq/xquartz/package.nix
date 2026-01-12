@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xrandr,
   xpr,
   xprop,
   xmodmap,
@@ -188,7 +189,7 @@ let
     xmodmap
     xpr
     xprop
-    xorg.xrandr
+    xrandr
     xorg.xrdb
     xorg.xrefresh
     xorg.xset

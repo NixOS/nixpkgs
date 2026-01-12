@@ -24,6 +24,7 @@
     jdk17
   ],
   xorg,
+  xrandr,
   glib,
   libGL,
   glfw,
@@ -177,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
       --prefix PATH : "${
-        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xorg.xrandr)
+        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
       ''${gappsWrapperArgs[@]}

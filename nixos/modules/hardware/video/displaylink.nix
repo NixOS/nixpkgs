@@ -35,7 +35,7 @@ in
 
     # make the device available
     services.xserver.displayManager.sessionCommands = ''
-      ${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 1 0
+      ${lib.getBin pkgs.xrandr}/bin/xrandr --setprovideroutputsource 1 0
     '';
 
     # Those are taken from displaylink-installer.sh and from Arch Linux AUR package.

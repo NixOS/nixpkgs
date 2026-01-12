@@ -12,6 +12,7 @@
   libdbusmenu,
   playerctl,
   xorg,
+  xrandr,
   xinput,
   iio-sensor-proxy,
   inotify-tools,
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     grim
     wf-recorder
     playerctl
-    xorg.xrandr
+    xrandr
     xinput
     xorg.libXdamage
     iio-sensor-proxy

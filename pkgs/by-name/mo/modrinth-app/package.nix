@@ -26,6 +26,7 @@
   udev,
   wrapGAppsHook3,
   xorg,
+  xrandr,
 }:
 
 symlinkJoin {
@@ -79,7 +80,7 @@ symlinkJoin {
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
+        --prefix PATH : ${lib.makeBinPath [ xrandr ]}
         --set LD_LIBRARY_PATH $runtimeDependencies
       ''}
     )

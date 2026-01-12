@@ -119,7 +119,7 @@ rec {
         gtk3
         bashInteractive
         zenity
-        xorg.xrandr
+        xrandr
         which
         perl
         xdg-user-dirs # flutter desktop apps

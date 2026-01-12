@@ -28,6 +28,7 @@
   libxkbcommon,
   libxcb,
   xorg,
+  xrandr,
   libxkbfile,
   wayland,
   libudev0-shim,
@@ -153,7 +154,7 @@ let
         libxcb
         xorg.libX11
         xorg.libXdamage
-        xorg.xrandr
+        xrandr
         xorg.libXtst
         xorg.libXcomposite
         xorg.libXext
