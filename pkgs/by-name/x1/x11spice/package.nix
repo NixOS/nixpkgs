@@ -5,6 +5,7 @@
   autoreconfHook,
   pkg-config,
   xorg,
+  libxcb,
   gtk2,
   spice,
   spice-protocol,
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    xorg.libxcb
+    libxcb
     xorg.xcbutil
     xorg.utilmacros
     gtk2

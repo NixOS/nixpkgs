@@ -6,6 +6,7 @@
   zlib,
   glib,
   xorg,
+  libxcb,
   dbus,
   fontconfig,
   libGL,
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     zlib
     glib
     xorg.libXi
-    xorg.libxcb
+    libxcb
     xorg.libXrender
     xorg.libX11
     xorg.libSM

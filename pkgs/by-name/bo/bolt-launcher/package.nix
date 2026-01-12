@@ -10,6 +10,7 @@
   cef-binary,
   luajit,
   xorg,
+  libxcb,
   libgbm,
   glib,
   jdk17,
@@ -59,7 +60,7 @@ let
     buildInputs = [
       libgbm
       xorg.libX11
-      xorg.libxcb
+      libxcb
       libarchive
       libz
       cef

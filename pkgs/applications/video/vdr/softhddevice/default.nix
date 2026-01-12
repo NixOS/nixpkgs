@@ -10,6 +10,7 @@
   libva,
   libvdpau,
   xorg,
+  libxcb,
   libGL,
   libGLU,
 }:
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libva
     libvdpau
-    xorg.libxcb
+    libxcb
     xorg.libX11
     libGL
     libGLU

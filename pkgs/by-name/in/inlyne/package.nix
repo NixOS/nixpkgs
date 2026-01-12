@@ -7,6 +7,7 @@
   pkg-config,
   fontconfig,
   xorg,
+  libxcb,
   libxkbcommon,
   wayland,
   libGL,
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-    xorg.libxcb
+    libxcb
     wayland
     libxkbcommon
     openssl

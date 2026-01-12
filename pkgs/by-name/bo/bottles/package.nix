@@ -32,7 +32,7 @@ let
             xorg.libSM
             xorg.libX11
             xorg.libXaw
-            xorg.libxcb
+            libxcb
             xorg.libXcomposite
             xorg.libXcursor
             xorg.libXdmcp

@@ -17,6 +17,7 @@
   nss,
   nspr,
   xorg,
+  libxcb,
   systemdLibs,
   fontconfig,
   libdbusmenu,
@@ -115,7 +116,7 @@ stdenv.mkDerivation (
             xorg.libX11
             xorg.libXcomposite
             xorg.libXdamage
-            xorg.libxcb
+            libxcb
             xorg.libXext
             xorg.libXfixes
             xorg.libXrandr

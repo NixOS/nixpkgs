@@ -79,7 +79,7 @@ buildFHSEnv {
       glib
       fontconfig
       freetype
-      xorg.libxcb
+      libxcb
       xorg.libX11
       xorg.xcbutilwm
       xorg.xcbutilimage

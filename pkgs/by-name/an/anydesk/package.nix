@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libxcb,
   minizip,
   lsb-release,
   freetype,
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     polkit_gnome
     pulseaudio
-    xorg.libxcb
+    libxcb
     xorg.libxkbfile
     xorg.libX11
     xorg.libXdamage

@@ -8,6 +8,7 @@
   libxkbcommon,
   wayland,
   xorg,
+  libxcb,
   libGL,
   sqlite,
 }:
@@ -32,7 +33,7 @@ buildGoModule rec {
     xorg.libX11
     xorg.libXcursor
     xorg.libXfixes
-    xorg.libxcb
+    libxcb
     libGL
     sqlite
   ];

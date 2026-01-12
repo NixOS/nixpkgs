@@ -11,6 +11,7 @@
   pkg-config,
   gdk-pixbuf,
   xorg,
+  libxcb,
   libstartup_notification,
   libxdg_basedir,
   libpthreadstubs,
@@ -124,7 +125,7 @@ stdenv.mkDerivation rec {
     xcb-util-cursor
     xorg.libXau
     xorg.libXdmcp
-    xorg.libxcb
+    libxcb
     xorg.libxshmfence
     xorg.xcbutil
     xorg.xcbutilimage

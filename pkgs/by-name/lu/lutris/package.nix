@@ -29,7 +29,7 @@ let
       xorg.libX11
       xorg.libXrender
       xorg.libXrandr
-      xorg.libxcb
+      libxcb
       xorg.libXmu
       xorg.libpthreadstubs
       xorg.libXext

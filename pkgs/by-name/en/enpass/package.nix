@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libxcb,
   glib,
   libGLU,
   libGL,
@@ -56,7 +57,7 @@ let
     xorg.libICE
     xorg.libXrender
     xorg.libXScrnSaver
-    xorg.libxcb
+    libxcb
     libcap
     glib
     gtk3

@@ -15,6 +15,7 @@
   inih,
   withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
   xorg,
+  libxcb,
   libxkbcommon,
   libGL,
   wayland,
@@ -50,7 +51,7 @@ let
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
-      xorg.libxcb
+      libxcb
       xorg.libX11
     ];
     wayland = [

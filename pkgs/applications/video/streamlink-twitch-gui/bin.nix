@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxcb,
   streamlink,
 }:
 let
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     nspr
     libuuid
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage

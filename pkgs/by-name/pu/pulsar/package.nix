@@ -19,6 +19,7 @@
   nss,
   nspr,
   xorg,
+  libxcb,
   libdrm,
   libsecret,
   libxkbcommon,
@@ -63,7 +64,7 @@ let
     nspr
     libdrm
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXext

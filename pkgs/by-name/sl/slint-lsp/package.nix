@@ -8,6 +8,7 @@
   fontconfig,
   libGL,
   xorg,
+  libxcb,
   libxkbcommon,
   wayland,
   versionCheckHook,
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   rpathLibs = [
     fontconfig
     libGL
-    xorg.libxcb
+    libxcb
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     fontconfig
   ];
-  buildInputs = finalAttrs.rpathLibs ++ [ xorg.libxcb.dev ];
+  buildInputs = finalAttrs.rpathLibs ++ [ libxcb.dev ];
 
   # Tests requires `i_slint_backend_testing` which is only a dev dependency
   doCheck = false;

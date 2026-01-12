@@ -20,6 +20,7 @@
   systemd,
   wayland,
   xorg,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     systemd
     wayland
-    xorg.libxcb
+    libxcb
     xorg.libX11
     xorg.libXext
   ];

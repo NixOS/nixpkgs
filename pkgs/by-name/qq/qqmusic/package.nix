@@ -28,6 +28,7 @@
   pciutils,
   udev,
   xorg,
+  libxcb,
 }:
 ################################################################################
 # Mostly based on qqmusic-bin package from AUR:
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     pciutils
     udev
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage

@@ -10,6 +10,7 @@
   fontconfig,
   freetype,
   xorg,
+  libxcb,
   python3,
   git,
 }:
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     freetype
     xorg.libXi
     xorg.libXrender
-    xorg.libxcb
+    libxcb
   ];
 
   nativeBuildInputs = [

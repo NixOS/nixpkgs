@@ -18,6 +18,7 @@
   wayland,
   gobject-introspection,
   xorg,
+  libxcb,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -28,7 +29,7 @@ let
     xorg.libXi
     xorg.libXrandr
     xorg.libXxf86vm
-    xorg.libxcb
+    libxcb
     wayland
   ];
 in

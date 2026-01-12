@@ -40,6 +40,7 @@
   wayland-protocols,
   wayland-scanner,
   xorg,
+  libxcb,
   xwayland,
   debug ? false,
   enableXWayland ? true,
@@ -175,7 +176,7 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
     (optionals enableXWayland [
-      xorg.libxcb
+      libxcb
       xorg.libXdmcp
       xorg.xcbutilerrors
       xorg.xcbutilwm

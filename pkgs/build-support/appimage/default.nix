@@ -189,7 +189,7 @@ rec {
 
         xorg.libXt
         xorg.libXmu
-        xorg.libxcb
+        libxcb
         xorg.xcbutil
         xorg.xcbutilwm
         xorg.xcbutilimage

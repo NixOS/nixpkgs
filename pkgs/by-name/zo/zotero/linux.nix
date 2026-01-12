@@ -16,6 +16,7 @@
   libGL,
   libva,
   xorg,
+  libxcb,
   libgbm,
   pango,
   pciutils,
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
         xorg.libXi
         xorg.libXrandr
         xorg.libXtst
-        xorg.libxcb
+        libxcb
         libgbm
         pango
         pciutils

@@ -38268,7 +38268,7 @@ with self;
     env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
-      pkgs.xorg.libxcb
+      pkgs.libxcb
       pkgs.xorg.xcbproto
       pkgs.xorg.xcbutil
       pkgs.xorg.xcbutilwm

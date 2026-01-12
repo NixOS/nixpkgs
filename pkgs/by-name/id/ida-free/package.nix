@@ -18,6 +18,7 @@
   openssl,
   stdenv,
   xorg,
+  libxcb,
   zlib,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     xorg.libSM
     xorg.libX11
     xorg.libXau
-    xorg.libxcb
+    libxcb
     xorg.libXext
     xorg.libXi
     xorg.libXrender

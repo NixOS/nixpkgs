@@ -12,6 +12,7 @@
   freetype,
   openssl,
   xorg,
+  libxcb,
   libGL,
   libxkbcommon,
   wayland,
@@ -51,12 +52,12 @@ rustPlatform.buildRustPackage rec {
     gtk3
     freetype
     openssl
-    xorg.libxcb
+    libxcb
     xorg.libX11
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXi
-    xorg.libxcb
+    libxcb
     libGL
     libxkbcommon
     wayland

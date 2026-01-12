@@ -8,6 +8,7 @@
   copyDesktopItems,
   autoPatchelfHook,
   xorg,
+  libxcb,
   libpulseaudio,
   libGL,
   udev,
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libxcb
+    libxcb
     stdenv.cc.cc.lib
   ];
 

@@ -10,6 +10,7 @@
   gtk3,
   lib,
   xorg,
+  libxcb,
   libglvnd,
   libjack2,
   ffmpeg,
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     gtk3
-    xorg.libxcb
+    libxcb
     xorg.xcbutil
     xorg.xcbutilwm
     zlib

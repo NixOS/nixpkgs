@@ -27,6 +27,7 @@
   xcb-imdkit,
   xdg-utils,
   xorg,
+  libxcb,
   zlib,
 }:
 
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libnghttp2
-    xorg.libxcb
+    libxcb
     xorg.libXcursor
     xorg.libX11
     xorg.libXtst

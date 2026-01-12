@@ -12,6 +12,7 @@
   ffmpeg,
   pkg-config,
   xorg,
+  libxcb,
   libvdpau,
   libpulseaudio,
   libcec,
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     udev
     SDL2
     ffmpeg
-    xorg.libxcb
+    libxcb
     libvdpau
     libpulseaudio
     libcec

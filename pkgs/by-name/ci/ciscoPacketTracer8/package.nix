@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libxcb,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -90,7 +91,7 @@ let
       xorg.libXrandr
       xorg.libXrender
       xorg.libXtst
-      xorg.libxcb
+      libxcb
       xorg.xcbutilimage
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil

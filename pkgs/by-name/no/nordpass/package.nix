@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libxcb,
   alsa-lib,
   freetype,
   glib,
@@ -73,7 +74,7 @@ let
     xorg.libICE
     xorg.libSM
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage

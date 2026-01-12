@@ -13,6 +13,7 @@
   qttools,
   qtx11extras,
   xorg,
+  libxcb,
   xscreensaver,
   wrapGAppsHook3,
 }:
@@ -45,7 +46,7 @@ mkDerivation rec {
     qtx11extras
     xorg.libXcursor
     xorg.libXdamage
-    xorg.libxcb
+    libxcb
     xorg.xcbutilimage
     xorg.xcbutilwm
     xscreensaver

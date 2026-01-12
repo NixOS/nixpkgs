@@ -30,6 +30,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libxcb,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
     libglvnd
     vulkan-loader # may help with nvidia users
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXext

@@ -42,7 +42,7 @@ appimageTools.wrapType2 {
       unzip
       glib
       xorg.libX11
-      xorg.libxcb
+      libxcb
       xorg.libXcomposite
       xorg.libXcursor
       xorg.libXdamage

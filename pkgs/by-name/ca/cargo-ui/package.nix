@@ -10,6 +10,7 @@
   fontconfig,
   libGL,
   xorg,
+  libxcb,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-    xorg.libxcb
+    libxcb
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxcb,
   pango,
   zlib,
   atkmm,
@@ -77,7 +78,7 @@ let
     xorg.libXext
     xorg.libSM
     xorg.libICE
-    xorg.libxcb
+    libxcb
     libxkbcommon
     xorg.libxshmfence
     xorg.libXi

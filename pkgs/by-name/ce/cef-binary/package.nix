@@ -22,6 +22,7 @@
   udev,
   systemdLibs,
   xorg,
+  libxcb,
   version ? "142.0.10",
   gitRevision ? "29548e2",
   chromiumVersion ? "142.0.7444.135",
@@ -55,7 +56,7 @@ let
     libGL
     udev
     systemdLibs
-    xorg.libxcb
+    libxcb
     xorg.libX11
     xorg.libXcomposite
     xorg.libXdamage

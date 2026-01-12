@@ -24,6 +24,7 @@
   dbus,
   libX11,
   xorg,
+  libxcb,
   libXi,
   libXcursor,
   libXdamage,
@@ -187,7 +188,7 @@ stdenv.mkDerivation rec {
     nss
     pango
     systemdLibs
-    xorg.libxcb
+    libxcb
     xorg.libxshmfence
   ];
 

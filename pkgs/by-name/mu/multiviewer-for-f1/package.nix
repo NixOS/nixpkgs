@@ -22,6 +22,7 @@
   nss,
   pango,
   xorg,
+  libxcb,
   writeScript,
 }:
 let
@@ -60,7 +61,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pango
     xorg.libX11
     xorg.libXcomposite
-    xorg.libxcb
+    libxcb
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

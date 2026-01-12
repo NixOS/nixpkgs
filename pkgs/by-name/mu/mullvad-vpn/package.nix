@@ -21,6 +21,7 @@
   libGL,
   wayland,
   xorg,
+  libxcb,
   autoPatchelfHook,
   systemd,
   libnotify,
@@ -60,7 +61,7 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libxcb
+    libxcb
     xorg.libxshmfence
     nspr
     nss

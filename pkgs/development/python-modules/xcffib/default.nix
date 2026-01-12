@@ -5,6 +5,7 @@
   fetchPypi,
   pytestCheckHook,
   xorg,
+  libxcb,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Hardcode cairo library path
-    sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
+    sed -e 's,ffi\.dlopen(,&"${libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
   propagatedNativeBuildInputs = [ cffi ];

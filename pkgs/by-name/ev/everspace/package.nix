@@ -18,6 +18,7 @@
 
   # Unreal Engine 4 Dependencies
   xorg,
+  libxcb,
 }:
 
 # Known issues:
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libXrender
     xorg.libXxf86vm
-    xorg.libxcb
+    libxcb
   ];
 
   unpackPhase = ''

@@ -20,6 +20,7 @@
   gn,
   openbox,
   xorg,
+  libxcb,
   libglvnd,
   libepoxy,
   wayland,
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
               harfbuzz
               pango
               cairo
-              xorg.libxcb
+              libxcb
               xorg.libX11
               xorg.libXcursor
               xorg.libXrandr

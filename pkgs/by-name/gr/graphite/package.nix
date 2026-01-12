@@ -26,6 +26,7 @@
   libGL,
   libxkbcommon,
   xorg,
+  libxcb,
 }:
 
 let
@@ -124,7 +125,7 @@ let
     openssl
     libxkbcommon
     xorg.libXcursor
-    xorg.libxcb
+    libxcb
     xorg.libX11
   ];
   cef = cef-binary.overrideAttrs {

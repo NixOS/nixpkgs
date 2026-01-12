@@ -56,10 +56,10 @@ buildFHSEnv {
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXtst
-      xorg.libxcb
+      libxcb
       xorg.libXScrnSaver
       xorg.libXrandr
-      xorg.libxcb
+      libxcb
       xorg.libxkbfile
       xorg.libxshmfence
       xorg.xcbutil

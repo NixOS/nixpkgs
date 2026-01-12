@@ -15,6 +15,7 @@
   gnutls,
   libGL,
   xorg,
+  libxcb,
   alsa-lib,
   libjpeg,
   libogg,
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    xorg.libxcb
+    libxcb
     xorg.libX11
     xorg.libXrandr
     xorg.libXcursor

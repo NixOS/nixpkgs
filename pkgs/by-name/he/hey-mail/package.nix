@@ -31,6 +31,7 @@
   pango,
   cairo,
   xorg,
+  libxcb,
   ffmpeg,
   http-parser,
   nss,
@@ -62,7 +63,7 @@ let
     gdk-pixbuf
     pango
     cairo
-    xorg.libxcb
+    libxcb
     xorg.libX11
     xorg.libXcomposite
     xorg.libXcursor

@@ -17,6 +17,7 @@
   cairo,
   pango,
   xorg,
+  libxcb,
   libxkbcommon,
   vulkan-loader,
   libjpeg,
@@ -83,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xorg.libXext
     xorg.libXrandr
     xorg.libXrender
-    xorg.libxcb
+    libxcb
     xorg.libXfixes
     libxkbcommon
     vulkan-loader

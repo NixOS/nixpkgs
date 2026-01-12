@@ -23,6 +23,7 @@
   pango,
   systemd,
   xorg,
+  libxcb,
   autoPatchelfHook,
   wrapGAppsHook3,
   runtimeShell,
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libxcb
+    libxcb
     libdrm
     libgbm
   ];

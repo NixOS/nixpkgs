@@ -10,6 +10,7 @@
 
   ### Libs
   xorg,
+  libxcb,
   libxkbcommon,
   glib,
   nss,
@@ -53,7 +54,7 @@ stdenvNoCC.mkDerivation rec {
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxcb
+    libxcb
 
     ### Systemd libs
     systemdLibs
@@ -96,7 +97,7 @@ stdenvNoCC.mkDerivation rec {
           xorg.libXext
           xorg.libXfixes
           xorg.libXrandr
-          xorg.libxcb
+          libxcb
 
           ### Systemd libs
           systemdLibs

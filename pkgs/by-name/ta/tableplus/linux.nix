@@ -12,6 +12,7 @@
   stdenv,
   wrapGAppsHook3,
   xorg,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender
-    xorg.libxcb
+    libxcb
   ];
 
   unpackPhase = ''

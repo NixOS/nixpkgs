@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxcb,
   buildFHSEnv,
   bash,
   writeText,
@@ -236,7 +237,7 @@ buildFHSEnv {
       xorg.libXt
       xorg.libXtst
       xorg.libXxf86vm
-      xorg.libxcb
+      libxcb
       xorg.xcbutil
       xorg.xcbutilimage
       xorg.xcbutilkeysyms

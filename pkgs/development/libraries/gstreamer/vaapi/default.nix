@@ -14,6 +14,7 @@
   libdrm,
   udev,
   xorg,
+  libxcb,
   libGLU,
   libGL,
   gstreamer,
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     udev
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXext
     xorg.libXv
     xorg.libXrandr

@@ -32,6 +32,7 @@
   vulkan-headers,
   xbyak,
   xorg,
+  libxcb,
   enableQtTranslations ? true,
   qt6,
   enableCubeb ? true,
@@ -122,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     qt6.qtwayland
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [

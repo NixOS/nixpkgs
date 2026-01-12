@@ -14,6 +14,7 @@
   sfml,
   udev,
   xorg,
+  libxcb,
 }:
 mkLibretroCore {
   core = "dolphin";
@@ -48,7 +49,7 @@ mkLibretroCore {
     xorg.libXrandr
     xorg.libXxf86vm
     xorg.libpthreadstubs
-    xorg.libxcb
+    libxcb
     xorg.xcbutil
   ];
 

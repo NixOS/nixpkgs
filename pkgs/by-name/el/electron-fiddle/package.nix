@@ -135,7 +135,7 @@ buildFHSEnv {
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
-      xorg.libxcb
+      libxcb
 
       # for running Electron before 18.3.5/19.0.5/20.0.0 inside
       gdk-pixbuf

@@ -8,6 +8,7 @@
   icu,
   openssl,
   xorg,
+  libxcb,
   gtk3,
   glib,
   nss,
@@ -160,7 +161,7 @@ buildDotnetModule (finalAttrs: {
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxcb
+    libxcb
 
     dbus
     atk

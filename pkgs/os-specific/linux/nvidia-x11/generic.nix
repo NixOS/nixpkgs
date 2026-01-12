@@ -110,7 +110,7 @@ let
         xorg.libX11
         xorg.libXv
         xorg.libXrandr
-        xorg.libxcb
+        libxcb
         zlib
         stdenv.cc.cc
         wayland

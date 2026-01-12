@@ -9,6 +9,7 @@
   ninja,
   cmake,
   xorg,
+  libxcb,
   libdrm,
   libei,
   vulkan-loader,
@@ -129,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     hwdata
     xorg.libX11
-    xorg.libxcb
+    libxcb
     wayland
     wayland-protocols
     vulkan-loader

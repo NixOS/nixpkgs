@@ -93,7 +93,7 @@ let
         xorg.libXdamage
         xorg.libXext
         xorg.libXfixes
-        xorg.libxcb
+        libxcb
       ]);
     runScript = ''
       Typora "$@"

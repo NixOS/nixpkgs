@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libxcb,
   xvidcore,
   zlib,
   zstd,
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrender
     xorg.libXScrnSaver
     xorg.libXtst
-    xorg.libxcb
+    libxcb
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil

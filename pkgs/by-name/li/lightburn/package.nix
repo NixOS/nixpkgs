@@ -13,6 +13,7 @@
   makeDesktopItem,
   copyDesktopItems,
   xorg,
+  libxcb,
   libGL,
   alsa-lib,
   freetype,
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     libgpg-error
     e2fsprogs
     xorg.libX11
-    xorg.libxcb
+    libxcb
     libGL
     alsa-lib
     freetype

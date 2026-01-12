@@ -16,6 +16,7 @@
   libGL,
   libxkbcommon,
   xorg,
+  libxcb,
   wayland,
   vulkan-loader,
 
@@ -39,7 +40,7 @@ makeSetupHook {
       xorg.libX11
       xorg.libXcursor
       xorg.libXi
-      xorg.libxcb
+      libxcb
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       wayland

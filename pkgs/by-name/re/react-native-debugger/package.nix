@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxcb,
   gdk-pixbuf,
   fontconfig,
   pango,
@@ -55,7 +56,7 @@ let
     xorg.libX11
     xorg.libXcursor
     xorg.libXtst
-    xorg.libxcb
+    libxcb
     xorg.libXext
     xorg.libXi
     xorg.libXdamage

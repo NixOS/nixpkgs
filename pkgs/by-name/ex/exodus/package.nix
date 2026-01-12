@@ -13,6 +13,7 @@
   cairo,
   gdk-pixbuf,
   xorg,
+  libxcb,
   xorg_sys_opengl,
   util-linux,
   alsa-lib,
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
         cairo
         gdk-pixbuf
         xorg.libX11
-        xorg.libxcb
+        libxcb
         xorg.libXcomposite
         xorg.libXcursor
         xorg.libXdamage

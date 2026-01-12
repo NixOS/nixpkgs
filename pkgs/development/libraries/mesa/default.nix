@@ -40,6 +40,7 @@
   wayland-scanner,
   xcbutilkeysyms,
   xorg,
+  libxcb,
   zstd,
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
@@ -268,7 +269,7 @@ stdenv.mkDerivation {
     libunwind
     libva-minimal
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr

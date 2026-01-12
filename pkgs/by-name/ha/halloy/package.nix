@@ -13,6 +13,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libxcb,
   alsa-lib,
 }:
 
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
-    xorg.libxcb
+    libxcb
   ];
 
   desktopItems = [

@@ -58,6 +58,7 @@
   x11Support ? true,
   libcanberra,
   xorg,
+  libxcb,
   libmysofa,
   ffadoSupport ?
     x11Support
@@ -167,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libcanberra
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXfixes
   ]
   ++ lib.optionals bluezSupport [

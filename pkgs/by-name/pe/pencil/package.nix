@@ -24,6 +24,7 @@
   nss,
   pango,
   xorg,
+  libxcb,
   systemd,
 }:
 let
@@ -48,7 +49,7 @@ let
     nss
     pango
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

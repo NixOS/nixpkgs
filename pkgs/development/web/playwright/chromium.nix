@@ -32,6 +32,7 @@
   systemd,
   vulkan-loader,
   xorg,
+  libxcb,
   ...
 }:
 let
@@ -86,7 +87,7 @@ let
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
-      xorg.libxcb
+      libxcb
     ];
 
     installPhase = ''

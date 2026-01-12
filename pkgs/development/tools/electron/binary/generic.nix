@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxcb,
   pango,
   systemd,
   pciutils,
@@ -102,7 +103,7 @@ let
     nss
     nspr
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXext

@@ -67,7 +67,7 @@ buildFHSEnv {
       xorg.libXmu
       xorg.libXxf86vm
       libGL
-      xorg.libxcb
+      libxcb
       xorg.xkeyboardconfig
       curl
       dbus

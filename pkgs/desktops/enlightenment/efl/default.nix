@@ -54,6 +54,7 @@
   wayland-scanner,
   writeText,
   xorg,
+  libxcb,
   zlib,
   directoryListingUpdater,
 }:
@@ -143,7 +144,7 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libxcb
+    libxcb
   ];
 
   dontDropIconThemeCache = true;

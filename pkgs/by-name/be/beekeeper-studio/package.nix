@@ -21,6 +21,7 @@
   nss,
   nspr,
   xorg,
+  libxcb,
   alsa-lib,
   expat,
   libxkbcommon,
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxcb
+    libxcb
     libxkbcommon
     glibc
     gcc

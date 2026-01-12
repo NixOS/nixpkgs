@@ -18,6 +18,7 @@
   freetype,
   libGL,
   xorg,
+  libxcb,
   libxkbcommon,
   wayland,
   xdg-utils,
@@ -38,7 +39,7 @@ let
     xorg.libXcursor
     xorg.libXi
     xorg.libXxf86vm
-    xorg.libxcb
+    libxcb
     libxkbcommon
     wayland
   ];

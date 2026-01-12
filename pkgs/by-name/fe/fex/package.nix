@@ -24,6 +24,7 @@
   libGL,
   wayland,
   xorg,
+  libxcb,
   withQt ? true,
   qt6,
 }:
@@ -36,7 +37,7 @@ let
     libGL
     wayland
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXrandr
     xorg.libXrender
     xorg.xorgproto

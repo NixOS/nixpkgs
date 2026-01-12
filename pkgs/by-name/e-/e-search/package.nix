@@ -27,6 +27,7 @@
   pango,
   pangomm,
   xorg,
+  libxcb,
   zlib,
   nix-update-script,
   commandLineArgs ? "",
@@ -112,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
     xorg.libXt
     xorg.libXtst
-    xorg.libxcb
+    libxcb
     zlib
   ];
 

@@ -20,6 +20,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libxcb,
   zlib,
 }:
 
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
-    xorg.libxcb
+    libxcb
     xorg.libXcursor
     xorg.libX11
     xorg.libXtst

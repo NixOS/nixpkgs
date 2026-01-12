@@ -18,6 +18,7 @@
   alsa-lib,
   expat,
   xorg,
+  libxcb,
   libgbm,
   systemd,
   libGL,
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
     xorg.libX11
     xorg.libXext
-    xorg.libxcb
+    libxcb
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXfixes

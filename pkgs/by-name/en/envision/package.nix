@@ -36,7 +36,7 @@ buildFHSEnv {
           libgbm
           shaderc
           xorg.libX11
-          xorg.libxcb
+          libxcb
           xorg.libXrandr
           xorg.libXrender
           xorg.xorgproto

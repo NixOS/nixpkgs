@@ -5,6 +5,7 @@
   fetchFromGitLab,
   python3,
   xorg,
+  libxcb,
   libpulseaudio,
   pkg-config,
   patchelf,
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     xorg.libX11
-    xorg.libxcb
+    libxcb
     xorg.libXScrnSaver
     libpulseaudio
   ];

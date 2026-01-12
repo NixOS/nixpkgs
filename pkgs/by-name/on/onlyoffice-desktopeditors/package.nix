@@ -36,6 +36,7 @@
   wrapGAppsHook3,
   xkeyboard_config,
   xorg,
+  libxcb,
 }:
 let
 
@@ -107,7 +108,7 @@ let
       qt5.qtsvg
       qt5.qtwayland
       xorg.libX11
-      xorg.libxcb
+      libxcb
       xorg.libXcomposite
       xorg.libXcursor
       xorg.libXdamage

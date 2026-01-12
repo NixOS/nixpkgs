@@ -18,6 +18,7 @@
   wayland-scanner,
   x11Support ? stdenv.hostPlatform.isLinux,
   xorg,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXft
     xorg.libXdmcp
     xorg.libpthreadstubs
-    xorg.libxcb
+    libxcb
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

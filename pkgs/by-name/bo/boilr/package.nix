@@ -6,6 +6,7 @@
   clangStdenv,
   gtk3,
   xorg,
+  libxcb,
   perl,
   pkg-config,
   openssl,
@@ -30,7 +31,7 @@ let
     xorg.libXrandr
     xorg.libXi
     xorg.libX11
-    xorg.libxcb
+    libxcb
   ];
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {

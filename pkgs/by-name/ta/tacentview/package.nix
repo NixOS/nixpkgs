@@ -9,6 +9,7 @@
   stdenv,
   tacent,
   xorg,
+  libxcb,
   zenity,
 }:
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.cc.lib
     tacent
     xorg.libX11
-    xorg.libxcb
+    libxcb
     zenity
   ];
 

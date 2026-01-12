@@ -12,6 +12,7 @@
   pkg-config,
   python3Packages,
   xorg,
+  libxcb,
   zlib,
 }:
 let
@@ -48,7 +49,7 @@ stdenv.mkDerivation {
     xorg.libX11
     xorg.libXext
     xorg.libXfixes
-    xorg.libxcb
+    libxcb
     zlib
   ];
 

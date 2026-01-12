@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libxcb,
   zlib,
   # options
   cudaSupport,
@@ -130,7 +131,7 @@ stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libxcb
+    libxcb
   ]
   ++ lib.optional cudaSupport cudaEnv;
 
