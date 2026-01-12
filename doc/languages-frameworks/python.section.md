@@ -292,29 +292,21 @@ the overrides for packages in the package set.
 ```nix
 with import <nixpkgs> { };
 
-(
-  let
-    python =
-      let
-        packageOverrides = self: super: {
-          pandas = super.pandas.overridePythonAttrs (old: rec {
-            version = "0.19.1";
-            src = fetchPypi {
-              pname = "pandas";
-              inherit version;
-              hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
-            };
-          });
+let
+  python = pkgs.python3.override {
+    packageOverrides = self: super: {
+      pandas = super.pandas.overridePythonAttrs (old: {
+        version = "0.19.1";
+        src = fetchPypi {
+          pname = "pandas";
+          inherit version;
+          hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
         };
-      in
-      pkgs.python3.override {
-        inherit packageOverrides;
-        self = python;
-      };
-
-  in
-  python.withPackages (ps: [ ps.blaze ])
-).env
+      });
+    };
+  };
+in
+(python.withPackages (ps: [ ps.blaze ])).env
 ```
 
 The next example shows a non trivial overriding of the `blas` implementation to
