@@ -235,6 +235,43 @@ in
 
     package = mkPackageOption pkgs "systemd" { };
 
+    unitGenerator = {
+      useGoImpl = mkEnableOption "" // {
+        default = false;
+        description = ''
+          Whether to use the experimental Go-based systemd unit generator
+          for the final output instead of the bash implementation.
+
+          By default (when false), NixOS will:
+          - Build systemd units using the bash implementation (output)
+          - Also build with the Go implementation (for testing)
+          - Compare both outputs and warn if they differ
+          - Suggest reporting differences to nixpkgs
+
+          When enabled (true):
+          - Use the Go implementation for the final output (30-60x faster)
+          - Does not build the bash implementation anymore
+
+          The Go implementation is experimental. By keeping this disabled,
+          you help test it automatically while using the stable bash version.
+        '';
+      };
+
+      debug = mkEnableOption "" // {
+        default = false;
+        description = ''
+          Whether to enable debug output for the Go-based systemd unit generator.
+          
+          When enabled, the Go unit generator will output detailed information about
+          what it's doing, which can help diagnose issues or differences between the
+          bash and Go implementations.
+          
+          This is useful when reporting issues about differences between the
+          bash and Go implementations.
+        '';
+      };
+    };
+
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''
         Whether to run `shellcheck` on the generated scripts for systemd
