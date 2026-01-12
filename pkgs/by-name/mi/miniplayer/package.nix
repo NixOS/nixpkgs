@@ -9,7 +9,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "miniplayer";
   version = "1.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

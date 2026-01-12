@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "multimethod";
   version = "2.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coady";

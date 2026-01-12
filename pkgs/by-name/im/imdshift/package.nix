@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "imdshift";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ayushpriya10";

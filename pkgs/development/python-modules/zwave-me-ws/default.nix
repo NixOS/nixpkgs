@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "zwave-me-ws";
   version = "0.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Z-Wave-Me";

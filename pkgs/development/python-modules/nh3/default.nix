@@ -18,7 +18,7 @@ let
 in
 buildPythonPackage {
   inherit pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;

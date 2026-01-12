@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "nbtlib";
   version = "2.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vberlier";

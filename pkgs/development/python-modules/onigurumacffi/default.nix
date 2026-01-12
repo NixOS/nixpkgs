@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "onigurumacffi";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

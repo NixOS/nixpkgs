@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pysnmp-pyasn1";
   version = "1.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysnmp";

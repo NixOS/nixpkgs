@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pyswitchbee";
   version = "1.8.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jafar-atili";

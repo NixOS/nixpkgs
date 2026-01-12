@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "jaraco-email";
   version = "3.1.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";

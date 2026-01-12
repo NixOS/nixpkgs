@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pyqtdatavisualization";
   version = "5.15.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyQtDataVisualization";

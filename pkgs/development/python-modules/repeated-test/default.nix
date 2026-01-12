@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "repeated-test";
   version = "2.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "repeated_test";

@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   pname = "ormar";
   version = "0.20.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collerek";

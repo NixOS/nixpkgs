@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "elmax";
   version = "0.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";

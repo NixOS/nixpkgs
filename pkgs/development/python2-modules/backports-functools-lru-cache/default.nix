@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "backports-functools-lru-cache";
   version = "1.6.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "backports.functools_lru_cache";

@@ -19,7 +19,7 @@ python3'.pkgs.buildPythonApplication rec {
   pname = "opshin";
   version = "0.24.3";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";

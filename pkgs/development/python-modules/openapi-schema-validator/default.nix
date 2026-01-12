@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
   version = "0.6.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";

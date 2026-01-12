@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "magic-filter";
   version = "1.0.12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aiogram";

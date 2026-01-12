@@ -32,7 +32,7 @@ in
 buildPythonPackage rec {
   pname = "python-arango";
   version = "8.2.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arangodb";

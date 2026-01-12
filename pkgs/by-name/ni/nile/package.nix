@@ -11,7 +11,7 @@ in
 python3Packages.buildPythonApplication {
   pname = "nile";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imLinguin";

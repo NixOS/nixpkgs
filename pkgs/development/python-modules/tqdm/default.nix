@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "tqdm";
   version = "4.67.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

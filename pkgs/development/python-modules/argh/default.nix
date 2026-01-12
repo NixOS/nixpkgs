@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "argh";
   version = "0.31.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

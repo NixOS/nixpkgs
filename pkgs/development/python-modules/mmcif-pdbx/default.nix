@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "mmcif-pdbx";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Electrostatics";

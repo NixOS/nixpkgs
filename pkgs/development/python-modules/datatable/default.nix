@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "datatable";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonAtLeast "3.13";
 

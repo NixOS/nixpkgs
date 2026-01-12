@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "deltalake";
   version = "1.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

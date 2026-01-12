@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "flatten-dict";
   version = "0.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ianlini";

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
   version = "2025.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jsonschema_specifications";

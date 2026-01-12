@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "emborg";
   version = "1.42";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";

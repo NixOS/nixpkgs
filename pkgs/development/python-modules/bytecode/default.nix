@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "bytecode";
   version = "0.17.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vstinner";

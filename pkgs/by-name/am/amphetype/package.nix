@@ -13,7 +13,7 @@ let
   description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
-  format = "pyproject";
+  pyproject = true;
   inherit pname version;
 
   src = fetchFromGitLab {

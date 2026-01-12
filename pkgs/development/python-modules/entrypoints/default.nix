@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "entrypoints";
   version = "0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pymongo-inmemory";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kaizendorks";

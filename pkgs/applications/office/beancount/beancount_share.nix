@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-BW2KEC0pmervT71FBixPcQciEuGcElCd2wW7BZL1xUg=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = [
     beancount

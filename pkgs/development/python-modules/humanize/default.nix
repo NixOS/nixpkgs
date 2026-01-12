@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "humanize";
   version = "4.12.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-humanize";

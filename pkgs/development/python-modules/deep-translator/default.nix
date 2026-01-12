@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "deep-translator";
   version = "1.11.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "deep_translator";

@@ -18,7 +18,7 @@
 
 buildPythonPackage {
   inherit (subunit) name src meta;
-  format = "pyproject";
+  pyproject = true;
 
   postPatch = ''
     substituteInPlace setup.py \

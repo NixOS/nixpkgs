@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "laspy";
   version = "2.6.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

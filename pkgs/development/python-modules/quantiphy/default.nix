@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "quantiphy";
   version = "2.21";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";

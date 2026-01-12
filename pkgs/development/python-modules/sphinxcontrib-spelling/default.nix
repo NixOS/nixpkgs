@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
   version = "8.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";

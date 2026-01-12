@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyheck";
   version = "0.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kevinheavey";

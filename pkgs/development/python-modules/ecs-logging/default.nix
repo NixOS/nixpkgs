@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "ecs-logging";
   version = "2.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";

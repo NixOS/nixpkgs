@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyperscan";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vlaci";

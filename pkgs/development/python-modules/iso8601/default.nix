@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "iso8601";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
   version = "1.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mtkennerly";

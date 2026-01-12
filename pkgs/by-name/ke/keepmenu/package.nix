@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";

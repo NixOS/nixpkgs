@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miniconfig";

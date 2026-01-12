@@ -46,7 +46,7 @@
 buildPythonPackage rec {
   pname = "django";
   version = "4.2.27";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 

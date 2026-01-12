@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "python-rabbitair";
   version = "0.0.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rabbit-air";

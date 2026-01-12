@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "jsonschema-spec";
   version = "0.3.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";

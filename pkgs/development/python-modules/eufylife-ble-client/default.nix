@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "eufylife-ble-client";
   version = "0.1.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "eufylife_ble_client";

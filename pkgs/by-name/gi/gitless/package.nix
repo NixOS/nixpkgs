@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gitless";
   version = "0.9.17";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "goldstar611";

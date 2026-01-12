@@ -24,7 +24,7 @@
 buildPythonPackage rec {
   pname = "mip";
   version = "1.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "py-canary";
   version = "0.5.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snjoetw";

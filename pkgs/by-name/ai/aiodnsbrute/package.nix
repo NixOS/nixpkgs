@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "aiodnsbrute";
   version = "0.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blark";

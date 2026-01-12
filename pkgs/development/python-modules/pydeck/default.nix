@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pydeck";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

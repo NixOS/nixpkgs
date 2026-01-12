@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "cython-test-exception-raiser";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twisted";

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-isort";
   version = "4.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stephrdev";

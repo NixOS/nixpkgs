@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "python-pae";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   # Tests are on GitHub
   src = fetchFromGitHub {

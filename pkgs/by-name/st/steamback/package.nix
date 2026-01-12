@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "steamback";
   version = "0.3.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

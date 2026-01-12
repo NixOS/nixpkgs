@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "dicom-numpy";
   version = "0.6.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "innolitics";

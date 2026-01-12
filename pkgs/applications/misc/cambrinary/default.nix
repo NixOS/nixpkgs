@@ -10,7 +10,7 @@
 buildPythonApplication {
   pname = "cambrinary";
   version = "unstable-2023-07-16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xueyuanl";

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "roonapi";
   version = "0.1.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pavoni";

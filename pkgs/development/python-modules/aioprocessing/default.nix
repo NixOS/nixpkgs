@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "aioprocessing";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

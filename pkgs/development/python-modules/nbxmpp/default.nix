@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "nbxmpp";
   version = "6.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";

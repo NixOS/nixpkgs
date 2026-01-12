@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "html-tag-names";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";

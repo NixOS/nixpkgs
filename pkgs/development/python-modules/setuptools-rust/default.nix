@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "1.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_rust";

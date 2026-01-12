@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "adblock";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   # Pypi only has binary releases
   src = fetchFromGitHub {

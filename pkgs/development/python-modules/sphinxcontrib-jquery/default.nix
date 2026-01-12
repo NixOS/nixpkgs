@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-jquery";
   version = "4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";

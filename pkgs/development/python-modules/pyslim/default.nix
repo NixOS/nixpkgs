@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pyslim";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

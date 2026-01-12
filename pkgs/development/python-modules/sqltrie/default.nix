@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "sqltrie";
   version = "0.11.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";

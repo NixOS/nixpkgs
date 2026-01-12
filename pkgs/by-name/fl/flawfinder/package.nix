@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "flawfinder";
   version = "2.0.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://dwheeler.com/flawfinder/flawfinder-${version}.tar.gz";

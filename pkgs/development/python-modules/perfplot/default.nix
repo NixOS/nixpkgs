@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "perfplot";
   version = "0.10.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nschloe";

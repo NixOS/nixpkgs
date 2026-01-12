@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "wtforms-bootstrap5";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

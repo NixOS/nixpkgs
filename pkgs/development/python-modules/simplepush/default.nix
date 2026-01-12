@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "simplepush";
   version = "2.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simplepush";

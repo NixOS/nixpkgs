@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "nitime";
   version = "0.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

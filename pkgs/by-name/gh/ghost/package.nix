@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ghost";
   version = "8.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.7";
 

@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "logging-journald";
   version = "0.6.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";

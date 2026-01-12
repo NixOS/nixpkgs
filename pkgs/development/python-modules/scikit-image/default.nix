@@ -35,7 +35,7 @@ let
   self = buildPythonPackage rec {
     pname = "scikit-image";
     version = "0.25.2";
-    format = "pyproject";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "scikit-image";

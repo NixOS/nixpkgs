@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "frozenlist2";
   version = "1.0.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rohanpm";

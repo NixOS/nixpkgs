@@ -14,7 +14,7 @@
 buildPythonPackage {
   pname = "govee-led-wez";
   version = "0.0.15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wez";

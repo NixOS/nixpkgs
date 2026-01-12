@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "netdata";
   version = "1.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";

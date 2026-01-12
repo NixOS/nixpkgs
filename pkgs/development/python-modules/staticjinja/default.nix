@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "staticjinja";
   version = "5.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   # No tests in pypi
   src = fetchFromGitHub {

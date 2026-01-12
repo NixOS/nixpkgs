@@ -26,7 +26,7 @@ let
     buildPythonPackage rec {
       inherit pname;
       version = "1.2.0";
-      format = "pyproject";
+      pyproject = true;
 
       outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
 

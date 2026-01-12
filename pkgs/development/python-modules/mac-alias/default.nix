@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "mac-alias";
   version = "2.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "mac_alias";

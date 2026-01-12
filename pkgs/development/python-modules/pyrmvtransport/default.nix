@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pyrmvtransport";
   version = "0.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgtobi";
