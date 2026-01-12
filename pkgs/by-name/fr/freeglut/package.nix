@@ -4,7 +4,7 @@
   fetchurl,
   libice,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   libXxf86vm,
   libGLX,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libice
     libxext
-    libXi
+    libxi
     libXrandr
     libXxf86vm
     libGLU

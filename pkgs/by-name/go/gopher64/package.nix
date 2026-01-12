@@ -10,7 +10,7 @@
   libx11,
   libxcursor,
   libxkbcommon,
-  libXi,
+  libxi,
   moltenvk,
   sdl3,
   wayland,
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # for X11
     libx11
     libxcursor
-    libXi
+    libxi
 
     # for wayland
     wayland

@@ -28,7 +28,7 @@
   libxext,
   libXxf86vm,
   libXv,
-  libXi,
+  libxi,
   libx11,
   libxft,
   xorgproto,
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     libxext
     libXxf86vm
     libXv
-    libXi
+    libxi
     libx11
     libxft
     xorgproto

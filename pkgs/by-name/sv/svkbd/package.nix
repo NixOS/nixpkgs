@@ -6,7 +6,7 @@
   pkg-config,
   libx11,
   libxft,
-  libXi,
+  libxi,
   libxinerama,
   libXtst,
   layout ? "mobile-intl",
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxft
-    libXi
+    libxi
     libxinerama
     libXtst
   ];

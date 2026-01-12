@@ -30,7 +30,7 @@
   libGLU,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXrender,
   libXxf86vm,
   libdecor,
@@ -279,7 +279,7 @@ stdenv'.mkDerivation (finalAttrs: {
         libGLU
         libx11
         libxext
-        libXi
+        libxi
         libXrender
         libXxf86vm
         openal

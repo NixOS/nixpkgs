@@ -33,7 +33,7 @@
   vulkan-loader,
   vulkan-memory-allocator,
   xbyak,
-  xorg,
+  libxi,
   libxext,
   libx11,
   xxHash,
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     vulkan-loader
-    xorg.libXi
+    libxi
   ];
 
   passthru = {

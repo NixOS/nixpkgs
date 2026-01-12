@@ -49,7 +49,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   libXrandr,
   libXrender,
   libXtst,
@@ -142,7 +142,7 @@ let
             fontconfig
             freetype
             libxext
-            libXi
+            libxi
             libXrender
             libXtst
             libsecret

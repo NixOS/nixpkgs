@@ -38,6 +38,7 @@
   cairo,
   pixman,
   xorg,
+  libxi,
   libxfixes,
   clisp,
   biber,
@@ -754,7 +755,7 @@ rec {
       ghostscript
       libx11
       libxaw
-      xorg.libXi
+      libxi
       xorg.libXpm
       xorg.libXmu
       libxaw

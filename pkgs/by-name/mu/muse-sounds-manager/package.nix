@@ -8,7 +8,7 @@
   icu,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   libice,
   libsm,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     icu
     libx11
     libxext
-    libXi
+    libxi
     libXrandr
     libice
     libsm

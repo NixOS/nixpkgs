@@ -10,7 +10,7 @@
   libxcursor,
   libxdamage,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   libXrender,
   libXtst,
@@ -52,7 +52,7 @@ let
       libxcursor
       libxdamage
       libxext
-      libXi
+      libxi
       libXrandr
       libXrender
       libXtst

@@ -15,7 +15,7 @@
   pango,
   cairo,
   libXres,
-  libXi,
+  libxi,
   libstartup_notification,
   gettext,
   gobject-introspection,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     pango
     cairo
     libXres
-    libXi
+    libxi
   ];
 
   propagatedBuildInputs = [

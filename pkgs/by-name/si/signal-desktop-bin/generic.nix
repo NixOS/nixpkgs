@@ -25,7 +25,7 @@
   libx11,
   libxshmfence,
   libxcb,
-  libXi,
+  libxi,
   libxcursor,
   libxdamage,
   libXrandr,
@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
     libxdamage
     libxext
     libxfixes
-    libXi
+    libxi
     libXrandr
     libXrender
     libXtst

@@ -5,7 +5,7 @@
   fetchhg,
   libxext,
   libxft,
-  libXi,
+  libxi,
   libxinerama,
   libXtst,
   libXv,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libxext
     libxft
-    libXi
+    libxi
     libxinerama
     libXtst
     libXv

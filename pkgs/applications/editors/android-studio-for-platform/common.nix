@@ -27,7 +27,7 @@
   freetype,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   libXrender,
   libXtst,
@@ -108,7 +108,7 @@ let
             fontconfig
             freetype
             libxext
-            libXi
+            libxi
             libXrender
             libXtst
             libx11

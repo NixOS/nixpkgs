@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   vulkan-loader,
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
         lib.makeLibraryPath [
           libx11
           libxcursor
-          xorg.libXi
+          libxi
           xorg.libXrandr
           vulkan-loader
         ]

@@ -10,6 +10,7 @@
   libpng,
   libglvnd,
   xorg,
+  libxi,
   libx11,
   libevdev,
   curl,
@@ -70,7 +71,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libpng
     libglvnd
     libx11
-    xorg.libXi
+    libxi
     xorg.libXtst
     libevdev
     curl

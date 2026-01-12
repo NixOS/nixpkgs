@@ -9,6 +9,7 @@
   freetype,
   libGL,
   xorg,
+  libxi,
   libxcursor,
   libx11,
 }:
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     freetype
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXrandr
   ];
 

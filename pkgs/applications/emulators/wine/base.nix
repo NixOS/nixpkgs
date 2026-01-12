@@ -170,7 +170,7 @@ stdenv.mkDerivation (
             libxcursor
             libxext
             libxfixes
-            xorg.libXi
+            libxi
             xorg.libXrandr
             xorg.libXrender
             xorg.libXxf86vm

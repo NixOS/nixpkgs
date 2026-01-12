@@ -19,7 +19,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libXxf86vm,
   libxcb,
   libXrandr,
@@ -86,7 +86,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxext
-    libXi
+    libxi
     libXxf86vm
     libxcb
     libXrandr

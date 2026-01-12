@@ -33,7 +33,7 @@
   libxaw,
   libxcursor,
   libxft,
-  libXi,
+  libxi,
   libXpm,
   libXrandr,
   libgccjit,
@@ -350,7 +350,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
   ]
   ++ lib.optionals withXinput2 [
-    libXi
+    libxi
   ]
   ++ lib.optionals withWebkitgtk [
     webkitgtk_4_1

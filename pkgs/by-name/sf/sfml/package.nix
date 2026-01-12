@@ -15,7 +15,7 @@
   libvorbis,
   miniaudio,
   udev,
-  libXi,
+  libxi,
   libx11,
   libxcursor,
   libXrandr,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libx11
-    libXi
+    libxi
     libxcursor
     libXrandr
     libXrender

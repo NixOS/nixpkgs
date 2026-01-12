@@ -6,7 +6,7 @@
   libx11,
   xorgproto,
   libXtst,
-  libXi,
+  libxi,
   libxext,
   libxinerama,
   libXrandr,
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     libx11
     xorgproto
     libXtst
-    libXi
+    libxi
     libxext
     libxinerama
     libXrandr

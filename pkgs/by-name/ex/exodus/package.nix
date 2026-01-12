@@ -13,6 +13,7 @@
   cairo,
   gdk-pixbuf,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libxdamage,
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
         libxdamage
         libxext
         libxfixes
-        xorg.libXi
+        libxi
         xorg.libXrender
         libxshmfence
         xorg.libXtst

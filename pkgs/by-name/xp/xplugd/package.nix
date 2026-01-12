@@ -2,6 +2,7 @@
   lib,
   stdenv,
   xorg,
+  libxi,
   libxext,
   libx11,
   pkg-config,
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    xorg.libXi
+    libxi
     xorg.libXrandr
     libxext
   ];

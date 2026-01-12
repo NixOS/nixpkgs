@@ -4,6 +4,7 @@
   fetchzip,
   zlib,
   xorg,
+  libxi,
   libxext,
   libx11,
   freetype,
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     zlib
     libx11
     libxext
-    xorg.libXi
+    libxi
     xorg.libXtst
     xorg.libXrender
     freetype

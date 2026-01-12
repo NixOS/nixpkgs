@@ -9,7 +9,7 @@
   gtk2,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXtst,
   texinfo,
   xorgproto,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
     libx11
     libxext
-    libXi
+    libxi
     libXtst
     texinfo
     xorgproto

@@ -14,7 +14,7 @@
   vulkan-loader,
   wayland,
   xdg-utils,
-  xorg,
+  libxi,
   libxcursor,
   libx11,
   libxcb,
@@ -68,7 +68,7 @@ let
       libx11
       libxcb
       libxcursor
-      xorg.libXi
+      libxi
     ]
     ++ lib.optionals waylandSupport [ wayland ];
 

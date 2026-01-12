@@ -4,7 +4,7 @@
   fetchFromGitHub,
   freetype,
   libx11,
-  libXi,
+  libxi,
   libXt,
   libxft,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [
     libx11
-    libXi
+    libxi
     libXt
     libxft
   ];

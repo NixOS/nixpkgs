@@ -4,7 +4,7 @@
   rustPlatform,
   pkg-config,
   libx11,
-  libXi,
+  libxi,
   libXtst,
   libevdev,
   udevCheckHook,
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libx11
-    libXi
+    libxi
     libXtst
     libevdev
   ];

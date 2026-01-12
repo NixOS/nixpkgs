@@ -13,6 +13,7 @@
   openexr,
   onetbb,
   xorg,
+  libxi,
   libxinerama,
   libxext,
   libxcursor,
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
     libx11
     libxcursor
     libxext
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
   ]

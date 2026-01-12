@@ -12,6 +12,7 @@
   iputils,
   psmisc,
   xorg,
+  libxi,
   libxext,
   libx11,
 }:
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
           libxext
           xorg.libXrender
           xorg.libXtst
-          xorg.libXi
+          libxi
         ]
       }" ./jre/lib/libawt_xawt.so
       patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so

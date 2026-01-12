@@ -11,7 +11,7 @@
   openjdk17,
   freetype,
   fontconfig,
-  libXi,
+  libxi,
   libx11,
   libxext,
   libXtst,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     fontconfig
-    libXi
+    libxi
     libx11
     libxext
     libXtst

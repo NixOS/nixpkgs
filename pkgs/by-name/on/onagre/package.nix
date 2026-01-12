@@ -9,6 +9,7 @@
   expat,
   wayland,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   libxkbcommon,
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage {
     freetype
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXrandr
   ];
 

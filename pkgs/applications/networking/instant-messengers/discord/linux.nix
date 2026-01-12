@@ -39,7 +39,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   libXrandr,
   libXrender,
   libXtst,
@@ -162,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxdamage
       libxext
       libxfixes
-      libXi
+      libxi
       libXrandr
       libXrender
       libXtst

@@ -43,7 +43,7 @@
   libx11,
   libxcomposite,
   libxext,
-  libXi,
+  libxi,
   libXrender,
   libjpeg,
   libpng,
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     libx11
     libxcomposite
     libxext
-    libXi
+    libxi
     libXrender
     libxcb
     libxkbcommon

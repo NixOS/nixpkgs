@@ -39,7 +39,7 @@ let
       libsm
       xorg.libXv
       libxaw
-      xorg.libXi
+      libxi
       libxcursor
       libxcomposite
       libxfixes

@@ -5,6 +5,7 @@
   stdenv,
   libGL,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcursor
     xorg.libXrandr
     libxinerama
-    xorg.libXi
+    libxi
   ];
 
   # Tell autopatchelf about the dependency that is linked through dlopen
@@ -56,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcursor
     xorg.libXrandr
     libxinerama
-    xorg.libXi
+    libxi
   ];
 
   meta = {

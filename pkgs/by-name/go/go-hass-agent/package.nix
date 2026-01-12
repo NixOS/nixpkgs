@@ -9,6 +9,7 @@
   writableTmpDirAsHomeHook,
   libglvnd,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   go,
@@ -55,7 +56,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     libglvnd
     libxcursor
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
     xorg.libXxf86vm

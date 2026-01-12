@@ -7,7 +7,7 @@
   libx11,
   libxcursor,
   libxinerama,
-  libXi,
+  libxi,
   libXrandr,
   libXxf86vm,
   pkg-config,
@@ -35,7 +35,7 @@ buildGoModule rec {
     libx11
     libxcursor
     libxinerama
-    libXi
+    libxi
     libXrandr
     libXxf86vm
   ];

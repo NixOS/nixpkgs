@@ -12,7 +12,7 @@
   libGLU,
   libxext,
   libXmu,
-  libXi,
+  libxi,
   vtk,
   withVtk ? false,
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libGLU
     libxext
     libXmu
-    libXi
+    libxi
     rapidjson
   ]
   ++ lib.optional withVtk vtk;

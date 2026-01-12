@@ -18,6 +18,7 @@
   freetype,
   libffi,
   xorg,
+  libxi,
   libxext,
   libx11,
   zlib,
@@ -67,7 +68,7 @@ let
       (lib.getLib stdenv.cc.cc) # libstdc++.so.6
       libx11
       libxext
-      xorg.libXi
+      libxi
       xorg.libXrender
       xorg.libXtst
       zlib

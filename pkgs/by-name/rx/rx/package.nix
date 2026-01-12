@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   xorg ? null,
+  libxi,
   libxinerama,
   libxext,
   libxcursor,
@@ -39,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXrandr
     libxinerama
     libxcursor
-    xorg.libXi
+    libxi
     libxext
   ];
 

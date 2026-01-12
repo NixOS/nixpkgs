@@ -16,7 +16,7 @@
   dbus,
   libx11,
   libxcb,
-  libXi,
+  libxi,
   libxcursor,
   libxdamage,
   libXrandr,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     dbus
     libx11
     libxcb
-    libXi
+    libxi
     libxcursor
     libxdamage
     libXrandr

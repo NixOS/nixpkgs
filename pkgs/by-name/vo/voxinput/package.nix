@@ -7,6 +7,7 @@
   dotool,
   libGL,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -43,7 +44,7 @@ buildGoModule (finalAttrs: {
     libGL
     libx11.dev
     libxcursor
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
     xorg.libXxf86vm

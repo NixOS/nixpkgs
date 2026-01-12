@@ -26,7 +26,7 @@
   libXrandr,
   libXtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
@@ -270,7 +270,7 @@ qtModule {
     libdrm
     libxkbfile
     libxshmfence
-    libXi
+    libxi
     libxext
 
     # Pipewire

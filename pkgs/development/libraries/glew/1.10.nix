@@ -4,7 +4,7 @@
   fetchurl,
   libGLU,
   libXmu,
-  libXi,
+  libxi,
   libxext,
   testers,
   mesa,
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libXmu
-    libXi
+    libxi
     libxext
   ];
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libGLU ]; # GL/glew.h includes GL/glu.h

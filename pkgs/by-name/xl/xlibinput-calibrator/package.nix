@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXi,
+  libxi,
   libXrandr,
   txt2man,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXi
+    libxi
     libXrandr
   ];
 

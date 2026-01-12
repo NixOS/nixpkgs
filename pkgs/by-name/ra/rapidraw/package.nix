@@ -17,6 +17,7 @@
   cairo,
   pango,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libxcursor,
@@ -83,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cairo
     pango
     libx11
-    xorg.libXi
+    libxi
     libxcursor
     libxext
     xorg.libXrandr

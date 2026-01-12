@@ -12,7 +12,7 @@
   libglvnd,
   libx11,
   libxcursor,
-  libXi,
+  libxi,
   libXrandr,
   libxfixes,
   libpulseaudio,
@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation {
     curl
     libx11
     libxcursor
-    libXi
+    libxi
     libXrandr
     libxfixes
     vulkan-loader

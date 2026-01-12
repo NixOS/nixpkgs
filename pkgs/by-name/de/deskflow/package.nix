@@ -12,7 +12,7 @@
   libxkbfile,
   libXtst,
   libxinerama,
-  libXi,
+  libxi,
   libXrandr,
   libxkbcommon,
   pugixml,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxkbfile
     libxinerama
-    libXi
+    libxi
     libXrandr
     libXtst
     libxkbcommon

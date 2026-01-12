@@ -20,6 +20,7 @@
   util-linux,
   wayland,
   xorg,
+  libxi,
   libxinerama,
   libxext,
   libxcomposite,
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxext
     xorg.libXrandr
-    xorg.libXi
+    libxi
     libxinerama
   ];
 

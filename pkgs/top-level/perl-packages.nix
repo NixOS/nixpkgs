@@ -26580,7 +26580,7 @@ with self;
       pkgs.libGLU
       pkgs.libglut
       pkgs.libx11
-      pkgs.xorg.libXi
+      pkgs.libxi
       pkgs.xorg.libXmu
       pkgs.libxext
       pkgs.xdummy
@@ -27548,7 +27548,7 @@ with self;
       gsl
       libglut
       xorg.libXmu
-      xorg.libXi
+      libxi
     ]);
 
     propagatedBuildInputs = [
@@ -38237,7 +38237,7 @@ with self;
     };
     buildInputs = [
       pkgs.libx11
-      pkgs.xorg.libXi
+      pkgs.libxi
       pkgs.xorg.libXt
       pkgs.xorg.libXtst
     ];

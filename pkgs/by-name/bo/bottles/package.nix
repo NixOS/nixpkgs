@@ -37,7 +37,7 @@ let
             libxcursor
             libxdmcp
             libxext
-            xorg.libXi
+            libxi
             libxinerama
             xorg.libXmu
             xorg.libXrandr

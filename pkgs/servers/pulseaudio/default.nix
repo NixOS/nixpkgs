@@ -8,6 +8,7 @@
   makeWrapper,
   perlPackages,
   xorg,
+  libxi,
   libx11,
   libsm,
   libice,
@@ -146,7 +147,7 @@ stdenv.mkDerivation rec {
       libice
       libsm
       libx11
-      xorg.libXi
+      libxi
       xorg.libXtst
     ]
     ++ lib.optional useSystemd systemd

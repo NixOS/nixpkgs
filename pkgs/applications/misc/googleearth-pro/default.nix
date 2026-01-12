@@ -10,7 +10,7 @@
   libsm,
 
   libxcomposite,
-  libXi,
+  libxi,
   libXrender,
   libx11,
 
@@ -66,7 +66,7 @@ mkDerivation rec {
     libsm
     libx11
     libxcomposite
-    libXi
+    libxi
     libXrender
     libproxy
     libxcb

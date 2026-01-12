@@ -54,7 +54,7 @@ buildFHSEnv {
       libsm
       libx11
       libxcursor
-      xorg.libXi
+      libxi
     ]
     ++ extraLibs pkgs;
 

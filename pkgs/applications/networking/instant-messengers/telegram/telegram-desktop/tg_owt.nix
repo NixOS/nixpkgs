@@ -20,7 +20,7 @@
   libxext,
   libXrender,
   libXrandr,
-  libXi,
+  libxi,
   glib,
   abseil-cpp,
   pipewire,
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     libxext
     libXrender
     libXrandr
-    libXi
+    libxi
     glib
     pipewire
     libgbm

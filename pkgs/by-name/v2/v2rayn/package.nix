@@ -15,6 +15,7 @@
   krb5,
   bash,
   xorg,
+  libxi,
   libxext,
   libxcursor,
   libx11,
@@ -80,7 +81,7 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libx11
     xorg.libXrandr
-    xorg.libXi
+    libxi
     libice
     libsm
     libxcursor

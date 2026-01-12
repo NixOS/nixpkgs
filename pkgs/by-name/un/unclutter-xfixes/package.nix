@@ -5,7 +5,7 @@
   libev,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libxfixes,
   pkg-config,
   asciidoc,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     libev
     libx11
     libxext
-    libXi
+    libxi
     libxfixes
   ];
 

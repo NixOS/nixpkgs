@@ -15,7 +15,7 @@
   libxdamage,
   libXxf86vm,
   libXrandr,
-  libXi,
+  libxi,
   libxcursor,
   libXrender,
   libx11,
@@ -124,7 +124,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         libxdamage
         libXxf86vm
         libXrandr
-        libXi
+        libxi
         libxcursor
         libXrender
         libx11

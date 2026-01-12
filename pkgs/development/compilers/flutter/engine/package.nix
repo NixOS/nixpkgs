@@ -20,6 +20,7 @@
   gn,
   openbox,
   xorg,
+  libxi,
   libxinerama,
   libxfixes,
   libxext,
@@ -127,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
               xorg.libXrandr
               xorg.libXrender
               libxinerama
-              xorg.libXi
+              libxi
               libxext
               libxfixes
               xorg.libXxf86vm

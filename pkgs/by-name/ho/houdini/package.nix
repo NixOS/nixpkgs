@@ -45,7 +45,7 @@ buildFHSEnv {
       libice
       libsm
       xorg.libXmu
-      xorg.libXi
+      libxi
       xorg.libXt
       libxext
       libx11

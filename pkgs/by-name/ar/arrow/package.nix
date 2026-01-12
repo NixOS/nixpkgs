@@ -9,7 +9,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   udev,
   vulkan-loader,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxext
-    libXi
+    libxi
     libXrandr
     udev
     vulkan-loader

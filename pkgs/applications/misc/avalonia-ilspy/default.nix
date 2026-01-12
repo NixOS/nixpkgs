@@ -7,7 +7,7 @@
   libx11,
   libice,
   libsm,
-  libXi,
+  libxi,
   libxcursor,
   libxext,
   libXrandr,
@@ -62,7 +62,7 @@ buildDotnetModule rec {
     libx11
     libice
     libsm
-    libXi
+    libxi
     libxcursor
     libxext
     libXrandr

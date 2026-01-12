@@ -12,7 +12,7 @@
   freetype,
   fontconfig,
   dbus,
-  libXi,
+  libxi,
   libxcursor,
   libxdamage,
   libXrandr,
@@ -52,7 +52,7 @@ let
     freetype
     fontconfig
     dbus
-    libXi
+    libxi
     libxcursor
     libxdamage
     libXrandr

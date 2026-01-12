@@ -19,7 +19,7 @@
   libva,
   libdrm,
   coreutils,
-  libXi,
+  libxi,
   libGL,
   bash,
   libxcomposite,
@@ -78,7 +78,7 @@ buildFHSEnv {
     pulseaudio
     nspr
     kmod
-    libXi
+    libxi
     systemdMinimal
     glib
     libz

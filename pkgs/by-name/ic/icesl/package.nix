@@ -4,7 +4,7 @@
   fetchzip,
   libglut,
   libXmu,
-  libXi,
+  libxi,
   libx11,
   libice,
   libGLU,
@@ -22,7 +22,7 @@
 let
   lpath = lib.makeLibraryPath [
     libXmu
-    libXi
+    libxi
     libx11
     libglut
     libice

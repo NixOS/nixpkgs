@@ -13,6 +13,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libxi,
   libxcursor,
   libx11,
 }:
@@ -54,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

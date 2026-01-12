@@ -20,7 +20,7 @@
   libx11,
   libxcb,
   libxcursor,
-  libXi,
+  libxi,
   libXrandr,
 }:
 
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     libx11
     libxcb
     libxcursor
-    libXi
+    libxi
     libXrandr
   ];
 

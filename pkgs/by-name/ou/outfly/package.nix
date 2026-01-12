@@ -12,7 +12,7 @@
   libXrandr,
   libxcursor,
   libx11,
-  libXi,
+  libxi,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     alsa-lib.dev
     libxcursor
-    libXi
+    libxi
     wayland
   ];
 

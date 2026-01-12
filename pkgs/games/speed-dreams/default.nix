@@ -14,7 +14,7 @@
   libxext,
   libsm,
   libice,
-  libXi,
+  libxi,
   libXt,
   libXrender,
   libXxf86vm,
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     libxext
     libsm
     libice
-    libXi
+    libxi
     libXt
     libXrender
     libXxf86vm

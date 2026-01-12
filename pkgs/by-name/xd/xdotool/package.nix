@@ -7,7 +7,7 @@
   perl,
   libXtst,
   xorgproto,
-  libXi,
+  libxi,
   libxinerama,
   libxkbcommon,
   libxext,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libx11
     libXtst
     xorgproto
-    libXi
+    libxi
     libxinerama
     libxkbcommon
     libxext

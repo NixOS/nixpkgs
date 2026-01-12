@@ -35,6 +35,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   libxcb,
@@ -57,7 +58,7 @@ let
     lib.optionals (stdenv.hostPlatform.isLinux) [
       libxcursor
       xorg.libXrandr
-      xorg.libXi
+      libxi
       libxkbcommon
       vulkan-loader
       wayland

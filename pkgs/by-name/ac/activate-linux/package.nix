@@ -4,6 +4,7 @@
   lib,
   pkg-config,
   xorg,
+  libxi,
   libxinerama,
   libxfixes,
   libxext,
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxfixes
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
     xorg.libXt

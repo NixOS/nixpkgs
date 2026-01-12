@@ -10,7 +10,7 @@
   wayland,
   libxcursor,
   libXrandr,
-  libXi,
+  libxi,
   libx11,
   libxcb,
   vulkan-loader,
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optionals withX11 [
       libxcursor
       libXrandr
-      libXi
+      libxi
       libx11
       libxcb
     ]

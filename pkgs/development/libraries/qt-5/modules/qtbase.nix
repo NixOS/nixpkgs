@@ -30,7 +30,7 @@
   libxcomposite,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libXrender,
   libjpeg,
   libpng,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (
           libx11
           libxcomposite
           libxext
-          libXi
+          libxi
           libXrender
           libxcb
           libxkbcommon

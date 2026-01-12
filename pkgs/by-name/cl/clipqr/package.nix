@@ -7,7 +7,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libxinerama,
   libXrandr,
   libXxf86vm,
@@ -40,7 +40,7 @@ buildGoModule rec {
     libx11
     libxcursor
     libxext
-    libXi
+    libxi
     libxinerama
     libXrandr
     libXxf86vm

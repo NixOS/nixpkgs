@@ -18,6 +18,7 @@
   wayland,
   gobject-introspection,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   libxcb,
@@ -28,7 +29,7 @@ let
     libxkbcommon
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXrandr
     xorg.libXxf86vm
     libxcb

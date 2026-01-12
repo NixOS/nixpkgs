@@ -16,7 +16,7 @@
   libxinerama,
   libxcursor,
   libxkbcommon,
-  libXi,
+  libxi,
   libxext,
   wayland-protocols,
   wayland,
@@ -92,7 +92,7 @@ buildPythonApplication rec {
     libxinerama
     libxcursor
     libxkbcommon
-    libXi
+    libxi
     libxext
     wayland-protocols
     wayland

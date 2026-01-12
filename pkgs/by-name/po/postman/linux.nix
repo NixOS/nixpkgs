@@ -23,7 +23,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   libXrandr,
   libXrender,
   libXScrnSaver,
@@ -131,7 +131,7 @@ stdenv.mkDerivation {
           libxdamage
           libxext
           libxfixes
-          libXi
+          libxi
           libXrandr
           libXrender
           libXScrnSaver

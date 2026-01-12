@@ -8,6 +8,7 @@
   glew,
   gtk3,
   xorg,
+  libxi,
   libxcursor,
   nix-update-script,
 }:
@@ -49,7 +50,7 @@ buildDotnetModule rec {
     # For Avalonia UI
     glew
     xorg.libXrandr
-    xorg.libXi
+    libxi
     libxcursor
     # For file dialogs
     gtk3

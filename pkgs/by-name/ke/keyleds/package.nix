@@ -7,7 +7,7 @@
   pkg-config,
   libuv,
   libx11,
-  libXi,
+  libxi,
   libyaml,
   luajit,
   udev,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libuv
     libx11
-    libXi
+    libxi
     libyaml
     luajit
     udev

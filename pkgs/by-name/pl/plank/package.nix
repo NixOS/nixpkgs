@@ -12,7 +12,7 @@
   libwnck,
   libx11,
   libxfixes,
-  libXi,
+  libxi,
   pango,
   gettext,
   pkg-config,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     gtk3
     libx11
     libxfixes
-    libXi
+    libxi
     libdbusmenu-gtk3
     libgee
     libwnck

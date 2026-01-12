@@ -11,7 +11,7 @@
   texinfo,
   libx11,
   xorgproto,
-  libXi,
+  libxi,
   gmp,
   libxext,
   libXt,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     gmp
     libx11
     xorgproto
-    libXi
+    libxi
     libxext
     libXt
     libxaw

@@ -13,7 +13,7 @@
   libunwind,
   openssl,
   xinput,
-  xorg,
+  libxi,
   libx11,
   libsm,
   libice,
@@ -58,7 +58,7 @@ buildDotnetModule rec {
     libice
     libsm
     libx11
-    xorg.libXi
+    libxi
   ];
 
   autoPatchelfIgnoreMissingDeps = [

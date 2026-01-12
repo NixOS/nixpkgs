@@ -11,7 +11,7 @@
   libxinerama,
   libXrandr,
   xinput,
-  libXi,
+  libxi,
   libxext,
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libXrandr
     xinput
-    libXi
+    libxi
     libxext
   ];
 

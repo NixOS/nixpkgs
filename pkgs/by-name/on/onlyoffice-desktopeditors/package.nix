@@ -36,6 +36,7 @@
   wrapGAppsHook3,
   xkeyboard_config,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libxdamage,
@@ -120,7 +121,7 @@ let
       libxdamage
       libxext
       libxfixes
-      xorg.libXi
+      libxi
       xorg.libXrandr
       xorg.libXrender
       xorg.libXScrnSaver

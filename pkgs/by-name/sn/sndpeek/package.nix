@@ -10,7 +10,7 @@
   libx11,
   libXmu,
   libxext,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libx11
     libXmu
     libxext
-    libXi
+    libxi
   ];
   buildFlags = [ "linux-alsa" ];
 

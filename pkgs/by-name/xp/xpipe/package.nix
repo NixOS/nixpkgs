@@ -18,7 +18,7 @@
   libxcb,
   libxcomposite,
   libxcursor,
-  libXi,
+  libxi,
   libXrender,
   libXtst,
   libXxf86vm,
@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation rec {
     libxcb
     libxcomposite
     libxcursor
-    libXi
+    libxi
     libXrender
     libXtst
     libXxf86vm

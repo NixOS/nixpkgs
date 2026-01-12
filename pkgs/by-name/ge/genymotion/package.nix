@@ -21,7 +21,7 @@
   pixman,
   # For glewinfo
   libXmu,
-  libXi,
+  libxi,
   libxext,
 }:
 
@@ -33,7 +33,7 @@ let
     libx11
     libxkbcommon
     libXmu
-    libXi
+    libxi
     libxext
     libGL
     libXrender

@@ -7,6 +7,7 @@
   pango,
   cairo,
   xorg,
+  libxi,
   libxcursor,
   libx11,
 }:
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     libxcursor
     xorg.libXrandr
     libx11
-    xorg.libXi
+    libxi
   ];
 
   postInstall = ''

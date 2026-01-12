@@ -11,7 +11,7 @@
   fontconfig,
   libx11,
   libxcursor,
-  libXi,
+  libxi,
   libXrandr,
   libXxf86vm,
   libXtst,
@@ -25,7 +25,7 @@ let
     wayland
     libx11
     libxcursor
-    libXi
+    libxi
     libXrandr
     libXxf86vm
     libXtst

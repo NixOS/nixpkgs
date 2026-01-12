@@ -6,6 +6,7 @@
   restish,
   testers,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -27,7 +28,7 @@ buildGoModule rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
   ];

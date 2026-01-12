@@ -1,5 +1,5 @@
 {
-  xorg,
+  libxi,
   libxext,
   libx11,
   lib,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxext
-    xorg.libXi
+    libxi
     libev
   ];
   nativeBuildInputs = [ pkg-config ];

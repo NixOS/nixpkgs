@@ -18,6 +18,7 @@
   freetype,
   libGL,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   libxcb,
@@ -39,7 +40,7 @@ let
     libGL
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXxf86vm
     libxcb
     libxkbcommon

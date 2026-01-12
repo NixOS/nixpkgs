@@ -7,7 +7,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     libx11
     libXtst
     libxext
-    libXi
+    libxi
   ];
 
   meta = {

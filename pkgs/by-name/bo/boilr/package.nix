@@ -6,6 +6,7 @@
   clangStdenv,
   gtk3,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   libxcb,
@@ -31,7 +32,7 @@ let
     # WINIT_UNIX_BACKEND=x11
     libxcursor
     xorg.libXrandr
-    xorg.libXi
+    libxi
     libx11
     libxcb
   ];

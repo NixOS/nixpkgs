@@ -9,7 +9,7 @@
   perl,
   wxGTK32,
   libxext,
-  libXi,
+  libxi,
   libXt,
   libXtst,
   xercesc,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxext
-    libXi
+    libxi
     libXt
     libXtst
     libuuid

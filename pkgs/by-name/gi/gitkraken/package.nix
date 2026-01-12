@@ -33,7 +33,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   libXrandr,
   libXrender,
   libXtst,
@@ -113,7 +113,7 @@ let
       libx11
       libxext
       libxcursor
-      libXi
+      libxi
       libxcb
       glib
       libXScrnSaver

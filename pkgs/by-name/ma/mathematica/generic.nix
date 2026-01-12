@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libxi,
   libxinerama,
   libxfixes,
   libxext,
@@ -134,7 +135,7 @@ stdenv.mkDerivation {
     libxdamage
     libxext
     libxfixes
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXmu
     xorg.libXrandr

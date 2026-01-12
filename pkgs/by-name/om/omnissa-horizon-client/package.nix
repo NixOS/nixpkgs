@@ -106,7 +106,7 @@ let
           libxau
           libxcursor
           libxext
-          xorg.libXi
+          libxi
           libxinerama
           libxkbfile
           xorg.libXrandr

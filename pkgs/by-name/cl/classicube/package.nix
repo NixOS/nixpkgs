@@ -7,7 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   libx11,
-  libXi,
+  libxi,
   libGL,
   curl,
   openal,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXi
+    libxi
     libGL
     curl
     openal

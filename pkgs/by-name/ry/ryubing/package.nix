@@ -21,7 +21,7 @@
   libsm,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   udev,
   SDL2,
@@ -74,7 +74,7 @@ buildDotnetModule rec {
     libsm
     libxcursor
     libxext
-    libXi
+    libxi
     libXrandr
     gtk3
 

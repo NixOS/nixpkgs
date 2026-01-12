@@ -165,7 +165,7 @@ rec {
         xorg.libXrender
         xorg.libXScrnSaver
         xorg.libXxf86vm
-        xorg.libXi
+        libxi
         libsm
         libice
         freetype

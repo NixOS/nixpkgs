@@ -8,7 +8,7 @@
   makeWrapper,
   libpng,
   libx11,
-  libXi,
+  libxi,
   libXtst,
   zlib,
   electron,
@@ -36,7 +36,7 @@ buildNpmPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpng
     libx11
-    libXi
+    libxi
     libXtst
     zlib
   ];

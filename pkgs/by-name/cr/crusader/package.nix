@@ -13,7 +13,7 @@
   fontconfig,
   libgcc,
   libxkbcommon,
-  xorg,
+  libxi,
   libxcursor,
   libx11,
 
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxcursor
-    xorg.libXi
+    libxi
   ];
 
   # required for crusader-gui

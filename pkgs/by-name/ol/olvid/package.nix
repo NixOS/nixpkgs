@@ -7,7 +7,7 @@
   libx11,
   libXrender,
   libXtst,
-  libXi,
+  libxi,
   freetype,
   alsa-lib,
   jdk21,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXrender
     libXtst
-    libXi
+    libxi
     freetype
     alsa-lib
   ];

@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   xorg,
+  libxi,
   libxinerama,
   libxext,
   libx11,
@@ -76,7 +77,7 @@ buildPythonPackage rec {
               elif name == 'pulse':
                   path = '${libpulseaudio}/lib/libpulse${ext}'
               elif name == 'Xi':
-                  path = '${xorg.libXi}/lib/libXi${ext}'
+                  path = '${libxi}/lib/libXi${ext}'
               elif name == 'Xinerama':
                   path = '${libxinerama}/lib/libXinerama${ext}'
               elif name == 'Xrandr':

@@ -10,6 +10,7 @@
   openssl,
   wayland,
   xorg,
+  libxi,
   libxcursor,
   libx11,
 
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage rec {
         wayland
         libxcursor
         xorg.libXrandr
-        xorg.libXi
+        libxi
         libx11
       ];
     in

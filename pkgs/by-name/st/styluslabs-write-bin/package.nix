@@ -4,7 +4,7 @@
   libsForQt5,
   libglvnd,
   libx11,
-  libXi,
+  libxi,
   fetchurl,
   makeDesktopItem,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         (lib.getLib stdenv.cc.cc) # libstdc++.so.6
         libglvnd # libGL.so.1
         libx11 # libX11.so.6
-        libXi # libXi.so.6
+        libxi # libXi.so.6
       ];
     in
     ''

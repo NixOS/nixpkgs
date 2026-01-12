@@ -10,7 +10,7 @@
 
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
 
   git,
@@ -57,7 +57,7 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libxcursor
     libxext
-    libXi
+    libxi
     libXrandr
   ];
 

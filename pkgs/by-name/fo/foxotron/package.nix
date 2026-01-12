@@ -12,7 +12,7 @@
   libXrandr,
   libxinerama,
   libxcursor,
-  libXi,
+  libxi,
   libxext,
   libGLU,
   alsa-lib,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libxinerama
     libxcursor
-    libXi
+    libxi
     libxext
     alsa-lib
     fontconfig

@@ -10,7 +10,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXi,
+  libxi,
   libXrandr,
   libXxf86vm,
   libxcb,
@@ -22,7 +22,7 @@ let
     libGL
     libx11
     libxcursor
-    libXi
+    libxi
     libXrandr
     libXxf86vm
     libxcb

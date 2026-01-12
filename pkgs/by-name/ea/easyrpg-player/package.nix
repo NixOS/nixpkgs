@@ -22,7 +22,7 @@
   libvorbis,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libxinerama,
   libxmp,
   libXrandr,
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libxcursor
     libxext
-    libXi
+    libxi
     libxinerama
     libXrandr
     libXScrnSaver

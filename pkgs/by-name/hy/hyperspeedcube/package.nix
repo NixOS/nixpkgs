@@ -17,7 +17,7 @@
   libx11,
   libxcb,
   libxcursor,
-  libXi,
+  libxi,
   libxkbcommon,
   libXrandr,
   makeWrapper,
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     # WINIT_UNIX_BACKEND=x11
     libxcursor
     libXrandr
-    libXi
+    libxi
     libx11
 
     vulkan-headers

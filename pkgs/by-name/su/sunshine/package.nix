@@ -12,6 +12,7 @@
   libevdev,
   libpulseaudio,
   xorg,
+  libxi,
   libxfixes,
   libxdmcp,
   libx11,
@@ -138,7 +139,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libxfixes
     xorg.libXrandr
     xorg.libXtst
-    xorg.libXi
+    libxi
     openssl
     libopus
     boost

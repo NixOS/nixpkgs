@@ -15,7 +15,7 @@
   cosmic-settings,
   libGL,
   libxkbcommon,
-  xorg,
+  libxi,
   libxcursor,
   libx11,
   libxcb,
@@ -41,7 +41,7 @@ makeSetupHook {
       libxkbcommon
       libx11
       libxcursor
-      xorg.libXi
+      libxi
       libxcb
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

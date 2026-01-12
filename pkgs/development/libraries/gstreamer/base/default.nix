@@ -26,7 +26,7 @@
   gobject-introspection,
   enableX11 ? stdenv.hostPlatform.isLinux,
   libxext,
-  libXi,
+  libxi,
   libXv,
   libdrm,
   enableWayland ? stdenv.hostPlatform.isLinux,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableX11 [
     libxext
-    libXi
+    libxi
     libXv
   ]
   ++ lib.optionals enableWayland [

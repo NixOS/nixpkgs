@@ -8,6 +8,7 @@
   pkg-config,
   desktopToDarwinBundle,
   xorg,
+  libxi,
   libxinerama,
   libxext,
   libxcursor,
@@ -56,7 +57,7 @@ buildGoModule rec {
     xorg.libXrandr
     libxinerama
     libxcursor
-    xorg.libXi
+    libxi
     libxext
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [

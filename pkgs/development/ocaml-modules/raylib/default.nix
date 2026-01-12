@@ -10,7 +10,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXi,
+  libxi,
   libxinerama,
   libXrandr,
 }:
@@ -47,7 +47,7 @@ buildDunePackage rec {
     libGL
     libx11
     libxcursor
-    libXi
+    libxi
     libxinerama
     libXrandr
   ];

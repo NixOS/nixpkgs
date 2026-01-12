@@ -19,7 +19,7 @@
   libx11,
   libxext,
   libxinerama,
-  libXi,
+  libxi,
   libXrender,
   libXrandr,
   libXtst,
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxinerama
-    libXi
+    libxi
     libXrender
     libXrandr
     libXtst

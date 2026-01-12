@@ -18,7 +18,7 @@
   libxkbcommon,
   libxext,
   libXrandr,
-  libXi,
+  libxi,
   libXScrnSaver,
   libxinerama,
   libxcursor,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals xorgSupport [
     libxkbcommon
-    libXi
+    libxi
     libXScrnSaver
     libxinerama
     libxcursor

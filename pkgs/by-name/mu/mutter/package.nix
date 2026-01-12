@@ -25,7 +25,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage
     libxext
     libxfixes
-    libXi
+    libxi
     xkeyboard_config
     libxkbcommon
     libxcb

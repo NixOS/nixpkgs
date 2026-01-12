@@ -8,7 +8,7 @@
   libglvnd,
   libjack2,
   libx11,
-  libXi,
+  libxi,
   makeDesktopItem,
   makeWrapper,
   SDL2,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libglvnd
     libx11
-    libXi
+    libxi
     SDL2
   ];
 

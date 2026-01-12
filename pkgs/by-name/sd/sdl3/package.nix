@@ -23,7 +23,7 @@
   libxcursor,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   libXrandr,
   libxtst,
   ninja,
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxcursor
       libxext
       libxfixes
-      libXi
+      libxi
       libXrandr
       libxtst
     ]

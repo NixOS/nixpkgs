@@ -15,7 +15,7 @@
   libxcomposite,
   libxcursor,
   libxdamage,
-  libXi,
+  libxi,
   libxinerama,
   libXrandr,
   libXrender,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) [
     libxcomposite
     libxcursor
-    libXi
+    libxi
     libXrandr
     libXrender
   ]

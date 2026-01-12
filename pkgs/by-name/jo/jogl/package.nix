@@ -10,6 +10,7 @@
   xcbuild,
   udev,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   libgbm,
@@ -82,7 +83,7 @@ stdenv.mkDerivation {
     libx11
     xorg.libXrandr
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXt
     xorg.libXxf86vm
     xorg.libXrender

@@ -32,7 +32,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXi,
+  libxi,
   libxkbcommon,
   libXrandr,
   libXrender,
@@ -129,7 +129,7 @@ let
     libxdamage
     libxext
     libxfixes
-    libXi
+    libxi
     libxkbcommon
     libXrandr
     libXrender

@@ -15,7 +15,7 @@
   libx11,
   libxcursor,
   libXrandr,
-  libXi,
+  libxi,
   libxkbcommon,
   vulkan-loader,
   wayland,
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     libXrandr
-    libXi
+    libxi
     cairo
     pango
     atkmm
@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libx11
         libxcursor
         libXrandr
-        libXi
+        libxi
         libxkbcommon
         vulkan-loader
         wayland

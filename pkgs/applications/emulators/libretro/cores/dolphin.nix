@@ -14,6 +14,7 @@
   sfml,
   udev,
   xorg,
+  libxi,
   libxinerama,
   libxext,
   libx11,
@@ -49,7 +50,7 @@ mkLibretroCore {
     libsm
     libx11
     libxext
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
     xorg.libXxf86vm

@@ -19,7 +19,7 @@
   libva,
   libglvnd,
   libxdamage,
-  libXi,
+  libxi,
   libXrandr,
   libxfixes,
   wrapperDir ? "/run/wrappers/bin",
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libdrm
     libva
     libxdamage
-    libXi
+    libxi
     libXrandr
     libxfixes
   ];

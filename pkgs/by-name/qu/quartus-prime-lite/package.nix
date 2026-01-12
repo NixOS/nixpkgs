@@ -62,7 +62,7 @@ buildFHSEnv rec {
       dbus
       # qsys requirements
       xorg.libXtst
-      xorg.libXi
+      libxi
       dejavu_fonts
       gnumake
     ];

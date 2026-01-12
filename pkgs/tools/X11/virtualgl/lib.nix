@@ -7,7 +7,7 @@
   libGLU,
   libXv,
   libXtst,
-  libXi,
+  libxi,
   libjpeg_turbo,
   fltk,
   xorg,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     fltk
     libXv
     libXtst
-    libXi
+    libxi
     xorg.xcbutilkeysyms
     opencl-headers
     opencl-clhpp

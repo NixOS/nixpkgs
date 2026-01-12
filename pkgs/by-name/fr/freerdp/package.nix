@@ -24,7 +24,7 @@
   libxdamage,
   libxdmcp,
   libxext,
-  libXi,
+  libxi,
   libxinerama,
   libXrandr,
   libXrender,
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage
     libxdmcp
     libxext
-    libXi
+    libxi
     libxinerama
     libXrandr
     libXrender

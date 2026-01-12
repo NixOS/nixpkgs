@@ -10,7 +10,7 @@
   glew,
   libx11,
   xorgproto,
-  libXi,
+  libxi,
   libXmu,
   fetchpatch,
   libXrandr,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     glew
     libx11
     xorgproto
-    libXi
+    libxi
     libXmu
     libXrandr
   ];

@@ -5,7 +5,7 @@
   libXt,
   libxaw,
   libXtst,
-  libXi,
+  libxi,
   libXpm,
   pkg-config,
   xorgproto,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libxaw
     libXtst
     xorgproto
-    libXi
+    libxi
     Xaw3d
     libXpm
   ];

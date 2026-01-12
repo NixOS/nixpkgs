@@ -9,7 +9,7 @@
   python3,
   symlinkJoin,
   lib,
-  xorg,
+  libxi,
   libxext,
   libx11,
   libxcb,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxcb.dev
       libx11.dev
       libxext.dev
-      xorg.libXi
+      libxi
       wayland.dev
       pciutils
       libGL

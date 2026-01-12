@@ -10,7 +10,7 @@
   libxinerama,
   libxcursor,
   libx11,
-  libXi,
+  libxi,
   libxext,
   libXxf86vm,
   fixDarwinDylibNames,
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     libXrandr
     libxinerama
     libxcursor
-    libXi
+    libxi
     libxext
     libXxf86vm
   ];

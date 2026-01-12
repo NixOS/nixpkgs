@@ -9,6 +9,7 @@
     "netclient"
   ],
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -35,7 +36,7 @@ buildGoModule rec {
     libglvnd
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     libxinerama
     xorg.libXrandr
   ];

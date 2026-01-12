@@ -10,6 +10,7 @@
   cef-binary,
   luajit,
   xorg,
+  libxi,
   libxext,
   libx11,
   libsm,
@@ -117,7 +118,7 @@ buildFHSEnv {
       libsm
       xorg.libXxf86vm
       libx11
-      xorg.libXi
+      libxi
       libxext
       glib
       pango

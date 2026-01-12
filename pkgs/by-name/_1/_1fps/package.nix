@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   xorg,
+  libxi,
   libx11,
   stdenv,
 }:
@@ -24,7 +25,7 @@ buildGoModule rec {
   buildInputs = [
     libx11
     xorg.libXtst
-    xorg.libXi
+    libxi
   ];
 
   meta = {

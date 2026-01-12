@@ -17,7 +17,7 @@
   libpng12,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXmu,
   runtimeShell,
   SDL_compat,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxext
-    libXi
+    libxi
     libXmu
     libGL
     libGLU

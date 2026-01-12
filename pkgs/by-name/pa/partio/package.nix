@@ -11,6 +11,7 @@
   swig,
   doxygen,
   xorg,
+  libxi,
   python3,
 }:
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     swig
-    xorg.libXi
+    libxi
     xorg.libXmu
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

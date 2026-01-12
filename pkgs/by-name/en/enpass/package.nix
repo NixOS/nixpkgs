@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libxi,
   libx11,
   libsm,
   libice,
@@ -55,7 +56,7 @@ let
     zlib
     dbus
     libx11
-    xorg.libXi
+    libxi
     libsm
     libice
     xorg.libXrender

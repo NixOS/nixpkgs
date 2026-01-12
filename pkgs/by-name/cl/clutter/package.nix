@@ -10,7 +10,7 @@
   libxfixes,
   libxdamage,
   libxcomposite,
-  libXi,
+  libxi,
   libxcb,
   cogl,
   pango,
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     libxfixes
     libxdamage
     libxcomposite
-    libXi
+    libxi
     libxcb
     libinput
     libgudev

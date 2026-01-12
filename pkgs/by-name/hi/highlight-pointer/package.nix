@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  xorg,
+  libxi,
   libxfixes,
   libxext,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxext
-    xorg.libXi
+    libxi
     libxfixes
   ];
 

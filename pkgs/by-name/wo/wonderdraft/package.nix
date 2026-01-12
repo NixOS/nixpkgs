@@ -4,6 +4,7 @@
   requireFile,
   dpkg,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
         libxinerama
         xorg.libXrandr
         libx11
-        xorg.libXi
+        libxi
         libGL
         alsa-lib
         pulseaudio

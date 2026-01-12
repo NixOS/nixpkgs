@@ -7,6 +7,7 @@
   SDL2,
   pkg-config,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   wayland,
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     xorg.libXrandr
-    xorg.libXi
+    libxi
   ];
 
   postInstall = ''

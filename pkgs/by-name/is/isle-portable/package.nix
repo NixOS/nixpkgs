@@ -11,6 +11,7 @@
 
   # Build Inputs
   xorg,
+  libxi,
   libxinerama,
   libxfixes,
   libxext,
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
     xorg.libXrender
     libxfixes
-    xorg.libXi
+    libxi
     libxinerama
     libxcursor
     wayland

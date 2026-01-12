@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libxdamage,
@@ -64,7 +65,7 @@ let
     xorg.libXtst
     libxcb
     libxext
-    xorg.libXi
+    libxi
     libxdamage
     xorg.libXrandr
     libxcomposite

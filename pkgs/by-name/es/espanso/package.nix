@@ -8,7 +8,7 @@
   dbus,
   libx11,
   libxcb,
-  libXi,
+  libxi,
   libXtst,
   libnotify,
   libxkbcommon,
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wl-clipboard
   ]
   ++ lib.optionals x11Support [
-    libXi
+    libxi
     libXtst
     libx11
     libxcb

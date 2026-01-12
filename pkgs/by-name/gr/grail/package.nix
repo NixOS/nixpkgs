@@ -5,6 +5,7 @@
   fetchurl,
   pkg-config,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libx11,
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     libx11
     xorg.libXtst
     libxext
-    xorg.libXi
+    libxi
     libxfixes
   ];
 

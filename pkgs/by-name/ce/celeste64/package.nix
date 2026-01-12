@@ -13,6 +13,7 @@
   wayland,
   libdecor,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libxcursor,
@@ -52,7 +53,7 @@ buildDotnetModule rec {
     libxfixes
     libxext
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXrandr
   ]
   ++ lib.optionals withSELinux [ libselinux ];

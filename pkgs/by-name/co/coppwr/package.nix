@@ -8,7 +8,7 @@
   vulkan-loader,
   wayland,
   libGL,
-  xorg,
+  libxi,
   libxcursor,
   libx11,
 }:
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     libGL
     libxcursor
-    xorg.libXi
+    libxi
     libx11
   ];
 

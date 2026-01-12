@@ -7,6 +7,7 @@
   meson,
   ninja,
   xorg,
+  libxi,
   libx11,
 }:
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    xorg.libXi
+    libxi
     xorg.libXrandr
   ];
 

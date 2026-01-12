@@ -10,6 +10,7 @@
   fontconfig,
   freetype,
   xorg,
+  libxi,
   libxcb,
   python3,
   git,
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtsvg
     libgbm
     freetype
-    xorg.libXi
+    libxi
     xorg.libXrender
     libxcb
   ];

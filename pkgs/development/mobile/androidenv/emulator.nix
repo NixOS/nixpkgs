@@ -47,7 +47,7 @@ deployAndroidPackage {
       libxcb
       libxcomposite
       libxcursor
-      xorg.libXi
+      libxi
       xorg.libXrender
       xorg.libXtst
       libice

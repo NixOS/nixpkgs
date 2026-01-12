@@ -10,6 +10,7 @@
   libva,
   gst_all_1,
   xorg,
+  libxi,
   libxinerama,
   libxft,
   libxfixes,
@@ -57,7 +58,7 @@ rustPlatform.buildRustPackage {
     xorg.libXtst
     xorg.libXrandr
     libxcomposite
-    xorg.libXi
+    libxi
     xorg.libXv
     pango
     libdrm

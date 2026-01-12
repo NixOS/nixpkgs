@@ -10,7 +10,7 @@
   libGL,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libxinerama,
   libxkbcommon,
   libXrandr,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
-    libXi
+    libxi
     libxinerama
     libxkbcommon
     libXrandr

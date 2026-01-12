@@ -21,7 +21,7 @@
   libXrender,
   libxfixes,
   libx11,
-  libXi,
+  libxi,
   libXrandr,
   libxcursor,
   freetype,
@@ -49,7 +49,7 @@ let
     libXrender
     libxfixes
     libx11
-    libXi
+    libxi
     libXrandr
     libxcursor
     freetype

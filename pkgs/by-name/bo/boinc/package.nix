@@ -10,7 +10,7 @@
   libGLU,
   libGL,
   libXmu,
-  libXi,
+  libxi,
   libglut,
   libjpeg,
   libtool,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libXmu
-    libXi
+    libxi
     libglut
     libjpeg
     wxGTK32

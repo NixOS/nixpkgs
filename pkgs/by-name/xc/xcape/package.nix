@@ -6,7 +6,7 @@
   libx11,
   libXtst,
   xorgproto,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     libx11
     libXtst
     xorgproto
-    libXi
+    libxi
   ];
 
   makeFlags = [

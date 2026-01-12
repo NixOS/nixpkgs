@@ -7,7 +7,7 @@
   freetype,
   libx11,
   libxft,
-  libXi,
+  libxi,
   libXpm,
   libXrandr,
   libXt,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libx11
     libxft
-    libXi
+    libxi
     libXpm
     libXrandr
     libXt

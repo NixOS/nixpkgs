@@ -7,7 +7,7 @@
   libx11,
   libXt,
   libXmu,
-  libXi,
+  libxi,
   libxext,
   libGL,
   libGLU,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libx11
     libXt
     libXmu
-    libXi
+    libxi
     libxext
   ];
 

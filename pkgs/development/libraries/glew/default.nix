@@ -6,7 +6,7 @@
   cmake,
   libGLU,
   libXmu,
-  libXi,
+  libxi,
   libxext,
   enableEGL ? (!stdenv.hostPlatform.isDarwin),
   testers,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libXmu
-    libXi
+    libxi
     libxext
   ];
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libGLU ]; # GL/glew.h includes GL/glu.h

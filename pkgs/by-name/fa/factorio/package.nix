@@ -9,7 +9,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXi,
+  libxi,
   libxinerama,
   libXrandr,
   libpulseaudio,
@@ -248,7 +248,7 @@ let
         libx11
         libxcursor
         libxext
-        libXi
+        libxi
         libxinerama
         libXrandr
         libpulseaudio

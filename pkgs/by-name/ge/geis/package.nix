@@ -14,6 +14,7 @@
   grail,
   gtk3,
   xorg,
+  libxi,
   libxext,
   libx11,
   pango,
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libx11
     libxext
-    xorg.libXi
+    libxi
     xorg.libXtst
     pango
     python3Packages.python

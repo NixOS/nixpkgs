@@ -7,7 +7,7 @@
   libxft,
   xorgproto,
   xinput,
-  libXi,
+  libxi,
   libxext,
   libXtst,
   libXpm,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXpm
     libx11
-    libXi
+    libxi
     xorgproto
     xinput
   ];

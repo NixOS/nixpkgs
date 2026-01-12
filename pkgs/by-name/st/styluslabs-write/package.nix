@@ -4,7 +4,7 @@
   stdenv,
   pkg-config,
   SDL2,
-  xorg,
+  libxi,
   libxcursor,
   libx11,
   libGL,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     libx11
-    xorg.libXi
+    libxi
     libxcursor
     libGL
   ];

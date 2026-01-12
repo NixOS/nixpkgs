@@ -6,6 +6,7 @@
   zlib,
   libjpeg,
   xorg,
+  libxi,
   libxinerama,
   libxfixes,
   libxext,
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     xorg.libXrandr
     libxext
-    xorg.libXi
+    libxi
     xorg.libXrender
     libvncserver
   ];

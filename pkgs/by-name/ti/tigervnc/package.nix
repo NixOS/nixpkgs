@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxi,
   libxft,
   libxfont_2,
   libxext,
@@ -156,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       libx11
       libxext
       libice
-      xorg.libXi
+      libxi
       libsm
       libxft
       libxkbfile

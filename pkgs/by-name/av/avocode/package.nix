@@ -22,6 +22,7 @@
   udev,
   adwaita-icon-theme,
   xorg,
+  libxi,
   libxfixes,
   libxext,
   libxdamage,
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxshmfence
     libxkbcommon
-    xorg.libXi
+    libxi
     libxcursor
     libxdamage
     xorg.libXrandr

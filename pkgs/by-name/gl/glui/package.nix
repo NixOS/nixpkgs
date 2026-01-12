@@ -7,7 +7,7 @@
   libGLU,
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXmu,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libXmu
     libxext
     libx11
-    libXi
+    libxi
   ];
 
   installPhase = ''

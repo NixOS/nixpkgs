@@ -20,6 +20,7 @@
   libGL,
   numactl,
   xorg,
+  libxi,
   libxinerama,
   libxft,
   libxfixes,
@@ -126,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libxft
     libxinerama
-    xorg.libXi
+    libxi
     xorg.libXrandr
     xorg.libXrender
     xorg.libXScrnSaver
@@ -240,7 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
         --add-needed ${libx11}/lib/libX11.so.6 \
-        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
+        --add-needed ${libxi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done

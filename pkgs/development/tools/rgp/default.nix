@@ -17,7 +17,7 @@
   libsm,
   libx11,
   libxcb,
-  libXi,
+  libxi,
   libxkbcommon,
   libxml2_13,
   ncurses,
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     libsm
     libx11
     libxcb
-    libXi
+    libxi
     libxkbcommon
     libxml2_13
     ncurses

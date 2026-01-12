@@ -19,7 +19,7 @@
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libx11,
   libxext,
-  libXi,
+  libxi,
   libXrandr,
   enableCurl ? true,
   curl,
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableX11 [
     libx11
     libxext
-    libXi
+    libxi
     libXrandr
   ]
   ++ lib.optionals enableCurl [

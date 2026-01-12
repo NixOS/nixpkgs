@@ -9,6 +9,7 @@
   pugixml,
   cairo,
   xorg,
+  libxi,
   libxdmcp,
   libx11,
   libpthread-stubs,
@@ -67,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     xorg.libXtst
     xorg.libXrandr
-    xorg.libXi
+    libxi
     libxdmcp
     libpthread-stubs
     libxcb

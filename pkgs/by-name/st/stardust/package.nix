@@ -7,7 +7,7 @@
   libxml2,
   SDL_compat,
   libx11,
-  libXi,
+  libxi,
   libXmu,
   libxext,
   libGLU,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     SDL_compat
     libx11
-    libXi
+    libxi
     libXmu
     libxext
     libGLU

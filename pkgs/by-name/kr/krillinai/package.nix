@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -33,7 +34,7 @@ buildGoModule (finalAttrs: {
     libxcursor
     xorg.libXrandr
     libx11
-    xorg.libXi
+    libxi
     libGL
   ];
 

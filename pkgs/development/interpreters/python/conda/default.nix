@@ -16,7 +16,7 @@
       libx11
       libxau
       libxdamage
-      xorg.libXi
+      libxi
       xorg.libXrender
       xorg.libXrandr
       libxcomposite

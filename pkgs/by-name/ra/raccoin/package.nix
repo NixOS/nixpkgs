@@ -14,6 +14,7 @@
   alsa-lib,
   libGL,
   xorg,
+  libxi,
   libxcursor,
   libx11,
   openssl,
@@ -55,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals withX11 [
     libx11
     libxcursor
-    xorg.libXi
+    libxi
     xorg.libXrandr
   ];
 

@@ -9,6 +9,7 @@
   libarchive,
   libGL,
   xorg,
+  libxi,
   libxau,
   libx11,
   libsm,
@@ -23,7 +24,7 @@
     libice
     libx11
     libxau
-    xorg.libXi
+    libxi
     xorg.libXrender
     libselinux
     libGL

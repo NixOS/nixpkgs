@@ -10,7 +10,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXi,
+  libxi,
   stdenv,
   makeWrapper,
   zenity,
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libx11
     libxcursor
-    libXi
+    libxi
   ];
 
   cargoHash = "sha256-E+9u7t6bLzORL2HiG4iT5pT4nGftyOgO2/eXHuQK4pQ=";

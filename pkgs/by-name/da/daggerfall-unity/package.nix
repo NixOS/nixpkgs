@@ -8,7 +8,7 @@
   libGL,
   libXScrnSaver,
   libxcursor,
-  libXi,
+  libxi,
   libxinerama,
   libXrandr,
   libXxf86vm,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libXScrnSaver
     libxcursor
-    libXi
+    libxi
     libxinerama
     libXrandr
     libXxf86vm

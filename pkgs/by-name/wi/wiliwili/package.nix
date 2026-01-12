@@ -14,6 +14,7 @@
   wayland,
   egl-wayland,
   xorg,
+  libxi,
   libxinerama,
   libxcursor,
   libx11,
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
     libxinerama
     libxcursor
-    xorg.libXi
+    libxi
   ];
 
   cmakeFlags = [

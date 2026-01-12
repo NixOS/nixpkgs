@@ -8,6 +8,7 @@
   alsa-lib,
   ncurses5,
   xorg,
+  libxi,
   libxft,
   libxext,
   libxcursor,
@@ -96,7 +97,7 @@ let
       libxcursor
       libxext
       libxft
-      xorg.libXi
+      libxi
       xorg.libXrandr
       xorg.libXrender
       xorg.libXtst

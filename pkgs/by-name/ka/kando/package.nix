@@ -17,7 +17,7 @@
   libxkbcommon,
   libx11,
   libXtst,
-  libXi,
+  libxi,
   wayland,
 }:
 
@@ -55,7 +55,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
     libxkbcommon
     libx11
     libXtst
-    libXi
+    libxi
     wayland
   ];
 

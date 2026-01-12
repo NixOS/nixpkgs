@@ -10,7 +10,7 @@
   libx11,
   libxcursor,
   libXrandr,
-  libXi,
+  libxi,
   libGL,
   libxkbcommon,
   wayland,
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     libGL
     libx11
     libxcursor
-    libXi
+    libxi
     libXrandr
     gtk3
     libxkbcommon

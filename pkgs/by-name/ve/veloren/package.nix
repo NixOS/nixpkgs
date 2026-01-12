@@ -11,7 +11,7 @@
   libxkbcommon,
   autoPatchelfHook,
   libx11,
-  libXi,
+  libxi,
   libxcursor,
   libXrandr,
   wayland,
@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage {
     (lib.makeLibraryPath (
       [
         libx11
-        libXi
+        libxi
         libxcursor
         libXrandr
         vulkan-loader
