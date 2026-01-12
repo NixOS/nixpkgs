@@ -44,8 +44,6 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs ./tools/splitconfig.py
-
     # Disable some tests that always fail -- our postgresqlTestHook initializes the database with the default (ASCII) encoding.
     substituteInPlace test/unit/test_stream_from.cxx \
       --replace-fail "PQXX_REGISTER_TEST(test_stream_from_parses_awkward_strings);" ""
@@ -56,6 +54,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile.am \
       --replace-fail "TESTS = tools/lint" ""
 
+    patchShebangs ./tools/splitconfig.py
     # Needed for autoreconfHook
     patchShebangs tools/*.py
   '';
