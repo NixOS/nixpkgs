@@ -9,7 +9,7 @@
   freetype,
   gettext,
   libx11,
-  libXau,
+  libxau,
   libXdmcp,
   libXext,
   libXft,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     libx11
-    libXau
+    libxau
     libXdmcp
     libXext
     libXft

@@ -9,7 +9,7 @@
   glslang,
   libffi,
   libx11,
-  libXau,
+  libxau,
   libxcb,
   libXdmcp,
   libXrandr,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
     libx11
-    libXau
+    libxau
     libxcb
     libXdmcp
     libXrandr

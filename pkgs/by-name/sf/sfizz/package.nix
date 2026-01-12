@@ -5,6 +5,7 @@
   libjack2,
   libsndfile,
   xorg,
+  libxau,
   libx11,
   libxcb,
   freetype,
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libopus
     libx11
     libxcb
-    xorg.libXau
+    libxau
     xorg.libXdmcp
     xorg.xcbutil
     xorg.xcbutilcursor

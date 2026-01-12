@@ -10,7 +10,7 @@
   glslang,
   libffi,
   libx11,
-  libXau,
+  libxau,
   libxcb,
   libXdmcp,
   libXrandr,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXau
+    libxau
     libXdmcp
     libXrandr
     libffi

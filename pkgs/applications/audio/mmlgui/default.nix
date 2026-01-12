@@ -7,7 +7,7 @@
   glfw,
   libvgm,
   libx11,
-  libXau,
+  libxau,
   libXdmcp,
   cppunit,
 }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXau
+    libxau
     libXdmcp
   ];
 

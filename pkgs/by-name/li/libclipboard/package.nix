@@ -4,7 +4,7 @@
   cmake,
   pkg-config,
   libxcb,
-  libXau,
+  libxau,
   libXdmcp,
   lib,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXau
+    libxau
     libXdmcp
   ];
   nativeBuildInputs = [

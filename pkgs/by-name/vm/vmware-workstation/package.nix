@@ -20,6 +20,7 @@
   libGL,
   numactl,
   xorg,
+  libxau,
   libx11,
   kmod,
   python3,
@@ -108,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     numactl
     libx11
-    xorg.libXau
+    libxau
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage

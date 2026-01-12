@@ -18,7 +18,7 @@
   glm,
   gmp,
   kissfftFloat,
-  libXau,
+  libxau,
   libXdmcp,
   libXpm,
   libXrandr,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     gmp
     kissfftFloat
-    libXau
+    libxau
     libXdmcp
     libXpm
     libXrandr

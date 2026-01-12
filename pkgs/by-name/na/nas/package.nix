@@ -6,7 +6,7 @@
   flex,
   gccmakedep,
   imake,
-  libXau,
+  libxau,
   libXaw,
   libXext,
   libXpm,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXau
+    libxau
     libXaw
     libXext
     libXpm

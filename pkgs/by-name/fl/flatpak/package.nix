@@ -56,7 +56,7 @@
   wrapGAppsNoGuiHook,
   xdg-dbus-proxy,
   xmlto,
-  xorg,
+  libxau,
   zstd,
   withAutoSideloading ? false,
   withDconf ? lib.meta.availableOn stdenv.hostPlatform dconf,
@@ -219,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wayland
     wayland-protocols
-    xorg.libXau
+    libxau
     zstd
   ]
   ++ lib.optional withDconf dconf

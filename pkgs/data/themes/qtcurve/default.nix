@@ -24,7 +24,7 @@
   pcre,
   libXdmcp,
   libx11,
-  libXau, # X11 dependencies
+  libxau, # X11 dependencies
   fetchpatch,
 }:
 
@@ -80,7 +80,7 @@ mkDerivation rec {
     pcre
     libXdmcp
     libx11
-    libXau
+    libxau
   ]
   ++ lib.optional gtk2Support gtk2;
 

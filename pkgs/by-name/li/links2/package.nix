@@ -20,7 +20,7 @@
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libx11,
   libXt,
-  libXau, # GUI support
+  libxau, # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
   ++ lib.optionals enableX11 [
     libx11
-    libXau
+    libxau
     libXt
   ]
   ++ lib.optionals enableDirectFB [ directfb ];

@@ -14,7 +14,7 @@
   leptonica,
   libGL,
   libx11,
-  libXau,
+  libxau,
   libXcomposite,
   libXdmcp,
   libXfixes,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     leptonica
     libGL
     libx11
-    libXau
+    libxau
     libXcomposite
     libXdmcp
     libXfixes

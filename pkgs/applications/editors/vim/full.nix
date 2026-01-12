@@ -22,7 +22,7 @@
   libXpm,
   libXt,
   libXaw,
-  libXau,
+  libxau,
   libXmu,
   libsodium,
   libice,
@@ -184,7 +184,7 @@ stdenv.mkDerivation {
     libXpm
     libXt
     libXaw
-    libXau
+    libxau
     libXmu
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11

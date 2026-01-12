@@ -18,7 +18,7 @@
   libiconv,
   flex,
   libXp,
-  libXau,
+  libxau,
   demoSupport ? false,
 }:
 # refer to the gentoo package
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     libXp
-    libXau
+    libxau
   ];
 
   strictDeps = true;

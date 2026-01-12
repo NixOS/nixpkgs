@@ -12,7 +12,7 @@
   libffi,
   libpng,
   libx11,
-  libXau,
+  libxau,
   libXdmcp,
   libxcb,
   makeWrapper,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
     libpng
     libx11
-    libXau
+    libxau
     libXdmcp
     libxcb
     vulkan-headers

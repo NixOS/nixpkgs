@@ -31,7 +31,7 @@
   libxcb,
   libXrandr,
   libXinerama,
-  libXau,
+  libxau,
   libinput,
   libdrm,
   libgbm,
@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libXrandr
     libXinerama
-    libXau
+    libxau
   ];
 
   postPatch = ''

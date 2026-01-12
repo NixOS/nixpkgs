@@ -27,7 +27,7 @@
   libuv,
   libuvc,
   libv4l,
-  libXau,
+  libxau,
   libxcb,
   libXdmcp,
   libXext,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuv
     libuvc
     libv4l
-    libXau
+    libxau
     libxcb
     libXdmcp
     libXext

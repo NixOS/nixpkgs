@@ -19,7 +19,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  libXau,
+  libxau,
   libx11,
   libXrender,
   libxcb,
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libglvnd
-    libXau
+    libxau
     libx11
     libXrender
     libxcb

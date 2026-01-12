@@ -103,7 +103,7 @@ let
           udev
           omnissaHorizonClientFiles
           libx11
-          xorg.libXau
+          libxau
           xorg.libXcursor
           xorg.libXext
           xorg.libXi

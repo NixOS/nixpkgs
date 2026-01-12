@@ -6,7 +6,7 @@
   pkg-config,
   libx11,
   libpthread-stubs,
-  libXau,
+  libxau,
   libXdmcp,
   libXext,
   libvdpau,
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     libpthread-stubs
-    libXau
+    libxau
     libXdmcp
     libXext
     libvdpau

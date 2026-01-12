@@ -6,7 +6,7 @@
   writeText,
   libx11,
   libxcb,
-  libXau,
+  libxau,
   libXdmcp,
   config,
   conf ? config.slstatus.conf or null,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxcb
-    libXau
+    libxau
     libXdmcp
   ]
   ++ extraLibs;

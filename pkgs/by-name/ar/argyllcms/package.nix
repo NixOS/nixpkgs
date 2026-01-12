@@ -15,7 +15,7 @@
   libXScrnSaver,
   writeText,
   libXdmcp,
-  libXau,
+  libxau,
   lib,
   openssl,
   buildPackages,
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXScrnSaver
     libXdmcp
-    libXau
+    libxau
     openssl
   ];
 

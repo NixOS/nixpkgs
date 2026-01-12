@@ -18,6 +18,7 @@
   openssl,
   stdenv,
   xorg,
+  libxau,
   libx11,
   libsm,
   libice,
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     libice
     libsm
     libx11
-    xorg.libXau
+    libxau
     libxcb
     xorg.libXext
     xorg.libXi

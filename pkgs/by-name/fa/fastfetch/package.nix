@@ -36,6 +36,7 @@
   wayland,
   xfconf,
   xorg,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -169,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
           libXrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
+          libxau
           xorg.libXdmcp
           xorg.libXext
         ]

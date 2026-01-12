@@ -144,7 +144,7 @@ buildFHSEnv {
       xorg.libXrandr
       xorg.libXScrnSaver
       xorg.libXxf86vm
-      xorg.libXau
+      libxau
       xorg.libXdmcp
     ];
 

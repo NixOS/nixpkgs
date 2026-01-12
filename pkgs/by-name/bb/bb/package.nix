@@ -6,6 +6,7 @@
   aalib,
   ncurses,
   xorg,
+  libxau,
   libx11,
   libmikmod,
 }:
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     aalib
     ncurses
     libmikmod
-    xorg.libXau
+    libxau
     xorg.libXdmcp
     libx11
   ];

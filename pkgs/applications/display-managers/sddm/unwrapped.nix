@@ -7,7 +7,7 @@
   pkg-config,
   qttools,
   libxcb,
-  libXau,
+  libxau,
   pam,
   qtbase,
   qtdeclarative,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXau
+    libxau
     pam
     qtbase
     qtdeclarative

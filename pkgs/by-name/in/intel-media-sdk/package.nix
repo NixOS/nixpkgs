@@ -9,7 +9,7 @@
   libpciaccess,
   libva,
   libx11,
-  libXau,
+  libxau,
   libXdmcp,
   libpthread-stubs,
   fetchpatch,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libva
     libpciaccess
     libx11
-    libXau
+    libxau
     libXdmcp
     libpthread-stubs
   ];

@@ -10,7 +10,7 @@
   obs-studio,
   libffi,
   libx11,
-  libXau,
+  libxau,
   libXdmcp,
   libxcb,
   vulkan-headers,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libffi
     libx11
-    libXau
+    libxau
     libXdmcp
     libxcb
     vulkan-headers

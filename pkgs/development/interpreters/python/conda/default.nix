@@ -14,7 +14,7 @@
       libsm
       libice
       libx11
-      xorg.libXau
+      libxau
       xorg.libXdamage
       xorg.libXi
       xorg.libXrender

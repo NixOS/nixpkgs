@@ -20,7 +20,7 @@
   libffi,
   libffcall,
   libx11,
-  libXau,
+  libxau,
   libXt,
   libXpm,
   libXext,
@@ -46,7 +46,7 @@ assert
   x11Support
   -> (
     libx11 != null
-    && libXau != null
+    && libxau != null
     && libXt != null
     && libXpm != null
     && xorgproto != null
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   ++ lib.optional ffcallAvailable libffcall
   ++ lib.optionals x11Support [
     libx11
-    libXau
+    libxau
     libXt
     libXpm
     xorgproto

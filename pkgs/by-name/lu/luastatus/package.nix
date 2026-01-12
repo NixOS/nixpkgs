@@ -13,7 +13,7 @@
   glib,
   libnl,
   udev,
-  libXau,
+  libxau,
   libXdmcp,
   pcre2,
   pcre,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     xcbutilwm
     libXdmcp
-    libXau
+    libxau
     libpulseaudio
     libnl
     libselinux

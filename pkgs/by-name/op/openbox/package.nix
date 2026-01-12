@@ -9,7 +9,7 @@
   libxml2,
   libXinerama,
   libXcursor,
-  libXau,
+  libxau,
   libXrandr,
   libice,
   libsm,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libxml2
     libXinerama
     libXcursor
-    libXau
+    libxau
     libXrandr
     libice
     libsm

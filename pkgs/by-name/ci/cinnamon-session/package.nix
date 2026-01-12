@@ -18,6 +18,7 @@
   wrapGAppsHook3,
   xapp,
   xorg,
+  libxau,
   libx11,
   xtrans,
   libexecinfo,
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     libx11
     xorg.libXext
     xapp
-    xorg.libXau
+    libxau
     xorg.libXcomposite
 
     systemd
