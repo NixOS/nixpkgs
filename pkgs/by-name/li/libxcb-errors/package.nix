@@ -5,7 +5,7 @@
   pkg-config,
   m4,
   python3,
-  xcbproto,
+  xcb-proto,
   libxcb,
   writeScript,
   testers,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xcbproto
+    xcb-proto
     libxcb
   ];
 

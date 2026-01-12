@@ -38269,7 +38269,7 @@ with self;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
       pkgs.libxcb
-      pkgs.xorg.xcbproto
+      pkgs.xcb-proto
       pkgs.xorg.xcbutil
       pkgs.xorg.xcbutilwm
       ExtUtilsDepends

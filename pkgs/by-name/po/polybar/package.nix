@@ -14,7 +14,7 @@
   python3Packages, # sphinx-build
   lib,
   stdenv,
-  xcbproto,
+  xcb-proto,
   xcbutil,
   xcbutilcursor,
   xcbutilimage,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     pcre
     python3
-    xcbproto
+    xcb-proto
     xcbutil
     xcbutilcursor
     xcbutilimage

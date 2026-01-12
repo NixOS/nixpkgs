@@ -7,7 +7,7 @@
   xcbutil,
   xcbutilkeysyms,
   xcbutilwm,
-  xcbproto,
+  xcb-proto,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     xcbutil
     xcbutilkeysyms
     xcbutilwm
-    xcbproto
+    xcb-proto
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
