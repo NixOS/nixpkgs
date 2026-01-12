@@ -10,7 +10,7 @@
 buildPythonApplication rec {
   pname = "Tautulli";
   version = "2.16.0";
-  format = "other";
+  pyproject = false;
 
   pythonPath = [ setuptools ];
   nativeBuildInputs = [
