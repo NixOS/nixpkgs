@@ -8,7 +8,7 @@
   fribidi,
   game-music-emu,
   libxdmcp,
-  libXv,
+  libxv,
   libass,
   libcddb,
   libcdio,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     game-music-emu
     libxdmcp
-    libXv
+    libxv
     libass
     libcddb
     libcdio

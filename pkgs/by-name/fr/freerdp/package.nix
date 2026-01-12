@@ -29,7 +29,7 @@
   libxrandr,
   libxrender,
   libxtst,
-  libXv,
+  libxv,
   libxkbcommon,
   libxkbfile,
   wayland,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxtst
-    libXv
+    libxv
     libjpeg_turbo
     libkrb5
     libopus

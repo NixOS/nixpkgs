@@ -30,7 +30,7 @@
   libx11,
   libxext,
   libxrandr,
-  libXv,
+  libxv,
   openssl,
   peg,
   procps,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxrandr
-    libXv
+    libxv
     openssl
     peg
     procps

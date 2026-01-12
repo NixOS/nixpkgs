@@ -12,7 +12,7 @@
   gtk2,
   libpulseaudio,
   openssl,
-  xorg,
+  libxv,
   libxscrnsaver,
   libxext,
   libx11,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxscrnsaver
-    xorg.libXv
+    libxv
   ];
 
   nativeBuildInputs = [ unzip ];

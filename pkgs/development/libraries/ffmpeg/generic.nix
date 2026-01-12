@@ -314,7 +314,7 @@
   libxcb,
   libxext,
   libxml2,
-  libXv,
+  libxv,
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
@@ -966,7 +966,7 @@ stdenv.mkDerivation (
       ++ optionals withXeve [ xeve ]
       ++ optionals withXlib [
         libx11
-        libXv
+        libxv
         libxext
       ]
       ++ optionals withXml2 [ libxml2 ]

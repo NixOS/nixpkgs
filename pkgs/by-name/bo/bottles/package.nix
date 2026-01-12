@@ -42,7 +42,7 @@ let
             libxmu
             libxrandr
             libxrender
-            xorg.libXv
+            libxv
             xorg.libXxf86vm
           ];
         gstreamerDeps =

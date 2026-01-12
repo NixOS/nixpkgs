@@ -27,7 +27,7 @@
   enableX11 ? stdenv.hostPlatform.isLinux,
   libxext,
   libxi,
-  libXv,
+  libxv,
   libdrm,
   enableWayland ? stdenv.hostPlatform.isLinux,
   wayland-scanner,
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     libxext
     libxi
-    libXv
+    libxv
   ]
   ++ lib.optionals enableWayland [
     wayland

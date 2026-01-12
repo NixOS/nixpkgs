@@ -37,7 +37,7 @@ let
       xorg.libXxf86vm
       libxinerama
       libsm
-      xorg.libXv
+      libxv
       libxaw
       libxi
       libxcursor

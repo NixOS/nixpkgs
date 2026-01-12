@@ -5,7 +5,7 @@
   cmake,
   libGL,
   libGLU,
-  libXv,
+  libxv,
   libxtst,
   libxi,
   libjpeg_turbo,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     fltk
-    libXv
+    libxv
     libxtst
     libxi
     xorg.xcbutilkeysyms

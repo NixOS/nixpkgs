@@ -6,7 +6,7 @@
   xorgproto,
   libx11,
   libxext,
-  libXv,
+  libxv,
   writeScript,
   testers,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
     libx11
     libxext
-    libXv
+    libxv
   ];
 
   propagatedBuildInputs = [ xorgproto ];

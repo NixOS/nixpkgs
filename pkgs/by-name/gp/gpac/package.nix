@@ -29,7 +29,7 @@
   pulseaudio,
   SDL2,
   curl,
-  xorg,
+  libxv,
   libx11,
   xorgproto,
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     openjpeg
     libcaca
     libx11
-    xorg.libXv
+    libxv
     xorgproto
     mesa
     mesa_glu

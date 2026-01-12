@@ -27,7 +27,7 @@
   openexr,
   libxext,
   libXxf86vm,
-  libXv,
+  libxv,
   libxi,
   libx11,
   libxft,
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
     openexr
     libxext
     libXxf86vm
-    libXv
+    libxv
     libxi
     libx11
     libxft

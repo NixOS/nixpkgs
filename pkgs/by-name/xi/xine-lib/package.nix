@@ -11,7 +11,7 @@
   libx11,
   libxext,
   libxinerama,
-  libXv,
+  libxv,
   libcaca,
   libcdio,
   libmng,
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     libxinerama
-    libXv
-    libXv
+    libxv
+    libxv
     libcaca
     libcdio
     libmng

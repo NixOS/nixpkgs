@@ -23,7 +23,7 @@
   xineramaSupport ? true,
   libxinerama,
   xvSupport ? true,
-  libXv,
+  libxv,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   screenSaverSupport ? true,
@@ -152,7 +152,7 @@ stdenv.mkDerivation {
     libGL
   ]
   ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional xvSupport libXv
+  ++ lib.optional xvSupport libxv
   ++ lib.optional theoraSupport libtheora
   ++ lib.optional cacaSupport libcaca
   ++ lib.optional xineramaSupport libxinerama

@@ -11,7 +11,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXv,
+  libxv,
   libepoxy,
   libpng,
   libselinux,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXv
+    libxv
     minizip
     zlib
   ]

@@ -12,7 +12,7 @@
   libtiff,
   udev,
   gtk3,
-  xorg,
+  libxv,
   libxtst,
   libxdamage,
   cups,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qt5.qtbase
     libxdamage
     libxtst
-    xorg.libXv
+    libxv
   ];
 
   dontWrapQtApps = true;

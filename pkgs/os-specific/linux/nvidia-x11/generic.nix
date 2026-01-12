@@ -108,7 +108,7 @@ let
         libdrm
         libxext
         libx11
-        xorg.libXv
+        libxv
         libxrandr
         libxcb
         zlib

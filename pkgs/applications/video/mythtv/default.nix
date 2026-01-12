@@ -20,7 +20,7 @@
   libbluray,
   lzo,
   libx11,
-  libXv,
+  libxv,
   libxrandr,
   libxvmc,
   libxinerama,
@@ -75,7 +75,7 @@ mkDerivation rec {
     libpulseaudio
     fftwSinglePrec
     libx11
-    libXv
+    libxv
     libxrandr
     libxvmc
     libxmu

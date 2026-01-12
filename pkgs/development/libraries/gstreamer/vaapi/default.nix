@@ -13,7 +13,7 @@
   wayland-scanner,
   libdrm,
   udev,
-  xorg,
+  libxv,
   libxrandr,
   libxext,
   libx11,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcb
     libxext
-    xorg.libXv
+    libxv
     libxrandr
     libsm
     libice

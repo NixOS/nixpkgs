@@ -12,7 +12,7 @@ nvidia_x11: sha256:
   dbus,
   vulkan-headers,
   gtk3,
-  libXv,
+  libxv,
   libxrandr,
   libxext,
   libXxf86vm,
@@ -88,7 +88,7 @@ let
   runtimeDependencies = [
     libglvnd
     libxrandr
-    libXv
+    libxv
   ];
 
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
@@ -143,7 +143,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     jansson
-    libXv
+    libxv
     libxrandr
     libxext
     libXxf86vm

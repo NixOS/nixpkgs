@@ -9,7 +9,7 @@
   libGL,
   libGLU,
   libx11,
-  libXv,
+  libxv,
   libao,
   libpulseaudio,
   libretro-shaders-slang,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libx11
-    libXv
+    libxv
     libpulseaudio
     openal
     udev

@@ -9,7 +9,7 @@
   libjack2,
   liblo,
   libx11,
-  libXv,
+  libxv,
   pkg-config,
   portmidi,
   libxpm,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGLU
     liblo
-    libXv
+    libxv
     portmidi
   ];
 

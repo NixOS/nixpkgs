@@ -8,7 +8,7 @@
   enableX11 ? true,
   libx11,
   libxext,
-  libXv,
+  libxv,
   libpng,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     libpng
     libx11
     libxext
-    libXv
+    libxv
   ];
 
   enableParallelBuilding = true;

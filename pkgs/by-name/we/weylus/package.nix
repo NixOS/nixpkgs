@@ -9,7 +9,7 @@
   x264,
   libva,
   gst_all_1,
-  xorg,
+  libxv,
   libxtst,
   libxrender,
   libxrandr,
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage {
     libxrandr
     libxcomposite
     libxi
-    xorg.libXv
+    libxv
     pango
     libdrm
     wayland

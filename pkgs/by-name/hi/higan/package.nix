@@ -8,7 +8,7 @@
   libGL,
   libGLU,
   libx11,
-  libXv,
+  libxv,
   libao,
   libicns,
   libpulseaudio,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libx11
-    libXv
+    libxv
     libpulseaudio
     openal
     udev

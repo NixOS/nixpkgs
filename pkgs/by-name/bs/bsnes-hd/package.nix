@@ -6,7 +6,7 @@
   gtk3,
   gtksourceview3,
   libx11,
-  libXv,
+  libxv,
   libao,
   libicns,
   libpulseaudio,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXv
+    libxv
     udev
     gtk3
     gtksourceview3

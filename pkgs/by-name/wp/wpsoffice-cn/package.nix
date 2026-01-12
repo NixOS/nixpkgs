@@ -22,7 +22,7 @@
   unixODBC,
   libmysqlclient,
   libsForQt5,
-  xorg,
+  libxv,
   libxtst,
   libxdamage,
   # wpsoffice runtime dependencies
@@ -149,7 +149,7 @@ else
       libsForQt5.qtbase
       libxdamage
       libxtst
-      xorg.libXv
+      libxv
     ];
 
     dontWrapQtApps = true;
