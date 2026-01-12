@@ -9,7 +9,7 @@
   SDL2,
   SDL2_image,
   libsm,
-  libXext,
+  libxext,
   libpng,
   freetype,
   libGLU,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_image
     libsm
-    libXext
+    libxext
     libpng
     freetype
     libGL

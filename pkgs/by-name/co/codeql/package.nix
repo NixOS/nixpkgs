@@ -4,6 +4,7 @@
   fetchzip,
   zlib,
   xorg,
+  libxext,
   libx11,
   freetype,
   jdk17,
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     zlib
     libx11
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXtst
     xorg.libXrender

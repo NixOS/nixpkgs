@@ -8,7 +8,7 @@
   xorgproto,
   xinput,
   libXi,
-  libXext,
+  libxext,
   libXtst,
   libXpm,
   libx11,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     freetype
     libXrender
     libXft
-    libXext
+    libxext
     libXtst
     libXpm
     libx11

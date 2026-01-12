@@ -5,7 +5,7 @@
   autoconf,
   pkg-config,
   libx11,
-  libXext,
+  libxext,
   libGLU,
   libGL,
   imagemagick6,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libx11
-    libXext
+    libxext
     imagemagick6
     libtiff
     bzip2

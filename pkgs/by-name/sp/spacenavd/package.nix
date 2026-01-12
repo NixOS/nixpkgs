@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libXext,
+  libxext,
   libx11,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
   ];
 
   configureFlags = [ "--disable-debug" ];

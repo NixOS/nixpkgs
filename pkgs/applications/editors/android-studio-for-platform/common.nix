@@ -26,7 +26,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   libXrender,
@@ -107,7 +107,7 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
+            libxext
             libXi
             libXrender
             libXtst

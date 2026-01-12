@@ -8,7 +8,7 @@
   libdrm,
   libva,
   libx11,
-  libXext,
+  libxext,
   libXfixes,
   wayland,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libdrm
     libva
     libx11
-    libXext
+    libxext
     libXfixes
     wayland
   ];

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   xorgproto,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXinerama,
   libXrandr,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXi
     libXinerama
     libXrandr

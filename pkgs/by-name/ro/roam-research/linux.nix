@@ -17,7 +17,7 @@
   libxcomposite,
   libxcursor,
   libxdamage,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXrandr,
@@ -51,7 +51,7 @@ let
     libx11
     libxcomposite
     libxdamage
-    libXext
+    libxext
     libXfixes
     libXi
     libXrandr

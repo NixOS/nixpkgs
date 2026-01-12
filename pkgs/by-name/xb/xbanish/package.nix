@@ -6,7 +6,7 @@
   libXi,
   libXt,
   libXfixes,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     libXi
     libXt
     libXfixes
-    libXext
+    libxext
   ];
 
   src = fetchFromGitHub {

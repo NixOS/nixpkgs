@@ -8,7 +8,7 @@
   libXt,
   libXmu,
   libXi,
-  libXext,
+  libxext,
   libGL,
   libGLU,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libXt
     libXmu
     libXi
-    libXext
+    libxext
   ];
 
   nativeBuildInputs = [

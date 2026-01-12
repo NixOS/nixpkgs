@@ -6,6 +6,7 @@
   zlib,
   glib,
   xorg,
+  libxext,
   libx11,
   libsm,
   libice,
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     libx11
     libsm
     libice
-    xorg.libXext
+    libxext
     dbus
     fontconfig
     freetype

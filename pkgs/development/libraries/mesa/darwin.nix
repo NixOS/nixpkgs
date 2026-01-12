@@ -12,6 +12,7 @@
   pkg-config,
   python3Packages,
   xorg,
+  libxext,
   libx11,
   libxcb,
   zlib,
@@ -48,7 +49,7 @@ stdenv.mkDerivation {
     libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
     libx11
-    xorg.libXext
+    libxext
     xorg.libXfixes
     libxcb
     zlib

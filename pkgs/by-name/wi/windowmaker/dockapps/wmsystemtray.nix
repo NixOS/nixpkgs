@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libx11,
-  libXext,
+  libxext,
   libXfixes,
   libXmu,
   libXpm,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXfixes
     libXmu
     libXpm

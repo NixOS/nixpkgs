@@ -13,7 +13,7 @@
   lv2,
   lv2lint,
   sord,
-  xorg,
+  libxext,
   libx11,
 }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     lv2
     sord
     libx11
-    xorg.libXext
+    libxext
     glew
     lv2lint
   ];

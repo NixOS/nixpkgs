@@ -4,7 +4,7 @@
   dockapps-sources,
   libx11,
   libXpm,
-  libXext,
+  libxext,
   libdockapp,
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXpm
     libdockapp
   ];

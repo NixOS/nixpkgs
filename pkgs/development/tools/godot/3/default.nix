@@ -11,7 +11,7 @@
   libpulseaudio,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXinerama,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (self: {
     libpulseaudio
     libx11
     libxcursor
-    libXext
+    libxext
     libXfixes
     libXi
     libXinerama

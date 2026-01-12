@@ -16,7 +16,7 @@
   SDL2_mixer,
   libopenmpt,
   libXrandr,
-  libXext,
+  libxext,
   libXfixes,
   libxcursor,
   libXi,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libopenmpt
     SDL2
     libXrandr
-    libXext
+    libxext
     libXfixes
     libxcursor
     libXi

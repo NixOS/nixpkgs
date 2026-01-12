@@ -10,7 +10,7 @@
   glib,
   gtk3,
   libx11,
-  libXext,
+  libxext,
   libxfce4ui,
   libxfce4util,
   xfce4-panel,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libx11
-    libXext
+    libxext
     libxfce4ui
     libxfce4util
     xfce4-panel

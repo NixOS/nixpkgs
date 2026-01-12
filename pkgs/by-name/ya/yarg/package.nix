@@ -10,7 +10,7 @@
   hidapi,
   libGL,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXinerama,
   libxkbcommon,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     libGL
     libxcursor
-    libXext
+    libxext
     libXi
     libXinerama
     libxkbcommon

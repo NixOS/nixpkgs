@@ -18,7 +18,7 @@
   libwebp,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXxf86vm,
   libxcb,
@@ -85,7 +85,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libwebp
     libx11
     libxcursor
-    libXext
+    libxext
     libXi
     libXxf86vm
     libxcb

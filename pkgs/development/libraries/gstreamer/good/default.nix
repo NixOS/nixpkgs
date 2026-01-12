@@ -48,6 +48,7 @@
   libjack2,
   enableX11 ? stdenv.hostPlatform.isLinux,
   xorg,
+  libxext,
   libxdamage,
   ncurses,
   enableWayland ? stdenv.hostPlatform.isLinux,
@@ -159,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     libraspberrypi
   ]
   ++ lib.optionals enableX11 [
-    xorg.libXext
+    libxext
     xorg.libXfixes
     libxdamage
     xorg.libXtst

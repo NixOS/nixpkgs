@@ -36,7 +36,7 @@ let
             libxcomposite
             libxcursor
             libxdmcp
-            xorg.libXext
+            libxext
             xorg.libXi
             xorg.libXinerama
             xorg.libXmu

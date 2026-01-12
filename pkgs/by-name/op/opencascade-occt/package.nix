@@ -10,7 +10,7 @@
   tk,
   libGL,
   libGLU,
-  libXext,
+  libxext,
   libXmu,
   libXi,
   vtk,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     tk
     libGL
     libGLU
-    libXext
+    libxext
     libXmu
     libXi
     rapidjson

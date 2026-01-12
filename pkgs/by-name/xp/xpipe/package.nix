@@ -12,7 +12,7 @@
   alsa-lib,
   makeShellWrapper,
   libx11,
-  libXext,
+  libxext,
   libxdamage,
   libXfixes,
   libxcb,
@@ -72,7 +72,7 @@ stdenvNoCC.mkDerivation rec {
     alsa-lib
     libx11
     libx11
-    libXext
+    libxext
     libxdamage
     libXfixes
     libxcb

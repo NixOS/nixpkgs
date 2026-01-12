@@ -8,7 +8,7 @@
   libglut,
   glew,
   libXmu,
-  libXext,
+  libxext,
   libx11,
   fixDarwinDylibNames,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libglut
     libXmu
-    libXext
+    libxext
     libx11
   ];
 

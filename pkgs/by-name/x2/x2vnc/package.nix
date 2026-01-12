@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  libxext,
   libx11,
   xorgproto,
 }:
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     xorgproto
-    xorg.libXext
+    libxext
     xorg.libXrandr
   ];
 

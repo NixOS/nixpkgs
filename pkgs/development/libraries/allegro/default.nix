@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   texinfo,
-  libXext,
+  libxext,
   xorgproto,
   libx11,
   libXpm,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     texinfo
-    libXext
+    libxext
     xorgproto
     libx11
     libXpm

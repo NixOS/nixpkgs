@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libXScrnSaver,
-  libXext,
+  libxext,
   gnulib,
   autoconf,
   automake,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libXScrnSaver
-    libXext
+    libxext
   ];
 
   meta = {

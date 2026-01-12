@@ -22,7 +22,7 @@
   gtk3,
   libxcb,
   libx11,
-  libXext,
+  libxext,
   libXrender,
   libXt,
   libXtst,
@@ -74,7 +74,7 @@ let
       gtk3
       libxcb
       libx11
-      libXext
+      libxext
       libXrender
       libXt
       libXtst

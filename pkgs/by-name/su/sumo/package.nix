@@ -27,6 +27,7 @@
   swig,
   xercesc,
   xorg,
+  libxext,
   libxcursor,
   zlib,
 }:
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     python3
     libx11
     libxcursor
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXft
     xorg.libXrandr

@@ -14,7 +14,7 @@
   glew,
   freetype,
   libsm,
-  libXext,
+  libxext,
   libGL,
   libGLU,
   libx11,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     freetype
     libsm
-    libXext
+    libxext
     libGL
     libGLU
     libxcb

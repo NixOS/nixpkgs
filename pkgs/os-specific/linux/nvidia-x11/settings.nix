@@ -14,7 +14,7 @@ nvidia_x11: sha256:
   gtk3,
   libXv,
   libXrandr,
-  libXext,
+  libxext,
   libXxf86vm,
   libvdpau,
   librsvg,
@@ -45,7 +45,7 @@ let
 
     buildInputs = [
       libXrandr
-      libXext
+      libxext
     ];
 
     preBuild = ''
@@ -145,7 +145,7 @@ stdenv.mkDerivation {
     jansson
     libXv
     libXrandr
-    libXext
+    libxext
     libXxf86vm
     libvdpau
     nvidia_x11

@@ -4,7 +4,7 @@
   fetchurl,
   pam ? null,
   libx11,
-  libXext,
+  libxext,
   libXinerama,
   libxdmcp,
   libXt,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pam
     libx11
-    libXext.dev
+    libxext.dev
     libXinerama
     libxdmcp
     libXt

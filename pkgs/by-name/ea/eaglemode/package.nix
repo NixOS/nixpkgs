@@ -13,7 +13,7 @@
   librsvg,
   glib,
   gtk3,
-  libXext,
+  libxext,
   libXxf86vm,
   poppler,
   vlc,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libXxf86vm
-    libXext
+    libxext
     poppler
     vlc
     ghostscript

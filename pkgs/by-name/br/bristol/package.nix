@@ -6,7 +6,7 @@
   libjack2,
   pkg-config,
   libx11,
-  libXext,
+  libxext,
   xorgproto,
   libpulseaudio,
   copyDesktopItems,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libjack2
     libpulseaudio
     libx11
-    libXext
+    libxext
     xorgproto
   ];
 

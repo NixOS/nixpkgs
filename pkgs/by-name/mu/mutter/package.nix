@@ -23,7 +23,7 @@
   libxcomposite,
   libxcursor,
   libxdamage,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   xkeyboard_config,
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxcursor
     libxdamage
-    libXext
+    libxext
     libXfixes
     libXi
     xkeyboard_config

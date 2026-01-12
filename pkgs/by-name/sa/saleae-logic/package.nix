@@ -15,7 +15,7 @@
   libsm,
   libice,
   gtk2,
-  libXext,
+  libxext,
   libXft,
   fontconfig,
   libXrender,
@@ -43,7 +43,7 @@ let
     libsm
     libice
     gtk2
-    libXext
+    libxext
     libXft
     fontconfig
     libXrender

@@ -5,7 +5,7 @@
   cmake,
   coin3d,
   motif,
-  libXext,
+  libxext,
   libXmu,
   libGLU,
   libGL,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     motif
     libGLU
     libGL
-    libXext
+    libxext
     libXmu
   ];
 

@@ -10,7 +10,7 @@
   lv2,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libGL,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     lv2
     libx11
     libxcursor
-    libXext
+    libxext
     libXinerama
     libXrandr
     libGL

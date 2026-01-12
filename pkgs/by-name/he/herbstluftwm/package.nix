@@ -6,7 +6,7 @@
   pkg-config,
   python3,
   libx11,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libXft,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXinerama
     libXrandr
     libXft

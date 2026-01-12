@@ -34,6 +34,7 @@
   vulkan-memory-allocator,
   xbyak,
   xorg,
+  libxext,
   libx11,
   xxHash,
   zlib-ng,
@@ -67,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
     libusb1
     libx11
-    xorg.libXext
+    libxext
     magic-enum
     libgbm
     pipewire

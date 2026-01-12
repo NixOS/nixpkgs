@@ -7,7 +7,7 @@
   libffi,
   libGL,
   libx11,
-  libXext,
+  libxext,
   libXpm,
   libXrandr,
   ncurses,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gpm
     libGL
     libx11
-    libXext
+    libxext
     libXpm
     libXrandr
   ];

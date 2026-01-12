@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  libxext,
   libxaw,
   libx11,
   libsm,
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     libxaw
     xorgproto
     xorg.libXt
-    xorg.libXext
+    libxext
     libx11
     libsm
     libice

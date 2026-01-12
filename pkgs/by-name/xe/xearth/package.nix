@@ -5,7 +5,7 @@
   imake,
   gccmakedep,
   libXt,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libXt
-    libXext
+    libxext
   ];
 
   installFlags = [

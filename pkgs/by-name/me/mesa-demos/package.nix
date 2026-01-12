@@ -7,7 +7,7 @@
   libGLU,
   libx11,
   libxcb,
-  libXext,
+  libxext,
   libgbm,
   mesa,
   meson,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libglut
     libx11
     libxcb
-    libXext
+    libxext
     libGL
     libGLU
     libgbm

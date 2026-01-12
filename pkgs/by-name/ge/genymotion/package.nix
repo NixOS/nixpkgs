@@ -22,7 +22,7 @@
   # For glewinfo
   libXmu,
   libXi,
-  libXext,
+  libxext,
 }:
 
 let
@@ -34,7 +34,7 @@ let
     libxkbcommon
     libXmu
     libXi
-    libXext
+    libxext
     libGL
     libXrender
     fontconfig

@@ -12,7 +12,7 @@
   libXrandr,
   xinput,
   libXi,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     xinput
     libXi
-    libXext
+    libxext
   ];
 
   postFixup = ''

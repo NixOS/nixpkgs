@@ -8,7 +8,7 @@
   libpthread-stubs,
   libxau,
   libxdmcp,
-  libXext,
+  libxext,
   libvdpau,
   glib,
   libva,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     libpthread-stubs
     libxau
     libxdmcp
-    libXext
+    libxext
     libvdpau
     glib
     libva

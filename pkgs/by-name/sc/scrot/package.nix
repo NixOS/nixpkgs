@@ -6,7 +6,7 @@
   autoreconfHook,
   autoconf-archive,
   libx11,
-  libXext,
+  libxext,
   libXfixes,
   libxcomposite,
   libXinerama,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imlib2
     libx11
-    libXext
+    libxext
     libXfixes
     libxcomposite
     libXinerama

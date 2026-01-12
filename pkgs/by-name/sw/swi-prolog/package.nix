@@ -35,7 +35,7 @@
 
   withGui ? false,
   libXpm,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libjpeg,
@@ -103,7 +103,7 @@ let
     ++ (lib.optional withYaml libyaml)
     ++ (lib.optionals withGui' [
       libXt
-      libXext
+      libxext
       libXpm
       libXft
       libXinerama

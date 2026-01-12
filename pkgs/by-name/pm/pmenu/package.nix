@@ -6,7 +6,7 @@
   fontconfig,
   imlib2,
   libx11,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libXrender,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     imlib2
     libx11
-    libXext
+    libxext
     libXft
     libXinerama
     libXrender

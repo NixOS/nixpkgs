@@ -10,7 +10,7 @@
   libapplewm,
   xorgproto,
   libXrandr,
-  libXext,
+  libxext,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libapplewm
     xorgproto
     libXrandr
-    libXext
+    libxext
     pixman
   ];
 

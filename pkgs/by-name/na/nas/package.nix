@@ -8,7 +8,7 @@
   imake,
   libxau,
   libxaw,
-  libXext,
+  libxext,
   libXpm,
   libXt,
   xorgcffiles,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxau
     libxaw
-    libXext
+    libxext
     libXpm
     libXt
     xorgproto

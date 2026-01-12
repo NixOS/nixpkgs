@@ -6,6 +6,7 @@
   zlib,
   libjpeg,
   xorg,
+  libxext,
   libxdamage,
   libx11,
   xorgproto,
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXtst
     xorg.libXinerama
     xorg.libXrandr
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXrender
     libvncserver

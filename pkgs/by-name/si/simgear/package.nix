@@ -6,7 +6,7 @@
   libglut,
   xorgproto,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libice,
   libsm,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libglut
     xorgproto
     libx11
-    libXext
+    libxext
     libXi
     libice
     libsm

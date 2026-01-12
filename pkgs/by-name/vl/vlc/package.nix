@@ -22,7 +22,7 @@
   harfbuzz,
   libGL,
   libsm,
-  libXext,
+  libxext,
   libXinerama,
   libXpm,
   libarchive,
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
   ]
   ++ optionals skins2Support [
-    libXext
+    libxext
     libXinerama
     libXpm
   ]

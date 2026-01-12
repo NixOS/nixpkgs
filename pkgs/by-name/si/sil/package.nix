@@ -7,7 +7,7 @@
   libx11,
   libxaw,
   libXt,
-  libXext,
+  libxext,
   libXmu,
   makeWrapper,
   writeScript,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libx11
     libxaw
     libXt
-    libXext
+    libxext
     libXmu
   ];
 

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libGL,
   libx11,
-  libXext,
+  libxext,
   libXrandr,
   libXinerama,
   libxcursor,
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libGL
     libx11
-    libXext
+    libxext
     libXrandr
     libXinerama
     libxcursor

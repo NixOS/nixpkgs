@@ -12,7 +12,7 @@
   godot3-headless,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXinerama,
   libXrandr,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxcursor
-    libXext
+    libxext
     libXi
     libXinerama
     libXrandr

@@ -26,6 +26,7 @@
   lsof,
   lz4,
   xorg,
+  libxext,
   libx11,
   xz,
   man,
@@ -120,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     xorg.libXpm
     xorg.libXft
-    xorg.libXext
+    libxext
   ];
 
   preConfigure = ''

@@ -7,7 +7,7 @@
   util-macros,
   xorgproto,
   libx11,
-  libXext,
+  libxext,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xorgproto
     libx11
-    libXext
+    libxext
   ];
 
   passthru = {

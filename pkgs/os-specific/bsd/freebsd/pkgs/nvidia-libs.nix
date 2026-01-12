@@ -2,7 +2,7 @@
   mkDerivation,
   nvidia-driver,
   autoPatchelfHook,
-  xorg,
+  libxext,
   libx11,
   freetype,
   gtk2,
@@ -34,7 +34,7 @@ mkDerivation {
     glib
     libintl
     freetype
-    xorg.libXext
+    libxext
     libx11
   ];
 

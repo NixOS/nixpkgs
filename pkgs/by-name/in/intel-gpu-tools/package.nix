@@ -28,7 +28,7 @@
   libpciaccess,
   libunwind,
   libx11,
-  libXext,
+  libxext,
   libXrandr,
   libXv,
   openssl,
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libpciaccess
     libunwind
     libx11
-    libXext
+    libxext
     libXrandr
     libXv
     openssl

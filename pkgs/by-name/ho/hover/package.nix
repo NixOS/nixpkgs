@@ -8,6 +8,7 @@
   fetchFromGitHub,
   roboto,
   xorg,
+  libxext,
   libxcursor,
   libx11,
   xorgproto,
@@ -26,7 +27,7 @@ let
   libs = [
     libx11.dev
     libxcursor.dev
-    xorg.libXext.dev
+    libxext.dev
     xorg.libXi.dev
     xorg.libXinerama.dev
     xorg.libXrandr.dev

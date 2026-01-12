@@ -26,7 +26,7 @@ deployAndroidPackage {
       stdenv.cc.cc.libgcc or null # fix for https://github.com/NixOS/nixpkgs/issues/226357
       libx11
       xorg.libXrender
-      xorg.libXext
+      libxext
     ])
     ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
       with pkgsi686Linux;
@@ -34,7 +34,7 @@ deployAndroidPackage {
         glibc
         libx11
         xorg.libXrender
-        xorg.libXext
+        libxext
         fontconfig.lib
         freetype
         zlib

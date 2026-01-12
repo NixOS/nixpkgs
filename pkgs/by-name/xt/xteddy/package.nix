@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   pkg-config,
-  xorg,
+  libxext,
   libx11,
   imlib2,
   makeWrapper,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imlib2
     libx11
-    xorg.libXext
+    libxext
   ];
 
   patches = [

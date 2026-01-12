@@ -17,6 +17,7 @@
   SDL2,
   fontconfig,
   xorg,
+  libxext,
   libxcursor,
   libx11,
   stdenv,
@@ -91,7 +92,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
           libxkbcommon
           libx11
           libxcursor
-          xorg.libXext
+          libxext
           xorg.libXrandr
           xorg.libXi
         ]

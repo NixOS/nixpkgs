@@ -199,7 +199,7 @@ let
       pkgs.libx11
       pkgs.libxcomposite
       pkgs.libxdamage
-      pkgs.xorg.libXext
+      pkgs.libxext
       pkgs.xorg.libXfixes
       pkgs.xorg.libXrandr
       pkgs.xorg.libXrender

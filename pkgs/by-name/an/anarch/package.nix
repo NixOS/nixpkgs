@@ -4,6 +4,7 @@
   fetchFromGitLab,
   SDL2,
   xorg,
+  libxext,
   libxcursor,
 }:
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     xorg.libXrandr
     xorg.libXfixes
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXScrnSaver
   ];

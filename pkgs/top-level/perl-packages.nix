@@ -26582,7 +26582,7 @@ with self;
       pkgs.libx11
       pkgs.xorg.libXi
       pkgs.xorg.libXmu
-      pkgs.xorg.libXext
+      pkgs.libxext
       pkgs.xdummy
     ];
 
@@ -38174,12 +38174,12 @@ with self;
       hash = "sha256-2P3cB455ge4xt2CMZTZFyyDwFr3dx8VQtNUn79NiR0g=";
     };
     buildInputs = [
-      pkgs.xorg.libXext
+      pkgs.libxext
       pkgs.xorg.libXScrnSaver
       pkgs.libx11
     ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.libx11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
+    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.libx11.out}/lib/ -L${pkgs.libxext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
     meta = {
       description = "Get the idle time of X11";
       license = with lib.licenses; [

@@ -5,6 +5,7 @@
   fetchurl,
   pkg-config,
   xorg,
+  libxext,
   libx11,
   python3,
   frame,
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableX11 [
     libx11
     xorg.libXtst
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXfixes
   ];

@@ -17,7 +17,7 @@
   libv4l,
   libx11,
   libxdmcp,
-  libXext,
+  libxext,
   libxkbcommon,
   libxml2,
   libXxf86vm,
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     dbus
     libx11
     libxdmcp
-    libXext
+    libxext
     libXxf86vm
     libdrm
     libpulseaudio

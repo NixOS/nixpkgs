@@ -10,7 +10,7 @@
   fontconfig,
   libXrender,
   libXScrnSaver,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
         fontconfig
         libXrender
         libXScrnSaver
-        libXext
+        libxext
       ];
     in
     ''

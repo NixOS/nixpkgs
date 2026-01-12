@@ -13,7 +13,7 @@
   libx11,
   libGL,
   wayland,
-  libXext,
+  libxext,
   enableHybridCodec ? false,
   vaapi-intel-hybrid,
   enableGui ? true,
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals enableGui [
     libx11
-    libXext
+    libxext
     libGL
     wayland
   ]

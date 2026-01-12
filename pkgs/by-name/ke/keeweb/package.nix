@@ -21,7 +21,7 @@
   xdotool,
   libx11,
   libxcomposite,
-  libXext,
+  libxext,
   libXrandr,
   libXScrnSaver,
   libXtst,
@@ -57,7 +57,7 @@ let
     udev
     libx11
     libxcomposite
-    libXext
+    libxext
     libXrandr
     libXScrnSaver
     libXtst

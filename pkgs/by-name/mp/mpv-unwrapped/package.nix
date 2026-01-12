@@ -15,7 +15,7 @@
   libGL,
   libx11,
   libXScrnSaver,
-  libXext,
+  libxext,
   libXpresent,
   libXrandr,
   libarchive,
@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals x11Support [
     libx11
-    libXext
+    libxext
     libGL
     libXrandr
     libXpresent

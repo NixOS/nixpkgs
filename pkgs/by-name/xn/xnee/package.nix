@@ -8,7 +8,7 @@
   pkg-config,
   gtk2,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXtst,
   texinfo,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk2
     libx11
-    libXext
+    libxext
     libXi
     libXtst
     texinfo

@@ -5,7 +5,7 @@
   imake,
   gccmakedep,
   libx11,
-  libXext,
+  libxext,
   libXScrnSaver,
   xorgproto,
   nixosTests,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXScrnSaver
     xorgproto
   ];

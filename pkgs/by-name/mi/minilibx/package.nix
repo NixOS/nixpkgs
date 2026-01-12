@@ -4,7 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   libx11,
-  libXext,
+  libxext,
   unstableGitUpdater,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
   ];
 
   dontConfigure = true;

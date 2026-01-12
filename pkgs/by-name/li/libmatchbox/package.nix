@@ -7,7 +7,7 @@
   libjpeg,
   libpng,
   libx11,
-  libXext,
+  libxext,
   libXft,
   pango,
   pkg-config,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libx11
-    libXext
+    libxext
     libXft
     pango
   ];

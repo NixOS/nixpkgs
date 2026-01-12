@@ -12,7 +12,7 @@
   libx11,
   libXrandr,
   libXinerama,
-  libXext,
+  libxext,
   libxcursor,
   freetype,
   alsa-lib,
@@ -72,7 +72,7 @@ let
     libx11
     libXrandr
     libXinerama
-    libXext
+    libxext
     libxcursor
   ];
 in

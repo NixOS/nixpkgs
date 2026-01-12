@@ -7,7 +7,7 @@
   zlib,
   icu,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   libice,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = map lib.getLib [
     icu
     libx11
-    libXext
+    libxext
     libXi
     libXrandr
     libice

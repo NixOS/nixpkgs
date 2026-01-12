@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  libxext,
   libxdmcp,
   libxdamage,
   libxcomposite,
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libxdamage
     libxdmcp
-    xorg.libXext
+    libxext
     xorg.libXfont2
     xorg.libXinerama
     xorg.libXpm

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   readline,
-  xorg,
+  libxext,
   libxcomposite,
   libx11,
   mpi,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = optionals useIv [
     libx11.dev
     libxcomposite.dev
-    xorg.libXext.dev
+    libxext.dev
   ];
 
   propagatedBuildInputs = [

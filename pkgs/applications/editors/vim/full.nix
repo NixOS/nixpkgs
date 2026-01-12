@@ -17,7 +17,7 @@
   tcl,
   ruby,
   libx11,
-  libXext,
+  libxext,
   libsm,
   libXpm,
   libXt,
@@ -180,7 +180,7 @@ stdenv.mkDerivation {
     libsm
     libice
     libx11
-    libXext
+    libxext
     libXpm
     libXt
     libxaw

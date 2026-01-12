@@ -5,7 +5,7 @@
   lib,
   pam,
   libxslt,
-  libXext,
+  libxext,
   libxcursor,
   libXmu,
   glib,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dbus
     libxslt
-    libXext
+    libxext
     libxcursor
     pam
     libXmu

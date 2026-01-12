@@ -13,6 +13,7 @@
   pkg-config,
   portmidi,
   xorg,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     libjack2
     libx11
-    xorg.libXext
+    libxext
     xorg.libXpm
     # The following are recommended in the README, but are seemingly
     # unnecessary for a successful build. That said, the result of including

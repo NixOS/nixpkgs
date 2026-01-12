@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libglvnd,
   xorg,
+  libxext,
   libx11,
 }:
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libglvnd
     xorg.libXinerama
-    xorg.libXext
+    libxext
     libx11
   ];
 

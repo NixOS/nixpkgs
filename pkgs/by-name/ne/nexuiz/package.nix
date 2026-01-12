@@ -17,7 +17,7 @@
   libGLU,
   libGL,
   libXpm,
-  libXext,
+  libxext,
   libXxf86vm,
   libXxf86dga,
   alsa-lib,
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     libGLU
     libGL
     libXpm
-    libXext
+    libxext
     libXxf86vm
     libXxf86dga
     alsa-lib

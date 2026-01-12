@@ -11,7 +11,7 @@
   libglvnd,
   libGLU,
   libx11,
-  libXext,
+  libxext,
   libXrender,
   libXrandr,
   ffmpeg,
@@ -71,7 +71,7 @@ let
       libglvnd
       libGLU
       libvdpau
-      libXext
+      libxext
       libXrandr
       libXrender
       libx11

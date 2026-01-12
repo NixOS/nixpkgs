@@ -4,7 +4,7 @@
   fetchurl,
   libx11,
   libXt,
-  libXext,
+  libxext,
   libXpm,
   imake,
   gccmakedep,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libXt
-    libXext
+    libxext
     libXpm
   ]
   ++ lib.optionals svgSupport [

@@ -9,7 +9,7 @@
   libsm,
   libXi,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
   fontconfig,
   glew,
@@ -64,7 +64,7 @@ buildDotnetModule rec {
     libsm
     libXi
     libxcursor
-    libXext
+    libxext
     libXrandr
     fontconfig
     glew

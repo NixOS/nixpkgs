@@ -4,7 +4,7 @@
   fetchFromGitHub,
   dash,
   libx11,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libXrandr,
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   buildInputs = [
     dash
     libx11
-    libXext
+    libxext
     libXft
     libXinerama
     libXrandr

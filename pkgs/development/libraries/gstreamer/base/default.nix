@@ -25,7 +25,7 @@
   buildPackages,
   gobject-introspection,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  libXext,
+  libxext,
   libXi,
   libXv,
   libdrm,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
   ]
   ++ lib.optionals enableX11 [
-    libXext
+    libxext
     libXi
     libXv
   ]

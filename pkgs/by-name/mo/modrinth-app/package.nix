@@ -26,6 +26,7 @@
   udev,
   wrapGAppsHook3,
   xorg,
+  libxext,
   libxcursor,
   libx11,
   xrandr,
@@ -57,7 +58,7 @@ symlinkJoin {
       libGL
       libx11
       libxcursor
-      xorg.libXext
+      libxext
       xorg.libXrandr
       xorg.libXxf86vm
 

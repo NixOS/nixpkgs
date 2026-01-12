@@ -21,7 +21,7 @@
   libpng,
   fontconfig,
   freetype,
-  xorg,
+  libxext,
   libx11,
   libsm,
   libice,
@@ -43,7 +43,7 @@ let
       libsm
       libice
       libx11
-      xorg.libXext
+      libxext
       xercesc
       openal
       libvorbis

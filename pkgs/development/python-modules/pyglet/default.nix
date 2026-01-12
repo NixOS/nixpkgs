@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   xorg,
+  libxext,
   libx11,
   pytestCheckHook,
   glibc,
@@ -62,7 +63,7 @@ buildPythonPackage rec {
               elif name == 'gdk_pixbuf-2.0':
                   path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
               elif name == 'Xext':
-                  path = '${xorg.libXext}/lib/libXext${ext}'
+                  path = '${libxext}/lib/libXext${ext}'
               elif name == 'fontconfig':
                   path = '${fontconfig.lib}/lib/libfontconfig${ext}'
               elif name == 'freetype':

@@ -9,7 +9,7 @@
   bzip2,
   mesa_glu,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
   libXft,
   cups,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     bzip2
     mesa_glu
     libxcursor
-    libXext
+    libxext
     libXrandr
     libXft
   ]

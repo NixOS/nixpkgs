@@ -22,6 +22,7 @@
   nss,
   pango,
   xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   libx11,
@@ -66,7 +67,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libxcomposite
     libxcb
     libxdamage
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXrandr
   ];

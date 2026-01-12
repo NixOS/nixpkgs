@@ -18,6 +18,7 @@
   wrapGAppsHook3,
   xapp,
   xorg,
+  libxext,
   libxcomposite,
   libxau,
   libx11,
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     libcanberra
     pango
     libx11
-    xorg.libXext
+    libxext
     xapp
     libxau
     libxcomposite

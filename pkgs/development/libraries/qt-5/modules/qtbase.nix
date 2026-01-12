@@ -29,7 +29,7 @@
   libx11,
   libxcomposite,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXrender,
   libjpeg,
@@ -126,7 +126,7 @@ stdenv.mkDerivation (
           # X11 libs
           libx11
           libxcomposite
-          libXext
+          libxext
           libXi
           libXrender
           libxcb
@@ -463,9 +463,9 @@ stdenv.mkDerivation (
             "-I"
             "${libx11.out}/include"
             "-L"
-            "${libXext.out}/lib"
+            "${libxext.out}/lib"
             "-I"
-            "${libXext.out}/include"
+            "${libxext.out}/include"
             "-L"
             "${libXrender.out}/lib"
             "-I"

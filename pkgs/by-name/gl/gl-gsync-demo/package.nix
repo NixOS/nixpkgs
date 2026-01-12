@@ -4,7 +4,7 @@
   libx11,
   libglut,
   glew,
-  libXext,
+  libxext,
   linuxPackages,
   lib,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     libglut
     glew
     libXNVCtrl
-    libXext
+    libxext
   ];
 
   installPhase = ''

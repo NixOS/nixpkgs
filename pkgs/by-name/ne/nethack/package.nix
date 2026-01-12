@@ -13,7 +13,7 @@
   x11Mode ? false,
   qtMode ? false,
   libxaw,
-  libXext,
+  libxext,
   libXpm,
   bdftopcf,
   mkfontscale,
@@ -77,7 +77,7 @@ stdenvUsed.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals x11Mode [
     libxaw
-    libXext
+    libxext
     libXpm
   ]
   ++ lib.optionals qtMode [

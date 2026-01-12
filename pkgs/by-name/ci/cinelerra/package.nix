@@ -25,7 +25,7 @@
   x264,
   gettext,
   openexr,
-  libXext,
+  libxext,
   libXxf86vm,
   libXv,
   libXi,
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
     x264
     gettext
     openexr
-    libXext
+    libxext
     libXxf86vm
     libXv
     libXi

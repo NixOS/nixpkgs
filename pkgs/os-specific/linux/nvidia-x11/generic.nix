@@ -106,7 +106,7 @@ let
       with pkgs;
       [
         libdrm
-        xorg.libXext
+        libxext
         libx11
         xorg.libXv
         xorg.libXrandr

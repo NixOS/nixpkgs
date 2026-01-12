@@ -3,7 +3,7 @@
   autoreconfHook,
   curl,
   fetchhg,
-  libXext,
+  libxext,
   libXft,
   libXi,
   libXinerama,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    libXext
+    libxext
     libXft
     libXi
     libXinerama

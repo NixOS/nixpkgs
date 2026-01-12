@@ -11,7 +11,7 @@
   libice,
   libsm,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
 }:
@@ -53,7 +53,7 @@ buildDotnetModule (finalAttrs: {
     libice
     libsm
     libxcursor
-    libXext
+    libxext
     libXi
     libXrandr
   ];

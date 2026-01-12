@@ -168,7 +168,7 @@ stdenv.mkDerivation (
             libx11
             libxcomposite
             libxcursor
-            xorg.libXext
+            libxext
             xorg.libXfixes
             xorg.libXi
             xorg.libXrandr

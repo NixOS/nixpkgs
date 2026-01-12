@@ -5,7 +5,7 @@
   testers,
   cmake,
   libx11,
-  libXext,
+  libxext,
   sdbus-cpp,
   udev,
   xcbutilimage,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     ddcutil
     fmt
     libx11
-    libXext
+    libxext
     nlohmann_json
     sdbus-cpp
     spdlog

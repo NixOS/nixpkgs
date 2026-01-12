@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   xorg,
+  libxext,
   libxaw,
   libx11,
   libsm,
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    xorg.libXext
+    libxext
     libsm
     xorg.libXmu
     libxaw

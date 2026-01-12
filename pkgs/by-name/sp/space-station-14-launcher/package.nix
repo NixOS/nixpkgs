@@ -13,7 +13,7 @@
   libsm,
   libXi,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
   libGL,
   freetype,
@@ -92,7 +92,7 @@ buildDotnetModule rec {
     libsm
     libXi
     libxcursor
-    libXext
+    libxext
     libXrandr
     at-spi2-atk
     at-spi2-core

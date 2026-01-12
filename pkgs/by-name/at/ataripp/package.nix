@@ -8,7 +8,7 @@
   libice,
   libsm,
   libx11,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libx11
-    libXext
+    libxext
   ];
 
   postFixup = ''

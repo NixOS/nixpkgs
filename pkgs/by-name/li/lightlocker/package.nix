@@ -13,7 +13,7 @@
   libx11,
   libXScrnSaver,
   libXxf86vm,
-  libXext,
+  libxext,
   systemd,
   pantheon,
   wrapGAppsHook3,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gtk3
     libx11
     libXScrnSaver
-    libXext
+    libxext
     libXxf86vm
     systemd
   ];

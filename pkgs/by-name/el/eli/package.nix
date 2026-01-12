@@ -9,6 +9,7 @@
   tk,
   ncurses,
   xorg,
+  libxext,
   libxaw,
   libx11,
   file,
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     libx11.dev
     xorg.libXt.dev
     libxaw.dev
-    xorg.libXext.dev
+    libxext.dev
   ];
 
   nativeBuildInputs = [

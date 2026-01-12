@@ -14,7 +14,7 @@
   libfs,
   libxaw,
   libXpm,
-  libXext,
+  libxext,
   libsm,
   libice,
   perl,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     aalib
     libxaw
     libXpm
-    libXext
+    libxext
     libsm
     libice
     libv4l

@@ -4,7 +4,7 @@
   fetchurl,
   libx11,
   libXt,
-  libXext,
+  libxext,
   libxaw,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libXt
-    libXext
+    libxext
     libxaw
   ];
   installPhase = "install -Dt $out/bin darcnes";

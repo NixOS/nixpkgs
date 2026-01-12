@@ -10,7 +10,7 @@
   libGLU,
   libGL,
   libsm,
-  libXext,
+  libxext,
   glibc,
   lua,
   luabind,
@@ -29,7 +29,7 @@ let
     libGLU
     libGL
     libsm
-    libXext
+    libxext
     glibc
     lua
     glfw

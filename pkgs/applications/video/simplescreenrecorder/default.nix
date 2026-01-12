@@ -6,7 +6,7 @@
   ffmpeg,
   libjack2,
   libx11,
-  libXext,
+  libxext,
   libXinerama,
   qtx11extras,
   libXfixes,
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     ffmpeg
     libjack2
     libx11
-    libXext
+    libxext
     libXfixes
     libXinerama
     libGLU

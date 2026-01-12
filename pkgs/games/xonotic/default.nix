@@ -22,7 +22,7 @@
   libGLU,
   libGL,
   libXpm,
-  libXext,
+  libxext,
   libXxf86vm,
   alsa-lib,
   # sdl
@@ -106,7 +106,7 @@ let
       libGLU
       libGL
       libXpm
-      libXext
+      libxext
       libXxf86vm
       alsa-lib
     ]

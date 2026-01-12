@@ -5,7 +5,7 @@
   gcc,
   libGLU,
   libx11,
-  libXext,
+  libxext,
   libxcursor,
   libpulseaudio,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     gcc
     libGLU
     libx11
-    libXext
+    libxext
     libxcursor
     libpulseaudio
   ];

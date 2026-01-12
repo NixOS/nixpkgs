@@ -11,7 +11,7 @@
   systemdMinimal,
   glib,
   pulseaudio,
-  libXext,
+  libxext,
   libx11,
   libXrandr,
   glibc,
@@ -85,7 +85,7 @@ buildFHSEnv {
     bash
     coreutils
     libx11
-    libXext
+    libxext
     libXrandr
     glibc
     libdrm

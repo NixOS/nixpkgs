@@ -8,6 +8,7 @@
   gsl,
   motif,
   xorg,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     alsa-lib
   ]
   ++ [
-    xorg.libXext
+    libxext
     xorg.libXft
     xorg.libXpm
     xorg.libXt

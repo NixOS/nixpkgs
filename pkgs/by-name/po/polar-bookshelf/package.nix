@@ -21,7 +21,7 @@
   libxdamage,
   libXrandr,
   libxcomposite,
-  libXext,
+  libxext,
   libXfixes,
   libXrender,
   libXtst,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libxdamage
     libXrandr
     libxcomposite
-    libXext
+    libxext
     libXfixes
     libXrender
     libXtst

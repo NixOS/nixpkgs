@@ -11,7 +11,7 @@
   libXrandr,
   libGLU,
   libGL,
-  libXext,
+  libxext,
   libXft,
   libXfixes,
   mesa,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     bzip2
     libxcursor
     libXrandr
-    libXext
+    libxext
     libXft
     libGLU
     libGL

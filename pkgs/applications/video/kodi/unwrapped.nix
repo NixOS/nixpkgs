@@ -96,7 +96,7 @@
   xorgproto,
   libXt,
   libXmu,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libXtst,
@@ -354,7 +354,7 @@ stdenv.mkDerivation (
       xorgproto
       libXt
       libXmu
-      libXext.dev
+      libxext.dev
       libxdmcp
       libXinerama
       libXrandr.dev

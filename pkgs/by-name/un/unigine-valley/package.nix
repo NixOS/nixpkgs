@@ -14,7 +14,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libXrender,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     libx11
-    libXext
+    libxext
     libXinerama
     libXrandr
     libXrender

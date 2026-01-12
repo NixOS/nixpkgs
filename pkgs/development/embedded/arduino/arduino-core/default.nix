@@ -20,6 +20,7 @@
   upx,
   fontconfig,
   xorg,
+  libxext,
   libx11,
   libsm,
   gcc,
@@ -78,7 +79,7 @@ let
     udev
     libsm
     libx11
-    xorg.libXext
+    libxext
     xorg.libXft
     xorg.libXinerama
     xorg.libXxf86vm

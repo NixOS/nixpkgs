@@ -19,7 +19,7 @@ buildFHSEnv {
       shticker-book-unwritten-unwrapped
       libx11
       libxcursor
-      xorg.libXext
+      libxext
     ];
   runScript = "shticker_book_unwritten";
 

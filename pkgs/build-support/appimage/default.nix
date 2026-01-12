@@ -142,7 +142,7 @@ rec {
         libxcomposite
         xorg.libXtst
         xorg.libXrandr
-        xorg.libXext
+        libxext
         libx11
         xorg.libXfixes
         libGL

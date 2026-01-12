@@ -5,7 +5,7 @@
   imake,
   libx11,
   libsm,
-  libXext,
+  libxext,
   libice,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libsm
-    libXext
+    libxext
     libice
   ];
 

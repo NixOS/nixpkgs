@@ -1,5 +1,6 @@
 {
   xorg,
+  libxext,
   libx11,
   lib,
   stdenv,
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libx11
-    xorg.libXext
+    libxext
     xorg.libXi
     libev
   ];

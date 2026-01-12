@@ -16,7 +16,7 @@
   fontconfig,
   fribidi,
   makeWrapper,
-  libXext,
+  libxext,
   libGLU,
   alsa-lib,
   withX265 ? true,
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     alsa-lib
-    libXext
+    libxext
     libGLU
   ]
   ++ lib.optional withX264 x264
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     let
       wrapWith =
         makeWrapper: filename:
-        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libxext}/lib";
       wrapQtApp = wrapWith "wrapQtApp";
       wrapProgram = wrapWith "wrapProgram";
     in

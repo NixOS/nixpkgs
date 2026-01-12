@@ -13,7 +13,7 @@
   libx11,
   libxcb,
   libxdg_basedir,
-  libXext,
+  libxext,
   libxml2,
   libxslt,
   makeWrapper,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcb
     libxdg_basedir
-    libXext
+    libxext
     libxml2
     libxslt
     pcre2

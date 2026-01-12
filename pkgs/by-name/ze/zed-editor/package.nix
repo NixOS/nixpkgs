@@ -36,7 +36,7 @@
   nodejs,
   libGL,
   libx11,
-  libXext,
+  libxext,
   livekit-libwebrtc,
   testers,
   writableTmpDirAsHomeHook,
@@ -174,7 +174,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by livekit:
     libGL
     libx11
-    libXext
+    libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15

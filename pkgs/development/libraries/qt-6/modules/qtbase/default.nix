@@ -42,7 +42,7 @@
   icu,
   libx11,
   libxcomposite,
-  libXext,
+  libxext,
   libXi,
   libXrender,
   libjpeg,
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     # X11 libs
     libx11
     libxcomposite
-    libXext
+    libxext
     libXi
     libXrender
     libxcb

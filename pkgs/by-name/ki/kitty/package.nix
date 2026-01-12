@@ -17,7 +17,7 @@
   libxcursor,
   libxkbcommon,
   libXi,
-  libXext,
+  libxext,
   wayland-protocols,
   wayland,
   xxHash,
@@ -93,7 +93,7 @@ buildPythonApplication rec {
     libxcursor
     libxkbcommon
     libXi
-    libXext
+    libxext
     wayland-protocols
     wayland
     dbus

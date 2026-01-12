@@ -21,7 +21,7 @@
   libxml2,
   libXtst,
   libXi,
-  libXext,
+  libxext,
   gnome,
   systemdLibs,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXi
     # libXext is a transitive dependency of libXi
-    libXext
+    libxext
   ]
   ++ lib.optionals systemdSupport [
     # libsystemd is a needed for dbus-broker support

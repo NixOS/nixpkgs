@@ -15,7 +15,7 @@
   libxau,
   libxaw,
   libxdmcp,
-  libXext,
+  libxext,
   libXfixes,
   libXfont2,
   libXmu,
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     libxau
     libxaw
     libxdmcp
-    libXext
+    libxext
     libXfixes
     libXfont2
     libXmu

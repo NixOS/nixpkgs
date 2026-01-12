@@ -47,7 +47,7 @@
   libxcomposite,
   libxcursor,
   libxdamage,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXrandr,
@@ -141,7 +141,7 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
+            libxext
             libXi
             libXrender
             libXtst

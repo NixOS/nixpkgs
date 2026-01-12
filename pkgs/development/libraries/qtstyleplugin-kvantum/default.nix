@@ -11,7 +11,7 @@
   kwindowsystem,
   qtwayland,
   libx11,
-  libXext,
+  libxext,
   qttools,
   wrapQtAppsHook,
   gitUpdater,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     libx11
-    libXext
+    libxext
   ]
   ++ lib.optionals isQt5 [ qtx11extras ]
   ++ lib.optionals (!isQt5) [

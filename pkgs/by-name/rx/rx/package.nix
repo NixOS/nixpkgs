@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   xorg ? null,
+  libxext,
   libxcursor,
   libx11,
   libGL ? null,
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXinerama
     libxcursor
     xorg.libXi
-    xorg.libXext
+    libxext
   ];
 
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests

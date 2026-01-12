@@ -9,7 +9,7 @@
   libnotify,
   libx11,
   libXScrnSaver,
-  libXext,
+  libxext,
   libXtst,
   libuuid,
   libsecret,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libx11
     libXScrnSaver
-    libXext
+    libxext
     libXtst
     libuuid
     libsecret

@@ -7,7 +7,7 @@
   fribidi,
   imlib2,
   libx11,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libXpm,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     imlib2
     libx11
-    libXext
+    libxext
     libXft
     libXinerama
     libXpm

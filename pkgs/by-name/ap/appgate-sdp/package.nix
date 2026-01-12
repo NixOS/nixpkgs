@@ -37,6 +37,7 @@
   systemd,
   xdg-utils,
   xorg,
+  libxext,
   libxdamage,
   libxcursor,
   libxcomposite,
@@ -80,7 +81,7 @@ let
     libxcomposite
     libxcursor
     libxdamage
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXi
     xorg.libXrandr

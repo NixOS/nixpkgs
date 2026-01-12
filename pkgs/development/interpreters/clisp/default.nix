@@ -23,7 +23,7 @@
   libxau,
   libXt,
   libXpm,
-  libXext,
+  libxext,
   xorgproto,
   coreutils,
   # build options
@@ -50,7 +50,7 @@ assert
     && libXt != null
     && libXpm != null
     && xorgproto != null
-    && libXext != null
+    && libxext != null
   );
 
 let
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     libXt
     libXpm
     xorgproto
-    libXext
+    libxext
   ];
 
   # First, replace port 9090 (rather low, can be used)

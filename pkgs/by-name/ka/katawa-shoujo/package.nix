@@ -16,7 +16,7 @@
   libjpeg,
   libpng12,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXmu,
   runtimeShell,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXext
+    libxext
     libXi
     libXmu
     libGL

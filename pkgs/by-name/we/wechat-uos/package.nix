@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxext,
   libxdamage,
   libxcursor,
   libxcomposite,
@@ -82,7 +83,7 @@ let
     xcbutilrenderutil
     libx11
     xorg.libXt
-    xorg.libXext
+    libxext
     libsm
     libice
     libxcb

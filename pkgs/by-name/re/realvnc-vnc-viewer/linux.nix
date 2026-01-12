@@ -4,7 +4,7 @@
   autoPatchelfHook,
   rpmextract,
   libx11,
-  libXext,
+  libxext,
   pname,
   version,
   meta,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libx11
-    libXext
+    libxext
     stdenv.cc.cc.libgcc or null
   ];
 

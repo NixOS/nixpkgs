@@ -11,7 +11,7 @@
   freetype,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   nix-update-script,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libx11
     libxcursor
-    libXext
+    libxext
     libXinerama
     libXrandr
   ];

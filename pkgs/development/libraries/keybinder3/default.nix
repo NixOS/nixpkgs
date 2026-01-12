@@ -10,7 +10,7 @@
   gtk-doc,
   gtk3,
   libx11,
-  libXext,
+  libxext,
   libXrender,
   gobject-introspection,
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libx11
-    libXext
+    libxext
     libXrender
   ];
 

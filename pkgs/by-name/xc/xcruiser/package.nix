@@ -7,7 +7,7 @@
   libXt,
   libxaw,
   libXpm,
-  libXext,
+  libxext,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libXt
     libxaw
     libXpm
-    libXext
+    libxext
   ];
 
   makeFlags = [

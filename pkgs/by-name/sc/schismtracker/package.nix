@@ -8,7 +8,7 @@
   pkg-config,
   SDL2,
   libx11,
-  libXext,
+  libxext,
   utf8proc,
   nix-update-script,
 }:
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libXext
+    libxext
   ];
 
   enableParallelBuilding = true;

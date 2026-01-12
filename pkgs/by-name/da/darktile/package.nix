@@ -7,7 +7,7 @@
   libXrandr,
   libXinerama,
   libXi,
-  libXext,
+  libxext,
   libXxf86vm,
   libGL,
   nixosTests,
@@ -35,7 +35,7 @@ buildGoModule rec {
     libXrandr
     libXinerama
     libXi
-    libXext
+    libxext
     libXxf86vm
     libGL
   ];

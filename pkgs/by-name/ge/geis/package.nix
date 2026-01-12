@@ -14,6 +14,7 @@
   grail,
   gtk3,
   xorg,
+  libxext,
   libx11,
   pango,
   xorgserver,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     grail
     gtk3
     libx11
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXtst
     pango

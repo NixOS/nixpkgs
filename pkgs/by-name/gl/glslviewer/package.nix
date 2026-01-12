@@ -10,7 +10,7 @@
   libXinerama,
   libxcursor,
   libXi,
-  libXext,
+  libxext,
   libGLU,
   ffmpeg_7,
   ncurses,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libXinerama
     libxcursor
     libXi
-    libXext
+    libxext
     libGLU
     ncurses
     ffmpeg_7

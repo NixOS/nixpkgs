@@ -11,7 +11,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
   libarchive,
   libjack2,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libGL
     libx11
     libxcursor
-    libXext
+    libxext
     libXrandr
     libarchive
     liblo

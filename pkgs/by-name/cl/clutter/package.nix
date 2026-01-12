@@ -6,7 +6,7 @@
   libGLU,
   libGL,
   libx11,
-  libXext,
+  libxext,
   libXfixes,
   libxdamage,
   libxcomposite,
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     libx11
     libGL
     libGLU
-    libXext
+    libxext
     libXfixes
     libxdamage
     libxcomposite

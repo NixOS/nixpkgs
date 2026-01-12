@@ -21,6 +21,7 @@
   nss,
   nspr,
   xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   libx11,
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcomposite
     libxdamage
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXrandr
     libxcb

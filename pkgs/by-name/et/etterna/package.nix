@@ -10,6 +10,7 @@
   openssl,
   libGLU,
   xorg,
+  libxext,
   libx11,
   alsa-lib,
   libjack2,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
     xorg.libXrandr
     libx11
-    xorg.libXext # Needed for DPMS
+    libxext # Needed for DPMS
     xorg.libXvMC
   ];
 

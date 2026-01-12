@@ -105,7 +105,7 @@ let
           libx11
           libxau
           libxcursor
-          xorg.libXext
+          libxext
           xorg.libXi
           xorg.libXinerama
           libxkbfile

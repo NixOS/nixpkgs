@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   xorg,
+  libxext,
   libxcursor,
   libxcomposite,
   libx11,
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcomposite
     libxcursor
-    xorg.libXext
+    libxext
     xorg.libXinerama
     xorg.libXrender
     xorg.libXrandr

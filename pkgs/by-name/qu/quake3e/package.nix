@@ -10,7 +10,7 @@
   alsa-lib,
   libXrandr,
   libXxf86vm,
-  libXext,
+  libxext,
   SDL2,
   glibc,
   copyDesktopItems,
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     alsa-lib
     libXrandr
     libXxf86vm
-    libXext
+    libxext
     SDL2
     glibc
   ];

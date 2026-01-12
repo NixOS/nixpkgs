@@ -11,6 +11,7 @@
   libdrm,
   elfutils,
   xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   libx11,
@@ -92,7 +93,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       freetype
       libx11
       xorg.libXxf86vm
-      xorg.libXext
+      libxext
       libxcb
       libxcomposite
       libxdamage
@@ -139,7 +140,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       elfutils
       zlib
       libx11
-      xorg.libXext
+      libxext
       libxcb
       libxcomposite
       libxdamage

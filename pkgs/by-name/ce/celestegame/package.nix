@@ -136,7 +136,7 @@ buildFHSEnv {
       libxcomposite
       libxdamage
       xorg.libXfixes
-      xorg.libXext
+      libxext
       libxcb
       libxcursor
       xorg.libXinerama

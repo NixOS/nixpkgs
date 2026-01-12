@@ -15,7 +15,7 @@
   python3,
   which,
   nodejs,
-  xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   xrandr,
@@ -271,7 +271,7 @@ qtModule {
     libxkbfile
     libxshmfence
     libXi
-    xorg.libXext
+    libxext
 
     # Pipewire
     pipewire

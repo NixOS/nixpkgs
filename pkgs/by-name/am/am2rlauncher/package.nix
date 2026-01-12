@@ -31,7 +31,7 @@ let
       pkgs: with pkgs; [
         (lib.getLib stdenv.cc.cc)
         libx11
-        xorg.libXext
+        libxext
         xorg.libXrandr
         xorg.libXxf86vm
         curl

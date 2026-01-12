@@ -6,7 +6,7 @@
   libxdamage,
   libXrender,
   libxcomposite,
-  libXext,
+  libxext,
   installShellFiles,
   git,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libxdamage
     libXrender
     libxcomposite
-    libXext
+    libxext
   ];
   preInstall = "mkdir -p $out/share/man/man1";
   installFlags = [ "PREFIX=${placeholder "out"}" ];

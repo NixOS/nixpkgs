@@ -6,7 +6,7 @@
   SDL2,
 
   libx11,
-  libXext,
+  libxext,
 
   guiBackend ? "sdl",
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableSDL [ SDL2 ]
     ++ lib.optionals enableX11 [
       libx11
-      libXext
+      libxext
     ];
 
   enableParallelBuilding = true;

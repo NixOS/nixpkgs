@@ -9,7 +9,7 @@
   dbus,
   libGL,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXinerama,
   libxkbcommon,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libGL
     libxcursor
-    libXext
+    libxext
     libXi
     libXinerama
     libxkbcommon

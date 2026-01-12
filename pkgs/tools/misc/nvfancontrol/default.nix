@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libXNVCtrl,
   libx11,
-  libXext,
+  libxext,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     libXNVCtrl
     libx11
-    libXext
+    libxext
   ];
 
   # Needed for static linking
   preConfigure = ''
-    export LIBRARY_PATH=${libXNVCtrl}/lib:${libx11}/lib:${libXext}/lib
+    export LIBRARY_PATH=${libXNVCtrl}/lib:${libx11}/lib:${libxext}/lib
   '';
 
   meta = {

@@ -7,7 +7,7 @@
   jre,
 
   libx11,
-  libXext,
+  libxext,
   libxcursor,
   libXrandr,
   libXxf86vm,
@@ -32,7 +32,7 @@ let
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXext
+    libxext
     libxcursor
     libXrandr
     libXxf86vm

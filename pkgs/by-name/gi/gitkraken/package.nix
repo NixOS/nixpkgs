@@ -31,7 +31,7 @@
   libxcomposite,
   libxcursor,
   libxdamage,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXrandr,
@@ -111,7 +111,7 @@ let
       curlWithGnuTls
       udev
       libx11
-      libXext
+      libxext
       libxcursor
       libXi
       libxcb

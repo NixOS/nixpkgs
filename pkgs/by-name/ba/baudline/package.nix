@@ -5,7 +5,7 @@
   libXmu,
   libXt,
   libx11,
-  libXext,
+  libxext,
   libXxf86vm,
   libjack2,
   makeWrapper,
@@ -16,7 +16,7 @@ let
     libXmu
     libXt
     libx11
-    libXext
+    libxext
     libXxf86vm
     libjack2
   ];

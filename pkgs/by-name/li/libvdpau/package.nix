@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  libxext,
   libx11,
   xorgproto,
   mesa,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     xorgproto
-    xorg.libXext
+    libxext
   ];
 
   propagatedBuildInputs = [ libx11 ];

@@ -5,7 +5,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXext,
+  libxext,
   libXt,
   xorgproto,
   perl, # For building web manuals
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
         fontconfig
         freetype # fontsrv uses these
         libx11
-        libXext
+        libxext
         libXt
         xorgproto
       ]

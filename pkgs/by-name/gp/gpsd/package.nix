@@ -22,7 +22,7 @@
   libXt,
   libXpm,
   libxaw,
-  libXext,
+  libxext,
   gobject-introspection,
   pango,
   gdk-pixbuf,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     libx11
     libxaw
-    libXext
+    libxext
     libXpm
     libXt
     pango

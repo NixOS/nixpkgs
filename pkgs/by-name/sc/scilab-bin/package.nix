@@ -8,6 +8,7 @@
   alsa-lib,
   ncurses5,
   xorg,
+  libxext,
   libxcursor,
   libx11,
 }:
@@ -92,7 +93,7 @@ let
       stdenv.cc.cc
       libx11
       libxcursor
-      xorg.libXext
+      libxext
       xorg.libXft
       xorg.libXi
       xorg.libXrandr

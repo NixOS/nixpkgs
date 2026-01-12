@@ -40,6 +40,7 @@
   wayland-scanner,
   xcbutilkeysyms,
   xorg,
+  libxext,
   libx11,
   xorgproto,
   libxshmfence,
@@ -273,7 +274,7 @@ stdenv.mkDerivation {
     libva-minimal
     libx11
     libxcb
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXrandr
     libxshmfence

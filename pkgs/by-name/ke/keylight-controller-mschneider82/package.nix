@@ -6,6 +6,7 @@
   nssmdns,
   pkg-config,
   xorg,
+  libxext,
   libxcursor,
   libx11,
   xinput,
@@ -34,7 +35,7 @@ buildGoModule rec {
     libx11
     libx11.dev
     libxcursor
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXinerama
     xorg.libXrandr

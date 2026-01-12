@@ -11,7 +11,7 @@
   libGLU,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXinerama,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     libGLU
     libx11
     libxcursor
-    libXext
+    libxext
     libXfixes
     libXi
     libXinerama

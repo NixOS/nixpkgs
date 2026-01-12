@@ -12,6 +12,7 @@
   iputils,
   psmisc,
   xorg,
+  libxext,
   libx11,
 }:
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${
         lib.makeLibraryPath [
           libx11
-          xorg.libXext
+          libxext
           xorg.libXrender
           xorg.libXtst
           xorg.libXi

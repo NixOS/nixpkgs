@@ -6,7 +6,7 @@
   pandoc,
   installShellFiles,
   perl,
-  xorg,
+  libxext,
   libx11,
   x11perf,
   libGLX,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withGL [
     libx11
-    xorg.libXext
+    libxext
     libGLX
   ];
 

@@ -8,7 +8,7 @@
   libXt,
   libXft,
   libXrender,
-  libXext,
+  libxext,
   ncurses,
   fontconfig,
   freetype,
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals perlSupport [
     perl
-    libXext
+    libxext
   ]
   ++ lib.optional gdkPixbufSupport gdk-pixbuf;
 

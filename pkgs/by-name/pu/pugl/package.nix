@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libxext,
   libxcursor,
   libx11,
   libGL,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     vulkan-loader
     vulkan-headers
-    xorg.libXext
+    libxext
     cairo
   ];
 

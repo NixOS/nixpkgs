@@ -12,7 +12,7 @@
   libGLU,
   libGLX,
   libx11,
-  libXext,
+  libxext,
   libXmu,
   libXpm,
   motif,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optionals enableOpenGLX11 [
       libGLU
-      libXext
+      libxext
       libXmu
     ]
     ++ lib.optionals enableInventor [

@@ -7,7 +7,7 @@
   libglvnd,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXinerama,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     libXinerama
     libxcursor
-    libXext
+    libxext
     libXrandr
     libXrender
     libx11

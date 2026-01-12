@@ -5,7 +5,7 @@
   makeWrapper,
   autoPatchelfHook,
   libx11,
-  libXext,
+  libxext,
   libXrandr,
   libXinerama,
   libglvnd,
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
   buildInputs = [
     stdenv.cc.cc
     libx11
-    libXext
+    libxext
     libXrandr
     libXinerama
   ];

@@ -22,7 +22,7 @@
   lame,
   fdk_aac,
   libass,
-  libXext,
+  libxext,
   libXfixes,
 }:
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     fdk_aac
     libass
     quazip
-    libXext
+    libxext
     libXfixes
   ];
 

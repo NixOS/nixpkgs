@@ -14,6 +14,7 @@
   giflib,
   enableX11 ? true,
   xorg,
+  libxext,
   libx11,
   xorgproto,
   enableSDL ? true,
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableX11 [
     xorgproto
     libx11
-    xorg.libXext
+    libxext
     xorg.libXrender
   ];
 

@@ -5,7 +5,7 @@
   pkg-config,
   libpng,
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXtst,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng
     libx11
-    libXext
+    libxext
     libXi
     libXtst
   ];

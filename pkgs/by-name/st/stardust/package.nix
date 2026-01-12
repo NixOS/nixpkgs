@@ -9,7 +9,7 @@
   libx11,
   libXi,
   libXmu,
-  libXext,
+  libxext,
   libGLU,
   libGL,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXi
     libXmu
-    libXext
+    libxext
     libGLU
     libGL
   ];

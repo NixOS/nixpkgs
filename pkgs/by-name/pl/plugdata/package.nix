@@ -13,6 +13,7 @@
   zenity,
   curl,
   xorg,
+  libxext,
   libxdmcp,
   libxcursor,
   libx11,
@@ -66,7 +67,7 @@ stdenv.mkDerivation {
     webkitgtk_4_1
     libx11
     libxcursor
-    xorg.libXext
+    libxext
     xorg.libXinerama
     xorg.libXrender
     xorg.libXrandr

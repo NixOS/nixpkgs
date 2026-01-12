@@ -4,7 +4,7 @@
   config,
   fetchurl,
   libx11,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libXrender,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       makeLibraryPath [
         stdenv.cc.cc
         libx11
-        libXext
+        libxext
         libXrender
         fontconfig
         freetype
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
       makeLibraryPath [
         stdenv.cc.cc
         libx11
-        libXext
+        libxext
         libXrender
         fontconfig
         freetype
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
       makeLibraryPath [
         stdenv.cc.cc
         libx11
-        libXext
+        libxext
         libXrender
         fontconfig
         freetype
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
       makeLibraryPath [
         stdenv.cc.cc
         libx11
-        libXext
+        libxext
         libXinerama
         libXrandr
       ]
@@ -101,7 +101,7 @@ stdenv.mkDerivation {
       makeLibraryPath [
         stdenv.cc.cc
         libx11
-        libXext
+        libxext
         libXinerama
         libXrandr
       ]

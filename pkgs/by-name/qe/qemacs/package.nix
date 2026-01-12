@@ -7,7 +7,7 @@
   texi2html,
   enableX11 ? true,
   libx11,
-  libXext,
+  libxext,
   libXv,
   libpng,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   buildInputs = lib.optionals enableX11 [
     libpng
     libx11
-    libXext
+    libxext
     libXv
   ];
 

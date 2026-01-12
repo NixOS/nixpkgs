@@ -55,7 +55,7 @@ let
       "libpthread.so.0" = glibc;
       "libresolv.so.2" = glibc;
       "libX11.so.6" = libx11;
-      "libXext.so.6" = xorg.libXext;
+      "libXext.so.6" = libxext;
       "libXrender.so.1" = xorg.libXrender;
       "libICE.so.6" = libice;
       "libSM.so.6" = libsm;

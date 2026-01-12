@@ -10,7 +10,7 @@
   libsm,
   libice,
   libXmu,
-  libXext,
+  libxext,
   gnuchess,
   texinfo,
   libXpm,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libsm
     libice
     libXmu
-    libXext
+    libxext
     gnuchess
     texinfo
     libXpm

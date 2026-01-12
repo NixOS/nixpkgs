@@ -41,7 +41,7 @@ deployAndroidPackage {
     )
     ++ (with pkgs; [
       libx11
-      xorg.libXext
+      libxext
       libxdamage
       xorg.libXfixes
       libxcb

@@ -19,6 +19,7 @@
   nss,
   nspr,
   xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   libx11,
@@ -72,7 +73,7 @@ let
     libxcb
     libxcomposite
     libxdamage
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXrandr
     libxshmfence

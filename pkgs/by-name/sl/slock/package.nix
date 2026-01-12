@@ -5,7 +5,7 @@
   writeText,
   xorgproto,
   libx11,
-  libXext,
+  libxext,
   libXrandr,
   libxcrypt,
   config,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xorgproto
     libx11
-    libXext
+    libxext
     libXrandr
     libxcrypt
   ]

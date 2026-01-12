@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libice,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   libXxf86vm,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libice
-    libXext
+    libxext
     libXi
     libXrandr
     libXxf86vm

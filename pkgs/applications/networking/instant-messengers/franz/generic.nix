@@ -6,6 +6,7 @@
   autoPatchelfHook,
   dpkg,
   xorg,
+  libxext,
   libxdamage,
   libxcursor,
   libxcomposite,
@@ -77,7 +78,7 @@ stdenv.mkDerivation (
       libxdamage
       xorg.libXrandr
       libxcomposite
-      xorg.libXext
+      libxext
       xorg.libXfixes
       xorg.libXrender
       libx11

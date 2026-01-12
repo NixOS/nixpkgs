@@ -18,7 +18,7 @@
   enableDdc ? true,
   ddcutil,
   enableDpms ? true,
-  libXext,
+  libxext,
   enableGamma ? true,
   libdrm,
   libXrandr,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpthread-stubs
   ]
   ++ lib.optionals enableDdc [ ddcutil ]
-  ++ lib.optionals enableDpms [ libXext ]
+  ++ lib.optionals enableDpms [ libxext ]
   ++ lib.optionals enableGamma [ libXrandr ]
   ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
     libdrm

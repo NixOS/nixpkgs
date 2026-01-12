@@ -15,6 +15,7 @@
   krb5,
   bash,
   xorg,
+  libxext,
   libxcursor,
   libx11,
   libsm,
@@ -83,7 +84,7 @@ buildDotnetModule (finalAttrs: {
     libice
     libsm
     libxcursor
-    xorg.libXext
+    libxext
   ];
 
   desktopItems = [

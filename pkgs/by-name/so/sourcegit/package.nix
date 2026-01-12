@@ -9,7 +9,7 @@
   libicns,
 
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
 
@@ -56,7 +56,7 @@ buildDotnetModule (finalAttrs: {
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
     libxcursor
-    libXext
+    libxext
     libXi
     libXrandr
   ];

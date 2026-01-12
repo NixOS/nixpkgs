@@ -18,7 +18,7 @@
   libGLU,
   libsm,
   libxdmcp,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libXxf86vm,
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libsm
     libxdmcp
-    libXext
+    libxext
     libXinerama
     libXrandr
     libXxf86vm

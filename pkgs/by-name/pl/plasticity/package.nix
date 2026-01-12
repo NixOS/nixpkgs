@@ -30,6 +30,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   libx11,
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxcomposite
     libxdamage
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXrandr
     xorg.libXtst

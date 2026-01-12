@@ -7,7 +7,7 @@
   doxygen,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libXrandr,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           libx11
           libxcursor
-          libXext
+          libxext
           libXft
           libXinerama
           libXrandr

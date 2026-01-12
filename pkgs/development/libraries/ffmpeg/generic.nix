@@ -312,7 +312,7 @@
   libwebp,
   libx11,
   libxcb,
-  libXext,
+  libxext,
   libxml2,
   libXv,
   nv-codec-headers,
@@ -967,7 +967,7 @@ stdenv.mkDerivation (
       ++ optionals withXlib [
         libx11
         libXv
-        libXext
+        libxext
       ]
       ++ optionals withXml2 [ libxml2 ]
       ++ optionals withXvid [ xvidcore ]

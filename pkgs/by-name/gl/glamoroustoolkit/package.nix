@@ -13,7 +13,7 @@
   gtk3,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   libXrender,
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
         gtk3
         libx11
         libxcursor
-        libXext
+        libxext
         libXi
         libXrandr
         libXrender

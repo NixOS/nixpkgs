@@ -7,7 +7,7 @@
   libjack2,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libXtst,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libjack2
     libx11
     libxcursor
-    libXext
+    libxext
     libXinerama
     libXrandr
     libXtst

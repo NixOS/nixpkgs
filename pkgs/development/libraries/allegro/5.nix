@@ -22,7 +22,7 @@
   libx11,
   libxcursor,
   libxdmcp,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXpm,
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     libx11
     libxcursor
     libxdmcp
-    libXext
+    libxext
     libXfixes
     libXi
     libXpm

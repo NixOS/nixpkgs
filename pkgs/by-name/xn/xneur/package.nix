@@ -14,6 +14,7 @@
   libnotify,
   pcre,
   xorg,
+  libxext,
   libx11,
   xosd,
 }:
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
     libnotify
     pcre
     libx11
-    xorg.libXext
+    libxext
     xorg.libXi
     xorg.libXtst
     xosd

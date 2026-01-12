@@ -10,7 +10,7 @@
   libice,
   libsm,
   libx11,
-  libXext,
+  libxext,
   libXrender,
   zlib,
 }:
@@ -25,7 +25,7 @@ let
     libice
     libsm
     libx11
-    libXext
+    libxext
     libXrender
     zlib
   ];

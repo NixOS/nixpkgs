@@ -20,6 +20,7 @@
   libGL,
   numactl,
   xorg,
+  libxext,
   libxdmcp,
   libxdamage,
   libxcursor,
@@ -118,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxdamage
     libxdmcp
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXft
     xorg.libXinerama

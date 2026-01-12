@@ -15,7 +15,7 @@
   libunwind,
   libx11,
   xorgproto,
-  libXext,
+  libxext,
   libXi,
   libXmu,
   libXt,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     libunwind
     libx11
     xorgproto
-    libXext
+    libxext
     libXi
     libXmu
     libXt

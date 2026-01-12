@@ -47,7 +47,7 @@ buildFHSEnv {
       xorg.libXmu
       xorg.libXi
       xorg.libXt
-      xorg.libXext
+      libxext
       libx11
       xorg.libXrender
       libxcursor

@@ -12,7 +12,7 @@
   gst_all_1,
   libGL,
   libx11,
-  libXext,
+  libxext,
   libXmu,
   libXrandr,
   libXrender,
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-base
     libGL
     libx11
-    libXext
+    libxext
     libXmu
     libXrandr
     libXrender

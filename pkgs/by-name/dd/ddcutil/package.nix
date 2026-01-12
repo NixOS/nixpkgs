@@ -11,6 +11,7 @@
   libusb1,
   libdrm,
   xorg,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     libgudev
     libusb1
     udev
-    xorg.libXext
+    libxext
     xorg.libXrandr
   ];
 

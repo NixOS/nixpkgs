@@ -10,7 +10,7 @@
   libiconv,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   freetype,
   fontconfig,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxcursor
-    libXext
+    libxext
     libXi
     freetype
     fontconfig

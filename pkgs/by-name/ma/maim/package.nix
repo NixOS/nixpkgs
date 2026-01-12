@@ -12,7 +12,7 @@
   libGL,
   glm,
   libx11,
-  libXext,
+  libxext,
   libXfixes,
   libXrandr,
   libxcomposite,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libGL
     glm
     libx11
-    libXext
+    libxext
     libXfixes
     libXrandr
     libxcomposite

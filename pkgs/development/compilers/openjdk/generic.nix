@@ -31,7 +31,7 @@
   lcms2,
   libx11,
   libice,
-  libXext,
+  libxext,
   libXrender,
   libXtst,
   libXt,
@@ -278,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libx11
     libice
-    libXext
+    libxext
     libXrender
     libXtst
     libXt

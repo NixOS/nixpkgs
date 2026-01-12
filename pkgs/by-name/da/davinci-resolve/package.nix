@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxext,
   libxdamage,
   libxcursor,
   libxcomposite,
@@ -234,7 +235,7 @@ buildFHSEnv {
       libxcomposite
       libxcursor
       libxdamage
-      xorg.libXext
+      libxext
       xorg.libXfixes
       xorg.libXi
       xorg.libXinerama

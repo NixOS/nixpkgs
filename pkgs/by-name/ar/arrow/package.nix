@@ -8,7 +8,7 @@
   libpulseaudio,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   udev,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libx11
     libxcursor
-    libXext
+    libxext
     libXi
     libXrandr
     udev

@@ -30,7 +30,7 @@
   libxcb,
   libxcomposite,
   libxdamage,
-  libXext,
+  libxext,
   libXfixes,
   libXrandr,
   libxkbfile,
@@ -66,7 +66,7 @@ let
     libxcb
     libxcomposite
     libxdamage
-    libXext
+    libxext
     libXfixes
     libXrandr
     libxkbfile

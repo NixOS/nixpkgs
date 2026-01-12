@@ -6,7 +6,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   makeDesktopItem,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXft
     libXinerama
     fontconfig

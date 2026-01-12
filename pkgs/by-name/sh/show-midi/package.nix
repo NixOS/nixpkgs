@@ -8,7 +8,7 @@
   libx11,
   libXrandr,
   libXinerama,
-  libXext,
+  libxext,
   libxcursor,
   makeDesktopItem,
   copyDesktopItems,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXrandr
     libXinerama
-    libXext
+    libxext
     libxcursor
   ];
 

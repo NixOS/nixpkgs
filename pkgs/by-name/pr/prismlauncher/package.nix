@@ -12,7 +12,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
   libXxf86vm,
   libjack2,
@@ -91,7 +91,7 @@ symlinkJoin {
         libGL
         libx11
         libxcursor
-        libXext
+        libxext
         libXrandr
         libXxf86vm
 

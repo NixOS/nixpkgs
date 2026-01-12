@@ -11,6 +11,7 @@
 
   # Build Inputs
   xorg,
+  libxext,
   libxcursor,
   libx11,
   wayland,
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    xorg.libXext
+    libxext
     xorg.libXrandr
     xorg.libXrender
     xorg.libXfixes

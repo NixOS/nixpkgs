@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libGL,
   libx11,
-  libXext,
+  libxext,
   libXrandr,
   pkg-config,
   python3,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXext
+    libxext
     libXrandr
   ];
 

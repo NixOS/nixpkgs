@@ -91,7 +91,7 @@ let
         xorg.libXrandr
         libxcomposite
         libxdamage
-        xorg.libXext
+        libxext
         xorg.libXfixes
         libxcb
       ]);

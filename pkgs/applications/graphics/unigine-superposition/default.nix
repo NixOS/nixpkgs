@@ -12,7 +12,7 @@
   libsm,
   libXi,
   libglvnd,
-  libXext,
+  libxext,
   libXrandr,
   mailspring,
   libx11,
@@ -58,7 +58,7 @@ let
       libsm
       libXi
       libglvnd
-      libXext
+      libxext
       libXrandr
       mailspring
       libx11
@@ -115,7 +115,7 @@ buildFHSEnv {
     libsm
     libXi
     libglvnd
-    libXext
+    libxext
     libXrandr
     mailspring
     libx11

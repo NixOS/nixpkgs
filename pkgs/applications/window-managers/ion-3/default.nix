@@ -8,7 +8,7 @@
   libice,
   libsm,
   libx11,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libice
     libsm
     libx11
-    libXext
+    libxext
     lua
     gettext
     groff

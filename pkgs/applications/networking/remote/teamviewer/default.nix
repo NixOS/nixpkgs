@@ -11,7 +11,7 @@
   glibc,
   libXrandr,
   libx11,
-  libXext,
+  libxext,
   libxdamage,
   libXtst,
   libsm,
@@ -129,7 +129,7 @@ mkDerivation rec {
       lib.makeLibraryPath [
         libXrandr
         libx11
-        libXext
+        libxext
         libxdamage
         libXtst
         libsm

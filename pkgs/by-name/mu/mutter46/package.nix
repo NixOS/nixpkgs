@@ -20,7 +20,7 @@
   libxcomposite,
   libxcursor,
   libxdamage,
-  libXext,
+  libxext,
   libXfixes,
   libXi,
   libXtst,
@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxcursor
     libxdamage
-    libXext
+    libxext
     libXfixes
     libXi
     libXtst

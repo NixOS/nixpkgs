@@ -18,7 +18,7 @@
   freetype,
   libGL,
   libxcursor,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libepoxy,
@@ -58,7 +58,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libGL
     libxcursor
-    libXext
+    libxext
     libXinerama
     libXrandr
     libepoxy

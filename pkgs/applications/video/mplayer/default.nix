@@ -17,7 +17,7 @@
   fribidi,
   x11Support ? true,
   libx11,
-  libXext,
+  libxext,
   libGLU,
   libGL,
   xineramaSupport ? true,
@@ -147,7 +147,7 @@ stdenv.mkDerivation {
   ++ lib.optional fribidiSupport fribidi
   ++ lib.optionals x11Support [
     libx11
-    libXext
+    libxext
     libGLU
     libGL
   ]

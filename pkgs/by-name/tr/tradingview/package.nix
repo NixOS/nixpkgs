@@ -19,7 +19,7 @@
   sqlite,
   systemd,
   wayland,
-  xorg,
+  libxext,
   libx11,
   libxcb,
 }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     libxcb
     libx11
-    xorg.libXext
+    libxext
   ];
 
   unpackPhase = ''

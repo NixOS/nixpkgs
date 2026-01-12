@@ -8,7 +8,7 @@
 
   # Linux deps
   libGL,
-  xorg,
+  libxext,
   libx11,
 
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libx11
-    xorg.libXext
+    libxext
   ];
 
   preConfigure = ''

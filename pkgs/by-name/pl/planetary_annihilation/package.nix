@@ -19,6 +19,7 @@
   curl,
   systemd,
   xorg,
+  libxext,
   libxdamage,
   libxcursor,
   libxcomposite,
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
         glib
         stdenv.cc.libc
         "$out"
-        xorg.libXext
+        libxext
         pango
         udev
         libx11

@@ -7,7 +7,7 @@
   pkg-config,
   libtool,
   xbitmaps,
-  libXext,
+  libxext,
   libXft,
   libXrender,
   libXmu,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     flex
     libtool
     xbitmaps
-    libXext
+    libxext
     libXft
     libXrender
     libXmu

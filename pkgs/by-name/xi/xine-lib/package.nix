@@ -9,7 +9,7 @@
   libGL,
   libGLU,
   libx11,
-  libXext,
+  libxext,
   libXinerama,
   libXv,
   libcaca,
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libx11
     libx11
-    libXext
-    libXext
+    libxext
+    libxext
     libXinerama
     libXinerama
     libXv

@@ -33,6 +33,7 @@
   fluxbox,
   enlightenment,
   xorg,
+  libxext,
   testers,
 
   gitUpdater,
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals x11Support [
     xorg.libXft
-    xorg.libXext
+    libxext
   ]
   ++ optional heifSupport libheif
   ++ optional svgSupport librsvg

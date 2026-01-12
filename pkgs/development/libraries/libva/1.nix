@@ -5,7 +5,7 @@
   autoreconfHook,
   libx11,
   pkg-config,
-  libXext,
+  libxext,
   libdrm,
   libXfixes,
   wayland,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!minimal) [
     libva1-minimal
     libx11
-    libXext
+    libxext
     libXfixes
     wayland
     libffi

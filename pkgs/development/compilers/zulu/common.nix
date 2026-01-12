@@ -15,6 +15,7 @@
   freetype,
   zlib,
   xorg,
+  libxext,
   libx11,
   # runtime dependencies
   cups,
@@ -98,7 +99,7 @@ let
         freetype
         stdenv.cc.cc # libstdc++.so.6
         libx11
-        xorg.libXext
+        libxext
         xorg.libXi
         xorg.libXrender
         xorg.libXtst

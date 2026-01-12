@@ -5,7 +5,7 @@
   fetchFromGitHub,
   libGL,
   libx11,
-  libXext,
+  libxext,
   python3,
   libXrandr,
   libXrender,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXext
+    libxext
     libXrandr
     libXrender
     libpulseaudio

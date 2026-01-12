@@ -7,7 +7,7 @@
   libXt,
   libxaw,
   libXpm,
-  libXext,
+  libxext,
   withNethackLevels ? true,
 }:
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libXt
     libxaw
     libXpm
-    libXext
+    libxext
   ];
   nativeBuildInputs = [ imake ];
 

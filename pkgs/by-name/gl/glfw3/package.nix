@@ -11,7 +11,7 @@
   libxcursor,
   libx11,
   libXi,
-  libXext,
+  libxext,
   libXxf86vm,
   fixDarwinDylibNames,
   wayland,
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     libXinerama
     libxcursor
     libXi
-    libXext
+    libxext
     libXxf86vm
   ];
 

@@ -5,7 +5,7 @@
   autoreconfHook,
   xorgproto,
   libx11,
-  libXext,
+  libxext,
   pixman,
   pkg-config,
   utilmacros,
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [
     xorgproto
     libx11
-    libXext
+    libxext
     pixman
     utilmacros
     xorgserver

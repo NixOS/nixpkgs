@@ -7,7 +7,7 @@
   groff,
   libsm,
   libx11,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libXrandr,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libsm
     libx11
-    libXext
+    libxext
     libXft
     libXinerama
     libXrandr

@@ -11,7 +11,7 @@
   freealut,
   libXrandr,
   xorgproto,
-  libXext,
+  libxext,
   libsm,
   libice,
   libXi,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     freealut
     libXrandr
     xorgproto
-    libXext
+    libxext
     libsm
     libice
     libXi

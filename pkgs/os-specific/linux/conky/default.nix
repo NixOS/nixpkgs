@@ -30,6 +30,7 @@
   x11Support ? true,
   freetype,
   xorg,
+  libxext,
   libx11,
   libsm,
   libice,
@@ -137,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libice
     libx11
-    xorg.libXext
+    libxext
     xorg.libXft
     xorg.libXfixes
     libsm

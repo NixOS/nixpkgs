@@ -5,7 +5,7 @@
   fetchurl,
   zlib,
   libx11,
-  libXext,
+  libxext,
   libsm,
   libice,
   libxkbcommon,
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     zlib
     libx11
     libXt
-    libXext
+    libxext
     libsm
     libice
     libxcb

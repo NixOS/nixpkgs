@@ -20,7 +20,7 @@
   libxkbcommon,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   makeWrapper,
@@ -116,7 +116,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
             libxkbcommon
             libx11
             libxcursor
-            libXext
+            libxext
             libXrandr
             libXi
             wayland

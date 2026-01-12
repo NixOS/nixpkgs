@@ -6,7 +6,7 @@
   libGL,
   libGLU,
   libx11,
-  libXext,
+  libxext,
   makeBinaryWrapper,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libx11
-    libXext
+    libxext
   ];
 
   enableParallelBuilding = true;

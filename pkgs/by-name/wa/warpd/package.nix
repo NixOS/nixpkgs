@@ -14,7 +14,7 @@
   libXfixes,
   libXtst,
   libx11,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       libXfixes
       libXtst
       libx11
-      libXext
+      libxext
     ];
 
   makeFlags = [

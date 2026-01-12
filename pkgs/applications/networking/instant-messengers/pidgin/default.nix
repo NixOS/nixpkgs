@@ -19,7 +19,7 @@
   libice,
   libsm,
   libXScrnSaver,
-  libXext,
+  libxext,
   libgcrypt,
   libgnt,
   libidn,
@@ -77,7 +77,7 @@ let
         libice
         libsm
         libXScrnSaver
-        libXext
+        libxext
         libgnt
         libidn
         libstartup_notification

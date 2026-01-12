@@ -18,7 +18,7 @@
   libsm,
   libXi,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
 
   makeDesktopItem,
@@ -107,7 +107,7 @@ buildDotnetModule (finalAttrs: {
     libsm
     libXi
     libxcursor
-    libXext
+    libxext
     libXrandr
   ];
 

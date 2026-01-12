@@ -8,7 +8,7 @@
   juce,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXinerama,
   libXrandr,
   libglvnd,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     juce
     libx11
     libxcursor
-    libXext
+    libxext
     libXinerama
     libXrandr
     libglvnd

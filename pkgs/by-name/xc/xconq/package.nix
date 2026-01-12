@@ -10,7 +10,7 @@
   libXt,
   tcl,
   tk,
-  libXext,
+  libxext,
   fontconfig,
   makeWrapper,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libXt
     tcl
     tk
-    libXext
+    libxext
     fontconfig
   ];
 

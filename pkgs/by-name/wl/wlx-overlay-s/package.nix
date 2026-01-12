@@ -7,7 +7,7 @@
   libGL,
   libx11,
   libxcb,
-  libXext,
+  libxext,
   libXrandr,
   libxkbcommon,
   makeWrapper,
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     libGL
     libx11
     libxcb
-    libXext
+    libxext
     libXrandr
     libxkbcommon
     openxr-loader

@@ -18,7 +18,7 @@
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libx11,
-  libXext,
+  libxext,
   libXi,
   libXrandr,
   enableCurl ? true,
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableX11 [
     libx11
-    libXext
+    libxext
     libXi
     libXrandr
   ]

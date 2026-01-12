@@ -14,7 +14,7 @@
   libcanberra,
   libgnomekbd,
   libx11,
-  libXext,
+  libxext,
   linkFarm,
   lightdm-slick-greeter,
   numlockx,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libcanberra
     libgnomekbd # needed by XApp.KbdLayoutController
     libx11
-    libXext
+    libxext
   ];
 
   pythonPath = [

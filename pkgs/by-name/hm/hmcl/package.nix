@@ -24,6 +24,7 @@
     jdk17
   ],
   xorg,
+  libxext,
   libxcursor,
   libx11,
   xrandr,
@@ -143,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     xorg.libXxf86vm
-    xorg.libXext
+    libxext
     libxcursor
     xorg.libXrandr
     xorg.libXtst

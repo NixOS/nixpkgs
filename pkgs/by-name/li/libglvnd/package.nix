@@ -8,7 +8,7 @@
   python3,
   addDriverRunpath,
   libx11,
-  libXext,
+  libxext,
   xorgproto,
 }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libx11
-    libXext
+    libxext
     xorgproto
   ];
 

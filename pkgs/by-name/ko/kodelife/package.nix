@@ -12,7 +12,7 @@
   libxcb,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXinerama,
   libXrandr,
@@ -29,7 +29,7 @@ let
     libxcb
     libx11
     libxcursor
-    libXext
+    libxext
     libXi
     libXinerama
     libXrandr

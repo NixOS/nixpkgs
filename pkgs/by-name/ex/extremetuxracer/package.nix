@@ -12,7 +12,7 @@
   sfml_2,
   libXi,
   libXmu,
-  libXext,
+  libxext,
   libXt,
   libsm,
   libice,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     sfml_2
     libXi
     libXmu
-    libXext
+    libxext
     libXt
     libsm
     libice

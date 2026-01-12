@@ -10,7 +10,7 @@
   openssl,
   libXrandr,
   libXfixes,
-  libXext,
+  libxext,
   libXrender,
   libXinerama,
   libjpeg,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     cyrus_sasl
     glib
     gst_all_1.gst-plugins-base
-    libXext
+    libxext
     libXfixes
     libXinerama
     libXrandr

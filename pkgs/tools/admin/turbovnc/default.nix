@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  libxext,
   libxdmcp,
   libxdamage,
   libx11,
@@ -90,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxdamage # for -DTVNC_SYSTEMX11=1
     libxdmcp # for -DTVNC_SYSTEMX11=1
-    xorg.libXext
+    libxext
     xorg.libXfont2 # for -DTVNC_SYSTEMX11=1
     libxkbfile # for -DTVNC_SYSTEMX11=1
     libxshmfence

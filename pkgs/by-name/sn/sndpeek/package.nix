@@ -9,7 +9,7 @@
   libGLU,
   libx11,
   libXmu,
-  libXext,
+  libxext,
   libXi,
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libx11
     libXmu
-    libXext
+    libxext
     libXi
   ];
   buildFlags = [ "linux-alsa" ];

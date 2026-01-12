@@ -5,7 +5,7 @@
   pkg-config,
   freetype,
   fribidi,
-  libXext,
+  libxext,
   libXft,
   libXpm,
   libXrandr,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     fribidi
-    libXext
+    libxext
     libXft
     libXpm
     libXrandr

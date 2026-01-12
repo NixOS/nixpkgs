@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libxext,
   libxdamage,
   libxcursor,
   libxcomposite,
@@ -129,7 +130,7 @@ stdenv.mkDerivation {
     libxcomposite
     libxcursor
     libxdamage
-    xorg.libXext
+    libxext
     xorg.libXfixes
     xorg.libXi
     xorg.libXinerama

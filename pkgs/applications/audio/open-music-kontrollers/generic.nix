@@ -8,7 +8,7 @@
   lv2,
   sord,
   libx11,
-  libXext,
+  libxext,
   glew,
   lv2lint,
   pname,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     lv2
     sord
     libx11
-    libXext
+    libxext
     glew
     lv2lint
   ]

@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   zlib,
-  libXext,
+  libxext,
   libx11,
   libXrender,
   libXtst,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     zlib
-    libXext
+    libxext
     libx11
     libXrender
     libXtst

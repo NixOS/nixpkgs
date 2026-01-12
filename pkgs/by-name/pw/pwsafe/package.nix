@@ -8,7 +8,7 @@
   gettext,
   perl,
   wxGTK32,
-  libXext,
+  libxext,
   libXi,
   libXt,
   libXtst,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     file
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXext
+    libxext
     libXi
     libXt
     libXtst

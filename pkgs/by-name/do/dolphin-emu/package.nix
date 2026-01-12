@@ -40,7 +40,7 @@
   alsa-lib,
   bluez,
   libGL,
-  libXext,
+  libxext,
   libXrandr,
   libevdev,
   udev,
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     bluez
     libGL
-    libXext
+    libxext
     libXrandr
     libevdev
     # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version

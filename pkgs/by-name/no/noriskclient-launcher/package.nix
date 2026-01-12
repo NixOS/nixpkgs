@@ -19,7 +19,7 @@
   libpulseaudio,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXrandr,
   libXxf86vm,
   noriskclient-launcher-unwrapped,
@@ -56,7 +56,7 @@ symlinkJoin {
       libGL
       libx11
       libxcursor
-      libXext
+      libxext
       libXrandr
       libXxf86vm
 

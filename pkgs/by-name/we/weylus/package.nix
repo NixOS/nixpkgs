@@ -10,6 +10,7 @@
   libva,
   gst_all_1,
   xorg,
+  libxext,
   libxcursor,
   libxcomposite,
   libdrm,
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage {
     dbus
     libva
     gst_all_1.gst-plugins-base
-    xorg.libXext
+    libxext
     xorg.libXft
     xorg.libXinerama
     libxcursor

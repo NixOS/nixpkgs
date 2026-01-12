@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   mkLibretroCore,
-  xorg,
+  libxext,
   libx11,
 }:
 mkLibretroCore {
@@ -18,7 +18,7 @@ mkLibretroCore {
 
   extraBuildInputs = [
     libx11
-    xorg.libXext
+    libxext
   ];
 
   makefile = "GNUmakefile";

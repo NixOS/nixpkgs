@@ -13,7 +13,7 @@
   libXinerama,
   libxcursor,
   libXi,
-  libXext,
+  libxext,
   libGLU,
   alsa-lib,
   fontconfig,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libXinerama
     libxcursor
     libXi
-    libXext
+    libxext
     alsa-lib
     fontconfig
     libGLU

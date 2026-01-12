@@ -7,7 +7,7 @@
   libXft,
   libxcomposite,
   libxdamage,
-  libXext,
+  libxext,
   libXinerama,
   libjpeg,
   giflib,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libxcomposite
     libxdamage
-    libXext
+    libxext
     libXinerama
     libjpeg
     giflib

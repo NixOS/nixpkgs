@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxext,
   libxdamage,
   libx11,
   libsm,
@@ -149,9 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
       xorgproto
       xorg.utilmacros
       xorg.libXtst
-      xorg.libXext
+      libxext
       libx11
-      xorg.libXext
+      libxext
       libice
       xorg.libXi
       libsm

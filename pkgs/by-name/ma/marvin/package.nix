@@ -13,7 +13,7 @@
   fontconfig,
   libXi,
   libx11,
-  libXext,
+  libxext,
   libXtst,
   libXrender,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libXi
     libx11
-    libXext
+    libxext
     libXtst
     libXrender
   ];

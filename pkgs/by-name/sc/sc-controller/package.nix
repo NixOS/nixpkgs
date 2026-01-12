@@ -10,7 +10,7 @@
   bluez,
   linuxHeaders,
   libx11,
-  libXext,
+  libxext,
   libXfixes,
   libusb1,
   udev,
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [
     libx11
-    libXext
+    libxext
     libXfixes
     libusb1
     udev

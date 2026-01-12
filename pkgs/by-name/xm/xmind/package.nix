@@ -18,6 +18,7 @@
   alsa-lib,
   expat,
   xorg,
+  libxext,
   libxdamage,
   libxcomposite,
   libx11,
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     libx11
-    xorg.libXext
+    libxext
     libxcb
     libxcomposite
     libxdamage

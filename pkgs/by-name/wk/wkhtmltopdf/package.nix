@@ -14,6 +14,7 @@
   stdenv,
   xar,
   xorg,
+  libxext,
 }:
 
 let
@@ -50,7 +51,7 @@ let
     ];
 
     buildInputs = [
-      xorg.libXext
+      libxext
       xorg.libXrender
 
       freetype

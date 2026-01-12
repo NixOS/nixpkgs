@@ -19,7 +19,7 @@
   ghostscript,
   libXpm,
   libXmu,
-  libXext,
+  libxext,
   perl,
   perlPackages,
   python3Packages,
@@ -757,7 +757,7 @@ rec {
       xorg.libXpm
       xorg.libXmu
       libxaw
-      xorg.libXext
+      libxext
       xorg.libXfixes
     ];
 

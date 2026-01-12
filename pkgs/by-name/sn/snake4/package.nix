@@ -5,6 +5,7 @@
   shhmsg,
   shhopt,
   xorg,
+  libxext,
   libxaw,
   libx11,
 }:
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     xorg.libXt
     xorg.libXpm
     libxaw
-    xorg.libXext
+    libxext
   ];
 
   preInstall = ''

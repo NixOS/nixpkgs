@@ -7,7 +7,7 @@
   fftw,
   withNgshared ? true,
   libxaw,
-  libXext,
+  libxext,
   llvmPackages,
   readline,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!withNgshared) [
     libxaw
-    libXext
+    libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp

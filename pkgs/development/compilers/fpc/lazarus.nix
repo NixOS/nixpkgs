@@ -13,7 +13,7 @@
   libXi,
   xorgproto,
   libx11,
-  libXext,
+  libxext,
   gdb,
   gnumake,
   binutils,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libXi
     xorgproto
     libx11
-    libXext
+    libxext
     pango
     atk
     stdenv.cc

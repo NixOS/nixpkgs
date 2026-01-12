@@ -10,6 +10,7 @@
   lib,
   stdenv,
   xorg,
+  libxext,
   expat,
   libdrm,
 }:
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   neededLibs = map (p: p.out) [
     xorg.libXxf86vm
-    xorg.libXext
+    libxext
     expat
     libdrm
     stdenv.cc.cc

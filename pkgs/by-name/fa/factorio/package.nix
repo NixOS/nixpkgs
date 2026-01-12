@@ -8,7 +8,7 @@
   libsm,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXi,
   libXinerama,
   libXrandr,
@@ -247,7 +247,7 @@ let
         libsm
         libx11
         libxcursor
-        libXext
+        libxext
         libXi
         libXinerama
         libXrandr

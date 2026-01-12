@@ -7,7 +7,7 @@
   pkg-config,
   imagemagick,
   libx11,
-  libXext,
+  libxext,
   libXft,
   libXinerama,
   libXmu,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     imagemagick
     libx11
-    libXext
+    libxext
     libXft
     libXinerama
     libXmu

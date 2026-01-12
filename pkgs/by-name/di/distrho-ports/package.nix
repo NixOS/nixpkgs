@@ -8,7 +8,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXext,
+  libxext,
   libXrender,
   meson,
   ninja,
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     libGL
     libx11
     libxcursor
-    libXext
+    libxext
     libXrender
   ];
 
