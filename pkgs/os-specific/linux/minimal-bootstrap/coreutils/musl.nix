@@ -13,6 +13,7 @@
   gzip,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils-musl";
   version = "9.4";
 
@@ -36,7 +37,7 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -54,14 +55,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/cat --version
         mkdir $out
       '';
-
-    meta = {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      platforms = lib.platforms.unix;
-    };
   }
   ''
     # Unpack

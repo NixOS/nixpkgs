@@ -1746,6 +1746,7 @@ mapAliases {
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  wayvr-dashboard = throw "'wayvr-dashboard' and 'wlx-overlay-s' have been merged into a single application. Please switch to 'wayvr'"; # Added 2026-01-09
   wcurl = throw "'wcurl' has been removed due to being bundled with 'curl'"; # Added 2025-07-04
   wdomirror = throw "'wdomirror' has been removed as it is unmaintained upstream, Consider using 'wl-mirror' instead"; # Added 2025-09-04
   webfontkitgenerator = webfont-bundler; # Added 2025-07-27
@@ -1759,6 +1760,7 @@ mapAliases {
   wineWayland = throw "'wineWayland' has been renamed to/replaced by 'wine-wayland'"; # Converted to throw 2025-10-27
   winhelpcgi = throw "'winhelpcgi' has been removed as it was unmaintained upstream and broken with GCC 14"; # Added 2025-06-14
   wkhtmltopdf-bin = throw "'wkhtmltopdf-bin' has been renamed to/replaced by 'wkhtmltopdf'"; # Converted to throw 2025-10-27
+  wlx-overlay-s = throw "'wlx-overlay-s' and 'wayvr-dashboard' have been merged into a single application. Please switch to 'wayvr'"; # Added 2026-01-09
   wmii_hg = throw "'wmii_hg' has been renamed to/replaced by 'wmii'"; # Converted to throw 2025-10-27
   woof = throw "'woof' has been removed as it is broken and unmaintained upstream"; # Added 2025-09-04
   worldengine-cli = throw "'worldengine-cli' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04

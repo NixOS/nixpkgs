@@ -20,27 +20,24 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "model-hosting-container-standards";
-  version = "0.1.12";
+  version = "0.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "model-hosting-container-standards";
-    tag = "v${version}";
-    hash = "sha256-r1HdBe/JaOZVeLCOip5wsoifJRvkJpKPVWHrKPBSY1Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t7+yZ4jKsU9tlcr22jiqL3fVI0z704xHCQbSDsbWMfk=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [
     poetry-core
   ];
 
-  pythonRelaxDeps = [
-    "starlette"
-  ];
   pythonRemoveDeps = [
     # Declared as a runtime dependency, but not used in practice
     "setuptools"
@@ -71,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Python framework for seamless integration between ML frameworks (TensorRT-LLM, vLLM) and Amazon SageMaker hosting";
     homepage = "https://github.com/aws/model-hosting-container-standards/tree/main/python";
-    changelog = "https://github.com/aws/model-hosting-container-standards/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/aws/model-hosting-container-standards/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
