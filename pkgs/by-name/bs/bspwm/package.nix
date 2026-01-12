@@ -6,7 +6,7 @@
   libxinerama,
   xcbutil,
   libxcb-keysyms,
-  xcbutilwm,
+  libxcb-wm,
   nixosTests,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libxinerama
     xcbutil
     libxcb-keysyms
-    xcbutilwm
+    libxcb-wm
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

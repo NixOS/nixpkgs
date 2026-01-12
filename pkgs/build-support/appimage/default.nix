@@ -191,7 +191,7 @@ rec {
         libxmu
         libxcb
         xorg.xcbutil
-        xorg.xcbutilwm
+        libxcb-wm
         libxcb-image
         libxcb-keysyms
         libxcb-render-util

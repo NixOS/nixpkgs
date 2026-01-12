@@ -22,7 +22,7 @@
   xcbutil,
   libxcb-image,
   libxcb-keysyms,
-  xcbutilwm,
+  libxcb-wm,
   zlib,
 }:
 
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage rec {
     xcbutil
     libxcb-image
     libxcb-keysyms
-    xcbutilwm # contains xcb-ewmh among others
+    libxcb-wm # contains xcb-ewmh among others
   ];
 
   buildFeatures = [ "distro-defaults" ];

@@ -19,7 +19,7 @@
   libxcb-cursor,
   libxcb-image,
   libxcb-render-util,
-  xcbutilwm,
+  libxcb-wm,
   xcbutilxrm,
   makeWrapper,
   removeReferencesTo,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-cursor
     libxcb-image
     libxcb-render-util
-    xcbutilwm
+    libxcb-wm
     xcbutilxrm
   ]
   ++ lib.optional alsaSupport alsa-lib

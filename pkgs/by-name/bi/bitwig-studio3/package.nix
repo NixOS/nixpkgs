@@ -10,6 +10,7 @@
   gtk3,
   lib,
   xorg,
+  libxcb-wm,
   libxtst,
   libxcursor,
   libx11,
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libxcb
     xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb-wm
     zlib
     libxtst
     libxkbcommon

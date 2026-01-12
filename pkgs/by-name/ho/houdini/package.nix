@@ -67,7 +67,7 @@ buildFHSEnv {
       libxcb-render-util
       libxcb-cursor
       libxcb-keysyms
-      xorg.xcbutilwm
+      libxcb-wm
     ];
 
   passthru = {

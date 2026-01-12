@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libxcb,
   xcbutil,
-  xcbutilwm,
+  libxcb-wm,
   git,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libxcb
     git
     xcbutil
-    xcbutilwm
+    libxcb-wm
   ];
 
   meta = {

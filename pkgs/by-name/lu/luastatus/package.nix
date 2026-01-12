@@ -25,7 +25,7 @@
   libxcb,
   libx11,
   xcbutil,
-  xcbutilwm,
+  libxcb-wm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libx11
     xcbutil
-    xcbutilwm
+    libxcb-wm
     libxdmcp
     libxau
     libpulseaudio

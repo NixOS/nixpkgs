@@ -27,6 +27,7 @@
   xcb-imdkit,
   xdg-utils,
   xorg,
+  libxcb-wm,
   libxtst,
   libxcursor,
   libx11,
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
     xcb-imdkit
     xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb-wm
     zlib
   ];
 

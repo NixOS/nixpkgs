@@ -10,7 +10,7 @@
   libxcb,
   libxcb-keysyms,
   xcbutil,
-  xcbutilwm,
+  libxcb-wm,
   xcbutilxrm,
   libstartup_notification,
   libx11,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libxcb-keysyms
     xcbutil
-    xcbutilwm
+    libxcb-wm
     xcbutilxrm
     libxkbcommon
     libstartup_notification

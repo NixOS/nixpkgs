@@ -20,7 +20,7 @@
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  xcbutilwm,
+  libxcb-wm,
 }:
 let
   version = "6.0.6";
@@ -48,7 +48,7 @@ let
     libxcb-image
     libxcb-keysyms
     libxcb-render-util
-    xcbutilwm
+    libxcb-wm
   ];
 
   meta = {

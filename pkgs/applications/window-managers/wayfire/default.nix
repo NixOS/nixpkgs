@@ -24,7 +24,7 @@
   wayland-scanner,
   wlroots_0_19,
   pango,
-  xorg,
+  libxcb-wm,
   yyjson,
 }:
 let
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     vulkan-headers
     wayland-protocols
-    xorg.xcbutilwm
+    libxcb-wm
     yyjson
   ];
 

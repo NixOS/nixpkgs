@@ -48,7 +48,7 @@
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  xcbutilwm,
+  libxcb-wm,
   p7zip,
   onetbb,
   wayland,
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     libxscrnsaver
     libxcb-keysyms
     libxcb-render-util
-    xcbutilwm
+    libxcb-wm
     onetbb
     wayland
   ];

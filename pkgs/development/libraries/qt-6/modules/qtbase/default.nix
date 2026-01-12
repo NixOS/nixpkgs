@@ -60,7 +60,7 @@
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  xcbutilwm,
+  libxcb-wm,
   zlib,
   at-spi2-core,
   unixODBC,
@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
     libxcb-image
     libxcb-keysyms
     libxcb-render-util
-    xcbutilwm
+    libxcb-wm
     libxdmcp
     libxtst
     libxcb-cursor

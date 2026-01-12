@@ -15,7 +15,7 @@
   pixman,
   libcap,
   libgbm,
-  xorg,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-image,
   libxcb-errors,
@@ -96,7 +96,7 @@ let
         libxcb-errors
         libxcb-image
         libxcb-render-util
-        xorg.xcbutilwm
+        libxcb-wm
       ]
       ++ lib.optional finalAttrs.enableXWayland xwayland
       ++ extraBuildInputs;

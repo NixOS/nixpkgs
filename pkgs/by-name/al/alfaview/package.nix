@@ -22,7 +22,7 @@
   openssl,
   systemd,
   xcb-util-cursor,
-  xorg,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     systemd
     xcb-util-cursor
     libx11
-    xorg.xcbutilwm
+    libxcb-wm
     libxcb-image
     libxcb-keysyms
     libxcb-render-util

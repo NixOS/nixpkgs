@@ -27,7 +27,7 @@
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
-  xorg,
+  libxcb-wm,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   trayEnabled ? systemdSupport,
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     (wlroots.override { inherit (finalAttrs) enableXWayland; })
   ]
   ++ lib.optionals finalAttrs.enableXWayland [
-    xorg.xcbutilwm
+    libxcb-wm
   ];
 
   mesonFlags =

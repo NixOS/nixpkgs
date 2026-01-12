@@ -81,7 +81,7 @@ buildFHSEnv {
       freetype
       libxcb
       libx11
-      xorg.xcbutilwm
+      libxcb-wm
       libxcb-image
       libxcb-keysyms
       libxcb-render-util

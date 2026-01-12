@@ -20,7 +20,7 @@
   stdenv,
   writeShellScript,
   xkeyboard_config,
-  xorg,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -86,7 +86,7 @@ let
       libxcb-image
       libxcb-keysyms
       libxcb-render-util
-      xorg.xcbutilwm
+      libxcb-wm
       xrandr
     ];
 

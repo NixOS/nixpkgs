@@ -15,7 +15,7 @@
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  xcbutilwm,
+  libxcb-wm,
   libxml2,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-image
     libxcb-keysyms
     libxcb-render-util
-    xcbutilwm
+    libxcb-wm
   ];
 
   installPhase = ''

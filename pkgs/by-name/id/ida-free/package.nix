@@ -17,7 +17,7 @@
   makeWrapper,
   openssl,
   stdenv,
-  xorg,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     libxcb-image
     libxcb-keysyms
     libxcb-render-util
-    xorg.xcbutilwm
+    libxcb-wm
     libxcb-cursor
     zlib
   ];

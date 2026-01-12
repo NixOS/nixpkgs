@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -260,7 +261,7 @@ buildFHSEnv {
       libxcb-image
       libxcb-keysyms
       libxcb-render-util
-      xorg.xcbutilwm
+      libxcb-wm
       xorg.xkeyboardconfig
       zlib
     ];

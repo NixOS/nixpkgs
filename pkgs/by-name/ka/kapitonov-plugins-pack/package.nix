@@ -12,7 +12,7 @@
   ladspa-sdk,
   libxcb,
   lv2,
-  xcbutilwm,
+  libxcb-wm,
   xorg,
   zita-convolver,
   zita-resampler,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ladspa-sdk
     libxcb
     lv2
-    xcbutilwm
+    libxcb-wm
     xorg.xcbutil
     zita-convolver
     zita-resampler

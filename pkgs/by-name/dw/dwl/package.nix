@@ -16,7 +16,7 @@
   wayland-scanner,
   wlroots,
   writeText,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   # Boolean flags
   enableXWayland ? true,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableXWayland [
     libx11
-    xcbutilwm
+    libxcb-wm
     xwayland
   ];
 

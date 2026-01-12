@@ -38271,7 +38271,7 @@ with self;
       pkgs.libxcb
       pkgs.xcb-proto
       pkgs.xorg.xcbutil
-      pkgs.xorg.xcbutilwm
+      pkgs.libxcb-wm
       ExtUtilsDepends
       ExtUtilsPkgConfig
       TestDeep

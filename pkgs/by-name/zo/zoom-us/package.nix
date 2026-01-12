@@ -210,7 +210,7 @@ let
       pkgs.libxcb-image
       pkgs.libxcb-keysyms
       pkgs.libxcb-render-util
-      pkgs.xorg.xcbutilwm
+      pkgs.libxcb-wm
       pkgs.zlib
     ]
     ++ lib.optionals pulseaudioSupport [

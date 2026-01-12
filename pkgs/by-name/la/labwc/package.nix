@@ -23,7 +23,7 @@
   wayland-protocols,
   wayland-scanner,
   wlroots_0_19,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
 }:
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_19
-    xcbutilwm
+    libxcb-wm
     xwayland
   ];
 

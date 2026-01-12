@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   dpkg,
-  xorg,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -74,7 +74,7 @@ let
     curl
     libuuid
     cups
-    xorg.xcbutilwm # libxcb-icccm.so.4
+    libxcb-wm # libxcb-icccm.so.4
     libxcb-image # libxcb-image.so.0
     libxcb-keysyms # libxcb-keysyms.so.1
     libxcb-render-util # libxcb-render-util.so.0

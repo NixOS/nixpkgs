@@ -20,7 +20,7 @@
   libdrm,
   libxkbcommon,
   wlroots_0_19,
-  xorg,
+  libxcb-wm,
   nix-update-script,
   nixosTests,
   testers,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     wayland
     finalAttrs.wlroots
-    xorg.xcbutilwm
+    libxcb-wm
     gmobile
   ];
 

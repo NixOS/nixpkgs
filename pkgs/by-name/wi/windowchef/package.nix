@@ -6,7 +6,7 @@
   libxrandr,
   xcbutil,
   libxcb-keysyms,
-  xcbutilwm,
+  libxcb-wm,
   xcb-proto,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libxrandr
     xcbutil
     libxcb-keysyms
-    xcbutilwm
+    libxcb-wm
     xcb-proto
   ];
 

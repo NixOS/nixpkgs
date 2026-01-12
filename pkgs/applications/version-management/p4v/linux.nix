@@ -27,7 +27,7 @@
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  xcbutilwm,
+  libxcb-wm,
 }:
 
 {
@@ -69,7 +69,7 @@ let
       libxcb-image
       libxcb-keysyms
       libxcb-render-util
-      xcbutilwm
+      libxcb-wm
     ];
 
     dontBuild = true;

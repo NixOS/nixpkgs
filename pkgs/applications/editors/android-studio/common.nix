@@ -38,7 +38,7 @@
   libxcb,
   libxkbcommon,
   mesa-demos,
-  xcbutilwm,
+  libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -171,7 +171,7 @@ let
             libx11
             libxcb
             libxkbcommon
-            xcbutilwm
+            libxcb-wm
             libxcb-render-util
             libxcb-keysyms
             libxcb-image

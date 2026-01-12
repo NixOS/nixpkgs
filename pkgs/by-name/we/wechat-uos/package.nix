@@ -28,7 +28,7 @@
   atkmm,
   libdrm,
   libxkbcommon,
-  xcbutilwm,
+  libxcb-wm,
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
@@ -84,7 +84,7 @@ let
     stdenv.cc.libc
     pango
     zlib
-    xcbutilwm
+    libxcb-wm
     libxcb-image
     libxcb-keysyms
     libxcb-render-util

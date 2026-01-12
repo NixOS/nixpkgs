@@ -4,7 +4,7 @@
   vdr,
   alsa-lib,
   fetchFromGitHub,
-  xcbutilwm,
+  libxcb-wm,
   xorgserver,
   ffmpeg,
   libva,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     vdr
-    xcbutilwm
+    libxcb-wm
     ffmpeg
     alsa-lib
     libva

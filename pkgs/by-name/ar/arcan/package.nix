@@ -44,7 +44,7 @@
   wayland-protocols,
   wayland-scanner,
   xcbutil,
-  xcbutilwm,
+  libxcb-wm,
   xz,
   # Boolean flags
   buildManPages ? true,
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     xcbutil
-    xcbutilwm
+    libxcb-wm
     xz
   ]
   ++ lib.optionals (!useBuiltinLua) [ luajit ]
