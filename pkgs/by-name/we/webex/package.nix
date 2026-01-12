@@ -34,7 +34,7 @@
   pango,
   zlib,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxcrypt-legacy
     libx11
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdamage
     libXext

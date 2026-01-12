@@ -8,7 +8,7 @@
   libx11,
   libXext,
   libXfixes,
-  libXcomposite,
+  libxcomposite,
   libXinerama,
   pkg-config,
   libbsd,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libx11
     libXext
     libXfixes
-    libXcomposite
+    libxcomposite
     libXinerama
     libbsd
   ];

@@ -40,7 +40,7 @@
   harfbuzz,
   icu,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXext,
   libXi,
   libXrender,
@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
     freetype
     # X11 libs
     libx11
-    libXcomposite
+    libxcomposite
     libXext
     libXi
     libXrender

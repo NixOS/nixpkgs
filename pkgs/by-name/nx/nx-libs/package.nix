@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  libxcomposite,
   font-util,
   xkbcomp,
   pixman,
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     libpng
     libxml2
     font-util
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXdmcp
     xorg.libXext

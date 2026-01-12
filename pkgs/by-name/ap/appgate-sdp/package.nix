@@ -37,6 +37,7 @@
   systemd,
   xdg-utils,
   xorg,
+  libxcomposite,
   libx11,
   libxshmfence,
   libxkbfile,
@@ -74,7 +75,7 @@ let
     systemd
     libx11
     xorg.libXScrnSaver
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXext

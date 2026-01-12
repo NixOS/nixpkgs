@@ -5,7 +5,7 @@
   libx11,
   libXdamage,
   libXrender,
-  libXcomposite,
+  libxcomposite,
   libXext,
   installShellFiles,
   git,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libx11
     libXdamage
     libXrender
-    libXcomposite
+    libxcomposite
     libXext
   ];
   preInstall = "mkdir -p $out/share/man/man1";

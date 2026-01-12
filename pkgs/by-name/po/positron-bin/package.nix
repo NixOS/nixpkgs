@@ -19,6 +19,7 @@
   openssl,
   stdenv,
   xorg,
+  libxcomposite,
   libx11,
   libxkbfile,
 }:
@@ -60,7 +61,7 @@ stdenv.mkDerivation {
     stdenv.cc.cc
     openssl
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     libxkbfile
   ]

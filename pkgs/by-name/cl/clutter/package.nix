@@ -9,7 +9,7 @@
   libXext,
   libXfixes,
   libXdamage,
-  libXcomposite,
+  libxcomposite,
   libXi,
   libxcb,
   cogl,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     libXext
     libXfixes
     libXdamage
-    libXcomposite
+    libxcomposite
     libXi
     libxcb
     libinput

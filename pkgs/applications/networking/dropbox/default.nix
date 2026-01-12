@@ -59,7 +59,7 @@ buildFHSEnv {
       libice
       libsm
       libx11
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXext
       xorg.libXfixes

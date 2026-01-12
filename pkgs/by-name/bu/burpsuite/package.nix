@@ -78,7 +78,7 @@ buildFHSEnv {
       pango
       libx11
       libxcb
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXext
       xorg.libXfixes

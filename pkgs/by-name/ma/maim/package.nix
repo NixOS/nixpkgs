@@ -15,7 +15,7 @@
   libXext,
   libXfixes,
   libXrandr,
-  libXcomposite,
+  libxcomposite,
   slop,
   icu,
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libXext
     libXfixes
     libXrandr
-    libXcomposite
+    libxcomposite
     slop
     icu
   ];

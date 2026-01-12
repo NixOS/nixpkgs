@@ -32,6 +32,7 @@
   systemd,
   vulkan-loader,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   ...
@@ -83,7 +84,7 @@ let
       stdenv.cc.cc.lib
       systemd
       libx11
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXext
       xorg.libXfixes

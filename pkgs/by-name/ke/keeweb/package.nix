@@ -20,7 +20,7 @@
   libappindicator,
   xdotool,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXext,
   libXrandr,
   libXScrnSaver,
@@ -56,7 +56,7 @@ let
     nss
     udev
     libx11
-    libXcomposite
+    libxcomposite
     libXext
     libXrandr
     libXScrnSaver

@@ -9,6 +9,7 @@
   pkg-config,
   alsa-lib,
   xorg,
+  libxcomposite,
   libx11,
   freetype,
   libGLU,
@@ -100,7 +101,7 @@ stdenv.mkDerivation {
   buildInputs = [
     alsa-lib
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXext
     xorg.libXinerama

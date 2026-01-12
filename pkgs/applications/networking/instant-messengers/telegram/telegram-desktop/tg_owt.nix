@@ -15,7 +15,7 @@
   libvpx,
   libx11,
   libXtst,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXrender,
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libXtst
-    libXcomposite
+    libxcomposite
     libXdamage
     libXext
     libXrender

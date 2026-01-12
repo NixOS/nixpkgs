@@ -27,7 +27,7 @@
   libkrb5,
   libx11,
   libxcb,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -132,7 +132,7 @@ let
     libpng
     libx11
     libxcb
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdamage
     libXext

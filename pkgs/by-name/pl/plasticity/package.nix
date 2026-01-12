@@ -30,6 +30,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
 }:
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
     vulkan-loader # may help with nvidia users
     libx11
     libxcb
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

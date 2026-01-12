@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxcomposite,
   libx11,
   libsm,
   libice,
@@ -228,7 +229,7 @@ buildFHSEnv {
       libice
       libsm
       libx11
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXcursor
       xorg.libXdamage
       xorg.libXext

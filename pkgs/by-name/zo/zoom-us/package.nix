@@ -197,7 +197,7 @@ let
       pkgs.util-linux
       pkgs.wayland
       pkgs.libx11
-      pkgs.xorg.libXcomposite
+      pkgs.libxcomposite
       pkgs.xorg.libXdamage
       pkgs.xorg.libXext
       pkgs.xorg.libXfixes

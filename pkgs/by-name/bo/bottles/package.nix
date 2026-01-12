@@ -33,7 +33,7 @@ let
             libx11
             libxaw
             libxcb
-            xorg.libXcomposite
+            libxcomposite
             xorg.libXcursor
             xorg.libXdmcp
             xorg.libXext

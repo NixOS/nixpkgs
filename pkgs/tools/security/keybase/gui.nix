@@ -23,6 +23,7 @@
   pango,
   systemd,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   autoPatchelfHook,
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     systemd
     libx11
     xorg.libXScrnSaver
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXext

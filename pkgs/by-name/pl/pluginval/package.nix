@@ -8,7 +8,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdmcp,
   libXext,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libx11
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdmcp
     libXext

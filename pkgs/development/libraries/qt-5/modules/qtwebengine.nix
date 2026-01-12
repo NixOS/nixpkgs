@@ -21,6 +21,7 @@
   pkgsBuildBuild,
 
   xorg,
+  libxcomposite,
   xrandr,
   libxkbfile,
   libpciaccess,
@@ -386,7 +387,7 @@ qtModule (
       libXrandr
       libpciaccess
       libXtst
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       libdrm
       libxkbfile

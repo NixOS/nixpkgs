@@ -11,7 +11,7 @@
   alsa-lib,
   at-spi2-atk,
   glib,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXfixes,
   libXrandr,
@@ -45,7 +45,7 @@ let
       alsa-lib
       at-spi2-atk
       glib
-      libXcomposite
+      libxcomposite
       libXdamage
       libXfixes
       libXrandr

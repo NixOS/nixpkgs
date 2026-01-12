@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxcomposite,
   libx11,
   pkgs,
   lib,
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXfixes
     xorg.libXrender

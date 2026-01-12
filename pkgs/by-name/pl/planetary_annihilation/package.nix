@@ -19,6 +19,7 @@
   curl,
   systemd,
   xorg,
+  libxcomposite,
   libx11,
   requireFile,
 }:
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
         pango
         udev
         libx11
-        xorg.libXcomposite
+        libxcomposite
         alsa-lib
         atk
         nspr

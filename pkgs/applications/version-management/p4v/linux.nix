@@ -6,7 +6,7 @@
   fontconfig,
   gccForLibs,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -48,7 +48,7 @@ let
       fontconfig
       gccForLibs
       libx11
-      libXcomposite
+      libxcomposite
       libXcursor
       libXdamage
       libXext

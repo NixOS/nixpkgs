@@ -5,7 +5,7 @@
   autoreconfHook,
   pkg-config,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXft,
   libXmu,
   libXrandr,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXcomposite
+    libxcomposite
     libXft
     libXmu
     libXrandr

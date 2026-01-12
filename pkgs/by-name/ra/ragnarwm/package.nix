@@ -7,7 +7,7 @@
   libx11,
   libXft,
   libXcursor,
-  libXcomposite,
+  libxcomposite,
   conf ? null,
   nixosTests,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXft
     libXcursor
-    libXcomposite
+    libxcomposite
   ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

@@ -7,7 +7,7 @@
   ninja,
   addDriverRunpath,
   pkg-config,
-  libXcomposite,
+  libxcomposite,
   libpulseaudio,
   dbus,
   ffmpeg,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXcomposite
+    libxcomposite
     libpulseaudio
     dbus
     ffmpeg

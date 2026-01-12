@@ -23,7 +23,7 @@
   qt6,
   libx11,
   libXScrnSaver,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -114,7 +114,7 @@ let
     libGL
     libxkbcommon
     libXScrnSaver
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdamage
     libXext

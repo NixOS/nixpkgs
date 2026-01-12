@@ -166,7 +166,7 @@ stdenv.mkDerivation (
           with pkgs;
           [
             libx11
-            xorg.libXcomposite
+            libxcomposite
             xorg.libXcursor
             xorg.libXext
             xorg.libXfixes

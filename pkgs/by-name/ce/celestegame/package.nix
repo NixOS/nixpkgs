@@ -133,7 +133,7 @@ buildFHSEnv {
       pipewire
       vulkan-loader
       libx11
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXfixes
       xorg.libXext

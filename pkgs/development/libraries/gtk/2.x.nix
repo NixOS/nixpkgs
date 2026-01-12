@@ -12,7 +12,7 @@
   gettext,
   glib,
   gobject-introspection,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXi,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) [
-    libXcomposite
+    libxcomposite
     libXcursor
     libXi
     libXrandr

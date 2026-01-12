@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   gdk-pixbuf,
@@ -62,7 +63,7 @@ let
     xorg.libXi
     xorg.libXdamage
     xorg.libXrandr
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXfixes
     xorg.libXrender
     xorg.libXScrnSaver

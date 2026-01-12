@@ -24,6 +24,7 @@
   vulkan-loader,
   curlWithGnuTls,
   xorg,
+  libxcomposite,
   lib,
   libnotify,
   libappindicator-gtk3,
@@ -35,7 +36,7 @@ let
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXrandr
   ];
 

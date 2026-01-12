@@ -34,7 +34,7 @@
   libva,
   libx11,
   libXScrnSaver,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       libglvnd
       libnotify
       libx11
-      libXcomposite
+      libxcomposite
       libunity
       libuuid
       libva

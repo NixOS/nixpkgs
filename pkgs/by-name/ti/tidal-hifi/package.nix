@@ -28,7 +28,7 @@
   nspr,
   libx11,
   libxcb,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXfixes,
@@ -64,7 +64,7 @@ let
     nspr
     libx11
     libxcb
-    libXcomposite
+    libxcomposite
     libXdamage
     libXext
     libXfixes

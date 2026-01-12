@@ -20,7 +20,7 @@
   libxcvt,
   libGL,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -162,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     # X11 client
     gtk4
     libx11
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdamage
     libXext

@@ -8,7 +8,7 @@
   copyDesktopItems,
   makeDesktopItem,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXinerama,
   libXrandr,
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
   buildInputs = [
     alsa-lib
     libx11
-    libXcomposite
+    libxcomposite
     libXcursor
     libXinerama
     libXrandr

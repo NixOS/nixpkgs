@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
         dbus
         at-spi2-core
         pango
-        xorg.libXcomposite
+        libxcomposite
         xorg.libXext
         xorg.libXdamage
         xorg.libXfixes

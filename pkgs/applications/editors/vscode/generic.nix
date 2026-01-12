@@ -17,6 +17,7 @@
   nss,
   nspr,
   xorg,
+  libxcomposite,
   libx11,
   libxkbfile,
   libxcb,
@@ -116,7 +117,7 @@ stdenv.mkDerivation (
             expat
             libxkbcommon
             libx11
-            xorg.libXcomposite
+            libxcomposite
             xorg.libXdamage
             libxcb
             xorg.libXext

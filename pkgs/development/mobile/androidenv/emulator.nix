@@ -45,7 +45,7 @@ deployAndroidPackage {
       xorg.libXdamage
       xorg.libXfixes
       libxcb
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXcursor
       xorg.libXi
       xorg.libXrender

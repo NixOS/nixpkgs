@@ -6,7 +6,7 @@
   cairo,
   pango,
   libx11,
-  libXcomposite,
+  libxcomposite,
   autoconf,
   automake,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cairo
     pango
     libx11
-    libXcomposite
+    libxcomposite
   ];
   enableParallelBuilding = true;
 

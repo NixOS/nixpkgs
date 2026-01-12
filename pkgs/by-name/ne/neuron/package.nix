@@ -4,6 +4,7 @@
   fetchFromGitHub,
   readline,
   xorg,
+  libxcomposite,
   libx11,
   mpi,
   cmake,
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = optionals useIv [
     libx11.dev
-    xorg.libXcomposite.dev
+    libxcomposite.dev
     xorg.libXext.dev
   ];
 

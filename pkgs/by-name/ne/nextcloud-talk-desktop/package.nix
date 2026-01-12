@@ -9,6 +9,7 @@
   nss,
   cairo,
   xorg,
+  libxcomposite,
   libx11,
   libxkbcommon,
   alsa-lib,
@@ -93,7 +94,7 @@ let
       libGL
       libglvnd
       libx11
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXrandr
       xorg.libXfixes

@@ -41,7 +41,7 @@ let
       libxaw
       xorg.libXi
       xorg.libXcursor
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXfixes
       xorg.libXtst
       xorg.libXScrnSaver

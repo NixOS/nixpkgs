@@ -10,6 +10,7 @@
 
   ### Libs
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   libxkbcommon,
@@ -50,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
 
     ### Xorg libs
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes
@@ -93,7 +94,7 @@ stdenvNoCC.mkDerivation rec {
         lib.makeLibraryPath [
           ### Xorg libs
           libx11
-          xorg.libXcomposite
+          libxcomposite
           xorg.libXdamage
           xorg.libXext
           xorg.libXfixes

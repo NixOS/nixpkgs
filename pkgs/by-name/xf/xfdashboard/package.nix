@@ -9,7 +9,7 @@
   wrapGAppsHook3,
   clutter,
   gettext,
-  libXcomposite,
+  libxcomposite,
   libXinerama,
   libXdamage,
   libx11,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libx11
-    libXcomposite
+    libxcomposite
     libXdamage
     libXinerama
     libwnck

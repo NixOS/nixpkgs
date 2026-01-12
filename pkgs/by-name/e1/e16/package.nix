@@ -6,7 +6,7 @@
   freetype,
   imlib2,
   libsm,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXfixes,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     freetype
     imlib2
     libsm
-    libXcomposite
+    libxcomposite
     libXdamage
     libXext
     libXfixes

@@ -53,7 +53,7 @@ buildFHSEnv {
       xorg.libXcursor
       xorg.libXfixes
       xorg.libXrender
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXtst
       libxcb

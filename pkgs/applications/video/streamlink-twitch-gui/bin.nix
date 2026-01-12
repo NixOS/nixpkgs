@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   streamlink,
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     libuuid
     libx11
     libxcb
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXext

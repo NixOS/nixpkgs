@@ -89,7 +89,7 @@ let
         libx11
         xorg.libXcursor
         xorg.libXrandr
-        xorg.libXcomposite
+        libxcomposite
         xorg.libXdamage
         xorg.libXext
         xorg.libXfixes

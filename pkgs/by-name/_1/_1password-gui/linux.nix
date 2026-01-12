@@ -19,7 +19,7 @@
   glib,
   gtk3,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXfixes,
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
           glib
           gtk3
           libx11
-          libXcomposite
+          libxcomposite
           libXdamage
           libXext
           libXfixes

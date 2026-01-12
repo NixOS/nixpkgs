@@ -9,7 +9,7 @@
   libGLU,
   libsm,
 
-  libXcomposite,
+  libxcomposite,
   libXi,
   libXrender,
   libx11,
@@ -65,7 +65,7 @@ mkDerivation rec {
     libGLU
     libsm
     libx11
-    libXcomposite
+    libxcomposite
     libXi
     libXrender
     libproxy

@@ -29,7 +29,7 @@
   libXcursor,
   libXdamage,
   libXrandr,
-  libXcomposite,
+  libxcomposite,
   libXext,
   libXfixes,
   libXrender,
@@ -170,7 +170,7 @@ stdenv.mkDerivation rec {
     gtk3
     libx11
     libXScrnSaver
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdamage
     libXext

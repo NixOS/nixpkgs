@@ -139,7 +139,7 @@ rec {
     multiPkgs =
       pkgs: with pkgs; [
         desktop-file-utils
-        xorg.libXcomposite
+        libxcomposite
         xorg.libXtst
         xorg.libXrandr
         xorg.libXext

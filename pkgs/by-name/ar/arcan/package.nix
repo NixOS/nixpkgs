@@ -15,7 +15,7 @@
   libGL,
   libx11,
   libxau,
-  libXcomposite,
+  libxcomposite,
   libXdmcp,
   libXfixes,
   libdrm,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libx11
     libxau
-    libXcomposite
+    libxcomposite
     libXdmcp
     libXfixes
     libdrm

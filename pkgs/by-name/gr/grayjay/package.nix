@@ -8,6 +8,7 @@
   icu,
   openssl,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   gtk3,
@@ -157,7 +158,7 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [
     libz
 
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

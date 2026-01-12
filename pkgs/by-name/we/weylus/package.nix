@@ -10,6 +10,7 @@
   libva,
   gst_all_1,
   xorg,
+  libxcomposite,
   libdrm,
   pkg-config,
   pango,
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage {
     xorg.libXfixes
     xorg.libXtst
     xorg.libXrandr
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXi
     xorg.libXv
     pango

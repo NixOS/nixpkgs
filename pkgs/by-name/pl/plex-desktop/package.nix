@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxcomposite,
   xrandr,
   libxshmfence,
 }:
@@ -67,7 +68,7 @@ let
       minizip
       nss
       stdenv.cc.cc
-      xorg.libXcomposite
+      libxcomposite
       xorg.libXdamage
       xorg.libXinerama
       xorg.libXrandr

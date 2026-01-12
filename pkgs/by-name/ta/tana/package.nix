@@ -1,7 +1,7 @@
 {
   libx11,
   libxcb,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXfixes,
@@ -47,7 +47,7 @@ let
     libdrm
     libx11
     libxcb
-    libXcomposite
+    libxcomposite
     libXdamage
     libXext
     libXfixes

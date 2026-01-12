@@ -30,6 +30,7 @@
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
   xorg,
+  libxcomposite,
   libsm,
   libice,
   libepoxy,
@@ -166,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libice
     libsm
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXfixes

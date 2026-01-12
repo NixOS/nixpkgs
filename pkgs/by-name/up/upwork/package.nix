@@ -25,7 +25,7 @@
   libuuid,
   libx11,
   libxcb,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     libuuid
     libx11
     libxcb
-    libXcomposite
+    libxcomposite
     libXcursor
     libXdamage
     libXext

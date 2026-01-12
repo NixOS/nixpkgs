@@ -12,7 +12,7 @@
   pango,
   cairo,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXfixes,
@@ -81,7 +81,7 @@ let
       pango
       cairo
       libx11
-      libXcomposite
+      libxcomposite
       libXdamage
       libXext
       libXfixes

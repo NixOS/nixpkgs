@@ -13,7 +13,7 @@
   gtk3,
   libXinerama,
   libXrender,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libx11,
   libXrandr,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     gtk3
     libXinerama
     libXrender
-    libXcomposite
+    libxcomposite
     libXdamage
     libx11
     libXrandr

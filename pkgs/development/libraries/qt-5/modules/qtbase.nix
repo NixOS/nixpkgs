@@ -27,7 +27,7 @@
   icu,
   libdrm,
   libx11,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXext,
   libXi,
@@ -125,7 +125,7 @@ stdenv.mkDerivation (
 
           # X11 libs
           libx11
-          libXcomposite
+          libxcomposite
           libXext
           libXi
           libXrender

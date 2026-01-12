@@ -24,6 +24,7 @@
   nss,
   pango,
   xorg,
+  libxcomposite,
   libx11,
   libxcb,
   systemd,
@@ -52,7 +53,7 @@ let
     libx11
     libxcb
     xorg.libXScrnSaver
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXext

@@ -28,7 +28,7 @@
   libGL,
   libx11,
   libXScrnSaver,
-  libXcomposite,
+  libxcomposite,
   libXcursor,
   libXdamage,
   libXext,
@@ -133,7 +133,7 @@ let
       cairo
       freetype
       fontconfig
-      libXcomposite
+      libxcomposite
       libXfixes
       libXrender
       gtk3

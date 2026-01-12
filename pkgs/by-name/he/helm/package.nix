@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   xorg,
+  libxcomposite,
   libx11,
   freetype,
   alsa-lib,
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
     xorg.libXext
     xorg.libXinerama

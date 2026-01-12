@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxcomposite,
   libx11,
   libxkbfile,
   libxcb,
@@ -106,7 +107,7 @@ let
     nspr
     libx11
     libxcb
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

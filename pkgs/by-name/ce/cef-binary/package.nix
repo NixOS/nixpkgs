@@ -22,6 +22,7 @@
   udev,
   systemdLibs,
   xorg,
+  libxcomposite,
   libx11,
   libxshmfence,
   libxcb,
@@ -60,7 +61,7 @@ let
     systemdLibs
     libxcb
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

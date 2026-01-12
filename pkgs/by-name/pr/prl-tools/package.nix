@@ -20,6 +20,7 @@
   util-linux,
   wayland,
   xorg,
+  libxcomposite,
   libx11,
 }:
 
@@ -68,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     fuse
     glib
     libx11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXext
     xorg.libXrandr
     xorg.libXi

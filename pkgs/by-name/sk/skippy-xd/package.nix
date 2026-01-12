@@ -5,7 +5,7 @@
   xorgproto,
   libx11,
   libXft,
-  libXcomposite,
+  libxcomposite,
   libXdamage,
   libXext,
   libXinerama,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
     libx11
     libXft
-    libXcomposite
+    libxcomposite
     libXdamage
     libXext
     libXinerama
