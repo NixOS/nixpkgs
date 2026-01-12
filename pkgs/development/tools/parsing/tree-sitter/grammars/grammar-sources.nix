@@ -600,7 +600,7 @@
   markdown = {
     version = "0.3.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown";
     meta = {
       license = lib.licenses.mit;
@@ -609,9 +609,9 @@
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.3.2";
+    version = "0.5.2";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
     location = "tree-sitter-markdown-inline";
     meta = {
       license = lib.licenses.mit;
