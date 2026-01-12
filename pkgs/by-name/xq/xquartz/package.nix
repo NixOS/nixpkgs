@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xbacklight,
   xauth,
   x11perf,
   smproxy,
@@ -141,7 +142,7 @@ let
     xorg.twm
     x11perf
     xauth
-    xorg.xbacklight
+    xbacklight
     xorg.xclock
     xorg.xcmsdb
     xorg.xcursorgen
