@@ -17,6 +17,7 @@
   speex,
   libopus,
   xorg,
+  libxcursor,
   libGL,
 }@attrs:
 {
@@ -45,7 +46,7 @@
         speex
         libopus
         xorg.libXrandr
-        xorg.libXcursor
+        libxcursor
         xorg.libXScrnSaver
       ];
 

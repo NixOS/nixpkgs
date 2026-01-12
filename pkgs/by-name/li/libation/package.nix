@@ -8,6 +8,7 @@
   glew,
   gtk3,
   xorg,
+  libxcursor,
   nix-update-script,
 }:
 
@@ -49,7 +50,7 @@ buildDotnetModule rec {
     glew
     xorg.libXrandr
     xorg.libXi
-    xorg.libXcursor
+    libxcursor
     # For file dialogs
     gtk3
   ];

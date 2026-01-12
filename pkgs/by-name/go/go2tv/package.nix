@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   xorg,
+  libxcursor,
   libx11,
   libglvnd,
   pkg-config,
@@ -26,7 +27,7 @@ buildGoModule rec {
 
   buildInputs = [
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXi

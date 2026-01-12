@@ -7,7 +7,7 @@
   libice,
   libsm,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -246,7 +246,7 @@ let
         libice
         libsm
         libx11
-        libXcursor
+        libxcursor
         libXext
         libXi
         libXinerama

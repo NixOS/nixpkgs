@@ -19,7 +19,7 @@
   gtk3,
   libx11,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -127,7 +127,7 @@ stdenv.mkDerivation {
           libuuid
           libx11
           libxcomposite
-          libXcursor
+          libxcursor
           libXdamage
           libXext
           libXfixes

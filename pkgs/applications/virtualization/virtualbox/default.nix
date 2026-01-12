@@ -13,7 +13,7 @@
   libx11,
   xorgproto,
   libXext,
-  libXcursor,
+  libxcursor,
   libXfixes,
   libXmu,
   SDL2,
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
     libx11
     libXext
-    libXcursor
+    libxcursor
     libcap
     glib
     lvm2

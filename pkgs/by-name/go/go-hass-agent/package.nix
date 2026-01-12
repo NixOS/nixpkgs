@@ -9,6 +9,7 @@
   writableTmpDirAsHomeHook,
   libglvnd,
   xorg,
+  libxcursor,
   go,
   nix-update-script,
 }:
@@ -52,7 +53,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     libglvnd
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXinerama
     xorg.libXrandr

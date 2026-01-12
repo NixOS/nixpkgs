@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libxcursor,
   libx11,
   libGL,
   cairo,
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     libGL
     vulkan-loader

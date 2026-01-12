@@ -11,6 +11,7 @@
   libglvnd,
   libxkbcommon,
   xorg,
+  libxcursor,
   libx11,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libxkbcommon
         wayland
         libx11
-        xorg.libXcursor
+        libxcursor
         xorg.libXi
         xorg.libXrandr
       ]

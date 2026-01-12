@@ -9,6 +9,7 @@
   nss,
   cairo,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxkbcommon,
@@ -98,7 +99,7 @@ let
       xorg.libXdamage
       xorg.libXrandr
       xorg.libXfixes
-      xorg.libXcursor
+      libxcursor
     ];
 
     # Required to launch the application and proceed past the zygote_linux fork() process

@@ -10,6 +10,7 @@
   gtk3,
   lib,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   libglvnd,
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libx11
     libglvnd
-    xorg.libXcursor
+    libxcursor
     (lib.getLib stdenv.cc.cc)
   ];
 

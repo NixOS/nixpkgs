@@ -8,7 +8,7 @@
   libice,
   libsm,
   libXi,
-  libXcursor,
+  libxcursor,
   libXext,
   libXrandr,
   fontconfig,
@@ -63,7 +63,7 @@ buildDotnetModule rec {
     libice
     libsm
     libXi
-    libXcursor
+    libxcursor
     libXext
     libXrandr
     fontconfig

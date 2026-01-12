@@ -11,6 +11,7 @@
 
   # Build Inputs
   xorg,
+  libxcursor,
   libx11,
   wayland,
   libxkbcommon,
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXfixes
     xorg.libXi
     xorg.libXinerama
-    xorg.libXcursor
+    libxcursor
     wayland
     libxkbcommon
     wayland-protocols

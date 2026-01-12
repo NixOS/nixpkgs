@@ -8,7 +8,7 @@
   vulkan-loader,
   libXrandr,
   libXinerama,
-  libXcursor,
+  libxcursor,
   libx11,
   libXi,
   libXext,
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     libx11
     libXrandr
     libXinerama
-    libXcursor
+    libxcursor
     libXi
     libXext
     libXxf86vm

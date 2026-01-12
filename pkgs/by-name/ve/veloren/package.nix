@@ -12,7 +12,7 @@
   autoPatchelfHook,
   libx11,
   libXi,
-  libXcursor,
+  libxcursor,
   libXrandr,
   wayland,
   stdenv,
@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage {
       [
         libx11
         libXi
-        libXcursor
+        libxcursor
         libXrandr
         vulkan-loader
       ]

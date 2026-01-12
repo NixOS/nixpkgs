@@ -16,6 +16,7 @@
   wayland-protocols,
   wayland-scanner,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
     wayland-scanner
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXinerama
     xorg.libXrandr

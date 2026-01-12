@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libx11,
-  libXcursor,
+  libxcursor,
   libxcb,
   python3,
   installShellFiles,
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libx11
-    libXcursor
+    libxcursor
     libxcb
   ];
 

@@ -25,7 +25,7 @@
   libGL,
   xorgproto,
   libx11,
-  libXcursor,
+  libxcursor,
   nspr,
   SDL2,
   gloox,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     libGL
     xorgproto
     libx11
-    libXcursor
+    libxcursor
     nspr
     SDL2
     gloox
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include"
     "-I${libx11.dev}/include"
-    "-I${libXcursor.dev}/include"
+    "-I${libxcursor.dev}/include"
     "-I${SDL2}/include/SDL2"
     "-I${fmt.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"

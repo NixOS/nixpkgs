@@ -8,7 +8,7 @@
   autoPatchelfHook,
   alsa-lib,
   wayland,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXi,
   libx11,
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       openh264
     ]
     ++ lib.optionals withX11 [
-      libXcursor
+      libxcursor
       libXrandr
       libXi
       libx11

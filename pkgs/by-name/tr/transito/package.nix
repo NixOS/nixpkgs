@@ -8,6 +8,7 @@
   libxkbcommon,
   wayland,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   libGL,
@@ -32,7 +33,7 @@ buildGoModule rec {
     libxkbcommon
     wayland
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXfixes
     libxcb
     libGL

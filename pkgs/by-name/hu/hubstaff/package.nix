@@ -14,7 +14,7 @@
   fontconfig,
   libXft,
   libXinerama,
-  libXcursor,
+  libxcursor,
   cairo,
   libXfixes,
   libXScrnSaver,
@@ -52,7 +52,7 @@ let
     curl
     libXfixes
     libXScrnSaver
-    libXcursor
+    libxcursor
     cairo
   ];
 

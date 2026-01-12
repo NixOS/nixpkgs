@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitea,
-  xorg,
+  libxcursor,
   libx11,
   installShellFiles,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    xorg.libXcursor
+    libxcursor
   ];
   nativeBuildInputs = [ installShellFiles ];
 

@@ -94,6 +94,7 @@ in
   onnxruntime,
   pango,
   xorg,
+  libxcursor,
   libx11,
   xorgproto,
   pixman,
@@ -562,7 +563,7 @@ buildStdenv.mkDerivation {
       nspr
       pango
       libx11
-      xorg.libXcursor
+      libxcursor
       xorg.libXdamage
       xorg.libXext
       xorg.libXft

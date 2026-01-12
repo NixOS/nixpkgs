@@ -13,7 +13,7 @@
   fontconfig,
   dbus,
   libXi,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXrandr,
   libxcomposite,
@@ -53,7 +53,7 @@ let
     fontconfig
     dbus
     libXi
-    libXcursor
+    libxcursor
     libXdamage
     libXrandr
     libxcomposite

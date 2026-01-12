@@ -5,6 +5,7 @@
   alsa-lib,
   freetype,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   curl,
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libXinerama
     xorg.libXrandr
-    xorg.libXcursor
+    libxcursor
     libxcomposite
     curl
     libGL

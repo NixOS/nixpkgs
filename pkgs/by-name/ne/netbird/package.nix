@@ -10,7 +10,7 @@
   gtk3,
   libayatana-appindicator,
   libx11,
-  libXcursor,
+  libxcursor,
   libXxf86vm,
   versionCheckHook,
   netbird-management,
@@ -85,7 +85,7 @@ buildGoModule (finalAttrs: {
     gtk3
     libayatana-appindicator
     libx11
-    libXcursor
+    libxcursor
     libXxf86vm
   ];
 

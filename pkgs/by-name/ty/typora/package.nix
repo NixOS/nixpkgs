@@ -87,7 +87,7 @@ let
         expat
         libxkbcommon
         libx11
-        xorg.libXcursor
+        libxcursor
         xorg.libXrandr
         libxcomposite
         xorg.libXdamage

@@ -16,6 +16,7 @@
   libGL,
   libva,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxcb,
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
         libva
         libx11
         libxcomposite
-        xorg.libXcursor
+        libxcursor
         xorg.libXdamage
         xorg.libXext
         xorg.libXfixes

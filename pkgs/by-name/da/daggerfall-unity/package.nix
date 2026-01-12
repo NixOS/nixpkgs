@@ -7,7 +7,7 @@
   lib,
   libGL,
   libXScrnSaver,
-  libXcursor,
+  libxcursor,
   libXi,
   libXinerama,
   libXrandr,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libGL
     libXScrnSaver
-    libXcursor
+    libxcursor
     libXi
     libXinerama
     libXrandr

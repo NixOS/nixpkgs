@@ -11,6 +11,7 @@
   vulkan-headers,
   wayland,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -37,7 +38,7 @@ buildGoModule rec {
     vulkan-headers
     wayland
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXfixes
   ];
 

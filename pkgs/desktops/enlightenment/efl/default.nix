@@ -54,6 +54,7 @@
   wayland-scanner,
   writeText,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   xorgproto,
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
     udev
     wayland-protocols
     libx11
-    xorg.libXcursor
+    libxcursor
     xorgproto
     zlib
     # still missing parent icon themes: RAVE-X, Faenza

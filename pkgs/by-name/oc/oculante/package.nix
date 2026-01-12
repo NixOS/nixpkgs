@@ -8,7 +8,7 @@
   fontconfig,
   nasm,
   libx11,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXi,
   libGL,
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXi
     libXrandr
     gtk3

@@ -28,7 +28,7 @@
   libdrm,
   libx11,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXrender,
@@ -320,7 +320,7 @@ stdenv.mkDerivation (
           ++ [
             ''-DNIXPKGS_QTCOMPOSE="${libx11.out}/share/X11/locale"''
             ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
-            ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+            ''-DNIXPKGS_LIBXCURSOR="${libxcursor.out}/lib/libXcursor"''
           ]
           ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
           ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"

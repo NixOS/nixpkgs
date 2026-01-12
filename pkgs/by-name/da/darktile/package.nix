@@ -3,7 +3,7 @@
   lib,
   pkg-config,
   libx11,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXinerama,
   libXi,
@@ -31,7 +31,7 @@ buildGoModule rec {
 
   buildInputs = [
     libx11
-    libXcursor
+    libxcursor
     libXrandr
     libXinerama
     libXi

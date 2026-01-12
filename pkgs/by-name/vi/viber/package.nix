@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libsm,
@@ -142,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libx11
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

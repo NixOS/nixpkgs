@@ -7,7 +7,7 @@
   freetype,
   libXrandr,
   libXinerama,
-  libXcursor,
+  libxcursor,
   lv2,
   libjack2,
   cmake,
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     freetype
     libXrandr
     libXinerama
-    libXcursor
+    libxcursor
     lv2
     libjack2
   ];

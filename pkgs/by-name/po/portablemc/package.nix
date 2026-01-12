@@ -8,7 +8,7 @@
 
   libx11,
   libXext,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXxf86vm,
   libpulseaudio,
@@ -33,7 +33,7 @@ let
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libXext
-    libXcursor
+    libxcursor
     libXrandr
     libXxf86vm
 

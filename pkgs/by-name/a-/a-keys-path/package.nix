@@ -11,7 +11,7 @@
   godot3-export-templates,
   godot3-headless,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXinerama

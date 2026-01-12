@@ -6,6 +6,7 @@
   clangStdenv,
   gtk3,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   perl,
@@ -28,7 +29,7 @@ let
     wayland
 
     # WINIT_UNIX_BACKEND=x11
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXi
     libx11

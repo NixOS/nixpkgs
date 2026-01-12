@@ -20,7 +20,7 @@
   libsndfile,
   libsysprof-capture,
   libvorbis,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXinerama

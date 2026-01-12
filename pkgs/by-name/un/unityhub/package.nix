@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
         # Unity Editor dependencies
         libglvnd # provides ligbl
         libx11
-        xorg.libXcursor
+        libxcursor
         glib
         gdk-pixbuf
         libxml2_13

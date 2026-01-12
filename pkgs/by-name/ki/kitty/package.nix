@@ -14,7 +14,7 @@
   libx11,
   libXrandr,
   libXinerama,
-  libXcursor,
+  libxcursor,
   libxkbcommon,
   libXi,
   libXext,
@@ -90,7 +90,7 @@ buildPythonApplication rec {
     libx11
     libXrandr
     libXinerama
-    libXcursor
+    libxcursor
     libxkbcommon
     libXi
     libXext

@@ -11,7 +11,7 @@
   glfw3,
   libGLU,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   libXinerama,
   libXrandr,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw3
     libGLU
     libx11
-    libXcursor
+    libxcursor
     libXi
     libXinerama
     libXrandr

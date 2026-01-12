@@ -7,7 +7,7 @@
   pkg-config,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXinerama,
   libXi,
@@ -43,7 +43,7 @@ buildGoModule rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXrandr
     libXinerama
     libXi

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   freetype,
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXext
     xorg.libXinerama
     xorg.libXrender

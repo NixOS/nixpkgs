@@ -8,7 +8,7 @@
   freetype,
   libglvnd,
   curl,
-  libXcursor,
+  libxcursor,
   libXinerama,
   libXrandr,
   libXrender,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = map lib.getLib [
     curl
-    libXcursor
+    libxcursor
     libXinerama
     libXrandr
     libXrender

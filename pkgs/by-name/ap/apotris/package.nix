@@ -18,7 +18,7 @@
   libXrandr,
   libXext,
   libXfixes,
-  libXcursor,
+  libxcursor,
   libXi,
   libXScrnSaver,
   makeDesktopItem,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXext
     libXfixes
-    libXcursor
+    libxcursor
     libXi
     libXScrnSaver
   ];

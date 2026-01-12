@@ -35,6 +35,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   zlib,
@@ -54,7 +55,7 @@ let
   );
   runtimePaths = lib.makeLibraryPath (
     lib.optionals (stdenv.hostPlatform.isLinux) [
-      xorg.libXcursor
+      libxcursor
       xorg.libXrandr
       xorg.libXi
       libxkbcommon

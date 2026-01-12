@@ -6,7 +6,7 @@
   fetchurl,
   libjack2,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

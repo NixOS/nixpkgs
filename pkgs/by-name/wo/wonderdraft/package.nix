@@ -4,6 +4,7 @@
   requireFile,
   dpkg,
   xorg,
+  libxcursor,
   libx11,
   libGL,
   alsa-lib,
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       libPath = lib.makeLibraryPath [
-        xorg.libXcursor
+        libxcursor
         xorg.libXinerama
         xorg.libXrandr
         libx11

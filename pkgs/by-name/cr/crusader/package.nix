@@ -14,6 +14,7 @@
   libgcc,
   libxkbcommon,
   xorg,
+  libxcursor,
   libx11,
 
   libGL,
@@ -52,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
   ];
 

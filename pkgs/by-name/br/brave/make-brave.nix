@@ -24,7 +24,7 @@
   libx11,
   libXScrnSaver,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -115,7 +115,7 @@ let
     libxkbcommon
     libXScrnSaver
     libxcomposite
-    libXcursor
+    libxcursor
     libXdamage
     libXext
     libXfixes

@@ -15,6 +15,7 @@
   gnutls,
   libGL,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   alsa-lib,
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libx11
     xorg.libXrandr
-    xorg.libXcursor
+    libxcursor
     xorg.libXScrnSaver
     dbus
     fontconfig
@@ -121,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
         xorg.libXxf86vm
         xorg.libXxf86dga
         xorg.libXi
-        xorg.libXcursor
+        libxcursor
         libGL
 
         libvorbis

@@ -11,7 +11,7 @@
   libx11,
   libXrandr,
   libXi,
-  libXcursor,
+  libxcursor,
   udev,
   alsa-lib,
   stdenv,
@@ -37,7 +37,7 @@ let
         libxkbcommon
         libxcb
         libx11
-        libXcursor
+        libxcursor
         libXrandr
         libXi
         vulkan-loader
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage {
     libx11
     libXrandr
     libXi
-    libXcursor
+    libxcursor
   ];
   nativeBuildInputs = [
     cmake
@@ -108,7 +108,7 @@ rustPlatform.buildRustPackage {
         libx11
         libXrandr
         libXi
-        libXcursor
+        libxcursor
       ];
     in
     ''

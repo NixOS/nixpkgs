@@ -8,6 +8,7 @@
   openssl,
   pkg-config,
   xorg,
+  libxcursor,
   libx11,
   vulkan-loader,
   wayland,
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     libx11
     xorg.libXScrnSaver
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     vulkan-loader
     wayland

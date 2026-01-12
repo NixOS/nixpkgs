@@ -6,7 +6,7 @@
   godot3-export-templates,
   libglvnd,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXfixes,
   libXi,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
 
     libXinerama
-    libXcursor
+    libxcursor
     libXext
     libXrandr
     libXrender

@@ -7,7 +7,7 @@
   gccForLibs,
   libx11,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXi,
@@ -49,7 +49,7 @@ let
       gccForLibs
       libx11
       libxcomposite
-      libXcursor
+      libxcursor
       libXdamage
       libXext
       libXi

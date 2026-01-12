@@ -16,7 +16,7 @@
   pipewire,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXrandr,
   libXxf86vm,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
         # lwjgl
         libGL
         libx11
-        libXcursor
+        libxcursor
         libXext
         libXrandr
         libXxf86vm

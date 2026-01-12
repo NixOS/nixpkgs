@@ -18,6 +18,7 @@
   freetype,
   libGL,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   libxkbcommon,
@@ -37,7 +38,7 @@ let
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXxf86vm
     libxcb

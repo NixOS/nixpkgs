@@ -21,6 +21,7 @@
   libGL,
   wayland,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxshmfence,
@@ -56,7 +57,7 @@ let
     libx11
     xorg.libXScrnSaver
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

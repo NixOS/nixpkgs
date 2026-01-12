@@ -9,6 +9,7 @@
   glib,
   systemd,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxshmfence,
@@ -83,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
           libx11
           libxcb
           libxcomposite
-          xorg.libXcursor
+          libxcursor
           xorg.libXext
           xorg.libXfixes
           xorg.libXi

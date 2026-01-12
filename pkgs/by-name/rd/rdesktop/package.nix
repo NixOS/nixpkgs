@@ -5,7 +5,7 @@
   openssl,
   libx11,
   krb5,
-  libXcursor,
+  libxcursor,
   libtasn1,
   nettle,
   gnutls,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     libx11
-    libXcursor
+    libxcursor
     libtasn1
     nettle
     gnutls

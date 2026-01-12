@@ -9,7 +9,7 @@
   freetype,
   libx11,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdmcp,
   libXext,
   libXinerama,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libx11
     libxcomposite
-    libXcursor
+    libxcursor
     libXdmcp
     libXext
     libXinerama

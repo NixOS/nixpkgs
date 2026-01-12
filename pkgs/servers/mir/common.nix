@@ -38,7 +38,7 @@
   udev,
   wayland,
   wayland-scanner,
-  xorg,
+  libxcursor,
   libx11,
   xorgproto,
   xwayland,
@@ -144,7 +144,7 @@ stdenv.mkDerivation (
       udev
       wayland
       libx11
-      xorg.libXcursor
+      libxcursor
       xorgproto
       xwayland
     ]

@@ -9,6 +9,7 @@
   freetype,
   libGL,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     freetype
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXrandr
   ];

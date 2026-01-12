@@ -8,7 +8,7 @@
   makeDesktopItem,
   libicns,
 
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXrandr,
@@ -55,7 +55,7 @@ buildDotnetModule (finalAttrs: {
   # libXi is needed for right-click support
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXrandr

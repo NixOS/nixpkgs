@@ -15,7 +15,7 @@
   openal,
   udev,
   libx11,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXrender,
   xcbutilimage,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libx11
-    libXcursor
+    libxcursor
     libXrandr
     libXrender
     xcbutilimage

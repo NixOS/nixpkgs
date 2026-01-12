@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxcb,
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
     libx11
     libxcb
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

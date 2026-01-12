@@ -15,6 +15,7 @@
   wayland,
   xdg-utils,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   zlib,
@@ -66,7 +67,7 @@ let
       xdg-utils
       libx11
       libxcb
-      xorg.libXcursor
+      libxcursor
       xorg.libXi
     ]
     ++ lib.optionals waylandSupport [ wayland ];

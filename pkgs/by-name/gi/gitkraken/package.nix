@@ -29,7 +29,7 @@
   libx11,
   libXScrnSaver,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -112,7 +112,7 @@ let
       udev
       libx11
       libXext
-      libXcursor
+      libxcursor
       libXi
       libxcb
       glib

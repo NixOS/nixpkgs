@@ -6,6 +6,7 @@
   autoPatchelfHook,
   fontconfig,
   xorg,
+  libxcursor,
   libx11,
   libsm,
   libice,
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
     fontconfig
     xorg.libXrandr
     xorg.libXfixes
-    xorg.libXcursor
+    libxcursor
     libsm
     libice
     libx11

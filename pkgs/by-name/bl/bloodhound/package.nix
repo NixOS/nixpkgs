@@ -34,6 +34,7 @@
   unzip,
   xdg-utils,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxkbfile,
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     xorg.libXScrnSaver
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

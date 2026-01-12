@@ -43,7 +43,7 @@
   webpSupport ? true,
   libwebp,
   xwaylandSupport ? true,
-  libXcursor,
+  libxcursor,
   xwayland,
 }:
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional webpSupport libwebp
   ++ lib.optionals xwaylandSupport [
-    libXcursor
+    libxcursor
     xcbutilcursor
     xwayland
   ];

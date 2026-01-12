@@ -6,7 +6,7 @@
   freetype,
   lib,
   libGL,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     freetype
     libGL
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

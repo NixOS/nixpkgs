@@ -7,7 +7,7 @@
   fontconfig,
   freetype,
   fribidi,
-  libXcursor,
+  libxcursor,
   libXft,
   libXinerama,
   libXpm,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     fribidi
-    libXcursor
+    libxcursor
     libXft
     libXinerama
     libXpm

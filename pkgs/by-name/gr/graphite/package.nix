@@ -25,7 +25,7 @@
   vulkan-loader,
   libGL,
   libxkbcommon,
-  xorg,
+  libxcursor,
   libx11,
   libxcb,
 }:
@@ -125,7 +125,7 @@ let
     wayland
     openssl
     libxkbcommon
-    xorg.libXcursor
+    libxcursor
     libxcb
     libx11
   ];

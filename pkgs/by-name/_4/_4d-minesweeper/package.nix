@@ -10,7 +10,7 @@
   godot3-headless,
   libGLU,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXfixes,
   libXi,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     git
     libGLU
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXfixes
     libXi

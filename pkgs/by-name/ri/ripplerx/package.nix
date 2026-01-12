@@ -10,7 +10,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

@@ -9,7 +9,7 @@
   python3,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   libXrandr,
   libXxf86vm,
@@ -21,7 +21,7 @@ let
   rpathLibs = [
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXi
     libXrandr
     libXxf86vm

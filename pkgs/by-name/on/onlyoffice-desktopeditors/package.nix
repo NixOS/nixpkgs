@@ -36,6 +36,7 @@
   wrapGAppsHook3,
   xkeyboard_config,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxcb,
@@ -112,7 +113,7 @@ let
       libx11
       libxcb
       libxcomposite
-      xorg.libXcursor
+      libxcursor
       xorg.libXdamage
       xorg.libXext
       xorg.libXfixes

@@ -20,7 +20,7 @@
   uriparser,
   zlib,
   libx11,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXdmcp,
   libXext,
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     icu
     libx11
-    libXcursor
+    libxcursor
     libXdamage
     libXdmcp
     libXext

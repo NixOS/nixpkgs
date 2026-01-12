@@ -16,7 +16,7 @@
   libGL,
   libx11,
   libxcb,
-  libXcursor,
+  libxcursor,
   libXi,
   libxkbcommon,
   libXrandr,
@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
     wayland
 
     # WINIT_UNIX_BACKEND=x11
-    libXcursor
+    libxcursor
     libXrandr
     libXi
     libx11

@@ -26,7 +26,7 @@
   libx11,
   libxcb,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libx11
     libxcb
     libxcomposite
-    libXcursor
+    libxcursor
     libXdamage
     libXext
     libXfixes

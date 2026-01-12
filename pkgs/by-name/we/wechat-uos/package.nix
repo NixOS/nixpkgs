@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libsm,
@@ -88,7 +89,7 @@ let
     libxshmfence
     xorg.libXi
     xorg.libXft
-    xorg.libXcursor
+    libxcursor
     xorg.libXfixes
     xorg.libXScrnSaver
     libxcomposite

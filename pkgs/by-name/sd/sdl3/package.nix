@@ -20,7 +20,7 @@
   libx11,
   libxcb,
   libXScrnSaver,
-  libXcursor,
+  libxcursor,
   libXext,
   libXfixes,
   libXi,
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       libx11
       libxcb
       libXScrnSaver
-      libXcursor
+      libxcursor
       libXext
       libXfixes
       libXi

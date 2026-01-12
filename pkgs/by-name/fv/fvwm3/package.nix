@@ -9,7 +9,7 @@
   fribidi,
   libsm,
   libx11,
-  libXcursor,
+  libxcursor,
   libXft,
   libXi,
   libXinerama,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     libsm
     libx11
-    libXcursor
+    libxcursor
     libXft
     libXi
     libXinerama

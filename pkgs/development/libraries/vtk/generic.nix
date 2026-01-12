@@ -77,7 +77,7 @@
   libx11,
   libXfixes,
   libXrender,
-  libXcursor,
+  libxcursor,
   gl2ps,
   libGL,
   qt6,
@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXfixes
     libXrender
-    libXcursor
+    libxcursor
   ]
   ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi

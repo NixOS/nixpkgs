@@ -8,7 +8,7 @@
   alsa-lib,
   dbus,
   libGL,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Run-time libraries (loaded with dlopen)
     dbus
     libGL
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXinerama

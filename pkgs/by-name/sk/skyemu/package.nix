@@ -13,7 +13,7 @@
   libGLU,
   libx11,
   libXi,
-  libXcursor,
+  libxcursor,
   lua,
   makeDesktopItem,
   copyDesktopItems,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libXi
-    libXcursor
+    libxcursor
     lua
   ];
 

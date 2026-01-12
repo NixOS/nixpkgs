@@ -4,6 +4,7 @@
   replaceVars,
   fontconfig,
   xorg,
+  libxcursor,
   libsm,
   xrdb,
   xmessage,
@@ -58,7 +59,7 @@ mkKdeDerivation {
     pipewire
 
     libsm
-    xorg.libXcursor
+    libxcursor
     xorg.libXtst
     xorg.libXft
 

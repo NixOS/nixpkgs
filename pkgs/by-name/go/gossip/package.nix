@@ -19,7 +19,7 @@
   nix-update-script,
   libx11,
   libxcb,
-  libXcursor,
+  libxcursor,
   libXi,
   libXrandr,
 }:
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     wayland
     libx11
     libxcb
-    libXcursor
+    libxcursor
     libXi
     libXrandr
   ];

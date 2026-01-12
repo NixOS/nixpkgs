@@ -11,7 +11,7 @@
   udev,
   libglvnd,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   libXrandr,
   libXfixes,
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation {
     libjpeg8
     curl
     libx11
-    libXcursor
+    libxcursor
     libXi
     libXrandr
     libXfixes

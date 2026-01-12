@@ -9,7 +9,7 @@
   dbus,
   hidapi,
   libGL,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     hidapi
     libGL
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXinerama

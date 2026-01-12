@@ -17,7 +17,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
   libXScrnSaver,
   libGL,
   libxcb,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXinerama
     libXext
-    libXcursor
+    libxcursor
     libXScrnSaver
     curl
     gtk3
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXrandr
       libXinerama
       libXext
-      libXcursor
+      libxcursor
       libXScrnSaver
     ]
   }";

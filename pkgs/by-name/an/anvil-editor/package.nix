@@ -12,6 +12,7 @@
   vulkan-headers,
   libGL,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
 }:
@@ -61,7 +62,7 @@ buildGoModule (finalAttrs: {
     libGL
     libx11
     libxcb
-    xorg.libXcursor
+    libxcursor
     xorg.libXfixes
   ];
 

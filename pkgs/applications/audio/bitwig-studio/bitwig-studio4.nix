@@ -20,6 +20,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   zlib,
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libxcb
-    xorg.libXcursor
+    libxcursor
     libx11
     xorg.libXtst
     libxkbcommon

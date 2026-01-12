@@ -9,7 +9,7 @@
   libjack2,
   lv2,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     lv2
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

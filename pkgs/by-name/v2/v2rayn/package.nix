@@ -15,6 +15,7 @@
   krb5,
   bash,
   xorg,
+  libxcursor,
   libx11,
   libsm,
   libice,
@@ -81,7 +82,7 @@ buildDotnetModule (finalAttrs: {
     xorg.libXi
     libice
     libsm
-    xorg.libXcursor
+    libxcursor
     xorg.libXext
   ];
 

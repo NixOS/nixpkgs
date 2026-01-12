@@ -20,7 +20,7 @@
       xorg.libXrender
       xorg.libXrandr
       libxcomposite
-      xorg.libXcursor
+      libxcursor
       xorg.libXtst
       xorg.libXScrnSaver
     ]

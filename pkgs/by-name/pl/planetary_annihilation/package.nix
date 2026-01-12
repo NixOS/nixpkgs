@@ -19,6 +19,7 @@
   curl,
   systemd,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   requireFile,
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
         stdenv.cc.cc
         stdenv.cc.libc
         libx11
-        xorg.libXcursor
+        libxcursor
         gtk2
         glib
         curl
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
           curl
           libx11
           stdenv.cc.libc
-          xorg.libXcursor
+          libxcursor
           "$out"
         ]
       }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" $f

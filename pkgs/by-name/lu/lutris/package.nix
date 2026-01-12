@@ -40,7 +40,7 @@ let
       xorg.libXv
       libxaw
       xorg.libXi
-      xorg.libXcursor
+      libxcursor
       libxcomposite
       xorg.libXfixes
       xorg.libXtst

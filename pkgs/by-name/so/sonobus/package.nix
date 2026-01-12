@@ -9,7 +9,7 @@
   freetype,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

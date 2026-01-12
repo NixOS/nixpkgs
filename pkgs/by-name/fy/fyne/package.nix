@@ -5,7 +5,7 @@
 
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXinerama,
   libXi,
   libXrandr,
@@ -33,7 +33,7 @@ buildGoModule rec {
   buildInputs = [
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXinerama
     libXi
     libXrandr

@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   xorg,
+  libxcursor,
   libx11,
   libGLU,
   libGL,
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       libx11
       xorg.libXrandr
       xorg.libXxf86vm
-      xorg.libXcursor
+      libxcursor
       xorg.libXinerama
       xorg.libXi
     ]

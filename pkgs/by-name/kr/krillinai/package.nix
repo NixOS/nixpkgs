@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libxcursor,
   libx11,
   libGL,
   nix-update-script,
@@ -28,7 +29,7 @@ buildGoModule (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libXinerama
     xorg.libXxf86vm
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     libx11
     xorg.libXi

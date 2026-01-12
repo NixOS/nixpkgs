@@ -8,7 +8,7 @@
   python3,
   libxml2,
   libXinerama,
-  libXcursor,
+  libxcursor,
   libxau,
   libXrandr,
   libice,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     libXinerama
-    libXcursor
+    libxcursor
     libxau
     libXrandr
     libice

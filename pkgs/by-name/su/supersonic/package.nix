@@ -8,6 +8,7 @@
   pkg-config,
   desktopToDarwinBundle,
   xorg,
+  libxcursor,
   libx11,
   wayland,
   wayland-protocols,
@@ -52,7 +53,7 @@ buildGoModule rec {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
     xorg.libXrandr
     xorg.libXinerama
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXext
   ]

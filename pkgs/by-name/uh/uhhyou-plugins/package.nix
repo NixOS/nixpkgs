@@ -16,7 +16,7 @@
   libx11,
   libXrandr,
   libXinerama,
-  libXcursor,
+  libxcursor,
   pango,
   gtkmm3,
   sqlite,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXrandr
     libXinerama
-    libXcursor
+    libxcursor
     pango
     gtkmm3
     sqlite

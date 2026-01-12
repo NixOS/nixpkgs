@@ -8,6 +8,7 @@
   copyDesktopItems,
   makeDesktopItem,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   xvfb,
@@ -76,7 +77,7 @@ stdenv.mkDerivation {
     alsa-lib
     libx11
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXtst

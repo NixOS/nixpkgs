@@ -8,6 +8,7 @@
   fontconfig,
   libGL,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   libxkbcommon,
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libxcb
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

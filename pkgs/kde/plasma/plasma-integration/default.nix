@@ -3,7 +3,7 @@
   qtbase,
   qtwayland,
   libsForQt5,
-  xorg,
+  libxcursor,
 }:
 mkKdeDerivation {
   pname = "plasma-integration";
@@ -63,7 +63,7 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtwayland
-    xorg.libXcursor
+    libxcursor
   ];
 
   # Move Qt5 plugin to Qt5 plugin path

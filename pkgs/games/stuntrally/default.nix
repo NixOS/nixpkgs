@@ -13,7 +13,7 @@
   pkg-config,
   makeWrapper,
   enet,
-  libXcursor,
+  libxcursor,
   bullet,
   openal,
   tinyxml,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     libx11
     libvorbis
     enet
-    libXcursor
+    libxcursor
     bullet
     openal
     tinyxml

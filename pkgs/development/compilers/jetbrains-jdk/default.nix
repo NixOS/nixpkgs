@@ -15,7 +15,7 @@
   libXxf86vm,
   libXrandr,
   libXi,
-  libXcursor,
+  libxcursor,
   libXrender,
   libx11,
   libXext,
@@ -139,7 +139,7 @@ jdk.overrideAttrs (oldAttrs: rec {
         libXxf86vm
         libXrandr
         libXi
-        libXcursor
+        libxcursor
         libXrender
         libx11
         libXext

@@ -17,6 +17,7 @@
   libpulseaudio,
   udev,
   xorg,
+  libxcursor,
   libx11,
 }:
 let
@@ -65,7 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         libpulseaudio
         udev
         libx11
-        xorg.libXcursor
+        libxcursor
         xorg.libXxf86vm
       ]
       ++ lib.optional gamemodeSupport gamemode.lib

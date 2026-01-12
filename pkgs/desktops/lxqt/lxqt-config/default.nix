@@ -6,7 +6,7 @@
   glib,
   kwindowsystem,
   libXScrnSaver,
-  libXcursor,
+  libxcursor,
   libXdmcp,
   libkscreen,
   liblxqt,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     glib.bin
     kwindowsystem
     libXScrnSaver
-    libXcursor
+    libxcursor
     libXdmcp
     libkscreen
     liblxqt

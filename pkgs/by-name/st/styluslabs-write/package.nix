@@ -5,6 +5,7 @@
   pkg-config,
   SDL2,
   xorg,
+  libxcursor,
   libx11,
   libGL,
   roboto,
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     libx11
     xorg.libXi
-    xorg.libXcursor
+    libxcursor
     libGL
   ];
 

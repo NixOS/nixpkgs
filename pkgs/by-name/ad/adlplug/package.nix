@@ -12,7 +12,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
   withJack ? false,
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
     libXrandr
     libXinerama
     libXext
-    libXcursor
+    libxcursor
   ]
   ++ lib.optionals withJack [ libjack2 ];
 

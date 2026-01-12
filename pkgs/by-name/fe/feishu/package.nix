@@ -23,7 +23,7 @@
   libx11,
   libXScrnSaver,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -98,7 +98,7 @@ let
     libx11
     libXScrnSaver
     libxcomposite
-    libXcursor
+    libxcursor
     libXdamage
     libXext
     libXfixes

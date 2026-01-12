@@ -9,7 +9,7 @@
   libice,
   libsm,
   libx11,
-  libXcursor,
+  libxcursor,
   libXfixes,
   libXrandr,
   libXrender,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libx11
-    libXcursor
+    libxcursor
     libXfixes
     libXrandr
     libXrender

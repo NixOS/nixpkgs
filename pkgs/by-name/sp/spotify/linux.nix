@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libsm,
@@ -90,7 +91,7 @@ let
     libx11
     libxcb
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

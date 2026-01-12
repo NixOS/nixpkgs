@@ -16,6 +16,7 @@
   libGL,
   libxkbcommon,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   wayland,
@@ -39,7 +40,7 @@ makeSetupHook {
       libGL
       libxkbcommon
       libx11
-      xorg.libXcursor
+      libxcursor
       xorg.libXi
       libxcb
     ]

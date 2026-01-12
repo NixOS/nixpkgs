@@ -10,7 +10,7 @@
   lib,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXrandr,
   libarchive,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     jansson
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXrandr
     libarchive

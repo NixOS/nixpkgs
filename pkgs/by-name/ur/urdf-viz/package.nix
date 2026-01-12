@@ -5,6 +5,7 @@
   stdenv,
   libGL,
   xorg,
+  libxcursor,
   libx11,
   lib,
 }:
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     stdenv.cc.cc.lib
     libGL
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXi
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   runtimeDependencies = [
     libGL
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXi

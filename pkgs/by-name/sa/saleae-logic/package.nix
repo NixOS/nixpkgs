@@ -23,7 +23,7 @@
   libx11,
   libXi,
   libXrandr,
-  libXcursor,
+  libxcursor,
   freetype,
   libXinerama,
   libxcb,
@@ -51,7 +51,7 @@ let
     libx11
     libXi
     libXrandr
-    libXcursor
+    libxcursor
     freetype
     libXinerama
     libxcb

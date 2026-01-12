@@ -104,7 +104,7 @@ let
           omnissaHorizonClientFiles
           libx11
           libxau
-          xorg.libXcursor
+          libxcursor
           xorg.libXext
           xorg.libXi
           xorg.libXinerama

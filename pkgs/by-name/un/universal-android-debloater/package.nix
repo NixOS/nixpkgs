@@ -16,6 +16,7 @@
   wayland,
   writableTmpDirAsHomeHook,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -58,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libxkbcommon
         wayland
         libx11
-        xorg.libXcursor
+        libxcursor
         xorg.libXi
         xorg.libXrandr
       ]

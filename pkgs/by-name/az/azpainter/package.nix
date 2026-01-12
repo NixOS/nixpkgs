@@ -9,7 +9,7 @@
   pkg-config,
   libiconv,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   freetype,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXi
     freetype

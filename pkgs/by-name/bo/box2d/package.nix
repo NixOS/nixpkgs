@@ -14,7 +14,7 @@
   imgui,
   libGLU,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   libXinerama,
   libXrandr,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     libGLU
     libx11
-    libXcursor
+    libxcursor
     libXi
     libXinerama
     libXrandr

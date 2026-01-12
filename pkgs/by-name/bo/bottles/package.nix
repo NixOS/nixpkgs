@@ -34,7 +34,7 @@ let
             libxaw
             libxcb
             libxcomposite
-            xorg.libXcursor
+            libxcursor
             xorg.libXdmcp
             xorg.libXext
             xorg.libXi

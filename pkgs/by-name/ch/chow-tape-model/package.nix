@@ -11,7 +11,7 @@
   gtk3,
   lib,
   libGL,
-  libXcursor,
+  libxcursor,
   libXdmcp,
   libXext,
   libXinerama,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gtk3
     libGL
-    libXcursor
+    libxcursor
     libXdmcp
     libXext
     libXinerama

@@ -9,7 +9,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
   freetype,
   alsa-lib,
   libjack2,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libXext
-    libXcursor
+    libxcursor
     libXinerama
     libXrandr
     freetype

@@ -8,7 +8,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
   freetype,
   alsa-lib,
   libjack2,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libXinerama
     libXext
-    libXcursor
+    libxcursor
     freetype
     alsa-lib
     libjack2

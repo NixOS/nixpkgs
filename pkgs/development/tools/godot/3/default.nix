@@ -10,7 +10,7 @@
   libGLU,
   libpulseaudio,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXfixes,
   libXi,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (self: {
     libGLU
     libpulseaudio
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXfixes
     libXi

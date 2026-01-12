@@ -15,7 +15,7 @@
   libx11,
   libXScrnSaver,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -65,7 +65,7 @@ let
     pango
     stdenv.cc.cc
     libXScrnSaver
-    libXcursor
+    libxcursor
     libXrender
     libXtst
     libpulseaudio

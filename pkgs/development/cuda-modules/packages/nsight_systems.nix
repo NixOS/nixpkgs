@@ -15,6 +15,7 @@
   ucx,
   wayland,
   xorg,
+  libxcursor,
 }:
 let
   # NOTE(@connorbaker): nsight_systems doesn't support Jetson, so no need for case splitting on aarch64-linux.
@@ -119,7 +120,7 @@ buildRedist (
       rdma-core
       ucx
       wayland
-      xorg.libXcursor
+      libxcursor
       xorg.libXdamage
       xorg.libXrandr
       xorg.libXtst

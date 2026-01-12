@@ -13,7 +13,7 @@
   freetype,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXrandr,
   libXi,
   libxkbcommon,
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     freetype
     libx11
-    libXcursor
+    libxcursor
     libXrandr
     libXi
     cairo
@@ -94,7 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         fontconfig
         freetype
         libx11
-        libXcursor
+        libxcursor
         libXrandr
         libXi
         libxkbcommon

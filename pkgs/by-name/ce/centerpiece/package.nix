@@ -11,6 +11,7 @@
   wayland,
   enableX11 ? true,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals enableX11 [
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXrandr
   ];

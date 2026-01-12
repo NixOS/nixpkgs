@@ -6,7 +6,7 @@
   makeDesktopItem,
   libXrender,
   libXrandr,
-  libXcursor,
+  libxcursor,
   libx11,
   libXext,
   libXi,
@@ -29,7 +29,7 @@ let
   libPath = lib.makeLibraryPath [
     libXrender
     libXrandr
-    libXcursor
+    libxcursor
     libx11
     libXext
     libXi
@@ -72,7 +72,7 @@ mkDerivation rec {
   buildInputs = [
     libXrender
     libXrandr
-    libXcursor
+    libxcursor
     libx11
     libXext
     libXi

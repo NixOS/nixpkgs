@@ -20,7 +20,7 @@
   libvorbis,
   libwebp,
   libx11,
-  libXcursor,
+  libxcursor,
   libXdmcp,
   libXext,
   libXfixes,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     libpthread-stubs
     libpulseaudio
     libx11
-    libXcursor
+    libxcursor
     libXdmcp
     libXext
     libXfixes

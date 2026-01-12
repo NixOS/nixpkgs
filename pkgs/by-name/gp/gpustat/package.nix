@@ -6,7 +6,7 @@
   fontconfig,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   libXrandr,
   cmake,
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXi
     libXrandr
     libxkbcommon

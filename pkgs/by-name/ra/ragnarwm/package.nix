@@ -6,7 +6,7 @@
   fontconfig,
   libx11,
   libXft,
-  libXcursor,
+  libxcursor,
   libxcomposite,
   conf ? null,
   nixosTests,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libx11
     libXft
-    libXcursor
+    libxcursor
     libxcomposite
   ];
 

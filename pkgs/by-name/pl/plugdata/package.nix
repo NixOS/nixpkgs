@@ -13,6 +13,7 @@
   zenity,
   curl,
   xorg,
+  libxcursor,
   libx11,
   xvfb,
   python3,
@@ -63,7 +64,7 @@ stdenv.mkDerivation {
     freetype
     webkitgtk_4_1
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXext
     xorg.libXinerama
     xorg.libXrender

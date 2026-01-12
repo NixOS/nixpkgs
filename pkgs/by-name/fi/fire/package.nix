@@ -13,7 +13,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
   freetype,
   alsa-lib,
 
@@ -73,7 +73,7 @@ let
     libXrandr
     libXinerama
     libXext
-    libXcursor
+    libxcursor
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

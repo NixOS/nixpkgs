@@ -9,6 +9,7 @@
   pkg-config,
   alsa-lib,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   freetype,
@@ -102,7 +103,7 @@ stdenv.mkDerivation {
     alsa-lib
     libx11
     libxcomposite
-    xorg.libXcursor
+    libxcursor
     xorg.libXext
     xorg.libXinerama
     xorg.libXrandr

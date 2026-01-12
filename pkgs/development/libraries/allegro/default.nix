@@ -8,7 +8,7 @@
   libx11,
   libXpm,
   libXt,
-  libXcursor,
+  libxcursor,
   alsa-lib,
   cmake,
   pkg-config,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libx11
     libXpm
     libXt
-    libXcursor
+    libxcursor
     alsa-lib
     zlib
     libpng

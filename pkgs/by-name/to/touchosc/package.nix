@@ -11,7 +11,7 @@
   jack2,
   libxcb,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -29,7 +29,7 @@ let
     jack2
     libxcb
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXinerama

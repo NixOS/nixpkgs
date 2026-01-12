@@ -12,7 +12,7 @@
   icu,
   libice,
   libsm,
-  libXcursor,
+  libxcursor,
   openssl,
   imagemagick,
   makeWrapper,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libx11
-    libXcursor
+    libxcursor
   ];
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libx11
-    libXcursor
+    libxcursor
   ];
 
   dontBuild = true;

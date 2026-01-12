@@ -45,7 +45,7 @@
   xcbutilcursor,
   libxkbfile,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -180,7 +180,7 @@ let
             libsm
             libxkbfile
             libxcomposite
-            libXcursor
+            libxcursor
             libXdamage
             libXfixes
             libGL

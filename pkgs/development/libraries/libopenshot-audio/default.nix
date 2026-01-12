@@ -6,7 +6,7 @@
   cmake,
   doxygen,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXft,
   libXinerama,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       else
         [
           libx11
-          libXcursor
+          libxcursor
           libXext
           libXft
           libXinerama

@@ -13,7 +13,7 @@
   glib,
   gobject-introspection,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXi,
   libXinerama,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) [
     libxcomposite
-    libXcursor
+    libxcursor
     libXi
     libXrandr
     libXrender

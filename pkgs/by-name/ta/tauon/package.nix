@@ -17,7 +17,7 @@
   librsvg,
   libsamplerate,
   libvorbis,
-  xorg,
+  libxcursor,
   mpg123,
   opusfile,
   pango,
@@ -139,7 +139,7 @@ python3Packages.buildPythonApplication rec {
           libopenmpt
           pulseaudio
         ]
-        ++ lib.optional stdenv.hostPlatform.isLinux xorg.libXcursor
+        ++ lib.optional stdenv.hostPlatform.isLinux libxcursor
       )
     }"
     "--prefix PYTHONPATH : $out/share/tauon"

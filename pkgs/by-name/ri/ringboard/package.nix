@@ -7,6 +7,7 @@
   libGL,
   wayland,
   xorg,
+  libxcursor,
   libx11,
   makeWrapper,
   displayServer ? "x11",
@@ -43,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
   ]
   ++ lib.optionals (displayServer == "x11") [
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXi
     libx11

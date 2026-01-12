@@ -12,6 +12,7 @@
   freetype,
   openssl,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   libGL,
@@ -55,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     libxcb
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXi
     libxcb

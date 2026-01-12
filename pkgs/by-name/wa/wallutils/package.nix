@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   libx11,
-  libXcursor,
+  libxcursor,
   libXmu,
   libXpm,
   libheif,
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXcursor
+    libxcursor
     libXmu
     libXpm
     libheif

@@ -5,7 +5,7 @@
   libbsd,
   pkg-config,
   libXrandr,
-  libXcursor,
+  libxcursor,
   libXft,
   libXt,
   xcbutil,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libXrandr
-    libXcursor
+    libxcursor
     libXft
     libXt
     xcbutil

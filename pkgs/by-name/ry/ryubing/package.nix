@@ -19,7 +19,7 @@
   libGL,
   libice,
   libsm,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXrandr,
@@ -72,7 +72,7 @@ buildDotnetModule rec {
     glew
     libice
     libsm
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXrandr

@@ -35,7 +35,7 @@
   libx11,
   libXScrnSaver,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       libunity
       libuuid
       libva
-      libXcursor
+      libxcursor
       libXdamage
       libXext
       libXfixes

@@ -10,7 +10,7 @@
   libxkbcommon,
   libXrandr,
   libXi,
-  libXcursor,
+  libxcursor,
   nix-update-script,
 }:
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     libXrandr
     libXi
-    libXcursor
+    libxcursor
   ];
 
   postInstall = ''

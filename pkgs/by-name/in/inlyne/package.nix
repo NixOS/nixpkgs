@@ -7,6 +7,7 @@
   pkg-config,
   fontconfig,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   libxkbcommon,
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXrandr
     libxcb

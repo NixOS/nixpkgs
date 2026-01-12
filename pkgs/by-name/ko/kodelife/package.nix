@@ -11,7 +11,7 @@
   gst_all_1,
   libxcb,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXinerama,
@@ -28,7 +28,7 @@ let
     avahi
     libxcb
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXinerama

@@ -18,7 +18,7 @@
   libjack2,
   libpulseaudio,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXrandr,
   libXxf86vm,
@@ -55,7 +55,7 @@ symlinkJoin {
       # glfw
       libGL
       libx11
-      libXcursor
+      libxcursor
       libXext
       libXrandr
       libXxf86vm

@@ -24,6 +24,7 @@
     jdk17
   ],
   xorg,
+  libxcursor,
   libx11,
   xrandr,
   glib,
@@ -143,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     xorg.libXxf86vm
     xorg.libXext
-    xorg.libXcursor
+    libxcursor
     xorg.libXrandr
     xorg.libXtst
     libpulseaudio

@@ -41,6 +41,7 @@
   wayland,
   xdg-utils,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxshmfence,
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
       libx11
       xorg.libXScrnSaver
       libxcomposite
-      xorg.libXcursor
+      libxcursor
       xorg.libXdamage
       xorg.libXext
       xorg.libXfixes

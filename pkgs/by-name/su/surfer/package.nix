@@ -9,7 +9,7 @@
   libxkbcommon,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   stdenv,
   makeWrapper,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXi
   ];
 

@@ -9,6 +9,7 @@
   expat,
   wayland,
   xorg,
+  libxcursor,
   libx11,
   libxkbcommon,
   pop-launcher,
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage {
     expat
     freetype
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXrandr
   ];

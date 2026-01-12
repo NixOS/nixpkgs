@@ -37,7 +37,7 @@
   libXt,
   libXi,
   libXinerama,
-  libXcursor,
+  libxcursor,
   libXrandr,
   fontconfig,
 
@@ -284,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXt
     libXi
     libXinerama
-    libXcursor
+    libxcursor
     libXrandr
     fontconfig
   ]

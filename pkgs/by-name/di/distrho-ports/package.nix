@@ -7,7 +7,7 @@
   freetype,
   libGL,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXrender,
   meson,
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     freetype
     libGL
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXrender
   ];

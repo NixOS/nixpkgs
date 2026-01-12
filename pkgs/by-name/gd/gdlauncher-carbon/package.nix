@@ -8,6 +8,7 @@
   copyDesktopItems,
   autoPatchelfHook,
   xorg,
+  libxcursor,
   libx11,
   xrandr,
   libxcb,
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       libPath = lib.makeLibraryPath [
         libx11
         xorg.libXext
-        xorg.libXcursor
+        libxcursor
         xorg.libXrandr
         xorg.libXxf86vm
 

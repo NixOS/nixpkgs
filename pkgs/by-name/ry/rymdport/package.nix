@@ -5,6 +5,7 @@
   pkg-config,
   libGL,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -28,7 +29,7 @@ buildGoModule rec {
   buildInputs = [
     libGL
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXext
     xorg.libXi
     xorg.libXinerama

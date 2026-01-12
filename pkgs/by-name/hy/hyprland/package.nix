@@ -40,6 +40,7 @@
   wayland-protocols,
   wayland-scanner,
   xorg,
+  libxcursor,
   libxcb,
   xwayland,
   debug ? false,
@@ -171,7 +172,7 @@ customStdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
-      xorg.libXcursor
+      libxcursor
     ]
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])

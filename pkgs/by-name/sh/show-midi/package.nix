@@ -9,7 +9,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXinerama
     libXext
-    libXcursor
+    libxcursor
   ];
 
   enableParallelBuilding = true;

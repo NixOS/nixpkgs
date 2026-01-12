@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   libxcb,
@@ -56,7 +57,7 @@ let
     libgbm
 
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXtst
     libxcb
     xorg.libXext

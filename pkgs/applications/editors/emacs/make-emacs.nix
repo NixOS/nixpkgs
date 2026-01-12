@@ -31,7 +31,7 @@
   imagemagick,
   jansson,
   libxaw,
-  libXcursor,
+  libxcursor,
   libXft,
   libXi,
   libXpm,
@@ -485,7 +485,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withX && toolkit == "lucid") ''
-    patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
+    patchelf --add-rpath ${lib.makeLibraryPath [ libxcursor ]} $out/bin/emacs
     patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';
 

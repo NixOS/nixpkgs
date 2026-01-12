@@ -27,7 +27,7 @@
   libtheora,
   libwebp,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXfixes,
   libXi,
@@ -294,7 +294,7 @@ let
                         alsa-lib
                         libpulseaudio
                         libx11
-                        libXcursor
+                        libxcursor
                         libXext
                         libXi
                         libXrandr
@@ -496,7 +496,7 @@ let
         ++ lib.optional (withX11 || withWayland) libxkbcommon
         ++ lib.optionals withX11 [
           libx11
-          libXcursor
+          libxcursor
           libXext
           libXfixes
           libXi

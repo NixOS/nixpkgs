@@ -10,7 +10,7 @@
   vulkan-loader,
   wayland,
   libXrandr,
-  libXcursor,
+  libxcursor,
   libx11,
   libXi,
 }:
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib.dev
-    libXcursor
+    libxcursor
     libXi
     wayland
   ];

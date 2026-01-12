@@ -18,6 +18,7 @@
   dotnet-runtime_8,
   x11Support ? true,
   xorg ? null,
+  libxcursor,
   libx11,
   waylandSupport ? false,
   wayland ? null,
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libx11
     xorg.libXi
-    xorg.libXcursor
+    libxcursor
   ]
   ++ lib.optionals waylandSupport [
     wayland

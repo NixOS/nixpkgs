@@ -17,7 +17,7 @@
   fontconfig,
   freetype,
   libGL,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -57,7 +57,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

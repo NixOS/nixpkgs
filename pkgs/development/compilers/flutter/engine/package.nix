@@ -20,6 +20,7 @@
   gn,
   openbox,
   xorg,
+  libxcursor,
   libx11,
   xorgproto,
   libxcb,
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
               cairo
               libxcb
               libx11
-              xorg.libXcursor
+              libxcursor
               xorg.libXrandr
               xorg.libXrender
               xorg.libXinerama

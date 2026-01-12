@@ -8,7 +8,7 @@
   libice,
   libsm,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXrandr,
@@ -86,7 +86,7 @@ stdenvNoCC.mkDerivation (
           --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
           --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
           --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
-          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
+          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libxcursor}/lib/libXcursor.so.1"'
 
         # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
         dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json

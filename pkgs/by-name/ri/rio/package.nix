@@ -19,7 +19,7 @@
   libxkbcommon,
   withX11 ? !stdenv.hostPlatform.isDarwin,
   libx11,
-  libXcursor,
+  libxcursor,
   libXi,
   libXrandr,
   libxcb,
@@ -39,7 +39,7 @@ let
     ]
     ++ lib.optionals withX11 [
       libx11
-      libXcursor
+      libxcursor
       libXi
       libXrandr
       libxcb

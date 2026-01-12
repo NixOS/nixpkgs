@@ -7,7 +7,7 @@
   libGL,
   libpulseaudio,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXi,
   libXrandr,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libpulseaudio
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXi
     libXrandr

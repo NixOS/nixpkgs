@@ -35,7 +35,7 @@
   zlib,
   libx11,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXdamage,
   libXext,
   libXfixes,
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     libxcrypt-legacy
     libx11
     libxcomposite
-    libXcursor
+    libxcursor
     libXdamage
     libXext
     libXfixes

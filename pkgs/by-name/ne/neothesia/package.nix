@@ -10,6 +10,7 @@
   libxkbcommon,
   vulkan-loader,
   xorg,
+  libxcursor,
   libx11,
 }:
 let
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage {
         libxkbcommon
         vulkan-loader
         libx11
-        xorg.libXcursor
+        libxcursor
         xorg.libXi
         xorg.libXrender
       ]

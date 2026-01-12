@@ -9,7 +9,7 @@
   makeDesktopItem,
   libx11,
   libxcomposite,
-  libXcursor,
+  libxcursor,
   libXinerama,
   libXrandr,
   libXtst,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libx11
     libxcomposite
-    libXcursor
+    libxcursor
     libXinerama
     libXrandr
     libXtst

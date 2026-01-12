@@ -15,6 +15,7 @@
   fontconfig,
   vulkan-loader,
   xorg,
+  libxcursor,
   libx11,
 
   # wrapper
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     vulkan-loader
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXrandr
   ]

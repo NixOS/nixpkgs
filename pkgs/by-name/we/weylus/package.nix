@@ -10,6 +10,7 @@
   libva,
   gst_all_1,
   xorg,
+  libxcursor,
   libxcomposite,
   libdrm,
   pkg-config,
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage {
     xorg.libXext
     xorg.libXft
     xorg.libXinerama
-    xorg.libXcursor
+    libxcursor
     xorg.libXrender
     xorg.libXfixes
     xorg.libXtst

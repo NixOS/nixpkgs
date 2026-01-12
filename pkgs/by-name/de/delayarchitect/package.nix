@@ -7,7 +7,7 @@
   libXext,
   libXrandr,
   libXinerama,
-  libXcursor,
+  libxcursor,
   freetype,
   alsa-lib,
   cmake,
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     libXext
     libXrandr
     libXinerama
-    libXcursor
+    libxcursor
     freetype
     alsa-lib
   ];

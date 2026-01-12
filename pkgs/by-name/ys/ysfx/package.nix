@@ -7,7 +7,7 @@
   freetype,
   juce,
   libx11,
-  libXcursor,
+  libxcursor,
   libXext,
   libXinerama,
   libXrandr,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     freetype
     juce
     libx11
-    libXcursor
+    libxcursor
     libXext
     libXinerama
     libXrandr

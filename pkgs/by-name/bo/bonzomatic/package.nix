@@ -7,7 +7,7 @@
   alsa-lib,
   fontconfig,
   mesa_glu,
-  libXcursor,
+  libxcursor,
   libXinerama,
   libXrandr,
   xinput,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     fontconfig
     mesa_glu
-    libXcursor
+    libxcursor
     libXinerama
     libXrandr
     xinput

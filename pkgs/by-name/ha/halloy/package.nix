@@ -13,6 +13,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libxcursor,
   libx11,
   libxcb,
   alsa-lib,
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
     wayland
     libx11
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     libxcb
   ];

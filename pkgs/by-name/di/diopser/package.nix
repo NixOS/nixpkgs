@@ -12,7 +12,7 @@
   libXrandr,
   libXinerama,
   libXext,
-  libXcursor,
+  libxcursor,
 }:
 
 let
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     libXrandr
     libXinerama
     libXext
-    libXcursor
+    libxcursor
   ];
 
   cmakeFlags = [

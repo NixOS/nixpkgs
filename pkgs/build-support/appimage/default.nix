@@ -161,7 +161,7 @@ rec {
 
         xorg.libXinerama
         xorg.libXdamage
-        xorg.libXcursor
+        libxcursor
         xorg.libXrender
         xorg.libXScrnSaver
         xorg.libXxf86vm

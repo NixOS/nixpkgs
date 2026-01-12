@@ -9,6 +9,7 @@
   ninja,
   cmake,
   xorg,
+  libxcursor,
   libxcomposite,
   libx11,
   xwininfo,
@@ -147,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ [
       # gamescope uses a custom wlroots branch
       libxcomposite
-      xorg.libXcursor
+      libxcursor
       xorg.libXdamage
       xorg.libXext
       xorg.libXi

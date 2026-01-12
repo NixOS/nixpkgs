@@ -20,7 +20,7 @@
   xrandr,
   libxkbfile,
   libpciaccess,
-  libXcursor,
+  libxcursor,
   libXScrnSaver,
   libXrandr,
   libXtst,
@@ -260,7 +260,7 @@ qtModule {
     # X11 libs
     xrandr
     libXScrnSaver
-    libXcursor
+    libxcursor
     libXrandr
     libpciaccess
     libXtst

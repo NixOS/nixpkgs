@@ -6,6 +6,7 @@
   dbus,
   kmod,
   xorg,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
@@ -108,7 +109,7 @@ stdenv.mkDerivation {
             xorg.libXext
             xorg.libXmu
             xorg.libXfixes
-            xorg.libXcursor
+            libxcursor
           ]
         } $i
     done

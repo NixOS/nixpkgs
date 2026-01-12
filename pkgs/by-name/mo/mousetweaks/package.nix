@@ -9,6 +9,7 @@
   gsettings-desktop-schemas,
   wrapGAppsHook3,
   xorg,
+  libxcursor,
   libx11,
 }:
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     libx11
     xorg.libXtst
     xorg.libXfixes
-    xorg.libXcursor
+    libxcursor
   ];
 
   passthru = {

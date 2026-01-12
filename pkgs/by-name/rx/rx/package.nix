@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   xorg ? null,
+  libxcursor,
   libx11,
   libGL ? null,
 }:
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     libx11
     xorg.libXrandr
     xorg.libXinerama
-    xorg.libXcursor
+    libxcursor
     xorg.libXi
     xorg.libXext
   ];

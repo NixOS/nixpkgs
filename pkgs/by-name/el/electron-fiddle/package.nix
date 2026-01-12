@@ -144,7 +144,7 @@ buildFHSEnv {
       libxshmfence
 
       # for running Electron before 11.0.0 inside
-      xorg.libXcursor
+      libxcursor
       xorg.libXi
       xorg.libXrender
       xorg.libXtst

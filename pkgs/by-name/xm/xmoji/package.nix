@@ -7,7 +7,7 @@
   harfbuzz,
   libpng,
   xcbutil,
-  libXcursor,
+  libxcursor,
   xcbutilimage,
   libxkbcommon,
   xcb-util-cursor,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     harfbuzz
-    libXcursor
+    libxcursor
     libpng
     libxkbcommon
     xcb-util-cursor
