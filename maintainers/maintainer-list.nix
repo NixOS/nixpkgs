@@ -10026,6 +10026,12 @@
     githubId = 6578603;
     name = "Jonas Rembser";
   };
+  gui-wf = {
+    name = "Guilherme Fontes";
+    email = "dev@gui.wf";
+    github = "gui-wf";
+    githubId = 48162143;
+  };
   gurjaka = {
     name = "Gurami Esartia";
     email = "esartia.gurika@gmail.com";
