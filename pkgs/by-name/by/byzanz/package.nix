@@ -14,6 +14,7 @@
   pkg-config,
   which,
   xorg,
+  xwininfo,
 }:
 
 stdenv.mkDerivation {
@@ -57,7 +58,7 @@ stdenv.mkDerivation {
     libtool
     cairo
     gtk3
-    xorg.xwininfo
+    xwininfo
     xorg.libXdamage
   ]
   ++ (with gst_all_1; [

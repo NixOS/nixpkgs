@@ -6,7 +6,7 @@
   ffmpeg,
   imagemagick,
   dzen2,
-  xorg,
+  xwininfo,
   xmodmap,
   xinput,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
         lib.makeBinPath [
           ffmpeg
           dzen2
-          xorg.xwininfo
+          xwininfo
           xinput
           xmodmap
           imagemagick

@@ -9,6 +9,7 @@
   ninja,
   cmake,
   xorg,
+  xwininfo,
   xprop,
   libxcb,
   libdrm,
@@ -178,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           xprop
-          xorg.xwininfo
+          xwininfo
         ]
       }
 

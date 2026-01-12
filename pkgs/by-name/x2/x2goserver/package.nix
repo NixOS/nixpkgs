@@ -15,6 +15,7 @@
   gnugrep,
   findutils,
   xorg,
+  xwininfo,
   xrandr,
   xmodmap,
   xkbcomp,
@@ -96,7 +97,7 @@ let
     xinit
     xrandr
     xmodmap
-    xorg.xwininfo
+    xwininfo
     xorg.fontutil
     xkbcomp
     setxkbmap

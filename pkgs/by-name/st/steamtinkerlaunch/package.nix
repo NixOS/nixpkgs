@@ -14,7 +14,7 @@
   wget,
   writeShellApplication,
   xdotool,
-  xorg,
+  xwininfo,
   xrandr,
   xprop,
   yad,
@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation {
           xdotool
           xprop
           xrandr
-          xorg.xwininfo
+          xwininfo
           yad
         ];
         name = "stl-head";

@@ -48,7 +48,7 @@
   xdg-utils,
   xdotool,
   xkb-switch,
-  xorg,
+  xwininfo,
   xxd,
   ycmd,
   zathura,
@@ -3361,7 +3361,7 @@ assertNoAdditions {
     postPatch = ''
       substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace-fail xdotool ${xdotool}/bin/xdotool
       substituteInPlace lua/stylish/components/menu.lua --replace-fail xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xorg.xwininfo}/bin/xwininfo
+      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xwininfo}/bin/xwininfo
     '';
   };
 
