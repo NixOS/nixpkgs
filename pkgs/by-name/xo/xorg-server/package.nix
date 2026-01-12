@@ -49,7 +49,7 @@
 
   # darwin specific deps
   darwin,
-  utilmacros,
+  util-macros,
   libapplewm,
 
   writeScript,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [

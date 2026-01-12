@@ -15,7 +15,7 @@
   pkg-config,
   udev,
   udevCheckHook,
-  utilmacros,
+  util-macros,
   xorgserver,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libxrender
     ncurses
     udev
-    utilmacros
+    util-macros
     pixman
     xorgproto
     xorgserver

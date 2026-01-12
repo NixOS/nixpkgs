@@ -8,7 +8,7 @@
   libxext,
   pixman,
   pkg-config,
-  utilmacros,
+  util-macros,
   xorgserver,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     pixman
-    utilmacros
+    util-macros
     xorgserver
   ];
 

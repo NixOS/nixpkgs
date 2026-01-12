@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  util-macros,
   tab-window-manager,
   libxtst,
   libxrandr,
@@ -154,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       pam
       perl
       xorgproto
-      xorg.utilmacros
+      util-macros
       libxtst
       libxext
       libx11
@@ -184,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
       font-util
       libtool
       makeWrapper
-      xorg.utilmacros
+      util-macros
       zlib
     ]
     ++ xorg.xorgserver.nativeBuildInputs

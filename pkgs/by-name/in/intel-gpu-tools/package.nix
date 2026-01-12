@@ -12,7 +12,7 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
 
   # runtime
   alsa-lib,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [

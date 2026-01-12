@@ -7,6 +7,7 @@
   libtool,
   pkg-config,
   xorg,
+  util-macros,
   gnum4,
   libxcb,
   gperf,
@@ -45,7 +46,7 @@ stdenv.mkDerivation {
     gperf
     libtool
     libxcb
-    xorg.utilmacros
+    util-macros
     xorg.xcbutilimage
     xorg.xcbutilrenderutil
   ];
