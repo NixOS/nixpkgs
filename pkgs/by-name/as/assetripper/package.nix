@@ -10,19 +10,14 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "assetripper";
-  version = "1.3.0";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "AssetRipper";
     repo = "AssetRipper";
     tag = finalAttrs.version;
-    hash = "sha256-ixXWbygFhvOjld+YRLIhkO3cgDNkQsbivri2pjU4rgM=";
+    hash = "sha256-cQt0udU2IjsKPwTpBZLFmw1kGv2DfRt7ecdh2ilQtN8=";
   };
-
-  postPatch = ''
-    sed 's@Path.Join(ExecutingDirectory, "temp",@Path.Join(Path.GetTempPath(), "AssetRipper",@' \
-      -i Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs
-  '';
 
   buildInputs = [
     dbus
@@ -69,7 +64,7 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "AssetRipper.GUI.Free" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = finalAttrs.dotnet-sdk.aspnetcore;
 
   meta = {
