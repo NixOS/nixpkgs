@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xset,
   xsetroot,
   xrefresh,
   xrdb,
@@ -195,7 +196,7 @@ let
     xrandr
     xrdb
     xrefresh
-    xorg.xset
+    xset
     xsetroot
     xorg.xvinfo
     xorg.xwd
@@ -258,7 +259,7 @@ stdenv.mkDerivation {
     cp ${./10-fontdir.sh} $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh
     substituteInPlace $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh \
       --subst-var-by "SYSTEM_FONTS" "${fonts}/share/X11-fonts/" \
-      --subst-var-by "XSET"         "${xorg.xset}/bin/xset"
+      --subst-var-by "XSET"         "${xset}/bin/xset"
 
     cp ${./98-user.sh} $out/etc/X11/xinit/xinitrc.d/98-user.sh
 

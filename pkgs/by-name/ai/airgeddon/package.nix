@@ -17,7 +17,7 @@
   tmux,
   # X11 Front
   xterm,
-  xorg,
+  xset,
   xdpyinfo,
   # what the author calls "Internals"
   usbutils,
@@ -109,7 +109,7 @@ let
   ]
   ++ lib.optionals supportX11 [
     xterm
-    xorg.xset
+    xset
     xdpyinfo
   ];
 in

@@ -96,7 +96,7 @@ in
   hddtemp = { };
   hostname = { };
   http_status = { };
-  indicator.propagatedBuildInputs = [ pkgs.xorg.xset ];
+  indicator.propagatedBuildInputs = [ pkgs.xset ];
   kernel = { };
   keys = { };
   # python3Packages.xkbgroup is unpackaged
