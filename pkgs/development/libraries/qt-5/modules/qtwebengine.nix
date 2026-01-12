@@ -21,6 +21,7 @@
   pkgsBuildBuild,
 
   xorg,
+  libxkbfile,
   libpciaccess,
   libXcursor,
   libXScrnSaver,
@@ -387,7 +388,7 @@ qtModule (
       xorg.libXcomposite
       xorg.libXdamage
       libdrm
-      xorg.libxkbfile
+      libxkbfile
 
     ]
     ++ lib.optionals pipewireSupport [

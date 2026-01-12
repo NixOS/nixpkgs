@@ -30,6 +30,7 @@
   systemd,
   wrapGAppsHook3,
   xorg,
+  libxkbfile,
   libxcb,
   zlib,
 }:
@@ -174,7 +175,7 @@ stdenv.mkDerivation rec {
       xorg.libXrandr
       xorg.libxshmfence
       libxkbcommon
-      xorg.libxkbfile
+      libxkbfile
       pango
       stdenv.cc.cc
       systemd

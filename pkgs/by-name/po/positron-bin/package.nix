@@ -19,6 +19,7 @@
   openssl,
   stdenv,
   xorg,
+  libxkbfile,
 }:
 let
   pname = "positron-bin";
@@ -60,7 +61,7 @@ stdenv.mkDerivation {
     xorg.libX11
     xorg.libXcomposite
     xorg.libXdamage
-    xorg.libxkbfile
+    libxkbfile
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     blas

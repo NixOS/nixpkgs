@@ -28,6 +28,7 @@
   libxkbcommon,
   libxcb,
   xorg,
+  libxkbfile,
   wayland,
   libudev0-shim,
   bubblewrap,
@@ -158,7 +159,7 @@ let
         xorg.libXext
         xorg.libXfixes
         xorg.libXrandr
-        xorg.libxkbfile
+        libxkbfile
       ];
 
     profile = ''

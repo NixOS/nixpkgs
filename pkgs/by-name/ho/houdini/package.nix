@@ -60,7 +60,7 @@ buildFHSEnv {
       xorg.libXScrnSaver
       xorg.libXrandr
       libxcb
-      xorg.libxkbfile
+      libxkbfile
       xorg.libxshmfence
       xorg.xcbutil
       xorg.xcbutilimage

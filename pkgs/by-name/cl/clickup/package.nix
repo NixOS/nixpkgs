@@ -17,7 +17,7 @@ let
 
   appimage = appimageTools.wrapType2 {
     inherit pname version src;
-    extraPkgs = pkgs: [ pkgs.xorg.libxkbfile ];
+    extraPkgs = pkgs: [ pkgs.libxkbfile ];
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

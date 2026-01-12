@@ -93,7 +93,7 @@ let
       targetPkgs =
         pkgs:
         (with pkgs; [
-          xorg.libxkbfile
+          libxkbfile
           xorg.libxshmfence
           xcb-util-cursor-HEAD
           krb5

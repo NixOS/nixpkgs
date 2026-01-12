@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  libxkbfile,
   xf86-video-dummy,
   xorgserver,
   xxHash,
@@ -133,7 +134,7 @@ effectiveBuildPythonApplication rec {
     xorg.libXdamage
     xorg.libXfixes
     xorg.libXi
-    xorg.libxkbfile
+    libxkbfile
     xorg.libXrandr
     xorg.libXrender
     xorg.libXres

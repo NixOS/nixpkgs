@@ -10,6 +10,7 @@
   libxkbcommon,
   xinput,
   xorg,
+  libxkbfile,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     xorg.libXt
     xorg.libXtst
     xorg.libXext
-    xorg.libxkbfile
+    libxkbfile
   ];
 
   outputs = [

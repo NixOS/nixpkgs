@@ -6,6 +6,7 @@
   undmg,
   autoPatchelfHook,
   xorg,
+  libxkbfile,
   gtk3,
   nss,
   alsa-lib,
@@ -65,7 +66,7 @@ let
       xorg.libXdamage
       xorg.libXtst
       xorg.libXScrnSaver
-      xorg.libxkbfile
+      libxkbfile
       gtk3
       nss
       alsa-lib

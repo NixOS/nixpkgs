@@ -15,6 +15,7 @@
   systemd,
   xkeyboard_config,
   xorg,
+  libxkbfile,
   wrapGAppsHook3,
   glib,
 }:
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     isocodes
     systemd
     xkeyboard_config
-    xorg.libxkbfile
+    libxkbfile
     xorg.libXext
     xorg.libXrandr
   ];

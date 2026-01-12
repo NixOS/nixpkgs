@@ -108,7 +108,7 @@ let
           xorg.libXext
           xorg.libXi
           xorg.libXinerama
-          xorg.libxkbfile
+          libxkbfile
           xorg.libXrandr
           xorg.libXrender
           xorg.libXScrnSaver

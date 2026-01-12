@@ -21,6 +21,7 @@
   nspr,
   libdrm,
   xorg,
+  libxkbfile,
   libxcb,
   libxkbcommon,
   libxshmfence,
@@ -103,7 +104,7 @@ let
             xorg.libXrandr
             xorg.libxshmfence
             libxkbcommon
-            xorg.libxkbfile
+            libxkbfile
             pango
             (lib.getLib stdenv.cc.cc)
             systemd

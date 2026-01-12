@@ -17,6 +17,7 @@
   nss,
   nspr,
   xorg,
+  libxkbfile,
   libxcb,
   systemdLibs,
   fontconfig,
@@ -238,7 +239,7 @@ stdenv.mkDerivation (
       nspr
       systemdLibs
       webkitgtk_4_1
-      xorg.libxkbfile
+      libxkbfile
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [

@@ -9,6 +9,7 @@
   electron,
   python3,
   xorg,
+  libxkbfile,
   fontconfig,
   node-gyp-build,
   ripgrep,
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsecret
     xorg.libX11
-    xorg.libxkbfile
+    libxkbfile
     fontconfig
     xorg.xorgproto
   ];

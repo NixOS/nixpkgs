@@ -34,6 +34,7 @@
   unzip,
   xdg-utils,
   xorg,
+  libxkbfile,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "bloodhound";
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libxkbfile
+    libxkbfile
     xorg.libxshmfence
   ];
 

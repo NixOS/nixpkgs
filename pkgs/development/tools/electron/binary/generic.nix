@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxkbfile,
   libxcb,
   pango,
   systemd,
@@ -109,7 +110,7 @@ let
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxkbfile
+    libxkbfile
     pango
     pciutils
     stdenv.cc.cc

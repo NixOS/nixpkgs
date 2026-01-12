@@ -18,6 +18,7 @@
   alsa-lib,
   expat,
   xorg,
+  libxkbfile,
   libxcb,
   libgbm,
   systemd,
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXdamage
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxkbfile
+    libxkbfile
     glib
     at-spi2-atk
     cairo

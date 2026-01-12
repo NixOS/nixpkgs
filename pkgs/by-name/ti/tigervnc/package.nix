@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxkbfile,
   libpciaccess,
   xkeyboard_config,
   zlib,
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXi
       xorg.libSM
       xorg.libXft
-      xorg.libxkbfile
+      libxkbfile
       xorg.libXfont2
       libpciaccess
       libGLU

@@ -15,6 +15,7 @@
   libsecret,
   libkrb5,
   xorg,
+  libxkbfile,
   ripgrep,
   cctools,
   nixosTests,
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
     ++ [
       xorg.libX11
-      xorg.libxkbfile
+      libxkbfile
       libkrb5
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

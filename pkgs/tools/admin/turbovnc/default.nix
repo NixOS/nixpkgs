@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  libxkbfile,
   libfontenc,
   xterm,
 }:
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXdmcp # for -DTVNC_SYSTEMX11=1
     xorg.libXext
     xorg.libXfont2 # for -DTVNC_SYSTEMX11=1
-    xorg.libxkbfile # for -DTVNC_SYSTEMX11=1
+    libxkbfile # for -DTVNC_SYSTEMX11=1
     xorg.libxshmfence
     xorg.libXi
     mesa-gl-headers # for -DTVNC_SYSTEMX11=1

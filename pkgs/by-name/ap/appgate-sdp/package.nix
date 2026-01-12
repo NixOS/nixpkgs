@@ -37,6 +37,7 @@
   systemd,
   xdg-utils,
   xorg,
+  libxkbfile,
   zlib,
 }:
 
@@ -80,7 +81,7 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libxkbfile
+    libxkbfile
     xorg.libxshmfence
     zlib
   ];
