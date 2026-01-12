@@ -9,6 +9,7 @@
   harfbuzz,
   libheif,
   nixosTests,
+  optipng,
   x265,
   libde265,
   icu,
@@ -119,7 +120,9 @@ let
   qmakeFlags = [ ];
   dontStrip = false;
 
-  # Revisions that correspond to onlyoffice-documentserver 9.2.1
+  # x2t is not 'directly' versioned, so we version it after the version
+  # of documentserver it's pulled into as a submodule
+  version = "9.2.1";
   core-rev = "a22f0bfb6032e91f218951ef1c0fc29f6d1ceb36";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
@@ -155,14 +158,23 @@ let
       autoconf
       automake
       grunt-cli
+      optipng
     ];
 
     dontNpmBuild = true;
+
+    preBuild = ''
+      export PRODUCT_VERSION=${version}
+    '';
 
     postBuild = ''
       chmod u+w ..
       mkdir ../deploy
       chmod u+w -R ../apps
+
+      mkdir -p ./node_modules/optipng-bin/vendor
+      ln -s ${optipng}/bin/optipng ./node_modules/optipng-bin/vendor/optipng
+
       grunt --force
     '';
 
@@ -170,6 +182,11 @@ let
       runHook preInstall
 
       cp -r ../deploy/web-apps $out
+
+      ## see usr/bin/documentserver-flush-cache.sh
+      chmod u+w $out/apps/api/documents
+      substituteInPlace $out/apps/api/documents/api.js \
+        --replace-fail '{{HASH_POSTFIX}}' "$(basename $out | cut -d '-' -f 1)"
 
       runHook postInstall
     '';
@@ -719,6 +736,32 @@ let
       runHook postInstall
     '';
   };
+  allthemesgen = buildCoreComponent "DesktopEditor/allthemesgen" {
+    buildInputs = [
+      unicodeConverter
+      kernel
+      graphics
+      network
+      doctrenderer
+      docxrenderer
+      pdffile
+      xpsfile
+      djvufile
+    ];
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+    preConfigure = ''
+      source ${fixIcu}
+    '';
+    dontStrip = true;
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp $BUILDRT/build/bin/*/* $BUILDRT/build/bin/*/*/* $out/bin
+
+      runHook postInstall
+    '';
+  };
   core-fonts = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core-fonts";
@@ -741,9 +784,7 @@ let
 in
 buildCoreComponent "X2tConverter/build/Qt" {
   pname = "x2t";
-  # x2t is not 'directly' versioned, so we version it after the version
-  # of documentserver it's pulled into as a submodule
-  version = "9.2.1";
+  inherit version;
 
   buildInputs = [
     unicodeConverter
@@ -794,7 +835,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
     mkdir -p $out/bin
     find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
-    mkdir -p $out/etc
+    mkdir $out/etc
     cat >$out/etc/DoctRenderer.config <<EOF
           <Settings>
             <file>${sdkjs}/common/Native/native.js</file>
@@ -805,6 +846,11 @@ buildCoreComponent "X2tConverter/build/Qt" {
             <dictionaries>${dictionaries}</dictionaries>
           </Settings>
     EOF
+
+    # TODO when allthemesgen invokes x2t as the converter, it
+    # hard-codes expecting DoctRenderer.config in the same dir
+    # the x2t binary is located:
+    ln -s $out/etc/DoctRenderer.config $out/bin/DoctRenderer.config
 
     runHook postInstall
   '';
@@ -824,7 +870,9 @@ buildCoreComponent "X2tConverter/build/Qt" {
   passthru.components = {
     inherit
       allfontsgen
+      allthemesgen
       allfonts
+      core-fonts
       unicodeConverter
       kernel
       graphics
