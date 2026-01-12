@@ -1,23 +1,24 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonPackage,
+  python3Packages,
   openvpn,
   iproute2,
   iptables,
   util-linux,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "namespaced-openvpn";
   version = "0.6.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "slingamn";
-    repo = pname;
+    repo = "namespaced-openvpn";
     rev = "a3fa42b2d8645272cbeb6856e26a7ea9547cb7d1";
-    sha256 = "+Fdaw9EGyFGH9/DSeVJczS8gPzAOv+qn+1U20zQBBqQ=";
+    hash = "sha256-+Fdaw9EGyFGH9/DSeVJczS8gPzAOv+qn+1U20zQBBqQ=
+";
   };
 
   buildInputs = [

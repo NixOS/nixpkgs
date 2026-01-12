@@ -1,28 +1,29 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
-  setuptools,
-  wrapPython,
+  python3Packages,
   makeWrapper,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "Tautulli";
   version = "2.16.0";
   format = "other";
 
-  pythonPath = [ setuptools ];
+  pythonPath = [
+    python3Packages.setuptools
+  ];
+
   nativeBuildInputs = [
-    wrapPython
+    python3Packages.wrapPython
     makeWrapper
   ];
 
   src = fetchFromGitHub {
     owner = "Tautulli";
-    repo = pname;
-    tag = "v${version}";
-    sha256 = "sha256-nqSqWRst+gx9aZ2Ko+/tKzpQX7wuU4Bn3vLR5F87aJA=";
+    repo = "Tautulli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nqSqWRst+gx9aZ2Ko+/tKzpQX7wuU4Bn3vLR5F87aJA=";
   };
 
   installPhase = ''
@@ -32,7 +33,7 @@ buildPythonApplication rec {
     cp -R contrib data lib plexpy Tautulli.py CHANGELOG.md $out/libexec/tautulli
 
     echo "master" > $out/libexec/tautulli/branch.txt
-    echo "v${version}" > $out/libexec/tautulli/version.txt
+    echo "v${finalAttrs.version}" > $out/libexec/tautulli/version.txt
 
     # Can't just symlink to the main script, since it uses __file__ to
     # import bundled packages and manage the service
@@ -58,6 +59,6 @@ buildPythonApplication rec {
     homepage = "https://tautulli.com/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rhoriguchi ];
+    maintainers = [ lib.maintainers.rhoriguchi ];
   };
-}
+})

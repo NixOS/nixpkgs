@@ -1,27 +1,25 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  evdev,
-  pyudev,
+  python3Packages,
   udevCheckHook,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "persistent-evdev";
   version = "unstable-2022-05-07";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "aiberia";
-    repo = pname;
+    repo = "persistent-evdev";
     rev = "52bf246464e09ef4e6f2e1877feccc7b9feba164";
-    sha256 = "d0i6DL/qgDELet4ew2lyVqzd9TApivRxL3zA3dcsQXY=";
+    hash = "sha256-d0i6DL/qgDELet4ew2lyVqzd9TApivRxL3zA3dcsQXY=";
   };
 
-  propagatedBuildInputs = [
-    evdev
-    pyudev
+  dependencies = [
+    python3Packages.evdev
+    python3Packages.pyudev
   ];
 
   nativeBuildInputs = [
