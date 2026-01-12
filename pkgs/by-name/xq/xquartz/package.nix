@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xrdb,
   xrandr,
   xpr,
   xprop,
@@ -190,7 +191,7 @@ let
     xpr
     xprop
     xrandr
-    xorg.xrdb
+    xrdb
     xorg.xrefresh
     xorg.xset
     xorg.xsetroot
@@ -248,7 +249,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/etc/X11/xinit/xinitrc \
       --replace ${xinit} $out \
       --replace xmodmap ${xmodmap}/bin/xmodmap \
-      --replace xrdb ${xorg.xrdb}/bin/xrdb
+      --replace xrdb ${xrdb}/bin/xrdb
 
     mkdir -p $out/etc/X11/xinit/xinitrc.d
 
