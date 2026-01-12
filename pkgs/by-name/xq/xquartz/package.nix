@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xwud,
   xwininfo,
   xwd,
   xvinfo,
@@ -204,7 +205,7 @@ let
     xvinfo
     xwd
     xwininfo
-    xorg.xwud
+    xwud
   ];
 in
 stdenv.mkDerivation {
