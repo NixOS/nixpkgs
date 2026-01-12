@@ -9,6 +9,7 @@
   xdotool,
   unclutter,
   xorg,
+  xkbutils,
   pulseaudio,
   xprintidle-ng,
 }:
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     xprintidle-ng
     xdotool
     xorg.xmodmap
-    xorg.xkbutils
+    xkbutils
     unclutter
   ];
 

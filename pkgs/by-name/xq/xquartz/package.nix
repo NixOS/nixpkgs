@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xkbutils,
   xkbevd,
   xkbcomp,
   xinput,
@@ -172,7 +173,7 @@ let
     xinput
     xkbcomp
     xkbevd
-    xorg.xkbutils
+    xkbutils
     xorg.xkill
     xorg.xlsatoms
     xorg.xlsclients
