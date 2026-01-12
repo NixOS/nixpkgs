@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xdriinfo,
   xdpyinfo,
   xdm,
   xcursorgen,
@@ -153,7 +154,7 @@ let
     xcursorgen
     xdm
     xdpyinfo
-    xorg.xdriinfo
+    xdriinfo
     xorg.xev
     xorg.xeyes
     xorg.xfs
