@@ -16,7 +16,7 @@
   libpng,
   libvorbis,
   libxxf86dga,
-  libXxf86misc,
+  libxxf86misc,
   libXxf86vm,
   openal,
   libGLU,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     libpng
     libvorbis
     libxxf86dga
-    libXxf86misc
+    libxxf86misc
     libXxf86vm
     openal
     libGLU

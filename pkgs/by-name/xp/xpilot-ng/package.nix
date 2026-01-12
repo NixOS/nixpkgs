@@ -12,7 +12,7 @@
   SDL_ttf,
   SDL_image,
   zlib,
-  libXxf86misc,
+  libxxf86misc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpilot-ng";
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     expat
     zlib
-    libXxf86misc
+    libxxf86misc
   ];
 
   patches = [

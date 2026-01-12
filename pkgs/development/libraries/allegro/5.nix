@@ -28,7 +28,7 @@
   libxpm,
   libxt,
   libxxf86dga,
-  libXxf86misc,
+  libxxf86misc,
   libXxf86vm,
   openal,
   physfs,
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     libxpm
     libxt
     libxxf86dga
-    libXxf86misc
+    libxxf86misc
     libXxf86vm
     xorgproto
   ]
