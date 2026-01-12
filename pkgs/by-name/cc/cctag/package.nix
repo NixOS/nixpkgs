@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
 
   cmake,
@@ -9,9 +9,11 @@
   opencv,
   onetbb,
 
-  avx2Support ? stdenv.hostPlatform.avx2Support,
+  avx2Support ? clangStdenv.hostPlatform.avx2Support,
 }:
-
+let
+  stdenv = clangStdenv;
+in
 stdenv.mkDerivation rec {
   pname = "cctag";
   version = "1.0.4";

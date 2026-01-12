@@ -6642,10 +6642,6 @@ with pkgs;
 
   ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
 
-  cctag = callPackage ../development/libraries/cctag {
-    stdenv = clangStdenv;
-  };
-
   ceedling = callPackage ../development/tools/ceedling { };
 
   celt = callPackage ../development/libraries/celt { };
