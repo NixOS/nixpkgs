@@ -5,6 +5,7 @@
   makeWrapper,
   nx-libs,
   xorg,
+  xdpyinfo,
   xauth,
   libxcvt,
   getopt,
@@ -48,7 +49,7 @@ stdenv.mkDerivation {
           mount
           iproute2
           nx-libs
-          xorg.xdpyinfo
+          xdpyinfo
           xorg.xhost
           xorg.xinit
           python3

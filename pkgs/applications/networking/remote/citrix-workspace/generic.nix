@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  xdpyinfo,
   libxcb,
   zlib,
 
@@ -223,7 +224,7 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libXtst
     libxcb
-    xorg.xdpyinfo
+    xdpyinfo
     xorg.xprop
   ];
 

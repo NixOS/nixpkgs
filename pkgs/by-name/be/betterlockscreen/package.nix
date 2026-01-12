@@ -17,6 +17,7 @@
   imagemagick,
   procps,
   xorg,
+  xdpyinfo,
 }:
 
 let
@@ -30,7 +31,7 @@ let
     gnused
     imagemagick
     procps
-    xorg.xdpyinfo
+    xdpyinfo
     xorg.xrandr
     xorg.xset
   ]

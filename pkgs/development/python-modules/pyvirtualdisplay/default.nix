@@ -5,6 +5,7 @@
   fetchPypi,
   replaceVars,
   xorg,
+  xdpyinfo,
   xauth,
 
   # build-system
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./paths.patch {
       xauth = lib.getExe xauth;
-      xdpyinfo = lib.getExe xorg.xdpyinfo;
+      xdpyinfo = lib.getExe xdpyinfo;
     })
   ];
 

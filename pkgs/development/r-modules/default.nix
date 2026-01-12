@@ -1316,7 +1316,7 @@ let
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [
       which
-      xorg.xdpyinfo
+      xdpyinfo
     ];
     tfevents = [ pkgs.protobuf ];
     rsvg = [ pkgs.librsvg.dev ];

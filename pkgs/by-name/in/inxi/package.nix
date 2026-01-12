@@ -26,6 +26,7 @@
   withRecommendedDisplayInformationPrograms ? withRecommends,
   mesa-demos,
   xorg,
+  xdpyinfo,
 }:
 
 let
@@ -48,7 +49,7 @@ let
   ];
   recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms [
     mesa-demos
-    xorg.xdpyinfo
+    xdpyinfo
     xorg.xprop
     xorg.xrandr
   ];

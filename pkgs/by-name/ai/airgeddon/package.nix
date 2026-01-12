@@ -18,6 +18,7 @@
   # X11 Front
   xterm,
   xorg,
+  xdpyinfo,
   # what the author calls "Internals"
   usbutils,
   wget,
@@ -109,7 +110,7 @@ let
   ++ lib.optionals supportX11 [
     xterm
     xorg.xset
-    xorg.xdpyinfo
+    xdpyinfo
   ];
 in
 stdenv.mkDerivation rec {

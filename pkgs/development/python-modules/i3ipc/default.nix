@@ -13,6 +13,7 @@
   pytest-xvfb,
   i3,
   xorg,
+  xdpyinfo,
 }:
 
 buildPythonPackage rec {
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xvfb
     i3
-    xorg.xdpyinfo
+    xdpyinfo
     xorg.xvfb
   ];
 
