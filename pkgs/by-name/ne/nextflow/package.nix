@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # to be reverted for this specific use case.
     substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
       --replace-fail "['/bin/bash'," "['${bash}/bin/bash'," \
+      --replace-fail '? "/bin/bash"' '? "'${bash}'/bin/bash"' \
       --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
                 launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
   '';
