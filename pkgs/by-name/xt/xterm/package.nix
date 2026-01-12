@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  luit,
   ncurses,
   freetype,
   fontconfig,
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     ncurses
     freetype
     xorg.libXft
-    xorg.luit
+    luit
   ];
 
   configureFlags = [
