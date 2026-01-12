@@ -659,7 +659,7 @@ rec {
   pygmentex = python3Packages.buildPythonApplication rec {
     pname = "pygmentex";
     inherit (src) version;
-    format = "other";
+    pyproject = false;
 
     src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
 

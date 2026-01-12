@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
   version = "1.15";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "phillipberndt";

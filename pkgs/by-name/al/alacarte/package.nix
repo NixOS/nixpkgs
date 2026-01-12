@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-U3shnQ1GlDvOQFfjYVfAhCVRVQpTyLwEzHqKIbBChas=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     autoconf

@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-fqhi4K8Ceh8Rs0ExteCfAuVfEamFjMCjCFm6DRAJDmI=";
   };
 
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs = with python3Packages; [
     broadlink

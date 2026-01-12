@@ -47,7 +47,7 @@ let
       hash = "sha256-6NkgyDw4xHXY6XO+YHYKSdw1w3ldZL1oduVq26Yi5cs=";
     };
 
-    format = "other";
+    pyproject = false;
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 

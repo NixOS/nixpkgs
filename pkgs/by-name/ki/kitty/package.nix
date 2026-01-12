@@ -52,7 +52,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
   version = "0.45.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";

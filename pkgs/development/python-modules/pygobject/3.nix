@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "dev"
   ];
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";

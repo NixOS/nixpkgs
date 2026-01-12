@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   pname = "syncplay";
   version = "1.7.4";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Syncplay";

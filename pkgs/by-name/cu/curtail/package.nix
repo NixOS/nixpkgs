@@ -23,7 +23,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
   version = "1.14.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Huluti";

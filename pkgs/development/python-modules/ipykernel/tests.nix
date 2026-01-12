@@ -15,7 +15,7 @@
 buildPythonPackage {
   pname = "ipykernel-tests";
   inherit (ipykernel) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

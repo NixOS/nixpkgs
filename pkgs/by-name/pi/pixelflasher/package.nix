@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pixelflasher";
   version = "8.9.1.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "badabing2005";

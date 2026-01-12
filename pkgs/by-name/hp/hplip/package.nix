@@ -74,7 +74,7 @@ in
 
 python3Packages.buildPythonApplication {
   inherit pname version;
-  format = "other";
+  pyproject = false;
 
   srcs = [ src ] ++ lib.optional withPlugin plugin;
 

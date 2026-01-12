@@ -18,7 +18,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pybluez ];
 
-  format = "other";
+  pyproject = false;
 
   installPhase = ''
     mkdir -p $out/bin
