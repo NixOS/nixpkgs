@@ -5,6 +5,7 @@
   makeWrapper,
   nx-libs,
   xorg,
+  xinit,
   xhost,
   xdpyinfo,
   xauth,
@@ -52,7 +53,7 @@ stdenv.mkDerivation {
           nx-libs
           xdpyinfo
           xhost
-          xorg.xinit
+          xinit
           python3
           jq
           libxcvt

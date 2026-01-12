@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xinit,
   xhost,
   xgamma,
   xfs,
@@ -198,7 +199,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    cp -rT ${xorg.xinit} $out
+    cp -rT ${xinit} $out
     chmod -R u+w $out
     cp -rT ${xorg.xorgserver} $out
     chmod -R u+w $out
@@ -211,9 +212,9 @@ stdenv.mkDerivation {
     cp ${fontsConf} $fontsConfPath
 
     substituteInPlace $out/bin/startx \
-      --replace "bindir=${xorg.xinit}/bin" "bindir=$out/bin" \
+      --replace "bindir=${xinit}/bin" "bindir=$out/bin" \
       --replace 'defaultserver=${xorg.xorgserver}/bin/X' "defaultserver=$out/bin/Xquartz" \
-      --replace "${xorg.xinit}" "$out" \
+      --replace "${xinit}" "$out" \
       --replace "${xorg.xorgserver}" "$out" \
       --replace "eval xinit" "eval $out/bin/xinit" \
       --replace "sysclientrc=/etc/X11/xinit/xinitrc" "sysclientrc=$out/etc/X11/xinit/xinitrc"
@@ -233,7 +234,7 @@ stdenv.mkDerivation {
     EOF
 
     substituteInPlace $out/etc/X11/xinit/xinitrc \
-      --replace ${xorg.xinit} $out \
+      --replace ${xinit} $out \
       --replace xmodmap ${xorg.xmodmap}/bin/xmodmap \
       --replace xrdb ${xorg.xrdb}/bin/xrdb
 
@@ -252,7 +253,7 @@ stdenv.mkDerivation {
     chmod +x $out/etc/X11/xinit/xinitrc.d/99-quartz-wm.sh
 
     substituteInPlace $out/etc/X11/xinit/privileged_startx.d/20-font_cache \
-      --replace ${xorg.xinit} $out
+      --replace ${xinit} $out
 
     cp ${./font_cache} $out/bin/font_cache
     substituteInPlace $out/bin/font_cache \

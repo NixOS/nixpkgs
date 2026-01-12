@@ -15,6 +15,7 @@
   gnugrep,
   findutils,
   xorg,
+  xinit,
   xauth,
   setxkbmap,
   net-tools,
@@ -89,7 +90,7 @@ let
     openssh
     sshfs
     xauth
-    xorg.xinit
+    xinit
     xorg.xrandr
     xorg.xmodmap
     xorg.xwininfo

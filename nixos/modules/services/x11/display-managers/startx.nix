@@ -100,7 +100,7 @@ in
       '';
     };
 
-    environment.systemPackages = with pkgs; [ xorg.xinit ];
+    environment.systemPackages = with pkgs; [ xinit ];
 
   };
 
