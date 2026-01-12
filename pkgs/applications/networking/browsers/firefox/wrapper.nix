@@ -13,6 +13,7 @@
   ## various stuff that can be plugged in
   ffmpeg_7,
   xorg,
+  libxscrnsaver,
   libxext,
   libx11,
   alsa-lib,
@@ -101,7 +102,7 @@ let
             libva
             libgbm
             libnotify
-            xorg.libXScrnSaver
+            libxscrnsaver
             cups
             pciutils
             vulkan-loader

@@ -25,7 +25,7 @@
   libpulseaudio,
   libuuid,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxdamage
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libXtst
     libxcb
     libxshmfence
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     libxcb
     pango
     systemd
-    libXScrnSaver
+    libxscrnsaver
     libappindicator-gtk3
     libdbusmenu
   ];

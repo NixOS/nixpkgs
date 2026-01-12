@@ -18,6 +18,7 @@
 
   # Unreal Engine 4 Dependencies
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
 
     # ue4
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxau
     libxcursor
     libxext

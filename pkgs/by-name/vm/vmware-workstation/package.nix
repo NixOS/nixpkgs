@@ -20,6 +20,7 @@
   libGL,
   numactl,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -132,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxrandr
     libxrender
-    xorg.libXScrnSaver
+    libxscrnsaver
     xorg.libXtst
   ];
 

@@ -10,6 +10,7 @@
   libvpx,
   libxslt,
   xorg,
+  libxscrnsaver,
   libxdamage,
   minizip,
   nss,
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     libevent
     libvpx
     libxslt
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxdamage
     xorg.libXtst
     minizip

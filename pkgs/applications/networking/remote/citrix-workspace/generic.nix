@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxmu,
   libxinerama,
@@ -209,7 +210,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     (lib.getLib systemd)
     woff2
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxaw
     libxmu
     xorg.libXtst
@@ -224,7 +225,7 @@ stdenv.mkDerivation rec {
     pcsclite
 
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxext
     libxfixes
     libxinerama

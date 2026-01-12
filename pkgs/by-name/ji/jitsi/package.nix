@@ -13,6 +13,7 @@
   libpulseaudio,
   openssl,
   xorg,
+  libxscrnsaver,
   libxext,
   libx11,
 }:
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     openssl
     libx11
     libxext
-    xorg.libXScrnSaver
+    libxscrnsaver
     xorg.libXv
   ];
 

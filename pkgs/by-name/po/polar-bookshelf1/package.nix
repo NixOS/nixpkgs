@@ -19,7 +19,7 @@
   gsettings-desktop-schemas,
   gtk3,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

@@ -14,6 +14,7 @@
   imagemagick,
   twemoji-color-font,
   xorg,
+  libxscrnsaver,
   libxcursor,
   libx11,
   libsodium,
@@ -55,7 +56,7 @@ mkDerivation rec {
     qtwebsockets
     qtimageformats
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcursor
     xorg.xkeyboardconfig
   ];

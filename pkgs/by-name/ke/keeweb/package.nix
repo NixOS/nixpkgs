@@ -23,7 +23,7 @@
   libxcomposite,
   libxext,
   libxrandr,
-  libXScrnSaver,
+  libxscrnsaver,
   libXtst,
   libxshmfence,
 }:
@@ -59,7 +59,7 @@ let
     libxcomposite
     libxext
     libxrandr
-    libXScrnSaver
+    libxscrnsaver
     libXtst
     libxshmfence
     gnome-keyring

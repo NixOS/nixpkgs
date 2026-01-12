@@ -27,7 +27,7 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   screenSaverSupport ? true,
-  libXScrnSaver,
+  libxscrnsaver,
   vdpauSupport ? false,
   libvdpau,
   cddaSupport ? !stdenv.hostPlatform.isDarwin,
@@ -167,7 +167,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional x264Support x264
   ++ lib.optional pulseSupport libpulseaudio
-  ++ lib.optional screenSaverSupport libXScrnSaver
+  ++ lib.optional screenSaverSupport libxscrnsaver
   ++ lib.optional lameSupport lame
   ++ lib.optional vdpauSupport libvdpau
   ++ lib.optional speexSupport speex

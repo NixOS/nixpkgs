@@ -8,7 +8,7 @@
   makeWrapper,
   libnotify,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxext,
   libXtst,
   libuuid,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libnotify
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxext
     libXtst
     libuuid

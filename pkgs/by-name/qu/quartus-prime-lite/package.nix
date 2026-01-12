@@ -54,7 +54,7 @@ buildFHSEnv rec {
       libsm
       libxau
       libxdmcp
-      xorg.libXScrnSaver
+      libxscrnsaver
       libudev0-shim
       bzip2
       brotli

@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -73,7 +74,7 @@ let
     libxcomposite
     libxfixes
     libxrender
-    xorg.libXScrnSaver
+    libxscrnsaver
   ];
 in
 stdenv.mkDerivation rec {

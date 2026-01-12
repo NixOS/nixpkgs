@@ -150,7 +150,7 @@ buildFHSEnv {
       xorg.libXtst
 
       # for running Electron before 10.0.0 inside
-      xorg.libXScrnSaver
+      libxscrnsaver
 
       # for running Electron before 8.0.0 inside
       libuuid

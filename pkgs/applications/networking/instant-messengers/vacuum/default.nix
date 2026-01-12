@@ -12,7 +12,7 @@
   openssl,
   xorgproto,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   xz,
   zlib,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     openssl
     xorgproto
     libx11
-    libXScrnSaver
+    libxscrnsaver
     xz
     zlib
   ];

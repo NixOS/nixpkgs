@@ -35,6 +35,7 @@
   systemd,
   udev,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -75,7 +76,7 @@ let
       nss
       pango
       libx11
-      xorg.libXScrnSaver
+      libxscrnsaver
       libxcomposite
       libxcursor
       libxdamage

@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -92,7 +93,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    xorg.libXScrnSaver
+    libxscrnsaver
     xorg.libXtst
     makeWrapper
     wrapGAppsHook3

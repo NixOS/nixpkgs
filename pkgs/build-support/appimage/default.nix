@@ -163,7 +163,7 @@ rec {
         libxdamage
         libxcursor
         libxrender
-        xorg.libXScrnSaver
+        libxscrnsaver
         xorg.libXxf86vm
         libxi
         libsm

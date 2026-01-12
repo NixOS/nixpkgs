@@ -13,7 +13,7 @@
   dbus-glib,
   libXtst,
   libxdamage,
-  libXScrnSaver,
+  libxscrnsaver,
 }:
 
 let
@@ -48,7 +48,7 @@ let
       dbus-glib
       libXtst
       libxdamage
-      libXScrnSaver
+      libxscrnsaver
     ];
 
     nativeBuildInputs = [

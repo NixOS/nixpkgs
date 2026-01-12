@@ -22,7 +22,7 @@
   libxrender,
   libx11,
   libXtst,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcb,
   nss,
   nspr,
@@ -63,7 +63,7 @@ let
     libxrender
     libx11
     libXtst
-    libXScrnSaver
+    libxscrnsaver
     nss
     nspr
     alsa-lib

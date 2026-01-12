@@ -10,7 +10,7 @@
   qtwebengine,
   libidn,
   qca-qt5,
-  libXScrnSaver,
+  libxscrnsaver,
   hunspell,
 }:
 
@@ -38,7 +38,7 @@ mkDerivation rec {
     qtwebengine
     libidn
     qca-qt5
-    libXScrnSaver
+    libxscrnsaver
     hunspell
   ];
 

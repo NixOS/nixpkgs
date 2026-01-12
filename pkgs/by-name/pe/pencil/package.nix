@@ -24,6 +24,7 @@
   nss,
   pango,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -59,7 +60,7 @@ let
     pango
     libx11
     libxcb
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

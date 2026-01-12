@@ -14,7 +14,7 @@
   lcms2,
   libGL,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxext,
   libxpresent,
   libxrandr,
@@ -222,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxrandr
     libxpresent
-    libXScrnSaver
+    libxscrnsaver
   ]
   ++ lib.optionals zimgSupport [ zimg ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];

@@ -21,6 +21,7 @@
   libGL,
   wayland,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -61,7 +62,7 @@ let
     libnotify
     libgbm
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

@@ -6,7 +6,7 @@
   gccmakedep,
   libx11,
   libxext,
-  libXScrnSaver,
+  libxscrnsaver,
   xorgproto,
   nixosTests,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxext
-    libXScrnSaver
+    libxscrnsaver
     xorgproto
   ];
 

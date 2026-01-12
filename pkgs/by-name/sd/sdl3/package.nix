@@ -19,7 +19,7 @@
   libgbm,
   libx11,
   libxcb,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcursor,
   libxext,
   libxfixes,
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals x11Support [
       libx11
       libxcb
-      libXScrnSaver
+      libxscrnsaver
       libxcursor
       libxext
       libxfixes

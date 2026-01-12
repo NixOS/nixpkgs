@@ -13,6 +13,7 @@
   cairo,
   gdk-pixbuf,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -87,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
         xorg_sys_opengl
         util-linux
         libxrandr
-        xorg.libXScrnSaver
+        libxscrnsaver
         alsa-lib
         dbus.lib
         at-spi2-atk

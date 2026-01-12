@@ -13,6 +13,7 @@
   nspr,
   systemd,
   xorg,
+  libxscrnsaver,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     nss
     nspr
-    xorg.libXScrnSaver
+    libxscrnsaver
     xorg.libXtst
     systemd
   ];

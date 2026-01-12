@@ -6,6 +6,7 @@
   undmg,
   autoPatchelfHook,
   xorg,
+  libxscrnsaver,
   libxdamage,
   libxkbfile,
   gtk3,
@@ -66,7 +67,7 @@ let
     buildInputs = [
       libxdamage
       xorg.libXtst
-      xorg.libXScrnSaver
+      libxscrnsaver
       libxkbfile
       gtk3
       nss

@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxmu,
@@ -132,7 +133,7 @@ stdenv.mkDerivation {
     libice
     libsm
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

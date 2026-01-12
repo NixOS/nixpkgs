@@ -6,7 +6,7 @@
   fetchzip,
   lib,
   libGL,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcursor,
   libxi,
   libxinerama,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     libGL
-    libXScrnSaver
+    libxscrnsaver
     libxcursor
     libxi
     libxinerama

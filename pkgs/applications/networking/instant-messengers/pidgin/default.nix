@@ -18,7 +18,7 @@
   lib,
   libice,
   libsm,
-  libXScrnSaver,
+  libxscrnsaver,
   libxext,
   libgcrypt,
   libgnt,
@@ -76,7 +76,7 @@ let
         gst_all_1.gstreamer
         libice
         libsm
-        libXScrnSaver
+        libxscrnsaver
         libxext
         libgnt
         libidn

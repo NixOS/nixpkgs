@@ -142,7 +142,7 @@ buildFHSEnv {
       libxinerama
       libxi
       libxrandr
-      xorg.libXScrnSaver
+      libxscrnsaver
       xorg.libXxf86vm
       libxau
       libxdmcp

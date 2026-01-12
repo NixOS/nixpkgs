@@ -13,7 +13,7 @@
   glib,
   gtk3,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -64,7 +64,7 @@ let
     nss
     pango
     stdenv.cc.cc
-    libXScrnSaver
+    libxscrnsaver
     libxcursor
     libxrender
     libXtst

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   glib,
   pkg-config,
-  xorg,
+  libxscrnsaver,
   libx11,
   dbus,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     dbus
   ];
 

@@ -22,7 +22,7 @@
   gtk4,
   qt6,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -113,7 +113,7 @@ let
     libx11
     libGL
     libxkbcommon
-    libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

@@ -34,6 +34,7 @@
   unzip,
   xdg-utils,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
     udev
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

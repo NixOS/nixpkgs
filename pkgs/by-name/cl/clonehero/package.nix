@@ -14,7 +14,7 @@
   libxinerama,
   libxkbcommon,
   libxrandr,
-  libXScrnSaver,
+  libxscrnsaver,
   libXxf86vm,
   udev,
   vulkan-loader, # (not used by default, enable in settings menu)
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxkbcommon
     libxrandr
-    libXScrnSaver
+    libxscrnsaver
     libXxf86vm
     udev
     vulkan-loader

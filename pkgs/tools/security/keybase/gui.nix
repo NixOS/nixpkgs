@@ -23,6 +23,7 @@
   pango,
   systemd,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     pango
     systemd
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

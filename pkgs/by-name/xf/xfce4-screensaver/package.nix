@@ -15,7 +15,7 @@
   glib,
   gtk3,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxrandr,
   libwnck,
   libxfce4ui,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxrandr
     libwnck
     libxfce4ui

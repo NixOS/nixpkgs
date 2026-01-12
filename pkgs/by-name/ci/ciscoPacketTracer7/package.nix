@@ -19,7 +19,7 @@
   libxslt,
   nspr,
   nss,
-  xorg,
+  libxscrnsaver,
   libx11,
   libsm,
   libice,
@@ -71,7 +71,7 @@ let
       libice
       libsm
       libx11
-      xorg.libXScrnSaver
+      libxscrnsaver
     ];
 
     unpackPhase = ''

@@ -22,7 +22,7 @@
       libxcomposite
       libxcursor
       xorg.libXtst
-      xorg.libXScrnSaver
+      libxscrnsaver
     ]
   );
 }

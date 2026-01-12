@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -95,7 +96,7 @@ let
     libxi
     libxrandr
     libxrender
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxshmfence
     xorg.libXtst
     zlib

@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -98,7 +99,7 @@ let
     libxft
     libxcursor
     libxfixes
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxdamage
     xorg.libXtst

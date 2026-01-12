@@ -44,7 +44,7 @@ let
       libxcomposite
       libxfixes
       xorg.libXtst
-      xorg.libXScrnSaver
+      libxscrnsaver
       libice
       xorg.libXt
     ];

@@ -20,7 +20,7 @@
   readline,
   sqlite,
   autoAwaySupport ? true,
-  libXScrnSaver,
+  libxscrnsaver,
   libx11,
   notifySupport ? true,
   libnotify,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals autoAwaySupport [
-    libXScrnSaver
+    libxscrnsaver
     libx11
   ]
   ++ lib.optionals notifySupport [

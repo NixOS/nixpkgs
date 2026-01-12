@@ -27,6 +27,7 @@
   udev,
   libGL,
   xorg,
+  libxscrnsaver,
   libxfixes,
   libxdamage,
   libx11,
@@ -64,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nss
     pipewire
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxdamage
     libxfixes
     libxshmfence

@@ -20,7 +20,7 @@
   libdrm,
   libgbm,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libdrm
     libxdamage
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libXtst
     libxcb
     libxshmfence
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     nss
     libxcb
     pango
-    libXScrnSaver
+    libxscrnsaver
     udev
   ];
 

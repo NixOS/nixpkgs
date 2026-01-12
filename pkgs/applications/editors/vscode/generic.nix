@@ -7,7 +7,7 @@
   makeDesktopItem,
   unzip,
   libsecret,
-  libXScrnSaver,
+  libxscrnsaver,
   libxshmfence,
   buildPackages,
   at-spi2-atk,
@@ -232,7 +232,7 @@ stdenv.mkDerivation (
 
     buildInputs = [
       libsecret
-      libXScrnSaver
+      libxscrnsaver
       libxshmfence
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

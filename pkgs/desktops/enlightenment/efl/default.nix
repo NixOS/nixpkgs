@@ -54,6 +54,7 @@
   wayland-scanner,
   writeText,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -145,7 +146,7 @@ stdenv.mkDerivation rec {
     poppler
     util-linux
     wayland
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxdamage
     libxext

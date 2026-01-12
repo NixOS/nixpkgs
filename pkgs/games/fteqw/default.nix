@@ -16,7 +16,7 @@
   vulkan-headers,
   speex,
   libopus,
-  xorg,
+  libxscrnsaver,
   libxrandr,
   libxcursor,
   libGL,
@@ -48,7 +48,7 @@
         libopus
         libxrandr
         libxcursor
-        xorg.libXScrnSaver
+        libxscrnsaver
       ];
 
       postFixup = ''

@@ -9,7 +9,7 @@
   libtoxcore,
   libpthread-stubs,
   libxdmcp,
-  libXScrnSaver,
+  libxscrnsaver,
   ffmpeg,
   filter-audio,
   libexif,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libtoxcore
     libpthread-stubs
     libxdmcp
-    libXScrnSaver
+    libxscrnsaver
     ffmpeg
     filter-audio
     libexif

@@ -34,7 +34,7 @@
   libxfixes,
   libxrender,
   libXtst,
-  libXScrnSaver,
+  libxscrnsaver,
   nss,
   nspr,
   alsa-lib,
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

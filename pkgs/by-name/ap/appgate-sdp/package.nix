@@ -37,6 +37,7 @@
   systemd,
   xdg-utils,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -81,7 +82,7 @@ let
     stdenv.cc.cc
     systemd
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

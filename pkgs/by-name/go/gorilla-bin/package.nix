@@ -9,7 +9,7 @@
   freetype,
   fontconfig,
   libxrender,
-  libXScrnSaver,
+  libxscrnsaver,
   libxext,
 }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
         freetype
         fontconfig
         libxrender
-        libXScrnSaver
+        libxscrnsaver
         libxext
       ];
     in

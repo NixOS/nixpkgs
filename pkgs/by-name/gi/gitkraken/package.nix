@@ -27,7 +27,7 @@
   krb5,
   libGL,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -116,7 +116,7 @@ let
       libxi
       libxcb
       glib
-      libXScrnSaver
+      libxscrnsaver
       libxkbfile
       libXtst
       nss

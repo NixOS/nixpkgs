@@ -6,6 +6,7 @@
   autoPatchelfHook,
   dpkg,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -87,7 +88,7 @@ stdenv.mkDerivation (
       libxrender
       libx11
       xorg.libXtst
-      xorg.libXScrnSaver
+      libxscrnsaver
       libgbm
       gtk3
       atk

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxext,
   gnulib,
   autoconf,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxext
   ];
 

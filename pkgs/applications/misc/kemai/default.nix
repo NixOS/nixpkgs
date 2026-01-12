@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # buildInputs
-  libXScrnSaver,
+  libxscrnsaver,
   magic-enum,
 
   # nativeBuildInputs
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    libXScrnSaver
+    libxscrnsaver
     magic-enum
     qtbase
     qtconnectivity

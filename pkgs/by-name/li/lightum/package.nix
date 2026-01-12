@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxext,
   glib,
   dbus,
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     dbus
     glib
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxext
     systemd
   ];

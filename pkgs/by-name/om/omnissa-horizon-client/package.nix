@@ -111,7 +111,7 @@ let
           libxkbfile
           libxrandr
           libxrender
-          xorg.libXScrnSaver
+          libxscrnsaver
           xorg.libXtst
           zlib
           libxml2_13

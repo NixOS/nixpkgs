@@ -12,7 +12,7 @@
   libtiff,
   libjpeg,
   libpng,
-  libXScrnSaver,
+  libxscrnsaver,
   writeText,
   libxdmcp,
   libxau,
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     libxinerama
     libxext
     libxrender
-    libXScrnSaver
+    libxscrnsaver
     libxdmcp
     libxau
     openssl

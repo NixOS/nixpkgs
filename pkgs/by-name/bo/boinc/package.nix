@@ -19,7 +19,7 @@
   sqlite,
   gtk3,
   patchelf,
-  libXScrnSaver,
+  libxscrnsaver,
   libnotify,
   libx11,
   libxcb,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libjpeg
     wxGTK32
     gtk3
-    libXScrnSaver
+    libxscrnsaver
     libnotify
     libx11
     libxcb

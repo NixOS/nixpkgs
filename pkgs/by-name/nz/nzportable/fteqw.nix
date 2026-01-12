@@ -15,6 +15,7 @@
   gnutls,
   libGL,
   xorg,
+  libxscrnsaver,
   libxrandr,
   libxi,
   libxcursor,
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxrandr
     libxcursor
-    xorg.libXScrnSaver
+    libxscrnsaver
     dbus
     fontconfig
     libjpeg

@@ -16,7 +16,7 @@
   libjpeg,
   libxmu,
   libxdmcp,
-  libXScrnSaver,
+  libxscrnsaver,
   bdftopcf,
   ncompress,
   mkfontscale,
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libxmu
     libxdmcp
-    libXScrnSaver
+    libxscrnsaver
     tcl
     libxaw
     ksh

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   SDL2,
-  xorg,
+  libxscrnsaver,
   libxrandr,
   libxi,
   libxfixes,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libxext
     libxi
-    xorg.libXScrnSaver
+    libxscrnsaver
   ];
 
   # upstream is an error-prone make/build script

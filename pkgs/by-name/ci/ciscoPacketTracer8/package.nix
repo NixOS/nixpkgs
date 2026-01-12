@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -92,7 +93,7 @@ let
       libice
       libsm
       libx11
-      xorg.libXScrnSaver
+      libxscrnsaver
       libxcomposite
       libxcursor
       libxdamage

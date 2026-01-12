@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
         libxfixes
         libxcb
         libxshmfence
-        xorg.libXScrnSaver
+        libxscrnsaver
         xorg.libXtst
 
         # Unity Hub additional dependencies

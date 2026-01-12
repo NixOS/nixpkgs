@@ -10,7 +10,7 @@
   libxmu,
   libxrandr,
   libxext,
-  libXScrnSaver,
+  libxscrnsaver,
   pam,
   apacheHttpd,
   pamtester,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libxmu
     libxrandr
     libxext
-    libXScrnSaver
+    libxscrnsaver
     pam
     apacheHttpd
     pamtester

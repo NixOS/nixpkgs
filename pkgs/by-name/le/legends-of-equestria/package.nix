@@ -27,7 +27,7 @@
   vulkan-loader,
   libasyncns,
   pango,
-  xorg,
+  libxscrnsaver,
   libxrender,
   libxrandr,
   libxi,
@@ -88,7 +88,7 @@ let
     libxinerama
     libxi
     libxrandr
-    xorg.libXScrnSaver
+    libxscrnsaver
   ];
 in
 stdenv.mkDerivation {

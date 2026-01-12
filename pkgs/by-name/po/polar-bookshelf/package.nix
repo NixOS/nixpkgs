@@ -25,7 +25,7 @@
   libxfixes,
   libxrender,
   libXtst,
-  libXScrnSaver,
+  libxscrnsaver,
   nss,
   nspr,
   alsa-lib,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxrender
     libXtst
-    libXScrnSaver
+    libxscrnsaver
     nss
     nspr
     alsa-lib

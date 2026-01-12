@@ -21,7 +21,7 @@
   lib,
   libGL,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -96,7 +96,7 @@ let
     gnutls
     libGL
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxcomposite
     libxcursor
     libxdamage

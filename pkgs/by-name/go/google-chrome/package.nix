@@ -36,7 +36,7 @@
   libxkbcommon,
   libxrandr,
   libxrender,
-  libXScrnSaver,
+  libxscrnsaver,
   libxshmfence,
   libXtst,
   libgbm,
@@ -141,7 +141,7 @@ let
     libxkbcommon
     libxrandr
     libxrender
-    libXScrnSaver
+    libxscrnsaver
     libxshmfence
     libXtst
     libgbm

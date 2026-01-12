@@ -33,7 +33,7 @@
   libuuid,
   libva,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   libxcomposite,
   libxcursor,
   libxdamage,
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libxdamage
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libXtst
     libxcb
     libxshmfence
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxcb
       pango
       pipewire
-      libXScrnSaver
+      libxscrnsaver
       libappindicator-gtk3
       libdbusmenu
       wayland

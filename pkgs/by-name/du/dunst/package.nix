@@ -15,7 +15,7 @@
   gdk-pixbuf,
   glib,
   libx11,
-  libXScrnSaver,
+  libxscrnsaver,
   wayland,
   wayland-protocols,
   libxinerama,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withX11 [
     libx11
-    libXScrnSaver
+    libxscrnsaver
     libxinerama
     xorgproto
     libxrandr

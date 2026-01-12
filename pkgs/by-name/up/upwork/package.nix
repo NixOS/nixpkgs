@@ -33,7 +33,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXScrnSaver,
+  libxscrnsaver,
   libXtst,
   libgbm,
   nspr,
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    libXScrnSaver
+    libxscrnsaver
     libXtst
     libgbm
     nspr

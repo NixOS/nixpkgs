@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  xorg,
+  libxscrnsaver,
   libxext,
   libx11,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libXScrnSaver
+    libxscrnsaver
     libx11
     libxext
   ];

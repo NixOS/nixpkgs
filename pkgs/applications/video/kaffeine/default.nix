@@ -9,7 +9,7 @@
   libx11,
   kidletime,
   kdelibs4support,
-  libXScrnSaver,
+  libxscrnsaver,
   wrapQtAppsHook,
   qtx11extras,
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     kidletime
     qtx11extras
     kdelibs4support
-    libXScrnSaver
+    libxscrnsaver
   ];
 
   meta = {

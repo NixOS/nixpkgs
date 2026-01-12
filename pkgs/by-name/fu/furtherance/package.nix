@@ -7,7 +7,7 @@
   libxkbcommon,
   openssl,
   pkg-config,
-  xorg,
+  libxscrnsaver,
   libxi,
   libxcursor,
   libx11,
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     libxkbcommon
     libx11
-    xorg.libXScrnSaver
+    libxscrnsaver
     libxcursor
     libxi
     vulkan-loader
