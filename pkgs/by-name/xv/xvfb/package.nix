@@ -22,7 +22,7 @@
   pixman,
   xcbutil,
   libxcb-image,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutilrenderutil,
   xcbutilwm,
   xkbcomp,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     xcbutil
     libxcb-image
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutilrenderutil
     xcbutilwm
     xorgproto

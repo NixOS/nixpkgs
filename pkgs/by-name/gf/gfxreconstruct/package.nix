@@ -11,7 +11,7 @@
   libxcb,
   lz4,
   vulkan-loader,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
   zstd,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     lz4
     python3
     wayland
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
     zstd
   ];

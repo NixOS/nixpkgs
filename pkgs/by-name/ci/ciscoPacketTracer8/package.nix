@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libxcb-keysyms,
   libxcb-image,
   libxtst,
   libxscrnsaver,
@@ -107,7 +108,7 @@ let
       libxtst
       libxcb
       libxcb-image
-      xorg.xcbutilkeysyms
+      libxcb-keysyms
       xorg.xcbutilrenderutil
       xorg.xcbutilwm
     ];

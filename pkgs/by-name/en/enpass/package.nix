@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libxcb-keysyms,
   libxcb-image,
   libxscrnsaver,
   libxrender,
@@ -74,7 +75,7 @@ let
     cups
     xorg.xcbutilwm # libxcb-icccm.so.4
     libxcb-image # libxcb-image.so.0
-    xorg.xcbutilkeysyms # libxcb-keysyms.so.1
+    libxcb-keysyms # libxcb-keysyms.so.1
     xorg.xcbutilrenderutil # libxcb-render-util.so.0
     xz
     libxkbcommon

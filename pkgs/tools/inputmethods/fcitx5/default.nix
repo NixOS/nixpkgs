@@ -28,7 +28,7 @@
   libxkbcommon,
   libthai,
   libdatrie,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutil,
   xcbutilwm,
   xcb-imdkit,
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     xcbutil
     xcbutilwm
-    xcbutilkeysyms
+    libxcb-keysyms
     xcb-imdkit
     xkeyboard_config
     libxkbfile

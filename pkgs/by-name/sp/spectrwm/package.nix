@@ -9,7 +9,7 @@
   libxft,
   libxt,
   xcbutil,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutilwm,
   writeShellScript,
   curl,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
     libxt
     xcbutil
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutilwm
     libbsd
   ];

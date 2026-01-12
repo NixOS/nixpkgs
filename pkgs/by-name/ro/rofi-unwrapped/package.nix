@@ -26,7 +26,7 @@
   xcb-imdkit,
   xcbutil,
   xcb-util-cursor,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutilwm,
   xcbutilxrm,
   waylandSupport ? true,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcb-imdkit
     xcbutil
     xcb-util-cursor
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutilwm
     xcbutilxrm
   ];

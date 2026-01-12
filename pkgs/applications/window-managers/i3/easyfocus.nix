@@ -5,7 +5,7 @@
   pkg-config,
   xorgproto,
   libxcb,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   libx11,
   i3ipc-glib,
   glib,
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libxcb
-    xcbutilkeysyms
+    libxcb-keysyms
     xorgproto
     libx11.dev
     i3ipc-glib

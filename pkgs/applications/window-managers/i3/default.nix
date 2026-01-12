@@ -8,7 +8,7 @@
   ninja,
   installShellFiles,
   libxcb,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutil,
   xcbutilwm,
   xcbutilxrm,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutil
     xcbutilwm
     xcbutilxrm

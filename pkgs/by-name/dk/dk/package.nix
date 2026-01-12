@@ -3,7 +3,7 @@
   stdenv,
   fetchFromBitbucket,
   xcbutil,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutilwm,
   xcb-util-cursor,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xcbutil
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutilwm
     xcb-util-cursor
   ];

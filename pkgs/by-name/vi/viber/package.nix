@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libxcb-keysyms,
   libxcb-image,
   libxtst,
   libxscrnsaver,
@@ -163,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxtst
     libxcb
     libxcb-image
-    xorg.xcbutilkeysyms
+    libxcb-keysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm
     xvidcore

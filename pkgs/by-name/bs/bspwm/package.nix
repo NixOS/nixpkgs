@@ -5,7 +5,7 @@
   libxcb,
   libxinerama,
   xcbutil,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutilwm,
   nixosTests,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxinerama
     xcbutil
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutilwm
   ];
 

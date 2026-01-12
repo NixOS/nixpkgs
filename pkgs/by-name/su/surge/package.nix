@@ -14,7 +14,7 @@
   libxkbcommon,
   xcbutil,
   libxcb-cursor,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zenity,
   curl,
   rsync,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     xcbutil
     libxcb-cursor
-    xcbutilkeysyms
+    libxcb-keysyms
     zenity
     curl
     rsync

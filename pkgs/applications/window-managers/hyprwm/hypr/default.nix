@@ -14,7 +14,7 @@
   pcre2,
   pkg-config,
   libxcb-cursor,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutilwm,
   xcbutil,
   xmodmap,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     pcre2
     libxcb-cursor
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutilwm
     xcbutil
   ];

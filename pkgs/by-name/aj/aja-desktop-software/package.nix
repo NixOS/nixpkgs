@@ -83,7 +83,7 @@ buildFHSEnv {
       libx11
       xorg.xcbutilwm
       libxcb-image
-      xorg.xcbutilkeysyms
+      libxcb-keysyms
       xorg.xcbutilrenderutil
       libsm
       libice

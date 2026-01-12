@@ -5,6 +5,7 @@
   libjack2,
   libsndfile,
   xorg,
+  libxcb-keysyms,
   libxcb-image,
   libxcb-cursor,
   libxdmcp,
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.xcbutil
     libxcb-cursor
     xorg.xcbutilrenderutil
-    xorg.xcbutilkeysyms
+    libxcb-keysyms
     libxcb-image
     libxkbcommon
     cairo

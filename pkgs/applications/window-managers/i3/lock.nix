@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   libxcb,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   libxcb-image,
   xcbutilxrm,
   pam,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libxcb
-    xcbutilkeysyms
+    libxcb-keysyms
     libxcb-image
     xcbutilxrm
     pam

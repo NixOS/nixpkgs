@@ -7,7 +7,7 @@
   cairo,
   libxkbcommon,
   libxcb-cursor,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   xcbutil,
   libxrandr,
   libxinerama,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libxkbcommon
     libxcb-cursor
-    xcbutilkeysyms
+    libxcb-keysyms
     xcbutil
     libxrandr
     libxinerama

@@ -193,7 +193,7 @@ rec {
         xorg.xcbutil
         xorg.xcbutilwm
         libxcb-image
-        xorg.xcbutilkeysyms
+        libxcb-keysyms
         xorg.xcbutilrenderutil
         libGLU
         libuuid

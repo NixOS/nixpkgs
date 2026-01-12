@@ -51,7 +51,7 @@
   libshout,
   ffmpeg_6,
   libmpeg2,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   lirc,
   lua5_2,
   taglib,
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     libshout
     ffmpeg_6
-    xcbutilkeysyms
+    libxcb-keysyms
     lirc
     lua5_2
     taglib

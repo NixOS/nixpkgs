@@ -83,7 +83,7 @@
   wayland-scanner,
   wrapGAppsHook3,
   writeShellScript,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
 
   chromecastSupport ? true,
@@ -193,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     systemdLibs
     taglib_1
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
   ]
   ++ optionals (!onlyLibVLC) [ live555 ]
