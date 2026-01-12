@@ -6,7 +6,7 @@
 }:
 buildGoModule {
   pname = "jqfmt";
-  version = "0-unstable-2025-07-28";
+  version = "0.1.0-unstable-2025-07-28";
 
   src = fetchFromGitHub {
     owner = "noperator";
