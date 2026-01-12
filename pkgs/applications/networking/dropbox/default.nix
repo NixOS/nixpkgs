@@ -68,7 +68,7 @@ buildFHSEnv {
       libxxf86vm
       libGL
       libxcb
-      xorg.xkeyboardconfig
+      xkeyboard-config
       curl
       dbus
       firefox-bin

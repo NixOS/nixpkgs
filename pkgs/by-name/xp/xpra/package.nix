@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  xkeyboard-config,
   libxtst,
   libxres,
   libxrender,
@@ -248,7 +249,7 @@ effectiveBuildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
-      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XPRA_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
       --set XORG_CONFIG_PREFIX ""
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${

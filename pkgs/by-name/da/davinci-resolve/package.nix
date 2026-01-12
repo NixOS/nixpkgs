@@ -9,7 +9,7 @@
   addDriverRunpath,
   dbus,
   libGLU,
-  xorg,
+  xkeyboard-config,
   libxcb-util,
   libxcb-wm,
   libxcb-render-util,
@@ -263,7 +263,7 @@ buildFHSEnv {
       libxcb-keysyms
       libxcb-render-util
       libxcb-wm
-      xorg.xkeyboardconfig
+      xkeyboard-config
       zlib
     ];
 

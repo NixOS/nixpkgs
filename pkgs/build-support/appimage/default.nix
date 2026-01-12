@@ -151,7 +151,7 @@ rec {
         gst_all_1.gst-plugins-ugly
         gst_all_1.gst-plugins-base
         libdrm
-        xorg.xkeyboardconfig
+        xkeyboard-config
         libpciaccess
 
         glib

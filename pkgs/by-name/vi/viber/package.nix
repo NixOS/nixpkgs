@@ -55,7 +55,7 @@
   twolame,
   wavpack,
   wayland,
-  xorg,
+  xkeyboard-config,
   libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/opt/viber/Viber $out/bin/viber \
       --set QT_QPA_PLATFORM "xcb" \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
-      --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
       --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
       --set QML2_IMPORT_PATH "$out/opt/viber/qml"
 

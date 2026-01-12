@@ -11,7 +11,7 @@
   libxml2,
   pkg-config,
   which,
-  xorg,
+  xkeyboard-config,
   libxtst,
   libxrandr,
   libxpm,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libxtst
     pixman
     xkbcomp
-    xorg.xkeyboardconfig
+    xkeyboard-config
     libtirpc
   ];
 

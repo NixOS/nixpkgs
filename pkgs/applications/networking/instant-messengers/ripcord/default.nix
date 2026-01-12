@@ -13,7 +13,7 @@
   desktop-file-utils,
   imagemagick,
   twemoji-color-font,
-  xorg,
+  xkeyboard-config,
   libxscrnsaver,
   libxcursor,
   libx11,
@@ -58,7 +58,7 @@ mkDerivation rec {
     libx11
     libxscrnsaver
     libxcursor
-    xorg.xkeyboardconfig
+    xkeyboard-config
   ];
 
   fontsConf = makeFontsConf {
@@ -89,7 +89,7 @@ mkDerivation rec {
       --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH ":" "${libxcursor}/lib" \
-      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --prefix QT_XKB_CONFIG_ROOT ":" "${xkeyboard-config}/share/X11/xkb" \
       --set RIPCORD_ALLOW_UPDATES 0
 
     runHook postInstall

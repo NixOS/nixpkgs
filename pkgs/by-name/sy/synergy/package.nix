@@ -21,7 +21,7 @@
   libxtst,
   libxrandr,
   libxinerama,
-  xkeyboardconfig,
+  xkeyboard-config,
   xinput,
   avahi-compat,
   libsForQt5,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
-      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard-config}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [

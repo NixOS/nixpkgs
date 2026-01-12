@@ -26,7 +26,7 @@
   libxcb-render-util,
   libxcb-wm,
   xkbcomp,
-  xkeyboardconfig,
+  xkeyboard-config,
   xorgproto,
   xtrans,
 }:
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-xquartz"
     "--disable-xwayland"
     "--with-xkb-bin-directory=${xkbcomp}/bin"
-    "--with-xkb-path=${xkeyboardconfig}/share/X11/xkb"
+    "--with-xkb-path=${xkeyboard-config}/share/X11/xkb"
     "--with-xkb-output=$out/share/X11/xkb/compiled"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "--without-dtrace";
