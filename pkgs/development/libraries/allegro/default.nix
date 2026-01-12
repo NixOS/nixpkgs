@@ -15,7 +15,7 @@
   zlib,
   libpng,
   libvorbis,
-  libXxf86dga,
+  libxxf86dga,
   libXxf86misc,
   libXxf86vm,
   openal,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     zlib
     libpng
     libvorbis
-    libXxf86dga
+    libxxf86dga
     libXxf86misc
     libXxf86vm
     openal

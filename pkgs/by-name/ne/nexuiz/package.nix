@@ -19,7 +19,7 @@
   libxpm,
   libxext,
   libXxf86vm,
-  libXxf86dga,
+  libxxf86dga,
   alsa-lib,
   # sdl
   SDL,
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     libxpm
     libxext
     libXxf86vm
-    libXxf86dga
+    libxxf86dga
     alsa-lib
     # sdl
     SDL

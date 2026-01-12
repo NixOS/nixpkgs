@@ -13,6 +13,7 @@
   ## various stuff that can be plugged in
   ffmpeg_7,
   xorg,
+  libxxf86dga,
   libxt,
   libxscrnsaver,
   libxext,
@@ -117,7 +118,7 @@ let
         ++ lib.optionals (cfg.enableQuakeLive or false) [
           stdenv.cc
           libx11
-          xorg.libXxf86dga
+          libxxf86dga
           xorg.libXxf86vm
           libxext
           libxt
