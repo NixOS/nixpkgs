@@ -9,14 +9,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "mlmmj";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "mlmmj";
     repo = "mlmmj";
     rev = "refs/tags/RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
-    hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
+    hash = "sha256-+JN8sGDsW5PGBSWRruLiWV4Z7x3WC15vqj9nAaiCTDI=";
   };
 
   nativeBuildInputs = [
