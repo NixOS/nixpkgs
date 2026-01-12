@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "darkman";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";
     rev = "v${version}";
-    hash = "sha256-Kpuuxxwn/huA5WwmnVGG0HowNBGyexDRpdUc3bNmB18=";
+    hash = "sha256-KkO0s+TY9dRf8sYkEdg8sLtIxuU/tXHGo0V+FpByAkA=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ buildGoModule rec {
       --replace-fail /usr/bin/darkman $out/bin/darkman
   '';
 
-  vendorHash = "sha256-QO+fz8m2rILKTokimf+v4x0lon5lZy7zC+5qjTMdcs0=";
+  vendorHash = "sha256-6wH2mE3pr4C4CoroNXd+OUjnOZ8xr7SrJfNCJX4t8Gs=";
   nativeBuildInputs = [ scdoc ];
 
   buildPhase = ''
