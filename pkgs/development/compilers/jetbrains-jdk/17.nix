@@ -14,7 +14,7 @@
 
   libxdamage,
   libXxf86vm,
-  libXrandr,
+  libxrandr,
   libxi,
   libxcursor,
   libXrender,
@@ -123,7 +123,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
       lib.makeLibraryPath [
         libxdamage
         libXxf86vm
-        libXrandr
+        libxrandr
         libxi
         libxcursor
         libXrender

@@ -13,7 +13,7 @@
 
   libxdamage,
   libXxf86vm,
-  libXrandr,
+  libxrandr,
   libxi,
   libxcursor,
   libXrender,
@@ -137,7 +137,7 @@ jdk.overrideAttrs (oldAttrs: rec {
       lib.makeLibraryPath [
         libxdamage
         libXxf86vm
-        libXrandr
+        libxrandr
         libxi
         libxcursor
         libXrender

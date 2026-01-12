@@ -141,7 +141,7 @@ rec {
         desktop-file-utils
         libxcomposite
         xorg.libXtst
-        xorg.libXrandr
+        libxrandr
         libxext
         libx11
         libxfixes

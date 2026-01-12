@@ -5,7 +5,7 @@
   pkg-config,
   autoreconfHook,
   libx11,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libx11
-    libXrandr
+    libxrandr
   ];
 
   installPhase = ''

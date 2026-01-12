@@ -201,7 +201,7 @@ let
       pkgs.libxdamage
       pkgs.libxext
       pkgs.libxfixes
-      pkgs.xorg.libXrandr
+      pkgs.libxrandr
       pkgs.xorg.libXrender
       pkgs.xorg.libXtst
       pkgs.libxcb

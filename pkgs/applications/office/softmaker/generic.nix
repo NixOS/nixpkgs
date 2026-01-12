@@ -14,7 +14,7 @@
   libx11,
   libxext,
   libxmu,
-  libXrandr,
+  libxrandr,
   libXrender,
 
   # For fixing up execution of /bin/ls, which is necessary for
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     libxmu
-    libXrandr
+    libxrandr
     libXrender
     (lib.getLib stdenv.cc.cc)
   ];

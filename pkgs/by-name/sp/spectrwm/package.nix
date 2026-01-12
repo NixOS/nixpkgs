@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libbsd,
   pkg-config,
-  libXrandr,
+  libxrandr,
   libxcursor,
   libxft,
   libXt,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libXrandr
+    libxrandr
     libxcursor
     libxft
     libXt

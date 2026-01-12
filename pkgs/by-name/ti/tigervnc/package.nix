@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxrandr,
   libxi,
   libxft,
   libxfont_2,
@@ -164,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxfont_2
       libpciaccess
       libGLU
-      xorg.libXrandr
+      libxrandr
       libxdamage
     ]
     ++ xorg.xorgserver.buildInputs

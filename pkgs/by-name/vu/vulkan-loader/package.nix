@@ -6,7 +6,7 @@
   pkg-config,
   libx11,
   libxcb,
-  libXrandr,
+  libxrandr,
   wayland,
   moltenvk,
   vulkan-headers,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     libx11
     libxcb
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland

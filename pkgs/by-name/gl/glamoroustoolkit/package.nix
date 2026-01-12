@@ -15,7 +15,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libxkbcommon,
   libgit2,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
         libxcursor
         libxext
         libxi
-        libXrandr
+        libxrandr
         libXrender
         libxkbcommon
         libglvnd

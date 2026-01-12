@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxext
     libxcursor

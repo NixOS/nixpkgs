@@ -29,7 +29,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   libdrm,
@@ -120,7 +120,7 @@ let
     libxext
     libxfixes
     libxi
-    libXrandr
+    libxrandr
     libXrender
     libxshmfence
     libXtst

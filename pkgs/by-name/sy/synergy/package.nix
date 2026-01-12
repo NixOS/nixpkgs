@@ -19,7 +19,7 @@
   libxkbfile,
   libxi,
   libXtst,
-  libXrandr,
+  libxrandr,
   libxinerama,
   xkeyboardconfig,
   xinput,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     libx11
     libxi
     libXtst
-    libXrandr
+    libxrandr
     libxinerama
     libxkbfile
     xinput

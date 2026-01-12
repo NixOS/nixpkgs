@@ -22,7 +22,7 @@
   pam,
   cairo,
   xdotool,
-  xorg,
+  libxrandr,
   libxinerama,
   libxext,
   libx11,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     libxext
     libxinerama
     libx11
-    xorg.libXrandr
+    libxrandr
 
     (python3.withPackages (
       pp: with pp; [

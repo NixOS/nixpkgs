@@ -11,6 +11,7 @@
 
   # Build Inputs
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxfixes,
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxext
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
     libxfixes
     libxi

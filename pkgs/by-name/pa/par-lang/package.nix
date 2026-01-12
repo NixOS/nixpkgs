@@ -8,7 +8,7 @@
   libGL,
   libxkbcommon,
   wayland,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage {
         libx11
         libxcursor
         libxi
-        xorg.libXrandr
+        libxrandr
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''

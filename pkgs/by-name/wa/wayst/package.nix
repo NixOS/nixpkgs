@@ -8,7 +8,7 @@
   fontconfig,
   libGL,
   libx11,
-  libXrandr,
+  libxrandr,
   libxcb,
   libxkbcommon,
   utf8proc,
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     libGL
     libxcb
     libxkbcommon
-    libXrandr
+    libxrandr
     utf8proc
     wayland
   ];

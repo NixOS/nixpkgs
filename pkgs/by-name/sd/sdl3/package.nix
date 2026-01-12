@@ -24,7 +24,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libxtst,
   ninja,
   nix-update-script,
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxext
       libxfixes
       libxi
-      libXrandr
+      libxrandr
       libxtst
     ]
     ++ [

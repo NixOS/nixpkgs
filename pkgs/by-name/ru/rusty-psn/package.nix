@@ -11,7 +11,7 @@
   gtk3,
   freetype,
   openssl,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     libxcb
     libx11
     libxcursor
-    xorg.libXrandr
+    libxrandr
     libxi
     libxcb
     libGL

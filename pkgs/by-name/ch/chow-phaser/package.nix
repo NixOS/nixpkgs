@@ -16,7 +16,7 @@
   libxdmcp,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXtst,
   libdatrie,
   libjack2,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     libXtst
     libdatrie
     libjack2

@@ -6,6 +6,7 @@
   dbus,
   kmod,
   xorg,
+  libxrandr,
   libxmu,
   libxfixes,
   libxext,
@@ -52,7 +53,7 @@ let
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";

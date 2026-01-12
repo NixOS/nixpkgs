@@ -20,7 +20,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   noriskclient-launcher-unwrapped,
   pipewire,
@@ -57,7 +57,7 @@ symlinkJoin {
       libx11
       libxcursor
       libxext
-      libXrandr
+      libxrandr
       libXxf86vm
 
       # narrator support

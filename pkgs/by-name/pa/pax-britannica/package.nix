@@ -9,7 +9,7 @@
   libGL,
   libGLU,
   alsa-lib,
-  xorg,
+  libxrandr,
   libx11,
   glfw2,
   glfw3,
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     libGLU
     alsa-lib
     libx11
-    xorg.libXrandr
+    libxrandr
     (if useGlfw3 then glfw3 else glfw2)
   ];
   makeFlags =

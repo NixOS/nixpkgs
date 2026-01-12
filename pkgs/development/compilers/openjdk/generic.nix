@@ -38,7 +38,7 @@
   libxi,
   libxinerama,
   libxcursor,
-  libXrandr,
+  libxrandr,
   fontconfig,
 
   setJavaClassPath,
@@ -285,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxcursor
-    libXrandr
+    libxrandr
     fontconfig
   ]
   ++ lib.optionals (atLeast11 && !atLeast21) [

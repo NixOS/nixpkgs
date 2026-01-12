@@ -9,6 +9,7 @@
   glib,
   systemd,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxext,
@@ -104,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
           gdk-pixbuf
           pango
           cairo
-          xorg.libXrandr
+          libxrandr
           expat
           libdrm
           libgbm

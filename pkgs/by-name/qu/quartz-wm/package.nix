@@ -9,7 +9,7 @@
   libxinerama,
   libapplewm,
   xorgproto,
-  libXrandr,
+  libxrandr,
   libxext,
 }:
 
@@ -33,7 +33,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxinerama
     libapplewm
     xorgproto
-    libXrandr
+    libxrandr
     libxext
     pixman
   ];

@@ -7,7 +7,7 @@
   libx11,
   libxext,
   python3,
-  libXrandr,
+  libxrandr,
   libXrender,
   libpulseaudio,
   libxcomposite,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxext
-    libXrandr
+    libxrandr
     libXrender
     libpulseaudio
     libxcomposite

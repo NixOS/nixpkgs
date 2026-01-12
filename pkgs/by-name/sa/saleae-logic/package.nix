@@ -22,7 +22,7 @@
   libxfixes,
   libx11,
   libxi,
-  libXrandr,
+  libxrandr,
   libxcursor,
   freetype,
   libxinerama,
@@ -50,7 +50,7 @@ let
     libxfixes
     libx11
     libxi
-    libXrandr
+    libxrandr
     libxcursor
     freetype
     libxinerama

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libxi,
-  libXrandr,
+  libxrandr,
   txt2man,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxi
-    libXrandr
+    libxrandr
   ];
 
   installFlags = [ "prefix=$(out)" ];

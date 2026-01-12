@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       with pkgs;
       [
         # Unity Hub binary dependencies
-        xorg.libXrandr
+        libxrandr
         xdg-utils
 
         # GTK filepicker

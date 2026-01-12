@@ -12,7 +12,7 @@
   libx11,
   libxcursor,
   libxi,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libXtst,
   copyDesktopItems,
@@ -26,7 +26,7 @@ let
     libx11
     libxcursor
     libxi
-    libXrandr
+    libxrandr
     libXxf86vm
     libXtst
     fontconfig

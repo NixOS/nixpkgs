@@ -21,7 +21,7 @@
   libxext,
   enableGamma ? true,
   libdrm,
-  libXrandr,
+  libxrandr,
   libiio,
   wayland,
   enableScreen ? true,
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableDdc [ ddcutil ]
   ++ lib.optionals enableDpms [ libxext ]
-  ++ lib.optionals enableGamma [ libXrandr ]
+  ++ lib.optionals enableGamma [ libxrandr ]
   ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
     libdrm
     wayland

@@ -28,7 +28,7 @@ let
     pkgs: with pkgs; [
       libx11
       xorg.libXrender
-      xorg.libXrandr
+      libxrandr
       libxcb
       libxmu
       libpthread-stubs

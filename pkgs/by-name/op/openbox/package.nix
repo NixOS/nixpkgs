@@ -10,7 +10,7 @@
   libxinerama,
   libxcursor,
   libxau,
-  libXrandr,
+  libxrandr,
   libice,
   libsm,
   imlib2,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libxinerama
     libxcursor
     libxau
-    libXrandr
+    libxrandr
     libice
     libsm
     libstartup_notification

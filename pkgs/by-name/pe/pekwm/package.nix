@@ -9,7 +9,7 @@
   libxft,
   libxinerama,
   libxpm,
-  libXrandr,
+  libxrandr,
   libjpeg,
   libpng,
   pkg-config,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
     libxinerama
     libxpm
-    libXrandr
+    libxrandr
     libjpeg
     libpng
   ];

@@ -18,7 +18,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
 
   # runtime (path)
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
         libx11
         libxcursor
         libxext
-        libXrandr
+        libxrandr
         libXxf86vm
       ];
       runtimePrograms = lib.optionals stdenv.hostPlatform.isLinux [

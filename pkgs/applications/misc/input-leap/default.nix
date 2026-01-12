@@ -14,7 +14,7 @@
   libxdmcp,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXtst,
   libei,
   libportal,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libxext
     libXtst
     libxinerama
-    libXrandr
+    libxrandr
     libxdmcp
     libice
     libsm

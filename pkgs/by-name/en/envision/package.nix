@@ -37,7 +37,7 @@ buildFHSEnv {
           shaderc
           libx11
           libxcb
-          xorg.libXrandr
+          libxrandr
           xorg.libXrender
           xorgproto
           SDL2

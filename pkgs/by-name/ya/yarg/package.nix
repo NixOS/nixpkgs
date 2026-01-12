@@ -14,7 +14,7 @@
   libxi,
   libxinerama,
   libxkbcommon,
-  libXrandr,
+  libxrandr,
   libXScrnSaver,
   libXxf86vm,
   udev,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxkbcommon
-    libXrandr
+    libxrandr
     libXScrnSaver
     libXxf86vm
     udev

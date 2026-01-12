@@ -21,7 +21,7 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libxdamage
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
   ];
 
   dontBuild = true;

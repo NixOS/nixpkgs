@@ -22,7 +22,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   udev,
   SDL2,
   SDL2_mixer,
@@ -75,7 +75,7 @@ buildDotnetModule rec {
     libxcursor
     libxext
     libxi
-    libXrandr
+    libxrandr
     gtk3
 
     # Headless executable

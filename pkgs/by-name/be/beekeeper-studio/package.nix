@@ -20,7 +20,7 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxcb
     libxkbcommon
     glibc

@@ -24,6 +24,7 @@
   libGL,
   wayland,
   xorg,
+  libxrandr,
   libx11,
   xorgproto,
   libxcb,
@@ -40,7 +41,7 @@ let
     wayland
     libx11
     libxcb
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
     xorgproto
   ];

@@ -12,7 +12,7 @@
   libxcursor,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libjack2,
   libopus,
   curl,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxinerama
-    libXrandr
+    libxrandr
   ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath (finalAttrs.runtimeDependencies)}";

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  xorg,
+  libxrandr,
   libxi,
   libxext,
   libx11,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxi
-    xorg.libXrandr
+    libxrandr
     libxext
   ];
   nativeBuildInputs = [

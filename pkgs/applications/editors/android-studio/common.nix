@@ -50,7 +50,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   makeWrapper,
@@ -159,7 +159,7 @@ let
             zlib
             pkgsi686Linux.zlib
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For Android emulator
             alsa-lib

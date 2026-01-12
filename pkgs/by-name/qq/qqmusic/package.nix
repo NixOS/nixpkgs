@@ -28,6 +28,7 @@
   pciutils,
   udev,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxext,
@@ -85,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxfixes
     libxi
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
     xorg.libXScrnSaver
     xorg.libXtst

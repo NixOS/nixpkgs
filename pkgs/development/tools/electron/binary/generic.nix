@@ -24,7 +24,7 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -114,7 +114,7 @@ let
     libxdamage
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxkbfile
     pango
     pciutils

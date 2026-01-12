@@ -10,7 +10,7 @@
   gtk2,
   gtk3,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libidn,
   libjpeg,
   libjxl,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gperf
     libxcursor
-    libXrandr
+    libxrandr
     libidn
     libjpeg
     libjxl

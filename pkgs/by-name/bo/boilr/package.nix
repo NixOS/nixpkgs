@@ -5,7 +5,7 @@
   rustPlatform,
   clangStdenv,
   gtk3,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -31,7 +31,7 @@ let
 
     # WINIT_UNIX_BACKEND=x11
     libxcursor
-    xorg.libXrandr
+    libxrandr
     libxi
     libx11
     libxcb

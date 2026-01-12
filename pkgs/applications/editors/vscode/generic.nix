@@ -16,7 +16,7 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -125,7 +125,7 @@ stdenv.mkDerivation (
             libxcb
             libxext
             libxfixes
-            xorg.libXrandr
+            libxrandr
             cairo
             pango
             alsa-lib

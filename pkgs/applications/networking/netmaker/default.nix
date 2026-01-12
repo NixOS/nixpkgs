@@ -8,7 +8,7 @@
     "."
     "netclient"
   ],
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -38,7 +38,7 @@ buildGoModule rec {
     libxcursor
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
   ];
 
   meta = {

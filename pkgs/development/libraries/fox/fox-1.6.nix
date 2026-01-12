@@ -8,7 +8,7 @@
   zlib,
   bzip2,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libGLU,
   libGL,
   libxext,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     zlib
     bzip2
     libxcursor
-    libXrandr
+    libxrandr
     libxext
     libxft
     libGLU

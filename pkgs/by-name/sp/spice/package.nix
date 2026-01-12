@@ -8,7 +8,7 @@
   pixman,
   alsa-lib,
   openssl,
-  libXrandr,
+  libxrandr,
   libxfixes,
   libxext,
   libXrender,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     libcacard
     libjpeg

@@ -82,7 +82,7 @@ buildFHSEnv {
       libxdamage
       libxext
       libxfixes
-      xorg.libXrandr
+      libxrandr
     ];
 
   extraInstallCommands = ''

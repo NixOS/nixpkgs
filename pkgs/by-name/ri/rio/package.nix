@@ -21,7 +21,7 @@
   libx11,
   libxcursor,
   libxi,
-  libXrandr,
+  libxrandr,
   libxcb,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
@@ -41,7 +41,7 @@ let
       libx11
       libxcursor
       libxi
-      libXrandr
+      libxrandr
       libxcb
     ]
     ++ lib.optionals withWayland [

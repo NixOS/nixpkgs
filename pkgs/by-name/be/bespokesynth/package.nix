@@ -14,7 +14,7 @@
   jsoncpp,
   libusb1,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxext
     libxcursor
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
     lib.makeLibraryPath [
       libx11
-      libXrandr
+      libxrandr
       libxinerama
       libxext
       libxcursor

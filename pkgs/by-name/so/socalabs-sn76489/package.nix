@@ -11,7 +11,7 @@
   libxcomposite,
   libxcursor,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXtst,
   libxdmcp,
   libxext,
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     libxcomposite
     libxcursor
     libxinerama
-    libXrandr
+    libxrandr
     libXtst
     libxdmcp
     libxext

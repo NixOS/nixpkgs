@@ -15,7 +15,7 @@
   openssl,
   pango,
   pkg-config,
-  xorg,
+  libxrandr,
   libx11,
 }:
 let
@@ -93,7 +93,7 @@ let
         openssl
         pango
         libx11
-        xorg.libXrandr
+        libxrandr
       ];
 
       postInstall = ''

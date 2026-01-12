@@ -20,7 +20,7 @@
   libxcursor,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libepoxy,
   libjack2,
   libxkbcommon,
@@ -60,7 +60,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     libepoxy
     libjack2
     libxkbcommon

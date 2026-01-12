@@ -7,7 +7,7 @@
   glfw,
   libxft,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libxinerama,
   xinput,
   libxi,
@@ -35,7 +35,7 @@ buildGoModule rec {
     glfw
     libxft
     libxcursor
-    libXrandr
+    libxrandr
     libxinerama
     libxi
     xinput

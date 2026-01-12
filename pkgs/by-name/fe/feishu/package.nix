@@ -28,7 +28,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   libappindicator-gtk3,
@@ -103,7 +103,7 @@ let
     libxext
     libxfixes
     libxi
-    libXrandr
+    libxrandr
     libXrender
     libXtst
     libappindicator-gtk3

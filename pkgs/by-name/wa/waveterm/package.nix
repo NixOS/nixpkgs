@@ -16,7 +16,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXrandr,
+  libxrandr,
   libgbm,
   expat,
   libxcb,
@@ -85,7 +85,7 @@ let
       libxdamage
       libxext
       libxfixes
-      libXrandr
+      libxrandr
       libgbm
       expat
       libxcb

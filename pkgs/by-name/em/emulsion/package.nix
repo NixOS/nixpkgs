@@ -11,7 +11,7 @@
   libx11,
   libxcursor,
   libxi,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libxcb,
   libxkbcommon,
@@ -23,7 +23,7 @@ let
     libx11
     libxcursor
     libxi
-    libXrandr
+    libxrandr
     libXxf86vm
     libxcb
   ]

@@ -32,7 +32,7 @@ let
         (lib.getLib stdenv.cc.cc)
         libx11
         libxext
-        xorg.libXrandr
+        libxrandr
         xorg.libXxf86vm
         curl
         libGLU

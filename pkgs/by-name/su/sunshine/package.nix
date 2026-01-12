@@ -12,6 +12,7 @@
   libevdev,
   libpulseaudio,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxdmcp,
@@ -137,7 +138,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libx11
     libxcb
     libxfixes
-    xorg.libXrandr
+    libxrandr
     xorg.libXtst
     libxi
     openssl
@@ -179,7 +180,7 @@ stdenv'.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     avahi
     libgbm
-    xorg.libXrandr
+    libxrandr
     libxcb
     libglvnd
   ];

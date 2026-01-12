@@ -16,7 +16,7 @@
   libxft,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXt,
   libXxf86vm,
   libxml2,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXt
     libXxf86vm
     libxml2

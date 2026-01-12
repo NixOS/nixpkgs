@@ -9,7 +9,7 @@
   plib,
   openal,
   freealut,
-  libXrandr,
+  libxrandr,
   xorgproto,
   libxext,
   libsm,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     plib
     openal
     freealut
-    libXrandr
+    libxrandr
     xorgproto
     libxext
     libsm

@@ -40,6 +40,7 @@
   wayland-scanner,
   xcbutilkeysyms,
   xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libx11,
@@ -277,7 +278,7 @@ stdenv.mkDerivation {
     libxcb
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxshmfence
     xorg.libXxf86vm
     llvmPackages.clang

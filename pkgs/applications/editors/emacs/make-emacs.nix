@@ -35,7 +35,7 @@
   libxft,
   libxi,
   libxpm,
-  libXrandr,
+  libxrandr,
   libgccjit,
   libjpeg,
   libotf,
@@ -337,7 +337,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libxaw
     libxpm
-    libXrandr
+    libxrandr
     libjpeg
     libpng
     librsvg

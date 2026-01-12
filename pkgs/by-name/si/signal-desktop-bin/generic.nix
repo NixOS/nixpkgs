@@ -28,7 +28,7 @@
   libxi,
   libxcursor,
   libxdamage,
-  libXrandr,
+  libxrandr,
   libxcomposite,
   libxext,
   libxfixes,
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxi
-    libXrandr
+    libxrandr
     libXrender
     libXtst
     libappindicator-gtk3

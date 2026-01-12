@@ -16,7 +16,7 @@
   libusb1,
   libx11,
   libxcb,
-  libXrandr,
+  libxrandr,
   python3,
   qtbase,
   qtserialport,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libusb1
     libx11
     libxcb
-    libXrandr
+    libxrandr
     flatbuffers
     protobuf
     mbedtls

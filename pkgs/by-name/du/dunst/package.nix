@@ -7,7 +7,7 @@
   which,
   perl,
   jq,
-  libXrandr,
+  libxrandr,
   coreutils,
   cairo,
   dbus,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXScrnSaver
     libxinerama
     xorgproto
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals withWayland [
     wayland

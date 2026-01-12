@@ -15,6 +15,7 @@
   gnutls,
   libGL,
   xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -67,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxcb
     libx11
-    xorg.libXrandr
+    libxrandr
     libxcursor
     xorg.libXScrnSaver
     dbus
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         # gl/gl_vidlinuxglx.c
         libx11
-        xorg.libXrandr
+        libxrandr
         xorg.libXxf86vm
         xorg.libXxf86dga
         libxi

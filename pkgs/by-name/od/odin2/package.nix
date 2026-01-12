@@ -12,7 +12,7 @@
   libxcursor,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libGL,
   gcc-unwrapped,
   copyDesktopItems,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     libGL
   ];
 

@@ -6,7 +6,7 @@
   pkg-config,
   libGL,
   vulkan-loader,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   libx11,
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     wayland-protocols
     libxkbcommon
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     libxi

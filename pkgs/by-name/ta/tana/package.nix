@@ -5,7 +5,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXrandr,
+  libxrandr,
   stdenv,
   lib,
   alsa-lib,
@@ -52,7 +52,7 @@ let
     libxext
     libxfixes
     libxkbcommon
-    libXrandr
+    libxrandr
     nspr
     nss
     pango

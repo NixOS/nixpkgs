@@ -14,7 +14,7 @@
   libGL,
   libx11,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libxi,
   libxkbcommon,
   vulkan-loader,
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     freetype
     libx11
     libxcursor
-    libXrandr
+    libxrandr
     libxi
     cairo
     pango
@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         freetype
         libx11
         libxcursor
-        libXrandr
+        libxrandr
         libxi
         libxkbcommon
         vulkan-loader

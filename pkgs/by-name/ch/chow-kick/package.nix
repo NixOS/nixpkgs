@@ -10,7 +10,7 @@
   libxcursor,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libjack2,
   libxkbcommon,
   lv2,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     libjack2
     libxkbcommon
     lv2

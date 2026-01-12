@@ -9,7 +9,7 @@
   alsa-lib,
   wayland,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libxi,
   libx11,
   libxcb,
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ]
     ++ lib.optionals withX11 [
       libxcursor
-      libXrandr
+      libxrandr
       libxi
       libx11
       libxcb

@@ -60,7 +60,7 @@ appimageTools.wrapType2 {
       atk
       cairo
       expat
-      xorg.libXrandr
+      libxrandr
       xorg.libXScrnSaver
       alsa-lib
       at-spi2-core

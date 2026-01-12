@@ -5,7 +5,7 @@
   pkg-config,
   libx11,
   libxfixes,
-  libXrandr,
+  libxrandr,
   gitUpdater,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxfixes
-    libXrandr
+    libxrandr
   ];
 
   makeFlags = [ "prefix=$(out)" ];

@@ -40,7 +40,7 @@ let
             libxi
             libxinerama
             libxmu
-            xorg.libXrandr
+            libxrandr
             xorg.libXrender
             xorg.libXv
             xorg.libXxf86vm

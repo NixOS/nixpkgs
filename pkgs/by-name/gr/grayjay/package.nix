@@ -7,7 +7,7 @@
   libz,
   icu,
   openssl,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -165,7 +165,7 @@ buildDotnetModule (finalAttrs: {
     libxdamage
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxcb
 
     dbus

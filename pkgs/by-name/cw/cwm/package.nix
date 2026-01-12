@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libxft,
   bison,
   pkg-config,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxinerama
-    libXrandr
+    libxrandr
     libxft
   ];
 

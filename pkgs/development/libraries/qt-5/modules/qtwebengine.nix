@@ -27,7 +27,7 @@
   libpciaccess,
   libxcursor,
   libXScrnSaver,
-  libXrandr,
+  libxrandr,
   libXtst,
   fontconfig,
   freetype,
@@ -384,7 +384,7 @@ qtModule (
       xrandr
       libXScrnSaver
       libxcursor
-      libXrandr
+      libxrandr
       libpciaccess
       libXtst
       libxcomposite

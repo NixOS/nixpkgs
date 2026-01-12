@@ -136,7 +136,7 @@ buildFHSEnv {
       libxdamage
       libxext
       libxfixes
-      xorg.libXrandr
+      libxrandr
       libgcrypt
       openssl
       udev

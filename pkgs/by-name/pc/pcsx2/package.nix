@@ -8,7 +8,7 @@
   extra-cmake-modules,
   ffmpeg,
   gtk3,
-  libXrandr,
+  libxrandr,
   libaio,
   libbacktrace,
   libpcap,
@@ -91,7 +91,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     libbacktrace
     libpcap
     libwebp
-    libXrandr
+    libxrandr
     lz4
     qtbase
     qtsvg

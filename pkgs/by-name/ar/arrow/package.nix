@@ -10,7 +10,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   udev,
   vulkan-loader,
   autoPatchelfHook,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxi
-    libXrandr
+    libxrandr
     udev
     vulkan-loader
   ];

@@ -58,7 +58,7 @@ buildFHSEnv {
       xorg.libXtst
       libxcb
       xorg.libXScrnSaver
-      xorg.libXrandr
+      libxrandr
       libxcb
       libxkbfile
       libxshmfence

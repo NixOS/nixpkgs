@@ -29,7 +29,7 @@
   libxkbcommon,
   libXrender,
   libxcb,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxau,
   libinput,
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libXrender
     libxcb
-    libXrandr
+    libxrandr
     libxinerama
     libxau
   ];

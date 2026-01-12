@@ -25,7 +25,7 @@
   libxft,
   libxinerama,
   libxpm,
-  libXrandr,
+  libxrandr,
   libjpeg,
   libogg,
   libpng,
@@ -82,7 +82,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     libxft
     libxinerama
     libxpm
-    libXrandr
+    libxrandr
     libjpeg
     libogg
     libpng

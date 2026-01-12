@@ -4,7 +4,7 @@
   fetchzip,
   libGLU,
   libGL,
-  libXrandr,
+  libxrandr,
   libx11,
   libXxf86vm,
   zlib,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libGLU
     libGL
-    libXrandr
+    libxrandr
     libx11
     libXxf86vm
   ]

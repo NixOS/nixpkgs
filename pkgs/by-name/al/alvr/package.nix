@@ -17,7 +17,7 @@
   lame,
   libx11,
   libxi,
-  libXrandr,
+  libxrandr,
   libxcursor,
   libdrm,
   libglvnd,
@@ -114,7 +114,7 @@ rustPlatform.buildRustPackage rec {
     libx11
     libxcursor
     libxi
-    libXrandr
+    libxrandr
     libdrm
     libglvnd
     libogg

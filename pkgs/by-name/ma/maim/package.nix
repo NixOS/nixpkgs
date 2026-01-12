@@ -14,7 +14,7 @@
   libx11,
   libxext,
   libxfixes,
-  libXrandr,
+  libxrandr,
   libxcomposite,
   slop,
   icu,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxfixes
-    libXrandr
+    libxrandr
     libxcomposite
     slop
     icu

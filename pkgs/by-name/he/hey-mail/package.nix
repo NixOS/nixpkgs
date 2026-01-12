@@ -31,6 +31,7 @@
   pango,
   cairo,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxext,
@@ -80,7 +81,7 @@ let
     libxi
     xorg.libXrender
     xorg.libXtst
-    xorg.libXrandr
+    libxrandr
     ffmpeg
     http-parser
     nss

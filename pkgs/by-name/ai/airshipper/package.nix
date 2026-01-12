@@ -9,7 +9,7 @@
   wayland-protocols,
   libxkbcommon,
   libx11,
-  libXrandr,
+  libxrandr,
   libxi,
   libxcursor,
   udev,
@@ -38,7 +38,7 @@ let
         libxcb
         libx11
         libxcursor
-        libXrandr
+        libxrandr
         libxi
         vulkan-loader
         libGL
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage {
     wayland-protocols
     libxkbcommon
     libx11
-    libXrandr
+    libxrandr
     libxi
     libxcursor
   ];
@@ -106,7 +106,7 @@ rustPlatform.buildRustPackage {
         freetype
         libxkbcommon
         libx11
-        libXrandr
+        libxrandr
         libxi
         libxcursor
       ];

@@ -22,7 +22,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   makeWrapper,
   ninja,
   pkg-config,
@@ -117,7 +117,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
             libx11
             libxcursor
             libxext
-            libXrandr
+            libxrandr
             libxi
             wayland
           ]

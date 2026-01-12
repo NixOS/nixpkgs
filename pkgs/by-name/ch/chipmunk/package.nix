@@ -13,7 +13,7 @@
   libxi,
   libxmu,
   fetchpatch,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libxi
     libxmu
-    libXrandr
+    libxrandr
   ];
 
   postInstall = ''

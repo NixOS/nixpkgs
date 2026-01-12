@@ -8,7 +8,7 @@
   libx11,
   libXxf86dga,
   alsa-lib,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libxext,
   SDL2,
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     libx11
     libXxf86dga
     alsa-lib
-    libXrandr
+    libxrandr
     libXxf86vm
     libxext
     SDL2
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     sed -i -e 's#Sys_LoadLibrary( "libpthread.so.0" )#Sys_LoadLibrary( "${glibc}/lib/libpthread.so.0" )#' code/unix/linux_snd.c
     sed -i -e 's#Sys_LoadLibrary( "libasound.so.2" )#Sys_LoadLibrary( "${alsa-lib}/lib/libasound.so.2" )#' code/unix/linux_snd.c
     sed -i -e 's#Sys_LoadLibrary( "libXxf86dga.so.1" )#Sys_LoadLibrary( "${libXxf86dga}/lib/libXxf86dga.so.1" )#' code/unix/x11_dga.c
-    sed -i -e 's#Sys_LoadLibrary( "libXrandr.so.2" )#Sys_LoadLibrary( "${libXrandr}/lib/libXrandr.so.2" )#' code/unix/x11_randr.c
+    sed -i -e 's#Sys_LoadLibrary( "libXrandr.so.2" )#Sys_LoadLibrary( "${libxrandr}/lib/libXrandr.so.2" )#' code/unix/x11_randr.c
     sed -i -e 's#Sys_LoadLibrary( "libXxf86vm.so.1" )#Sys_LoadLibrary( "${libXxf86vm}/lib/libXxf86vm.so.1" )#' code/unix/x11_randr.c
     sed -i -e 's#Sys_LoadLibrary( "libXxf86vm.so.1" )#Sys_LoadLibrary( "${libXxf86vm}/lib/libXxf86vm.so.1" )#' code/unix/x11_vidmode.c
     sed -i -e 's#"libcurl.so.4"#"${curl.out}/lib/libcurl.so.4"#' code/client/cl_curl.h

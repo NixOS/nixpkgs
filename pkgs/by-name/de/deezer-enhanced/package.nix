@@ -9,7 +9,7 @@
   gnutar,
 
   ### Libs
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation rec {
     libxdamage
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxcb
 
     ### Systemd libs
@@ -101,7 +101,7 @@ stdenvNoCC.mkDerivation rec {
           libxdamage
           libxext
           libxfixes
-          xorg.libXrandr
+          libxrandr
           libxcb
 
           ### Systemd libs

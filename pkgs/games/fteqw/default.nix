@@ -17,6 +17,7 @@
   speex,
   libopus,
   xorg,
+  libxrandr,
   libxcursor,
   libGL,
 }@attrs:
@@ -45,7 +46,7 @@
         vulkan-loader
         speex
         libopus
-        xorg.libXrandr
+        libxrandr
         libxcursor
         xorg.libXScrnSaver
       ];

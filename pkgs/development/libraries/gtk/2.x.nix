@@ -17,7 +17,7 @@
   libxdamage,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   pango,
   perl,
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxcursor
     libxi
-    libXrandr
+    libxrandr
     libXrender
   ]
   ++ lib.optional xineramaSupport libxinerama

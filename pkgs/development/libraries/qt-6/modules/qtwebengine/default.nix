@@ -23,7 +23,7 @@
   libpciaccess,
   libxcursor,
   libXScrnSaver,
-  libXrandr,
+  libxrandr,
   libXtst,
   libxshmfence,
   libxi,
@@ -262,7 +262,7 @@ qtModule {
     xrandr
     libXScrnSaver
     libxcursor
-    libXrandr
+    libxrandr
     libpciaccess
     libXtst
     libxcomposite

@@ -21,7 +21,7 @@
   libx11,
   libxaw,
   libxmu,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXt,
   libXxf86vm,
@@ -89,7 +89,7 @@ let
         libx11
         libxaw
         libxmu
-        libXrandr
+        libxrandr
         libXrender
         libXt
         libXxf86vm

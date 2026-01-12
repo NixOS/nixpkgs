@@ -34,7 +34,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   libdrm,
@@ -127,7 +127,7 @@ let
       gdk-pixbuf
       dbus
       libxdamage
-      libXrandr
+      libxrandr
       atk
       pango
       cairo

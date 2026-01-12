@@ -14,7 +14,7 @@
   libxcomposite,
   libxdamage,
   libxfixes,
-  libXrandr,
+  libxrandr,
   libgbm,
   libgcc,
   libxkbcommon,
@@ -48,7 +48,7 @@ let
       libxcomposite
       libxdamage
       libxfixes
-      libXrandr
+      libxrandr
       libgbm
       libgcc.lib
       libxkbcommon

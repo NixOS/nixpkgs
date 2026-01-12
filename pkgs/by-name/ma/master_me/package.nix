@@ -5,7 +5,7 @@
   libGL,
   libx11,
   libxext,
-  libXrandr,
+  libxrandr,
   pkg-config,
   python3,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxext
-    libXrandr
+    libxrandr
   ];
 
   enableParallelBuilding = true;

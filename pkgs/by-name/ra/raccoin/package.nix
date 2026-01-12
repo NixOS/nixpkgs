@@ -13,7 +13,7 @@
   freetype,
   alsa-lib,
   libGL,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     libxi
-    xorg.libXrandr
+    libxrandr
   ];
 
   # upstream has no tests

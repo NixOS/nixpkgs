@@ -4,7 +4,7 @@
   meson,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxrandr,
   libxext,
   libxcursor,
   libx11,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxcursor
-    xorg.libXrandr
+    libxrandr
     libGL
     vulkan-loader
     vulkan-headers

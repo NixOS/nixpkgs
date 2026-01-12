@@ -14,7 +14,7 @@
   libxi,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
   libGL,
   freetype,
   glib,
@@ -93,7 +93,7 @@ buildDotnetModule rec {
     libxi
     libxcursor
     libxext
-    libXrandr
+    libxrandr
     at-spi2-atk
     at-spi2-core
     libxkbcommon

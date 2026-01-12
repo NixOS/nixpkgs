@@ -5,7 +5,7 @@
   libice,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libGLX,
   libGLU,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libxext
     libxi
-    libXrandr
+    libxrandr
     libXxf86vm
     libGLU
   ];

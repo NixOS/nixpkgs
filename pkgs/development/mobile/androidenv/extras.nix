@@ -32,7 +32,7 @@ deployAndroidPackage {
             with pkgs;
             [
               libx11
-              xorg.libXrandr
+              libxrandr
             ]
           )
         }

@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  xorg,
+  libxrandr,
   libx11,
   wayland,
 }:
@@ -27,7 +27,7 @@ buildGoModule {
 
   buildInputs = [
     libx11
-    xorg.libXrandr
+    libxrandr
     wayland.dev
   ];
 

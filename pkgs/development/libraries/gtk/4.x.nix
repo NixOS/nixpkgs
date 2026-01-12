@@ -25,6 +25,7 @@
   fribidi,
   harfbuzz,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxdamage,
@@ -152,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxdamage
     libxi
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
   ]
   ++ lib.optionals trackerSupport [

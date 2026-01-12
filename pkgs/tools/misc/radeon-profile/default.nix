@@ -5,7 +5,7 @@
   qtbase,
   qtcharts,
   qmake,
-  libXrandr,
+  libxrandr,
   libdrm,
 }:
 
@@ -18,7 +18,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtcharts
-    libXrandr
+    libxrandr
     libdrm
   ];
 

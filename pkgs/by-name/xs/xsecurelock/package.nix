@@ -8,7 +8,7 @@
   libxcomposite,
   libxft,
   libxmu,
-  libXrandr,
+  libxrandr,
   libxext,
   libXScrnSaver,
   pam,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libxft
     libxmu
-    libXrandr
+    libxrandr
     libxext
     libXScrnSaver
     pam

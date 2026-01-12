@@ -21,7 +21,7 @@
   libxau,
   libxdmcp,
   libxpm,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libdecor,
   libffi,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxau
     libxdmcp
     libxpm
-    libXrandr
+    libxrandr
     libXxf86vm
     libdecor
     libffi

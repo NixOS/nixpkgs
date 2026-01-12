@@ -5,7 +5,7 @@
   lib,
   libGL,
   libx11,
-  libXrandr,
+  libxrandr,
   libpng,
   libjpeg,
   wayland,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     libx11
-    libXrandr
+    libxrandr
     libGL
     libpng
     libjpeg

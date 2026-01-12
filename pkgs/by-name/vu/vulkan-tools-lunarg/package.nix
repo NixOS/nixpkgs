@@ -9,7 +9,7 @@
   jsoncpp,
   libx11,
   libxdmcp,
-  libXrandr,
+  libxrandr,
   libffi,
   libxcb,
   pkg-config,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     libx11
     libxdmcp
-    libXrandr
+    libxrandr
     libffi
     libxcb
     valijson

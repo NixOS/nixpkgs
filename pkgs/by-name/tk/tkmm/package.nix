@@ -13,7 +13,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "Tkmm";
@@ -55,7 +55,7 @@ buildDotnetModule (finalAttrs: {
     libxcursor
     libxext
     libxi
-    libXrandr
+    libxrandr
   ];
 
   enableParallelBuilding = false;

@@ -20,7 +20,7 @@
   libx11,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   enableCurl ? true,
   curl,
   openssl,
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxi
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals enableCurl [
     curl

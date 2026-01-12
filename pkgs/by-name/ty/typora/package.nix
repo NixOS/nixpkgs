@@ -88,7 +88,7 @@ let
         libxkbcommon
         libx11
         libxcursor
-        xorg.libXrandr
+        libxrandr
         libxcomposite
         libxdamage
         libxext

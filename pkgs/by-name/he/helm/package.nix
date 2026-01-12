@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   xorg,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     xorg.libXrender
-    xorg.libXrandr
+    libxrandr
     freetype
     alsa-lib
     curl

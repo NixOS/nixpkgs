@@ -9,7 +9,7 @@
   libxcursor,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXtst,
   mpg123,
   pipewire,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     libXtst
     pipewire
   ];

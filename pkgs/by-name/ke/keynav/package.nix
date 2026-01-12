@@ -9,7 +9,7 @@
   libxi,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   glib,
   cairo,
   xdotool,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     libxi
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     glib
     cairo
     xdotool

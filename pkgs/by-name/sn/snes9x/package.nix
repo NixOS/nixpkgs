@@ -10,7 +10,7 @@
   libxdmcp,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXv,
   libepoxy,
   libpng,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     libepoxy
     libxdmcp
-    libXrandr
+    libxrandr
     pcre2
     portaudio
     SDL2

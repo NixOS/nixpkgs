@@ -23,7 +23,7 @@
   libGL,
   vulkan-loader,
   curlWithGnuTls,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -40,7 +40,7 @@ let
     libxext
     libxfixes
     libxcomposite
-    xorg.libXrandr
+    libxrandr
   ];
 
   deps = [

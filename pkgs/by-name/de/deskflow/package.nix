@@ -13,7 +13,7 @@
   libXtst,
   libxinerama,
   libxi,
-  libXrandr,
+  libxrandr,
   libxkbcommon,
   pugixml,
   python3,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     libxinerama
     libxi
-    libXrandr
+    libxrandr
     libXtst
     libxkbcommon
     pugixml

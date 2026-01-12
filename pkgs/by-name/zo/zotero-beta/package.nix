@@ -13,6 +13,7 @@
   gtk3,
   libGL,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxext,
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
       libxext
       libxfixes
       libxi
-      xorg.libXrandr
+      libxrandr
       xorg.libXtst
       libxcb
       libgbm

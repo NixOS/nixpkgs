@@ -20,7 +20,7 @@
   libxfixes,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   zlib,
   udev, # for libudev
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     zlib
     udev

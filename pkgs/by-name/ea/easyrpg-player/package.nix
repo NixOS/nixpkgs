@@ -25,7 +25,7 @@
   libxi,
   libxinerama,
   libxmp,
-  libXrandr,
+  libxrandr,
   libXScrnSaver,
   libXxf86vm,
   mpg123,
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libxext
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXScrnSaver
     libXxf86vm
     libdecor

@@ -10,7 +10,7 @@
   freetype,
   libglvnd,
   libxkbcommon,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libx11
         libxcursor
         libxi
-        xorg.libXrandr
+        libxrandr
       ]
     }' $out/bin/openmeters
   '';

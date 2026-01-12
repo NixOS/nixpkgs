@@ -109,7 +109,7 @@ let
         libxext
         libx11
         xorg.libXv
-        xorg.libXrandr
+        libxrandr
         libxcb
         zlib
         stdenv.cc.cc

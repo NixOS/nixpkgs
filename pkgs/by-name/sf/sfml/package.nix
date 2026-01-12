@@ -18,7 +18,7 @@
   libxi,
   libx11,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libXrender,
   xcbutilimage,
 }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxi
     libxcursor
-    libXrandr
+    libxrandr
     libXrender
     xcbutilimage
   ];

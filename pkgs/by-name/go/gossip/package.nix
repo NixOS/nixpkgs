@@ -21,7 +21,7 @@
   libxcb,
   libxcursor,
   libxi,
-  libXrandr,
+  libxrandr,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     libxcb
     libxcursor
     libxi
-    libXrandr
+    libxrandr
   ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)

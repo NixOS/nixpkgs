@@ -16,7 +16,7 @@
   libxcomposite,
   libxdamage,
   libx11,
-  libXrandr,
+  libxrandr,
   librsvg,
   libpthread-stubs,
   libxdmcp,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libxdamage
     libx11
-    libXrandr
+    libxrandr
     librsvg
     libpthread-stubs
     libxdmcp

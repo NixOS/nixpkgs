@@ -6,7 +6,7 @@
   makeDesktopItem,
   SDL2,
   pkg-config,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SDL2.dev
     libx11
     libxcursor
-    xorg.libXrandr
+    libxrandr
     libxi
   ];
 

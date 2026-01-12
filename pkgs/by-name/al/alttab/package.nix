@@ -13,6 +13,7 @@
   which,
   xnee,
   xorg,
+  libxrandr,
   libxpm,
   libxmu,
   libxft,
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     libxft
     libxmu
     libxpm
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
   ];
 

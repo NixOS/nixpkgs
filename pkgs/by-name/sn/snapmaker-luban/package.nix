@@ -27,7 +27,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   libxcb,
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxi
-    libXrandr
+    libxrandr
     libXrender
     libXtst
     nspr

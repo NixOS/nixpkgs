@@ -5,7 +5,7 @@
   version,
   autoPatchelfHook,
   fontconfig,
-  xorg,
+  libxrandr,
   libxfixes,
   libxcursor,
   libx11,
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     fontconfig
-    xorg.libXrandr
+    libxrandr
     libxfixes
     libxcursor
     libsm

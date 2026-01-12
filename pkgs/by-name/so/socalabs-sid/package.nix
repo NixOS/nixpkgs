@@ -8,6 +8,7 @@
   copyDesktopItems,
   makeDesktopItem,
   xorg,
+  libxrandr,
   libxinerama,
   libxdmcp,
   libxcursor,
@@ -81,7 +82,7 @@ stdenv.mkDerivation {
     libxcomposite
     libxcursor
     libxinerama
-    xorg.libXrandr
+    libxrandr
     xorg.libXtst
     libxdmcp
     xvfb

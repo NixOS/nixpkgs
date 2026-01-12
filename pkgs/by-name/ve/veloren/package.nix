@@ -13,7 +13,7 @@
   libx11,
   libxi,
   libxcursor,
-  libXrandr,
+  libxrandr,
   wayland,
   stdenv,
 }:
@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage {
         libx11
         libxi
         libxcursor
-        libXrandr
+        libxrandr
         vulkan-loader
       ]
       ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [

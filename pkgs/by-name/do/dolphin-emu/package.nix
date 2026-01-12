@@ -41,7 +41,7 @@
   bluez,
   libGL,
   libxext,
-  libXrandr,
+  libxrandr,
   libevdev,
   udev,
   vulkan-loader,
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     bluez
     libGL
     libxext
-    libXrandr
+    libxrandr
     libevdev
     # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
     #mgba # Derivation doesn't support Darwin

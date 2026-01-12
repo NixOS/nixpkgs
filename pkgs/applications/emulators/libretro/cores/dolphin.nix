@@ -14,6 +14,7 @@
   sfml,
   udev,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxext,
@@ -52,7 +53,7 @@ mkLibretroCore {
     libxext
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
     xorg.libXxf86vm
     libpthread-stubs
     libxcb

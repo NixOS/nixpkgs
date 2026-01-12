@@ -15,7 +15,7 @@
   alsa-lib,
   libpulseaudio,
   libxpm,
-  libXrandr,
+  libxrandr,
   flac,
   libogg,
   libvorbis,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     jack2
     libGL
     libxpm
-    libXrandr
+    libxrandr
     libogg
     libopus
     libpulseaudio

@@ -6,7 +6,7 @@
   makeWrapper,
   cmake,
   pkg-config,
-  xorg ? null,
+  libxrandr,
   libxi,
   libxinerama,
   libxext,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # glfw-sys dependencies:
     libx11
-    xorg.libXrandr
+    libxrandr
     libxinerama
     libxcursor
     libxi

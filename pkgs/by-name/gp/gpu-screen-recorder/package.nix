@@ -20,7 +20,7 @@
   libglvnd,
   libxdamage,
   libxi,
-  libXrandr,
+  libxrandr,
   libxfixes,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libva
     libxdamage
     libxi
-    libXrandr
+    libxrandr
     libxfixes
   ];
 

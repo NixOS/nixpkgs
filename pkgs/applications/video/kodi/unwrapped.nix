@@ -98,7 +98,7 @@
   libxmu,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXtst,
   libxfixes,
   xdpyinfo,
@@ -357,7 +357,7 @@ stdenv.mkDerivation (
       libxext.dev
       libxdmcp
       libxinerama
-      libXrandr.dev
+      libxrandr.dev
       libXtst
       libxfixes
     ]

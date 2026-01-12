@@ -15,7 +15,7 @@
   gpu-screen-recorder,
   libglvnd,
   libx11,
-  libXrandr,
+  libxrandr,
   wayland,
   wrapGAppsHook3,
   wrapperDir ? "/run/wrappers/bin",
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libdrm
     libx11
-    libXrandr
+    libxrandr
     wayland
   ];
 

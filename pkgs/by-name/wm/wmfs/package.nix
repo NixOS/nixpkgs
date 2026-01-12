@@ -5,7 +5,7 @@
   fetchpatch,
   libx11,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libxpm,
   libxft,
   imlib2,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     imlib2
     libx11
     libxinerama
-    libXrandr
+    libxrandr
     libxpm
     libxft
   ];

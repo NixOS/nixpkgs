@@ -9,6 +9,7 @@
   runtimeShell,
   gtk3,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxext,
@@ -107,7 +108,7 @@ let
     libxext
     libxfixes
     libxi
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
     xorg.libXtst
     libxkbfile

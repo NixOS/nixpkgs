@@ -8,7 +8,7 @@
   glib,
   libpciaccess,
   libxcb,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxfixes,
   dbus,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libdrm
     libpciaccess
     libxcb
-    libXrandr
+    libxrandr
     libxinerama
     libxfixes
     dbus

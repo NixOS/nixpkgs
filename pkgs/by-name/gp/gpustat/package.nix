@@ -8,7 +8,7 @@
   libx11,
   libxcursor,
   libxi,
-  libXrandr,
+  libxrandr,
   cmake,
   libxkbcommon,
   wayland,
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     libx11
     libxcursor
     libxi
-    libXrandr
+    libxrandr
     libxkbcommon
     wayland
   ];

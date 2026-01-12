@@ -9,7 +9,7 @@
   expat,
   fontconfig,
   libGL,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     libx11
     libxcursor
     libxi
-    xorg.libXrandr
+    libxrandr
     libxcb
   ];
 

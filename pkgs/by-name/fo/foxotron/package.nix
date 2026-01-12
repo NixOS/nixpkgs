@@ -9,7 +9,7 @@
   makeWrapper,
   zlib,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   libxi,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     libxi

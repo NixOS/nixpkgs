@@ -7,6 +7,7 @@
   makeWrapper,
   nss,
   xorg,
+  libxrandr,
   libxext,
   libxdamage,
   libx11,
@@ -74,7 +75,7 @@ let
       opencv4WithoutCuda
       pipewire
       libxdamage
-      xorg.libXrandr
+      libxrandr
       libx11
     ];
 
@@ -278,7 +279,7 @@ stdenv.mkDerivation {
         "--set QT_STYLE_OVERRIDE fusion"
         "--set IBUS_USE_PORTAL 1"
         "--set XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
-        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${libxext}/lib:${libxdamage}/lib:${opencv4WithoutCuda}/lib:${xorg.libXrandr}/lib"
+        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${libxext}/lib:${libxdamage}/lib:${opencv4WithoutCuda}/lib:${libxrandr}/lib"
         "--prefix PATH : $out/app/wemeet/bin"
         "--prefix QT_PLUGIN_PATH : $out/app/wemeet/plugins"
       ];

@@ -9,7 +9,7 @@
   libx11,
   libxext,
   libxpm,
-  libXrandr,
+  libxrandr,
   ncurses,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxpm
-    libXrandr
+    libxrandr
   ];
 
   enableParallelBuilding = true;

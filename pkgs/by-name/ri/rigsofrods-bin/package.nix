@@ -9,7 +9,7 @@
   libice,
   libsm,
   libx11,
-  libXrandr,
+  libxrandr,
   zlib,
   alsa-lib,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     libice
     libsm
     libx11
-    libXrandr
+    libxrandr
     stdenv.cc.cc
     zlib
   ];

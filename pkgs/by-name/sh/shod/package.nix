@@ -7,7 +7,7 @@
   libx11,
   libxft,
   libxpm,
-  libXrandr,
+  libxrandr,
   libXrender,
   conf ? null,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libx11
     libxft
     libxpm
-    libXrandr
+    libxrandr
     libXrender
   ];
 

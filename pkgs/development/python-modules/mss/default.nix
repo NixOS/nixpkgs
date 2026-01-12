@@ -9,7 +9,7 @@
   hatchling,
 
   # native dependencies
-  xorg,
+  libxrandr,
   libxfixes,
   libx11,
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     (replaceVars ./linux-paths.patch {
       x11 = "${libx11}/lib/libX11.so";
       xfixes = "${libxfixes}/lib/libXfixes.so";
-      xrandr = "${xorg.libXrandr}/lib/libXrandr.so";
+      xrandr = "${libxrandr}/lib/libXrandr.so";
     })
   ];
 

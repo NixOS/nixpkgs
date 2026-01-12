@@ -17,7 +17,7 @@
   libxkbcommon,
   alsa-lib,
   expat,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxdamage
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxkbfile
     glib
     at-spi2-atk

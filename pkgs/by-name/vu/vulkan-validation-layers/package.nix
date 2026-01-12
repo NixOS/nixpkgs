@@ -13,7 +13,7 @@
   libxau,
   libxcb,
   libxdmcp,
-  libXrandr,
+  libxrandr,
   spirv-headers,
   spirv-tools,
   vulkan-headers,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libx11
     libxau
     libxdmcp
-    libXrandr
+    libxrandr
     libffi
     libxcb
     wayland

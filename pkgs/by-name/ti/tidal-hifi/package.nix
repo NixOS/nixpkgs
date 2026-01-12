@@ -32,7 +32,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXrandr,
+  libxrandr,
   libxkbfile,
   pango,
   systemd,
@@ -68,7 +68,7 @@ let
     libxdamage
     libxext
     libxfixes
-    libXrandr
+    libxrandr
     libxkbfile
     pango
     pciutils

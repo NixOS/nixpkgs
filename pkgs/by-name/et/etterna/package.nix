@@ -10,6 +10,7 @@
   openssl,
   libGLU,
   xorg,
+  libxrandr,
   libxinerama,
   libxext,
   libx11,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     sse2neon
     libxinerama
-    xorg.libXrandr
+    libxrandr
     libx11
     libxext # Needed for DPMS
     xorg.libXvMC

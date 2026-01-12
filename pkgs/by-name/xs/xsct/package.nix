@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gitUpdater,
   libx11,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXrandr
+    libxrandr
   ];
 
   makeFlags = [

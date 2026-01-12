@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   libxi,
-  libXrandr,
+  libxrandr,
   libXt,
   libXtst,
 }:
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   buildInputs = [
     libxi
-    libXrandr
+    libxrandr
     libXt
     libXtst
   ];

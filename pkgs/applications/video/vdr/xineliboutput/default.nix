@@ -13,7 +13,7 @@
   libx11,
   libxext,
   libXrender,
-  libXrandr,
+  libxrandr,
   ffmpeg,
   avahi,
   wayland,
@@ -72,7 +72,7 @@ let
       libGLU
       libvdpau
       libxext
-      libXrandr
+      libxrandr
       libXrender
       libx11
       vdr

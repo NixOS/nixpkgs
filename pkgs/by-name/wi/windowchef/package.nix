@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXrandr,
+  libxrandr,
   xcbutil,
   xcbutilkeysyms,
   xcbutilwm,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxcb
-    libXrandr
+    libxrandr
     xcbutil
     xcbutilkeysyms
     xcbutilwm

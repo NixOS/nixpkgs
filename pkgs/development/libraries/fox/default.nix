@@ -10,7 +10,7 @@
   mesa_glu,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
   libxft,
   cups,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mesa_glu
     libxcursor
     libxext
-    libXrandr
+    libxrandr
     libxft
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

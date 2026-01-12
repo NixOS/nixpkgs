@@ -109,7 +109,7 @@ let
           libxi
           libxinerama
           libxkbfile
-          xorg.libXrandr
+          libxrandr
           xorg.libXrender
           xorg.libXScrnSaver
           xorg.libXtst

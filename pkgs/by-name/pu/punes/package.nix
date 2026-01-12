@@ -10,7 +10,7 @@
   libGLU,
   alsa-lib,
   libx11,
-  libXrandr,
+  libxrandr,
   sndio,
   libsForQt5,
   qt6Packages,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libx11
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isBSD [
     sndio

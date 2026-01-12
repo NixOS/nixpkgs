@@ -4,7 +4,7 @@
   pkg-config,
   libx11,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxi,
   libxext,
@@ -32,7 +32,7 @@ buildGoModule rec {
   buildInputs = [
     libx11
     libxcursor
-    libXrandr
+    libxrandr
     libxinerama
     libxi
     libxext

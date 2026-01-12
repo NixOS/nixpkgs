@@ -11,7 +11,7 @@
   libxdamage,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   libinput,
@@ -53,7 +53,7 @@ let
       libxdamage
       libxext
       libxi
-      libXrandr
+      libxrandr
       libXrender
       libXtst
       libinput

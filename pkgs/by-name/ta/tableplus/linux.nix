@@ -12,6 +12,7 @@
   stdenv,
   wrapGAppsHook3,
   xorg,
+  libxrandr,
   libxi,
   libxext,
   libxcursor,
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxi
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
     libxcb
   ];

@@ -15,6 +15,7 @@
   ucx,
   wayland,
   xorg,
+  libxrandr,
   libxdamage,
   libxcursor,
 }:
@@ -123,7 +124,7 @@ buildRedist (
       wayland
       libxcursor
       libxdamage
-      xorg.libXrandr
+      libxrandr
       xorg.libXtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.

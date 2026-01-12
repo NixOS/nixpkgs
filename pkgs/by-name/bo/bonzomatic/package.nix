@@ -9,7 +9,7 @@
   mesa_glu,
   libxcursor,
   libxinerama,
-  libXrandr,
+  libxrandr,
   xinput,
   libxi,
   libxext,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     mesa_glu
     libxcursor
     libxinerama
-    libXrandr
+    libxrandr
     xinput
     libxi
     libxext

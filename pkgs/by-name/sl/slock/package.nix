@@ -6,7 +6,7 @@
   xorgproto,
   libx11,
   libxext,
-  libXrandr,
+  libxrandr,
   libxcrypt,
   config,
   conf ? config.slock.conf or null,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
     libx11
     libxext
-    libXrandr
+    libxrandr
     libxcrypt
   ]
   ++ extraLibs;

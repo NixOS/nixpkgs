@@ -18,7 +18,7 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -76,7 +76,7 @@ let
     libxdamage
     libxext
     libxfixes
-    xorg.libXrandr
+    libxrandr
     libxshmfence
     libxkbcommon
     libxkbfile

@@ -15,7 +15,7 @@
   libxext,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   libglvnd,
   writableTmpDirAsHomeHook,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     libglvnd
   ];

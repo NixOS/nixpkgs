@@ -5,7 +5,7 @@
   fetchFromGitHub,
   restish,
   testers,
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -30,7 +30,7 @@ buildGoModule rec {
     libxcursor
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
   ];
 
   ldflags = [

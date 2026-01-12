@@ -6,7 +6,7 @@
   stdenv,
   pkg-config,
   fontconfig,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libxcursor
     libxi
-    xorg.libXrandr
+    libxrandr
     libxcb
     wayland
     libxkbcommon

@@ -6,6 +6,7 @@
   gtk3,
   librsvg,
   xorg,
+  libxrandr,
   libxinerama,
   libxext,
   libx11,
@@ -48,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     xorg.libXxf86vm
     libxext
     libxinerama
-    xorg.libXrandr
+    libxrandr
   ];
 
   # Workaround for eoyilmaz/displaycal-py3#261

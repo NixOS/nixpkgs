@@ -8,7 +8,7 @@
   libnotify,
   glfw,
   makeWrapper,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   gtk3,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     gtk3

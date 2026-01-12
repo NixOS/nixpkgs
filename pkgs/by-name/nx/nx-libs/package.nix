@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  libxrandr,
   libxpm,
   libxinerama,
   libxfont_2,
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     libxfont_2
     libxinerama
     libxpm
-    xorg.libXrandr
+    libxrandr
     xorg.libXtst
     pixman
     xkbcomp

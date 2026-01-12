@@ -14,7 +14,7 @@
   xcbutilkeysyms,
   libxkbcommon,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   pango,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilkeysyms
     libxkbcommon
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     pango

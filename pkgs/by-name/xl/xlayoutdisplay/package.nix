@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   pkg-config,
-  xorg,
+  libxrandr,
   libxcursor,
   libx11,
   boost,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libx11
-    xorg.libXrandr
+    libxrandr
     libxcursor
     boost
   ];

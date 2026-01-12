@@ -9,7 +9,7 @@
   vulkan-utility-libraries,
   jq,
   libx11,
-  libXrandr,
+  libxrandr,
   libxcb,
   wayland,
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-utility-libraries
     libx11
-    libXrandr
+    libxrandr
     libxcb
     wayland
   ];

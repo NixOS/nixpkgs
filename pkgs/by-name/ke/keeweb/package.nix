@@ -22,7 +22,7 @@
   libx11,
   libxcomposite,
   libxext,
-  libXrandr,
+  libxrandr,
   libXScrnSaver,
   libXtst,
   libxshmfence,
@@ -58,7 +58,7 @@ let
     libx11
     libxcomposite
     libxext
-    libXrandr
+    libxrandr
     libXScrnSaver
     libXtst
     libxshmfence

@@ -10,7 +10,7 @@
   fontconfig,
   pkg-config,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -70,7 +70,7 @@ let
 
   x11Libs = [
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxext
     libxcursor

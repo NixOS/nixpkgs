@@ -8,7 +8,7 @@
   wayland,
   wayland-protocols,
   libxkbcommon,
-  libXrandr,
+  libxrandr,
   libxi,
   libxcursor,
   nix-update-script,
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     wayland
     wayland-protocols
     libxkbcommon
-    libXrandr
+    libxrandr
     libxi
     libxcursor
   ];

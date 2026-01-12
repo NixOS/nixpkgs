@@ -8,7 +8,7 @@
   libxext,
   libxft,
   libxpm,
-  libXrandr,
+  libxrandr,
   libXrender,
   xorgproto,
   libxinerama,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libxext
     libxft
     libxpm
-    libXrandr
+    libxrandr
     libXrender
     xorgproto
     libxinerama

@@ -8,7 +8,7 @@
   libxext,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   ncurses,
   pixman,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libxext
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     ncurses
     udev

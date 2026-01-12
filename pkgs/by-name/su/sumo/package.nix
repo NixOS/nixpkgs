@@ -27,6 +27,7 @@
   swig,
   xercesc,
   xorg,
+  libxrandr,
   libxft,
   libxfixes,
   libxext,
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxft
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
   ];
 

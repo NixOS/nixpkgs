@@ -7,7 +7,7 @@
   stdenv,
   withSixel ? false,
   libsixel,
-  xorg,
+  libxrandr,
   libx11,
   withSki ? true,
 }:
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     lib.optional withSixel libsixel
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libx11
-      xorg.libXrandr
+      libxrandr
     ];
 
   buildNoDefaultFeatures = !withSki;

@@ -9,7 +9,7 @@
   libx11,
   libxext,
   libxcursor,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libpulseaudio,
   libGL,
@@ -34,7 +34,7 @@ let
     libx11
     libxext
     libxcursor
-    libXrandr
+    libxrandr
     libXxf86vm
 
     # lwjgl

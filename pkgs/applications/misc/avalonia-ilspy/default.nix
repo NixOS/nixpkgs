@@ -10,7 +10,7 @@
   libxi,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
   fontconfig,
   glew,
   makeDesktopItem,
@@ -65,7 +65,7 @@ buildDotnetModule rec {
     libxi
     libxcursor
     libxext
-    libXrandr
+    libxrandr
     fontconfig
     glew
   ];

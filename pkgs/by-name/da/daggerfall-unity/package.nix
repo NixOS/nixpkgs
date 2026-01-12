@@ -10,7 +10,7 @@
   libxcursor,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libpulseaudio,
   libudev0-shim,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXxf86vm
     libpulseaudio
     libudev0-shim

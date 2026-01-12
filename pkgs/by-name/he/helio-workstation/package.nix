@@ -4,7 +4,7 @@
   fetchFromGitHub,
   alsa-lib,
   freetype,
-  xorg,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxinerama
-    xorg.libXrandr
+    libxrandr
     libxcursor
     libxcomposite
     curl

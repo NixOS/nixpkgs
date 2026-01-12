@@ -3,7 +3,7 @@
   stdenv,
   requireFile,
   dpkg,
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       libPath = lib.makeLibraryPath [
         libxcursor
         libxinerama
-        xorg.libXrandr
+        libxrandr
         libx11
         libxi
         libGL

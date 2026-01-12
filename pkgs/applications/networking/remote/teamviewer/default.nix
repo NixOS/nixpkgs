@@ -9,7 +9,7 @@
   dbus,
   getconf,
   glibc,
-  libXrandr,
+  libxrandr,
   libx11,
   libxext,
   libxdamage,
@@ -127,7 +127,7 @@ mkDerivation rec {
     }"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        libXrandr
+        libxrandr
         libx11
         libxext
         libxdamage

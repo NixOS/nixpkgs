@@ -19,7 +19,7 @@
   libxcursor,
   libxi,
   libxkbcommon,
-  libXrandr,
+  libxrandr,
   makeWrapper,
   mold,
   pango,
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
     # WINIT_UNIX_BACKEND=x11
     libxcursor
-    libXrandr
+    libxrandr
     libxi
     libx11
 

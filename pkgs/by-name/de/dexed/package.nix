@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxcursor
     libxinerama
-    libXrandr
+    libxrandr
     freetype
     alsa-lib
     libjack2

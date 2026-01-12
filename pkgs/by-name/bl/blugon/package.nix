@@ -4,7 +4,7 @@
   fetchFromGitHub,
   python3,
   libx11,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     libx11
-    libXrandr
+    libxrandr
   ];
 
   # Remove at next release

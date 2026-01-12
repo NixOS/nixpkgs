@@ -22,7 +22,7 @@
   libGL,
   libx11,
   libxinerama,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation {
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libx11
       libxinerama
-      libXrandr
+      libxrandr
       libGLU
       libGL
     ]

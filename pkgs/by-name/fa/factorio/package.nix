@@ -11,7 +11,7 @@
   libxext,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libpulseaudio,
   libxkbcommon,
   makeDesktopItem,
@@ -250,7 +250,7 @@ let
         libxext
         libxi
         libxinerama
-        libXrandr
+        libxrandr
         libpulseaudio
         libxkbcommon
         wayland

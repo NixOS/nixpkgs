@@ -11,7 +11,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   liberation_ttf,
   makeFontsConf,
   nodejs,
@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation (
           --replace-fail '"libSM.so.6"' '"${lib.getLib libsm}/lib/libSM.so.6"'
         substituteInPlace src/Avalonia.X11/XLib.cs \
           --replace-fail '"libX11.so.6"' '"${lib.getLib libx11}/lib/libX11.so.6"' \
-          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
+          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libxrandr}/lib/libXrandr.so.2"' \
           --replace-fail '"libXext.so.6"' '"${lib.getLib libxext}/lib/libXext.so.6"' \
           --replace-fail '"libXi.so.6"' '"${lib.getLib libxi}/lib/libXi.so.6"' \
           --replace-fail '"libXcursor.so.1"' '"${lib.getLib libxcursor}/lib/libXcursor.so.1"'

@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxrandr,
   libxinerama,
   libxdamage,
   libxcomposite,
@@ -73,7 +74,7 @@ let
       libxcomposite
       libxdamage
       libxinerama
-      xorg.libXrandr
+      libxrandr
       xorg.libXrender
       xorg.libXtst
       libxshmfence

@@ -12,7 +12,7 @@
   libstartup_notification,
   libGL,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   libxkbcommon,
@@ -88,7 +88,7 @@ buildPythonApplication rec {
     libunistring
     libcanberra
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     libxkbcommon

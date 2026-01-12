@@ -22,7 +22,7 @@
   libxi,
   libXxf86vm,
   libxcb,
-  libXrandr,
+  libxrandr,
   ninja,
   pcre2,
   pixman,
@@ -89,7 +89,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxi
     libXxf86vm
     libxcb
-    libXrandr
+    libxrandr
     pcre2
     pixman
     skia-aseprite

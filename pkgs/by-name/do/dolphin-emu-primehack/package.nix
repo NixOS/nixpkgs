@@ -20,7 +20,7 @@
   libxdmcp,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   libao,
   libpthread-stubs,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libxext
     libxinerama
-    libXrandr
+    libxrandr
     libXxf86vm
     libao
     libpthread-stubs

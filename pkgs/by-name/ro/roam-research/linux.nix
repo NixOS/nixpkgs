@@ -20,7 +20,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   libdrm,
@@ -54,7 +54,7 @@ let
     libxext
     libxfixes
     libxi
-    libXrandr
+    libxrandr
     libdrm
     libxcb
     libxkbcommon

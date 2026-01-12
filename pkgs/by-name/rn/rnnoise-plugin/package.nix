@@ -8,7 +8,7 @@
   pcre,
   pkg-config,
   webkitgtk_4_1,
-  xorg,
+  libxrandr,
   libx11,
 }:
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk3-x11
     pcre
     libx11
-    xorg.libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1

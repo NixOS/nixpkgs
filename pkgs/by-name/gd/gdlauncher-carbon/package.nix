@@ -8,6 +8,7 @@
   copyDesktopItems,
   autoPatchelfHook,
   xorg,
+  libxrandr,
   libxext,
   libxcursor,
   libx11,
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
         libx11
         libxext
         libxcursor
-        xorg.libXrandr
+        libxrandr
         xorg.libXxf86vm
 
         # lwjgl

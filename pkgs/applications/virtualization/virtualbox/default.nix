@@ -23,7 +23,7 @@
   libpng,
   glib,
   lvm2,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libopus,
   libtpms,
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeself
     perl
     libxmu
-    libXrandr
+    libxrandr
     libpng
     libopus
     libtpms

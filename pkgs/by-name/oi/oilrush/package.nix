@@ -6,7 +6,7 @@
   libx11,
   libxext,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   fontconfig,
   freetype,
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
         libx11
         libxext
         libxinerama
-        libXrandr
+        libxrandr
       ]
     }\
              libUnigine_$arch.so
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
         libx11
         libxext
         libxinerama
-        libXrandr
+        libxrandr
       ]
     }\
              OilRush_$arch

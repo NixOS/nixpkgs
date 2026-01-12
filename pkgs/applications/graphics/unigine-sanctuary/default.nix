@@ -6,7 +6,7 @@
   autoPatchelfHook,
   libx11,
   libxext,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libglvnd,
   openal,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     libx11
     libxext
-    libXrandr
+    libxrandr
     libxinerama
   ];
 

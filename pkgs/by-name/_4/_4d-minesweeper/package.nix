@@ -15,7 +15,7 @@
   libxfixes,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   libglvnd,
   libpulseaudio,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     libxfixes
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     libglvnd
     libpulseaudio

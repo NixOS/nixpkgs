@@ -12,7 +12,7 @@
   libxcursor,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
 }:
 
 buildDunePackage rec {
@@ -49,7 +49,7 @@ buildDunePackage rec {
     libxcursor
     libxi
     libxinerama
-    libXrandr
+    libxrandr
   ];
 
   meta = {

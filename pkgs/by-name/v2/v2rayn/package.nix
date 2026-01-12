@@ -14,7 +14,7 @@
   lttng-ust_2_12,
   krb5,
   bash,
-  xorg,
+  libxrandr,
   libxi,
   libxext,
   libxcursor,
@@ -80,7 +80,7 @@ buildDotnetModule (finalAttrs: {
 
   runtimeDeps = [
     libx11
-    xorg.libXrandr
+    libxrandr
     libxi
     libice
     libsm

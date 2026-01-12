@@ -5,6 +5,7 @@
   pkg-config,
   libGL,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxext,
@@ -36,7 +37,7 @@ buildGoModule rec {
     libxext
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
     xorg.libXxf86vm
   ];
 

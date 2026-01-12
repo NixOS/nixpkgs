@@ -18,7 +18,7 @@
       libxdamage
       libxi
       xorg.libXrender
-      xorg.libXrandr
+      libxrandr
       libxcomposite
       libxcursor
       xorg.libXtst

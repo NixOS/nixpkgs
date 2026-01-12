@@ -14,7 +14,7 @@
   expat,
   fontconfig,
   vulkan-loader,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     libxi
-    xorg.libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook

@@ -18,7 +18,7 @@
   libxcomposite,
   libxdamage,
   libXtst,
-  libXrandr,
+  libxrandr,
   alsa-lib,
   dbus,
   cups,
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libxdamage
     libXtst
-    libXrandr
+    libxrandr
     atk
     at-spi2-atk
     at-spi2-core

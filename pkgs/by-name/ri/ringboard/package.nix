@@ -6,7 +6,7 @@
   libxkbcommon,
   libGL,
   wayland,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (displayServer == "x11") [
     libxcursor
-    xorg.libXrandr
+    libxrandr
     libxi
     libx11
   ]

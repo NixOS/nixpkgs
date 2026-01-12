@@ -6,7 +6,7 @@
   jdk21,
   fontconfig,
   libxinerama,
-  libXrandr,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libxinerama
-    libXrandr
+    libxrandr
     file
     gtk3
     glib

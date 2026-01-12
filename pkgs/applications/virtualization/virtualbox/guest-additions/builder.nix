@@ -9,7 +9,7 @@
   libxcursor,
   libxmu,
   glib,
-  libXrandr,
+  libxrandr,
   dbus,
   xz,
   pkg-config,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     pam
     libxmu
-    libXrandr
+    libxrandr
   ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

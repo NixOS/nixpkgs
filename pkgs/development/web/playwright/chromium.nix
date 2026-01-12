@@ -31,7 +31,7 @@
   stdenv,
   systemd,
   vulkan-loader,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -91,7 +91,7 @@ let
       libxdamage
       libxext
       libxfixes
-      xorg.libXrandr
+      libxrandr
       libxcb
     ];
 

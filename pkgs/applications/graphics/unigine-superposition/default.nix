@@ -13,7 +13,7 @@
   libxi,
   libglvnd,
   libxext,
-  libXrandr,
+  libxrandr,
   mailspring,
   libx11,
   libice,
@@ -59,7 +59,7 @@ let
       libxi
       libglvnd
       libxext
-      libXrandr
+      libxrandr
       mailspring
       libx11
       libice
@@ -116,7 +116,7 @@ buildFHSEnv {
     libxi
     libglvnd
     libxext
-    libXrandr
+    libxrandr
     mailspring
     libx11
     libice

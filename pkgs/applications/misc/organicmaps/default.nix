@@ -19,7 +19,7 @@
   icu,
   freetype,
   pugixml,
-  xorg,
+  libxrandr,
   libxinerama,
   libxcursor,
   nix-update-script,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     freetype
     pugixml
-    xorg.libXrandr
+    libxrandr
     libxinerama
     libxcursor
   ];

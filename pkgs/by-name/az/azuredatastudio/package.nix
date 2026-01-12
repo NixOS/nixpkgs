@@ -29,7 +29,7 @@
   pango,
   systemd,
   wrapGAppsHook3,
-  xorg,
+  libxrandr,
   libxfixes,
   libxext,
   libxdamage,
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
       libxdamage
       libxext
       libxfixes
-      xorg.libXrandr
+      libxrandr
       libxshmfence
       libxkbcommon
       libxkbfile

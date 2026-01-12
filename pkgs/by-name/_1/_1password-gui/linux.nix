@@ -23,7 +23,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXrandr,
+  libxrandr,
   libdrm,
   libxcb,
   libxkbcommon,
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
           libxdamage
           libxext
           libxfixes
-          libXrandr
+          libxrandr
           libdrm
           libxcb
           libxkbcommon

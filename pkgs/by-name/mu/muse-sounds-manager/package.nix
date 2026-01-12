@@ -9,7 +9,7 @@
   libx11,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   libice,
   libsm,
   openssl,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxi
-    libXrandr
+    libxrandr
     libice
     libsm
     openssl

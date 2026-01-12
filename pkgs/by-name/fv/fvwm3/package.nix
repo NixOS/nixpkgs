@@ -14,7 +14,7 @@
   libxi,
   libxinerama,
   libxpm,
-  libXrandr,
+  libxrandr,
   libXt,
   libevent,
   libintl,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxpm
-    libXrandr
+    libxrandr
     libXt
     libevent
     libintl

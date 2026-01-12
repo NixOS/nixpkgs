@@ -12,7 +12,7 @@
   libpng,
   openexr,
   onetbb,
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxext,
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     libxext
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ilmbase

@@ -18,6 +18,7 @@
   libopus,
   nasm,
   xorg,
+  libxrandr,
   libxfixes,
   libx11,
   xauth,
@@ -114,7 +115,7 @@ let
       systemd
       libx11
       libxfixes
-      xorg.libXrandr
+      libxrandr
     ];
 
     postPatch = ''

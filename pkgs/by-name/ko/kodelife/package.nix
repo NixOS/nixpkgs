@@ -15,7 +15,7 @@
   libxext,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXxf86vm,
   libglvnd,
@@ -32,7 +32,7 @@ let
     libxext
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     libXxf86vm
     libglvnd

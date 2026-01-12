@@ -13,7 +13,7 @@
   pulseaudio,
   libxext,
   libx11,
-  libXrandr,
+  libxrandr,
   glibc,
   cairo,
   libva,
@@ -86,7 +86,7 @@ buildFHSEnv {
     coreutils
     libx11
     libxext
-    libXrandr
+    libxrandr
     glibc
     libdrm
     libGL

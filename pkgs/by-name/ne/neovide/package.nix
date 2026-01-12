@@ -16,7 +16,7 @@
   cctools,
   SDL2,
   fontconfig,
-  xorg,
+  libxrandr,
   libxi,
   libxext,
   libxcursor,
@@ -94,7 +94,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
           libx11
           libxcursor
           libxext
-          xorg.libXrandr
+          libxrandr
           libxi
         ]
         ++ lib.optionals enableWayland [ wayland ]

@@ -9,7 +9,7 @@
   libxext,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXxf86vm,
   go-licenses,
   pkg-config,
@@ -42,7 +42,7 @@ buildGoModule rec {
     libxext
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXxf86vm
   ];
 

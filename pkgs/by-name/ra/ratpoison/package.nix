@@ -9,7 +9,7 @@
   libxft,
   libxi,
   libxpm,
-  libXrandr,
+  libxrandr,
   libXt,
   libXtst,
   perl,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
     libxi
     libxpm
-    libXrandr
+    libxrandr
     libXt
     libXtst
     perl

@@ -5,7 +5,7 @@
   makeWrapper,
   libx11,
   libxext,
-  libXrandr,
+  libxrandr,
   freetype,
   fontconfig,
   libXrender,
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     libx11
     stdenv.cc.cc
     libxext
-    libXrandr
+    libxrandr
     freetype
     fontconfig
     libXrender

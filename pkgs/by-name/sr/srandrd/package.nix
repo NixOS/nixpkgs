@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXrandr
+    libxrandr
     libxinerama
   ];
 

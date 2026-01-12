@@ -4,6 +4,7 @@
   lib,
   pkg-config,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxfixes,
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
     xorg.libXt
     xorgproto
     wayland

@@ -5,7 +5,7 @@
   versionCheckHook,
   nix-update-script,
   pkg-config,
-  xorg,
+  libxrandr,
   libxinerama,
   libxft,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libxft
-    xorg.libXrandr
+    libxrandr
     libxinerama
   ];
 

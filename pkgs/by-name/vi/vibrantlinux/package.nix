@@ -5,7 +5,7 @@
   cmake,
   libvibrant,
   libxcb,
-  libXrandr,
+  libxrandr,
   pkg-config,
   qt6,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libvibrant
     libxcb
-    libXrandr
+    libxrandr
     qt6.qtbase
     qt6.qttools
   ];

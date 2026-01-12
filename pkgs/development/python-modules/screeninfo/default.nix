@@ -5,7 +5,7 @@
   fetchFromGitHub,
   libx11,
   libxinerama,
-  libXrandr,
+  libxrandr,
   poetry-core,
   pytestCheckHook,
 }:
@@ -30,7 +30,7 @@ buildPythonPackage rec {
       --replace 'load_library("Xinerama")' 'ctypes.cdll.LoadLibrary("${libxinerama}/lib/libXinerama.so")'
     substituteInPlace screeninfo/enumerators/xrandr.py \
       --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libx11}/lib/libX11.so")' \
-      --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libXrandr}/lib/libXrandr.so")'
+      --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libxrandr}/lib/libXrandr.so")'
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

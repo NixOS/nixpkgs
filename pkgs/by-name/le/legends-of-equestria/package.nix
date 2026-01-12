@@ -28,6 +28,7 @@
   libasyncns,
   pango,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxfixes,
@@ -85,7 +86,7 @@ let
     libxfixes
     libxinerama
     libxi
-    xorg.libXrandr
+    libxrandr
     xorg.libXScrnSaver
   ];
 in

@@ -27,7 +27,7 @@
   spdlog,
   libxkbcommon,
   glfw,
-  libXrandr,
+  libxrandr,
   x11Support ? true,
   waylandSupport ? true,
   nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (x11Support || waylandSupport) libxkbcommon
   ++ lib.optionals mangoappSupport [
     glfw
-    libXrandr
+    libxrandr
   ];
 
   doCheck = true;

@@ -30,6 +30,7 @@
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxfixes,
@@ -177,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage
     libxfixes
     libxi
-    xorg.libXrandr
+    libxrandr
     xorg.libXrender
   ]
   ++ [

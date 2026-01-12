@@ -8,7 +8,7 @@
   jetbrains, # Requird by upstream due to JCEF dependency
   fontconfig,
   libxinerama,
-  libXrandr,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libxinerama
-    libXrandr
+    libxrandr
     file
     shine
     libmpeg2

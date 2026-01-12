@@ -7,6 +7,7 @@
   dotool,
   libGL,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -46,7 +47,7 @@ buildGoModule (finalAttrs: {
     libxcursor
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
     xorg.libXxf86vm
     libxkbcommon
     wayland

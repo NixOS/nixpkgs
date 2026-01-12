@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxrandr,
   libxext,
   libx11,
   xorgproto,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libx11
     xorgproto
     libxext
-    xorg.libXrandr
+    libxrandr
   ];
 
   hardeningDisable = [ "format" ];

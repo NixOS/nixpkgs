@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       # FIXME: these are not actually needed, but the configure script wants them.
       glew
       libx11
-      xorg.libXrandr
+      libxrandr
       xorg.libXxf86vm
       libxcursor
       libxinerama

@@ -13,7 +13,7 @@
   libffi,
   wayland,
   egl-wayland,
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     egl-wayland
     libx11
-    xorg.libXrandr
+    libxrandr
     libxinerama
     libxcursor
     libxi

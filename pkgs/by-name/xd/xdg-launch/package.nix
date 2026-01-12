@@ -9,7 +9,7 @@
   perl,
   pkg-config,
   glib,
-  xorg,
+  libxrandr,
   libx11,
 }:
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    xorg.libXrandr
+    libxrandr
     glib # can be optional
   ];
 

@@ -27,6 +27,7 @@
   pango,
   pangomm,
   xorg,
+  libxrandr,
   libx11,
   libxcb,
   zlib,
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     pangomm
     libx11
-    xorg.libXrandr
+    libxrandr
     xorg.libXt
     xorg.libXtst
     libxcb

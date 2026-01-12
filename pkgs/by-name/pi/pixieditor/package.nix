@@ -19,7 +19,7 @@
   libxi,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
 
   makeDesktopItem,
   copyDesktopItems,
@@ -108,7 +108,7 @@ buildDotnetModule (finalAttrs: {
     libxi
     libxcursor
     libxext
-    libXrandr
+    libxrandr
   ];
 
   desktopItems = [

@@ -11,7 +11,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
 
   git,
   xdg-utils,
@@ -58,7 +58,7 @@ buildDotnetModule (finalAttrs: {
     libxcursor
     libxext
     libxi
-    libXrandr
+    libxrandr
   ];
 
   # Note: users can use `.overrideAttrs` to append to this list

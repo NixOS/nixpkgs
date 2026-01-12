@@ -30,7 +30,7 @@
   librsvg,
   libva,
   libx11,
-  libXrandr,
+  libxrandr,
   makeDesktopItem,
   nix-update-script,
   nlohmann_json,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libva
     libx11
-    libXrandr
+    libxrandr
     nlohmann_json
     openxr-loader
     onnxruntime

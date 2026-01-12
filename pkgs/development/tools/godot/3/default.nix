@@ -15,7 +15,7 @@
   libxfixes,
   libxi,
   libxinerama,
-  libXrandr,
+  libxrandr,
   libXrender,
   makeWrapper,
   openssl,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (self: {
     libxfixes
     libxi
     libxinerama
-    libXrandr
+    libxrandr
     libXrender
     openssl
     udev

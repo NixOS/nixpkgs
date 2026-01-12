@@ -24,6 +24,7 @@
     jdk17
   ],
   xorg,
+  libxrandr,
   libxext,
   libxcursor,
   libx11,
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXxf86vm
     libxext
     libxcursor
-    xorg.libXrandr
+    libxrandr
     xorg.libXtst
     libpulseaudio
     wayland

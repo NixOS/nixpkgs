@@ -5,7 +5,7 @@
   libGL,
   libx11,
   libxext,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   freetype,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     libGL
     libx11
     libxext
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     freetype

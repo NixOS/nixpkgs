@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxext,
@@ -81,7 +82,7 @@ buildPythonPackage rec {
               elif name == 'Xinerama':
                   path = '${libxinerama}/lib/libXinerama${ext}'
               elif name == 'Xrandr':
-                  path = '${lib.getLib xorg.libXrandr}/lib/libXrandr${ext}'
+                  path = '${lib.getLib libxrandr}/lib/libXrandr${ext}'
               elif name == 'Xrender':
                   path = '${lib.getLib xorg.libXrender}/lib/libXrender${ext}'
               elif name == 'Xxf86vm':

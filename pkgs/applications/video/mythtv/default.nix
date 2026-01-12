@@ -21,7 +21,7 @@
   lzo,
   libx11,
   libXv,
-  libXrandr,
+  libxrandr,
   libXvMC,
   libxinerama,
   libXxf86vm,
@@ -76,7 +76,7 @@ mkDerivation rec {
     fftwSinglePrec
     libx11
     libXv
-    libXrandr
+    libxrandr
     libXvMC
     libxmu
     libxinerama

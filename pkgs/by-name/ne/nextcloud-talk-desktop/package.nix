@@ -8,7 +8,7 @@
   makeDesktopItem,
   nss,
   cairo,
-  xorg,
+  libxrandr,
   libxfixes,
   libxdamage,
   libxcursor,
@@ -99,7 +99,7 @@ let
       libx11
       libxcomposite
       libxdamage
-      xorg.libXrandr
+      libxrandr
       libxfixes
       libxcursor
     ];

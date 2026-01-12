@@ -4,6 +4,7 @@
   fetchFromGitLab,
   SDL2,
   xorg,
+  libxrandr,
   libxi,
   libxfixes,
   libxext,
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     libxcursor
-    xorg.libXrandr
+    libxrandr
     libxfixes
     libxext
     libxi

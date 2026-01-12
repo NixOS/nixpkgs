@@ -9,7 +9,7 @@
   xcbutilcursor,
   xcbutilkeysyms,
   xcbutil,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxcursor,
   alsa-lib,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilcursor
     xcbutilkeysyms
     xcbutil
-    libXrandr
+    libxrandr
     libxinerama
     libxcursor
     alsa-lib

@@ -12,7 +12,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXrandr,
+  libxrandr,
   libarchive,
   libjack2,
   liblo,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libx11
     libxcursor
     libxext
-    libXrandr
+    libxrandr
     libarchive
     liblo
     libsamplerate

@@ -17,7 +17,7 @@
   libx11,
   libxkbcommon,
   libxext,
-  libXrandr,
+  libxrandr,
   libxi,
   libXScrnSaver,
   libxinerama,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxpresent
     libxext
-    libXrandr
+    libxrandr
     libxdmcp
   ]
   ++ lib.optionals waylandSupport [

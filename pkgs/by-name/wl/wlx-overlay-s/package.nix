@@ -8,7 +8,7 @@
   libx11,
   libxcb,
   libxext,
-  libXrandr,
+  libxrandr,
   libxkbcommon,
   makeWrapper,
   nix-update-script,
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     libx11
     libxcb
     libxext
-    libXrandr
+    libxrandr
     libxkbcommon
     openxr-loader
     pipewire

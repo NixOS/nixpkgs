@@ -17,7 +17,7 @@
   libXScrnSaver,
   libxext,
   libxpresent,
-  libXrandr,
+  libxrandr,
   libarchive,
   libass,
   libbluray,
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libGL
-    libXrandr
+    libxrandr
     libxpresent
     libXScrnSaver
   ]

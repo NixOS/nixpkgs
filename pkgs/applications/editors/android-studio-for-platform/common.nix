@@ -28,7 +28,7 @@
   libx11,
   libxext,
   libxi,
-  libXrandr,
+  libxrandr,
   libXrender,
   libXtst,
   makeFontsConf,
@@ -114,7 +114,7 @@ let
             libx11
 
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For GTKLookAndFeel
             gtk2

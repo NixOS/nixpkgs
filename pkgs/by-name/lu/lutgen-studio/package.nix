@@ -9,7 +9,7 @@
   libxkbcommon,
   openssl,
   wayland,
-  xorg,
+  libxrandr,
   libxi,
   libxcursor,
   libx11,
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
         openssl
         wayland
         libxcursor
-        xorg.libXrandr
+        libxrandr
         libxi
         libx11
       ];

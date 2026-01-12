@@ -6,7 +6,7 @@
   alsa-lib,
   freetype,
   libx11,
-  libXrandr,
+  libxrandr,
   libxinerama,
   libxext,
   libxcursor,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     freetype
     libx11
-    libXrandr
+    libxrandr
     libxinerama
     libxext
     libxcursor

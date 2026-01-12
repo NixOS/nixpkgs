@@ -19,7 +19,7 @@
   undmg,
   util-linux,
   wayland,
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxext,
@@ -30,7 +30,7 @@
 let
   libPath = lib.concatStringsSep ":" [
     "${glib.out}/lib"
-    "${xorg.libXrandr}/lib"
+    "${libxrandr}/lib"
     "${wayland.out}/lib"
   ];
   scriptPath = lib.concatStringsSep ":" [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcomposite
     libxext
-    xorg.libXrandr
+    libxrandr
     libxi
     libxinerama
   ];
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     dbus
     glib
-    xorg.libXrandr
+    libxrandr
   ];
 
   unpackPhase = ''

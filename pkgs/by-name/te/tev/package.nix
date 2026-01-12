@@ -15,7 +15,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxrandr,
   libxi,
   libxinerama,
   libxcursor,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxi
     libxinerama
-    xorg.libXrandr
+    libxrandr
   ];
 
   cmakeFlags = [
