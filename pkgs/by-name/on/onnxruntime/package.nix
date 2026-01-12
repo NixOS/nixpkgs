@@ -5,6 +5,7 @@
   fetchFromGitHub,
   applyPatches,
   fetchpatch,
+  fetchurl,
   abseil-cpp_202407,
   cmake,
   cpuinfo,
@@ -20,6 +21,7 @@
   removeReferencesTo,
   re2,
   zlib,
+  protobuf_32,
   protobuf_21,
   microsoft-gsl,
   darwinMinVersionHook,
@@ -40,7 +42,7 @@ let
   # TODO: update the following dependencies according to:
   # https://github.com/microsoft/onnxruntime/blob/v<VERSION>/cmake/deps.txt
 
-  protobuf = protobuf_21;
+  protobuf = if cudaSupport then protobuf_21 else protobuf_32;
 
   mp11-src = fetchFromGitHub {
     name = "mp11-src";
@@ -127,6 +129,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://github.com/microsoft/onnxruntime/commit/8ebd0bf1cf02414584d15d7244b07fa97d65ba02.patch";
       hash = "sha256-vX+kaFiNdmqWI91JELcLpoaVIHBb5EPbI7rCAMYAx04=";
+    })
+
+    # Skip execinfo include on musl
+    # https://github.com/microsoft/onnxruntime/pull/25726
+    ./musl-execinfo.patch
+    # Add missing include which is only needed on musl (is implied in other includes on glibc)
+    # https://github.com/microsoft/onnxruntime/pull/26969
+    ./musl-cstdint.patch
+
+    # Fix build of unit tests with musl libc
+    # https://github.com/microsoft/onnxruntime/issues/9155
+    (fetchurl {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch";
+      hash = "sha256-BdeGYevZExWWCuJ1lSw0Roy3h+9EbJgFF8qMwVxSn1A=";
     })
   ];
 
@@ -251,6 +267,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
+  env = lib.optionalAttrs effectiveStdenv.hostPlatform.isMusl {
+    NIX_CFLAGS_COMPILE = "-DFLATBUFFERS_LOCALE_INDEPENDENT=0";
+    GTEST_FILTER = "*:-ContribOpTest.StringNormalizer*";
+  };
+
   doCheck =
     !(
       cudaSupport
@@ -268,6 +289,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
     "nostrictaliasing"
   ];
+  hardeningDisable = lib.optional effectiveStdenv.hostPlatform.isMusl "fortify";
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
