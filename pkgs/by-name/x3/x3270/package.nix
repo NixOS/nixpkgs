@@ -12,7 +12,7 @@
   bdftopcf,
   mkfontscale,
   font-adobe-100dpi,
-  fontadobeutopia100dpi,
+  font-adobe-utopia-100dpi,
   fontbh100dpi,
   fontbhlucidatypewriter100dpi,
   fontbitstream100dpi,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     bdftopcf
     mkfontscale
     font-adobe-100dpi
-    fontadobeutopia100dpi
+    font-adobe-utopia-100dpi
     fontbh100dpi
     fontbhlucidatypewriter100dpi
     fontbitstream100dpi
