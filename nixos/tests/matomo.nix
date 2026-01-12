@@ -51,5 +51,7 @@
     mmilata
     twey
     boozedog
+    leona
+    osnyx
   ];
 }

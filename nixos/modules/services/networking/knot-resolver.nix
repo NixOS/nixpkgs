@@ -33,6 +33,8 @@ in
 {
   meta.maintainers = [
     lib.maintainers.vcunat # upstream developer
+    lib.maintainers.leona
+    lib.maintainers.osnyx
   ];
 
   ###### interface

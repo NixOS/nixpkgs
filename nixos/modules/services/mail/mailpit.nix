@@ -101,4 +101,9 @@ in
       }
     ) instances;
   };
+
+  meta.maintainers = [
+    lib.maintainers.leona
+    lib.maintainers.osnyx
+  ];
 }

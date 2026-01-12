@@ -11,6 +11,10 @@ let
     package:
     makeTest {
       name = "postgresql_anonymizer-${package.name}";
+      meta.maintainers = [
+        lib.maintainers.leona
+        lib.maintainers.osnyx
+      ];
 
       nodes.machine =
         { pkgs, ... }:
