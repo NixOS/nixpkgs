@@ -157,20 +157,7 @@ in
           Type = "notify";
           NotifyAccess = "main";
           PIDFile = "/run/sssd.pid";
-          CapabilityBoundingSet = [
-            "CAP_IPC_LOCK"
-            "CAP_CHOWN"
-            "CAP_DAC_READ_SEARCH"
-            "CAP_KILL"
-            "CAP_NET_ADMIN"
-            "CAP_SYS_NICE"
-            "CAP_FOWNER"
-            "CAP_SETGID"
-            "CAP_SETUID"
-            "CAP_SYS_ADMIN"
-            "CAP_SYS_RESOURCE"
-            "CAP_BLOCK_SUSPEND"
-          ];
+          CapabilityBoundingSet = "";
           Restart = "on-abnormal";
           StateDirectory = baseNameOf dataDir;
           # We cannot use LoadCredential here because it's not available in ExecStartPre
