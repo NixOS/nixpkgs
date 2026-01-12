@@ -56,16 +56,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  apm = {
-    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
-    shortName = "apm employees";
-    # Edits to this list should only be done by an already existing member.
-    members = [
-      DutchGerman
-      friedow
-    ];
-  };
-
   apparmor = {
     scope = "AppArmor-related modules, userspace tool packages and profiles";
     shortName = "apparmor";
@@ -94,16 +84,6 @@ with lib.maintainers;
   beam = {
     github = "beam";
     enableFeatureFreezePing = true;
-  };
-
-  bitnomial = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      cdepillabout
-      wraithm
-    ];
-    scope = "Group registration for packages maintained by Bitnomial.";
-    shortName = "Bitnomial employees";
   };
 
   blockchains = {
@@ -141,17 +121,6 @@ with lib.maintainers;
     scope = "Maintain C libraries and tooling.";
     shortName = "C";
     enableFeatureFreezePing = true;
-  };
-
-  c3d2 = {
-    members = [
-      astro
-      SuperSandro2000
-      revol-xut
-      oxapentane
-    ];
-    scope = "Maintain packages used in the C3D2 hackspace";
-    shortName = "c3d2";
   };
 
   categorization = {
@@ -382,17 +351,6 @@ with lib.maintainers;
 
   freedesktop = {
     github = "freedesktop";
-  };
-
-  fslabs = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      lpostula
-      mockersf
-      NthTensor
-    ];
-    scope = "Group registration for packages maintained by Foresight Spatial Labs.";
-    shortName = "Foresight Spatial Labs employees";
   };
 
   gcc = {

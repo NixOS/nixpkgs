@@ -40,7 +40,6 @@ let
       homepage = "https://github.com/jketterl/js8py";
       description = "Library to decode the output of the js8 binary of JS8Call";
       license = lib.licenses.gpl3Only;
-      teams = with lib.teams; [ c3d2 ];
     };
   };
 
@@ -83,7 +82,6 @@ let
       description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.unix;
-      teams = with lib.teams; [ c3d2 ];
     };
   };
 
@@ -136,6 +134,5 @@ python3Packages.buildPythonApplication rec {
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     mainProgram = "openwebrx";
     license = lib.licenses.gpl3Only;
-    teams = with lib.teams; [ c3d2 ];
   };
 }
