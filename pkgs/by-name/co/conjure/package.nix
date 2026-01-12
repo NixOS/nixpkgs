@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   pname = "conjure";
   version = "0.1.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "nate-xyz";
