@@ -513,6 +513,8 @@ in
         files =
           (lib.optional cfg.allowConfigWrite sabnzbdIniPath) ++ [ publicSettingsIni ] ++ cfg.secretFiles;
         iniPathQuoted = lib.escapeShellArg sabnzbdIniPath;
+        host = cfg.settings.misc.host;
+        port = toString cfg.settings.misc.port;
       in
       {
         description = "sabnzbd server";
@@ -524,7 +526,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           StateDirectory = cfg.stateDir;
-          ExecStart = "${lib.getExe cfg.package} -d -f ${iniPathQuoted}";
+          ExecStart = "${lib.getExe cfg.package} -d -f ${iniPathQuoted} -s ${host}:${port}";
         };
         preStart = ''
           set -euo pipefail
