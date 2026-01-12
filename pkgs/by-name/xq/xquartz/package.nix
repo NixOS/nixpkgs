@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  font-bh-lucidatypewriter-100dpi,
   font-bh-100dpi,
   xwud,
   xwininfo,
@@ -132,7 +133,7 @@ let
     xorg.fontcursormisc
   ]
   ++ lib.optionals unfreeFonts [
-    xorg.fontbhlucidatypewriter100dpi
+    font-bh-lucidatypewriter-100dpi
     xorg.fontbhlucidatypewriter75dpi
     font-bh-100dpi
   ]
