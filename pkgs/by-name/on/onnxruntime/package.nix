@@ -153,9 +153,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals isCudaJetson [
     cudaPackages.autoAddCudaCompatRunpath
-  ]
-  ++ lib.optionals rocmSupport [
-    perl # for tools/ci_build/hipify-perl
   ];
 
   buildInputs = [
@@ -195,6 +192,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
     rocmPackages.hipblas
+    rocmPackages.hipblaslt
     rocmPackages.hipcub
     rocmPackages.hipfft
     rocmPackages.hiprand
@@ -204,6 +202,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     rocmPackages.rocrand
     rocmPackages.rocthrust
     rocmPackages.miopen
+    rocmPackages.migraphx
     rocmPackages.rccl
     rocmPackages.rocm-smi
     rocmPackages.roctracer
@@ -255,12 +254,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
-    (lib.cmakeBool "onnxruntime_USE_ROCM" rocmSupport)
+    (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
-  ]
-  ++ lib.optionals (effectiveStdenv.cc.isClang || rocmSupport) [
-    # Disable -Werror from COMPILE_WARNING_AS_ERROR target property
-    "--compile-no-warning-as-error"
   ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
