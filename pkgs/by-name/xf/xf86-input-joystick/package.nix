@@ -52,6 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     pkgConfigModules = [ "xorg-joystick" ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xf86-input-joystick.x86_64-darwin
   };
 })
