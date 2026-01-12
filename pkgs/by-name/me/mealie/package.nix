@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "3.5.0";
+  version = "3.9.2";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-rZOmu2xplIyMgX0uk5XCKf79qWfftHVELYNXdlzYkrY=";
+    hash = "sha256-jR9NGguxobUenjnvh6vhZztntxNM2rkwkWcq/DeB4JY=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -86,6 +86,9 @@ pythonpkgs.buildPythonApplication rec {
 
   postPatch = ''
     rm -rf dev # Do not need dev scripts & code
+
+    substituteInPlace pyproject.toml \
+     --replace-fail '"setuptools==80.9.0"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'

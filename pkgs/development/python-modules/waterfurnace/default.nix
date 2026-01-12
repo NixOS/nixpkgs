@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "waterfurnace";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdague";
     repo = "waterfurnace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mg2Kuw54Lc4vZCSAM8FE6l00XBBqLVZEkaoGrP+Fcyo=";
+    hash = "sha256-1WHXhLLk9l/WQvmC6zrkbLFth9jf/M1vZsv05CZtevE=";
   };
 
   build-system = [ setuptools ];

@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lance-namespace";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aNo6rrWnnFpFk3iPX1sQsuXTDkE5ZRA/9P7TQeJr4iI=";
+    hash = "sha256-cUwvPPOQemusthuTMttdojqApnWL4JmCdSB5oGZCfZ8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/lance_namespace_urllib3_client";

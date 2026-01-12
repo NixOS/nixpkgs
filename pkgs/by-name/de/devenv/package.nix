@@ -128,6 +128,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    teams = [ lib.teams.cachix ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      sandydoo
+    ];
   };
 }
