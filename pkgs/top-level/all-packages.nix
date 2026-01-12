@@ -4968,6 +4968,7 @@ with pkgs;
   ocaml = ocamlPackages.ocaml;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
