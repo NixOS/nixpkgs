@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libice,
   libxshmfence,
   libxcb,
   alsa-lib,
@@ -72,7 +73,7 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     libxcb

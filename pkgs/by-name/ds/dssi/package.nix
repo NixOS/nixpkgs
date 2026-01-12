@@ -14,7 +14,7 @@
   autoconf,
   automake,
   xorgproto,
-  libICE,
+  libice,
   pkg-config,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libsamplerate
     libtool
     xorgproto
-    libICE
+    libice
   ];
 
   meta = {

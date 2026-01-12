@@ -16,7 +16,7 @@
   libglut,
   libGL,
   libGLU,
-  libICE,
+  libice,
   libSM,
   libX11,
   libXaw,
@@ -84,7 +84,7 @@ let
         libglut
         libGL
         libGLU
-        libICE
+        libice
         libSM
         libX11
         libXaw

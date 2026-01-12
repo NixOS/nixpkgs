@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libice,
   libxcb,
   glib,
   libGLU,
@@ -54,7 +55,7 @@ let
     xorg.libX11
     xorg.libXi
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libXrender
     xorg.libXScrnSaver
     libxcb

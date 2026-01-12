@@ -17,7 +17,7 @@
   vulkan-loader,
   glew,
   libGL,
-  libICE,
+  libice,
   libSM,
   libXcursor,
   libXext,
@@ -70,7 +70,7 @@ buildDotnetModule rec {
 
     # Avalonia UI
     glew
-    libICE
+    libice
     libSM
     libXcursor
     libXext

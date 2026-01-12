@@ -10,7 +10,7 @@
   intltool,
   libtool,
   pkg-config,
-  libICE,
+  libice,
   libSM,
   libXScrnSaver,
   libXtst,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libICE
+    libice
     libSM
     libXScrnSaver
     libXtst

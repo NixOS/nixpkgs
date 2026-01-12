@@ -7,6 +7,7 @@
   fontconfig,
   freetype,
   xorg,
+  libice,
 }:
 
 # !!! assert freetype == xorg.freetype
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXext

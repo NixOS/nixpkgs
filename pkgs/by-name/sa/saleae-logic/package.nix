@@ -13,7 +13,7 @@
   unzip,
   glib,
   libSM,
-  libICE,
+  libice,
   gtk2,
   libXext,
   libXft,
@@ -41,7 +41,7 @@ let
   libPath = lib.makeLibraryPath [
     glib
     libSM
-    libICE
+    libice
     gtk2
     libXext
     libXft

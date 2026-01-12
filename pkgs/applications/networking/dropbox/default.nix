@@ -56,7 +56,7 @@ buildFHSEnv {
 
   targetPkgs =
     pkgs: with pkgs; [
-      xorg.libICE
+      libice
       xorg.libSM
       xorg.libX11
       xorg.libXcomposite

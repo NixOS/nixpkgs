@@ -10,7 +10,7 @@
   libX11,
   lttng-ust,
   icu,
-  libICE,
+  libice,
   libSM,
   libXcursor,
   openssl,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig.lib
 
     # Runtime deps
-    libICE
+    libice
     libSM
     libX11
     libXcursor
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # will add to the RPATH of executable only
   runtimeDependencies = [
-    libICE
+    libice
     libSM
     libX11
     libXcursor

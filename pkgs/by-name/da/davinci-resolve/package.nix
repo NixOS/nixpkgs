@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libice,
   libxcb,
   buildFHSEnv,
   bash,
@@ -222,7 +223,7 @@ buildFHSEnv {
       python3.pkgs.numpy
       udev
       xdg-utils # xdg-open needed to open URLs
-      xorg.libICE
+      libice
       xorg.libSM
       xorg.libX11
       xorg.libXcomposite

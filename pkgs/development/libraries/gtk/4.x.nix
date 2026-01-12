@@ -25,6 +25,7 @@
   fribidi,
   harfbuzz,
   xorg,
+  libice,
   libepoxy,
   libxkbcommon,
   libpng,
@@ -141,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     fribidi
     harfbuzz
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libXcursor
     xorg.libXdamage

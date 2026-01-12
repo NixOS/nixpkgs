@@ -13,7 +13,7 @@
   pkg-config,
   gdk-pixbuf,
   libnotify,
-  libICE,
+  libice,
   libSM,
   libX11,
   libxkbfile,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     util-linux
     libselinux
     libsepol
-    libICE
+    libice
     libSM
     libX11
     libXi

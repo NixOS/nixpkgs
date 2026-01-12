@@ -17,7 +17,7 @@
   gnome-shell,
   dbus,
   json-glib,
-  libICE,
+  libice,
   xmlto,
   docbook_xsl,
   docbook_xml_dtd_45,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk4
-    libICE
+    libice
     gnome-desktop
     json-glib
     xtrans

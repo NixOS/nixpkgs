@@ -15,7 +15,7 @@
   libXext,
   libXt,
   libSM,
-  libICE,
+  libice,
   libpng,
   pkg-config,
   gettext,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXt
     libSM
-    libICE
+    libice
     libpng
     gettext
   ];

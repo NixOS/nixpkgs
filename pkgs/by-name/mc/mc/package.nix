@@ -8,7 +8,7 @@
   gpm,
   file,
   e2fsprogs,
-  libICE,
+  libice,
   perl,
   zip,
   unzip,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     file
     gettext
     glib
-    libICE
+    libice
     libssh2
     openssl
     slang

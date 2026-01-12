@@ -10,7 +10,7 @@
   libXext,
   libXi,
   libXrandr,
-  libICE,
+  libice,
   libSM,
   openssl,
   unzip,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libXext
     libXi
     libXrandr
-    libICE
+    libice
     libSM
     openssl
   ];

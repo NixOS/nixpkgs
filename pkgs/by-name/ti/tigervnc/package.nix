@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libice,
   font-util,
   xsetroot,
   xorgproto,
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXext
       xorg.libX11
       xorg.libXext
-      xorg.libICE
+      libice
       xorg.libXi
       xorg.libSM
       xorg.libXft

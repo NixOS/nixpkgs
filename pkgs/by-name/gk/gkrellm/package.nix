@@ -8,7 +8,7 @@
   gtk2,
   libX11,
   libSM,
-  libICE,
+  libice,
   which,
   copyDesktopItems,
   makeDesktopItem,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
     libX11
     libSM
-    libICE
+    libice
   ];
 
   hardeningDisable = [ "format" ];

@@ -14,7 +14,7 @@
   giflib,
   glib,
   imlib2,
-  libICE,
+  libice,
   libSM,
   libX11,
   libXcomposite,
@@ -71,7 +71,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     giflib
     glib
     imlib2
-    libICE
+    libice
     libSM
     libX11
     libXcomposite

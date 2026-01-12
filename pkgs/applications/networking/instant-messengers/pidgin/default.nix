@@ -16,7 +16,7 @@
   gtkspell2,
   intltool,
   lib,
-  libICE,
+  libice,
   libSM,
   libXScrnSaver,
   libXext,
@@ -74,7 +74,7 @@ let
         gst_all_1.gst-plugins-base
         gst_all_1.gst-plugins-good
         gst_all_1.gstreamer
-        libICE
+        libice
         libSM
         libXScrnSaver
         libXext

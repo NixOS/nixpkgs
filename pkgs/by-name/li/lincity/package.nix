@@ -7,7 +7,7 @@
   libX11,
   libXext,
   xorgproto,
-  libICE,
+  libice,
   libSM,
   libpng12,
   zlib,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   buildInputs = [
-    libICE
+    libice
     libpng12
     libSM
     libX11

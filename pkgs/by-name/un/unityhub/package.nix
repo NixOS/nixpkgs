@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
         vulkan-loader
 
         # Unity Bug Reporter specific dependencies
-        xorg.libICE
+        libice
         xorg.libSM
 
         # Fonts used by built-in and third party editor tools

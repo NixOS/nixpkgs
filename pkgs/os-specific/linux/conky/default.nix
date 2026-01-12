@@ -30,6 +30,7 @@
   x11Support ? true,
   freetype,
   xorg,
+  libice,
   waylandSupport ? true,
   pango,
   wayland,
@@ -132,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     freetype
     libxfixes
-    xorg.libICE
+    libice
     xorg.libX11
     xorg.libXext
     xorg.libXft

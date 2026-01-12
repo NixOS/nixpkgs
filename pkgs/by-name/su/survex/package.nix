@@ -5,7 +5,7 @@
   ffmpeg,
   glib,
   libGLU,
-  libICE,
+  libice,
   libX11,
   libgbm,
   perl,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # (#233265); is it required for anything?
     libGLU
     libgbm
-    libICE
+    libice
     libX11
   ];
 

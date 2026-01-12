@@ -6,6 +6,7 @@
   bison,
   flex,
   xorg,
+  libice,
 }:
 
 stdenv.mkDerivation {
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
     flex
   ];
   buildInputs = [
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXaw

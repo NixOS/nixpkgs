@@ -9,6 +9,7 @@
   libGL,
   xkeyboard_config,
   xorg,
+  libice,
   libxcb,
   zlib,
 }:
@@ -32,7 +33,7 @@ buildFHSEnv {
     glib
     libGL
     xkeyboard_config
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXext

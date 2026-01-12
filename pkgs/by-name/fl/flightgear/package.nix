@@ -7,7 +7,7 @@
   freealut,
   libGLU,
   libGL,
-  libICE,
+  libice,
   libjpeg,
   openal,
   plib,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     freealut
     libGLU
     libGL
-    libICE
+    libice
     libjpeg
     openal
     openscenegraph

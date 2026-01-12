@@ -9,6 +9,7 @@
   libjack2,
   curl,
   xorg,
+  libice,
   libGL,
   freetype,
   zenity,
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
     libGL
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libX11
     freetype
     libjack2

@@ -14,6 +14,7 @@
   openssl,
   xinput,
   xorg,
+  libice,
 }:
 buildDotnetModule rec {
   pname = "opentracker";
@@ -52,7 +53,7 @@ buildDotnetModule rec {
     gtk3
     openssl
     xinput
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXi

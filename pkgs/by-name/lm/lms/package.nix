@@ -14,7 +14,7 @@
   ffmpeg,
   zlib,
   libSM,
-  libICE,
+  libice,
   stb,
   openssl,
   xxHash,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     zlib
     libSM
-    libICE
+    libice
     stb
     openssl
     xxHash

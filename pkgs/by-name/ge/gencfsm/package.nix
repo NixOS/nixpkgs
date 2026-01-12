@@ -15,6 +15,7 @@
   vala,
   wrapGAppsHook3,
   xorg,
+  libice,
   gobject-introspection,
 }:
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     xorg.libSM
-    xorg.libICE
+    libice
     libsecret
   ];
 

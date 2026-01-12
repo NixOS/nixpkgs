@@ -16,7 +16,7 @@
   libXpm,
   libXext,
   libSM,
-  libICE,
+  libice,
   perl,
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libXpm
     libXext
     libSM
-    libICE
+    libice
     libv4l
   ];
 

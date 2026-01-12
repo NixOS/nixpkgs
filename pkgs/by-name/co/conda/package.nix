@@ -9,6 +9,7 @@
   libarchive,
   libGL,
   xorg,
+  libice,
   zlib,
   # Conda installs its packages and environments under this directory
   installationPath ? "~/.conda",
@@ -16,7 +17,7 @@
   condaDeps ? [
     stdenv.cc
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libX11
     xorg.libXau
     xorg.libXi

@@ -27,6 +27,7 @@
   cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin),
   cups,
   x11Support ? cupsSupport,
+  libice,
   xorg, # with CUPS, X11 only adds very little
   dynamicDrivers ? true,
 
@@ -130,7 +131,7 @@ stdenv.mkDerivation rec {
     openjpeg
   ]
   ++ lib.optionals x11Support [
-    xorg.libICE
+    libice
     xorg.libX11
     xorg.libXext
     xorg.libXt

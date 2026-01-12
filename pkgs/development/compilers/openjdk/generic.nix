@@ -30,7 +30,7 @@
   libpng,
   lcms2,
   libX11,
-  libICE,
+  libice,
   libXext,
   libXrender,
   libXtst,
@@ -277,7 +277,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     giflib
     libX11
-    libICE
+    libice
     libXext
     libXrender
     libXtst

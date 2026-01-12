@@ -15,6 +15,7 @@
   libGL,
   libGLU,
   xorg,
+  libice,
   opencascade-occt,
   llvmPackages,
   python3Packages,
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
     xorg.libX11
     xorg.libSM
-    xorg.libICE
+    libice
   ]
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

@@ -50,7 +50,7 @@ buildFHSEnv rec {
       ))
       # quartus requirements
       glib
-      xorg.libICE
+      libice
       xorg.libSM
       xorg.libXau
       xorg.libXdmcp

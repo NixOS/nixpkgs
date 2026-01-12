@@ -30,6 +30,7 @@
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
   xorg,
+  libice,
   libepoxy,
   libxkbcommon,
   libxml2,
@@ -162,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ]
   ++ lib.optionals x11Support [
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libXcomposite
     xorg.libXcursor

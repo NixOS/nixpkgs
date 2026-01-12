@@ -15,6 +15,7 @@
   krb5,
   bash,
   xorg,
+  libice,
   nix-update-script,
 }:
 
@@ -76,7 +77,7 @@ buildDotnetModule (finalAttrs: {
     xorg.libX11
     xorg.libXrandr
     xorg.libXi
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libXcursor
     xorg.libXext

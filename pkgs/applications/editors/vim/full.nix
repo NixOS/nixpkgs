@@ -25,7 +25,7 @@
   libXau,
   libXmu,
   libsodium,
-  libICE,
+  libice,
   wayland-scanner,
   vimPlugins,
   makeWrapper,
@@ -178,7 +178,7 @@ stdenv.mkDerivation {
   # All X related dependencies
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
     libSM
-    libICE
+    libice
     libX11
     libXext
     libXpm

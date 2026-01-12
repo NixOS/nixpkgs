@@ -22,6 +22,7 @@
   fontconfig,
   freetype,
   xorg,
+  libice,
   makeWrapper,
   bash,
   which,
@@ -38,7 +39,7 @@ let
     paths = [
       SDL2
       xorg.libSM
-      xorg.libICE
+      libice
       xorg.libX11
       xorg.libXext
       xercesc

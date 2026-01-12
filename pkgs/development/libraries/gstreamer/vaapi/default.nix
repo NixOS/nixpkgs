@@ -14,6 +14,7 @@
   libdrm,
   udev,
   xorg,
+  libice,
   libxcb,
   libGLU,
   libGL,
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXv
     xorg.libXrandr
     xorg.libSM
-    xorg.libICE
+    libice
     nasm
     libvpx
   ]

@@ -13,7 +13,7 @@
   xorgproto,
   libXext,
   libSM,
-  libICE,
+  libice,
   libXi,
   libXt,
   libXrender,
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libXext
     libSM
-    libICE
+    libice
     libXi
     libXt
     libXrender

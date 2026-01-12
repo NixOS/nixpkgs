@@ -9,6 +9,7 @@
   fontconfig,
   openssl,
   xorg,
+  libice,
   zlib,
 }:
 
@@ -20,7 +21,7 @@ let
     openssl
     (lib.getLib stdenv.cc.cc)
     xorg.libX11
-    xorg.libICE
+    libice
     xorg.libSM
     zlib
   ];

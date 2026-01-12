@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
-  libICE,
+  libice,
   libjpeg,
   libpng,
   libX11,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   propagatedBuildInputs = [
-    libICE
+    libice
     libjpeg
     libpng
     libX11

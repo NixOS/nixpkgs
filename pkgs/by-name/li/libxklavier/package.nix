@@ -9,6 +9,7 @@
   xkeyboard_config,
   libxml2,
   xorg,
+  libice,
   xkbcomp,
   libxkbfile,
   docbook_xsl,
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     xorg.libXi
     xkeyboard_config
     libxml2
-    xorg.libICE
+    libice
     glib
     libxkbfile
     isocodes

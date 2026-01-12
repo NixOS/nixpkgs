@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libice,
   libxcb,
   zlib,
   # options
@@ -116,7 +117,7 @@ stdenv.mkDerivation {
     xcbutilimage
     xcbutilkeysyms
     xkeyboard_config
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXScrnSaver

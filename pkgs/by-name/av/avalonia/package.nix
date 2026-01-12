@@ -5,7 +5,7 @@
   fetchzip,
   fontconfig,
   lib,
-  libICE,
+  libice,
   libSM,
   libX11,
   libXcursor,
@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation (
         patchShebangs build.sh
 
         substituteInPlace src/Avalonia.X11/ICELib.cs \
-          --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
+          --replace-fail '"libICE.so.6"' '"${lib.getLib libice}/lib/libICE.so.6"'
         substituteInPlace src/Avalonia.X11/SMLib.cs \
           --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
         substituteInPlace src/Avalonia.X11/XLib.cs \

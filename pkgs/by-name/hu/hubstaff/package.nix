@@ -7,7 +7,7 @@
   libX11,
   zlib,
   libSM,
-  libICE,
+  libice,
   libXext,
   freetype,
   libXrender,
@@ -37,7 +37,7 @@ let
     libX11
     zlib
     libSM
-    libICE
+    libice
     libXext
     freetype
     libXrender

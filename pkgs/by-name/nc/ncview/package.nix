@@ -7,6 +7,7 @@
   udunits,
   netcdf,
   xorg,
+  libice,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     netcdf
     udunits
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXaw

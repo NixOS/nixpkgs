@@ -14,7 +14,7 @@
   systemd,
   libusb-compat-0_1,
   libftdi1,
-  libICE,
+  libice,
   libSM,
   libX11,
 }:
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     systemd
     libusb-compat-0_1
     libftdi1
-    libICE
+    libice
     libSM
     libX11
   ];

@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libice,
   libxkbfile,
   libxcb,
   minizip,
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
     xorg.libXtst
     xorg.libXt
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libXrender
   ];

@@ -167,7 +167,7 @@ rec {
         xorg.libXxf86vm
         xorg.libXi
         xorg.libSM
-        xorg.libICE
+        libice
         freetype
         curlWithGnuTls
         nspr

@@ -7,7 +7,7 @@
   fontconfig,
   freetype,
   glib,
-  libICE,
+  libice,
   libSM,
   libX11,
   libXext,
@@ -22,7 +22,7 @@ let
     fontconfig
     freetype
     glib
-    libICE
+    libice
     libSM
     libX11
     libXext

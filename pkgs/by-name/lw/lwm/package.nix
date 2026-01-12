@@ -6,7 +6,7 @@
   libX11,
   libSM,
   libXext,
-  libICE,
+  libice,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libX11
     libSM
     libXext
-    libICE
+    libice
   ];
 
   dontConfigure = true;

@@ -12,7 +12,7 @@
   libdrm,
   libGLU,
   libglvnd,
-  libICE,
+  libice,
   libkrb5,
   libSM,
   libX11,
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     libdrm
     libGLU
     libglvnd
-    libICE
+    libice
     libkrb5
     libSM
     libX11

@@ -57,7 +57,7 @@ let
       "libX11.so.6" = xorg.libX11;
       "libXext.so.6" = xorg.libXext;
       "libXrender.so.1" = xorg.libXrender;
-      "libICE.so.6" = xorg.libICE;
+      "libICE.so.6" = libice;
       "libSM.so.6" = xorg.libSM;
       "libGL.so.1" = libGL;
       "libgobject-2.0.so.0" = glib;

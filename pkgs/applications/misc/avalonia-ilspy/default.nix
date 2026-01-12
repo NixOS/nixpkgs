@@ -5,7 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   libX11,
-  libICE,
+  libice,
   libSM,
   libXi,
   libXcursor,
@@ -60,7 +60,7 @@ buildDotnetModule rec {
   runtimeDeps = [
     # Avalonia UI
     libX11
-    libICE
+    libice
     libSM
     libXi
     libXcursor

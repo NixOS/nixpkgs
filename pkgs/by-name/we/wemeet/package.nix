@@ -7,6 +7,7 @@
   makeWrapper,
   nss,
   xorg,
+  libice,
   desktop-file-utils,
   libpulseaudio,
   libgcrypt,
@@ -197,7 +198,7 @@ stdenv.mkDerivation {
     nss
     xorg.libX11
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libXtst
     desktop-file-utils
     libpulseaudio

@@ -6,6 +6,7 @@
   autoreconfHook,
   pkg-config,
   xorg,
+  libice,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     xorg.libX11
     xorg.libXt
-    xorg.libICE
+    libice
     xorg.libSM
   ];
 

@@ -15,7 +15,7 @@
   ninja,
   xvfb-run,
   libxcvt,
-  libICE,
+  libice,
   libX11,
   libXcomposite,
   libXcursor,
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libICE
+    libice
     libX11
     libXcomposite
     libXcursor

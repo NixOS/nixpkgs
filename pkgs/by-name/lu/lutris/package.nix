@@ -45,7 +45,7 @@ let
       xorg.libXfixes
       xorg.libXtst
       xorg.libXScrnSaver
-      xorg.libICE
+      libice
       xorg.libXt
     ];
   gstreamerDeps =

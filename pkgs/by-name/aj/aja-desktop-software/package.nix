@@ -86,7 +86,7 @@ buildFHSEnv {
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.libSM
-      xorg.libICE
+      libice
       libxkbcommon
       dbus
       avahi

@@ -6,7 +6,7 @@
   gdk-pixbuf-xlib,
   gettext,
   gtk2-x11,
-  libICE,
+  libice,
   libSM,
   libxcrypt,
   libXinerama,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gdk-pixbuf-xlib
     gtk2-x11
-    libICE
+    libice
     libSM
     libxcrypt
     libXinerama

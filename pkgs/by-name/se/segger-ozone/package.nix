@@ -6,7 +6,7 @@
   copyDesktopItems,
   fontconfig,
   freetype,
-  libICE,
+  libice,
   libSM,
   libX11,
   libXcursor,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libICE
+    libice
     libSM
     libX11
     libXcursor

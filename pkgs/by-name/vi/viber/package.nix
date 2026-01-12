@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libice,
   libxcb,
   xvidcore,
   zlib,
@@ -134,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     twolame
     wavpack
     wayland
-    xorg.libICE
+    libice
     xorg.libSM
     xorg.libX11
     xorg.libXcomposite

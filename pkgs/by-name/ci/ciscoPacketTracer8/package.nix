@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libice,
   libxcb,
   buildFHSEnv,
   copyDesktopItems,
@@ -78,7 +79,7 @@ let
       nspr
       nss
       wayland
-      xorg.libICE
+      libice
       xorg.libSM
       xorg.libX11
       xorg.libXScrnSaver

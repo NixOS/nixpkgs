@@ -6,6 +6,7 @@
   zlib,
   glib,
   xorg,
+  libice,
   libxcb,
   dbus,
   fontconfig,
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libX11
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libXext
     dbus
     fontconfig

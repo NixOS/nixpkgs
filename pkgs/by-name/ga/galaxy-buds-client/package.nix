@@ -8,6 +8,7 @@
   glib,
   libglvnd,
   xorg,
+  libice,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -46,7 +47,7 @@ buildDotnetModule rec {
   runtimeDeps = [
     libglvnd
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libX11
   ];
 

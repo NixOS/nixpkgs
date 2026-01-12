@@ -12,7 +12,7 @@
       gcc-unwrapped
       libGL
       xorg.libSM
-      xorg.libICE
+      libice
       xorg.libX11
       xorg.libXau
       xorg.libXdamage

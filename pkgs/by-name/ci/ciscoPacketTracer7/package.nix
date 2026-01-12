@@ -20,6 +20,7 @@
   nspr,
   nss,
   xorg,
+  libice,
   buildFHSEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -65,7 +66,7 @@ let
       libxslt
       nspr
       nss
-      xorg.libICE
+      libice
       xorg.libSM
       xorg.libX11
       xorg.libXScrnSaver

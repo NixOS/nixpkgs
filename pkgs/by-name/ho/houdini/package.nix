@@ -42,7 +42,7 @@ buildFHSEnv {
       ocl-icd # needed for opencl
       numactl # needed by hfs ocl backend
       zstd # needed from 20.0
-      xorg.libICE
+      libice
       xorg.libSM
       xorg.libXmu
       xorg.libXi

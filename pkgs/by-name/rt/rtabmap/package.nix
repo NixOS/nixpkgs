@@ -15,6 +15,7 @@
   pcl,
   liblapack,
   xorg,
+  libice,
   libusb1,
   yaml-cpp,
   libnabo,
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcl'
     liblapack
     xorg.libSM
-    xorg.libICE
+    libice
     xorg.libXt
 
     ## Optional

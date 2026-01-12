@@ -11,6 +11,7 @@
   tcl,
   tk,
   xorg,
+  libice,
   zlib,
 }:
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation {
     ghostscript
     xorg.libSM
     xorg.libXt
-    xorg.libICE
+    libice
     xorg.libX11
     xorg.libXpm
     tcl
