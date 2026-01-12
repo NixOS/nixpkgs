@@ -26,6 +26,7 @@
   lsof,
   lz4,
   xorg,
+  libxft,
   libxext,
   libx11,
   xz,
@@ -120,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libx11
     xorg.libXpm
-    xorg.libXft
+    libxft
     libxext
   ];
 

@@ -14,7 +14,7 @@
   libXinerama,
   libxfixes,
   libxcursor,
-  libXft,
+  libxft,
   libXrender,
 
   withGL ? true,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libxfixes
     libxcursor
-    libXft
+    libxft
     libXrender
   ]
   ++ lib.optionals withWayland [

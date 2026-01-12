@@ -6,7 +6,7 @@
   fontconfig,
   freetype,
   gnustep-gui,
-  libXft,
+  libxft,
   libXmu,
   pkg-config,
   wrapGNUstepAppsHook,
@@ -30,7 +30,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cairo
     fontconfig
     freetype
-    libXft
+    libxft
     libXmu
   ];
 

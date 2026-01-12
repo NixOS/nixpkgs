@@ -8,7 +8,7 @@
   imagemagick,
   libx11,
   libxext,
-  libXft,
+  libxft,
   libXinerama,
   libXmu,
   libXpm,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     libx11
     libxext
-    libXft
+    libxft
     libXinerama
     libXmu
     libXpm

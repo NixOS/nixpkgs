@@ -29,7 +29,7 @@
   ncurses ? null,
   x11Support ? true,
   freetype,
-  xorg,
+  libxft,
   libxext,
   libx11,
   libsm,
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libx11
     libxext
-    xorg.libXft
+    libxft
     libxfixes
     libsm
     expat

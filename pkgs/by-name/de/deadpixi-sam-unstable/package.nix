@@ -6,7 +6,7 @@
   libx11,
   libXi,
   libXt,
-  libXft,
+  libxft,
 }:
 
 stdenv.mkDerivation {
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     libx11
     libXi
     libXt
-    libXft
+    libxft
   ];
   # build fails when run in parallel
   enableParallelBuilding = false;

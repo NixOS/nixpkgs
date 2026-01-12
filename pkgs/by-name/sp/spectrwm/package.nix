@@ -6,7 +6,7 @@
   pkg-config,
   libXrandr,
   libxcursor,
-  libXft,
+  libxft,
   libXt,
   xcbutil,
   xcbutilkeysyms,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libXrandr
     libxcursor
-    libXft
+    libxft
     libXt
     xcbutil
     xcbutilkeysyms

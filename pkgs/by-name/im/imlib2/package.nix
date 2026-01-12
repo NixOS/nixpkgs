@@ -32,7 +32,7 @@
   openbox,
   fluxbox,
   enlightenment,
-  xorg,
+  libxft,
   libxext,
   testers,
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libid3tag
   ]
   ++ optionals x11Support [
-    xorg.libXft
+    libxft
     libxext
   ]
   ++ optional heifSupport libheif

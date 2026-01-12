@@ -6,7 +6,7 @@
   libogg,
   libtheora,
   SDL,
-  libXft,
+  libxft,
   SDL_image,
   zlib,
   libx11,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     libogg
     libtheora
     SDL
-    libXft
+    libxft
     SDL_image
     zlib
     libx11

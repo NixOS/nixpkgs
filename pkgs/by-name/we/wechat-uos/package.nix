@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxft,
   libxfixes,
   libxext,
   libxdamage,
@@ -91,7 +92,7 @@ let
     libxkbcommon
     libxshmfence
     xorg.libXi
-    xorg.libXft
+    libxft
     libxcursor
     libxfixes
     xorg.libXScrnSaver

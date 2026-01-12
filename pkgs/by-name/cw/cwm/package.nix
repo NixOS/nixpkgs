@@ -5,7 +5,7 @@
   libx11,
   libXinerama,
   libXrandr,
-  libXft,
+  libxft,
   bison,
   pkg-config,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libx11
     libXinerama
     libXrandr
-    libXft
+    libxft
   ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';

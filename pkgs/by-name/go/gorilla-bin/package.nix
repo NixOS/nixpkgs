@@ -4,7 +4,7 @@
   patchelf,
   lib,
   stdenv,
-  libXft,
+  libxft,
   libx11,
   freetype,
   fontconfig,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     let
       interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
       libPath = lib.makeLibraryPath [
-        libXft
+        libxft
         libx11
         freetype
         fontconfig

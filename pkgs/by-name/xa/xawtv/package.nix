@@ -8,7 +8,7 @@
   libXt,
   alsa-lib,
   aalib,
-  libXft,
+  libxft,
   xorgproto,
   libv4l,
   libfs,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libx11
     libXt
-    libXft
+    libxft
     xorgproto
     libfs
     perl

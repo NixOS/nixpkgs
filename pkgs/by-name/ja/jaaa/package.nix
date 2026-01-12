@@ -6,7 +6,7 @@
   libclthreads,
   libclxclient,
   libx11,
-  libXft,
+  libxft,
   libXrender,
   fftwFloat,
   libjack2,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libclthreads
     libclxclient
     libx11
-    libXft
+    libxft
     libXrender
     fftwFloat
     libjack2

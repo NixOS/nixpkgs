@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   libx11,
-  libXft,
+  libxft,
   freetype,
   patches ? [ ],
   extraLibs ? [ ],
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXft
+    libxft
     freetype
   ]
   ++ extraLibs;

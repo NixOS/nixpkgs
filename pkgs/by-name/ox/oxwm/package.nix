@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libx11,
-  libXft,
+  libxft,
   libXrender,
   freetype,
   fontconfig,
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXft
+    libxft
     libXrender
     freetype
     fontconfig

@@ -29,7 +29,7 @@
   libGL,
   freetype,
   fontconfig,
-  libXft,
+  libxft,
   libXrender,
   libxcb,
   expat,
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxshmfence
     libXi
-    libXft
+    libxft
     libxcursor
     libxfixes
     libXScrnSaver

@@ -13,7 +13,7 @@
   # buildInputs
   expat,
   fontconfig,
-  libXft,
+  libxft,
   libXinerama,
   libxcb,
   aspell,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     fontconfig
-    libXft
+    libxft
     libXinerama
     libxcb
   ]

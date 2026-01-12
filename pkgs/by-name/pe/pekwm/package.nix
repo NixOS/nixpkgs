@@ -6,7 +6,7 @@
   cmake,
   grep,
   libxext,
-  libXft,
+  libxft,
   libXinerama,
   libXpm,
   libXrandr,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxext
-    libXft
+    libxft
     libXinerama
     libXpm
     libXrandr

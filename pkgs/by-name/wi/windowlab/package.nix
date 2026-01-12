@@ -5,7 +5,7 @@
   pkg-config,
   libx11,
   libxext,
-  libXft,
+  libxft,
 }:
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     libxext
-    libXft
+    libxft
   ];
 
   postPatch = ''

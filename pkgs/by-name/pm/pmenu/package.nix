@@ -7,7 +7,7 @@
   imlib2,
   libx11,
   libxext,
-  libXft,
+  libxft,
   libXinerama,
   libXrender,
   conf ? null,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     imlib2
     libx11
     libxext
-    libXft
+    libxft
     libXinerama
     libXrender
   ];

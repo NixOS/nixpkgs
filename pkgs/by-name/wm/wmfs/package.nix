@@ -7,7 +7,7 @@
   libXinerama,
   libXrandr,
   libXpm,
-  libXft,
+  libxft,
   imlib2,
 }:
 stdenv.mkDerivation {
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     libXinerama
     libXrandr
     libXpm
-    libXft
+    libxft
   ];
 
   preConfigure = "substituteInPlace configure --replace '-lxft' '-lXft'";

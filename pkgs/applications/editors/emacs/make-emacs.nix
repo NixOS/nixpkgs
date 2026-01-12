@@ -32,7 +32,7 @@
   jansson,
   libxaw,
   libxcursor,
-  libXft,
+  libxft,
   libXi,
   libXpm,
   libXrandr,
@@ -347,7 +347,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
   ]
   ++ lib.optionals (withX && !withCairo) [
-    libXft
+    libxft
   ]
   ++ lib.optionals withXinput2 [
     libXi

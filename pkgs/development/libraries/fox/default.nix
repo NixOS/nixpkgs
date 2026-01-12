@@ -11,7 +11,7 @@
   libxcursor,
   libxext,
   libXrandr,
-  libXft,
+  libxft,
   cups,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxext
     libXrandr
-    libXft
+    libxft
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cups

@@ -16,7 +16,7 @@
   libice,
   gtk2,
   libxext,
-  libXft,
+  libxft,
   fontconfig,
   libXrender,
   libxfixes,
@@ -44,7 +44,7 @@ let
     libice
     gtk2
     libxext
-    libXft
+    libxft
     fontconfig
     libXrender
     libxfixes

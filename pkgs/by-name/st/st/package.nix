@@ -6,7 +6,7 @@
   fontconfig,
   freetype,
   libx11,
-  libXft,
+  libxft,
   ncurses,
   writeText,
   config,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libx11
-    libXft
+    libxft
   ]
   ++ extraLibs;
 

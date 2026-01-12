@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  libxft,
   libxext,
   libxaw,
   libx11,
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     libice
     ncurses
     freetype
-    xorg.libXft
+    libxft
     luit
   ];
 

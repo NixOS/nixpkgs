@@ -5,7 +5,7 @@
   cairo,
   fftwSinglePrec,
   libx11,
-  libXft,
+  libxft,
   libclthreads,
   libclxclient,
   libjack2,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cairo
     fftwSinglePrec
     libx11
-    libXft
+    libxft
     libclthreads
     libclxclient
     libjack2

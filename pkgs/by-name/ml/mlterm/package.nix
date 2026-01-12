@@ -43,7 +43,7 @@
     cairo = true;
   },
   libx11,
-  libXft,
+  libxft,
   cairo,
   # List of external tools to create, this default list includes all default
   # tools, as recorded on release 3.9.3.
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ]
   ++ lib.optionals enableTypeEngines.xft [
-    libXft
+    libxft
   ]
   ++ lib.optionals enableTypeEngines.cairo [
     cairo

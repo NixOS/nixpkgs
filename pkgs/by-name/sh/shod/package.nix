@@ -5,7 +5,7 @@
   writeText,
   fontconfig,
   libx11,
-  libXft,
+  libxft,
   libXpm,
   libXrandr,
   libXrender,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fontconfig
     libx11
-    libXft
+    libxft
     libXpm
     libXrandr
     libXrender

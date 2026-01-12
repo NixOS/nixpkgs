@@ -4,7 +4,7 @@
   fetchzip,
   libx11,
   libXinerama,
-  libXft,
+  libxft,
   writeText,
   pkg-config,
   # customization
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libXinerama
-    libXft
+    libxft
   ]
   ++ extraLibs;
 

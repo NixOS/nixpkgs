@@ -5,7 +5,7 @@
   fontconfig,
   harfbuzz,
   libx11,
-  libXft,
+  libxft,
   ncurses,
   gd,
   glib,
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     fontconfig
     harfbuzz
     libx11
-    libXft
+    libxft
     ncurses
     gd
     glib

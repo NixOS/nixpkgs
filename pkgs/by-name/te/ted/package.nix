@@ -16,7 +16,7 @@
   libpaper,
   makeWrapper,
   ghostscript,
-  libXft,
+  libxft,
 }:
 
 stdenv.mkDerivation rec {
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     libpng
     gtk2-x11
     libpaper
-    libXft
+    libxft
   ];
 
   meta = {

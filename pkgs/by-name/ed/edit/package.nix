@@ -4,7 +4,7 @@
   fetchgit,
   cwebbin,
   libx11,
-  libXft,
+  libxft,
   ncurses,
   pkg-config,
   unzip,
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libx11
-    libXft
+    libxft
     ncurses
   ];
 

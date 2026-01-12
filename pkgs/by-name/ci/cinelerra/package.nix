@@ -30,7 +30,7 @@
   libXv,
   libXi,
   libx11,
-  libXft,
+  libxft,
   xorgproto,
   libtheora,
   libpng,
@@ -101,7 +101,7 @@ stdenv.mkDerivation {
     libXv
     libXi
     libx11
-    libXft
+    libxft
     xorgproto
     libtheora
     libpng

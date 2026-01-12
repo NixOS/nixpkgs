@@ -10,6 +10,7 @@
   SDL2,
   tkrzw,
   xorg,
+  libxft,
   libx11,
 }:
 
@@ -108,7 +109,7 @@
     {
       buildInputs = buildInputs ++ [
         libx11
-        xorg.libXft
+        libxft
         xorg.libXinerama
       ];
     };

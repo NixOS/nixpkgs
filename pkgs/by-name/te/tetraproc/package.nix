@@ -14,6 +14,7 @@
   libsndfile,
   libxcb,
   xorg,
+  libxft,
   libxdmcp,
   libxau,
   libx11,
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     libx11
     libxau
     libxdmcp
-    xorg.libXft
+    libxft
     xorg.libXrender
   ];
 

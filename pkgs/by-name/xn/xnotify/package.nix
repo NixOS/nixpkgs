@@ -6,7 +6,7 @@
   fontconfig,
   imlib2,
   libx11,
-  libXft,
+  libxft,
   libXinerama,
   conf ? null,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     fontconfig
     imlib2
     libx11
-    libXft
+    libxft
     libXinerama
   ];
 

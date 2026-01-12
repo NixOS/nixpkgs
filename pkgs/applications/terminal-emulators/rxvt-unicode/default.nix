@@ -6,7 +6,7 @@
   makeDesktopItem,
   libx11,
   libXt,
-  libXft,
+  libxft,
   libXrender,
   libxext,
   ncurses,
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     libXt
-    libXft
+    libxft
     ncurses # required to build the terminfo file
     fontconfig
     freetype

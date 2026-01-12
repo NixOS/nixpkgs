@@ -5,7 +5,7 @@
   fontconfig,
   libx11,
   libxext,
-  libXft,
+  libxft,
   ncurses,
   pkg-config,
   nix-update-script,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libx11
     libxext
-    libXft
+    libxft
     ncurses
   ];
 

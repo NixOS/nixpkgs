@@ -12,7 +12,7 @@
   intltool,
   file,
   libpng,
-  xorg,
+  libxft,
   libx11,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     libx11
-    xorg.libXft
+    libxft
   ];
 
   preConfigure = ''

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   fontconfig,
-  libXft,
+  libxft,
   libXrender,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     fontconfig
-    libXft
+    libxft
     libXrender
   ];
 

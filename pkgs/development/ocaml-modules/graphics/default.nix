@@ -4,7 +4,7 @@
   buildDunePackage,
   dune-configurator,
   libx11,
-  libXft,
+  libxft,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -21,7 +21,7 @@ buildDunePackage (finalAttrs: {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
     libx11
-    libXft
+    libxft
   ];
 
   meta = {

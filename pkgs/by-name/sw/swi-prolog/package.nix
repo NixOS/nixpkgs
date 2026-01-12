@@ -36,7 +36,7 @@
   withGui ? false,
   libXpm,
   libxext,
-  libXft,
+  libxft,
   libXinerama,
   libjpeg,
   libXt,
@@ -105,7 +105,7 @@ let
       libXt
       libxext
       libXpm
-      libXft
+      libxft
       libXinerama
       libjpeg
       libsm

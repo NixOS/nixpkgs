@@ -494,7 +494,7 @@ let
       cargo
       rustc
     ];
-    devEMF = with pkgs; [ xorg.libXft.dev ];
+    devEMF = with pkgs; [ libxft.dev ];
     DEploid = [ pkgs.zlib.dev ];
     DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
@@ -2458,7 +2458,7 @@ let
     });
 
     devEMF = old.devEMF.overrideAttrs (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+      NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
       NIX_LDFLAGS = "-lX11";
     });
 

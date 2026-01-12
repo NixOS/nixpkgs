@@ -10,7 +10,7 @@
   libxdamage,
   libxext,
   libxfixes,
-  libXft,
+  libxft,
   libXinerama,
   libXrandr,
   libpulseaudio,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libxdamage
     libxext
     libxfixes
-    libXft
+    libxft
     libXinerama
     libXrandr
     libpulseaudio

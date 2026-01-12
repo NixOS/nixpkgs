@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   xorg,
+  libxft,
   libx11,
 }:
 
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     patchelf --set-rpath ${
       lib.makeLibraryPath [
         libx11
-        xorg.libXft
+        libxft
         xorg.libXinerama
       ]
     } $out/bin/rlaunch

@@ -6,7 +6,7 @@
   gpgme,
   libx11,
   libXinerama,
-  libXft,
+  libxft,
   pkg-config,
   zlib,
   writeText,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgpg-error
     libx11
     libXinerama
-    libXft
+    libxft
   ];
 
   preConfigure = ''

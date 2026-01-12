@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libx11,
-  libXft,
+  libxft,
 }:
 stdenv.mkDerivation rec {
   pname = "xfractint";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXft
+    libxft
   ];
 
   configurePhase = ''

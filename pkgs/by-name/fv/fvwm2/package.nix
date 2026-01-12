@@ -8,7 +8,7 @@
   freetype,
   fribidi,
   libxcursor,
-  libXft,
+  libxft,
   libXinerama,
   libXpm,
   libXt,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     freetype
     fribidi
     libxcursor
-    libXft
+    libxft
     libXinerama
     libXpm
     libXt

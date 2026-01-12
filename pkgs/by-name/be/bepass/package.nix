@@ -5,7 +5,7 @@
   enableGUI ? false, # upstream working in progress
   pkg-config,
   glfw,
-  xorg,
+  libxft,
   libxcursor,
   libXrandr,
   libXinerama,
@@ -33,7 +33,7 @@ buildGoModule rec {
   nativeBuildInputs = lib.optionals enableGUI [ pkg-config ];
   buildInputs = lib.optionals enableGUI [
     glfw
-    xorg.libXft
+    libxft
     libxcursor
     libXrandr
     libXinerama

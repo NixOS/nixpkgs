@@ -12,7 +12,7 @@
   libGLU,
   libGL,
   libxext,
-  libXft,
+  libxft,
   libxfixes,
   mesa,
   xinput,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libXrandr
     libxext
-    libXft
+    libxft
     libGLU
     libGL
     libxfixes

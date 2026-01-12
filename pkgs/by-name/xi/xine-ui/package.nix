@@ -4,7 +4,7 @@
   curl,
   fetchhg,
   libxext,
-  libXft,
+  libxft,
   libXi,
   libXinerama,
   libXtst,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     libxext
-    libXft
+    libxft
     libXi
     libXinerama
     libXtst

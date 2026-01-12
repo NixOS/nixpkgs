@@ -5,7 +5,7 @@
   writeText,
   fontconfig,
   libx11,
-  libXft,
+  libxft,
   libxcursor,
   libxcomposite,
   conf ? null,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libx11
-    libXft
+    libxft
     libxcursor
     libxcomposite
   ];

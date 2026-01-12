@@ -6,7 +6,7 @@
   pkg-config,
   libx11,
   libxcomposite,
-  libXft,
+  libxft,
   libXmu,
   libXrandr,
   libxext,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxcomposite
-    libXft
+    libxft
     libXmu
     libXrandr
     libxext

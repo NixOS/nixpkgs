@@ -5,7 +5,7 @@
   writeText,
   pkg-config,
   libx11,
-  libXft,
+  libxft,
   libXi,
   libXinerama,
   libXtst,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXft
+    libxft
     libXi
     libXinerama
     libXtst

@@ -4,6 +4,7 @@
   replaceVars,
   fontconfig,
   xorg,
+  libxft,
   libxcursor,
   libsm,
   xrdb,
@@ -61,7 +62,7 @@ mkKdeDerivation {
     libsm
     libxcursor
     xorg.libXtst
-    xorg.libXft
+    libxft
 
     gpsd
   ];

@@ -8,7 +8,7 @@
   libsm,
   libx11,
   libxext,
-  libXft,
+  libxft,
   libXinerama,
   libXrandr,
   lua,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libx11
     libxext
-    libXft
+    libxft
     libXinerama
     libXrandr
     lua

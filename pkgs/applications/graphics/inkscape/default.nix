@@ -31,7 +31,7 @@
   libsigcxx,
   libvisio,
   libwpg,
-  libXft,
+  libxft,
   libxml2,
   libxslt,
   ninja,
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsigcxx
     libvisio
     libwpg
-    libXft
+    libxft
     libxml2
     libxslt
     perlPackages.perl

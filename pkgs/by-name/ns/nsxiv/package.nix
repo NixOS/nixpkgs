@@ -4,7 +4,7 @@
   fetchFromGitea,
   giflib,
   imlib2,
-  libXft,
+  libxft,
   libexif,
   libwebp,
   libinotify-kqueue,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     giflib
     imlib2
-    libXft
+    libxft
     libexif
     libwebp
   ]

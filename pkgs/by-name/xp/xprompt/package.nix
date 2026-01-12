@@ -5,7 +5,7 @@
   writeText,
   fontconfig,
   libx11,
-  libXft,
+  libxft,
   libXinerama,
   conf ? null,
   nix-update-script,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fontconfig
     libx11
-    libXft
+    libxft
     libXinerama
   ];
 

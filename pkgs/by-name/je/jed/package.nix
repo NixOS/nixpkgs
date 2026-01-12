@@ -5,7 +5,7 @@
   pkg-config,
   gpm,
   libxext,
-  libXft,
+  libxft,
   libXt,
   ncurses5,
   slang,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gpm
     libxext
-    libXft
+    libxft
     libXt
     ncurses5
     slang

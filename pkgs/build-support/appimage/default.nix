@@ -228,7 +228,7 @@ rec {
         libgcrypt
         libvpx
         librsvg
-        xorg.libXft
+        libxft
         libvdpau
         alsa-lib
 

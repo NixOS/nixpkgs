@@ -10,7 +10,7 @@
   withX ? true,
   libXi,
   libXinerama,
-  libXft,
+  libxft,
   libxfixes,
   libXtst,
   libx11,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withX [
       libXi
       libXinerama
-      libXft
+      libxft
       libxfixes
       libXtst
       libx11

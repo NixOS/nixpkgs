@@ -14,6 +14,7 @@
   SDL2,
   xkeyboard_config,
   xorg,
+  libxft,
   libxcursor,
   libcanberra,
   libwacom,
@@ -57,7 +58,7 @@ mkKdeDerivation {
     xkeyboard_config
 
     libxcursor
-    xorg.libXft
+    libxft
     xorg.xf86inputlibinput
     xorg.xf86inputevdev
     xorg.xorgserver

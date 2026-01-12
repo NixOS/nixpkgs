@@ -8,7 +8,7 @@
   libjack2,
   libclxclient,
   libx11,
-  libXft,
+  libxft,
   readline,
   aeolus-stops,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libjack2
     libclxclient
     libx11
-    libXft
+    libxft
     readline
   ];
 

@@ -6,7 +6,7 @@
   freetype,
   fribidi,
   libxext,
-  libXft,
+  libxft,
   libXpm,
   libXrandr,
   libXrender,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     freetype
     fribidi
     libxext
-    libXft
+    libxft
     libXpm
     libXrandr
     libXrender

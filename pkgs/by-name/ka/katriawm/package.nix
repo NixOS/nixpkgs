@@ -3,7 +3,7 @@
   stdenv,
   fetchzip,
   libx11,
-  libXft,
+  libxft,
   libXrandr,
   pkg-config,
   gitUpdater,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXft
+    libxft
     libXrandr
   ];
 

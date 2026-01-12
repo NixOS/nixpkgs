@@ -13,7 +13,7 @@
   libGLU,
   libx11,
   libxext,
-  libXft,
+  libxft,
   libXi,
   libXinerama,
   libXrandr,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libx11
     libxext
-    libXft
+    libxft
     libXi
     libXinerama
     libXrandr

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cairo,
   libjpeg,
-  libXft,
+  libxft,
   pkg-config,
   python3,
   wafHook,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     libjpeg
-    libXft
+    libxft
     python3
   ];
 

@@ -94,6 +94,7 @@ in
   onnxruntime,
   pango,
   xorg,
+  libxft,
   libxext,
   libxdamage,
   libxcursor,
@@ -568,7 +569,7 @@ buildStdenv.mkDerivation {
       libxcursor
       libxdamage
       libxext
-      xorg.libXft
+      libxft
       xorg.libXi
       xorg.libXrender
       xorg.libXt

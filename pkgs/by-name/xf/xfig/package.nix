@@ -11,7 +11,7 @@
   libXp,
   Xaw3d,
   libxaw,
-  libXft,
+  libxft,
   fig2dev,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libXp
     Xaw3d
     libxaw
-    libXft
+    libxft
   ];
 
   # Upstream-accepted patches for C23 compatibility from Gentoo and Debian

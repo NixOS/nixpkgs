@@ -5,7 +5,7 @@
   dash,
   libx11,
   libxext,
-  libXft,
+  libxft,
   libXinerama,
   libXrandr,
   libXrender,
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     dash
     libx11
     libxext
-    libXft
+    libxft
     libXinerama
     libXrandr
     libXrender

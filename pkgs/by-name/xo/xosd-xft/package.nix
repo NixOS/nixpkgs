@@ -6,6 +6,7 @@
   nix-update-script,
   pkg-config,
   xorg,
+  libxft,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    xorg.libXft
+    libxft
     xorg.libXrandr
     xorg.libXinerama
   ];

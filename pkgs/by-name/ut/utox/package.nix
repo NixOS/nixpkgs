@@ -16,7 +16,7 @@
   libXrender,
   fontconfig,
   libxext,
-  libXft,
+  libxft,
   libsodium,
   libopus,
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libXrender
     fontconfig
     libxext
-    libXft
+    libxft
     filter-audio
     libsodium
     libopus

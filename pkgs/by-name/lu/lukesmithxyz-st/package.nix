@@ -6,7 +6,7 @@
   harfbuzz,
   libx11,
   libxext,
-  libXft,
+  libxft,
   ncurses,
   pkg-config,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     harfbuzz
     libx11
     libxext
-    libXft
+    libxft
     ncurses
   ];
 

@@ -5,7 +5,7 @@
   fontconfig,
   libx11,
   libXinerama,
-  libXft,
+  libxft,
   writeText,
   # customization
   config,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libx11
     libXinerama
-    libXft
+    libxft
   ]
   ++ extraLibs;
 
