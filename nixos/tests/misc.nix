@@ -6,7 +6,6 @@ let
 in
 {
   name = "misc";
-  meta.maintainers = with lib.maintainers; [ eelco ];
 
   nodes.machine =
     { lib, ... }:

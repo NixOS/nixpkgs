@@ -2,7 +2,6 @@
 {
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   lib,
   replaceVars,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "cairocffi";
   version = "1.7.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

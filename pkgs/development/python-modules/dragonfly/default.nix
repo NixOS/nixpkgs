@@ -10,7 +10,6 @@
   psutil,
   pynput,
   pyperclip,
-  pythonOlder,
   regex,
   requests,
   setuptools,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "dragonfly";
   version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dictation-toolbox";

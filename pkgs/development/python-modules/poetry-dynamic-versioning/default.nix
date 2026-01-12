@@ -7,7 +7,6 @@
   poetry-core,
   poetry,
   pytestCheckHook,
-  pythonOlder,
   tomlkit,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
   version = "1.9.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";

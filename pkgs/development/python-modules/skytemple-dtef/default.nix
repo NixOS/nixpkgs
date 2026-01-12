@@ -5,7 +5,6 @@
   setuptools,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   skytemple-files,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "skytemple-dtef";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

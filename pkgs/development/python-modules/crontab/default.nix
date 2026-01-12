@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
   python-dateutil,
   pytz,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "crontab";
   version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     owner = "doctormo";

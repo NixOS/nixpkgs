@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   uc-micro-py,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "linkify-it-py";
   version = "2.0.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tsutsu3";

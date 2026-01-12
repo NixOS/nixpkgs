@@ -5,7 +5,6 @@
   makefun,
   decopatch,
   packaging,
-  pythonOlder,
   pytest,
   setuptools-scm,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-cases";
   version = "3.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_cases";

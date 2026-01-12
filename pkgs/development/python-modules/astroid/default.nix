@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "4.0.1"; # Check whether the version is compatible with pylint
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "astroid";

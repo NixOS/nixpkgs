@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyebus";
   version = "1.4.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

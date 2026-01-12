@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   mpv,
   setuptools,
 }:
@@ -28,8 +27,6 @@ buildPythonPackage rec {
       hash = "sha256-2O7w8PeWinCzrigGX3IV+9PVCtU9KCM2UJ32Y1kE6m0=";
     })
   ];
-
-  disabled = pythonOlder "3.9";
 
   nativeBuildInputs = [ setuptools ];
 

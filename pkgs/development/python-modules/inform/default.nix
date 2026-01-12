@@ -8,27 +8,24 @@
   hypothesis,
   num2words,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inform";
-  version = "1.35";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.36";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
-    tag = "v${version}";
-    hash = "sha256-FQc8R4MJ5RKJi70ADboy2Lw6IwLaI3hup60GcnPxV60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x2xLEcywMaYhq/SWPVu48zTHJW3/MWujjr4y6/uEClU=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arrow
     six
   ];
@@ -55,8 +52,8 @@ buildPythonPackage rec {
       allow you to simply and cleanly print different types of messages.
     '';
     homepage = "https://inform.readthedocs.io";
-    changelog = "https://github.com/KenKundert/inform/blob/${src.tag}/doc/releases.rst";
+    changelog = "https://github.com/KenKundert/inform/blob/${finalAttrs.src.tag}/doc/releases.rst";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
-}
+})

@@ -5,7 +5,6 @@
   lxml,
   lxml-html-clean,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "html-text";
   version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zytedata";

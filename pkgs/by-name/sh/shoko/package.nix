@@ -9,6 +9,7 @@
   rhash,
   nix-update-script,
 }:
+
 buildDotnetModule (finalAttrs: {
   pname = "shoko";
   version = "5.1.0";
@@ -38,7 +39,13 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [ rhash ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        ''v([0-9]+\.[0-9]+\.[0-9]+).*''
+      ];
+    };
+
     tests.shoko = nixosTests.shoko;
   };
 

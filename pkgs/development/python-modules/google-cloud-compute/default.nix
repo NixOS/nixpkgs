@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   google-api-core,
   mock,
   proto-plus,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "google-cloud-compute";
   version = "1.37.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_compute";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   # build inputs
   torch,
@@ -22,8 +21,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";

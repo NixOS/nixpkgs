@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   # build inputs
   inflect,
@@ -29,8 +28,6 @@ buildPythonPackage {
     rev = "9dafd76d3586aa5ea1b96164d86c73037e827294";
     hash = "sha256-fHztPeTbMp1aYsj+STYWzHgwdY0Q9078qXpXxtA8pPs=";
   };
-
-  disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
     inflect

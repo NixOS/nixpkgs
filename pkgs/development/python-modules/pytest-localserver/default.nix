@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   werkzeug,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-localserver";
   version = "0.9.0.post0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "pytest_localserver";

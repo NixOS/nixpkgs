@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "3.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";

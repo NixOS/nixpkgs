@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "qiskit-optimization";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";

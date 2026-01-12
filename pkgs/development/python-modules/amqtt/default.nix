@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   setuptools,
   transitions,
@@ -21,8 +20,6 @@ buildPythonPackage {
   pname = "amqtt";
   version = "unstable-2022-05-29";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yakifo";

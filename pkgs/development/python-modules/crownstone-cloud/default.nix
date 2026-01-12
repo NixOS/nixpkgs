@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   certifi,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "crownstone-cloud";
   version = "1.4.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "crownstone_cloud";

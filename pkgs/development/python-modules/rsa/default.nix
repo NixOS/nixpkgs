@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "4.9";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "sybrenstuvel";
     repo = "python-rsa";

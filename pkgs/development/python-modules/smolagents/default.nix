@@ -47,14 +47,41 @@
   # tests
   ipython,
   pytest-datadir,
+  pytest-timeout,
   pytestCheckHook,
   wikipedia-api,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
+  pname = "smolagents";
+  version = "1.23.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "huggingface";
+    repo = "smolagents";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    huggingface-hub
+    jinja2
+    pillow
+    python-dotenv
+    requests
+    rich
+  ];
+
   optional-dependencies = lib.fix (self: {
     audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
+    # blaxel = [
+    #   blaxel
+    #   websocket-client
+    # ];
     docker = [
       docker
       websocket-client
@@ -69,6 +96,10 @@ let
       mcp
       mcpadapt
     ];
+    # modal = [
+    #   modal
+    #   websocket-client
+    # ];
     # mlx-lm = [ mlx-lm ];
     openai = [ openai ];
     # telemetry = [
@@ -101,39 +132,14 @@ let
     # ];
   });
 
-in
-buildPythonPackage (finalAttrs: {
-  pname = "smolagents";
-  version = "1.21.3";
-  pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "huggingface";
-    repo = "smolagents";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
-  };
-
-  build-system = [ setuptools ];
-
-  dependencies = [
-    huggingface-hub
-    jinja2
-    pillow
-    python-dotenv
-    requests
-    rich
-  ];
-
-  inherit optional-dependencies;
-
   nativeCheckInputs = [
     ipython
     pytest-datadir
     pytestCheckHook
     wikipedia-api
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ pytest-timeout ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 
@@ -177,6 +183,16 @@ buildPythonPackage (finalAttrs: {
     "test_init_agent_with_different_toolsets"
     "test_multiagents_save"
     "test_new_instance"
+
+    # Requires optional "blaxel" dependencies
+    "test_blaxel_executor_instantiation_with_blaxel_sdk"
+    "test_blaxel_executor_custom_parameters"
+    "test_blaxel_executor_cleanup"
+    # Requires optional "modal" dependencies
+    "test_sandbox_lifecycle"
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+
   ];
 
   __darwinAllowLocalNetworking = true;

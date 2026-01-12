@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytest7CheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "favicon";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

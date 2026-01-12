@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
   pydal,
   graphviz,
   pandoc,
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "pytm";
   version = "1.3.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "OWASP";

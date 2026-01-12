@@ -30,10 +30,10 @@
   builderKeys ? [
     "152812300785C96444D3334D17565732E08E5E41" # achow101.gpg
     "9EDAFF80E080659604F4A76B2EBB056FD847F8A7" # Emzy.gpg
-    # "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg (not signed 30.1)
+    # "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg (not signed 30.2)
     "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg
-    "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg
-    "67AA5B46E7AF78053167FE343B8F814A784218F8" # willcl-ark.gpg
+    # "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg (not signed 30.2)
+    # "67AA5B46E7AF78053167FE343B8F814A784218F8" # willcl-ark.gpg (not signed 30.2)
   ],
 }:
 
@@ -46,14 +46,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "30.1";
+  version = "30.2";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "5d5518782c3000f64717ec1b4291e7e609a1f900d9729ee83c982243779c3f43";
+    sha256 = "6fd00b8c42883d5c963901ad4109a35be1e5ec5c2dc763018c166c21a06c84cb";
   };
 
   nativeBuildInputs = [
@@ -93,12 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       checksums = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-WdOYSEbxmpecFpThNwxKTNXbbwQvqlUuCxmCbhfhW6k";
+        hash = "sha256-ERE/QO2elj++mON3UYGJKaLdU86gWIRS/AufuyS/JAU=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-yFPhf/tyotBtpx1lZAQR+C2YdZaAyaWCq/0OVdP2wR4=";
+        hash = "sha256-69TMNzKJQRDC+2YU6bKI23c8Jx44m5B1zz823SQtiyg=";
       };
 
       verifyBuilderKeys =

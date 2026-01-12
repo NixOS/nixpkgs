@@ -8,7 +8,6 @@
   pyyaml,
   urllib3,
   fetchPypi,
-  pythonOlder,
   hatchling,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "snowflake-core";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "snowflake_core";

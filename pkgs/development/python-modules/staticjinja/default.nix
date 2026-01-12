@@ -8,7 +8,6 @@
   jinja2,
   pytestCheckHook,
   pytest-check,
-  pythonOlder,
   markdown,
   testers,
   tomlkit,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "staticjinja";
   version = "5.0.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   # No tests in pypi
   src = fetchFromGitHub {

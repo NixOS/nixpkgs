@@ -7,7 +7,6 @@
   hatchling,
   mock,
   python,
-  pythonOlder,
   requests,
   responses,
   urllib3,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "django-anymail";
   version = "13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anymail";

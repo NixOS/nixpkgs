@@ -5,7 +5,6 @@
   banal,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   sqlalchemy,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dataset";
   version = "1.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pudo";

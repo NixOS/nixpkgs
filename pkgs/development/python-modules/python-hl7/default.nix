@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "hl7";
   version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "johnpaulett";

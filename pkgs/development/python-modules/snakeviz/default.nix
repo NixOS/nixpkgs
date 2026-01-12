@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ipython,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   tornado,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "snakeviz";
   version = "2.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jiffyclub";

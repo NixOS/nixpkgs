@@ -9,7 +9,6 @@
   pkg-config,
   protobuf,
   typing-extensions,
-  pythonOlder,
   setuptools,
   zlib,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "grpcio";
   version = "1.76.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

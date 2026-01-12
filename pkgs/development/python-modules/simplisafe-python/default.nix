@@ -12,7 +12,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   types-pytz,
   voluptuous,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "simplisafe-python";
   version = "2024.01.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";

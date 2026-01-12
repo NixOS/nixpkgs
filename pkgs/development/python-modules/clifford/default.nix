@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   h5py,
   ipython,
   numba,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "clifford";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

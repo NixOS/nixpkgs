@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pyudev,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "monitorcontrol";
   version = "4.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "newAM";

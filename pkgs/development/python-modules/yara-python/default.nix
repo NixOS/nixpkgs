@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   yara,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "yara-python";
   version = "4.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";

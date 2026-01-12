@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pandas,
   pyarrow,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "geoarrow-pandas";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";

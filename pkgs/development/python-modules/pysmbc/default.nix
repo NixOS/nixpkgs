@@ -4,15 +4,12 @@
   fetchPypi,
   samba,
   pkg-config,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysmbc";
   version = "1.0.25.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

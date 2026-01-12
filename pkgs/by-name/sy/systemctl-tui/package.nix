@@ -13,11 +13,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rgwood";
     repo = "systemctl-tui";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OzOc0osaKoRVuo+fBJOhsZAiFfm0ZHj6POUjRaIZGsc=";
+    # https://github.com/rgwood/systemctl-tui/issues/68#issuecomment-3735677971
+    tag = "v${finalAttrs.version}-take2";
+    hash = "sha256-6SN8c8gDVsvFFyrcFjdO70pJpVxWG/AbdB6V4mM5Q5Y=";
   };
 
-  cargoHash = "sha256-MSpex0G1RJsI5RCrAlSgeY2/6flndwCjdtopWfuXNts=";
+  cargoHash = "sha256-4VlKJUxmxC1dIZYsUMLhNzOJTYacpddlKZUSwjKlzJ8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

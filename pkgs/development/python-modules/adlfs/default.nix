@@ -8,7 +8,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fsspec,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "adlfs";
   version = "2025.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";

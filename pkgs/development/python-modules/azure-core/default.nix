@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   aiodns,
   aiohttp,
   flask,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   version = "1.35.0";
   pname = "azure-core";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 

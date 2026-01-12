@@ -7,7 +7,6 @@
   numpy,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   scikit-build,
   setuptools,
 }:
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "parselmouth";
   version = "0.4.6";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YannickJadoul";

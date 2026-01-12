@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   tornado,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "deezer-python";
   version = "7.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "browniebroke";

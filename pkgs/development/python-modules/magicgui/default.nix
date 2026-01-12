@@ -9,7 +9,6 @@
   psygnal,
   pyside2,
   pytestCheckHook,
-  pythonOlder,
   superqt,
   typing-extensions,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "magicgui";
   version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";

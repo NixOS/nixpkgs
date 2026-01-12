@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
+    echo gcc -O2 -include ${glibc.dev}/include/errno.h -std=gnu17 > conf-cc
     echo $out > conf-home
     # djbdns ships with an outdated list of root servers
     awk '/^.?.ROOT-SERVERS.NET/ { print $4 }' ${dns-root-data}/root.hints > dnsroots.global

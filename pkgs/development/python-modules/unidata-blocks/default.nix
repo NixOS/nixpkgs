@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   nix-update-script,
   hatchling,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "unidata-blocks";
   version = "0.0.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "unidata_blocks";

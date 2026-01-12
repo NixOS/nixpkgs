@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   rustPlatform,
   nix-update-script,
 
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   pname = "libipld";
   version = "3.3.2";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
 
   # use pypi, GitHub does not include Cargo.lock
   src = fetchPypi {

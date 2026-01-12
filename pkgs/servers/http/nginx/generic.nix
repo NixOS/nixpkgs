@@ -319,7 +319,6 @@ stdenv.mkDerivation {
         ];
         teams = with lib.teams; [
           helsinki-systems
-          stridtech
         ];
       };
 }
