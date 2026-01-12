@@ -1,0 +1,47 @@
+--- a/termcap.c
++++ b/termcap.c
+@@ -126,7 +126,7 @@
+    for tgetnum, tgetflag and tgetstr to find.  */
+ static char *term_entry;
+ 
+-static char *tgetst1 ();
++static char *tgetst1 (char *ptr, char **area);
+ 
+ /* Search entry BP for capability CAP.
+    Return a pointer to the capability (in BP) if found,
+@@ -317,7 +317,7 @@
+ tputs (str, nlines, outfun)
+      register char *str;
+      int nlines;
+-     register int (*outfun) ();
++     register int (*outfun) (...);
+ {
+   register int padcount = 0;
+   register int speed;
+@@ -389,10 +389,10 @@
+ 
+ /* Forward declarations of static functions.  */
+ 
+-static int scan_file ();
+-static char *gobble_line ();
+-static int compare_contin ();
+-static int name_match ();
++static int scan_file (char *str, int fd, register struct termcap_buffer *bufp);
++static char *gobble_line (int fd, register struct termcap_buffer *bufp, char *append_end);
++static int compare_contin (register char *str1, register char *str2);
++static int name_match (char *line, char *name);
+ 
+ #ifdef VMS
+ 
+--- a/tparam.c
++++ b/tparam.c
+@@ -88,7 +88,8 @@
+ 
+    The fourth and following args to tparam serve as the parameter values.  */
+ 
+-static char *tparam1 ();
++static char *tparam1 (char *string, char *outstring, int len, char *up, char *left, register int *argp);
++
+ 
+ /* VARARGS 2 */
+ char *

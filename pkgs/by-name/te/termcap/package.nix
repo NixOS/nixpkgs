@@ -1,23 +1,25 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   fetchpatch,
   autoreconfHook,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "termcap";
   version = "1.3.1";
 
-  src = fetchurl {
-    url = "mirror://gnu/termcap/termcap-${version}.tar.gz";
-    hash = "sha256-kaDiLlOHykRntbyxjt8cUbkwJi/UZtX9o5bdnSZxkQA=";
+  src = fetchzip {
+    url = "mirror://gnu/termcap/termcap-${finalAttrs.version}.tar.gz";
+    hash = "sha256-IO0rqQuhd+U3haNOY6w7tDRGNbNEwTgKyj2s+509RUo=";
   };
 
   patches = [
+    ./function-declarations.patch
+
     (fetchpatch {
       name = "0001-tparam-replace-write-with-fprintf.patch";
       url = "https://github.com/msys2/MINGW-packages/raw/c6691ad1bd9d4c6823a18068ca0683c3e32ea005/mingw-w64-termcap/0001-tparam-replace-write-with-fprintf.patch";
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
     [
       "-DSTDC_HEADERS"
     ]
@@ -73,7 +75,10 @@ stdenv.mkDerivation rec {
     description = "Terminal feature database";
     homepage = "https://www.gnu.org/software/termutils/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ wegank ];
+    maintainers = with lib.maintainers; [
+      prince213
+      wegank
+    ];
     platforms = lib.platforms.all;
   };
-}
+})
