@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xrefresh,
   xrdb,
   xrandr,
   xpr,
@@ -192,7 +193,7 @@ let
     xprop
     xrandr
     xrdb
-    xorg.xrefresh
+    xrefresh
     xorg.xset
     xorg.xsetroot
     xorg.xvinfo
