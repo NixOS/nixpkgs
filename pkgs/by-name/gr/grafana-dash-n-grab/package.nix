@@ -32,7 +32,10 @@ buildGoModule rec {
     description = "Grafana Dash-n-Grab (gdg) -- backup and restore Grafana dashboards, datasources, and other entities";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/esnet/gdg";
-    teams = [ lib.teams.bitnomial ];
+    maintainers = with lib.maintainers; [
+      cdepillabout
+      wraithm
+    ];
     mainProgram = "gdg";
     changelog = "https://github.com/esnet/gdg/releases/tag/v${version}";
   };
