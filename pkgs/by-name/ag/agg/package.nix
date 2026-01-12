@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   autoconf,
   automake,
@@ -10,7 +10,9 @@
   SDL,
   libX11,
 }:
-
+let
+  stdenv = gccStdenv;
+in
 stdenv.mkDerivation rec {
   pname = "agg";
   version = "2.5";

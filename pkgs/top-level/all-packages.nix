@@ -6579,10 +6579,6 @@ with pkgs;
 
   acl = callPackage ../development/libraries/acl { };
 
-  agg = callPackage ../development/libraries/agg {
-    stdenv = gccStdenv;
-  };
-
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
