@@ -10,7 +10,7 @@
   zlib,
   swig,
   doxygen,
-  xorg,
+  libxmu,
   libxi,
   python3,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     zlib
     swig
     libxi
-    xorg.libXmu
+    libxmu
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libglut

@@ -17,6 +17,7 @@
   unixODBC,
   xkeyboard_config,
   xorg,
+  libxmu,
   libxi,
   libxfixes,
   libxext,
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     libxext
     xorg.libXtst
     libxi
-    xorg.libXmu
+    libxmu
     xorg.libXrender
     libxcb
     libxcursor

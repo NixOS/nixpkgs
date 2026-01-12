@@ -6,7 +6,7 @@
   makeWrapper,
   imagemagick,
   libXpm,
-  libXmu,
+  libxmu,
   libxi,
   libXp,
   Xaw3d,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libXpm
-    libXmu
+    libxmu
     libxi
     libXp
     Xaw3d

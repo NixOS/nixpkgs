@@ -13,7 +13,7 @@
   libGL,
   libx11,
   libxext,
-  libXmu,
+  libxmu,
   libXrandr,
   libXrender,
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     libGL
     libx11
     libxext
-    libXmu
+    libxmu
     libXrandr
     libXrender
     (lib.getLib stdenv.cc.cc)

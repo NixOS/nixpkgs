@@ -44,7 +44,7 @@ buildFHSEnv {
       zstd # needed from 20.0
       libice
       libsm
-      xorg.libXmu
+      libxmu
       libxi
       xorg.libXt
       libxext

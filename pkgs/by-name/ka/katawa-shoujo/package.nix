@@ -18,7 +18,7 @@
   libx11,
   libxext,
   libxi,
-  libXmu,
+  libxmu,
   runtimeShell,
   SDL_compat,
   SDL_image,
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxi
-    libXmu
+    libxmu
     libGL
     libGLU
   ];

@@ -7,7 +7,7 @@
   orc,
   webkitgtk_4_1,
   autoPatchelfHook,
-  xorg,
+  libxmu,
   jdk,
   zlib,
   runCommand,
@@ -49,7 +49,7 @@ flutter338.buildFlutterApplication {
     libunwind
     orc
     webkitgtk_4_1
-    xorg.libXmu
+    libxmu
     jdk
   ];
 

@@ -11,7 +11,7 @@
   libGL,
   libGLU,
   libxext,
-  libXmu,
+  libxmu,
   libxi,
   vtk,
   withVtk ? false,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     libxext
-    libXmu
+    libxmu
     libxi
     rapidjson
   ]

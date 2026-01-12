@@ -7,7 +7,7 @@
   libxslt,
   libxext,
   libxcursor,
-  libXmu,
+  libxmu,
   glib,
   libXrandr,
   dbus,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxcursor
     pam
-    libXmu
+    libxmu
     libXrandr
   ];
 

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   xorg,
+  libxmu,
   libxext,
   libxaw,
   libx11,
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libsm
-    xorg.libXmu
+    libxmu
     libxaw
     xorg.libXt
   ];

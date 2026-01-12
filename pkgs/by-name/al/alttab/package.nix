@@ -13,6 +13,7 @@
   which,
   xnee,
   xorg,
+  libxmu,
   libxft,
   libx11,
   xprop,
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     uthash
     libx11
     libxft
-    xorg.libXmu
+    libxmu
     xorg.libXpm
     xorg.libXrandr
     xorg.libXrender

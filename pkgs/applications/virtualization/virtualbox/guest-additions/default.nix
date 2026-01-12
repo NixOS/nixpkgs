@@ -6,6 +6,7 @@
   dbus,
   kmod,
   xorg,
+  libxmu,
   libxfixes,
   libxext,
   libxcursor,
@@ -109,7 +110,7 @@ stdenv.mkDerivation {
             libx11
             xorg.libXt
             libxext
-            xorg.libXmu
+            libxmu
             libxfixes
             libxcursor
           ]

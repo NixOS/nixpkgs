@@ -15,7 +15,7 @@
   libxext,
   libxcursor,
   libxfixes,
-  libXmu,
+  libxmu,
   SDL2,
   libcap,
   libGL,
@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     makeself
     perl
-    libXmu
+    libxmu
     libXrandr
     libpng
     libopus

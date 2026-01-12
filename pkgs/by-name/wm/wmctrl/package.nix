@@ -5,7 +5,7 @@
   libx11,
   glib,
   pkg-config,
-  libXmu,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ glib.dev ];
   buildInputs = [
     libx11
-    libXmu
+    libxmu
     glib
   ];
 

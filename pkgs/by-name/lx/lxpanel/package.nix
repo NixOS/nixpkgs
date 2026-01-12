@@ -16,7 +16,7 @@
   libfm,
   libwnck,
   libwnck2,
-  libXmu,
+  libxmu,
   libXpm,
   cairo,
   gdk-pixbuf,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     (libfm.override { inherit withGtk3; })
     (if withGtk3 then libwnck else libwnck2)
-    libXmu
+    libxmu
     libXpm
     cairo
     gdk-pixbuf

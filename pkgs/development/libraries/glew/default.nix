@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   libGLU,
-  libXmu,
+  libxmu,
   libxi,
   libxext,
   enableEGL ? (!stdenv.hostPlatform.isDarwin),
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libXmu
+    libxmu
     libxi
     libxext
   ];

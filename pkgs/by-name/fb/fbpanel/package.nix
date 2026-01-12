@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libx11,
-  libXmu,
+  libxmu,
   libXpm,
   gtk2,
   libpng,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libx11
-    libXmu
+    libxmu
     libXpm
     gtk2
     libpng

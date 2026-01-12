@@ -7,7 +7,7 @@
   imake,
   gccmakedep,
   libXt,
-  libXmu,
+  libxmu,
   libxaw,
   libxext,
   libsm,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     libx11
     xorgproto
     libXt
-    libXmu
+    libxmu
     libxaw
     libxext
     libsm

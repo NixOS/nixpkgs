@@ -5,7 +5,7 @@
   bzip2,
   gfortran,
   libx11,
-  libXmu,
+  libxmu,
   libXt,
   libjpeg,
   libpng,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     gfortran
     libx11
-    libXmu
+    libxmu
     libXt
     libXt
     libjpeg

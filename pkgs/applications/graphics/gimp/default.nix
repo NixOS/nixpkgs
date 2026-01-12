@@ -50,6 +50,7 @@
   appstream,
   desktop-file-utils,
   xorg,
+  libxmu,
   glib-networking,
   json-glib,
   libmypaint,
@@ -188,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     python
     libexif
     xorg.libXpm
-    xorg.libXmu
+    libxmu
     glib-networking
     libmypaint
     mypaint-brushes1

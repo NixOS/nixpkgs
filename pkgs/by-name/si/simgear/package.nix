@@ -11,7 +11,7 @@
   libice,
   libsm,
   libXt,
-  libXmu,
+  libxmu,
   libGLU,
   libGL,
   boost179,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libice
     libsm
     libXt
-    libXmu
+    libxmu
     libGLU
     libGL
     boost179

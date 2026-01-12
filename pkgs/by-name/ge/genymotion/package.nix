@@ -20,7 +20,7 @@
   gtk3,
   pixman,
   # For glewinfo
-  libXmu,
+  libxmu,
   libxi,
   libxext,
 }:
@@ -32,7 +32,7 @@ let
     glib
     libx11
     libxkbcommon
-    libXmu
+    libxmu
     libxi
     libxext
     libGL

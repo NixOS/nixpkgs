@@ -11,7 +11,7 @@
   libx11,
   xorgproto,
   libxi,
-  libXmu,
+  libxmu,
   fetchpatch,
   libXrandr,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libx11
     xorgproto
     libxi
-    libXmu
+    libxmu
     libXrandr
   ];
 

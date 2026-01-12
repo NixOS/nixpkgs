@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libGLU,
-  libXmu,
+  libxmu,
   libxi,
   libxext,
   testers,
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libXmu
+    libxmu
     libxi
     libxext
   ];

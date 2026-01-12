@@ -5,7 +5,7 @@
   libx11,
   libxext,
   libxfixes,
-  libXmu,
+  libxmu,
   libXpm,
   pkg-config,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxfixes
-    libXmu
+    libxmu
     libXpm
   ];
 

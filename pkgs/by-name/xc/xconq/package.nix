@@ -5,7 +5,7 @@
   cpio,
   xorgproto,
   libx11,
-  libXmu,
+  libxmu,
   libxaw,
   libXt,
   tcl,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cpio
     xorgproto
     libx11
-    libXmu
+    libxmu
     libxaw
     libXt
     tcl

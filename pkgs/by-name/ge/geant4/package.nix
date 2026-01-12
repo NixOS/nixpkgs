@@ -13,7 +13,7 @@
   libGLX,
   libx11,
   libxext,
-  libXmu,
+  libxmu,
   libXpm,
   motif,
   python3,
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     lib.optionals enableOpenGLX11 [
       libGLU
       libxext
-      libXmu
+      libxmu
     ]
     ++ lib.optionals enableInventor [
       libXpm

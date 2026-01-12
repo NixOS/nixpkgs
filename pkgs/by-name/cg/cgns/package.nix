@@ -7,7 +7,7 @@
   gfortran,
   tk,
   hdf5,
-  xorg,
+  libxmu,
   libGLU,
   withTools ? false,
   testers,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withTools [
     tk
-    xorg.libXmu
+    libxmu
     libGLU
   ];
 

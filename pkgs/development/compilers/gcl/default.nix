@@ -16,7 +16,7 @@
   libxext,
   libXt,
   libxaw,
-  libXmu,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libxext
     libXt
     libxaw
-    libXmu
+    libxmu
     zlib
     which
     texinfo

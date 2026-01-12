@@ -23,7 +23,7 @@
   libXt,
   libxaw,
   libxau,
-  libXmu,
+  libxmu,
   libsodium,
   libice,
   wayland-scanner,
@@ -185,7 +185,7 @@ stdenv.mkDerivation {
     libXt
     libxaw
     libxau
-    libXmu
+    libxmu
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11

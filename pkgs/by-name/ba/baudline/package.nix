@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libXmu,
+  libxmu,
   libXt,
   libx11,
   libxext,
@@ -13,7 +13,7 @@
 
 let
   rpath = lib.makeLibraryPath [
-    libXmu
+    libxmu
     libXt
     libx11
     libxext

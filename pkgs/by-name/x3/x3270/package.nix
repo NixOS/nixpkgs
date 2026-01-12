@@ -8,7 +8,7 @@
   libx11,
   libXt,
   libxaw,
-  libXmu,
+  libxmu,
   bdftopcf,
   mkfontscale,
   font-adobe-100dpi,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXt
     libxaw
-    libXmu
+    libxmu
     bdftopcf
     mkfontscale
     font-adobe-100dpi

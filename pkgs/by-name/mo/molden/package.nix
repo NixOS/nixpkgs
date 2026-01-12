@@ -5,7 +5,7 @@
   which,
   gfortran,
   libGLU,
-  xorg,
+  libxmu,
   libx11,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     gfortran
     libGLU
     libx11
-    xorg.libXmu
+    libxmu
   ];
 
   patches = [ ./dont_register_file_types.patch ];

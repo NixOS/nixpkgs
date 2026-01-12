@@ -30,7 +30,7 @@ let
       xorg.libXrender
       xorg.libXrandr
       libxcb
-      xorg.libXmu
+      libxmu
       libpthread-stubs
       libxext
       libxdmcp

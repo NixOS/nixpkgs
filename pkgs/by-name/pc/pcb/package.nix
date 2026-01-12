@@ -20,6 +20,7 @@
   gnome2,
   gd,
   xorg,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     tk
     gnome2.gtkglext
     gd
-    xorg.libXmu
+    libxmu
   ];
 
   configureFlags = [

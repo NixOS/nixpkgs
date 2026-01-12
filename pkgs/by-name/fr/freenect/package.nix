@@ -9,7 +9,7 @@
   libGLU,
   libGL,
   libxi,
-  libXmu,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libxi
-    libXmu
+    libxmu
   ];
 
   nativeBuildInputs = [

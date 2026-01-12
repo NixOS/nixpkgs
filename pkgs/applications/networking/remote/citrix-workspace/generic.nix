@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  libxmu,
   libxinerama,
   libxfixes,
   libxext,
@@ -209,7 +210,7 @@ stdenv.mkDerivation rec {
     woff2
     xorg.libXScrnSaver
     libxaw
-    xorg.libXmu
+    libxmu
     xorg.libXtst
     zlib
   ];
@@ -226,7 +227,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxinerama
-    xorg.libXmu
+    libxmu
     xorg.libXrender
     xorg.libXtst
     libxcb

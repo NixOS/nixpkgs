@@ -20,7 +20,7 @@
   libsm,
   libx11,
   libxaw,
-  libXmu,
+  libxmu,
   libXrandr,
   libXrender,
   libXt,
@@ -88,7 +88,7 @@ let
         libsm
         libx11
         libxaw
-        libXmu
+        libxmu
         libXrandr
         libXrender
         libXt

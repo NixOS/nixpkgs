@@ -9,7 +9,7 @@
   libx11,
   libxaw,
   libXt,
-  libXmu, # for postscript and html output
+  libxmu, # for postscript and html output
   enableHtml ? false,
   psutils,
   netpbm, # for html output
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libx11
     libxaw
     libXt
-    libXmu
+    libxmu
   ]
   ++ lib.optionals enableHtml [
     psutils

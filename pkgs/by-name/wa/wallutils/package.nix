@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libxcursor,
-  libXmu,
+  libxmu,
   libXpm,
   libheif,
   pkg-config,
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     libx11
     libxcursor
-    libXmu
+    libxmu
     libXpm
     libheif
     wayland

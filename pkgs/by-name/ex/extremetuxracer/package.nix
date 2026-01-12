@@ -11,7 +11,7 @@
   freetype,
   sfml_2,
   libxi,
-  libXmu,
+  libxmu,
   libxext,
   libXt,
   libsm,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     sfml_2
     libxi
-    libXmu
+    libxmu
     libxext
     libXt
     libsm

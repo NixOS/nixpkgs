@@ -14,7 +14,7 @@
   libxext,
   libxft,
   libxinerama,
-  libXmu,
+  libxmu,
   libXpm,
   libjpeg,
   libpng,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libxext
     libxft
     libxinerama
-    libXmu
+    libxmu
     libXpm
     libjpeg
     libpng

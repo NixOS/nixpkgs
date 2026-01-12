@@ -17,7 +17,7 @@
   xorgproto,
   libxext,
   libxi,
-  libXmu,
+  libxmu,
   libXt,
   simgear,
   zlib,
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libxext
     libxi
-    libXmu
+    libxmu
     libXt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib

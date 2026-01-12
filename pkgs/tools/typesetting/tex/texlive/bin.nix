@@ -18,7 +18,7 @@
   icu,
   ghostscript,
   libXpm,
-  libXmu,
+  libxmu,
   libxext,
   perl,
   perlPackages,
@@ -757,7 +757,7 @@ rec {
       libxaw
       libxi
       xorg.libXpm
-      xorg.libXmu
+      libxmu
       libxaw
       libxext
       libxfixes

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  libXmu,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ libXmu ];
+  buildInputs = [ libxmu ];
 
   meta = {
     description = "Tool to access the X clipboard from a console application";

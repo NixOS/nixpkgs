@@ -6,7 +6,7 @@
   coin3d,
   motif,
   libxext,
-  libXmu,
+  libxmu,
   libGLU,
   libGL,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libGL
     libxext
-    libXmu
+    libxmu
   ];
 
   meta = {

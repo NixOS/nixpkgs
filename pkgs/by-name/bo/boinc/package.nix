@@ -9,7 +9,7 @@
   curl,
   libGLU,
   libGL,
-  libXmu,
+  libxmu,
   libxi,
   libglut,
   libjpeg,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!headless) [
     libGLU
     libGL
-    libXmu
+    libxmu
     libxi
     libglut
     libjpeg

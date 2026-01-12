@@ -7,7 +7,7 @@
   freetype,
   gnustep-gui,
   libxft,
-  libXmu,
+  libxmu,
   pkg-config,
   wrapGNUstepAppsHook,
 }:
@@ -31,7 +31,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libxft
-    libXmu
+    libxmu
   ];
 
   propagatedBuildInputs = [ gnustep-gui ];

@@ -6,7 +6,7 @@
   flex,
   pkg-config,
   libxext,
-  libXmu,
+  libxmu,
   libXpm,
   libXp,
   libXt,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libXp
   ];
   propagatedBuildInputs = [
-    libXmu
+    libxmu
     libXt
     xorgproto
   ];

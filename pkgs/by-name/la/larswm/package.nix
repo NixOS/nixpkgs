@@ -6,7 +6,7 @@
   gccmakedep,
   libx11,
   libxext,
-  libXmu,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxext
-    libXmu
+    libxmu
   ];
 
   makeFlags = [

@@ -39,7 +39,7 @@ let
             libxext
             libxi
             libxinerama
-            xorg.libXmu
+            libxmu
             xorg.libXrandr
             xorg.libXrender
             xorg.libXv

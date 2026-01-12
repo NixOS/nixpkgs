@@ -13,7 +13,7 @@
   libGLU,
   libredwg,
   libspnav,
-  libXmu,
+  libxmu,
   medfile,
   ninja,
   ode,
@@ -81,7 +81,7 @@ freecad-utils.makeCustomizable (
       gts
       hdf5
       libGLU
-      libXmu
+      libxmu
       libspnav
       medfile
       ode

@@ -188,7 +188,7 @@ rec {
         libudev0-shim
 
         xorg.libXt
-        xorg.libXmu
+        libxmu
         libxcb
         xorg.xcbutil
         xorg.xcbutilwm

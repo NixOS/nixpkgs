@@ -7,7 +7,7 @@
   utilmacros,
   libx11,
   libxaw,
-  libXmu,
+  libxmu,
   libXt,
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxaw
-    libXmu
+    libxmu
     libXt
   ];
 

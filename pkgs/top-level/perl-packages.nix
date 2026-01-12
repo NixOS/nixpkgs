@@ -26581,7 +26581,7 @@ with self;
       pkgs.libglut
       pkgs.libx11
       pkgs.libxi
-      pkgs.xorg.libXmu
+      pkgs.libxmu
       pkgs.libxext
       pkgs.xdummy
     ];
@@ -27547,7 +27547,7 @@ with self;
     ++ (with pkgs; [
       gsl
       libglut
-      xorg.libXmu
+      libxmu
       libxi
     ]);
 

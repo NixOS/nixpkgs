@@ -8,7 +8,7 @@
   SDL_compat,
   libx11,
   libxi,
-  libXmu,
+  libxmu,
   libxext,
   libGLU,
   libGL,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_compat
     libx11
     libxi
-    libXmu
+    libxmu
     libxext
     libGLU
     libGL

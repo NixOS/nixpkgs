@@ -10,7 +10,7 @@
   libxext,
   libxft,
   libxinerama,
-  libXmu,
+  libxmu,
   libXpm,
   libXrandr,
   libXres,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxft
     libxinerama
-    libXmu
+    libxmu
     libXpm
     libXrandr
     libXres
