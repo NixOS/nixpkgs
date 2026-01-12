@@ -15,6 +15,7 @@
   gnugrep,
   findutils,
   xorg,
+  setxkbmap,
   net-tools,
   iproute2,
   bc,
@@ -93,7 +94,7 @@ let
     xorg.xwininfo
     xorg.fontutil
     xorg.xkbcomp
-    xorg.setxkbmap
+    setxkbmap
   ];
 in
 stdenv.mkDerivation {

@@ -34,6 +34,7 @@
   fluidsynth,
   xorgserver,
   xorg,
+  setxkbmap,
   util-linux,
   pkg-config,
   desktop-file-utils,
@@ -54,7 +55,7 @@ let
     libstrangle
     fluidsynth
     xorgserver
-    xorg.setxkbmap
+    setxkbmap
     xorg.xkbcomp
     # bypass mount suid wrapper which does not work in fhsenv
     util-linux

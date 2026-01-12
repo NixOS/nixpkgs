@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  setxkbmap,
   sessreg,
   makedepend,
   luit,
@@ -132,7 +133,7 @@ let
     mkfontscale
     mkfontscale
     sessreg
-    xorg.setxkbmap
+    setxkbmap
     xorg.smproxy
     xorg.twm
     xorg.x11perf
