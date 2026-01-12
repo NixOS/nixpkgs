@@ -10281,10 +10281,6 @@ with pkgs;
 
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
-  backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
-
-  backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
-
   backintime = backintime-qt;
 
   bespokesynth-with-vst2 = bespokesynth.override {

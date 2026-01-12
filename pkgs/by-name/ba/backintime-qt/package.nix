@@ -8,9 +8,7 @@
   su,
   coreutils,
   util-linux,
-  wrapQtAppsHook,
-  qtbase,
-  qtwayland,
+  qt6,
 }:
 
 let
@@ -36,12 +34,12 @@ stdenv.mkDerivation {
   buildInputs = [
     python'
     backintime-common
-    qtbase
-    qtwayland
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   nativeBuildInputs = backintime-common.nativeBuildInputs or [ ] ++ [
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   configureFlags = [ "--python=${lib.getExe python'}" ];
