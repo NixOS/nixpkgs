@@ -11,7 +11,7 @@
   libXmu,
   bdftopcf,
   mkfontscale,
-  fontadobe100dpi,
+  font-adobe-100dpi,
   fontadobeutopia100dpi,
   fontbh100dpi,
   fontbhlucidatypewriter100dpi,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXmu
     bdftopcf
     mkfontscale
-    fontadobe100dpi
+    font-adobe-100dpi
     fontadobeutopia100dpi
     fontbh100dpi
     fontbhlucidatypewriter100dpi

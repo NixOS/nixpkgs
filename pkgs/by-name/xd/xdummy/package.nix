@@ -2,6 +2,7 @@
   writeText,
   writeScriptBin,
   xorg,
+  font-adobe-100dpi,
   xkeyboard_config,
   runtimeShell,
   unfreeFonts ? false,
@@ -30,7 +31,7 @@ let
       ModulePath "${xorg.xf86videodummy}/lib/xorg/modules"
       XkbDir "${xkeyboard_config}/share/X11/xkb"
       FontPath "${xorg.fontadobe75dpi}/share/fonts/X11/75dpi"
-      FontPath "${xorg.fontadobe100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-adobe-100dpi}/share/fonts/X11/100dpi"
       FontPath "${xorg.fontmiscmisc}/share/fonts/X11/misc"
       FontPath "${xorg.fontcursormisc}/share/fonts/X11/misc"
     ${lib.optionalString unfreeFonts ''
