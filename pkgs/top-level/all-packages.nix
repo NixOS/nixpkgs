@@ -1632,9 +1632,7 @@ with pkgs;
 
   asmrepl = callPackage ../development/interpreters/asmrepl { };
 
-  avahi = callPackage ../development/libraries/avahi { };
-
-  avahi-compat = callPackage ../development/libraries/avahi {
+  avahi-compat = callPackage ../by-name/av/avahi/package.nix {
     withLibdnssdCompat = true;
   };
 
