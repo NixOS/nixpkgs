@@ -7,7 +7,7 @@
   pkg-config,
   util-macros,
   libXinerama,
-  libAppleWM,
+  libapplewm,
   xorgproto,
   libXrandr,
   libXext,
@@ -31,7 +31,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libXinerama
-    libAppleWM
+    libapplewm
     xorgproto
     libXrandr
     libXext
