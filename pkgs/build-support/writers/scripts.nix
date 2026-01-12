@@ -254,7 +254,7 @@ rec {
       # The inner derivation which creates the executable under $out/bin (never at $out directly)
       # This is required in order to support wrapping, as wrapped programs consist of at least two files: the executable and the wrapper.
       inner =
-        pkgs.runCommandLocal name
+        pkgs.runCommandLocal "${name}-makeBinWriter-wrapper"
           (
             {
               inherit makeWrapperArgs;
