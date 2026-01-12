@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xlsatoms,
   xkill,
   xkbutils,
   xkbevd,
@@ -176,7 +177,7 @@ let
     xkbevd
     xkbutils
     xkill
-    xorg.xlsatoms
+    xlsatoms
     xorg.xlsclients
     xorg.xmessage
     xorg.xmodmap
