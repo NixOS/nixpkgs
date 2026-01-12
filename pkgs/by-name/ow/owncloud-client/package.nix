@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "6.0.2";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
     tag = "v${version}";
-    hash = "sha256-cqnDe9q7+qQ0MNrt48zTw6TcNYCEFgQmwXkmQCjR1Uc=";
+    hash = "sha256-11ZqCqFKJexMRH73IEBRuNx5Dxf4aMHlShwull0z4hI=";
   };
 
   patches = [
