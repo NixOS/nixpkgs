@@ -1717,10 +1717,6 @@ with pkgs;
       '';
     });
 
-  ceres-solver = callPackage ../development/libraries/ceres-solver {
-    gflags = null; # only required for examples/tests
-  };
-
   cedille = callPackage ../applications/science/logic/cedille {
     inherit (haskellPackages)
       alex
