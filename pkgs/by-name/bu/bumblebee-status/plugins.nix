@@ -43,7 +43,7 @@ in
   caffeine.propagatedBuildInputs = [
     pkgs.xdg-utils
     pkgs.xdotool
-    pkgs.xorg.xprop
+    pkgs.xprop
     pkgs.libnotify
   ];
   cmus.propagatedBuildInputs = [ pkgs.cmus ];

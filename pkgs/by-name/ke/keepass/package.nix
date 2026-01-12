@@ -8,7 +8,7 @@
   icoutils,
   replaceVars,
   xsel,
-  xorg,
+  xprop,
   xdotool,
   coreutils,
   unixtools,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (replaceVars ./fix-paths.patch {
       xsel = "${xsel}/bin/xsel";
-      xprop = "${xorg.xprop}/bin/xprop";
+      xprop = "${xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";
       uname = "${coreutils}/bin/uname";
       whereis = "${unixtools.whereis}/bin/whereis";

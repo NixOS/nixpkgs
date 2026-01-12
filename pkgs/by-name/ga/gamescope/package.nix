@@ -9,6 +9,7 @@
   ninja,
   cmake,
   xorg,
+  xprop,
   libxcb,
   libdrm,
   libei,
@@ -176,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/gamescope" \
       --prefix PATH : ${
         lib.makeBinPath [
-          xorg.xprop
+          xprop
           xorg.xwininfo
         ]
       }

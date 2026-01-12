@@ -13,6 +13,7 @@
   which,
   xnee,
   xorg,
+  xprop,
   xeyes,
   python3Packages,
 }:
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     which
     xnee
     xeyes
-    xorg.xprop
+    xprop
   ];
 
   meta = {

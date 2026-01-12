@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xprop,
   xmodmap,
   xmessage,
   xlsclients,
@@ -185,7 +186,7 @@ let
     xmessage
     xmodmap
     xorg.xpr
-    xorg.xprop
+    xprop
     xorg.xrandr
     xorg.xrdb
     xorg.xrefresh

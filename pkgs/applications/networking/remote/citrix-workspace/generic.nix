@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  xprop,
   xdpyinfo,
   libxcb,
   zlib,
@@ -225,7 +226,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     libxcb
     xdpyinfo
-    xorg.xprop
+    xprop
   ];
 
   installPhase =

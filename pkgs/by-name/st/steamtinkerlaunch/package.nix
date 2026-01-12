@@ -15,6 +15,7 @@
   writeShellApplication,
   xdotool,
   xorg,
+  xprop,
   yad,
 }:
 
@@ -70,7 +71,7 @@ stdenvNoCC.mkDerivation {
           util-linux
           wget
           xdotool
-          xorg.xprop
+          xprop
           xorg.xrandr
           xorg.xwininfo
           yad
