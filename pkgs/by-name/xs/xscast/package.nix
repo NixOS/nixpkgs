@@ -7,6 +7,7 @@
   imagemagick,
   dzen2,
   xorg,
+  xmodmap,
   xinput,
 }:
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
           dzen2
           xorg.xwininfo
           xinput
-          xorg.xmodmap
+          xmodmap
           imagemagick
         ]
       }

@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xmodmap,
   xmessage,
   xlsclients,
   xlsatoms,
@@ -182,7 +183,7 @@ let
     xlsatoms
     xlsclients
     xmessage
-    xorg.xmodmap
+    xmodmap
     xorg.xpr
     xorg.xprop
     xorg.xrandr
@@ -243,7 +244,7 @@ stdenv.mkDerivation {
 
     substituteInPlace $out/etc/X11/xinit/xinitrc \
       --replace ${xinit} $out \
-      --replace xmodmap ${xorg.xmodmap}/bin/xmodmap \
+      --replace xmodmap ${xmodmap}/bin/xmodmap \
       --replace xrdb ${xorg.xrdb}/bin/xrdb
 
     mkdir -p $out/etc/X11/xinit/xinitrc.d
