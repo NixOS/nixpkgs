@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xclock,
   xbacklight,
   xauth,
   x11perf,
@@ -143,7 +144,7 @@ let
     x11perf
     xauth
     xbacklight
-    xorg.xclock
+    xclock
     xorg.xcmsdb
     xorg.xcursorgen
     xorg.xdm
