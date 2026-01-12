@@ -308,9 +308,9 @@
   };
 
   glimmer = {
-    version = "1.4.0";
-    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.4.0-tree-sitter-glimmer";
-    hash = "sha256-4kEOvObNnZtt2aaf0Df+R/Wvyk/JlFnsvbasDIJxt4w=";
+    version = "1.6.0";
+    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.6.0-tree-sitter-glimmer";
+    hash = "sha256-AW+jd1Kl3krTgnPc8NoXfSM91fOan/wIB/mo/feWj74=";
     meta = {
       license = lib.licenses.mit;
     };
