@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ocamlPackages,
-  version ? "3.20.2",
+  version ? "3.21.0",
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       "https://github.com/ocaml/dune/releases/download/${version}/dune-${sfx}${version}.tbz";
     hash =
       {
-        "3.20.2" = "sha256-sahrLWC9tKi5u2hhvfL58opufLXYM86Br+zOue+cpUk=";
+        "3.21.0" = "sha256-521NiTaKCnACUZOur098W1QDHbo/Wb+dKvGXHcDs7d0=";
         "2.9.3" = "sha256:1ml8bxym8sdfz25bx947al7cvsi2zg5lcv7x9w6xb01cmdryqr9y";
       }
       ."${version}";
