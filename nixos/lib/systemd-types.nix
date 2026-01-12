@@ -45,14 +45,19 @@ let
     mkEnableOption
     mkIf
     mkOption
+    optionalString
     strings
-    lists
-    attrsets
+    ;
+
+  inherit (lib.attrsets)
+    optionalAttrs
     ;
 
   inherit (lib.types)
     attrsOf
+    bool
     coercedTo
+    either
     enum
     lines
     listOf
@@ -61,6 +66,7 @@ let
     package
     path
     singleLineStr
+    str
     submodule
     ;
 
@@ -257,60 +263,100 @@ in
     )
   );
 
-  credential = nullOr (oneOf [
-    path
-    singleLineStr
-    (submodule {
-      options =
-        let
-          optionalStr = mkOption {
-            type = nullOr singleLineStr;
-            default = null;
-          };
-        in
-        {
-          LoadCredential = optionalStr;
-          LoadCredentialEncrypted = optionalStr;
-          SetCredential = optionalStr;
-          SetCredentialEncrypted = optionalStr;
-          ImportCredential = optionalStr;
-        };
-    })
-  ]);
-  credentialConfig =
+  mkCredentialOption =
     {
-      credential,
-      defaultId,
+      defaultName,
+      readOnlyName ? false,
       bindPath ? null,
-      nullable ? false,
-      conditional ? false,
       asserted ? false,
+      conditional ? false,
+      description,
+      nullable ? false,
     }:
-    with (
-      if !strings.isStringLike credential then
-        with lists.findSingle ({ value, ... }: strings.isStringLike value)
-          (throw "Credential option must be given")
-          (throw "Credential option must be singular")
-          (attrsets.mapAttrsToList attrsets.nameValuePair credential);
-        {
-          id = builtins.head (builtins.split ":" "${value}");
-          serviceConfig.${name} = "${value}";
-        }
-      else if strings.hasInfix ":" "${credential}" then
-        {
-          id = builtins.head (builtins.split ":" "${credential}");
-          serviceConfig.LoadCredentialEncrypted = "${credential}";
-        }
-      else
-        {
-          id = defaultId;
-          serviceConfig.LoadCredential = "${defaultId}:${credential}";
-        }
-    );
-    {
-      inherit id;
-      serviceConfig = serviceConfig // {
-        BindPaths = if bindPath != null then [ "%d/${id}:${bindPath}" ] else [ ];
-      };
+    mkOption (
+      optionalAttrs nullable {
+        default = null;
+      }
+    )
+    // {
+      type = (if nullable then nullOr else lib.id) (oneOf [
+        path
+        singleLineStr
+        (submodule {
+          options = {
+            name = mkOption {
+              type = singleLineStr;
+              description = "The name of the credential";
+              default = defaultName;
+              readOnly = readOnlyName;
+            };
+            encrypted = mkOption {
+              type = bool;
+              description = "Whether the credential is encrypted with systemd-creds";
+              default = false;
+            };
+            path = mkOption {
+              type = nullOr (either path singleLineStr);
+              description = "The path of the credential data. If given, the credential will be consumed via `LoadCredential[Encrypted]`";
+              default = null;
+            };
+            data = mkOption {
+              type = nullOr str;
+              description = "The credential data. If given, the credential will be consumed via `SetCredential[Encrypted]`";
+              default = null;
+            };
+            reference = mkOption {
+              type = nullOr str;
+              description = "The credential reference. If given, the credential will be consumed via `ImportCredential`";
+              default = null;
+            };
+          };
+        })
+      ]);
+      description = ''
+        ${description}
+
+        The secret will be passed to the service via systemd-creds, as per the documentation here <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#Credentials>
+
+        The secret may be given as a string/path, in which case it is taken to
+        have the default name, to be unencrypted, and to be a path per the
+        systemd documentation for `LoadCredential`.
+      '';
+      apply =
+        credential:
+        let
+          cred =
+            if strings.isStringLike credential then
+              {
+                name = defaultName;
+                encrypted = false;
+                path = credential;
+                data = null;
+                reference = null;
+              }
+            else
+              credential;
+          encrypted = optionalString cred.encrypted "Encrypted";
+        in
+        cred
+        // {
+          serviceConfig = {
+            BindPaths = if bindPath != null then [ "%d/${cred.name}:${bindPath}" ] else [ ];
+            AssertCredential = if asserted then [ cred.name ] else [ ];
+            ConditionCredential = if conditional then [ cred.name ] else [ ];
+          }
+          // (
+            if cred.data != null && cred.reference == null && cred.path == null then
+              { ImportCredential = "${cred.ref}:${cred.name}"; }
+            else if cred.data == null && cred.reference != null && cred.path == null then
+              { "SetCredential${encrypted}" = "${cred.name}:${cred.data}"; }
+            else if cred.data == null && cred.reference == null then
+              {
+                "LoadCredential${encrypted}" = if cred.path != null then "${cred.name}:${cred.path}" else cred.name;
+              }
+            else
+              throw "Credential must be given at most one data, path, or reference"
+          );
+        };
     };
 }
