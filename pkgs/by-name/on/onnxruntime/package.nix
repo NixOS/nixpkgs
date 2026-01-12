@@ -15,7 +15,6 @@
   howard-hinnant-date,
   libpng,
   nlohmann_json,
-  perl,
   pkg-config,
   python3Packages,
   removeReferencesTo,
@@ -378,5 +377,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       puffnfresh
       ck3d
     ];
+    #  [libprotobuf ERROR /build/source/src/google/protobuf/descriptor_database.cc:642] File already
+    # exists in database: onnx/onnx-ml.proto
+    # https://github.com/onnx/onnx/issues/6094
+    broken = withFullProtobuf;
   };
 })
