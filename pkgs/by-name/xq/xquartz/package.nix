@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  x11perf,
   smproxy,
   setxkbmap,
   sessreg,
@@ -137,7 +138,7 @@ let
     setxkbmap
     smproxy
     xorg.twm
-    xorg.x11perf
+    x11perf
     xorg.xauth
     xorg.xbacklight
     xorg.xclock

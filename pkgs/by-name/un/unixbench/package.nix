@@ -7,6 +7,7 @@
   installShellFiles,
   perl,
   xorg,
+  x11perf,
   libGLX,
   coreutils,
   unixtools,
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     gawk
   ]
   ++ lib.optionals withX11perf [
-    xorg.x11perf
+    x11perf
   ];
 
   makeFlags = [
