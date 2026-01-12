@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "fickling";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
     tag = "v${version}";
-    hash = "sha256-p2XkHKqheVHqLTQKmUApiYH7NIaHc091B/TjiCDYWtA=";
+    hash = "sha256-uirVOJ6CI7gBu9lOoPtpjUZeBmIhBMI0tjSDI/ASy7w=";
   };
 
   build-system = [
