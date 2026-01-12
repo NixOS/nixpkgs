@@ -433,9 +433,9 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
+    services.xserver.modules = [ pkgs.xf86-input-libinput ];
 
-    environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
+    environment.systemPackages = [ pkgs.xf86-input-libinput ];
 
     environment.etc =
       let
@@ -443,7 +443,7 @@ in
       in
       {
         ${cfgPath} = {
-          source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
+          source = pkgs.xf86-input-libinput.out + "/share/" + cfgPath;
         };
       };
 

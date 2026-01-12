@@ -21,7 +21,7 @@
   qttools,
   qtwayland,
   wrapQtAppsHook,
-  xf86inputlibinput,
+  xf86-input-libinput,
   xkeyboard_config,
   gitUpdater,
 }:
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     qtwayland
-    xf86inputlibinput
-    xf86inputlibinput.dev
+    xf86-input-libinput
+    xf86-input-libinput.dev
   ];
 
   cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
