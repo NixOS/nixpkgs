@@ -296,7 +296,7 @@
       "description": {
         "path": ".",
         "ref": "main",
-        "resolved-ref": "16ee8cec19a324653f0a3b54897134c5e77ae613",
+        "resolved-ref": "bf637fdf511418be585930c2ec882df41d0803aa",
         "url": "https://github.com/bggRGjQaUbCoE/canvas_danmaku.git"
       },
       "source": "git",
@@ -367,11 +367,11 @@
       "dependency": "transitive",
       "description": {
         "name": "code_builder",
-        "sha256": "11654819532ba94c34de52ff5feb52bd81cba1de00ef2ed622fd50295f9d4243",
+        "sha256": "6a6cab2ba4680d6423f34a9b972a4c9a94ebe1b62ecec4e1a1f2cba91fd1319d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.11.0"
+      "version": "4.11.1"
     },
     "collection": {
       "dependency": "direct main",
@@ -577,11 +577,11 @@
       "dependency": "transitive",
       "description": {
         "name": "equatable",
-        "sha256": "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7",
+        "sha256": "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.7"
+      "version": "2.0.8"
     },
     "expandable": {
       "dependency": "direct main",
@@ -986,7 +986,7 @@
       "description": {
         "path": ".",
         "ref": "version_4.7.2",
-        "resolved-ref": "4f5c47f38bde5df0abd6481702b2d8ec199a0e49",
+        "resolved-ref": "9addd004c11e1c388bff5988ac9564e7ee5ff395",
         "url": "https://github.com/bggRGjQaUbCoE/getx.git"
       },
       "source": "git",
@@ -1388,7 +1388,7 @@
       "description": {
         "path": "media_kit",
         "ref": "version_1.2.5",
-        "resolved-ref": "bc999bf181ddf12d60891f76e41359e4177b93a7",
+        "resolved-ref": "ac35bc96c5560a7c9a55bc421bd4115d1e47bc70",
         "url": "https://github.com/bggRGjQaUbCoE/media-kit.git"
       },
       "source": "git",
@@ -1399,7 +1399,7 @@
       "description": {
         "path": "libs/android/media_kit_libs_android_video",
         "ref": "version_1.2.5",
-        "resolved-ref": "bc999bf181ddf12d60891f76e41359e4177b93a7",
+        "resolved-ref": "ac35bc96c5560a7c9a55bc421bd4115d1e47bc70",
         "url": "https://github.com/bggRGjQaUbCoE/media-kit.git"
       },
       "source": "git",
@@ -1440,7 +1440,7 @@
       "description": {
         "path": "libs/universal/media_kit_libs_video",
         "ref": "version_1.2.5",
-        "resolved-ref": "bc999bf181ddf12d60891f76e41359e4177b93a7",
+        "resolved-ref": "ac35bc96c5560a7c9a55bc421bd4115d1e47bc70",
         "url": "https://github.com/bggRGjQaUbCoE/media-kit.git"
       },
       "source": "git",
@@ -1451,7 +1451,7 @@
       "description": {
         "path": "libs/windows/media_kit_libs_windows_video",
         "ref": "version_1.2.5",
-        "resolved-ref": "bc999bf181ddf12d60891f76e41359e4177b93a7",
+        "resolved-ref": "ac35bc96c5560a7c9a55bc421bd4115d1e47bc70",
         "url": "https://github.com/bggRGjQaUbCoE/media-kit.git"
       },
       "source": "git",
@@ -1462,7 +1462,7 @@
       "description": {
         "path": "media_kit_native_event_loop",
         "ref": "version_1.2.5",
-        "resolved-ref": "bc999bf181ddf12d60891f76e41359e4177b93a7",
+        "resolved-ref": "ac35bc96c5560a7c9a55bc421bd4115d1e47bc70",
         "url": "https://github.com/bggRGjQaUbCoE/media-kit.git"
       },
       "source": "git",
@@ -1473,7 +1473,7 @@
       "description": {
         "path": "media_kit_video",
         "ref": "version_1.2.5",
-        "resolved-ref": "bc999bf181ddf12d60891f76e41359e4177b93a7",
+        "resolved-ref": "ac35bc96c5560a7c9a55bc421bd4115d1e47bc70",
         "url": "https://github.com/bggRGjQaUbCoE/media-kit.git"
       },
       "source": "git",
