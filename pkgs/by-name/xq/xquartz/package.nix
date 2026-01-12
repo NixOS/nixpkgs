@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xfs,
   xeyes,
   xev,
   xdriinfo,
@@ -159,7 +160,7 @@ let
     xdriinfo
     xev
     xeyes
-    xorg.xfs
+    xfs
     xorg.xgamma
     xorg.xhost
     xorg.xinput
