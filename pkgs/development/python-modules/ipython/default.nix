@@ -34,7 +34,7 @@
   testpath,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipython";
   version = "9.9.0";
   outputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SPvtGy3l4scXfu+hRKun/LgtrFFPCbV+KsnaNN21QiA=";
   };
 
@@ -106,9 +106,9 @@ buildPythonPackage rec {
     description = "IPython: Productive Interactive Computing";
     downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.readthedocs.io/en/stable/";
-    changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
+    changelog = "https://github.com/ipython/ipython/blob/${finalAttrs.version}/docs/source/whatsnew/version${lib.versions.major finalAttrs.version}.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bjornfor ];
     teams = [ lib.teams.jupyter ];
   };
-}
+})
