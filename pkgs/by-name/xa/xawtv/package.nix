@@ -12,7 +12,7 @@
   xorgproto,
   libv4l,
   libfs,
-  libXaw,
+  libxaw,
   libXpm,
   libXext,
   libsm,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     perl
     alsa-lib
     aalib
-    libXaw
+    libxaw
     libXpm
     libXext
     libsm

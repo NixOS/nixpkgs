@@ -39,6 +39,7 @@
   ant,
   cups,
   xorg,
+  libxaw,
   libx11,
   libpthread-stubs,
   libxshmfence,
@@ -437,7 +438,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libtool
       libx11
-      xorg.libXaw
+      libxaw
       xorg.libXdmcp
       xorg.libXext
       xorg.libXi

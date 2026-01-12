@@ -20,7 +20,7 @@
   libx11 ? null,
   libXt ? null,
   libXpm ? null,
-  libXaw ? null,
+  libxaw ? null,
   aquaterm ? false,
   withWxGTK ? false,
   wxGTK32,
@@ -69,7 +69,7 @@ in
     libx11
     libXpm
     libXt
-    libXaw
+    libxaw
   ]
   ++ lib.optionals withQt [
     qtbase

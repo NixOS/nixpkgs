@@ -5,7 +5,7 @@
   fetchzip,
   ncurses,
   libx11,
-  libXaw,
+  libxaw,
   libXt,
   libXext,
   libXmu,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libx11
-    libXaw
+    libxaw
     libXt
     libXext
     libXmu

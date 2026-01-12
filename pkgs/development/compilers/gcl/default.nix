@@ -15,7 +15,7 @@
   gmp,
   libXext,
   libXt,
-  libXaw,
+  libxaw,
   libXmu,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libXi
     libXext
     libXt
-    libXaw
+    libxaw
     libXmu
     zlib
     which

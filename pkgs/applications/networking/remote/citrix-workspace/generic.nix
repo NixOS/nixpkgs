@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  libxaw,
   libx11,
   xprop,
   xdpyinfo,
@@ -204,7 +205,7 @@ stdenv.mkDerivation rec {
     (lib.getLib systemd)
     woff2
     xorg.libXScrnSaver
-    xorg.libXaw
+    libxaw
     xorg.libXmu
     xorg.libXtst
     zlib

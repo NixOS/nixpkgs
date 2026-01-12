@@ -8,7 +8,7 @@
   gccmakedep,
   libXt,
   libXmu,
-  libXaw,
+  libxaw,
   libXext,
   libsm,
   libice,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     xorgproto
     libXt
     libXmu
-    libXaw
+    libxaw
     libXext
     libsm
     libice

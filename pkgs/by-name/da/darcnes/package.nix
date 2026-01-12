@@ -5,7 +5,7 @@
   libx11,
   libXt,
   libXext,
-  libXaw,
+  libxaw,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libx11
     libXt
     libXext
-    libXaw
+    libxaw
   ];
   installPhase = "install -Dt $out/bin darcnes";
 

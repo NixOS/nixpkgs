@@ -31,7 +31,7 @@ let
             libpthread-stubs
             libsm
             libx11
-            xorg.libXaw
+            libxaw
             libxcb
             xorg.libXcomposite
             xorg.libXcursor

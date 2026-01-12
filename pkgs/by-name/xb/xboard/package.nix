@@ -6,7 +6,7 @@
   libx11,
   xorgproto,
   libXt,
-  libXaw,
+  libxaw,
   libsm,
   libice,
   libXmu,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libx11
     xorgproto
     libXt
-    libXaw
+    libxaw
     libsm
     libice
     libXmu

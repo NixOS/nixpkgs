@@ -6,7 +6,7 @@
   xorgproto,
   libx11,
   libXmu,
-  libXaw,
+  libxaw,
   libXt,
   tcl,
   tk,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libx11
     libXmu
-    libXaw
+    libxaw
     libXt
     tcl
     tk

@@ -13,7 +13,7 @@
   libGLU,
   libx11,
   libxau,
-  libXaw,
+  libxaw,
   libXdmcp,
   libXext,
   libXfixes,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     libGLU
     libx11
     libxau
-    libXaw
+    libxaw
     libXdmcp
     libXext
     libXfixes

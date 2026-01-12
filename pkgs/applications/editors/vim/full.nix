@@ -21,7 +21,7 @@
   libsm,
   libXpm,
   libXt,
-  libXaw,
+  libxaw,
   libxau,
   libXmu,
   libsodium,
@@ -183,7 +183,7 @@ stdenv.mkDerivation {
     libXext
     libXpm
     libXt
-    libXaw
+    libxaw
     libxau
     libXmu
   ]

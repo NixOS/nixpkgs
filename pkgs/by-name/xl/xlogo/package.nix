@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   xorg,
+  libxaw,
   libx11,
   libsm,
   autoreconfHook,
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     xorg.libXext
     libsm
     xorg.libXmu
-    xorg.libXaw
+    libxaw
     xorg.libXt
   ];
 

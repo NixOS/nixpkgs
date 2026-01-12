@@ -5,7 +5,7 @@
   libx11,
   imake,
   libXt,
-  libXaw,
+  libxaw,
   libXpm,
   libXext,
   withNethackLevels ? true,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libXt
-    libXaw
+    libxaw
     libXpm
     libXext
   ];

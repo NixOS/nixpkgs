@@ -12,7 +12,7 @@
   buildPackages,
   x11Mode ? false,
   qtMode ? false,
-  libXaw,
+  libxaw,
   libXext,
   libXpm,
   bdftopcf,
@@ -76,7 +76,7 @@ stdenvUsed.mkDerivation (finalAttrs: {
     ncurses
   ]
   ++ lib.optionals x11Mode [
-    libXaw
+    libxaw
     libXext
     libXpm
   ]

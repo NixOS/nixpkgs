@@ -30,7 +30,7 @@
   harfbuzz,
   imagemagick,
   jansson,
-  libXaw,
+  libxaw,
   libXcursor,
   libXft,
   libXi,
@@ -335,7 +335,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withX [
     Xaw3d
     giflib
-    libXaw
+    libxaw
     libXpm
     libXrandr
     libjpeg

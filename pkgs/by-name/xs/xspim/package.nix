@@ -6,6 +6,7 @@
   bison,
   flex,
   xorg,
+  libxaw,
   libx11,
   libsm,
   libice,
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
     libice
     libsm
     libx11
-    xorg.libXaw
+    libxaw
     xorg.libXext
     xorg.libXmu
     xorg.libXpm

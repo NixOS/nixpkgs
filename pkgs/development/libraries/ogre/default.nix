@@ -19,7 +19,7 @@
   libice,
   libsm,
   libx11,
-  libXaw,
+  libxaw,
   libXmu,
   libXrandr,
   libXrender,
@@ -87,7 +87,7 @@ let
         libice
         libsm
         libx11
-        libXaw
+        libxaw
         libXmu
         libXrandr
         libXrender

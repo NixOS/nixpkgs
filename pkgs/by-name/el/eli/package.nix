@@ -9,6 +9,7 @@
   tk,
   ncurses,
   xorg,
+  libxaw,
   libx11,
   file,
 }:
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     fontconfig
     libx11.dev
     xorg.libXt.dev
-    xorg.libXaw.dev
+    libxaw.dev
     xorg.libXext.dev
   ];
 

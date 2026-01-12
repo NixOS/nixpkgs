@@ -14,7 +14,7 @@
   freetype,
   ttfautohint,
   gd,
-  libXaw,
+  libxaw,
   icu,
   ghostscript,
   libXpm,
@@ -752,11 +752,11 @@ rec {
       freetype
       ghostscript
       libx11
-      xorg.libXaw
+      libxaw
       xorg.libXi
       xorg.libXpm
       xorg.libXmu
-      xorg.libXaw
+      libxaw
       xorg.libXext
       xorg.libXfixes
     ];

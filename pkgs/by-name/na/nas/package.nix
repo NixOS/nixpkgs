@@ -7,7 +7,7 @@
   gccmakedep,
   imake,
   libxau,
-  libXaw,
+  libxaw,
   libXext,
   libXpm,
   libXt,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxau
-    libXaw
+    libxaw
     libXext
     libXpm
     libXt

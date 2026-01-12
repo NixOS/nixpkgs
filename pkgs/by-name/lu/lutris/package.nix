@@ -38,7 +38,7 @@ let
       xorg.libXinerama
       libsm
       xorg.libXv
-      xorg.libXaw
+      libxaw
       xorg.libXi
       xorg.libXcursor
       xorg.libXcomposite

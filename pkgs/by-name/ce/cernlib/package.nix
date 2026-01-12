@@ -10,6 +10,7 @@
   libnsl,
   motif,
   xorg,
+  libxaw,
   libx11,
   libxcrypt,
 }:
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     gfortran
     openssl
     libx11
-    xorg.libXaw
+    libxaw
     xorg.libXft
     xorg.libXt
     libxcrypt

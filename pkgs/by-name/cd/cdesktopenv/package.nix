@@ -21,7 +21,7 @@
   ncompress,
   mkfontscale,
   tcl,
-  libXaw,
+  libxaw,
   libxcrypt,
   glibcLocales,
   autoPatchelfHook,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libXScrnSaver
     tcl
-    libXaw
+    libxaw
     ksh
     libxcrypt
     libXpm
