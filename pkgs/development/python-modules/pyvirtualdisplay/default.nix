@@ -5,6 +5,7 @@
   fetchPypi,
   replaceVars,
   xorg,
+  xmessage,
   xdpyinfo,
   xauth,
 
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     (vncdo.overridePythonAttrs { doCheck = false; })
     xorg.xorgserver
-    xorg.xmessage
+    xmessage
     xorg.xvfb
   ];
 

@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xmessage,
   xlsclients,
   xlsatoms,
   xkill,
@@ -180,7 +181,7 @@ let
     xkill
     xlsatoms
     xlsclients
-    xorg.xmessage
+    xmessage
     xorg.xmodmap
     xorg.xpr
     xorg.xprop
