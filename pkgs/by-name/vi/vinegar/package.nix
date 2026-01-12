@@ -126,13 +126,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vinegar";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wL7tdGza+lrIwpG5yG3lIrFq7XoKVR+IIWZIij3eQ5k=";
+    hash = "sha256-0MNUkfhbsvOJdN89VGTuf3zHUFhimiCNuoY47V03Cgo=";
   };
 
   vendorHash = "sha256-gzy7Lw7AP1evPSDSzMQb/yzn+8uVtyk8TOBL2fjE3R8=";
