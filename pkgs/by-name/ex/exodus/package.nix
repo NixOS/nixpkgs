@@ -13,6 +13,7 @@
   cairo,
   gdk-pixbuf,
   xorg,
+  libxshmfence,
   libxcb,
   xorg_sys_opengl,
   util-linux,
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
         xorg.libXfixes
         xorg.libXi
         xorg.libXrender
-        xorg.libxshmfence
+        libxshmfence
         xorg.libXtst
         xorg_sys_opengl
         util-linux

@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libxshmfence,
   libxcb,
   alsa-lib,
   makeShellWrapper,
@@ -93,7 +94,7 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXScrnSaver
-    xorg.libxshmfence
+    libxshmfence
     xorg.libXtst
     zlib
   ];

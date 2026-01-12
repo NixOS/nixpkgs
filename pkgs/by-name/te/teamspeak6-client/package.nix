@@ -27,6 +27,7 @@
   udev,
   libGL,
   xorg,
+  libxshmfence,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -63,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libXdamage
     xorg.libXfixes
-    xorg.libxshmfence
+    libxshmfence
     xorg.libXtst
   ];
 

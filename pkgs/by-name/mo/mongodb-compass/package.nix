@@ -9,6 +9,7 @@
   runtimeShell,
   gtk3,
   xorg,
+  libxshmfence,
   libxkbfile,
   glib,
   cairo,
@@ -103,7 +104,7 @@ let
     xorg.libXrender
     xorg.libXtst
     libxkbfile
-    xorg.libxshmfence
+    libxshmfence
     (lib.getLib stdenv.cc.cc)
   ];
 in

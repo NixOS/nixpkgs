@@ -22,6 +22,7 @@
   udev,
   adwaita-icon-theme,
   xorg,
+  libxshmfence,
   libxcb,
   mozjpeg,
   makeWrapper,
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     udev
     xorg.libX11
     libxcb
-    xorg.libxshmfence
+    libxshmfence
     libxkbcommon
     xorg.libXi
     xorg.libXcursor

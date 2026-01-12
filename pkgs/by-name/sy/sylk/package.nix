@@ -2,7 +2,7 @@
   appimageTools,
   fetchurl,
   lib,
-  xorg,
+  libxshmfence,
 }:
 
 appimageTools.wrapType2 rec {
@@ -15,7 +15,7 @@ appimageTools.wrapType2 rec {
   };
 
   extraPkgs = pkgs: [
-    xorg.libxshmfence
+    libxshmfence
   ];
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

@@ -38,7 +38,7 @@
   nss,
   pango,
   udev,
-  xorg,
+  libxshmfence,
   libxcb,
   bintools,
   makeDesktopItem,
@@ -142,7 +142,7 @@ stdenv.mkDerivation {
           pango
           udev
           libxcb
-          xorg.libxshmfence
+          libxshmfence
         ]
       }" $file
     done

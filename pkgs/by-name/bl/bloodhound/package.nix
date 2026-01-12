@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrender
     xorg.libXtst
     libxkbfile
-    xorg.libxshmfence
+    libxshmfence
   ];
 
   buildInputs = [

@@ -40,6 +40,7 @@
   wayland-scanner,
   xcbutilkeysyms,
   xorg,
+  libxshmfence,
   libxcb,
   zstd,
   enablePatentEncumberedCodecs ? true,
@@ -273,7 +274,7 @@ stdenv.mkDerivation {
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxshmfence
+    libxshmfence
     xorg.libXxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped

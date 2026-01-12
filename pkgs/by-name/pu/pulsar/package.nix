@@ -19,6 +19,7 @@
   nss,
   nspr,
   xorg,
+  libxshmfence,
   libxkbfile,
   libxcb,
   libdrm,
@@ -71,7 +72,7 @@ let
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxshmfence
+    libxshmfence
     libxkbcommon
     libxkbfile
     pango

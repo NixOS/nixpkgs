@@ -23,7 +23,7 @@
   fontconfig,
   dbus,
   libX11,
-  xorg,
+  libxshmfence,
   libxcb,
   libXi,
   libXcursor,
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
     pango
     systemdLibs
     libxcb
-    xorg.libxshmfence
+    libxshmfence
   ];
 
   runtimeDependencies = [

@@ -39,6 +39,7 @@
   ant,
   cups,
   xorg,
+  libxshmfence,
   fontforge,
   jre21_minimal,
   openssl,
@@ -466,7 +467,7 @@ stdenv.mkDerivation (finalAttrs: {
       libwps
       libxcrypt
       libxml2
-      xorg.libxshmfence
+      libxshmfence
       libxslt
       libzmf
       libwebp

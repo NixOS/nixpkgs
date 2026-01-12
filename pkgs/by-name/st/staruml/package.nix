@@ -9,6 +9,7 @@
   glib,
   systemd,
   xorg,
+  libxshmfence,
   libxcb,
   nss,
   nspr,
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
           xorg.libXi
           xorg.libXrender
           xorg.libXtst
-          xorg.libxshmfence
+          libxshmfence
           libxkbcommon
           nss
           nspr

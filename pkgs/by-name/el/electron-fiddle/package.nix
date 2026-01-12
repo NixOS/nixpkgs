@@ -141,7 +141,7 @@ buildFHSEnv {
       gdk-pixbuf
 
       # for running Electron before 16.0.0 inside
-      xorg.libxshmfence
+      libxshmfence
 
       # for running Electron before 11.0.0 inside
       xorg.libXcursor

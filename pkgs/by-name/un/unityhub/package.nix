@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
         xorg.libXdamage
         xorg.libXfixes
         libxcb
-        xorg.libxshmfence
+        libxshmfence
         xorg.libXScrnSaver
         xorg.libXtst
 

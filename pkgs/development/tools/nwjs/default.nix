@@ -35,6 +35,7 @@
   systemd,
   udev,
   xorg,
+  libxshmfence,
 }:
 
 let
@@ -75,7 +76,7 @@ let
       xorg.libXrandr
       xorg.libXrender
       xorg.libXtst
-      xorg.libxshmfence
+      libxshmfence
       # libnw-specific (not chromium dependencies)
       ffmpeg
       libxcb

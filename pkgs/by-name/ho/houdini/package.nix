@@ -61,7 +61,7 @@ buildFHSEnv {
       xorg.libXrandr
       libxcb
       libxkbfile
-      xorg.libxshmfence
+      libxshmfence
       xorg.xcbutil
       xorg.xcbutilimage
       xorg.xcbutilrenderutil

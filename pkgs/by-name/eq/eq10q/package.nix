@@ -10,6 +10,7 @@
   lv2,
   pkg-config,
   xorg,
+  libxshmfence,
 }:
 stdenv.mkDerivation rec {
   pname = "eq10q";
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     lv2
     xorg.libpthreadstubs
     xorg.libXdmcp
-    xorg.libxshmfence
+    libxshmfence
   ];
 
   patches = [

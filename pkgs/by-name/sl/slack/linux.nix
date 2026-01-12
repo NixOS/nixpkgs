@@ -41,6 +41,7 @@
   wayland,
   xdg-utils,
   xorg,
+  libxshmfence,
   libxkbfile,
 }:
 stdenv.mkDerivation rec {
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
       xorg.libXrender
       xorg.libXtst
       libxkbfile
-      xorg.libxshmfence
+      libxshmfence
     ]
     + ":${lib.getLib stdenv.cc.cc}/lib64";
 

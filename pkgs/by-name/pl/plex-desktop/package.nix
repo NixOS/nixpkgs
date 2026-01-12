@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxshmfence,
 }:
 let
   pname = "plex-desktop";
@@ -71,7 +72,7 @@ let
       xorg.libXrandr
       xorg.libXrender
       xorg.libXtst
-      xorg.libxshmfence
+      libxshmfence
       xorg.xcbutilimage
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil

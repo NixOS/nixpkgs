@@ -102,7 +102,7 @@ let
             xorg.libXext
             xorg.libXfixes
             xorg.libXrandr
-            xorg.libxshmfence
+            libxshmfence
             libxkbcommon
             libxkbfile
             pango

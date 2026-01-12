@@ -11,6 +11,7 @@
   pkg-config,
   gdk-pixbuf,
   xorg,
+  libxshmfence,
   libxcb,
   libstartup_notification,
   libxdg_basedir,
@@ -126,7 +127,7 @@ stdenv.mkDerivation rec {
     xorg.libXau
     xorg.libXdmcp
     libxcb
-    xorg.libxshmfence
+    libxshmfence
     xorg.xcbutil
     xorg.xcbutilimage
     xorg.xcbutilkeysyms

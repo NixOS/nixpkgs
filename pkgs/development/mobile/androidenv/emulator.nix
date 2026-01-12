@@ -53,7 +53,7 @@ deployAndroidPackage {
       xorg.libICE
       xorg.libSM
       libxkbfile
-      xorg.libxshmfence
+      libxshmfence
     ])
     ++ lib.optional (os == "linux" && stdenv.isx86_64) pkgsi686Linux.glibc;
   patchInstructions =

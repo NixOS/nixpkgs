@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libxshmfence,
   libxcb,
   alsa-lib,
   freetype,
@@ -84,7 +85,7 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXScrnSaver
-    xorg.libxshmfence
+    libxshmfence
     xorg.libXtst
     zlib
   ];

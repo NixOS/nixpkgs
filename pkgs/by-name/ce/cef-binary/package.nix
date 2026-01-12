@@ -22,6 +22,7 @@
   udev,
   systemdLibs,
   xorg,
+  libxshmfence,
   libxcb,
   version ? "142.0.10",
   gitRevision ? "29548e2",
@@ -63,7 +64,7 @@ let
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr
-    xorg.libxshmfence
+    libxshmfence
   ];
 
   selectSystem =
