@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  font-misc-misc,
   font-cursor-misc,
   font-bh-lucidatypewriter-75dpi,
   font-bh-lucidatypewriter-100dpi,
@@ -131,7 +132,7 @@ let
     ttf_bitstream_vera
     freefont_ttf
     liberation_ttf
-    xorg.fontmiscmisc
+    font-misc-misc
     font-cursor-misc
   ]
   ++ lib.optionals unfreeFonts [
