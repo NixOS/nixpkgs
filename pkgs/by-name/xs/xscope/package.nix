@@ -6,6 +6,7 @@
   autoreconfHook,
   util-macros,
   xorg,
+  xtrans,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorg.libXt
-    xorg.xtrans
+    xtrans
   ];
 
   meta = {

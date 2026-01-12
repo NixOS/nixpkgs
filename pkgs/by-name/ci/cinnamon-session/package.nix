@@ -18,6 +18,7 @@
   wrapGAppsHook3,
   xapp,
   xorg,
+  xtrans,
   libexecinfo,
   pango,
 }:
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
 
     xorg.libXtst
     xorg.libXrender
-    xorg.xtrans
+    xtrans
 
     # other (not meson.build)
     cinnamon-settings-daemon

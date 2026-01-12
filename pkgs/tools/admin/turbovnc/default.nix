@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  xtrans,
   xorgproto,
   xauth,
   pixman,
@@ -93,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     mesa-gl-headers # for -DTVNC_SYSTEMX11=1
     pixman # for -DTVNC_SYSTEMX11=1
     xorgproto
-    xorg.xtrans # for -DTVNC_SYSTEMX11=1
+    xtrans # for -DTVNC_SYSTEMX11=1
   ];
 
   postPatch = ''
