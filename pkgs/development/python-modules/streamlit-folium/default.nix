@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "streamlit-folium";
-  version = "0.25.3";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randyzwitch";
     repo = "streamlit-folium";
     tag = "v${version}";
-    hash = "sha256-ACllvlT2zPyV7IS00LVgnf2u5jMChVJlDgNlWk0c9fo=";
+    hash = "sha256-Q4drhYRh+iO/qg4AY2fDszGdUld2NS1CXTtCdOFl8wo=";
   };
 
   postPatch = ''
