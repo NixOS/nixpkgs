@@ -13449,6 +13449,12 @@
     githubId = 34152449;
     name = "Karl Hallsby";
   };
+  karol-broda = {
+    email = "nix@karolbroda.com";
+    github = "karol-broda";
+    githubId = 122811026;
+    name = "Karol Broda";
+  };
   karpfediem = {
     name = "Karpfen";
     github = "karpfediem";
