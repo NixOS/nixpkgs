@@ -16,6 +16,7 @@
   libcap,
   libgbm,
   xorg,
+  libxcb-errors,
   libx11,
   hwdata,
   seatd,
@@ -90,7 +91,7 @@ let
         wayland
         wayland-protocols
         libx11
-        xorg.xcbutilerrors
+        libxcb-errors
         xorg.xcbutilimage
         xorg.xcbutilrenderutil
         xorg.xcbutilwm

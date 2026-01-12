@@ -40,6 +40,7 @@
   wayland-protocols,
   wayland-scanner,
   xorg,
+  libxcb-errors,
   libxdmcp,
   libxcursor,
   libxcb,
@@ -180,7 +181,7 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals enableXWayland [
       libxcb
       libxdmcp
-      xorg.xcbutilerrors
+      libxcb-errors
       xorg.xcbutilwm
       xwayland
     ])

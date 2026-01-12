@@ -23,7 +23,7 @@
   wayland-scanner,
   xcbutil,
   libxcb-cursor,
-  xcbutilerrors,
+  libxcb-errors,
   xcbutilwm,
   waylandSupport ? true,
   x11Support ? true,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     xcbutil
     libxcb-cursor
-    xcbutilerrors
+    libxcb-errors
     xcbutilwm
   ];
 
