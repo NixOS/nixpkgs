@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "demesdraw";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

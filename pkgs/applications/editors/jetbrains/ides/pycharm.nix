@@ -60,7 +60,6 @@ in
       It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing and powerful Debugger.
     '';
     maintainers = with lib.maintainers; [
-      genericnerdyusername
       tymscar
     ];
     license = lib.licenses.unfree;

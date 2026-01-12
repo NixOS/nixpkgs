@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "unpaddedbase64";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matrix-org";

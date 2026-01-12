@@ -25,7 +25,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "sha256-ByECaQ6NW1Su+k/j/bcKJqFf7bStdWZxOZn95GJEqBg=";
   };
 
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs =
     with python.pkgs;

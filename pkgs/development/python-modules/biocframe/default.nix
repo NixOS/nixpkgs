@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "biocframe";
-  version = "0.6.3";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BiocPy";
     repo = "BiocFrame";
     tag = "${version}";
-    hash = "sha256-HeXQEVDGrr/oEGqLcKgq2RLDA58sbYtc2O6oEdFxrIw=";
+    hash = "sha256-2O4YINYo9ehiBuZSHZmBmNIwud7GkNzAMWEv2/7oSs8=";
   };
 
   build-system = [

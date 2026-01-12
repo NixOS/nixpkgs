@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "asyncmy";
   version = "0.2.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "long2ice";

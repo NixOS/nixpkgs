@@ -16,7 +16,7 @@ let
 in
 buildPythonPackage {
   pname = "xgboost";
-  format = "pyproject";
+  pyproject = true;
   inherit (xgboost) version src meta;
 
   nativeBuildInputs = [

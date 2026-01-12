@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "ansi";
   version = "0.3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tehmaze";

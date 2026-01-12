@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pytest-subtests";
   version = "0.14.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_subtests";

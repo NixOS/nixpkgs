@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "loca";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";

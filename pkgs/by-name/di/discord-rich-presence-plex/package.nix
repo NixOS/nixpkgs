@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "discord-rich-presence-plex";
   version = "2.16.0";
-  format = "other";
+  pyproject = false;
   src = fetchFromGitHub {
     owner = "phin05";
     repo = "discord-rich-presence-plex";

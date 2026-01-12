@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "snakemake-executor-plugin-cluster-generic";
   version = "1.0.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

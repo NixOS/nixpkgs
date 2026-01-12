@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "py-pdf-parser";
   version = "0.13.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

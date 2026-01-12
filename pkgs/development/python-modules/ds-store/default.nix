@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ds-store";
   version = "1.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "al45tair";

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "faadelays";
   version = "2023.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
