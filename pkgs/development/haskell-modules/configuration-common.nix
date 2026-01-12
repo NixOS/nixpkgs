@@ -1704,6 +1704,21 @@ with haskellLib;
     (appendPatches [ ./patches/pattern-arrows-add-fix-import.patch ])
   ];
 
+  # posix-waitpid - Fix CPid constructor import and version bounds
+  # Broken since 2011 (GHC 7.4+), marked broken in nixpkgs since 2016
+  # The original package has no repo however there's a fork with the
+  # fix at https://github.com/GaloisInc/posix-waitpid
+  posix-waitpid = lib.pipe super.posix-waitpid [
+    (overrideCabal (drv: {
+      postPatch = ''
+        substituteInPlace System/Posix/Waitpid.hs \
+          --replace 'import System.Posix.Types (CPid)' \
+                    'import System.Posix.Types (CPid(..))'
+      '';
+    }))
+    doJailbreak
+  ];
+
   # 2024-03-19: Fix for mtl >= 2.3
   cheapskate = lib.pipe super.cheapskate [
     doJailbreak
