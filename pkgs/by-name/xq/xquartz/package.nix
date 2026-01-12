@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xkbevd,
   xkbcomp,
   xinput,
   xinit,
@@ -170,7 +171,7 @@ let
     xhost
     xinput
     xkbcomp
-    xorg.xkbevd
+    xkbevd
     xorg.xkbutils
     xorg.xkill
     xorg.xlsatoms
