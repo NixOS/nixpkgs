@@ -3599,10 +3599,6 @@ with pkgs;
 
   rtaudio = rtaudio_5;
 
-  rtmidi = callPackage ../development/libraries/audio/rtmidi {
-    jack = libjack2;
-  };
-
   mpi = openmpi; # this attribute should used to build MPI applications
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica { });
 

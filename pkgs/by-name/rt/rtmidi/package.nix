@@ -8,7 +8,7 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   jackSupport ? true,
-  jack,
+  libjack2,
   coremidiSupport ? stdenv.hostPlatform.isDarwin,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optional alsaSupport alsa-lib ++ lib.optional jackSupport jack;
+  buildInputs = lib.optional alsaSupport alsa-lib ++ lib.optional jackSupport libjack2;
 
   cmakeFlags = [
     "-DRTMIDI_API_ALSA=${if alsaSupport then "ON" else "OFF"}"
