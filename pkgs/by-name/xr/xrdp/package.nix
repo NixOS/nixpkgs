@@ -17,7 +17,6 @@
   libjpeg,
   libopus,
   nasm,
-  xorg,
   xorg-server,
   libxrandr,
   libxfixes,

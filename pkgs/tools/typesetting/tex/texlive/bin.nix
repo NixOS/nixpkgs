@@ -37,7 +37,6 @@
   brotli,
   cairo,
   pixman,
-  xorg,
   libxi,
   libxfixes,
   clisp,

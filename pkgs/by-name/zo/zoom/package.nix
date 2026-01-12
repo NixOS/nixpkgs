@@ -6,7 +6,6 @@
   expat,
   fontconfig,
   freetype,
-  xorg,
   libxrender,
   libxext,
   libx11,

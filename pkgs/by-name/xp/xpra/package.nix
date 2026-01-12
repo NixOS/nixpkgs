@@ -41,7 +41,6 @@
   libyuv,
   xauth,
   xdg-utils,
-  xorg,
   xkeyboard-config,
   libxtst,
   libxres,

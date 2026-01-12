@@ -20,7 +20,6 @@
   SDL2,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
   xorg_sys_opengl,
   zlib,
 }:
