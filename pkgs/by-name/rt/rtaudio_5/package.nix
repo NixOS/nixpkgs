@@ -10,7 +10,7 @@
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   jackSupport ? true,
-  jack,
+  libjack2,
   coreaudioSupport ? stdenv.hostPlatform.isDarwin,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional jackSupport jack;
+    ++ lib.optional jackSupport libjack2;
 
   cmakeFlags = [
     "-DRTAUDIO_API_ALSA=${if alsaSupport then "ON" else "OFF"}"
