@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "msoffcrypto-tool";
-  version = "5.4.2";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolze";
     repo = "msoffcrypto-tool";
     tag = "v${version}";
-    hash = "sha256-nwCjgcZqD0hptHC0WqIodHC5m/JHYyUdfEngIoXzNqA=";
+    hash = "sha256-qhnQXLkEeMfuPl2FJGX19M2B+StlzGU/wHgmRn9jcxc=";
   };
 
   build-system = [ poetry-core ];
