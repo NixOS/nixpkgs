@@ -66,6 +66,7 @@
   lxc,
   libpcap,
   xorg,
+  libpthread-stubs,
   gtk3,
   lerc,
   buildRubyGem,
@@ -180,7 +181,7 @@ in
       glib
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
+      libpthread-stubs
       xorg.libXdmcp
     ];
   };
@@ -192,7 +193,7 @@ in
       expat
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
+      libpthread-stubs
       xorg.libXdmcp
     ];
   };
@@ -563,7 +564,7 @@ in
       libsysprof-capture
       libthai
       pcre2
-      xorg.libpthreadstubs
+      libpthread-stubs
       xorg.libXdmcp
       xorg.libXtst
       libxkbcommon
@@ -869,7 +870,7 @@ in
       harfbuzz
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
+      libpthread-stubs
       xorg.libXdmcp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

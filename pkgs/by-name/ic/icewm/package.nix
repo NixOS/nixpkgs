@@ -29,7 +29,7 @@
   libjpeg,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsndfile,
   libtiff,
   libxcb,
@@ -86,7 +86,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsndfile
     libtiff
     libxcb

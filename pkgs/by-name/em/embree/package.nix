@@ -10,7 +10,7 @@
   openimageio,
   libjpeg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libX11,
   glib,
 }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libX11
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
 

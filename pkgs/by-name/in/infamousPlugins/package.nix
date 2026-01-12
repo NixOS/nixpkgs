@@ -6,7 +6,7 @@
   cairomm,
   cmake,
   lv2,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libXft,
   ntk,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairomm
     lv2
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libXft
     ntk

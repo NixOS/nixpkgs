@@ -6,7 +6,7 @@
   meson,
   ninja,
   docutils,
-  libpthreadstubs,
+  libpthread-stubs,
   withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
   libpciaccess,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     docutils
   ];
   buildInputs = [
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optional withIntel libpciaccess
   ++ lib.optional withValgrind valgrind-light;

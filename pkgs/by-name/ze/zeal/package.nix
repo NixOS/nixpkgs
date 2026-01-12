@@ -8,7 +8,7 @@
   httplib,
   libarchive,
   libXdmcp,
-  libpthreadstubs,
+  libpthread-stubs,
   xcbutilkeysyms,
   qt6,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     httplib
     libXdmcp
     libarchive
-    libpthreadstubs
+    libpthread-stubs
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtwebengine

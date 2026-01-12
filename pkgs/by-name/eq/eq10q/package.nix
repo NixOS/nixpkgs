@@ -10,6 +10,7 @@
   lv2,
   pkg-config,
   xorg,
+  libpthread-stubs,
   libxshmfence,
 }:
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     gtkmm2
     libxcb
     lv2
-    xorg.libpthreadstubs
+    libpthread-stubs
     xorg.libXdmcp
     libxshmfence
   ];

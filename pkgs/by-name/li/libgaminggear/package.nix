@@ -12,6 +12,7 @@
   pcre,
   sqlite,
   xorg,
+  libpthread-stubs,
   harfbuzz,
 }:
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     pcre
     sqlite
     xorg.libXdmcp
-    xorg.libpthreadstubs
+    libpthread-stubs
   ];
 
   cmakeFlags = [

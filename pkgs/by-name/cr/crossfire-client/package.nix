@@ -15,6 +15,7 @@
   fribidi,
   harfbuzzFull,
   xorg,
+  libpthread-stubs,
   util-linux,
   curl,
   SDL2,
@@ -49,7 +50,7 @@ stdenv.mkDerivation {
     libpng
     fribidi
     harfbuzzFull
-    xorg.libpthreadstubs
+    libpthread-stubs
     xorg.libXdmcp
     curl
     SDL2

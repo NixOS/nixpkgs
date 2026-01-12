@@ -10,7 +10,7 @@
   libXdmcp,
   libkscreen,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libqtxdg,
   libxcb,
   lxqt-build-tools,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libkscreen
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libqtxdg
     libxcb
     lxqt-menu-data

@@ -84,7 +84,7 @@ buildFHSEnv {
       zlib
       libgbm
       libxshmfence
-      xorg.libpthreadstubs
+      libpthread-stubs
       libappindicator
     ];
 

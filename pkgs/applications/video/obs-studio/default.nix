@@ -17,7 +17,7 @@
   jansson,
   libjack2,
   libxkbcommon,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   qtbase,
   qtsvg,
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libv4l
     libxkbcommon
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     qtbase
     qtsvg

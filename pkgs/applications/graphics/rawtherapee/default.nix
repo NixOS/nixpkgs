@@ -16,7 +16,7 @@
   wrapGAppsHook3,
   makeWrapper,
   pixman,
-  libpthreadstubs,
+  libpthread-stubs,
   gtkmm3,
   libXau,
   libXdmcp,
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libepoxy
     libXtst
     pixman
-    libpthreadstubs
+    libpthread-stubs
     gtkmm3
     libXau
     libXdmcp

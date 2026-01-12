@@ -7,7 +7,7 @@
   perl,
   kdePackages,
   libtoxcore,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libXScrnSaver,
   ffmpeg,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     kdePackages.sonnet
     libtoxcore
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libXScrnSaver
     ffmpeg

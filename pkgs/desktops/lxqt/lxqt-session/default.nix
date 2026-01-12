@@ -7,7 +7,7 @@
   layer-shell-qt,
   libXdmcp,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libqtxdg,
   lxqt-build-tools,
   pkg-config,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     layer-shell-qt
     libXdmcp
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libqtxdg
     procps
     qtbase

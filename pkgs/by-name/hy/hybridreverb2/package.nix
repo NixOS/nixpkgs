@@ -11,7 +11,7 @@
   libX11,
   gtk3,
   pcre,
-  libpthreadstubs,
+  libpthread-stubs,
   libXdmcp,
   libxkbcommon,
   libepoxy,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libX11
     gtk3
     pcre
-    libpthreadstubs
+    libpthread-stubs
     libXdmcp
     libxkbcommon
     libepoxy

@@ -9,6 +9,7 @@
   pcre,
   libepoxy,
   xorg,
+  libpthread-stubs,
   at-spi2-core,
   libxklavier,
   libxkbcommon,
@@ -59,7 +60,7 @@ stdenv.mkDerivation {
     libxklavier
     at-spi2-core
     libxkbcommon
-    xorg.libpthreadstubs
+    libpthread-stubs
     librsvg
   ];
 

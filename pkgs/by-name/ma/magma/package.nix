@@ -11,7 +11,7 @@
   rocmPackages,
   lapack,
   lib,
-  libpthreadstubs,
+  libpthread-stubs,
   ninja,
   python3,
   config,
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libpthreadstubs
+    libpthread-stubs
     lapack
     blas
     python3

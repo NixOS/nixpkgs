@@ -8,7 +8,7 @@
   gtk2,
   libjack2,
   gnome2,
-  libpthreadstubs,
+  libpthread-stubs,
   libsamplerate,
   libsndfile,
   libtool,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
     libjack2
     gnome2.libgnomecanvas
-    libpthreadstubs
+    libpthread-stubs
     libsamplerate
     libsndfile
     libtool

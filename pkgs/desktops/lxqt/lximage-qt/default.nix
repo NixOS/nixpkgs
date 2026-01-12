@@ -7,7 +7,7 @@
   libXdmcp,
   libexif,
   libfm-qt,
-  libpthreadstubs,
+  libpthread-stubs,
   lxqt-build-tools,
   menu-cache,
   qtbase,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libexif
     libfm-qt
-    libpthreadstubs
+    libpthread-stubs
     menu-cache
     qtbase
     qtimageformats # add-on module to support more image file formats

@@ -14,6 +14,7 @@
   sfml,
   udev,
   xorg,
+  libpthread-stubs,
   libxcb,
 }:
 mkLibretroCore {
@@ -48,7 +49,7 @@ mkLibretroCore {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXxf86vm
-    xorg.libpthreadstubs
+    libpthread-stubs
     libxcb
     xorg.xcbutil
   ];

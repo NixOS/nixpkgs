@@ -41,7 +41,7 @@
   libepoxy,
   libXdmcp,
   libXtst,
-  libpthreadstubs,
+  libpthread-stubs,
   libselinux,
   libsepol,
   libxkbcommon,
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libXdmcp
     libXtst
-    libpthreadstubs
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

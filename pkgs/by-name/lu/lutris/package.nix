@@ -31,7 +31,7 @@ let
       xorg.libXrandr
       libxcb
       xorg.libXmu
-      xorg.libpthreadstubs
+      libpthread-stubs
       xorg.libXext
       xorg.libXdmcp
       xorg.libXxf86vm

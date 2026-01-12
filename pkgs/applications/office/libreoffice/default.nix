@@ -39,6 +39,7 @@
   ant,
   cups,
   xorg,
+  libpthread-stubs,
   libxshmfence,
   fontforge,
   jre21_minimal,
@@ -456,7 +457,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      xorg.libpthreadstubs
+      libpthread-stubs
       librdf_redland
       librevenge
       librsvg

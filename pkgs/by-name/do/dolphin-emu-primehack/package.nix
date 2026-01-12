@@ -23,7 +23,7 @@
   libXrandr,
   libXxf86vm,
   libao,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libusb1,
   mbedtls,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXxf86vm
     libao
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libusb1
     mbedtls

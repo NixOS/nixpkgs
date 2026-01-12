@@ -28,7 +28,7 @@ let
       let
         xorgDeps =
           pkgs: with pkgs; [
-            xorg.libpthreadstubs
+            libpthread-stubs
             xorg.libSM
             xorg.libX11
             xorg.libXaw

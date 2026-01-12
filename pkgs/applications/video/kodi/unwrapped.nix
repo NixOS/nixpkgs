@@ -81,7 +81,7 @@
   harfbuzz,
   lcms2,
   libidn2,
-  libpthreadstubs,
+  libpthread-stubs,
   libtasn1,
   libplist,
   p11-kit,
@@ -335,7 +335,7 @@ stdenv.mkDerivation (
       glib
       harfbuzz
       lcms2
-      libpthreadstubs
+      libpthread-stubs
       ffmpeg
       flatbuffers
       fstrcmp

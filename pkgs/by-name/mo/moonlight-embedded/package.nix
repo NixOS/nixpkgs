@@ -11,7 +11,7 @@
   SDL2,
   ffmpeg,
   pkg-config,
-  xorg,
+  libpthread-stubs,
   libxcb,
   libvdpau,
   libpulseaudio,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libvdpau
     libpulseaudio
     libcec
-    xorg.libpthreadstubs
+    libpthread-stubs
     curl
     expat
     avahi

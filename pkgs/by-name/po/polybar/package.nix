@@ -6,7 +6,7 @@
   fetchpatch,
   libuv,
   libXdmcp,
-  libpthreadstubs,
+  libpthread-stubs,
   libxcb,
   pcre,
   pkg-config,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     libuv
     libXdmcp
-    libpthreadstubs
+    libpthread-stubs
     libxcb
     pcre
     python3

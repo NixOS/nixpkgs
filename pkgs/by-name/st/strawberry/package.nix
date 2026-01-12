@@ -15,7 +15,7 @@
   libebur128,
   libidn2,
   libmtp,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libselinux,
   libsepol,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libebur128
     libidn2
     libmtp
-    libpthreadstubs
+    libpthread-stubs
     libtasn1
     qt6.qtbase
     sqlite
