@@ -8,7 +8,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hier-config";
   version = "3.4.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netdevops";
     repo = "hier_config";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q360VBd7r0URu3zTgnrPL9NaasJQnKaIGDc9KjLJMyI=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to handle hierarchical configurations";
     homepage = "https://github.com/netdevops/hier_config";
-    changelog = "https://github.com/netdevops/hier_config/releases/tag/v${src.tag}";
+    changelog = "https://github.com/netdevops/hier_config/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
