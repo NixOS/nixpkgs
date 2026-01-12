@@ -225,10 +225,13 @@ let
           lndir
         ];
         buildCommand = ''
-          mkdir $out
+          ${builtins.concatStringsSep "\n" (
+            map (output: ''
+              mkdir ''$${output}
+              lndir -silent ${unwrapped.${output}} ''$${output}
+            '') outputs
+          )}
           cd $out
-          lndir -silent ${unwrapped.out}
-          lndir -silent ${unwrapped.man}
           ${lib.optionalString (extraPackages != [ ]) (
             builtins.concatStringsSep "\n" (
               map (pkg: ''
