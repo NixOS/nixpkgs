@@ -14,7 +14,7 @@
   libx11,
   libxext,
   libxmu,
-  libXpm,
+  libxpm,
   motif,
   python3,
   qt5,
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       libxmu
     ]
     ++ lib.optionals enableInventor [
-      libXpm
+      libxpm
       coin3d
       soxt
       motif

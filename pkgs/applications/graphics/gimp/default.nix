@@ -49,7 +49,7 @@
   perl,
   appstream,
   desktop-file-utils,
-  xorg,
+  libxpm,
   libxmu,
   glib-networking,
   json-glib,
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     libheif
     python
     libexif
-    xorg.libXpm
+    libxpm
     libxmu
     glib-networking
     libmypaint

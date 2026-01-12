@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  libxpm,
   font-util,
   font-misc-misc,
   font-cursor-misc,
@@ -168,7 +169,7 @@ let
     bdftopcf
     font-util
     iceauth
-    xorg.libXpm
+    libxpm
     lndir
     luit
     makedepend

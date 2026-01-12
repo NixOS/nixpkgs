@@ -37,7 +37,7 @@
   libGL,
   libjpeg,
   libx11,
-  libXpm,
+  libxpm,
   ntk,
 
   # Test dependencies
@@ -116,12 +116,12 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (guiModule == "fltk") [
     fltk
     libjpeg
-    libXpm
+    libxpm
   ]
   ++ lib.optionals (guiModule == "ntk") [
     ntk
     cairo
-    libXpm
+    libxpm
   ]
   ++ lib.optionals (guiModule == "zest") [
     libGL

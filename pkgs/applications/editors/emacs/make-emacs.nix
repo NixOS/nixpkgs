@@ -34,7 +34,7 @@
   libxcursor,
   libxft,
   libxi,
-  libXpm,
+  libxpm,
   libXrandr,
   libgccjit,
   libjpeg,
@@ -314,7 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withPgtk [
     giflib
     gtk3
-    libXpm
+    libxpm
     libjpeg
     libpng
     librsvg
@@ -336,7 +336,7 @@ stdenv.mkDerivation (finalAttrs: {
     Xaw3d
     giflib
     libxaw
-    libXpm
+    libxpm
     libXrandr
     libjpeg
     libpng

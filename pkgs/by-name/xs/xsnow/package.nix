@@ -7,6 +7,7 @@
   wrapGAppsHook3,
   gtk3-x11,
   xorg,
+  libxpm,
   libx11,
   libxkbcommon,
   gsl,
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     libxml2
     gsl
     libx11
-    xorg.libXpm
+    libxpm
     xorg.libXt
     xorg.libXtst
   ];

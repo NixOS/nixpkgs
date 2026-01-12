@@ -16,7 +16,7 @@
   libx11,
   libGLU,
   libGL,
-  libXpm,
+  libxpm,
   libxext,
   libXxf86vm,
   libXxf86dga,
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     libx11
     libGLU
     libGL
-    libXpm
+    libxpm
     libxext
     libXxf86vm
     libXxf86dga

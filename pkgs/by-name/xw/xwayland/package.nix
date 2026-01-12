@@ -19,7 +19,7 @@
   libxfixes,
   libxfont_2,
   libxmu,
-  libXpm,
+  libxpm,
   libXrender,
   libXres,
   libXt,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxfont_2
     libxmu
-    libXpm
+    libxpm
     libXrender
     libXres
     libXt

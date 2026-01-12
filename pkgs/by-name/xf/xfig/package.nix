@@ -5,7 +5,7 @@
   fetchpatch,
   makeWrapper,
   imagemagick,
-  libXpm,
+  libxpm,
   libxmu,
   libxi,
   libXp,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXpm
+    libxpm
     libxmu
     libxi
     libXp

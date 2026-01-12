@@ -4,7 +4,7 @@
   fetchFromGitHub,
   sbcl,
   libx11,
-  libXpm,
+  libxpm,
   libice,
   libsm,
   libXt,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sbcl
     libx11
-    libXpm
+    libxpm
     libice
     libsm
     libXt

@@ -31,7 +31,7 @@
   autoreconfHook,
   opensp,
   flex,
-  libXpm,
+  libxpm,
   rpcsvc-proto,
 }:
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     libxaw
     ksh
     libxcrypt
-    libXpm
+    libxpm
   ];
   nativeBuildInputs = [
     bison

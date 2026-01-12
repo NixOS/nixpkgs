@@ -7,7 +7,7 @@
   fribidi,
   libxext,
   libxft,
-  libXpm,
+  libxpm,
   libXrandr,
   libXrender,
   xorgproto,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     fribidi
     libxext
     libxft
-    libXpm
+    libxpm
     libXrandr
     libXrender
     xorgproto

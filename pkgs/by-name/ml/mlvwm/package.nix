@@ -5,7 +5,7 @@
   gccmakedep,
   libx11,
   libxext,
-  libXpm,
+  libxpm,
   imake,
   installShellFiles,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gccmakedep
     libx11
     libxext
-    libXpm
+    libxpm
     imake
   ];
 

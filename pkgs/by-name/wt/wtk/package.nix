@@ -4,6 +4,7 @@
   requireFile,
   unzip,
   xorg,
+  libxpm,
   libx11,
   libsm,
   libice,
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   libraries = [
-    xorg.libXpm
+    libxpm
     xorg.libXt
     libx11
     libice

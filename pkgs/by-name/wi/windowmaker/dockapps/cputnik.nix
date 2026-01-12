@@ -4,7 +4,7 @@
   dockapps-sources,
   libx11,
   libxext,
-  libXpm,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,14 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXpm
+    libxpm
     libxext
   ];
 
   preBuild = ''
     makeFlagsArray+=(
-      INCS="-I${libx11.dev}/include -I${libxext.dev}/include -I${libXpm.dev}/include"
-      LIBS="-L${libx11}/lib -L${libxext}/lib -L${libXpm}/lib -lX11 -lXpm -lXext"
+      INCS="-I${libx11.dev}/include -I${libxext.dev}/include -I${libxpm.dev}/include"
+      LIBS="-L${libx11}/lib -L${libxext}/lib -L${libxpm}/lib -lX11 -lXpm -lXext"
     )
   '';
 

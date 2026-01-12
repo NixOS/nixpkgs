@@ -7,7 +7,7 @@
   fetchpatch,
   fetchurl,
   libx11,
-  libXpm,
+  libxpm,
   libXt,
   motif,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXpm
+    libxpm
     libXt
     motif
   ];

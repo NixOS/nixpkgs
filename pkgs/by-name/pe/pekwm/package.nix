@@ -8,7 +8,7 @@
   libxext,
   libxft,
   libxinerama,
-  libXpm,
+  libxpm,
   libXrandr,
   libjpeg,
   libpng,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxft
     libxinerama
-    libXpm
+    libxpm
     libXrandr
     libjpeg
     libpng

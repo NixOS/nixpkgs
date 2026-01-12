@@ -24,7 +24,7 @@
   libsm,
   libxext,
   libxinerama,
-  libXpm,
+  libxpm,
   libarchive,
   libass,
   libbluray-full,
@@ -205,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals skins2Support [
     libxext
     libxinerama
-    libXpm
+    libxpm
   ]
   ++ optionals waylandSupport [
     wayland

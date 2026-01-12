@@ -6,6 +6,7 @@
   bison,
   flex,
   xorg,
+  libxpm,
   libxmu,
   libxext,
   libxaw,
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
     libxaw
     libxext
     libxmu
-    xorg.libXpm
+    libxpm
     xorg.libXt
   ];
 

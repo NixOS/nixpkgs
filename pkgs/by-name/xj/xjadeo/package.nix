@@ -12,7 +12,7 @@
   libXv,
   pkg-config,
   portmidi,
-  xorg,
+  libxpm,
   libxext,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libx11
     libxext
-    xorg.libXpm
+    libxpm
     # The following are recommended in the README, but are seemingly
     # unnecessary for a successful build. That said, the result of including
     # these in the build process is possibly required at runtime in some cases,

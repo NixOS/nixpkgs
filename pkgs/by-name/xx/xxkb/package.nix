@@ -5,7 +5,7 @@
   libx11,
   libXt,
   libxext,
-  libXpm,
+  libxpm,
   imake,
   gccmakedep,
   svgSupport ? false,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libx11
     libXt
     libxext
-    libXpm
+    libxpm
   ]
   ++ lib.optionals svgSupport [
     librsvg

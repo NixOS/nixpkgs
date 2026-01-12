@@ -15,7 +15,7 @@
   libxft,
   libxinerama,
   libxmu,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   librsvg,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libxft
     libxinerama
     libxmu
-    libXpm
+    libxpm
     libjpeg
     libpng
     librsvg

@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   libx11,
-  libXpm,
+  libxpm,
   alsa-lib,
   bzip2,
   zlib,
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     bzip2
     zlib
-    libXpm
+    libxpm
     libgcc
   ];
 

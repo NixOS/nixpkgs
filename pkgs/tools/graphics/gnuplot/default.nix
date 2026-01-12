@@ -19,7 +19,7 @@
   libcaca,
   libx11 ? null,
   libXt ? null,
-  libXpm ? null,
+  libxpm ? null,
   libxaw ? null,
   aquaterm ? false,
   withWxGTK ? false,
@@ -67,7 +67,7 @@ in
   ++ lib.optional withCaca libcaca
   ++ lib.optionals withX [
     libx11
-    libXpm
+    libxpm
     libXt
     libxaw
   ]

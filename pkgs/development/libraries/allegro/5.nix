@@ -25,7 +25,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXpm,
+  libxpm,
   libXt,
   libXxf86dga,
   libXxf86misc,
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxi
-    libXpm
+    libxpm
     libXt
     libXxf86dga
     libXxf86misc

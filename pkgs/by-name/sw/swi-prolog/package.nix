@@ -34,7 +34,7 @@
   libyaml,
 
   withGui ? false,
-  libXpm,
+  libxpm,
   libxext,
   libxft,
   libxinerama,
@@ -104,7 +104,7 @@ let
     ++ (lib.optionals withGui' [
       libXt
       libxext
-      libXpm
+      libxpm
       libxft
       libxinerama
       libjpeg

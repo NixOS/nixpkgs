@@ -6,7 +6,7 @@
   fontconfig,
   libx11,
   libxft,
-  libXpm,
+  libxpm,
   libXrandr,
   libXrender,
   conf ? null,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     fontconfig
     libx11
     libxft
-    libXpm
+    libxpm
     libXrandr
     libXrender
   ];

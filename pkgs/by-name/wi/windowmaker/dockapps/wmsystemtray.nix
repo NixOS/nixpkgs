@@ -6,7 +6,7 @@
   libxext,
   libxfixes,
   libxmu,
-  libXpm,
+  libxpm,
   pkg-config,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxfixes
     libxmu
-    libXpm
+    libxpm
   ];
 
   meta = {

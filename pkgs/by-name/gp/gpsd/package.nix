@@ -20,7 +20,7 @@
   dbus-glib,
   libx11,
   libXt,
-  libXpm,
+  libxpm,
   libxaw,
   libxext,
   gobject-introspection,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libx11
     libxaw
     libxext
-    libXpm
+    libxpm
     libXt
     pango
   ];

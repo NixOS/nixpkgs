@@ -13,7 +13,7 @@
   libxext,
   gnuchess,
   texinfo,
-  libXpm,
+  libxpm,
   pkg-config,
   librsvg,
   cairo,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libxext
     gnuchess
     texinfo
-    libXpm
+    libxpm
     librsvg
     cairo
     pango

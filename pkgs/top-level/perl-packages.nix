@@ -14524,7 +14524,7 @@ with self;
       pkgs.freetype
       pkgs.libpng
       pkgs.fontconfig
-      pkgs.xorg.libXpm
+      pkgs.libxpm
       ExtUtilsPkgConfig
       TestFork
       TestNoWarnings
@@ -14539,7 +14539,7 @@ with self;
       "--lib_zlib_path=${pkgs.zlib.out}"
       "--lib_ft_path=${pkgs.freetype.out}"
       "--lib_fontconfig_path=${pkgs.fontconfig.lib}"
-      "--lib_xpm_path=${pkgs.xorg.libXpm.out}"
+      "--lib_xpm_path=${pkgs.libxpm.out}"
     ];
 
     meta = {

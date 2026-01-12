@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   gettext,
-  libXpm,
+  libxpm,
   libGL,
   fltk,
   hicolor-icon-theme,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXpm
+    libxpm
     libGL
     fltk
     hicolor-icon-theme

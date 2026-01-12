@@ -11,7 +11,7 @@
   libseccomp,
   libjpeg,
   libpng,
-  libXpm,
+  libxpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libseccomp
     libjpeg
     libpng
-    libXpm
+    libxpm
   ];
 
   postInstall = ''

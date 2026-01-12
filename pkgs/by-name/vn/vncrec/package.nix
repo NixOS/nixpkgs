@@ -12,7 +12,7 @@
   libxext,
   libsm,
   libice,
-  libXpm,
+  libxpm,
   libXp,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     libxext
     libsm
     libice
-    libXpm
+    libxpm
     libXp
   ];
 

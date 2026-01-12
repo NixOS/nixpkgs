@@ -6,7 +6,7 @@
   font-util,
   libx11,
   libxext,
-  libXpm,
+  libxpm,
   mkfontscale,
   pkg-config,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxext
-    libXpm
+    libxpm
     font-util
     mkfontscale
   ];

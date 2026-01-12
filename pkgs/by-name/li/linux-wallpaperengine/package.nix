@@ -20,7 +20,7 @@
   kissfftFloat,
   libxau,
   libxdmcp,
-  libXpm,
+  libxpm,
   libXrandr,
   libXxf86vm,
   libdecor,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     kissfftFloat
     libxau
     libxdmcp
-    libXpm
+    libxpm
     libXrandr
     libXxf86vm
     libdecor

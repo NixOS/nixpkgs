@@ -10,7 +10,7 @@
   libxi,
   libxext,
   libXtst,
-  libXpm,
+  libxpm,
   libx11,
   autoreconfHook,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libxft
     libxext
     libXtst
-    libXpm
+    libxpm
     libx11
     libxi
     xorgproto

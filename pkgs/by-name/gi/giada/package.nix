@@ -14,7 +14,7 @@
   jack2,
   alsa-lib,
   libpulseaudio,
-  libXpm,
+  libxpm,
   libXrandr,
   flac,
   libogg,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     jack2
     libGL
-    libXpm
+    libxpm
     libXrandr
     libogg
     libopus

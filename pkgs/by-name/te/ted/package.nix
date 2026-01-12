@@ -5,7 +5,7 @@
   pkg-config,
   zlib,
   pcre,
-  xorg,
+  libxpm,
   libx11,
   libsm,
   libice,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     libx11
     libice
     libsm
-    xorg.libXpm
+    libxpm
     libjpeg
     libtiff
     libpng

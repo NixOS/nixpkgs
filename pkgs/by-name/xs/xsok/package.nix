@@ -6,7 +6,7 @@
   imake,
   libXt,
   libxaw,
-  libXpm,
+  libxpm,
   libxext,
   withNethackLevels ? true,
 }:
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     libx11
     libXt
     libxaw
-    libXpm
+    libxpm
     libxext
   ];
   nativeBuildInputs = [ imake ];
 
-  env.NIX_CFLAGS_COMPILE = " -isystem ${libXpm.dev}/include/X11 ";
+  env.NIX_CFLAGS_COMPILE = " -isystem ${libxpm.dev}/include/X11 ";
 
   preConfigure = ''
     sed -e "s@/usr/@$out/share/@g" -i src/Imakefile

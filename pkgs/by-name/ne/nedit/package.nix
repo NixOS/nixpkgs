@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   motif,
-  libXpm,
+  libxpm,
   libXt,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     motif
-    libXpm
+    libxpm
     libXt
   ];
 

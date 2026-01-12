@@ -5,7 +5,7 @@
   unzip,
   perl,
   libx11,
-  libXpm,
+  libxpm,
   gpm,
   ncurses,
   slang,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     perl
     libx11
-    libXpm
+    libxpm
     gpm
     ncurses
     slang

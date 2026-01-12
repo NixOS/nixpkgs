@@ -25,7 +25,7 @@
   llvm_20,
   lsof,
   lz4,
-  xorg,
+  libxpm,
   libxft,
   libxext,
   libx11,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libGL
     libx11
-    xorg.libXpm
+    libxpm
     libxft
     libxext
   ];

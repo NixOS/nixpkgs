@@ -5,7 +5,7 @@
   libx11,
   libxcursor,
   libxmu,
-  libXpm,
+  libxpm,
   libheif,
   pkg-config,
   wayland,
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     libx11
     libxcursor
     libxmu
-    libXpm
+    libxpm
     libheif
     wayland
     xbitmaps

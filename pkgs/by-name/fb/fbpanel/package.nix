@@ -5,7 +5,7 @@
   pkg-config,
   libx11,
   libxmu,
-  libXpm,
+  libxpm,
   gtk2,
   libpng,
   libjpeg,
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     libxmu
-    libXpm
+    libxpm
     gtk2
     libpng
     libjpeg

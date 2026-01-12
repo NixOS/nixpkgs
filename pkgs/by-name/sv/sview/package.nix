@@ -7,7 +7,7 @@
   lib,
   libconfig,
   libGL,
-  libXpm,
+  libxpm,
   makeFontsConf,
   makeWrapper,
   nanum,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gtk2
     libconfig
     libGL
-    libXpm
+    libxpm
     openal
   ];
 

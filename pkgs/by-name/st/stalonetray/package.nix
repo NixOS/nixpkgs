@@ -5,7 +5,7 @@
   fetchFromGitHub,
   lib,
   libx11,
-  libXpm,
+  libxpm,
   libxslt,
   stdenv,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-ns
     docbook_xml_dtd_44
     libx11
-    libXpm
+    libxpm
     libxslt
   ];
 

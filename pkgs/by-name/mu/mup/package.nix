@@ -10,7 +10,7 @@
   netpbm,
   fltk,
   libxinerama,
-  libXpm,
+  libxpm,
   libjpeg,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   buildInputs = [
     fltk
     libxinerama
-    libXpm
+    libxpm
     libjpeg
   ];
 

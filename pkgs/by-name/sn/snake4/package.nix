@@ -5,6 +5,7 @@
   shhmsg,
   shhopt,
   xorg,
+  libxpm,
   libxext,
   libxaw,
   libx11,
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     shhopt
     libx11
     xorg.libXt
-    xorg.libXpm
+    libxpm
     libxaw
     libxext
   ];

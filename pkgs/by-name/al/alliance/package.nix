@@ -6,7 +6,7 @@
   motif,
   libx11,
   libXt,
-  libXpm,
+  libxpm,
   bison,
   flex,
   automake,
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     motif
     libx11
     libXt
-    libXpm
+    libxpm
     bison
   ];
 

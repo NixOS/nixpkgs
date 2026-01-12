@@ -14,7 +14,7 @@
   qtMode ? false,
   libxaw,
   libxext,
-  libXpm,
+  libxpm,
   bdftopcf,
   mkfontscale,
   pkg-config,
@@ -78,7 +78,7 @@ stdenvUsed.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Mode [
     libxaw
     libxext
-    libXpm
+    libxpm
   ]
   ++ lib.optionals qtMode [
     gzip

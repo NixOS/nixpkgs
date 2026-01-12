@@ -4,7 +4,7 @@
   fetchurl,
   libx11,
   xorgproto,
-  libXpm,
+  libxpm,
   libXt,
 }:
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     xorgproto
-    libXpm
+    libxpm
     libXt
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11 -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-I${libxpm.dev}/include/X11 -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
 
   hardeningDisable = [ "format" ];
 

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libx11,
-  libXpm,
+  libxpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXpm
+    libxpm
   ];
 
   buildFlags = [

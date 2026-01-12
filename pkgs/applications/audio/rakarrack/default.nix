@@ -7,7 +7,7 @@
   fltk,
   libjack2,
   libxft,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   libsamplerate,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     fltk
     libjack2
     libxft
-    libXpm
+    libxpm
     libjpeg
     libpng
     libsamplerate

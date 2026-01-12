@@ -5,7 +5,7 @@
   dockapps-sources,
   libx11,
   libxext,
-  libXpm,
+  libxpm,
   pkg-config,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     libx11
-    libXpm
+    libxpm
     libxext
   ];
 

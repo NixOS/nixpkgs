@@ -9,7 +9,7 @@
   libGL,
   libGLU,
   libx11,
-  libXpm,
+  libxpm,
   libtool,
   ncurses,
   pkg-config,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libx11
-    libXpm
+    libxpm
   ];
 
   configureFlags = [

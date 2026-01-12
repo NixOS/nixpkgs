@@ -11,6 +11,7 @@
   tcl,
   tk,
   xorg,
+  libxpm,
   libx11,
   libsm,
   libice,
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
     xorg.libXt
     libice
     libx11
-    xorg.libXpm
+    libxpm
     tcl
     tk
     zlib

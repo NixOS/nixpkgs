@@ -8,6 +8,7 @@
   gsl,
   motif,
   xorg,
+  libxpm,
   libxft,
   libxext,
 }:
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   ++ [
     libxext
     libxft
-    xorg.libXpm
+    libxpm
     xorg.libXt
   ];
 

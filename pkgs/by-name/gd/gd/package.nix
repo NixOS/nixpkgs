@@ -12,7 +12,7 @@
   libwebp,
   libtiff,
   withXorg ? true,
-  libXpm,
+  libxpm,
   libavif,
   fontconfig,
   freetype,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withXorg [
     fontconfig
-    libXpm
+    libxpm
   ];
 
   outputs = [

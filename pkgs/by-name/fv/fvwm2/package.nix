@@ -10,7 +10,7 @@
   libxcursor,
   libxft,
   libxinerama,
-  libXpm,
+  libxpm,
   libXt,
   libpng,
   librsvg,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxft
     libxinerama
-    libXpm
+    libxpm
     libXt
     libpng
     librsvg

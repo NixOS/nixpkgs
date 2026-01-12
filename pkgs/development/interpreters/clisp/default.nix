@@ -22,7 +22,7 @@
   libx11,
   libxau,
   libXt,
-  libXpm,
+  libxpm,
   libxext,
   xorgproto,
   coreutils,
@@ -48,7 +48,7 @@ assert
     libx11 != null
     && libxau != null
     && libXt != null
-    && libXpm != null
+    && libxpm != null
     && xorgproto != null
     && libxext != null
   );
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
     libx11
     libxau
     libXt
-    libXpm
+    libxpm
     xorgproto
     libxext
   ];

@@ -21,7 +21,7 @@
   # glx
   libGLU,
   libGL,
-  libXpm,
+  libxpm,
   libxext,
   libXxf86vm,
   alsa-lib,
@@ -105,7 +105,7 @@ let
     ++ lib.optionals withGLX [
       libGLU
       libGL
-      libXpm
+      libxpm
       libxext
       libXxf86vm
       alsa-lib

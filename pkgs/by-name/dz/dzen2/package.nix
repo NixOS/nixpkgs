@@ -6,7 +6,7 @@
   libx11,
   libxft,
   libxinerama,
-  libXpm,
+  libxpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     libx11
     libxft
     libxinerama
-    libXpm
+    libxpm
   ];
 
   src = fetchurl {

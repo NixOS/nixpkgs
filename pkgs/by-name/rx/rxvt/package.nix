@@ -6,7 +6,7 @@
   libtool,
   libx11,
   libXt,
-  libXpm,
+  libxpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libtool
     libx11
     libXt
-    libXpm
+    libxpm
   ];
 
   configurePhase = ''
