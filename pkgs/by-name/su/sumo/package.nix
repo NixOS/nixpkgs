@@ -26,7 +26,7 @@
   stdenv,
   swig,
   xercesc,
-  xorg,
+  libxrender,
   libxrandr,
   libxft,
   libxfixes,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxft
     libxrandr
-    xorg.libXrender
+    libxrender
   ];
 
   meta = {

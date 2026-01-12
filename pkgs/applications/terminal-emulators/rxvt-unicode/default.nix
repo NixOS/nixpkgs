@@ -7,7 +7,7 @@
   libx11,
   libXt,
   libxft,
-  libXrender,
+  libxrender,
   libxext,
   ncurses,
   fontconfig,
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     ncurses # required to build the terminfo file
     fontconfig
     freetype
-    libXrender
+    libxrender
     libptytty
   ]
   ++ lib.optionals perlSupport [

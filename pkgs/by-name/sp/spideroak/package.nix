@@ -11,7 +11,7 @@
   libsm,
   libx11,
   libxext,
-  libXrender,
+  libxrender,
   zlib,
 }:
 
@@ -26,7 +26,7 @@ let
     libsm
     libx11
     libxext
-    libXrender
+    libxrender
     zlib
   ];
 

@@ -18,7 +18,7 @@
   gdk-pixbuf,
   curl,
   systemd,
-  xorg,
+  libxrender,
   libxfixes,
   libxext,
   libxdamage,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
         freetype
         gnome2.GConf
         gdk-pixbuf
-        xorg.libXrender
+        libxrender
       ]
     }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" "$out/host/CoherentUI_Host"
 

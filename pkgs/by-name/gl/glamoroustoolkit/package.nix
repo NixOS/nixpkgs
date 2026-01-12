@@ -16,7 +16,7 @@
   libxext,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libxkbcommon,
   libgit2,
   libglvnd,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
         libxext
         libxi
         libxrandr
-        libXrender
+        libxrender
         libxkbcommon
         libglvnd
         libuuid

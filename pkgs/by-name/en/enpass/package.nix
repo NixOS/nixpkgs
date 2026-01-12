@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libxrender,
   libxi,
   libx11,
   libsm,
@@ -59,7 +60,7 @@ let
     libxi
     libsm
     libice
-    xorg.libXrender
+    libxrender
     xorg.libXScrnSaver
     libxcb
     libcap

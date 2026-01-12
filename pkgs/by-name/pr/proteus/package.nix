@@ -13,7 +13,7 @@
   libxcursor,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxinerama
     libxrandr
-    libXrender
+    libxrender
   ];
 
   postPatch = ''

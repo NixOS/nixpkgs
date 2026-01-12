@@ -18,6 +18,7 @@
   wrapGAppsHook3,
   xapp,
   xorg,
+  libxrender,
   libxext,
   libxcomposite,
   libxau,
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     systemd
 
     xorg.libXtst
-    xorg.libXrender
+    libxrender
     xtrans
 
     # other (not meson.build)

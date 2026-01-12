@@ -18,7 +18,7 @@
   libxext,
   libxft,
   fontconfig,
-  libXrender,
+  libxrender,
   libxfixes,
   libx11,
   libxi,
@@ -46,7 +46,7 @@ let
     libxext
     libxft
     fontconfig
-    libXrender
+    libxrender
     libxfixes
     libx11
     libxi

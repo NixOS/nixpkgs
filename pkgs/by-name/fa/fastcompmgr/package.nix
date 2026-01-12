@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libxrender,
   libxfixes,
   libxdamage,
   libxcomposite,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxdamage
     libxfixes
-    xorg.libXrender
+    libxrender
   ];
 
   installPhase = ''

@@ -9,6 +9,7 @@
   ninja,
   cmake,
   xorg,
+  libxrender,
   libxmu,
   libxi,
   libxext,
@@ -157,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxext
       libxi
       libxmu
-      xorg.libXrender
+      libxrender
       xorg.libXres
       xorg.libXtst
       xorg.libXxf86vm

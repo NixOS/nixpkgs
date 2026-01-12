@@ -10,7 +10,7 @@
   giflib,
   libjpeg,
   libpng,
-  libXrender,
+  libxrender,
   libexif,
   autoreconfHook,
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libjpeg
     libpng
-    libXrender
+    libxrender
     libexif
   ];
 

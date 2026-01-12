@@ -23,6 +23,7 @@
   pango,
   systemd,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     libxcb
     libdrm

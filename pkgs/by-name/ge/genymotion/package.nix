@@ -10,7 +10,7 @@
   libx11,
   libxkbcommon,
   xdg-utils,
-  libXrender,
+  libxrender,
   fontconfig,
   freetype,
   systemd,
@@ -36,7 +36,7 @@ let
     libxi
     libxext
     libGL
-    libXrender
+    libxrender
     fontconfig
     freetype
     systemd

@@ -9,7 +9,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   ncurses,
   pixman,
   pkg-config,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libxi
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     ncurses
     udev
     utilmacros

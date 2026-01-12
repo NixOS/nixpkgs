@@ -19,7 +19,7 @@
   libxcomposite,
   libxext,
   libxfixes,
-  libXrender,
+  libxrender,
   libx11,
   libXtst,
   libXScrnSaver,
@@ -60,7 +60,7 @@ let
     libxext
     libxfixes
     libxcb
-    libXrender
+    libxrender
     libx11
     libXtst
     libXScrnSaver

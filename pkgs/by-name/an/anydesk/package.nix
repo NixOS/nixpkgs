@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libxrender,
   libxrandr,
   libxmu,
   libxi,
@@ -87,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXt
     libice
     libsm
-    xorg.libXrender
+    libxrender
   ];
 
   nativeBuildInputs = [

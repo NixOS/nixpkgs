@@ -38,7 +38,7 @@ buildFHSEnv {
           libx11
           libxcb
           libxrandr
-          xorg.libXrender
+          libxrender
           xorgproto
           SDL2
           wayland

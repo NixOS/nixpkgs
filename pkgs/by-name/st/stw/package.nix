@@ -5,7 +5,7 @@
   libx11,
   fontconfig,
   libxft,
-  libXrender,
+  libxrender,
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     libx11
     fontconfig
     libxft
-    libXrender
+    libxrender
   ];
 
   makeFlags = [

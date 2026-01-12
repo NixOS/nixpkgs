@@ -30,7 +30,7 @@
   freetype,
   fontconfig,
   libxft,
-  libXrender,
+  libxrender,
   libxcb,
   expat,
   libuuid,
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     qt6.qtwayland
     freetype
     fontconfig
-    libXrender
+    libxrender
     libuuid
     expat
     glib

@@ -31,7 +31,7 @@
   libxcursor,
   libxext,
   libxi,
-  libXrender,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -128,7 +128,7 @@ stdenv.mkDerivation (
           libxcomposite
           libxext
           libxi
-          libXrender
+          libxrender
           libxcb
           libxkbcommon
           xcbutil
@@ -467,9 +467,9 @@ stdenv.mkDerivation (
             "-I"
             "${libxext.out}/include"
             "-L"
-            "${libXrender.out}/lib"
+            "${libxrender.out}/lib"
             "-I"
-            "${libXrender.out}/include"
+            "${libxrender.out}/include"
 
             ''-${lib.optionalString (cups == null) "no-"}cups''
             "-dbus-linked"

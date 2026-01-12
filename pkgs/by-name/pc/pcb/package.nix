@@ -19,7 +19,7 @@
   tk,
   gnome2,
   gd,
-  xorg,
+  libxrender,
   libxmu,
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2
     dbus
-    xorg.libXrender
+    libxrender
     freetype
     fontconfig
     libGLU

@@ -18,6 +18,7 @@
 
   # Unreal Engine 4 Dependencies
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXxf86vm
     libxcb
   ];

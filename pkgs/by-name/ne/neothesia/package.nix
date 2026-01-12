@@ -9,7 +9,7 @@
   makeWrapper,
   libxkbcommon,
   vulkan-loader,
-  xorg,
+  libxrender,
   libxi,
   libxcursor,
   libx11,
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
         libx11
         libxcursor
         libxi
-        xorg.libXrender
+        libxrender
       ]
     }"
 

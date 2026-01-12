@@ -9,7 +9,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXrender,
+  libxrender,
   meson,
   ninja,
   pkg-config,
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     libx11
     libxcursor
     libxext
-    libXrender
+    libxrender
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];

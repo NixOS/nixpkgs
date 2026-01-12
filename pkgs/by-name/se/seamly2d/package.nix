@@ -9,7 +9,7 @@
   xvfb-run,
   fontconfig,
   freetype,
-  xorg,
+  libxrender,
   libxi,
   libxcb,
   python3,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libgbm
     freetype
     libxi
-    xorg.libXrender
+    libxrender
     libxcb
   ];
 

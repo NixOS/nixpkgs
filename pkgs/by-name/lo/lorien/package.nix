@@ -21,7 +21,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   zlib,
   udev, # for libudev
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libxi
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     zlib
     udev
   ];

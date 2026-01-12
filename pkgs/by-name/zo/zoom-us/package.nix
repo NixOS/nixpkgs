@@ -202,7 +202,7 @@ let
       pkgs.libxext
       pkgs.libxfixes
       pkgs.libxrandr
-      pkgs.xorg.libXrender
+      pkgs.libxrender
       pkgs.xorg.libXtst
       pkgs.libxcb
       pkgs.libxshmfence

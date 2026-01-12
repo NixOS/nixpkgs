@@ -12,6 +12,7 @@
   iputils,
   psmisc,
   xorg,
+  libxrender,
   libxi,
   libxext,
   libx11,
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           libx11
           libxext
-          xorg.libXrender
+          libxrender
           xorg.libXtst
           libxi
         ]

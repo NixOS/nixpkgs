@@ -27,7 +27,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   libnghttp2,
   libudev0-shim,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxrandr
-    libXrender
+    libxrender
     libXtst
     libxcb
     nspr

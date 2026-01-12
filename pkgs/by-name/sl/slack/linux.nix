@@ -41,6 +41,7 @@
   wayland,
   xdg-utils,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
       libxfixes
       libxi
       libxrandr
-      xorg.libXrender
+      libxrender
       xorg.libXtst
       libxkbfile
       libxshmfence

@@ -5,7 +5,7 @@
   libx11,
   libxext,
   libxrandr,
-  libXrender,
+  libxrender,
   xorgproto,
   patches ? [ ],
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxrandr
-    libXrender
+    libxrender
     xorgproto
   ];
 

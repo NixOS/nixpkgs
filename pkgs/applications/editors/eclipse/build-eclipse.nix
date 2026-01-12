@@ -5,7 +5,7 @@
   freetype,
   fontconfig,
   libx11,
-  libXrender,
+  libxrender,
   zlib,
   jdk,
   glib,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     gtk
     jdk
     libx11
-    libXrender
+    libxrender
     libXtst
     libsecret
     zlib
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
         freetype
         fontconfig
         libx11
-        libXrender
+        libxrender
         zlib
       ]
     } $libCairo

@@ -13,7 +13,7 @@
   fontconfig,
   stdenv,
   xar,
-  xorg,
+  libxrender,
   libxext,
 }:
 
@@ -52,7 +52,7 @@ let
 
     buildInputs = [
       libxext
-      xorg.libXrender
+      libxrender
 
       freetype
       openssl

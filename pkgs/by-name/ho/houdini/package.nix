@@ -49,10 +49,10 @@ buildFHSEnv {
       xorg.libXt
       libxext
       libx11
-      xorg.libXrender
+      libxrender
       libxcursor
       libxfixes
-      xorg.libXrender
+      libxrender
       libxcomposite
       libxdamage
       xorg.libXtst

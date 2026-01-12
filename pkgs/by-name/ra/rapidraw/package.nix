@@ -16,7 +16,7 @@
   libappindicator,
   cairo,
   pango,
-  xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcursor
     libxext
     libxrandr
-    xorg.libXrender
+    libxrender
     libxcb
     libxfixes
     libxkbcommon

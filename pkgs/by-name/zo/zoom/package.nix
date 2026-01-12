@@ -7,6 +7,7 @@
   fontconfig,
   freetype,
   xorg,
+  libxrender,
   libxext,
   libx11,
   libsm,
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     libsm
     libx11
     libxext
-    xorg.libXrender
+    libxrender
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";

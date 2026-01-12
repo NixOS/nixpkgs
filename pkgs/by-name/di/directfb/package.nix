@@ -13,7 +13,7 @@
   libpng,
   giflib,
   enableX11 ? true,
-  xorg,
+  libxrender,
   libxext,
   libx11,
   xorgproto,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libx11
     libxext
-    xorg.libXrender
+    libxrender
   ];
 
   env = {

@@ -8,7 +8,7 @@
   libxext,
   python3,
   libxrandr,
-  libXrender,
+  libxrender,
   libpulseaudio,
   libxcomposite,
   enableGlfw ? false,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxrandr
-    libXrender
+    libxrender
     libpulseaudio
     libxcomposite
   ]

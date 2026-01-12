@@ -34,6 +34,7 @@
   unzip,
   xdg-utils,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -91,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     libxkbfile
     libxshmfence

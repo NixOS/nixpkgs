@@ -24,7 +24,7 @@
   gobject-introspection,
   fribidi,
   harfbuzz,
-  xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
   ]
   ++ lib.optionals trackerSupport [
     tinysparql

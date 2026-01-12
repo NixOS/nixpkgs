@@ -15,7 +15,7 @@
   gtk3,
   hidapi,
   imgui,
-  libXrender,
+  libxrender,
   libpng,
   libusb1,
   libzip,
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libusb1
     libzip
-    libXrender
+    libxrender
     pugixml
     rapidjson
     vulkan-headers

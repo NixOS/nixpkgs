@@ -4,7 +4,7 @@
   fetchurl,
   xorgproto,
   libx11,
-  libXrender,
+  libxrender,
   gmp,
   libjpeg,
   libpng,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     csound
-    libXrender
+    libxrender
     libcaca
     cunit
     libtool

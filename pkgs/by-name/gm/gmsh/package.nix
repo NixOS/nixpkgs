@@ -14,7 +14,7 @@
   zlib,
   libGL,
   libGLU,
-  xorg,
+  libxrender,
   libxinerama,
   libxft,
   libxfixes,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
-    xorg.libXrender
+    libxrender
     libxcursor
     libxfixes
     libxext

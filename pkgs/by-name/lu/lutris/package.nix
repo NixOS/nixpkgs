@@ -27,7 +27,7 @@ let
   xorgDeps =
     pkgs: with pkgs; [
       libx11
-      xorg.libXrender
+      libxrender
       libxrandr
       libxcb
       libxmu

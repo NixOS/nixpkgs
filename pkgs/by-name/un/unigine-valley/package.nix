@@ -17,7 +17,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   libglvnd,
   openal,
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libxext
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     libglvnd
     openal
   ];

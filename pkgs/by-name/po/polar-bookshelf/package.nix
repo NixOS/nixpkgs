@@ -23,7 +23,7 @@
   libxcomposite,
   libxext,
   libxfixes,
-  libXrender,
+  libxrender,
   libXtst,
   libXScrnSaver,
   nss,
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libxext
     libxfixes
-    libXrender
+    libxrender
     libXtst
     libXScrnSaver
     nss

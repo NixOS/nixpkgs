@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -71,7 +72,7 @@ let
     libxrandr
     libxcomposite
     libxfixes
-    xorg.libXrender
+    libxrender
     xorg.libXScrnSaver
   ];
 in

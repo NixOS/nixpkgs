@@ -18,7 +18,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   pango,
   perl,
   pkg-config,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxi
     libxrandr
-    libXrender
+    libxrender
   ]
   ++ lib.optional xineramaSupport libxinerama
   ++ lib.optional cupsSupport cups

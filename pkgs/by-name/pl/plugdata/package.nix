@@ -13,6 +13,7 @@
   zenity,
   curl,
   xorg,
+  libxrender,
   libxrandr,
   libxinerama,
   libxext,
@@ -71,7 +72,7 @@ stdenv.mkDerivation {
     libxcursor
     libxext
     libxinerama
-    xorg.libXrender
+    libxrender
     libxrandr
     libxdmcp
     xorg.libXtst

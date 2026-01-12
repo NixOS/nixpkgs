@@ -94,6 +94,7 @@ in
   onnxruntime,
   pango,
   xorg,
+  libxrender,
   libxi,
   libxft,
   libxext,
@@ -572,7 +573,7 @@ buildStdenv.mkDerivation {
       libxext
       libxft
       libxi
-      xorg.libXrender
+      libxrender
       xorg.libXt
       xorg.libXtst
       pixman

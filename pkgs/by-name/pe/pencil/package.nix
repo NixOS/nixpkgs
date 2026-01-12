@@ -24,6 +24,7 @@
   nss,
   pango,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -66,7 +67,7 @@ let
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     (lib.getLib stdenv.cc.cc)
     stdenv.cc.cc

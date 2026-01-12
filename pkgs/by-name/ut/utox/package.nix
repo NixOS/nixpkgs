@@ -13,7 +13,7 @@
   openal,
   freetype,
   libv4l,
-  libXrender,
+  libxrender,
   fontconfig,
   libxext,
   libxft,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     openal
     freetype
     libv4l
-    libXrender
+    libxrender
     fontconfig
     libxext
     libxft

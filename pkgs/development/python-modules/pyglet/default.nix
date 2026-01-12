@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -84,7 +85,7 @@ buildPythonPackage rec {
               elif name == 'Xrandr':
                   path = '${lib.getLib libxrandr}/lib/libXrandr${ext}'
               elif name == 'Xrender':
-                  path = '${lib.getLib xorg.libXrender}/lib/libXrender${ext}'
+                  path = '${lib.getLib libxrender}/lib/libXrender${ext}'
               elif name == 'Xxf86vm':
                   path = '${xorg.libXxf86vm}/lib/libXxf86vm${ext}'
               elif name == 'harfbuzz':

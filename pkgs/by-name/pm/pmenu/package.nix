@@ -9,7 +9,7 @@
   libxext,
   libxft,
   libxinerama,
-  libXrender,
+  libxrender,
   conf ? null,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxft
     libxinerama
-    libXrender
+    libxrender
   ];
 
   postPatch =

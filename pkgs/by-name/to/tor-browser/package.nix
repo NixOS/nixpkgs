@@ -23,7 +23,7 @@
   libxcb,
   libx11,
   libxext,
-  libXrender,
+  libxrender,
   libXt,
   libXtst,
   libgbm,
@@ -80,7 +80,7 @@ let
       libxcb
       libx11
       libxext
-      libXrender
+      libxrender
       libXt
       libXtst
       libgbm

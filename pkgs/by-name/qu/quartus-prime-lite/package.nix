@@ -91,7 +91,7 @@ buildFHSEnv rec {
       fontconfig
       libx11
       libxext
-      xorg.libXrender
+      libxrender
       libxcrypt-legacy
     ];
 

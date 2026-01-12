@@ -51,7 +51,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   makeWrapper,
   ncurses5,
@@ -143,7 +143,7 @@ let
             freetype
             libxext
             libxi
-            libXrender
+            libxrender
             libXtst
             libsecret
 

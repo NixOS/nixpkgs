@@ -8,6 +8,7 @@
   fetchFromGitHub,
   roboto,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -35,7 +36,7 @@ let
     libxi.dev
     libxinerama.dev
     libxrandr.dev
-    xorg.libXrender.dev
+    libxrender.dev
     libxfixes.dev
     xorg.libXxf86vm
     libglvnd.dev

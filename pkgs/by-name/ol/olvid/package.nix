@@ -5,7 +5,7 @@
   zlib,
   libxext,
   libx11,
-  libXrender,
+  libxrender,
   libXtst,
   libxi,
   freetype,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libxext
     libx11
-    libXrender
+    libxrender
     libXtst
     libxi
     freetype

@@ -8,7 +8,7 @@
   libx11,
   pam,
   libgcrypt,
-  libXrender,
+  libxrender,
   imlib2,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libx11
     pam
     libgcrypt
-    libXrender
+    libxrender
     imlib2
   ];
 

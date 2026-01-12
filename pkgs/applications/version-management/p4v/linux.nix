@@ -12,7 +12,7 @@
   libxext,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   libinput,
   libxcb,
@@ -54,7 +54,7 @@ let
       libxext
       libxi
       libxrandr
-      libXrender
+      libxrender
       libXtst
       libinput
       libxcb

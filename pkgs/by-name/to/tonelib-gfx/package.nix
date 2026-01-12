@@ -11,7 +11,7 @@
   libxcursor,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   libjack2,
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     libjack2
   ];
 

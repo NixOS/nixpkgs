@@ -10,6 +10,7 @@
   libva,
   gst_all_1,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -54,7 +55,7 @@ rustPlatform.buildRustPackage {
     libxft
     libxinerama
     libxcursor
-    xorg.libXrender
+    libxrender
     libxfixes
     xorg.libXtst
     libxrandr

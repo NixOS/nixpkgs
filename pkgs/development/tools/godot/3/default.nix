@@ -16,7 +16,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   makeWrapper,
   openssl,
   pkg-config,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (self: {
     libxi
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     openssl
     udev
     yasm

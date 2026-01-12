@@ -27,7 +27,7 @@
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
-  libXrender,
+  libxrender,
   libxcb,
   libxrandr,
   libxinerama,
@@ -162,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     xkeyboard_config
     libxkbcommon
-    libXrender
+    libxrender
     libxcb
     libxrandr
     libxinerama

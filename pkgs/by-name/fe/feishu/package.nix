@@ -29,7 +29,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   libappindicator-gtk3,
   libcxx,
@@ -104,7 +104,7 @@ let
     libxfixes
     libxi
     libxrandr
-    libXrender
+    libxrender
     libXtst
     libappindicator-gtk3
     libcxx

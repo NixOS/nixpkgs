@@ -18,7 +18,7 @@
   libxcomposite,
   libxdamage,
   libxext,
-  libXrender,
+  libxrender,
   libxrandr,
   libxi,
   glib,
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     libxcomposite
     libxdamage
     libxext
-    libXrender
+    libxrender
     libxrandr
     libxi
     glib

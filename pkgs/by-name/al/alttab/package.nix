@@ -12,7 +12,7 @@
   uthash,
   which,
   xnee,
-  xorg,
+  libxrender,
   libxrandr,
   libxpm,
   libxmu,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libxmu
     libxpm
     libxrandr
-    xorg.libXrender
+    libxrender
   ];
 
   enableParallelBuilding = true;

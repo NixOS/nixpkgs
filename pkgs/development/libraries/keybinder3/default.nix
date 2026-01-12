@@ -11,7 +11,7 @@
   gtk3,
   libx11,
   libxext,
-  libXrender,
+  libxrender,
   gobject-introspection,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gtk3
     libx11
     libxext
-    libXrender
+    libxrender
   ];
 
   preConfigure = ''

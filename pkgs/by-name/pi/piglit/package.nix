@@ -21,7 +21,7 @@
   wayland-scanner,
   libxau,
   libx11,
-  libXrender,
+  libxrender,
   libxcb,
   libxkbcommon,
   mesa,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     libglvnd
     libxau
     libx11
-    libXrender
+    libxrender
     libxcb
     libxkbcommon
     (python3.withPackages (

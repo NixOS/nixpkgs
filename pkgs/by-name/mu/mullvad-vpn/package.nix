@@ -21,6 +21,7 @@
   libGL,
   wayland,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -68,7 +69,7 @@ let
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     libxcb
     libxshmfence

@@ -12,7 +12,7 @@
   libxinerama,
   libxpm,
   libxrandr,
-  libXrender,
+  libxrender,
   pkg-config,
   xorgproto,
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxpm
     libxrandr
-    libXrender
+    libxrender
     xorgproto
   ];
 

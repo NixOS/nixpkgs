@@ -8,7 +8,7 @@
   libxft,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   libixp,
   pkg-config,
   txt2tags,
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     libxft
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     libixp
     txt2tags
     which

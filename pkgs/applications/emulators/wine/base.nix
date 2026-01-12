@@ -172,7 +172,7 @@ stdenv.mkDerivation (
             libxfixes
             libxi
             libxrandr
-            xorg.libXrender
+            libxrender
             xorg.libXxf86vm
           ]
         )

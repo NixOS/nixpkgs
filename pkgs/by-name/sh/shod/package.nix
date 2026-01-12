@@ -8,7 +8,7 @@
   libxft,
   libxpm,
   libxrandr,
-  libXrender,
+  libxrender,
   conf ? null,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libxft
     libxpm
     libxrandr
-    libXrender
+    libxrender
   ];
 
   postPatch =

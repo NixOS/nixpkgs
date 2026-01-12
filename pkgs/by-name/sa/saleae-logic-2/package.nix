@@ -49,7 +49,7 @@ appimageTools.wrapType2 {
       libxext
       libxfixes
       libxi
-      xorg.libXrender
+      libxrender
       xorg.libXtst
       nss
       nspr

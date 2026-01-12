@@ -10,7 +10,7 @@
   pkg-config,
 
   # Build Inputs
-  xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxrandr
-    xorg.libXrender
+    libxrender
     libxfixes
     libxi
     libxinerama

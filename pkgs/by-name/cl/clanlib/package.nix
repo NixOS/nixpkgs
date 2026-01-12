@@ -10,7 +10,7 @@
   freetype,
   fontconfig,
   alsa-lib,
-  libXrender,
+  libxrender,
   libxinerama,
   nix-update-script,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     alsa-lib
-    libXrender
+    libxrender
     libxinerama
   ];
 

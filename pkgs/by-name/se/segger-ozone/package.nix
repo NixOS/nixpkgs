@@ -12,7 +12,7 @@
   libxcursor,
   libxfixes,
   libxrandr,
-  libXrender,
+  libxrender,
   makeDesktopItem,
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxfixes
     libxrandr
-    libXrender
+    libxrender
     (lib.getLib stdenv.cc.cc)
   ];
 

@@ -7,7 +7,7 @@
   libclxclient,
   libx11,
   libxft,
-  libXrender,
+  libxrender,
   fftwFloat,
   libjack2,
   zita-alsa-pcmi,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libclxclient
     libx11
     libxft
-    libXrender
+    libxrender
     fftwFloat
     libjack2
     zita-alsa-pcmi

@@ -35,7 +35,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   libdrm,
   libgbm,
@@ -135,7 +135,7 @@ let
       fontconfig
       libxcomposite
       libxfixes
-      libXrender
+      libxrender
       gtk3
       libgnome-keyring
       openssl

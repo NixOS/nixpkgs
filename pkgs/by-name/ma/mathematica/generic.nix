@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libxrender,
   libxrandr,
   libxmu,
   libxi,
@@ -141,7 +142,7 @@ stdenv.mkDerivation {
     libxinerama
     libxmu
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     libxcb
   ]

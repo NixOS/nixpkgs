@@ -34,7 +34,7 @@
   libxinerama,
   libxkbcommon,
   libxrandr,
-  libXrender,
+  libxrender,
   makeWrapper,
   mbedtls,
   miniupnpc,
@@ -502,7 +502,7 @@ let
           libxi
           libxinerama
           libxrandr
-          libXrender
+          libxrender
         ]
         ++ lib.optionals withWayland [
           libdecor

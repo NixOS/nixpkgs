@@ -15,7 +15,7 @@
   libxfixes,
   libxcursor,
   libxft,
-  libXrender,
+  libxrender,
 
   withGL ? true,
   libGL,
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libxcursor
     libxft
-    libXrender
+    libxrender
   ]
   ++ lib.optionals withWayland [
     wayland

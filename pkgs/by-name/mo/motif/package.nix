@@ -9,7 +9,7 @@
   xbitmaps,
   libxext,
   libxft,
-  libXrender,
+  libxrender,
   libxmu,
   libXt,
   expat,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     xbitmaps
     libxext
     libxft
-    libXrender
+    libxrender
     libxmu
     libXt
     expat

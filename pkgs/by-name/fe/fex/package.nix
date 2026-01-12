@@ -23,7 +23,7 @@
   libdrm,
   libGL,
   wayland,
-  xorg,
+  libxrender,
   libxrandr,
   libx11,
   xorgproto,
@@ -42,7 +42,7 @@ let
     libx11
     libxcb
     libxrandr
-    xorg.libXrender
+    libxrender
     xorgproto
   ];
 

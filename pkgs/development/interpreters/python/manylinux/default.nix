@@ -56,7 +56,7 @@ let
       "libresolv.so.2" = glibc;
       "libX11.so.6" = libx11;
       "libXext.so.6" = libxext;
-      "libXrender.so.1" = xorg.libXrender;
+      "libXrender.so.1" = libxrender;
       "libICE.so.6" = libice;
       "libSM.so.6" = libsm;
       "libGL.so.1" = libGL;

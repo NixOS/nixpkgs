@@ -11,7 +11,7 @@
   libxrandr,
   libxfixes,
   libxext,
-  libXrender,
+  libxrender,
   libxinerama,
   libjpeg,
   zlib,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     libcacard
     libjpeg
     libopus

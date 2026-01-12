@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
     xorg.libXScrnSaver
     xorg.libXtst
     makeWrapper

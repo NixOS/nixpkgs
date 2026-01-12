@@ -35,6 +35,7 @@
   systemd,
   udev,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -82,7 +83,7 @@ let
       libxfixes
       libxi
       libxrandr
-      xorg.libXrender
+      libxrender
       xorg.libXtst
       libxshmfence
       # libnw-specific (not chromium dependencies)

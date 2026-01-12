@@ -8,7 +8,7 @@
   jdk17,
   lib,
   libx11,
-  libXrender,
+  libxrender,
   libXtst,
   makeDesktopItem,
   makeWrapper,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
         freetype
         fontconfig
         libx11
-        libXrender
+        libxrender
         zlib
       ]
     } $libCairo
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     gtk3
     jdk
     libx11
-    libXrender
+    libxrender
     libXtst
     zlib
     shared-mime-info

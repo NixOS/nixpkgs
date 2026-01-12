@@ -28,6 +28,7 @@
   libasyncns,
   pango,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -82,7 +83,7 @@ let
     libxdmcp
     libxext
     libxcursor
-    xorg.libXrender
+    libxrender
     libxfixes
     libxinerama
     libxi

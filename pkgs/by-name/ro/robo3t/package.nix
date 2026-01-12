@@ -5,7 +5,7 @@
   curlWithGnuTls,
   zlib,
   glib,
-  xorg,
+  libxrender,
   libxi,
   libxext,
   libx11,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     glib
     libxi
     libxcb
-    xorg.libXrender
+    libxrender
     libx11
     libsm
     libice

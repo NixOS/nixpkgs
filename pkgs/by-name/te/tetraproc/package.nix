@@ -13,7 +13,7 @@
   libclxclient,
   libsndfile,
   libxcb,
-  xorg,
+  libxrender,
   libxft,
   libxdmcp,
   libxau,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libxau
     libxdmcp
     libxft
-    xorg.libXrender
+    libxrender
   ];
 
   makeFlags = [

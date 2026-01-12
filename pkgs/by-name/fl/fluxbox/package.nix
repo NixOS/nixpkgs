@@ -9,7 +9,7 @@
   libxft,
   libxpm,
   libxrandr,
-  libXrender,
+  libxrender,
   xorgproto,
   libxinerama,
   imlib2,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libxft
     libxpm
     libxrandr
-    libXrender
+    libxrender
     xorgproto
     libxinerama
     imlib2

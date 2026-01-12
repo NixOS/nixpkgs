@@ -32,7 +32,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXScrnSaver,
   libXtst,
   libgbm,
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxrandr
-    libXrender
+    libxrender
     libXScrnSaver
     libXtst
     libgbm

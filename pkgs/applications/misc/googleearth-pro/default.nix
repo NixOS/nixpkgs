@@ -11,7 +11,7 @@
 
   libxcomposite,
   libxi,
-  libXrender,
+  libxrender,
   libx11,
 
   libxcb,
@@ -67,7 +67,7 @@ mkDerivation rec {
     libx11
     libxcomposite
     libxi
-    libXrender
+    libxrender
     libproxy
     libxcb
     libxml2_13

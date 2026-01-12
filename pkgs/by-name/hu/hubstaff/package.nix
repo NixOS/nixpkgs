@@ -10,7 +10,7 @@
   libice,
   libxext,
   freetype,
-  libXrender,
+  libxrender,
   fontconfig,
   libxft,
   libxinerama,
@@ -40,7 +40,7 @@ let
     libice
     libxext
     freetype
-    libXrender
+    libxrender
     fontconfig
     libxft
     libxinerama

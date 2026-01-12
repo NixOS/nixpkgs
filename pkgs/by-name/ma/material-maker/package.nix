@@ -12,7 +12,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   nix-update-script,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libxrandr
-    libXrender
+    libxrender
     libx11
     libxi
     libxfixes

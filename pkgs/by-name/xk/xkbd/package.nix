@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libXrender,
+  libxrender,
   libxft,
   xorgproto,
   xinput,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
-    libXrender
+    libxrender
     libxft
     libxext
     libXtst

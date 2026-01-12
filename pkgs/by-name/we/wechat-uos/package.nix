@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxft,
@@ -118,7 +119,7 @@ let
     libva
     freetype
     fontconfig
-    xorg.libXrender
+    libxrender
     libuuid
     expat
     glib

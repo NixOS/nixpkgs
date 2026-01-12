@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxrender,
   libxrandr,
   libxinerama,
   libxdamage,
@@ -75,7 +76,7 @@ let
       libxdamage
       libxinerama
       libxrandr
-      xorg.libXrender
+      libxrender
       xorg.libXtst
       libxshmfence
       xorg.xcbutilimage

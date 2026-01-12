@@ -7,7 +7,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   fontconfig,
   freetype,
   openal,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
         stdenv.cc.cc
         libx11
         libxext
-        libXrender
+        libxrender
         fontconfig
         freetype
       ]
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
         stdenv.cc.cc
         libx11
         libxext
-        libXrender
+        libxrender
         fontconfig
         freetype
       ]
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
         stdenv.cc.cc
         libx11
         libxext
-        libXrender
+        libxrender
         fontconfig
         freetype
       ]

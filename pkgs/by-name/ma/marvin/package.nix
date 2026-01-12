@@ -15,7 +15,7 @@
   libx11,
   libxext,
   libXtst,
-  libXrender,
+  libxrender,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libXtst
-    libXrender
+    libxrender
   ];
 
   unpackPhase = ''

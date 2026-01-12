@@ -30,7 +30,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   libdrm,
   libkrb5,
@@ -121,7 +121,7 @@ let
     libxfixes
     libxi
     libxrandr
-    libXrender
+    libxrender
     libxshmfence
     libXtst
     libuuid

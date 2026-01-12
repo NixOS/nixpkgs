@@ -15,7 +15,7 @@
   openal,
   quesoglc,
   clanlib,
-  libXrender,
+  libxrender,
   libmikmod,
   alsa-lib,
   nix-update-script,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     quesoglc
     clanlib
-    libXrender
+    libxrender
     libxinerama
     libmikmod
     alsa-lib

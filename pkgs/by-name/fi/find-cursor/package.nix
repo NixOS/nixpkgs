@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libxdamage,
-  libXrender,
+  libxrender,
   libxcomposite,
   libxext,
   installShellFiles,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxdamage
-    libXrender
+    libxrender
     libxcomposite
     libxext
   ];

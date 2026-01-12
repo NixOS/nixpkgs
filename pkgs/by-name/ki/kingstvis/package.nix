@@ -8,7 +8,7 @@
   lib,
   libGL,
   xkeyboard_config,
-  xorg,
+  libxrender,
   libxi,
   libxext,
   libx11,
@@ -42,7 +42,7 @@ buildFHSEnv {
     libx11
     libxext
     libxi
-    xorg.libXrender
+    libxrender
     libxcb
     zlib
   ];

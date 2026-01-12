@@ -7,7 +7,7 @@
   freetype,
   fontconfig,
   libx11,
-  libXrender,
+  libxrender,
   zlib,
   glib,
   gtk3,
@@ -57,7 +57,7 @@ let
       freetype
       fontconfig
       libx11
-      libXrender
+      libxrender
       zlib
       jdk
       glib

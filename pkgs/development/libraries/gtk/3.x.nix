@@ -29,7 +29,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
-  xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxinerama,
@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
     libxi
     libxrandr
-    xorg.libXrender
+    libxrender
   ]
   ++ [
     # TODO: Reorder me on `staging`.

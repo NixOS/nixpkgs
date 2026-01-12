@@ -18,7 +18,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXrender,
+  libxrender,
   libglvnd,
   libpulseaudio,
   perl,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libxi
     libxinerama
     libxrandr
-    libXrender
+    libxrender
     libglvnd
     libpulseaudio
     perl

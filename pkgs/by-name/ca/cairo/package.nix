@@ -16,7 +16,7 @@
   zlib,
   x11Support ? !stdenv.hostPlatform.isDarwin || true,
   libxext,
-  libXrender,
+  libxrender,
   gobjectSupport ? true,
   glib,
   xcbSupport ? x11Support,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (
     ]
     ++ optionals x11Support [
       libxext
-      libXrender
+      libxrender
     ]
     ++ optionals xcbSupport [ libxcb ]
     ++ optional gobjectSupport glib; # TODO: maybe liblzo but what would it be for here?

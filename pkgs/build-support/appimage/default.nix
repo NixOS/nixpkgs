@@ -162,7 +162,7 @@ rec {
         libxinerama
         libxdamage
         libxcursor
-        xorg.libXrender
+        libxrender
         xorg.libXScrnSaver
         xorg.libXxf86vm
         libxi

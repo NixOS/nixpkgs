@@ -15,7 +15,7 @@
   libxext,
   libxmu,
   libxrandr,
-  libXrender,
+  libxrender,
 
   # For fixing up execution of /bin/ls, which is necessary for
   # product unlocking.
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     libxext
     libxmu
     libxrandr
-    libXrender
+    libxrender
     (lib.getLib stdenv.cc.cc)
   ];
 

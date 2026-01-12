@@ -146,7 +146,7 @@ buildFHSEnv {
       # for running Electron before 11.0.0 inside
       libxcursor
       libxi
-      xorg.libXrender
+      libxrender
       xorg.libXtst
 
       # for running Electron before 10.0.0 inside

@@ -21,7 +21,7 @@
   libxfixes,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   libdrm,
   libpulseaudio,
@@ -66,7 +66,7 @@ let
     stdenv.cc.cc
     libXScrnSaver
     libxcursor
-    libXrender
+    libxrender
     libXtst
     libpulseaudio
     udev

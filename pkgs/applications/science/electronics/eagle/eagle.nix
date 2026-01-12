@@ -4,7 +4,7 @@
   mkDerivation,
   fetchurl,
   makeDesktopItem,
-  libXrender,
+  libxrender,
   libxrandr,
   libxcursor,
   libx11,
@@ -27,7 +27,7 @@
 
 let
   libPath = lib.makeLibraryPath [
-    libXrender
+    libxrender
     libxrandr
     libxcursor
     libx11
@@ -70,7 +70,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    libXrender
+    libxrender
     libxrandr
     libxcursor
     libx11

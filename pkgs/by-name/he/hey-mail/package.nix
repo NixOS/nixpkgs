@@ -31,6 +31,7 @@
   pango,
   cairo,
   xorg,
+  libxrender,
   libxrandr,
   libxi,
   libxfixes,
@@ -79,7 +80,7 @@ let
     libxext
     libxfixes
     libxi
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     libxrandr
     ffmpeg

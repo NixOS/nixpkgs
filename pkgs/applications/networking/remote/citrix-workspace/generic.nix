@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  libxrender,
   libxmu,
   libxinerama,
   libxfixes,
@@ -228,7 +229,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxinerama
     libxmu
-    xorg.libXrender
+    libxrender
     xorg.libXtst
     libxcb
     xdpyinfo

@@ -29,7 +29,7 @@
   libxext,
   libxi,
   libxrandr,
-  libXrender,
+  libxrender,
   libXtst,
   makeFontsConf,
   makeWrapper,
@@ -109,7 +109,7 @@ let
             freetype
             libxext
             libxi
-            libXrender
+            libxrender
             libXtst
             libx11
 

@@ -32,7 +32,7 @@
   libx11,
   libice,
   libxext,
-  libXrender,
+  libxrender,
   libXtst,
   libXt,
   libxi,
@@ -279,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libice
     libxext
-    libXrender
+    libxrender
     libXtst
     libXt
     libxi

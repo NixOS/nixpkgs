@@ -8,7 +8,7 @@
   libxrandr,
   freetype,
   fontconfig,
-  libXrender,
+  libxrender,
   libxinerama,
   autoPatchelfHook,
   libglvnd,
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     libxrandr
     freetype
     fontconfig
-    libXrender
+    libxrender
     libxinerama
   ];
 

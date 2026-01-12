@@ -32,7 +32,7 @@
   libxcomposite,
   libxext,
   libxfixes,
-  libXrender,
+  libxrender,
   libXtst,
   libXScrnSaver,
   nss,
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     libxfixes
     libxi
     libxrandr
-    libXrender
+    libxrender
     libXtst
     libappindicator-gtk3
     libpulseaudio

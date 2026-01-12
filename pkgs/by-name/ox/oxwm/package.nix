@@ -5,7 +5,7 @@
   pkg-config,
   libx11,
   libxft,
-  libXrender,
+  libxrender,
   freetype,
   fontconfig,
   versionCheckHook,
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libx11
     libxft
-    libXrender
+    libxrender
     freetype
     fontconfig
   ];

@@ -10,7 +10,7 @@
   libxinerama,
   libxrandr,
   libxft,
-  libXrender,
+  libxrender,
   libxdmcp,
   libxfixes,
   freetype,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libxinerama
     libxrandr
     libxft
-    libXrender
+    libxrender
     libxdmcp
     libxfixes
     freetype
