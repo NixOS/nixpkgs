@@ -133,7 +133,7 @@ class QemuStartCommand:
         """A start script from nixos/modules/virtualiation/qemu-vm.nix.
         These Nix commands have the particular characteristic that the
         machine name can be extracted out of them via a regex match.
-        (Admittedly a _very_ implicit contract, evtl. TODO fix)
+        (Admittedly a _very_ implicit contract, TODO fix this eventually.)
         """
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
@@ -1503,15 +1503,15 @@ class NspawnMachine(BaseMachine):
         else:
             raise RuntimeError(f"Failed to start container {self.name}")
 
-        childs = (
+        children = (
             Path(f"/proc/{systemd_nspawn_pid}/task/{systemd_nspawn_pid}/children")
             .read_text()
             .split()
         )
-        assert len(childs) == 1, (
-            f"Expected exactly one child process for systemd-nspawn, got {childs}"
+        assert len(children) == 1, (
+            f"Expected exactly one child process for systemd-nspawn, got {children}"
         )
-        (child,) = childs
+        (child,) = children
 
         try:
             return int(child)
@@ -1571,7 +1571,7 @@ class NspawnMachine(BaseMachine):
 
         self.pid = self.process.pid
 
-        self.log(f"system-nspawn running (pid {self.pid})")
+        self.log(f"systemd-nspawn running (pid {self.pid})")
 
     def wait_for_shutdown(self) -> None:
         if self.process is None:
