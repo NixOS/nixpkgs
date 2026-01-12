@@ -13,6 +13,7 @@
   which,
   xnee,
   xorg,
+  xeyes,
   python3Packages,
 }:
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     python3Packages.xvfbwrapper
     which
     xnee
-    xorg.xeyes
+    xeyes
     xorg.xprop
   ];
 

@@ -5,6 +5,7 @@
   fetchPypi,
   pytestCheckHook,
   xorg,
+  xeyes,
   libxcb,
 }:
 
@@ -29,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    xorg.xeyes
+    xeyes
     xorg.xvfb
   ];
 
