@@ -14,12 +14,12 @@
 }:
 let
   pname = "opencode";
-  version = "1.1.11";
+  version = "1.1.14";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256-PZB9XsuUr8EzXDhlzM3tKANFAXc19RheIyxSXjLuZrM=";
+    hash = "sha256-B0NkJ4HSxgdjBuydvjcNcoaW5WIYcuKV8qHYapAaDmU=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
