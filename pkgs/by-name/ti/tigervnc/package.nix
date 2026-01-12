@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  xsetroot,
   xorgproto,
   xkbcomp,
   xauth,
@@ -113,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeBinPath [
             xterm
             xorg.twm
-            xorg.xsetroot
+            xsetroot
             xauth
           ]
         }

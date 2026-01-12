@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  xsetroot,
   makeWrapper,
 }:
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/xscreenruler \
-      --prefix PATH : ${lib.makeBinPath [ xorg.xsetroot ]}
+      --prefix PATH : ${lib.makeBinPath [ xsetroot ]}
   '';
 
   meta = {
