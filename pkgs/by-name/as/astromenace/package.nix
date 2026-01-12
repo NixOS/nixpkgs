@@ -6,7 +6,7 @@
   cmake,
   ninja,
   makeWrapper,
-  xorg,
+  libxinerama,
   libx11,
   libice,
   libGLU,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libice
     libx11
-    xorg.libXinerama
+    libxinerama
     libGLU
     libGL
     SDL2

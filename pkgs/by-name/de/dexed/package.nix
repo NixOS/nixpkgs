@@ -7,7 +7,7 @@
   pkg-config,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxext,
   libxcursor,
   freetype,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxcursor
-    libXinerama
+    libxinerama
     libXrandr
     freetype
     alsa-lib

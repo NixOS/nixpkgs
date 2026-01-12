@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   xorg ? null,
+  libxinerama,
   libxext,
   libxcursor,
   libx11,
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     # glfw-sys dependencies:
     libx11
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
     libxcursor
     xorg.libXi
     libxext

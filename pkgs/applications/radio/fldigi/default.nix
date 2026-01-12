@@ -10,7 +10,7 @@
   libsndfile,
   libsamplerate,
   libpulseaudio,
-  libXinerama,
+  libxinerama,
   gettext,
   pkg-config,
   alsa-lib,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libXinerama
+    libxinerama
     gettext
     hamlib
     fltk13

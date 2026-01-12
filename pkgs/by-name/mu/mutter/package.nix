@@ -30,7 +30,7 @@
   libxkbcommon,
   libxcb,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxau,
   libinput,
   libdrm,
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxcb
     libXrandr
-    libXinerama
+    libxinerama
     libxau
 
     # for gdctl and gnome-service-client shebangs

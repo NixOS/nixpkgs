@@ -12,7 +12,7 @@
   libxcursor,
   libxext,
   libXi,
-  libXinerama,
+  libxinerama,
   libxkbcommon,
   libXrandr,
   libXScrnSaver,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxext
     libXi
-    libXinerama
+    libxinerama
     libxkbcommon
     libXrandr
     libXScrnSaver

@@ -159,7 +159,7 @@ rec {
         zlib
         gdk-pixbuf
 
-        xorg.libXinerama
+        libxinerama
         libxdamage
         libxcursor
         xorg.libXrender

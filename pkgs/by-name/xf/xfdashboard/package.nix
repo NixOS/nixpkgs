@@ -10,7 +10,7 @@
   clutter,
   gettext,
   libxcomposite,
-  libXinerama,
+  libxinerama,
   libxdamage,
   libx11,
   libwnck,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcomposite
     libxdamage
-    libXinerama
+    libxinerama
     libwnck
     libxfce4ui
     libxfce4util

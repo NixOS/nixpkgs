@@ -5,7 +5,7 @@
   pam ? null,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   libxdmcp,
   libXt,
   autoreconfHook,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     pam
     libx11
     libxext.dev
-    libXinerama
+    libxinerama
     libxdmcp
     libXt
   ];

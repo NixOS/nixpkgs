@@ -11,7 +11,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libjack2,
   libopus,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
   ];
 

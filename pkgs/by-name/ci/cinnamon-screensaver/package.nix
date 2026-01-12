@@ -23,6 +23,7 @@
   cairo,
   xdotool,
   xorg,
+  libxinerama,
   libxext,
   libx11,
   iso-flags-png-320x240,
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     glib
 
     libxext
-    xorg.libXinerama
+    libxinerama
     libx11
     xorg.libXrandr
 

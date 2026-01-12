@@ -39,6 +39,7 @@
   ant,
   cups,
   xorg,
+  libxinerama,
   libxext,
   libxdmcp,
   libxaw,
@@ -444,7 +445,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxdmcp
       libxext
       xorg.libXi
-      xorg.libXinerama
+      libxinerama
       xorg.libXtst
       libabw
       libargon2

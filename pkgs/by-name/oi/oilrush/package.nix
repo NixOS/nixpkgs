@@ -5,7 +5,7 @@
   fetchurl,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   fontconfig,
@@ -92,7 +92,7 @@ stdenv.mkDerivation {
         stdenv.cc.cc
         libx11
         libxext
-        libXinerama
+        libxinerama
         libXrandr
       ]
     }\
@@ -102,7 +102,7 @@ stdenv.mkDerivation {
         stdenv.cc.cc
         libx11
         libxext
-        libXinerama
+        libxinerama
         libXrandr
       ]
     }\

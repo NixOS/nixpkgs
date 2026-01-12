@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXinerama,
+  libxinerama,
   xcbutil,
   xcbutilkeysyms,
   xcbutilwm,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxcb
-    libXinerama
+    libxinerama
     xcbutil
     xcbutilkeysyms
     xcbutilwm

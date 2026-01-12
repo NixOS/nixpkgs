@@ -6,7 +6,7 @@
   libx11,
   libxext,
   libxft,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   libixp,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     libxft
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
     libixp

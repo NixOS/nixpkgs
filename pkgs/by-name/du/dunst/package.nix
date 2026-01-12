@@ -18,7 +18,7 @@
   libXScrnSaver,
   wayland,
   wayland-protocols,
-  libXinerama,
+  libxinerama,
   libnotify,
   pango,
   xorgproto,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withX11 [
     libx11
     libXScrnSaver
-    libXinerama
+    libxinerama
     xorgproto
     libXrandr
   ]

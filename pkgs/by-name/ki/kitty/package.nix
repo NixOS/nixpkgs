@@ -13,7 +13,7 @@
   libGL,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxcursor,
   libxkbcommon,
   libXi,
@@ -89,7 +89,7 @@ buildPythonApplication rec {
     libcanberra
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxcursor
     libxkbcommon
     libXi

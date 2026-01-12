@@ -19,7 +19,7 @@
   libsm,
   libxdmcp,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXxf86vm,
   libao,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libxdmcp
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libXxf86vm
     libao

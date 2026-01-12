@@ -6,7 +6,7 @@
   fontconfig,
   libx11,
   libxft,
-  libXinerama,
+  libxinerama,
   conf ? null,
   nix-update-script,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     fontconfig
     libx11
     libxft
-    libXinerama
+    libxinerama
   ];
 
   postPatch = ''

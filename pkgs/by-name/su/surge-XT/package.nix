@@ -12,7 +12,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
 
   buildVST3 ? true,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
   ]
   ++ lib.optionals buildLV2 [ lv2 ];

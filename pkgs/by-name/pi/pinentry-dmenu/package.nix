@@ -5,7 +5,7 @@
   fontconfig,
   gpgme,
   libx11,
-  libXinerama,
+  libxinerama,
   libxft,
   pkg-config,
   zlib,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libconfig
     libgpg-error
     libx11
-    libXinerama
+    libxinerama
     libxft
   ];
 

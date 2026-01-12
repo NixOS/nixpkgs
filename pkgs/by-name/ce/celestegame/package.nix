@@ -139,7 +139,7 @@ buildFHSEnv {
       libxext
       libxcb
       libxcursor
-      xorg.libXinerama
+      libxinerama
       xorg.libXi
       xorg.libXrandr
       xorg.libXScrnSaver

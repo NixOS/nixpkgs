@@ -9,7 +9,7 @@
   libice,
   libsm,
   libxcrypt,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXtst,
   librep,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libxcrypt
-    libXinerama
+    libxinerama
     libXrandr
     libXtst
     librep

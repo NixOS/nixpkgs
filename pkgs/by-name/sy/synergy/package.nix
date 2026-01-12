@@ -20,7 +20,7 @@
   libXi,
   libXtst,
   libXrandr,
-  libXinerama,
+  libxinerama,
   xkeyboardconfig,
   xinput,
   avahi-compat,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     libXi
     libXtst
     libXrandr
-    libXinerama
+    libxinerama
     libxkbfile
     xinput
     avahi-compat

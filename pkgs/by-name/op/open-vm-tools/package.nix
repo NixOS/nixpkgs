@@ -18,7 +18,7 @@
   rpcsvc-proto,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   libXi,
   libXrender,
   libXrandr,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     libx11
     libxext
-    libXinerama
+    libxinerama
     libXi
     libXrender
     libXrandr

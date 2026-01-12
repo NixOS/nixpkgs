@@ -10,7 +10,7 @@
   zlib,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxcursor,
   libXi,
   libxext,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxcursor
     libXi
     libxext

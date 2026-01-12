@@ -38,7 +38,7 @@ let
             libxdmcp
             libxext
             xorg.libXi
-            xorg.libXinerama
+            libxinerama
             xorg.libXmu
             xorg.libXrandr
             xorg.libXrender

@@ -10,7 +10,7 @@
   # dependencies
   glib,
   libxfixes,
-  libXinerama,
+  libxinerama,
   catch2,
   gperf,
 
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    libXinerama
+    libxinerama
   ]
   ++ lib.optional ncursesSupport ncurses
   ++ lib.optionals x11Support [

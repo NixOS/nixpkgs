@@ -8,7 +8,7 @@
   libxft,
   libxcursor,
   libXrandr,
-  libXinerama,
+  libxinerama,
   xinput,
   libXi,
   libXxf86vm,
@@ -36,7 +36,7 @@ buildGoModule rec {
     libxft
     libxcursor
     libXrandr
-    libXinerama
+    libxinerama
     libXi
     xinput
     libXxf86vm

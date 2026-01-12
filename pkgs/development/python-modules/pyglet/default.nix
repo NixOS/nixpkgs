@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   xorg,
+  libxinerama,
   libxext,
   libx11,
   pytestCheckHook,
@@ -77,7 +78,7 @@ buildPythonPackage rec {
               elif name == 'Xi':
                   path = '${xorg.libXi}/lib/libXi${ext}'
               elif name == 'Xinerama':
-                  path = '${xorg.libXinerama}/lib/libXinerama${ext}'
+                  path = '${libxinerama}/lib/libXinerama${ext}'
               elif name == 'Xrandr':
                   path = '${lib.getLib xorg.libXrandr}/lib/libXrandr${ext}'
               elif name == 'Xrender':

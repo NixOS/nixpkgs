@@ -13,7 +13,7 @@
   libXrender,
   fontconfig,
   libxft,
-  libXinerama,
+  libxinerama,
   libxcursor,
   cairo,
   libxfixes,
@@ -43,7 +43,7 @@ let
     libXrender
     fontconfig
     libxft
-    libXinerama
+    libxinerama
     stdenv.cc.cc
     libnotify
     glib

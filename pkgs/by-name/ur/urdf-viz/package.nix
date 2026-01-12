@@ -5,6 +5,7 @@
   stdenv,
   libGL,
   xorg,
+  libxinerama,
   libxcursor,
   libx11,
   lib,
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
     xorg.libXi
   ];
 
@@ -54,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
     xorg.libXi
   ];
 

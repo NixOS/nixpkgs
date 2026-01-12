@@ -8,7 +8,7 @@
   libXtst,
   libXi,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   glib,
   cairo,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     libXtst
     libXi
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     glib
     cairo

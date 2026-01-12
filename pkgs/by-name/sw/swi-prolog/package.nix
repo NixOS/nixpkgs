@@ -37,7 +37,7 @@
   libXpm,
   libxext,
   libxft,
-  libXinerama,
+  libxinerama,
   libjpeg,
   libXt,
   libsm,
@@ -106,7 +106,7 @@ let
       libxext
       libXpm
       libxft
-      libXinerama
+      libxinerama
       libjpeg
       libsm
       freetype

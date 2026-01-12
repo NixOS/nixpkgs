@@ -9,7 +9,7 @@
   raylib,
   SDL2,
   tkrzw,
-  xorg,
+  libxinerama,
   libxft,
   libx11,
 }:
@@ -110,7 +110,7 @@
       buildInputs = buildInputs ++ [
         libx11
         libxft
-        xorg.libXinerama
+        libxinerama
       ];
     };
 

@@ -8,7 +8,7 @@
   libGL,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libjack2,
   pkg-config,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libjack2
   ];

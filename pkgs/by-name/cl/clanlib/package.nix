@@ -11,7 +11,7 @@
   fontconfig,
   alsa-lib,
   libXrender,
-  libXinerama,
+  libxinerama,
   nix-update-script,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     alsa-lib
     libXrender
-    libXinerama
+    libxinerama
   ];
 
   passthru.updateScript = nix-update-script { };

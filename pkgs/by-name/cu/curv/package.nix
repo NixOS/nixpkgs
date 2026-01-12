@@ -13,6 +13,7 @@
   openexr,
   onetbb,
   xorg,
+  libxinerama,
   libxext,
   libxcursor,
   libx11,
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
     libxcursor
     libxext
     xorg.libXi
-    xorg.libXinerama
+    libxinerama
     xorg.libXrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

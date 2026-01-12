@@ -9,7 +9,7 @@
   libxext,
   libxfixes,
   libxcomposite,
-  libXinerama,
+  libxinerama,
   pkg-config,
   libbsd,
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxcomposite
-    libXinerama
+    libxinerama
     libbsd
   ];
 

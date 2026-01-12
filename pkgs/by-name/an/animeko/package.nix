@@ -7,7 +7,7 @@
   autoPatchelfHook,
   jetbrains, # Requird by upstream due to JCEF dependency
   fontconfig,
-  libXinerama,
+  libxinerama,
   libXrandr,
   file,
   gtk3,
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
+    libxinerama
     libXrandr
     file
     shine

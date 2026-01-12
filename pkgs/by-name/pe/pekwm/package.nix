@@ -7,7 +7,7 @@
   grep,
   libxext,
   libxft,
-  libXinerama,
+  libxinerama,
   libXpm,
   libXrandr,
   libjpeg,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxext
     libxft
-    libXinerama
+    libxinerama
     libXpm
     libXrandr
     libjpeg

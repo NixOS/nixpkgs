@@ -23,7 +23,7 @@
   libGL,
   libsm,
   libxext,
-  libXinerama,
+  libxinerama,
   libXpm,
   libarchive,
   libass,
@@ -204,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals skins2Support [
     libxext
-    libXinerama
+    libxinerama
     libXpm
   ]
   ++ optionals waylandSupport [

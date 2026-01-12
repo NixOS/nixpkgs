@@ -11,7 +11,7 @@
   libx11,
   libxcursor,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
 }:
 
@@ -48,7 +48,7 @@ buildDunePackage rec {
     libx11
     libxcursor
     libXi
-    libXinerama
+    libxinerama
     libXrandr
   ];
 

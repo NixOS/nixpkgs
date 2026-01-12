@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   xorg,
+  libxinerama,
   libx11,
   imlib2Full,
   libjpeg,
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xorg.libXt
     libx11
-    xorg.libXinerama
+    libxinerama
     imlib2Full
     libjpeg
     libpng

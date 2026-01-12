@@ -10,6 +10,7 @@
   libva,
   gst_all_1,
   xorg,
+  libxinerama,
   libxft,
   libxfixes,
   libxext,
@@ -49,7 +50,7 @@ rustPlatform.buildRustPackage {
     gst_all_1.gst-plugins-base
     libxext
     libxft
-    xorg.libXinerama
+    libxinerama
     libxcursor
     xorg.libXrender
     libxfixes

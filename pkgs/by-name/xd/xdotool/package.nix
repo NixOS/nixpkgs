@@ -8,7 +8,7 @@
   libXtst,
   xorgproto,
   libXi,
-  libXinerama,
+  libxinerama,
   libxkbcommon,
   libxext,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libXtst
     xorgproto
     libXi
-    libXinerama
+    libxinerama
     libxkbcommon
     libxext
   ];

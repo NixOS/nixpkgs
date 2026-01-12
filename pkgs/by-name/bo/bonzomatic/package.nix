@@ -8,7 +8,7 @@
   fontconfig,
   mesa_glu,
   libxcursor,
-  libXinerama,
+  libxinerama,
   libXrandr,
   xinput,
   libXi,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     mesa_glu
     libxcursor
-    libXinerama
+    libxinerama
     libXrandr
     xinput
     libXi

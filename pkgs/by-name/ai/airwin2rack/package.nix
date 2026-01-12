@@ -9,6 +9,7 @@
   pkg-config,
   alsa-lib,
   xorg,
+  libxinerama,
   libxext,
   libxdmcp,
   libxcursor,
@@ -107,7 +108,7 @@ stdenv.mkDerivation {
     libxcomposite
     libxcursor
     libxext
-    xorg.libXinerama
+    libxinerama
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst

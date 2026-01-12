@@ -13,7 +13,7 @@
   libx11,
   gdk-pixbuf,
   pango,
-  libXinerama,
+  libxinerama,
   mpg123,
   runtimeShell,
 }:
@@ -30,7 +30,7 @@ let
     libx11
     gdk-pixbuf
     pango
-    libXinerama
+    libxinerama
   ];
 
 in

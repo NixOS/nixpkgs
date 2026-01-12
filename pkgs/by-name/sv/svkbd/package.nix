@@ -7,7 +7,7 @@
   libx11,
   libxft,
   libXi,
-  libXinerama,
+  libxinerama,
   libXtst,
   layout ? "mobile-intl",
   conf ? null,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxft
     libXi
-    libXinerama
+    libxinerama
     libXtst
   ];
 

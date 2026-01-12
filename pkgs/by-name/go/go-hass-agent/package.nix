@@ -9,6 +9,7 @@
   writableTmpDirAsHomeHook,
   libglvnd,
   xorg,
+  libxinerama,
   libxcursor,
   go,
   nix-update-script,
@@ -55,7 +56,7 @@ buildGoModule (finalAttrs: {
     libglvnd
     libxcursor
     xorg.libXi
-    xorg.libXinerama
+    libxinerama
     xorg.libXrandr
     xorg.libXxf86vm
   ];

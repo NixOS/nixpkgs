@@ -97,7 +97,7 @@
   libXt,
   libXmu,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXtst,
   libxfixes,
@@ -356,7 +356,7 @@ stdenv.mkDerivation (
       libXmu
       libxext.dev
       libxdmcp
-      libXinerama
+      libxinerama
       libXrandr.dev
       libXtst
       libxfixes

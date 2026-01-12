@@ -10,7 +10,7 @@
   libGL,
   libGLU,
   libsm,
-  libXinerama,
+  libxinerama,
   libXtst,
   libXxf86vm,
   libnotify,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     gspell # wxTextCtrl spell checking
     gtk3
     libsm
-    libXinerama
+    libxinerama
     libXtst
     libXxf86vm
     libnotify # wxNotificationMessage backend

@@ -7,6 +7,7 @@
   dotool,
   libGL,
   xorg,
+  libxinerama,
   libxcursor,
   libx11,
   libxkbcommon,
@@ -43,7 +44,7 @@ buildGoModule (finalAttrs: {
     libx11.dev
     libxcursor
     xorg.libXi
-    xorg.libXinerama
+    libxinerama
     xorg.libXrandr
     xorg.libXxf86vm
     libxkbcommon

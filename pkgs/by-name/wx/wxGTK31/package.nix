@@ -8,7 +8,7 @@
   libGL,
   libGLU,
   libsm,
-  libXinerama,
+  libxinerama,
   libXtst,
   libXxf86vm,
   pkg-config,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
     libsm
-    libXinerama
+    libxinerama
     libXtst
     libXxf86vm
     xorgproto

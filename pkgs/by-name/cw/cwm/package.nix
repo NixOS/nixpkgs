@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libxft,
   bison,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libx11
-    libXinerama
+    libxinerama
     libXrandr
     libxft
   ];

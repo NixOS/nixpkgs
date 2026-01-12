@@ -9,7 +9,7 @@
   freetype,
   fontconfig,
   libXrender,
-  libXinerama,
+  libxinerama,
   autoPatchelfHook,
   libglvnd,
   openal,
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     freetype
     fontconfig
     libXrender
-    libXinerama
+    libxinerama
   ];
 
   dontUnpack = true;

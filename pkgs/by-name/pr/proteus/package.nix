@@ -11,7 +11,7 @@
   libx11,
   libxext,
   libxcursor,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxcursor
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
   ];

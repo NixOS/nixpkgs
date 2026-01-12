@@ -9,7 +9,7 @@
   wayland,
   withX ? true,
   libXi,
-  libXinerama,
+  libxinerama,
   libxft,
   libxfixes,
   libXtst,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withX [
       libXi
-      libXinerama
+      libxinerama
       libxft
       libxfixes
       libXtst

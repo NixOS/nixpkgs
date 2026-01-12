@@ -23,7 +23,7 @@
   libxcursor,
   libxext,
   libXi,
-  libXinerama,
+  libxinerama,
   libxmp,
   libXrandr,
   libXScrnSaver,
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxext
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXScrnSaver
     libXxf86vm

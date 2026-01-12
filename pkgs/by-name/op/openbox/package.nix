@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   libxml2,
-  libXinerama,
+  libxinerama,
   libxcursor,
   libxau,
   libXrandr,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    libXinerama
+    libxinerama
     libxcursor
     libxau
     libXrandr

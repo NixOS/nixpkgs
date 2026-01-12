@@ -7,7 +7,7 @@
   libjack2,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   qtx11extras,
   libxfixes,
   libGLU,
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     libxfixes
-    libXinerama
+    libxinerama
     libGLU
     libGL
     libpulseaudio

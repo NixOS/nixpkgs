@@ -8,7 +8,7 @@
   libxcursor,
   libxext,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXxf86vm,
   makeDesktopItem,
@@ -41,7 +41,7 @@ buildGoModule rec {
     libxcursor
     libxext
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXxf86vm
     libgbm

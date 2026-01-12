@@ -8,7 +8,7 @@
   libxcursor,
   libxext,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXxf86vm,
   go-licenses,
@@ -41,7 +41,7 @@ buildGoModule rec {
     libxcursor
     libxext
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXxf86vm
   ];

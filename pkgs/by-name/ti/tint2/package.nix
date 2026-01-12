@@ -11,7 +11,7 @@
   glib,
   imlib2,
   gtk3,
-  libXinerama,
+  libxinerama,
   libXrender,
   libxcomposite,
   libxdamage,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     glib
     imlib2
     gtk3
-    libXinerama
+    libxinerama
     libXrender
     libxcomposite
     libxdamage

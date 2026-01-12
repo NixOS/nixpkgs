@@ -20,6 +20,7 @@
   util-linux,
   wayland,
   xorg,
+  libxinerama,
   libxext,
   libxcomposite,
   libx11,
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     xorg.libXrandr
     xorg.libXi
-    xorg.libXinerama
+    libxinerama
   ];
 
   runtimeDependencies = [

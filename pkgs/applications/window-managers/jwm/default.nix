@@ -13,7 +13,7 @@
   libxdmcp,
   libxext,
   libxft,
-  libXinerama,
+  libxinerama,
   libXmu,
   libXpm,
   libjpeg,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libxdmcp
     libxext
     libxft
-    libXinerama
+    libxinerama
     libXmu
     libXpm
     libjpeg

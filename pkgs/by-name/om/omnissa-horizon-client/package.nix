@@ -107,7 +107,7 @@ let
           libxcursor
           libxext
           xorg.libXi
-          xorg.libXinerama
+          libxinerama
           libxkbfile
           xorg.libXrandr
           xorg.libXrender

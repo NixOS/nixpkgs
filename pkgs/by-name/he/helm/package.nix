@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   xorg,
+  libxinerama,
   libxext,
   libxcursor,
   libxcomposite,
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcomposite
     libxcursor
     libxext
-    xorg.libXinerama
+    libxinerama
     xorg.libXrender
     xorg.libXrandr
     freetype

@@ -6,6 +6,7 @@
   gtk3,
   librsvg,
   xorg,
+  libxinerama,
   libxext,
   libx11,
   argyllcms,
@@ -46,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     libx11
     xorg.libXxf86vm
     libxext
-    xorg.libXinerama
+    libxinerama
     xorg.libXrandr
   ];
 

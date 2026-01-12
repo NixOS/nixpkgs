@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libXrandr
-    libXinerama
+    libxinerama
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

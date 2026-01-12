@@ -4,7 +4,7 @@
   fetchzip,
   fontconfig,
   libx11,
-  libXinerama,
+  libxinerama,
   libxft,
   writeText,
   # customization
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libx11
-    libXinerama
+    libxinerama
     libxft
   ]
   ++ extraLibs;

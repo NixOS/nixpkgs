@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libxinerama,
   libxcursor,
   libx11,
   libGL,
@@ -27,7 +28,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libXinerama
+    libxinerama
     xorg.libXxf86vm
     libxcursor
     xorg.libXrandr

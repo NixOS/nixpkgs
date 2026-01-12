@@ -14,7 +14,7 @@
   libXtst,
   libXi,
   libXrandr,
-  libXinerama,
+  libxinerama,
 }:
 
 let
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXi
     libXrandr
-    libXinerama
+    libxinerama
     glibc
     libGL
     (lib.getLib stdenv.cc.cc)

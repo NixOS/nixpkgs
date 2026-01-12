@@ -19,7 +19,7 @@
   libxext,
   libxfixes,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   zlib,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
     zlib

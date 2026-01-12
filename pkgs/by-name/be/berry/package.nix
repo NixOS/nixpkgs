@@ -8,7 +8,7 @@
   libx11,
   libxext,
   libxft,
-  libXinerama,
+  libxinerama,
   makeDesktopItem,
   pkg-config,
   which,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxft
-    libXinerama
+    libxinerama
     fontconfig
     freetype
   ];

@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxinerama,
   libxfixes,
   libxext,
   libxdamage,
@@ -239,7 +240,7 @@ buildFHSEnv {
       libxext
       libxfixes
       xorg.libXi
-      xorg.libXinerama
+      libxinerama
       xorg.libXrandr
       xorg.libXrender
       xorg.libXt

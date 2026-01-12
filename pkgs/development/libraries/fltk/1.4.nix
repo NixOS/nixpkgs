@@ -11,7 +11,7 @@
   freetype,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   libxfixes,
   libxcursor,
   libxft,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withXorg [
     libx11
     libxext
-    libXinerama
+    libxinerama
     libxfixes
     libxcursor
     libxft

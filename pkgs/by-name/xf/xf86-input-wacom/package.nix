@@ -7,7 +7,7 @@
   libx11,
   libxext,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   ncurses,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
     ncurses

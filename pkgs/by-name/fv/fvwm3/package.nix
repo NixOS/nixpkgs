@@ -12,7 +12,7 @@
   libxcursor,
   libxft,
   libXi,
-  libXinerama,
+  libxinerama,
   libXpm,
   libXrandr,
   libXt,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxft
     libXi
-    libXinerama
+    libxinerama
     libXpm
     libXrandr
     libXt

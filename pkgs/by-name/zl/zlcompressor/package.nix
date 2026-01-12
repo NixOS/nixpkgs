@@ -19,7 +19,7 @@
   libGL,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libepoxy,
   libjack2,
@@ -59,7 +59,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libepoxy
     libjack2

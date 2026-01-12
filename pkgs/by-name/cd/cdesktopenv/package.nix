@@ -6,7 +6,7 @@
   bison,
   ksh,
   perl,
-  libXinerama,
+  libxinerama,
   libXt,
   libxext,
   libtirpc,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXinerama
+    libxinerama
     libXt
     libxext
     libtirpc

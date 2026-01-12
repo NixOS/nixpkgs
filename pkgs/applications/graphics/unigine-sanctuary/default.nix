@@ -7,7 +7,7 @@
   libx11,
   libxext,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libglvnd,
   openal,
   glibc,
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libXrandr
-    libXinerama
+    libxinerama
   ];
 
   dontUnpack = true;

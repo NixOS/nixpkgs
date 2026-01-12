@@ -5,7 +5,7 @@
   gradle_9,
   jdk21,
   fontconfig,
-  libXinerama,
+  libxinerama,
   libXrandr,
   file,
   gtk3,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
+    libxinerama
     libXrandr
     file
     gtk3

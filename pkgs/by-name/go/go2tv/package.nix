@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   xorg,
+  libxinerama,
   libxext,
   libxcursor,
   libx11,
@@ -30,7 +31,7 @@ buildGoModule rec {
     libx11
     libxcursor
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
     xorg.libXi
     libxext
     xorg.libXxf86vm

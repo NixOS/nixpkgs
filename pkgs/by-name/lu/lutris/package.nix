@@ -35,7 +35,7 @@ let
       libxext
       libxdmcp
       xorg.libXxf86vm
-      xorg.libXinerama
+      libxinerama
       libsm
       xorg.libXv
       libxaw

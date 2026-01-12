@@ -6,7 +6,7 @@
   libx11,
   libXxf86vm,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libXrender,
   libxext,
   libtiff,
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     libx11
     libXxf86vm
     libXrandr
-    libXinerama
+    libxinerama
     libxext
     libXrender
     libXScrnSaver

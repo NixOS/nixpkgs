@@ -9,7 +9,7 @@
   libxcursor,
   libxext,
   libxft,
-  libXinerama,
+  libxinerama,
   libXrandr,
   pkg-config,
   zlib,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
           libxcursor
           libxext
           libxft
-          libXinerama
+          libxinerama
           libXrandr
         ]
     );

@@ -12,7 +12,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   nix-update-script,
   makeDesktopItem,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
   ];
 

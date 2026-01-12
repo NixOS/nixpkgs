@@ -5,7 +5,7 @@
   imlib2,
   libx11,
   libxft,
-  libXinerama,
+  libxinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     imlib2
     libx11
     libxft
-    libXinerama
+    libxinerama
   ];
 
   makeFlags = [

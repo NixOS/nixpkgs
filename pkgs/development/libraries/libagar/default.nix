@@ -10,7 +10,7 @@
   mandoc,
   libpng,
   libjpeg,
-  libXinerama,
+  libxinerama,
   freetype,
   SDL,
   libGL,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bsdbuild
     perl
-    libXinerama
+    libxinerama
     SDL
     libGL
     libmysqlclient

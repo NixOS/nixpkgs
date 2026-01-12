@@ -9,7 +9,7 @@
   libGL,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libjack2,
   libxkbcommon,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libjack2
     libxkbcommon

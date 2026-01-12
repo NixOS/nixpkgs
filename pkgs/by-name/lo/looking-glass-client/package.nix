@@ -20,7 +20,7 @@
   libXrandr,
   libXi,
   libXScrnSaver,
-  libXinerama,
+  libxinerama,
   libxcursor,
   libXpresent,
   libxdmcp,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libXi
     libXScrnSaver
-    libXinerama
+    libxinerama
     libxcursor
     libXpresent
     libxext

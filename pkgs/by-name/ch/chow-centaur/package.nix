@@ -10,7 +10,7 @@
   xcbutilkeysyms,
   xcbutil,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxcursor,
   alsa-lib,
   libjack2,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilkeysyms
     xcbutil
     libXrandr
-    libXinerama
+    libxinerama
     libxcursor
     alsa-lib
     libjack2

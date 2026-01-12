@@ -25,6 +25,7 @@
   fribidi,
   harfbuzz,
   xorg,
+  libxinerama,
   libxdamage,
   libxcursor,
   libsm,
@@ -162,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals xineramaSupport [
-    xorg.libXinerama
+    libxinerama
   ]
   ++ lib.optionals cupsSupport [
     cups

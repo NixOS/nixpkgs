@@ -11,7 +11,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libGL,
   gcc-unwrapped,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libGL
   ];

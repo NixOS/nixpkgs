@@ -10,7 +10,7 @@
   freetype,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxext,
   libxcursor,
 }:
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     freetype
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxext
     libxcursor
   ];

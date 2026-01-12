@@ -6,6 +6,7 @@
   nix-update-script,
   pkg-config,
   xorg,
+  libxinerama,
   libxft,
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxft
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
   ];
 
   nativeInstallCheckInputs = [

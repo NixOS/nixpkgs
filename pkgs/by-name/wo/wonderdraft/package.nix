@@ -4,6 +4,7 @@
   requireFile,
   dpkg,
   xorg,
+  libxinerama,
   libxcursor,
   libx11,
   libGL,
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     let
       libPath = lib.makeLibraryPath [
         libxcursor
-        xorg.libXinerama
+        libxinerama
         xorg.libXrandr
         libx11
         xorg.libXi

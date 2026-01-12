@@ -11,7 +11,7 @@
   ocl-icd,
   opencl-headers,
   libusb1,
-  xorg,
+  libxinerama,
   libxext,
   libx11,
   jansson,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     opencl-headers
     libx11
     libxext
-    xorg.libXinerama
+    libxinerama
     jansson
     libusb1
   ];

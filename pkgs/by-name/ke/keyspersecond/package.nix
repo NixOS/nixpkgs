@@ -13,7 +13,7 @@
   libxkbcommon,
   libxcb,
   libXt,
-  libXinerama,
+  libxinerama,
 }:
 
 let
@@ -28,7 +28,7 @@ let
     libxkbcommon
     libxcb
     libXt
-    libXinerama
+    libxinerama
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

@@ -14,7 +14,7 @@
   libxcursor,
   libxext,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   libXxf86vm,
@@ -31,7 +31,7 @@ let
     libxcursor
     libxext
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
     libXxf86vm

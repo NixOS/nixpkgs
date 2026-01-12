@@ -10,6 +10,7 @@
   libxml2,
   menu-cache,
   xorg,
+  libxinerama,
   makeWrapper,
   enableXfcePanelApplet ? false,
   xfce4-panel,
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     librsvg
     libxml2
     menu-cache
-    xorg.libXinerama
+    libxinerama
     xorg.libXrandr
     python3Packages.python
   ]

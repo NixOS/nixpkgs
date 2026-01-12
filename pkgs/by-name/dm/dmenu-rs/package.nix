@@ -14,7 +14,7 @@
   expat,
   fontconfig,
   libxft,
-  libXinerama,
+  libxinerama,
   libxcb,
   aspell,
   xclip,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     libxft
-    libXinerama
+    libxinerama
     libxcb
   ]
   ++ lib.optionals enablePlugins [

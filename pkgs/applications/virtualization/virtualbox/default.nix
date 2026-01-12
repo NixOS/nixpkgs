@@ -24,7 +24,7 @@
   glib,
   lvm2,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libopus,
   libtpms,
   qt6,
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
     qtscxml
-    libXinerama
+    libxinerama
     SDL2
     libGLU
   ]

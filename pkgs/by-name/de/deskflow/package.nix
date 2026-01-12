@@ -11,7 +11,7 @@
   libx11,
   libxkbfile,
   libXtst,
-  libXinerama,
+  libxinerama,
   libXi,
   libXrandr,
   libxkbcommon,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libportal
     libx11
     libxkbfile
-    libXinerama
+    libxinerama
     libXi
     libXrandr
     libXtst

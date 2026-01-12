@@ -21,7 +21,7 @@
   libGLU,
   libGL,
   xineramaSupport ? true,
-  libXinerama,
+  libxinerama,
   xvSupport ? true,
   libXv,
   alsaSupport ? stdenv.hostPlatform.isLinux,
@@ -155,7 +155,7 @@ stdenv.mkDerivation {
   ++ lib.optional xvSupport libXv
   ++ lib.optional theoraSupport libtheora
   ++ lib.optional cacaSupport libcaca
-  ++ lib.optional xineramaSupport libXinerama
+  ++ lib.optional xineramaSupport libxinerama
   ++ lib.optional dvdnavSupport libdvdnav
   ++ lib.optional dvdreadSupport libdvdread
   ++ lib.optional bluraySupport libbluray

@@ -7,7 +7,7 @@
   freetype,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxext,
   libxcursor,
   makeDesktopItem,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxext
     libxcursor
   ];

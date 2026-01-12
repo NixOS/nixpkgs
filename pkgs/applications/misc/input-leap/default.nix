@@ -13,7 +13,7 @@
   libx11,
   libxdmcp,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXtst,
   libei,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libXtst
-    libXinerama
+    libxinerama
     libXrandr
     libxdmcp
     libice

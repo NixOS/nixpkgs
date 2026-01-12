@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxinerama,
   libxdamage,
   libxcomposite,
   xrandr,
@@ -71,7 +72,7 @@ let
       stdenv.cc.cc
       libxcomposite
       libxdamage
-      xorg.libXinerama
+      libxinerama
       xorg.libXrandr
       xorg.libXrender
       xorg.libXtst

@@ -14,6 +14,7 @@
   wayland,
   egl-wayland,
   xorg,
+  libxinerama,
   libxcursor,
   libx11,
 }:
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     egl-wayland
     libx11
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
     libxcursor
     xorg.libXi
   ];

@@ -9,7 +9,7 @@
   groff,
   netpbm,
   fltk,
-  libXinerama,
+  libxinerama,
   libXpm,
   libjpeg,
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fltk
-    libXinerama
+    libxinerama
     libXpm
     libjpeg
   ];

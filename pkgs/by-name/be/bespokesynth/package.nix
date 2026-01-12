@@ -15,7 +15,7 @@
   libusb1,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxext,
   libxcursor,
   libXScrnSaver,
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxext
     libxcursor
     libXScrnSaver
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.makeLibraryPath [
       libx11
       libXrandr
-      libXinerama
+      libxinerama
       libxext
       libxcursor
       libXScrnSaver

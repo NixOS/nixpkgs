@@ -7,7 +7,7 @@
   python3,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libxft,
   libXrender,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libxft
     libXrender

@@ -15,7 +15,7 @@
   libxkbcommon,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxcursor,
   pango,
   gtkmm3,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxcursor
     pango
     gtkmm3

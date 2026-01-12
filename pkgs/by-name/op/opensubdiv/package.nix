@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   xorg,
+  libxinerama,
   libxcursor,
   libx11,
   libGLU,
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXrandr
       xorg.libXxf86vm
       libxcursor
-      xorg.libXinerama
+      libxinerama
       xorg.libXi
     ]
     ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [

@@ -9,7 +9,7 @@
   libx11,
   libxcursor,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libXi,
   libXxf86vm,
   mupdf,
@@ -45,7 +45,7 @@ buildGoModule rec {
     libx11
     libxcursor
     libXrandr
-    libXinerama
+    libxinerama
     libXi
     libXxf86vm
     fontconfig

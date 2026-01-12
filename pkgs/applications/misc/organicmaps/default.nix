@@ -20,6 +20,7 @@
   freetype,
   pugixml,
   xorg,
+  libxinerama,
   libxcursor,
   nix-update-script,
 }:
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     pugixml
     xorg.libXrandr
-    xorg.libXinerama
+    libxinerama
     libxcursor
   ];
 

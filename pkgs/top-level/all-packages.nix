@@ -7234,7 +7234,7 @@ with pkgs;
   };
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot {
-    libXinerama = xorg.libXinerama;
+    libxinerama = libxinerama;
   };
 
   indicator-application-gtk2 =

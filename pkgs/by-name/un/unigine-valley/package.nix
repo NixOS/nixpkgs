@@ -15,7 +15,7 @@
   freetype,
   libx11,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   libglvnd,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     freetype
     libx11
     libxext
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
     libglvnd

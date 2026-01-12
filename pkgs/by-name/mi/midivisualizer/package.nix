@@ -9,7 +9,7 @@
   glfw,
   makeWrapper,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxcursor,
   gtk3,
   ffmpeg-full,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxcursor
     gtk3
   ];

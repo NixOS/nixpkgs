@@ -12,7 +12,7 @@
   libxfixes,
   libxext,
   libXrender,
-  libXinerama,
+  libxinerama,
   libjpeg,
   zlib,
   spice-protocol,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     libxext
     libxfixes
-    libXinerama
+    libxinerama
     libXrandr
     libXrender
     libcacard

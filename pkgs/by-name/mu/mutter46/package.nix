@@ -30,7 +30,7 @@
   libXrender,
   libxcb,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxau,
   libinput,
   libdrm,
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrender
     libxcb
     libXrandr
-    libXinerama
+    libxinerama
     libxau
   ];
 

@@ -9,7 +9,7 @@
   fribidi,
   libxcursor,
   libxft,
-  libXinerama,
+  libxinerama,
   libXpm,
   libXt,
   libpng,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     fribidi
     libxcursor
     libxft
-    libXinerama
+    libxinerama
     libXpm
     libXt
     libpng

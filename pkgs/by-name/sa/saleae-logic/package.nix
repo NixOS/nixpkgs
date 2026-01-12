@@ -25,7 +25,7 @@
   libXrandr,
   libxcursor,
   freetype,
-  libXinerama,
+  libxinerama,
   libxcb,
   zlib,
   pciutils,
@@ -53,7 +53,7 @@ let
     libXrandr
     libxcursor
     freetype
-    libXinerama
+    libxinerama
     libxcb
     zlib
     stdenv.cc.cc

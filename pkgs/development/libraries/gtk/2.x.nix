@@ -16,7 +16,7 @@
   libxcursor,
   libxdamage,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   pango,
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXrender
   ]
-  ++ lib.optional xineramaSupport libXinerama
+  ++ lib.optional xineramaSupport libxinerama
   ++ lib.optional cupsSupport cups
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libxdamage

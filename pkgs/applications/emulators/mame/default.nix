@@ -13,7 +13,7 @@
   glm,
   installShellFiles,
   libXi,
-  libXinerama,
+  libxinerama,
   libjpeg,
   libpcap,
   libpulseaudio,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libpulseaudio
-    libXinerama
+    libxinerama
     libXi
     fontconfig
   ]

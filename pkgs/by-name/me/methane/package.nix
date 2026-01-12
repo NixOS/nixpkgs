@@ -19,7 +19,7 @@
   libmikmod,
   alsa-lib,
   nix-update-script,
-  libXinerama,
+  libxinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     quesoglc
     clanlib
     libXrender
-    libXinerama
+    libxinerama
     libmikmod
     alsa-lib
   ];

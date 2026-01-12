@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   imlib2,
-  libXinerama,
+  libxinerama,
   pkg-config,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imlib2
     libx11
-    libXinerama
+    libxinerama
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

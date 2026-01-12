@@ -7,7 +7,7 @@
   imlib2,
   libx11,
   libxft,
-  libXinerama,
+  libxinerama,
   conf ? null,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     imlib2
     libx11
     libxft
-    libXinerama
+    libxinerama
   ];
 
   postPatch =

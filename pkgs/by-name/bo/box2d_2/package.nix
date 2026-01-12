@@ -13,7 +13,7 @@
   libx11,
   libxcursor,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libglut,
   xorgproto,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libglut
     xorgproto

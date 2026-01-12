@@ -11,7 +11,7 @@
   pkg-config,
   libx11,
   libXrandr,
-  libXinerama,
+  libxinerama,
   libxext,
   libxcursor,
   freetype,
@@ -71,7 +71,7 @@ let
   x11Libs = [
     libx11
     libXrandr
-    libXinerama
+    libxinerama
     libxext
     libxcursor
   ];

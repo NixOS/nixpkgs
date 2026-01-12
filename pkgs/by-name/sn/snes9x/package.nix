@@ -9,7 +9,7 @@
   libx11,
   libxdmcp,
   libxext,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXv,
   libepoxy,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!withGtk) [
     libpng
     libxext
-    libXinerama
+    libxinerama
   ]
   ++ lib.optionals withGtk [
     gtkmm3

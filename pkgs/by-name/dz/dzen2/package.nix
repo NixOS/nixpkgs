@@ -5,7 +5,7 @@
   pkg-config,
   libx11,
   libxft,
-  libXinerama,
+  libxinerama,
   libXpm,
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxft
-    libXinerama
+    libxinerama
     libXpm
   ];
 

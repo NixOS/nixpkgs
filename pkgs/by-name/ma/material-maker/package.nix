@@ -10,7 +10,7 @@
   libxext,
   libxfixes,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXrender,
   nix-update-script,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libglvnd
 
-    libXinerama
+    libxinerama
     libxcursor
     libxext
     libXrandr

@@ -9,7 +9,7 @@
   libXScrnSaver,
   libxcursor,
   libXi,
-  libXinerama,
+  libxinerama,
   libXrandr,
   libXxf86vm,
   libpulseaudio,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXScrnSaver
     libxcursor
     libXi
-    libXinerama
+    libxinerama
     libXrandr
     libXxf86vm
     libpulseaudio
