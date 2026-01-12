@@ -159,7 +159,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/rancher/rke2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      azey7f
+      maevii
       rorosen
       zimbatm
       zygot

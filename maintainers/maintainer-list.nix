@@ -2809,14 +2809,6 @@
     githubId = 426541;
     name = "Tim Kleinschmidt";
   };
-  azey7f = {
-    email = "me@azey.net";
-    github = "azey7f";
-    githubId = 41077433;
-    name = "azey";
-    # assuming my nameservers are up: gpg --auto-key-locate clear,nodefault,cert,dane --locate-keys me@azey.net
-    keys = [ { fingerprint = "2CCB 3403 43FE 8A2B 91CE  7F75 F94F 4A71 C5C2 1E8F"; } ];
-  };
   azuwis = {
     email = "azuwis@gmail.com";
     github = "azuwis";
@@ -15859,6 +15851,14 @@
     github = "maeve-oake";
     githubId = 38541651;
     name = "maeve";
+  };
+  maevii = {
+    email = "me@maevi.net";
+    github = "maevii";
+    githubId = 41077433;
+    name = "Maevi";
+    # assuming my nameservers are up: gpg --auto-key-locate clear,nodefault,cert,dane --locate-keys me@maevi.net
+    keys = [ { fingerprint = "A176 4D41 E826 A6E5 A5A1  8231 7670 F0F0 C946 12F4"; } ];
   };
   mafo = {
     email = "Marc.Fontaine@gmx.de";

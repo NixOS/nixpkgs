@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
     ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ azey7f ];
+    maintainers = with lib.maintainers; [ maevii ];
   };
 })
