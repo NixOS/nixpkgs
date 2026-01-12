@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  tab-window-manager,
   libxtst,
   libxrandr,
   libxi,
@@ -124,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : ${
           lib.makeBinPath [
             xterm
-            xorg.twm
+            tab-window-manager
             xsetroot
             xauth
           ]

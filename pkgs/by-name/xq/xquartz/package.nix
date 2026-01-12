@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  tab-window-manager,
   libxpm,
   font-util,
   font-misc-misc,
@@ -178,7 +179,7 @@ let
     sessreg
     setxkbmap
     smproxy
-    xorg.twm
+    tab-window-manager
     x11perf
     xauth
     xbacklight

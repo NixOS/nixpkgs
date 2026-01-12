@@ -25,7 +25,7 @@
   which,
   xkbcomp,
   xkeyboard_config,
-  xorg,
+  tab-window-manager,
   libxi,
   libxfont_2,
   libxext,
@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           which
-          xorg.twm
+          tab-window-manager
           xauth
           xterm
         ]

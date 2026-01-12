@@ -163,7 +163,7 @@
             systemctl --user import-environment DISPLAY XDG_SESSION_ID
             systemctl --user start nixos-fake-graphical-session.target
             # run the window manager
-            twm
+            tab-window-manager
             # stop services and all subprocesses
             systemctl --user stop nixos-fake-graphical-session.target
             EOF
