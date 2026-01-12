@@ -197,8 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "http://odamex.net/";
+    homepage = "https://odamex.net";
     description = "Client/server port for playing old-school Doom online";
+    changelog = "https://github.com/odamex/odamex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ eljamm ];
