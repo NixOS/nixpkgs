@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "impala";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "impala";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FU/8g2zTTHm3Sdbxt9761Z+a0zaJMdAMdHrJIwjUrYs=";
   };
 
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
       nydragon
       bridgesense
     ];
+    mainProgram = "impala";
   };
-}
+})
