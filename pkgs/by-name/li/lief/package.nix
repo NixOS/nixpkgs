@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       lassulus
-      genericnerdyusername
     ];
   };
 })
