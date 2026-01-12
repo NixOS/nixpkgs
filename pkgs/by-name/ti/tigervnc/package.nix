@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libpciaccess,
   xkeyboard_config,
   zlib,
   libjpeg_turbo,
@@ -147,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXft
       xorg.libxkbfile
       xorg.libXfont2
-      xorg.libpciaccess
+      libpciaccess
       libGLU
       xorg.libXrandr
       xorg.libXdamage

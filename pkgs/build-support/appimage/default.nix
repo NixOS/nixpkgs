@@ -152,7 +152,7 @@ rec {
         gst_all_1.gst-plugins-base
         libdrm
         xorg.xkeyboardconfig
-        xorg.libpciaccess
+        libpciaccess
 
         glib
         bzip2
