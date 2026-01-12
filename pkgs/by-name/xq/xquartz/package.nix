@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  font-cursor-misc,
   font-bh-lucidatypewriter-75dpi,
   font-bh-lucidatypewriter-100dpi,
   font-bh-100dpi,
@@ -131,7 +132,7 @@ let
     freefont_ttf
     liberation_ttf
     xorg.fontmiscmisc
-    xorg.fontcursormisc
+    font-cursor-misc
   ]
   ++ lib.optionals unfreeFonts [
     font-bh-lucidatypewriter-100dpi

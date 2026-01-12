@@ -2,6 +2,7 @@
   writeText,
   writeScriptBin,
   xorg,
+  font-cursor-misc,
   font-bh-lucidatypewriter-75dpi,
   font-bh-lucidatypewriter-100dpi,
   font-bh-100dpi,
@@ -37,7 +38,7 @@ let
       FontPath "${font-adobe-75dpi}/share/fonts/X11/75dpi"
       FontPath "${font-adobe-100dpi}/share/fonts/X11/100dpi"
       FontPath "${xorg.fontmiscmisc}/share/fonts/X11/misc"
-      FontPath "${xorg.fontcursormisc}/share/fonts/X11/misc"
+      FontPath "${font-cursor-misc}/share/fonts/X11/misc"
     ${lib.optionalString unfreeFonts ''
       FontPath "${font-bh-lucidatypewriter-75dpi}/share/fonts/X11/75dpi"
       FontPath "${font-bh-lucidatypewriter-100dpi}/share/fonts/X11/100dpi"
