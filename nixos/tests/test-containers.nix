@@ -67,10 +67,16 @@
     n1.wait_for_unit("network-online.target")
     n2.wait_for_unit("network-online.target")
 
-    # <<< # Confirm containers and nodes in the same vlan can talk to each other.
-    # <<< c1.succeed("ping -c 1 n1")
-    # <<< n1.succeed("ping -c 1 c1")
-    # <<< c2.succeed("ping -c 1 n2")
-    # <<< n2.succeed("ping -c 1 c2")
+    # Confirm containers and nodes in the same vlan can talk to each other.
+    c1.succeed("ping -c 1 n1")
+    n1.succeed("ping -c 1 c1")
+    c2.succeed("ping -c 1 n2")
+    n2.succeed("ping -c 1 c2")
+
+    # Confirm containers and nodes in different vlans cannot talk to each other.
+    c1.fail("ping -c 1 -W 1 n2")
+    n1.fail("ping -c 1 -W 1 c2")
+    c2.fail("ping -c 1 -W 1 n1")
+    n2.fail("ping -c 1 -W 1 c1")
   '';
 }

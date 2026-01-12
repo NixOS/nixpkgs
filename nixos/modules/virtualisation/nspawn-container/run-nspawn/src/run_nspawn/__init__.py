@@ -68,7 +68,9 @@ def ensure_vlan_bridge(vlan: int) -> typing.Generator[str, None, None]:
     ipv6_addr = f"2001:db8:{vlan}::fe/64"
 
     bridge_name = f"br{vlan}"
+    tap_name = f"vde-tap{vlan}"
     bridge_path = Path("/sys/class/net") / bridge_name
+    tap_path = Path("/sys/class/net") / tap_name
     try:
         # To avoid racing against other nspawn containers that also
         # need this vlan, grab an exclusive lock.
@@ -79,6 +81,15 @@ def ensure_vlan_bridge(vlan: int) -> typing.Generator[str, None, None]:
                 run_ip("link", "set", bridge_name, "up")
                 run_ip("addr", "add", ipv4_addr, "dev", bridge_name)
                 run_ip("addr", "add", ipv6_addr, "dev", bridge_name)
+
+            if tap_path.exists():
+                logger.info(f"attaching {tap_name} to {bridge_name}")
+                run_ip("link", "set", tap_name, "master", bridge_name)
+                run_ip("link", "set", tap_name, "up")
+            else:
+                logger.warning(
+                    f"TAP {tap_name} not found; container will be isolated from VDE"
+                )
 
         yield bridge_name
     finally:
