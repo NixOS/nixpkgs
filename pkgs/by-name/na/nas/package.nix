@@ -11,7 +11,7 @@
   libxext,
   libxpm,
   libxt,
-  xorgcffiles,
+  xorg-cf-files,
   xorgproto,
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mv $out/${xorgcffiles}/* $out
+    mv $out/${xorg-cf-files}/* $out
     rm -fr $out/nix
   '';
 
