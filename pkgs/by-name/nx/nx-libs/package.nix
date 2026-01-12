@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  gccmakedep,
   libtirpc,
 }:
 stdenv.mkDerivation rec {
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     which
-    xorg.gccmakedep
+    gccmakedep
     xorg.imake
   ];
   buildInputs = [
