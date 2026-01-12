@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -89,7 +90,7 @@ let
       xorg.libXScrnSaver
       libxcomposite
       libxcursor
-      xorg.libXdamage
+      libxdamage
       xorg.libXext
       xorg.libXfixes
       xorg.libXi

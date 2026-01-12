@@ -45,7 +45,7 @@ appimageTools.wrapType2 {
       libxcb
       libxcomposite
       libxcursor
-      xorg.libXdamage
+      libxdamage
       xorg.libXext
       xorg.libXfixes
       xorg.libXi

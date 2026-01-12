@@ -54,6 +54,7 @@
   wayland-scanner,
   writeText,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -140,7 +141,7 @@ stdenv.mkDerivation rec {
     wayland
     xorg.libXScrnSaver
     libxcomposite
-    xorg.libXdamage
+    libxdamage
     xorg.libXext
     xorg.libXfixes
     xorg.libXi

@@ -9,6 +9,7 @@
   glib,
   systemd,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -80,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           glib
           gtk3
-          xorg.libXdamage
+          libxdamage
           libx11
           libxcb
           libxcomposite

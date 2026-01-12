@@ -6,6 +6,7 @@
   zlib,
   libjpeg,
   xorg,
+  libxdamage,
   libx11,
   xorgproto,
   xdpyinfo,
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXfixes
     xorgproto
     openssl
-    xorg.libXdamage
+    libxdamage
     zlib
     libx11
     libjpeg

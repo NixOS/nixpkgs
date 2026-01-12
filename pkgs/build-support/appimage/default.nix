@@ -160,7 +160,7 @@ rec {
         gdk-pixbuf
 
         xorg.libXinerama
-        xorg.libXdamage
+        libxdamage
         libxcursor
         xorg.libXrender
         xorg.libXScrnSaver

@@ -18,7 +18,7 @@
   patchelf,
   openssl,
   stdenv,
-  xorg,
+  libxdamage,
   libxcomposite,
   libx11,
   libxkbfile,
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     openssl
     libx11
     libxcomposite
-    xorg.libXdamage
+    libxdamage
     libxkbfile
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

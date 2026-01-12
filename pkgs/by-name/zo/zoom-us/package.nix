@@ -198,7 +198,7 @@ let
       pkgs.wayland
       pkgs.libx11
       pkgs.libxcomposite
-      pkgs.xorg.libXdamage
+      pkgs.libxdamage
       pkgs.xorg.libXext
       pkgs.xorg.libXfixes
       pkgs.xorg.libXrandr

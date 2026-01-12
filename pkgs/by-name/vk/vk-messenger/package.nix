@@ -6,6 +6,7 @@
   undmg,
   autoPatchelfHook,
   xorg,
+  libxdamage,
   libxkbfile,
   gtk3,
   nss,
@@ -63,7 +64,7 @@ let
       wrapGAppsHook3
     ];
     buildInputs = [
-      xorg.libXdamage
+      libxdamage
       xorg.libXtst
       xorg.libXScrnSaver
       libxkbfile

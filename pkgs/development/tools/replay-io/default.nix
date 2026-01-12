@@ -8,7 +8,7 @@
   libcxx,
   libx11,
   libXt,
-  libXdamage,
+  libxdamage,
   glib,
   gtk3,
   dbus-glib,
@@ -63,7 +63,7 @@ rec {
       glib
       gtk3
       libx11
-      libXdamage
+      libxdamage
       libXt
     ];
     installPhase = ''

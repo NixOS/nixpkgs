@@ -11,6 +11,7 @@
   libdrm,
   elfutils,
   xorg,
+  libxdamage,
   libxcomposite,
   libx11,
   libxcb,
@@ -94,7 +95,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       xorg.libXext
       libxcb
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXfixes
       xorg.libXrandr
       nss
@@ -141,7 +142,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       xorg.libXext
       libxcb
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXfixes
       xorg.libXrandr
       glib

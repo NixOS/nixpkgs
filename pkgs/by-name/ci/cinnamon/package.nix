@@ -23,7 +23,7 @@
   libsecret,
   libstartup_notification,
   libXtst,
-  libXdamage,
+  libxdamage,
   libgbm,
   muffin,
   networkmanager,
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     libsecret
     libstartup_notification
     libXtst
-    libXdamage
+    libxdamage
     libgbm
     muffin
     networkmanager

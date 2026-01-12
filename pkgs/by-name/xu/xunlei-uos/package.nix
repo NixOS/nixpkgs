@@ -12,7 +12,7 @@
   alsa-lib,
   dbus-glib,
   libXtst,
-  libXdamage,
+  libxdamage,
   libXScrnSaver,
 }:
 
@@ -47,7 +47,7 @@ let
       alsa-lib
       dbus-glib
       libXtst
-      libXdamage
+      libxdamage
       libXScrnSaver
     ];
 

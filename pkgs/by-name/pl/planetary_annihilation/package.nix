@@ -19,6 +19,7 @@
   curl,
   systemd,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${
       lib.makeLibraryPath [
         stdenv.cc.cc
-        xorg.libXdamage
+        libxdamage
         xorg.libXfixes
         gtk2
         glib

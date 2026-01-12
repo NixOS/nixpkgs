@@ -23,7 +23,7 @@
   libGL,
   bash,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXfixes,
   libXtst,
   nss,
@@ -93,7 +93,7 @@ buildFHSEnv {
     procps
     cairo
     libxcomposite
-    libXdamage
+    libxdamage
     libXfixes
     libXtst
     nss

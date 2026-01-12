@@ -54,7 +54,7 @@ buildFHSEnv {
       xorg.libXfixes
       xorg.libXrender
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXtst
       libxcb
       xorg.libXScrnSaver

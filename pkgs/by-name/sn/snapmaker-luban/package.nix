@@ -23,7 +23,7 @@
   libXScrnSaver,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     gcc-unwrapped
     gtk3
     libdrm
-    libXdamage
+    libxdamage
     libx11
     libXScrnSaver
     libXtst
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libxshmfence
     libxcursor
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libXi

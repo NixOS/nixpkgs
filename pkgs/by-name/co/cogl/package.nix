@@ -7,6 +7,7 @@
   glib,
   gdk-pixbuf,
   xorg,
+  libxdamage,
   libxcomposite,
   libintl,
   pangoSupport ? true,
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libXfixes
     libxcomposite
-    xorg.libXdamage
+    libxdamage
   ]
   ++ lib.optionals gstreamerSupport [
     gst_all_1.gstreamer

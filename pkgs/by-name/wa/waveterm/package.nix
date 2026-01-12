@@ -13,7 +13,7 @@
   cairo,
   libx11,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXrandr,
@@ -82,7 +82,7 @@ let
       cairo
       libx11
       libxcomposite
-      libXdamage
+      libxdamage
       libXext
       libXfixes
       libXrandr

@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  libxdamage,
   libxcomposite,
   libx11,
   xorgproto,
@@ -134,7 +135,7 @@ effectiveBuildPythonApplication rec {
   buildInputs = [
     libx11
     libxcomposite
-    xorg.libXdamage
+    libxdamage
     xorg.libXfixes
     xorg.libXi
     libxkbfile

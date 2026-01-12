@@ -30,7 +30,7 @@
   libXScrnSaver,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -126,7 +126,7 @@ let
       expat
       gdk-pixbuf
       dbus
-      libXdamage
+      libxdamage
       libXrandr
       atk
       pango

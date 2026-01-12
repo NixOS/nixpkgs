@@ -8,6 +8,7 @@
   icu,
   openssl,
   xorg,
+  libxdamage,
   libxcomposite,
   libx11,
   libxcb,
@@ -159,7 +160,7 @@ buildDotnetModule (finalAttrs: {
     libz
 
     libxcomposite
-    xorg.libXdamage
+    libxdamage
     xorg.libXext
     xorg.libXfixes
     xorg.libXrandr

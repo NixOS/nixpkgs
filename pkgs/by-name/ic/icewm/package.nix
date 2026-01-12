@@ -18,7 +18,7 @@
   libsm,
   libx11,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXdmcp,
   libXext,
   libXfixes,
@@ -75,7 +75,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     libsm
     libx11
     libxcomposite
-    libXdamage
+    libxdamage
     libXdmcp
     libXext
     libXfixes

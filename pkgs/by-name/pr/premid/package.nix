@@ -28,7 +28,7 @@
   libXScrnSaver,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     cups
     libdrm
     libuuid
-    libXdamage
+    libxdamage
     libx11
     libXScrnSaver
     libXtst
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     libxcomposite
     libuuid
     libxcursor
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libXi

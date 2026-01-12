@@ -21,7 +21,7 @@
   nspr,
   libGL,
   libx11,
-  libXdamage,
+  libxdamage,
   boost,
   thrift,
   cef-binary,
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     boost
     libGL
     libx11
-    libXdamage
+    libxdamage
     nss
     nspr
     thrift20

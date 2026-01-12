@@ -70,7 +70,7 @@
   pciutils,
   protobuf,
   speechd-minimal,
-  libXdamage,
+  libxdamage,
   at-spi2-core,
   pipewire,
   libva,
@@ -367,7 +367,7 @@ let
       pciutils
       protobuf
       speechd-minimal
-      libXdamage
+      libxdamage
       at-spi2-core
       pipewire
       libva
@@ -428,7 +428,7 @@ let
       pciutils
       protobuf
       speechd-minimal
-      libXdamage
+      libxdamage
       at-spi2-core
       pipewire
       libva

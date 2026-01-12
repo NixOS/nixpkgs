@@ -20,6 +20,7 @@
   libGL,
   numactl,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libxau,
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxau
     libxcomposite
     libxcursor
-    xorg.libXdamage
+    libxdamage
     xorg.libXdmcp
     xorg.libXext
     xorg.libXfixes

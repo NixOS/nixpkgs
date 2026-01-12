@@ -14,7 +14,7 @@
   dbus,
   libXi,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXrandr,
   libxcomposite,
   libXext,
@@ -54,7 +54,7 @@ let
     dbus
     libXi
     libxcursor
-    libXdamage
+    libxdamage
     libXrandr
     libxcomposite
     libXext

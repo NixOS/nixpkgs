@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
         pango
         libxcomposite
         xorg.libXext
-        xorg.libXdamage
+        libxdamage
         xorg.libXfixes
         libxcb
         libxshmfence

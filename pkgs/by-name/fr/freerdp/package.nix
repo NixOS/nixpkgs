@@ -21,7 +21,7 @@
   zlib,
   libx11,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXdmcp,
   libXext,
   libXi,
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     libx11
     libxcursor
-    libXdamage
+    libxdamage
     libXdmcp
     libXext
     libXi

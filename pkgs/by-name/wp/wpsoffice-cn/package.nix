@@ -23,6 +23,7 @@
   libmysqlclient,
   libsForQt5,
   xorg,
+  libxdamage,
   # wpsoffice runtime dependencies
   cups,
   dbus,
@@ -145,7 +146,7 @@ else
       libusb1
       unixODBC
       libsForQt5.qtbase
-      xorg.libXdamage
+      libxdamage
       xorg.libXtst
       xorg.libXv
     ];

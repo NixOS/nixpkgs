@@ -11,7 +11,7 @@
   debugBuild ? false,
   withJcef ? true,
 
-  libXdamage,
+  libxdamage,
   libXxf86vm,
   libXrandr,
   libXi,
@@ -135,7 +135,7 @@ jdk.overrideAttrs (oldAttrs: rec {
     # Build the set of output library directories to rpath against
     LIBDIRS="${
       lib.makeLibraryPath [
-        libXdamage
+        libxdamage
         libXxf86vm
         libXrandr
         libXi

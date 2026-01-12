@@ -134,7 +134,7 @@ buildFHSEnv {
       vulkan-loader
       libx11
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXfixes
       xorg.libXext
       libxcb

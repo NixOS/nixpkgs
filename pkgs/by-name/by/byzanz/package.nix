@@ -13,7 +13,7 @@
   libtool,
   pkg-config,
   which,
-  xorg,
+  libxdamage,
   xwininfo,
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     cairo
     gtk3
     xwininfo
-    xorg.libXdamage
+    libxdamage
   ]
   ++ (with gst_all_1; [
     gstreamer

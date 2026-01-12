@@ -14,7 +14,7 @@
   libXinerama,
   libXrender,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libx11,
   libXrandr,
   librsvg,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     libXinerama
     libXrender
     libxcomposite
-    libXdamage
+    libxdamage
     libx11
     libXrandr
     librsvg

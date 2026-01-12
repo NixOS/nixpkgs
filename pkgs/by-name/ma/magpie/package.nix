@@ -20,7 +20,7 @@
   xkeyboard_config,
   libxcvt,
   libxkbfile,
-  libXdamage,
+  libxdamage,
   libxkbcommon,
   libXtst,
   libinput,
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwacom
     libxkbcommon
     libxkbfile
-    libXdamage
+    libxdamage
     colord
     lcms2
     pango

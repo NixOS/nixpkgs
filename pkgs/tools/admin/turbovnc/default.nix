@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  libxdamage,
   libx11,
   libsm,
   xtrans,
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libfontenc # for -DTVNC_SYSTEMX11=1
     libsm
     libx11
-    xorg.libXdamage # for -DTVNC_SYSTEMX11=1
+    libxdamage # for -DTVNC_SYSTEMX11=1
     xorg.libXdmcp # for -DTVNC_SYSTEMX11=1
     xorg.libXext
     xorg.libXfont2 # for -DTVNC_SYSTEMX11=1

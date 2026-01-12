@@ -12,7 +12,7 @@
   at-spi2-atk,
   glib,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXfixes,
   libXrandr,
   libgbm,
@@ -46,7 +46,7 @@ let
       at-spi2-atk
       glib
       libxcomposite
-      libXdamage
+      libxdamage
       libXfixes
       libXrandr
       libgbm

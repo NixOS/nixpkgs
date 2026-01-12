@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXdamage,
+  libxdamage,
   libXrender,
   libxcomposite,
   libXext,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libx11
-    libXdamage
+    libxdamage
     libXrender
     libxcomposite
     libXext

@@ -2,7 +2,7 @@
   libx11,
   libxcb,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXrandr,
@@ -48,7 +48,7 @@ let
     libx11
     libxcb
     libxcomposite
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libxkbcommon

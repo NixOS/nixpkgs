@@ -22,7 +22,7 @@
   libstartup_notification,
   libwacom,
   libxcvt,
-  libXdamage,
+  libxdamage,
   libxkbcommon,
   libXtst,
   mesa-gl-headers,
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libwacom
     libxcvt
-    libXdamage
+    libxdamage
     libxkbcommon
     pipewire
     udev

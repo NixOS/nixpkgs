@@ -24,7 +24,7 @@
   libXScrnSaver,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -99,7 +99,7 @@ let
     libXScrnSaver
     libxcomposite
     libxcursor
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libXi
@@ -152,7 +152,7 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    libXdamage
+    libxdamage
     libXtst
     libdrm
     libgcrypt

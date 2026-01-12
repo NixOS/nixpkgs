@@ -30,6 +30,7 @@
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libsm,
@@ -170,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libxcomposite
     libxcursor
-    xorg.libXdamage
+    libxdamage
     xorg.libXfixes
     xorg.libXi
     xorg.libXrandr

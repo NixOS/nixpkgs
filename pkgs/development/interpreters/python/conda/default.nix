@@ -15,7 +15,7 @@
       libice
       libx11
       libxau
-      xorg.libXdamage
+      libxdamage
       xorg.libXi
       xorg.libXrender
       xorg.libXrandr

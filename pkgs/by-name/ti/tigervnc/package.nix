@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxdamage,
   libx11,
   libsm,
   libice,
@@ -160,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       libpciaccess
       libGLU
       xorg.libXrandr
-      xorg.libXdamage
+      libxdamage
     ]
     ++ xorg.xorgserver.buildInputs
   );

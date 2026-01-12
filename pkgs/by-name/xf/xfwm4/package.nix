@@ -10,7 +10,7 @@
   dbus-glib,
   libepoxy,
   gtk3,
-  libXdamage,
+  libxdamage,
   libstartup_notification,
   libxfce4ui,
   libxfce4util,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     libepoxy
     gtk3
-    libXdamage
+    libxdamage
     libstartup_notification
     libxfce4ui
     libxfce4util

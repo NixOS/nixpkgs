@@ -16,6 +16,7 @@
   which,
   nodejs,
   xorg,
+  libxdamage,
   libxcomposite,
   xrandr,
   libxkbfile,
@@ -265,7 +266,7 @@ qtModule {
     libpciaccess
     libXtst
     libxcomposite
-    xorg.libXdamage
+    libxdamage
     libdrm
     libxkbfile
     libxshmfence

@@ -31,6 +31,7 @@
   pango,
   cairo,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -70,7 +71,7 @@ let
     libx11
     libxcomposite
     libxcursor
-    xorg.libXdamage
+    libxdamage
     xorg.libXext
     xorg.libXfixes
     xorg.libXi

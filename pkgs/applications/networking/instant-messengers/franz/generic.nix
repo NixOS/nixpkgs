@@ -6,6 +6,7 @@
   autoPatchelfHook,
   dpkg,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -73,7 +74,7 @@ stdenv.mkDerivation (
     buildInputs = extraBuildInputs ++ [
       xorg.libXi
       libxcursor
-      xorg.libXdamage
+      libxdamage
       xorg.libXrandr
       libxcomposite
       xorg.libXext

@@ -8,7 +8,7 @@
   libx11,
   libXext,
   libXfixes,
-  libXdamage,
+  libxdamage,
   libxcomposite,
   libXi,
   libxcb,
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     libGLU
     libXext
     libXfixes
-    libXdamage
+    libxdamage
     libxcomposite
     libXi
     libxcb

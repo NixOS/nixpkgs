@@ -80,7 +80,7 @@
   thrift,
   libGL,
   libx11,
-  libXdamage,
+  libxdamage,
   nss,
   nspr,
 }:
@@ -231,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
     libGL
     libx11
-    libXdamage
+    libxdamage
   ];
 
   dontWrapQtApps = true;

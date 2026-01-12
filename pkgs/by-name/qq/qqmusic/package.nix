@@ -28,6 +28,7 @@
   pciutils,
   udev,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libxcomposite
     libxcursor
-    xorg.libXdamage
+    libxdamage
     xorg.libXext
     xorg.libXfixes
     xorg.libXi

@@ -133,7 +133,7 @@ buildFHSEnv {
       libx11
       libxcb
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr

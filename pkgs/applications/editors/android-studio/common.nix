@@ -46,7 +46,7 @@
   libxkbfile,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -181,7 +181,7 @@ let
             libxkbfile
             libxcomposite
             libxcursor
-            libXdamage
+            libxdamage
             libXfixes
             libGL
             libdrm

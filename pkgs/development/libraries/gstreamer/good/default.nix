@@ -48,6 +48,7 @@
   libjack2,
   enableX11 ? stdenv.hostPlatform.isLinux,
   xorg,
+  libxdamage,
   ncurses,
   enableWayland ? stdenv.hostPlatform.isLinux,
   wayland,
@@ -160,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     xorg.libXext
     xorg.libXfixes
-    xorg.libXdamage
+    libxdamage
     xorg.libXtst
     xorg.libXi
   ]

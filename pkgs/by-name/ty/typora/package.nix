@@ -90,7 +90,7 @@ let
         libxcursor
         xorg.libXrandr
         libxcomposite
-        xorg.libXdamage
+        libxdamage
         xorg.libXext
         xorg.libXfixes
         libxcb

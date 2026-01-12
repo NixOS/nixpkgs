@@ -13,6 +13,7 @@
   udev,
   gtk3,
   xorg,
+  libxdamage,
   cups,
   pango,
   runCommandLocal,
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     udev
     gtk3
     libsForQt5.qt5.qtbase
-    xorg.libXdamage
+    libxdamage
     xorg.libXtst
     xorg.libXv
   ];

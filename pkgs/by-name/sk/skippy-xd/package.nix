@@ -6,7 +6,7 @@
   libx11,
   libXft,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXext,
   libXinerama,
   libjpeg,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libXft
     libxcomposite
-    libXdamage
+    libxdamage
     libXext
     libXinerama
     libjpeg

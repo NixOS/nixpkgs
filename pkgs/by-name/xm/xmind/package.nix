@@ -18,6 +18,7 @@
   alsa-lib,
   expat,
   xorg,
+  libxdamage,
   libxcomposite,
   libx11,
   libxkbfile,
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     libxcb
     libxcomposite
-    xorg.libXdamage
+    libxdamage
     xorg.libXfixes
     xorg.libXrandr
     libxkbfile

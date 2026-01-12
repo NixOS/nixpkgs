@@ -18,7 +18,7 @@
   libdrm,
   libva,
   libglvnd,
-  libXdamage,
+  libxdamage,
   libXi,
   libXrandr,
   libXfixes,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     vulkan-headers
     libdrm
     libva
-    libXdamage
+    libxdamage
     libXi
     libXrandr
     libXfixes

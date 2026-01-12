@@ -8,7 +8,7 @@
   libx11,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXi,
   libXrandr,
@@ -50,7 +50,7 @@ let
       libx11
       libxcomposite
       libxcursor
-      libXdamage
+      libxdamage
       libXext
       libXi
       libXrandr

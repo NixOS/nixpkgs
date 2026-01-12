@@ -13,7 +13,7 @@
   makeShellWrapper,
   libx11,
   libXext,
-  libXdamage,
+  libxdamage,
   libXfixes,
   libxcb,
   libxcomposite,
@@ -73,7 +73,7 @@ stdenvNoCC.mkDerivation rec {
     libx11
     libx11
     libXext
-    libXdamage
+    libxdamage
     libXfixes
     libxcb
     libxcomposite

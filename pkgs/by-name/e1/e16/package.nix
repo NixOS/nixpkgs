@@ -7,7 +7,7 @@
   imlib2,
   libsm,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXft,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     imlib2
     libsm
     libxcomposite
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libXft

@@ -14,7 +14,7 @@
   gobject-introspection,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXi,
   libXinerama,
   libXrandr,
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional xineramaSupport libXinerama
   ++ lib.optional cupsSupport cups
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libXdamage
+    libxdamage
   ];
 
   preConfigure = lib.optionalString (

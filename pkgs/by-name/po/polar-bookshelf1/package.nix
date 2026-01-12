@@ -22,7 +22,7 @@
   libXScrnSaver,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libxcomposite
     libxcursor
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libXi

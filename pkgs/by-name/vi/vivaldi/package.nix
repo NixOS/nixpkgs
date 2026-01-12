@@ -16,7 +16,7 @@
   libxcursor,
   libXScrnSaver,
   libxcomposite,
-  libXdamage,
+  libxdamage,
   libXtst,
   libXrandr,
   alsa-lib,
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     libXfixes
     libXScrnSaver
     libxcomposite
-    libXdamage
+    libxdamage
     libXtst
     libXrandr
     atk

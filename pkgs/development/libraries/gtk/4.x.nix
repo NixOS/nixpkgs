@@ -25,6 +25,7 @@
   fribidi,
   harfbuzz,
   xorg,
+  libxdamage,
   libxcursor,
   libsm,
   libice,
@@ -147,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libxcursor
-    xorg.libXdamage
+    libxdamage
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender

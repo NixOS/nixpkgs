@@ -12,7 +12,7 @@
   libXrandr,
   libx11,
   libXext,
-  libXdamage,
+  libxdamage,
   libXtst,
   libsm,
   libXfixes,
@@ -130,7 +130,7 @@ mkDerivation rec {
         libXrandr
         libx11
         libXext
-        libXdamage
+        libxdamage
         libXtst
         libsm
         libXfixes

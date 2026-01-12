@@ -16,7 +16,7 @@
   libXScrnSaver,
   libxcomposite,
   libxcursor,
-  libXdamage,
+  libxdamage,
   libXext,
   libXfixes,
   libXi,
@@ -50,7 +50,7 @@ let
     gtk3
     libx11
     libxcomposite
-    libXdamage
+    libxdamage
     libXext
     libXfixes
     libXi

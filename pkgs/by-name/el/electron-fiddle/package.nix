@@ -131,7 +131,7 @@ buildFHSEnv {
       pango
       libx11
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr

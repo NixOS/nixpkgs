@@ -15,6 +15,7 @@
   ucx,
   wayland,
   xorg,
+  libxdamage,
   libxcursor,
 }:
 let
@@ -121,7 +122,7 @@ buildRedist (
       ucx
       wayland
       libxcursor
-      xorg.libXdamage
+      libxdamage
       xorg.libXrandr
       xorg.libXtst
     ]

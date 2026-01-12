@@ -11,7 +11,7 @@
   gettext,
   libxcomposite,
   libXinerama,
-  libXdamage,
+  libxdamage,
   libx11,
   libwnck,
   libxfce4ui,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libx11
     libxcomposite
-    libXdamage
+    libxdamage
     libXinerama
     libwnck
     libxfce4ui

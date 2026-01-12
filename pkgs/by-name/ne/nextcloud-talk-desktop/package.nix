@@ -9,6 +9,7 @@
   nss,
   cairo,
   xorg,
+  libxdamage,
   libxcursor,
   libxcomposite,
   libx11,
@@ -96,7 +97,7 @@ let
       libglvnd
       libx11
       libxcomposite
-      xorg.libXdamage
+      libxdamage
       xorg.libXrandr
       xorg.libXfixes
       libxcursor
