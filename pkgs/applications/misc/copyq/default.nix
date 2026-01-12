@@ -9,7 +9,7 @@
   qtsvg,
   qttools,
   qtdeclarative,
-  libXfixes,
+  libxfixes,
   libXtst,
   qtwayland,
   wayland,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qttools
     qtdeclarative
-    libXfixes
+    libxfixes
     libXtst
     qtwayland
     wayland

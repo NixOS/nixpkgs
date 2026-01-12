@@ -10,7 +10,7 @@
   libice,
   libxkbcommon,
   libxshmfence,
-  libXfixes,
+  libxfixes,
   libXt,
   libXi,
   libxcursor,
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     libXi
     libXft
     libxcursor
-    libXfixes
+    libxfixes
     libXScrnSaver
     libxcomposite
     libxdamage

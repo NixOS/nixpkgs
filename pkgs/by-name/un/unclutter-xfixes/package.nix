@@ -6,7 +6,7 @@
   libx11,
   libxext,
   libXi,
-  libXfixes,
+  libxfixes,
   pkg-config,
   asciidoc,
   libxslt,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     libXi
-    libXfixes
+    libxfixes
   ];
 
   prePatch = ''

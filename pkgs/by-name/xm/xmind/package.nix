@@ -18,6 +18,7 @@
   alsa-lib,
   expat,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcomposite,
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libxcomposite
     libxdamage
-    xorg.libXfixes
+    libxfixes
     xorg.libXrandr
     libxkbfile
     glib

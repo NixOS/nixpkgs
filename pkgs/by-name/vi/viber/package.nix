@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcursor,
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxdamage
     libxext
-    xorg.libXfixes
+    libxfixes
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender

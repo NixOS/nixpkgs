@@ -31,7 +31,7 @@
   libxcursor,
   libxdamage,
   libxext,
-  libXfixes,
+  libxfixes,
   libXi,
   libxkbcommon,
   libXrandr,
@@ -136,7 +136,7 @@ let
     libxcursor
     libxdamage
     libxext
-    libXfixes
+    libxfixes
     libXi
     libxkbcommon
     libXrandr

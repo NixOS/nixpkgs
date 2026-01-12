@@ -28,6 +28,7 @@
   libxkbcommon,
   libxcb,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcomposite,
@@ -162,7 +163,7 @@ let
         xorg.libXtst
         libxcomposite
         libxext
-        xorg.libXfixes
+        libxfixes
         xorg.libXrandr
         libxkbfile
       ];

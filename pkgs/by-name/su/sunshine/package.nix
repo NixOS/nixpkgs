@@ -12,6 +12,7 @@
   libevdev,
   libpulseaudio,
   xorg,
+  libxfixes,
   libxdmcp,
   libx11,
   libxcb,
@@ -134,7 +135,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libpulseaudio
     libx11
     libxcb
-    xorg.libXfixes
+    libxfixes
     xorg.libXrandr
     xorg.libXtst
     xorg.libXi

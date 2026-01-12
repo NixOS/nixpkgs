@@ -13,7 +13,7 @@
   libGL,
   libxext,
   libXft,
-  libXfixes,
+  libxfixes,
   mesa,
   xinput,
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libXft
     libGLU
     libGL
-    libXfixes
+    libxfixes
     xinput
   ];
 

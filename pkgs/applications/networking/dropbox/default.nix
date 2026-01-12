@@ -62,7 +62,7 @@ buildFHSEnv {
       libxcomposite
       libxdamage
       libxext
-      xorg.libXfixes
+      libxfixes
       xorg.libXrender
       xorg.libXmu
       xorg.libXxf86vm

@@ -13,7 +13,7 @@
   glib,
   libxcomposite,
   libxdamage,
-  libXfixes,
+  libxfixes,
   libXrandr,
   libgbm,
   libgcc,
@@ -47,7 +47,7 @@ let
       glib
       libxcomposite
       libxdamage
-      libXfixes
+      libxfixes
       libXrandr
       libgbm
       libgcc.lib

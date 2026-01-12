@@ -31,7 +31,7 @@
   libxcomposite,
   libxdamage,
   libxext,
-  libXfixes,
+  libxfixes,
   libXrandr,
   libxkbfile,
   pango,
@@ -67,7 +67,7 @@ let
     libxcomposite
     libxdamage
     libxext
-    libXfixes
+    libxfixes
     libXrandr
     libxkbfile
     pango

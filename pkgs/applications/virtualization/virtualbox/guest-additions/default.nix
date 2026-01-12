@@ -6,6 +6,7 @@
   dbus,
   kmod,
   xorg,
+  libxfixes,
   libxext,
   libxcursor,
   zlib,
@@ -46,7 +47,7 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
@@ -109,7 +110,7 @@ stdenv.mkDerivation {
             xorg.libXt
             libxext
             xorg.libXmu
-            xorg.libXfixes
+            libxfixes
             libxcursor
           ]
         } $i

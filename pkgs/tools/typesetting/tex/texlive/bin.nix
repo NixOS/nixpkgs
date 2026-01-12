@@ -38,6 +38,7 @@
   cairo,
   pixman,
   xorg,
+  libxfixes,
   clisp,
   biber,
   woff2,
@@ -758,7 +759,7 @@ rec {
       xorg.libXmu
       libxaw
       libxext
-      xorg.libXfixes
+      libxfixes
     ];
 
     preConfigure = "cd texk/xdvik";

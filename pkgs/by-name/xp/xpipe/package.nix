@@ -14,7 +14,7 @@
   libx11,
   libxext,
   libxdamage,
-  libXfixes,
+  libxfixes,
   libxcb,
   libxcomposite,
   libxcursor,
@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation rec {
     libx11
     libxext
     libxdamage
-    libXfixes
+    libxfixes
     libxcb
     libxcomposite
     libxcursor

@@ -42,7 +42,7 @@ let
       xorg.libXi
       libxcursor
       libxcomposite
-      xorg.libXfixes
+      libxfixes
       xorg.libXtst
       xorg.libXScrnSaver
       libice

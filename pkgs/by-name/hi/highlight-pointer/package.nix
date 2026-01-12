@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libx11,
   xorg,
+  libxfixes,
   libxext,
 }:
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     xorg.libXi
-    xorg.libXfixes
+    libxfixes
   ];
 
   installPhase = ''

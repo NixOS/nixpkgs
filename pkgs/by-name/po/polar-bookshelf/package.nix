@@ -22,7 +22,7 @@
   libXrandr,
   libxcomposite,
   libxext,
-  libXfixes,
+  libxfixes,
   libXrender,
   libXtst,
   libXScrnSaver,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libxcomposite
     libxext
-    libXfixes
+    libxfixes
     libXrender
     libXtst
     libXScrnSaver

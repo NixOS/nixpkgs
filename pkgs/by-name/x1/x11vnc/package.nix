@@ -6,6 +6,7 @@
   zlib,
   libjpeg,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libx11,
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libXfixes
+    libxfixes
     xorgproto
     openssl
     libxdamage

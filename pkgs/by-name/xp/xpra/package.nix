@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  libxfixes,
   libxdamage,
   libxcomposite,
   libx11,
@@ -136,7 +137,7 @@ effectiveBuildPythonApplication rec {
     libx11
     libxcomposite
     libxdamage
-    xorg.libXfixes
+    libxfixes
     xorg.libXi
     libxkbfile
     xorg.libXrandr

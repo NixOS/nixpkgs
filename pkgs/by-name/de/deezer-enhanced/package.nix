@@ -10,6 +10,7 @@
 
   ### Libs
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcomposite,
@@ -56,7 +57,7 @@ stdenvNoCC.mkDerivation rec {
     libxcomposite
     libxdamage
     libxext
-    xorg.libXfixes
+    libxfixes
     xorg.libXrandr
     libxcb
 
@@ -99,7 +100,7 @@ stdenvNoCC.mkDerivation rec {
           libxcomposite
           libxdamage
           libxext
-          xorg.libXfixes
+          libxfixes
           xorg.libXrandr
           libxcb
 

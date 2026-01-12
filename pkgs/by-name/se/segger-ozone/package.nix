@@ -10,7 +10,7 @@
   libsm,
   libx11,
   libxcursor,
-  libXfixes,
+  libxfixes,
   libXrandr,
   libXrender,
   makeDesktopItem,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libx11
     libxcursor
-    libXfixes
+    libxfixes
     libXrandr
     libXrender
     (lib.getLib stdenv.cc.cc)

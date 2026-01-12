@@ -17,6 +17,7 @@
   nss,
   nspr,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcomposite,
@@ -123,7 +124,7 @@ stdenv.mkDerivation (
             libxdamage
             libxcb
             libxext
-            xorg.libXfixes
+            libxfixes
             xorg.libXrandr
             cairo
             pango

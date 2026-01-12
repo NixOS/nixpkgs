@@ -9,6 +9,7 @@
   glib,
   systemd,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcursor,
@@ -88,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
           libxcomposite
           libxcursor
           libxext
-          xorg.libXfixes
+          libxfixes
           xorg.libXi
           xorg.libXrender
           xorg.libXtst

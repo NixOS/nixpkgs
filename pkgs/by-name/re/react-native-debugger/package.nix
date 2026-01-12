@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcursor,
@@ -67,7 +68,7 @@ let
     libxdamage
     xorg.libXrandr
     libxcomposite
-    xorg.libXfixes
+    libxfixes
     xorg.libXrender
     xorg.libXScrnSaver
   ];

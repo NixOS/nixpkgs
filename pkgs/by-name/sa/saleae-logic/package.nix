@@ -19,7 +19,7 @@
   libXft,
   fontconfig,
   libXrender,
-  libXfixes,
+  libxfixes,
   libx11,
   libXi,
   libXrandr,
@@ -47,7 +47,7 @@ let
     libXft
     fontconfig
     libXrender
-    libXfixes
+    libxfixes
     libx11
     libXi
     libXrandr

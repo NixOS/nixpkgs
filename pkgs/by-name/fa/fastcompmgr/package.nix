@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxfixes,
   libxdamage,
   libxcomposite,
   libx11,
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcomposite
     libxdamage
-    xorg.libXfixes
+    libxfixes
     xorg.libXrender
   ];
 

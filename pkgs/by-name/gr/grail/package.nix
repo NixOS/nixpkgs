@@ -5,6 +5,7 @@
   fetchurl,
   pkg-config,
   xorg,
+  libxfixes,
   libxext,
   libx11,
   python3,
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     libxext
     xorg.libXi
-    xorg.libXfixes
+    libxfixes
   ];
 
   configureFlags = lib.optional enableX11 "--with-x11";

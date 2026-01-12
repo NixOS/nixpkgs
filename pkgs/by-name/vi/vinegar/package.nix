@@ -19,7 +19,7 @@
   vulkan-loader,
   wayland,
   winetricks,
-  xorg,
+  libxfixes,
   libxcursor,
   libx11,
   symlinkJoin,
@@ -95,7 +95,7 @@ buildGoModule (finalAttrs: {
     winetricks
     libx11
     libxcursor
-    xorg.libXfixes
+    libxfixes
   ];
 
   postPatch = ''

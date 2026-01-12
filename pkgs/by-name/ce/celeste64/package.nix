@@ -13,6 +13,7 @@
   wayland,
   libdecor,
   xorg,
+  libxfixes,
   libxext,
   libxcursor,
   libx11,
@@ -48,7 +49,7 @@ buildDotnetModule rec {
     libdrm
     libxkbcommon
     libx11
-    xorg.libXfixes
+    libxfixes
     libxext
     libxcursor
     xorg.libXi

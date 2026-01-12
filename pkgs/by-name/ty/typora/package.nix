@@ -92,7 +92,7 @@ let
         libxcomposite
         libxdamage
         libxext
-        xorg.libXfixes
+        libxfixes
         libxcb
       ]);
     runScript = ''

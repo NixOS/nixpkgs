@@ -17,7 +17,7 @@
   libxau,
   libxcomposite,
   libxdmcp,
-  libXfixes,
+  libxfixes,
   libdrm,
   libffi,
   libjpeg,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxau
     libxcomposite
     libxdmcp
-    libXfixes
+    libxfixes
     libdrm
     libffi
     libjpeg

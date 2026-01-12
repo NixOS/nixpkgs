@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcomposite,
@@ -112,7 +113,7 @@ let
     libxcomposite
     libxdamage
     libxext
-    xorg.libXfixes
+    libxfixes
     xorg.libXrandr
     libxkbfile
     pango

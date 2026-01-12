@@ -24,7 +24,7 @@
   bash,
   libxcomposite,
   libxdamage,
-  libXfixes,
+  libxfixes,
   libXtst,
   nss,
   libXxf86vm,
@@ -94,7 +94,7 @@ buildFHSEnv {
     cairo
     libxcomposite
     libxdamage
-    libXfixes
+    libxfixes
     libXtst
     nss
     libXxf86vm

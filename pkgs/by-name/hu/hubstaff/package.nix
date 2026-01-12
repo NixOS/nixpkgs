@@ -16,7 +16,7 @@
   libXinerama,
   libxcursor,
   cairo,
-  libXfixes,
+  libxfixes,
   libXScrnSaver,
   libnotify,
   glib,
@@ -50,7 +50,7 @@ let
     gtk3
     libappindicator-gtk3
     curl
-    libXfixes
+    libxfixes
     libXScrnSaver
     libxcursor
     cairo

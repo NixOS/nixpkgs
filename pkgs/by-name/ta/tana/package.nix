@@ -4,7 +4,7 @@
   libxcomposite,
   libxdamage,
   libxext,
-  libXfixes,
+  libxfixes,
   libXrandr,
   stdenv,
   lib,
@@ -50,7 +50,7 @@ let
     libxcomposite
     libxdamage
     libxext
-    libXfixes
+    libxfixes
     libxkbcommon
     libXrandr
     nspr

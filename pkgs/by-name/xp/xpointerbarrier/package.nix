@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   libx11,
-  libXfixes,
+  libxfixes,
   libXrandr,
   gitUpdater,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libx11
-    libXfixes
+    libxfixes
     libXrandr
   ];
 

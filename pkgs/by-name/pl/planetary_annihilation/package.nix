@@ -19,6 +19,7 @@
   curl,
   systemd,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcursor,
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         stdenv.cc.cc
         libxdamage
-        xorg.libXfixes
+        libxfixes
         gtk2
         glib
         stdenv.cc.libc

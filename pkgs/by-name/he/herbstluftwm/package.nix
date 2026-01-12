@@ -12,7 +12,7 @@
   libXft,
   libXrender,
   libxdmcp,
-  libXfixes,
+  libxfixes,
   freetype,
   asciidoc,
   xdotool,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libXft
     libXrender
     libxdmcp
-    libXfixes
+    libxfixes
     freetype
   ];
 

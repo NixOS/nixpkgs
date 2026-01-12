@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libx11,
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxdamage
     libxext
-    xorg.libXfixes
+    libxfixes
     xorg.libXi
     xorg.libXmu
     xorg.libXrandr

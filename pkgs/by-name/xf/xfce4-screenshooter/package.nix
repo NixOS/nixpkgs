@@ -14,7 +14,7 @@
   gtk-layer-shell,
   libx11,
   libxext,
-  libXfixes,
+  libxfixes,
   libXtst,
   libxfce4ui,
   libxfce4util,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     libx11
     libxext
-    libXfixes
+    libxfixes
     libXtst
     libxfce4ui
     libxfce4util

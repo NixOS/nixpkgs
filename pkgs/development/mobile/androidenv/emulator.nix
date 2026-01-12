@@ -43,7 +43,7 @@ deployAndroidPackage {
       libx11
       libxext
       libxdamage
-      xorg.libXfixes
+      libxfixes
       libxcb
       libxcomposite
       libxcursor

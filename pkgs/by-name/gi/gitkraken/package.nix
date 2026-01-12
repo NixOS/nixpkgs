@@ -32,7 +32,7 @@
   libxcursor,
   libxdamage,
   libxext,
-  libXfixes,
+  libxfixes,
   libXi,
   libXrandr,
   libXrender,
@@ -134,7 +134,7 @@ let
       freetype
       fontconfig
       libxcomposite
-      libXfixes
+      libxfixes
       libXrender
       gtk3
       libgnome-keyring

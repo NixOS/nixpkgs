@@ -75,7 +75,7 @@
   freetype,
   fontconfig,
   libx11,
-  libXfixes,
+  libxfixes,
   libXrender,
   libxcursor,
   gl2ps,
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXfixes
+    libxfixes
     libXrender
     libxcursor
   ]

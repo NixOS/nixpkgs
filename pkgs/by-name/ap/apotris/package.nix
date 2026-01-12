@@ -17,7 +17,7 @@
   libopenmpt,
   libXrandr,
   libxext,
-  libXfixes,
+  libxfixes,
   libxcursor,
   libXi,
   libXScrnSaver,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     libXrandr
     libxext
-    libXfixes
+    libxfixes
     libxcursor
     libXi
     libXScrnSaver

@@ -7,7 +7,7 @@
   pkg-config,
   libxext,
   libdrm,
-  libXfixes,
+  libxfixes,
   wayland,
   wayland-scanner,
   libffi,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libva1-minimal
     libx11
     libxext
-    libXfixes
+    libxfixes
     wayland
     libffi
     libGL

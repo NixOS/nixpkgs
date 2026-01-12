@@ -57,7 +57,7 @@
   roc-toolkit,
   x11Support ? true,
   libcanberra,
-  xorg,
+  libxfixes,
   libx11,
   libxcb,
   libmysofa,
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra
     libx11
     libxcb
-    xorg.libXfixes
+    libxfixes
   ]
   ++ lib.optionals bluezSupport [
     bluez

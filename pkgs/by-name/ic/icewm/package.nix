@@ -21,7 +21,7 @@
   libxdamage,
   libxdmcp,
   libxext,
-  libXfixes,
+  libxfixes,
   libXft,
   libXinerama,
   libXpm,
@@ -78,7 +78,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     libxdamage
     libxdmcp
     libxext
-    libXfixes
+    libxfixes
     libXft
     libXinerama
     libXpm

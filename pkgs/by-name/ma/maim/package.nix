@@ -13,7 +13,7 @@
   glm,
   libx11,
   libxext,
-  libXfixes,
+  libxfixes,
   libXrandr,
   libxcomposite,
   slop,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     glm
     libx11
     libxext
-    libXfixes
+    libxfixes
     libXrandr
     libxcomposite
     slop

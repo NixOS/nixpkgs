@@ -35,6 +35,7 @@
   systemd,
   udev,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcursor,
@@ -76,7 +77,7 @@ let
       libxcursor
       libxdamage
       libxext
-      xorg.libXfixes
+      libxfixes
       xorg.libXi
       xorg.libXrandr
       xorg.libXrender

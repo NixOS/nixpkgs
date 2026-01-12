@@ -29,7 +29,7 @@
   libx11,
   libxcursor,
   libxext,
-  libXfixes,
+  libxfixes,
   libXi,
   libXinerama,
   libxkbcommon,
@@ -498,7 +498,7 @@ let
           libx11
           libxcursor
           libxext
-          libXfixes
+          libxfixes
           libXi
           libXinerama
           libXrandr

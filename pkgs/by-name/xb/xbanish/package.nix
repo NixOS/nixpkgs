@@ -5,7 +5,7 @@
   libx11,
   libXi,
   libXt,
-  libXfixes,
+  libxfixes,
   libxext,
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     libx11
     libXi
     libXt
-    libXfixes
+    libxfixes
     libxext
   ];
 

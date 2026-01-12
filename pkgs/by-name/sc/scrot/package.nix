@@ -7,7 +7,7 @@
   autoconf-archive,
   libx11,
   libxext,
-  libXfixes,
+  libxfixes,
   libxcomposite,
   libXinerama,
   pkg-config,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     imlib2
     libx11
     libxext
-    libXfixes
+    libxfixes
     libxcomposite
     libXinerama
     libbsd

@@ -9,7 +9,7 @@
   alsa-lib,
   openssl,
   libXrandr,
-  libXfixes,
+  libxfixes,
   libxext,
   libXrender,
   libXinerama,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     gst_all_1.gst-plugins-base
     libxext
-    libXfixes
+    libxfixes
     libXinerama
     libXrandr
     libXrender

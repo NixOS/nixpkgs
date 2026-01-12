@@ -48,6 +48,7 @@
   libjack2,
   enableX11 ? stdenv.hostPlatform.isLinux,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   ncurses,
@@ -161,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableX11 [
     libxext
-    xorg.libXfixes
+    libxfixes
     libxdamage
     xorg.libXtst
     xorg.libXi

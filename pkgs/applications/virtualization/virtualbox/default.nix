@@ -14,7 +14,7 @@
   xorgproto,
   libxext,
   libxcursor,
-  libXfixes,
+  libxfixes,
   libXmu,
   SDL2,
   libcap,
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libXfixes\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libXfixes\.so\.3"@"${libXfixes.out}/lib/libXfixes.so.3"@g'
+      s@"libXfixes\.so\.3"@"${libxfixes.out}/lib/libXfixes.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'

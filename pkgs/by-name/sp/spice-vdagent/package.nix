@@ -10,7 +10,7 @@
   libxcb,
   libXrandr,
   libXinerama,
-  libXfixes,
+  libxfixes,
   dbus,
   libdrm,
   systemd,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libxcb
     libXrandr
     libXinerama
-    libXfixes
+    libxfixes
     dbus
     systemd
   ];

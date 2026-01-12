@@ -24,6 +24,7 @@
   vulkan-loader,
   curlWithGnuTls,
   xorg,
+  libxfixes,
   libxext,
   libxdamage,
   libxcomposite,
@@ -37,7 +38,7 @@ let
   xorgDeps = [
     libxdamage
     libxext
-    xorg.libXfixes
+    libxfixes
     libxcomposite
     xorg.libXrandr
   ];

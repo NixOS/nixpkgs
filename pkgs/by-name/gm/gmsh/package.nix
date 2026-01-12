@@ -15,6 +15,7 @@
   libGL,
   libGLU,
   xorg,
+  libxfixes,
   libxext,
   libxcursor,
   libx11,
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     xorg.libXrender
     libxcursor
-    xorg.libXfixes
+    libxfixes
     libxext
     xorg.libXft
     xorg.libXinerama

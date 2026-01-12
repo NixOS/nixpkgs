@@ -7,7 +7,7 @@
   libx11,
   libxcb,
   libxcursor,
-  libXfixes,
+  libxfixes,
   libxkbcommon,
   vulkan-headers,
   wayland,
@@ -45,7 +45,7 @@ buildGoModule rec {
     libx11
     libxcb
     libxcursor
-    libXfixes
+    libxfixes
     libGL
   ];
 

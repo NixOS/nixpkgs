@@ -21,7 +21,7 @@
   libxdamage,
   libXi,
   libXrandr,
-  libXfixes,
+  libxfixes,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libxdamage
     libXi
     libXrandr
-    libXfixes
+    libxfixes
   ];
 
   mesonFlags = [

@@ -1,6 +1,6 @@
 {
   libx11,
-  libXfixes,
+  libxfixes,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXfixes
+    libxfixes
   ];
 
   installPhase = ''

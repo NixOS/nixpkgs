@@ -38,7 +38,7 @@
   libxcursor,
   libxdamage,
   libxext,
-  libXfixes,
+  libxfixes,
   libXi,
   libXrandr,
   libXrender,
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     libxcursor
     libxdamage
     libxext
-    libXfixes
+    libxfixes
     libXi
     libXrandr
     libXrender

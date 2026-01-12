@@ -200,7 +200,7 @@ let
       pkgs.libxcomposite
       pkgs.libxdamage
       pkgs.libxext
-      pkgs.xorg.libXfixes
+      pkgs.libxfixes
       pkgs.xorg.libXrandr
       pkgs.xorg.libXrender
       pkgs.xorg.libXtst

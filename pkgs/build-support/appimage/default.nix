@@ -144,7 +144,7 @@ rec {
         xorg.libXrandr
         libxext
         libx11
-        xorg.libXfixes
+        libxfixes
         libGL
 
         gst_all_1.gstreamer

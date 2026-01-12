@@ -14,7 +14,7 @@
   libxcursor,
   libXi,
   libXrandr,
-  libXfixes,
+  libxfixes,
   libpulseaudio,
   libva,
   ffmpeg_7,
@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation {
     libxcursor
     libXi
     libXrandr
-    libXfixes
+    libxfixes
     vulkan-loader
   ];
 

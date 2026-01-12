@@ -100,7 +100,7 @@
   libXinerama,
   libXrandr,
   libXtst,
-  libXfixes,
+  libxfixes,
   xdpyinfo,
   libxdmcp,
   dbusSupport ? true,
@@ -359,7 +359,7 @@ stdenv.mkDerivation (
       libXinerama
       libXrandr.dev
       libXtst
-      libXfixes
+      libxfixes
     ]
     ++ lib.optional dbusSupport dbus
     ++ lib.optional joystickSupport cwiid

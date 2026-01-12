@@ -9,7 +9,7 @@
   libxext,
   libXinerama,
   qtx11extras,
-  libXfixes,
+  libxfixes,
   libGLU,
   libGL,
   pkg-config,
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     libjack2
     libx11
     libxext
-    libXfixes
+    libxfixes
     libXinerama
     libGLU
     libGL

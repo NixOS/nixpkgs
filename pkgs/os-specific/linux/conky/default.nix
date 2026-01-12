@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     xorg.libXft
-    xorg.libXfixes
+    libxfixes
     libsm
     expat
   ]

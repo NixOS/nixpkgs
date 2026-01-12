@@ -11,7 +11,7 @@
   libx11,
   libxcb,
   libxext,
-  libXfixes,
+  libxfixes,
   wayland,
   libffi,
   libGL,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcb
     libxext
-    libXfixes
+    libxfixes
     wayland
     libffi
     libGL

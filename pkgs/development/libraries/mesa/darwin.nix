@@ -11,7 +11,7 @@
   ninja,
   pkg-config,
   python3Packages,
-  xorg,
+  libxfixes,
   libxext,
   libx11,
   libxcb,
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     llvmPackages.libllvm
     libx11
     libxext
-    xorg.libXfixes
+    libxfixes
     libxcb
     zlib
   ];

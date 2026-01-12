@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  libxfixes,
   libxext,
   libxaw,
   libx11,
@@ -222,7 +223,7 @@ stdenv.mkDerivation rec {
     libx11
     xorg.libXScrnSaver
     libxext
-    xorg.libXfixes
+    libxfixes
     xorg.libXinerama
     xorg.libXmu
     xorg.libXrender

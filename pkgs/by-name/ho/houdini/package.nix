@@ -51,7 +51,7 @@ buildFHSEnv {
       libx11
       xorg.libXrender
       libxcursor
-      xorg.libXfixes
+      libxfixes
       xorg.libXrender
       libxcomposite
       libxdamage

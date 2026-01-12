@@ -7,6 +7,7 @@
   glib,
   gdk-pixbuf,
   xorg,
+  libxfixes,
   libxdamage,
   libxcomposite,
   libintl,
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     mesa-gl-headers
     libGL
     xorg.libXrandr
-    xorg.libXfixes
+    libxfixes
     libxcomposite
     libxdamage
   ]
