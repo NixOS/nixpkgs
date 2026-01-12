@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xvinfo,
   xset,
   xsetroot,
   xrefresh,
@@ -198,7 +199,7 @@ let
     xrefresh
     xset
     xsetroot
-    xorg.xvinfo
+    xvinfo
     xorg.xwd
     xorg.xwininfo
     xorg.xwud
