@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   hatchling,
   numpy,
   pytestCheckHook,
@@ -12,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fickling";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p2XkHKqheVHqLTQKmUApiYH7NIaHc091B/TjiCDYWtA=";
+    hash = "sha256-uirVOJ6CI7gBu9lOoPtpjUZeBmIhBMI0tjSDI/ASy7w=";
   };
 
   build-system = [
@@ -45,11 +46,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  disabledTestPaths = [
-    # https://github.com/trailofbits/fickling/issues/162
-    # AttributeError: module 'numpy.lib.format' has no attribute...
-    "test/test_polyglot.py"
-  ];
+  # Tests fail upstream in pytorch under python 3.14
+  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "fickling" ];
 
