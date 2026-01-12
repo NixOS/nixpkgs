@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  pixman,
   imake,
   gccmakedep,
   libtirpc,
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     xorg.libXpm
     xorg.libXrandr
     xorg.libXtst
-    xorg.pixman
+    pixman
     xorg.xkbcomp
     xorg.xkeyboardconfig
     libtirpc

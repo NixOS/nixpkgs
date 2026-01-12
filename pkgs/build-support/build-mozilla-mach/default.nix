@@ -94,6 +94,7 @@ in
   onnxruntime,
   pango,
   xorg,
+  pixman,
   zip,
   zlib,
   pkgsBuildBuild,
@@ -567,7 +568,7 @@ buildStdenv.mkDerivation {
       xorg.libXrender
       xorg.libXt
       xorg.libXtst
-      xorg.pixman
+      pixman
       xorg.xorgproto
       zlib
       (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)

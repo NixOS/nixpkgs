@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  pixman,
   libxshmfence,
   libxkbfile,
   libfontenc,
@@ -88,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence
     xorg.libXi
     mesa-gl-headers # for -DTVNC_SYSTEMX11=1
-    xorg.pixman # for -DTVNC_SYSTEMX11=1
+    pixman # for -DTVNC_SYSTEMX11=1
     xorg.xorgproto
     xorg.xtrans # for -DTVNC_SYSTEMX11=1
   ];
@@ -96,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${xorg.libXfont2}/lib/libXfont2.so)  #'
     substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "fontenc" X11_Fontenc_LIB' 'set(X11_Fontenc_LIB ${libfontenc}/lib/libfontenc.so)  #'
-    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "pixman-1" X11_Pixman_LIB' 'set(X11_Pixman_LIB ${xorg.pixman}/lib/libpixman-1.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "pixman-1" X11_Pixman_LIB' 'set(X11_Pixman_LIB ${pixman}/lib/libpixman-1.so)  #'
   '';
 
   cmakeFlags = [
