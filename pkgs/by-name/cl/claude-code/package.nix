@@ -22,6 +22,11 @@ buildNpmPackage (finalAttrs: {
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
+
+    # Replace hardcoded `/bin/bash` with `/usr/bin/env bash` for Nix compatibility
+    # https://github.com/anthropics/claude-code/issues/15195
+    substituteInPlace cli.js \
+      --replace-warn '#!/bin/bash' '#!/usr/bin/env bash'
   '';
 
   dontNpmBuild = true;

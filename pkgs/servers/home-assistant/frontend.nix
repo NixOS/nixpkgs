@@ -12,7 +12,8 @@ buildPythonPackage rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     pname = "home_assistant_frontend";
     dist = "py3";
     python = "py3";

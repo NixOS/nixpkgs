@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Provider of IANA time zone data";
     homepage = "https://github.com/python/tzdata";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }
