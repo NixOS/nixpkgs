@@ -12,7 +12,7 @@
   libx11,
   libxau,
   libxdmcp,
-  libXfont2,
+  libxfont_2,
   libdrm,
   libgcrypt,
   libmd,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalPackages: rec {
     libx11
     libxau
     libxdmcp
-    libXfont2
+    libxfont_2
     libdrm
     libgcrypt
     libmd

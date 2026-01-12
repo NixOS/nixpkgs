@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  libxfont_2,
   libxext,
   libxdmcp,
   libxdamage,
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage # for -DTVNC_SYSTEMX11=1
     libxdmcp # for -DTVNC_SYSTEMX11=1
     libxext
-    xorg.libXfont2 # for -DTVNC_SYSTEMX11=1
+    libxfont_2 # for -DTVNC_SYSTEMX11=1
     libxkbfile # for -DTVNC_SYSTEMX11=1
     libxshmfence
     xorg.libXi
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${xorg.libXfont2}/lib/libXfont2.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${libxfont_2}/lib/libXfont2.so)  #'
     substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "fontenc" X11_Fontenc_LIB' 'set(X11_Fontenc_LIB ${libfontenc}/lib/libfontenc.so)  #'
     substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "pixman-1" X11_Pixman_LIB' 'set(X11_Pixman_LIB ${pixman}/lib/libpixman-1.so)  #'
   '';
