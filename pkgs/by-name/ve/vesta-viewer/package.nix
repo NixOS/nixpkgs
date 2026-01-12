@@ -14,7 +14,7 @@
   libgcc,
   gtk3,
   gtk2,
-  xorg,
+  libxxf86vm,
   libxtst,
   temurin-jre-bin,
 }:
@@ -49,7 +49,7 @@ let
       gtk3
       gtk2
       temurin-jre-bin
-      xorg.libXxf86vm
+      libxxf86vm
       libxtst
     ];
 

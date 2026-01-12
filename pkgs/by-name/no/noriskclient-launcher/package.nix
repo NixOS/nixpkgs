@@ -21,7 +21,7 @@
   libxcursor,
   libxext,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   noriskclient-launcher-unwrapped,
   pipewire,
   stdenv,
@@ -58,7 +58,7 @@ symlinkJoin {
       libxcursor
       libxext
       libxrandr
-      libXxf86vm
+      libxxf86vm
 
       # narrator support
       flite

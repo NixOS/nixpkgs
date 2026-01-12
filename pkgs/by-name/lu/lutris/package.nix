@@ -34,7 +34,7 @@ let
       libpthread-stubs
       libxext
       libxdmcp
-      xorg.libXxf86vm
+      libxxf86vm
       libxinerama
       libsm
       libxv

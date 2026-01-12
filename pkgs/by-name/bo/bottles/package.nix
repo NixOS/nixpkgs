@@ -43,7 +43,7 @@ let
             libxrandr
             libxrender
             libxv
-            xorg.libXxf86vm
+            libxxf86vm
           ];
         gstreamerDeps =
           pkgs: with pkgs.gst_all_1; [

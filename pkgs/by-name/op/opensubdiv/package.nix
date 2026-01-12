@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxinerama,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       glew
       libx11
       libxrandr
-      xorg.libXxf86vm
+      libxxf86vm
       libxcursor
       libxinerama
       libxi

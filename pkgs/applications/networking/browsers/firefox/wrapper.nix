@@ -12,7 +12,7 @@
 
   ## various stuff that can be plugged in
   ffmpeg_7,
-  xorg,
+  libxxf86vm,
   libxxf86dga,
   libxt,
   libxscrnsaver,
@@ -119,7 +119,7 @@ let
           stdenv.cc
           libx11
           libxxf86dga
-          xorg.libXxf86vm
+          libxxf86vm
           libxext
           libxt
           alsa-lib

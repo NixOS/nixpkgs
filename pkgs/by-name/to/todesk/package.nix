@@ -27,7 +27,7 @@
   libxfixes,
   libxtst,
   nss,
-  libXxf86vm,
+  libxxf86vm,
   gtk3,
   gdk-pixbuf,
   pango,
@@ -97,7 +97,7 @@ buildFHSEnv {
     libxfixes
     libxtst
     nss
-    libXxf86vm
+    libxxf86vm
     gtk3
     gdk-pixbuf
     pango

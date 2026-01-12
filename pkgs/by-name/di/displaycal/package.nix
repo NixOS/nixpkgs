@@ -5,7 +5,7 @@
   wrapGAppsHook3,
   gtk3,
   librsvg,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxinerama,
   libxext,
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     librsvg
     libx11
-    xorg.libXxf86vm
+    libxxf86vm
     libxext
     libxinerama
     libxrandr

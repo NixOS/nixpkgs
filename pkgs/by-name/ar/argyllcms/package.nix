@@ -4,7 +4,7 @@
   jam,
   unzip,
   libx11,
-  libXxf86vm,
+  libxxf86vm,
   libxrandr,
   libxinerama,
   libxrender,
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libx11
-    libXxf86vm
+    libxxf86vm
     libxrandr
     libxinerama
     libxext

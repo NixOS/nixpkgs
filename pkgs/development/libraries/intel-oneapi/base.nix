@@ -10,7 +10,7 @@
   pkg-config,
   libdrm,
   elfutils,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxfixes,
   libxext,
@@ -94,7 +94,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       glib
       freetype
       libx11
-      xorg.libXxf86vm
+      libxxf86vm
       libxext
       libxcb
       libxcomposite

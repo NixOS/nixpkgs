@@ -11,7 +11,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libpulseaudio,
   libudev0-shim,
   makeDesktopItem,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libpulseaudio
     libudev0-shim
     vulkan-loader

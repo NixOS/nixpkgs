@@ -11,7 +11,7 @@
   libxinerama,
   xinput,
   libxi,
-  libXxf86vm,
+  libxxf86vm,
 }:
 buildGoModule rec {
   pname = "bepass";
@@ -39,7 +39,7 @@ buildGoModule rec {
     libxinerama
     libxi
     xinput
-    libXxf86vm
+    libxxf86vm
   ];
 
   ldflags = [

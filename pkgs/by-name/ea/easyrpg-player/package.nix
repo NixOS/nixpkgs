@@ -27,7 +27,7 @@
   libxmp,
   libxrandr,
   libxscrnsaver,
-  libXxf86vm,
+  libxxf86vm,
   mpg123,
   nlohmann_json,
   opusfile,
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     libxinerama
     libxrandr
     libxscrnsaver
-    libXxf86vm
+    libxxf86vm
     libdecor
   ];
 

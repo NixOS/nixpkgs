@@ -6,7 +6,7 @@
   libxext,
   libxi,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libGLX,
   libGLU,
   cmake,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxi
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libGLU
   ];
 

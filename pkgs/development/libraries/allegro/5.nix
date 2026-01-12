@@ -29,7 +29,7 @@
   libxt,
   libxxf86dga,
   libxxf86misc,
-  libXxf86vm,
+  libxxf86vm,
   openal,
   physfs,
   pkg-config,
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     libxt
     libxxf86dga
     libxxf86misc
-    libXxf86vm
+    libxxf86vm
     xorgproto
   ]
   ++ lib.optionals useSDL [

@@ -23,7 +23,7 @@
   libGL,
   libxpm,
   libxext,
-  libXxf86vm,
+  libxxf86vm,
   alsa-lib,
   # sdl
   SDL2,
@@ -107,7 +107,7 @@ let
       libGL
       libxpm
       libxext
-      libXxf86vm
+      libxxf86vm
       alsa-lib
     ]
     ++ lib.optionals withSDL [ SDL2 ];

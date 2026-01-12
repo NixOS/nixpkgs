@@ -10,7 +10,7 @@
   libsm,
   libxinerama,
   libxtst,
-  libXxf86vm,
+  libxxf86vm,
   pkg-config,
   xorgproto,
   compat28 ? false,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libsm
     libxinerama
     libxtst
-    libXxf86vm
+    libxxf86vm
     xorgproto
   ]
   ++ lib.optional withCurl curl

@@ -13,7 +13,7 @@
   withJcef ? true,
 
   libxdamage,
-  libXxf86vm,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxcursor,
@@ -122,7 +122,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     LIBDIRS="${
       lib.makeLibraryPath [
         libxdamage
-        libXxf86vm
+        libxxf86vm
         libxrandr
         libxi
         libxcursor

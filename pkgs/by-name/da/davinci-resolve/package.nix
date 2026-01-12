@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxxf86vm,
   libxt,
   libxtst,
   libxrender,
@@ -61,7 +62,7 @@ let
       # Pretty sure, there are missing dependencies ...
       buildInputs = [
         libGLU
-        xorg.libXxf86vm
+        libxxf86vm
       ];
 
       src =
@@ -250,7 +251,7 @@ buildFHSEnv {
       libxrender
       libxt
       libxtst
-      xorg.libXxf86vm
+      libxxf86vm
       libxcb
       xorg.xcbutil
       xorg.xcbutilimage

@@ -18,7 +18,7 @@
   libGL,
   libxpm,
   libxext,
-  libXxf86vm,
+  libxxf86vm,
   libxxf86dga,
   alsa-lib,
   # sdl
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     libGL
     libxpm
     libxext
-    libXxf86vm
+    libxxf86vm
     libxxf86dga
     alsa-lib
     # sdl

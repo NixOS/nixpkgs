@@ -32,7 +32,7 @@
   libxext,
   libxi,
   libxrender,
-  libXxf86vm,
+  libxxf86vm,
   libdecor,
   libepoxy,
   libffi,
@@ -281,7 +281,7 @@ stdenv'.mkDerivation (finalAttrs: {
         libxext
         libxi
         libxrender
-        libXxf86vm
+        libxxf86vm
         openal
         openxr-loader
       ]

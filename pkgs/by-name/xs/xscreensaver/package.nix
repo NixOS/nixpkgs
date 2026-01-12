@@ -18,7 +18,7 @@
   libxinerama,
   libxrandr,
   libxt,
-  libXxf86vm,
+  libxxf86vm,
   libxml2,
   makeWrapper,
   pam,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxrandr
     libxt
-    libXxf86vm
+    libxxf86vm
     libxml2
     pam
     perlPackages.LWPProtocolHttps

@@ -27,7 +27,7 @@
   libvorbis,
   libx11,
   libxkbcommon,
-  libXxf86vm,
+  libxxf86vm,
   mono,
   nlohmann_json,
   openal,
@@ -88,7 +88,7 @@ let
       libGLU
       libx11
       libxkbcommon
-      libXxf86vm
+      libxxf86vm
       wayland
     ];
 
@@ -279,7 +279,7 @@ let
             libGL
             libx11
             libxkbcommon
-            libXxf86vm
+            libxxf86vm
             sqlite
             wayland
             egl-wayland

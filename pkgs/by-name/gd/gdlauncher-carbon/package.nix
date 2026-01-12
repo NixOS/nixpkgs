@@ -7,7 +7,7 @@
   makeWrapper,
   copyDesktopItems,
   autoPatchelfHook,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxext,
   libxcursor,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
         libxext
         libxcursor
         libxrandr
-        xorg.libXxf86vm
+        libxxf86vm
 
         # lwjgl
         libpulseaudio

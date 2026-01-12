@@ -12,7 +12,7 @@
   libsm,
   libxinerama,
   libxtst,
-  libXxf86vm,
+  libxxf86vm,
   libnotify,
   libpng,
   libsecret,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libxinerama
     libxtst
-    libXxf86vm
+    libxxf86vm
     libnotify # wxNotificationMessage backend
     libsecret # wxSecretStore backend
     libxkbcommon # proper key codes in key events

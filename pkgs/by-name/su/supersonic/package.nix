@@ -7,7 +7,7 @@
   copyDesktopItems,
   pkg-config,
   desktopToDarwinBundle,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxinerama,
@@ -51,7 +51,7 @@ buildGoModule rec {
     mpv-unwrapped
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libXxf86vm
+    libxxf86vm
     libx11
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [

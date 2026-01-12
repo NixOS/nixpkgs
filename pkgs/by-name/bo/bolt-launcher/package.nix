@@ -9,7 +9,7 @@
   libz,
   cef-binary,
   luajit,
-  xorg,
+  libxxf86vm,
   libxi,
   libxext,
   libx11,
@@ -116,7 +116,7 @@ buildFHSEnv {
     [ bolt ]
     ++ (with pkgs; [
       libsm
-      xorg.libXxf86vm
+      libxxf86vm
       libx11
       libxi
       libxext

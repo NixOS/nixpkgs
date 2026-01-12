@@ -6,7 +6,7 @@
   flit-core,
   libGL,
   libGLU,
-  xorg,
+  libxxf86vm,
   libxrender,
   libxrandr,
   libxi,
@@ -87,7 +87,7 @@ buildPythonPackage rec {
               elif name == 'Xrender':
                   path = '${lib.getLib libxrender}/lib/libXrender${ext}'
               elif name == 'Xxf86vm':
-                  path = '${xorg.libXxf86vm}/lib/libXxf86vm${ext}'
+                  path = '${libxxf86vm}/lib/libXxf86vm${ext}'
               elif name == 'harfbuzz':
                   path = '${harfbuzz}/lib/libharfbuzz${ext}'
               if path is not None:

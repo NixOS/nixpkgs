@@ -7,7 +7,7 @@
   autoPatchelfHook,
   alsa-lib,
   ncurses5,
-  xorg,
+  libxxf86vm,
   libxtst,
   libxrender,
   libxrandr,
@@ -104,7 +104,7 @@ let
       libxrandr
       libxrender
       libxtst
-      xorg.libXxf86vm
+      libxxf86vm
     ];
 
     installPhase = ''

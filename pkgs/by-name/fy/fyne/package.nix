@@ -9,7 +9,7 @@
   libxinerama,
   libxi,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   pkg-config,
 }:
 
@@ -37,7 +37,7 @@ buildGoModule rec {
     libxinerama
     libxi
     libxrandr
-    libXxf86vm
+    libxxf86vm
   ];
 
   doCheck = false;

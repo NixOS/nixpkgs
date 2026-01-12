@@ -16,7 +16,7 @@
   libxkbcommon,
   libxrandr,
   libxscrnsaver,
-  libXxf86vm,
+  libxxf86vm,
   udev,
   vulkan-loader,
   wayland, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxrandr
     libxscrnsaver
-    libXxf86vm
+    libxxf86vm
     udev
     vulkan-loader
     wayland

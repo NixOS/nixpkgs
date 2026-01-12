@@ -5,7 +5,7 @@
   libGL,
   nssmdns,
   pkg-config,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxinerama,
@@ -42,7 +42,7 @@ buildGoModule rec {
     libxi
     libxinerama
     libxrandr
-    xorg.libXxf86vm
+    libxxf86vm
     xinput
   ];
 

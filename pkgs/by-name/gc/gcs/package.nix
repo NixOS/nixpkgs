@@ -11,7 +11,7 @@
   libxrandr,
   libxinerama,
   libxi,
-  libXxf86vm,
+  libxxf86vm,
   mupdf,
   fontconfig,
   freetype,
@@ -47,7 +47,7 @@ buildGoModule rec {
     libxrandr
     libxinerama
     libxi
-    libXxf86vm
+    libxxf86vm
     fontconfig
     freetype
   ];

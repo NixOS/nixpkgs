@@ -17,7 +17,7 @@
   openal,
 
   # Unreal Engine 4 Dependencies
-  xorg,
+  libxxf86vm,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    xorg.libXxf86vm
+    libxxf86vm
     libxcb
   ];
 

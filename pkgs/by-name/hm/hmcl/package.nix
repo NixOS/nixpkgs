@@ -23,7 +23,7 @@
     hmclJdk
     jdk17
   ],
-  xorg,
+  libxxf86vm,
   libxtst,
   libxrandr,
   libxext,
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    xorg.libXxf86vm
+    libxxf86vm
     libxext
     libxcursor
     libxrandr

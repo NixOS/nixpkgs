@@ -8,7 +8,7 @@
   pkg-config,
   ninja,
   cmake,
-  xorg,
+  libxxf86vm,
   libxtst,
   libxres,
   libxrender,
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxrender
       libxres
       libxtst
-      xorg.libXxf86vm
+      libxxf86vm
       libavif
       libdrm
       libei

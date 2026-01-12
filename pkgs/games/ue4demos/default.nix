@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   patchelf,
-  xorg,
+  libxxf86vm,
   libxext,
   openal,
 }:
@@ -28,7 +28,7 @@ let
 
       rtdeps =
         lib.makeLibraryPath [
-          xorg.libXxf86vm
+          libxxf86vm
           libxext
           openal
         ]

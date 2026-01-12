@@ -14,7 +14,7 @@
   libxcursor,
   libxext,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libjack2,
   libpulseaudio,
   libusb1,
@@ -93,7 +93,7 @@ symlinkJoin {
         libxcursor
         libxext
         libxrandr
-        libXxf86vm
+        libxxf86vm
 
         udev # oshi
 

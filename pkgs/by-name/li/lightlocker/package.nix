@@ -12,7 +12,7 @@
   dbus-glib,
   libx11,
   libxscrnsaver,
-  libXxf86vm,
+  libxxf86vm,
   libxext,
   systemd,
   pantheon,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libx11
     libxscrnsaver
     libxext
-    libXxf86vm
+    libxxf86vm
     systemd
   ];
 

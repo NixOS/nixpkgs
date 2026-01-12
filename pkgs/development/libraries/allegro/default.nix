@@ -17,7 +17,7 @@
   libvorbis,
   libxxf86dga,
   libxxf86misc,
-  libXxf86vm,
+  libxxf86vm,
   openal,
   libGLU,
   libGL,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libvorbis
     libxxf86dga
     libxxf86misc
-    libXxf86vm
+    libxxf86vm
     openal
     libGLU
     libGL

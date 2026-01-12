@@ -17,7 +17,7 @@
   wrapGAppsHook3,
   wayland,
   gobject-introspection,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxcursor,
@@ -32,7 +32,7 @@ let
     libxcursor
     libxi
     libxrandr
-    xorg.libXxf86vm
+    libxxf86vm
     libxcb
     wayland
   ];

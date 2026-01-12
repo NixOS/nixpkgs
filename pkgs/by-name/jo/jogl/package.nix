@@ -9,7 +9,7 @@
   stripJavaArchivesHook,
   xcbuild,
   udev,
-  xorg,
+  libxxf86vm,
   libxt,
   libxrender,
   libxrandr,
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     libxcursor
     libxi
     libxt
-    xorg.libXxf86vm
+    libxxf86vm
     libxrender
     libgbm
   ];

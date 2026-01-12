@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxinerama,
@@ -36,7 +36,7 @@ buildGoModule rec {
     libxinerama
     libxi
     libxext
-    xorg.libXxf86vm
+    libxxf86vm
     libglvnd
   ];
 

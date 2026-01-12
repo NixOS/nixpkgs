@@ -143,7 +143,7 @@ buildFHSEnv {
       libxi
       libxrandr
       libxscrnsaver
-      xorg.libXxf86vm
+      libxxf86vm
       libxau
       libxdmcp
     ];

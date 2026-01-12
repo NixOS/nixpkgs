@@ -10,7 +10,7 @@
   libxext,
   libxcursor,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libpulseaudio,
   libGL,
   glfw,
@@ -35,7 +35,7 @@ let
     libxext
     libxcursor
     libxrandr
-    libXxf86vm
+    libxxf86vm
 
     # lwjgl
     libpulseaudio

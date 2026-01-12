@@ -15,7 +15,7 @@ nvidia_x11: sha256:
   libxv,
   libxrandr,
   libxext,
-  libXxf86vm,
+  libxxf86vm,
   libvdpau,
   librsvg,
   libglvnd,
@@ -146,7 +146,7 @@ stdenv.mkDerivation {
     libxv
     libxrandr
     libxext
-    libXxf86vm
+    libxxf86vm
     libvdpau
     nvidia_x11
     dbus

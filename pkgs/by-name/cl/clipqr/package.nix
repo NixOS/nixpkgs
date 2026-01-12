@@ -10,7 +10,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   makeDesktopItem,
   libgbm,
   pkg-config,
@@ -43,7 +43,7 @@ buildGoModule rec {
     libxi
     libxinerama
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libgbm
   ];
 

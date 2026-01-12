@@ -8,7 +8,7 @@
   libogg,
   libvorbis,
   libx11,
-  libXxf86vm,
+  libxxf86vm,
   openal,
   pkg-config,
   stdenv,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     libx11
-    libXxf86vm
+    libxxf86vm
     openal
   ];
 

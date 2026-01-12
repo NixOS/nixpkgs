@@ -8,7 +8,7 @@
   jre,
   libGL,
   libpulseaudio,
-  libXxf86vm,
+  libxxf86vm,
   nix-update-script,
 }:
 let
@@ -32,7 +32,7 @@ let
     lib.optionals stdenv.hostPlatform.isLinux [
       libGL
       libpulseaudio
-      libXxf86vm
+      libxxf86vm
     ]
   );
 in

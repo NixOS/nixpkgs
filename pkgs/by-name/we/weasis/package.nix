@@ -8,7 +8,7 @@
   makeDesktopItem,
   makeBinaryWrapper,
   libGL,
-  xorg,
+  libxxf86vm,
   libxrender,
   libx11,
 }:
@@ -28,7 +28,7 @@ let
     libGL
     libx11
     libxrender
-    xorg.libXxf86vm
+    libxxf86vm
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

@@ -17,7 +17,7 @@
   libxinerama,
   libxrandr,
   libxrender,
-  libXxf86vm,
+  libxxf86vm,
   libglvnd,
   zenity,
 }:
@@ -35,7 +35,7 @@ let
     libxinerama
     libxrandr
     libxrender
-    libXxf86vm
+    libxxf86vm
     libglvnd
   ];
 

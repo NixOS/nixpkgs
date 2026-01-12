@@ -13,7 +13,7 @@
   libxcursor,
   libxi,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libxtst,
   copyDesktopItems,
   makeDesktopItem,
@@ -27,7 +27,7 @@ let
     libxcursor
     libxi
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libxtst
     fontconfig
   ];

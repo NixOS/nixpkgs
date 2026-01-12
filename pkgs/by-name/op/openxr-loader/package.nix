@@ -5,7 +5,7 @@
   cmake,
   python3,
   libx11,
-  libXxf86vm,
+  libxxf86vm,
   libxrandr,
   vulkan-headers,
   libGL,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libx11
-    libXxf86vm
+    libxxf86vm
     libxrandr
     vulkan-headers
     libGL

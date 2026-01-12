@@ -164,7 +164,7 @@ rec {
         libxcursor
         libxrender
         libxscrnsaver
-        xorg.libXxf86vm
+        libxxf86vm
         libxi
         libsm
         libice

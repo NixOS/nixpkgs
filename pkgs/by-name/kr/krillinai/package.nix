@@ -4,7 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxinerama,
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxinerama
-    xorg.libXxf86vm
+    libxxf86vm
     libxcursor
     libxrandr
     libx11

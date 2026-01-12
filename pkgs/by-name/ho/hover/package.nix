@@ -7,7 +7,7 @@
   pkg-config,
   fetchFromGitHub,
   roboto,
-  xorg,
+  libxxf86vm,
   libxrender,
   libxrandr,
   libxi,
@@ -38,7 +38,7 @@ let
     libxrandr.dev
     libxrender.dev
     libxfixes.dev
-    xorg.libXxf86vm
+    libxxf86vm
     libglvnd.dev
     xorgproto
   ];

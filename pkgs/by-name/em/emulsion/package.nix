@@ -12,7 +12,7 @@
   libxcursor,
   libxi,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libxcb,
   libxkbcommon,
   wayland,
@@ -24,7 +24,7 @@ let
     libxcursor
     libxi
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libxcb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

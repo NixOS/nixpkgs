@@ -5,7 +5,7 @@
   gradle_9,
   jdk25,
   wrapGAppsHook3,
-  libXxf86vm,
+  libxxf86vm,
   libxtst,
   libglvnd,
   glib,
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          libXxf86vm
+          libxxf86vm
           glib
           libxtst
           libglvnd

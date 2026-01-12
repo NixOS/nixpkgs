@@ -33,7 +33,7 @@ let
         libx11
         libxext
         libxrandr
-        xorg.libXxf86vm
+        libxxf86vm
         curl
         libGLU
         libglvnd

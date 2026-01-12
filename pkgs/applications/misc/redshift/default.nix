@@ -24,7 +24,7 @@
   withDrm ? stdenv.hostPlatform.isLinux,
   libdrm,
   withVidmode ? stdenv.hostPlatform.isLinux,
-  libXxf86vm,
+  libxxf86vm,
 
   withGeolocation ? true,
   withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin,
@@ -88,7 +88,7 @@ let
       ++ lib.optional withRandr libxcb
       ++ lib.optional withGeoclue geoclue
       ++ lib.optional withDrm libdrm
-      ++ lib.optional withVidmode libXxf86vm
+      ++ lib.optional withVidmode libxxf86vm
       ++ lib.optional withAppIndicator (
         if (pname != "gammastep") then libappindicator else libayatana-appindicator
       );

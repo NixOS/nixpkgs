@@ -65,7 +65,7 @@ buildFHSEnv {
       libxfixes
       libxrender
       libxmu
-      xorg.libXxf86vm
+      libxxf86vm
       libGL
       libxcb
       xorg.xkeyboardconfig

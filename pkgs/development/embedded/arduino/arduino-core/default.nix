@@ -19,7 +19,7 @@
   # Packages needed for Teensyduino
   upx,
   fontconfig,
-  xorg,
+  libxxf86vm,
   libxinerama,
   libxft,
   libxext,
@@ -84,7 +84,7 @@ let
     libxext
     libxft
     libxinerama
-    xorg.libXxf86vm
+    libxxf86vm
     zlib
   ];
   teensy_architecture =

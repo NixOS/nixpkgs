@@ -6,7 +6,7 @@
   libGL,
   libxrandr,
   libx11,
-  libXxf86vm,
+  libxxf86vm,
   zlib,
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     libGL
     libxrandr
     libx11
-    libXxf86vm
+    libxxf86vm
   ]
   ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 

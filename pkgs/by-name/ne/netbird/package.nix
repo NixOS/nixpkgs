@@ -11,7 +11,7 @@
   libayatana-appindicator,
   libx11,
   libxcursor,
-  libXxf86vm,
+  libxxf86vm,
   versionCheckHook,
   netbird-management,
   netbird-relay,
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     libayatana-appindicator
     libx11
     libxcursor
-    libXxf86vm
+    libxxf86vm
   ];
 
   subPackages = [ component.module ];

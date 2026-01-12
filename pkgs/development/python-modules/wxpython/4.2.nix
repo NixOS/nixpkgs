@@ -28,7 +28,7 @@
   libsm,
   libxinerama,
   libxtst,
-  libXxf86vm,
+  libxxf86vm,
   libglvnd,
   libgbm,
   pango,
@@ -105,7 +105,7 @@ buildPythonPackage rec {
     libsm
     libxinerama
     libxtst
-    libXxf86vm
+    libxxf86vm
     libglvnd
     libgbm
     webkitgtk_4_1

@@ -19,7 +19,7 @@
   libxcursor,
   libxext,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
 
   # runtime (path)
   xrandr,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
         libxcursor
         libxext
         libxrandr
-        libXxf86vm
+        libxxf86vm
       ];
       runtimePrograms = lib.optionals stdenv.hostPlatform.isLinux [
         # https://github.com/LWJGL/lwjgl/issues/128

@@ -20,7 +20,7 @@
   libxext,
   libxkbcommon,
   libxml2,
-  libXxf86vm,
+  libxxf86vm,
   makeBinaryWrapper,
   mbedtls,
   libgbm,
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     libx11
     libxdmcp
     libxext
-    libXxf86vm
+    libxxf86vm
     libdrm
     libpulseaudio
     libv4l

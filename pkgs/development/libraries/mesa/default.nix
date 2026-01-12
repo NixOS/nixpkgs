@@ -39,7 +39,7 @@
   wayland-protocols,
   wayland-scanner,
   xcbutilkeysyms,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxfixes,
   libxext,
@@ -280,7 +280,7 @@ stdenv.mkDerivation {
     libxfixes
     libxrandr
     libxshmfence
-    xorg.libXxf86vm
+    libxxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
     llvmPackages.libclc

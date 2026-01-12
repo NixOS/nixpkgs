@@ -22,7 +22,7 @@
   libxdmcp,
   libxpm,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libdecor,
   libffi,
   libglut,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libxpm
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libdecor
     libffi
     libglut

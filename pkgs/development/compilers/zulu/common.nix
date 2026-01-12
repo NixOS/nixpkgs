@@ -14,7 +14,7 @@
   fontconfig,
   freetype,
   zlib,
-  xorg,
+  libxxf86vm,
   libxtst,
   libxrender,
   libxi,
@@ -106,7 +106,7 @@ let
         libxi
         libxrender
         libxtst
-        xorg.libXxf86vm
+        libxxf86vm
         zlib
       ]
       ++ lib.optionals (stdenv.hostPlatform.isLinux && enableJavaFX) runtimeDependencies;

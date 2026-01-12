@@ -26,7 +26,7 @@
   gettext,
   openexr,
   libxext,
-  libXxf86vm,
+  libxxf86vm,
   libxv,
   libxi,
   libx11,
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     gettext
     openexr
     libxext
-    libXxf86vm
+    libxxf86vm
     libxv
     libxi
     libx11

@@ -12,7 +12,7 @@
   libx11,
   libxi,
   libxext,
-  libXxf86vm,
+  libxxf86vm,
   fixDarwinDylibNames,
   wayland,
   wayland-scanner,
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     libxcursor
     libxi
     libxext
-    libXxf86vm
+    libxxf86vm
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

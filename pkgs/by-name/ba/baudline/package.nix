@@ -6,7 +6,7 @@
   libxt,
   libx11,
   libxext,
-  libXxf86vm,
+  libxxf86vm,
   libjack2,
   makeWrapper,
 }:
@@ -17,7 +17,7 @@ let
     libxt
     libx11
     libxext
-    libXxf86vm
+    libxxf86vm
     libjack2
   ];
 in

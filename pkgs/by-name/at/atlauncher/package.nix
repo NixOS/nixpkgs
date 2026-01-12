@@ -16,7 +16,7 @@
   libglvnd,
   libpulseaudio,
   udev,
-  xorg,
+  libxxf86vm,
   libxcursor,
   libx11,
 }:
@@ -67,7 +67,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         udev
         libx11
         libxcursor
-        xorg.libXxf86vm
+        libxxf86vm
       ]
       ++ lib.optional gamemodeSupport gamemode.lib
       ++ lib.optional textToSpeechSupport flite

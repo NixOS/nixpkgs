@@ -25,7 +25,7 @@
   symlinkJoin,
   udev,
   wrapGAppsHook3,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxext,
   libxcursor,
@@ -61,7 +61,7 @@ symlinkJoin {
       libxcursor
       libxext
       libxrandr
-      xorg.libXxf86vm
+      libxxf86vm
 
       # lwjgl
       (lib.getLib stdenv.cc.cc)

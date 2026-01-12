@@ -173,7 +173,7 @@ stdenv.mkDerivation (
             libxi
             libxrandr
             libxrender
-            xorg.libXxf86vm
+            libxxf86vm
           ]
         )
         ++ lib.optionals waylandSupport (

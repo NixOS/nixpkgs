@@ -17,7 +17,7 @@
   fontconfig,
   freetype,
   libGL,
-  xorg,
+  libxxf86vm,
   libxi,
   libxcursor,
   libx11,
@@ -41,7 +41,7 @@ let
     libx11
     libxcursor
     libxi
-    xorg.libXxf86vm
+    libxxf86vm
     libxcb
     libxkbcommon
     wayland

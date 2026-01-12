@@ -24,7 +24,7 @@
   libxrandr,
   libxrender,
   libxt,
-  libXxf86vm,
+  libxxf86vm,
   xorgproto,
   # optional
   withNvidiaCg ? false,
@@ -92,7 +92,7 @@ let
         libxrandr
         libxrender
         libxt
-        libXxf86vm
+        libxxf86vm
         xorgproto
       ]
       ++ lib.optionals withNvidiaCg [

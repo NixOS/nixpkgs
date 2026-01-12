@@ -24,7 +24,7 @@
   libxrandr,
   libxvmc,
   libxinerama,
-  libXxf86vm,
+  libxxf86vm,
   libxmu,
   yasm,
   libuuid,
@@ -80,7 +80,7 @@ mkDerivation rec {
     libxvmc
     libxmu
     libxinerama
-    libXxf86vm
+    libxxf86vm
     libxmu
     libuuid
     taglib

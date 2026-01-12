@@ -16,7 +16,7 @@
   gtk2,
   gtk3,
   libxtst,
-  libXxf86vm,
+  libxxf86vm,
   glib,
   alsa-lib,
   ffmpeg_7,
@@ -108,7 +108,7 @@ stdenv.mkDerivation {
     gtk2
     gtk3
     libxtst
-    libXxf86vm
+    libxxf86vm
     glib
     alsa-lib
     (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)

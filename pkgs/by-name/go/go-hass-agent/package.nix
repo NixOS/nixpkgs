@@ -8,7 +8,7 @@
   pkg-config,
   writableTmpDirAsHomeHook,
   libglvnd,
-  xorg,
+  libxxf86vm,
   libxrandr,
   libxi,
   libxinerama,
@@ -60,7 +60,7 @@ buildGoModule (finalAttrs: {
     libxi
     libxinerama
     libxrandr
-    xorg.libXxf86vm
+    libxxf86vm
   ];
 
   desktopItems = [ "assets/go-hass-agent.desktop" ];

@@ -17,7 +17,7 @@
   libxi,
   libxt,
   libxrender,
-  libXxf86vm,
+  libxxf86vm,
   openscenegraph,
   expat,
   libpng,
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     libxi
     libxt
     libxrender
-    libXxf86vm
+    libxxf86vm
     zlib
     bash
     expat

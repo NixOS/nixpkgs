@@ -21,7 +21,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXxf86vm,
+  libxxf86vm,
   libao,
   libpthread-stubs,
   libpulseaudio,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     libxrandr
-    libXxf86vm
+    libxxf86vm
     libao
     libpthread-stubs
     libpulseaudio

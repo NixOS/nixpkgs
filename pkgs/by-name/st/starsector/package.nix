@@ -6,7 +6,7 @@
   openal,
   openjdk17,
   stdenv,
-  xorg,
+  libxxf86vm,
   xrandr,
   copyDesktopItems,
   makeDesktopItem,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXxf86vm
+    libxxf86vm
     openal
     libGL
   ];
