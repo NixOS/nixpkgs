@@ -64,7 +64,7 @@ buildFHSEnv {
       libxshmfence
       xorg.xcbutil
       libxcb-image
-      xorg.xcbutilrenderutil
+      libxcb-render-util
       libxcb-cursor
       libxcb-keysyms
       xorg.xcbutilwm

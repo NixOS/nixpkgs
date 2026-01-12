@@ -16,6 +16,7 @@
   unzip,
   writeShellApplication,
   xorg,
+  libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
   libxcb,
@@ -50,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libxcb
     libxcb-image
     libxcb-keysyms
-    xorg.xcbutilrenderutil
+    libxcb-render-util
     xorg.xcbutilwm
     zlib
   ];

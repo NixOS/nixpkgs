@@ -16,6 +16,7 @@
   libcap,
   libgbm,
   xorg,
+  libxcb-render-util,
   libxcb-image,
   libxcb-errors,
   libx11,
@@ -94,7 +95,7 @@ let
         libx11
         libxcb-errors
         libxcb-image
-        xorg.xcbutilrenderutil
+        libxcb-render-util
         xorg.xcbutilwm
       ]
       ++ lib.optional finalAttrs.enableXWayland xwayland

@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
   libxtst,
@@ -84,7 +85,7 @@ let
       libxshmfence
       libxcb-image
       libxcb-keysyms
-      xorg.xcbutilrenderutil
+      libxcb-render-util
       xorg.xcbutilwm
       xrandr
     ];

@@ -5,6 +5,7 @@
   libjack2,
   libsndfile,
   xorg,
+  libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
   libxcb-cursor,
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-cursor
     libxcb-image
     libxcb-keysyms
-    xorg.xcbutilrenderutil
+    libxcb-render-util
     zenity
   ];
 

@@ -194,7 +194,7 @@ rec {
         xorg.xcbutilwm
         libxcb-image
         libxcb-keysyms
-        xorg.xcbutilrenderutil
+        libxcb-render-util
         libGLU
         libuuid
         libogg

@@ -26,7 +26,7 @@
   uthash,
   xcbutil,
   libxcb-image,
-  xcbutilrenderutil,
+  libxcb-render-util,
   xorgproto,
   xwininfo,
   withDebug ? false,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     uthash
     xcbutil
     libxcb-image
-    xcbutilrenderutil
+    libxcb-render-util
     xorgproto
   ];
 

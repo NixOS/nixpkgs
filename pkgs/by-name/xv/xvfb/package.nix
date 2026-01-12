@@ -23,7 +23,7 @@
   xcbutil,
   libxcb-image,
   libxcb-keysyms,
-  xcbutilrenderutil,
+  libxcb-render-util,
   xcbutilwm,
   xkbcomp,
   xkeyboardconfig,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     libxcb-image
     libxcb-keysyms
-    xcbutilrenderutil
+    libxcb-render-util
     xcbutilwm
     xorgproto
     xtrans

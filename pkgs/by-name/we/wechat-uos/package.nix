@@ -31,7 +31,7 @@
   xcbutilwm,
   libxcb-image,
   libxcb-keysyms,
-  xcbutilrenderutil,
+  libxcb-render-util,
   libgbm,
   alsa-lib,
   wayland,
@@ -87,7 +87,7 @@ let
     xcbutilwm
     libxcb-image
     libxcb-keysyms
-    xcbutilrenderutil
+    libxcb-render-util
     libx11
     libxt
     libxext

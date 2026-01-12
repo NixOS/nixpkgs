@@ -23,6 +23,7 @@
   systemd,
   xcb-util-cursor,
   xorg,
+  libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
   libx11,
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     xorg.xcbutilwm
     libxcb-image
     libxcb-keysyms
-    xorg.xcbutilrenderutil
+    libxcb-render-util
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

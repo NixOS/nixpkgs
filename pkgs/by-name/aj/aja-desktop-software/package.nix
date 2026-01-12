@@ -84,7 +84,7 @@ buildFHSEnv {
       xorg.xcbutilwm
       libxcb-image
       libxcb-keysyms
-      xorg.xcbutilrenderutil
+      libxcb-render-util
       libsm
       libice
       libxkbcommon

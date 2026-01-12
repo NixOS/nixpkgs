@@ -6,7 +6,7 @@
   automake,
   libtool,
   pkg-config,
-  xorg,
+  libxcb-render-util,
   libxcb-image,
   util-macros,
   gnum4,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     libxcb
     util-macros
     libxcb-image
-    xorg.xcbutilrenderutil
+    libxcb-render-util
   ];
 
   configurePhase = ''

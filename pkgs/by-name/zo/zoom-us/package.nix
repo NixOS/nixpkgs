@@ -209,7 +209,7 @@ let
       pkgs.libxcb-cursor
       pkgs.libxcb-image
       pkgs.libxcb-keysyms
-      pkgs.xorg.xcbutilrenderutil
+      pkgs.libxcb-render-util
       pkgs.xorg.xcbutilwm
       pkgs.zlib
     ]
