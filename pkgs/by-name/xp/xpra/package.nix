@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  libxres,
   libxrender,
   libxrandr,
   libxi,
@@ -145,7 +146,7 @@ effectiveBuildPythonApplication rec {
     libxkbfile
     libxrandr
     libxrender
-    xorg.libXres
+    libxres
     xorg.libXtst
     xorgproto
   ]

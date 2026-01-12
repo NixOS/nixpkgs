@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  libxres,
   libxext,
   libx11,
   pkg-config,
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libx11
-    xorg.libXres
+    libxres
     libxext
     ncurses
   ];

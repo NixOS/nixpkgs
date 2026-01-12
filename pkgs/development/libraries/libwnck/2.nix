@@ -5,7 +5,7 @@
   pkg-config,
   gtk2,
   intltool,
-  xorg,
+  libxres,
   libx11,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2
     libx11
-    xorg.libXres
+    libxres
   ];
   # ?another optional: startup-notification
 

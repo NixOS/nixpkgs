@@ -21,7 +21,7 @@
   libxmu,
   libxpm,
   libxrender,
-  libXres,
+  libxres,
   libXt,
   libdrm,
   libtirpc,
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     libxmu
     libxpm
     libxrender
-    libXres
+    libxres
     libXt
     libdrm
     libtirpc

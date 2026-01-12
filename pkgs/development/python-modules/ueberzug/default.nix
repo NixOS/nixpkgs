@@ -6,7 +6,7 @@
   fetchPypi,
   libx11,
   libxext,
-  libXres,
+  libxres,
   meson-python,
   meson,
   pillow,
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     libx11
-    libXres
+    libxres
     libxext
   ];
 

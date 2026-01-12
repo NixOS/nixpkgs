@@ -14,7 +14,7 @@
   gtk3,
   pango,
   cairo,
-  libXres,
+  libxres,
   libxi,
   libstartup_notification,
   gettext,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     pango
     cairo
-    libXres
+    libxres
     libxi
   ];
 

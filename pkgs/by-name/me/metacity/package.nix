@@ -7,7 +7,7 @@
   gnome,
   gsettings-desktop-schemas,
   gtk3,
-  xorg,
+  libxres,
   libxpresent,
   libxdamage,
   libx11,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libXres
+    libxres
     libxpresent
     libxdamage
     libx11
