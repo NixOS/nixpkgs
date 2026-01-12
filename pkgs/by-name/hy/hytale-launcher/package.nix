@@ -6,6 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  writeScript,
   gtk3,
   nss,
   libsecret,
@@ -17,16 +18,15 @@
 }:
 
 let
-  version = "2026.01.12.e43ec47";
-  versionHyphenated = "2026.01.12-e43ec47";
+  version = "2026.01.12-e43ec47";
 
   sources = {
     x86_64-linux = {
-      url = "https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-${versionHyphenated}.zip";
+      url = "https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-${version}.zip";
       hash = "sha256-OtfhmPQPmmrwp/1XYcbefj6PMxEEbOE5RSTECCZaguc=";
     };
     aarch64-darwin = {
-      url = "https://launcher.hytale.com/builds/release/darwin/arm64/hytale-launcher-${versionHyphenated}.zip";
+      url = "https://launcher.hytale.com/builds/release/darwin/arm64/hytale-launcher-${version}.zip";
       hash = "sha256-2+RCO1dqK6AGSPy/tFVvMeETUuuughwNznvGENPobew=";
     };
   };
@@ -35,7 +35,7 @@ let
     sources.${stdenv.hostPlatform.system}
       or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hytale-launcher";
   inherit version;
 
@@ -97,6 +97,40 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript =
+    writeScript "update-hytale-launcher" # sh
+      ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell --pure -i bash -p bash curl cacert jq nix common-updater-scripts
+
+        set -euo pipefail
+
+        launcherJson=$(curl -s https://launcher.hytale.com/version/release/launcher.json)
+
+        launcherJq() {
+          echo "$launcherJson" | jq --raw-output "$1"
+        }
+
+        latestVersion="$(launcherJq '.version')"
+        currentVersion="$(NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw -f . ${finalAttrs.pname}.version)"
+
+        if [[ "$latestVersion" == "$currentVersion" ]]; then
+          echo "package is up-to-date"
+          exit 0
+        fi
+
+        update() {
+          system="$1"
+          url="$2"
+          prefetched="$(nix-prefetch-url --unpack "$url")"
+          hash="$(nix-hash --type sha256 --to-sri "$prefetched")"
+          update-source-version --system="$system" --ignore-same-version ${finalAttrs.pname} "$latestVersion" "$hash"
+        }
+
+        update "x86_64-linux" "$(launcherJq ".download_url.linux.amd64.url")"
+        update "aarch64-darwin" "$(launcherJq ".download_url.darwin.arm64.url")"
+      '';
+
   meta = {
     description = "Official launcher for Hytale";
     homepage = "https://hytale.com";
@@ -109,4 +143,4 @@ stdenv.mkDerivation {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
