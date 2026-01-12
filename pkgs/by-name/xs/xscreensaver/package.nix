@@ -11,7 +11,7 @@
   intltool,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXext,
   libXft,
   libXi,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libGL
     libGLU
-    libX11
+    libx11
     libXext
     libXft
     libXi

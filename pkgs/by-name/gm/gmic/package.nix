@@ -15,7 +15,7 @@
   gnused,
   graphicsmagick,
   jq,
-  libX11,
+  libx11,
   libXext,
   libjpeg,
   libpng,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     cimg
     fftw
     graphicsmagick
-    libX11
+    libx11
     libXext
     libjpeg
     libpng

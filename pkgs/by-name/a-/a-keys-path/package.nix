@@ -10,7 +10,7 @@
   alsa-lib,
   godot3-export-templates,
   godot3-headless,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXcursor
     libXext
     libXi

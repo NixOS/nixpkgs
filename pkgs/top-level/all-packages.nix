@@ -3863,7 +3863,7 @@ with pkgs;
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   twilight = callPackage ../tools/graphics/twilight {
-    libX11 = xorg.libX11;
+    libx11 = libx11;
   };
 
   twitch-chat-downloader =

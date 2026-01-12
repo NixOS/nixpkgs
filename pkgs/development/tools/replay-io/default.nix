@@ -6,7 +6,7 @@
   autoPatchelfHook,
   makeWrapper,
   libcxx,
-  libX11,
+  libx11,
   libXt,
   libXdamage,
   glib,
@@ -62,7 +62,7 @@ rec {
       dbus-glib
       glib
       gtk3
-      libX11
+      libx11
       libXdamage
       libXt
     ];

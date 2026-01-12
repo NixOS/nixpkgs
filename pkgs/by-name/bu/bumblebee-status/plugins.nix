@@ -101,19 +101,19 @@ in
   keys = { };
   # python3Packages.xkbgroup is unpackaged
   layout = {
-    buildInputs = [ pkgs.xorg.libX11 ];
+    buildInputs = [ pkgs.libx11 ];
     # propagatedBuildInputs = [py.xkbgroup];
   };
   # python3Packages.xkbgroup is unpackaged
   layout-xkb = {
-    buildInputs = [ pkgs.xorg.libX11 ];
+    buildInputs = [ pkgs.libx11 ];
     # propagatedBuildInputs = [py.xkbgroup];
   };
   layout-xkbswitch.propagatedBuildInputs = [ pkgs.xkb-switch ];
   # python3Packages.xkbgroup is unpackaged
   # NOTE: Yes, there is also a plugin named `layout-xkb` with a dash.
   layout_xkb = {
-    buildInputs = [ pkgs.xorg.libX11 ];
+    buildInputs = [ pkgs.libx11 ];
     # propagatedBuildInputs = [python3Packages.xkbgroup];
   };
   # NOTE: Yes, there is also a plugin named `layout-xkbswitch` with a dash.

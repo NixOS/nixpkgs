@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   setuptools,
-  libX11,
+  libx11,
   libXt,
   libGL,
   openimageio,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     imath
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
+    libx11
     libXt
     libGL
   ];

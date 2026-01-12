@@ -5,7 +5,7 @@
   cmake,
   libGL,
   libiconv,
-  libX11,
+  libx11,
   openal,
   nix-update-script,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libiconv
-    libX11
+    libx11
     openal
   ];
 

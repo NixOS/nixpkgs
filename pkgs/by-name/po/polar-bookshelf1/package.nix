@@ -18,7 +18,7 @@
   glibc,
   gsettings-desktop-schemas,
   gtk3,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gtk3
-    libX11
+    libx11
     libXScrnSaver
     libXcomposite
     libXcursor

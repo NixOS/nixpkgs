@@ -10,7 +10,7 @@
   libogg,
   libtool,
   libvorbis,
-  libX11,
+  libx11,
   pkg-config,
   zlib,
   enableTools ? false,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     SDL2
     libogg
     libvorbis
-    libX11
+    libx11
     zlib
   ];
 

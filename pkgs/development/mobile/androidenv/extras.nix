@@ -31,7 +31,7 @@ deployAndroidPackage {
           lib.makeLibraryPath (
             with pkgs;
             [
-              xorg.libX11
+              libx11
               xorg.libXrandr
             ]
           )

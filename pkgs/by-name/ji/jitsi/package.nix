@@ -13,6 +13,7 @@
   libpulseaudio,
   openssl,
   xorg,
+  libx11,
 }:
 
 let
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     gtk2
     libpulseaudio
     openssl
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXScrnSaver
     xorg.libXv

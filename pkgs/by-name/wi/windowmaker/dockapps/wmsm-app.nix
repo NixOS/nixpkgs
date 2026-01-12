@@ -2,7 +2,7 @@
   lib,
   stdenv,
   dockapps-sources,
-  libX11,
+  libx11,
   libXpm,
   libXext,
   libdockapp,
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/wmsm.app/wmsm";
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXpm
     libdockapp

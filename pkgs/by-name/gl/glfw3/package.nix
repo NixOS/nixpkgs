@@ -9,7 +9,7 @@
   libXrandr,
   libXinerama,
   libXcursor,
-  libX11,
+  libx11,
   libXi,
   libXext,
   libXxf86vm,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     libxkbcommon
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXcursor

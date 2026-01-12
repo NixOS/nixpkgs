@@ -8,7 +8,7 @@
   iconConvTools,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
+  libx11,
   libice,
   libsm,
   libXi,
@@ -87,7 +87,7 @@ buildDotnetModule rec {
     libGL
     freetype
     glib
-    libX11
+    libx11
     libice
     libsm
     libXi

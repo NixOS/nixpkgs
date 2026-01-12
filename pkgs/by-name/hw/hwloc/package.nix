@@ -9,7 +9,7 @@
   pciutils,
   numactl,
   x11Support ? false,
-  libX11,
+  libx11,
   cairo,
   config,
   enableCuda ? config.cudaSupport,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals x11Support [
     cairo
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
   ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];

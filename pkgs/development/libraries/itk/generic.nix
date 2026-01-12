@@ -21,7 +21,7 @@
   libminc,
   libtiff,
   libpng,
-  libX11,
+  libx11,
   libuuid,
   patchelf,
   python ? null,
@@ -138,7 +138,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libuuid
   ]
   ++ lib.optionals (lib.versionAtLeast version "5.4") [ eigen ]

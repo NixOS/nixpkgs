@@ -14,7 +14,7 @@
   libGL,
   nanosvg,
 
-  libX11,
+  libx11,
   libxkbcommon,
   libXext,
   libXrandr,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libGL
     freefont_ttf
     spice-protocol

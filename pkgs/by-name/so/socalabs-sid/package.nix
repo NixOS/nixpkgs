@@ -8,6 +8,7 @@
   copyDesktopItems,
   makeDesktopItem,
   xorg,
+  libx11,
   xvfb,
   freetype,
   expat,
@@ -72,7 +73,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXinerama

@@ -10,7 +10,7 @@
   avahi,
   gst_all_1,
   libxcb,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -27,7 +27,7 @@ let
     curl
     avahi
     libxcb
-    libX11
+    libx11
     libXcursor
     libXext
     libXi

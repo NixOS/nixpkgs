@@ -14,6 +14,7 @@
   wayland,
   egl-wayland,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi # needed for wayland
     wayland
     egl-wayland
-    xorg.libX11
+    libx11
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXcursor

@@ -11,6 +11,7 @@
   libdrm,
   elfutils,
   xorg,
+  libx11,
   libxcb,
   glib,
   nss,
@@ -87,7 +88,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       fontconfig
       glib
       freetype
-      xorg.libX11
+      libx11
       xorg.libXxf86vm
       xorg.libXext
       libxcb
@@ -135,7 +136,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       libdrm
       elfutils
       zlib
-      xorg.libX11
+      libx11
       xorg.libXext
       libxcb
       xorg.libXcomposite

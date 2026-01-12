@@ -15,7 +15,7 @@
   gmp,
   jack2,
   lame,
-  libX11,
+  libx11,
   libXi,
   libXrandr,
   libXcursor,
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage rec {
     gmp
     jack2
     lame
-    libX11
+    libx11
     libXcursor
     libXi
     libXrandr

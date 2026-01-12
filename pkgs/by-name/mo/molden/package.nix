@@ -6,6 +6,7 @@
   gfortran,
   libGLU,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gfortran
     libGLU
-    xorg.libX11
+    libx11
     xorg.libXmu
   ];
 

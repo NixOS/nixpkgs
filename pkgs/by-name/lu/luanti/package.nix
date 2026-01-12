@@ -22,6 +22,7 @@
   ncurses,
   graphviz,
   xorg,
+  libx11,
   gmp,
   libspatialindex,
   leveldb,
@@ -121,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
   ]
   ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
-    xorg.libX11
+    libx11
     xorg.libXi
   ]
   ++ lib.optionals buildServer [

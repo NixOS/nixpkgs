@@ -18,6 +18,7 @@
   libopus,
   nasm,
   xorg,
+  libx11,
   xauth,
   lame,
   pixman,
@@ -110,7 +111,7 @@ let
       pam
       pixman
       systemd
-      xorg.libX11
+      libx11
       xorg.libXfixes
       xorg.libXrandr
     ];

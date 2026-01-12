@@ -16,7 +16,7 @@
   xvfb-run,
   libxcvt,
   libice,
-  libX11,
+  libx11,
   libXcomposite,
   libXcursor,
   libXdamage,
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     # X11 client
     gtk4
     libice
-    libX11
+    libx11
     libXcomposite
     libXcursor
     libXdamage

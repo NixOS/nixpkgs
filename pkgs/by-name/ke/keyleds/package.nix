@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   libuv,
-  libX11,
+  libx11,
   libXi,
   libyaml,
   luajit,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libuv
-    libX11
+    libx11
     libXi
     libyaml
     luajit

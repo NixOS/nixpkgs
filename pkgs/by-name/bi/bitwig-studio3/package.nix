@@ -10,6 +10,7 @@
   gtk3,
   lib,
   xorg,
+  libx11,
   libxcb,
   libglvnd,
   libjack2,
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pulseaudio
     libjack2
-    xorg.libX11
+    libx11
     libglvnd
     xorg.libXcursor
     (lib.getLib stdenv.cc.cc)

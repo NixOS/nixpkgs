@@ -6,7 +6,7 @@
   libdv,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   pkg-config,
   SDL,
   SDL_gfx,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!withMinimal) [
     gtk2
-    libX11
+    libx11
     SDL
     SDL_gfx
   ];

@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   python3,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   libXrandr,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXinerama
     libXrandr

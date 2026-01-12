@@ -13,6 +13,7 @@
   zenity,
   curl,
   xorg,
+  libx11,
   xvfb,
   python3,
   libsysprof-capture,
@@ -61,7 +62,7 @@ stdenv.mkDerivation {
     curl
     freetype
     webkitgtk_4_1
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXext
     xorg.libXinerama

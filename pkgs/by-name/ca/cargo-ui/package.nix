@@ -10,6 +10,7 @@
   fontconfig,
   libGL,
   xorg,
+  libx11,
   libxcb,
 }:
 
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     expat
     fontconfig
     libGL
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr

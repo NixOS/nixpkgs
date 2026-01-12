@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   pam ? null,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   libXdmcp,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # Optionally, it can use GTK.
   buildInputs = [
     pam
-    libX11
+    libx11
     libXext.dev
     libXinerama
     libXdmcp

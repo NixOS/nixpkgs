@@ -9,6 +9,7 @@
   wayland,
   libGL,
   xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     xorg.libXcursor
     xorg.libXi
-    xorg.libX11
+    libx11
   ];
 
   preBuild = ''

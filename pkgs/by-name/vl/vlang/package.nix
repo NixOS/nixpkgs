@@ -9,6 +9,7 @@
   upx,
   boehmgc,
   xorg,
+  libx11,
   xorgproto,
   binaryen,
 }:
@@ -77,7 +78,7 @@ stdenv.mkDerivation {
     binaryen
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
     xorg.libXau
     xorg.libXdmcp
     xorgproto

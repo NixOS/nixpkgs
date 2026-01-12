@@ -8,6 +8,7 @@
   gsettings-desktop-schemas,
   gtk3,
   xorg,
+  libx11,
   libcanberra-gtk3,
   libgtop,
   libstartup_notification,
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXres
     xorg.libXpresent
     xorg.libXdamage
-    xorg.libX11
+    libx11
     glib
     gsettings-desktop-schemas
     gtk3

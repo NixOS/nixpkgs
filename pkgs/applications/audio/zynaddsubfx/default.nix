@@ -36,7 +36,7 @@
   fltk,
   libGL,
   libjpeg,
-  libX11,
+  libx11,
   libXpm,
   ntk,
 
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (guiModule == "zest") [
     libGL
-    libX11
+    libx11
   ];
 
   cmakeFlags = [

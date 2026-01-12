@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   imlib2,
-  libX11,
+  libx11,
   libXft,
   libXinerama,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     imlib2
-    libX11
+    libx11
     libXft
     libXinerama
   ];

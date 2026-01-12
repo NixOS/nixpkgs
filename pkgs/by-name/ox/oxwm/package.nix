@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   libXft,
   libXrender,
   freetype,
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     libXft
     libXrender
     freetype

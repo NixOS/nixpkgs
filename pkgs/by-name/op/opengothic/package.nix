@@ -4,7 +4,7 @@
   fetchFromGitHub,
   glslang,
   lib,
-  libX11,
+  libx11,
   libXcursor,
   libglvnd,
   makeWrapper,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
+    libx11
     libXcursor
     libglvnd
     vulkan-headers

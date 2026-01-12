@@ -7,6 +7,7 @@
   pkg-config,
   fontconfig,
   xorg,
+  libx11,
   libxcb,
   libxkbcommon,
   wayland,
@@ -67,7 +68,7 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${
         lib.makeLibraryPath [
           libGL
-          xorg.libX11
+          libx11
         ]
       }
   '';

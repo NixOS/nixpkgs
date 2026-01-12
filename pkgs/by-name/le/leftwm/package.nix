@@ -2,14 +2,14 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  libX11,
+  libx11,
   libXinerama,
 }:
 
 let
   rpathLibs = [
     libXinerama
-    libX11
+    libx11
   ];
 in
 

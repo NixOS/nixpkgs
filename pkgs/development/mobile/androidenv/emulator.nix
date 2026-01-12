@@ -40,7 +40,7 @@ deployAndroidPackage {
       ]
     )
     ++ (with pkgs; [
-      xorg.libX11
+      libx11
       xorg.libXext
       xorg.libXdamage
       xorg.libXfixes
@@ -80,7 +80,7 @@ deployAndroidPackage {
           ]
         } \
         --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
+        --set QTCOMPOSE ${pkgs.libx11.out}/share/X11/locale
     '')
     + ''
       mkdir -p $out/bin

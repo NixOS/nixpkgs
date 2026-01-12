@@ -15,6 +15,7 @@
   libGL,
   libGLU,
   xorg,
+  libx11,
   libsm,
   libice,
   opencascade-occt,
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     xorg.libXft
     xorg.libXinerama
-    xorg.libX11
+    libx11
     libsm
     libice
   ]

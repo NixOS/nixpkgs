@@ -7,7 +7,7 @@
   gcc-unwrapped,
   libice,
   libsm,
-  libX11,
+  libx11,
   libXext,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     gcc-unwrapped
     libice
     libsm
-    libX11
+    libx11
     libXext
   ];
 

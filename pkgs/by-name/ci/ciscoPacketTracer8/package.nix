@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libx11,
   libsm,
   libice,
   libxcb,
@@ -82,7 +83,7 @@ let
       wayland
       libice
       libsm
-      xorg.libX11
+      libx11
       xorg.libXScrnSaver
       xorg.libXcomposite
       xorg.libXcursor

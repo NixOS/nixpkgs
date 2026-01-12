@@ -5,7 +5,7 @@
   autoreconfHook,
   fontconfig,
   freetype,
-  libX11,
+  libx11,
   libXft,
   libXi,
   libXpm,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libX11
+    libx11
     libXft
     libXi
     libXpm
@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ratpoison";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

@@ -6,6 +6,7 @@
   zlib,
   pcre,
   xorg,
+  libx11,
   libsm,
   libice,
   libjpeg,
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     pcre
-    xorg.libX11
+    libx11
     libice
     libsm
     xorg.libXpm

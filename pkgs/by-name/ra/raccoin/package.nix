@@ -14,6 +14,7 @@
   alsa-lib,
   libGL,
   xorg,
+  libx11,
   openssl,
   nix-update-script,
   withWayland ? true,
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
   ]
   ++ lib.optionals withX11 [
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
@@ -74,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           libxkbcommon
           openssl
         ]
-        ++ lib.optional withX11 xorg.libX11
+        ++ lib.optional withX11 libx11
       )
     }" \
       $out/bin/raccoin

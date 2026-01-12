@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libglvnd,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
     libglvnd
     xorg.libXinerama
     xorg.libXext
-    xorg.libX11
+    libx11
   ];
 
   # The "linuxinstall" target won't work for us:

@@ -4,7 +4,7 @@
   pkg-config,
   buildGoModule,
   libGL,
-  libX11,
+  libx11,
   libxcb,
   libXcursor,
   libXfixes,
@@ -42,7 +42,7 @@ buildGoModule rec {
     vulkan-headers
     libxkbcommon
     wayland
-    libX11
+    libx11
     libxcb
     libXcursor
     libXfixes

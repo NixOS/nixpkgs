@@ -5,6 +5,7 @@
   alsa-lib,
   freetype,
   xorg,
+  libx11,
   curl,
   libGL,
   libjack2,
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     freetype
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXinerama
     xorg.libXrandr

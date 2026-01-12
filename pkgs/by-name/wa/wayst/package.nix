@@ -7,7 +7,7 @@
   freetype,
   fontconfig,
   libGL,
-  libX11,
+  libx11,
   libXrandr,
   libxcb,
   libxkbcommon,
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fontconfig
-    libX11
+    libx11
     freetype
     libGL
     libxcb

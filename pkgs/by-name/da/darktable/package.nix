@@ -67,7 +67,7 @@
   colord-gtk,
   libselinux,
   libsepol,
-  libX11,
+  libx11,
   libXdmcp,
   libxkbcommon,
   libXtst,
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     colord-gtk
     libselinux
     libsepol
-    libX11
+    libx11
     libXdmcp
     libxkbcommon
     libXtst

@@ -54,6 +54,7 @@
   wayland-scanner,
   writeText,
   xorg,
+  libx11,
   xorgproto,
   libxcb,
   zlib,
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
     systemd
     udev
     wayland-protocols
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorgproto
     zlib

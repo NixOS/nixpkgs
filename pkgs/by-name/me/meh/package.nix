@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXext,
   libjpeg,
   libpng,
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libXext
-    libX11
+    libx11
     libjpeg
     libpng
     giflib

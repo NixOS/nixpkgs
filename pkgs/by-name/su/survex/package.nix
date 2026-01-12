@@ -6,7 +6,7 @@
   glib,
   libGLU,
   libice,
-  libX11,
+  libx11,
   libgbm,
   perl,
   pkg-config,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libGLU
     libgbm
     libice
-    libX11
+    libx11
   ];
 
   strictDeps = true;

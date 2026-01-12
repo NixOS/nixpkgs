@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   autoreconfHook,
-  libX11,
+  libx11,
   pkg-config,
   libXext,
   libdrm,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!minimal) [
     libva1-minimal
-    libX11
+    libx11
     libXext
     libXfixes
     wayland

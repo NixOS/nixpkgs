@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   xorg,
+  libx11,
   xorgproto,
   mesa,
   meson,
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     xorg.libXext
   ];
 
-  propagatedBuildInputs = [ xorg.libX11 ];
+  propagatedBuildInputs = [ libx11 ];
 
   mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "-Dmoduledir=${mesa.driverLink}/lib/vdpau"

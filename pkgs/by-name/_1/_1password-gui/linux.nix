@@ -18,7 +18,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
+  libx11,
   libXcomposite,
   libXdamage,
   libXext,
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
           gdk-pixbuf
           glib
           gtk3
-          libX11
+          libx11
           libXcomposite
           libXdamage
           libXext

@@ -9,6 +9,7 @@
   nss,
   cairo,
   xorg,
+  libx11,
   libxkbcommon,
   alsa-lib,
   at-spi2-core,
@@ -91,7 +92,7 @@ let
       libgbm
       libGL
       libglvnd
-      xorg.libX11
+      libx11
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXrandr

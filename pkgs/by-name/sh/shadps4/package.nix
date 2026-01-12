@@ -34,6 +34,7 @@
   vulkan-memory-allocator,
   xbyak,
   xorg,
+  libx11,
   xxHash,
   zlib-ng,
   zydis,
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libunwind
     libusb1
-    xorg.libX11
+    libx11
     xorg.libXext
     magic-enum
     libgbm

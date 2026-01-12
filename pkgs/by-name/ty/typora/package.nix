@@ -86,7 +86,7 @@ let
         libGL
         expat
         libxkbcommon
-        xorg.libX11
+        libx11
         xorg.libXcursor
         xorg.libXrandr
         xorg.libXcomposite

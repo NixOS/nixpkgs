@@ -8,7 +8,7 @@
   alsa-lib,
   libjack2,
   freetype,
-  libX11,
+  libx11,
   gtk3,
   pcre,
   libpthread-stubs,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     freetype
-    libX11
+    libx11
     gtk3
     pcre
     libpthread-stubs

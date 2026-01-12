@@ -11,7 +11,7 @@
   freetype,
   glib,
   gtk3,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
         freetype
         glib
         gtk3
-        libX11
+        libx11
         libXcursor
         libXext
         libXi

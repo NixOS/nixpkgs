@@ -16,7 +16,7 @@
   perl,
   tcl,
   ruby,
-  libX11,
+  libx11,
   libXext,
   libsm,
   libXpm,
@@ -179,7 +179,7 @@ stdenv.mkDerivation {
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
     libsm
     libice
-    libX11
+    libx11
     libXext
     libXpm
     libXt

@@ -5,7 +5,7 @@
   coreutils,
   lazarus,
   fpc,
-  libX11,
+  libx11,
 
   # GTK2/3
   pango,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
 
   buildInputs = [
-    libX11
+    libx11
   ]
   ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
     pango

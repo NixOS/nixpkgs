@@ -21,7 +21,7 @@
   gtk3,
   gtk4,
   qt6,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -110,7 +110,7 @@ let
     gtk3
     gtk4
     libdrm
-    libX11
+    libx11
     libGL
     libxkbcommon
     libXScrnSaver

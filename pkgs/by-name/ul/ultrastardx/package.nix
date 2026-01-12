@@ -18,7 +18,7 @@
   ffmpeg,
   sqlite,
   zlib,
-  libX11,
+  libx11,
   libGLU,
   libGL,
 }:
@@ -36,7 +36,7 @@ let
     sqlite
     lua
     zlib
-    libX11
+    libx11
     libGLU
     libGL
     ffmpeg

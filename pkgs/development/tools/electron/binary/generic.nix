@@ -25,6 +25,7 @@
   nss,
   nspr,
   xorg,
+  libx11,
   libxkbfile,
   libxcb,
   pango,
@@ -103,7 +104,7 @@ let
     gtk4
     nss
     nspr
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXcomposite
     xorg.libXdamage

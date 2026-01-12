@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
+  libx11,
   gtk2,
   fig2dev,
   wrapGAppsHook3,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
   buildInputs = [
-    libX11
+    libx11
     gtk2
     fig2dev
   ];

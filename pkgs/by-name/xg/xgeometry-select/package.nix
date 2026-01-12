@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   buildPhase = ''
     gcc -Wall -lX11 ${src} -o xgeometry-select

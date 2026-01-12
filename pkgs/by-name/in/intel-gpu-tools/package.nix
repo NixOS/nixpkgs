@@ -27,7 +27,7 @@
   liboping,
   libpciaccess,
   libunwind,
-  libX11,
+  libx11,
   libXext,
   libXrandr,
   libXv,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     liboping
     libpciaccess
     libunwind
-    libX11
+    libx11
     libXext
     libXrandr
     libXv

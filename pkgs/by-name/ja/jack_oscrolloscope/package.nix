@@ -6,7 +6,7 @@
   libjack2,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   pkg-config,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libjack2
     libGLU
     libGL
-    libX11
+    libx11
   ];
 
   installPhase = ''

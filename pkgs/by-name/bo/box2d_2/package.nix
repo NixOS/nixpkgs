@@ -10,7 +10,7 @@
   # buildInputs
   glfw3,
   libGLU,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXinerama,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glfw3
     libGLU
-    libX11
+    libx11
     libXcursor
     libXi
     libXinerama

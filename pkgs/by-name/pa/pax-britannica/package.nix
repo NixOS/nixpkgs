@@ -10,6 +10,7 @@
   libGLU,
   alsa-lib,
   xorg,
+  libx11,
   glfw2,
   glfw3,
   useGlfw3 ? false,
@@ -68,7 +69,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     alsa-lib
-    xorg.libX11
+    libx11
     xorg.libXrandr
     (if useGlfw3 then glfw3 else glfw2)
   ];

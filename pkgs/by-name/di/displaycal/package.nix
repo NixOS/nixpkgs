@@ -6,6 +6,7 @@
   gtk3,
   librsvg,
   xorg,
+  libx11,
   argyllcms,
 }:
 
@@ -41,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     librsvg
-    xorg.libX11
+    libx11
     xorg.libXxf86vm
     xorg.libXext
     xorg.libXinerama

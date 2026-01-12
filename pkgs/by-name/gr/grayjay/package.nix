@@ -8,6 +8,7 @@
   icu,
   openssl,
   xorg,
+  libx11,
   libxcb,
   gtk3,
   glib,
@@ -70,7 +71,7 @@ buildDotnetModule (finalAttrs: {
   buildInputs = [
     openssl
     libgcc
-    xorg.libX11
+    libx11
     gtk3
     glib
     alsa-lib

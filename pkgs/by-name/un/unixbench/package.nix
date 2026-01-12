@@ -7,6 +7,7 @@
   installShellFiles,
   perl,
   xorg,
+  libx11,
   x11perf,
   libGLX,
   coreutils,
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     perl
   ]
   ++ lib.optionals withGL [
-    xorg.libX11
+    libx11
     xorg.libXext
     libGLX
   ];

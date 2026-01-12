@@ -21,7 +21,7 @@
   sqlite,
   autoAwaySupport ? true,
   libXScrnSaver,
-  libX11,
+  libx11,
   notifySupport ? true,
   libnotify,
   gdk-pixbuf,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals autoAwaySupport [
     libXScrnSaver
-    libX11
+    libx11
   ]
   ++ lib.optionals notifySupport [
     libnotify

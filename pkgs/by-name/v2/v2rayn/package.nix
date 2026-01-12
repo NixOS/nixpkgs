@@ -15,6 +15,7 @@
   krb5,
   bash,
   xorg,
+  libx11,
   libsm,
   libice,
   nix-update-script,
@@ -75,7 +76,7 @@ buildDotnetModule (finalAttrs: {
   ];
 
   runtimeDeps = [
-    xorg.libX11
+    libx11
     xorg.libXrandr
     xorg.libXi
     libice

@@ -7,6 +7,7 @@
   dotool,
   libGL,
   xorg,
+  libx11,
   libxkbcommon,
   wayland,
   lib,
@@ -38,7 +39,7 @@ buildGoModule (finalAttrs: {
     dotool
 
     libGL
-    xorg.libX11.dev
+    libx11.dev
     xorg.libXcursor
     xorg.libXi
     xorg.libXinerama

@@ -8,7 +8,7 @@
   ninja,
   pkg-config,
   libiconv,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    libX11
+    libx11
     libXcursor
     libXext
     libXi

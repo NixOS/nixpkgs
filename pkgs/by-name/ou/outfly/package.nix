@@ -11,7 +11,7 @@
   wayland,
   libXrandr,
   libXcursor,
-  libX11,
+  libx11,
   libXi,
 }:
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     libGL
     libXrandr
-    libX11
+    libx11
     vulkan-loader
   ];
 

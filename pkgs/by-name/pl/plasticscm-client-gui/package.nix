@@ -52,7 +52,7 @@ buildFHSEnv {
       gtk3
       libice
       libsm
-      xorg.libX11
+      libx11
       xorg.libXcursor
       xorg.libXi
     ]

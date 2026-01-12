@@ -92,7 +92,7 @@
   lirc,
   mesa-gl-headers,
   x11Support ? true,
-  libX11,
+  libx11,
   xorgproto,
   libXt,
   libXmu,
@@ -350,7 +350,7 @@ stdenv.mkDerivation (
       zlib
     ]
     ++ lib.optionals x11Support [
-      libX11
+      libx11
       xorgproto
       libXt
       libXmu

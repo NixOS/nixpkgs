@@ -14,7 +14,7 @@
   garcon,
   glib,
   gtk3,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXrandr,
   libwnck,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     garcon
     glib
     gtk3
-    libX11
+    libx11
     libXScrnSaver
     libXrandr
     libwnck

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  libx11,
   libsm,
   libice,
   xorgproto,
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     xorgproto
     xorg.libXt
     xorg.libXext
-    xorg.libX11
+    libx11
     libsm
     libice
     ncurses

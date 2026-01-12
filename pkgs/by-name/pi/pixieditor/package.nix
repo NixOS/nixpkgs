@@ -13,7 +13,7 @@
   vulkan-loader,
   openssl,
   libGL,
-  libX11,
+  libx11,
   libice,
   libsm,
   libXi,
@@ -102,7 +102,7 @@ buildDotnetModule (finalAttrs: {
     vulkan-loader
     openssl
     libGL
-    libX11
+    libx11
     libice
     libsm
     libXi

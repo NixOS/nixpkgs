@@ -4,7 +4,7 @@
   fetchFromGitHub,
   imake,
   gccmakedep,
-  libX11,
+  libx11,
   libXext,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     gccmakedep
   ];
   buildInputs = [
-    libX11
+    libx11
     libXext
   ];
 

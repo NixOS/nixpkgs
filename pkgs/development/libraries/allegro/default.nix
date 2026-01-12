@@ -5,7 +5,7 @@
   texinfo,
   libXext,
   xorgproto,
-  libX11,
+  libx11,
   libXpm,
   libXt,
   libXcursor,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     texinfo
     libXext
     xorgproto
-    libX11
+    libx11
     libXpm
     libXt
     libXcursor

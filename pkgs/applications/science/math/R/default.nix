@@ -4,7 +4,7 @@
   fetchurl,
   bzip2,
   gfortran,
-  libX11,
+  libx11,
   libXmu,
   libXt,
   libjpeg,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     gfortran
-    libX11
+    libx11
     libXmu
     libXt
     libXt

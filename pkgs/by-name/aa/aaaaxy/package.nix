@@ -4,7 +4,7 @@
   buildGoModule,
   alsa-lib,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -37,7 +37,7 @@ buildGoModule rec {
   buildInputs = [
     alsa-lib
     libGL
-    libX11
+    libx11
     libXcursor
     libXext
     libXi

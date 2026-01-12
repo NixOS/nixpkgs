@@ -1,7 +1,7 @@
 {
   stdenv,
   boost,
-  libX11,
+  libx11,
   libXext,
   linuxPackages,
   openssl,
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    libX11
+    libx11
     libXext
     linuxPackages.nvidia_x11
     linuxPackages.nvidia_x11.settings.libXNVCtrl

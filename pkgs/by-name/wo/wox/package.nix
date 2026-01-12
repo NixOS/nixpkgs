@@ -14,6 +14,7 @@
   pkg-config,
   autoPatchelfHook,
   xorg,
+  libx11,
   libxkbcommon,
   libayatana-appindicator,
   gtk3,
@@ -170,7 +171,7 @@ buildGoModule {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXtst
     libxkbcommon
     libayatana-appindicator

@@ -13,7 +13,7 @@
   jbig2dec,
   leptonica,
   libGL,
-  libX11,
+  libx11,
   libXau,
   libXcomposite,
   libXdmcp,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     jbig2dec
     leptonica
     libGL
-    libX11
+    libx11
     libXau
     libXcomposite
     libXdmcp

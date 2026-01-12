@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libev,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXfixes,
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libev
-    libX11
+    libx11
     libXext
     libXi
     libXfixes

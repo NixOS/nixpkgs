@@ -14,7 +14,7 @@
   SDL2,
   SDL2_image,
   SDL2_ttf,
-  xorg,
+  libx11,
   xorgproto,
   nix-update-script,
 }:
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libpng
     libvorbis
-    xorg.libX11
+    libx11
     xorgproto
   ]
   ++ sdlInputs;

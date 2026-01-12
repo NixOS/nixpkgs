@@ -32,7 +32,7 @@
   wayland-scanner,
   waylandpp,
   wxGTK32,
-  xorg,
+  libx11,
   xorgproto,
   zstd,
 
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
   ]
   ++ lib.optionals withX11 [
-    xorg.libX11
+    libx11
     xorgproto
   ]
   ++ lib.optionals withWayland [

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fontconfig,
-  libX11,
+  libx11,
   libXext,
   libXft,
   ncurses,
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     fontconfig
-    libX11
+    libx11
     libXext
     libXft
     ncurses

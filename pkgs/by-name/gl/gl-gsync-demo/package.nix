@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libglut,
   glew,
   libXext,
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libglut
     glew
     libXNVCtrl

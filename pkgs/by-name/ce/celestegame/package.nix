@@ -132,7 +132,7 @@ buildFHSEnv {
       libpulseaudio
       pipewire
       vulkan-loader
-      xorg.libX11
+      libx11
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXfixes

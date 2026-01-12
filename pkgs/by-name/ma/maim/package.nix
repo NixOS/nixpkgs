@@ -11,7 +11,7 @@
   libGLU,
   libGL,
   glm,
-  libX11,
+  libx11,
   libXext,
   libXfixes,
   libXrandr,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     glm
-    libX11
+    libx11
     libXext
     libXfixes
     libXrandr

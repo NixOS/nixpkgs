@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   xorg,
+  libx11,
   vulkan-loader,
 }:
 
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/binocle \
       --suffix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          xorg.libX11
+          libx11
           xorg.libXcursor
           xorg.libXi
           xorg.libXrandr

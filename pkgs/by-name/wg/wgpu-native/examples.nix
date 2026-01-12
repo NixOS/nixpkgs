@@ -9,6 +9,7 @@
   glfw,
   wayland,
   xorg,
+  libx11,
   vulkan-loader,
 
   version,
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    xorg.libX11
+    libx11
     xorg.libXrandr
   ];
 

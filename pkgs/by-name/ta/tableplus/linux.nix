@@ -12,6 +12,7 @@
   stdenv,
   wrapGAppsHook3,
   xorg,
+  libx11,
   libxcb,
 }:
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
     libsecret
     libxkbcommon
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXext
     xorg.libXi

@@ -10,7 +10,7 @@
   libev,
   libGL,
   libepoxy,
-  libX11,
+  libx11,
   libxcb,
   libxdg_basedir,
   libXext,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libev
     libGL
     libepoxy
-    libX11
+    libx11
     libxcb
     libxdg_basedir
     libXext

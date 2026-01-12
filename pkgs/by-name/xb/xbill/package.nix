@@ -6,7 +6,7 @@
   copyDesktopItems,
   fetchpatch,
   fetchurl,
-  libX11,
+  libx11,
   libXpm,
   libXt,
   motif,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXpm
     libXt
     motif

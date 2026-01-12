@@ -5,7 +5,7 @@
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXext,
   makeBinaryWrapper,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libX11
+    libx11
     libXext
   ];
 

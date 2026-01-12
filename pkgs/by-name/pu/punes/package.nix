@@ -9,7 +9,7 @@
   ffmpeg,
   libGLU,
   alsa-lib,
-  libX11,
+  libx11,
   libXrandr,
   sndio,
   libsForQt5,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ])
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libX11
+    libx11
     libXrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isBSD [

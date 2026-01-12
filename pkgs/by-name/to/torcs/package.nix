@@ -5,7 +5,7 @@
   stdenv,
   libGLU,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libglut
-    libX11
+    libx11
     plib
     openal
     freealut

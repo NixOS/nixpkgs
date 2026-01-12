@@ -2,7 +2,7 @@
   lib,
   stdenv,
   dockapps-sources,
-  libX11,
+  libx11,
   libXpm,
   libXext,
   libdockapp,
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/wmcube/wmcube";
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXpm
     libdockapp
@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
           CC="${stdenv.cc.targetPrefix}cc"
           PREFIX="${placeholder "out"}"
           VERSION="${finalAttrs.version}"
-          LIBDIR="-L${lib.getLib libX11}/lib -L${lib.getLib libXext}/lib \
+          LIBDIR="-L${lib.getLib libx11}/lib -L${lib.getLib libXext}/lib \
     -L${lib.getLib libXpm}/lib -L${lib.getLib libdockapp}/lib"
-          INCDIR="-I${lib.getDev libX11}/lib -I${lib.getDev libXext}/lib \
+          INCDIR="-I${lib.getDev libx11}/lib -I${lib.getDev libXext}/lib \
     -I${lib.getDev libXpm}/lib -I${lib.getDev libdockapp}/lib"
           LIBS="-lm -lXpm -lXext -lX11 -ldockapp"
         )

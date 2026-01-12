@@ -20,6 +20,7 @@
   upx,
   fontconfig,
   xorg,
+  libx11,
   libsm,
   gcc,
   atk,
@@ -76,7 +77,7 @@ let
     pango
     udev
     libsm
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXft
     xorg.libXinerama

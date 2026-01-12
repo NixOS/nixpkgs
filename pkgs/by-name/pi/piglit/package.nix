@@ -20,7 +20,7 @@
   wayland-protocols,
   wayland-scanner,
   libXau,
-  libX11,
+  libx11,
   libXrender,
   libxcb,
   libxkbcommon,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     libGLU
     libglvnd
     libXau
-    libX11
+    libx11
     libXrender
     libxcb
     libxkbcommon

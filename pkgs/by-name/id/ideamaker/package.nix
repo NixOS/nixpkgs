@@ -14,7 +14,7 @@
   libpsl,
   libsForQt5,
   libredirect,
-  libX11,
+  libx11,
   lz4,
   makeDesktopItem,
   makeWrapper,
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/ideamaker \
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
       --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${libX11.out}/share/X11/locale" \
+      --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
       --set KDEDIRS "$HOME/.nix-profile:/nix/var/nix/profiles/default" \
       --set NIX_REDIRECTS /usr/share=$out/share/
   '';

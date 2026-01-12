@@ -19,6 +19,7 @@
   curl,
   systemd,
   xorg,
+  libx11,
   requireFile,
 }:
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
         xorg.libXext
         pango
         udev
-        xorg.libX11
+        libx11
         xorg.libXcomposite
         alsa-lib
         atk
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         stdenv.cc.cc
         stdenv.cc.libc
-        xorg.libX11
+        libx11
         xorg.libXcursor
         gtk2
         glib
@@ -93,7 +94,7 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           stdenv.cc.cc
           curl
-          xorg.libX11
+          libx11
           stdenv.cc.libc
           xorg.libXcursor
           "$out"

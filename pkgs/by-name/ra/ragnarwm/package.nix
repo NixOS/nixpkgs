@@ -4,7 +4,7 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
+  libx11,
   libXft,
   libXcursor,
   libXcomposite,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libX11
+    libx11
     libXft
     libXcursor
     libXcomposite

@@ -27,6 +27,7 @@
   xcb-imdkit,
   xdg-utils,
   xorg,
+  libx11,
   libxcb,
   zlib,
 }:
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     libnghttp2
     libxcb
     xorg.libXcursor
-    xorg.libX11
+    libx11
     xorg.libXtst
     libxkbcommon
     libudev-zero

@@ -9,6 +9,7 @@
   runtimeShell,
   gtk3,
   xorg,
+  libx11,
   libxshmfence,
   libxkbfile,
   glib,
@@ -92,7 +93,7 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

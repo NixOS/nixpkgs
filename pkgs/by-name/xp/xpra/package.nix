@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  libx11,
   xorgproto,
   libxkbfile,
   xf86-video-dummy,
@@ -130,7 +131,7 @@ effectiveBuildPythonApplication rec {
   ++ lib.optional withNvenc cudatoolkit;
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXfixes

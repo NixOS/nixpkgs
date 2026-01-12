@@ -6,7 +6,7 @@
   autoreconfHook,
   allegro,
   libsamplerate,
-  libX11,
+  libx11,
   SDL2,
   SDL2_mixer,
   readline,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     allegro
     libsamplerate
-    libX11
+    libx11
     SDL2
     SDL2_mixer
     readline

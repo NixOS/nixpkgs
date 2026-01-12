@@ -6,7 +6,7 @@
   alsa-lib,
   libGL,
   libpulseaudio,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libGL
     libpulseaudio
-    libX11
+    libx11
     libXcursor
     libXext
     libXi

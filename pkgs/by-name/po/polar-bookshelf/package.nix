@@ -14,7 +14,7 @@
   glib,
   at-spi2-atk,
   dbus,
-  libX11,
+  libx11,
   libxcb,
   libXi,
   libXcursor,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     at-spi2-atk
     dbus
-    libX11
+    libx11
     libxcb
     libXi
     libXcursor

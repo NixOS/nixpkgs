@@ -9,6 +9,7 @@
   xkeyboard_config,
   libxml2,
   xorg,
+  libx11,
   libice,
   xkbcomp,
   libxkbfile,
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
 
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXi
     xkeyboard_config
     libxml2

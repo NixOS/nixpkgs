@@ -10,6 +10,7 @@
   openssl,
   wayland,
   xorg,
+  libx11,
 
   nix-update-script,
 }:
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage rec {
         xorg.libXcursor
         xorg.libXrandr
         xorg.libXi
-        xorg.libX11
+        libx11
       ];
     in
     ''

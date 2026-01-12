@@ -18,6 +18,7 @@
   freetype,
   libffi,
   xorg,
+  libx11,
   zlib,
   # runtime dependencies
   cups,
@@ -63,7 +64,7 @@ let
       fontconfig
       freetype
       (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-      xorg.libX11
+      libx11
       xorg.libXext
       xorg.libXi
       xorg.libXrender

@@ -5,7 +5,7 @@
   pkg-config,
   alsa-lib,
   freetype,
-  libX11,
+  libx11,
   libXrandr,
   libXinerama,
   libXext,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     freetype
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXext

@@ -16,7 +16,7 @@
   procps,
   libtirpc,
   rpcsvc-proto,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   libXi,
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf-xlib
     gtk3
     gtkmm3
-    libX11
+    libx11
     libXext
     libXinerama
     libXi

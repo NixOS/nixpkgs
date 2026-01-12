@@ -6,7 +6,7 @@
   libGL,
   libice,
   libsm,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -245,7 +245,7 @@ let
         libGL
         libice
         libsm
-        libX11
+        libx11
         libXcursor
         libXext
         libXi

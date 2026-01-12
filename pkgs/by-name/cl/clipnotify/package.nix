@@ -1,5 +1,5 @@
 {
-  libX11,
+  libx11,
   libXfixes,
   lib,
   stdenv,
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libXfixes
   ];
 

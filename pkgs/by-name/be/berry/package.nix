@@ -5,7 +5,7 @@
   copyDesktopItems,
   fontconfig,
   freetype,
-  libX11,
+  libx11,
   libXext,
   libXft,
   libXinerama,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXft
     libXinerama
@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "berry";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

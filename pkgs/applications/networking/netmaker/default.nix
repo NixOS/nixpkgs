@@ -9,6 +9,7 @@
     "netclient"
   ],
   xorg,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   buildInputs = [
     libglvnd
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
     xorg.libXinerama

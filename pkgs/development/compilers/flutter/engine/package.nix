@@ -20,6 +20,7 @@
   gn,
   openbox,
   xorg,
+  libx11,
   xorgproto,
   libxcb,
   libglvnd,
@@ -117,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
               pango
               cairo
               libxcb
-              xorg.libX11
+              libx11
               xorg.libXcursor
               xorg.libXrandr
               xorg.libXrender

@@ -14,6 +14,7 @@
   libdrm,
   udev,
   xorg,
+  libx11,
   libsm,
   libice,
   libxcb,
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     libdrm
     udev
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXext
     xorg.libXv

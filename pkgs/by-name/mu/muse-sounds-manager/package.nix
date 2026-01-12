@@ -6,7 +6,7 @@
   fontconfig,
   zlib,
   icu,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXrandr,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = map lib.getLib [
     icu
-    libX11
+    libx11
     libXext
     libXi
     libXrandr

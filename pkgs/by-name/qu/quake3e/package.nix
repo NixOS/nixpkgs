@@ -5,7 +5,7 @@
   makeWrapper,
   curl,
   libGL,
-  libX11,
+  libx11,
   libXxf86dga,
   alsa-lib,
   libXrandr,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     libGL
-    libX11
+    libx11
     libXxf86dga
     alsa-lib
     libXrandr

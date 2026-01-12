@@ -5,7 +5,7 @@
   dotnetCorePackages,
   makeDesktopItem,
   copyDesktopItems,
-  libX11,
+  libx11,
   glew,
   libGL,
   libice,
@@ -47,7 +47,7 @@ buildDotnetModule (finalAttrs: {
 
   runtimeDeps = [
     # Avalonia UI
-    libX11
+    libx11
     libGL
     glew
     libice

@@ -3,7 +3,7 @@
   fetchzip,
   jam,
   unzip,
-  libX11,
+  libx11,
   libXxf86vm,
   libXrandr,
   libXinerama,
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     libtiff
     libjpeg
     libpng
-    libX11
+    libx11
     libXxf86vm
     libXrandr
     libXinerama

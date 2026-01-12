@@ -8,7 +8,7 @@
   libglut,
   zlib,
   cmake,
-  libX11,
+  libx11,
   libxml2,
   libpng,
   libXxf86vm,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libGL
     libglut
     zlib
-    libX11
+    libx11
     libxml2
     libpng
     libXxf86vm

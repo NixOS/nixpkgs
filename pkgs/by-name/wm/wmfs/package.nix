@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  libX11,
+  libx11,
   libXinerama,
   libXrandr,
   libXpm,
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     imlib2
-    libX11
+    libx11
     libXinerama
     libXrandr
     libXpm

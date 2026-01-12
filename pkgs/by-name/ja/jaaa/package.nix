@@ -5,7 +5,7 @@
   alsa-lib,
   libclthreads,
   libclxclient,
-  libX11,
+  libx11,
   libXft,
   libXrender,
   fftwFloat,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libclthreads
     libclxclient
-    libX11
+    libx11
     libXft
     libXrender
     fftwFloat

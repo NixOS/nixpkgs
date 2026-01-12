@@ -29,7 +29,7 @@
   libpulseaudio,
   librsvg,
   libva,
-  libX11,
+  libx11,
   libXrandr,
   makeDesktopItem,
   nix-update-script,
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     librsvg
     libva
-    libX11
+    libx11
     libXrandr
     nlohmann_json
     openxr-loader

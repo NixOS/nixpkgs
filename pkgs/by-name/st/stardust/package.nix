@@ -6,7 +6,7 @@
   libtiff,
   libxml2,
   SDL_compat,
-  libX11,
+  libx11,
   libXi,
   libXmu,
   libXext,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     SDL_compat
-    libX11
+    libx11
     libXi
     libXmu
     libXext

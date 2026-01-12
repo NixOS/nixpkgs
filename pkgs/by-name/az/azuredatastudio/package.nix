@@ -30,6 +30,7 @@
   systemd,
   wrapGAppsHook3,
   xorg,
+  libx11,
   libxshmfence,
   libxkbfile,
   libxcb,
@@ -167,7 +168,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       libdrm
-      xorg.libX11
+      libx11
       libxcb
       xorg.libXcomposite
       xorg.libXdamage

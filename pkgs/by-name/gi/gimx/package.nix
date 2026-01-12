@@ -10,6 +10,7 @@
   ncurses5,
   libmhash,
   xorg,
+  libx11,
 }:
 
 let
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     ncurses5
     libmhash
-    xorg.libX11
+    libx11
     xorg.libXi
   ];
 

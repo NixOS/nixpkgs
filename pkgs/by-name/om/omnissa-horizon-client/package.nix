@@ -102,7 +102,7 @@ let
           pixman
           udev
           omnissaHorizonClientFiles
-          xorg.libX11
+          libx11
           xorg.libXau
           xorg.libXcursor
           xorg.libXext

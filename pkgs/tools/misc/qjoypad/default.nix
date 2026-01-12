@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  libX11,
+  libx11,
   libXtst,
   qtbase,
   qttools,
@@ -32,7 +32,7 @@ mkDerivation rec {
     qttools
   ];
   buildInputs = [
-    libX11
+    libx11
     libXtst
     qtbase
     qtx11extras

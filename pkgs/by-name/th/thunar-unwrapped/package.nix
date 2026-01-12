@@ -10,7 +10,7 @@
   libexif,
   libgudev,
   libnotify,
-  libX11,
+  libx11,
   libxfce4ui,
   libxfce4util,
   libxslt,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     xfce4-exo
     gdk-pixbuf
     gtk3
-    libX11
+    libx11
     libexif # image properties page
     libgudev
     libnotify

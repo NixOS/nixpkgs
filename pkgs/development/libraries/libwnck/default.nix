@@ -9,7 +9,7 @@
   gtk-doc,
   docbook_xsl,
   docbook_xml_dtd_412,
-  libX11,
+  libx11,
   glib,
   gtk3,
   pango,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libstartup_notification
     pango
     cairo

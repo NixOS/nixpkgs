@@ -10,6 +10,7 @@
   openssl,
   libGLU,
   xorg,
+  libx11,
   alsa-lib,
   libjack2,
   libpulseaudio,
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     sse2neon
     xorg.libXinerama
     xorg.libXrandr
-    xorg.libX11
+    libx11
     xorg.libXext # Needed for DPMS
     xorg.libXvMC
   ];

@@ -1,6 +1,6 @@
 {
   lib,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ]
   ++ lib.optionals enableXWayland [
-    libX11
+    libx11
     xcbutilwm
     xwayland
   ];

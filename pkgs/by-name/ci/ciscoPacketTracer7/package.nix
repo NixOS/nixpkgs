@@ -20,6 +20,7 @@
   nspr,
   nss,
   xorg,
+  libx11,
   libsm,
   libice,
   buildFHSEnv,
@@ -69,7 +70,7 @@ let
       nss
       libice
       libsm
-      xorg.libX11
+      libx11
       xorg.libXScrnSaver
     ];
 

@@ -23,7 +23,7 @@
   libnotify,
   libpulseaudio,
   libuuid,
-  libX11,
+  libx11,
   libxcb,
   libXcomposite,
   libXcursor,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     libdrm
     libnotify
     libuuid
-    libX11
+    libx11
     libxcb
     libXcomposite
     libXcursor

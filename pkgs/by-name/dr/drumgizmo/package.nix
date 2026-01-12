@@ -8,7 +8,7 @@
   glib,
   libjack2,
   libXext,
-  libX11,
+  libx11,
   libpng,
   libpthread-stubs,
   libsmf,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     glib
     libjack2
     libXext
-    libX11
+    libx11
     libpng
     libpthread-stubs
     libsmf

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   libnotify,
   glfw,
   makeWrapper,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXcursor

@@ -10,6 +10,7 @@
   xcbuild,
   udev,
   xorg,
+  libx11,
   libgbm,
   coreutils,
 }:
@@ -77,7 +78,7 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
-    xorg.libX11
+    libx11
     xorg.libXrandr
     xorg.libXcursor
     xorg.libXi

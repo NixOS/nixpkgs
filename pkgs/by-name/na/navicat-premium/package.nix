@@ -15,7 +15,7 @@
   glibc,
   harfbuzz,
   libGL,
-  libX11,
+  libx11,
   libgpg-error,
   libselinux,
   libxcb,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibc
     harfbuzz
     libGL
-    libX11
+    libx11
     libgpg-error
     libselinux
     libxcb
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
           glibc
           harfbuzz
           libGL
-          libX11
+          libx11
           libgpg-error
           libselinux
           libxcb

@@ -7,7 +7,7 @@
   autoreconfHook,
   pkg-config,
   gtk2,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXtst,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk2
-    libX11
+    libx11
     libXext
     libXi
     libXtst

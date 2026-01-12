@@ -10,6 +10,7 @@
 
   ### Libs
   xorg,
+  libx11,
   libxcb,
   libxkbcommon,
   glib,
@@ -48,7 +49,7 @@ stdenvNoCC.mkDerivation rec {
   buildInputs = [
 
     ### Xorg libs
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXext
@@ -91,7 +92,7 @@ stdenvNoCC.mkDerivation rec {
       --set LD_LIBRARY_PATH ${
         lib.makeLibraryPath [
           ### Xorg libs
-          xorg.libX11
+          libx11
           xorg.libXcomposite
           xorg.libXdamage
           xorg.libXext

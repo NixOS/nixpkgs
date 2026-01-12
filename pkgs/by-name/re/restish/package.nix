@@ -6,6 +6,7 @@
   restish,
   testers,
   xorg,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,7 @@ buildGoModule rec {
   vendorHash = "sha256-5+N6iL9wD5J/E6H5qn1InQR8bbuAlTOzPQn0sawVbrI=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
     xorg.libXinerama

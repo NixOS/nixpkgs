@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   libXft,
   libclthreads,
   libclxclient,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libXft
     libclthreads
     libclxclient

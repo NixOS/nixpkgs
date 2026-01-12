@@ -32,6 +32,7 @@
   vulkan-headers,
   xbyak,
   xorg,
+  libx11,
   libxcb,
   enableQtTranslations ? true,
   qt6,
@@ -122,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     pipewire
     qt6.qtwayland
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXext
   ]

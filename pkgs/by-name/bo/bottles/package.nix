@@ -30,7 +30,7 @@ let
           pkgs: with pkgs; [
             libpthread-stubs
             libsm
-            xorg.libX11
+            libx11
             xorg.libXaw
             libxcb
             xorg.libXcomposite

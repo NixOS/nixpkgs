@@ -9,7 +9,7 @@
   filter-audio,
   dbus,
   libvpx,
-  libX11,
+  libx11,
   openal,
   freetype,
   libv4l,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libtoxcore
     dbus
     libvpx
-    libX11
+    libx11
     openal
     freetype
     libv4l

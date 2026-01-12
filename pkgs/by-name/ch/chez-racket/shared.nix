@@ -8,7 +8,7 @@ args:
   darwin,
   ncurses,
   libiconv,
-  libX11,
+  libx11,
   zlib,
   lz4,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (
     ];
     buildInputs = [
       libiconv
-      libX11
+      libx11
       lz4
       ncurses
       zlib

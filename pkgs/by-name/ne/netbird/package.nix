@@ -9,7 +9,7 @@
   pkg-config,
   gtk3,
   libayatana-appindicator,
-  libX11,
+  libx11,
   libXcursor,
   libXxf86vm,
   versionCheckHook,
@@ -84,7 +84,7 @@ buildGoModule (finalAttrs: {
   buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && componentName == "ui") [
     gtk3
     libayatana-appindicator
-    libX11
+    libx11
     libXcursor
     libXxf86vm
   ];

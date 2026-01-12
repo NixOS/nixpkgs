@@ -5,7 +5,7 @@
 
   SDL2,
 
-  libX11,
+  libx11,
   libXext,
 
   guiBackend ? "sdl",
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     [ ]
     ++ lib.optionals enableSDL [ SDL2 ]
     ++ lib.optionals enableX11 [
-      libX11
+      libx11
       libXext
     ];
 

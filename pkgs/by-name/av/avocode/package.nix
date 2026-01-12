@@ -22,6 +22,7 @@
   udev,
   adwaita-icon-theme,
   xorg,
+  libx11,
   libxshmfence,
   libxcb,
   mozjpeg,
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     cups
     expat
     udev
-    xorg.libX11
+    libx11
     libxcb
     libxshmfence
     libxkbcommon

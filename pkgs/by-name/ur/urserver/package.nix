@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   bluez,
-  libX11,
+  libx11,
   libXtst,
   makeWrapper,
   versionCheckHook,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (
       install -m755 -D urserver $out/bin/urserver
       wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          libX11
+          libx11
           libXtst
           bluez
         ]

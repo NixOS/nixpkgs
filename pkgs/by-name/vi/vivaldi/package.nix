@@ -4,7 +4,7 @@
   coreutils,
   fetchurl,
   zlib,
-  libX11,
+  libx11,
   libXext,
   libsm,
   libice,
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     stdenv.cc.libc
     zlib
-    libX11
+    libx11
     libXt
     libXext
     libsm

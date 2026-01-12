@@ -5,7 +5,7 @@
   texinfo,
   allegro,
   perl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     texinfo
     allegro
     perl
-    libX11
+    libx11
   ];
 
   configurePhase = ''

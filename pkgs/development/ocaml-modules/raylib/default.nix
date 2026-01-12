@@ -8,7 +8,7 @@
   integers,
   patch,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXinerama,
@@ -45,7 +45,7 @@ buildDunePackage rec {
     ctypes
     integers
     libGL
-    libX11
+    libx11
     libXcursor
     libXi
     libXinerama

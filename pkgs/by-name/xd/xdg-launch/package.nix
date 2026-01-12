@@ -10,6 +10,7 @@
   pkg-config,
   glib,
   xorg,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXrandr
     glib # can be optional
   ];

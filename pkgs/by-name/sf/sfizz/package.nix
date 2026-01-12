@@ -5,6 +5,7 @@
   libjack2,
   libsndfile,
   xorg,
+  libx11,
   libxcb,
   freetype,
   libxkbcommon,
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libvorbis
     libopus
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXau
     xorg.libXdmcp

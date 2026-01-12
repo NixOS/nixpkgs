@@ -13,7 +13,7 @@
   plib,
   libsm,
   libunwind,
-  libX11,
+  libx11,
   xorgproto,
   libXext,
   libXi,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     plib
     libsm
     libunwind
-    libX11
+    libx11
     xorgproto
     libXext
     libXi

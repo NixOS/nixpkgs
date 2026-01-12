@@ -8,7 +8,7 @@
   jdk,
   fontconfig,
   libGL,
-  libX11,
+  libx11,
 
   vmopts ? null,
   forceWayland ? false,
@@ -57,7 +57,7 @@ mkJetBrainsProductCore {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       fontconfig
       libGL
-      libX11
+      libx11
     ];
 
   extraWrapperArgs =

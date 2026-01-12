@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   libXt,
   libXext,
   libXaw,
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = [ ./label.patch ];
 
   buildInputs = [
-    libX11
+    libx11
     libXt
     libXext
     libXaw

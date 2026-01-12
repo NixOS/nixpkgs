@@ -13,7 +13,7 @@
   libogg,
   libmodplug,
   # glx
-  libX11,
+  libx11,
   libGLU,
   libGL,
   libXpm,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     # glx
-    libX11
+    libx11
     libGLU
     libGL
     libXpm

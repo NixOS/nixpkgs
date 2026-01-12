@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libx11,
   libsm,
   libice,
   libxkbfile,
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
     libxcb
     libxkbfile
-    xorg.libX11
+    libx11
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes

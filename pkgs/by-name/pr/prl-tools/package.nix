@@ -20,6 +20,7 @@
   util-linux,
   wayland,
   xorg,
+  libx11,
 }:
 
 let
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fuse
     glib
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXext
     xorg.libXrandr

@@ -8,7 +8,7 @@
   wayland,
   wayland-protocols,
   libxkbcommon,
-  libX11,
+  libx11,
   libXrandr,
   libXi,
   libXcursor,
@@ -36,7 +36,7 @@ let
         (lib.getLib stdenv.cc.cc)
         libxkbcommon
         libxcb
-        libX11
+        libx11
         libXcursor
         libXrandr
         libXi
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage {
     wayland
     wayland-protocols
     libxkbcommon
-    libX11
+    libx11
     libXrandr
     libXi
     libXcursor
@@ -105,7 +105,7 @@ rustPlatform.buildRustPackage {
         fontconfig
         freetype
         libxkbcommon
-        libX11
+        libx11
         libXrandr
         libXi
         libXcursor

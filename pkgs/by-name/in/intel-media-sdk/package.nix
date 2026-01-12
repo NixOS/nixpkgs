@@ -8,7 +8,7 @@
   libdrm,
   libpciaccess,
   libva,
-  libX11,
+  libx11,
   libXau,
   libXdmcp,
   libpthread-stubs,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libdrm
     libva
     libpciaccess
-    libX11
+    libx11
     libXau
     libXdmcp
     libpthread-stubs

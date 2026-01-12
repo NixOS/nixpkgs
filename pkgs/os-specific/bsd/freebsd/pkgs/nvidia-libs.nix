@@ -3,6 +3,7 @@
   nvidia-driver,
   autoPatchelfHook,
   xorg,
+  libx11,
   freetype,
   gtk2,
   gtk3,
@@ -34,7 +35,7 @@ mkDerivation {
     libintl
     freetype
     xorg.libXext
-    xorg.libX11
+    libx11
   ];
 
   env.LOCALBASE = "${builtins.placeholder "out"}";

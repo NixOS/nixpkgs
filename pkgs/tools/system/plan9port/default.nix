@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fontconfig,
   freetype,
-  libX11,
+  libx11,
   libXext,
   libXt,
   xorgproto,
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
       [
         fontconfig
         freetype # fontsrv uses these
-        libX11
+        libx11
         libXext
         libXt
         xorgproto

@@ -19,7 +19,7 @@
   libsecret,
   libappindicator,
   xdotool,
-  libX11,
+  libx11,
   libXcomposite,
   libXext,
   libXrandr,
@@ -55,7 +55,7 @@ let
     libGL
     nss
     udev
-    libX11
+    libx11
     libXcomposite
     libXext
     libXrandr

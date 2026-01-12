@@ -5,7 +5,7 @@
   readline,
   perl,
   libharu,
-  libX11,
+  libx11,
   libpng,
   libXt,
   zlib,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     perl
     libharu
     libpng
-    libX11
+    libx11
     libXt
     zlib
   ];

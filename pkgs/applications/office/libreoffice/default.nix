@@ -39,6 +39,7 @@
   ant,
   cups,
   xorg,
+  libx11,
   libpthread-stubs,
   libxshmfence,
   fontforge,
@@ -435,7 +436,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       libGLU
       libtool
-      xorg.libX11
+      libx11
       xorg.libXaw
       xorg.libXdmcp
       xorg.libXext

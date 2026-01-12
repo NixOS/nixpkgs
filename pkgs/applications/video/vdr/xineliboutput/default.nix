@@ -10,7 +10,7 @@
   libextractor,
   libglvnd,
   libGLU,
-  libX11,
+  libx11,
   libXext,
   libXrender,
   libXrandr,
@@ -74,7 +74,7 @@ let
       libXext
       libXrandr
       libXrender
-      libX11
+      libx11
       vdr
       xine-lib
       avahi

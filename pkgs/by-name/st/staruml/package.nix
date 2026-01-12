@@ -9,6 +9,7 @@
   glib,
   systemd,
   xorg,
+  libx11,
   libxshmfence,
   libxcb,
   nss,
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
           glib
           gtk3
           xorg.libXdamage
-          xorg.libX11
+          libx11
           libxcb
           xorg.libXcomposite
           xorg.libXcursor

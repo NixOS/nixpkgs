@@ -3,7 +3,7 @@
   lib,
   stdenv,
   makeWrapper,
-  xorg,
+  libx11,
   ncurses,
   coreutils,
   bashInteractive,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ];
 
   patches = [

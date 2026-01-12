@@ -79,7 +79,7 @@
   boost,
   thrift,
   libGL,
-  libX11,
+  libx11,
   libXdamage,
   nss,
   nspr,
@@ -230,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     nspr
     libGL
-    libX11
+    libx11
     libXdamage
   ];
 

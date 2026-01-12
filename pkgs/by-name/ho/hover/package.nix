@@ -8,6 +8,7 @@
   fetchFromGitHub,
   roboto,
   xorg,
+  libx11,
   xorgproto,
   libglvnd,
   addDriverRunpath,
@@ -22,7 +23,7 @@ let
   version = "0.47.2";
 
   libs = [
-    xorg.libX11.dev
+    libx11.dev
     xorg.libXcursor.dev
     xorg.libXext.dev
     xorg.libXi.dev

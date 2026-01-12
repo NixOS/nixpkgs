@@ -13,6 +13,7 @@
   cairo,
   gdk-pixbuf,
   xorg,
+  libx11,
   libxshmfence,
   libxcb,
   xorg_sys_opengl,
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         atk
         cairo
         gdk-pixbuf
-        xorg.libX11
+        libx11
         libxcb
         xorg.libXcomposite
         xorg.libXcursor

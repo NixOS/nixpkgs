@@ -11,7 +11,7 @@
   libXcursor,
   libXrandr,
   libXi,
-  libX11,
+  libx11,
   libxcb,
   vulkan-loader,
   udev,
@@ -90,7 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       libXcursor
       libXrandr
       libXi
-      libX11
+      libx11
       libxcb
     ]
   );

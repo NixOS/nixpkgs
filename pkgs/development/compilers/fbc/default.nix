@@ -6,7 +6,7 @@
   gpm,
   libffi,
   libGL,
-  libX11,
+  libx11,
   libXext,
   libXpm,
   libXrandr,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gpm
     libGL
-    libX11
+    libx11
     libXext
     libXpm
     libXrandr

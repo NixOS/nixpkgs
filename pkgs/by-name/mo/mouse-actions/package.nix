@@ -3,7 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  libX11,
+  libx11,
   libXi,
   libXtst,
   libevdev,
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   buildInputs = [
-    libX11
+    libx11
     libXi
     libXtst
     libevdev

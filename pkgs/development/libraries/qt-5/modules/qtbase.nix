@@ -26,7 +26,7 @@
   harfbuzz,
   icu,
   libdrm,
-  libX11,
+  libx11,
   libXcomposite,
   libXcursor,
   libXext,
@@ -124,7 +124,7 @@ stdenv.mkDerivation (
           libdrm
 
           # X11 libs
-          libX11
+          libx11
           libXcomposite
           libXext
           libXi
@@ -318,7 +318,7 @@ stdenv.mkDerivation (
             "-w"
           ]
           ++ [
-            ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+            ''-DNIXPKGS_QTCOMPOSE="${libx11.out}/share/X11/locale"''
             ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
             ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
           ]
@@ -459,9 +459,9 @@ stdenv.mkDerivation (
             "-xcb"
             "-qpa xcb"
             "-L"
-            "${libX11.out}/lib"
+            "${libx11.out}/lib"
             "-I"
-            "${libX11.out}/include"
+            "${libx11.out}/include"
             "-L"
             "${libXext.out}/lib"
             "-I"

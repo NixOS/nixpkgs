@@ -28,6 +28,7 @@
   pciutils,
   udev,
   xorg,
+  libx11,
   libxcb,
 }:
 ################################################################################
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     pciutils
     udev
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXcomposite
     xorg.libXcursor

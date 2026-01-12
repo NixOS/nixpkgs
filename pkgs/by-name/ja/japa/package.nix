@@ -7,7 +7,7 @@
   fftwFloat,
   libclthreads,
   libclxclient,
-  libX11,
+  libx11,
   libXft,
   zita-alsa-pcmi,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     fftwFloat
     libclthreads
     libclxclient
-    libX11
+    libx11
     libXft
     zita-alsa-pcmi
   ];

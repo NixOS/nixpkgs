@@ -3,7 +3,7 @@
   stdenv,
   config,
   fetchurl,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   libXrandr,
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
+        libx11
         libXext
         libXrender
         fontconfig
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
+        libx11
         libXext
         libXrender
         fontconfig
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
+        libx11
         libXext
         libXrender
         fontconfig
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
+        libx11
         libXext
         libXinerama
         libXrandr
@@ -100,7 +100,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
+        libx11
         libXext
         libXinerama
         libXrandr

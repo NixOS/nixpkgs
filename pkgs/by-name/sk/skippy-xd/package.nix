@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorgproto,
-  libX11,
+  libx11,
   libXft,
   libXcomposite,
   libXdamage,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
+    libx11
     libXft
     libXcomposite
     libXdamage

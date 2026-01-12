@@ -4,7 +4,7 @@
   fetchurl,
   perl,
   xorgproto,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perl
     xorgproto
-    libX11
+    libx11
   ];
   makeFlags = [
     "PREFIX=$(out)"

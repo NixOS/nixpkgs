@@ -13,7 +13,7 @@
   xorg,
   xcbutilkeysyms,
   libxkbcommon,
-  libX11,
+  libx11,
   libXrandr,
   libXinerama,
   libXcursor,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.xcbutilcursor
     xcbutilkeysyms
     libxkbcommon
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXcursor

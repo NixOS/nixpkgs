@@ -10,7 +10,7 @@
   SDL2,
   SDL2_image,
   libvorbis,
-  libX11,
+  libx11,
   bullet,
   curl,
   gettext,
@@ -50,7 +50,7 @@ let
       SDL2
       SDL2_image
       libvorbis
-      libX11
+      libx11
       bullet
       curl
       gettext

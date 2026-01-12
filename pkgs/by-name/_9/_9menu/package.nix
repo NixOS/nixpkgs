@@ -6,7 +6,7 @@
   pkg-config,
   meson,
   ninja,
-  libX11,
+  libx11,
   libXext,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
   buildInputs = [
-    libX11
+    libx11
     libXext
   ];
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "9menu";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = libX11.meta.platforms;
+    platforms = libx11.meta.platforms;
   };
 })

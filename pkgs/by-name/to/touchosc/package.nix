@@ -10,7 +10,7 @@
   avahi,
   jack2,
   libxcb,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -28,7 +28,7 @@ let
     avahi
     jack2
     libxcb
-    libX11
+    libx11
     libXcursor
     libXext
     libXi

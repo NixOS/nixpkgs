@@ -11,6 +11,7 @@
   libglvnd,
   libxkbcommon,
   xorg,
+  libx11,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openmeters";
@@ -43,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libglvnd
         libxkbcommon
         wayland
-        xorg.libX11
+        libx11
         xorg.libXcursor
         xorg.libXi
         xorg.libXrandr

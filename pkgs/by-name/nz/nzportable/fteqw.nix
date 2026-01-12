@@ -15,6 +15,7 @@
   gnutls,
   libGL,
   xorg,
+  libx11,
   libxcb,
   alsa-lib,
   libjpeg,
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libxcb
-    xorg.libX11
+    libx11
     xorg.libXrandr
     xorg.libXcursor
     xorg.libXScrnSaver
@@ -115,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
         addDriverRunpath.driverLink
 
         # gl/gl_vidlinuxglx.c
-        xorg.libX11
+        libx11
         xorg.libXrandr
         xorg.libXxf86vm
         xorg.libXxf86dga

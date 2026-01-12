@@ -5,6 +5,7 @@
   autoreconfHook,
   imlib2,
   xorg,
+  libx11,
   ncurses,
   pkg-config,
   zlib,
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     (imlib2.override { inherit x11Support; })
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
+    libx11
     xorg.libXext
   ];
 

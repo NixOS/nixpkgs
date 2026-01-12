@@ -1,5 +1,5 @@
 {
-  libX11,
+  libx11,
   libxcb,
   libXcomposite,
   libXdamage,
@@ -45,7 +45,7 @@ let
     glib
     gtk3
     libdrm
-    libX11
+    libx11
     libxcb
     libXcomposite
     libXdamage

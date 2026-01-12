@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   alsa-lib,
-  libX11,
+  libx11,
   pcsclite,
   testers,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
+    libx11
     pcsclite
   ];
 

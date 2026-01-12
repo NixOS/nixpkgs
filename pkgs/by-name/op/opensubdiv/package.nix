@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   xorg,
+  libx11,
   libGLU,
   libGL,
   glew,
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       # FIXME: these are not actually needed, but the configure script wants them.
       glew
-      xorg.libX11
+      libx11
       xorg.libXrandr
       xorg.libXxf86vm
       xorg.libXcursor

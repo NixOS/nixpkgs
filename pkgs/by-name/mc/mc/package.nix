@@ -19,7 +19,7 @@
   coreutils,
   darwin,
   x11Support ? true,
-  libX11,
+  libx11,
 
   # updater only
   writeScript,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     slang
     zip
   ]
-  ++ lib.optionals x11Support [ libX11 ]
+  ++ lib.optionals x11Support [ libx11 ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     e2fsprogs
     gpm
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString ((!stdenv.hostPlatform.isDarwin) && x11Support) ''
     # libX11.so is loaded dynamically so autopatch doesn't detect it
     patchelf \
-      --add-needed ${libX11}/lib/libX11.so \
+      --add-needed ${libx11}/lib/libX11.so \
       $out/bin/mc
   '';
 

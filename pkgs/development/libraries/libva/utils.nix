@@ -7,7 +7,7 @@
   pkg-config,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libXext,
   libXfixes,
   wayland,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libdrm
     libva
-    libX11
+    libx11
     libXext
     libXfixes
     wayland

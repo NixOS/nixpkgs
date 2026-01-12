@@ -8,7 +8,7 @@
   xcbutilkeysyms,
   xcbutilimage,
   pam,
-  libX11,
+  libx11,
   libev,
   cairo,
   libxkbcommon,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilimage
     pam
-    libX11
+    libx11
     libev
     cairo
     libxkbcommon

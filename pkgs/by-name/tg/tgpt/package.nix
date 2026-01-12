@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Xilu4wzDkwf15LmVH0Pkk91/nDisUu66aPP0JvT4ldo=";
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   ldflags = [
     "-s"

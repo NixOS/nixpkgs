@@ -23,6 +23,7 @@
   pango,
   systemd,
   xorg,
+  libx11,
   libxcb,
   autoPatchelfHook,
   wrapGAppsHook3,
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     nss
     pango
     systemd
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

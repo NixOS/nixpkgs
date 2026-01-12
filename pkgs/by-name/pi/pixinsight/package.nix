@@ -28,6 +28,7 @@
   libxkbcommon,
   libxcb,
   xorg,
+  libx11,
   xrandr,
   libxkbfile,
   wayland,
@@ -152,7 +153,7 @@ let
         brotli
         libxkbcommon
         libxcb
-        xorg.libX11
+        libx11
         xorg.libXdamage
         xrandr
         xorg.libXtst

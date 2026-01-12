@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libx11,
   libGL,
   cairo,
   glslang,
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXrandr
     libGL

@@ -12,6 +12,7 @@
   openxr-loader,
   pkg-config,
   xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     libgbm
     openxr-loader
-    xorg.libX11
+    libx11
     xorg.libXfixes
   ];
 

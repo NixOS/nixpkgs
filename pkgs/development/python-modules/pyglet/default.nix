@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   xorg,
+  libx11,
   pytestCheckHook,
   glibc,
   gtk2-x11,
@@ -55,7 +56,7 @@ buildPythonPackage rec {
               elif name == 'c':
                   path = '${glibc}/lib/libc${ext}.6'
               elif name == 'X11':
-                  path = '${xorg.libX11}/lib/libX11${ext}'
+                  path = '${libx11}/lib/libX11${ext}'
               elif name == 'gdk-x11-2.0':
                   path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
               elif name == 'gdk_pixbuf-2.0':

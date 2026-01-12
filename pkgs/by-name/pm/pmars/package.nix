@@ -3,7 +3,7 @@
   lib,
   fetchzip,
   installShellFiles,
-  libX11,
+  libx11,
   ncurses,
   pkg-config,
   enableXwinGraphics ? false,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals (pkgConfigLibs != [ ]) [ pkg-config ];
 
   buildInputs =
-    lib.optionals enableXwinGraphics [ libX11 ] ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
+    lib.optionals enableXwinGraphics [ libx11 ] ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
 
   preConfigure = ''
     cd src

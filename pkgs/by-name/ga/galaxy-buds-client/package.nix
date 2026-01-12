@@ -7,7 +7,7 @@
   fontconfig,
   glib,
   libglvnd,
-  xorg,
+  libx11,
   libsm,
   libice,
   makeWrapper,
@@ -49,7 +49,7 @@ buildDotnetModule rec {
     libglvnd
     libsm
     libice
-    xorg.libX11
+    libx11
   ];
 
   postFixup = ''

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libX11,
+  libx11,
   libXcomposite,
   libXft,
   libXmu,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXcomposite
     libXft
     libXmu

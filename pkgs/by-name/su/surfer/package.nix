@@ -8,7 +8,7 @@
   autoPatchelfHook,
   libxkbcommon,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   stdenv,
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     libxkbcommon
     libGL
-    libX11
+    libx11
     libXcursor
     libXi
   ];

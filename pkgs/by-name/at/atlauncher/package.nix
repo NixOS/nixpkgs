@@ -17,6 +17,7 @@
   libpulseaudio,
   udev,
   xorg,
+  libx11,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
@@ -63,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         libglvnd
         libpulseaudio
         udev
-        xorg.libX11
+        libx11
         xorg.libXcursor
         xorg.libXxf86vm
       ]

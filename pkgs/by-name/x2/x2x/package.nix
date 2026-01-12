@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  libX11,
+  libx11,
   libXtst,
   libXext,
   fetchFromGitHub,
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libX11
+    libx11
     libXtst
     libXext
     libXi

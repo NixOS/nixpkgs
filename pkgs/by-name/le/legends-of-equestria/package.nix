@@ -28,6 +28,7 @@
   libasyncns,
   pango,
   xorg,
+  libx11,
   libxcb,
   wayland,
 }:
@@ -67,7 +68,7 @@ let
     libGL
     vulkan-loader
     libasyncns
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXau
     xorg.libXdmcp

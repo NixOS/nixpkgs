@@ -13,6 +13,7 @@
   file,
   libpng,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     libpng
     fontconfig
     freetype
-    xorg.libX11
+    libx11
     xorg.libXft
   ];
 

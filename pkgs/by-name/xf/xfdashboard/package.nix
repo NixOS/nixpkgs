@@ -12,7 +12,7 @@
   libXcomposite,
   libXinerama,
   libXdamage,
-  libX11,
+  libx11,
   libwnck,
   libxfce4ui,
   libxfce4util,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     garcon
     glib
     gtk3
-    libX11
+    libx11
     libXcomposite
     libXdamage
     libXinerama

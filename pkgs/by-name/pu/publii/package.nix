@@ -23,7 +23,7 @@
   pango,
   udev,
   xdg-utils,
-  xorg,
+  libx11,
   libxcb,
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     musl
     nss
     pango
-    xorg.libX11
+    libx11
     libxcb
   ];
 

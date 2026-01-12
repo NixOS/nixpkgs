@@ -130,7 +130,7 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
+      libx11
       libxcb
       xorg.libXcomposite
       xorg.libXdamage

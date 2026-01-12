@@ -165,7 +165,7 @@ stdenv.mkDerivation (
         ++ lib.optionals x11Support (
           with pkgs;
           [
-            xorg.libX11
+            libx11
             xorg.libXcomposite
             xorg.libXcursor
             xorg.libXext

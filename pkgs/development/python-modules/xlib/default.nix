@@ -6,7 +6,7 @@
   six,
   setuptools,
   setuptools-scm,
-  xorg,
+  libx11,
   xvfb,
   xauth,
   mock,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   propagatedBuildInputs = [ six ];
 

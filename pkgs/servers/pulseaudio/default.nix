@@ -8,6 +8,7 @@
   makeWrapper,
   perlPackages,
   xorg,
+  libx11,
   libsm,
   libice,
   libcap,
@@ -144,7 +145,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals x11Support [
       libice
       libsm
-      xorg.libX11
+      libx11
       xorg.libXi
       xorg.libXtst
     ]

@@ -6,6 +6,7 @@
   pkg-config,
   libpng,
   xorg,
+  libx11,
   xorgproto,
 }:
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorgproto
   ];

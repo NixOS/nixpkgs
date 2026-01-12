@@ -7,7 +7,7 @@
   ninja,
   lv2,
   sord,
-  libX11,
+  libx11,
   libXext,
   glew,
   lv2lint,
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   buildInputs = [
     lv2
     sord
-    libX11
+    libx11
     libXext
     glew
     lv2lint

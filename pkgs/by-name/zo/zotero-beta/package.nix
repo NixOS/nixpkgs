@@ -13,6 +13,7 @@
   gtk3,
   libGL,
   xorg,
+  libx11,
   libxcb,
   libgbm,
   pango,
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
       glib
       gtk3
       libGL
-      xorg.libX11
+      libx11
       xorg.libXcomposite
       xorg.libXcursor
       xorg.libXdamage

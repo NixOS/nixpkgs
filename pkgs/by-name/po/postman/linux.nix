@@ -17,7 +17,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
+  libx11,
   libXcomposite,
   libXcursor,
   libXdamage,
@@ -125,7 +125,7 @@ stdenv.mkDerivation {
           libGL
           libsecret
           libuuid
-          libX11
+          libx11
           libXcomposite
           libXcursor
           libXdamage

@@ -29,7 +29,7 @@
   giflib,
   libpng,
   lcms2,
-  libX11,
+  libx11,
   libice,
   libXext,
   libXrender,
@@ -276,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libjpeg
     giflib
-    libX11
+    libx11
     libice
     libXext
     libXrender

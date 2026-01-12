@@ -7,6 +7,7 @@
   ninja,
   makeWrapper,
   xorg,
+  libx11,
   libice,
   libGLU,
   libGL,
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libice
-    xorg.libX11
+    libx11
     xorg.libXinerama
     libGLU
     libGL

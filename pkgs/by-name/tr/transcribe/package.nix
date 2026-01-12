@@ -14,7 +14,7 @@
   gst_all_1,
   gtk3,
   libsm,
-  libX11,
+  libx11,
   libXtst,
   libpng12,
   pango,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       cairo
       gdk-pixbuf
       alsa-lib
-      libX11
+      libx11
       libXtst
       libsm
       libpng12

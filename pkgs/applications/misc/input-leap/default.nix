@@ -10,7 +10,7 @@
   curl,
   libice,
   libsm,
-  libX11,
+  libx11,
   libXdmcp,
   libXext,
   libXinerama,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     curl
     qtbase
     avahi
-    libX11
+    libx11
     libXext
     libXtst
     libXinerama

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   writeScript,
-  libX11,
+  libx11,
   libXext,
   alsa-lib,
   autoPatchelfHook,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     alsa-lib
     (lib.getLib stdenv.cc.cc)

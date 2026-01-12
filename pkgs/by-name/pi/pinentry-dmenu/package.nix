@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fontconfig,
   gpgme,
-  libX11,
+  libx11,
   libXinerama,
   libXft,
   pkg-config,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libassuan
     libconfig
     libgpg-error
-    libX11
+    libx11
     libXinerama
     libXft
   ];

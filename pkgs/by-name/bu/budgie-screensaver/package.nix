@@ -8,7 +8,7 @@
   gtk3,
   intltool,
   libgnomekbd,
-  libX11,
+  libx11,
   linux-pam,
   meson,
   ninja,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gtk3
     libgnomekbd
-    libX11
+    libx11
     linux-pam
     systemd
     xorg.libXxf86vm

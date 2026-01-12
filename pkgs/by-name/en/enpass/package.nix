@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libx11,
   libsm,
   libice,
   libxcb,
@@ -53,7 +54,7 @@ let
     libpulseaudio
     zlib
     dbus
-    xorg.libX11
+    libx11
     xorg.libXi
     libsm
     libice

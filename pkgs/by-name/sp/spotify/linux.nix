@@ -4,6 +4,7 @@
   stdenv,
   squashfsTools,
   xorg,
+  libx11,
   libsm,
   libice,
   libxshmfence,
@@ -85,7 +86,7 @@ let
     systemd
     libice
     libsm
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXcomposite
     xorg.libXcursor

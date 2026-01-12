@@ -21,7 +21,7 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
+  libx11,
   libXext,
   libXrender,
   libXt,
@@ -78,7 +78,7 @@ let
       glib
       gtk3
       libxcb
-      libX11
+      libx11
       libXext
       libXrender
       libXt

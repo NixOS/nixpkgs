@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   python3,
-  libX11,
+  libx11,
   libXxf86vm,
   libXrandr,
   vulkan-headers,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    libX11
+    libx11
     libXxf86vm
     libXrandr
     vulkan-headers

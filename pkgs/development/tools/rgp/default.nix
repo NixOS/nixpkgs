@@ -15,7 +15,7 @@
   libice,
   libkrb5,
   libsm,
-  libX11,
+  libx11,
   libxcb,
   libXi,
   libxkbcommon,
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     libice
     libkrb5
     libsm
-    libX11
+    libx11
     libxcb
     libXi
     libxkbcommon

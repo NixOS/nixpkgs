@@ -10,7 +10,7 @@
   gtk2,
   alsa-lib,
   libsm,
-  libX11,
+  libx11,
   gdk-pixbuf,
   pango,
   libXinerama,
@@ -27,7 +27,7 @@ let
     gtk2
     alsa-lib
     libsm
-    libX11
+    libx11
     gdk-pixbuf
     pango
     libXinerama

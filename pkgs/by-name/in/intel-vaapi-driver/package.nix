@@ -10,7 +10,7 @@
   intel-gpu-tools,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
   libXext,
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     libva
   ]
   ++ lib.optionals enableGui [
-    libX11
+    libx11
     libXext
     libGL
     wayland

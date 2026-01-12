@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  libX11,
+  libx11,
   libXpm,
   alsa-lib,
   bzip2,
@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     alsa-lib
     bzip2
     zlib

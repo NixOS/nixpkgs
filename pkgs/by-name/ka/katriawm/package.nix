@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
+  libx11,
   libXft,
   libXrandr,
   pkg-config,
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     libXft
     libXrandr
   ];
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "katriawm";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

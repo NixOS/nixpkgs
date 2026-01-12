@@ -28,6 +28,7 @@
   cups,
   x11Support ? cupsSupport,
   libice,
+  libx11,
   xorg, # with CUPS, X11 only adds very little
   dynamicDrivers ? true,
 
@@ -132,7 +133,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals x11Support [
     libice
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXt
   ]

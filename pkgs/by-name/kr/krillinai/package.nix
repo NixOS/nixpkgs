@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   xorg,
+  libx11,
   libGL,
   nix-update-script,
 }:
@@ -29,7 +30,7 @@ buildGoModule (finalAttrs: {
     xorg.libXxf86vm
     xorg.libXcursor
     xorg.libXrandr
-    xorg.libX11
+    libx11
     xorg.libXi
     libGL
   ];

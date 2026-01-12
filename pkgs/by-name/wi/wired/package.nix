@@ -7,6 +7,7 @@
   pango,
   cairo,
   xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXScrnSaver
     xorg.libXcursor
     xorg.libXrandr
-    xorg.libX11
+    libx11
     xorg.libXi
   ];
 

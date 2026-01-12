@@ -10,7 +10,7 @@
   xcbutilimage,
   xcbutilxrm,
   pam,
-  libX11,
+  libx11,
   libev,
   cairo,
   libxkbcommon,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     xcbutilimage
     xcbutilxrm
     pam
-    libX11
+    libx11
     libev
     cairo
     libxkbcommon

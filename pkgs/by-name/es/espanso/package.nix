@@ -6,7 +6,7 @@
   pkg-config,
   extra-cmake-modules,
   dbus,
-  libX11,
+  libx11,
   libxcb,
   libXi,
   libXtst,
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals x11Support [
     libXi
     libXtst
-    libX11
+    libx11
     libxcb
     xclip
     xdotool

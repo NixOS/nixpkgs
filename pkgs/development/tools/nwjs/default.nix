@@ -35,6 +35,7 @@
   systemd,
   udev,
   xorg,
+  libx11,
   libxshmfence,
 }:
 
@@ -65,7 +66,7 @@ let
       nspr
       nss
       pango
-      xorg.libX11
+      libx11
       xorg.libXScrnSaver
       xorg.libXcomposite
       xorg.libXcursor

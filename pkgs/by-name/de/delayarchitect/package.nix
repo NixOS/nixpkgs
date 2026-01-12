@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libGL,
-  libX11,
+  libx11,
   libXext,
   libXrandr,
   libXinerama,
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libGL
-    libX11
+    libx11
     libXext
     libXrandr
     libXinerama

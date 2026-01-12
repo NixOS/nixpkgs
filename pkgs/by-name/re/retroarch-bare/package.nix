@@ -15,7 +15,7 @@
   libGLU,
   libpulseaudio,
   libv4l,
-  libX11,
+  libx11,
   libXdmcp,
   libXext,
   libxkbcommon,
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus
-    libX11
+    libx11
     libXdmcp
     libXext
     libXxf86vm

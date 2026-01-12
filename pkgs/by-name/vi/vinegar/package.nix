@@ -20,6 +20,7 @@
   wayland,
   winetricks,
   xorg,
+  libx11,
   symlinkJoin,
   nix-update-script,
 }:
@@ -91,7 +92,7 @@ buildGoModule (finalAttrs: {
     wayland
     wine
     winetricks
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXfixes
   ];

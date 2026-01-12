@@ -15,6 +15,7 @@
   libGL,
   pango,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
     libGLU
     libGL
     pango
-    xorg.libX11
+    libx11
     xorg.libXmu
   ];
 

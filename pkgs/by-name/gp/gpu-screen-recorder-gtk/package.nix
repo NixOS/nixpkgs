@@ -14,7 +14,7 @@
   libdrm,
   gpu-screen-recorder,
   libglvnd,
-  libX11,
+  libx11,
   libXrandr,
   wayland,
   wrapGAppsHook3,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libayatana-appindicator
     libpulseaudio
     libdrm
-    libX11
+    libx11
     libXrandr
     wayland
   ];

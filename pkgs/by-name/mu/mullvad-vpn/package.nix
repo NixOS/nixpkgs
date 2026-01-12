@@ -21,6 +21,7 @@
   libGL,
   wayland,
   xorg,
+  libx11,
   libxshmfence,
   libxcb,
   autoPatchelfHook,
@@ -51,7 +52,7 @@ let
     libappindicator
     libnotify
     libgbm
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

@@ -13,7 +13,7 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
   pcre,
   python3,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-tools
     glew
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   strictDeps = true;
 

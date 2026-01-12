@@ -11,7 +11,7 @@
   libGL,
   libGLU,
   libGLX,
-  libX11,
+  libx11,
   libXext,
   libXmu,
   libXpm,
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableOpenGLX11 [
     libGL
-    libX11
+    libx11
   ]
   ++ lib.optionals enableXM [ motif ]
   ++ lib.optionals enableQt [ qt5.qtbase ];

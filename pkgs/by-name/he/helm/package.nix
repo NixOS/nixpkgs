@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   xorg,
+  libx11,
   freetype,
   alsa-lib,
   curl,
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXext

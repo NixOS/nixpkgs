@@ -34,7 +34,7 @@
   libogg,
   libvorbis,
   bzip2,
-  libX11,
+  libx11,
   sdl_gamecontrollerdb,
 }:
 
@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libvorbis
     bzip2
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio

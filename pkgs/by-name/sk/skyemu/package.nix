@@ -11,7 +11,7 @@
   alsa-lib,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXi,
   libXcursor,
   lua,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXi
     libXcursor
     lua

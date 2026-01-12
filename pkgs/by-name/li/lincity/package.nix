@@ -4,7 +4,7 @@
   fetchurl,
   fetchpatch,
   gettext,
-  libX11,
+  libx11,
   libXext,
   xorgproto,
   libice,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libpng12
     libsm
-    libX11
+    libx11
     libXext
     xorgproto
     zlib

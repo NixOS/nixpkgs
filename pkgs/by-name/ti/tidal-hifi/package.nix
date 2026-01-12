@@ -26,7 +26,7 @@
   gdk-pixbuf,
   nss,
   nspr,
-  libX11,
+  libx11,
   libxcb,
   libXcomposite,
   libXdamage,
@@ -62,7 +62,7 @@ let
     gtk4
     nss
     nspr
-    libX11
+    libx11
     libxcb
     libXcomposite
     libXdamage

@@ -8,7 +8,7 @@
   gtk3,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXpm,
   libtool,
   ncurses,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     libGL
     libGLU
-    libX11
+    libx11
     libXpm
   ];
 

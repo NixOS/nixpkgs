@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   ncurses,
-  libX11,
+  libx11,
   bzip2,
   zlib,
   brotli,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses
-    libX11
+    libx11
     bzip2
     zlib
     brotli

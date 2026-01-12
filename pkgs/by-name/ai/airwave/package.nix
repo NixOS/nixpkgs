@@ -6,7 +6,7 @@
   cmake,
   makeWrapper,
   file,
-  libX11,
+  libx11,
   qt5,
   vst2-sdk,
 }:
@@ -47,7 +47,7 @@ multiStdenv.mkDerivation {
 
   buildInputs = [
     file
-    libX11
+    libx11
     qt5.qtbase
     wine-xembed
   ];

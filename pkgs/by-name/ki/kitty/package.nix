@@ -11,7 +11,7 @@
   imagemagick,
   libstartup_notification,
   libGL,
-  libX11,
+  libx11,
   libXrandr,
   libXinerama,
   libXcursor,
@@ -87,7 +87,7 @@ buildPythonApplication rec {
     fontconfig
     libunistring
     libcanberra
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXcursor

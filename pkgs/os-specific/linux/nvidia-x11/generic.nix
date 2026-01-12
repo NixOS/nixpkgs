@@ -107,7 +107,7 @@ let
       [
         libdrm
         xorg.libXext
-        xorg.libX11
+        libx11
         xorg.libXv
         xorg.libXrandr
         libxcb

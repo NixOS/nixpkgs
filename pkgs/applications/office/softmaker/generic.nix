@@ -11,7 +11,7 @@
   glib,
   gst_all_1,
   libGL,
-  libX11,
+  libx11,
   libXext,
   libXmu,
   libXrandr,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libGL
-    libX11
+    libx11
     libXext
     libXmu
     libXrandr

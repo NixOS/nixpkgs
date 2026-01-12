@@ -9,7 +9,7 @@
   installShellFiles,
   libGLU,
   libpulseaudio,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXfixes,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (self: {
     freetype
     libGLU
     libpulseaudio
-    libX11
+    libx11
     libXcursor
     libXext
     libXfixes

@@ -35,7 +35,7 @@
   makeBinaryWrapper,
   nodejs,
   libGL,
-  libX11,
+  libx11,
   libXext,
   livekit-libwebrtc,
   testers,
@@ -173,7 +173,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcb
     # required by livekit:
     libGL
-    libX11
+    libx11
     libXext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

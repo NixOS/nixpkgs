@@ -66,6 +66,7 @@
   which,
   woff2,
   xorg,
+  libx11,
   xprop,
   xdpyinfo,
   libxcb,
@@ -216,7 +217,7 @@ stdenv.mkDerivation rec {
     libGL
     pcsclite
 
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXext
     xorg.libXfixes

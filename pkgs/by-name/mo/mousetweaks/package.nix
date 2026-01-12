@@ -9,6 +9,7 @@
   gsettings-desktop-schemas,
   wrapGAppsHook3,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gsettings-desktop-schemas
-    xorg.libX11
+    libx11
     xorg.libXtst
     xorg.libXfixes
     xorg.libXcursor

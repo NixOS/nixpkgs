@@ -2,7 +2,7 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  libX11,
+  libx11,
   libXcursor,
   libXrandr,
   libXinerama,
@@ -30,7 +30,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     libXcursor
     libXrandr
     libXinerama

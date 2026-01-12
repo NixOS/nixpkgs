@@ -7,6 +7,7 @@
   udunits,
   netcdf,
   xorg,
+  libx11,
   libsm,
   libice,
 }:
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     udunits
     libice
     libsm
-    xorg.libX11
+    libx11
     xorg.libXaw
     xorg.libXt
   ];

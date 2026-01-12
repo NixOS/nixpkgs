@@ -26,6 +26,7 @@
   lsof,
   lz4,
   xorg,
+  libx11,
   xz,
   man,
   openssl,
@@ -116,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGLU
     libGL
-    xorg.libX11
+    libx11
     xorg.libXpm
     xorg.libXft
     xorg.libXext

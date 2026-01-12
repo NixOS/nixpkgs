@@ -1,5 +1,6 @@
 {
   xorg,
+  libx11,
   lib,
   stdenv,
   libev,
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXi
     libev

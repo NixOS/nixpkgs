@@ -5,6 +5,7 @@
   glib,
   pkg-config,
   xorg,
+  libx11,
   dbus,
 }:
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     dbus
   ];

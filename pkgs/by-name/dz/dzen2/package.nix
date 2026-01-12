@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
+  libx11,
   libXft,
   libXinerama,
   libXpm,
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     libXft
     libXinerama
     libXpm

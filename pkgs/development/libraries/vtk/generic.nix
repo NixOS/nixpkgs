@@ -74,7 +74,7 @@
   viskores,
   freetype,
   fontconfig,
-  libX11,
+  libx11,
   libXfixes,
   libXrender,
   libXcursor,
@@ -201,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     gl2ps
   ]
   # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do

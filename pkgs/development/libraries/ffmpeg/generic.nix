@@ -310,7 +310,7 @@
   libvpl,
   libvpx,
   libwebp,
-  libX11,
+  libx11,
   libxcb,
   libXext,
   libxml2,
@@ -965,7 +965,7 @@ stdenv.mkDerivation (
       ++ optionals withXevd [ xevd ]
       ++ optionals withXeve [ xeve ]
       ++ optionals withXlib [
-        libX11
+        libx11
         libXv
         libXext
       ]

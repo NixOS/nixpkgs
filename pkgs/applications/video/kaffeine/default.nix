@@ -6,7 +6,7 @@
   extra-cmake-modules,
   libvlc,
   libv4l,
-  libX11,
+  libx11,
   kidletime,
   kdelibs4support,
   libXScrnSaver,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libvlc
     libv4l
-    libX11
+    libx11
     kidletime
     qtx11extras
     kdelibs4support

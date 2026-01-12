@@ -6,7 +6,7 @@
   enableGhostscript ? false,
   ghostscript,
   gawk,
-  libX11,
+  libx11,
   libXaw,
   libXt,
   libXmu, # for postscript and html output
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableGhostscript [
     ghostscript
     gawk
-    libX11
+    libx11
     libXaw
     libXt
     libXmu

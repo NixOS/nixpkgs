@@ -14,7 +14,7 @@
   pango,
   inih,
   withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
-  xorg,
+  libx11,
   libxcb,
   libxkbcommon,
   libGL,
@@ -52,7 +52,7 @@ let
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
       libxcb
-      xorg.libX11
+      libx11
     ];
     wayland = [
       wayland

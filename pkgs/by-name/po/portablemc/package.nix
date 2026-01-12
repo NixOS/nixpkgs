@@ -6,7 +6,7 @@
   installShellFiles,
   jre,
 
-  libX11,
+  libx11,
   libXext,
   libXcursor,
   libXrandr,
@@ -31,7 +31,7 @@ let
     (lib.getLib stdenv.cc.cc)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXext
     libXcursor
     libXrandr

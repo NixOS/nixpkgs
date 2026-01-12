@@ -6,6 +6,7 @@
   zlib,
   glib,
   xorg,
+  libx11,
   libsm,
   libice,
   libxcb,
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     xorg.libXi
     libxcb
     xorg.libXrender
-    xorg.libX11
+    libx11
     libsm
     libice
     xorg.libXext

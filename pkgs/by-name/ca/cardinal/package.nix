@@ -9,7 +9,7 @@
   jansson,
   lib,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXrandr,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     freetype
     jansson
     libGL
-    libX11
+    libx11
     libXcursor
     libXext
     libXrandr

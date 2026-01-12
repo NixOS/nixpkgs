@@ -143,7 +143,7 @@ rec {
         xorg.libXtst
         xorg.libXrandr
         xorg.libXext
-        xorg.libX11
+        libx11
         xorg.libXfixes
         libGL
 

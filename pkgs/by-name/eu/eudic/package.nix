@@ -7,7 +7,7 @@
   dpkg,
   makeWrapper,
   libnotify,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXext,
   libXtst,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libnotify
-    libX11
+    libx11
     libXScrnSaver
     libXext
     libXtst

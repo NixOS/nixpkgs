@@ -8,7 +8,7 @@
   pkg-config,
   python3,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXrandr,
@@ -20,7 +20,7 @@
 let
   rpathLibs = [
     libGL
-    libX11
+    libx11
     libXcursor
     libXi
     libXrandr

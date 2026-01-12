@@ -7,6 +7,7 @@
   pkg-config,
   alsa-lib,
   xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
+    libx11
     xorg.libXi
     xorg.libXtst
   ];

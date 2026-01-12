@@ -19,7 +19,7 @@
   gdk-pixbuf,
   libdrm,
   libgbm,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     gtk3
     libdrm
     libXdamage
-    libX11
+    libx11
     libXScrnSaver
     libXtst
     libxcb
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
-    libX11
+    libx11
     libXcomposite
     libxshmfence
     libXcursor

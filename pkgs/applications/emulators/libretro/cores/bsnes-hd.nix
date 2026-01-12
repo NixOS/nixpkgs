@@ -3,6 +3,7 @@
   fetchFromGitHub,
   mkLibretroCore,
   xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "bsnes-hd-beta";
@@ -16,7 +17,7 @@ mkLibretroCore {
   };
 
   extraBuildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXext
   ];
 

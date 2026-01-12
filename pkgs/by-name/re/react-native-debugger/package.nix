@@ -5,6 +5,7 @@
   unzip,
   cairo,
   xorg,
+  libx11,
   libxcb,
   gdk-pixbuf,
   fontconfig,
@@ -53,7 +54,7 @@ let
     libxkbcommon
     libgbm
 
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXtst
     libxcb

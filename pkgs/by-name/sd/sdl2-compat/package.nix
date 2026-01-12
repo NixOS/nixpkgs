@@ -6,7 +6,7 @@
   sdl3,
   stdenv,
   testers,
-  libX11,
+  libx11,
   libGL,
   nix-update-script,
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     sdl3'
   ]
-  ++ lib.optional x11Support libX11;
+  ++ lib.optional x11Support libx11;
 
   checkInputs = [ libGL ];
 

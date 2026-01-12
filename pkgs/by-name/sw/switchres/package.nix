@@ -4,6 +4,7 @@
   pkg-config,
   fetchFromGitHub,
   xorg,
+  libx11,
   xorgproto,
   libdrm,
   SDL2,
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook prePatch
 
     substituteInPlace ./custom_video_xrandr.cpp \
-      --replace-fail libX11.so ${xorg.libX11}/lib/libX11.so \
+      --replace-fail libX11.so ${libx11}/lib/libX11.so \
       --replace-fail libXrandr.so ${xorg.libXrandr}/lib/libXrandr.so
 
     substituteInPlace ./custom_video_drmkms.cpp \

@@ -13,6 +13,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
     vulkan-loader
     wayland
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr

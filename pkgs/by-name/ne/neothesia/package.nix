@@ -10,6 +10,7 @@
   libxkbcommon,
   vulkan-loader,
   xorg,
+  libx11,
 }:
 let
   version = "0.3.1";
@@ -49,7 +50,7 @@ rustPlatform.buildRustPackage {
         wayland
         libxkbcommon
         vulkan-loader
-        xorg.libX11
+        libx11
         xorg.libXcursor
         xorg.libXi
         xorg.libXrender

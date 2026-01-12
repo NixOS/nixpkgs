@@ -5,7 +5,7 @@
   alsa-lib,
   fetchurl,
   libjack2,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXinerama,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     libjack2
-    libX11
+    libx11
     libXcursor
     libXext
     libXinerama

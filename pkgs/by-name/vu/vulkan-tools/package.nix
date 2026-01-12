@@ -8,7 +8,7 @@
   python3,
   glslang,
   libffi,
-  libX11,
+  libx11,
   libXau,
   libxcb,
   libXdmcp,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
-    libX11
+    libx11
     libXau
     libxcb
     libXdmcp

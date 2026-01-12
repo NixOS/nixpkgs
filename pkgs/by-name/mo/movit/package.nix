@@ -9,7 +9,7 @@
   eigen,
   libepoxy,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     fftw
     gtest
     libGL
-    libX11
+    libx11
   ];
 
   propagatedBuildInputs = [

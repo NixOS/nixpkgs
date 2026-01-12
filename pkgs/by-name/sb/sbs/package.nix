@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   imlib2,
   libXinerama,
   pkg-config,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     imlib2
-    libX11
+    libx11
     libXinerama
   ];
 

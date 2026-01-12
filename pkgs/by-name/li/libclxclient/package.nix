@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libclthreads,
-  libX11,
+  libx11,
   libXft,
   xorgproto,
   pkg-config,
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libclthreads
-    libX11
+    libx11
     libXft
     xorgproto
   ];

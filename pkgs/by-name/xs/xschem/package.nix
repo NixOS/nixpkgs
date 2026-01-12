@@ -5,7 +5,7 @@
   bison,
   cairo,
   flex,
-  libX11,
+  libx11,
   libXpm,
   pkg-config,
   tcl,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    libX11
+    libx11
     libXpm
     tcl
     tk

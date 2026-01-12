@@ -19,7 +19,7 @@
   libtheora,
   libvorbis,
   libwebp,
-  libX11,
+  libx11,
   libXcursor,
   libXdmcp,
   libXext,
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpthread-stubs
     libpulseaudio
-    libX11
+    libx11
     libXcursor
     libXdmcp
     libXext

@@ -7,7 +7,7 @@
   qtwebkit,
   qtx11extras,
   lzo,
-  libX11,
+  libx11,
   wrapQtAppsHook,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     qtwebkit
     qtx11extras
     lzo
-    libX11
+    libx11
   ];
   nativeBuildInputs = [
     qmake

@@ -15,7 +15,7 @@
   libmpeg2,
   libvorbis,
   libzip,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

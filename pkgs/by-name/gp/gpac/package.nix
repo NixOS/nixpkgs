@@ -30,6 +30,7 @@
   SDL2,
   curl,
   xorg,
+  libx11,
   xorgproto,
 
   withFullDeps ? false,
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     nghttp2
     openjpeg
     libcaca
-    xorg.libX11
+    libx11
     xorg.libXv
     xorgproto
     mesa

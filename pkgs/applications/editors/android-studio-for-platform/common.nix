@@ -25,7 +25,7 @@
   fontsConf,
   fontconfig,
   freetype,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXrandr,
@@ -111,7 +111,7 @@ let
             libXi
             libXrender
             libXtst
-            libX11
+            libx11
 
             # Support multiple monitors
             libXrandr

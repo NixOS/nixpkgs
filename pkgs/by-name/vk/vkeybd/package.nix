@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   alsa-lib,
-  libX11,
+  libx11,
   makeWrapper,
   tcl,
   tk,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     alsa-lib
-    libX11
+    libx11
     tcl
     tk
   ];

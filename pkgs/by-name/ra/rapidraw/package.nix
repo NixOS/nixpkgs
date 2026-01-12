@@ -17,6 +17,7 @@
   cairo,
   pango,
   xorg,
+  libx11,
   libxcb,
   libxkbcommon,
   vulkan-loader,
@@ -78,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gdk-pixbuf
     cairo
     pango
-    xorg.libX11
+    libx11
     xorg.libXi
     xorg.libXcursor
     xorg.libXext

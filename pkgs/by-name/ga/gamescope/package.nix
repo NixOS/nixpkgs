@@ -9,6 +9,7 @@
   ninja,
   cmake,
   xorg,
+  libx11,
   xwininfo,
   xprop,
   libxcb,
@@ -131,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     pipewire
     hwdata
-    xorg.libX11
+    libx11
     libxcb
     wayland
     wayland-protocols

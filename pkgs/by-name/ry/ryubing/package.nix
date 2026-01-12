@@ -5,7 +5,7 @@
   darwin,
   dotnetCorePackages,
   fetchFromGitLab,
-  libX11,
+  libx11,
   libgdiplus,
   moltenvk,
   ffmpeg,
@@ -59,7 +59,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   runtimeDeps = [
-    libX11
+    libx11
     libgdiplus
     SDL2_mixer
     openal

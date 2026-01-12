@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "08mqp00lrh1chdrbs18qr0xv63h866lkmfj87kfscwdm1vn9a3yd";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   patchPhase = ''
     sed -i "s@/usr/local@$out@g" config.mk
-    sed -i "s@/usr/X11R6/include@${libX11}/include@g" config.mk
-    sed -i "s@/usr/X11R6/lib@${libX11}/lib@g" config.mk
+    sed -i "s@/usr/X11R6/include@${libx11}/include@g" config.mk
+    sed -i "s@/usr/X11R6/lib@${libx11}/lib@g" config.mk
   '';
 
   meta = {

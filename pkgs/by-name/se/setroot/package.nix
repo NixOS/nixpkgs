@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   imlib2,
   pkg-config,
   fetchpatch,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     imlib2
   ]
   ++ lib.optionals enableXinerama [ libXinerama ];

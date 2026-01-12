@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   xorgproto,
-  libX11,
+  libx11,
   libXext,
   writeScript,
   testers,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
+    libx11
     libXext
   ];
 

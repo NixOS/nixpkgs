@@ -4,7 +4,7 @@
   writeScript,
   fetchFromGitHub,
   libGL,
-  libX11,
+  libx11,
   libXext,
   python3,
   libXrandr,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXrandr
     libXrender

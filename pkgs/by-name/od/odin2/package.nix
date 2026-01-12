@@ -8,7 +8,7 @@
   freetype,
   libjack2,
   lv2,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXinerama,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libjack2
     lv2
-    libX11
+    libx11
     libXcursor
     libXext
     libXinerama

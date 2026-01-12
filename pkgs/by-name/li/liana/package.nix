@@ -17,6 +17,7 @@
   wayland,
   vulkan-loader,
   xorg,
+  libx11,
 }:
 
 let
@@ -31,7 +32,7 @@ let
     wayland
     libxkbcommon
     vulkan-loader
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr

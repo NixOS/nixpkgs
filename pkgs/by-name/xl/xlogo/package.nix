@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   xorg,
+  libx11,
   libsm,
   autoreconfHook,
   pkg-config,
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-appdefaultdir=$out/share/X11/app-defaults" ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXext
     libsm
     xorg.libXmu

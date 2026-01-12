@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libX11,
+  libx11,
   libXi,
   libXt,
   libXft,
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [
-    libX11
+    libx11
     libXi
     libXt
     libXft

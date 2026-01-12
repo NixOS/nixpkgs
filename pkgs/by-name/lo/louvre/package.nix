@@ -10,7 +10,7 @@
   libdrm,
   libGL,
   libinput,
-  libX11,
+  libx11,
   libXcursor,
   libxkbcommon,
   libgbm,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libGL
     libinput
-    libX11
+    libx11
     libXcursor
     libxkbcommon
     libgbm

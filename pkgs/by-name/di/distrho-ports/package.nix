@@ -6,7 +6,7 @@
   fftwFloat,
   freetype,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXrender,
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     alsa-lib
     freetype
     libGL
-    libX11
+    libx11
     libXcursor
     libXext
     libXrender

@@ -23,7 +23,7 @@
   libpthread-stubs,
   pcre,
   libXdmcp,
-  libX11,
+  libx11,
   libXau, # X11 dependencies
   fetchpatch,
 }:
@@ -79,7 +79,7 @@ mkDerivation rec {
     libpthread-stubs
     pcre
     libXdmcp
-    libX11
+    libx11
     libXau
   ]
   ++ lib.optional gtk2Support gtk2;

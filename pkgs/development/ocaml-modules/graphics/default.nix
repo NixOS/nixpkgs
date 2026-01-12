@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildDunePackage,
   dune-configurator,
-  libX11,
+  libx11,
   libXft,
 }:
 
@@ -20,7 +20,7 @@ buildDunePackage (finalAttrs: {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    libX11
+    libx11
     libXft
   ];
 

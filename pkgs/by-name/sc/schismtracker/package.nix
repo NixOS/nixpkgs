@@ -7,7 +7,7 @@
   perl,
   pkg-config,
   SDL2,
-  libX11,
+  libx11,
   libXext,
   utf8proc,
   nix-update-script,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     utf8proc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

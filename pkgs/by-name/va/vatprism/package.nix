@@ -9,7 +9,7 @@
   libxkbcommon,
   wayland,
   fontconfig,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXrandr,
@@ -23,7 +23,7 @@ let
     libGL
     libxkbcommon
     wayland
-    libX11
+    libx11
     libXcursor
     libXi
     libXrandr

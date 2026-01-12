@@ -17,6 +17,7 @@
   libwacom,
   switchboard,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     libgudev
     libwacom
     switchboard
-    xorg.libX11
+    libx11
     xorg.libXi
   ];
 

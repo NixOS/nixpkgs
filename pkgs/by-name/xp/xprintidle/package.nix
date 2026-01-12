@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorg.libXScrnSaver
-    xorg.libX11
+    libx11
     xorg.libXext
   ];
 

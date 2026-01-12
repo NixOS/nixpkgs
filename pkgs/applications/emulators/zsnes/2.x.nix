@@ -6,7 +6,7 @@
   libGL,
   libGLU,
   libpng,
-  libX11,
+  libx11,
   nasm,
   pkg-config,
   zlib,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libpng
-    libX11
+    libx11
     zlib
   ];
 

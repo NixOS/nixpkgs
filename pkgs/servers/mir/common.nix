@@ -39,6 +39,7 @@
   wayland,
   wayland-scanner,
   xorg,
+  libx11,
   xorgproto,
   xwayland,
   dbus,
@@ -142,7 +143,7 @@ stdenv.mkDerivation (
       nettle
       udev
       wayland
-      xorg.libX11
+      libx11
       xorg.libXcursor
       xorgproto
       xwayland

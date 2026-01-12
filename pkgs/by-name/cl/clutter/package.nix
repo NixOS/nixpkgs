@@ -5,7 +5,7 @@
   pkg-config,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   libXext,
   libXfixes,
   libXdamage,
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     gobject-introspection
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
+    libx11
     libGL
     libGLU
     libXext

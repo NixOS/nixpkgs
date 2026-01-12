@@ -4,7 +4,7 @@
   fetchurl,
   cairo,
   fftwSinglePrec,
-  libX11,
+  libx11,
   libXft,
   libclthreads,
   libclxclient,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     fftwSinglePrec
-    libX11
+    libx11
     libXft
     libclthreads
     libclxclient

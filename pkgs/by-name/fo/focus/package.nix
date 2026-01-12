@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXinerama,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libXinerama
   ];
 

@@ -4,7 +4,7 @@
   fetchzip,
   pkg-config,
   writeText,
-  libX11,
+  libx11,
   libxcb,
   libXau,
   libXdmcp,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     libxcb
     libXau
     libXdmcp

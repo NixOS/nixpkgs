@@ -26,7 +26,7 @@ let
     ];
   xorgDeps =
     pkgs: with pkgs; [
-      xorg.libX11
+      libx11
       xorg.libXrender
       xorg.libXrandr
       libxcb

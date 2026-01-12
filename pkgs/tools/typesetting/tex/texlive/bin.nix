@@ -10,7 +10,7 @@
   zlib,
   libiconv,
   libpng,
-  libX11,
+  libx11,
   freetype,
   ttfautohint,
   gd,
@@ -414,7 +414,7 @@ rec {
       harfbuzz
       icu
       graphite2
-      libX11
+      libx11
       potrace
     ];
 
@@ -751,7 +751,7 @@ rec {
       core # kpathsea
       freetype
       ghostscript
-      xorg.libX11
+      libx11
       xorg.libXaw
       xorg.libXi
       xorg.libXpm
@@ -783,7 +783,7 @@ rec {
 
     inherit (common) src;
 
-    buildInputs = [ libX11 ];
+    buildInputs = [ libx11 ];
 
     preConfigure = "cd utils/xpdfopen";
 

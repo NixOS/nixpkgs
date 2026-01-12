@@ -14,6 +14,7 @@
   lv2lint,
   sord,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvterm-neovim
     lv2
     sord
-    xorg.libX11
+    libx11
     xorg.libXext
     glew
     lv2lint

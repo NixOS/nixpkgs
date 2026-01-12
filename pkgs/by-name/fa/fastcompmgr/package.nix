@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libx11,
   pkgs,
   lib,
 }:
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkgs.pkg-config ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXfixes

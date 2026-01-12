@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXcursor,
   libXmu,
   libXpm,
@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXcursor
     libXmu
     libXpm

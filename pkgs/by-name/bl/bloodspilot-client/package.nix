@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   SDL,
   libGLU,
   libGL,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./bloodspilot-sdl-window-fix.patch ];
 
   buildInputs = [
-    libX11
+    libx11
     SDL
     SDL_ttf
     SDL_image

@@ -11,7 +11,7 @@
   cmake,
   openssl,
   xorgproto,
-  libX11,
+  libx11,
   libXScrnSaver,
   xz,
   zlib,
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     qtwebkit
     openssl
     xorgproto
-    libX11
+    libx11
     libXScrnSaver
     xz
     zlib

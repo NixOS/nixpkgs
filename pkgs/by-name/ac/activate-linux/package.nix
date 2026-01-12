@@ -4,6 +4,7 @@
   lib,
   pkg-config,
   xorg,
+  libx11,
   xorgproto,
   cairo,
   wayland,
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXfixes
     xorg.libXi

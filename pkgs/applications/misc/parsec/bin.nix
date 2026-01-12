@@ -10,7 +10,7 @@
   openssl,
   udev,
   libglvnd,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXrandr,
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation {
   buildInputs = [
     stdenv.cc.cc # libstdc++
     libglvnd
-    libX11
+    libx11
   ];
 
   runtimeDependenciesPath = lib.makeLibraryPath [
@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation {
     libpng
     libjpeg8
     curl
-    libX11
+    libx11
     libXcursor
     libXi
     libXrandr

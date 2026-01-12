@@ -6,7 +6,7 @@
   nix-update-script,
   pkg-config,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXrandr,
   libXinerama,
@@ -42,7 +42,7 @@ buildGoModule rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    libX11
+    libx11
     libXcursor
     libXrandr
     libXinerama

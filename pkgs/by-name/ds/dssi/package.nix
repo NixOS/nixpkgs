@@ -6,7 +6,7 @@
   libjack2,
   liblo,
   alsa-lib,
-  libX11,
+  libx11,
   libsndfile,
   libsm,
   libsamplerate,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libjack2
     liblo
     alsa-lib
-    libX11
+    libx11
     libsndfile
     libsm
     libsamplerate

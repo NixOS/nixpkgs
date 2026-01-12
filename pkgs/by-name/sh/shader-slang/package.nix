@@ -8,7 +8,7 @@
   miniz,
   lz4,
   libxml2,
-  libX11,
+  libx11,
   glslang,
   unordered_dense,
   versionCheckHook,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     unordered_dense
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.

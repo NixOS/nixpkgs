@@ -12,7 +12,7 @@
   xfce4-exo,
   gtk3,
   gtk-layer-shell,
-  libX11,
+  libx11,
   libXext,
   libXfixes,
   libXtst,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     xfce4-exo
     gtk3
     gtk-layer-shell
-    libX11
+    libx11
     libXext
     libXfixes
     libXtst

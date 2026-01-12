@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   libglut,
-  libX11,
+  libx11,
   libXt,
   libXmu,
   libXi,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libglut
-    libX11
+    libx11
     libXt
     libXmu
     libXi

@@ -12,7 +12,7 @@
   musl,
   libice,
   libsm,
-  libX11,
+  libx11,
   dotnetCorePackages,
   xorg,
   expat,
@@ -75,7 +75,7 @@ in
     # Avalonia dependencies needed for dotMemory
     libice
     libsm
-    libX11
+    libx11
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed

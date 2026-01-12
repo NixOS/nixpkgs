@@ -4,7 +4,7 @@
   fetchurl,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   libXext,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    libX11
+    libx11
     libXext
   ];
 

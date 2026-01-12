@@ -18,6 +18,7 @@
   dotnet-runtime_8,
   x11Support ? true,
   xorg ? null,
+  libx11,
   waylandSupport ? false,
   wayland ? null,
   libxkbcommon ? null,
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
+    libx11
     xorg.libXi
     xorg.libXcursor
   ]

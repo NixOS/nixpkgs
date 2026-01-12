@@ -8,6 +8,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXi
-    xorg.libX11
+    libx11
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to

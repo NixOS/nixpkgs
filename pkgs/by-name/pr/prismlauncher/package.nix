@@ -10,7 +10,7 @@
   kdePackages,
   lib,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXrandr,
@@ -89,7 +89,7 @@ symlinkJoin {
 
         ## glfw
         libGL
-        libX11
+        libx11
         libXcursor
         libXext
         libXrandr

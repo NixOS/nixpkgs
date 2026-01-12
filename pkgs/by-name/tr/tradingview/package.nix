@@ -20,6 +20,7 @@
   systemd,
   wayland,
   xorg,
+  libx11,
   libxcb,
 }:
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     wayland
     libxcb
-    xorg.libX11
+    libx11
     xorg.libXext
   ];
 

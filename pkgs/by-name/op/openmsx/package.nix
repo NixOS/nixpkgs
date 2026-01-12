@@ -15,7 +15,7 @@
   libpng,
   libtheora,
   libvorbis,
-  libX11,
+  libx11,
   python3,
   tcl,
   zlib,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_ttf
-    libX11
+    libx11
     alsa-lib
     freetype
     glew

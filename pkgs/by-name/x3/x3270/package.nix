@@ -5,7 +5,7 @@
   fetchurl,
   m4,
   expat,
-  libX11,
+  libx11,
   libXt,
   libXaw,
   libXmu,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     expat
-    libX11
+    libx11
     libXt
     libXaw
     libXmu

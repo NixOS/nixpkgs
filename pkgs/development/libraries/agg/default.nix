@@ -8,7 +8,7 @@
   pkg-config,
   freetype,
   SDL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     SDL
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
 
   postPatch = ''
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
     "--enable-examples=no"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--x-includes=${lib.getDev libX11}/include"
-    "--x-libraries=${lib.getLib libX11}/lib"
+    "--x-includes=${lib.getDev libx11}/include"
+    "--x-libraries=${lib.getLib libx11}/lib"
   ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];

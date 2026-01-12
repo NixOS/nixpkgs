@@ -13,7 +13,7 @@
   openh264,
   crc32c,
   libvpx,
-  libX11,
+  libx11,
   libXtst,
   libXcomposite,
   libXdamage,
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     abseil-cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXtst
     libXcomposite
     libXdamage

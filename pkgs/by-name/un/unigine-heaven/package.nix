@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  libX11,
+  libx11,
   libXext,
   libXrandr,
   freetype,
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     stdenv.cc.cc
     libXext
     libXrandr

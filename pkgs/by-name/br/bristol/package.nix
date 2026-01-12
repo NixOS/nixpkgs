@@ -5,7 +5,7 @@
   alsa-lib,
   libjack2,
   pkg-config,
-  libX11,
+  libx11,
   libXext,
   xorgproto,
   libpulseaudio,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     libpulseaudio
-    libX11
+    libx11
     libXext
     xorgproto
   ];

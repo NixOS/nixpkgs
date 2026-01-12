@@ -31,6 +31,7 @@
   pango,
   cairo,
   xorg,
+  libx11,
   libxcb,
   ffmpeg,
   http-parser,
@@ -64,7 +65,7 @@ let
     pango
     cairo
     libxcb
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage

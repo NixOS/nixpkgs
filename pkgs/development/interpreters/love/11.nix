@@ -18,7 +18,7 @@
   libtheora,
   which,
   libtool,
-  xorg,
+  libx11,
   cmake,
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libtool
   ]
   ++ lib.optionals stdenv.isLinux [
-    xorg.libX11 # SDL2 optional depend, for SDL_syswm.h
+    libx11 # SDL2 optional depend, for SDL_syswm.h
     libGLU
     libGL
   ];

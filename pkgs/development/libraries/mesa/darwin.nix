@@ -12,6 +12,7 @@
   pkg-config,
   python3Packages,
   xorg,
+  libx11,
   libxcb,
   zlib,
 }:
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXfixes
     libxcb

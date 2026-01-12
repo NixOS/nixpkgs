@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"

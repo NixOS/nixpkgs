@@ -5,7 +5,7 @@
   automake,
   autoconf,
   libtool,
-  libX11,
+  libx11,
   libXi,
   libXtst,
   pkg-config,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXi
     libXtst
     xorgproto

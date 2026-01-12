@@ -5,7 +5,7 @@
   cmake,
   extra-cmake-modules,
   glfw3,
-  libX11,
+  libx11,
   libXau,
   libXdmcp,
   libepoxy,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     glfw3
-    libX11
+    libx11
     libXau
     libXdmcp
     libepoxy

@@ -34,6 +34,7 @@
   unzip,
   xdg-utils,
   xorg,
+  libx11,
   libxkbfile,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     (lib.getLib stdenv.cc.cc)
     udev
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

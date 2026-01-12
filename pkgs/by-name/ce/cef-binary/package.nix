@@ -22,6 +22,7 @@
   udev,
   systemdLibs,
   xorg,
+  libx11,
   libxshmfence,
   libxcb,
   version ? "142.0.10",
@@ -58,7 +59,7 @@ let
     udev
     systemdLibs
     libxcb
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXext

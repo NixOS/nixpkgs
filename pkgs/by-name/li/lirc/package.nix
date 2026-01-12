@@ -16,7 +16,7 @@
   libftdi1,
   libice,
   libsm,
-  libX11,
+  libx11,
 }:
 
 let
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     libftdi1
     libice
     libsm
-    libX11
+    libx11
   ];
 
   DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";

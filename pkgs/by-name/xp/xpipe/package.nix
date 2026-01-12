@@ -11,7 +11,7 @@
   freetype,
   alsa-lib,
   makeShellWrapper,
-  libX11,
+  libx11,
   libXext,
   libXdamage,
   libXfixes,
@@ -70,8 +70,8 @@ stdenvNoCC.mkDerivation rec {
     freetype
     gtk3
     alsa-lib
-    libX11
-    libX11
+    libx11
+    libx11
     libXext
     libXdamage
     libXfixes

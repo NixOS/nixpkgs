@@ -13,6 +13,7 @@
   which,
   xnee,
   xorg,
+  libx11,
   xprop,
   xeyes,
   python3Packages,
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng
     uthash
-    xorg.libX11
+    libx11
     xorg.libXft
     xorg.libXmu
     xorg.libXpm

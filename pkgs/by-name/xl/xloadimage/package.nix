@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchzip,
-  libX11,
+  libx11,
   libXt,
   autoreconfHook,
   quilt,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXt
   ]
   ++ lib.optionals withJpegSupport [

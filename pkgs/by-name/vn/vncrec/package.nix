@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   xorgproto,
   imake,
   gccmakedep,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     gccmakedep
   ];
   buildInputs = [
-    libX11
+    libx11
     xorgproto
     libXt
     libXmu

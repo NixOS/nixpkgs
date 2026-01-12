@@ -10,7 +10,7 @@
   qtx11extras ? null, # Qt 5 only
   kwindowsystem,
   qtwayland,
-  libX11,
+  libx11,
   libXext,
   qttools,
   wrapQtAppsHook,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     qtsvg
-    libX11
+    libx11
     libXext
   ]
   ++ lib.optionals isQt5 [ qtx11extras ]

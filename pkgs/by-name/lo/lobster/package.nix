@@ -9,6 +9,7 @@
   # Linux deps
   libGL,
   xorg,
+  libx11,
 
 }:
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
-    xorg.libX11
+    libx11
     xorg.libXext
   ];
 

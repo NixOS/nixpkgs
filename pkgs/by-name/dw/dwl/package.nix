@@ -2,7 +2,7 @@
   lib,
   fetchFromGitea,
   installShellFiles,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     wlroots
   ]
   ++ lib.optionals enableXWayland [
-    libX11
+    libx11
     xcbutilwm
     xwayland
   ];

@@ -6,7 +6,7 @@
   libGL,
   libGLU,
   pkg-config,
-  xorg,
+  libx11,
   autoreconfHook,
   wrapGAppsHook4,
 }:
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     wxGTK32
     libGL
     libGLU
-    xorg.libX11
-    xorg.libX11.dev
+    libx11
+    libx11.dev
   ];
 
   configureFlags = [ "LDFLAGS=-lGL" ];

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libx11,
   libsm,
   libice,
   font-util,
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.utilmacros
       xorg.libXtst
       xorg.libXext
-      xorg.libX11
+      libx11
       xorg.libXext
       libice
       xorg.libXi

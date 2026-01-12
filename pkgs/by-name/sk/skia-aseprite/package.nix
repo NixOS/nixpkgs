@@ -12,7 +12,7 @@
   libjpeg,
   libpng,
   libwebp,
-  libX11,
+  libx11,
   libgbm,
   ninja,
   python3,
@@ -72,7 +72,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libwebp
-    libX11
+    libx11
     libgbm
     zlib
   ];

@@ -5,7 +5,7 @@
   alsa-lib,
   cmake,
   doxygen,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXft,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       else
         [
-          libX11
+          libx11
           libXcursor
           libXext
           libXft

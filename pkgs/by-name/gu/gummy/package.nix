@@ -4,7 +4,7 @@
   fetchFromGitea,
   testers,
   cmake,
-  libX11,
+  libx11,
   libXext,
   sdbus-cpp,
   udev,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     cli11
     ddcutil
     fmt
-    libX11
+    libx11
     libXext
     nlohmann_json
     sdbus-cpp

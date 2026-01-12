@@ -26,6 +26,7 @@
   udev,
   wrapGAppsHook3,
   xorg,
+  libx11,
   xrandr,
 }:
 
@@ -53,7 +54,7 @@ symlinkJoin {
 
       # glfw
       libGL
-      xorg.libX11
+      libx11
       xorg.libXcursor
       xorg.libXext
       xorg.libXrandr

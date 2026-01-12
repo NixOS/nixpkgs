@@ -12,7 +12,7 @@
   openal,
   alure,
   libXtst,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals legacy [
     libXtst
-    libX11
+    libx11
   ]
   ++ lib.optionals (!legacy) [ libinput ];
 

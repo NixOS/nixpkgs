@@ -16,6 +16,7 @@
   libcap,
   libgbm,
   xorg,
+  libx11,
   hwdata,
   seatd,
   vulkan-loader,
@@ -88,7 +89,7 @@ let
         vulkan-loader
         wayland
         wayland-protocols
-        xorg.libX11
+        libx11
         xorg.xcbutilerrors
         xorg.xcbutilimage
         xorg.xcbutilrenderutil

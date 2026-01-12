@@ -5,7 +5,7 @@
   fetchFromGitHub,
   gtk3,
   gtksourceview3,
-  libX11,
+  libx11,
   libXv,
   libao,
   libicns,
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     libao
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXv
     udev
     gtk3

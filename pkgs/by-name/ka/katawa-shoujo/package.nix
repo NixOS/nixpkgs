@@ -15,7 +15,7 @@
   devendorImageLibs ? !stdenvNoCC.hostPlatform.isDarwin,
   libjpeg,
   libpng12,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXmu,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     libpng12
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXext
     libXi
     libXmu

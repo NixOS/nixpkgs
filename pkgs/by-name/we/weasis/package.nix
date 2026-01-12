@@ -9,6 +9,7 @@
   makeBinaryWrapper,
   libGL,
   xorg,
+  libx11,
 }:
 
 let
@@ -24,7 +25,7 @@ let
 
   runtimeDeps = [
     libGL
-    xorg.libX11
+    libx11
     xorg.libXrender
     xorg.libXxf86vm
   ];

@@ -11,6 +11,7 @@
 
   # Build Inputs
   xorg,
+  libx11,
   wayland,
   libxkbcommon,
   wayland-protocols,
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     iniparser
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXrandr
     xorg.libXrender

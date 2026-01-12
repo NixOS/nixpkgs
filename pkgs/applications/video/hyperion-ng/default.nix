@@ -14,7 +14,7 @@
   libcec,
   libftdi1,
   libusb1,
-  libX11,
+  libx11,
   libxcb,
   libXrandr,
   python3,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     hidapi
     libftdi1
     libusb1
-    libX11
+    libx11
     libxcb
     libXrandr
     flatbuffers

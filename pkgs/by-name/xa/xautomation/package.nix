@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   libpng,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXtst,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpng
-    libX11
+    libx11
     libXext
     libXi
     libXtst

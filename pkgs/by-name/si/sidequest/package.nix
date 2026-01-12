@@ -21,6 +21,7 @@
   nspr,
   libdrm,
   xorg,
+  libx11,
   libxkbfile,
   libxcb,
   libxkbcommon,
@@ -95,7 +96,7 @@ let
             nss
             nspr
             libdrm
-            xorg.libX11
+            libx11
             libxcb
             xorg.libXcomposite
             xorg.libXdamage

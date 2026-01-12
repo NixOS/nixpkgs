@@ -13,7 +13,7 @@
   gtk-layer-shell,
   glib,
   libnotify,
-  libX11,
+  libx11,
   libXext,
   libxfce4ui,
   libxfce4util,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gtk-layer-shell
     libnotify
-    libX11
+    libx11
     libXext
     libxfce4ui
     libxfce4util

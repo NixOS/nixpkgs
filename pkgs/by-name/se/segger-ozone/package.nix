@@ -8,7 +8,7 @@
   freetype,
   libice,
   libsm,
-  libX11,
+  libx11,
   libXcursor,
   libXfixes,
   libXrandr,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libice
     libsm
-    libX11
+    libx11
     libXcursor
     libXfixes
     libXrandr

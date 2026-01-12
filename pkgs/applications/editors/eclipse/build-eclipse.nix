@@ -4,7 +4,7 @@
   makeDesktopItem,
   freetype,
   fontconfig,
-  libX11,
+  libx11,
   libXrender,
   zlib,
   jdk,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk
     jdk
-    libX11
+    libx11
     libXrender
     libXtst
     libsecret
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
+        libx11
         libXrender
         zlib
       ]

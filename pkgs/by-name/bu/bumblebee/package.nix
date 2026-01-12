@@ -26,7 +26,7 @@
   makeWrapper,
   glib,
   libbsd,
-  libX11,
+  libx11,
   xorgserver,
   kmod,
   xf86videonouveau,
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
   buildInputs = [
-    libX11
+    libx11
     glib
     libbsd
     kmod

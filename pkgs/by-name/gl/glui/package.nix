@@ -5,7 +5,7 @@
   libglut,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXmu,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libGL
     libXmu
     libXext
-    libX11
+    libx11
     libXi
   ];
 

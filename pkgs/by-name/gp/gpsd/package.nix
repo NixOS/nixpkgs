@@ -18,7 +18,7 @@
   # optional deps for GUI packages
   guiSupport ? true,
   dbus-glib,
-  libX11,
+  libx11,
   libXt,
   libXpm,
   libXaw,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     atk
     dbus-glib
     gdk-pixbuf
-    libX11
+    libx11
     libXaw
     libXext
     libXpm

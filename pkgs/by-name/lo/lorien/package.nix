@@ -14,7 +14,7 @@
   libGL,
   libGLU,
   libpulseaudio,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXfixes,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libGL
     libGLU
-    libX11
+    libx11
     libXcursor
     libXext
     libXfixes

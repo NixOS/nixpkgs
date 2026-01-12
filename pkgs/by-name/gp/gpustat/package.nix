@@ -5,7 +5,7 @@
   pkg-config,
   fontconfig,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXrandr,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     fontconfig
     libGL
-    libX11
+    libx11
     libXcursor
     libXi
     libXrandr

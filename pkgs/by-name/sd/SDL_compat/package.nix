@@ -6,7 +6,7 @@
   fetchFromGitHub,
   libGLU,
   libiconv,
-  libX11,
+  libx11,
   mesa,
   pkg-config,
   pkg-config-unwrapped,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedNativeBuildInputs = [ pkg-config-unwrapped ];
 
   buildInputs = [
-    libX11
+    libx11
     sdl2-compat
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

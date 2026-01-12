@@ -20,6 +20,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libx11,
   libxcb,
   zlib,
 }:
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libxcb
     xorg.libXcursor
-    xorg.libX11
+    libx11
     xorg.libXtst
     libxkbcommon
     pipewire

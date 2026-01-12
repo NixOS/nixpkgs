@@ -4,7 +4,7 @@
   fetchFromGitHub,
   xorgproto,
   motif,
-  libX11,
+  libx11,
   libXt,
   libXpm,
   bison,
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   buildInputs = [
     xorgproto
     motif
-    libX11
+    libx11
     libXt
     libXpm
     bison

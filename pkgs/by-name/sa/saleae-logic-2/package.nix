@@ -41,7 +41,7 @@ appimageTools.wrapType2 {
       wget
       unzip
       glib
-      xorg.libX11
+      libx11
       libxcb
       xorg.libXcomposite
       xorg.libXcursor

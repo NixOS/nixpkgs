@@ -6,7 +6,7 @@
   callPackage,
   pkg-config,
   imagemagick,
-  libX11,
+  libx11,
   libXext,
   libXft,
   libXinerama,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     giflib
     imagemagick
-    libX11
+    libx11
     libXext
     libXft
     libXinerama

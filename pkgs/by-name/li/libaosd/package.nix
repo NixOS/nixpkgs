@@ -5,7 +5,7 @@
   pkg-config,
   cairo,
   pango,
-  libX11,
+  libx11,
   libXcomposite,
   autoconf,
   automake,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     pango
-    libX11
+    libx11
     libXcomposite
   ];
   enableParallelBuilding = true;

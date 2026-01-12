@@ -11,7 +11,7 @@
   json-glib,
   itstool,
   accountsservice,
-  libX11,
+  libx11,
   libXdmcp,
   libxcb,
   gnome,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     gtk3
     keyutils
-    libX11
+    libx11
     libXdmcp
     libxcb
     libgudev

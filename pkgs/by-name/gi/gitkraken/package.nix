@@ -26,7 +26,7 @@
   gtk3,
   krb5,
   libGL,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -110,7 +110,7 @@ let
       stdenv.cc.cc
       curlWithGnuTls
       udev
-      libX11
+      libx11
       libXext
       libXcursor
       libXi

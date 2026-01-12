@@ -19,7 +19,7 @@
   pkcs11helper,
   uriparser,
   zlib,
-  libX11,
+  libx11,
   libXcursor,
   libXdamage,
   libXdmcp,
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     glib
     icu
-    libX11
+    libx11
     libXcursor
     libXdamage
     libXdmcp

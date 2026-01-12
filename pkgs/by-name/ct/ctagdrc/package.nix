@@ -7,7 +7,7 @@
   alsa-lib,
   fontconfig,
   freetype,
-  libX11,
+  libx11,
   libXcomposite,
   libXcursor,
   libXdmcp,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     fontconfig
     freetype
-    libX11
+    libx11
     libXcomposite
     libXcursor
     libXdmcp

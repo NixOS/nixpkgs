@@ -4,7 +4,7 @@
   autoreconfHook,
   dockapps-sources,
   font-util,
-  libX11,
+  libx11,
   libXext,
   libXpm,
   mkfontscale,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXpm
     font-util

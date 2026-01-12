@@ -17,7 +17,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   portmidi,
   SDL2,
   SDL2_image,
@@ -100,7 +100,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     freetype
-    libX11
+    libx11
     libjpeg
     libpng
     portmidi

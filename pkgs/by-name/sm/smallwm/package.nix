@@ -4,7 +4,7 @@
   fetchFromGitHub,
   doxygen,
   graphviz,
-  libX11,
+  libx11,
   libXrandr,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXrandr
   ];
 
@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     mainProgram = "smallwm";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

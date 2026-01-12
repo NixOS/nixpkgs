@@ -2,7 +2,7 @@
   lib,
   multiStdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXxf86vm,
   xorgproto,
   unstableGitUpdater,
@@ -25,7 +25,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXxf86vm
     xorgproto
   ];

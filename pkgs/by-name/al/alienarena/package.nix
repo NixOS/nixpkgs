@@ -7,7 +7,7 @@
   libjpeg,
   libogg,
   libvorbis,
-  libX11,
+  libx11,
   libXxf86vm,
   openal,
   pkg-config,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libogg
     libvorbis
-    libX11
+    libx11
     libXxf86vm
     openal
   ];

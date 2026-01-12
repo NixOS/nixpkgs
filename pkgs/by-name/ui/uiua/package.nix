@@ -16,6 +16,7 @@
   libxkbcommon,
   wayland,
   xorg,
+  libx11,
   windowSupport ? false,
 
   runCommand,
@@ -62,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libGL
         libxkbcommon
         wayland
-        xorg.libX11
+        libx11
         xorg.libXcursor
         xorg.libXi
         xorg.libXrandr

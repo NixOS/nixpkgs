@@ -11,7 +11,7 @@
   libXext,
   libXtst,
   libXpm,
-  libX11,
+  libx11,
   autoreconfHook,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libXext
     libXtst
     libXpm
-    libX11
+    libx11
     libXi
     xorgproto
     xinput

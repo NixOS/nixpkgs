@@ -6,6 +6,7 @@
   installShellFiles,
   makeWrapper,
   xorg,
+  libx11,
   pkg-config,
   wayland-scanner,
   pipewire,
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
       libdecor
     ]
     ++ lib.optionals withXorg [
-      xorg.libX11
+      libx11
       xorg.libXt
     ];
 

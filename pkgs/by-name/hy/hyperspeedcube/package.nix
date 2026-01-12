@@ -14,7 +14,7 @@
   harfbuzz,
   lib,
   libGL,
-  libX11,
+  libx11,
   libxcb,
   libXcursor,
   libXi,
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
     libXcursor
     libXrandr
     libXi
-    libX11
+    libx11
 
     vulkan-headers
     vulkan-loader

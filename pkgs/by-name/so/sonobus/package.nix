@@ -8,7 +8,7 @@
   cmake,
   freetype,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXinerama,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     libGL
-    libX11
+    libx11
     libXcursor
     libXext
     libXinerama

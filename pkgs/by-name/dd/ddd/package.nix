@@ -6,7 +6,7 @@
   desktopToDarwinBundle,
   motif,
   ncurses,
-  libX11,
+  libx11,
   libXt,
   gdb,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     motif
     ncurses
-    libX11
+    libx11
     libXt
   ];
 

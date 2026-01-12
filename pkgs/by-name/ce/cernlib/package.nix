@@ -10,6 +10,7 @@
   libnsl,
   motif,
   xorg,
+  libx11,
   libxcrypt,
 }:
 
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     freetype
     gfortran
     openssl
-    xorg.libX11
+    libx11
     xorg.libXaw
     xorg.libXft
     xorg.libXt

@@ -5,7 +5,7 @@
   alsa-lib,
   ffmpeg,
   libjack2,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   qtx11extras,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     alsa-lib
     ffmpeg
     libjack2
-    libX11
+    libx11
     libXext
     libXfixes
     libXinerama

@@ -26,6 +26,7 @@
   libGL,
   libxkbcommon,
   xorg,
+  libx11,
   libxcb,
 }:
 
@@ -126,7 +127,7 @@ let
     libxkbcommon
     xorg.libXcursor
     libxcb
-    xorg.libX11
+    libx11
   ];
   cef = cef-binary.overrideAttrs {
     postFixup = ''

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   dbus,
-  libX11,
+  libx11,
   libusb1,
   pkg-config,
   udev,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     wayland
     wayland-scanner
-    libX11
+    libx11
     udev
     libusb1
     libxkbcommon

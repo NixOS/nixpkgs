@@ -8,7 +8,7 @@
   fontconfig,
   freetype,
   gettext,
-  libX11,
+  libx11,
   libXau,
   libXdmcp,
   libXext,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    libX11
+    libx11
     libXau
     libXdmcp
     libXext

@@ -6,7 +6,7 @@
   libxcb,
   xcbutilkeysyms,
   xcbutilwm,
-  libX11,
+  libx11,
   xcbutil,
   xcbutilxrm,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libxcb
     xcbutilkeysyms
     xcbutilwm
-    libX11
+    libx11
     xcbutil
     xcbutilxrm
   ];

@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libx11,
   libsm,
   libice,
   libxshmfence,
@@ -76,7 +77,7 @@ let
     xcbutilimage
     xcbutilkeysyms
     xcbutilrenderutil
-    xorg.libX11
+    libx11
     xorg.libXt
     xorg.libXext
     libsm

@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   makeWrapper,
-  libX11,
+  libx11,
   zlib,
   libsm,
   libice,
@@ -34,7 +34,7 @@ let
   sha256 = "sha256:0cv6b5rx1bjizwa22xlzmljwgcvm1mqyng79qqrdzmd0xy7c02pi";
 
   rpath = lib.makeLibraryPath [
-    libX11
+    libx11
     zlib
     libsm
     libice

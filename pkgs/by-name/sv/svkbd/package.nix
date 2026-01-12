@@ -4,7 +4,7 @@
   fetchurl,
   writeText,
   pkg-config,
-  libX11,
+  libx11,
   libXft,
   libXi,
   libXinerama,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXft
     libXi
     libXinerama

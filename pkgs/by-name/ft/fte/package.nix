@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   perl,
-  libX11,
+  libx11,
   libXpm,
   gpm,
   ncurses,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ unzip ];
   buildInputs = [
     perl
-    libX11
+    libx11
     libXpm
     gpm
     ncurses

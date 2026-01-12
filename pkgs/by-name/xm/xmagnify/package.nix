@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libX11,
+  libx11,
   xorgproto,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   prePatch = "substituteInPlace ./Makefile --replace /usr $out";
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
 

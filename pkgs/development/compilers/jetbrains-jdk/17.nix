@@ -18,7 +18,7 @@
   libXi,
   libXcursor,
   libXrender,
-  libX11,
+  libx11,
   libXext,
   libxcb,
   nss,
@@ -127,7 +127,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         libXi
         libXcursor
         libXrender
-        libX11
+        libx11
         libXext
         libxcb
         nss

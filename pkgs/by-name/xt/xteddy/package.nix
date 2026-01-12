@@ -4,6 +4,7 @@
   fetchFromGitLab,
   pkg-config,
   xorg,
+  libx11,
   imlib2,
   makeWrapper,
 }:
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     imlib2
-    xorg.libX11
+    libx11
     xorg.libXext
   ];
 

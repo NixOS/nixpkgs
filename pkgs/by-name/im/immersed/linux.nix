@@ -38,7 +38,7 @@ appimageTools.wrapAppImage {
       e2fsprogs
       zlib
       libp11
-      xorg.libX11
+      libx11
       libsm
     ];
 

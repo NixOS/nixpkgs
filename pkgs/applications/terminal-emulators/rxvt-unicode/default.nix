@@ -4,7 +4,7 @@
   fetchurl,
   fetchpatch,
   makeDesktopItem,
-  libX11,
+  libx11,
   libXt,
   libXft,
   libXrender,
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     libXt
     libXft
     ncurses # required to build the terminfo file

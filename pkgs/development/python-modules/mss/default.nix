@@ -10,6 +10,7 @@
 
   # native dependencies
   xorg,
+  libx11,
 
   # tests
   lsof,
@@ -32,7 +33,7 @@ buildPythonPackage rec {
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./linux-paths.patch {
-      x11 = "${xorg.libX11}/lib/libX11.so";
+      x11 = "${libx11}/lib/libX11.so";
       xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
       xrandr = "${xorg.libXrandr}/lib/libXrandr.so";
     })

@@ -21,6 +21,7 @@
   nss,
   nspr,
   xorg,
+  libx11,
   libxcb,
   alsa-lib,
   expat,
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXext

@@ -5,7 +5,7 @@
   libGLU,
   libGL,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libglut
-    libX11
+    libx11
     plib
     openal
     freealut

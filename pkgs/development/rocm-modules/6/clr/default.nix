@@ -25,7 +25,7 @@
   zlib,
   libGL,
   libxml2,
-  libX11,
+  libx11,
   python3Packages,
   llvm,
   khronos-ocl-icd-loader,
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     libGL
     libxml2
-    libX11
+    libx11
     khronos-ocl-icd-loader
     hipClang
     libffi

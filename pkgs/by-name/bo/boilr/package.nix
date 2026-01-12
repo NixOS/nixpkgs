@@ -6,6 +6,7 @@
   clangStdenv,
   gtk3,
   xorg,
+  libx11,
   libxcb,
   perl,
   pkg-config,
@@ -30,7 +31,7 @@ let
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXi
-    xorg.libX11
+    libx11
     libxcb
   ];
 in

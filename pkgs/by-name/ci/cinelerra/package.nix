@@ -29,7 +29,7 @@
   libXxf86vm,
   libXv,
   libXi,
-  libX11,
+  libx11,
   libXft,
   xorgproto,
   libtheora,
@@ -100,7 +100,7 @@ stdenv.mkDerivation {
     libXxf86vm
     libXv
     libXi
-    libX11
+    libx11
     libXft
     xorgproto
     libtheora

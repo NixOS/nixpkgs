@@ -6,6 +6,7 @@
   nssmdns,
   pkg-config,
   xorg,
+  libx11,
   xinput,
 }:
 
@@ -29,8 +30,8 @@ buildGoModule rec {
   buildInputs = [
     libGL
     nssmdns
-    xorg.libX11
-    xorg.libX11.dev
+    libx11
+    libx11.dev
     xorg.libXcursor
     xorg.libXext
     xorg.libXi

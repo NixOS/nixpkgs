@@ -22,6 +22,7 @@
   fontconfig,
   freetype,
   xorg,
+  libx11,
   libsm,
   libice,
   makeWrapper,
@@ -41,7 +42,7 @@ let
       SDL2
       libsm
       libice
-      xorg.libX11
+      libx11
       xorg.libXext
       xercesc
       openal
@@ -119,7 +120,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     SDL2
-    xorg.libX11
+    libx11
     xercesc
     openal
     lua

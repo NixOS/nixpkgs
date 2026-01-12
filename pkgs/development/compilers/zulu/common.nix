@@ -15,6 +15,7 @@
   freetype,
   zlib,
   xorg,
+  libx11,
   # runtime dependencies
   cups,
   # runtime dependencies for GTK+ Look and Feel
@@ -96,7 +97,7 @@ let
         fontconfig
         freetype
         stdenv.cc.cc # libstdc++.so.6
-        xorg.libX11
+        libx11
         xorg.libXext
         xorg.libXi
         xorg.libXrender

@@ -7,7 +7,7 @@
   zlib,
   libgcc,
   fontconfig,
-  libX11,
+  libx11,
   lttng-ust,
   icu,
   libice,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Runtime deps
     libice
     libsm
-    libX11
+    libx11
     libXcursor
   ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     libice
     libsm
-    libX11
+    libx11
     libXcursor
   ];
 

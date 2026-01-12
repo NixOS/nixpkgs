@@ -23,7 +23,7 @@
   lua5,
   docutils,
   libxcb,
-  libX11,
+  libx11,
   xcbutil,
   xcbutilwm,
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libX11
+    libx11
     xcbutil
     xcbutilwm
     libXdmcp

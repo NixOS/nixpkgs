@@ -32,7 +32,7 @@
   libpulseaudio,
   libuuid,
   libva,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libuuid
     libXdamage
-    libX11
+    libx11
     libXScrnSaver
     libXtst
     libxcb
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libglvnd
       libnotify
-      libX11
+      libx11
       libXcomposite
       libunity
       libuuid

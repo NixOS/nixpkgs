@@ -4,7 +4,7 @@
   fetchurl,
   ncurses,
   libjpeg,
-  libX11,
+  libx11,
   libXt,
   alsa-lib,
   aalib,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libjpeg
-    libX11
+    libx11
     libXt
     libXft
     xorgproto

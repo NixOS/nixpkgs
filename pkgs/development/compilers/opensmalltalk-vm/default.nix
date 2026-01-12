@@ -16,6 +16,7 @@
   pango,
   pkg-config,
   xorg,
+  libx11,
 }:
 let
   buildVM =
@@ -91,7 +92,7 @@ let
         libuuid
         openssl
         pango
-        xorg.libX11
+        libx11
         xorg.libXrandr
       ];
 

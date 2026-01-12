@@ -5,7 +5,7 @@
   glew,
   gsm,
   lib,
-  libX11,
+  libx11,
   libXext,
   libopus,
   libpulseaudio,
@@ -47,7 +47,7 @@ mkLinphoneDerivation (finalAttrs: {
 
     ffmpeg_4
     glew
-    libX11
+    libx11
     libXext
     libpulseaudio
     libv4l

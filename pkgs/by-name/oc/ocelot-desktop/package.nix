@@ -15,7 +15,7 @@
   libpulseaudio,
   pipewire,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXrandr,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         # lwjgl
         libGL
-        libX11
+        libx11
         libXcursor
         libXext
         libXrandr

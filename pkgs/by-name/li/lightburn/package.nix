@@ -12,7 +12,7 @@
   e2fsprogs,
   makeDesktopItem,
   copyDesktopItems,
-  xorg,
+  libx11,
   libxcb,
   libGL,
   alsa-lib,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     cups
     libgpg-error
     e2fsprogs
-    xorg.libX11
+    libx11
     libxcb
     libGL
     alsa-lib

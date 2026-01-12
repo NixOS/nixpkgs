@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXext,
   gnulib,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libX11
+    libx11
     libXScrnSaver
     libXext
   ];

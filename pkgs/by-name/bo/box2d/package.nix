@@ -13,7 +13,7 @@
   glfw3,
   imgui,
   libGLU,
-  libX11,
+  libx11,
   libXcursor,
   libXi,
   libXinerama,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       IMGUI_BUILD_GLFW_BINDING = true;
     })
     libGLU
-    libX11
+    libx11
     libXcursor
     libXi
     libXinerama

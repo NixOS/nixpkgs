@@ -8,6 +8,7 @@
   alsa-lib,
   ncurses5,
   xorg,
+  libx11,
 }:
 
 let
@@ -88,7 +89,7 @@ let
       alsa-lib
       ncurses5
       stdenv.cc.cc
-      xorg.libX11
+      libx11
       xorg.libXcursor
       xorg.libXext
       xorg.libXft

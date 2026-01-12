@@ -19,7 +19,7 @@
   libadwaita,
   libxcvt,
   libGL,
-  libX11,
+  libx11,
   libXcomposite,
   libXcursor,
   libXdamage,
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libX11
+    libx11
     libXcomposite
     libXcursor
     libXdamage

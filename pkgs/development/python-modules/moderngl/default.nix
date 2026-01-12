@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   libGL,
-  libX11,
+  libx11,
   setuptools,
   glcontext,
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     libGL
-    libX11
+    libx11
   ];
 
   dependencies = [ glcontext ];

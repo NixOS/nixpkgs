@@ -6,7 +6,7 @@
   fetchFromGitHub,
   gtkmm3,
   libGLX,
-  libX11,
+  libx11,
   libXdmcp,
   libXext,
   libXinerama,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXv
     minizip
     zlib

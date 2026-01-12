@@ -7,7 +7,7 @@
 
   bzip2,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libxkbcommon,
   libXi,
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
 
     # for X11
-    libX11
+    libx11
     libXcursor
     libXi
 

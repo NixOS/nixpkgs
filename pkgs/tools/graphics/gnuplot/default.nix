@@ -17,7 +17,7 @@
   lua,
   withCaca ? false,
   libcaca,
-  libX11 ? null,
+  libx11 ? null,
   libXt ? null,
   libXpm ? null,
   libXaw ? null,
@@ -34,9 +34,9 @@
   qtsvg,
 }:
 
-assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
+assert libx11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
+  withX = libx11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
@@ -66,7 +66,7 @@ in
   ++ lib.optional withLua lua
   ++ lib.optional withCaca libcaca
   ++ lib.optionals withX [
-    libX11
+    libx11
     libXpm
     libXt
     libXaw

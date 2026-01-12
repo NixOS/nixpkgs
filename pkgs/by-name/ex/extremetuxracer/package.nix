@@ -4,7 +4,7 @@
   fetchurl,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   xorgproto,
   tcl,
   libglut,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGLU
     libGL
-    libX11
+    libx11
     xorgproto
     tcl
     libglut

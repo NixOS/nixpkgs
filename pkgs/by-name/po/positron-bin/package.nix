@@ -19,6 +19,7 @@
   openssl,
   stdenv,
   xorg,
+  libx11,
   libxkbfile,
 }:
 let
@@ -58,7 +59,7 @@ stdenv.mkDerivation {
     nss
     stdenv.cc.cc
     openssl
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXdamage
     libxkbfile

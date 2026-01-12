@@ -6,7 +6,7 @@
   libice,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   libXext,
   libXft,
   pango,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libice
     libjpeg
     libpng
-    libX11
+    libx11
     libXext
     libXft
     pango

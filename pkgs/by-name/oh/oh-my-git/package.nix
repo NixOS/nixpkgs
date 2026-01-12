@@ -11,7 +11,7 @@
   godot3-export-templates,
   godot3-headless,
   libGLU,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXfixes,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gcc-unwrapped.lib
     git
     libGLU
-    libX11
+    libx11
     libXcursor
     libXext
     libXfixes

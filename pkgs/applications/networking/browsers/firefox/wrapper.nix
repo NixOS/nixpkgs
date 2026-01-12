@@ -13,6 +13,7 @@
   ## various stuff that can be plugged in
   ffmpeg_7,
   xorg,
+  libx11,
   alsa-lib,
   libpulseaudio,
   libcanberra-gtk3,
@@ -112,7 +113,7 @@ let
         ++ lib.optional useGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) [
           stdenv.cc
-          xorg.libX11
+          libx11
           xorg.libXxf86dga
           xorg.libXxf86vm
           xorg.libXext

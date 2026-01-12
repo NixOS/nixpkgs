@@ -14,6 +14,7 @@
   libgcc,
   libxkbcommon,
   xorg,
+  libx11,
 
   libGL,
   wayland,
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXi
   ];

@@ -3,7 +3,7 @@
   stdenv,
   alsa-lib,
   dockapps-sources,
-  libX11,
+  libx11,
   libXext,
   libXpm,
   pkg-config,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
+    libx11
     libXpm
     libXext
   ];

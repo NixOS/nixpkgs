@@ -8,7 +8,7 @@
   cairo,
   gtk3,
   xcur2png,
-  libX11,
+  libx11,
   zlib,
 }:
 
@@ -39,7 +39,7 @@ buildGoModule rec {
     glib
     cairo
     xcur2png
-    libX11.dev
+    libx11.dev
     zlib
     gtk3
   ];

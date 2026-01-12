@@ -25,7 +25,7 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
   libXcomposite,
   libXcursor,
@@ -130,7 +130,7 @@ let
     libglvnd
     libkrb5
     libpng
-    libX11
+    libx11
     libxcb
     libXcomposite
     libXcursor

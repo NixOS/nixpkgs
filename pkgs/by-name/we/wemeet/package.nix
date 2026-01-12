@@ -7,6 +7,7 @@
   makeWrapper,
   nss,
   xorg,
+  libx11,
   libsm,
   libice,
   desktop-file-utils,
@@ -72,7 +73,7 @@ let
       pipewire
       xorg.libXdamage
       xorg.libXrandr
-      xorg.libX11
+      libx11
     ];
 
     dontWrapQtApps = true;
@@ -102,7 +103,7 @@ let
     buildInputs = [
       openssl
       libpulseaudio
-      xorg.libX11
+      libx11
     ];
 
     buildPhase = ''
@@ -142,7 +143,7 @@ let
     nativeBuildInputs = [ pkg-config ];
 
     buildInputs = [
-      xorg.libX11
+      libx11
     ];
 
     buildPhase = ''
@@ -197,7 +198,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     nss
-    xorg.libX11
+    libx11
     libsm
     libice
     xorg.libXtst

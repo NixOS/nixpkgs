@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "@strip" "#@strip"
   '';
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   makeFlags = [ "CC:=$(CC)" ];
 

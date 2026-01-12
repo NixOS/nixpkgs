@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   xorgproto,
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXinerama,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXext
     libXi
     libXinerama

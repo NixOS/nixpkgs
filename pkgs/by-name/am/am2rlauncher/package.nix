@@ -30,7 +30,7 @@ let
     multiPkgs =
       pkgs: with pkgs; [
         (lib.getLib stdenv.cc.cc)
-        xorg.libX11
+        libx11
         xorg.libXext
         xorg.libXrandr
         xorg.libXxf86vm

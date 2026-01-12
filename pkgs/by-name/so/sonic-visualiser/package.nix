@@ -8,7 +8,7 @@
   bzip2,
   fftw,
   libjack2,
-  libX11,
+  libx11,
   liblo,
   libmad,
   lrdf,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmad
     libfishsound
     liblo
-    libX11
+    libx11
     capnproto
     liboggz
     libid3tag

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  libX11,
+  libx11,
   libXext,
   unstableGitUpdater,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXext
   ];
 

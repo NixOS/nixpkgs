@@ -7,7 +7,7 @@
   openssl,
   fontconfig,
   nasm,
-  libX11,
+  libx11,
   libXcursor,
   libXrandr,
   libXi,
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    libX11
+    libx11
     libXcursor
     libXi
     libXrandr

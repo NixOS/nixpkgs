@@ -19,7 +19,7 @@
   readline,
   libffi,
   libffcall,
-  libX11,
+  libx11,
   libXau,
   libXt,
   libXpm,
@@ -45,7 +45,7 @@
 assert
   x11Support
   -> (
-    libX11 != null
+    libx11 != null
     && libXau != null
     && libXt != null
     && libXpm != null
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
   ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
   ++ lib.optional ffcallAvailable libffcall
   ++ lib.optionals x11Support [
-    libX11
+    libx11
     libXau
     libXt
     libXpm

@@ -35,6 +35,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  libx11,
   libxcb,
   zlib,
 
@@ -128,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    xorg.libX11
+    libx11
     libxcb
     udev
     vulkan-loader

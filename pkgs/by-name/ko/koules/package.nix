@@ -7,7 +7,7 @@
   gccmakedep,
   imake,
   installShellFiles,
-  libX11,
+  libx11,
   libXext,
   makeDesktopItem,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
   buildInputs = [
-    libX11
+    libx11
     libXext
   ];
 

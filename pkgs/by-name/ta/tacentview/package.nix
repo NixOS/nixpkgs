@@ -8,7 +8,7 @@
   ninja,
   stdenv,
   tacent,
-  xorg,
+  libx11,
   libxcb,
   zenity,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     stdenv.cc.cc.lib
     tacent
-    xorg.libX11
+    libx11
     libxcb
     zenity
   ];

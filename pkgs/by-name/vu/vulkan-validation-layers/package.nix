@@ -9,7 +9,7 @@
   jq,
   glslang,
   libffi,
-  libX11,
+  libx11,
   libXau,
   libxcb,
   libXdmcp,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     vulkan-utility-libraries
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXau
     libXdmcp
     libXrandr

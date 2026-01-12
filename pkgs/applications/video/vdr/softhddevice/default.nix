@@ -9,7 +9,7 @@
   ffmpeg,
   libva,
   libvdpau,
-  xorg,
+  libx11,
   libxcb,
   libGL,
   libGLU,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libva
     libvdpau
     libxcb
-    xorg.libX11
+    libx11
     libGL
     libGLU
   ];

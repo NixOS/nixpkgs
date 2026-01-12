@@ -8,7 +8,7 @@
   curl,
   freetype,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXinerama,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     freetype
     libGL
-    libX11
+    libx11
     libXcursor
     libXext
     libXinerama

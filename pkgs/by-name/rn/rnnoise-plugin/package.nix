@@ -9,6 +9,7 @@
   pkg-config,
   webkitgtk_4_1,
   xorg,
+  libx11,
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     freetype
     gtk3-x11
     pcre
-    xorg.libX11
+    libx11
     xorg.libXrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

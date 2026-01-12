@@ -20,7 +20,7 @@
   fontconfig,
   libXrender,
   libXfixes,
-  libX11,
+  libx11,
   libXi,
   libXrandr,
   libXcursor,
@@ -48,7 +48,7 @@ let
     fontconfig
     libXrender
     libXfixes
-    libX11
+    libx11
     libXi
     libXrandr
     libXcursor

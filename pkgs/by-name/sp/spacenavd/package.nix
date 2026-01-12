@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   libXext,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libXext
   ];
 

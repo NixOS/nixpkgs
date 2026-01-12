@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   bison,
   ksh,
   perl,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libX11
+    libx11
     libXinerama
     libXt
     libXext

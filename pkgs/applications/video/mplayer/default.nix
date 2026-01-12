@@ -16,7 +16,7 @@
   fribidiSupport ? true,
   fribidi,
   x11Support ? true,
-  libX11,
+  libx11,
   libXext,
   libGLU,
   libGL,
@@ -146,7 +146,7 @@ stdenv.mkDerivation {
   ++ lib.optional fontconfigSupport fontconfig
   ++ lib.optional fribidiSupport fribidi
   ++ lib.optionals x11Support [
-    libX11
+    libx11
     libXext
     libGLU
     libGL

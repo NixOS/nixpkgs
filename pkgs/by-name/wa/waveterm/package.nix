@@ -11,7 +11,7 @@
   gtk3,
   pango,
   cairo,
-  libX11,
+  libx11,
   libXcomposite,
   libXdamage,
   libXext,
@@ -80,7 +80,7 @@ let
       gtk3
       pango
       cairo
-      libX11
+      libx11
       libXcomposite
       libXdamage
       libXext

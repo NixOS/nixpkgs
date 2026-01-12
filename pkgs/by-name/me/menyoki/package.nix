@@ -8,6 +8,7 @@
   withSixel ? false,
   libsixel,
   xorg,
+  libx11,
   withSki ? true,
 }:
 
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     lib.optional withSixel libsixel
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libX11
+      libx11
       xorg.libXrandr
     ];
 

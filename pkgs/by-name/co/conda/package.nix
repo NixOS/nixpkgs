@@ -9,6 +9,7 @@
   libarchive,
   libGL,
   xorg,
+  libx11,
   libsm,
   libice,
   zlib,
@@ -19,7 +20,7 @@
     stdenv.cc
     libsm
     libice
-    xorg.libX11
+    libx11
     xorg.libXau
     xorg.libXi
     xorg.libXrender
@@ -119,7 +120,7 @@ buildFHSEnv {
       export NIX_CFLAGS_LINK="-L${installationPath}/lib"
       # Some other required environment variables
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-      export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+      export QTCOMPOSE=${libx11}/share/X11/locale
       export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
       # Allows `conda activate` to work properly
       if [ ! -f ${condaSh} ]; then

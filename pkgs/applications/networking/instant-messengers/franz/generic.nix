@@ -6,6 +6,7 @@
   autoPatchelfHook,
   dpkg,
   xorg,
+  libx11,
   atk,
   glib,
   pango,
@@ -76,7 +77,7 @@ stdenv.mkDerivation (
       xorg.libXext
       xorg.libXfixes
       xorg.libXrender
-      xorg.libX11
+      libx11
       xorg.libXtst
       xorg.libXScrnSaver
       libgbm

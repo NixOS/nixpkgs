@@ -5,6 +5,7 @@
   fetchpatch2,
   pkg-config,
   xorg,
+  libx11,
   boost,
   gtest,
 }:
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXrandr
     xorg.libXcursor
     boost

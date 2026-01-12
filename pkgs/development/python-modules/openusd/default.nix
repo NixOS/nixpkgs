@@ -17,7 +17,7 @@
   jinja2,
   lib,
   libGL,
-  libX11,
+  libx11,
   libXt,
   materialx,
   ninja,
@@ -128,7 +128,7 @@ buildPythonPackage rec {
     onetbb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXt
   ]
   ++ lib.optionals withOsl [ osl ]

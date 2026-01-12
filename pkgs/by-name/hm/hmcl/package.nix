@@ -24,6 +24,7 @@
     jdk17
   ],
   xorg,
+  libx11,
   xrandr,
   glib,
   libGL,
@@ -139,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
+    libx11
     xorg.libXxf86vm
     xorg.libXext
     xorg.libXcursor

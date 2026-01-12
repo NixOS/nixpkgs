@@ -24,7 +24,7 @@ deployAndroidPackage {
       fontconfig
       fontconfig.lib
       stdenv.cc.cc.libgcc or null # fix for https://github.com/NixOS/nixpkgs/issues/226357
-      xorg.libX11
+      libx11
       xorg.libXrender
       xorg.libXext
     ])
@@ -32,7 +32,7 @@ deployAndroidPackage {
       with pkgsi686Linux;
       [
         glibc
-        xorg.libX11
+        libx11
         xorg.libXrender
         xorg.libXext
         fontconfig.lib
@@ -64,7 +64,7 @@ deployAndroidPackage {
         lib.makeLibraryPath (
           with pkgs;
           [
-            xorg.libX11
+            libx11
             xorg.libXtst
           ]
         )

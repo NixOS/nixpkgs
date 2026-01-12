@@ -5,7 +5,7 @@
   libglut,
   libXmu,
   libXi,
-  libX11,
+  libx11,
   libice,
   libGLU,
   libGL,
@@ -23,7 +23,7 @@ let
   lpath = lib.makeLibraryPath [
     libXmu
     libXi
-    libX11
+    libx11
     libglut
     libice
     libGLU

@@ -10,7 +10,7 @@
   getconf,
   glibc,
   libXrandr,
-  libX11,
+  libx11,
   libXext,
   libXdamage,
   libXtst,
@@ -128,7 +128,7 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
         libXrandr
-        libX11
+        libx11
         libXext
         libXdamage
         libXtst

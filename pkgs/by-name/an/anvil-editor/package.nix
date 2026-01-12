@@ -12,6 +12,7 @@
   vulkan-headers,
   libGL,
   xorg,
+  libx11,
   libxcb,
 }:
 
@@ -58,7 +59,7 @@ buildGoModule (finalAttrs: {
     libxkbcommon
     vulkan-headers
     libGL
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXcursor
     xorg.libXfixes

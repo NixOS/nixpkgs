@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXpm,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   buildInputs = [
-    libX11
+    libx11
     libXpm
   ];
 

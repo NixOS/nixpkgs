@@ -20,7 +20,7 @@ buildFHSEnv {
       jar
 
       openjdk25
-      xorg.libX11
+      libx11
       at-spi2-atk
       cairo
       gdk-pixbuf
@@ -28,7 +28,7 @@ buildFHSEnv {
       gtk3
       pango
       xorg.libXtst
-      xorg.libX11
+      libx11
       xorg_sys_opengl
     ];
 

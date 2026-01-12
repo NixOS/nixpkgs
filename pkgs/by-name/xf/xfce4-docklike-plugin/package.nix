@@ -10,7 +10,7 @@
   glib,
   gtk3,
   gtk-layer-shell,
-  libX11,
+  libx11,
   libXi,
   libxfce4ui,
   libxfce4util,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     gtk-layer-shell
-    libX11
+    libx11
     libXi
     libxfce4ui
     libxfce4util

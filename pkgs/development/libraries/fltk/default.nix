@@ -9,7 +9,7 @@
   libpng,
   fontconfig,
   freetype,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   libXfixes,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ]
   ++ lib.optionals withXorg [
-    libX11
+    libx11
     libXext
     libXinerama
     libXfixes

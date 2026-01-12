@@ -4,7 +4,7 @@
   fetchFromGitea,
   cmake,
   ninja,
-  libX11,
+  libx11,
   libXxf86vm,
   libXrandr,
   samurai,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libXxf86vm
     libXrandr
     samurai

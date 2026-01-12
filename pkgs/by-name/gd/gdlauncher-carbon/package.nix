@@ -8,6 +8,7 @@
   copyDesktopItems,
   autoPatchelfHook,
   xorg,
+  libx11,
   xrandr,
   libxcb,
   libpulseaudio,
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure =
     let
       libPath = lib.makeLibraryPath [
-        xorg.libX11
+        libx11
         xorg.libXext
         xorg.libXcursor
         xorg.libXrandr

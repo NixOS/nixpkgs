@@ -14,6 +14,7 @@
   sfml,
   udev,
   xorg,
+  libx11,
   libsm,
   libpthread-stubs,
   libxcb,
@@ -44,7 +45,7 @@ mkLibretroCore {
     sfml
     udev
     libsm
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXi
     xorg.libXinerama

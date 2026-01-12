@@ -8,7 +8,7 @@
   freetype,
   fribidi,
   libsm,
-  libX11,
+  libx11,
   libXcursor,
   libXft,
   libXi,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fribidi
     libsm
-    libX11
+    libx11
     libXcursor
     libXft
     libXi
@@ -114,6 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/fvwmorg/fvwm3/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

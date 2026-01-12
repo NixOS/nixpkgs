@@ -5,6 +5,7 @@
   shhmsg,
   shhopt,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     shhmsg
     shhopt
-    xorg.libX11
+    libx11
     xorg.libXt
     xorg.libXpm
     xorg.libXaw

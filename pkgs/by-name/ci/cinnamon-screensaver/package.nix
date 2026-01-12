@@ -23,6 +23,7 @@
   cairo,
   xdotool,
   xorg,
+  libx11,
   iso-flags-png-320x240,
 }:
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
 
     xorg.libXext
     xorg.libXinerama
-    xorg.libX11
+    libx11
     xorg.libXrandr
 
     (python3.withPackages (

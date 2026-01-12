@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libx11,
   libsm,
   libice,
   libxcb,
@@ -138,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     libice
     libsm
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -176,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set QT_QPA_PLATFORM "xcb" \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
       --set QML2_IMPORT_PATH "$out/opt/viber/qml"
 
     mv $out/usr/share $out/share

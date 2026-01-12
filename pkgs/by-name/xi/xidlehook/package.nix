@@ -5,6 +5,7 @@
   fetchFromGitLab,
   python3,
   xorg,
+  libx11,
   libxcb,
   libpulseaudio,
   pkg-config,
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-U1kjOWrFEp1pZnbawW2MCtC4UN7ELD/kcYWfEmn94Pg=";
 
   buildInputs = [
-    xorg.libX11
+    libx11
     libxcb
     xorg.libXScrnSaver
     libpulseaudio

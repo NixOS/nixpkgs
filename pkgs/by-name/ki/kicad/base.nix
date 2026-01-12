@@ -7,7 +7,7 @@
   zlib,
   wxGTK,
   gtk3,
-  libX11,
+  libx11,
   gettext,
   glew,
   glm,
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libGL
     zlib
-    libX11
+    libx11
     wxGTK
     gtk3
     libXdmcp

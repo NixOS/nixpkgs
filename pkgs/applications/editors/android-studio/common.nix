@@ -34,7 +34,7 @@
   libpng,
   libuuid,
   libsecret,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   mesa-demos,
@@ -168,7 +168,7 @@ let
             libbsd
             libpulseaudio
             libuuid
-            libX11
+            libx11
             libxcb
             libxkbcommon
             xcbutilwm

@@ -4,7 +4,7 @@
   fetchurl,
   gcc,
   libGLU,
-  libX11,
+  libx11,
   libXext,
   libXcursor,
   libpulseaudio,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   libPath = lib.makeLibraryPath [
     gcc
     libGLU
-    libX11
+    libx11
     libXext
     libXcursor
     libpulseaudio

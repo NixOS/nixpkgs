@@ -6,6 +6,7 @@
   gtk2,
   intltool,
   xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk2
-    xorg.libX11
+    libx11
     xorg.libXres
   ];
   # ?another optional: startup-notification

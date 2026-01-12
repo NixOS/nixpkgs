@@ -6,6 +6,7 @@
   aalib,
   ncurses,
   xorg,
+  libx11,
   libmikmod,
 }:
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     libmikmod
     xorg.libXau
     xorg.libXdmcp
-    xorg.libX11
+    libx11
   ];
 
   # regparm attribute is not supported by clang

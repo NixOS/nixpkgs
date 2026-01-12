@@ -5,7 +5,7 @@
   gitUpdater,
   pkg-config,
   autoreconfHook,
-  libX11,
+  libx11,
   pam,
   libgcrypt,
   libXrender,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
   buildInputs = [
-    libX11
+    libx11
     pam
     libgcrypt
     libXrender

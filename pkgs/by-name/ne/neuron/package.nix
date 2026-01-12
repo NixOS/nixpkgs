@@ -4,6 +4,7 @@
   fetchFromGitHub,
   readline,
   xorg,
+  libx11,
   mpi,
   cmake,
   bison,
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = optionals useIv [
-    xorg.libX11.dev
+    libx11.dev
     xorg.libXcomposite.dev
     xorg.libXext.dev
   ];

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXdamage,
   libXrender,
   libXcomposite,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     git
   ];
   buildInputs = [
-    libX11
+    libx11
     libXdamage
     libXrender
     libXcomposite

@@ -8,7 +8,7 @@
   pkg-config,
   makeWrapper,
   zlib,
-  libX11,
+  libx11,
   libXrandr,
   libXinerama,
   libXcursor,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXcursor

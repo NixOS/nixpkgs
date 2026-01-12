@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
-  libX11,
+  libx11,
   libXi,
   libXtst,
   xorgproto,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
-    libX11
+    libx11
     libXi
     libXtst
     xorgproto

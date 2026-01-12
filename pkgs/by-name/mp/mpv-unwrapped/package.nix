@@ -13,7 +13,7 @@
   freetype,
   lcms2,
   libGL,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXext,
   libXpresent,
@@ -217,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
   ]
   ++ lib.optionals x11Support [
-    libX11
+    libx11
     libXext
     libGL
     libXrandr

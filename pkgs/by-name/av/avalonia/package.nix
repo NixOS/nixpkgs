@@ -7,7 +7,7 @@
   lib,
   libice,
   libsm,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -82,7 +82,7 @@ stdenvNoCC.mkDerivation (
         substituteInPlace src/Avalonia.X11/SMLib.cs \
           --replace-fail '"libSM.so.6"' '"${lib.getLib libsm}/lib/libSM.so.6"'
         substituteInPlace src/Avalonia.X11/XLib.cs \
-          --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
+          --replace-fail '"libX11.so.6"' '"${lib.getLib libx11}/lib/libX11.so.6"' \
           --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
           --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
           --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \

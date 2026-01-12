@@ -17,6 +17,7 @@
   unixODBC,
   xkeyboard_config,
   xorg,
+  libx11,
   libsm,
   libice,
   libxcb,
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     zlib
     libGL
     libGLU
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXtst
     xorg.libXi

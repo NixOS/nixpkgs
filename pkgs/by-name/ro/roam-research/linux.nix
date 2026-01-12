@@ -12,7 +12,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -48,7 +48,7 @@ let
     gdk-pixbuf
     glib
     gtk3
-    libX11
+    libx11
     libXcomposite
     libXdamage
     libXext

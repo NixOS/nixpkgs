@@ -8,7 +8,7 @@
   libGLU,
   libjack2,
   liblo,
-  libX11,
+  libx11,
   libXv,
   pkg-config,
   portmidi,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ffmpeg
     libjack2
-    libX11
+    libx11
     xorg.libXext
     xorg.libXpm
     # The following are recommended in the README, but are seemingly

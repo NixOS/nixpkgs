@@ -13,7 +13,7 @@
       libGL
       libsm
       libice
-      xorg.libX11
+      libx11
       xorg.libXau
       xorg.libXdamage
       xorg.libXi

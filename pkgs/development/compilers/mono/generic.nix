@@ -7,7 +7,7 @@
   gettext,
   perl,
   libgdiplus,
-  libX11,
+  libx11,
   ncurses,
   zlib,
   bash,
@@ -48,15 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gettext
     libgdiplus
-    libX11
+    libx11
     ncurses
     zlib
     bash
   ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
-    "--x-libraries=${libX11.out}/lib"
+    "--x-includes=${libx11.dev}/include"
+    "--x-libraries=${libx11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
   ];
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
-    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
+    sed -i -e "s@libX11.so.6@${libx11.out}/lib/libX11.so.6@g"
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with

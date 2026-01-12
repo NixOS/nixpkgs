@@ -21,7 +21,7 @@
   patchelf,
   libXScrnSaver,
   libnotify,
-  libX11,
+  libx11,
   libxcb,
   headless ? false,
 }:
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     gtk3
     libXScrnSaver
     libnotify
-    libX11
+    libx11
     libxcb
     xcbutil
   ];

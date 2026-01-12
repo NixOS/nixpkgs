@@ -7,7 +7,7 @@
   gtk3,
   jdk17,
   lib,
-  libX11,
+  libx11,
   libXrender,
   libXtst,
   makeDesktopItem,
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
+        libx11
         libXrender
         zlib
       ]
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     jdk
-    libX11
+    libx11
     libXrender
     libXtst
     zlib

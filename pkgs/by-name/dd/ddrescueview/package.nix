@@ -9,7 +9,7 @@
   gdk-pixbuf,
   glib,
   gtk2,
-  libX11,
+  libx11,
   pango,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk2
-    libX11
+    libx11
     pango
   ];
 

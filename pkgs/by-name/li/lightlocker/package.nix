@@ -10,7 +10,7 @@
   glib,
   intltool,
   dbus-glib,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXxf86vm,
   libXext,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     dbus-glib
     glib
     gtk3
-    libX11
+    libx11
     libXScrnSaver
     libXext
     libXxf86vm

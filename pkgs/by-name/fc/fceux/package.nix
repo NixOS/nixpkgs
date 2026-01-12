@@ -5,7 +5,7 @@
   cmake,
   fetchFromGitHub,
   ffmpeg,
-  libX11,
+  libx11,
   libXdmcp,
   libxcb,
   lua5_1,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     ffmpeg
-    libX11
+    libx11
     libXdmcp
     libxcb
     lua5_1

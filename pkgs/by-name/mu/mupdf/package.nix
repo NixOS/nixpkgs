@@ -17,7 +17,7 @@
   libjpeg,
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
+  libx11,
   libXext,
   libXi,
   libXrandr,
@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
     gumbo
   ]
   ++ lib.optionals enableX11 [
-    libX11
+    libx11
     libXext
     libXi
     libXrandr

@@ -37,6 +37,7 @@
   systemd,
   xdg-utils,
   xorg,
+  libx11,
   libxshmfence,
   libxkbfile,
   zlib,
@@ -71,7 +72,7 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor

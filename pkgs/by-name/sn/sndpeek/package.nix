@@ -7,7 +7,7 @@
   alsa-lib,
   libgbm,
   libGLU,
-  libX11,
+  libx11,
   libXmu,
   libXext,
   libXi,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libgbm
     libGLU
     libsndfile
-    libX11
+    libx11
     libXmu
     libXext
     libXi

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   openssl,
-  libX11,
+  libx11,
   krb5,
   libXcursor,
   libtasn1,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     openssl
-    libX11
+    libx11
     libXcursor
     libtasn1
     nettle

@@ -10,7 +10,7 @@
   libxcb,
   libxkbcommon,
   autoPatchelfHook,
-  libX11,
+  libx11,
   libXi,
   libXcursor,
   libXrandr,
@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage {
   appendRunpaths = [
     (lib.makeLibraryPath (
       [
-        libX11
+        libx11
         libXi
         libXcursor
         libXrandr

@@ -18,7 +18,7 @@
   libglvnd,
   libjpeg,
   libxkbcommon,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXi,
@@ -114,7 +114,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
           ++ lib.optionals clangStdenv.hostPlatform.isLinux [
             libglvnd
             libxkbcommon
-            libX11
+            libx11
             libXcursor
             libXext
             libXrandr

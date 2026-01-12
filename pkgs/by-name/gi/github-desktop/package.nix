@@ -11,6 +11,7 @@
   nss,
   nspr,
   xorg,
+  libx11,
   libdrm,
   alsa-lib,
   cups,
@@ -54,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = [
     gnome-keyring
     xorg.libXdamage
-    xorg.libX11
+    libx11
     libsecret
     git
     curl

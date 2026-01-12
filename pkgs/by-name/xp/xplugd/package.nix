@@ -2,6 +2,7 @@
   lib,
   stdenv,
   xorg,
+  libx11,
   pkg-config,
   fetchFromGitHub,
   autoreconfHook,
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXi
     xorg.libXrandr
     xorg.libXext

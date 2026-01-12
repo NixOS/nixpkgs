@@ -14,6 +14,7 @@
   libnotify,
   pcre,
   xorg,
+  libx11,
   xosd,
 }:
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation {
     gst_all_1.gstreamer
     libnotify
     pcre
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXi
     xorg.libXtst

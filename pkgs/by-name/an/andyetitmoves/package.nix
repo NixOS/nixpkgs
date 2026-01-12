@@ -9,7 +9,7 @@
   libXft,
   SDL_image,
   zlib,
-  libX11,
+  libx11,
   libpng,
   openal,
   runtimeShell,
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libXft
     SDL_image
     zlib
-    libX11
+    libx11
     libpng
     openal
   ];

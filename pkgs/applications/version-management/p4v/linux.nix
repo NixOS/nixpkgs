@@ -5,7 +5,7 @@
   dbus,
   fontconfig,
   gccForLibs,
-  libX11,
+  libx11,
   libXcomposite,
   libXcursor,
   libXdamage,
@@ -47,7 +47,7 @@ let
       dbus
       fontconfig
       gccForLibs
-      libX11
+      libx11
       libXcomposite
       libXcursor
       libXdamage

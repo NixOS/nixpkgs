@@ -10,7 +10,7 @@
   pam,
   libxslt,
   libxml2,
-  libX11,
+  libx11,
   xorgproto,
   libXext,
   libXcursor,
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     xorgproto
-    libX11
+    libx11
     libXext
     libXcursor
     libcap

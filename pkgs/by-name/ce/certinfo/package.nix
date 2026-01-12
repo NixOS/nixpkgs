@@ -3,7 +3,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -20,7 +20,7 @@ buildGoModule rec {
   # clipboard functionality not working on Darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   vendorHash = null;
 

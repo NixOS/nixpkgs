@@ -10,6 +10,7 @@
   stdenv,
   lib,
   xorg,
+  libx11,
   glib,
   libglvnd,
   glibcLocales,
@@ -49,7 +50,7 @@ let
   versionFile = toString ./packages.nix;
 
   neededLibraries = [
-    xorg.libX11
+    libx11
     xorg.libXtst
     glib
     libglvnd

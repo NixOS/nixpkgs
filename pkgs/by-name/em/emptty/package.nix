@@ -2,7 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  libX11,
+  libx11,
   pam,
   stdenv,
 }:
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   buildInputs = [
     pam
-    libX11
+    libx11
   ];
 
   vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";

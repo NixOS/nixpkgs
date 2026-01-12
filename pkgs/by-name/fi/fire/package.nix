@@ -9,7 +9,7 @@
   cmake,
   fontconfig,
   pkg-config,
-  libX11,
+  libx11,
   libXrandr,
   libXinerama,
   libXext,
@@ -69,7 +69,7 @@ let
   ];
 
   x11Libs = [
-    libX11
+    libx11
     libXrandr
     libXinerama
     libXext

@@ -11,7 +11,7 @@
   libglvnd,
   libffi,
   libpng,
-  libX11,
+  libx11,
   libXau,
   libXdmcp,
   libxcb,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libglvnd
     libpng
-    libX11
+    libx11
     libXau
     libXdmcp
     libxcb

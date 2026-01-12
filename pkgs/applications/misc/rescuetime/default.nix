@@ -7,7 +7,7 @@
   qt5,
   libXtst,
   libXext,
-  libX11,
+  libx11,
   mkDerivation,
   libXScrnSaver,
   writeScript,
@@ -52,7 +52,7 @@ mkDerivation rec {
           qt5.qtbase
           libXtst
           libXext
-          libX11
+          libx11
           libXScrnSaver
         ]
       }" \

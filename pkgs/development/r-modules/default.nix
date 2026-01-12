@@ -603,7 +603,7 @@ let
       mpfr.dev
       pkg-config
     ];
-    imager = [ pkgs.xorg.libX11.dev ];
+    imager = [ pkgs.libx11.dev ];
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [
       fftw.dev
@@ -942,7 +942,7 @@ let
     ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [
-      xorg.libX11
+      libx11
       tk.dev
     ];
     topicmodels = [ pkgs.gsl ];
@@ -1174,7 +1174,7 @@ let
     rgl = with pkgs; [
       libGLU
       libGL
-      xorg.libX11.dev
+      libx11.dev
       freetype.dev
       libpng.dev
     ];

@@ -18,6 +18,7 @@
 
   # Unreal Engine 4 Dependencies
   xorg,
+  libx11,
   libxcb,
 }:
 
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     libGL
 
     # ue4
-    xorg.libX11
+    libx11
     xorg.libXScrnSaver
     xorg.libXau
     xorg.libXcursor

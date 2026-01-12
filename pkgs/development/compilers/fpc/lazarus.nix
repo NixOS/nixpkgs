@@ -12,7 +12,7 @@
   gdk-pixbuf,
   libXi,
   xorgproto,
-  libX11,
+  libx11,
   libXext,
   gdb,
   gnumake,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     glib
     libXi
     xorgproto
-    libX11
+    libx11
     libXext
     pango
     atk

@@ -4,7 +4,7 @@
   stdenv,
   fetchzip,
   ncurses,
-  libX11,
+  libx11,
   libXaw,
   libXt,
   libXext,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     ncurses
-    libX11
+    libx11
     libXaw
     libXt
     libXext

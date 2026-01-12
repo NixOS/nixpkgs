@@ -10,6 +10,7 @@
   SDL2,
   tkrzw,
   xorg,
+  libx11,
 }:
 
 # The following is list of overrides that take two arguments each:
@@ -106,7 +107,7 @@
     }:
     {
       buildInputs = buildInputs ++ [
-        xorg.libX11
+        libx11
         xorg.libXft
         xorg.libXinerama
       ];

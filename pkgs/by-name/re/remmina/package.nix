@@ -13,7 +13,7 @@
   gtk3,
   gettext,
   libxkbfile,
-  libX11,
+  libx11,
   python3,
   freerdp,
   libssh,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gettext
     libxkbfile
-    libX11
+    libx11
     freerdp
     libssh
     libgcrypt
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --set-default SSL_CERT_DIR "/etc/ssl/certs/"
-      --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
+      --prefix LD_LIBRARY_PATH : "${libx11.out}/lib"
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
       ''}

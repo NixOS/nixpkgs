@@ -11,7 +11,7 @@
   stdenv,
   vulkan-headers,
   vulkan-loader,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     vulkan-headers
     vulkan-loader
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [

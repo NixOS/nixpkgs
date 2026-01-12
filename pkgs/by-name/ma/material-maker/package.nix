@@ -5,7 +5,7 @@
   godot3-headless,
   godot3-export-templates,
   libglvnd,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXfixes,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     libXrender
-    libX11
+    libx11
     libXi
     libXfixes
   ];

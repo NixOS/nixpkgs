@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXt,
   withGraphics ? true,
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = lib.optionals withGraphics [
-    libX11
+    libx11
     libXt
   ];
 

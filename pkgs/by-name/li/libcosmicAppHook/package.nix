@@ -16,6 +16,7 @@
   libGL,
   libxkbcommon,
   xorg,
+  libx11,
   libxcb,
   wayland,
   vulkan-loader,
@@ -37,7 +38,7 @@ makeSetupHook {
     [
       libGL
       libxkbcommon
-      xorg.libX11
+      libx11
       xorg.libXcursor
       xorg.libXi
       libxcb

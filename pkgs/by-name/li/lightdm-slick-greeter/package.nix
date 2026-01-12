@@ -13,7 +13,7 @@
   pixman,
   libcanberra,
   libgnomekbd,
-  libX11,
+  libx11,
   libXext,
   linkFarm,
   lightdm-slick-greeter,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     pixman
     libcanberra
     libgnomekbd # needed by XApp.KbdLayoutController
-    libX11
+    libx11
     libXext
   ];
 

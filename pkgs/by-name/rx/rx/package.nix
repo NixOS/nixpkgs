@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   xorg ? null,
+  libx11,
   libGL ? null,
 }:
 
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # glfw-sys dependencies:
-    xorg.libX11
+    libx11
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXcursor

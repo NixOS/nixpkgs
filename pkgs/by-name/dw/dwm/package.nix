@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
+  libx11,
   libXinerama,
   libXft,
   writeText,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isStatic pkg-config;
 
   buildInputs = [
-    libX11
+    libx11
     libXinerama
     libXft
   ]

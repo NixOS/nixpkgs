@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchgit,
-  libX11,
+  libx11,
   libXScrnSaver,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libXScrnSaver
   ];
 

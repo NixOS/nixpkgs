@@ -6,7 +6,7 @@
   pkg-config,
   glfw,
   libvgm,
-  libX11,
+  libx11,
   libXau,
   libXdmcp,
   cppunit,
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     libvgm
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libXau
     libXdmcp
   ];

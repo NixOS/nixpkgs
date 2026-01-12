@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   libXtst,
   xorgproto,
   libXi,
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     libXtst
     xorgproto
     libXi

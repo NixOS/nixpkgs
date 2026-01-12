@@ -6,7 +6,7 @@
   m4,
   libxcb,
   xcbutil,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxcb
     xcbutil
-    libX11
+    libx11
   ];
 
   meta = {

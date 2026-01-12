@@ -8,7 +8,7 @@
   gtest,
   libei,
   libportal,
-  libX11,
+  libx11,
   libxkbfile,
   libXtst,
   libXinerama,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     libei
     libportal
-    libX11
+    libx11
     libxkbfile
     libXinerama
     libXi

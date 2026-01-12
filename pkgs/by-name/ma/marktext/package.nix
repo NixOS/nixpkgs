@@ -8,7 +8,7 @@
   nodejs,
   electron,
   python3,
-  xorg,
+  libx11,
   xorgproto,
   libxkbfile,
   fontconfig,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libsecret
-    xorg.libX11
+    libx11
     libxkbfile
     fontconfig
     xorgproto

@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   xorg,
+  libx11,
   libglvnd,
   pkg-config,
   withGui ? true,
@@ -24,7 +25,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXinerama

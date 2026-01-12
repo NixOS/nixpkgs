@@ -13,6 +13,7 @@
   openexr,
   onetbb,
   xorg,
+  libx11,
   ilmbase,
   llvmPackages,
   unstableGitUpdater,
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
     libpng
     openexr
     onetbb
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXext
     xorg.libXi

@@ -5,6 +5,7 @@
   libjack2,
   libsndfile,
   xorg,
+  libx11,
   libxcb,
   freetype,
   libxkbcommon,
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libxkbcommon
     pango
-    xorg.libX11
+    libx11
     xorg.libXau
     libxcb
     xorg.libXdmcp

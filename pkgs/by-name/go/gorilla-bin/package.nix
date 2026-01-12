@@ -5,7 +5,7 @@
   lib,
   stdenv,
   libXft,
-  libX11,
+  libx11,
   freetype,
   fontconfig,
   libXrender,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
       libPath = lib.makeLibraryPath [
         libXft
-        libX11
+        libx11
         freetype
         fontconfig
         libXrender

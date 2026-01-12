@@ -9,6 +9,7 @@
   pkg-config,
   alsa-lib,
   xorg,
+  libx11,
   freetype,
   libGLU,
   libjack2,
@@ -98,7 +99,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
+    libx11
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXext

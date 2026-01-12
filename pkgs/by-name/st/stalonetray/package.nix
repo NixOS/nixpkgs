@@ -4,7 +4,7 @@
   docbook-xsl-ns,
   fetchFromGitHub,
   lib,
-  libX11,
+  libx11,
   libXpm,
   libxslt,
   stdenv,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook-xsl-ns
     docbook_xml_dtd_44
-    libX11
+    libx11
     libXpm
     libxslt
   ];

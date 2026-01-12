@@ -27,7 +27,7 @@
   libogg,
   libopus,
   libvorbis,
-  libX11,
+  libx11,
   opusfile,
   sdl_gamecontrollerdb,
   makeDesktopItem,
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libpulseaudio
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     (lib.getDev opusfile)

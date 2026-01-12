@@ -8,7 +8,7 @@
   flac,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXext,
   libXinerama,
   libXv,
@@ -59,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     flac
     libGL
     libGLU
-    libX11
-    libX11
+    libx11
+    libx11
     libXext
     libXext
     libXinerama

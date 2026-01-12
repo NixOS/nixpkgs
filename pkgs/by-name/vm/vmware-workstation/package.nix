@@ -20,6 +20,7 @@
   libGL,
   numactl,
   xorg,
+  libx11,
   kmod,
   python3,
   autoPatchelfHook,
@@ -106,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt-legacy
     libGL
     numactl
-    xorg.libX11
+    libx11
     xorg.libXau
     xorg.libXcomposite
     xorg.libXcursor
@@ -229,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
+        --add-needed ${libx11}/lib/libX11.so.6 \
         --add-needed ${xorg.libXi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary

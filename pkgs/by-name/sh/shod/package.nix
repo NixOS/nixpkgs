@@ -4,7 +4,7 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
+  libx11,
   libXft,
   libXpm,
   libXrandr,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fontconfig
-    libX11
+    libx11
     libXft
     libXpm
     libXrandr

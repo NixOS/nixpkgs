@@ -3,7 +3,7 @@
   stdenv,
   fetchgit,
   xorgproto,
-  libX11,
+  libx11,
   libXft,
   customConfig ? null,
   patches ? [ ],
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
+    libx11
     libXft
   ];
 

@@ -8,6 +8,7 @@
   obs-studio,
   qtbase,
   xorg,
+  libx11,
   libxkbcommon,
   libxkbfile,
   sdl3,
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     obs-studio
     qtbase
     sdl3
-    xorg.libX11
+    libx11
     xorg.libXau
     xorg.libXdmcp
     xorg.libXtst

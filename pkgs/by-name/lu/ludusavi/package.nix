@@ -12,7 +12,7 @@
   fontconfig,
   freetype,
   libGL,
-  libX11,
+  libx11,
   libXcursor,
   libXrandr,
   libXi,
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libX11
+    libx11
     libXcursor
     libXrandr
     libXi
@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         bzip2
         fontconfig
         freetype
-        libX11
+        libx11
         libXcursor
         libXrandr
         libXi

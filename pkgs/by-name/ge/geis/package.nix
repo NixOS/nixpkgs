@@ -14,6 +14,7 @@
   grail,
   gtk3,
   xorg,
+  libx11,
   pango,
   xorgserver,
   testers,
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     grail
     gtk3
-    xorg.libX11
+    libx11
     xorg.libXext
     xorg.libXi
     xorg.libXtst

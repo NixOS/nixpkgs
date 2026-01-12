@@ -5,7 +5,7 @@
   fontconfig,
   installShellFiles,
   libGL,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   ncurses,
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libxcb
     libxkbcommon
     wayland

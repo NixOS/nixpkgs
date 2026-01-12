@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   bzip2,
-  libX11,
+  libx11,
   mkDerivation,
   qtbase,
   qttools,
@@ -50,7 +50,7 @@ mkDerivation rec {
     qtmultimedia
     qtscript
     bzip2
-    libX11
+    libx11
     pcre-cpp
     libidn
     lua5

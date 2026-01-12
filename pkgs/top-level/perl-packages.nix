@@ -26579,7 +26579,7 @@ with self;
       pkgs.libGL
       pkgs.libGLU
       pkgs.libglut
-      pkgs.xorg.libX11
+      pkgs.libx11
       pkgs.xorg.libXi
       pkgs.xorg.libXmu
       pkgs.xorg.libXext
@@ -37064,11 +37064,11 @@ with self;
     '';
     makeMakerFlags = [
       "AR=${pkgs.stdenv.cc.targetPrefix}ar"
-      "X11INC=${pkgs.xorg.libX11.dev}/include"
-      "X11LIB=${pkgs.xorg.libX11.out}/lib"
+      "X11INC=${pkgs.libx11.dev}/include"
+      "X11LIB=${pkgs.libx11.out}/lib"
     ];
     buildInputs = [
-      pkgs.xorg.libX11
+      pkgs.libx11
       pkgs.libpng
     ];
     env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -37093,8 +37093,8 @@ with self;
       hash = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
     };
     makeMakerFlags = [
-      "X11INC=${pkgs.xorg.libX11.dev}/include"
-      "X11LIB=${pkgs.xorg.libX11.out}/lib"
+      "X11INC=${pkgs.libx11.dev}/include"
+      "X11LIB=${pkgs.libx11.out}/lib"
     ];
     buildInputs = [ Tk ];
     doCheck = false; # Expects working X11.
@@ -38176,10 +38176,10 @@ with self;
     buildInputs = [
       pkgs.xorg.libXext
       pkgs.xorg.libXScrnSaver
-      pkgs.xorg.libX11
+      pkgs.libx11
     ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
+    patchPhase = "sed -i -e 's,-L/usr/X11R6/lib/,-L${pkgs.libx11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
     meta = {
       description = "Get the idle time of X11";
       license = with lib.licenses; [
@@ -38236,7 +38236,7 @@ with self;
       hash = "sha256-3O7eU3AGEP/xQtydXE5M0DcMiKTysTcfnL9NjYzm9ks=";
     };
     buildInputs = [
-      pkgs.xorg.libX11
+      pkgs.libx11
       pkgs.xorg.libXi
       pkgs.xorg.libXt
       pkgs.xorg.libXtst

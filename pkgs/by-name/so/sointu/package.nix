@@ -11,6 +11,7 @@
   vulkan-headers,
   wayland,
   xorg,
+  libx11,
 }:
 
 buildGoModule rec {
@@ -35,7 +36,7 @@ buildGoModule rec {
     libxkbcommon
     vulkan-headers
     wayland
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXfixes
   ];

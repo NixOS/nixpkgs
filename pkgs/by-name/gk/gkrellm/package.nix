@@ -6,7 +6,7 @@
   pkg-config,
   glib,
   gtk2,
-  libX11,
+  libx11,
   libsm,
   libice,
   which,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     gtk2
-    libX11
+    libx11
     libsm
     libice
   ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo "patching makefiles..."
     for i in Makefile src/Makefile server/Makefile
     do
-      sed -i "$i" -e "s|/usr/X11R6|${libX11.dev}|g ; s|-lICE|-lX11 -lICE|g"
+      sed -i "$i" -e "s|/usr/X11R6|${libx11.dev}|g ; s|-lICE|-lX11 -lICE|g"
     done
   '';
 

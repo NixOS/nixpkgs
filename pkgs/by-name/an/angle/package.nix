@@ -10,6 +10,7 @@
   symlinkJoin,
   lib,
   xorg,
+  libx11,
   libxcb,
   wayland,
   pciutils,
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.isLinux [
       glib
       libxcb.dev
-      xorg.libX11.dev
+      libx11.dev
       xorg.libXext.dev
       xorg.libXi
       wayland.dev

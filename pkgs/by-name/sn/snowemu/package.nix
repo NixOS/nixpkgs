@@ -7,6 +7,7 @@
   SDL2,
   pkg-config,
   xorg,
+  libx11,
   wayland,
   libxkbcommon,
   libGL,
@@ -32,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     SDL2.dev
-    xorg.libX11
+    libx11
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXi

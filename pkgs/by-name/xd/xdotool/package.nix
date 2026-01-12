@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   perl,
   libXtst,
   xorgproto,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perl
   ];
   buildInputs = [
-    libX11
+    libx11
     libXtst
     xorgproto
     libXi

@@ -8,7 +8,7 @@
   gtksourceview3,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libXv,
   libao,
   libpulseaudio,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview3
     libGL
     libGLU
-    libX11
+    libx11
     libXv
     libpulseaudio
     openal

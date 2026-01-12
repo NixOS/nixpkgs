@@ -20,7 +20,7 @@
   gtk3,
   lib,
   libGL,
-  libX11,
+  libx11,
   libXScrnSaver,
   libXcomposite,
   libXcursor,
@@ -95,7 +95,7 @@ let
     glibc
     gnutls
     libGL
-    libX11
+    libx11
     libXScrnSaver
     libXcomposite
     libXcursor

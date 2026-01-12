@@ -9,7 +9,7 @@
   freetype,
   libjack2,
   lv2,
-  libX11,
+  libx11,
   libXcursor,
   libXext,
   libXinerama,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     freetype
     libjack2
-    libX11
+    libx11
     libXcursor
     libXext
     libXinerama

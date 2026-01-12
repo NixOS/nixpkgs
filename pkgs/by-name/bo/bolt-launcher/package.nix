@@ -10,6 +10,7 @@
   cef-binary,
   luajit,
   xorg,
+  libx11,
   libsm,
   libxcb,
   libgbm,
@@ -60,7 +61,7 @@ let
 
     buildInputs = [
       libgbm
-      xorg.libX11
+      libx11
       libxcb
       libarchive
       libz
@@ -114,7 +115,7 @@ buildFHSEnv {
     ++ (with pkgs; [
       libsm
       xorg.libXxf86vm
-      xorg.libX11
+      libx11
       xorg.libXi
       xorg.libXext
       glib

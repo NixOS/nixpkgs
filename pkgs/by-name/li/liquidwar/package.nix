@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   xorgproto,
-  libX11,
+  libx11,
   libXrender,
   gmp,
   libjpeg,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorgproto
-    libX11
+    libx11
     gmp
     guile_2_0
     libjpeg

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   perl,
-  libX11,
+  libx11,
   libXinerama,
   libjpeg,
   libpng,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     perl
-    libX11
+    libx11
     libXinerama
     libjpeg
     libpng

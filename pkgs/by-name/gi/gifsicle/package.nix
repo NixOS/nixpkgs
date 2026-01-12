@@ -4,7 +4,7 @@
   fetchurl,
   xorgproto,
   libXt,
-  libX11,
+  libx11,
   gifview ? false,
   static ? stdenv.hostPlatform.isStatic,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals gifview [
     xorgproto
     libXt
-    libX11
+    libx11
   ];
 
   configureFlags = lib.optional (!gifview) "--disable-gifview";

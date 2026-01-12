@@ -58,7 +58,7 @@ buildFHSEnv {
     pkgs: with pkgs; [
       libice
       libsm
-      xorg.libX11
+      libx11
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXext

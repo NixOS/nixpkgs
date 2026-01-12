@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libXi,
   libXt,
   libXfixes,
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "xbanish";
 
   buildInputs = [
-    libX11
+    libx11
     libXi
     libXt
     libXfixes

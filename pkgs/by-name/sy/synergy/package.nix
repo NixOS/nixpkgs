@@ -15,7 +15,7 @@
   libnotify,
   libice,
   libsm,
-  libX11,
+  libx11,
   libxkbfile,
   libXi,
   libXtst,
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libsepol
     libice
     libsm
-    libX11
+    libx11
     libXi
     libXtst
     libXrandr
