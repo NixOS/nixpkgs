@@ -4070,6 +4070,12 @@
     name = "Builditluc";
     keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
+  bunbun = {
+    email = "bunbun@bunbun.dev";
+    github = "brainlessbitch";
+    githubId = 102400503;
+    name = "Winter Hille";
+  };
   burdzwastaken = {
     email = "burdz@burdz.net";
     github = "burdzwastaken";
