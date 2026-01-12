@@ -52,7 +52,7 @@
   mesa-gl-headers,
   meson,
   gnome-settings-daemon,
-  xorgserver,
+  xorg-server,
   python3,
   wayland-scanner,
   wrapGAppsHook4,
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
-    xorgserver
+    xorg-server
     gobject-introspection
     udevCheckHook
   ];

@@ -22,7 +22,7 @@
   pango,
   perlPackages,
   libxkbcommon,
-  xorgserver,
+  xorg-server,
   xvfb-run,
   xdotool,
   xrandr,
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
-    xorgserver
+    xorg-server
     xvfb-run
     xdotool
     setxkbmap

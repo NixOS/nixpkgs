@@ -32,7 +32,7 @@
   gettext,
   libstrangle,
   fluidsynth,
-  xorgserver,
+  xorg-server,
   xkbcomp,
   setxkbmap,
   util-linux,
@@ -54,7 +54,7 @@ let
     xgamma
     libstrangle
     fluidsynth
-    xorgserver
+    xorg-server
     setxkbmap
     xkbcomp
     # bypass mount suid wrapper which does not work in fhsenv

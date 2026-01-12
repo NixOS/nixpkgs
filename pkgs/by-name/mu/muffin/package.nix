@@ -36,7 +36,7 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
-  xorgserver,
+  xorg-server,
   xwayland,
   zenity,
 }:
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook3
-    xorgserver # for cvt command
+    xorg-server # for cvt command
     gobject-introspection
     wayland-scanner
   ];

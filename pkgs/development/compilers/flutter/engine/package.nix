@@ -19,7 +19,7 @@
   patchelf,
   gn,
   openbox,
-  xorg,
+  xorg-server,
   libxxf86vm,
   libxrender,
   libxrandr,
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.xorgserver
+    xorg-server
     openbox
   ];
 

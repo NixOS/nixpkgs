@@ -37,7 +37,7 @@
   meson,
   nix-update-script,
   validatePkgConfig,
-  xorgserver,
+  xorg-server,
   python3,
   wrapGAppsHook3,
   gi-docgen,
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
     wrapGAppsHook3
     gi-docgen
-    xorgserver
+    xorg-server
   ];
 
   buildInputs = [

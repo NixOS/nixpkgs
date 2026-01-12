@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  xorgserver,
+  xorg-server,
   xorgproto,
   util-macros,
   libgestures,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorgserver
+    xorg-server
     xorgproto
     util-macros
     libgestures

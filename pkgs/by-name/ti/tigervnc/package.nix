@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  xorg-server,
   util-macros,
   tab-window-manager,
   libxtst,
@@ -87,10 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
       export CXXFLAGS="$CXXFLAGS -fpermissive"
       # Build Xvnc
-      tar xf ${xorg.xorgserver.src}
+      tar xf ${xorg-server.src}
       cp -R xorg*/* unix/xserver
       pushd unix/xserver
-      version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
+      version=$(echo ${xorg-server.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
       patch -p1 < "$source_top/unix/xserver$version.patch"
       autoreconf -vfi
       ./configure $configureFlags  --disable-devel-docs --disable-docs \
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxrandr
       libxdamage
     ]
-    ++ xorg.xorgserver.buildInputs
+    ++ xorg-server.buildInputs
   );
 
   nativeBuildInputs = [
@@ -188,10 +188,10 @@ stdenv.mkDerivation (finalAttrs: {
       util-macros
       zlib
     ]
-    ++ xorg.xorgserver.nativeBuildInputs
+    ++ xorg-server.nativeBuildInputs
   );
 
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg.xorgserver.propagatedBuildInputs;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg-server.propagatedBuildInputs;
 
   passthru.tests.tigervnc = nixosTests.tigervnc;
 

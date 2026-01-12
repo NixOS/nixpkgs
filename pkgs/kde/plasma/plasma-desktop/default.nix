@@ -13,7 +13,7 @@
   breeze,
   SDL2,
   xkeyboard_config,
-  xorg,
+  xorg-server,
   xf86-input-libinput,
   xf86-input-evdev,
   libxft,
@@ -63,7 +63,7 @@ mkKdeDerivation {
     libxft
     xf86-input-libinput
     xf86-input-evdev
-    xorg.xorgserver
+    xorg-server
 
     ibus
   ];

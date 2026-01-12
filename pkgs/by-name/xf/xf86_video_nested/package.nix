@@ -9,7 +9,7 @@
   pixman,
   pkg-config,
   util-macros,
-  xorgserver,
+  xorg-server,
 }:
 
 stdenv.mkDerivation {
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     libxext
     pixman
     util-macros
-    xorgserver
+    xorg-server
   ];
 
   hardeningDisable = [ "fortify" ];

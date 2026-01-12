@@ -582,7 +582,7 @@ builtins.intersectAttrs super {
       testDepends =
         drv.testDepends or [ ]
         ++ map lib.getBin [
-          pkgs.xorg.xorgserver
+          pkgs.xorg-server
           pkgs.xprop
           pkgs.xrandr
           pkgs.xdummy

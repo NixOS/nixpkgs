@@ -16,7 +16,7 @@
   udev,
   udevCheckHook,
   util-macros,
-  xorgserver,
+  xorg-server,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     util-macros
     pixman
     xorgproto
-    xorgserver
+    xorg-server
   ];
 
   doInstallCheck = true;

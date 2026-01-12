@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  xorg,
+  xorg-server,
   libxi,
   libxext,
   libx11,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     stdenv
   ]
   ++ lib.optionals enableX11 [
-    xorg.xorgserver
+    xorg-server
     libx11
     libxext
     libxi

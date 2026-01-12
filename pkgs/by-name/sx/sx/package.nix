@@ -5,7 +5,7 @@
   makeDesktopItem,
   patsh,
   coreutils,
-  xorg,
+  xorg-server,
   xauth,
   nixosTests,
 }:
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = [
     coreutils # needed for cross
     xauth
-    xorg.xorgserver
+    xorg-server
   ];
 
   postInstall = ''

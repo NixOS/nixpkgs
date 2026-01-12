@@ -29,7 +29,7 @@
       description = "Terminal Server";
 
       path = [
-        pkgs.xorg.xorgserver.out
+        pkgs.xorg-server.out
         pkgs.gawk
         pkgs.which
         pkgs.openssl

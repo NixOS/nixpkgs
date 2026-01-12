@@ -5,7 +5,7 @@
   makeFontsConf,
   gnused,
   writeScript,
-  xorg,
+  xorg-server,
   tab-window-manager,
   libxpm,
   font-util,
@@ -218,7 +218,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "xquartz";
-  version = lib.getVersion xorg.xorgserver;
+  version = lib.getVersion xorg-server;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -229,7 +229,7 @@ stdenv.mkDerivation {
   installPhase = ''
     cp -rT ${xinit} $out
     chmod -R u+w $out
-    cp -rT ${xorg.xorgserver} $out
+    cp -rT ${xorg-server} $out
     chmod -R u+w $out
 
     cp ${installer} $out/bin/xquartz-install
@@ -241,9 +241,9 @@ stdenv.mkDerivation {
 
     substituteInPlace $out/bin/startx \
       --replace "bindir=${xinit}/bin" "bindir=$out/bin" \
-      --replace 'defaultserver=${xorg.xorgserver}/bin/X' "defaultserver=$out/bin/Xquartz" \
+      --replace 'defaultserver=${xorg-server}/bin/X' "defaultserver=$out/bin/Xquartz" \
       --replace "${xinit}" "$out" \
-      --replace "${xorg.xorgserver}" "$out" \
+      --replace "${xorg-server}" "$out" \
       --replace "eval xinit" "eval $out/bin/xinit" \
       --replace "sysclientrc=/etc/X11/xinit/xinitrc" "sysclientrc=$out/etc/X11/xinit/xinitrc"
 

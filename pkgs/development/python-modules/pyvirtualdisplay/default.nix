@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   replaceVars,
-  xorg,
+  xorg-server,
   xvfb,
   xmessage,
   xdpyinfo,
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
     (vncdo.overridePythonAttrs { doCheck = false; })
-    xorg.xorgserver
+    xorg-server
     xmessage
     xvfb
   ];
