@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       toastal
       mirror230469
+      SuperSandro2000
     ];
-    teams = with lib.teams; [ c3d2 ];
   };
 })

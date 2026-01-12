@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
+    (lib.mesonBool "werror" false)
     (lib.mesonOption "programmer" "auto")
     (lib.mesonEnable "man-pages" true)
     (lib.mesonEnable "tests" (!stdenv.buildPlatform.isDarwin))

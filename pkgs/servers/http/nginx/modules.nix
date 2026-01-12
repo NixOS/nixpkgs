@@ -1065,7 +1065,10 @@ let
         homepage = "https://github.com/evanmiller/mod_zip";
         license = with lib.licenses; [ bsd3 ];
         broken = stdenv.hostPlatform.isDarwin;
-        teams = [ lib.teams.apm ];
+        maintainers = with lib.maintainers; [
+          DutchGerman
+          friedow
+        ];
       };
     };
 

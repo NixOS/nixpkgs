@@ -114,6 +114,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
     mainProgram = "weasyprint";
-    teams = [ lib.teams.apm ];
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
 })
