@@ -18,7 +18,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
   version = "5.13.2";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ub/B3IO7f5Ah2XNTJ90Y6whP+PIDCL7ucHGd5sWwJRk=";
   };
 
@@ -71,9 +71,9 @@ buildPythonPackage rec {
   meta = {
     description = "Parser for SPF and DMARC DNS records";
     homepage = "https://github.com/domainaware/checkdmarc";
-    changelog = "https://github.com/domainaware/checkdmarc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/domainaware/checkdmarc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "checkdmarc";
   };
-}
+})
