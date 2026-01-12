@@ -29,7 +29,7 @@
   libx11,
   xorgserver,
   kmod,
-  xf86videonouveau,
+  xf86-video-nouveau,
   nvidia_x11 ? linuxPackages.nvidia_x11,
   linuxPackages,
   pkgsi686Linux,
@@ -70,7 +70,7 @@ let
 
   xmodules = lib.concatStringsSep "," (
     map (x: "${x.out or x}/lib/xorg/modules") (
-      [ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau
+      [ xorgserver ] ++ lib.optional (!useNvidia) xf86-video-nouveau
     )
   );
 
