@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  font-util,
   xsetroot,
   xorgproto,
   xkbcomp,
@@ -169,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux (
     [
-      xorg.fontutil
+      font-util
       libtool
       makeWrapper
       xorg.utilmacros

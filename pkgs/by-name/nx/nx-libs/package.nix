@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  font-util,
   xkbcomp,
   pixman,
   imake,
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo
     libpng
     libxml2
-    xorg.fontutil
+    font-util
     xorg.libXcomposite
     xorg.libXdamage
     xorg.libXdmcp

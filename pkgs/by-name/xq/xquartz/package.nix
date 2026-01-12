@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  font-util,
   font-misc-misc,
   font-cursor-misc,
   font-bh-lucidatypewriter-75dpi,
@@ -165,7 +166,7 @@ let
     xlsfonts
     xfontsel
     bdftopcf
-    xorg.fontutil
+    font-util
     iceauth
     xorg.libXpm
     lndir

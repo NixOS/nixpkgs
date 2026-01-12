@@ -7,7 +7,7 @@
   dbus,
   dri-pkgconfig-stub,
   libepoxy,
-  fontutil,
+  font-util,
   libGL,
   libX11,
   libXau,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalPackages: rec {
     dbus
     dri-pkgconfig-stub
     libepoxy
-    fontutil
+    font-util
     libGL
     libX11
     libXau

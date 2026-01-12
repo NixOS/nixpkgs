@@ -4,7 +4,7 @@
   bash,
   libepoxy,
   fetchurl,
-  fontutil,
+  font-util,
   lib,
   libdecor,
   libgbm,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     libgbm
     libepoxy
     libei
-    fontutil
+    font-util
     libGL
     libGLU
     libX11

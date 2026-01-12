@@ -11,7 +11,7 @@
   # deps
   dbus,
   dri-pkgconfig-stub,
-  fontutil,
+  font-util,
   libdrm,
   libepoxy,
   libgbm,
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fontutil
+    font-util
     libx11
     libxau
     libxcb
