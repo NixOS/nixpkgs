@@ -21,6 +21,7 @@
   writeShellScript,
   xkeyboard_config,
   xorg,
+  libxcb-image,
   libxtst,
   libxrender,
   libxrandr,
@@ -80,7 +81,7 @@ let
       libxrender
       libxtst
       libxshmfence
-      xorg.xcbutilimage
+      libxcb-image
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.xcbutilwm

@@ -7,7 +7,7 @@
   installShellFiles,
   pixman,
   xcbutil,
-  xcbutilimage,
+  libxcb-image,
   libseccomp,
   libjpeg,
   libpng,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     pixman
-    xcbutilimage
+    libxcb-image
     xcbutil
     libseccomp
     libjpeg

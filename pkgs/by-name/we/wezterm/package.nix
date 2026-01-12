@@ -20,7 +20,7 @@
   wayland,
   wezterm,
   xcbutil,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilwm,
   zlib,
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     wayland
     xcbutil
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xcbutilwm # contains xcb-ewmh among others
   ];

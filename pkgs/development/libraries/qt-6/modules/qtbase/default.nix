@@ -57,7 +57,7 @@
   sqlite,
   udev,
   xcbutil,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     xcbutil
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm

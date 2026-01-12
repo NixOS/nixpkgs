@@ -8,7 +8,7 @@
   libpng,
   xcbutil,
   libxcursor,
-  xcbutilimage,
+  libxcb-image,
   libxkbcommon,
   xcb-util-cursor,
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     xcb-util-cursor
     xcbutil
-    xcbutilimage
+    libxcb-image
   ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

@@ -16,6 +16,7 @@
   unzip,
   writeShellApplication,
   xorg,
+  libxcb-image,
   libxcb,
   zlib,
   metaCommon ? { },
@@ -46,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libGL
     libxkbcommon
     libxcb
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm

@@ -11,6 +11,7 @@
   alsa-lib,
   pulseaudio,
   xorg,
+  libxcb-image,
   libxtst,
   libxcb,
   gtk3,
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     xorg.xcbutil
     libxtst
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     libsForQt5.qtbase

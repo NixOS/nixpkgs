@@ -18,6 +18,7 @@
   openssl,
   stdenv,
   xorg,
+  libxcb-image,
   libxcb-cursor,
   libxrender,
   libxi,
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     libxext
     libxi
     libxrender
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm

@@ -207,7 +207,7 @@ let
       pkgs.libxcb
       pkgs.libxshmfence
       pkgs.libxcb-cursor
-      pkgs.xorg.xcbutilimage
+      pkgs.libxcb-image
       pkgs.xorg.xcbutilkeysyms
       pkgs.xorg.xcbutilrenderutil
       pkgs.xorg.xcbutilwm

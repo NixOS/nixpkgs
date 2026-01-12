@@ -13,6 +13,7 @@
   qttools,
   qtx11extras,
   xorg,
+  libxcb-image,
   libxdamage,
   libxcursor,
   libxcb,
@@ -49,7 +50,7 @@ mkDerivation rec {
     libxcursor
     libxdamage
     libxcb
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilwm
     xscreensaver
   ];

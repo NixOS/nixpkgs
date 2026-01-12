@@ -12,7 +12,7 @@
   stdenv,
   unzip,
   wayland,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     stdenv.cc.cc.lib
     wayland
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm

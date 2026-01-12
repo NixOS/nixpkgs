@@ -29,7 +29,7 @@
   libdrm,
   libxkbcommon,
   xcbutilwm,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilrenderutil,
   libgbm,
@@ -85,7 +85,7 @@ let
     pango
     zlib
     xcbutilwm
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xcbutilrenderutil
     libx11

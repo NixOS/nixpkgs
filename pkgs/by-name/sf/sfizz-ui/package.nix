@@ -5,6 +5,7 @@
   libjack2,
   libsndfile,
   xorg,
+  libxcb-image,
   libxcb-cursor,
   libxdmcp,
   libxau,
@@ -56,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     xorg.xcbutil
     libxcb-cursor
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     zenity

@@ -56,6 +56,7 @@
   wavpack,
   wayland,
   xorg,
+  libxcb-image,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -161,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxscrnsaver
     libxtst
     libxcb
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm

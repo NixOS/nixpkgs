@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libxcb-image,
   libxscrnsaver,
   libxrender,
   libxi,
@@ -72,7 +73,7 @@ let
     libuuid
     cups
     xorg.xcbutilwm # libxcb-icccm.so.4
-    xorg.xcbutilimage # libxcb-image.so.0
+    libxcb-image # libxcb-image.so.0
     xorg.xcbutilkeysyms # libxcb-keysyms.so.1
     xorg.xcbutilrenderutil # libxcb-render-util.so.0
     xz

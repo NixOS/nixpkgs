@@ -28,7 +28,7 @@
   wayland-protocols,
   wayland-scanner,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxcb-image,
   libx11,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableX11 [
     libx11
-    xorg.xcbutilimage
+    libxcb-image
   ]
   # Required by opencv when cudaSupport is enabled
   ++ lib.optionals cudaSupport [

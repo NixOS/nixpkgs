@@ -8,7 +8,7 @@
   libxext,
   sdbus-cpp,
   udev,
-  xcbutilimage,
+  libxcb-image,
   coreutils,
   cli11,
   ddcutil,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     sdbus-cpp
     spdlog
     udev
-    xcbutilimage
+    libxcb-image
   ];
 
   cmakeFlags = [

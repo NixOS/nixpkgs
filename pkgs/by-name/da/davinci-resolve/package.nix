@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxcb-image,
   libxxf86vm,
   libxt,
   libxtst,
@@ -254,7 +255,7 @@ buildFHSEnv {
       libxxf86vm
       libxcb
       xorg.xcbutil
-      xorg.xcbutilimage
+      libxcb-image
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.xcbutilwm

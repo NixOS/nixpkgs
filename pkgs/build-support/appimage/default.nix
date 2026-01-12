@@ -192,7 +192,7 @@ rec {
         libxcb
         xorg.xcbutil
         xorg.xcbutilwm
-        xorg.xcbutilimage
+        libxcb-image
         xorg.xcbutilkeysyms
         xorg.xcbutilrenderutil
         libGLU

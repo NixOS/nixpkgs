@@ -23,6 +23,7 @@
   systemd,
   xcb-util-cursor,
   xorg,
+  libxcb-image,
   libx11,
 }:
 
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     xcb-util-cursor
     libx11
     xorg.xcbutilwm
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
   ];

@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libxcb-image,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -105,7 +106,7 @@ let
       libxrender
       libxtst
       libxcb
-      xorg.xcbutilimage
+      libxcb-image
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.xcbutilwm

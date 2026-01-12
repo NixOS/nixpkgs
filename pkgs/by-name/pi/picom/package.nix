@@ -25,7 +25,7 @@
   stdenv,
   uthash,
   xcbutil,
-  xcbutilimage,
+  libxcb-image,
   xcbutilrenderutil,
   xorgproto,
   xwininfo,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     uthash
     xcbutil
-    xcbutilimage
+    libxcb-image
     xcbutilrenderutil
     xorgproto
   ];

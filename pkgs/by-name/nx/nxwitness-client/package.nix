@@ -17,7 +17,7 @@
   openal,
   qt6Packages,
   wayland,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
@@ -45,7 +45,7 @@ let
     qt6Packages.qtwebsockets
     qt6Packages.qtwebview
     wayland
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm

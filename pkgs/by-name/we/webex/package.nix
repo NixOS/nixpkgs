@@ -45,7 +45,7 @@
   libxtst,
   libxshmfence,
   xcbutil,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     libxtst
     libxshmfence
     xcbutil
-    xcbutilimage
+    libxcb-image
     libxscrnsaver
     xcbutilkeysyms
     xcbutilrenderutil

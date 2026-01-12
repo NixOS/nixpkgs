@@ -21,7 +21,7 @@
   openssl,
   pixman,
   xcbutil,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pixman
     xcbutil
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm

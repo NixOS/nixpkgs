@@ -42,7 +42,7 @@
   pciutils,
   tre,
   unixODBC,
-  xcbutilimage,
+  libxcb-image,
   xcbutilkeysyms,
   xkeyboard_config,
   libxtst,
@@ -127,7 +127,7 @@ stdenv.mkDerivation {
     pciutils
     tre
     unixODBC
-    xcbutilimage
+    libxcb-image
     xcbutilkeysyms
     xkeyboard_config
     libice

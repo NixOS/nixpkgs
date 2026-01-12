@@ -11,6 +11,7 @@
   pkg-config,
   gdk-pixbuf,
   xorg,
+  libxcb-image,
   libxdmcp,
   libxau,
   libxshmfence,
@@ -131,7 +132,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxshmfence
     xorg.xcbutil
-    xorg.xcbutilimage
+    libxcb-image
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm

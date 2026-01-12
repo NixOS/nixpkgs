@@ -6,7 +6,7 @@
   pkg-config,
   libxcb,
   xcbutilkeysyms,
-  xcbutilimage,
+  libxcb-image,
   pam,
   libx11,
   libev,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxcb
     xcbutilkeysyms
-    xcbutilimage
+    libxcb-image
     pam
     libx11
     libev
