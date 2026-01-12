@@ -137,7 +137,7 @@ let
       with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
         retry(check_for_color(launcherColor))
       with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
-        retry(fn=check_for_color_continued_presence(launcherColor), timeout=30)
+        retry(fn=check_for_color_continued_presence(launcherColor), timeout_seconds=30)
 
       machine.screenshot("lomiri_launched")
 
