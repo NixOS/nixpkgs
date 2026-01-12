@@ -5,8 +5,8 @@
         "lts": false
     },
     "6.1": {
-        "version": "6.1.159",
-        "hash": "sha256:17ib6ila2s8rclqpfxlkk1g72azj2r46k2x1q3n2j24qjfz7w80z",
+        "version": "6.1.160",
+        "hash": "sha256:15l4s87vyv4rnf5yagl6x7kz4yrlalh191ssxwbvwn3m8fl4d18f",
         "lts": true
     },
     "5.15": {
