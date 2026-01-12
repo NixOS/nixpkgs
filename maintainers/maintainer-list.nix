@@ -20118,6 +20118,13 @@
     githubId = 686076;
     name = "Vitalii Voloshyn";
   };
+  panakotta00 = {
+    name = "Panakotta00";
+    github = "Panakotta00";
+    githubId = 16022267;
+    email = "panakotta00@gmail.com";
+    keys = [ { fingerprint = "ABF8 D539 0F8C F623 8F49  7338 BA6C E8AC 4B73 53B9"; } ];
+  };
   pancaek = {
     github = "pancaek";
     githubId = 20342389;
