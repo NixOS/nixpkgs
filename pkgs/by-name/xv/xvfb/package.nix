@@ -20,7 +20,7 @@
   mesa-gl-headers,
   openssl,
   pixman,
-  xcbutil,
+  libxcb-util,
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     mesa-gl-headers
     openssl
     pixman
-    xcbutil
+    libxcb-util
     libxcb-image
     libxcb-keysyms
     libxcb-render-util

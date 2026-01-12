@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxcb-util,
   libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
@@ -257,7 +258,7 @@ buildFHSEnv {
       libxtst
       libxxf86vm
       libxcb
-      xorg.xcbutil
+      libxcb-util
       libxcb-image
       libxcb-keysyms
       libxcb-render-util

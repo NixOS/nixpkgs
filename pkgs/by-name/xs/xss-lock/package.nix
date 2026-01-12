@@ -9,7 +9,7 @@
   libpthread-stubs,
   libxau,
   libxdmcp,
-  xcbutil,
+  libxcb-util,
   nixosTests,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     libpthread-stubs
     libxau
     libxdmcp
-    xcbutil
+    libxcb-util
   ];
 
   passthru.tests = { inherit (nixosTests) xss-lock; };

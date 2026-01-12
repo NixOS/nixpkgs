@@ -4,7 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  xorg,
+  libxcb-util,
   util-macros,
   libxcb,
   gtk2,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libxcb
-    xorg.xcbutil
+    libxcb-util
     util-macros
     gtk2
     spice

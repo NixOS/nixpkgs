@@ -9,7 +9,7 @@
   libx11,
   pkg-config,
   upx,
-  xcbutil,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libx11
-    xcbutil
+    libxcb-util
   ];
 
   nativeBuildInputs = [

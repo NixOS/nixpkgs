@@ -43,7 +43,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutil,
+  libxcb-util,
   libxcb-wm,
   xz,
   # Boolean flags
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     wayland
     wayland-protocols
-    xcbutil
+    libxcb-util
     libxcb-wm
     xz
   ]

@@ -29,7 +29,7 @@
   libthai,
   libdatrie,
   libxcb-keysyms,
-  xcbutil,
+  libxcb-util,
   libxcb-wm,
   xcb-imdkit,
   libxkbfile,
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     libsepol
     libxdmcp
     libxkbcommon
-    xcbutil
+    libxcb-util
     libxcb-wm
     libxcb-keysyms
     xcb-imdkit

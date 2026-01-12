@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libjack2,
   libsndfile,
-  xorg,
+  libxcb-util,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxau
     libxcb
     libxdmcp
-    xorg.xcbutil
+    libxcb-util
     libxcb-cursor
     libxcb-image
     libxcb-keysyms

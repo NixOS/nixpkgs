@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libxcb,
   libxrandr,
-  xcbutil,
+  libxcb-util,
   libxcb-keysyms,
   libxcb-wm,
   xcb-proto,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxcb
     libxrandr
-    xcbutil
+    libxcb-util
     libxcb-keysyms
     libxcb-wm
     xcb-proto

@@ -30,7 +30,7 @@
   pixman,
   pkg-config,
   systemd,
-  xcbutil,
+  libxcb-util,
   libxcb-wm,
   libxcb-image,
   xkbcomp,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalPackages: rec {
     openssl
     pixman
     systemd
-    xcbutil
+    libxcb-util
     libxcb-wm
     libxcb-image
     xkbcomp

@@ -26,7 +26,7 @@
   wrapGAppsHook3,
   xcb-imdkit,
   xdg-utils,
-  xorg,
+  libxcb-util,
   libxcb-wm,
   libxtst,
   libxcursor,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
-    xorg.xcbutil
+    libxcb-util
     libxcb-wm
     zlib
   ];

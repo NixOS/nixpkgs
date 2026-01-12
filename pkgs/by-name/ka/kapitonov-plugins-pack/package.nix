@@ -13,7 +13,7 @@
   libxcb,
   lv2,
   libxcb-wm,
-  xorg,
+  libxcb-util,
   zita-convolver,
   zita-resampler,
 }:
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libxcb
     lv2
     libxcb-wm
-    xorg.xcbutil
+    libxcb-util
     zita-convolver
     zita-resampler
   ];

@@ -22,7 +22,7 @@
   libxml2_13,
   ncurses,
   wayland,
-  xcbutil,
+  libxcb-util,
   zlib,
   zstd,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     libxml2_13
     ncurses
     wayland
-    xcbutil
+    libxcb-util
     zlib
     zstd
   ];

@@ -10,7 +10,7 @@
   imagemagick,
   pkg-config,
   gdk-pixbuf,
-  xorg,
+  libxcb-util,
   libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     libxdmcp
     libxcb
     libxshmfence
-    xorg.xcbutil
+    libxcb-util
     libxcb-image
     libxcb-keysyms
     libxcb-render-util

@@ -190,7 +190,7 @@ rec {
         libxt
         libxmu
         libxcb
-        xorg.xcbutil
+        libxcb-util
         libxcb-wm
         libxcb-image
         libxcb-keysyms

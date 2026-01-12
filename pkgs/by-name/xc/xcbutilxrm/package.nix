@@ -5,7 +5,7 @@
   pkg-config,
   m4,
   libxcb,
-  xcbutil,
+  libxcb-util,
   libx11,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   buildInputs = [
     libxcb
-    xcbutil
+    libxcb-util
     libx11
   ];
 

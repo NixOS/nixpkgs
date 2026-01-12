@@ -56,7 +56,7 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
+  libxcb-util,
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     libxrender
     libxcb
     libxkbcommon
-    xcbutil
+    libxcb-util
     libxcb-image
     libxcb-keysyms
     libxcb-render-util

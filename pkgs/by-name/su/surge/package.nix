@@ -12,7 +12,7 @@
   libsndfile,
   libxcb,
   libxkbcommon,
-  xcbutil,
+  libxcb-util,
   libxcb-cursor,
   libxcb-keysyms,
   zenity,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxcb
     libxkbcommon
-    xcbutil
+    libxcb-util
     libxcb-cursor
     libxcb-keysyms
     zenity

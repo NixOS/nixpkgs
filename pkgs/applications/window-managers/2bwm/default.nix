@@ -7,7 +7,7 @@
   libxcb-keysyms,
   libxcb-wm,
   libx11,
-  xcbutil,
+  libxcb-util,
   xcbutilxrm,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libxcb-keysyms
     libxcb-wm
     libx11
-    xcbutil
+    libxcb-util
     xcbutilxrm
   ];
 

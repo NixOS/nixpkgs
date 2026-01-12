@@ -15,7 +15,7 @@
   lib,
   stdenv,
   xcb-proto,
-  xcbutil,
+  libxcb-util,
   libxcb-cursor,
   libxcb-image,
   libxcb-render-util,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
     python3
     xcb-proto
-    xcbutil
+    libxcb-util
     libxcb-cursor
     libxcb-image
     libxcb-render-util

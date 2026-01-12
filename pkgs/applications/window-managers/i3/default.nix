@@ -9,7 +9,7 @@
   installShellFiles,
   libxcb,
   libxcb-keysyms,
-  xcbutil,
+  libxcb-util,
   libxcb-wm,
   xcbutilxrm,
   libstartup_notification,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxcb
     libxcb-keysyms
-    xcbutil
+    libxcb-util
     libxcb-wm
     xcbutilxrm
     libxkbcommon

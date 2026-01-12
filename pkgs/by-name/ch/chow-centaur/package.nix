@@ -8,7 +8,7 @@
   libxkbcommon,
   libxcb-cursor,
   libxcb-keysyms,
-  xcbutil,
+  libxcb-util,
   libxrandr,
   libxinerama,
   libxcursor,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxcb-cursor
     libxcb-keysyms
-    xcbutil
+    libxcb-util
     libxrandr
     libxinerama
     libxcursor

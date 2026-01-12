@@ -10,7 +10,7 @@
   glib,
   alsa-lib,
   pulseaudio,
-  xorg,
+  libxcb-util,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xorg.xcbutil
+    libxcb-util
     libxtst
     libxcb-image
     libxcb-keysyms

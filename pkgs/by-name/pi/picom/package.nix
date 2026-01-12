@@ -24,7 +24,7 @@
   pkg-config,
   stdenv,
   uthash,
-  xcbutil,
+  libxcb-util,
   libxcb-image,
   libxcb-render-util,
   xorgproto,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     pixman
     uthash
-    xcbutil
+    libxcb-util
     libxcb-image
     libxcb-render-util
     xorgproto

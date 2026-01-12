@@ -7,7 +7,7 @@
   freetype,
   pkg-config,
   gettext,
-  xcbutil,
+  libxcb-util,
   gcc,
   intltool,
   file,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fox
     gettext
-    xcbutil
+    libxcb-util
     gcc
     file
     libpng

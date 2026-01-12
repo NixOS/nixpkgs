@@ -38270,7 +38270,7 @@ with self;
     buildInputs = [
       pkgs.libxcb
       pkgs.xcb-proto
-      pkgs.xorg.xcbutil
+      pkgs.libxcb-util
       pkgs.libxcb-wm
       ExtUtilsDepends
       ExtUtilsPkgConfig

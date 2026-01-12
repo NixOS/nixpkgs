@@ -21,7 +21,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutil,
+  libxcb-util,
   libxcb-cursor,
   libxcb-errors,
   libxcb-wm,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals x11Support [
-    xcbutil
+    libxcb-util
     libxcb-cursor
     libxcb-errors
     libxcb-wm

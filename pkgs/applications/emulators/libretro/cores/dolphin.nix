@@ -13,7 +13,7 @@
   pkg-config,
   sfml,
   udev,
-  xorg,
+  libxcb-util,
   libxxf86vm,
   libxrandr,
   libxi,
@@ -58,7 +58,7 @@ mkLibretroCore {
     libxxf86vm
     libpthread-stubs
     libxcb
-    xorg.xcbutil
+    libxcb-util
   ];
 
   makefile = "Makefile";

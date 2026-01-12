@@ -16,7 +16,7 @@
   libxcb-cursor,
   libxcb-keysyms,
   libxcb-wm,
-  xcbutil,
+  libxcb-util,
   xmodmap,
 }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-cursor
     libxcb-keysyms
     libxcb-wm
-    xcbutil
+    libxcb-util
   ];
 
   # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list
