@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  bdftopcf,
   font-encodings,
   mkfontscale,
   font-alias,
@@ -116,7 +117,7 @@ let
     # xorg
     xlsfonts
     xfontsel
-    xorg.bdftopcf
+    bdftopcf
     xorg.fontutil
     xorg.iceauth
     xorg.libXpm
