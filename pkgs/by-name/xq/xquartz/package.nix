@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xhost,
   xgamma,
   xfs,
   xeyes,
@@ -163,7 +164,7 @@ let
     xeyes
     xfs
     xgamma
-    xorg.xhost
+    xhost
     xorg.xinput
     xorg.xkbcomp
     xorg.xkbevd

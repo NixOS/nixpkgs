@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  xorg,
+  xhost,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exegol";
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
       supabase
     ]
     ++ pyjwt.optional-dependencies.crypto
-    ++ [ xorg.xhost ]
+    ++ [ xhost ]
     ++ lib.optional (!stdenv.hostPlatform.isLinux) tzlocal;
 
   doCheck = true;

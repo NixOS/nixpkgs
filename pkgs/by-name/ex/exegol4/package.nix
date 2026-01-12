@@ -2,7 +2,7 @@
   fetchPypi,
   lib,
   python3Packages,
-  xorg,
+  xhost,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exegol";
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
       argcomplete
       tzlocal
     ]
-    ++ [ xorg.xhost ];
+    ++ [ xhost ];
 
   doCheck = true;
 

@@ -5,6 +5,7 @@
   makeWrapper,
   nx-libs,
   xorg,
+  xhost,
   xdpyinfo,
   xauth,
   libxcvt,
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
           iproute2
           nx-libs
           xdpyinfo
-          xorg.xhost
+          xhost
           xorg.xinit
           python3
           jq
