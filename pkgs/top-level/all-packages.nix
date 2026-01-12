@@ -2584,8 +2584,6 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
-  gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
-
   inherit (callPackages ../tools/filesystems/garage { })
     garage
     garage_1
