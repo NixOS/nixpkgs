@@ -8,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "mlx";
-  version = "0.10";
+  version = "0.11";
 
   minimalOCamlVersion = "4.14";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "ocaml-mlx";
     repo = "mlx";
     rev = version;
-    hash = "sha256-g2v6U4lubYIVKUkU0j+OwtPxK9tKvleuX+vA4ljJ1bA=";
+    hash = "sha256-6cz/nbFGSxE1minncJujZi14TmM8ctDygJP4rmewYgo=";
   };
 
   buildInputs = [
