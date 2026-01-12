@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xev,
   xdriinfo,
   xdpyinfo,
   xdm,
@@ -155,7 +156,7 @@ let
     xdm
     xdpyinfo
     xdriinfo
-    xorg.xev
+    xev
     xorg.xeyes
     xorg.xfs
     xorg.xgamma
