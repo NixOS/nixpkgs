@@ -23,7 +23,7 @@
   makeWrapper,
   pam,
   perlPackages,
-  xorg,
+  appres,
   pkg-config,
   systemd,
   forceInstallAllHacks ? true,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeBinPath [
             coreutils
             perlPackages.perl
-            xorg.appres
+            appres
           ]
         }" \
         --prefix PERL5LIB ':' $PERL5LIB
