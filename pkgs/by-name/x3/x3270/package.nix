@@ -15,7 +15,7 @@
   font-adobe-utopia-100dpi,
   font-bh-100dpi,
   font-bh-lucidatypewriter-100dpi,
-  fontbitstream100dpi,
+  font-bitstream-100dpi,
   tcl,
   ncurses,
   openssl,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     font-adobe-utopia-100dpi
     font-bh-100dpi
     font-bh-lucidatypewriter-100dpi
-    fontbitstream100dpi
+    font-bitstream-100dpi
     tcl
     ncurses
     expat
