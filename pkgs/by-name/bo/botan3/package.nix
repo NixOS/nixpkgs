@@ -2,7 +2,7 @@
   lib,
   stdenv,
   libcxxStdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkgsStatic,
   runCommandLocal,
   binutils,
@@ -73,9 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     "selftests"
   ];
 
-  src = fetchurl {
-    url = "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/eGUI29tVDTxNuoKBif2zJ0mr4uW6fHhx9jILNkPTyQ=";
+  src = fetchFromGitHub {
+    owner = "randombit";
+    repo = "botan";
+    tag = finalAttrs.version;
+    hash = "sha256-E4kKk4ry3SMn2DbnUTVx22lcAWDxxbo8DLyixjr/S6A=";
   };
 
   nativeBuildInputs = [
