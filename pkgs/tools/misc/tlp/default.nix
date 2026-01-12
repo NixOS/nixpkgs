@@ -19,6 +19,7 @@
   smartmontools,
   systemd,
   udevCheckHook,
+  usbutils,
   util-linux,
   glib,
   x86_energy_perf_policy,
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
           perl
           smartmontools
           systemd
+          usbutils
           util-linux
           glib # gdbus
         ]
