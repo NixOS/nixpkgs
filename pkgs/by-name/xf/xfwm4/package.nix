@@ -15,7 +15,7 @@
   libxfce4ui,
   libxfce4util,
   libwnck,
-  libXpresent,
+  libxpresent,
   xfconf,
   gitUpdater,
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfce4ui
     libxfce4util
     libwnck
-    libXpresent
+    libxpresent
     xfconf
   ];
 

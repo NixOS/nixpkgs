@@ -8,6 +8,7 @@
   gsettings-desktop-schemas,
   gtk3,
   xorg,
+  libxpresent,
   libxdamage,
   libx11,
   libcanberra-gtk3,
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorg.libXres
-    xorg.libXpresent
+    libxpresent
     libxdamage
     libx11
     glib

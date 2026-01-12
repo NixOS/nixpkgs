@@ -16,7 +16,7 @@
   libx11,
   libXScrnSaver,
   libxext,
-  libXpresent,
+  libxpresent,
   libXrandr,
   libarchive,
   libass,
@@ -221,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libGL
     libXrandr
-    libXpresent
+    libxpresent
     libXScrnSaver
   ]
   ++ lib.optionals zimgSupport [ zimg ]

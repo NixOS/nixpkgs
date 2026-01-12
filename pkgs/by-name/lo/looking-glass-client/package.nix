@@ -22,7 +22,7 @@
   libXScrnSaver,
   libxinerama,
   libxcursor,
-  libXpresent,
+  libxpresent,
   libxdmcp,
 
   wayland,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXScrnSaver
     libxinerama
     libxcursor
-    libXpresent
+    libxpresent
     libxext
     libXrandr
     libxdmcp
