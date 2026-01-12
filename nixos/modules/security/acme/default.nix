@@ -20,6 +20,16 @@ let
   mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
 
+  isIP =
+    address:
+    let
+      isIPv6 = lib.length (lib.splitString ":" address) > 2;
+      isIPv4 = (lib.match "^([0-9]+\\.){3}[0-9]+$" address) != null;
+    in
+    isIPv6 || isIPv4;
+
+  isDomainName = name: !isIP name;
+
   # Lockdir is acme-setup.service's RuntimeDirectory.
   # Since that service is a oneshot with RemainAfterExit,
   # the folder will exist during all renewal services.
@@ -387,10 +397,14 @@ let
             exit 0
           fi
 
-          minica \
-            --ca-key ca/key.pem \
-            --ca-cert ca/cert.pem \
-            --domains ${lib.escapeShellArg (builtins.concatStringsSep "," ([ data.domain ] ++ extraDomains))}
+          minica ${
+            lib.cli.toCommandLineShellGNU { } {
+              ca-key = "ca/key.pem";
+              ca-cert = "ca/cert.pem";
+              domains = lib.concatStringsSep "," (lib.filter isDomainName ([ data.domain ] ++ extraDomains));
+              ip-addresses = lib.concatStringsSep "," (lib.filter isIP ([ data.domain ] ++ extraDomains));
+            }
+          }
 
           # Create files to match directory layout for real certificates
           (
