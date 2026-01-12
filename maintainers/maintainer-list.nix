@@ -16740,6 +16740,12 @@
     githubId = 94081214;
     name = "Jose Colomer";
   };
+  mcdonc = {
+    email = "chrism@plope.com";
+    github = "mcdonc";
+    githubId = 125174;
+    name = "Chris McDonough";
+  };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
     github = "mcmtroffaes";
