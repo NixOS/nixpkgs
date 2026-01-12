@@ -29,7 +29,7 @@
   prometheus-client,
   polib,
   python,
-  xorg,
+  lndir,
 }:
 
 buildPythonPackage rec {
@@ -95,7 +95,7 @@ buildPythonPackage rec {
         {
           nativeBuildInputs = [
             pkgs.brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''

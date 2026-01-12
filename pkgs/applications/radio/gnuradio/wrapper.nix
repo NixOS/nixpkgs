@@ -9,7 +9,7 @@
   # For the wrapper
   makeWrapper,
   # For lndir
-  xorg,
+  lndir,
   # To define a the gnuradio.pkgs scope
   newScope,
   # For Emulating wrapGAppsHook3
@@ -222,7 +222,7 @@ let
           ;
         nativeBuildInputs = [
           makeWrapper
-          xorg.lndir
+          lndir
         ];
         buildCommand = ''
           mkdir $out

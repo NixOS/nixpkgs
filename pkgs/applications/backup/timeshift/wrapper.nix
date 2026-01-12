@@ -4,7 +4,7 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   librsvg,
-  xorg,
+  lndir,
   shared-mime-info,
 }:
 
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    xorg.lndir
+    lndir
   ];
 
   installPhase = ''

@@ -57,7 +57,7 @@ let
   inherit (lib.strings) toJSON;
 
   cfg = config.systemd;
-  lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
+  lndir = "${pkgs.buildPackages.lndir}/bin/lndir";
   systemd = cfg.package;
 in
 rec {

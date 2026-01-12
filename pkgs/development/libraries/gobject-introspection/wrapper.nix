@@ -50,7 +50,7 @@ then
       eval fixupPhase
       ${lib.concatMapStrings (output: ''
         mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        ${lib.getExe buildPackages.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
       '') overriddenUnwrappedGir.outputs}
 
       cp $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
@@ -109,7 +109,7 @@ else
       eval fixupPhase
       ${lib.concatMapStrings (output: ''
         mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        ${lib.getExe buildPackages.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
       '') overriddenUnwrappedGir.outputs}
     '';
   })

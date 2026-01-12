@@ -9,7 +9,7 @@
   gcc-unwrapped,
   liberation_ttf_v1,
   writeScript,
-  xorg,
+  lndir,
   nixosTests,
 }:
 
@@ -114,9 +114,9 @@ let
 
             # onlyoffice places generated files in those directores
             rm -rf var/www/onlyoffice/documentserver/sdkjs/common/*
-            ${xorg.lndir}/bin/lndir -silent ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/ var/www/onlyoffice/documentserver/sdkjs/common/
+            ${lndir}/bin/lndir -silent ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/ var/www/onlyoffice/documentserver/sdkjs/common/
             rm -rf var/www/onlyoffice/documentserver/server/FileConverter/bin/*
-            ${xorg.lndir}/bin/lndir -silent ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/server/FileConverter/bin/ var/www/onlyoffice/documentserver/server/FileConverter/bin/
+            ${lndir}/bin/lndir -silent ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/server/FileConverter/bin/ var/www/onlyoffice/documentserver/server/FileConverter/bin/
 
             # https://github.com/ONLYOFFICE/document-server-package/blob/master/common/documentserver/bin/documentserver-generate-allfonts.sh.m4
             echo -n Generating AllFonts.js, please wait...

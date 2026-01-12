@@ -84,46 +84,44 @@ let
         ln -sf ${src} $out/${dir}/${filename}.yaml
       fi
     '';
-  provisionConfDir =
-    pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; }
-      ''
-        mkdir -p $out/{alerting,datasources,dashboards,plugins}
-        ${ln {
-          src = datasourceFileOrDir;
-          dir = "datasources";
-          filename = "datasource";
-        }}
-        ${ln {
-          src = dashboardFileOrDir;
-          dir = "dashboards";
-          filename = "dashboard";
-        }}
-        ${ln {
-          src = rulesFileOrDir;
-          dir = "alerting";
-          filename = "rules";
-        }}
-        ${ln {
-          src = contactPointsFileOrDir;
-          dir = "alerting";
-          filename = "contactPoints";
-        }}
-        ${ln {
-          src = policiesFileOrDir;
-          dir = "alerting";
-          filename = "policies";
-        }}
-        ${ln {
-          src = templatesFileOrDir;
-          dir = "alerting";
-          filename = "templates";
-        }}
-        ${ln {
-          src = muteTimingsFileOrDir;
-          dir = "alerting";
-          filename = "muteTimings";
-        }}
-      '';
+  provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.lndir ]; } ''
+    mkdir -p $out/{alerting,datasources,dashboards,plugins}
+    ${ln {
+      src = datasourceFileOrDir;
+      dir = "datasources";
+      filename = "datasource";
+    }}
+    ${ln {
+      src = dashboardFileOrDir;
+      dir = "dashboards";
+      filename = "dashboard";
+    }}
+    ${ln {
+      src = rulesFileOrDir;
+      dir = "alerting";
+      filename = "rules";
+    }}
+    ${ln {
+      src = contactPointsFileOrDir;
+      dir = "alerting";
+      filename = "contactPoints";
+    }}
+    ${ln {
+      src = policiesFileOrDir;
+      dir = "alerting";
+      filename = "policies";
+    }}
+    ${ln {
+      src = templatesFileOrDir;
+      dir = "alerting";
+      filename = "templates";
+    }}
+    ${ln {
+      src = muteTimingsFileOrDir;
+      dir = "alerting";
+      filename = "muteTimings";
+    }}
+  '';
 
   # Get a submodule without any embedded metadata:
   _filter = x: removeAttrs x [ "_module" ];
