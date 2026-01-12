@@ -7544,12 +7544,6 @@
     githubId = 8173116;
     name = "Dean Eckert";
   };
-  eelco = {
-    email = "edolstra+nixpkgs@gmail.com";
-    github = "edolstra";
-    githubId = 1148549;
-    name = "Eelco Dolstra";
-  };
   ehegnes = {
     email = "eric.hegnes@gmail.com";
     github = "ehegnes";
@@ -18245,7 +18239,7 @@
   nadiaholmquist = {
     name = "Nadia Holmquist Pedersen";
     email = "nadia@nhp.sh";
-    matrix = "@nhp:matrix.org";
+    matrix = "@nadia:nhp.sh";
     github = "nadiaholmquist";
     githubId = 893884;
   };

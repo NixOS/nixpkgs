@@ -40,7 +40,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lancedb";
   version = "0.26.1";
   pyproject = true;
@@ -48,14 +48,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${version}";
+    tag = "python-v${finalAttrs.version}";
     hash = "sha256-yx4cwO7qRH9/1rW0UFz17HkvJ8utJynYoAHnN+wPpKw=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-ymoA/KKL7oLgp5u/NcXxbYfOueiKH+bpLxLcO+mn0Eo=";
   };
 
@@ -139,8 +139,8 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
-    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

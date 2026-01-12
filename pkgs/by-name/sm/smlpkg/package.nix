@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smlpkg";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlpkg";
     rev = "v${version}";
-    sha256 = "sha256-g7w4/E+BHeiic5bT1RFF/CGQz5Mc1g2kzoNXsija3HU=";
+    sha256 = "sha256-zdWObV/W6fmQ6bFznEVEtp95D8t2YZd45sIC15XQwYM=";
   };
 
   enableParallelBuilding = true;
