@@ -15,7 +15,7 @@
   libx11,
   libxext,
   libxfixes,
-  libXtst,
+  libxtst,
   libxfce4ui,
   libxfce4util,
   wayland,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxfixes
-    libXtst
+    libxtst
     libxfce4ui
     libxfce4util
     wayland

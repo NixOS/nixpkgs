@@ -7,7 +7,7 @@
   libtool,
   makeWrapper,
   perlPackages,
-  xorg,
+  libxtst,
   libxi,
   libx11,
   libsm,
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       libsm
       libx11
       libxi
-      xorg.libXtst
+      libxtst
     ]
     ++ lib.optional useSystemd systemd
     ++ lib.optionals stdenv.hostPlatform.isLinux [

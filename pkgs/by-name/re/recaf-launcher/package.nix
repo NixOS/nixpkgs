@@ -27,7 +27,7 @@ buildFHSEnv {
       glib
       gtk3
       pango
-      xorg.libXtst
+      libxtst
       libx11
       xorg_sys_opengl
     ];

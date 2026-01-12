@@ -49,7 +49,7 @@ deployAndroidPackage {
       libxcursor
       libxi
       libxrender
-      xorg.libXtst
+      libxtst
       libice
       libsm
       libxkbfile

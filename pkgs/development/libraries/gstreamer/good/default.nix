@@ -47,7 +47,7 @@
   enableJack ? true,
   libjack2,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxtst,
   libxi,
   libxfixes,
   libxext,
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxfixes
     libxdamage
-    xorg.libXtst
+    libxtst
     libxi
   ]
   ++ lib.optionals gtkSupport [

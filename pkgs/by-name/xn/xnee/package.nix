@@ -10,7 +10,7 @@
   libx11,
   libxext,
   libxi,
-  libXtst,
+  libxtst,
   texinfo,
   xorgproto,
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxi
-    libXtst
+    libxtst
     texinfo
     xorgproto
   ];

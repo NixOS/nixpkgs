@@ -12,7 +12,7 @@
   python3,
   libxml2,
   libxklavier,
-  libXtst,
+  libxtst,
   gtk2,
   intltool,
   libxslt,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     dbus
     pythonEnv
     python3.pkgs.pygobject3
-    libXtst
+    libxtst
     gtk2
   ];
 

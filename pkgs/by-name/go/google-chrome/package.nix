@@ -38,7 +38,7 @@
   libxrender,
   libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -143,7 +143,7 @@ let
     libxrender
     libxscrnsaver
     libxshmfence
-    libXtst
+    libxtst
     libgbm
     nspr
     nss

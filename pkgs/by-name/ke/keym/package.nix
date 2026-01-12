@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXtst,
+  libxtst,
   libxi,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libx11
-    libXtst
+    libxtst
     libxi
   ];
 

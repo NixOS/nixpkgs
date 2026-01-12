@@ -35,7 +35,7 @@
   qt5,
   wrapGAppsHook3,
   xkeyboard_config,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -128,7 +128,7 @@ let
       libxrandr
       libxrender
       libxscrnsaver
-      xorg.libXtst
+      libxtst
     ];
 
     dontWrapQtApps = true;

@@ -17,7 +17,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
   libdatrie,
   libjack2,
   libpsl,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     libxrandr
-    libXtst
+    libxtst
     libdatrie
     libjack2
     libpsl

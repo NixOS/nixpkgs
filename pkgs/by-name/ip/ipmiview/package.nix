@@ -11,7 +11,7 @@
   gcc-unwrapped,
   iputils,
   psmisc,
-  xorg,
+  libxtst,
   libxrender,
   libxi,
   libxext,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
           libx11
           libxext
           libxrender
-          xorg.libXtst
+          libxtst
           libxi
         ]
       }" ./jre/lib/libawt_xawt.so

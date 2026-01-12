@@ -10,7 +10,7 @@
   nixosTests,
   bash,
   glib,
-  xorg,
+  libxtst,
   alsa-lib,
 }:
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    xorg.libXtst
+    libxtst
     alsa-lib
   ];
 

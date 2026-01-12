@@ -112,7 +112,7 @@ let
           libxrandr
           libxrender
           libxscrnsaver
-          xorg.libXtst
+          libxtst
           zlib
           libxml2_13
 

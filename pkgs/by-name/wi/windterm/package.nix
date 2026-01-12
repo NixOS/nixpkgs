@@ -11,6 +11,7 @@
   alsa-lib,
   pulseaudio,
   xorg,
+  libxtst,
   libxcb,
   gtk3,
   atk,
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxcb
     xorg.xcbutil
-    xorg.libXtst
+    libxtst
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil

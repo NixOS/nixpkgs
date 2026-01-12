@@ -16,7 +16,7 @@
   openssl,
   unixODBC,
   xkeyboard_config,
-  xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxmu,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     libGLU
     libx11
     libxext
-    xorg.libXtst
+    libxtst
     libxi
     libxmu
     libxrender

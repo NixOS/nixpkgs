@@ -14,7 +14,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     libxrandr
-    libXtst
+    libxtst
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

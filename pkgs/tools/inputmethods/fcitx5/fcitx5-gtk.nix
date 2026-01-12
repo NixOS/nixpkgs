@@ -22,7 +22,7 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   withGTK2 ? false,
 }:
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ]
   ++ lib.optional withGTK2 gtk2;
 

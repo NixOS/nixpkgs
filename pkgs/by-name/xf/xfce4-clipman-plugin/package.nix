@@ -11,7 +11,7 @@
   glib,
   gtk3,
   libx11,
-  libXtst,
+  libxtst,
   libxfce4ui,
   libxfce4util,
   qrencode,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libx11
-    libXtst
+    libxtst
     libxfce4ui
     libxfce4util
     qrencode

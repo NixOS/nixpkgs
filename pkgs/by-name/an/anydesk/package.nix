@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxmu,
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxmu
     libxrandr
-    xorg.libXtst
+    libxtst
     xorg.libXt
     libice
     libsm

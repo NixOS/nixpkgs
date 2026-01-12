@@ -25,7 +25,7 @@
   libxext,
   libxrender,
   libXt,
-  libXtst,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -82,7 +82,7 @@ let
       libxext
       libxrender
       libXt
-      libXtst
+      libxtst
       libgbm
       pango
       pciutils
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset

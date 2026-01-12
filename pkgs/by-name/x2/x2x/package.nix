@@ -2,7 +2,7 @@
   lib,
   stdenv,
   libx11,
-  libXtst,
+  libxtst,
   libxext,
   fetchFromGitHub,
   autoreconfHook,
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libx11
-    libXtst
+    libxtst
     libxext
     libxi
   ];

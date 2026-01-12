@@ -33,7 +33,7 @@
   libxext,
   libxfixes,
   libxrender,
-  libXtst,
+  libxtst,
   libxscrnsaver,
   nss,
   nspr,
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    libXtst
+    libxtst
     libappindicator-gtk3
     libpulseaudio
     libnotify

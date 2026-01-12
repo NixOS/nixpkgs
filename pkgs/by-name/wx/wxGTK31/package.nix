@@ -9,7 +9,7 @@
   libGLU,
   libsm,
   libxinerama,
-  libXtst,
+  libxtst,
   libXxf86vm,
   pkg-config,
   xorgproto,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     gtk3
     libsm
     libxinerama
-    libXtst
+    libxtst
     libXxf86vm
     xorgproto
   ]

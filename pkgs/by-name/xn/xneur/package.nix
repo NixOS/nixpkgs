@@ -13,7 +13,7 @@
   gst_all_1,
   libnotify,
   pcre,
-  xorg,
+  libxtst,
   libxi,
   libxext,
   libx11,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     libxi
-    xorg.libXtst
+    libxtst
     xosd
   ];
 

@@ -15,6 +15,7 @@
   freetype,
   zlib,
   xorg,
+  libxtst,
   libxrender,
   libxi,
   libxext,
@@ -104,7 +105,7 @@ let
         libxext
         libxi
         libxrender
-        xorg.libXtst
+        libxtst
         xorg.libXxf86vm
         zlib
       ]

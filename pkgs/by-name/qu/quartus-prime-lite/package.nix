@@ -61,7 +61,7 @@ buildFHSEnv rec {
       expat
       dbus
       # qsys requirements
-      xorg.libXtst
+      libxtst
       libxi
       dejavu_fonts
       gnumake

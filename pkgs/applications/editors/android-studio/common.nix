@@ -52,7 +52,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   makeWrapper,
   ncurses5,
   nspr,
@@ -144,7 +144,7 @@ let
             libxext
             libxi
             libxrender
-            libXtst
+            libxtst
             libsecret
 
             # No crash, but attempted to load at startup

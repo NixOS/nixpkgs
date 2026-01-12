@@ -24,7 +24,7 @@
   libxcursor,
   libxscrnsaver,
   libxrandr,
-  libXtst,
+  libxtst,
   libxshmfence,
   libxi,
   cups,
@@ -264,7 +264,7 @@ qtModule {
     libxcursor
     libxrandr
     libpciaccess
-    libXtst
+    libxtst
     libxcomposite
     libxdamage
     libdrm

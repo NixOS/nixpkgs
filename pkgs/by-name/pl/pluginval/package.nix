@@ -14,7 +14,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
   ladspaH,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     libxrandr
-    libXtst
+    libxtst
     ladspaH
   ];
 

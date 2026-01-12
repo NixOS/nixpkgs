@@ -12,7 +12,7 @@
   nss,
   nspr,
   systemd,
-  xorg,
+  libxtst,
   libxscrnsaver,
 }:
 let
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     nss
     nspr
     libxscrnsaver
-    xorg.libXtst
+    libxtst
     systemd
   ];
 

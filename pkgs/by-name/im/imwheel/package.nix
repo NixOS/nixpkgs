@@ -7,7 +7,7 @@
   libxi,
   libxmu,
   libXt,
-  libXtst,
+  libxtst,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxi
     libxmu
     libXt
-    libXtst
+    libxtst
   ];
 
   makeFlags = [

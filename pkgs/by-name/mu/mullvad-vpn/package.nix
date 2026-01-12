@@ -20,7 +20,7 @@
   libgbm,
   libGL,
   wayland,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -71,7 +71,7 @@ let
     libxi
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxcb
     libxshmfence
     nspr

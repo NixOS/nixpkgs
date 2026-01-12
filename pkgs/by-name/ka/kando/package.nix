@@ -16,7 +16,7 @@
 
   libxkbcommon,
   libx11,
-  libXtst,
+  libxtst,
   libxi,
   wayland,
 }:
@@ -54,7 +54,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
     libx11
-    libXtst
+    libxtst
     libxi
     wayland
   ];

@@ -27,7 +27,7 @@
   pango,
   pciutils,
   udev,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxscrnsaver
-    xorg.libXtst
+    libxtst
   ];
 
   unpackPhase = ''

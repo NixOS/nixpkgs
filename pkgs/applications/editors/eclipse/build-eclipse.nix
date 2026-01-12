@@ -11,7 +11,7 @@
   glib,
   glib-networking,
   gtk,
-  libXtst,
+  libxtst,
   libsecret,
   gsettings-desktop-schemas,
   webkitgtk_4_1,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     jdk
     libx11
     libxrender
-    libXtst
+    libxtst
     libsecret
     zlib
   ]
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
           [
             glib
             gtk
-            libXtst
+            libxtst
             libsecret
           ]
           ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1

@@ -1988,13 +1988,13 @@ builtins.intersectAttrs super {
     ;
 
   webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
 
   gi-webkit2 = lib.pipe super.gi-webkit2 [
-    (addBuildDepend pkgs.xorg.libXtst)
+    (addBuildDepend pkgs.libxtst)
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];

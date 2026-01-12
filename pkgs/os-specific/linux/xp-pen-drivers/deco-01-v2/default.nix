@@ -11,7 +11,7 @@
   wrapQtAppsHook,
   autoPatchelfHook,
   libx11,
-  libXtst,
+  libxtst,
   libxi,
   libxrandr,
   libxinerama,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libx11
-    libXtst
+    libxtst
     libxi
     libxrandr
     libxinerama

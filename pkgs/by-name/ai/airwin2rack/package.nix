@@ -8,7 +8,7 @@
   cmake,
   pkg-config,
   alsa-lib,
-  xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxinerama,
@@ -113,7 +113,7 @@ stdenv.mkDerivation {
     libxinerama
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxdmcp
     libGLU
     libjack2

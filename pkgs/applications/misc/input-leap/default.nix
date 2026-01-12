@@ -15,7 +15,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
   libei,
   libportal,
   openssl,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     avahi
     libx11
     libxext
-    libXtst
+    libxtst
     libxinerama
     libxrandr
     libxdmcp

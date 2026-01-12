@@ -14,7 +14,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxinerama
     libxrandr
-    libXtst
+    libxtst
   ];
 
   enableParallelBuilding = true;

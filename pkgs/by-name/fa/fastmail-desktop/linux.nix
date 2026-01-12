@@ -12,7 +12,7 @@
   makeWrapper,
   electron,
   libxscrnsaver,
-  libXtst,
+  libxtst,
   libappindicator,
   libgcc,
   musl,
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   libPath = lib.makeLibraryPath [
     libxscrnsaver
-    libXtst
+    libxtst
     libappindicator
   ];
 

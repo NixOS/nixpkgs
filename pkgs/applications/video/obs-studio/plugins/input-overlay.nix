@@ -8,6 +8,7 @@
   obs-studio,
   qtbase,
   xorg,
+  libxtst,
   libxi,
   libxinerama,
   libxext,
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxau
     libxdmcp
-    xorg.libXtst
+    libxtst
     libxext
     libxi
     xorg.libXt

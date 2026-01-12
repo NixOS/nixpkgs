@@ -8,7 +8,7 @@
   gtk3,
   glib,
   systemd,
-  xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxi,
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
           libxfixes
           libxi
           libxrender
-          xorg.libXtst
+          libxtst
           libxshmfence
           libxkbcommon
           nss

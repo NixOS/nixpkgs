@@ -36,7 +36,7 @@
   stdenv,
   systemd,
   xdg-utils,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -91,7 +91,7 @@ let
     libxi
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxkbfile
     libxshmfence
     zlib

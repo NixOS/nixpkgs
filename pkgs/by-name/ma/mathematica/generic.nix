@@ -45,7 +45,7 @@
   xcbutilimage,
   xcbutilkeysyms,
   xkeyboard_config,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -144,7 +144,7 @@ stdenv.mkDerivation {
     libxmu
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxcb
   ]
   ++ lib.optional cudaSupport cudaEnv;

@@ -28,7 +28,7 @@
   libxinerama,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libXv,
   libxkbcommon,
   libxkbfile,
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxrandr
     libxrender
-    libXtst
+    libxtst
     libXv
     libjpeg_turbo
     libkrb5

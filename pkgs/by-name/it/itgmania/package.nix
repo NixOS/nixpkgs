@@ -15,7 +15,7 @@
   libpulseaudio,
   libusb-compat-0_1,
   libvorbis,
-  libXtst,
+  libxtst,
   udev,
   makeWrapper,
   makeDesktopItem,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libusb-compat-0_1
     libvorbis
-    libXtst
+    libxtst
     udev
   ];
 

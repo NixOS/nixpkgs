@@ -24,7 +24,7 @@
   libxcvt,
   libxdamage,
   libxkbcommon,
-  libXtst,
+  libxtst,
   mesa-gl-headers,
   meson,
   ninja,
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # required for pkg-config to detect muffin-clutter
     json-glib
-    libXtst
+    libxtst
     graphene
     mesa-gl-headers
   ];

@@ -22,7 +22,7 @@
   json-glib,
   libsecret,
   libstartup_notification,
-  libXtst,
+  libxtst,
   libxdamage,
   libgbm,
   muffin,
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     json-glib
     libsecret
     libstartup_notification
-    libXtst
+    libxtst
     libxdamage
     libgbm
     muffin

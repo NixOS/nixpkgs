@@ -30,7 +30,7 @@
   gdk-pixbuf,
   pango,
   cairo,
-  xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxi,
@@ -81,7 +81,7 @@ let
     libxfixes
     libxi
     libxrender
-    xorg.libXtst
+    libxtst
     libxrandr
     ffmpeg
     http-parser

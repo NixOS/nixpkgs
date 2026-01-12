@@ -21,7 +21,7 @@
       libxrandr
       libxcomposite
       libxcursor
-      xorg.libXtst
+      libxtst
       libxscrnsaver
     ]
   );

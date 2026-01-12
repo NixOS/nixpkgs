@@ -11,7 +11,7 @@
   zlib,
   glib,
   gtk3,
-  libXtst,
+  libxtst,
   jdk,
   gsettings-desktop-schemas,
   webkitgtk_4_1 ? null, # for internal web browser
@@ -62,7 +62,7 @@ let
       jdk
       glib
       gtk
-      libXtst
+      libxtst
       gsettings-desktop-schemas
       webkitgtk_4_1
       makeWrapper

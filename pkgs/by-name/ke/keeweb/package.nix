@@ -24,7 +24,7 @@
   libxext,
   libxrandr,
   libxscrnsaver,
-  libXtst,
+  libxtst,
   libxshmfence,
 }:
 let
@@ -60,7 +60,7 @@ let
     libxext
     libxrandr
     libxscrnsaver
-    libXtst
+    libxtst
     libxshmfence
     gnome-keyring
     libgbm

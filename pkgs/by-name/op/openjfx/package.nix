@@ -15,7 +15,7 @@
 
   gtk2,
   gtk3,
-  libXtst,
+  libxtst,
   libXxf86vm,
   glib,
   alsa-lib,
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk2
     gtk3
-    libXtst
+    libxtst
     libXxf86vm
     glib
     alsa-lib

@@ -27,6 +27,7 @@
   xcb-imdkit,
   xdg-utils,
   xorg,
+  libxtst,
   libxcursor,
   libx11,
   libxcb,
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxcursor
     libx11
-    xorg.libXtst
+    libxtst
     libxkbcommon
     libudev-zero
     pango

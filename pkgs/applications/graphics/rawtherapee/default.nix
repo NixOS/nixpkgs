@@ -12,7 +12,7 @@
   libdatrie,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
   makeWrapper,
   pixman,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libdatrie
     libxkbcommon
     libepoxy
-    libXtst
+    libxtst
     pixman
     libpthread-stubs
     gtkmm3

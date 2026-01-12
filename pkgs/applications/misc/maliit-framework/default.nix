@@ -17,7 +17,7 @@
   pcre,
   util-linux,
   wayland,
-  xorg,
+  libxtst,
   libxdmcp,
 
   cmake,
@@ -51,7 +51,7 @@ mkDerivation {
     util-linux
     wayland
     libxdmcp
-    xorg.libXtst
+    libxtst
   ];
 
   nativeBuildInputs = [

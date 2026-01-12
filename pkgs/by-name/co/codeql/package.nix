@@ -3,7 +3,7 @@
   stdenv,
   fetchzip,
   zlib,
-  xorg,
+  libxtst,
   libxrender,
   libxi,
   libxext,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libx11
     libxext
     libxi
-    xorg.libXtst
+    libxtst
     libxrender
     freetype
     jdk17

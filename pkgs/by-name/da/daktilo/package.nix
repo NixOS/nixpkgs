@@ -6,7 +6,7 @@
   unixtools,
   pkg-config,
   alsa-lib,
-  xorg,
+  libxtst,
   libxi,
   libx11,
 }:
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
     libx11
     libxi
-    xorg.libXtst
+    libxtst
   ];
 
   nativeCheckInputs = [

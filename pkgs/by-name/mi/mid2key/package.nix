@@ -5,7 +5,7 @@
   alsa-lib,
   libx11,
   libxi,
-  libXtst,
+  libxtst,
   xorgproto,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libx11
     libxi
-    libXtst
+    libxtst
     xorgproto
   ];
 

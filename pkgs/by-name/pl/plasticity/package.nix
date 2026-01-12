@@ -29,7 +29,7 @@
   vulkan-loader,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxtst,
   libxrandr,
   libxfixes,
   libxext,
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxrandr
-    xorg.libXtst
+    libxtst
   ];
 
   dontUnpack = true;

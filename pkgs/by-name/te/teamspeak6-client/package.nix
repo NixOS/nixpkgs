@@ -26,7 +26,7 @@
   pipewire,
   udev,
   libGL,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxfixes,
   libxdamage,
@@ -69,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libxdamage
     libxfixes
     libxshmfence
-    xorg.libXtst
+    libxtst
   ];
 
   nativeBuildInputs = [

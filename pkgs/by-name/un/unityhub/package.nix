@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
         libxcb
         libxshmfence
         libxscrnsaver
-        xorg.libXtst
+        libxtst
 
         # Unity Hub additional dependencies
         libva

@@ -14,7 +14,7 @@
   crc32c,
   libvpx,
   libx11,
-  libXtst,
+  libxtst,
   libxcomposite,
   libxdamage,
   libxext,
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXtst
+    libxtst
     libxcomposite
     libxdamage
     libxext

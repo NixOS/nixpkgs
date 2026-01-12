@@ -29,7 +29,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libxcb,
   libxshmfence,
   pango,
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     libxdamage
     libx11
     libxscrnsaver
-    libXtst
+    libxtst
     libxcb
     libxshmfence
     libgbm
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    libXtst
+    libxtst
     nspr
     nss
     libxcb

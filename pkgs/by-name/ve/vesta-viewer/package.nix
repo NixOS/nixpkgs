@@ -15,6 +15,7 @@
   gtk3,
   gtk2,
   xorg,
+  libxtst,
   temurin-jre-bin,
 }:
 
@@ -49,7 +50,7 @@ let
       gtk2
       temurin-jre-bin
       xorg.libXxf86vm
-      xorg.libXtst
+      libxtst
     ];
 
     src = fetchzip {

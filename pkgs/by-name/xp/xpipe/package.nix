@@ -20,7 +20,7 @@
   libxcursor,
   libxi,
   libxrender,
-  libXtst,
+  libxtst,
   libXxf86vm,
   util-linux,
   socat,
@@ -80,7 +80,7 @@ stdenvNoCC.mkDerivation rec {
     libxcursor
     libxi
     libxrender
-    libXtst
+    libxtst
     libXxf86vm
     util-linux
     socat

@@ -31,7 +31,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libdrm,
   libkrb5,
   libuuid,
@@ -123,7 +123,7 @@ let
     libxrandr
     libxrender
     libxshmfence
-    libXtst
+    libxtst
     libuuid
     libgbm
     nspr

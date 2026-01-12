@@ -34,7 +34,7 @@
   stdenv,
   systemd,
   udev,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -85,7 +85,7 @@ let
       libxi
       libxrandr
       libxrender
-      xorg.libXtst
+      libxtst
       libxshmfence
       # libnw-specific (not chromium dependencies)
       ffmpeg

@@ -65,7 +65,7 @@
   libossp_uuid,
   lxc,
   libpcap,
-  xorg,
+  libxtst,
   libxdmcp,
   libpthread-stubs,
   gtk3,
@@ -567,7 +567,7 @@ in
       pcre2
       libpthread-stubs
       libxdmcp
-      xorg.libXtst
+      libxtst
       libxkbcommon
       libepoxy
     ];

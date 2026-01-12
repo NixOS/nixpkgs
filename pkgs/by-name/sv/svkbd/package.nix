@@ -8,7 +8,7 @@
   libxft,
   libxi,
   libxinerama,
-  libXtst,
+  libxtst,
   layout ? "mobile-intl",
   conf ? null,
   patches ? [ ],
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
     libxi
     libxinerama
-    libXtst
+    libxtst
   ];
 
   makeFlags = [

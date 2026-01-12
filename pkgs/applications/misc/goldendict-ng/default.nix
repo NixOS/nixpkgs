@@ -16,7 +16,7 @@
   fmt,
   bzip2,
   libiconv,
-  libXtst,
+  libxtst,
   qtbase,
   qtsvg,
   qtwebengine,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     hunspell
     xz
     lzo
-    libXtst
+    libxtst
     bzip2
     libiconv
     opencc

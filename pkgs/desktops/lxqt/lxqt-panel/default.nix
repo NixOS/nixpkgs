@@ -11,7 +11,7 @@
   layer-shell-qt,
   libxdamage,
   libxdmcp,
-  libXtst,
+  libxtst,
   libdbusmenu,
   liblxqt,
   libpthread-stubs,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     layer-shell-qt
     libxdamage
     libxdmcp
-    libXtst
+    libxtst
     libdbusmenu
     liblxqt
     libpthread-stubs

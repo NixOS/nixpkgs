@@ -4,7 +4,7 @@
   fetchurl,
   libXt,
   libxaw,
-  libXtst,
+  libxtst,
   libxi,
   libxpm,
   pkg-config,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libXt
     libxaw
-    libXtst
+    libxtst
     xorgproto
     libxi
     Xaw3d

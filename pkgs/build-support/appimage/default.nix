@@ -140,7 +140,7 @@ rec {
       pkgs: with pkgs; [
         desktop-file-utils
         libxcomposite
-        xorg.libXtst
+        libxtst
         libxrandr
         libxext
         libx11

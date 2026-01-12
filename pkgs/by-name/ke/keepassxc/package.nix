@@ -11,7 +11,7 @@
   curl,
   darwinMinVersionHook,
   libxi,
-  libXtst,
+  libxtst,
   libargon2,
   libusb1,
   minizip,
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     botan3
     curl
     libxi
-    libXtst
+    libxtst
     libargon2
     libsForQt5.qtbase
     libsForQt5.qtsvg

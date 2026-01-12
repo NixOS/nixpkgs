@@ -27,7 +27,7 @@
   libxrandr,
   libxrender,
   libxscrnsaver,
-  libXtst,
+  libxtst,
   libdrm,
   libgbm,
   libGL,
@@ -136,7 +136,7 @@ stdenv.mkDerivation {
           libxrender
           libxscrnsaver
           libxkbcommon
-          libXtst
+          libxtst
           nspr
           nss
           pango

@@ -21,7 +21,7 @@
   expat,
   udev,
   adwaita-icon-theme,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     libxext
     libxfixes
     libxrender
-    xorg.libXtst
+    libxtst
     libxscrnsaver
     libuuid
     libdrm

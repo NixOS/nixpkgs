@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libx11,
-  libXtst,
+  libxtst,
   cmake,
   qtbase,
   qttools,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals x11Support [
     libx11
-    libXtst
+    libxtst
   ];
   nativeBuildInputs = [
     cmake

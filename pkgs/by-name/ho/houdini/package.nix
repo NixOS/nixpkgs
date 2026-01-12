@@ -55,7 +55,7 @@ buildFHSEnv {
       libxrender
       libxcomposite
       libxdamage
-      xorg.libXtst
+      libxtst
       libxcb
       libxscrnsaver
       libxrandr

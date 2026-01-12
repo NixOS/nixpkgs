@@ -22,7 +22,7 @@
   libxi,
   libxrender,
   libxrandr,
-  libXtst,
+  libxtst,
   libxcrypt,
   libxml2,
   pkg-config,
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxrender
     libxrandr
-    libXtst
+    libxtst
   ];
 
   postPatch = ''

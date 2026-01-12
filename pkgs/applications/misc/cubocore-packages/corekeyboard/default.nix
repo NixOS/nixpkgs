@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   qt6,
-  xorg,
+  libxtst,
   libx11,
   cmake,
   ninja,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    xorg.libXtst
+    libxtst
     libx11
     libcprime
     libcsys

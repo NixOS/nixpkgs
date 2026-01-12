@@ -11,7 +11,7 @@
   libxcrypt,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
   librep,
   makeWrapper,
   pango,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
     libxinerama
     libxrandr
-    libXtst
+    libxtst
     librep
     pango
     rep-gtk

@@ -8,7 +8,7 @@
   dbus-glib,
   systemd,
   libsm,
-  libXtst,
+  libxtst,
   glib,
   gtk3,
   libepoxy,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     systemd
     libsm
-    libXtst
+    libxtst
     gtk3
     mate-desktop
     mate-screensaver # for gsm_manager_init

@@ -30,7 +30,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libappindicator-gtk3,
   libcxx,
   libdbusmenu,
@@ -105,7 +105,7 @@ let
     libxi
     libxrandr
     libxrender
-    libXtst
+    libxtst
     libappindicator-gtk3
     libcxx
     libdbusmenu
@@ -153,7 +153,7 @@ stdenv.mkDerivation {
     alsa-lib
     cups
     libxdamage
-    libXtst
+    libxtst
     libdrm
     libgcrypt
     libpulseaudio

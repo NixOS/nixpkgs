@@ -33,7 +33,7 @@
   udev,
   unzip,
   xdg-utils,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxkbfile
     libxshmfence
   ];

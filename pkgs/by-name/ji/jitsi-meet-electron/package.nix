@@ -9,7 +9,7 @@
   libpng,
   libx11,
   libxi,
-  libXtst,
+  libxtst,
   zlib,
   electron,
 }:
@@ -37,7 +37,7 @@ buildNpmPackage rec {
     libpng
     libx11
     libxi
-    libXtst
+    libxtst
     zlib
   ];
 

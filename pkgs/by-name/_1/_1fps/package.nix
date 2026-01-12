@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  xorg,
+  libxtst,
   libxi,
   libx11,
   stdenv,
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   buildInputs = [
     libx11
-    xorg.libXtst
+    libxtst
     libxi
   ];
 

@@ -12,7 +12,7 @@
   libxinerama,
   libxft,
   libxfixes,
-  libXtst,
+  libxtst,
   libx11,
   libxext,
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       libxinerama
       libxft
       libxfixes
-      libXtst
+      libxtst
       libx11
       libxext
     ];

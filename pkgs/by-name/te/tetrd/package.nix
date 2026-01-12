@@ -9,7 +9,7 @@
   libevent,
   libvpx,
   libxslt,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxdamage,
   minizip,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libxslt
     libxscrnsaver
     libxdamage
-    xorg.libXtst
+    libxtst
     minizip
     nss
     re2

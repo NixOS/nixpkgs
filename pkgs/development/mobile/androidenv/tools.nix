@@ -65,7 +65,7 @@ deployAndroidPackage {
           with pkgs;
           [
             libx11
-            xorg.libXtst
+            libxtst
           ]
         )
       }

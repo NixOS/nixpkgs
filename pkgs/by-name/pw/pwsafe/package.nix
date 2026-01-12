@@ -11,7 +11,7 @@
   libxext,
   libxi,
   libXt,
-  libXtst,
+  libxtst,
   xercesc,
   qrencode,
   libuuid,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libxext
     libxi
     libXt
-    libXtst
+    libxtst
     libuuid
     libyubikey
     yubikey-personalization

@@ -10,6 +10,7 @@
   gtk3,
   lib,
   xorg,
+  libxtst,
   libxcursor,
   libx11,
   libxcb,
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.xcbutil
     xorg.xcbutilwm
     zlib
-    xorg.libXtst
+    libxtst
     libxkbcommon
     pulseaudio
     libjack2

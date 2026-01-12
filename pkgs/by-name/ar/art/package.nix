@@ -12,7 +12,7 @@
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
   pixman,
   libpthread-stubs,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     lerc
     libxkbcommon
     libepoxy
-    libXtst
+    libxtst
     pixman
     libpthread-stubs
     gtkmm3

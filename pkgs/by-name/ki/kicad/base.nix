@@ -37,7 +37,7 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   pcre2,
   libdeflate,
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
     pcre2
   ];
 

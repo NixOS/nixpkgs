@@ -10,6 +10,7 @@
   libxkbcommon,
   xinput,
   xorg,
+  libxtst,
   libxi,
   libxinerama,
   libxext,
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     libxi
     libxinerama
     xorg.libXt
-    xorg.libXtst
+    libxtst
     libxext
     libxkbfile
   ];

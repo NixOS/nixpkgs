@@ -50,7 +50,7 @@ appimageTools.wrapType2 {
       libxfixes
       libxi
       libxrender
-      xorg.libXtst
+      libxtst
       nss
       nspr
       dbus

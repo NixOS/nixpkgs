@@ -11,7 +11,7 @@
   libxpm,
   libxrandr,
   libXt,
-  libXtst,
+  libxtst,
   perl,
   pkg-config,
   readline,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxpm
     libxrandr
     libXt
-    libXtst
+    libxtst
     perl
     readline
     xorgproto

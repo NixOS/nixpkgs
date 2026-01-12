@@ -24,6 +24,7 @@
     jdk17
   ],
   xorg,
+  libxtst,
   libxrandr,
   libxext,
   libxcursor,
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxcursor
     libxrandr
-    xorg.libXtst
+    libxtst
     libpulseaudio
     wayland
     alsa-lib

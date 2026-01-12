@@ -13,7 +13,7 @@
   gobject-introspection,
   grail,
   gtk3,
-  xorg,
+  libxtst,
   libxi,
   libxext,
   libx11,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxext
     libxi
-    xorg.libXtst
+    libxtst
     pango
     python3Packages.python
     xorgserver

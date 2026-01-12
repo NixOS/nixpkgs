@@ -8,7 +8,7 @@
   gnome,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
   libxfixes,
   libxcursor,
   libx11,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gtk3
     gsettings-desktop-schemas
     libx11
-    xorg.libXtst
+    libxtst
     libxfixes
     libxcursor
   ];

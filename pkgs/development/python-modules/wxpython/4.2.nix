@@ -27,7 +27,7 @@
   libGLU,
   libsm,
   libxinerama,
-  libXtst,
+  libxtst,
   libXxf86vm,
   libglvnd,
   libgbm,
@@ -104,7 +104,7 @@ buildPythonPackage rec {
     libGLU
     libsm
     libxinerama
-    libXtst
+    libxtst
     libXxf86vm
     libglvnd
     libgbm

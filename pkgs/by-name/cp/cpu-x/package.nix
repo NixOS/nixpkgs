@@ -28,7 +28,7 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   gtkmm3,
 }:
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ];
 
   preFixup = ''

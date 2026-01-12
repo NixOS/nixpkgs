@@ -8,7 +8,7 @@
   makeWrapper,
   runtimeShell,
   gtk3,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -112,7 +112,7 @@ let
     libxi
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxkbfile
     libxshmfence
     (lib.getLib stdenv.cc.cc)

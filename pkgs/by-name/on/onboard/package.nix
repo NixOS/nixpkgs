@@ -26,7 +26,7 @@
   procps,
   python3,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
   libxkbfile,
   yelp,
 }:
@@ -93,7 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     libxkbcommon
     mousetweaks
     udev
-    xorg.libXtst
+    libxtst
     libxkbfile
   ]
   ++ lib.optional atspiSupport at-spi2-core;

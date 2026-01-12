@@ -43,7 +43,7 @@
   tinyxml,
   util-linux,
   wxGTK32,
-  xorg,
+  libxtst,
   libxdmcp,
   xz,
 }:
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     util-linux
     libxdmcp
-    xorg.libXtst
+    libxtst
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils

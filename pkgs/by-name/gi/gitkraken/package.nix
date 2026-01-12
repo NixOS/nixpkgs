@@ -36,7 +36,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libdrm,
   libgbm,
   libgnome-keyring,
@@ -118,7 +118,7 @@ let
       glib
       libxscrnsaver
       libxkbfile
-      libXtst
+      libxtst
       nss
       nspr
       cups

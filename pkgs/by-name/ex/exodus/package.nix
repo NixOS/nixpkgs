@@ -12,7 +12,7 @@
   atk,
   cairo,
   gdk-pixbuf,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         libxi
         libxrender
         libxshmfence
-        xorg.libXtst
+        libxtst
         xorg_sys_opengl
         util-linux
         libxrandr

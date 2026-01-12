@@ -11,7 +11,7 @@
   libGLU,
   libsm,
   libxinerama,
-  libXtst,
+  libxtst,
   libXxf86vm,
   libnotify,
   libpng,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libsm
     libxinerama
-    libXtst
+    libxtst
     libXxf86vm
     libnotify # wxNotificationMessage backend
     libsecret # wxSecretStore backend

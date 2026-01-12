@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libxtst,
   pkg-config,
   wrapGAppsHook3,
   go,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXtst
+    libxtst
   ];
 
   preConfigure = ''

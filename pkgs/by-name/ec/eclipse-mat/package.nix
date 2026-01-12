@@ -9,7 +9,7 @@
   lib,
   libx11,
   libxrender,
-  libXtst,
+  libxtst,
   makeDesktopItem,
   makeWrapper,
   shared-mime-info,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           glib
           gtk3
-          libXtst
+          libxtst
           webkitgtk_4_1
         ]
       } \
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     jdk
     libx11
     libxrender
-    libXtst
+    libxtst
     zlib
     shared-mime-info
     webkitgtk_4_1

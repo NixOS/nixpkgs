@@ -43,7 +43,7 @@ let
       libxcursor
       libxcomposite
       libxfixes
-      xorg.libXtst
+      libxtst
       libxscrnsaver
       libice
       xorg.libXt

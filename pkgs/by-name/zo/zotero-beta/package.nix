@@ -12,7 +12,7 @@
   glib,
   gtk3,
   libGL,
-  xorg,
+  libxtst,
   libxrandr,
   libxi,
   libxfixes,
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       libxfixes
       libxi
       libxrandr
-      xorg.libXtst
+      libxtst
       libxcb
       libgbm
       pango

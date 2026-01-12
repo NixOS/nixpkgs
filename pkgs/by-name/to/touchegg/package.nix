@@ -8,7 +8,7 @@
   libinput,
   pugixml,
   cairo,
-  xorg,
+  libxtst,
   libxrandr,
   libxi,
   libxdmcp,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     gtk3-x11
     libx11
-    xorg.libXtst
+    libxtst
     libxrandr
     libxi
     libxdmcp

@@ -28,7 +28,7 @@
   libxcursor,
   libxscrnsaver,
   libxrandr,
-  libXtst,
+  libxtst,
   fontconfig,
   freetype,
   harfbuzz,
@@ -386,7 +386,7 @@ qtModule (
       libxcursor
       libxrandr
       libpciaccess
-      libXtst
+      libxtst
       libxcomposite
       libxdamage
       libdrm

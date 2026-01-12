@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -102,7 +103,7 @@ let
     libxscrnsaver
     libxcomposite
     libxdamage
-    xorg.libXtst
+    libxtst
     libxrandr
     libnotify
     atk

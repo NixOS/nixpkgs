@@ -19,7 +19,7 @@
   libxcrypt-legacy,
   libGL,
   numactl,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxscrnsaver
-    xorg.libXtst
+    libxtst
   ];
 
   installPhase = ''

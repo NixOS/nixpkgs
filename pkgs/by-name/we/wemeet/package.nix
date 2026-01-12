@@ -6,7 +6,7 @@
   autoPatchelfHook,
   makeWrapper,
   nss,
-  xorg,
+  libxtst,
   libxrandr,
   libxext,
   libxdamage,
@@ -204,7 +204,7 @@ stdenv.mkDerivation {
     libx11
     libsm
     libice
-    xorg.libXtst
+    libxtst
     desktop-file-utils
     libpulseaudio
     libgcrypt

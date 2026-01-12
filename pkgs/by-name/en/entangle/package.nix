@@ -35,7 +35,7 @@
   orc,
   udev,
   util-linux,
-  xorg,
+  libxtst,
   libxdmcp,
   zstd,
 }:
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
     zstd
     libxdmcp
-    xorg.libXtst
+    libxtst
   ];
 
   # Disable building of doc/reference since it requires network connection to render XML to HTML

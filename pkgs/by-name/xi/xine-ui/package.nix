@@ -7,7 +7,7 @@
   libxft,
   libxi,
   libxinerama,
-  libXtst,
+  libxtst,
   libXv,
   libXxf86vm,
   libjpeg,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
     libxi
     libxinerama
-    libXtst
+    libxtst
     libXv
     libXxf86vm
     libjpeg

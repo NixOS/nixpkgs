@@ -12,6 +12,7 @@
   pkg-config,
   which,
   xorg,
+  libxtst,
   libxrandr,
   libxpm,
   libxinerama,
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     libxinerama
     libxpm
     libxrandr
-    xorg.libXtst
+    libxtst
     pixman
     xkbcomp
     xorg.xkeyboardconfig

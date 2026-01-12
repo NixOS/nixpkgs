@@ -22,7 +22,7 @@
   libxkbfile,
   libxdamage,
   libxkbcommon,
-  libXtst,
+  libxtst,
   libinput,
   libdrm,
   libgbm,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect magpie-clutter
     json-glib
-    libXtst
+    libxtst
     libcap_ng
     graphene
     mesa-gl-headers

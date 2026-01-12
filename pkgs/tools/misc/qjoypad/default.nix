@@ -5,7 +5,7 @@
   pkg-config,
   cmake,
   libx11,
-  libXtst,
+  libxtst,
   qtbase,
   qttools,
   qtx11extras,
@@ -33,7 +33,7 @@ mkDerivation rec {
   ];
   buildInputs = [
     libx11
-    libXtst
+    libxtst
     qtbase
     qtx11extras
   ];

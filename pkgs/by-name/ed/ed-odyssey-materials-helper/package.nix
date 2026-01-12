@@ -6,7 +6,7 @@
   jdk25,
   wrapGAppsHook3,
   libXxf86vm,
-  libXtst,
+  libxtst,
   libglvnd,
   glib,
   alsa-lib,
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           libXxf86vm
           glib
-          libXtst
+          libxtst
           libglvnd
           alsa-lib
           ffmpeg

@@ -8,7 +8,7 @@
   ffmpeg_7,
   gst_all_1,
   fuse3,
-  libXtst,
+  libxtst,
   libaom,
   libopus,
   libpulseaudio,
@@ -127,7 +127,7 @@ flutter329.buildFlutterApplication rec {
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
-    libXtst
+    libxtst
     libaom
     libopus
     libpulseaudio

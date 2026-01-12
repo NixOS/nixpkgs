@@ -27,7 +27,7 @@
   brotli,
   libxkbcommon,
   libxcb,
-  xorg,
+  libxtst,
   libxrandr,
   libxfixes,
   libxext,
@@ -161,7 +161,7 @@ let
         libx11
         libxdamage
         xrandr
-        xorg.libXtst
+        libxtst
         libxcomposite
         libxext
         libxfixes

@@ -6,7 +6,7 @@
   libxext,
   libx11,
   libxrender,
-  libXtst,
+  libxtst,
   libxi,
   freetype,
   alsa-lib,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libx11
     libxrender
-    libXtst
+    libxtst
     libxi
     freetype
     alsa-lib

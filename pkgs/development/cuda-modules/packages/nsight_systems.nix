@@ -14,7 +14,7 @@
   rdma-core,
   ucx,
   wayland,
-  xorg,
+  libxtst,
   libxrandr,
   libxdamage,
   libxcursor,
@@ -125,7 +125,7 @@ buildRedist (
       libxcursor
       libxdamage
       libxrandr
-      xorg.libXtst
+      libxtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
     ++ lib.optionals (backendStdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [

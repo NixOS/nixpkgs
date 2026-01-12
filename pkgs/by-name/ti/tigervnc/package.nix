@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  libxtst,
   libxrandr,
   libxi,
   libxft,
@@ -153,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       perl
       xorgproto
       xorg.utilmacros
-      xorg.libXtst
+      libxtst
       libxext
       libx11
       libxext

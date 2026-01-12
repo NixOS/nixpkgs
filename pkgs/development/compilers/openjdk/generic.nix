@@ -33,7 +33,7 @@
   libice,
   libxext,
   libxrender,
-  libXtst,
+  libxtst,
   libXt,
   libxi,
   libxinerama,
@@ -280,7 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libxext
     libxrender
-    libXtst
+    libxtst
     libXt
     libxi
     libxinerama

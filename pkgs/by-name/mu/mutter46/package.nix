@@ -23,7 +23,7 @@
   libxext,
   libxfixes,
   libxi,
-  libXtst,
+  libxtst,
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxfixes
     libxi
-    libXtst
+    libxtst
     libxkbfile
     xkeyboard_config
     libxkbcommon

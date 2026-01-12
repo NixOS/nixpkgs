@@ -7,7 +7,7 @@
   libtool,
   libx11,
   libxi,
-  libXtst,
+  libxtst,
   pkg-config,
   xorgproto,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxi
-    libXtst
+    libxtst
     xorgproto
   ];
 

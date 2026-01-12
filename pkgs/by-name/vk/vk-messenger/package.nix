@@ -5,7 +5,7 @@
   rpmextract,
   undmg,
   autoPatchelfHook,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxdamage,
   libxkbfile,
@@ -66,7 +66,7 @@ let
     ];
     buildInputs = [
       libxdamage
-      xorg.libXtst
+      libxtst
       libxscrnsaver
       libxkbfile
       gtk3

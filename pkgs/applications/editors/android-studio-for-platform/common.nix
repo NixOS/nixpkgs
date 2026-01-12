@@ -30,7 +30,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   makeFontsConf,
   makeWrapper,
   ncurses5,
@@ -110,7 +110,7 @@ let
             libxext
             libxi
             libxrender
-            libXtst
+            libxtst
             libx11
 
             # Support multiple monitors

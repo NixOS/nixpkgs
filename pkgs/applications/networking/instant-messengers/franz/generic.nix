@@ -5,7 +5,7 @@
   wrapGAppsHook3,
   autoPatchelfHook,
   dpkg,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -87,7 +87,7 @@ stdenv.mkDerivation (
       libxfixes
       libxrender
       libx11
-      xorg.libXtst
+      libxtst
       libxscrnsaver
       libgbm
       gtk3

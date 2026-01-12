@@ -22,7 +22,7 @@
   nss,
   pango,
   systemd,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     libxcb
     libdrm
     libgbm

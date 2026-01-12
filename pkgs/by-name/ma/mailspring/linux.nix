@@ -18,7 +18,7 @@
   nss,
   openssl,
   udev,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxdamage,
   libxshmfence,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     libxdamage
     libxscrnsaver
-    xorg.libXtst
+    libxtst
     libxshmfence
     libgbm
     libdrm

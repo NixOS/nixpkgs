@@ -18,7 +18,7 @@
   libx11,
   libxkbfile,
   libxi,
-  libXtst,
+  libxtst,
   libxrandr,
   libxinerama,
   xkeyboardconfig,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     libsm
     libx11
     libxi
-    libXtst
+    libxtst
     libxrandr
     libxinerama
     libxkbfile

@@ -25,7 +25,7 @@
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   sqlite,
   fontconfig,
   versionCheckHook,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     libxdmcp
     libxkbcommon
-    libXtst
+    libxtst
   ];
 
   propagatedBuildInputs = [ fontconfig ];

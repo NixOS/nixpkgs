@@ -42,7 +42,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libxshmfence,
   xcbutil,
   xcbutilimage,
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     libxi
     libxrandr
     libxrender
-    libXtst
+    libxtst
     libxshmfence
     xcbutil
     xcbutilimage

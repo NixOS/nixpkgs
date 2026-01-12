@@ -9,7 +9,7 @@
   xinput,
   libxi,
   libxext,
-  libXtst,
+  libxtst,
   libxpm,
   libx11,
   autoreconfHook,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libxrender
     libxft
     libxext
-    libXtst
+    libxtst
     libxpm
     libx11
     libxi

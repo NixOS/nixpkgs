@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libx11,
-  libXtst,
+  libxtst,
   xorgproto,
   libxi,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libx11
-    libXtst
+    libxtst
     xorgproto
     libxi
   ];

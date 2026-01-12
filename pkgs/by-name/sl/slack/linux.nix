@@ -40,7 +40,7 @@
   systemd,
   wayland,
   xdg-utils,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
       libxi
       libxrandr
       libxrender
-      xorg.libXtst
+      libxtst
       libxkbfile
       libxshmfence
     ]

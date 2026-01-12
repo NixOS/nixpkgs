@@ -10,7 +10,7 @@
   libportal,
   libx11,
   libxkbfile,
-  libXtst,
+  libxtst,
   libxinerama,
   libxi,
   libxrandr,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxi
     libxrandr
-    libXtst
+    libxtst
     libxkbcommon
     pugixml
     gdk-pixbuf

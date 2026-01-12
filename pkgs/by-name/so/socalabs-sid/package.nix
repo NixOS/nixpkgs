@@ -7,7 +7,7 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  xorg,
+  libxtst,
   libxrandr,
   libxinerama,
   libxdmcp,
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
     libxcursor
     libxinerama
     libxrandr
-    xorg.libXtst
+    libxtst
     libxdmcp
     xvfb
     libGL

@@ -10,7 +10,7 @@
   qttools,
   qtdeclarative,
   libxfixes,
-  libXtst,
+  libxtst,
   qtwayland,
   wayland,
   pkg-config,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     qttools
     qtdeclarative
     libxfixes
-    libXtst
+    libxtst
     qtwayland
     wayland
     kdePackages.kconfig

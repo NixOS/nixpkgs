@@ -12,7 +12,7 @@
   webkitgtk_4_1,
   zenity,
   curl,
-  xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxinerama,
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     libxrender
     libxrandr
     libxdmcp
-    xorg.libXtst
+    libxtst
     xvfb
     libsysprof-capture
     pcre2

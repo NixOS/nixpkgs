@@ -9,7 +9,7 @@
   libx11,
   libxcb,
   libxi,
-  libXtst,
+  libxtst,
   libnotify,
   libxkbcommon,
   libpng,
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals x11Support [
     libxi
-    libXtst
+    libxtst
     libx11
     libxcb
     xclip

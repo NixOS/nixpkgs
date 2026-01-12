@@ -9,7 +9,7 @@
   jre,
   libGL,
   libx11,
-  libXtst,
+  libxtst,
   libxkbcommon,
   libxcb,
   libXt,
@@ -24,7 +24,7 @@ let
     libGL
     # jnativehook dependencies
     libx11
-    libXtst
+    libxtst
     libxkbcommon
     libxcb
     libXt

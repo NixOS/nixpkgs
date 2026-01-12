@@ -11,7 +11,7 @@
   gtk2,
   alsa-lib,
   dbus-glib,
-  libXtst,
+  libxtst,
   libxdamage,
   libxscrnsaver,
 }:
@@ -46,7 +46,7 @@ let
       gtk2
       alsa-lib
       dbus-glib
-      libXtst
+      libxtst
       libxdamage
       libxscrnsaver
     ];

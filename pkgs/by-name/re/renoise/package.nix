@@ -10,7 +10,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
   mpg123,
   pipewire,
   releasePath ? null,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     libxext
     libxinerama
     libxrandr
-    libXtst
+    libxtst
     pipewire
   ];
 

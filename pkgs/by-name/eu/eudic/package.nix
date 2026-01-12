@@ -10,7 +10,7 @@
   libx11,
   libxscrnsaver,
   libxext,
-  libXtst,
+  libxtst,
   libuuid,
   libsecret,
   xdg-utils,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxscrnsaver
     libxext
-    libXtst
+    libxtst
     libuuid
     libsecret
     xdg-utils

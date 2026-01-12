@@ -17,7 +17,7 @@
   fontconfig,
   freetype,
   libffi,
-  xorg,
+  libxtst,
   libxrender,
   libxi,
   libxext,
@@ -71,7 +71,7 @@ let
       libxext
       libxi
       libxrender
-      xorg.libXtst
+      libxtst
       zlib
     ]
     ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;

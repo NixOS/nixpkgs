@@ -5,7 +5,7 @@
   openssl,
   zlib,
   libjpeg,
-  xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxi,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libx11
     libjpeg
-    xorg.libXtst
+    libxtst
     libxinerama
     libxrandr
     libxext

@@ -17,7 +17,7 @@
   systemd,
   wrapGAppsHook3,
   xapp,
-  xorg,
+  libxtst,
   libxrender,
   libxext,
   libxcomposite,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
     systemd
 
-    xorg.libXtst
+    libxtst
     libxrender
     xtrans
 

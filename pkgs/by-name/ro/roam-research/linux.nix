@@ -22,7 +22,7 @@
   libxi,
   libxrandr,
   libxrender,
-  libXtst,
+  libxtst,
   libdrm,
   libpulseaudio,
   libxcb,
@@ -67,7 +67,7 @@ let
     libxscrnsaver
     libxcursor
     libxrender
-    libXtst
+    libxtst
     libpulseaudio
     udev
   ];

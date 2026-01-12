@@ -5,7 +5,7 @@
   autoPatchelfHook,
   bluez,
   libx11,
-  libXtst,
+  libxtst,
   makeWrapper,
   versionCheckHook,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (
       wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libx11
-          libXtst
+          libxtst
           bluez
         ]
       }"

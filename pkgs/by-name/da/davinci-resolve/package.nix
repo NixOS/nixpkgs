@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libxtst,
   libxrender,
   libxrandr,
   libxi,
@@ -247,7 +248,7 @@ buildFHSEnv {
       libxrandr
       libxrender
       xorg.libXt
-      xorg.libXtst
+      libxtst
       xorg.libXxf86vm
       libxcb
       xorg.xcbutil

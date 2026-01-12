@@ -38,7 +38,7 @@
   jdk21,
   ant,
   cups,
-  xorg,
+  libxtst,
   libxi,
   libxinerama,
   libxext,
@@ -447,7 +447,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxext
       libxi
       libxinerama
-      xorg.libXtst
+      libxtst
       libabw
       libargon2
       libatomic_ops

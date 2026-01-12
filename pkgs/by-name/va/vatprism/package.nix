@@ -14,7 +14,7 @@
   libxi,
   libxrandr,
   libXxf86vm,
-  libXtst,
+  libxtst,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -28,7 +28,7 @@ let
     libxi
     libxrandr
     libXxf86vm
-    libXtst
+    libxtst
     fontconfig
   ];
   jdkWithFX = jdk.override { enableJavaFX = true; };

@@ -21,7 +21,7 @@
   libxfixes,
   libxrender,
   libx11,
-  libXtst,
+  libxtst,
   libxscrnsaver,
   libxcb,
   nss,
@@ -62,7 +62,7 @@ let
     libxcb
     libxrender
     libx11
-    libXtst
+    libxtst
     libxscrnsaver
     nss
     nspr

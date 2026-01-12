@@ -21,7 +21,7 @@
   ibus,
   json-glib,
   pantheon,
-  xorg,
+  libxtst,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     dbus
     ibus
     json-glib
-    xorg.libXtst
+    libxtst
     pantheon.granite
   ];
 

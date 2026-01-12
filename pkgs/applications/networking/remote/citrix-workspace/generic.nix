@@ -65,7 +65,7 @@
   tzdata,
   which,
   woff2,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxmu,
@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     libxscrnsaver
     libxaw
     libxmu
-    xorg.libXtst
+    libxtst
     zlib
   ];
 
@@ -231,7 +231,7 @@ stdenv.mkDerivation rec {
     libxinerama
     libxmu
     libxrender
-    xorg.libXtst
+    libxtst
     libxcb
     xdpyinfo
     xprop

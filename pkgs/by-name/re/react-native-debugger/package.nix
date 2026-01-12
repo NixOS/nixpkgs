@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   cairo,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -65,7 +65,7 @@ let
 
     libx11
     libxcursor
-    xorg.libXtst
+    libxtst
     libxcb
     libxext
     libxi

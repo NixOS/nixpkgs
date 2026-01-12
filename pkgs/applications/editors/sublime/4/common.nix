@@ -9,7 +9,7 @@
   fetchurl,
   stdenv,
   lib,
-  xorg,
+  libxtst,
   libx11,
   glib,
   libglvnd,
@@ -51,7 +51,7 @@ let
 
   neededLibraries = [
     libx11
-    xorg.libXtst
+    libxtst
     glib
     libglvnd
     openssl_1_1

@@ -11,7 +11,7 @@
   avahi,
   libevdev,
   libpulseaudio,
-  xorg,
+  libxtst,
   libxrandr,
   libxi,
   libxfixes,
@@ -139,7 +139,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libxcb
     libxfixes
     libxrandr
-    xorg.libXtst
+    libxtst
     libxi
     openssl
     libopus

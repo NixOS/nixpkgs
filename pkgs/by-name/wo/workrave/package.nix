@@ -13,7 +13,7 @@
   libice,
   libsm,
   libxscrnsaver,
-  libXtst,
+  libxtst,
   gobject-introspection,
   glib,
   glibmm,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libice
     libsm
     libxscrnsaver
-    libXtst
+    libxtst
     glib
     glibmm
     gtkmm3

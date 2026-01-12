@@ -147,7 +147,7 @@ buildFHSEnv {
       libxcursor
       libxi
       libxrender
-      xorg.libXtst
+      libxtst
 
       # for running Electron before 10.0.0 inside
       libxscrnsaver

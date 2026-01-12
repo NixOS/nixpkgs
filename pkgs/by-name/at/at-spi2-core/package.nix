@@ -19,7 +19,7 @@
   dconf,
   libx11,
   libxml2,
-  libXtst,
+  libxtst,
   libxi,
   libxext,
   gnome,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libx11
     libxml2
     # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
-    libXtst
+    libxtst
     libxi
     # libXext is a transitive dependency of libxi
     libxext

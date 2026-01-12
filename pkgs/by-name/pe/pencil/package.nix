@@ -23,7 +23,7 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxtst,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -69,7 +69,7 @@ let
     libxi
     libxrandr
     libxrender
-    xorg.libXtst
+    libxtst
     (lib.getLib stdenv.cc.cc)
     stdenv.cc.cc
   ];

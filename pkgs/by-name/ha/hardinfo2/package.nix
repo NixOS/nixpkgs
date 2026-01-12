@@ -26,7 +26,7 @@
   libthai,
   libxkbcommon,
   libxdmcp,
-  libXtst,
+  libxtst,
   pcre2,
   sqlite,
   util-linux,
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     util-linux
     libxdmcp
-    libXtst
+    libxtst
     vulkan-headers
     wayland
   ];

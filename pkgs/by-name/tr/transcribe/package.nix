@@ -15,7 +15,7 @@
   gtk3,
   libsm,
   libx11,
-  libXtst,
+  libxtst,
   libpng12,
   pango,
   zlib,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       gdk-pixbuf
       alsa-lib
       libx11
-      libXtst
+      libxtst
       libsm
       libpng12
       gstreamer

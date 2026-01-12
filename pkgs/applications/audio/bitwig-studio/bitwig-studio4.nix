@@ -20,6 +20,7 @@
   wrapGAppsHook3,
   xdg-utils,
   xorg,
+  libxtst,
   libxcursor,
   libx11,
   libxcb,
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxcursor
     libx11
-    xorg.libXtst
+    libxtst
     libxkbcommon
     pipewire
     pulseaudio

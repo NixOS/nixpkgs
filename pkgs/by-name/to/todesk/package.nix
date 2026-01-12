@@ -25,7 +25,7 @@
   libxcomposite,
   libxdamage,
   libxfixes,
-  libXtst,
+  libxtst,
   nss,
   libXxf86vm,
   gtk3,
@@ -95,7 +95,7 @@ buildFHSEnv {
     libxcomposite
     libxdamage
     libxfixes
-    libXtst
+    libxtst
     nss
     libXxf86vm
     gtk3

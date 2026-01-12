@@ -99,7 +99,7 @@
   libxext,
   libxinerama,
   libxrandr,
-  libXtst,
+  libxtst,
   libxfixes,
   xdpyinfo,
   libxdmcp,
@@ -358,7 +358,7 @@ stdenv.mkDerivation (
       libxdmcp
       libxinerama
       libxrandr.dev
-      libXtst
+      libxtst
       libxfixes
     ]
     ++ lib.optional dbusSupport dbus
