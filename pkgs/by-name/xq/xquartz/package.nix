@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xcmsdb,
   xclock,
   xbacklight,
   xauth,
@@ -145,7 +146,7 @@ let
     xauth
     xbacklight
     xclock
-    xorg.xcmsdb
+    xcmsdb
     xorg.xcursorgen
     xorg.xdm
     xorg.xdpyinfo
