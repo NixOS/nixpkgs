@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-B+MfnYbxIbgMHFWWOYhap1MEbV3/NNYuR9goJDTNn9A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZLQFERi38+0SUxWaYAL4AepgVuAQKo9pxjcMkzA55BM=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -36,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.pkgs-config = testers.testMetaPkgConfig libetebase;
 
-  meta = with lib; {
-    description = "A C library for Etebase";
+  meta = {
+    description = "C library for Etebase";
     homepage = "https://www.etebase.com/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ laalsaas ];
+    maintainers = with lib.maintainers; [ laalsaas ];
     pkgConfigModules = [ "etebase" ];
   };
 }

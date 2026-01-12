@@ -12,20 +12,21 @@
 
 buildPythonPackage rec {
   pname = "argparse-manpage";
-  version = "4.6";
+  version = "4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praiskup";
     repo = "argparse-manpage";
     tag = "v${version}";
-    hash = "sha256-2GJDFLCaPTb8sQCAv9qZ+pIysFE7IaKh9co3Mb8Dutc=";
+    hash = "sha256-nonC0oK3T/8+gSa0lRaCf2wvvXoRBPP8b1jioNmW4qI=";
   };
 
   nativeBuildInputs = [
     setuptools
     packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 
@@ -40,18 +41,23 @@ buildPythonPackage rec {
     "test_old_example_file_name"
   ];
 
+  disabledTestPaths = [
+    # network access to install setuptools, likely due to pip update
+    "tests/test_examples.py"
+  ];
+
   pythonImportsCheck = [ "argparse_manpage" ];
 
   optional-dependencies = {
     setuptools = [ setuptools ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automatically build man-pages for your Python project";
     homepage = "https://github.com/praiskup/argparse-manpage";
-    changelog = "https://github.com/praiskup/argparse-manpage/blob/${src.rev}/NEWS";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    changelog = "https://github.com/praiskup/argparse-manpage/blob/${src.tag}/NEWS";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "argparse-manpage";
   };
 }

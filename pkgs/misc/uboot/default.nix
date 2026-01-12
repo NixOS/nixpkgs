@@ -27,14 +27,17 @@
   armTrustedFirmwareRK3568,
   armTrustedFirmwareRK3588,
   armTrustedFirmwareS905,
+  opensbi,
   buildPackages,
+  callPackages,
+  darwin,
 }@pkgs:
 
 let
-  defaultVersion = "2025.01";
+  defaultVersion = "2025.10";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-ze99UHyT8bvZ8BXqm8IfoHQmhIFAVQGUWrxvhU1baG8=";
+    hash = "sha256-tPAyhI5WzI8hOtWfkTLAhNu7YyvCkXbQJOWCIODv30o=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -43,7 +46,7 @@ let
     ncurses # tools/kwboot
     libuuid # tools/mkeficapsule
     gnutls # tools/mkeficapsule
-    openssl # tools/mkimage
+    openssl # tools/mkimage and tools/env/fw_printenv
   ];
 
   buildUBoot = lib.makeOverridable (
@@ -70,9 +73,7 @@ let
 
         src = if src == null then defaultSrc else src;
 
-        patches = [
-          ./0001-configs-rpi-allow-for-bigger-kernels.patch
-        ] ++ extraPatches;
+        patches = extraPatches;
 
         postPatch = ''
           ${lib.concatMapStrings (script: ''
@@ -97,8 +98,10 @@ let
           swig
           which # for scripts/dtc-version.sh
           perl # for oid build (secureboot)
-        ] ++ lib.optionals (!crossTools) toolsDeps;
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
+        ]
+        ++ lib.optionals (!crossTools) toolsDeps
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
+        depsBuildBuild = [ buildPackages.gccStdenv.cc ]; # gccStdenv is needed for Darwin buildPlatform
         buildInputs = lib.optionals crossTools toolsDeps;
 
         hardeningDisable = [ "all" ];
@@ -108,14 +111,16 @@ let
         makeFlags = [
           "DTC=${lib.getExe buildPackages.dtc}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-        ] ++ extraMakeFlags;
+          "HOSTCFLAGS=-fcommon"
+        ]
+        ++ extraMakeFlags;
 
         passAsFile = [ "extraConfig" ];
 
         configurePhase = ''
           runHook preConfigure
 
-          make ${defconfig}
+          make -j$NIX_BUILD_CORES ${defconfig}
 
           cat $extraConfigPath >> .config
 
@@ -132,7 +137,7 @@ let
 
           mkdir -p "$out/nix-support"
           ${lib.concatMapStrings (file: ''
-            echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+            echo "file binary-dist ${installDir}/${baseNameOf file}" >> "$out/nix-support/hydra-build-products"
           '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
 
           runHook postInstall
@@ -141,13 +146,12 @@ let
         dontStrip = true;
 
         meta =
-          with lib;
+
           {
             homepage = "https://www.denx.de/wiki/U-Boot/";
             description = "Boot loader for embedded systems";
-            license = licenses.gpl2Plus;
-            maintainers = with maintainers; [
-              bartsch
+            license = lib.licenses.gpl2Plus;
+            maintainers = with lib.maintainers; [
               dezgeg
               lopsided98
             ];
@@ -176,6 +180,7 @@ in
       "HOST_TOOLS_ALL=y"
       "NO_SDL=1"
       "cross_tools"
+      "envtools"
     ];
 
     outputs = [
@@ -185,19 +190,31 @@ in
 
     postInstall = ''
       installManPage doc/*.1
+
+      # from u-boot's tools/env/README:
+      # "You should then create a symlink from fw_setenv to fw_printenv. They
+      # use the same program and its function depends on its basename."
+      ln -s $out/bin/fw_printenv $out/bin/fw_setenv
     '';
+
     filesToInstall = [
       "tools/dumpimage"
+      "tools/fdt_add_pubkey"
       "tools/fdtgrep"
       "tools/kwboot"
+      "tools/mkeficapsule"
       "tools/mkenvimage"
       "tools/mkimage"
+      "tools/env/fw_printenv"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
       "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
     };
   };
+
+  ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
@@ -213,7 +230,10 @@ in
 
   ubootAmx335xEVM = buildUBoot {
     defconfig = "am335x_evm_defconfig";
-    extraMeta.platforms = [ "armv7l-linux" ];
+    extraMeta = {
+      platforms = [ "armv7l-linux" ];
+      broken = true; # too big, exceeds memory size
+    };
     filesToInstall = [
       "MLO"
       "u-boot.img"
@@ -224,6 +244,12 @@ in
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
+
+  ubootBananaPim2Zero = buildUBoot {
+    defconfig = "bananapi_m2_zero_defconfig";
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+    extraMeta.platforms = [ "armv7l-linux" ];
   };
 
   ubootBananaPim3 = buildUBoot {
@@ -287,9 +313,6 @@ in
     '';
   };
 
-  # Flashing instructions:
-  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
-  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
   ubootLibreTechCC =
     let
       firmwareImagePkg = fetchFromGitHub {
@@ -300,10 +323,21 @@ in
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in
-    assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
     buildUBoot {
       defconfig = "libretech-cc_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+        longDescription = ''
+          Boot loader for the Libre Computer AML-S905X-CC.
+
+          Flashing instructions:
+          ```sh
+          dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
+          dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
+          ```
+        '';
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [ "u-boot.bin" ];
       postBuild = ''
         # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
@@ -367,6 +401,17 @@ in
     ];
   };
 
+  ubootNanoPiR5S = buildUBoot {
+    defconfig = "nanopi-r5s-rk3568_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = rkbin.BL31_RK3568;
+    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    filesToInstall = [
+      "idbloader.img"
+      "u-boot.itb"
+    ];
+  };
+
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
@@ -376,10 +421,6 @@ in
     ];
   };
 
-  # Flashing instructions:
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
-  # dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
   ubootOdroidC2 =
     let
       firmwareBlobs = fetchFromGitHub {
@@ -392,7 +433,19 @@ in
     in
     buildUBoot {
       defconfig = "odroid-c2_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        longDescription = ''
+          Boot loader for the Hardkernel ODROID-C2.
+
+          Flashing instructions:
+          ```sh
+          dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
+          dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
+          dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
+          ```
+        '';
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [
         "u-boot.bin"
         "u-boot.gxbb"
@@ -453,6 +506,19 @@ in
 
   ubootOrangePi5 = buildUBoot {
     defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [
+      "u-boot.itb"
+      "idbloader.img"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
+  ubootOrangePi5Max = buildUBoot {
+    defconfig = "orangepi-5-max-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
     ROCKCHIP_TPL = rkbin.TPL_RK3588;
@@ -634,6 +700,18 @@ in
     ];
   };
 
+  ubootRadxaZero3W = buildUBoot {
+    defconfig = "radxa-zero-3-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3566;
+    filesToInstall = [
+      "idbloader.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+    ];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = [ "armv6l-linux" ];
@@ -710,13 +788,17 @@ in
     ];
   };
 
-  # A special build with much lower memory frequency (666 vs 1600 MT/s) which
-  # makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
-  # on that revision is marginal and not unconditionally stable at the specified
-  # frequency. If your ROCK64 is unstable you can try this u-boot variant to
-  # see if it works better for you. The only disadvantage is lowered memory
-  # bandwidth.
   ubootRock64v2 = buildUBoot {
+    extraMeta.longDescription = ''
+      Boot loader for the Pine64 Rock64 V2.
+
+      A special build with much lower memory frequency (666 vs 1600 MT/s) which
+      makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
+      on that revision is marginal and not unconditionally stable at the specified
+      frequency. If your ROCK64 is unstable you can try this u-boot variant to
+      see if it works better for you. The only disadvantage is lowered memory
+      bandwidth.
+    '';
     prePatch = ''
       substituteInPlace arch/arm/dts/rk3328-rock64-u-boot.dtsi \
         --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
@@ -743,13 +825,6 @@ in
   };
 
   ubootRockPro64 = buildUBoot {
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
-        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
-      })
-    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
@@ -772,7 +847,10 @@ in
 
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
-    extraMeta.platforms = [ "armv5tel-linux" ];
+    extraMeta = {
+      platforms = [ "armv5tel-linux" ];
+      broken = true; # too big, exceeds partition size
+    };
     filesToInstall = [ "u-boot.kwb" ];
   };
 
@@ -804,8 +882,25 @@ in
     extraConfig = ''
       CONFIG_CMD_SETEXPR=y
     '';
-    # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
-    # sf probe; sf update $loadaddr 0 80000
+    extraMeta.longDescription = ''
+      Boot loader for the CompuLab CM-FX6.
+
+      Flashing instructions:
+      ```
+      sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
+      sf probe; sf update $loadaddr 0 80000
+      ```
+    '';
+  };
+
+  ubootVisionFive2 = buildUBoot {
+    defconfig = "starfive_visionfive2_defconfig";
+    extraMeta.platforms = [ "riscv64-linux" ];
+    OPENSBI = "${opensbi}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
+    filesToInstall = [
+      "spl/u-boot-spl.bin.normal.out"
+      "u-boot.itb"
+    ];
   };
 
   ubootWandboard = buildUBoot {

@@ -78,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/valhalla/valhalla/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = [ maintainers.Thra11 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.Thra11 ];
     pkgConfigModules = [ "libvalhalla" ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -37,12 +37,12 @@ mkDerivation {
       --replace '-llept' '-lleptonica'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editor of tesseract-ocr box files";
     mainProgram = "qt-box-editor-1.12rc1";
     homepage = "https://github.com/zdenop/qt-box-editor";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.costrouc ];
+    platforms = lib.platforms.all;
   };
 }

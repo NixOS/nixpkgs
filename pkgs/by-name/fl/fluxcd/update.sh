@@ -12,9 +12,9 @@ LATEST_VERSION=$(echo "${LATEST_TAG}" | sed 's/^v//')
 
 if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     SRC_SHA256=$(nix-prefetch-url --quiet --unpack "https://github.com/fluxcd/flux2/archive/refs/tags/${LATEST_TAG}.tar.gz")
-    SRC_HASH=$(nix hash convert --hash-algo sha256 --to sri "$SRC_SHA256")
+    SRC_HASH=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$SRC_SHA256")
     MANIFESTS_SHA256=$(nix-prefetch-url --quiet --unpack "https://github.com/fluxcd/flux2/releases/download/${LATEST_TAG}/manifests.tar.gz")
-    MANIFESTS_HASH=$(nix hash convert --hash-algo sha256 --to sri "$MANIFESTS_SHA256")
+    MANIFESTS_HASH=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$MANIFESTS_SHA256")
 
     setKV () {
         sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${FLUXCD_PATH}/package.nix"
@@ -27,7 +27,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
 
     set +e
     VENDOR_SHA256=$(nix-build --no-out-link -A fluxcd "$NIXPKGS_PATH" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
-    VENDOR_HASH=$(nix hash convert --hash-algo sha256 --to sri "$VENDOR_SHA256")
+    VENDOR_HASH=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$VENDOR_SHA256")
     set -e
 
     if [ -n "${VENDOR_HASH:-}" ]; then

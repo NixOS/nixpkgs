@@ -6,7 +6,6 @@
   fetchPypi,
   lxml,
   python-slugify,
-  pythonOlder,
   setuptools,
   sphinx,
   unidecode,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "sphinx-material";
   version = "0.0.36";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sphinx_material";
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_material" ];
 
-  meta = with lib; {
+  meta = {
     description = "Material-based, responsive theme inspired by mkdocs-material";
     homepage = "https://bashtage.github.io/sphinx-material";
     changelog = "https://github.com/bashtage/sphinx-material/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

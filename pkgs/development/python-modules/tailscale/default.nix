@@ -8,6 +8,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   yarl,
@@ -30,8 +31,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
+      --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -46,16 +46,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "tailscale" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Tailscale API";
     homepage = "https://github.com/frenck/python-tailscale";
     changelog = "https://github.com/frenck/python-tailscale/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

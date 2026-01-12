@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "video-compare";
-  version = "20250420";
+  version = "20250928";
 
   src = fetchFromGitHub {
     owner = "pixop";
     repo = "video-compare";
     tag = version;
-    hash = "sha256-q61ZT2a2AkYWk4v2oZqCLHVu5eZQQrDLgD8vxitGyA4=";
+    hash = "sha256-md+h39tMbd07pHZzQ1eae5QCkqYErMoD6oEYov9lLBU=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/pixop/video-compare";
     description = "Split screen video comparison tool";
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Only;
     mainProgram = "video-compare";
     platforms = lib.platforms.unix;

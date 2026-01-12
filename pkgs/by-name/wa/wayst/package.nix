@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "wayst";
-  version = "unstable-2023-07-16";
+  version = "0-unstable-2023-07-16";
 
   src = fetchFromGitHub {
     owner = "91861";
@@ -84,12 +84,12 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.wayst;
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal emulator";
     mainProgram = "wayst";
     homepage = "https://github.com/91861/wayst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ berbiche ];
   };
 }

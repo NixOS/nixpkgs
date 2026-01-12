@@ -48,12 +48,16 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     sed -e "1aPATH=$out/bin:\$PATH" -i "$out/bin/rgbpm"
   '';
 
   meta = src.meta // {
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

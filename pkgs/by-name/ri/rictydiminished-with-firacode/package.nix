@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hakatashi";
     repo = "RictyDiminished-with-FiraCode";
-    rev = version;
+    tag = version;
     hash = "sha256-twh3yLAM4MUjWzSDNmo8gNIRf01hieXeOS334sNdFk4=";
     fetchSubmodules = true;
   };
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hakatashi/RictyDiminished-with-FiraCode";
     description = "Best Japanese programming font meets the awesome ligatures of Firacode";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mt-caret ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mt-caret ];
   };
 }

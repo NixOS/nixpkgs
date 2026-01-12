@@ -32,23 +32,22 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      flac
-      freetype
-      glew
-      libjpeg
-      libvorbis
-      openal
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXcursor
-      libXrandr
-      libXrender
-      xcbutilimage
-    ];
+  buildInputs = [
+    flac
+    freetype
+    glew
+    libjpeg
+    libvorbis
+    openal
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXcursor
+    libXrandr
+    libXrender
+    xcbutilimage
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
     license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.astsmtl ];
     platforms = lib.platforms.unix;
     badPlatforms = [
       # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'

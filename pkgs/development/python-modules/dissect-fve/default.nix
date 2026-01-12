@@ -7,7 +7,6 @@
   dissect-target,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-fve";
-  version = "4.1";
+  version = "4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.fve";
     tag = version;
-    hash = "sha256-xPjwyI134E0JWkM+S2ae9TuBGHMSrgyjooM9CGECqgg=";
+    hash = "sha256-Lg29WJfXvjdhGtkZowzXgH9zzockoGkei1s9hgLr/gg=";
   };
 
   build-system = [
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.fve" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing parsers for full volume encryption implementations";
     homepage = "https://github.com/fox-it/dissect.fve";
     changelog = "https://github.com/fox-it/dissect.fve/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

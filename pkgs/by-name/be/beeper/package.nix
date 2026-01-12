@@ -9,10 +9,10 @@
 }:
 let
   pname = "beeper";
-  version = "4.0.710";
+  version = "4.2.455";
   src = fetchurl {
-    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}.AppImage";
-    hash = "sha256-8NwntTrxxWScww0i2DlbVUg5KBlE3WcCVq5P1so8/ig=";
+    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
+    hash = "sha256-3FHaPIJb40ta/+sguolz2QQBKkGgd1P3CgyEHHxX5xA=";
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -70,7 +70,7 @@ appimageTools.wrapAppImage {
     inherit src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
@@ -78,10 +78,9 @@ appimageTools.wrapAppImage {
       many different chat networks.
     '';
     homepage = "https://beeper.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       jshcmpbll
-      edmundmiller
       zh4ngx
     ];
     platforms = [ "x86_64-linux" ];

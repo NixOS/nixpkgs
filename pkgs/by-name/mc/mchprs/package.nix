@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Jm9ZsqCKOIxZsXQbCluYu7MgOD7hXYljcv/URaNVUW0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YDfyixNfJsKigf3W5265CWl4ETQDeBHYpquBoFoj4Tw=";
 
   nativeBuildInputs = [
@@ -33,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "mchprs";
     description = "Multithreaded Minecraft server built for redstone";
     homepage = "https://github.com/MCHPR/MCHPRS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gdd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gdd ];
   };
 }

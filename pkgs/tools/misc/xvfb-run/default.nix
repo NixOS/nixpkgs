@@ -13,6 +13,7 @@
   coreutils,
   installShellFiles,
   xterm,
+  bashNonInteractive,
 }:
 stdenvNoCC.mkDerivation {
   pname = "xvfb-run";
@@ -29,6 +30,12 @@ stdenvNoCC.mkDerivation {
     makeWrapper
     installShellFiles
   ];
+
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
 
   dontUnpack = true;
   dontBuild = true;
@@ -69,11 +76,11 @@ stdenvNoCC.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Convenience script to run a virtualized X-Server";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.artturin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.artturin ];
     mainProgram = "xvfb-run";
   };
 }

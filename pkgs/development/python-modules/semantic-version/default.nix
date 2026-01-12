@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "semantic-version";
   version = "2.10.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "semantic_version";
@@ -23,11 +20,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "semantic_version" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing the 'SemVer' scheme";
     homepage = "https://github.com/rbarrois/python-semanticversion/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       layus
       makefu
     ];

@@ -1,22 +1,26 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mqtt-exporter";
-  version = "1.7.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kpetremann";
     repo = "mqtt-exporter";
     tag = "v${version}";
-    hash = "sha256-aEuwJeNMB6sou6oyAwCj11lOdMCjCyEsrDcMF/pHzcg=";
+    hash = "sha256-z2y43sRlwgy3Bwhu8rvlTkf6HOT+v8kjo5FT3lo5CEA=";
   };
 
-  pythonRelaxDeps = [ "prometheus-client" ];
+  postPatch = ''
+    # https://github.com/kpetremann/mqtt-exporter/pull/117
+    substituteInPlace pyproject.toml \
+      --replace-fail  "mqtt_exporter.main:main" "mqtt_exporter.main:main_mqtt_exporter"
+  '';
 
   build-system = with python3.pkgs; [ setuptools ];
 

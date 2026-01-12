@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "webcamoid";
-  version = "9.2.3";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "webcamoid";
     tag = version;
-    hash = "sha256-j4FiRQeFsrZD48P1CUESFytz9l/64Lz1EuOZp0ZSEmI=";
+    hash = "sha256-KU5iJqCGbqTZebP5yWb5VcxRGcRjQYQHn+GP6W57D9I=";
   };
 
   buildInputs = [

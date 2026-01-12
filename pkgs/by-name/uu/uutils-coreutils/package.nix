@@ -21,24 +21,24 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.1.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-nKKjc6Bui7k50SR7BY09dRGt3Za1Ch/E+3KiCO5KtOg=";
+    hash = "sha256-U9godsxtyWOFhrE8CaQesWoeKWmitADp2jyJU/1fPKA=";
   };
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "uutils-coreutils-${finalAttrs.version}";
-    hash = "sha256-PTIypl9uqFkp6GrF7Pp40AItbWFlXT2V2x/C8L2J8S0=";
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-V53qD7SujN8bEdNwcBshdkNeYdk+4Whr+XiYHO1iLXs=";
   };
-
-  patches = [
-    ./selinux_no_auto_detect.diff
-  ];
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform acl) [
@@ -54,31 +54,30 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.sphinx
   ];
 
-  makeFlags =
-    [
-      "CARGO=${lib.getExe cargo}"
-      "PREFIX=${placeholder "out"}"
-      "PROFILE=release"
-      "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
-      "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-      # Explicitly enable acl, and if requested selinux.
-      # We cannot rely on SELINUX_ENABLED here since our explicit assignment
-      # overrides its effect in the makefile.
-      "BUILD_SPEC_FEATURE=${
-        lib.concatStringsSep "," (
-          # We can always enable acl, on non-Linux, libc provides the headers,
-          # only in Linux we need to add the acl lib to buildInputs.
-          [
-            "feat_acl"
-          ]
-          ++ (lib.optionals selinuxSupport [
-            "feat_selinux"
-          ])
-        )
-      }"
-    ]
-    ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  makeFlags = [
+    "CARGO=${lib.getExe cargo}"
+    "PREFIX=${placeholder "out"}"
+    "PROFILE=release"
+    "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
+    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+    # Explicitly enable acl, and if requested selinux.
+    # We cannot rely on SELINUX_ENABLED here since our explicit assignment
+    # overrides its effect in the makefile.
+    "BUILD_SPEC_FEATURE=${
+      lib.concatStringsSep "," (
+        # We can always enable acl, on non-Linux, libc provides the headers,
+        # only in Linux we need to add the acl lib to buildInputs.
+        [
+          "feat_acl"
+        ]
+        ++ (lib.optionals selinuxSupport [
+          "feat_selinux"
+        ])
+      )
+    }"
+  ]
+  ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   env = lib.optionalAttrs selinuxSupport {
     SELINUX_INCLUDE_DIR = ''${libselinux.dev}/include'';
@@ -99,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
       prefix' = lib.optionalString (prefix != null) prefix;
     in
     "${placeholder "out"}/bin/${prefix'}ls";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

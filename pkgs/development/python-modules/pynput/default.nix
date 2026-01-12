@@ -46,22 +46,23 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  propagatedBuildInputs =
-    [ six ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      evdev
-      xlib
-    ];
+  propagatedBuildInputs = [
+    six
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    evdev
+    xlib
+  ];
 
   doCheck = false; # requires running X server
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

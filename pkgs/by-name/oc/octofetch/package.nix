@@ -18,17 +18,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1lnHCiRktBGYb7Bgq4p60+kikb/LApPhzNp1O0Go46Q=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/azur1s/octofetch";
     description = "Github user information on terminal";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "octofetch";
   };

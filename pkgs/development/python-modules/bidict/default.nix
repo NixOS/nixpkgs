@@ -7,7 +7,6 @@
   pytest-xdist,
   pytestCheckHook,
   typing-extensions,
-  pythonOlder,
   wheel,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "bidict";
   version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jab";
@@ -45,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bidict" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bidict.readthedocs.io";
     changelog = "https://bidict.readthedocs.io/changelog.html";
     description = "Bidirectional mapping library for Python";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       jab
       jakewaksbaum
     ];

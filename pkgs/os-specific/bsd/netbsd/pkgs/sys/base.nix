@@ -32,14 +32,13 @@
     ./sys-headers-incsdir.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
-        --replace "-nocombreloc" "-z nocombreloc"
-    ''
-    +
-      # multiple header dirs, see above
-      include.postPatch;
+  postPatch = ''
+    substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
+      --replace "-nocombreloc" "-z nocombreloc"
+  ''
+  +
+    # multiple header dirs, see above
+    include.postPatch;
 
   CONFIG = "GENERIC";
 
@@ -57,14 +56,13 @@
     genassym
   ];
 
-  postConfigure =
-    ''
-      pushd arch/$MACHINE/conf
-      config $CONFIG
-      popd
-    ''
-    # multiple header dirs, see above
-    + include.postConfigure;
+  postConfigure = ''
+    pushd arch/$MACHINE/conf
+    config $CONFIG
+    popd
+  ''
+  # multiple header dirs, see above
+  + include.postConfigure;
 
   makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
   hardeningDisable = [ "pic" ];
@@ -83,6 +81,13 @@
     cp arch/$MACHINE/compile/$CONFIG/netbsd $out
   '';
 
+  postIncludes = ''
+    install $BSDSRCDIR/lib/libossaudio/soundcard.h $out/include/soundcard.h
+  '';
+
   meta.platforms = lib.platforms.netbsd;
-  extraPaths = [ "common" ];
+  extraPaths = [
+    "common"
+    "lib/libossaudio"
+  ];
 }

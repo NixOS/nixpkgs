@@ -37,7 +37,6 @@
   x264,
   x265,
   libavif,
-  libspng,
   openh264,
   libyuv,
   xauth,
@@ -48,7 +47,8 @@
   clang,
   withHtml ? true,
   xpra-html5,
-}@args:
+  udevCheckHook,
+}:
 
 let
   inherit (python3.pkgs) cython buildPythonApplication;
@@ -86,18 +86,20 @@ let
     mkdir -p $out/include $out/lib/pkgconfig
     substituteAll ${cudaPackages.libnvjpeg.dev}/share/pkgconfig/nvjpeg.pc $out/lib/pkgconfig/nvjpeg.pc
   '';
+  effectiveBuildPythonApplication = buildPythonApplication.override {
+    stdenv = if withNvenc then cudaPackages.backendStdenv else stdenv;
+  };
 in
-buildPythonApplication rec {
+effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.3";
-
-  stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
+  version = "6.3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-m0GafyzblXwLBBn/eoSmcsLz1r4nzFIQzCOXVXvQB8Q=";
+    hash = "sha256-kXe/Pyjzf6CxYtsYP15hgYnj+qricrlXGqi/G3uQMFM=";
   };
 
   patches = [
@@ -120,7 +122,9 @@ buildPythonApplication rec {
     pkg-config
     wrapGAppsHook3
     pandoc
-  ] ++ lib.optional withNvenc cudatoolkit;
+    udevCheckHook
+  ]
+  ++ lib.optional withNvenc cudatoolkit;
 
   buildInputs =
     with xorg;
@@ -164,7 +168,6 @@ buildPythonApplication rec {
       x264
       x265
       libavif
-      libspng
       openh264
       libyuv
       xxHash
@@ -214,66 +217,63 @@ buildPythonApplication rec {
   # error: 'import_cairo' defined but not used
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  setupPyBuildFlags =
-    [
-      "--with-Xdummy"
-      "--without-Xdummy_wrapper"
-      "--without-strict"
-      "--with-gtk3"
-      # Override these, setup.py checks for headers in /usr/* paths
-      "--with-pam"
-      "--with-vsock"
-    ]
-    ++ lib.optional withNvenc [
-      "--with-nvenc"
-      "--with-nvjpeg_encoder"
-    ];
+  setupPyBuildFlags = [
+    "--with-Xdummy"
+    "--without-Xdummy_wrapper"
+    "--without-strict"
+    "--with-gtk3"
+    # Override these, setup.py checks for headers in /usr/* paths
+    "--with-pam"
+    "--with-vsock"
+  ]
+  ++ lib.optional withNvenc [
+    "--with-nvenc"
+    "--with-nvjpeg_encoder"
+  ];
 
   dontWrapGApps = true;
 
-  preFixup =
-    ''
-      makeWrapperArgs+=(
-        "''${gappsWrapperArgs[@]}"
-        --set XPRA_INSTALL_PREFIX "$out"
-        --set XPRA_COMMAND "$out/bin/xpra"
-        --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
-        --set XORG_CONFIG_PREFIX ""
-        --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
-        --prefix PATH : ${
-          lib.makeBinPath [
-            getopt
-            xorgserver
-            xauth
-            which
-            util-linux
-            pulseaudioFull
-          ]
-        }
-    ''
-    + lib.optionalString withNvenc ''
-      --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
-    ''
-    + ''
-      )
-    '';
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --set XPRA_INSTALL_PREFIX "$out"
+      --set XPRA_COMMAND "$out/bin/xpra"
+      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XORG_CONFIG_PREFIX ""
+      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix PATH : ${
+        lib.makeBinPath [
+          getopt
+          xorgserver
+          xauth
+          which
+          util-linux
+          pulseaudioFull
+        ]
+      }
+  ''
+  + lib.optionalString withNvenc ''
+    --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
+  ''
+  + ''
+    )
+  '';
 
-  postInstall =
-    ''
-      # append module paths to xorg.conf
-      cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
-      cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
+  postInstall = ''
+    # append module paths to xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
-      # make application icon visible to desktop environemnts
-      icon_dir="$out/share/icons/hicolor/64x64/apps"
-      mkdir -p "$icon_dir"
-      ln -sr "$out/share/icons/xpra.png" "$icon_dir"
-    ''
-    + lib.optionalString withHtml ''
-      ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
-    '';
+    # make application icon visible to desktop environemnts
+    icon_dir="$out/share/icons/hicolor/64x64/apps"
+    mkdir -p "$icon_dir"
+    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
+  ''
+  + lib.optionalString withHtml ''
+    ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
+  '';
 
-  doCheck = false;
+  # doCheck = false;
 
   enableParallelBuilding = true;
 

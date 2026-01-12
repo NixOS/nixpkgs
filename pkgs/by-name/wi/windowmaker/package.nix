@@ -83,6 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "wmaker";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

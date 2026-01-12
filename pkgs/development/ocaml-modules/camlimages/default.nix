@@ -35,14 +35,14 @@ buildDunePackage rec {
     stdio
   ];
 
-  meta = with lib; {
+  meta = {
     branch = "5.0";
     inherit (src.meta) homepage;
     description = "OCaml image processing library";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [
-      maintainers.vbgl
-      maintainers.mt-caret
+      lib.maintainers.vbgl
+      lib.maintainers.mt-caret
     ];
   };
 }

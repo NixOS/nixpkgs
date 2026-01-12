@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sy2qNFn8JLE173HVWfFXBx21jcx4kpFMwi9a0m38lso=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qRF111ofiM8SNUjQfpDg75OPpJnP7fOqM8Ih3NQUdGY=";
 
   nativeBuildInputs = [
@@ -56,15 +55,15 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";
     changelog = "https://github.com/gitext-rs/git-dive/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "git-dive";
   };
 }

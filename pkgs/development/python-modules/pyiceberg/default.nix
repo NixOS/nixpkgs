@@ -16,7 +16,7 @@
   mmh3,
   pydantic,
   pyparsing,
-  ray,
+  pyroaring,
   requests,
   rich,
   sortedcontainers,
@@ -26,14 +26,23 @@
 
   # optional-dependencies
   adlfs,
-  # getdaft,
+  google-cloud-bigquery,
+  # bodo,
+  # daft,
+  datafusion,
   duckdb,
   pyarrow,
   boto3,
+  google-auth,
   gcsfs,
-  mypy-boto3-glue,
+  huggingface-hub,
   thrift,
+  kerberos,
+  # thrift-sasl,
   pandas,
+  polars,
+  pyiceberg-core,
+  ray,
   s3fs,
   python-snappy,
   psycopg2-binary,
@@ -42,7 +51,6 @@
   # tests
   azure-core,
   azure-storage-blob,
-  datafusion,
   fastavro,
   moto,
   pyspark,
@@ -56,14 +64,14 @@
 
 buildPythonPackage rec {
   pname = "iceberg-python";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${version}";
-    hash = "sha256-OUj8z/UOIcK0S4tf6Id52YHweNDfYnX6P4nChXrOxqY=";
+    hash = "sha256-uR8nmKVjYjiArcNaf/Af2kGh14p59VV9g2mKPKmiJnc=";
   };
 
   patches = [
@@ -84,6 +92,7 @@ buildPythonPackage rec {
   env.CIBUILDWHEEL = "1";
 
   pythonRelaxDeps = [
+    "cachetools"
     "rich"
   ];
 
@@ -94,7 +103,7 @@ buildPythonPackage rec {
     mmh3
     pydantic
     pyparsing
-    ray
+    pyroaring
     requests
     rich
     sortedcontainers
@@ -107,8 +116,17 @@ buildPythonPackage rec {
     adlfs = [
       adlfs
     ];
+    bigquery = [
+      google-cloud-bigquery
+    ];
+    bodo = [
+      # bodo
+    ];
     daft = [
-      # getdaft
+      # daft
+    ];
+    datafusion = [
+      datafusion
     ];
     duckdb = [
       duckdb
@@ -117,27 +135,47 @@ buildPythonPackage rec {
     dynamodb = [
       boto3
     ];
+    gcp-auth = [
+      google-auth
+    ];
     gcsfs = [
       gcsfs
     ];
     glue = [
       boto3
-      mypy-boto3-glue
+    ];
+    hf = [
+      huggingface-hub
     ];
     hive = [
       thrift
+    ];
+    hive-kerberos = [
+      kerberos
+      thrift
+      # thrift-sasl
     ];
     pandas = [
       pandas
       pyarrow
     ];
+    polars = [
+      polars
+    ];
     pyarrow = [
       pyarrow
+      pyiceberg-core
+    ];
+    pyiceberg-core = [
+      pyiceberg-core
     ];
     ray = [
       pandas
       pyarrow
       ray
+    ];
+    rest-sigv4 = [
+      boto3
     ];
     s3fs = [
       s3fs
@@ -170,24 +208,24 @@ buildPythonPackage rec {
     datafusion
     fastavro
     moto
-    mypy-boto3-glue
-    pandas
-    pyarrow
     pyspark
     pytest-lazy-fixture
     pytest-mock
     pytest-timeout
     pytestCheckHook
     requests-mock
-    s3fs
-    sqlalchemy
-    thrift
-  ] ++ moto.optional-dependencies.server;
+  ]
+  ++ optional-dependencies.bigquery
+  ++ optional-dependencies.hive
+  ++ optional-dependencies.pandas
+  ++ optional-dependencies.pyarrow
+  ++ optional-dependencies.s3fs
+  ++ optional-dependencies.sql-sqlite
+  ++ moto.optional-dependencies.server;
 
-  pytestFlagsArray = [
-    "-W"
+  pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
-    "ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::ResourceWarning"
   ];
 
   disabledTestPaths = [
@@ -198,61 +236,80 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  disabledTests =
-    [
-      # ModuleNotFoundError: No module named 'puresasl'
-      "test_create_hive_client_with_kerberos"
-      "test_create_hive_client_with_kerberos_using_context_manager"
+  disabledTests = [
+    # KeyError: 'authorization'
+    "test_token_200"
+    "test_token_200_without_optional_fields"
+    "test_token_with_default_scope"
+    "test_token_with_optional_oauth_params"
+    "test_token_with_custom_scope"
 
-      # Require unpackaged pyiceberg_core
-      "test_bucket_pyarrow_transforms"
-      "test_transform_consistency_with_pyarrow_transform"
-      "test_truncate_pyarrow_transforms"
+    # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
+    "test_datafusion_register_pyiceberg_tabl"
 
-      # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
-      "test_checking_if_a_file_exists"
-      "test_closing_a_file"
-      "test_fsspec_file_tell"
-      "test_fsspec_getting_length_of_file"
-      "test_fsspec_pickle_round_trip_s3"
-      "test_fsspec_raise_on_opening_file_not_found"
-      "test_fsspec_read_specified_bytes_for_file"
-      "test_fsspec_write_and_read_file"
-      "test_writing_avro_file"
+    # ModuleNotFoundError: No module named 'puresasl'
+    "test_create_hive_client_with_kerberos"
+    "test_create_hive_client_with_kerberos_using_context_manager"
 
-      # Require unpackaged gcsfs
-      "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
-      "test_fsspec_new_input_file_gcs"
-      "test_fsspec_new_output_file_gcs"
-      "test_fsspec_pickle_roundtrip_gcs"
+    # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
+    "test_checking_if_a_file_exists"
+    "test_closing_a_file"
+    "test_fsspec_file_tell"
+    "test_fsspec_getting_length_of_file"
+    "test_fsspec_pickle_round_trip_s3"
+    "test_fsspec_raise_on_opening_file_not_found"
+    "test_fsspec_read_specified_bytes_for_file"
+    "test_fsspec_write_and_read_file"
+    "test_writing_avro_file"
 
-      # Timeout (network access)
-      "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
-      "test_fsspec_new_abfss_output_file_adls"
-      "test_fsspec_new_input_file_adls"
-      "test_fsspec_pickle_round_trip_aldfs"
-      "test_partitioned_write"
-      "test_token_200_w_oauth2_server_uri"
+    # Require unpackaged gcsfs
+    "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_fsspec_new_input_file_gcs"
+    "test_fsspec_new_output_file_gcs"
+    "test_fsspec_pickle_roundtrip_gcs"
 
-      # Hangs forever (from tests/io/test_pyarrow.py)
-      "test_getting_length_of_file_gcs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
-      "test_converting_an_outputfile_to_an_inputfile_gcs"
-      "test_new_input_file_gcs"
-      "test_new_output_file_gc"
+    # Timeout (network access)
+    "test_config_200"
+    "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
+    "test_fsspec_new_abfss_output_file_adls"
+    "test_fsspec_new_input_file_adls"
+    "test_fsspec_pickle_round_trip_aldfs"
+    "test_partitioned_write"
+    "test_token_200_w_oauth2_server_uri"
 
-      # PermissionError: [Errno 13] Failed to open local file
-      # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
-      "test_identity_transform_column_projection"
-      "test_identity_transform_columns_projection"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError:
-      # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
-      "test_read_not_struct_type"
-    ];
+    # azure.core.exceptions.ServiceRequestError (network access)
+    "test_converting_an_outputfile_to_an_inputfile_adls"
+    "test_file_tell_adls"
+    "test_getting_length_of_file_adls"
+    "test_new_input_file_adls"
+    "test_new_output_file_adls"
+    "test_raise_on_opening_file_not_found_adls"
+    "test_read_specified_bytes_for_file_adls"
+    "test_write_and_read_file_adls"
+
+    # Hangs forever (from tests/io/test_pyarrow.py)
+    "test_getting_length_of_file_gcs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
+    "test_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_create_table_with_database_location"
+    "test_drop_table_with_database_location"
+    "test_new_input_file_gcs"
+    "test_new_output_file_gc"
+
+    # PermissionError: [Errno 13] Failed to open local file
+    # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
+    "test_identity_transform_column_projection"
+    "test_identity_transform_columns_projection"
+    "test_in_memory_catalog_context_manager"
+    "test_inspect_partition_for_nested_field"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError:
+    # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
+    "test_read_not_struct_type"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

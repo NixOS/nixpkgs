@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pycyphal";
-  version = "1.18.0";
+  version = "1.24.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pycyphal";
     tag = version;
-    hash = "sha256-XkH0wss8ueh/Wwz0lhvQShOp3a4X9lNdosT/sMe7p4Q=";
+    hash = "sha256-yrGKmJW4W8bPazKHWkwgNWDPiQYg1KTEuI7hC3yOWek=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +55,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -92,14 +93,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycyphal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    teams = [ teams.ororatech ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.ororatech ];
   };
 }

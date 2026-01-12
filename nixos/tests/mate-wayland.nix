@@ -52,9 +52,11 @@
           machine.succeed(f"{cmd} | grep 'XDG_SESSION_TYPE' | grep 'wayland'")
           machine.succeed(f"{cmd} | grep 'XDG_SESSION_DESKTOP' | grep 'MATE'")
           machine.succeed(f"{cmd} | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate.mate-panel-with-applets.pname}'")
+          # From the nixos/mate module
+          machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Check if Wayfire config is properly configured"):
-          for i in ["button_style = mate", "firedecor", "mate-wayland-components.sh"]:
+          for i in ["autostart_wf_shell = false", "mate-wayland-components.sh"]:
               machine.wait_until_succeeds(f"cat /home/${user.name}/.config/mate/wayfire.ini | grep '{i}'")
 
       with subtest("Check if Wayfire has ever coredumped"):

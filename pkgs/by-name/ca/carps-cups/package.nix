@@ -33,11 +33,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ cups ];
 
-  meta = with lib; {
+  meta = {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "https://www.canon.com/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       ewok
     ];
   };

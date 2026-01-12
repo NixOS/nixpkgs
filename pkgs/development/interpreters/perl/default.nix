@@ -30,11 +30,7 @@ let
             }:
             let
               perlPackagesFun = callPackage ../../../top-level/perl-packages.nix {
-                # allow 'perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig; }; }' like in python3Packages
-                # most perl packages aren't called with callPackage so it's not possible to override their arguments individually
-                # the conditional is because the // above won't be applied to __splicedPackages and hopefully no one is doing that when cross-compiling
-                pkgs = if stdenv.buildPlatform != stdenv.hostPlatform then pkgs.__splicedPackages else pkgs;
-                inherit stdenv;
+                inherit stdenv pkgs;
                 perl = self;
               };
 
@@ -72,19 +68,10 @@ let
 
 in
 rec {
-  # Maint version
-  perl538 = callPackage ./interpreter.nix {
-    self = perl538;
-    version = "5.38.2";
-    sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
-    inherit passthruFun;
-  };
-
-  # Maint version
-  perl540 = callPackage ./interpreter.nix {
-    self = perl540;
-    version = "5.40.0";
-    sha256 = "sha256-x0A0jzVzljJ6l5XT6DI7r9D+ilx4NfwcuroMyN/nFh8=";
+  perl5 = callPackage ./interpreter.nix {
+    self = perl5;
+    version = "5.42.0";
+    sha256 = "sha256-4JPvGE1/mhuXl+JGUpb1VRCtttq4hCsMPtUzKWYwltw=";
     inherit passthruFun;
   };
 }

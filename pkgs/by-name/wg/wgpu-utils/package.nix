@@ -12,17 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "24.0.3";
+  version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     tag = "wgpu-v${version}";
-    hash = "sha256-MoHpMdOKwCdQ2iO4O8WDskOQXgeFwpsD/UhQOhSbF70=";
+    hash = "sha256-Na8UWMEzY0mvw8YERZ86PH79Z5YlXITPdOYha7Ahn7k=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-l7V8awY17YxVyBzWV+BHRva7FczZQxJy8c6xve27gjs=";
+  cargoHash = "sha256-9o1Tb0pVTc3iWPjNlAPBQX72djcx3EPJhxuUW6xZfCs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,14 +42,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
 }

@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0k06aq94cn5xp4knjw0p7gz06hzh622ql2xvnrlr3q8rcmdvwwx1";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zakalwe.fi/~shd/foss/cksfv/";
     description = "Tool for verifying files against a SFV checksum file";
     maintainers = [ ];
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "cksfv";
   };
 }

@@ -74,12 +74,12 @@ buildPythonPackage rec {
     "test_should_invoke_main"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/audreyr/cookiecutter";
     changelog = "https://github.com/cookiecutter/cookiecutter/blob/${version}/HISTORY.md";
     description = "Command-line utility that creates projects from project templates";
     mainProgram = "cookiecutter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kragniz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kragniz ];
   };
 }

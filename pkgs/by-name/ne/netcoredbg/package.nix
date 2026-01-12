@@ -44,6 +44,15 @@ let
 
     hardeningDisable = [ "strictoverflow" ];
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_minimum_required(VERSION 2.8.12.2)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace third_party/linenoise-ng/CMakeLists.txt --replace-fail \
+        "cmake_minimum_required(VERSION 2.6)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    '';
+
     preConfigure = ''
       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
     '';
@@ -101,13 +110,13 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Managed code debugger with MI interface for CoreCLR";
     homepage = "https://github.com/Samsung/netcoredbg";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "netcoredbg";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       leo60228
       konradmalik
     ];

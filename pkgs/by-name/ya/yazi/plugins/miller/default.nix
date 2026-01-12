@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "miller.yazi";
-  version = "0-unstable-2024-08-28";
+  version = "0-unstable-2025-04-17";
 
   src = fetchFromGitHub {
     owner = "Reledia";
     repo = "miller.yazi";
-    rev = "40e02654725a9902b689114537626207cbf23436";
-    hash = "sha256-GXZZ/vI52rSw573hoMmspnuzFoBXDLcA0fqjF76CdnY=";
+    rev = "0a3d1316e38132ae9a6b91fbd69bab295cbbf2fe";
+    hash = "sha256-pZpx7V5ud5JhEkgkfVBSuM0CFIIUXZZ+pOX0xVlHf+0=";
   };
 
   meta = {

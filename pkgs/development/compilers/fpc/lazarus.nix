@@ -58,25 +58,24 @@ stdenv.mkDerivation rec {
     cp ${overrides} ide/${overrides.name}
   '';
 
-  buildInputs =
-    [
-      # we need gtk2 unconditionally as that is the default target when building applications with lazarus
-      fpc
-      gtk2
-      glib
-      libXi
-      xorgproto
-      libX11
-      libXext
-      pango
-      atk
-      stdenv.cc
-      gdk-pixbuf
-    ]
-    ++ lib.optionals withQt [
-      libqtpas
-      qtbase
-    ];
+  buildInputs = [
+    # we need gtk2 unconditionally as that is the default target when building applications with lazarus
+    fpc
+    gtk2
+    glib
+    libXi
+    xorgproto
+    libX11
+    libXext
+    pango
+    atk
+    stdenv.cc
+    gdk-pixbuf
+  ]
+  ++ lib.optionals withQt [
+    libqtpas
+    qtbase
+  ];
 
   # Disable parallel build, errors:
   #  Fatal: (1018) Compilation aborted
@@ -84,7 +83,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional withQt wrapQtAppsHook;
+  ]
+  ++ lib.optional withQt wrapQtAppsHook;
 
   makeFlags = [
     "FPC=fpc"
@@ -145,11 +145,11 @@ stdenv.mkDerivation rec {
         }"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

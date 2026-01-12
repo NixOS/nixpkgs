@@ -14,7 +14,7 @@ let
 in
 {
   name = "proxy";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

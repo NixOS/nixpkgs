@@ -14,7 +14,7 @@ let
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
-      luksDevices = config.boot.initrd.luks.devices;
+      luksDevices = builtins.attrNames config.boot.initrd.luks.devices;
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
@@ -22,7 +22,7 @@ let
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
-      forceMbr = cfg.forceMbr;
+      force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
@@ -43,8 +43,16 @@ in
     inherit (pkgs.limine.meta) maintainers;
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "boot" "loader" "limine" "forceMbr" ]
+      [ "boot" "loader" "limine" "force" ]
+    )
+  ];
+
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
+    package = lib.mkPackageOption pkgs "limine" { };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -117,8 +125,6 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs "limine" { };
-
     efiSupport = lib.mkEnableOption null // {
       default = pkgs.stdenv.hostPlatform.isEfi;
       defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isEfi";
@@ -170,9 +176,9 @@ in
       '';
     };
 
-    forceMbr = lib.mkEnableOption null // {
+    force = lib.mkEnableOption null // {
       description = ''
-        Force MBR detection to work even if the safety checks fail, use absolutely only if necessary!
+        Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
     };
 
@@ -223,10 +229,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -369,7 +375,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [
@@ -438,15 +444,18 @@ in
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+
+        unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           RuntimeDirectory = "fwupd-efi";
         };
+
         script = ''
           cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
           chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe pkgs.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
         '';
       };
 

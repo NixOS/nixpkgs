@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "robokoding";
-    repo = pname;
+    repo = "sumorobot-manager";
     rev = "v${version}";
     sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/opt" "$pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop App for managing SumoRobots";
     mainProgram = "sumorobot-manager";
     homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

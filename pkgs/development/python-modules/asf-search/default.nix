@@ -8,7 +8,6 @@
   numpy,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   remotezip,
   requests-mock,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "8.2.3";
+  version = "9.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     tag = "v${version}";
-    hash = "sha256-K1aGkI5lBw2HmLAeCNqcpgsDG/fAoi7l1RTBxziJBL8=";
+    hash = "sha256-1ZJsVcbqvB0DpcVyCWaEdYEnDXDDIupiprcIZlRCWDo=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -56,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asf_search" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
     changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bzizou ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bzizou ];
   };
 }

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # Tests require a running Redis backend
   disabledTests = [
@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "celery_singleton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Seamlessly prevent duplicate executions of celery tasks";
     homepage = "https://github.com/steinitzu/celery-singleton";
     changelog = "https://github.com/steinitzu/celery-singleton/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

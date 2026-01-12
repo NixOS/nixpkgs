@@ -32,7 +32,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemqctl";
-    description = "Kubemqctl is a command line interface (CLI) for Kubemq Kubernetes Message Broker";
+    description = "CLI for Kubemq Kubernetes Message Broker";
     mainProgram = "kubemqctl";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];

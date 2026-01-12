@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-c9iSbxkHwLOeATkO7kzTyLD0VAwZUzCvw5c4FyuR5/E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+XZL0a7/9Ic6cmym3ctwmGMu4xjGPCA2E7OrBj7Bfvw=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,14 +25,13 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI command organizer written in rust";
     homepage = "https://github.com/hyde46/hoard";
     changelog = "https://github.com/Hyde46/hoard/blob/${src.rev}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       builditluc
-      figsoda
     ];
     mainProgram = "hoard";
   };

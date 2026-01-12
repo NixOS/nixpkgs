@@ -5,19 +5,24 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.3.1";
   pname = "wllvm";
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-PgV6V18FyezIZpqMQEbyv98MaVM7h7T7/Kvg3yMMwzE=";
   };
 
-  meta = with lib; {
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonImportsCheck = [ "wllvm.wllvm" ];
+
+  meta = {
     homepage = "https://github.com/travitch/whole-program-llvm";
     description = "Wrapper script to build whole-program LLVM bitcode files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.all;
   };
 }

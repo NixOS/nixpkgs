@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.4.4";
+  version = "2.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
     tag = version;
-    hash = "sha256-OeS1PqcWXJdvSEZwkBEHGJSYM6bX7QSPdfs9u06g760=";
+    hash = "sha256-lR3ZxwPvyv/Ffez6cfz8Gzc6h4PeqmgsTGNEVv9K+tU=";
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pdm-project/pdm-backend";
     changelog = "https://github.com/pdm-project/pdm-backend/releases/tag/${version}";
     description = "Yet another PEP 517 backend";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

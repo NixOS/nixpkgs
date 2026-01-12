@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Xci9168KqJf+mhx3k0d+nH6Ov5tqNtB6nxiL9BwVYjU=";
 
   cargoPatches = [
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Background process that saves uncommitted changes on git";
     mainProgram = "dura";
     longDescription = ''
@@ -47,7 +46,7 @@ rustPlatform.buildRustPackage rec {
       checkout a "dura" branch and recover.
     '';
     homepage = "https://github.com/tkellogg/dura";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drupol ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

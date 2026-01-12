@@ -7,7 +7,6 @@
   jsonschema,
   lark,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "ldfparser";
   version = "0.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "c4deszes";
@@ -45,12 +42,12 @@ buildPythonPackage rec {
     "tests/test_performance.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LIN Description File parser written in Python";
     homepage = "https://github.com/c4deszes/ldfparser";
     changelog = "https://github.com/c4deszes/ldfparser/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ldfparser";
   };
 }

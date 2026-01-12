@@ -6,8 +6,7 @@
 }:
 let
   cfg = config.security.duosec;
-
-  boolToStr = b: if b then "yes" else "no";
+  inherit (lib) boolToYesNo;
 
   configFilePam = ''
     [duo]
@@ -15,18 +14,16 @@ let
     host=${cfg.host}
     ${lib.optionalString (cfg.groups != "") ("groups=" + cfg.groups)}
     failmode=${cfg.failmode}
-    pushinfo=${boolToStr cfg.pushinfo}
-    autopush=${boolToStr cfg.autopush}
+    pushinfo=${boolToYesNo cfg.pushinfo}
+    autopush=${boolToYesNo cfg.autopush}
     prompts=${toString cfg.prompts}
-    fallback_local_ip=${boolToStr cfg.fallbackLocalIP}
+    fallback_local_ip=${boolToYesNo cfg.fallbackLocalIP}
   '';
 
-  configFileLogin =
-    configFilePam
-    + ''
-      motd=${boolToStr cfg.motd}
-      accept_env_factor=${boolToStr cfg.acceptEnvFactor}
-    '';
+  configFileLogin = configFilePam + ''
+    motd=${boolToYesNo cfg.motd}
+    accept_env_factor=${boolToYesNo cfg.acceptEnvFactor}
+  '';
 in
 {
   imports = [

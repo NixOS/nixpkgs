@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${version}";
-    hash = "sha256-ncPL76HCC9n4wTciGeqb+YAUcCE9EeOpWGM5DRYUCYg=";
+    hash = "sha256-snNh6883YUmzU1OG8jLf41/0NrEzfwFikyVtX1JeNdw=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     make icon-caches
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elementary icons for Xfce and other GTK desktops like GNOME";
     homepage = "https://github.com/shimmerproject/elementary-xfce";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     # darwin cannot deal with file names differing only in case
-    platforms = platforms.linux;
-    teams = [ teams.xfce ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 }

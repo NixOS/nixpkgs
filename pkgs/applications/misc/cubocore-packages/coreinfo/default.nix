@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coreinfo";
     homepage = "https://gitlab.com/cubocore/coreapps/coreinfo";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

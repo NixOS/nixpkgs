@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   fonttools,
   lxml,
   fs, # for fonttools extras
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "psautohint";
   version = "2.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
@@ -66,10 +63,10 @@ buildPythonPackage rec {
     fullTestsuite = psautohint.override { runAllTests = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
     homepage = "https://github.com/adobe-type-tools/psautohint";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

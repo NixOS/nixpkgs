@@ -51,9 +51,9 @@ buildPythonPackage rec {
         --replace \
           'gi.require_version("BlockDev",' \
           'import gi.repository
-    gi.require_version("GIRepository", "2.0")
+    gi.require_version("GIRepository", "3.0")
     from gi.repository import GIRepository
-    GIRepository.Repository.prepend_search_path("${libblockdev}/lib/girepository-1.0")
+    GIRepository.Repository.dup_default().prepend_search_path("${libblockdev}/lib/girepository-1.0")
     gi.require_version("BlockDev",'
     done
   '';

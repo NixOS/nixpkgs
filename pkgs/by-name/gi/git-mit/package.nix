@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   libgit2,
   openssl,
@@ -10,7 +9,7 @@
 }:
 
 let
-  version = "5.14.4";
+  version = "6.0.11";
 in
 rustPlatform.buildRustPackage {
   pname = "git-mit";
@@ -19,18 +18,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "PurpleBooth";
     repo = "git-mit";
-    rev = "v${version}";
-    hash = "sha256-8XWwzR9TiSCU6fKbrulKpCDFDEyzQpaT2nrahF8iac8=";
+    tag = "v${version}";
+    hash = "sha256-Hnmhvql7oTbNQnBvWlV60bxddH7H7intEsjfXhV4Z2Y=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoPatches = [
-    # https://github.com/PurpleBooth/git-mit/pull/1543
-    ./libgit2-update.patch
-  ];
-
-  cargoHash = "sha256-B2XRdcwcFxMwnDl5ndIw72OEsn6D2Y8rIoeO4tclJkk=";
+  cargoHash = "sha256-4HNr/m+n+M1BaL67Fo/S4A9EXBYOIp7il0sAtm4rSQc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -44,11 +36,11 @@ rustPlatform.buildRustPackage {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist set of hooks to aid pairing and link commits to issues";
     homepage = "https://github.com/PurpleBooth/git-mit";
     changelog = "https://github.com/PurpleBooth/git-mit/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.cc0;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

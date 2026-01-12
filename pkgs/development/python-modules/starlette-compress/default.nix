@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-compress";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Zaczero";
     repo = "starlette-compress";
     tag = version;
-    hash = "sha256-VEVPbCGE4BQo/0t/P785TyMHZGSKCicV6H0LbBsv8uo=";
+    hash = "sha256-JRg0WeMVTYnSh2an+/duSXzAigbjbCZ9NUsSNpXlFg8=";
   };
 
   build-system = [ hatchling ];
@@ -48,6 +48,9 @@ buildPythonPackage rec {
     description = "Compression middleware for Starlette - supporting ZStd, Brotli, and GZip";
     homepage = "https://pypi.org/p/starlette-compress";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ wrvsrx ];
+    maintainers = with lib.maintainers; [
+      wrvsrx
+      Zaczero
+    ];
   };
 }

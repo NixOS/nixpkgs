@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   html5lib,
   jsonschema,
@@ -17,15 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pystac";
-  version = "1.13.0";
+  version = "1.14.2";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac";
     tag = "v${version}";
-    hash = "sha256-DxRJsnbzXBnpQSJE0VwkXV3vyH6WffiMaZ3119XBxJ8=";
+    hash = "sha256-lSwapIOoZfI9m7BRVQVD8DS7+N+zieOiuvgwflt/bZw=";
   };
 
   build-system = [ setuptools ];

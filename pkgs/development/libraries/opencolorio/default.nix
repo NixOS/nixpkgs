@@ -46,49 +46,47 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals pythonBindings [ python3Packages.python ];
-  buildInputs =
-    [
-      expat
-      yaml-cpp
-      pystring
-      imath
-      minizip-ng
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glew
-      libglut
-    ]
-    ++ lib.optionals pythonBindings [
-      python3Packages.python
-      python3Packages.pybind11
-    ]
-    ++ lib.optionals buildApps [
-      lcms2
-      openexr
-    ];
+  buildInputs = [
+    expat
+    yaml-cpp
+    pystring
+    imath
+    minizip-ng
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glew
+    libglut
+  ]
+  ++ lib.optionals pythonBindings [
+    python3Packages.python
+    python3Packages.pybind11
+  ]
+  ++ lib.optionals buildApps [
+    lcms2
+    openexr
+  ];
 
-  cmakeFlags =
-    [
-      "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
-      "-DOCIO_USE_SSE2NEON=OFF"
-      # GPU test fails with: libglut (GPU tests): failed to open display ''
-      "-DOCIO_BUILD_GPU_TESTS=OFF"
-      "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
-    ]
-    ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
-    ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
+  cmakeFlags = [
+    "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
+    "-DOCIO_USE_SSE2NEON=OFF"
+    # GPU test fails with: libglut (GPU tests): failed to open display ''
+    "-DOCIO_BUILD_GPU_TESTS=OFF"
+    "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
+  ]
+  ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
+  ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
   # precision issues on non-x86
   doCheck = stdenv.hostPlatform.isx86_64;
   # Tends to fail otherwise.
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://opencolorio.org";
     description = "Color management framework for visual effects and animation";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.rytone ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.rytone ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -21,19 +21,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "crosvm";
-  version = "0-unstable-2025-05-16";
+  version = "0-unstable-2025-11-24";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "581ccb06d726b037fd75f64ef964b3d0eb989e33";
-    hash = "sha256-U4qWUPuGuAJlTMFY3qHTrlSmNYgxzuYxCHzZZ2O48FA=";
+    rev = "18bc84d003e04108d973a5233f0c6f3b2039d756";
+    hash = "sha256-7nm9QSmDkiUoTMcM1oMK1/QwSAnLAgvuYPoxTaJWMpQ=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZagGHo1DxSR51rvt0SKO1grhvKth5CuxXiCT6rKqGGk=";
+  cargoHash = "sha256-NeyJLsE/Uvcg/kNzS1SXEBjExKwbjcHkkhT2jSQjxx4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -77,12 +76,12 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure virtual machine monitor for KVM";
     homepage = "https://crosvm.dev/";
     mainProgram = "crosvm";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.bsd3;
     platforms = [
       "aarch64-linux"
       "riscv64-linux"

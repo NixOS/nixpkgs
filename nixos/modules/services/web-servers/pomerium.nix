@@ -66,15 +66,17 @@ in
       cfgFile =
         if cfg.configFile != null then cfg.configFile else (format.generate "pomerium.yaml" cfg.settings);
     in
-    mkIf cfg.enable ({
+    mkIf cfg.enable {
       systemd.services.pomerium = {
         description = "Pomerium authenticating reverse proxy";
         wants = [
           "network.target"
-        ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+        ]
+        ++ (optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service");
         after = [
           "network.target"
-        ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+        ]
+        ++ (optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service");
         wantedBy = [ "multi-user.target" ];
         environment = optionalAttrs (cfg.useACMEHost != null) {
           CERTIFICATE_FILE = "fullchain.pem";
@@ -125,18 +127,16 @@ in
 
       # postRun hooks on cert renew can't be used to restart Nginx since renewal
       # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
-      # which allows the acme-finished-$cert.target to signify the successful updating
+      # which allows the acme-order-renew-$cert.target to signify the successful updating
       # of certs end-to-end.
       systemd.services.pomerium-config-reload = mkIf (cfg.useACMEHost != null) {
         # TODO(lukegb): figure out how to make config reloading work with credentials.
 
         wantedBy = [
-          "acme-finished-${cfg.useACMEHost}.target"
+          "acme-order-renew-${cfg.useACMEHost}.service"
           "multi-user.target"
         ];
-        # Before the finished targets, after the renew services.
-        before = [ "acme-finished-${cfg.useACMEHost}.target" ];
-        after = [ "acme-${cfg.useACMEHost}.service" ];
+        after = [ "acme-order-renew-${cfg.useACMEHost}.service" ];
         # Block reloading if not all certs exist yet.
         unitConfig.ConditionPathExists = [
           "${config.security.acme.certs.${cfg.useACMEHost}.directory}/fullchain.pem"
@@ -148,5 +148,5 @@ in
           ExecStart = "/run/current-system/systemd/bin/systemctl --no-block restart pomerium.service";
         };
       };
-    });
+    };
 }

@@ -21,11 +21,11 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/sshed
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ssh config editor and bookmarks manager";
     homepage = "https://github.com/trntv/sshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ocfox ];
     mainProgram = "sshed";
   };
 }

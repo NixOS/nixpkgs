@@ -1,6 +1,8 @@
 {
   rustPlatform,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cargo-tauri,
   nodejs,
   pkg-config,
@@ -17,16 +19,15 @@
   jq,
   gst_all_1,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.43";
+  version = "0.9.97";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9ACeMGbOpa3Nh6NQIGckcI2oYNjtQ1pE4Zn++qcE0tM=";
+    hash = "sha256-JrqjOFfO6GGggRhHWq1B/mhcVQgQeFfT51WXlvlFW5Y=";
     fetchSubmodules = true;
   };
 
@@ -37,36 +38,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ozRDNXWqg0CZ1IgU33C6yJu4e05010jsHeTdIVhB72M=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-Y4GaHo1Jf99F8UhHbNfaAje2tE1QXwbd2upr6eN9qKE=";
   };
 
   pnpmRoot = "../..";
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-5DIagAKSq427kwZTH/QKY3vbb+TmFscKSANoSkEJMGg=";
+  cargoHash = "sha256-AwrA0KXLTSUhLxIJHKU1crVxUxImFOKDRStB48mZfcg=";
 
   cargoRoot = "../..";
 
   buildAndTestSubdir = "src-tauri";
 
   postPatch = ''
-    substituteInPlace src-tauri/Cargo.toml \
-      --replace-fail '"devtools"' '"devtools", "rustls-tls"'
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"Readest"' '"readest"'
     jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
-      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false"
+      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
+      --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
   '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -87,7 +88,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    pnpm setup-pdfjs
+    # set up pdfjs and simplecc
+    pnpm setup-vendors
   '';
 
   preFixup = ''

@@ -12,11 +12,8 @@ in
 
 {
   name = "printing";
-  meta = with lib.maintainers; {
-    maintainers = [
-      domenkozar
-      matthewbauer
-    ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.server =

@@ -1,14 +1,14 @@
 {
   lib,
-  flutter324,
+  flutter332,
   fetchFromGitHub,
-  webkitgtk_4_1,
   sqlite,
   libayatana-appindicator,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
   jdk17_headless,
+  yq-go,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,
@@ -16,19 +16,19 @@ let
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
 in
-flutter324.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.3.5";
+  version = "4.4.12";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    sparseCheckout = [ "auth" ];
+    sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-kM1y3Q5Z8J84qHhki9A+I/uY7xYQNMlfh2ZhxzpUBHM=";
+    hash = "sha256-1GJWGTzErV+wSkeAg3z0u7tBPFrq6hPc0fWniKT8w9M=";
   };
 
-  sourceRoot = "${src.name}/auth";
+  sourceRoot = "${src.name}/mobile/apps/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -41,6 +41,7 @@ flutter324.buildFlutterApplication rec {
   postPatch = ''
     rmdir assets/simple-icons
     ln -s ${simple-icons} assets/simple-icons
+    ${lib.getExe yq-go} -i 'del(.dependencies.sqlite3_flutter_libs)' pubspec.yaml
   '';
 
   nativeBuildInputs = [
@@ -49,7 +50,6 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk_4_1
     sqlite
     libayatana-appindicator
     # The networking client used by ente-auth (native_dio_adapter)
@@ -59,6 +59,9 @@ flutter324.buildFlutterApplication rec {
     # unsuccessful.
     jdk17_headless # JDK version used by upstream CI
   ];
+
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
   # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml

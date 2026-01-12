@@ -14,26 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs";
-  version = "4.6.1";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    hash = "sha256-C/awQpp1Q/0adx3YVNTq6ruEAzcjL5G7SkOCgpvAA50=";
+    hash = "sha256-xvTSGVwtzJjoAIF6GClASUIB5eIk+uquQNNzHIuwkuY=";
   };
 
-  patches = [
-    # This patch adds an option to pad filesystems (increasing size) in
-    # exchange for better chunking / binary diff calculation.
-    ./4k-align.patch
-  ];
-
   strictDeps = true;
-  nativeBuildInputs =
-    [ which ]
-    # when cross-compiling help2man cannot run the cross-compiled binary
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ help2man ];
+  nativeBuildInputs = [
+    which
+  ]
+  # when cross-compiling help2man cannot run the cross-compiled binary
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ help2man ];
   buildInputs = [
     zlib
     xz
@@ -63,12 +58,12 @@ stdenv.mkDerivation rec {
     nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/plougher/squashfs-tools";
     description = "Tool for creating and unpacking squashfs filesystems";
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ruuda ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ruuda ];
     mainProgram = "mksquashfs";
   };
 }

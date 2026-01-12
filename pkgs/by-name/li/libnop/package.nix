@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtest ];
 
   # Add optimization flags to address _FORTIFY_SOURCE warning
-  NIX_CFLAGS_COMPILE = [ "-O1" ];
+  NIX_CFLAGS_COMPILE = [
+    "-O1"
+    "-std=c++17"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -38,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fast, header-only C++ serialization library";
+    description = "Fast, header-only C++ serialization library";
     homepage = "https://github.com/google/libnop";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

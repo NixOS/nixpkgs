@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchpatch,
   cairo,
   cmake,
   boost,
@@ -43,6 +42,7 @@
   pdfslicer,
   scribus,
   vips,
+  testers,
 }:
 
 let
@@ -56,13 +56,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "91ee031c882634c36f2f0f2f14eb6646dd542fb9";
-    hash = "sha256-bImTdlhMAA79kwbKPrHN3a9vVrtsgBh3rFjH3B7tEbQ=";
+    rev = "9d5011815a14c157ba25bb160187842fb81579a5";
+    hash = "sha256-sA5f235IJpzzzHqpwHM3zCZC2Yh0ztA6PZa84j/6tfY=";
   };
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "25.05.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "25.10.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [
     "out"
@@ -70,74 +70,70 @@ stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   src = fetchurl {
-    url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    hash = "sha256-mxYnxbdoFqxeQFKgP1tgW6QLRc8GsCyt0EeWILSZqzg=";
+    url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
+    hash = "sha256-a16btk2rsVeHoU2xZ1KRx6+vk4dDjMk6T7f2rsTub+A=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals (!minimal) [
-      glib # for glib-mkenums
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals (!minimal) [
+    glib # for glib-mkenums
+  ];
 
-  buildInputs =
-    [
-      boost
-      libiconv
-      libintl
-    ]
-    ++ lib.optionals withData [
-      poppler_data
-    ];
+  buildInputs = [
+    boost
+    libiconv
+    libintl
+  ]
+  ++ lib.optionals withData [
+    poppler_data
+  ];
 
   # TODO: reduce propagation to necessary libs
-  propagatedBuildInputs =
-    [
-      zlib
-      freetype
-      fontconfig
-      libjpeg
-      openjpeg
-    ]
-    ++ lib.optionals (!minimal) [
-      cairo
-      lcms
-      libtiff
-      curl
-      nss
-    ]
-    ++ lib.optionals (qt5Support || qt6Support) [
-      qtbase
-    ]
-    ++ lib.optionals introspectionSupport [
-      gobject-introspection
-    ]
-    ++ lib.optionals gpgmeSupport [
-      gpgme
-    ];
+  propagatedBuildInputs = [
+    zlib
+    freetype
+    fontconfig
+    libjpeg
+    openjpeg
+  ]
+  ++ lib.optionals (!minimal) [
+    cairo
+    lcms
+    libtiff
+    curl
+    nss
+  ]
+  ++ lib.optionals (qt5Support || qt6Support) [
+    qtbase
+  ]
+  ++ lib.optionals introspectionSupport [
+    gobject-introspection
+  ]
+  ++ lib.optionals gpgmeSupport [
+    gpgme
+  ];
 
-  cmakeFlags =
-    [
-      (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
-      (mkFlag (!minimal) "GLIB")
-      (mkFlag (!minimal) "CPP")
-      (mkFlag (!minimal) "LIBCURL")
-      (mkFlag (!minimal) "LCMS")
-      (mkFlag (!minimal) "LIBTIFF")
-      (mkFlag (!minimal) "NSS3")
-      (mkFlag utils "UTILS")
-      (mkFlag qt5Support "QT5")
-      (mkFlag qt6Support "QT6")
-      (mkFlag gpgmeSupport "GPGME")
-    ]
-    ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      "-DTESTDATADIR=${testData}"
-    ];
+  cmakeFlags = [
+    (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
+    (mkFlag (!minimal) "GLIB")
+    (mkFlag (!minimal) "CPP")
+    (mkFlag (!minimal) "LIBCURL")
+    (mkFlag (!minimal) "LCMS")
+    (mkFlag (!minimal) "LIBTIFF")
+    (mkFlag (!minimal) "NSS3")
+    (mkFlag utils "UTILS")
+    (mkFlag qt5Support "QT5")
+    (mkFlag qt6Support "QT6")
+    (mkFlag gpgmeSupport "GPGME")
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    "-DTESTDATADIR=${testData}"
+  ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
@@ -177,12 +173,16 @@ stdenv.mkDerivation (finalAttrs: rec {
         ;
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
   meta = {
     homepage = "https://poppler.freedesktop.org/";
-    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${finalAttrs.version}/NEWS";
     description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
@@ -192,5 +192,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ttuegel ];
     teams = [ lib.teams.freedesktop ];
+    pkgConfigModules = [
+      "poppler"
+    ]
+    ++ lib.optionals (!minimal) [ "poppler-cpp" ]
+    ++ lib.optionals introspectionSupport [ "poppler-glib" ];
   };
 })

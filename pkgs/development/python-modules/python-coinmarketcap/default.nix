@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-coinmarketcap";
   version = "0.6";
   pyproject = true;

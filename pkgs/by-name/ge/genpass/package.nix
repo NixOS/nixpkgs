@@ -14,18 +14,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "UyEgOlKtDyneRteN3jHA2BJlu5U1HFL8HA2MTQz5rns=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tcE2TugvTJyUsgkxff31U/PIiO1IMr4rO6FKYP/oEiw=";
 
   buildInputs = [
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple yet robust commandline random password generator";
     mainProgram = "genpass";
     homepage = "https://sr.ht/~cyplo/genpass/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ cyplo ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ cyplo ];
   };
 }

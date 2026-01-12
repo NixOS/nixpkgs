@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for writing an ISO file to multiple USB devices at once";
     mainProgram = "gnome-multi-writer";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-multi-writer";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

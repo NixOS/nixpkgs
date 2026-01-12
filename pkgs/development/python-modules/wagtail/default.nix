@@ -12,6 +12,7 @@
   django,
   django-filter,
   django-modelcluster,
+  django-modelsearch,
   django-taggit,
   django-tasks,
   django-treebeard,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "6.4.1";
+  version = "7.2.1";
   pyproject = true;
 
   # The GitHub source requires some assets to be compiled, which in turn
@@ -39,12 +40,14 @@ buildPythonPackage rec {
   # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zsPm1JIKbRePoetvSvgLNw/dVXDtkkuXkQThV/EMoJc=";
+    hash = "sha256-OIu0LEgYwIGk3fNub0Upv7xU7SYqkbZbDl+VFHbyz3Q=";
   };
 
   build-system = [
     setuptools
   ];
+
+  pythonRelaxDeps = [ "django-tasks" ];
 
   dependencies = [
     anyascii
@@ -52,6 +55,7 @@ buildPythonPackage rec {
     django
     django-filter
     django-modelcluster
+    django-modelsearch
     django-taggit
     django-tasks
     django-treebeard
@@ -64,7 +68,8 @@ buildPythonPackage rec {
     requests
     telepath
     willow
-  ] ++ willow.optional-dependencies.heif;
+  ]
+  ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)

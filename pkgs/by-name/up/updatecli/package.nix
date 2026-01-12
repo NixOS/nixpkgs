@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   go,
   buildGoModule,
   fetchFromGitHub,
@@ -11,16 +12,16 @@
 
 buildGoModule rec {
   pname = "updatecli";
-  version = "0.100.0";
+  version = "0.112.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${version}";
-    hash = "sha256-gzHNUFhctfMSoXEVlnYJW4qD6MmV/NMMoTFSp550FTQ=";
+    hash = "sha256-goJH+B6gPNHSQmeUvXUVq5HBwMAKaGZiTlwiZK7rkbg=";
   };
 
-  vendorHash = "sha256-b4mIRfiFqOqRiyZJSrASCDpcE65j45SbgE7E8yFXrCE=";
+  vendorHash = "sha256-8NrT1jzLd1/8IFm8lOlqwQcSiaYQMRato7Z0kZFuN1s=";
 
   # tests require network access
   doCheck = false;
@@ -45,7 +46,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd updatecli \
       --bash <($out/bin/updatecli completion bash) \
       --fish <($out/bin/updatecli completion fish) \
@@ -55,15 +56,18 @@ buildGoModule rec {
     installManPage updatecli.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Declarative Dependency Management tool";
     longDescription = ''
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
     changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "updatecli";
-    maintainers = with maintainers; [ croissong ];
+    maintainers = with lib.maintainers; [
+      croissong
+      lpostula
+    ];
   };
 }

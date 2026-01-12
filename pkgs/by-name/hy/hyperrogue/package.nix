@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyperrogue";
-  version = "13.0x";
+  version = "13.1f";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-CwicLUQThNDc8Ig0kRNTnkSwUcoIw+tNQoXVgoWbkIE=";
+    sha256 = "sha256-HJer4CUtpJDI0aRbays9vhNTnmOYHl3eODDaLdxwjyE=";
   };
 
   env = {
@@ -101,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

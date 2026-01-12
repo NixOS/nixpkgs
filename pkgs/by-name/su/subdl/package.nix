@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "subdl";
-  version = "unstable-2017-11.06";
+  version = "0-unstable-2017-11-06";
 
   src = fetchFromGitHub {
     owner = "alexanderwink";

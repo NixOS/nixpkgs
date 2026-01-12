@@ -19,7 +19,6 @@
   libadwaita,
   libxcvt,
   libGL,
-  libICE,
   libX11,
   libXcomposite,
   libXcursor,
@@ -27,8 +26,6 @@
   libXext,
   libXfixes,
   libXi,
-  libXtst,
-  libxkbfile,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
@@ -39,9 +36,11 @@
   libdrm,
   libgbm,
   libei,
+  libepoxy,
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
+  libglycin,
   atk,
   gtk4,
   fribidi,
@@ -65,13 +64,14 @@
   desktop-file-utils,
   egl-wayland,
   graphene,
+  udevCheckHook,
   wayland,
   wayland-protocols,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "48.2";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PBi6Tgk+qaN4ET3K+nvbXB+db1r5dlAmt+Zst42vYU4=";
+    hash = "sha256-J2ORoIDlCVaSQKyGECVdd4q2qIoyUPmxd0AlXxNOPAo=";
   };
 
   mesonFlags = [
@@ -123,12 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     xorgserver
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
     cairo
     egl-wayland
     glib
+    libglycin
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -137,8 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libadwaita
     libgbm
     libei
+    libepoxy
     libdisplay-info
     libGL
     libgudev
@@ -157,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libICE
     libX11
     libXcomposite
     libXcursor
@@ -165,8 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXfixes
     libXi
-    libXtst
-    libxkbfile
     xkeyboard_config
     libxkbcommon
     libxcb
@@ -174,8 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libXau
 
-    # for gdctl shebang
+    # for gdctl and gnome-service-client shebangs
     (python3.withPackages (pp: [
+      pp.dbus-python
       pp.pygobject3
       pp.argcomplete
     ]))
@@ -196,13 +198,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Install udev files into our own tree.
-  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+  env.PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
   strictDeps = true;
 
+  doInstallCheck = true;
+
   passthru = {
-    libmutter_api_version = "16"; # bumped each dev cycle
+    libmutter_api_version = "17"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
@@ -220,13 +224,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Window manager for GNOME";
     mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     changelog = "https://gitlab.gnome.org/GNOME/mutter/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

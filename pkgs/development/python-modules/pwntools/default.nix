@@ -45,6 +45,10 @@ buildPythonPackage rec {
     # Upstream hardcoded the check for the command `gdb-multiarch`;
     # Forcefully use the provided debugger as `gdb`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+
+    # Disable update checks
+    substituteInPlace pwnlib/update.py \
+      --replace-fail 'disabled        = False' 'disabled        = True'
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -94,12 +98,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwn" ];
 
-  meta = with lib; {
+  meta = {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
     changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bennofs
       kristoff3r
       pamplemousse

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "4.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "stephrdev";
     repo = "pytest-isort";
@@ -34,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_isort" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to perform isort checks (import ordering)";
     homepage = "https://github.com/moccu/pytest-isort/";
     changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

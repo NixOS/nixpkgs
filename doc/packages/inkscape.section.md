@@ -8,9 +8,7 @@ To enable them, use an override on `inkscape-with-extensions`:
 
 ```nix
 inkscape-with-extensions.override {
-  inkscapeExtensions = with inkscape-extensions; [
-    inkstitch
-  ];
+  inkscapeExtensions = with inkscape-extensions; [ inkstitch ];
 }
 ```
 
@@ -22,7 +20,7 @@ $ nix-shell -p 'inkscape-with-extensions.override { inkscapeExtensions = with in
 [nix-shell:~]$ inkscape
 ```
 
-All available extension can be enabled by passing `inkscapeExtensions = null;`.
+All available extensions can be enabled by passing `inkscapeExtensions = null;`.
 
 ::: {.note}
 Loading the Inkscape extensions stand-alone (without using `override`) does not affect Inkscape at all.

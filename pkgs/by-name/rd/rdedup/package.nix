@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-GEYP18CaCQShvCg8T7YTvlybH1LNO34KBxgmsTv2Lzs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JpsUceR9Y3r6RiaLOtbgBUrb6eoan7fFt76U9ztQoM8=";
 
   nativeBuildInputs = [
@@ -32,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data deduplication with compression and public key encryption";
     mainProgram = "rdedup";
     homepage = "https://github.com/dpc/rdedup";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dywedir ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dywedir ];
   };
 }

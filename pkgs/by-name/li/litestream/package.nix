@@ -23,14 +23,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-sYIY3Z3VrCqbjEbQtEY7q6Jljg8jMoa2qWEB/IkDjzM=";
 
+  patches = [ ./fix-cve-2024-41254.patch ];
+
   passthru.tests = { inherit (nixosTests) litestream; };
 
-  meta = with lib; {
+  meta = {
     description = "Streaming replication for SQLite";
     mainProgram = "litestream";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://litestream.io/";
-    maintainers = with maintainers; [ fbrs ];
-    knownVulnerabilities = [ "CVE-2024-41254" ];
+    maintainers = with lib.maintainers; [ fbrs ];
   };
 }

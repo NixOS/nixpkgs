@@ -92,7 +92,7 @@ let
         ;
     };
 
-    meta = with lib; {
+    meta = {
       mainProgram = "references-test";
     };
   });

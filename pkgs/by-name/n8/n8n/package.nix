@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   node-gyp,
   cctools,
@@ -14,34 +16,35 @@
   libpq,
   makeWrapper,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.91.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-FkjYe+OSSzEHGx2NW1I3ZAsg4FbEP1VS2hA4Li3JvXc=";
+    hash = "sha256-6VfoT8Rw2c46ugSpW1IHJPSHTWnphNn0MG1XDhrPeBg=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-tYUbCAb2FI9NXyViDEYcpOST2LwZGx66Zwqy9sl2V1A=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-wSKxoxWys3gf++yTDr/XBadW9bq/w/NKPGUZpbAPe+I=";
   };
 
-  nativeBuildInputs =
-    [
-      pnpm_10.configHook
-      python3 # required to build sqlite3 bindings
-      node-gyp # required to build sqlite3 bindings
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    pnpmConfigHook
+    pnpm_10
+    python3 # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar
@@ -112,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
+      sweenu
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

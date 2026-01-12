@@ -8,24 +8,23 @@
   autoSignDarwinBinariesHook,
   glibcLocales,
 }:
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   pname = "ilspycmd";
-  version = "9.0-preview3";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
-    rev = "v${version}";
-    hash = "sha256-7cPXFaEKr76GtqcNsKx7tstRUeTpSTF8ggxbyEnQa9M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YkZEStCI6Omu8HgClm5qHnXxm5pKJVILtbydY8vAFic=";
   };
 
-  nativeBuildInputs =
-    [
-      powershell
-    ]
-    ++ lib.optionals (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    powershell
+  ]
+  ++ lib.optionals (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
@@ -54,6 +53,9 @@ buildDotnetModule (finalAttrs: rec {
       fromSource
       binaryBytecode
     ];
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      tbaldwin
+    ];
   };
 })

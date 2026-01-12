@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4BeE4Xy1M7tmvQYB4gXnhSY0RcPC33pvkCMqtBMccW0=";
   };
 
+  patches = [
+    # Fix C23 compatibility: rename 'bool' variable which is now a keyword
+    ./fix-bool-c23-keyword.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     makeWrapper
@@ -46,10 +51,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/sbin/nslcd --prefix LD_LIBRARY_PATH ":" $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LDAP identity and authentication for NSS/PAM";
     homepage = "https://arthurdejong.org/nss-pam-ldapd/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -45,14 +45,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "10.15";
+  version = "10.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
     tag = version;
-    hash = "sha256-ADl1l1cgJC3T8EN+cGNq14VfShGLG51ElXFRx+tdnCg=";
+    hash = "sha256-eE7DgMdUqSzjeDU7hZ7FCZC8Oyj2YpPtjAQbaLPKOhk=";
   };
 
   build-system = [ hatchling ];
@@ -85,13 +85,13 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensions for Python Markdown";
     homepage = "https://facelessuser.github.io/pymdown-extensions/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ];
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://pacparser.manugarg.com/";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "pactester";
   };
 })

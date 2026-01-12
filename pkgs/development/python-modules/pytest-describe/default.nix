@@ -1,9 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
-  # build
+  # build-system
+  uv-build,
+
+  # dependencies
   pytest,
 
   # tests
@@ -12,26 +15,30 @@
 
 let
   pname = "pytest-describe";
-  version = "2.2.0";
+  version = "3.1.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ObsF65DySX2co0Lvmgt/pbraflhQWuwz9m1mHWMZVbc=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-describe";
+    tag = version;
+    hash = "sha256-ygrZwd1cO9arekdzqn5Axjz4i9Q0QKFA/OS6QSIvP9Y=";
   };
+
+  build-system = [ uv-build ];
 
   buildInputs = [ pytest ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Describe-style plugin for the pytest framework";
     homepage = "https://github.com/pytest-dev/pytest-describe";
     changelog = "https://github.com/pytest-dev/pytest-describe/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

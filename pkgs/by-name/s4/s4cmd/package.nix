@@ -7,13 +7,16 @@
 python3Packages.buildPythonApplication rec {
   pname = "s4cmd";
   version = "2.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0d4mx98i3qhvlmr9x898mjvf827smzx6x5ji6daiwgjdlxc60mj2";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     boto3
     pytz
   ];
@@ -33,10 +36,11 @@ python3Packages.buildPythonApplication rec {
   # Test suite requires an S3 bucket
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "s4cmd" ];
+
+  meta = {
     homepage = "https://github.com/bloomreach/s4cmd";
     description = "Super S3 command line tool";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bhipple ];
+    license = lib.licenses.asl20;
   };
 }

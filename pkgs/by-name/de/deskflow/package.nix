@@ -5,8 +5,6 @@
   cmake,
   ninja,
   pkg-config,
-  tomlplusplus,
-  cli11,
   gtest,
   libei,
   libportal,
@@ -34,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.21.2";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXFBn8hlI8MZ9Vy3goPjosn0JgvaAgZaFIGh/3rFdx8=";
+    hash = "sha256-IclKXYCvYHMK4e1z1efmOHUaJqnmZgofK5r6Ml+i5OI=";
   };
 
   postPatch = ''
@@ -65,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   buildInputs = [
-    tomlplusplus
-    cli11
     gtest
     libei
     libportal
@@ -84,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     wayland-protocols
     qt6.qtwayland
+    qt6.qtdeclarative
+    qt6.qttools
     wayland
     libsysprof-capture
     lerc
@@ -101,22 +99,31 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    ./bin/unittests
-    ./bin/integtests
+    ./bin/legacytests
 
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
     maintainers = with lib.maintainers; [ flacks ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
+    license = with lib.licenses; [
+      gpl2Plus
+      openssl
+      mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
   };

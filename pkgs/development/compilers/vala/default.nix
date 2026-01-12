@@ -50,7 +50,7 @@ let
       };
 
       src = fetchurl {
-        url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+        url = "mirror://gnome/sources/vala/${lib.versions.majorMinor version}/vala-${version}.tar.xz";
         inherit hash;
       };
 
@@ -74,27 +74,25 @@ let
         "devdoc"
       ];
 
-      nativeBuildInputs =
-        [
-          pkg-config
-          flex
-          bison
-          libxslt
-          gobject-introspection
-        ]
-        ++ lib.optional (stdenv.hostPlatform.isDarwin) expat
-        ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
-        ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
-        ++ extraNativeBuildInputs;
+      nativeBuildInputs = [
+        pkg-config
+        flex
+        bison
+        libxslt
+        gobject-introspection
+      ]
+      ++ lib.optional (stdenv.hostPlatform.isDarwin) expat
+      ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
+      ++ extraNativeBuildInputs;
 
-      buildInputs =
-        [
-          glib
-          libiconv
-          libintl
-        ]
-        ++ lib.optional (withGraphviz) graphviz
-        ++ extraBuildInputs;
+      buildInputs = [
+        glib
+        libiconv
+        libintl
+      ]
+      ++ lib.optional withGraphviz graphviz
+      ++ extraBuildInputs;
 
       enableParallelBuilding = true;
 
@@ -106,22 +104,22 @@ let
             let
               roundUpToEven = num: num + lib.mod num 2;
             in
-            "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
-          packageName = pname;
+            "vala_${lib.versions.major version}_${toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
+          packageName = "vala";
           freeze = true;
         };
       };
 
-      meta = with lib; {
+      meta = {
         description = "Compiler for GObject type system";
         homepage = "https://vala.dev";
-        license = licenses.lgpl21Plus;
-        platforms = platforms.unix;
-        maintainers = with maintainers; [
+        license = lib.licenses.lgpl21Plus;
+        platforms = lib.platforms.unix;
+        maintainers = with lib.maintainers; [
           antono
           jtojnar
         ];
-        teams = [ teams.pantheon ];
+        teams = [ lib.teams.pantheon ];
       };
     }
   );

@@ -34,13 +34,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opensnitch";
-  version = "1.6.9";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+VAlm32/NXvUr5i0AY/zuTrFIQLtPxNNeSiQTMoJAY=";
+    hash = "sha256-Bz5h2DEC61vpkeWZxFlogh6NvTubJcnHuwgTNSzZd68=";
   };
 
   postPatch = ''
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     protoc-gen-go-grpc'
   ];
 
-  vendorHash = "sha256-urRujxcp58ZuhUtTAqCK0etSZ16YYG/6JY/aOUodl9g=";
+  vendorHash = "sha256-6/N/E+uk6RVmSLy6fSWjHj+J5mPFXtHZwWThhFJnfYY=";
 
   preBuild = ''
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
@@ -72,13 +72,11 @@ buildGoModule (finalAttrs: {
   postBuild = ''
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
     mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
-    cp system-fw.json $out/etc/opensnitchd/
-    substitute default-config.json $out/etc/opensnitchd/default-config.json \
+    cp -r data/{rules,*.json} $out/etc/opensnitchd/
+    substituteInPlace $out/etc/opensnitchd/default-config.json \
       --replace-fail "/var/log/opensnitchd.log" "/dev/stdout"
-    # Do not mkdir rules path
-    sed -i '8d' opensnitchd.service
     # Fixup hardcoded paths
-    substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
+    substitute data/init/opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
       --replace-fail "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
   '';
 

@@ -13,22 +13,20 @@
 
 let
   # The version of ocaml fstar uses.
-  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
 
   fstarZ3 = callPackage ./z3 { };
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
-  version = "2025.03.25";
+  version = "2025.12.15";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
-    rev = "v${version}";
-    hash = "sha256-PhjfThXF6fJlFHtNEURG4igCnM6VegWODypmRvnZPdA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UuwDX6178YMhEQqpEOATswzoUNpEECq7Nyh2yk5gKRg=";
   };
-
-  duneVersion = "3";
 
   nativeBuildInputs = [
     ocamlPackages.menhir
@@ -45,8 +43,11 @@ ocamlPackages.buildDunePackage rec {
   '';
 
   buildInputs = with ocamlPackages; [
+    memtrace
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
     batteries
-    menhir
     menhirLib
     pprint
     ppx_deriving
@@ -57,7 +58,6 @@ ocamlPackages.buildDunePackage rec {
     stdint
     yojson
     zarith
-    memtrace
     mtime
   ];
 
@@ -78,6 +78,10 @@ ocamlPackages.buildDunePackage rec {
     runHook preInstall
 
     make install
+
+    # Ensure ocamlfind can locate fstar OCaml libraries
+    mkdir -p $OCAMLFIND_DESTDIR
+    ln -s -t $OCAMLFIND_DESTDIR/ $out/lib/fstar
 
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 
@@ -101,21 +105,21 @@ ocamlPackages.buildDunePackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(\d{4}\.\d{2}\.\d{2})$"
+        "v(\\d{4}\\.\\d{2}\\.\\d{2})$"
       ];
     };
     z3 = fstarZ3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
-    changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/FStarLang/FStar/raw/v${finalAttrs.version}/CHANGES.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       numinit
     ];
     mainProgram = "fstar.exe";
-    platforms = with platforms; darwin ++ linux;
+    platforms = with lib.platforms; darwin ++ linux;
   };
-}
+})

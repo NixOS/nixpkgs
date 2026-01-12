@@ -79,13 +79,14 @@ For example:
 ### `mkEnableOption` usage
 ```nix
 lib.mkEnableOption "magic"
-# is like
-lib.mkOption {
-  type = lib.types.bool;
-  default = false;
-  example = true;
-  description = "Whether to enable magic.";
-}
+  # is like
+  lib.mkOption
+  {
+    type = lib.types.bool;
+    default = false;
+    example = true;
+    description = "Whether to enable magic.";
+  }
 ```
 :::
 
@@ -94,7 +95,14 @@ lib.mkOption {
 Usage:
 
 ```nix
-mkPackageOption pkgs "name" { default = [ "path" "in" "pkgs" ]; example = "literal example"; }
+mkPackageOption pkgs "name" {
+  default = [
+    "path"
+    "in"
+    "pkgs"
+  ];
+  example = "literal example";
+}
 ```
 
 Creates an Option attribute set for an option that specifies the package a module should use for some purpose.
@@ -127,47 +135,52 @@ Examples:
 ### Simple `mkPackageOption` usage
 ```nix
 lib.mkPackageOption pkgs "hello" { }
-# is like
-lib.mkOption {
-  type = lib.types.package;
-  default = pkgs.hello;
-  defaultText = lib.literalExpression "pkgs.hello";
-  description = "The hello package to use.";
-}
+  # is like
+  lib.mkOption
+  {
+    type = lib.types.package;
+    default = pkgs.hello;
+    defaultText = lib.literalExpression "pkgs.hello";
+    description = "The hello package to use.";
+  }
 ```
 :::
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
 ### `mkPackageOption` with explicit default and example
 ```nix
-lib.mkPackageOption pkgs "GHC" {
-  default = [ "ghc" ];
-  example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
-}
-# is like
-lib.mkOption {
-  type = lib.types.package;
-  default = pkgs.ghc;
-  defaultText = lib.literalExpression "pkgs.ghc";
-  example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
-  description = "The GHC package to use.";
-}
+lib.mkPackageOption pkgs "GHC"
+  {
+    default = [ "ghc" ];
+    example = "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  }
+  # is like
+  lib.mkOption
+  {
+    type = lib.types.package;
+    default = pkgs.ghc;
+    defaultText = lib.literalExpression "pkgs.ghc";
+    example = lib.literalExpression "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
+    description = "The GHC package to use.";
+  }
 ```
 :::
 
 ::: {#ex-options-declarations-util-mkPackageOption-extraDescription .example}
 ### `mkPackageOption` with additional description text
 ```nix
-mkPackageOption pkgs [ "python312Packages" "torch" ] {
-  extraDescription = "This is an example and doesn't actually do anything.";
-}
-# is like
-lib.mkOption {
-  type = lib.types.package;
-  default = pkgs.python312Packages.torch;
-  defaultText = lib.literalExpression "pkgs.python312Packages.torch";
-  description = "The pytorch package to use. This is an example and doesn't actually do anything.";
-}
+mkPackageOption pkgs [ "python312Packages" "torch" ]
+  {
+    extraDescription = "This is an example and doesn't actually do anything.";
+  }
+  # is like
+  lib.mkOption
+  {
+    type = lib.types.package;
+    default = pkgs.python312Packages.torch;
+    defaultText = lib.literalExpression "pkgs.python312Packages.torch";
+    description = "The pytorch package to use. This is an example and doesn't actually do anything.";
+  }
 ```
 :::
 
@@ -233,9 +246,7 @@ enforces that there can only be a single display manager enabled.
 ### Extending `services.xserver.displayManager.enable` in the `gdm` module
 ```nix
 {
-  services.xserver.displayManager.enable = mkOption {
-    type = with types; nullOr (enum [ "gdm" ]);
-  };
+  services.xserver.displayManager.enable = mkOption { type = with types; nullOr (enum [ "gdm" ]); };
 }
 ```
 :::
@@ -244,9 +255,7 @@ enforces that there can only be a single display manager enabled.
 ### Extending `services.xserver.displayManager.enable` in the `sddm` module
 ```nix
 {
-  services.xserver.displayManager.enable = mkOption {
-    type = with types; nullOr (enum [ "sddm" ]);
-  };
+  services.xserver.displayManager.enable = mkOption { type = with types; nullOr (enum [ "sddm" ]); };
 }
 ```
 :::

@@ -9,39 +9,37 @@
   pkg-config,
   nixVersions,
   nix-update-script,
-  enableNixImport ? true,
+  enableNixImport ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.11.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-I7cLVrkJhB3aJeE/A3tpFEUj0AkvcONSXD8NtnE5eQ0=";
+    hash = "sha256-NGivq2V4wdJapzU5iLcuHrz2RDz2WhnikmCq+75a338=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DzSfwBVeRT/GAXWyZKZjlDvj95bQzrkqIgZZ2EZw7eQ=";
+  cargoHash = "sha256-uCy/Qo92yZ4pjjgW64nWYH21EbdMMwGXP5522tl8MAE=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
     "-p nickel-lang-lsp"
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-      gitMinimal
-    ]
-    ++ lib.optionals enableNixImport [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    python3
+    gitMinimal
+  ]
+  ++ lib.optionals enableNixImport [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     boost
   ];
 
@@ -78,7 +76,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -99,6 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       felschr
       matthiasbeyer
+      yannham
     ];
     mainProgram = "nickel";
   };

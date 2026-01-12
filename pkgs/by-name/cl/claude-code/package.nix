@@ -1,46 +1,76 @@
+# NOTE: Use the following command to update the package
+# ```sh
+# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
+# ```
 {
   lib,
   buildNpmPackage,
   fetchzip,
-  nodejs_20,
+  procps,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
-
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "1.0.5";
-
-  nodejs = nodejs_20; # required for sandboxed Nix builds on Darwin
+  version = "2.1.5";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-bvfP1fkfRURLjgJ3mu5a+Rq9IqcU/Y/LkDp4MXzudww=";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-hJECxkGC+nkQ6YCZpSZxRbuHaeYQDs2q7L5SYKSFVFc=";
   };
 
-  npmDepsHash = "sha256-u7coCE1bu5Z8r59vaoQOaWfXTRytX4HH3QIA6vf3DNc=";
+  npmDepsHash = "sha256-HjHBNa9gcGpo5qFb9CQvBH60qDM58WXJhClWRrzczBc=";
+
+  strictDeps = true;
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
+
+    # Replace hardcoded `/bin/bash` with `/usr/bin/env bash` for Nix compatibility
+    # https://github.com/anthropics/claude-code/issues/15195
+    substituteInPlace cli.js \
+      --replace-warn '#!/bin/bash' '#!/usr/bin/env bash'
   '';
 
   dontNpmBuild = true;
 
-  AUTHORIZED = "1";
+  env.AUTHORIZED = "1";
 
   # `claude-code` tries to auto-update by default, this disables that functionality.
   # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
+  # The DEV=true env var causes claude to crash with `TypeError: window.WebSocket is not a constructor`
   postInstall = ''
     wrapProgram $out/bin/claude \
-      --set DISABLE_AUTOUPDATER 1
+      --set DISABLE_AUTOUPDATER 1 \
+      --unset DEV \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          procps # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
+        ]
+      }
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "An agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
+    description = "Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
     homepage = "https://github.com/anthropics/claude-code";
     downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.malo ];
+    maintainers = with lib.maintainers; [
+      adeci
+      malo
+      markus1189
+      omarjatoi
+      xiaoxiangmoe
+    ];
     mainProgram = "claude";
   };
-}
+})

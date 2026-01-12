@@ -6,13 +6,13 @@
   nodejs,
   yarn,
   fixup-yarn-lock,
-  python311,
+  python3,
   npmHooks,
-  cctools,
   sqlite,
   srcOnly,
   buildPackages,
   nixosTests,
+  xcbuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,15 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
   };
 
-  # Distutils was deprecated in 3.10, and removed in 3.12. This build needs it. An alternative could be adding
-  # setuptools, but testing with that and 3.12 still fails.
   nativeBuildInputs = [
     nodejs
     yarn
     fixup-yarn-lock
-    python311
+    python3
+    python3.pkgs.distutils
     npmHooks.npmInstallHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''
@@ -78,9 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Build the sqlite3 package.
     npm_config_nodedir="${srcOnly nodejs}" npm_config_node_gyp="${buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" npm rebuild --verbose --sqlite=${sqlite.dev}
+  '';
 
-    # These files seemingly aren't needed, and also might not exist when the Darwin sandbox is disabled?
-    rm -rf node_modules/sqlite3/build-tmp-napi-v6/{Release/obj.target,node_sqlite3.target.mk}
+  postInstall = ''
+    rm -r $out/lib/node_modules/thelounge/node_modules/sqlite3/build/
   '';
 
   dontNpmPrune = true;
@@ -90,15 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = nixosTests.thelounge;
 
-  meta = with lib; {
+  meta = {
     description = "Modern, responsive, cross-platform, self-hosted web IRC client";
     homepage = "https://thelounge.chat";
     changelog = "https://github.com/thelounge/thelounge/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       winter
       raitobezarius
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (nodejs.meta) platforms;
     mainProgram = "thelounge";
   };

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lava lamp simulation in the terminal";
     longDescription = ''
       Lavat puts ascii metaballs in your terminal to make it look a bit like a
@@ -33,10 +33,10 @@ stdenv.mkDerivation {
       Lavat contains various options, including those to change the color and
       speed of the metaballs. For a full list, run `lavat -h`
     '';
-    maintainers = [ maintainers.minion3665 ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.minion3665 ];
+    license = lib.licenses.mit;
     homepage = "https://github.com/AngelJumbo/lavat";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "lavat";
   };
 }

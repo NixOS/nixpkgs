@@ -5,7 +5,6 @@
   expandvars,
   fetchPypi,
   libssh,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   toml,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ansible-pylibssh";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,11 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibsshext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to client functionality of libssh specific to Ansible use case";
     homepage = "https://github.com/ansible/pylibssh";
     changelog = "https://github.com/ansible/pylibssh/releases/tag/v${version}";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ geluk ];
+    license = lib.licenses.lgpl21Plus;
   };
 }

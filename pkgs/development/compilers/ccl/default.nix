@@ -14,7 +14,7 @@ let
     # TODO: there are also FreeBSD and Windows versions
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "0mhmm8zbk42p2b9amy702365m687k5p0xnz010yqrki6mwyxlkx9";
+      sha256 = "sha256-cAae50xvBoXfg+tiJM4i8+eRnheyM0dseE5EDWDia/E=";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
     };
@@ -26,13 +26,13 @@ let
     };
     armv7l-linux = {
       arch = "linuxarm";
-      sha256 = "1a4y07cmmn1r88b4hl4msb0bvr2fxd2vw9lf7h4j9f7a5rpq7124";
+      sha256 = "sha256-iyUMTDuHbyfEAxAAhjXANjh6HhpLkWG5+diXI6aFUUc=";
       runtime = "armcl";
       kernel = "linuxarm";
     };
     x86_64-darwin = {
       arch = "darwinx86";
-      sha256 = "1xclnik6pqhkmr15cbqa2n1ddzdf0rs452lyiln3c42nmkf9jjb6";
+      sha256 = "sha256-r+OhkU0b+QDgoZpZb0Xpc3V0yRq8GBKcNLt2IzeOSdE=";
       runtime = "dx86cl64";
       kernel = "darwinx8664";
     };
@@ -45,7 +45,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ccl";
-  version = "1.12.2";
+  version = "1.13";
 
   src = fetchurl {
     url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
@@ -108,14 +108,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     # assembler failures during build, x86_64-darwin broken since 2020-10-14
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     description = "Clozure Common Lisp";
     homepage = "https://ccl.clozure.com/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ccl";
     teams = [ lib.teams.lisp ];
-    platforms = attrNames options;
+    platforms = lib.attrNames options;
   };
 }

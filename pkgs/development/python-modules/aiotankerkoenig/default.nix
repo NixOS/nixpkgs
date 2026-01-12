@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiotankerkoenig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with tankerkoenig.de";
     homepage = "https://github.com/jpbede/aiotankerkoenig";
     changelog = "https://github.com/jpbede/aiotankerkoenig/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

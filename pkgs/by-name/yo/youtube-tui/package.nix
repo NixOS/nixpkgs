@@ -14,17 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "youtube-tui";
-  version = "0.8.3";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
     repo = "youtube-tui";
     tag = "v${version}";
-    hash = "sha256-pt/lKvNDd3gji2+Ubd/ARiuV5MvdSxMfzJubACXTcUc=";
+    hash = "sha256-a2Y0CATnKmZsYr3eUch3EUgHw41X1a2iOP0CjEJLXnc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JbG+fYyHC6Li4kuNjQRS7gxU7nLADMEqTZQEBRAASjM=";
+  cargoHash = "sha256-W3MBYcxb51cBjHUF7zXMOrRVzcxUX/TxiLyYGuOPFyI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,11 +44,11 @@ rustPlatform.buildRustPackage rec {
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aesthetically pleasing YouTube TUI written in Rust";
     homepage = "https://siriusmart.github.io/youtube-tui";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Ruixi-rebirth ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Ruixi-rebirth ];
     mainProgram = "youtube-tui";
   };
 }

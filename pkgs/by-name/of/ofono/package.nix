@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  fetchpatch,
   testers,
   autoreconfHook,
   pkg-config,
@@ -17,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ofono";
-  version = "2.14";
+  version = "2.17";
 
   outputs = [
     "out"
@@ -26,30 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-7hYGSU8mEu9MfKAA0vR1tm/l46hHQmpZSYfMNkces5c=";
+    hash = "sha256-VJhLJeC1pwXuAadKvYPel6Xb3RZG4vwDhhKefRVrt3Y=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "0001-ofono-CVE-2024-7539.patch";
-      url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/patch/?id=389e2344f86319265fb72ae590b470716e038fdc";
-      hash = "sha256-jaZswtkWa8A9WlmjUxcwWtU2uUX5+g8m2Y/60Lb9C5Q=";
-    })
-
-    (fetchpatch {
-      name = "0002-ofono-CVE-2024-7540-through-7542.patch";
-      url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/patch/?id=29ff6334b492504ace101be748b256e6953d2c2f";
-      hash = "sha256-3iKG+5AQUVO4alZd3stTpyanwI2IfKbVTzatflMsurY=";
-    })
-
-    (fetchpatch {
-      name = "0003-ofono-Ensure-decode_hex_own_buf-valid-buffer.patch";
-      url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/patch/?id=1e2a768445aecfa0a0e9c788651a9205cfd3744f";
-      hash = "sha256-MD+LMnVK1JcVU47jQ+X0AHe8c/WqjsFycDroONE9ZLM=";
-    })
-
-    ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch
-  ];
+  patches = [ ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch ];
 
   postPatch = ''
     patchShebangs tools/provisiontool
@@ -79,9 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
   ];
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   enableParallelBuilding = true;
   enableParallelChecking = false;

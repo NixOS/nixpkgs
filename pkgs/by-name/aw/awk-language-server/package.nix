@@ -13,7 +13,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "Beaglefoot";
     repo = "awk-language-server";
-    rev = "server-${version}";
+    tag = "server-${version}";
     hash = "sha256-YtduDfMAUAoQY9tgyhgERFwx9TEgD52KdeHnX2MrjjI=";
     sparseCheckout = [ "server" ];
     postFetch = ''
@@ -57,11 +57,11 @@ mkYarnPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Language Server for AWK and associated VSCode client extension";
     homepage = "https://github.com/Beaglefoot/awk-language-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mathiassven ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mathiassven ];
     mainProgram = "awk-language-server";
   };
 }

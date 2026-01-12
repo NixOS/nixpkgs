@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "py-canary";
   version = "0.5.4";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "snjoetw";
@@ -41,10 +38,10 @@ buildPythonPackage rec {
     "test_location_with_motion_entry"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for Canary Security Camera";
     homepage = "https://github.com/snjoetw/py-canary";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

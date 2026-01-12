@@ -42,7 +42,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     scipy
-  ] ++ optional-dependencies.stack;
+  ]
+  ++ optional-dependencies.stack;
 
   disabledTests = [
     # requires optional dependency crackle-codec (not in nixpkgs)

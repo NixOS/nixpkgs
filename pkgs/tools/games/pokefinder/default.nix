@@ -35,33 +35,31 @@ stdenv.mkDerivation rec {
     patchShebangs Source/Core/Resources/
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-      mkdir -p $out/Applications
-      cp -R Source/PokeFinder.app $out/Applications
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      install -D Source/PokeFinder $out/bin/PokeFinder
-      mkdir -p $out/share/pixmaps
-      convert "$src/Source/Form/Images/pokefinder.ico[-1]" $out/share/pixmaps/pokefinder.png
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    mkdir -p $out/Applications
+    cp -R Source/PokeFinder.app $out/Applications
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    install -D Source/PokeFinder $out/bin/PokeFinder
+    mkdir -p $out/share/pixmaps
+    convert "$src/Source/Form/Images/pokefinder.ico[-1]" $out/share/pixmaps/pokefinder.png
+  ''
+  + ''
+    runHook postInstall
+  '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      wrapQtAppsHook
-      python3
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      copyDesktopItems
-      imagemagick
-    ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    python3
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    copyDesktopItems
+    imagemagick
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -77,18 +75,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qttools
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Admiral-Fish/PokeFinder";
     description = "Cross platform Pokémon RNG tool";
     mainProgram = "PokeFinder";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ leo60228 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ leo60228 ];
   };
 }

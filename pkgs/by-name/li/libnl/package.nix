@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
     "man"
-  ] ++ lib.optional pythonSupport "py";
+  ]
+  ++ lib.optional pythonSupport "py";
 
   enableParallelBuilding = true;
 
@@ -48,9 +49,10 @@ stdenv.mkDerivation rec {
     mscgen
     asciidoc
     sourceHighlight
-  ] ++ lib.optional pythonSupport swig;
+  ]
+  ++ lib.optional pythonSupport swig;
 
-  postBuild = lib.optionalString (pythonSupport) ''
+  postBuild = lib.optionalString pythonSupport ''
     cd python
     ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
     cd -
@@ -64,11 +66,11 @@ stdenv.mkDerivation rec {
     inherit pythonSupport;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.infradead.org/~tgr/libnl/";
     description = "Linux Netlink interface library suite";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.linux;
   };
 }

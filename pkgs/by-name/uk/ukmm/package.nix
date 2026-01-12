@@ -9,6 +9,8 @@
   libglvnd,
   libxkbcommon,
   openssl,
+  makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
 }:
 
@@ -23,13 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eDYCF+bYh0T/SSrQKjCqZvSd28CSxvGkpHgmBCHLoig=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -70,13 +72,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  postInstall = ''
+    install -Dm444 assets/ukmm.png  $out/share/icons/hicolor/256x256/apps/ukmm.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ukmm";
+      exec = "ukmm %u";
+      mimeTypes = [ "x-scheme-handler/bcml" ];
+      icon = "ukmm";
+      desktopName = "UKMM";
+      categories = [
+        "Game"
+        "Utility"
+      ];
+      comment = "Breath of the Wild Mod Manager";
+    })
+  ];
+
+  meta = {
     description = "New mod manager for The Legend of Zelda: Breath of the Wild";
     homepage = "https://github.com/NiceneNerd/ukmm";
     changelog = "https://github.com/NiceneNerd/ukmm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "ukmm";
   };

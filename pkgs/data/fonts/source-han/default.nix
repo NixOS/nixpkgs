@@ -89,9 +89,10 @@ in
   sans = makeSuperOTC {
     family = "sans";
     description = "sans-serif";
-    rev = "2.004R";
-    hash = "sha256-b1kRiprdpaf+Tp5rtTgwn34dPFQR+anTKvMqeVAbfk8=";
+    rev = "2.005R";
+    hash = "sha256-oCTPF1lJSEfNR6rkN5vLPcUwAXxwnz9QPuDtkY3ZKVI=";
     zip = ".zip";
+    prefix = "01_";
   };
 
   serif = makeSuperOTC {
@@ -112,15 +113,15 @@ in
 
   sans-vf-otf = makeVariable {
     family = "sans";
-    version = "2.004";
-    hash = "sha256-V7PE09c7h4RDS8Ij4PSI36Gy+LM+PVDi73Rcs+4DfHo=";
+    version = "2.005";
+    hash = "sha256-7/THncqTE6IpPezcX14eYRRC8WR/xPv0XjfOPEfF8aU=";
     format = "otf";
   };
 
   sans-vf-ttf = makeVariable {
     family = "sans";
-    version = "2.004";
-    hash = "sha256-mXTG/d30gUxzxkJpaH4vOawRXMSxxTXlHCvHEsfGqbc=";
+    version = "2.005";
+    hash = "sha256-CL5kjZzCiNvdcwiFflTlarINpeYxvuqZH+4ayiIQdD8=";
     format = "ttf";
   };
 

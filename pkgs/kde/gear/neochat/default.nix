@@ -1,16 +1,16 @@
 {
   mkKdeDerivation,
   qtlocation,
+  qtspeech,
   qtwebview,
-  kunifiedpush,
 }:
 mkKdeDerivation {
   pname = "neochat";
 
   extraBuildInputs = [
     qtlocation
+    qtspeech
     qtwebview
-    kunifiedpush
   ];
   meta.mainProgram = "neochat";
 }

@@ -2,7 +2,7 @@
   lib,
   pkgs,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromGitHub,
   replaceVars,
   colord,
   setuptools,
@@ -25,8 +25,9 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "gitlab.mister-muffin.de";
+  # gitlab.mister-muffin.de produces a 500 error on 0.6.1
+  # when upgrading, switch src attribute back to gitlab if fixed.
+  src = fetchFromGitHub {
     owner = "josch";
     repo = "img2pdf";
     tag = version;
@@ -83,6 +84,13 @@ buildPythonPackage rec {
     "test_miff_cmyk16"
     "test_png_gray16"
     "test_png_rgb16"
+    # these only fail on aarch64
+    "test_png_rgba8"
+    "test_png_gray8a"
+    # AssertionError: assert 'resolution' not in ...
+    # (starting with ImagMagick 7.1.2-5)
+    "test_date"
+    "test_jpg"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

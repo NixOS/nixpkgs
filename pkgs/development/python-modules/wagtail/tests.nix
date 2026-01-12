@@ -11,6 +11,7 @@
   python-dateutil,
   python,
   pytz,
+  responses,
   wagtail,
   wagtail-factories,
 }:
@@ -34,6 +35,7 @@ buildPythonPackage {
     msrest
     python-dateutil
     pytz
+    responses
     wagtail
     wagtail-factories
   ];

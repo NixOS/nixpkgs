@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CLxeT2olrxRCJ12IZ1PvLW7ZuX0HPsoNuFyxmGBhB8w=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-lPE/mx4LzSOG1YjGol1f77oox4voZzp9RqrKYZAMoX0=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -32,8 +30,6 @@ rustPlatform.buildRustPackage rec {
 
   versionCheckProgram = [ "${placeholder "out"}/bin/arp-scan" ];
 
-  versionCheckProgramArg = "--version";
-
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater { };
@@ -45,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "arp-scan";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "squeekboard-${version}";
+    inherit pname version src;
     hash = "sha256-3K1heokPYxYbiAGha9TrrjQXguzGv/djIB4eWa8dVjg=";
   };
 
@@ -66,11 +65,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.phosh = nixosTests.phosh;
 
-  meta = with lib; {
+  meta = {
     description = "Virtual keyboard supporting Wayland";
     homepage = "https://gitlab.gnome.org/World/Phosh/squeekboard";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ artturin ];
+    platforms = lib.platforms.linux;
   };
 }

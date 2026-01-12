@@ -56,5 +56,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    # fails to compile; out of date
+    broken = true;
   };
 }

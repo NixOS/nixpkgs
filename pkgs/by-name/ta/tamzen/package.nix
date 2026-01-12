@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mkfontdir "$out/share/fonts/misc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bitmapped programming font based on Tamsyn";
     longDescription = ''
       Tamzen is a monospace bitmap font. It is programmatically forked
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       symbols.
     '';
     homepage = "https://github.com/sunaku/tamzen-font";
-    license = licenses.free;
-    maintainers = with maintainers; [ wishfort36 ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ wishfort36 ];
   };
 }

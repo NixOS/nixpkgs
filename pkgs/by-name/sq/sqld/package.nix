@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoHash = "sha256-4Ma/17t+EmmjiYICBLhJifQez0dnwtjhlkmoQrAIG+s";
-  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     cmake
@@ -56,17 +55,18 @@ rustPlatform.buildRustPackage rec {
     zstd
   ];
 
-  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
 
-  # error[E0425]: cannot find function `consume_budget` in module `tokio::task`
-  env.RUSTFLAGS = "--cfg tokio_unstable";
+    # error[E0425]: cannot find function `consume_budget` in module `tokio::task`
+    RUSTFLAGS = "--cfg tokio_unstable";
+  };
 
   # requires a complex setup with podman for the end-to-end tests
   doCheck = false;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

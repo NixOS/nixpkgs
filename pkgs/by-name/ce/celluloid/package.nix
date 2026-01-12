@@ -10,7 +10,7 @@
   libepoxy,
   libadwaita,
   meson,
-  mpv,
+  mpv-unwrapped,
   ninja,
   nix-update-script,
   pkg-config,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libadwaita
     libepoxy
-    mpv
+    mpv-unwrapped
   ];
 
   postPatch = ''

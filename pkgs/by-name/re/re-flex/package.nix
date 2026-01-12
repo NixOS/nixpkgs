@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re-flex";
-  version = "5.5.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "RE-flex";
     rev = "v${version}";
-    hash = "sha256-BTzKR9C4J9DOszKGtcd+7Tiw+OkohPJuKKjbXZ8wX7k=";
+    hash = "sha256-p04o2e7Dxx7N6ByCwERz4hKz+vfTIuuZ//AoWSC1qao=";
   };
 
   outputs = [
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.genivia.com/doc/reflex/html";
     description = "Regex-centric, fast lexical analyzer generator for C++ with full Unicode support";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ prrlvr ];
     mainProgram = "reflex";
   };

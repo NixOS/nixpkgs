@@ -7,6 +7,7 @@
   pkg-config,
   pcsclite,
   udev,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,12 +21,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-7tpO5ir42mIKJXD0NJzEPXi/Xe6LdyEeBQWNfOdgX5I=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qD185H6wfW9yuYImTm9hqSgQpUQcKuCESM8riZwmGY0=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs =
@@ -42,17 +43,18 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
+  doInstallCheck = true;
 
   buildFeatures = [ "cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for managing SoloKeys' Solo2 USB security keys";
     homepage = "https://github.com/solokeys/solo2-cli";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ]; # either at your option
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [ lukegb ];
     mainProgram = "solo2";
   };
 }

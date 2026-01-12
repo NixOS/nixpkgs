@@ -12,14 +12,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmatekbd";
   version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "libmatekbd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6s8JiuXbBWOHxbNSuO8rglzOCRKlQ9fx/GsYYc08GmI=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     odd-unstable = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard management library for MATE";
     homepage = "https://github.com/mate-desktop/libmatekbd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
-}
+})

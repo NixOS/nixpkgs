@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "trezord-go";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-3I6NOzDMhzRyVSOURl7TjJ1Z0P0RcKrSs5rNaZ0Ho9M=";
   };
@@ -46,11 +46,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) trezord; };
 
-  meta = with lib; {
+  meta = {
     description = "Trezor Communication Daemon aka Trezor Bridge";
     homepage = "https://trezor.io";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       canndrew
       jb55
       prusnak

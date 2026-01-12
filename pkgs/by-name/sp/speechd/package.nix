@@ -15,6 +15,7 @@
   glib,
   dotconf,
   libsndfile,
+  runtimeShell,
   withLibao ? true,
   libao,
   withPulse ? false,
@@ -46,20 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-sUpSONKH0tzOTdQrvWbKZfoijn5oNwgmf3s0A297pLQ=";
   };
 
-  patches =
-    [
-      (replaceVars ./fix-paths.patch {
-        utillinux = util-linux;
-        # patch context
-        bindir = null;
-      })
-    ]
-    ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
-      # Replace FHS paths.
-      (replaceVars ./fix-mbrola-paths.patch {
-        inherit mbrola;
-      })
-    ];
+  patches = [
+    (replaceVars ./fix-paths.patch {
+      utillinux = util-linux;
+      # patch context
+      bindir = null;
+    })
+  ]
+  ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
+    # Replace FHS paths.
+    (replaceVars ./fix-mbrola-paths.patch {
+      inherit mbrola;
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -71,66 +71,70 @@ stdenv.mkDerivation (finalAttrs: {
     wrapPython
   ];
 
-  buildInputs =
-    [
-      glib
-      dotconf
-      libsndfile
-      libao
-      libpulseaudio
-      python
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemdMinimal # libsystemd
-    ]
-    ++ lib.optionals withAlsa [
-      alsa-lib
-    ]
-    ++ lib.optionals withEspeak [
-      espeak
-      sonic
-      pcaudiolib
-    ]
-    ++ lib.optionals withFlite [
-      flite
-    ]
-    ++ lib.optionals withPico [
-      svox
-    ];
+  buildInputs = [
+    glib
+    dotconf
+    libsndfile
+    libao
+    libpulseaudio
+    python
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    systemdMinimal # libsystemd
+  ]
+  ++ lib.optionals withAlsa [
+    alsa-lib
+  ]
+  ++ lib.optionals withEspeak [
+    espeak
+    sonic
+    pcaudiolib
+  ]
+  ++ lib.optionals withFlite [
+    flite
+  ]
+  ++ lib.optionals withPico [
+    svox
+  ];
 
   pythonPath = [
     pyxdg
   ];
 
-  configureFlags =
-    [
-      # Audio method falls back from left to right.
-      "--with-default-audio-method=\"libao,pulse,alsa,oss\""
-      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    ]
-    ++ lib.optionals withPulse [
-      "--with-pulse"
-    ]
-    ++ lib.optionals withAlsa [
-      "--with-alsa"
-    ]
-    ++ lib.optionals withLibao [
-      "--with-libao"
-    ]
-    ++ lib.optionals withOss [
-      "--with-oss"
-    ]
-    ++ lib.optionals withEspeak [
-      "--with-espeak-ng"
-    ]
-    ++ lib.optionals withPico [
-      "--with-pico"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    # Audio method falls back from left to right.
+    "--with-default-audio-method=\"libao,pulse,alsa,oss\""
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ]
+  ++ lib.optionals withPulse [
+    "--with-pulse"
+  ]
+  ++ lib.optionals withAlsa [
+    "--with-alsa"
+  ]
+  ++ lib.optionals withLibao [
+    "--with-libao"
+  ]
+  ++ lib.optionals withOss [
+    "--with-oss"
+  ]
+  ++ lib.optionals withEspeak [
+    "--with-espeak-ng"
+  ]
+  ++ lib.optionals withPico [
+    "--with-pico"
+  ];
 
   postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/generic.c --replace-fail "/bin/bash" "${runtimeShell}"
   '';
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   postInstall =
     if libsOnly then
@@ -144,17 +148,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description =
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       berce
       jtojnar
     ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
-    platforms = if withAlsa || withPico then platforms.linux else platforms.unix;
+    platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";
   };
 })

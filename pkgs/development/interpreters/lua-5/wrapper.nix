@@ -30,39 +30,38 @@ let
       ];
 
       # we create wrapper for the binaries in the different packages
-      postBuild =
-        ''
-          source ${lua}/nix-support/utils.sh
-          if [ -L "$out/bin" ]; then
-              unlink "$out/bin"
-          fi
-          mkdir -p "$out/bin"
+      postBuild = ''
+        source ${lua}/nix-support/utils.sh
+        if [ -L "$out/bin" ]; then
+            unlink "$out/bin"
+        fi
+        mkdir -p "$out/bin"
 
-          buildLuaPath "$out"
+        buildLuaPath "$out"
 
-          # take every binary from lua packages and put them into the env
-          for path in ${lib.concatStringsSep " " paths}; do
-            nix_debug "looking for binaries in path = $path"
-            if [ -d "$path/bin" ]; then
-              cd "$path/bin"
-              for prg in *; do
-                if [ -f "$prg" ]; then
-                  rm -f "$out/bin/$prg"
-                  if [ -x "$prg" ]; then
-                    nix_debug "Making wrapper $prg"
-                    makeWrapper "$path/bin/$prg" "$out/bin/$prg" \
-                      --set-default LUA_PATH ";;" \
-                      --suffix LUA_PATH ';' "$LUA_PATH" \
-                      --set-default LUA_CPATH ";;" \
-                      --suffix LUA_CPATH ';' "$LUA_CPATH" \
-                      ${lib.concatStringsSep " " makeWrapperArgs}
-                  fi
+        # take every binary from lua packages and put them into the env
+        for path in ${lib.concatStringsSep " " paths}; do
+          nix_debug "looking for binaries in path = $path"
+          if [ -d "$path/bin" ]; then
+            cd "$path/bin"
+            for prg in *; do
+              if [ -f "$prg" ]; then
+                rm -f "$out/bin/$prg"
+                if [ -x "$prg" ]; then
+                  nix_debug "Making wrapper $prg"
+                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" \
+                    --set-default LUA_PATH ";;" \
+                    --suffix LUA_PATH ';' "$LUA_PATH" \
+                    --set-default LUA_CPATH ";;" \
+                    --suffix LUA_CPATH ';' "$LUA_CPATH" \
+                    ${lib.concatStringsSep " " makeWrapperArgs}
                 fi
-              done
-            fi
-          done
-        ''
-        + postBuild;
+              fi
+            done
+          fi
+        done
+      ''
+      + postBuild;
 
       inherit (lua) meta;
 

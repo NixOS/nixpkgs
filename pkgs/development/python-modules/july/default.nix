@@ -44,7 +44,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Small library for creating pretty heatmaps of daily data.";
+    description = "Small library for creating pretty heatmaps of daily data";
     homepage = "https://github.com/e-hulten/july";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];

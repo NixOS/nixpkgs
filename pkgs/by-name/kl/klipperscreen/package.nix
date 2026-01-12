@@ -48,11 +48,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { url = meta.homepage; };
 
-  meta = with lib; {
+  meta = {
     description = "Touchscreen GUI for the Klipper 3D printer firmware";
     homepage = "https://github.com/jordanruthe/KlipperScreen";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       cab404
       saturn745
     ];

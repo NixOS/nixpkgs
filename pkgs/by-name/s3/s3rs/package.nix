@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-mJ1bMfv/HY74TknpRvu8RIs1d2VlNreEVtHCtQSHQw8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-z7de/TZXyNsb+dxWcNFdJsaGsM3Ld2A0jorNMAVOZOg=";
 
   nativeBuildInputs = [
@@ -29,11 +28,11 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "S3 cli client with multi configs with diffent provider";
     homepage = "https://github.com/yanganto/s3rs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yanganto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yanganto ];
     mainProgram = "s3rs";
   };
 }

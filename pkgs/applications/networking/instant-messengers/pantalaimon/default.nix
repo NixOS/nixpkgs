@@ -22,13 +22,12 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-g+ZWarZnjlSOpD75yf53Upqj1qDlil7pdbfEsMAsjh0=";
   };
 
-  build-system =
-    [
-      installShellFiles
-    ]
-    ++ (with python3Packages; [
-      setuptools
-    ]);
+  build-system = [
+    installShellFiles
+  ]
+  ++ (with python3Packages; [
+    setuptools
+  ]);
 
   pythonRelaxDeps = [
     "matrix-nio"
@@ -66,7 +65,7 @@ python3Packages.buildPythonApplication rec {
       pytest-aiohttp
       pytestCheckHook
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   nativeBuildInputs = lib.optionals enableDbusUi [
     wrapGAppsHook3
@@ -88,10 +87,10 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) pantalaimon;
   };
 
-  meta = with lib; {
+  meta = {
     description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ valodim ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ valodim ];
   };
 }

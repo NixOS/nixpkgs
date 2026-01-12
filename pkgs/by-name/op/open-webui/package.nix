@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.12";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-q8pb+XIBKzU8zWohBtKNQhYBwcQF51/uqgVrMxcKcUc=";
+    hash = "sha256-BS/EB64y/ytHqfKdAmTV0ahT6HQPo96cs+O1CYwd8Rs=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,19 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.27.3";
+    pyodideVersion = "0.28.2";
     pyodide = fetchurl {
-      hash = "sha256-SeK3RKqqxxLLf9DN5xXuPw6ZPblE6OX9VRXMzdrmTV4=";
+      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-576Cd7I4CzOItSycQH8CwLAelLoNnQcJVZ338IhMb/k=";
+    npmDepsHash = "sha256-OH0TuHN324Ef7ZX2JpWVi5q0ycgf1E+UXJj2b3ubMd4=";
+
+    # See https://github.com/open-webui/open-webui/issues/15880
+    npmFlags = [
+      "--force"
+      "--legacy-peer-deps"
+    ];
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -79,12 +85,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  pythonRemoveDeps = [
-    "docker"
-    "pytest"
-    "pytest-docker"
-  ];
-
   dependencies =
     with python3Packages;
     [
@@ -106,20 +106,17 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      chardet
       chromadb
-      colbert-ai
+      cryptography
+      ddgs
       docx2txt
-      duckduckgo-search
       einops
-      elasticsearch
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
-      gcp-storage-emulator
       google-api-python-client
       google-auth-httplib2
       google-auth-oauthlib
@@ -127,15 +124,18 @@ python3Packages.buildPythonApplication rec {
       google-genai
       google-generativeai
       googleapis-common-protos
-      iso-639
+      httpx
+      itsdangerous
       langchain
+      langchain-classic
       langchain-community
+      langchain-text-splitters
       langdetect
-      langfuse
       ldap3
       loguru
       markdown
-      moto
+      msoffcrypto-tool
+      mcp
       nltk
       onnxruntime
       openai
@@ -154,31 +154,27 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
       pandas
-      passlib
       peewee
       peewee-migrate
       pgvector
       pillow
-      pinecone-client
-      playwright
       psutil
-      psycopg2-binary
+      pyarrow
+      pycrdt
       pydub
       pyjwt
       pymdown-extensions
-      pymilvus
-      pymongo
       pymysql
       pypandoc
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio
       pytube
       pyxlsb
-      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -188,7 +184,7 @@ python3Packages.buildPythonApplication rec {
       sentencepiece
       soundfile
       starlette-compress
-      tencentcloud-sdk-python
+      starsessions
       tiktoken
       transformers
       unstructured
@@ -197,7 +193,33 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ moto.optional-dependencies.s3;
+    ++ pyjwt.optional-dependencies.crypto
+    ++ starsessions.optional-dependencies.redis;
+
+  optional-dependencies = with python3Packages; rec {
+    postgres = [
+      pgvector
+      psycopg2-binary
+    ];
+
+    all = [
+      azure-search-documents
+      colbert-ai
+      elasticsearch
+      firecrawl-py
+      gcp-storage-emulator
+      moto
+      oracledb
+      pinecone-client
+      playwright
+      pymilvus
+      pymongo
+      qdrant-client
+      weaviate-client
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ postgres;
+  };
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -234,8 +256,8 @@ python3Packages.buildPythonApplication rec {
     '';
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
-      drupol
       shivaraj-bh
+      codgician
     ];
   };
 }

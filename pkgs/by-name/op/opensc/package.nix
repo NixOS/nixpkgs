@@ -41,24 +41,25 @@ stdenv.mkDerivation rec {
     libXt
     libiconv
     docbook_xml_dtd_412
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  configureFlags =
-    [
-      "--enable-zlib"
-      "--enable-readline"
-      "--enable-openssl"
-      "--enable-pcsc"
-      "--enable-sm"
-      "--enable-man"
-      "--enable-doc"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin)
+  configureFlags = [
+    "--enable-zlib"
+    "--enable-readline"
+    "--enable-openssl"
+    "--enable-pcsc"
+    "--enable-sm"
+    "--enable-man"
+    "--enable-doc"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
+  ]
+  ++
+    lib.optional (!stdenv.hostPlatform.isDarwin)
       "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   installFlags = [
@@ -68,11 +69,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries and utilities to access smart cards";
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.michaeladler ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.michaeladler ];
   };
 }

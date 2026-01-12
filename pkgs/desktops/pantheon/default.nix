@@ -20,6 +20,7 @@ lib.makeScope pkgs.newScope (
       switchboard-plug-notifications
       switchboard-plug-onlineaccounts
       switchboard-plug-pantheon-shell
+      switchboard-plug-parental-controls
       switchboard-plug-power
       switchboard-plug-printers
       switchboard-plug-security-privacy
@@ -29,6 +30,7 @@ lib.makeScope pkgs.newScope (
     ];
 
     wingpanelIndicators = [
+      elementary-monitor
       wingpanel-applications-menu
       wingpanel-indicator-bluetooth
       wingpanel-indicator-datetime
@@ -73,6 +75,10 @@ lib.makeScope pkgs.newScope (
     elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
 
     elementary-mail = callPackage ./apps/elementary-mail { };
+
+    elementary-maps = callPackage ./apps/elementary-maps { };
+
+    elementary-monitor = callPackage ./apps/elementary-monitor { };
 
     elementary-music = callPackage ./apps/elementary-music { };
 
@@ -119,6 +125,8 @@ lib.makeScope pkgs.newScope (
     granite = callPackage ./libraries/granite { };
 
     granite7 = callPackage ./libraries/granite/7 { };
+
+    live-chart = callPackage ./libraries/live-chart { };
 
     pantheon-wayland = callPackage ./libraries/pantheon-wayland { };
 
@@ -193,6 +201,8 @@ lib.makeScope pkgs.newScope (
     switchboard-plug-onlineaccounts = callPackage ./apps/switchboard-plugs/onlineaccounts { };
 
     switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell { };
+
+    switchboard-plug-parental-controls = callPackage ./apps/switchboard-plugs/parental-controls { };
 
     switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };
 

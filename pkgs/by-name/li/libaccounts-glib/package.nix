@@ -39,22 +39,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-mLhcwp8rhCGSB1K6rTWT0tuiINzgwULwXINfCbgPKEg=";
   };
 
-  nativeBuildInputs =
-    [
-      check
-      docbook_xml_dtd_43
-      docbook_xsl
-      glibcLocales
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    check
+    docbook_xml_dtd_43
+    docbook_xsl
+    glibcLocales
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -81,10 +80,10 @@ stdenv.mkDerivation rec {
     rev-prefix = "VERSION_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing accounts which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libaccounts-glib";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
   };
 }

@@ -40,28 +40,27 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-guFgeWOrxRrxkU7kMvd5+nmML0rwLYW196m1usE2qiA=";
     })
   ];
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail GIT-hash-notfound "$version"
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail GIT-hash-notfound "$version"
 
-      # We want to use the Nix wrapper for the output check tool instead of running it through Python.
-      substituteInPlace tests/query-files/lit.cfg \
-        --replace-fail "pythonExec + ' ' +OutputCheckTool" "OutputCheckTool"
+    # We want to use the Nix wrapper for the output check tool instead of running it through Python.
+    substituteInPlace tests/query-files/lit.cfg \
+      --replace-fail "pythonExec + ' ' +OutputCheckTool" "OutputCheckTool"
 
-      # Results in duplication of Nix store paths and trouble finding the Python library at runtime
-      substituteInPlace bindings/python/stp/library_path.py.in_install \
-        --replace-fail "@CMAKE_INSTALL_PREFIX@/" ""
-    ''
-    + lib.optionalString useCadical ''
-      # Fix up Cadical paths.
-      substituteInPlace include/stp/Sat/Cadical.h \
-        --replace-fail "src/cadical.hpp" "cadical.hpp"
+    # Results in duplication of Nix store paths and trouble finding the Python library at runtime
+    substituteInPlace bindings/python/stp/library_path.py.in_install \
+      --replace-fail "@CMAKE_INSTALL_PREFIX@/" ""
+  ''
+  + lib.optionalString useCadical ''
+    # Fix up Cadical paths.
+    substituteInPlace include/stp/Sat/Cadical.h \
+      --replace-fail "src/cadical.hpp" "cadical.hpp"
 
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "build/libcadical.a" "lib/libcadical.a" \
-        --replace-fail 'include_directories(''${CADICAL_DIR}/)' 'include_directories(''${CADICAL_DIR}/include)'
-    '';
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "build/libcadical.a" "lib/libcadical.a" \
+      --replace-fail 'include_directories(''${CADICAL_DIR}/)' 'include_directories(''${CADICAL_DIR}/include)'
+  '';
 
   buildInputs = [
     boost
@@ -69,7 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     gmp
     minisat
-  ] ++ lib.optional (!useCadical) cryptominisat;
+  ]
+  ++ lib.optional (!useCadical) cryptominisat;
 
   nativeBuildInputs = [
     cmake
@@ -116,20 +116,19 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  preConfigure =
-    ''
-      python_install_dir=$out/${python3.sitePackages}
-      mkdir -p $python_install_dir
-      cmakeFlagsArray+=(
-        "-DPYTHON_LIB_INSTALL_DIR=$python_install_dir"
-      )
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      # Link in gtest and the output check utility.
-      mkdir -p deps
-      ln -s ${gtest.src} deps/gtest
-      ln -s ${outputcheck} deps/OutputCheck
-    '';
+  preConfigure = ''
+    python_install_dir=$out/${python3.sitePackages}
+    mkdir -p $python_install_dir
+    cmakeFlagsArray+=(
+      "-DPYTHON_LIB_INSTALL_DIR=$python_install_dir"
+    )
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    # Link in gtest and the output check utility.
+    mkdir -p deps
+    ln -s ${gtest.src} deps/gtest
+    ln -s ${outputcheck} deps/OutputCheck
+  '';
 
   nativeCheckInputs = [
     gtest

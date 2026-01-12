@@ -11,6 +11,7 @@ let
     any
     attrNames
     attrValues
+    boolToString
     concatMap
     concatMapStringsSep
     concatStrings
@@ -30,7 +31,7 @@ let
     mapAttrs'
     mapAttrsToList
     match
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkDefault
     mkIf
     mkMerge
@@ -43,6 +44,7 @@ let
     stringLength
     trace
     types
+    versionOlder
     xor
     ;
 
@@ -96,8 +98,8 @@ let
     only one of {option}`hashedPassword`, {option}`password`, or
     {option}`hashedPasswordFile` will be set.
 
-    In a system where [](#opt-systemd.sysusers.enable) is `true`, typically
-    only one of {option}`initialPassword`, {option}`initialHashedPassword`,
+    In a system where [](#opt-systemd.sysusers.enable) or [](#opt-services.userborn.enable) is `true`,
+    typically only one of {option}`initialPassword`, {option}`initialHashedPassword`,
     or {option}`hashedPasswordFile` will be set.
 
     If the option {option}`users.mutableUsers` is true, the password defined
@@ -377,7 +379,7 @@ let
 
         hashedPasswordFile = mkOption {
           type = with types; nullOr str;
-          default = cfg.users.${name}.passwordFile;
+          default = config.passwordFile;
           defaultText = literalExpression "null";
           description = ''
             The full path to a file that contains the hash of the user's
@@ -455,16 +457,21 @@ let
         };
 
         linger = mkOption {
-          type = types.bool;
-          default = false;
+          type = types.nullOr types.bool;
+          example = true;
+          default = null;
           description = ''
-            Whether to enable lingering for this user. If true, systemd user
-            units will start at boot, rather than starting at login and stopping
-            at logout. This is the declarative equivalent of running
-            `loginctl enable-linger` for this user.
+            Whether to enable or disable lingering for this user.  Without
+            lingering, user units will not be started until the user logs in,
+            and may be stopped on logout depending on the settings in
+            `logind.conf`.
 
-            If false, user units will not be started until the user logs in, and
-            may be stopped on logout depending on the settings in `logind.conf`.
+            By default, NixOS will not manage lingering, new users will default
+            to not lingering, and lingering can be configured imperatively using
+            `loginctl enable-linger` or `loginctl disable-linger`. Setting
+            this option to `true` or `false` is the declarative equivalent of
+            running `loginctl enable-linger` or `loginctl disable-linger`
+            respectively.
           '';
         };
       };
@@ -535,7 +542,7 @@ let
         name = mkDefault name;
 
         members = mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
+          filterAttrs (n: u: u.enable && elem config.name u.extraGroups) cfg.users
         );
       };
 
@@ -661,13 +668,11 @@ let
       shells = mapAttrsToList (_: u: u.shell) cfg.users;
     in
     filter types.shellPackage.check shells;
-
-  lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
 in
 {
   imports = [
-    (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
-    (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
     (mkRenamedOptionModule
       [ "security" "initialRootPassword" ]
       [ "users" "users" "root" "initialHashedPassword" ]
@@ -708,6 +713,13 @@ in
       description = ''
         Whether to require that no two users/groups share the same uid/gid.
       '';
+    };
+
+    users.manageLingering = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to manage whether users linger or not.";
+      example = false;
     };
 
     users.users = mkOption {
@@ -871,10 +883,11 @@ in
         render.gid = ids.gids.render;
         sgx.gid = ids.gids.sgx;
         shadow.gid = ids.gids.shadow;
+        clock.gid = ids.gids.clock;
       };
 
       system.activationScripts.users =
-        if !config.systemd.sysusers.enable then
+        if !config.systemd.sysusers.enable && !config.services.userborn.enable then
           {
             supportsDryActivation = true;
             text = ''
@@ -893,39 +906,59 @@ in
         else
           ""; # keep around for backwards compatibility
 
-      systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
+      systemd.services.linger-users = lib.mkIf cfg.manageLingering {
         wantedBy = [ "multi-user.target" ];
         after = [ "systemd-logind.service" ];
         requires = [ "systemd-logind.service" ];
 
         script =
           let
-            lingerDir = "/var/lib/systemd/linger";
-            lingeringUsersFile = builtins.toFile "lingering-users" (
-              concatStrings (map (s: "${s}\n") (sort (a: b: a < b) lingeringUsers))
-            ); # this sorting is important for `comm` to work correctly
+            lingeringUsers = filterAttrs (n: v: v.linger == true) cfg.users;
+            nonLingeringUsers = filterAttrs (n: v: v.linger == false) cfg.users;
+            lingeringUserNames = mapAttrsToList (n: v: v.name) lingeringUsers;
+            nonLingeringUserNames = mapAttrsToList (n: v: v.name) nonLingeringUsers;
           in
           ''
-            mkdir -vp ${lingerDir}
-            cd ${lingerDir}
-            for user in $(ls); do
-              if ! id "$user" >/dev/null; then
-                echo "Removing linger for missing user $user"
-                rm --force -- "$user"
-              fi
+            ${lib.strings.toShellVars { inherit lingeringUserNames nonLingeringUserNames; }}
+
+            user_configured () {
+                # Use `id` to check if the user exists rather than checking the
+                # NixOS configuration, as it may be that the user has been
+                # manually configured, which is permitted if users.mutableUsers
+                # is true (the default).
+                id "$1" >/dev/null
+            }
+
+            shopt -s dotglob nullglob
+            for user in *; do
+                if ! user_configured "$user"; then
+                    # systemd has this user configured to linger despite them not
+                    # existing.
+                    echo "Removing linger for missing user $user" >&2
+                    rm -- "$user"
+                fi
             done
-            ls | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
-            ls | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+
+            if (( ''${#nonLingeringUserNames[*]} > 0 )); then
+                ${config.systemd.package}/bin/loginctl disable-linger "''${nonLingeringUserNames[@]}"
+            fi
+            if (( ''${#lingeringUserNames[*]} > 0 )); then
+                ${config.systemd.package}/bin/loginctl enable-linger "''${lingeringUserNames[@]}"
+            fi
           '';
 
-        serviceConfig.Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+          StateDirectory = "systemd/linger";
+          WorkingDirectory = "/var/lib/systemd/linger";
+        };
       };
 
       # Warn about user accounts with deprecated password hashing schemes
       # This does not work when the users and groups are created by
       # systemd-sysusers because the users are created too late then.
       system.activationScripts.hashes =
-        if !config.systemd.sysusers.enable then
+        if !config.systemd.sysusers.enable && !config.services.userborn.enable then
           {
             deps = [ "users" ];
             text = ''
@@ -1033,179 +1066,194 @@ in
           cdrom = { };
           tape = { };
           kvm = { };
+          clock = { };
         };
       };
 
-      assertions =
-        [
-          {
-            assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
-            message = "UIDs and GIDs must be unique!";
-          }
-          {
-            assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
-            message = "systemd initrd UIDs and GIDs must be unique!";
-          }
-          {
-            assertion = usersWithoutExistingGroup == { };
-            message =
-              let
-                errUsers = lib.attrNames usersWithoutExistingGroup;
-                missingGroups = lib.unique (lib.mapAttrsToList (n: u: u.group) usersWithoutExistingGroup);
-                mkConfigHint = group: "users.groups.${group} = {};";
-              in
-              ''
-                The following users have a primary group that is undefined: ${lib.concatStringsSep " " errUsers}
-                Hint: Add this to your NixOS configuration:
-                  ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
-              '';
-          }
-          {
-            assertion = !cfg.mutableUsers -> length usersWithNullShells == 0;
-            message = ''
-              users.mutableUsers = false has been set,
-              but found users that have their shell set to null.
-              If you wish to disable login, set their shell to pkgs.shadow (the default).
-              Misconfigured users: ${lib.concatStringsSep " " usersWithNullShells}
+      assertions = [
+        {
+          assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
+          message = "UIDs and GIDs must be unique!";
+        }
+        {
+          assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
+          message = "systemd initrd UIDs and GIDs must be unique!";
+        }
+        {
+          assertion = usersWithoutExistingGroup == { };
+          message =
+            let
+              errUsers = lib.attrNames usersWithoutExistingGroup;
+              missingGroups = lib.unique (lib.mapAttrsToList (n: u: u.group) usersWithoutExistingGroup);
+              mkConfigHint = group: "users.groups.${group} = {};";
+            in
+            ''
+              The following users have a primary group that is undefined: ${lib.concatStringsSep " " errUsers}
+              Hint: Add this to your NixOS configuration:
+                ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
             '';
-          }
-          {
-            # If mutableUsers is false, to prevent users creating a
-            # configuration that locks them out of the system, ensure that
-            # there is at least one "privileged" account that has a
-            # password or an SSH authorized key. Privileged accounts are
-            # root and users in the wheel group.
-            # The check does not apply when users.allowNoPasswordLogin
-            # The check does not apply when users.mutableUsers
-            assertion =
-              !cfg.mutableUsers
-              -> !cfg.allowNoPasswordLogin
-              -> any id (
-                mapAttrsToList (
-                  name: cfg:
-                  (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups)
-                  && (
-                    allowsLogin cfg.hashedPassword
-                    || cfg.password != null
-                    || cfg.hashedPasswordFile != null
-                    || cfg.openssh.authorizedKeys.keys != [ ]
-                    || cfg.openssh.authorizedKeys.keyFiles != [ ]
-                  )
-                ) cfg.users
-                ++ [
-                  config.security.googleOsLogin.enable
-                ]
-              );
-            message = ''
-              Neither the root account nor any wheel user has a password or SSH authorized key.
-              You must set one to prevent being locked out of your system.
-              If you really want to be locked out of your system, set users.allowNoPasswordLogin = true;
-              However you are most probably better off by setting users.mutableUsers = true; and
-              manually running passwd root to set the root password.
-            '';
-          }
-        ]
-        ++ flatten (
-          flip mapAttrsToList cfg.users (
-            name: user:
-            [
-              (
-                let
-                  # Things fail in various ways with especially non-ascii usernames.
-                  # This regex mirrors the one from shadow's is_valid_name:
-                  # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
-                  # though without the trailing $, because Samba 3 got its last release
-                  # over 10 years ago and is not in Nixpkgs anymore,
-                  # while later versions don't appear to require anything like that.
-                  nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
-                in
-                {
-                  assertion = builtins.match nameRegex user.name != null;
-                  message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
-                }
-              )
-              {
-                assertion = (user.hashedPassword != null) -> (match ".*:.*" user.hashedPassword == null);
-                message = ''
-                  The password hash of user "${user.name}" contains a ":" character.
-                  This is invalid and would break the login system because the fields
-                  of /etc/shadow (file where hashes are stored) are colon-separated.
-                  Please check the value of option `users.users."${user.name}".hashedPassword`.'';
-              }
-              {
-                assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
-                message = ''
-                  A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
-                  Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
-                  or users.users.${user.name}.uid must be changed to 1000 or above.
-                '';
-              }
-              {
-                assertion =
-                  let
-                    # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
-                    isEffectivelySystemUser =
-                      user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
-                  in
-                  xor isEffectivelySystemUser user.isNormalUser;
-                message = ''
-                  Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
-                '';
-              }
-              {
-                assertion = user.group != "";
-                message = ''
-                  users.users.${user.name}.group is unset. This used to default to
-                  nogroup, but this is unsafe. For example you can create a group
-                  for this user with:
-                  users.users.${user.name}.group = "${user.name}";
-                  users.groups.${user.name} = {};
-                '';
-              }
-            ]
-            ++ (map
-              (shell: {
-                assertion =
-                  !user.ignoreShellProgramCheck
-                  -> (user.shell == pkgs.${shell})
-                  -> (config.programs.${shell}.enable == true);
-                message = ''
-                  users.users.${user.name}.shell is set to ${shell}, but
-                  programs.${shell}.enable is not true. This will cause the ${shell}
-                  shell to lack the basic nix directories in its PATH and might make
-                  logging in as that user impossible. You can fix it with:
-                  programs.${shell}.enable = true;
-
-                  If you know what you're doing and you are fine with the behavior,
-                  set users.users.${user.name}.ignoreShellProgramCheck = true;
-                  instead.
-                '';
-              })
-              [
-                "fish"
-                "xonsh"
-                "zsh"
+        }
+        {
+          assertion = !cfg.mutableUsers -> length usersWithNullShells == 0;
+          message = ''
+            users.mutableUsers = false has been set,
+            but found users that have their shell set to null.
+            If you wish to disable login, set their shell to pkgs.shadow (the default).
+            Misconfigured users: ${lib.concatStringsSep " " usersWithNullShells}
+          '';
+        }
+        {
+          # If mutableUsers is false, to prevent users creating a
+          # configuration that locks them out of the system, ensure that
+          # there is at least one "privileged" account that has a
+          # password or an SSH authorized key. Privileged accounts are
+          # root and users in the wheel group.
+          # The check does not apply when users.allowNoPasswordLogin
+          # The check does not apply when users.mutableUsers
+          assertion =
+            !cfg.mutableUsers
+            -> !cfg.allowNoPasswordLogin
+            -> any id (
+              mapAttrsToList (
+                name: cfg:
+                (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups)
+                && (
+                  allowsLogin cfg.hashedPassword
+                  || cfg.password != null
+                  || cfg.hashedPasswordFile != null
+                  || cfg.openssh.authorizedKeys.keys != [ ]
+                  || cfg.openssh.authorizedKeys.keyFiles != [ ]
+                )
+              ) cfg.users
+              ++ [
+                config.security.googleOsLogin.enable
               ]
+            );
+          message = ''
+            Neither the root account nor any wheel user has a password or SSH authorized key.
+            You must set one to prevent being locked out of your system.
+            If you really want to be locked out of your system, set users.allowNoPasswordLogin = true;
+            However you are most probably better off by setting users.mutableUsers = true; and
+            manually running passwd root to set the root password.
+          '';
+        }
+      ]
+      ++ flatten (
+        flip mapAttrsToList cfg.users (
+          name: user:
+          [
+            (
+              let
+                # Things fail in various ways with especially non-ascii usernames.
+                # This regex mirrors the one from shadow's is_valid_name:
+                # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
+                # though without the trailing $, because Samba 3 got its last release
+                # over 10 years ago and is not in Nixpkgs anymore,
+                # while later versions don't appear to require anything like that.
+                nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
+              in
+              {
+                assertion = builtins.match nameRegex user.name != null;
+                message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
+              }
             )
+            {
+              assertion = (user.hashedPassword != null) -> (match ".*:.*" user.hashedPassword == null);
+              message = ''
+                The password hash of user "${user.name}" contains a ":" character.
+                This is invalid and would break the login system because the fields
+                of /etc/shadow (file where hashes are stored) are colon-separated.
+                Please check the value of option `users.users."${user.name}".hashedPassword`.'';
+            }
+            {
+              assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
+              message = ''
+                A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
+                Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
+                or users.users.${user.name}.uid must be changed to 1000 or above.
+              '';
+            }
+            {
+              assertion =
+                let
+                  # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
+                  isEffectivelySystemUser =
+                    user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
+                in
+                xor isEffectivelySystemUser user.isNormalUser;
+              message = ''
+                Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+              '';
+            }
+            {
+              assertion = user.group != "";
+              message = ''
+                users.users.${user.name}.group is unset. This used to default to
+                nogroup, but this is unsafe. For example you can create a group
+                for this user with:
+                users.users.${user.name}.group = "${user.name}";
+                users.groups.${user.name} = {};
+              '';
+            }
+            {
+              assertion = user.linger != null -> cfg.manageLingering;
+              message = ''
+                users.manageLingering is set to false, but
+                users.users.${user.name}.linger is configured.
+
+                If you want NixOS to manage whether user accounts linger or
+                not, you must set users.manageLingering to true.  This is the
+                default setting.
+
+                If you do not want NixOS to manage whether user accounts linger
+                or not, you must set users.users.${user.name}.linger to null.
+                This is the default setting provided system.stateVersion is at
+                least "25.11".
+              '';
+            }
+          ]
+          ++ (map
+            (shell: {
+              assertion =
+                !user.ignoreShellProgramCheck
+                -> (user.shell == pkgs.${shell})
+                -> (config.programs.${shell}.enable == true);
+              message = ''
+                users.users.${user.name}.shell is set to ${shell}, but
+                programs.${shell}.enable is not true. This will cause the ${shell}
+                shell to lack the basic nix directories in its PATH and might make
+                logging in as that user impossible. You can fix it with:
+                programs.${shell}.enable = true;
+
+                If you know what you're doing and you are fine with the behavior,
+                set users.users.${user.name}.ignoreShellProgramCheck = true;
+                instead.
+              '';
+            })
+            [
+              "fish"
+              "xonsh"
+              "zsh"
+            ]
           )
-        );
+        )
+      );
 
       warnings =
         flip concatMap (attrValues cfg.users) (
           user:
           let
-            passwordOptions =
-              [
-                "hashedPassword"
-                "hashedPasswordFile"
-                "password"
-              ]
-              ++ optionals cfg.mutableUsers [
-                # For immutable users, initialHashedPassword is set to hashedPassword,
-                # so using these options would always trigger the assertion.
-                "initialHashedPassword"
-                "initialPassword"
-              ];
+            passwordOptions = [
+              "hashedPassword"
+              "hashedPasswordFile"
+              "password"
+            ]
+            ++ optionals cfg.mutableUsers [
+              # For immutable users, initialHashedPassword is set to hashedPassword,
+              # so using these options would always trigger the assertion.
+              "initialHashedPassword"
+              "initialPassword"
+            ];
             unambiguousPasswordConfiguration =
               1 >= length (filter (x: x != null) (map (flip getAttr user) passwordOptions));
           in

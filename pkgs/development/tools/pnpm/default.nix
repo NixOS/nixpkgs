@@ -2,7 +2,6 @@
   lib,
   callPackage,
 }:
-
 let
   inherit (lib) mapAttrs' nameValuePair;
 
@@ -16,8 +15,8 @@ let
       hash = "sha256-z4anrXZEBjldQoam0J1zBxFyCsxtk+nc6ax6xNxKKKc=";
     };
     "10" = {
-      version = "10.11.0";
-      hash = "sha256-pp6csHfaQZ1H0Y8d1S4gckWynKxuB2rO2+uL47Gme9c=";
+      version = "10.26.1";
+      hash = "sha256-6ObkmRKPaAT1ySIjzR8uP2JVcQLAxuJUzJm7KqIpu/k=";
     };
   };
 

@@ -9,6 +9,7 @@
   gvfs,
   maven,
   jre,
+  udevCheckHook,
 }:
 let
   pkgDescription = "All-in-one tool for managing Nintendo Switch homebrew";
@@ -21,13 +22,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "ns-usbloader";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
+    sha256 = "sha256-nZfAZ+IjoYXEWwH9oOhOQ5TOYUNiAGAqhHRhskyx/Vo=";
   };
 
   patches = [
@@ -47,9 +48,12 @@ maven.buildMavenPackage rec {
     makeWrapper
     wrapGAppsHook3
     gvfs
+    udevCheckHook
   ];
 
   doCheck = false;
+
+  doInstallCheck = true;
 
   # Don't wrap binaries twice.
   dontWrapGApps = true;
@@ -102,11 +106,11 @@ maven.buildMavenPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = pkgDescription;
     homepage = "https://github.com/developersu/ns-usbloader";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ soupglasses ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ soupglasses ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

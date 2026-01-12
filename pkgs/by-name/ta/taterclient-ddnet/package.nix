@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.3.0";
+  version = "10.7.0";
 
   src = fetchFromGitHub {
-    owner = "sjrc6";
-    repo = "taterclient-ddnet";
+    owner = "TaterClient";
+    repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-OEoiUtD87xsXBgAZ65mmfmAJcEvrley3drRX+IJo20s=";
+    hash = "sha256-9d4vKrWuDW2E1PXs4yRAyR6zNPfYEclW8RfHNnpkpyc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -76,17 +76,19 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     spirv-tools
     glew
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   strictDeps = true;
 
-  patches = [
-    ./client_log_format_security.patch
-  ];
-
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace-fail /usr/ $out/
+      --replace-fail "/usr/" "$out/"
+
+    # Substitute date and time CMake macros. It avoids to the client being banned on some Teeworlds servers.
+    substituteInPlace src/engine/client/client.cpp \
+      --replace-fail "__DATE__" "\"$(date +'%b %e %Y')\"" \
+      --replace-fail "__TIME__" "\"$(date +'%H:%M:%S')\""
   '';
 
   cmakeFlags = [
@@ -101,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.3.0/CMakeLists.txt#L3072
+  # See https://github.com/TaterClient/TClient/blob/V10.7.0/CMakeLists.txt#L3207
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

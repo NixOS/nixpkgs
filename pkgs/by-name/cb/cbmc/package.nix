@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.6.0";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-ot0vVBgiSVru/RE7KeyTsXzDfs0CSa5vaFsON+PCZZo=";
+    hash = "sha256-PT6AYiwkplCeyMREZnGZA0BKl4ZESRC02/9ibKg7mYU=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -53,27 +53,26 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-Do-not-download-sources-in-cmake.patch
   ];
 
-  postPatch =
-    ''
-      # fix library_check.sh interpreter error
-      patchShebangs .
+  postPatch = ''
+    # fix library_check.sh interpreter error
+    patchShebangs .
 
-      mkdir -p srccadical
-      cp -r ${finalAttrs.srccadical}/* srccadical
+    mkdir -p srccadical
+    cp -r ${finalAttrs.srccadical}/* srccadical
 
-      mkdir -p srcglucose
-      cp -r ${finalAttrs.srcglucose}/* srcglucose
-      find -exec chmod +w {} \;
+    mkdir -p srcglucose
+    cp -r ${finalAttrs.srcglucose}/* srcglucose
+    find -exec chmod +w {} \;
 
-      substituteInPlace src/solvers/CMakeLists.txt \
-       --replace-fail "@srccadical@" "$PWD/srccadical" \
-       --replace-fail "@srcglucose@" "$PWD/srcglucose"
-    ''
-    + lib.optionalString (!stdenv.cc.isGNU) ''
-      # goto-gcc rely on gcc
-      substituteInPlace "regression/CMakeLists.txt" \
-        --replace-fail "add_subdirectory(goto-gcc)" ""
-    '';
+    substituteInPlace src/solvers/CMakeLists.txt \
+     --replace-fail "@srccadical@" "$PWD/srccadical" \
+     --replace-fail "@srcglucose@" "$PWD/srcglucose"
+  ''
+  + lib.optionalString (!stdenv.cc.isGNU) ''
+    # goto-gcc rely on gcc
+    substituteInPlace "regression/CMakeLists.txt" \
+      --replace-fail "add_subdirectory(goto-gcc)" ""
+  '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH
@@ -92,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=unused-but-set-variable"
       # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
       "-Wno-error=c++20-extensions"
+      # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 
@@ -106,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/cbmc";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "CBMC is a Bounded Model Checker for C and C++ programs";
+    description = "Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ jiegec ];

@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.9.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Jiz0WbUXp9BE1vvIS5U+nIPwJnkLLdPOkPIaf47e0A8=";
@@ -45,7 +43,8 @@ buildPythonPackage rec {
     ipywidgets
     psygnal
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ]
+  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -58,15 +57,25 @@ buildPythonPackage rec {
   disabledTests = [
     # requires package.json
     "test_version"
+
+    # AssertionError: assert not {140737277121872: <MockComm id='140737277118512'>}
+    "test_descriptor_with_psygnal"
+    "test_descriptor_with_pydantic"
+    "test_descriptor_with_msgspec"
+    "test_descriptor_with_traitlets"
+    "test_infer_file_contents"
+
+    #  assert not {<function _connect_psygnal.<locals>._disconnect at 0x7ffff3617e...
+    "test_descriptor_with_psygnal"
   ];
 
   pythonImportsCheck = [ "anywidget" ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom jupyter widgets made easy";
     homepage = "https://github.com/manzt/anywidget";
     changelog = "https://github.com/manzt/anywidget/releases/tag/anywidget%40${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

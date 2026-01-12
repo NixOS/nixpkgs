@@ -60,13 +60,13 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK app to sync InfiniTime watch with PinePhone";
     mainProgram = "siglo";
     homepage = "https://github.com/theironrobin/siglo";
-    changelog = "https://github.com/theironrobin/siglo/tags/v${version}";
-    license = licenses.mpl20;
+    changelog = "https://github.com/theironrobin/siglo/releases/tag/v${version}";
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

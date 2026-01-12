@@ -7,24 +7,24 @@
 
 gccStdenv.mkDerivation rec {
   pname = "programmer-calculator";
-  version = "3.0";
+  version = "3.0-unstable-2025-11-06";
 
   src = fetchFromGitHub {
     owner = "alt-romes";
     repo = "programmer-calculator";
-    rev = "v${version}";
-    sha256 = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
+    rev = "153272c50b2491ddf25dfbfcf228a08a3b3ace69";
+    sha256 = "sha256-24OYG3tVxcc/1i9HRrzW/jPY41KnKkugLziWnG1wQIw=";
   };
 
   buildInputs = [ ncurses ];
 
   installPhase = ''
     runHook preInstall
-    install -Dm 555 pcalc -t "$out/bin"
+    install -Dm 555 bin/pcalc -t "$out/bin"
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal calculator for programmers";
     mainProgram = "pcalc";
     longDescription = ''
@@ -32,9 +32,9 @@ gccStdenv.mkDerivation rec {
       representations, sizes, and overall close to the bits
     '';
     homepage = "https://alt-romes.github.io/programmer-calculator";
-    changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/alt-romes/programmer-calculator/releases/tag/v${lib.versions.majorMinor version}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ cjab ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

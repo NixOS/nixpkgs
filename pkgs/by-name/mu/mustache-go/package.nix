@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cbroglie";
     repo = "mustache";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-A7LIkidhpFmhIjiDu9KdmSIdqFNsV3N8J2QEo7yT+DE=";
   };
@@ -23,11 +23,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cbroglie/mustache";
     description = "Mustache template language in Go";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ Zimmi48 ];
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ Zimmi48 ];
     mainProgram = "mustache";
   };
 }

@@ -34,33 +34,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      unzip
-    ]
-    # The preFixup hook rewrites the binary, which invaliates the code
-    # signature. Add the fixup hook to sign the output.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    unzip
+  ]
+  # The preFixup hook rewrites the binary, which invaliates the code
+  # signature. Add the fixup hook to sign the output.
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
+  ];
 
-  buildInputs =
-    [
-      file
-      gettext
-      glib
-      libICE
-      libssh2
-      openssl
-      slang
-      zip
-    ]
-    ++ lib.optionals x11Support [ libX11 ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      e2fsprogs
-      gpm
-    ];
+  buildInputs = [
+    file
+    gettext
+    glib
+    libICE
+    libssh2
+    openssl
+    slang
+    zip
+  ]
+  ++ lib.optionals x11Support [ libX11 ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    e2fsprogs
+    gpm
+  ];
 
   enableParallelBuilding = true;
 
@@ -98,13 +96,12 @@ stdenv.mkDerivation rec {
     update-source-version mc "$new_version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
     downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
     homepage = "https://midnight-commander.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "mc";
   };
 }

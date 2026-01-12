@@ -5,6 +5,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
@@ -18,11 +19,11 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(10\\.5\\.[0-9]+)$";
-    version = "10.5.6";
-    srcHash = "sha256-etHEJ3EBTolXZr/2Kd39Jdtf1qBMuVO5zRkuM6k4F3w=";
-    vendorHash = "sha256-9Jl+lxvSoxUReziTqkDRyeNrijGWcBDbqoywJRIeD2k=";
-    npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
+    regex = "^v(10\\.11\\.[0-9]+)$";
+    version = "10.11.9";
+    srcHash = "sha256-e7itz3VcjSwXGTA+Dn0g5CmQzpnquQ6GmWNdvwrhaQo=";
+    vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
+    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
@@ -192,15 +193,14 @@ buildMattermost rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--version-regex"
+        versionInfo.regex
+      ]
+      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+        "--override-filename"
+        versionInfo.autoUpdate
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
 
@@ -220,6 +220,9 @@ buildMattermost rec {
         substituteInPlace channels/webpack.config.js \
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
+
+      # https://github.com/NixOS/nixpkgs/issues/474535
+      nodejs = nodejs_22;
 
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
@@ -250,7 +253,7 @@ buildMattermost rec {
   };
 
   meta = {
-    description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
+    description = "Open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with lib.licenses; [
       agpl3Only

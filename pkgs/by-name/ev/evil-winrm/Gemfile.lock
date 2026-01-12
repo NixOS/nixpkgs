@@ -1,11 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    base64 (0.2.0)
-    bigdecimal (3.1.9)
+    base64 (0.3.0)
+    bigdecimal (3.3.1)
     builder (3.3.0)
     erubi (1.13.1)
-    ffi (1.17.1)
+    ffi (1.17.2)
     fileutils (1.7.3)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
@@ -15,19 +15,19 @@ GEM
     httpclient (2.9.0)
       mutex_m
     little-plugger (1.1.4)
-    logger (1.6.6)
+    logger (1.7.0)
     logging (2.4.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
-    multi_json (1.15.0)
+    multi_json (1.17.0)
     mutex_m (0.3.0)
     nori (2.7.1)
       bigdecimal
-    rexml (3.4.1)
+    rexml (3.4.4)
     rubyntlm (0.6.5)
       base64
     rubyzip (2.4.1)
-    stringio (3.1.5)
+    stringio (3.1.7)
     winrm (2.3.9)
       builder (>= 2.1.2)
       erubi (~> 1.8)
@@ -55,4 +55,4 @@ DEPENDENCIES
   winrm-fs
 
 BUNDLED WITH
-   2.6.2
+   2.7.1

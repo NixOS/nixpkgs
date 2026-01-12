@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.56.0";
+  version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd";
     tag = version;
-    hash = "sha256-URFLVMd1j/br+/isQytVjSVosMHn1SEwqg2VNxStD0A=";
+    hash = "sha256-moUcivW3YIE2SvjS7rCXTjeCKUW/u/NXWH3VmJ9x6jg=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -30,14 +30,15 @@ stdenv.mkDerivation rec {
     boost
     zlib
     openssl
-  ] ++ lib.optional upnpSupport miniupnpc;
+  ]
+  ++ lib.optional upnpSupport miniupnpc;
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   makeFlags = [
-    "USE_UPNP=${if upnpSupport then "yes" else "no"}"
+    "USE_UPNP=${lib.boolToYesNo upnpSupport}"
   ];
 
   enableParallelBuilding = true;
@@ -48,12 +49,12 @@ stdenv.mkDerivation rec {
     installManPage 'debian/i2pd.1'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.unix;
     mainProgram = "i2pd";
   };
 }

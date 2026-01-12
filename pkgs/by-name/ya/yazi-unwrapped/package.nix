@@ -8,27 +8,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yazi";
-  version = "25.5.28";
+  version = "26.1.4";
 
   srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
   sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-g+6RawDZsgYnXiybhaiosOfz/k4LHe5iX+VqHikfPzM=";
+  cargoHash = "sha256-P1ijZsY1AYosWVyxdmDX1SN6KZsrlUqJ9cNfyVWV6mI=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2025-05-28";
+  env.VERGEN_BUILD_DATE = "2026-1-4";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
-      --bash ./yazi-boot/completions/yazi.bash \
-      --fish ./yazi-boot/completions/yazi.fish \
-      --zsh  ./yazi-boot/completions/_yazi
+      --nushell ./yazi-boot/completions/yazi.nu \
+      --bash    ./yazi-boot/completions/yazi.bash \
+      --fish    ./yazi-boot/completions/yazi.fish \
+      --zsh     ./yazi-boot/completions/_yazi
 
     installManPage ../${finalAttrs.passthru.srcs.man_src.name}/yazi{.1,-config.5}
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "sxyazi";
       repo = "yazi";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-z+dh1lO6lvStlv58mi5T/cxYdewo2+5bRSO7naVcHMs=";
+      hash = "sha256-dNDwlMM+k20c2Lnm+hqUvzu5l3Ip9GeP+nnj4WlDVdw=";
     };
 
     man_src = fetchFromGitHub {

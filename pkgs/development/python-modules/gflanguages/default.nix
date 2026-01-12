@@ -4,7 +4,6 @@
   fetchPypi,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   setuptools-scm,
@@ -14,14 +13,12 @@
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.7.4";
+  version = "0.7.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d/Q5Kh/ApXP0AcNOuATy8GyssLcNUjboQPEj1Q48tuA=";
+    hash = "sha256-JR+lmwGhPR/RoskpouNzGOE9kRgvSGgzx5Xa196k0eA=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
@@ -57,11 +54,11 @@ buildPythonPackage rec {
     "test_sample_texts_are_in_script"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Google Fonts language metadata";
     homepage = "https://github.com/googlefonts/lang";
     changelog = "https://github.com/googlefonts/lang/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

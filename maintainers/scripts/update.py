@@ -7,6 +7,7 @@ import contextlib
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -91,7 +92,15 @@ async def attr_instantiation_worker(
 ) -> tuple[Path, str]:
     async with semaphore:
         eprint(f"Instantiating {attr_path}…")
-        return (await nix_instantiate(attr_path), attr_path)
+        try:
+            return (await nix_instantiate(attr_path), attr_path)
+        except Exception as e:
+            # Failure should normally terminate the script but
+            # looks like Python is buggy so we need to do it ourselves.
+            eprint(f"Failed to instantiate {attr_path}")
+            if e.stderr:
+                eprint(e.stderr.decode("utf-8"))
+            sys.exit(1)
 
 
 async def requisites_worker(
@@ -235,7 +244,11 @@ async def run_update_script(
             f"UPDATE_NIX_PNAME={package['pname']}",
             f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
             f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
-            *update_script_command,
+            # Run all update scripts in the Nixpkgs development shell to get access to formatters and co.
+            "nix-shell",
+            nixpkgs_root + "/shell.nix",
+            "--run",
+            " ".join([ shlex.quote(s) for s in update_script_command ]),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
             cwd=worktree,

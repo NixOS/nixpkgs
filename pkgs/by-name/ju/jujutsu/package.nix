@@ -4,11 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
-  libgit2,
-  libssh2,
-  openssl,
-  git,
+  gitMinimal,
   gnupg,
   openssh,
   buildPackages,
@@ -18,31 +14,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.29.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jyhjKppwK+emwLEXtOJKU0f4mPdLzDrQabnHhpyUzmw=";
+    hash = "sha256-KN8hukahS+/RowmQoaUrfxCKFT9YUhaIXzh84cBV1Ck=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-1bb7YWXExS62s83rprHa0byUBJUCdw6JDYkQ3VZcje8=";
+  cargoHash = "sha256-rk3Qft9g67rG0m6rPd4d++wDM5RiRrJAIHdUOQhn9bg=";
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-    libssh2
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
-
   nativeCheckInputs = [
-    git
+    gitMinimal
     gnupg
     openssh
   ];
@@ -62,12 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "jj-cli"
   ];
-
-  # taplo-cli (used in tests) always creates a reqwest client, which
-  # requires configd access on macOS.
-  sandboxProfile = ''
-    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
-  '';
 
   env = {
     # Disable vendored libraries.
@@ -93,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/jj";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

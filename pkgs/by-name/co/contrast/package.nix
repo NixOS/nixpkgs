@@ -28,13 +28,12 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "design";
     repo = "contrast";
-    rev = version;
+    tag = version;
     hash = "sha256-8A1qX1H0cET5AUvMoHC1/VyIQiaTysEY5RJRrVYvGng=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-Nj5MkYDeYUzgqegCbPt/XofSCw8ULFXAD7XHNecPznc=";
   };
 

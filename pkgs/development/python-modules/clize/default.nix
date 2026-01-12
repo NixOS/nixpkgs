@@ -7,7 +7,6 @@
   od,
   pygments,
   python-dateutil,
-  pythonOlder,
   repeated-test,
   setuptools-scm,
   sigtools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "clize";
   version = "5.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clize" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     changelog = "https://github.com/epsy/clize/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

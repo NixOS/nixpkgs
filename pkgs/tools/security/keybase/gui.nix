@@ -132,21 +132,20 @@ stdenv.mkDerivation rec {
       --replace run_keybase $out/bin/keybase-gui
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.keybase.io/";
     description = "Keybase official GUI";
     mainProgram = "keybase-gui";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avaq
       rvolosatovs
       puffnfresh
       np
-      Br1ght0ne
       shofius
       ryand56
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
   };
 }

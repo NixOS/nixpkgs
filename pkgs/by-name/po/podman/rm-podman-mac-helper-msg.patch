@@ -1,14 +1,14 @@
 diff --git a/pkg/machine/machine_common.go b/pkg/machine/machine_common.go
-index d2ba418..5098cdc 100644
+index 44773f2..eba7b46 100644
 --- a/pkg/machine/machine_common.go
 +++ b/pkg/machine/machine_common.go
-@@ -34,13 +34,8 @@ func GetDevNullFiles() (*os.File, *os.File, error) {
+@@ -31,13 +31,8 @@ func GetDevNullFiles() (*os.File, *os.File, error) {
  // WaitAPIAndPrintInfo prints info about the machine and does a ping test on the
  // API socket
- func WaitAPIAndPrintInfo(forwardState APIForwardingState, name, helper, forwardSock string, noInfo, rootful bool) {
+ func WaitAPIAndPrintInfo(forwardState APIForwardingState, name, helper, forwardSock string, noInfo, _ bool) {
 -	suffix := ""
  	var fmtString string
- 
+
 -	if name != define.DefaultMachineName {
 -		suffix = " " + name
 -	}
@@ -16,8 +16,8 @@ index d2ba418..5098cdc 100644
  	if forwardState == NoForwarding {
  		return
  	}
-@@ -62,14 +57,6 @@ address can't be used by podman. `
- 
+@@ -59,14 +54,6 @@ address can't be used by podman. `
+
  				if len(helper) < 1 {
  					fmt.Print(fmtString)
 -				} else {

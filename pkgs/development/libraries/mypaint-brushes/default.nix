@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mypaint";
-    repo = pname;
+    repo = "mypaint-brushes";
     rev = "v${version}";
     sha256 = "0kcqz13vzpy24dhmrx9hbs6s7hqb8y305vciznm15h277sabpmw9";
   };
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mypaint.org/";
     description = "Brushes used by MyPaint and other software using libmypaint";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 }

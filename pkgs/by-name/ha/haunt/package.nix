@@ -1,29 +1,32 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   autoreconfHook,
-  callPackage,
+  texinfo,
   guile,
   guile-commonmark,
   guile-reader,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "haunt";
   version = "0.3.0";
 
-  src = fetchurl {
-    url = "https://files.dthompson.us/haunt/haunt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-mLq+0GvlSgZsPryUQQqR63zEg2fpTVKBMdO6JxSZmSs=";
+  src = fetchgit {
+    url = "https://git.dthompson.us/haunt.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i6MI0eaRiA/JNgkIBJGLAsqMnyJz47aavyD6kOL7sqU=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
+    texinfo
   ];
 
   buildInputs = [
@@ -32,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     guile-reader
   ];
 
-  # Test suite is non-deterministic in later versions
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = ''
     wrapProgram $out/bin/haunt \
@@ -42,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      expectVersion = callPackage ./tests/001-test-version.nix { };
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       to do things that aren't provided out-of-the-box.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ normalcea ];
     inherit (guile.meta) platforms;
   };
 })

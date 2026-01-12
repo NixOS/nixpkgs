@@ -35,36 +35,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildOutputs = [ ];
 
-  makeFlags =
-    [
-      "TOPDIR=${placeholder "out"}"
-      "TZDIR=${placeholder "out"}/share/zoneinfo"
-      "BINDIR=${placeholder "bin"}/bin"
-      "ZICDIR=${placeholder "bin"}/bin"
-      "ETCDIR=$(TMPDIR)/etc"
-      "TZDEFAULT=tzdefault-to-remove"
-      "LIBDIR=${placeholder "dev"}/lib"
-      "MANDIR=${placeholder "man"}/share/man"
-      "AWK=awk"
-      "CURL=:" # disable network access
-      "CFLAGS=-DHAVE_LINK=0"
-      "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
-      "cc=${stdenv.cc.targetPrefix}cc"
-      "AR=${stdenv.cc.targetPrefix}ar"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "CFLAGS+=-DHAVE_DIRECT_H"
-      "CFLAGS+=-DHAVE_SETENV=0"
-      "CFLAGS+=-DHAVE_SYMLINK=0"
-      "CFLAGS+=-DRESERVE_STD_EXT_IDS"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "CFLAGS+=-DNETBSD_INSPIRED=0"
-      "CFLAGS+=-DSTD_INSPIRED=0"
-      "CFLAGS+=-DUSE_TIMEX_T=1"
-      "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
-      "CFLAGS+=-DEXTERN_TIMEOFF=1"
-    ];
+  makeFlags = [
+    "TOPDIR=${placeholder "out"}"
+    "TZDIR=${placeholder "out"}/share/zoneinfo"
+    "BINDIR=${placeholder "bin"}/bin"
+    "ZICDIR=${placeholder "bin"}/bin"
+    "ETCDIR=$(TMPDIR)/etc"
+    "TZDEFAULT=tzdefault-to-remove"
+    "LIBDIR=${placeholder "dev"}/lib"
+    "MANDIR=${placeholder "man"}/share/man"
+    "AWK=awk"
+    "CURL=:" # disable network access
+    "CFLAGS=-DHAVE_LINK=0"
+    "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
+    "cc=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_SETENV=0"
+    "CFLAGS+=-DHAVE_SYMLINK=0"
+    "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "CFLAGS+=-DNETBSD_INSPIRED=0"
+    "CFLAGS+=-DSTD_INSPIRED=0"
+    "CFLAGS+=-DUSE_TIMEX_T=1"
+    "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
+    "CFLAGS+=-DEXTERN_TIMEOFF=1"
+  ];
 
   enableParallelBuilding = true;
 
@@ -95,16 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
   # minor releases.
   passthru.tests = postgresql;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     changelog = "https://github.com/eggert/tz/blob/${finalAttrs.version}/NEWS";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3 # tzcode
       publicDomain # tzdata
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ajs124
       fpletz
     ];

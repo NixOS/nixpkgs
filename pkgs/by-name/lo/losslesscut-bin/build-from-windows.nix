@@ -36,10 +36,8 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta =
-    metaCommon
-    // (with lib; {
-      platforms = platforms.windows;
-      mainProgram = "LosslessCut.exe";
-    });
+  meta = metaCommon // {
+    platforms = lib.platforms.windows;
+    mainProgram = "LosslessCut.exe";
+  };
 }

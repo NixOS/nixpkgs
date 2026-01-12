@@ -41,11 +41,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.2.0)" \
+      "cmake_minimum_required (VERSION 3.10.0)"
+  '';
+
+  meta = {
     description = "Official library to interface with the Discord client";
     homepage = "https://github.com/discordapp/discord-rpc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

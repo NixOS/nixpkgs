@@ -17,29 +17,28 @@ in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.12";
+  version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = "toybox";
     rev = version;
-    sha256 = "sha256-D+tf2bJQlf2pLMNZdMUOoUdE3ea/KgkqoXGsnl1MVOE=";
+    sha256 = "sha256-b5sigIxyg4T4wVc5z8Das+RdEXmNBPFsXpWwXxU/ERE=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
   ];
-  buildInputs =
-    [
-      libxcrypt
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ optionals (enableStatic && stdenv.cc.libc ? static) [
-      stdenv.cc.libc
-      stdenv.cc.libc.static
-    ];
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ optionals (enableStatic && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -64,7 +63,18 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    # breaks string.h header in musl
+    "fortify"
+  ];
+
+  makeFlags = [
+    "PREFIX=$(out)/bin"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ]
+  ++ optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
+    "LDFLAGS=--static"
+  ];
 
   installTargets = [ "install_flat" ];
 
@@ -77,12 +87,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight implementation of some Unix command line utilities";
     homepage = "https://landley.net/toybox/";
-    license = licenses.bsd0;
-    platforms = with platforms; linux ++ darwin ++ freebsd;
-    maintainers = with maintainers; [ hhm ];
+    license = lib.licenses.bsd0;
+    platforms = with lib.platforms; linux ++ darwin ++ freebsd;
+    maintainers = with lib.maintainers; [ hhm ];
     priority = 10;
   };
 }

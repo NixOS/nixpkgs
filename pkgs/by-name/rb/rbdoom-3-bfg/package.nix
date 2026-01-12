@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
     repo = "rbdoom-3-bfg";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9BZEFO+e5IG6hv9+QI9OJecQ84rLTWBDz4k0GU6SeDE=";
     fetchSubmodules = true;
   };
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RobertBeckebans/RBDOOM-3-BFG";
     description = "Doom 3 BFG Edition with modern engine features";
     mainProgram = "RBDoom3BFG";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Zaechus ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ Zaechus ];
+    platforms = lib.platforms.unix;
   };
 }

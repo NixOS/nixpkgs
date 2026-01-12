@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-fsutil";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fsutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with file-system utilities";
     homepage = "https://github.com/fabiocaccamo/python-fsutil";
     changelog = "https://github.com/fabiocaccamo/python-fsutil/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

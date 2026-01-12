@@ -2,33 +2,37 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  zig_0_13,
+  zig_0_15,
   callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
-  version = "0.3.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "neurocyte";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D1pFP5tw323UJgWvLvh2sTiZG1hq5DP0FakdXEISRxs=";
+    hash = "sha256-868FK3wr/fjXzrQJ4YVDBvzNuX818lufEx/K0fvJdWo=";
   };
   postPatch = ''
     ln -s ${
       callPackage ./build.zig.zon.nix {
-        zig = zig_0_13;
+        zig = zig_0_15;
       }
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  nativeBuildInputs = [
-    zig_0_13.hook
-  ];
+  nativeBuildInputs = [ zig_0_15 ];
 
   passthru.updateScript = ./update.sh;
+
+  dontSetZigDefaultFlags = true;
+  zigBuildFlags = [
+    "-Dcpu=baseline"
+    "-Doptimize=ReleaseSafe"
+  ];
 
   env.VERSION = finalAttrs.version;
 

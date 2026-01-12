@@ -6,23 +6,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sleek";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nrempel";
     repo = "sleek";
     rev = "v${version}";
-    hash = "sha256-U1ujR+6wW3SKUnjqs/+DrEhu0XRBB8hxGC2pxe3LVbw=";
+    hash = "sha256-4op0EqJWRGEQwXu5DjFBM1ia9nKiE5QTg+pbaeg4+ag=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2P47kVNQPksKyWPtk1XEpVEjFfz7cEvWX0VvlT3nKOc=";
+  cargoHash = "sha256-0AB2Z++WnOQ06CkKIHBydgV4VlLGqhlKGAQ0blPOFPo=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for formatting SQL";
     homepage = "https://github.com/nrempel/sleek";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xrelkd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "sleek";
   };
 }

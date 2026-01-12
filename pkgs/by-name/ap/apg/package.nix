@@ -67,7 +67,6 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/wilx/apg";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 }

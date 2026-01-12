@@ -13,6 +13,7 @@
   docker,
   fastapi,
   google-pasta,
+  graphene,
   importlib-metadata,
   jsonschema,
   numpy,
@@ -40,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.243.0";
+  version = "2.254.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     tag = "v${version}";
-    hash = "sha256-Os26VMK/kR23plt+wq8kV3K+17PfP5XuBy7MIz9PQ6s=";
+    hash = "sha256-tE8AD/nVrlP96ihVjzpos1IUGPR2T47HAMczCGP3S9M=";
   };
 
   build-system = [
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     "importlib-metadata"
     "numpy"
     "omegaconf"
+    "packaging"
     "protobuf"
   ];
 
@@ -71,6 +73,7 @@ buildPythonPackage rec {
     docker
     fastapi
     google-pasta
+    graphene
     importlib-metadata
     jsonschema
     numpy
@@ -115,6 +118,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
     changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

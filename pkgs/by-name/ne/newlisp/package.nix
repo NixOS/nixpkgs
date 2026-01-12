@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  # Build fails with C standard newer than C17
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   configureScript = "./configure-alt";
 
   doCheck = true;

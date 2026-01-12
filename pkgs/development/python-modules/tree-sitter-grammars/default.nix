@@ -1,19 +1,30 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
+  setuptools,
   pytestCheckHook,
   tree-sitter,
   symlinkJoin,
   writeTextDir,
-  pythonOlder,
   # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
   name,
   grammarDrv,
 }:
 let
-  inherit (grammarDrv) version;
-
+  # Map nix style `0-unstable-YYYY-MM-DD` version identifiers to a PEP 440
+  # compatible form (`0+unstableYYYYMMDD`).
+  version = lib.pipe grammarDrv [
+    lib.getVersion
+    (lib.splitString "-")
+    (
+      parts:
+      let
+        version = lib.head parts;
+        metadata = lib.join "" (lib.tail parts);
+      in
+      if (metadata == "") then version else "${version}+${metadata}"
+    )
+  ];
   snakeCaseName = lib.replaceStrings [ "-" ] [ "_" ] name;
   drvPrefix = "python-${name}";
   # If the name of the grammar attribute differs from the grammar's symbol name,
@@ -27,16 +38,34 @@ in
 buildPythonPackage {
   inherit version;
   pname = drvPrefix;
+  pyproject = true;
+  build-system = [ setuptools ];
 
   src = symlinkJoin {
     name = "${drvPrefix}-source";
     paths = [
       (writeTextDir "${snakeCaseName}/__init__.py" ''
-        from ._binding import language
+        # AUTO-GENERATED DO NOT EDIT
 
+        # preload the parser object before importing c binding
+        # this way we can avoid dynamic linker kicking in when
+        # downstream code imports this python module
+        import ctypes
+        import sys
+        import os
+        parser = "${grammarDrv}/parser"
+        try:
+            ctypes.CDLL(parser, mode=ctypes.RTLD_GLOBAL) # cached
+        except OSError as e:
+            raise ImportError(f"cannot load tree-sitter parser object from {parser}: {e}")
+
+        # expose binding
+        from ._binding import language
         __all__ = ["language"]
       '')
       (writeTextDir "${snakeCaseName}/binding.c" ''
+        // AUTO-GENERATED DO NOT EDIT
+
         #include <Python.h>
 
         typedef struct TSLanguage TSLanguage;
@@ -66,6 +95,8 @@ buildPythonPackage {
         }
       '')
       (writeTextDir "setup.py" ''
+        # AUTO-GENERATED DO NOT EDIT
+
         from platform import system
         from setuptools import Extension, setup
 
@@ -86,6 +117,8 @@ buildPythonPackage {
         )
       '')
       (writeTextDir "pyproject.toml" ''
+        # AUTO-GENERATED DO NOT EDIT
+
         [build-system]
         requires = ["setuptools", "wheel"]
         build-backend = "setuptools.build_meta"
@@ -98,13 +131,12 @@ buildPythonPackage {
         classifiers = [
           "Development Status :: 4 - Beta",
           "Intended Audience :: Developers",
-          "License :: OSI Approved :: MIT License",
           "Topic :: Software Development :: Compilers",
           "Topic :: Text Processing :: Linguistic",
         ]
 
         requires-python = ">=3.8"
-        license.text = "MIT"
+        license = "MIT"
         readme = "README.md"
 
         [project.optional-dependencies]
@@ -115,6 +147,8 @@ buildPythonPackage {
         build-frontend = "build"
       '')
       (writeTextDir "tests/test_language.py" ''
+        # AUTO-GENERATED DO NOT EDIT
+
         from ${snakeCaseName} import language
         from tree_sitter import Language, Parser
 
@@ -125,29 +159,23 @@ buildPythonPackage {
         def test_language():
           lang = Language(language())
           assert lang is not None
-          parser = Parser()
-          parser.language = lang
+          parser = Parser(lang)
           tree = parser.parse(bytes("", "utf-8"))
           assert tree is not None
       '')
     ];
   };
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${grammarDrv}"
-  '';
-
   preCheck = ''
     # https://github.com/NixOS/nixpkgs/issues/255262
     rm -r ${snakeCaseName}
   '';
 
-  disabled = pythonOlder "3.8";
-
   nativeCheckInputs = [
     tree-sitter
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ snakeCaseName ];
 
   meta = {

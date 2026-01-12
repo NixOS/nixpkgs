@@ -1,11 +1,10 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   cmake,
   llvmPackages,
   xcbuild,
-  targetPackages,
   libxml2,
   ninja,
   zlib,
@@ -13,17 +12,18 @@
   callPackage,
   version,
   hash,
-  patches ? [ ],
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
+  ...
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   inherit version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
@@ -32,27 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = args.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      (lib.getDev llvmPackages.llvm.dev)
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # provides xcode-select, which is required for SDK detection
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cmake
+    (lib.getDev llvmPackages.llvm.dev)
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # provides xcode-select, which is required for SDK detection
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      zlib
-    ]
-    ++ (with llvmPackages; [
-      libclang
-      lld
-      llvm
-    ]);
+  buildInputs = [
+    libxml2
+    zlib
+  ]
+  ++ (with llvmPackages; [
+    libclang
+    lld
+    llvm
+  ]);
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
@@ -68,9 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  # strictDeps breaks zig when clang is being used.
-  # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
-  strictDeps = !stdenv.cc.isClang;
+  strictDeps = true;
 
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
@@ -79,25 +75,17 @@ stdenv.mkDerivation (finalAttrs: {
   # OSVersionDetectionFail when the sandbox is enabled.
   __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/CoreServices/.SystemVersionPlatform.plist"
-    "/System/Library/CoreServices/SystemVersion.plist"
   ];
 
   preBuild = ''
     export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache";
   '';
 
-  # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
-  # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch =
-    let
-      zigSystemPath =
-        if lib.versionAtLeast finalAttrs.version "0.12" then
-          "lib/std/zig/system.zig"
-        else
-          "lib/std/zig/system/NativeTargetInfo.zig";
-    in
+    # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
+    # work in Nix's sandbox. Use env from our coreutils instead.
     ''
-      substituteInPlace ${zigSystemPath} \
+      substituteInPlace lib/std/zig/system.zig \
         --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
     ''
     # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
@@ -117,24 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
       ''
-    else if lib.versionAtLeast finalAttrs.version "0.13" then
+    else
       ''
         stage3/bin/zig build langref
-      ''
-    else
-      ''
-        stage3/bin/zig run ../tools/docgen.zig -- ../doc/langref.html.in langref.html --zig $PWD/stage3/bin/zig
       '';
 
-  postInstall =
-    if lib.versionAtLeast finalAttrs.version "0.13" then
-      ''
-        install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      ''
-    else
-      ''
-        install -Dm444 langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
-      '';
+  postInstall = ''
+    install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -145,28 +123,53 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru = {
-    hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
-
-    bintools-unwrapped = callPackage ./bintools.nix { zig = finalAttrs.finalPackage; };
-    bintools = wrapBintoolsWith { bintools = finalAttrs.finalPackage.bintools-unwrapped; };
-
-    cc-unwrapped = callPackage ./cc.nix { zig = finalAttrs.finalPackage; };
-    cc = wrapCCWith {
-      cc = finalAttrs.finalPackage.cc-unwrapped;
-      bintools = finalAttrs.finalPackage.bintools;
-      nixSupport.cc-cflags =
-        [
-          "-target"
-          "${stdenv.targetPlatform.config}"
-        ]
-        ++ lib.optional (
-          stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-        ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
-    };
-
-    stdenv = overrideCC stdenv finalAttrs.finalPackage.cc;
+  passthru = import ./passthru.nix {
+    inherit
+      stdenv
+      callPackage
+      wrapCCWith
+      wrapBintoolsWith
+      overrideCC
+      ;
+    zig = finalAttrs.finalPackage;
   };
+
+  env = {
+    # This zig_default_optimize_flag below is meant to avoid CPU feature impurity in
+    # Nixpkgs. However, this flagset is "unstable": it is specifically meant to
+    # be controlled by the upstream development team - being up to that team
+    # exposing or not that flags to the outside (especially the package manager
+    # teams).
+
+    # Because of this hurdle, @andrewrk from Zig Software Foundation proposed
+    # some solutions for this issue. Hopefully they will be implemented in
+    # future releases of Zig. When this happens, this flagset should be
+    # revisited accordingly.
+
+    # Below are some useful links describing the discovery process of this 'bug'
+    # in Nixpkgs:
+
+    # https://github.com/NixOS/nixpkgs/issues/169461
+    # https://github.com/NixOS/nixpkgs/issues/185644
+    # https://github.com/NixOS/nixpkgs/pull/197046
+    # https://github.com/NixOS/nixpkgs/pull/241741#issuecomment-1624227485
+    # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
+    zig_default_cpu_flag = "-Dcpu=baseline";
+
+    zig_default_optimize_flag =
+      if lib.versionAtLeast finalAttrs.version "0.12" then
+        "--release=safe"
+      else if lib.versionAtLeast finalAttrs.version "0.11" then
+        "-Doptimize=ReleaseSafe"
+      else
+        "-Drelease-safe=true";
+  };
+
+  setupHook = ./setup-hook.sh;
+
+  # while xcrun is already included in the darwin stdenv, Zig also needs
+  # xcode-select (provided by xcbuild) for SDK detection
+  propagatedNativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   meta = {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";

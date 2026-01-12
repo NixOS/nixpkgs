@@ -3,23 +3,20 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyjson5";
-  version = "1.6.9";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Kijewski";
     repo = "pyjson5";
     tag = "v${version}";
-    hash = "sha256-3uxuJvxTn6C3MWShXQlILPApgtumgGOeaaMlBvRaHiU=";
+    hash = "sha256-vHO354ZjaQirOWavfaDvenE+MLQLhWF3bCHa5Z1NNXg=";
     fetchSubmodules = true;
   };
 
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyjson5" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON5 serializer and parser library";
     homepage = "https://github.com/Kijewski/pyjson5";
     changelog = "https://github.com/Kijewski/pyjson5/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

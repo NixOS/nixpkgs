@@ -21,10 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [ blasfeo ]
-    ++ lib.optionals pythonSupport [ python3Packages.pybind11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  buildInputs = [
+    blasfeo
+  ]
+  ++ lib.optionals pythonSupport [ python3Packages.pybind11 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_DOCS" true)
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    description = "nonlinear optimal control problem solver that aims to be fast, support a broad class of optimal control problems and achieve a high numerical robustness";
+    description = "Nonlinear optimal control problem solver that aims to be fast, support a broad class of optimal control problems and achieve a high numerical robustness";
     homepage = "https://github.com/meco-group/fatrop";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];

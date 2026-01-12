@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-sMgYgV4/vV1x5xSICXRpW6K8uCdVlJrS7iEg6XzQRo8=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [ ./no-lrt.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./no-lrt.patch ];
 
-  makeFlags = lib.optionals stdenv.isDarwin [
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "CC=cc"
     "LD=clang"
   ];
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "http://brandy.matrixnetwork.co.uk/";
+  meta = {
+    homepage = "https://brandy.matrixnetwork.co.uk/";
     description = "Matrix Brandy BASIC VI for Linux, Windows, MacOSX";
     mainProgram = "brandy";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fiq ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fiq ];
   };
 }

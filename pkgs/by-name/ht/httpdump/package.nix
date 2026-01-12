@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "httpdump";
-  version = "unstable-2023-05-07";
+  version = "0-unstable-2023-05-07";
 
   src = fetchFromGitHub {
     owner = "hsiafan";
@@ -25,11 +25,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse and display HTTP traffic from network device or pcap file";
     mainProgram = "httpdump";
     homepage = "https://github.com/hsiafan/httpdump";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

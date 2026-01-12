@@ -19,16 +19,21 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
-  version = "2.51.0";
+  version = "2.61.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "ringrtc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PLrGLW6pDoCNpbWASxAqockAJRoeBrkBdxNOHYrQu4s=";
+    hash = "sha256-84QqCfz+NKVLr2FAEDSFAvCm4RhHhq+174M2rxD/D0s=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-u38VOV2xdNG1WFox+SWT9ejJD1TjK0yAI6lCB9r75iY=";
+
+  cargoHash = "sha256-LpYjNXc/HzV3OYSIyCxDTlL3UZYbOiRkPCBeIqW2hB8=";
+
+  preConfigure = ''
+    # Check for matching webrtc version
+    grep 'webrtc.version=${webrtc.version}' config/version.properties
+  '';
 
   cargoBuildFlags = [
     "-p"
@@ -48,13 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      webrtc
-      cubeb'
-    ]
-    # Workaround for https://github.com/NixOS/nixpkgs/pull/394607
-    ++ cubeb'.buildInputs;
+  buildInputs = [
+    webrtc
+    cubeb'
+  ]
+  # Workaround for https://github.com/NixOS/nixpkgs/pull/394607
+  ++ cubeb'.buildInputs;
 
   meta = {
     homepage = "https://github.com/signalapp/ringrtc";

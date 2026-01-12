@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.4.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-vNa0MMU5NHO8RjgfKxNjhQDKQ2Rd/ZGU0HndOD2Sypo=";
+    hash = "sha256-PbaWqtBcAXnVmB2a2DflQhayvuT3qNBCHaXuDfdrtrY=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -52,18 +52,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # skip impure tests
-  disabledTests =
-    [
-      "test_pkgrepo_pmaports"
-      "test_random_valid_deviceinfos"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # assert chroot.type == ChrootType.BUILDROOT
-      # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
-      "test_valid_chroots"
-    ];
-
-  versionCheckProgramArg = "--version";
+  disabledTests = [
+    "test_pkgrepo_pmaports"
+    "test_random_valid_deviceinfos"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # assert chroot.type == ChrootType.BUILDROOT
+    # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
+    "test_valid_chroots"
+  ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${
@@ -80,11 +77,12 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
-    homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
+    homepage = "https://gitlab.postmarketos.org/postmarketOS/pmbootstrap";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       onny
       lucasew
+      ungeskriptet
     ];
     mainProgram = "pmbootstrap";
   };

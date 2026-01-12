@@ -5,7 +5,7 @@
   stdenvNoCC,
 
   # build system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langgraph-checkpoint,
@@ -21,19 +21,19 @@
   pytest-asyncio,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.21";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-hl1EBOtUkSfHGxsM+LOZPLSvkW7hdHS08klpvA7/Bd0=";
+    hash = "sha256-V+S53ZYTCsaV7WMwuEMf+/NFyvy+8M6haO5oMf7o6wk=";
   };
 
   postgresqlTestSetupPost = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/checkpoint-postgres";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langgraph-checkpoint
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    (postgresql.withPackages (p: with p; [ pgvector ]))
+    (postgresql.withPackages (p: [ pgvector ]))
     postgresqlTestHook
   ];
 
@@ -84,26 +84,27 @@ buildPythonPackage rec {
     "test_vector_search_with_filters"
     "test_vector_search_pagination"
     "test_vector_search_edge_cases"
+    "test_non_ascii"
     # Flaky under a parallel build (database in use)
     "test_store_ttl"
   ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "checkpointpostgres==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpointpostgres==";
+    };
   };
 
   meta = {
     description = "Library with a Postgres implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-postgres";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres==${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

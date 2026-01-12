@@ -19,14 +19,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/testcase.py" ];
+  enabledTestPaths = [ "test/testcase.py" ];
 
   pythonImportsCheck = [ "timeago" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to format past datetime output";
     homepage = "https://github.com/hustcc/timeago";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

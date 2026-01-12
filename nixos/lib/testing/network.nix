@@ -30,7 +30,7 @@ let
       ...
     }:
     let
-      qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
+      qemu-common = import ../qemu-common.nix { inherit (pkgs) lib stdenv; };
 
       # Convert legacy VLANs to named interfaces and merge with explicit interfaces.
       vlansNumbered = forEach (zipLists config.virtualisation.vlans (range 1 255)) (v: {
@@ -104,9 +104,9 @@ let
           optionalString (
             config.networking.primaryIPAddress != ""
           ) "${config.networking.primaryIPAddress} ${hostnames}"
-          + optionalString (config.networking.primaryIPv6Address != "") (
-            "${config.networking.primaryIPv6Address} ${hostnames}"
-          )
+          + optionalString (
+            config.networking.primaryIPv6Address != ""
+          ) "${config.networking.primaryIPv6Address} ${hostnames}"
         );
 
         virtualisation.qemu.options = qemuOptions;
@@ -130,7 +130,7 @@ let
         virtualisation.test.nodeName = mkOption {
           internal = true;
           default = name;
-          # We need to force this in specilisations, otherwise it'd be
+          # We need to force this in specialisations, otherwise it'd be
           # readOnly = true;
           description = ''
             The `name` in `nodes.<name>`; stable across `specialisations`.

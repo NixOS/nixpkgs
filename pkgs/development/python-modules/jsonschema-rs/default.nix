@@ -5,29 +5,25 @@
   lib,
   nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-rs";
-  version = "0.30.0";
+  version = "0.38.1";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Fetching from Pypi, because there is no Cargo.lock in the GitHub repo.
   src = fetchPypi {
     inherit version;
     pname = "jsonschema_rs";
-    hash = "sha256-KfmI0ik3HWrv1WDFsT5xvxyRyXKg2DpmxeuUHOR9MZM=";
+    hash = "sha256-zkbJ5DgntAnrqthloCPAPoaEx3+hc8BAicttgQXKG9w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-LNT2wQnOaVMBrI+fW6wbIRaTYPvw3ESinI5KY8wjp1o=";
+    inherit pname version src;
+    hash = "sha256-DqUBqpFFnxth5b1wvwWVFbhUeTBJEHTfCYZoJyhIfgU=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -49,6 +45,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Stranger6667/jsonschema/tree/master/crates/jsonschema-py";
     changelog = "https://github.com/Stranger6667/jsonschema/blob/python-v${version}/crates/jsonschema-py/CHANGELOG.md";
     license = lib.licenses.mit;
-    teams = [ lib.teams.apm ];
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
 }

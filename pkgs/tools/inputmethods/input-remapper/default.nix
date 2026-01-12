@@ -19,6 +19,8 @@
   procps,
   gtksourceview4,
   bash,
+  udevCheckHook,
+  versionCheckHook,
   nixosTests,
   # Change the default log level to debug for easier debugging of package issues
   withDebugLogLevel ? false,
@@ -37,26 +39,26 @@ let
 in
 (buildPythonApplication rec {
   pname = "input-remapper";
-  version = "2.1.1";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
     tag = version;
-    hash = "sha256-GMKcs2UK1yegGT/TBsLGgTBJROQ38M6WwnLbJIuAZwg=";
+    hash = "sha256-MZO40Y8ym/lwHB8PETdtByAJb/UMMM6pRAAgAYao8UI=";
   };
 
-  postPatch =
-    ''
-      # fix FHS paths
-      substituteInPlace inputremapper/configs/data.py \
-        --replace-fail "/usr/share"  "$out/usr/share"
-    ''
-    + lib.optionalString withDebugLogLevel ''
-      # if debugging
-      substituteInPlace inputremapper/logger.py \
-        --replace-fail "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
-    '';
+  postPatch = ''
+    # fix FHS paths
+    substituteInPlace inputremapper/configs/data.py \
+      --replace-fail "/usr/share"  "$out/usr/share"
+  ''
+  + lib.optionalString withDebugLogLevel ''
+    # if debugging
+    substituteInPlace inputremapper/logger.py \
+      --replace-fail "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -65,7 +67,8 @@ in
     glib
     gobject-introspection
     pygobject3
-  ] ++ maybeXmodmap;
+  ]
+  ++ maybeXmodmap;
 
   dependencies = [
     setuptools # needs pkg_resources
@@ -78,9 +81,14 @@ in
     psutil
   ];
 
-  doCheck = withDoCheck;
+  # buildPythonApplication maps nativeCheckInputs to nativeInstallCheckInputs.
+  nativeCheckInputs = [
+    udevCheckHook
+    versionCheckHook
+  ]
+  ++ lib.optionals withDoCheck [ psutil ];
 
-  nativeCheckInputs = [ psutil ];
+  versionCheckProgram = "${placeholder "out"}/bin/input-remapper-control";
 
   pythonImportsCheck = [
     "evdev"
@@ -112,9 +120,7 @@ in
   # We only run tests in the unit folder, integration tests require UI
   # To allow tests which access the system and session DBUS to run, we start a dbus session
   # and bind it to both the system and session buses
-  installCheckPhase = ''
-    runHook preInstallCheck
-
+  upstreamCheck = lib.optionalString withDoCheck ''
     echo "<busconfig>
       <type>session</type>
       <listen>unix:tmpdir=$TMPDIR</listen>
@@ -142,7 +148,11 @@ in
       DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket \
       ${dbus}/bin/dbus-run-session --config-file dbus.cfg \
       python tests/test.py --start-dir unit
+  '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+    eval "$upstreamCheck"
     runHook postInstallCheck
   '';
 
@@ -174,11 +184,9 @@ in
       # this ensures the rev matches the input src's rev after overriding
       # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
       # discussion
-      postPatch =
-        prev.postPatch or ""
-        + ''
-          # set revision for --version output
-          echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
-        '';
+      postPatch = prev.postPatch or "" + ''
+        # set revision for --version output
+        echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
+      '';
     }
   )

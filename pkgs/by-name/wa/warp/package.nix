@@ -16,7 +16,8 @@
   glib,
   gtk4,
   libadwaita,
-  zbar,
+  libcamera,
+  pipewire,
   gst_all_1,
   nix-update-script,
 }:
@@ -56,18 +57,27 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-      zbar
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    libcamera
+    pipewire
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good # multifilesink
+    gst-plugins-rs # gst-plugin-gtk4
+  ]);
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : ${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets
+    )
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -79,7 +89,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       dotlambda
-      foo-dogsquared
     ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.all;

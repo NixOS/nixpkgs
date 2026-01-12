@@ -13,17 +13,18 @@
   microsoft-gsl,
   spdlog,
   systemd,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "3";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "iptsd";
     tag = "v${version}";
-    hash = "sha256-3z3A9qywmsSW1tlJ6LePC5wudM/FITTAFyuPkbHlid0=";
+    hash = "sha256-2yYO1xb576IHaJquTrQtmAjJITGdW06I3eHD+HR88xI=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    udevCheckHook
   ];
 
   dontUseCmakeConfigure = true;
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     spdlog
     systemd
   ];
+
+  doInstallCheck = true;
 
   # Original installs udev rules and service config into global paths
   postPatch = ''
@@ -63,16 +67,16 @@ stdenv.mkDerivation rec {
     "-Db_lto=false" # plugin needed to handle lto object -> undefined reference to ...
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${version}";
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "iptsd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tomberek
       dotlambda
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

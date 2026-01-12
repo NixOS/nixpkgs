@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "2.9";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "liburing";
     tag = "liburing-${version}";
-    hash = "sha256-zOC53i52YJsH3AQIy4afjTGlX/IvVnW2QnYOppFxKiI=";
+    hash = "sha256-sEMzkyjrCc49ogfUnzdgNtEXmW0Tz/PUKo99C965428=";
   };
 
   separateDebugInfo = true;
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library for the Linux io_uring API";
     homepage = "https://github.com/axboe/liburing";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       nickcao
     ];

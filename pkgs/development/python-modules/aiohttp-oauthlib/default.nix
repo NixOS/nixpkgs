@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   oauthlib,
   aiohttp,
   setuptools-scm,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiohttp-oauthlib";
   version = "0.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +27,10 @@ buildPythonPackage rec {
   # Package has no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~whynothugo/aiohttp-oauthlib";
     description = "oauthlib integration for aiohttp clients";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sumnerevans ];
   };
 }

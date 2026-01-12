@@ -2,14 +2,13 @@
   lib,
   buildPythonPackage,
   python-dotenv,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   httpx,
   microsoft-kiota-abstractions,
   microsoft-kiota-authentication-azure,
   microsoft-kiota-http,
-  requests,
+  microsoft-kiota-serialization-json,
   azure-identity,
   pytestCheckHook,
   responses,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "1.3.3";
+  version = "1.3.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
     tag = "v${version}";
-    hash = "sha256-gYZWKv70lyuZIYXpchNnZ02J65hN45agDkxZVFed28s=";
+    hash = "sha256-6M1C2Y0jYec/yKjigtbaaZiEL23csQAFtuUVMTlaiXk=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,12 @@ buildPythonPackage rec {
     microsoft-kiota-abstractions
     microsoft-kiota-authentication-azure
     microsoft-kiota-http
-    requests
-  ];
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     azure-identity
+    microsoft-kiota-serialization-json
     pytestCheckHook
     python-dotenv
     responses

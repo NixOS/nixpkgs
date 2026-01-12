@@ -18,7 +18,7 @@
   tenacity,
   swh-core,
   swh-model,
-  swh-perfecthash,
+  swh-shard,
   aiohttp,
   azure-core,
   azure-storage-blob,
@@ -31,7 +31,7 @@
   pytest-postgresql,
   requests-mock,
   requests-toolbelt,
-  systemd,
+  systemd-python,
   types-python-dateutil,
   types-pyyaml,
   types-requests,
@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "swh-objstorage";
-  version = "4.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-objstorage";
     tag = "v${version}";
-    hash = "sha256-c0ZH2PMT9DVnpTV5PDyX0Yw4iHiJSolEgq/bMXEwXG8=";
+    hash = "sha256-NnNT9Lt/LGDIJpUmfkfPn6JnF3k8Usf2UVa88zHPKlg=";
   };
 
   build-system = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     tenacity
     swh-core
     swh-model
-    swh-perfecthash
+    swh-shard
   ];
 
   preCheck = ''
@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swh.objstorage" ];
 
-  pytestFlagsArray = [ "swh/objstorage/tests" ];
+  enabledTestPaths = [ "swh/objstorage/tests" ];
 
   nativeCheckInputs = [
     aiohttp
@@ -96,12 +96,13 @@ buildPythonPackage rec {
     pytest-postgresql
     requests-mock
     requests-toolbelt
-    systemd
+    systemd-python
     types-python-dateutil
     types-pyyaml
     types-requests
     util-linux
-  ] ++ psycopg.optional-dependencies.pool;
+  ]
+  ++ psycopg.optional-dependencies.pool;
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # FAILED swh/objstorage/tests/test_objstorage_winery.py::test_winery_leaky_bucket_tick - assert 1 == 0
@@ -109,9 +110,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-objstorage/-/tags/${src.tag}";
     description = "Content-addressable object storage for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-objstorage";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

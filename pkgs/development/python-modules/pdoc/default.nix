@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   jinja2,
@@ -15,16 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "15.0.3";
-  disabled = pythonOlder "3.9";
+  version = "15.0.4";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
-    rev = "v${version}";
-    hash = "sha256-qr0K+ZOmEPWMkm/cPisdw6gSPZI4FvICaKQNt/sef40=";
+    tag = "v${version}";
+    hash = "sha256-l0aaQbjxAMcTZZwDN6g8A7bjSsl6yP2FoAnwTYkKYH8=";
   };
 
   build-system = [ setuptools ];
@@ -46,8 +44,8 @@ buildPythonPackage rec {
     "test/test_snapshot.py"
   ];
 
-  pytestFlagsArray = [
-    ''-m "not slow"'' # skip slow tests
+  disabledTestMarks = [
+    "slow" # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -56,12 +54,12 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
     mainProgram = "pdoc";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

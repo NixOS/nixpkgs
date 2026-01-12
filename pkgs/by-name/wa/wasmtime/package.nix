@@ -3,26 +3,30 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  buildPackages,
   cmake,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "32.0.0";
+  version = "40.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MGeLnxUmhhuW1FInBCc1xzppgvf3W8J0sy9v9QjgBIA=";
+    hash = "sha256-d5j+QSEWIVwVRMT/QGc6x3cVBTFZBpoxiBagmpLV1e8=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-m9TsTTx/ExqE9/W3xVkYxtgKh8AlGUJTlGPMIDK2xog=";
+
+  cargoHash = "sha256-PIUJHkeGi8gao7n+SLzcxNYTl2KxKiwJZPW+sFYf0AY=";
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
@@ -33,9 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "lib"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
   doCheck =
     with stdenv.buildPlatform;
@@ -50,48 +58,61 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      inherit (stdenv.targetPlatform.rust) cargoShortTarget;
+      inherit (stdenv.hostPlatform.rust) cargoShortTarget;
     in
     ''
-      # move libs from out to dev
-      install -d -m 0755 $dev/lib
-      install -m 0644 ''${!outputLib}/lib/* $dev/lib
-      rm -r ''${!outputLib}/lib
+      moveToOutput lib $lib
+      ${lib.optionalString (!enableShared) "rm -f $lib/lib/*.so{,.*}"}
+      ${lib.optionalString (!enableStatic) "rm -f $lib/lib/*.a"}
 
       # copy the build.rs generated c-api headers
-      install -d -m0755 $dev/include/wasmtime
       # https://github.com/rust-lang/cargo/issues/9661
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/*.h \
-        $dev/include
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/wasmtime/*.h \
-        $dev/include/wasmtime
+      mkdir $dev
+      cp -r target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include $dev/include
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \
-        $dev/lib/libwasmtime.dylib \
-        $dev/lib/libwasmtime.dylib
+        $lib/lib/libwasmtime.dylib \
+        $lib/lib/libwasmtime.dylib
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd wasmtime \
+        --bash <("$out/bin/wasmtime" completion bash) \
+        --zsh <("$out/bin/wasmtime" completion zsh) \
+        --fish <("$out/bin/wasmtime" completion fish)
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd wasmtime \
+        --bash "${buildPackages.wasmtime}"/share/bash-completion/completions/*.bash \
+        --zsh "${buildPackages.wasmtime}"/share/zsh/site-functions/* \
+        --fish "${buildPackages.wasmtime}"/share/fish/*/*
     '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = lib.licenses.asl20;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.llvm-exception
+    ];
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre
-      matthewbauer
+      nekowinston
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${finalAttrs.version}/RELEASES.md";

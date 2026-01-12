@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.4.2";
+  version = "3.5.0";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -17,11 +17,12 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BORFXIikiX5Cu1rT8jUijkjAnncTACr8lEs/k2fC5Mk=";
+    hash = "sha256-BazzO+gR/mLcx+tlysPMJzcqmctUU0LSYL0YMZMyVrg=";
   };
 
   pythonRelaxDeps = [
     "websockets"
+    "typer"
   ];
 
   build-system = with python3Packages; [
@@ -68,6 +69,7 @@ python3Packages.buildPythonApplication rec {
       packaging
       pathspec
       pendulum
+      pluggy
       prometheus-client
       pydantic
       pydantic-core
@@ -80,13 +82,16 @@ python3Packages.buildPythonApplication rec {
       rfc3339-validator
       rich
       ruamel-yaml
+      semver
       sniffio
       toml
       typing-extensions
       ujson
       uvicorn
       websockets
+      whenever
       uv
+      semver
     ]
     ++ sqlalchemy.optional-dependencies.asyncio
     ++ httpx.optional-dependencies.http2
@@ -191,10 +196,13 @@ python3Packages.buildPythonApplication rec {
   # );
 
   meta = {
-    description = "Prefect is a workflow orchestration framework for building resilient data pipelines in Python";
+    description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      mrmebelman
+    ];
     mainProgram = "prefect";
   };
 }

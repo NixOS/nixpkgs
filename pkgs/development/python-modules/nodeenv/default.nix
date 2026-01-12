@@ -5,7 +5,6 @@
   mock,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   which,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "nodeenv";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ekalinin";
@@ -47,12 +44,12 @@ buildPythonPackage rec {
     "test_smoke"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Node.js virtual environment builder";
     mainProgram = "nodeenv";
     homepage = "https://github.com/ekalinin/nodeenv";
     changelog = "https://github.com/ekalinin/nodeenv/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

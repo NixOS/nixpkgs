@@ -5,13 +5,13 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  git,
   rocm-comgr,
   rocm-runtime,
   hwdata,
   texliveSmall,
   doxygen,
   graphviz,
+  writableTmpDirAsHomeHook,
   buildDocs ? true,
 }:
 
@@ -37,40 +37,42 @@ let
         helvetic
         wasy
         courier
+        tabularray
+        ltablex
+        ninecolors
+        xltabular
       ]
     )
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6itfBrWVspobU47aiJAOQoxT8chwrq9scRn0or3bXto=";
+    hash = "sha256-Rr8+SNeFps0rjk4Jn2+rFmtRJfL42l0tNOz13oZQy+I=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      rocm-cmake
-      git
-    ]
-    ++ lib.optionals buildDocs [
-      latex
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
+  ]
+  ++ lib.optionals buildDocs [
+    writableTmpDirAsHomeHook
+    latex
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     rocm-comgr
@@ -89,7 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Unfortunately, it seems like we have to call make on this manually
   postBuild = lib.optionalString buildDocs ''
-    export HOME=$(mktemp -d)
     make -j$NIX_BUILD_CORES doc
   '';
 
@@ -104,11 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Debugger support for control of execution and inspection state";
     homepage = "https://github.com/ROCm/ROCdbgapi";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

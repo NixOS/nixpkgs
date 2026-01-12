@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kuzu";
-  version = "0.10.0";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "kuzudb";
     repo = "kuzu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mc9MLIdlxMTQjvpKAa2N8AlhWJDzydd70x/YU6xX6h0=";
+    hash = "sha256-7TdSWKJ+tzDZ5ur5U762lz9hBAfldsbhcp21z46Rv6c=";
   };
 
   outputs = [
@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     changelog = "https://github.com/kuzudb/kuzu/releases/tag/v${finalAttrs.version}";

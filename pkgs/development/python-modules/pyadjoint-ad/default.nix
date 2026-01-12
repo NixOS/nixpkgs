@@ -8,16 +8,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyadjoint-ad";
-  version = "2025.04.0";
+  version = "2025.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfin-adjoint";
     repo = "pyadjoint";
-    tag = version;
-    hash = "sha256-ZNd8aJJ87OfQakScrkYqhCAh7qGctW/uqIoQjX5VEhI=";
+    tag = finalAttrs.version;
+    hash = "sha256-caW2X4q0mHnD8CEh5jjelD4xBth/R/8/P3m0tTeO/LQ=";
   };
 
   build-system = [
@@ -30,8 +30,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    # The firedrake_adjoint module is deprecated and requires a cyclic dependency of firedrake
-    # "firedrake_adjoint"
     "numpy_adjoint"
     "pyadjoint"
     "pyadjoint.optimization"
@@ -39,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/pyadjoint"
   ];
 
@@ -49,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

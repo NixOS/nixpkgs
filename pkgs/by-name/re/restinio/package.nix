@@ -21,13 +21,13 @@ assert !with_boost_asio -> asio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "restinio";
-  version = "0.7.6";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "Stiffstream";
     repo = "restinio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wQIJsybPz5GNcQMECcYhs8nh/h8gWEocS+M+lnP8EOE=";
+    hash = "sha256-ZosfTdi/u8/sHDf6UYP49ZEkTtT9FkVCazff/rMNbLA=";
   };
 
   # https://www.github.com/Stiffstream/restinio/issues/230
@@ -42,28 +42,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs =
-    [
-      expected-lite
-      fmt
-      llhttp
-      openssl
-      pcre2
-      zlib
-    ]
-    ++ (
-      if with_boost_asio then
-        [
-          boost
-        ]
-      else
-        [
-          asio
-        ]
-    );
+  propagatedBuildInputs = [
+    expected-lite
+    fmt
+    openssl
+    pcre2
+    zlib
+  ]
+  ++ (
+    if with_boost_asio then
+      [
+        boost
+      ]
+    else
+      [
+        asio
+      ]
+  );
 
   buildInputs = [
     catch2_3
+    llhttp
   ];
 
   cmakeDir = "../dev";
@@ -76,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRESTINIO_ASIO_SOURCE=${if with_boost_asio then "boost" else "standalone"}"
     "-DRESTINIO_DEP_EXPECTED_LITE=find"
     "-DRESTINIO_DEP_FMT=find"
-    "-DRESTINIO_DEP_LLHTTP=find"
+    "-DRESTINIO_DEP_LLHTTP=system"
     "-DRESTINIO_DEP_CATCH2=find"
   ];
 
@@ -105,12 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
       checkFlagsArray+=(ARGS="--exclude-regex '${excludeRegex}'")
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, efficient, customizable, and robust asynchronous HTTP(S)/WebSocket server C++ library";
     homepage = "https://github.com/Stiffstream/restinio";
     changelog = "https://github.com/Stiffstream/restinio/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tobim ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tobim ];
   };
 })

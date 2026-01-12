@@ -1,7 +1,6 @@
 {
   lib,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
 
@@ -41,26 +40,31 @@
   bottleneck,
   fsspec,
   s3fs,
+  uncompresspy,
 
   # testing
+  hypothesis,
   pytestCheckHook,
   pytest-xdist,
   pytest-astropy-header,
-  pytest-astropy,
+  pytest-doctestplus,
+  pytest-remotedata,
   threadpoolctl,
 
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.0.1";
+  version = "7.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "astropy";
+    tag = "v${version}";
+    hash = "sha256-cvwwTa6eJYncB2V6UCuBrQ5WRRvjgZF5/z4d7Z/uHc8=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -95,39 +99,46 @@ buildPythonPackage rec {
       ipykernel
       # ipydatagrid
       pandas
-    ] ++ self.ipython;
-    all =
-      [
-        certifi
-        dask
-        h5py
-        pyarrow
-        beautifulsoup4
-        html5lib
-        sortedcontainers
-        pytz
-        jplephem
-        mpmath
-        asdf
-        asdf-astropy
-        bottleneck
-        fsspec
-        s3fs
-      ]
-      ++ self.recommended
-      ++ self.ipython
-      ++ self.jupyter
-      ++ dask.optional-dependencies.array
-      ++ fsspec.optional-dependencies.http;
+    ]
+    ++ self.ipython;
+    all = [
+      certifi
+      dask
+      h5py
+      pyarrow
+      beautifulsoup4
+      html5lib
+      sortedcontainers
+      pytz
+      jplephem
+      mpmath
+      asdf
+      asdf-astropy
+      bottleneck
+      fsspec
+      s3fs
+      uncompresspy
+    ]
+    ++ self.recommended
+    ++ self.ipython
+    ++ self.jupyter
+    ++ dask.optional-dependencies.array
+    ++ fsspec.optional-dependencies.http;
   });
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     pytest-xdist
     pytest-astropy-header
-    pytest-astropy
+    pytest-doctestplus
+    pytest-remotedata
     threadpoolctl
-  ] ++ optional-dependencies.recommended;
+    # FIXME remove in 7.2.0
+    # see https://github.com/astropy/astropy/pull/18882
+    uncompresspy
+  ]
+  ++ optional-dependencies.recommended;
 
   pythonImportsCheck = [ "astropy" ];
 
@@ -142,7 +153,7 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd "$out"
   '';
-  pytestFlagsArray = [
+  pytestFlags = [
     "--hypothesis-profile=ci"
   ];
   postCheck = ''
@@ -150,6 +161,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://docs.astropy.org/en/${src.tag}/changelog.html";
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;

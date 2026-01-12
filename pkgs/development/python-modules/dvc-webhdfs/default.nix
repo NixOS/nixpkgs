@@ -4,7 +4,6 @@
   dvc-objects,
   fetchPypi,
   fsspec,
-  pythonOlder,
   requests-kerberos,
   setuptools-scm,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "dvc-webhdfs";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IsIastLIrPknaJcH8sb0plPme+VGvo9DeDIisTD4sRM=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-3L1LpmH96rYFB947sEhZcDK5g97zUgr2runjc1EYzZk=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,13 +28,13 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automated decoding of encrypted text without knowing the key or ciphers used";
     homepage = "https://github.com/bee-san/ares";
     changelog = "https://github.com/bee-san/Ares/releases/tag/v${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ares";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

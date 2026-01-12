@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "rioxarray";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
     tag = version;
-    hash = "sha256-tNcBuMyBVDVPbmujfn4WauquutOEn727lxcR19hfyuE=";
+    hash = "sha256-yLWCDaAcwQT2C0Nt1GaIA3NWXe6k2CDkBAr3rsm8eQs=";
   };
 
   build-system = [ setuptools ];
@@ -48,21 +48,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # AssertionError: assert 535727386 == 535691205
-      "test_clip_geojson__no_drop"
-      # Fails with GDAL 3.11 warning
-      "test_rasterio_vrt"
-      # Fails with small numerical errors on GDAL 3.11
-      "test_rasterio_vrt_gcps"
-      "test_reproject__gcps"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # numerical errors
-      "test_clip_geojson"
-      "test_open_rasterio_mask_chunk_clip"
-    ];
+  disabledTests = [
+    # AssertionError: assert 535727386 == 535691205
+    "test_clip_geojson__no_drop"
+    # Fails with GDAL 3.11 warning
+    "test_rasterio_vrt"
+    # Fails with small numerical errors on GDAL 3.11
+    "test_rasterio_vrt_gcps"
+    "test_reproject__gcps"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # numerical errors
+    "test_clip_geojson"
+    "test_open_rasterio_mask_chunk_clip"
+  ];
 
   pythonImportsCheck = [ "rioxarray" ];
 

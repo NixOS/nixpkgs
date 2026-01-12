@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
+  testers,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   autoreconfHook,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "2.14.1";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-t2bZcslHPRxrTt3cDW6mTXK35/MMw1u1CnVXTzN/UEs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IZFF3ft04+wweknX2iQ+pyuqkogxcVB1aUYiOWLSAVU=";
   };
 
   strictDeps = true;
@@ -34,19 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libsidplayfp
-    ]
-    ++ lib.optionals alsaSupport [
-      alsa-lib
-    ]
-    ++ lib.optionals pulseSupport [
-      libpulseaudio
-    ]
-    ++ lib.optionals out123Support [
-      mpg123
-    ];
+  buildInputs = [
+    libsidplayfp
+  ]
+  ++ lib.optionals alsaSupport [
+    alsa-lib
+  ]
+  ++ lib.optionals pulseSupport [
+    libpulseaudio
+  ]
+  ++ lib.optionals out123Support [
+    mpg123
+  ];
 
   configureFlags = [
     (lib.strings.withFeature out123Support "out123")
@@ -55,7 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "rc$";
+    };
   };
 
   meta = {

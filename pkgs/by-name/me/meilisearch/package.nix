@@ -4,40 +4,22 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
-  version ? "1.14.0",
 }:
 
-let
-  # Version 1.11 is kept here as it was the last version not to support dumpless
-  # upgrades, meaning NixOS systems that have set up their data before 25.05
-  # would not be able to update to 1.12+ without manual data migration.
-  # We're planning to remove it towards NixOS 25.11. Make sure to update
-  # the meilisearch module accordingly and to remove the meilisearch_1_11
-  # attribute from all-packages.nix at that point too.
-  hashes = {
-    "1.14.0" = "sha256-nPOhiJJbZCr9PBlR6bsZ9trSn/2XCI2O+nXeYbZEQpU=";
-    "1.11.3" = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
-  };
-  cargoHashes = {
-    "1.14.0" = "sha256-8fcOXAzheG9xm1v7uD3T+6oc/dD4cjtu3zzBBh2EkcE=";
-    "1.11.3" = "sha256-cEJTokDJQuc9Le5+3ObMDNJmEhWEb+Qh0TV9xZkD9D8=";
-  };
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meilisearch";
-  inherit version;
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
-    repo = "meiliSearch";
-    tag = "v${version}";
-    hash = hashes.${version};
+    repo = "meilisearch";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xwQxvyOaldcSyJBjQKLXTayvr3r9EwnXovkqs13XrUY=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = cargoHashes.${version};
+  cargoHash = "sha256-gvXViWVgu3mAE29Qmk7U2wMV96JYCm3CDcEKLoLwNqg=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
@@ -45,7 +27,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     tests = {
       meilisearch = nixosTests.meilisearch;
     };
@@ -58,7 +40,7 @@ rustPlatform.buildRustPackage {
     description = "Powerful, fast, and an easy to use search engine";
     mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
-    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
@@ -71,4 +53,4 @@ rustPlatform.buildRustPackage {
       "x86_64-darwin"
     ];
   };
-}
+})

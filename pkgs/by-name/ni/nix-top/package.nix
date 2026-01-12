@@ -23,33 +23,32 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-top";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jerith666";
     repo = "nix-top";
     rev = "v${version}";
-    hash = "sha256-w/TKzbZmMt4CX2KnLwPvR1ydp5NNlp9nNx78jJvhp54=";
+    hash = "sha256-dpH1qfAHt8kDEG1QMFcD67rOhDsWZuaw3WSUZdPx3oQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ ruby ];
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out/libexec/nix-top
-      install -D -m755 ./nix-top $out/bin/nix-top
-      wrapProgram $out/bin/nix-top \
-        --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ln -s /bin/stty $out/libexec/nix-top
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/libexec/nix-top
+    install -D -m755 ./nix-top $out/bin/nix-top
+    wrapProgram $out/bin/nix-top \
+      --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ln -s /bin/stty $out/libexec/nix-top
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = {
     description = "Tracks what nix is building";

@@ -69,14 +69,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "2 dimensional Pixel Art Jump & Run";
     homepage = "https://codeberg.org/annaaurora/Find-Billy";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.annaaurora ];
+    maintainers = [ lib.maintainers.annaaurora ];
   };
 }

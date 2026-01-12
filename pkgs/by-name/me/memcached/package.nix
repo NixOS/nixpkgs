@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.37";
+  version = "1.6.39";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dKBik3D2v2CHOTfkOc1ZZZ+9eoTyTBCVvAgtoMhAaWk=";
+    sha256 = "sha256-I+VQfpM7FUYxYdTF05IbDF80C1Qtbt1/bF4Xw08Ro2M=";
   };
 
   configureFlags = [
@@ -25,18 +25,16 @@ stdenv.mkDerivation rec {
     libevent
   ];
 
-  hardeningEnable = [ "pie" ];
-
   env.NIX_CFLAGS_COMPILE = toString (
     [ "-Wno-error=deprecated-declarations" ] ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-error"
   );
 
-  meta = with lib; {
+  meta = {
     description = "Distributed memory object caching system";
     homepage = "http://memcached.org/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.coconnor ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.coconnor ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "memcached";
   };
   passthru.tests = {

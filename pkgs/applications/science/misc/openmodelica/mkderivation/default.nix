@@ -71,8 +71,7 @@ let
 
   # Tell OpenModelica where built dependencies are located.
   configureFlags =
-    lib.optional ifDeps "--with-openmodelicahome=${joinedDeps}"
-    ++ getAttrDef "configureFlags" [ ] pkg;
+    lib.optional ifDeps "--with-openmodelicahome=${joinedDeps}" ++ getAttrDef "configureFlags" [ ] pkg;
 
   # Our own configurePhase that accounts for omautoconf
   configurePhase = ''
@@ -87,13 +86,12 @@ let
   deptargets = lib.forEach pkg.omdeps (dep: dep.omtarget);
 
   # ... so we ask openmodelica makefile to skip those targets.
-  preBuild =
-    ''
-      for target in ${concatStringsSep " " deptargets}; do
-        touch ''${target}.skip;
-      done
-    ''
-    + appendByAttr "preBuild" "\n" pkg;
+  preBuild = ''
+    for target in ${concatStringsSep " " deptargets}; do
+      touch ''${target}.skip;
+    done
+  ''
+  + appendByAttr "preBuild" "\n" pkg;
 
   makeFlags = "${omtarget}" + appendByAttr "makeFlags" " " pkg;
 

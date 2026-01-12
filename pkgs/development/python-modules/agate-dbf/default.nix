@@ -23,10 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-mKK1N1cTbMdNwpflniEB009tSPQfdBVrtsDeJruiqj8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Adds read support for dbf files to agate";
     homepage = "https://github.com/wireservice/agate-dbf";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

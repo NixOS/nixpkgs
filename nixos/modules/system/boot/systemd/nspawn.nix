@@ -160,7 +160,8 @@ let
           [Network]
           ${attrsToSection def.networkConfig}
         '';
-      } // def;
+      }
+      // def;
     in
     base // { unit = makeUnit name base; };
 

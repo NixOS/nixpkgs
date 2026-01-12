@@ -8,7 +8,6 @@ from typing import Any
 from unittest.mock import ANY, Mock, call, patch
 
 import pytest
-from pytest import MonkeyPatch
 
 import nixos_rebuild as nr
 
@@ -66,8 +65,7 @@ def test_parse_args() -> None:
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g1["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.common_flags) == [
         "--option",
         "foo1",
         "bar1",
@@ -75,7 +73,13 @@ def test_parse_args() -> None:
         "foo2",
         "bar2",
     ]
-    assert nr.utils.dict_to_flags(vars(g1["flake_common_flags"])) == [
+    assert nr.utils.dict_to_flags(g1.flake_common_flags) == [
+        "--option",
+        "foo1",
+        "bar1",
+        "--option",
+        "foo2",
+        "bar2",
         "--update-input",
         "input1",
         "--update-input",
@@ -113,13 +117,15 @@ def test_parse_args() -> None:
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    # round-trip test (ensure that we have the same flags as parsed)
-    assert nr.utils.dict_to_flags(vars(g2["common_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.common_flags) == [
         "-vvv",
         "--quiet",
         "--quiet",
     ]
-    assert nr.utils.dict_to_flags(vars(g2["common_build_flags"])) == [
+    assert nr.utils.dict_to_flags(g2.build_flags) == [
+        "-vvv",
+        "--quiet",
+        "--quiet",
         "--include",
         "include1",
         "--include",
@@ -127,97 +133,15 @@ def test_parse_args() -> None:
     ]
 
 
-@patch.dict(os.environ, {}, clear=True)
-@patch("os.execve", autospec=True)
-@patch(get_qualified_name(nr.nix.build), autospec=True)
-def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setattr(nr, "EXECUTABLE", "nixos-rebuild-ng")
-    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
-    args, _ = nr.parse_args(argv)
-    mock_build.return_value = Path("/path")
-
-    nr.reexec(argv, args, {"build": True}, {"flake": True})
-    mock_build.assert_has_calls(
-        [
-            call(
-                "config.system.build.nixos-rebuild",
-                nr.models.BuildAttr(ANY, ANY),
-                {"build": True, "no_out_link": True},
-            )
-        ]
-    )
-    # do not exec if there is no new version
-    mock_execve.assert_not_called()
-
-    mock_build.return_value = Path("/path/new")
-
-    nr.reexec(argv, args, {}, {})
-    # exec in the new version successfully
-    mock_execve.assert_called_once_with(
-        Path("/path/new/bin/nixos-rebuild-ng"),
-        ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
-    )
-
-    mock_execve.reset_mock()
-    mock_execve.side_effect = [OSError("BOOM"), None]
-
-    nr.reexec(argv, args, {}, {})
-    # exec in the previous version if the new version fails
-    mock_execve.assert_any_call(
-        Path("/path/bin/nixos-rebuild-ng"),
-        ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
-    )
-
-
-@patch.dict(os.environ, {}, clear=True)
-@patch("os.execve", autospec=True)
-@patch(get_qualified_name(nr.nix.build_flake), autospec=True)
-def test_reexec_flake(
-    mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
-) -> None:
-    monkeypatch.setattr(nr, "EXECUTABLE", "nixos-rebuild-ng")
-    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
-    args, _ = nr.parse_args(argv)
-    mock_build.return_value = Path("/path")
-
-    nr.reexec(argv, args, {"build": True}, {"flake": True})
-    mock_build.assert_called_once_with(
-        "config.system.build.nixos-rebuild",
-        nr.models.Flake(ANY, ANY),
-        {"flake": True, "no_link": True},
-    )
-    # do not exec if there is no new version
-    mock_execve.assert_not_called()
-
-    mock_build.return_value = Path("/path/new")
-
-    nr.reexec(argv, args, {}, {})
-    # exec in the new version successfully
-    mock_execve.assert_called_once_with(
-        Path("/path/new/bin/nixos-rebuild-ng"),
-        ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
-    )
-
-    mock_execve.reset_mock()
-    mock_execve.side_effect = [OSError("BOOM"), None]
-
-    nr.reexec(argv, args, {}, {})
-    # exec in the previous version if the new version fails
-    mock_execve.assert_any_call(
-        Path("/path/bin/nixos-rebuild-ng"),
-        ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
-    )
-
-
-@patch.dict(os.environ, {}, clear=True)
+@patch.dict(
+    os.environ,
+    {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
+    clear=True,
+)
 @patch("subprocess.run", autospec=True)
 def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
-    nixpkgs_path.mkdir()
+    (nixpkgs_path / ".git").mkdir(parents=True)
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -261,8 +185,8 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                     "<nixpkgs/nixos>",
                     "--attr",
                     "config.system.build.toplevel",
-                    "-vvv",
                     "--no-out-link",
+                    "-vvv",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -291,7 +215,58 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                     "boot",
                 ],
                 check=True,
-                **(DEFAULT_RUN_KWARGS | {"env": {"NIXOS_INSTALL_BOOTLOADER": "0"}}),
+                **(
+                    DEFAULT_RUN_KWARGS
+                    | {
+                        "env": {
+                            "NIXOS_INSTALL_BOOTLOADER": "0",
+                            "NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1",
+                        }
+                    }
+                ),
+            ),
+        ]
+    )
+
+
+# https://github.com/NixOS/nixpkgs/issues/437872
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        return CompletedProcess([], 0, str(config_path))
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build",
+            "--flake",
+            "/path/to/config#hostname",
+            "--no-build-output",
+        ]
+    )
+
+    assert mock_run.call_count == 1
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "--print-out-paths",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
             ),
         ]
     )
@@ -385,7 +360,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix",
                     "eval",
                     "--json",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images',
                     "--apply",
                     "builtins.attrNames",
                 ],
@@ -400,7 +375,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images.azure",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure',
                 ],
                 check=True,
                 stdout=PIPE,
@@ -411,7 +386,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix",
                     "eval",
                     "--json",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images.azure.passthru.filePath",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',
                 ],
                 check=True,
                 stdout=PIPE,
@@ -421,7 +396,11 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     )
 
 
-@patch.dict(os.environ, {}, clear=True)
+@patch.dict(
+    os.environ,
+    {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
+    clear=True,
+)
 @patch("subprocess.run", autospec=True)
 def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
@@ -462,12 +441,12 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
                     "-v",
                     "--option",
                     "narinfo-cache-negative-ttl",
                     "1200",
-                    "--no-link",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -498,16 +477,28 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "switch",
                 ],
                 check=True,
-                **(DEFAULT_RUN_KWARGS | {"env": {"NIXOS_INSTALL_BOOTLOADER": "1"}}),
+                **(
+                    DEFAULT_RUN_KWARGS
+                    | {
+                        "env": {
+                            "NIXOS_INSTALL_BOOTLOADER": "1",
+                            "NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1",
+                        }
+                    }
+                ),
             ),
         ]
     )
 
 
-@patch.dict(os.environ, {}, clear=True)
+@patch.dict(
+    os.environ,
+    {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
+    clear=True,
+)
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
-@patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_build_target_host(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
@@ -655,6 +646,8 @@ def test_execute_nix_switch_build_target_host(
             call(
                 [
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
                     "copy",
                     "--from",
                     "ssh://user@build-host",
@@ -714,9 +707,13 @@ def test_execute_nix_switch_build_target_host(
     )
 
 
-@patch.dict(os.environ, {}, clear=True)
+@patch.dict(
+    os.environ,
+    {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
+    clear=True,
+)
 @patch("subprocess.run", autospec=True)
-@patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_target_host(
     mock_cleanup_ssh: Mock,
     mock_run: Mock,
@@ -756,7 +753,7 @@ def test_execute_nix_switch_flake_target_host(
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",
                 ],
                 check=True,
@@ -817,9 +814,13 @@ def test_execute_nix_switch_flake_target_host(
     )
 
 
-@patch.dict(os.environ, {}, clear=True)
+@patch.dict(
+    os.environ,
+    {"NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM": "1"},
+    clear=True,
+)
 @patch("subprocess.run", autospec=True)
-@patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_build_host(
     mock_cleanup_ssh: Mock,
     mock_run: Mock,
@@ -860,7 +861,7 @@ def test_execute_nix_switch_flake_build_host(
                     "nix-command flakes",
                     "eval",
                     "--raw",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
                 ],
                 check=True,
                 stdout=PIPE,
@@ -931,7 +932,7 @@ def test_execute_nix_switch_flake_build_host(
 @patch("subprocess.run", autospec=True)
 def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
-    nixpkgs_path.touch()
+    (nixpkgs_path / ".git").mkdir(parents=True)
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix-instantiate":
@@ -1035,6 +1036,74 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
 
 
 @patch("subprocess.run", autospec=True)
+def test_execute_build_dry_run_build_and_target_remote(
+    mock_run: Mock, tmp_path: Path
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+    mock_run.side_effect = [
+        CompletedProcess([], 0, str(config_path)),
+        CompletedProcess([], 0),
+        CompletedProcess([], 0, str(config_path)),
+    ]
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "dry-build",
+            "--flake",
+            "/path/to/config#hostname",
+            "--build-host",
+            "user@build-host",
+            "--target-host",
+            "user@target-host",
+        ]
+    )
+
+    assert mock_run.call_count == 3
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "eval",
+                    "--raw",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["nix-copy-closure", "--to", "user@build-host", config_path],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "nix",
+                    "--extra-experimental-features",
+                    "'nix-command flakes'",
+                    "build",
+                    f"'{config_path}^*'",
+                    "--print-out-paths",
+                    "--dry-run",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch("subprocess.run", autospec=True)
 def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
@@ -1063,7 +1132,8 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "github:user/repo#nixosConfigurations.hostname.config.system.build.toplevel",
+                    'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
                 ],
                 check=True,
                 stdout=PIPE,

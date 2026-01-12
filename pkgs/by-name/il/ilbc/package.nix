@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     cp -v ${./CMakeLists.txt} CMakeLists.txt
   '';
 
+  # Fixes the build with CMake 4
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   meta = {
     platforms = lib.platforms.unix;
   };

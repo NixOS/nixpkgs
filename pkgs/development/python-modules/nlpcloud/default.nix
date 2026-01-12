@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nlpcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the NLP Cloud API";
     homepage = "https://nlpcloud.com/";
     changelog = "https://github.com/nlpcloud/nlpcloud-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

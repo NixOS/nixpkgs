@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-Va917eD9M3oUVmLrDab6cx/LvmBlk95U4mRHqPpBB5I=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tA0WjghBB2K71IlZ1u9K67tZWGe9VNFOfI2YdrqCUw0=";
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    description = "A simple git wrapper that waits until index.lock file is removed when present before running the command";
+    description = "Simple git wrapper that waits until index.lock file is removed when present before running the command";
     homepage = "https://github.com/darshanparajuli/git-wait";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

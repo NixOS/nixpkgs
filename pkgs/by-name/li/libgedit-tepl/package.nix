@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-tepl";
-  version = "6.13.0";
+  version = "6.14.0";
 
   outputs = [
     "out"
@@ -34,22 +34,21 @@ stdenv.mkDerivation rec {
     owner = "gedit";
     repo = "libgedit-tepl";
     tag = version;
-    hash = "sha256-YWONsw5+gq5Uew6xB76pKsGTJmI83zAssO5WX6aP7ZM=";
+    hash = "sha256-KtmExJCEfa4c6alrtWOLNSKZUs65tZ7p9zcT9f8ZC+k=";
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gobject-introspection
-      pkg-config
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gobject-introspection
+    pkg-config
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     icu
@@ -63,16 +62,16 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       bobby285271
     ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

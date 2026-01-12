@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "measureme";
-  version = "12.0.0";
+  version = "12.0.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "measureme";
     rev = version;
-    hash = "sha256-Zgl8iyBDVwqZnbfqC06DMuo0S/hV6pl812hkiovmS+I=";
+    hash = "sha256-pejgWzHtpEBylFzG1+/8zTV7qR6gf6UuTmuH9GNPoD0=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
@@ -21,10 +21,12 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Support crate for rustc's self-profiling feature";
     homepage = "https://github.com/rust-lang/measureme";
-    license = licenses.asl20;
-    maintainers = [ maintainers.t4ccer ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.t4ccer ];
   };
 }

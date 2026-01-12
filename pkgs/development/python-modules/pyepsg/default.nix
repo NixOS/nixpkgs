@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python interface to epsg.io";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     homepage = "https://pyepsg.readthedocs.io/en/latest/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "0.5.12";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
@@ -69,7 +67,8 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -79,10 +78,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "miio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flyfloh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

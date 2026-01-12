@@ -36,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libidn2
     openssl
-  ] ++ lib.optional (!enableStubOnly) unbound;
+  ]
+  ++ lib.optional (!enableStubOnly) unbound;
 
   cmakeFlags = [ (lib.strings.cmakeBool "ENABLE_STUB_ONLY" enableStubOnly) ];
 
@@ -63,9 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       their applications.
     '';
     homepage = "https://getdnsapi.net";
-    maintainers = with lib.maintainers; [
-      leenaars
-      ehmry
+    maintainers = [
     ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

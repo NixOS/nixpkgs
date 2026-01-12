@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "yatline.yazi";
-  version = "0-unstable-2025-04-22";
+  version = "25.5.31-unstable-2025-06-12";
 
   src = fetchFromGitHub {
     owner = "imsi32";
     repo = "yatline.yazi";
-    rev = "2ecf715d33866e5f8a63af25f6a242821746ddb7";
-    hash = "sha256-l4IrdALlgKd1USxE2+bD0Lkw3DgBoQDBxgxevrFhytU=";
+    rev = "88bd1c58357d472fe7e8daf9904936771fc49795";
+    hash = "sha256-RkQKZQAa5U9eMWk1Q0doueJZiuP4elUJ0dM1XKLSnDo=";
   };
 
   meta = {

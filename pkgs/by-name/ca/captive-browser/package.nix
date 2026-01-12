@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "captive-browser";
-  version = "unstable-2021-08-01";
+  version = "0-unstable-2021-08-01";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
@@ -32,10 +32,10 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dedicated Chrome instance to log into captive portals without messing with DNS settings";
     homepage = "https://blog.filippo.io/captive-browser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
   };
 }

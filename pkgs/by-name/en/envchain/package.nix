@@ -26,23 +26,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libsecret
-      readline
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libedit
-      ncurses
-    ];
+  buildInputs = [
+    libsecret
+    readline
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libedit
+    ncurses
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set environment variables with macOS keychain or D-Bus secret service";
     homepage = "https://github.com/sorah/envchain";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "envchain";
   };

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "wishlist";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "wishlist";
     rev = "v${version}";
-    sha256 = "sha256-53fojA+gdvpSVNjx6QncH16F8/x+lpY5SkNs7obW2XQ=";
+    sha256 = "sha256-RulCoXPqfsZrxlDMTbyFNxqf/tdi26Ikq6wNUXCp86I=";
   };
 
-  vendorHash = "sha256-VB515IK9ZJYC08EmShOPbLKU0fHZ16Dw+c5hiZ7mW8Q=";
+  vendorHash = "sha256-RPIxE1/ICchtCsIhShcJeUFfCWwzlCUfrY8yWfBeuHU=";
 
   doCheck = false;
 
@@ -25,15 +25,12 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Single entrypoint for multiple SSH endpoints";
     homepage = "https://github.com/charmbracelet/wishlist";
     changelog = "https://github.com/charmbracelet/wishlist/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      caarlos0
-      penguwin
-    ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ caarlos0 ];
     mainProgram = "wishlist";
   };
 }

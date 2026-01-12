@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.13.4";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KoZ2V0M4ezW58c65wc9vJHrYMZ2ywKUjCOietKYS94Q=";
+    hash = "sha256-68bjR5lf1sKxShM4p3Fm7ff8HvmTk2Fdz53CwfHI9Q8=";
   };
 
   build-system = [ hatchling ];
@@ -72,35 +72,35 @@ buildPythonPackage rec {
     redisTestHook
     requests
     sure
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
 
-  _darwinAllowLocalNetworking = true;
+  __darwinAllowLocalNetworking = true;
 
-  disabledTests =
-    [
-      # tests that require network access (like DNS lookups)
-      "test_truesendall_with_dump_from_recording"
-      "test_aiohttp"
-      "test_asyncio_record_replay"
-      "test_gethostbyname"
-      # httpx read failure
-      "test_no_dangling_fds"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
-      "test_httprettish_httpx_session"
-    ];
+  disabledTests = [
+    # tests that require network access (like DNS lookups)
+    "test_truesendall_with_dump_from_recording"
+    "test_aiohttp"
+    "test_asyncio_record_replay"
+    "test_gethostbyname"
+    # httpx read failure
+    "test_no_dangling_fds"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
+    "test_httprettish_httpx_session"
+  ];
 
   pythonImportsCheck = [ "mocket" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

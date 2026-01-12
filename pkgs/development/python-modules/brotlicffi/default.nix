@@ -2,9 +2,8 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cffi,
-  # overriden as pkgs.brotli
+  # overridden as pkgs.brotli
   brotli,
   setuptools,
   pytestCheckHook,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "brotlicffi";
   version = "1.1.0.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-hyper";
@@ -44,14 +42,14 @@ buildPythonPackage rec {
   # Test data is only available from libbrotli git checkout, not brotli.src
   doCheck = false;
 
-  pytestFlagsArray = [ "test/" ];
+  enabledTestPaths = [ "test/" ];
 
   pythonImportsCheck = [ "brotlicffi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python CFFI bindings to the Brotli library";
     homepage = "https://github.com/python-hyper/brotlicffi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

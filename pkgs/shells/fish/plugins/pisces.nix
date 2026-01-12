@@ -15,10 +15,10 @@ buildFishPlugin rec {
     sha256 = "sha256-Oou2IeNNAqR00ZT3bss/DbhrJjGeMsn9dBBYhgdafBw=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Paired symbols in the command line";
     homepage = "https://github.com/laughedelic/pisces";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ vanilla ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ vanilla ];
   };
 }

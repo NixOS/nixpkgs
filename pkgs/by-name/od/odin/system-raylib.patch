@@ -1,0 +1,141 @@
+diff --git a/vendor/raylib/raygui.odin b/vendor/raylib/raygui.odin
+index 559437a60..cd31fbe43 100644
+--- a/vendor/raylib/raygui.odin
++++ b/vendor/raylib/raygui.odin
+@@ -2,34 +2,7 @@ package raylib
+ 
+ import "core:c"
+ 
+-RAYGUI_SHARED :: #config(RAYGUI_SHARED, false)
+-RAYGUI_WASM_LIB :: #config(RAYGUI_WASM_LIB, "wasm/libraygui.a")
+-
+-when ODIN_OS == .Windows {
+-	foreign import lib {
+-		"windows/rayguidll.lib" when RAYGUI_SHARED else "windows/raygui.lib",
+-	}
+-} else when ODIN_OS == .Linux  {
+-	foreign import lib {
+-		"linux/libraygui.so" when RAYGUI_SHARED else "linux/libraygui.a",
+-	}
+-} else when ODIN_OS == .Darwin {
+-	when ODIN_ARCH == .arm64 {
+-		foreign import lib {
+-			"macos-arm64/libraygui.dylib" when RAYGUI_SHARED else "macos-arm64/libraygui.a",
+-		}
+-	} else {
+-		foreign import lib {
+-			"macos/libraygui.dylib" when RAYGUI_SHARED else "macos/libraygui.a",
+-		}
+-	}
+-} else when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
+-	foreign import lib {
+-		RAYGUI_WASM_LIB,
+-	}
+-} else {
+-	foreign import lib "system:raygui"
+-}
++foreign import lib "system:raygui"
+ 
+ RAYGUI_VERSION :: "4.0"
+ 
+diff --git a/vendor/raylib/raylib.odin b/vendor/raylib/raylib.odin
+index 02bb6deea..0df93009b 100644
+--- a/vendor/raylib/raylib.odin
++++ b/vendor/raylib/raylib.odin
+@@ -99,42 +99,7 @@ MAX_TEXT_BUFFER_LENGTH :: #config(RAYLIB_MAX_TEXT_BUFFER_LENGTH, 1024)
+ 
+ #assert(size_of(rune) == size_of(c.int))
+ 
+-RAYLIB_SHARED :: #config(RAYLIB_SHARED, false)
+-RAYLIB_WASM_LIB :: #config(RAYLIB_WASM_LIB, "wasm/libraylib.a")
+-
+-when ODIN_OS == .Windows {
+-	@(extra_linker_flags="/NODEFAULTLIB:" + ("msvcrt" when RAYLIB_SHARED else "libcmt"))
+-	foreign import lib {
+-		"windows/raylibdll.lib" when RAYLIB_SHARED else "windows/raylib.lib" ,
+-		"system:Winmm.lib",
+-		"system:Gdi32.lib",
+-		"system:User32.lib",
+-		"system:Shell32.lib",
+-	}
+-} else when ODIN_OS == .Linux  {
+-	foreign import lib {
+-		// Note(bumbread): I'm not sure why in `linux/` folder there are
+-		// multiple copies of raylib.so, but since these bindings are for
+-		// particular version of the library, I better specify it. Ideally,
+-		// though, it's best specified in terms of major (.so.4)
+-		"linux/libraylib.so.550" when RAYLIB_SHARED else "linux/libraylib.a",
+-		"system:dl",
+-		"system:pthread",
+-	}
+-} else when ODIN_OS == .Darwin {
+-	foreign import lib {
+-		"macos/libraylib.550.dylib" when RAYLIB_SHARED else "macos/libraylib.a",
+-		"system:Cocoa.framework",
+-		"system:OpenGL.framework",
+-		"system:IOKit.framework",
+-	} 
+-} else when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
+-	foreign import lib {
+-		RAYLIB_WASM_LIB,
+-	}
+-} else {
+-	foreign import lib "system:raylib"
+-}
++foreign import lib "system:raylib"
+ 
+ VERSION_MAJOR :: 5
+ VERSION_MINOR :: 5
+diff --git a/vendor/raylib/rlgl/rlgl.odin b/vendor/raylib/rlgl/rlgl.odin
+index 6ac19695d..78a483a59 100644
+--- a/vendor/raylib/rlgl/rlgl.odin
++++ b/vendor/raylib/rlgl/rlgl.odin
+@@ -112,47 +112,12 @@ import rl "../."
+ 
+ VERSION :: "5.0"
+ 
+-RAYLIB_SHARED :: #config(RAYLIB_SHARED, false)
+-RAYLIB_WASM_LIB :: #config(RAYLIB_WASM_LIB, "../wasm/libraylib.a")
+-
+ // Note: We pull in the full raylib library. If you want a truly stand-alone rlgl, then:
+ // - Compile a separate rlgl library and use that in the foreign import blocks below.
+ // - Remove the `import rl "../."` line
+ // - Copy the code from raylib.odin for any types we alias from that package (see PixelFormat etc)
+ 
+-when ODIN_OS == .Windows {
+-	@(extra_linker_flags="/NODEFAULTLIB:" + ("msvcrt" when RAYLIB_SHARED else "libcmt"))
+-	foreign import lib {
+-		"../windows/raylibdll.lib" when RAYLIB_SHARED else "../windows/raylib.lib" ,
+-		"system:Winmm.lib",
+-		"system:Gdi32.lib",
+-		"system:User32.lib",
+-		"system:Shell32.lib",
+-	}
+-} else when ODIN_OS == .Linux  {
+-	foreign import lib {
+-		// Note(bumbread): I'm not sure why in `linux/` folder there are
+-		// multiple copies of raylib.so, but since these bindings are for
+-		// particular version of the library, I better specify it. Ideally,
+-		// though, it's best specified in terms of major (.so.4)
+-		"../linux/libraylib.so.550" when RAYLIB_SHARED else "../linux/libraylib.a",
+-		"system:dl",
+-		"system:pthread",
+-	}
+-} else when ODIN_OS == .Darwin {
+-	foreign import lib {
+-		"../macos/libraylib.550.dylib" when RAYLIB_SHARED else "../macos/libraylib.a",
+-		"system:Cocoa.framework",
+-		"system:OpenGL.framework",
+-		"system:IOKit.framework",
+-	} 
+-} else when ODIN_ARCH == .wasm32 || ODIN_ARCH == .wasm64p32 {
+-	foreign import lib {
+-		RAYLIB_WASM_LIB,
+-	}
+-} else {
+-	foreign import lib "system:raylib"
+-}
++foreign import lib "system:raylib"
+ 
+ GRAPHICS_API_OPENGL_11  :: false
+ GRAPHICS_API_OPENGL_21  :: true

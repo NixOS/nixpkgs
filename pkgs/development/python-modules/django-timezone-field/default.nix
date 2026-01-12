@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   django,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "django-timezone-field";
   version = "7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mfogel";
@@ -47,10 +44,10 @@ buildPythonPackage rec {
     pytz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Django app providing database, form and serializer fields for pytz timezone objects";
     homepage = "https://github.com/mfogel/django-timezone-field";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

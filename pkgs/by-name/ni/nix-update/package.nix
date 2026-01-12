@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nix-update";
-  version = "1.11.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-update";
-    tag = version;
-    hash = "sha256-G5YehePEMhTgxCnLp8Dg+bDHvOe+QltlCkQHVwMtYx0=";
+    tag = "v${version}";
+    hash = "sha256-l6EvOXUZcbx712WYN3L4y8Qdim9sEISH06CWxgav6cQ=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
+      mdaniels5757
       mic92
     ];
     mainProgram = "nix-update";

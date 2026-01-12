@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftw ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance library for Spherical Harmonic Transform";
     homepage = "https://nschaeff.bitbucket.io/shtns/";
-    license = licenses.cecill21;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.linux;
+    license = lib.licenses.cecill21;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -15,12 +15,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.7";
+  version = "1.1.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4Qhzsa5GAAeSgt7FZsRWIVO1ZB+010WtBv9SV38Xgto=";
+    hash = "sha256-C0Jra/IK61tngGsuEnMD4mySRc/iZVgdYEbMXtwpBZ0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -53,13 +53,13 @@ python3.pkgs.buildPythonApplication rec {
       pkgsCross.avr.buildPackages.binutils
       pkgsCross.avr.buildPackages.binutils.bintools
       pkgsCross.avr.buildPackages.gcc
-      pkgsCross.avr.libcCross
+      pkgsCross.avr.libc
     ];
 
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qmk/qmk_cli";
     description = "Program to help users work with QMK Firmware";
     longDescription = ''
@@ -76,11 +76,8 @@ python3.pkgs.buildPythonApplication rec {
         - qmk lint
       - ... and many more!
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      bhipple
-      ekleog
-    ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "qmk";
   };
 }

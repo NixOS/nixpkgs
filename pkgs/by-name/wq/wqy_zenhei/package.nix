@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "(mainly) Chinese Unicode font";
+    description = "Chinese Unicode font with full CJK coverage";
     homepage = "http://wenq.org";
     license = lib.licenses.gpl2; # with font embedding exceptions
     maintainers = [ lib.maintainers.pkmx ];

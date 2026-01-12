@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  gettext,
   guileSupport ? false,
   guile,
   # avoid guile depend on bootstrap to prevent dependency cycles
@@ -15,12 +16,12 @@ let
   guileEnabled = guileSupport && !inBootstrap;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.gz";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
@@ -35,15 +36,25 @@ stdenv.mkDerivation rec {
   # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
   # convenient to keep them in a separate directory but we can defer listing the
   # directory until derivation realization to avoid unnecessary Nix evaluations.
-  patches = lib.filesystem.listFilesRecursive ./patches;
+  patches =
+    lib.filesystem.listFilesRecursive ./patches
+    ++ lib.optionals stdenv.hostPlatform.isMusl (lib.filesystem.listFilesRecursive ./musl-patches);
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
-  buildInputs = lib.optionals guileEnabled [ guile ];
+  buildInputs =
+    lib.optionals guileEnabled [ guile ]
+    # gettext gets pulled in via autoreconfHook because strictDeps is not set,
+    # and is linked against. Without this, it doesn't end up in HOST_PATH.
+    # TODO: enable strictDeps, and either make this dependency explicit, or remove it
+    ++ lib.optional stdenv.isCygwin gettext;
 
-  configureFlags = lib.optional guileEnabled "--with-guile";
+  configureFlags =
+    lib.optional guileEnabled "--with-guile"
+    # fnmatch.c:124:14: error: conflicting types for 'getenv'; have 'char *(void)'
+    ++ lib.optional stdenv.hostPlatform.isCygwin "CFLAGS=-std=gnu17";
 
   outputs = [
     "out"
@@ -57,7 +68,7 @@ stdenv.mkDerivation rec {
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -70,10 +81,9 @@ stdenv.mkDerivation rec {
       to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
-
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

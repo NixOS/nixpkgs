@@ -8,7 +8,6 @@
   pytz,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   tcolorpy,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "typepy";
   version = "1.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
@@ -41,7 +38,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "typepy" ];
 

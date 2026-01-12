@@ -9,6 +9,7 @@
 
   # dependencies
   glib,
+  libxfixes,
   libXinerama,
   catch2,
   gperf,
@@ -64,6 +65,7 @@
   extrasSupport ? true,
 
   versionCheckHook,
+  expat,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -89,23 +91,14 @@ assert extrasSupport -> python3 != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tEJQWZBaiX/bONPZEuGcvbGidktcvxUZtLvcGjz71Lk=";
+    hash = "sha256-tMnfdW1sbZkt8v6DITM2R0ZwyN+xs7VLGZDityYt38Q=";
   };
-
-  patches = [
-    # Upstream patch to install extra syntax files, remove after next release
-    (fetchpatch {
-      name = "install-extra-syntax-files";
-      url = "https://github.com/brndnmtthws/conky/commit/c67d8c27d1d091968a98ee49b313935eb7ea67fd.patch";
-      hash = "sha256-NaQlQm+7iJWtdKYErTak5CPLNUBlsWb7sECNg0i3fWY=";
-    })
-  ];
 
   # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
   postPatch = ''
@@ -115,53 +108,54 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      gperf
-    ]
-    ++ lib.optional docsSupport pandoc
-    ++ lib.optional (docsSupport || extrasSupport) (
-      # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
-      buildPackages.python3.withPackages (ps: [
-        ps.jinja2
-        ps.pyyaml
-      ])
-    )
-    ++ lib.optional luaImlib2Support toluapp
-    ++ lib.optional luaCairoSupport toluapp;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gperf
+  ]
+  ++ lib.optional docsSupport pandoc
+  ++ lib.optional (docsSupport || extrasSupport) (
+    # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
+    buildPackages.python3.withPackages (ps: [
+      ps.jinja2
+      ps.pyyaml
+    ])
+  )
+  ++ lib.optional luaImlib2Support toluapp
+  ++ lib.optional luaCairoSupport toluapp;
 
-  buildInputs =
-    [
-      glib
-      libXinerama
-    ]
-    ++ lib.optional ncursesSupport ncurses
-    ++ lib.optionals x11Support [
-      freetype
-      xorg.libICE
-      xorg.libX11
-      xorg.libXext
-      xorg.libXft
-      xorg.libSM
-    ]
-    ++ lib.optionals waylandSupport [
-      pango
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional xdamageSupport libXdamage
-    ++ lib.optional imlib2Support imlib2
-    ++ lib.optional luaSupport lua
-    ++ lib.optional luaImlib2Support imlib2
-    ++ lib.optional luaCairoSupport cairo
-    ++ lib.optional wirelessSupport wirelesstools
-    ++ lib.optional curlSupport curl
-    ++ lib.optional rssSupport libxml2
-    ++ lib.optional nvidiaSupport libXNVCtrl
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional journalSupport systemd;
+  buildInputs = [
+    glib
+    libXinerama
+  ]
+  ++ lib.optional ncursesSupport ncurses
+  ++ lib.optionals x11Support [
+    freetype
+    libxfixes
+    xorg.libICE
+    xorg.libX11
+    xorg.libXext
+    xorg.libXft
+    xorg.libXfixes
+    xorg.libSM
+    expat
+  ]
+  ++ lib.optionals waylandSupport [
+    pango
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional xdamageSupport libXdamage
+  ++ lib.optional imlib2Support imlib2
+  ++ lib.optional luaSupport lua
+  ++ lib.optional luaImlib2Support imlib2
+  ++ lib.optional luaCairoSupport cairo
+  ++ lib.optional wirelessSupport wirelesstools
+  ++ lib.optional curlSupport curl
+  ++ lib.optional rssSupport libxml2
+  ++ lib.optional nvidiaSupport libXNVCtrl
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional journalSupport systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "REPRODUCIBLE_BUILD" true)
@@ -191,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

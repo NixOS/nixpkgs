@@ -24,24 +24,22 @@ in
 buildFHSEnv {
   inherit pname version;
 
-  targetPkgs =
-    pkgs:
-    (with pkgs; [
-      dbus
-      fontconfig
-      freetype
-      glib
-      libGL
-      xkeyboard_config
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libxcb
-      zlib
-    ]);
+  targetPkgs = pkgs: [
+    dbus
+    fontconfig
+    freetype
+    glib
+    libGL
+    xkeyboard_config
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    xorg.libxcb
+    zlib
+  ];
 
   extraInstallCommands = ''
     install -Dvm644 ${src}/Driver/99-Kingst.rules \

@@ -19,10 +19,11 @@ let
 
   envFile = pkgs.writeText "nifi.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   nifiEnv = pkgs.writeShellScriptBin "nifi-env" ''
@@ -37,12 +38,7 @@ in
     services.nifi = {
       enable = lib.mkEnableOption "Apache NiFi";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nifi;
-        defaultText = lib.literalExpression "pkgs.nifi";
-        description = "Apache NiFi package to use.";
-      };
+      package = lib.mkPackageOption pkgs "nifi" { };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -74,7 +70,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = if cfg.enableHTTPS then 8443 else 8080;
         defaultText = lib.literalExpression ''
           if config.${opt.enableHTTPS}
@@ -96,7 +92,7 @@ in
       };
 
       proxyPort = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
+        type = lib.types.nullOr lib.types.port;
         default = if cfg.enableHTTPS then 8443 else null;
         defaultText = lib.literalExpression ''
           if config.${opt.enableHTTPS}

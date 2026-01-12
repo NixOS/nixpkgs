@@ -141,7 +141,7 @@ in
       machine.wait_for_unit("lasuite-docs-collaboration-server.service")
 
     with subtest("Create S3 bucket"):
-      machine.succeed("mc config host add minio http://${s3Domain} ${minioAccessKey} ${minioSecretKey} --api s3v4")
+      machine.succeed("mc alias set minio http://${s3Domain} ${minioAccessKey} ${minioSecretKey} --api s3v4")
       machine.succeed("mc mb lasuite-docs")
 
     with subtest("Wait for web servers to start"):

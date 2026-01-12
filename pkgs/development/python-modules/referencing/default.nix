@@ -8,7 +8,6 @@
   jsonschema,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   rpds-py,
   typing-extensions,
 }:
@@ -18,8 +17,6 @@ let
     pname = "referencing";
     version = "0.36.2";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "python-jsonschema";
@@ -53,12 +50,12 @@ let
 
     pythonImportsCheck = [ "referencing" ];
 
-    meta = with lib; {
+    meta = {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
       changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fab ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fab ];
     };
   };
 in

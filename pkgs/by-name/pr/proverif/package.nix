@@ -3,6 +3,11 @@
   stdenv,
   fetchurl,
   ocamlPackages,
+  makeBinaryWrapper,
+  graphviz,
+  m4,
+
+  enable_interact ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,16 +21,44 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [
-    ocaml
-    findlib
-  ];
+  nativeBuildInputs =
+    with ocamlPackages;
+    [
+      ocaml
+      findlib
+    ]
+    ++ lib.optionals enable_interact [ makeBinaryWrapper ];
 
-  buildPhase = "./build -nointeract";
+  buildInputs = lib.optionals enable_interact [
+    ocamlPackages.lablgtk
+  ];
+  nativeCheckInputs = [ m4 ];
+
+  buildPhase = ''
+    runHook preBuild
+    ${if enable_interact then "./build" else "./build -nointeract"}
+    runHook postBuild
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./test
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
+
     install -D -t $out/bin proverif proveriftotex
     install -D -t $out/share/emacs/site-lisp/ emacs/proverif.el
+
+    ${lib.optionalString enable_interact ''
+      install -D -t $out/bin proverif_interact
+      wrapProgram $out/bin/proverif_interact \
+        --prefix PATH : ${lib.makeBinPath [ graphviz ]}
+    ''}
+
     runHook postInstall
   '';
 

@@ -129,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "b_ndebug" "if-release")
-  ] ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
+  ]
+  ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
 
   postInstall = ''
     ln -s ${targetPrefix}libtool "$out/bin/${targetPrefix}ranlib"
@@ -157,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The classic linker for Darwin";
+    description = "Classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
     license = with lib.licenses; [
       apple-psl20

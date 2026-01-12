@@ -22,25 +22,27 @@ You can run `vwifi-ctrl` on this node to control characteristics of the simulate
 physical layer.
 
 ```nix
-airgap =
-  { config, ... }:
-  {
-    networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-      {
-        address = "192.168.1.2";
-        prefixLength = 24;
-      }
-    ];
-    services.vwifi = {
-      server = {
-        enable = true;
-        ports.tcp = 8212;
-        # uncomment if you want to enable monitor mode on another node
-        # ports.spy = 8213;
-        openFirewall = true;
+{
+  airgap =
+    { config, ... }:
+    {
+      networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
+        {
+          address = "192.168.1.2";
+          prefixLength = 24;
+        }
+      ];
+      services.vwifi = {
+        server = {
+          enable = true;
+          ports.tcp = 8212;
+          # uncomment if you want to enable monitor mode on another node
+          # ports.spy = 8213;
+          openFirewall = true;
+        };
       };
     };
-  };
+}
 ```
 
 ### AP {#sec-nixos-test-wifi-ap}
@@ -48,40 +50,42 @@ airgap =
 A node like this will act as a wireless access point in infrastructure mode.
 
 ```nix
-ap =
-  { config, ... }:
-  {
-    networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-      {
-        address = "192.168.1.3";
-        prefixLength = 24;
-      }
-    ];
-    services.hostapd = {
-      enable = true;
-      radios.wlan0 = {
-        channel = 1;
-        networks.wlan0 = {
-          ssid = "NixOS Test Wi-Fi Network";
-          authentication = {
-            mode = "wpa3-sae";
-            saePasswords = [ { password = "supersecret"; } ];
-            enableRecommendedPairwiseCiphers = true;
+{
+  ap =
+    { config, ... }:
+    {
+      networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
+        {
+          address = "192.168.1.3";
+          prefixLength = 24;
+        }
+      ];
+      services.hostapd = {
+        enable = true;
+        radios.wlan0 = {
+          channel = 1;
+          networks.wlan0 = {
+            ssid = "NixOS Test Wi-Fi Network";
+            authentication = {
+              mode = "wpa3-sae";
+              saePasswords = [ { password = "supersecret"; } ];
+              enableRecommendedPairwiseCiphers = true;
+            };
           };
         };
       };
-    };
-    services.vwifi = {
-      module = {
-        enable = true;
-        macPrefix = "74:F8:F6:00:01";
+      services.vwifi = {
+        module = {
+          enable = true;
+          macPrefix = "74:F8:F6:00:01";
+        };
+        client = {
+          enable = true;
+          serverAddress = "192.168.1.2";
+        };
       };
-      client = {
-        enable = true;
-        serverAddress = "192.168.1.2";
-      };
     };
-  };
+}
 ```
 
 ### Station {#sec-nixos-test-wifi-station}
@@ -89,37 +93,39 @@ ap =
 A node like this acts as a wireless client.
 
 ```nix
-station =
-  { config, ... }:
-  {
-    networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-      {
-        address = "192.168.1.3";
-        prefixLength = 24;
-      }
-    ];
-    networking.wireless = {
-      # No, really, we want it enabled!
-      enable = lib.mkOverride 0 true;
-      interfaces = [ "wlan0" ];
-      networks = {
-        "NixOS Test Wi-Fi Network" = {
-          psk = "supersecret";
-          authProtocols = [ "SAE" ];
+{
+  station =
+    { config, ... }:
+    {
+      networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
+        {
+          address = "192.168.1.3";
+          prefixLength = 24;
+        }
+      ];
+      networking.wireless = {
+        # No, really, we want it enabled!
+        enable = lib.mkOverride 0 true;
+        interfaces = [ "wlan0" ];
+        networks = {
+          "NixOS Test Wi-Fi Network" = {
+            psk = "supersecret";
+            authProtocols = [ "SAE" ];
+          };
+        };
+      };
+      services.vwifi = {
+        module = {
+          enable = true;
+          macPrefix = "74:F8:F6:00:02";
+        };
+        client = {
+          enable = true;
+          serverAddress = "192.168.1.2";
         };
       };
     };
-    services.vwifi = {
-      module = {
-        enable = true;
-        macPrefix = "74:F8:F6:00:02";
-      };
-      client = {
-        enable = true;
-        serverAddress = "192.168.1.2";
-      };
-    };
-  };
+}
 ```
 
 ### Monitor {#sec-nixos-test-wifi-monitor}
@@ -128,25 +134,28 @@ When the monitor mode interface is enabled, this node will receive
 all packets broadcast by all other nodes through the spy interface.
 
 ```nix
-monitor =
-  { config, ... }:
-  {
-    networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-      {
-        address = "192.168.1.4";
-        prefixLength = 24;
-      }
-    ];
+{
+  monitor =
+    { config, ... }:
+    {
+      networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
+        {
+          address = "192.168.1.4";
+          prefixLength = 24;
+        }
+      ];
 
-    services.vwifi = {
-      module = {
-        enable = true;
-        macPrefix = "74:F8:F6:00:03";
-      };
-      client = {
-        enable = true;
-        spy = true;
-        serverAddress = "192.168.1.2";
+      services.vwifi = {
+        module = {
+          enable = true;
+          macPrefix = "74:F8:F6:00:03";
+        };
+        client = {
+          enable = true;
+          spy = true;
+          serverAddress = "192.168.1.2";
+        };
       };
     };
+}
 ```

@@ -29,11 +29,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/frescobaldi/python-ly/releases/tag/${src.tag}";
     description = "Tool and library for manipulating LilyPond files";
     homepage = "https://github.com/frescobaldi/python-ly";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
   };
 }

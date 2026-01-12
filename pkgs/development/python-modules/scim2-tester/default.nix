@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   scim2-client,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   version = "0.1.14";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit version;
@@ -36,17 +33,18 @@ buildPythonPackage rec {
     scim2-server
     pytest-httpserver
     cacert
-  ] ++ optional-dependencies.httpx;
+  ]
+  ++ optional-dependencies.httpx;
 
   pythonImportsCheck = [ "scim2_tester" ];
 
   optional-dependencies.httpx = scim2-client.optional-dependencies.httpx;
 
-  meta = with lib; {
+  meta = {
     description = "SCIM RFCs server compliance checker";
     homepage = "https://scim2-tester.readthedocs.io/";
     changelog = "https://github.com/python-scim/scim2-tester/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

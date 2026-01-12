@@ -21,7 +21,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
   };
 
-  useFetchCargoVendor = true;
+  # Patch the vendored esl01-indexedlog crate.
+  # This is necessary to fix the build for rust 1.89. See:
+  # - https://github.com/NixOS/nixpkgs/issues/437051
+  # - https://github.com/arxanas/git-branchless/issues/1585
+  # - https://github.com/facebook/sapling/issues/1119
+  # The patch is derived from:
+  # - https://github.com/facebook/sapling/commit/9e27acb84605079bf4e305afb637a4d6801831ac
+  postPatch = ''
+    (
+      cd ../git-branchless-*-vendor/esl01-indexedlog-*/
+      patch -p1 < ${./fix-esl01-indexedlog-for-rust-1_89.patch}
+    )
+  '';
+
   cargoHash = "sha256-i7KpTd4fX3PrhDjj3R9u98rdI0uHkpQCxSmEF+Gu7yk=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -54,12 +67,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_switch_auto_switch_interactive"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "git-branchless";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nh2
       hmenke
       bryango

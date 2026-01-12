@@ -9,7 +9,7 @@
 
   _module.args.result =
     let
-      r = builtins.removeAttrs config [ "_module" ];
+      r = removeAttrs config [ "_module" ];
     in
     builtins.trace (builtins.deepSeq r r) (
       r == {

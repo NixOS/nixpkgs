@@ -54,7 +54,8 @@ let
   plugins = {
     amqp.buildInputs = [
       yajl
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rabbitmq-c ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ rabbitmq-c ];
     apache.buildInputs = [ curl ];
     ascent.buildInputs = [
       curl
@@ -80,14 +81,13 @@ let
     ];
     dns.buildInputs = [ libpcap ];
     ipmi.buildInputs = [ openipmi ];
-    iptables.buildInputs =
-      [
-        libpcap
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        iptables
-        libmnl
-      ];
+    iptables.buildInputs = [
+      libpcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      iptables
+      libmnl
+    ];
     java.buildInputs = [
       jdk
       libgcrypt
@@ -104,13 +104,12 @@ let
     mysql.buildInputs = lib.optionals (libmysqlclient != null) [
       libmysqlclient
     ];
-    netlink.buildInputs =
-      [
-        libpcap
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libmnl
-      ];
+    netlink.buildInputs = [
+      libpcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libmnl
+    ];
     network.buildInputs = [ libgcrypt ];
     nginx.buildInputs = [ curl ];
     notify_desktop.buildInputs = [
@@ -150,16 +149,15 @@ let
       curl
       varnish
     ];
-    virt.buildInputs =
-      [
-        libvirt
-        libxml2
-        yajl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        lvm2
-        udev
-      ];
+    virt.buildInputs = [
+      libvirt
+      libxml2
+      yajl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      lvm2
+      udev
+    ];
     write_http.buildInputs = [
       curl
       yajl
@@ -194,9 +192,7 @@ let
 
   buildInputs =
     if enabledPlugins == null then
-      builtins.concatMap pluginBuildInputs (
-        builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
-      )
+      builtins.concatMap pluginBuildInputs (builtins.attrNames (removeAttrs plugins [ "xencpu" ]))
     else
       builtins.concatMap pluginBuildInputs enabledPlugins;
 in

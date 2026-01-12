@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   setuptools,
 }:
 
@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "pastedeploy";
@@ -21,14 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-yR7UxAeF0fQrbU7tl29GpPeEAc4YcxHdNQWMD67pP3g=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail " --cov" ""
-  '';
-
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "paste.deploy" ];
 

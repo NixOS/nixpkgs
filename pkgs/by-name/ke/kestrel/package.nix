@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bKQBOk9yUqgnufRyyqXatsRHpesbM49rAkz0dD5XE80=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cwEHxbRFdOLmQy0FS4U6g785szMWISe6vkXvtj4VwPs=";
 
   nativeBuildInputs = [
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash --name kestrel completion/kestrel.bash-completion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "File encryption done right";
     mainProgram = "kestrel";
     longDescription = "
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage rec {
       that lets you encrypt files to anyone with a public key.
     ";
     homepage = "https://getkestrel.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

@@ -16,7 +16,7 @@ let
       rtp = "${derivation}/${path}/${rtpFilePath}";
     }
     // {
-      overrideAttrs = f: mkTmuxPlugin (attrs // f attrs);
+      overrideAttrs = f: mkTmuxPlugin (attrs // (if lib.isFunction f then f attrs else f));
     };
 
   mkTmuxPlugin =
@@ -96,7 +96,7 @@ in
     rtpFilePath = "scroll_copy_mode.tmux";
     meta = {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
-      description = "better mouse support for tmux";
+      description = "Better mouse support for tmux";
       longDescription = ''
         Features:
 
@@ -122,12 +122,12 @@ in
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
     '';
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/catppuccin/tmux";
-      description = "Soothing pastel theme for Tmux!";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ jnsgruk ];
+      description = "Soothing pastel theme for Tmux";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = [ ];
     };
   };
 
@@ -142,7 +142,7 @@ in
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
-      description = "continuous saving of tmux environment";
+      description = "Continuous saving of tmux environment";
       longDescription = ''
         Features:
         * continuous saving of tmux environment
@@ -220,17 +220,17 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.1.0";
+    version = "3.2.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-WNgCa8F618JQiHDM1YxHj7oR7w+7U6SU89K90RYIUh8=";
+      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
       downloadPage = "https://github.com/dracula/tmux";
-      description = "Feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux";
       changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
@@ -238,14 +238,34 @@ in
     };
   };
 
+  dotbar = mkTmuxPlugin rec {
+    pluginName = "dotbar";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "vaaleyard";
+      repo = "tmux-dotbar";
+      tag = version;
+      hash = "sha256-n9k18pJnd5mnp9a7VsMBmEHDwo3j06K6/G6p7/DTyIY=";
+    };
+    meta = {
+      homepage = "https://github.com/vaaleyard/tmux-dotbar";
+      downloadPage = "https://github.com/vaaleyard/tmux-dotbar";
+      description = "Simple and minimalist status bar for tmux";
+      changelog = "https://github.com/vaaleyard/tmux-dotbar/releases/tag/${version}";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "0-unstable-2024-08-25";
+    version = "0-unstable-2025-07-27";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "bf9e666f2a6a8172ebe99fff61b574ba740cffc2";
-      hash = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
+      rev = "b04dcf14496ffda629d8aa3a2ac63e4e08d2fdc9";
+      hash = "sha256-lknfek9Fu/RDHbq5HMaiNqc24deni5phzExWOkYRS+o";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [ pkgs.python3 ];
@@ -255,11 +275,13 @@ in
        wrapProgram $target/scripts/open.sh \
          --prefix PATH : ${
            with pkgs;
-           lib.makeBinPath [
-             fzf
-             xclip
-             wl-clipboard
-           ]
+           lib.makeBinPath (
+             [ fzf ]
+             ++ lib.optionals stdenv.hostPlatform.isLinux [
+               xclip
+               wl-clipboard
+             ]
+           )
          }
     '';
     meta = {
@@ -270,6 +292,7 @@ in
       maintainers = with lib.maintainers; [
         kidd
         fnune
+        deejayem
       ];
     };
   };
@@ -336,23 +359,43 @@ in
       rev = "28ed7ce3c73a328d8463d4f4aaa6ccb851e520fa";
       hash = "sha256-tl0SjG/CeolrN7OIHj6MgkB9lFmFgEuJevsSuwVs+78=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/wfxr/tmux-fzf-url";
-      description = "Quickly open urls on your terminal screen!";
-      license = licenses.mit;
-      platforms = platforms.unix;
+      description = "Quickly open urls on your terminal screen";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
     };
   };
 
-  gruvbox = mkTmuxPlugin {
+  gruvbox = mkTmuxPlugin rec {
     pluginName = "gruvbox";
     rtpFilePath = "gruvbox-tpm.tmux";
-    version = "unstable-2022-04-19";
+    version = "2.0.1";
     src = fetchFromGitHub {
       owner = "egel";
       repo = "tmux-gruvbox";
-      rev = "3f9e38d7243179730b419b5bfafb4e22b0a969ad";
-      hash = "sha256-jvGCrV94vJroembKZLmvGO8NknV1Hbgz2IuNmc/BE9A=";
+      tag = "v${version}";
+      hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
+    };
+  };
+
+  harpoon = mkTmuxPlugin {
+    pluginName = "harpoon";
+    rtpFilePath = "harpoon.tmux";
+    version = "0.4.0";
+    src = fetchFromGitHub {
+      owner = "chaitanyabsprip";
+      repo = "tmux-harpoon";
+      rev = "v0.4.0";
+      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+    };
+    meta = {
+      homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      downloadPage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      description = "Tool to bookmark session supporting auto create for sessions";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
     };
   };
 
@@ -369,31 +412,68 @@ in
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
     '';
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
-      license = licenses.gpl3;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ arnarg ];
+      license = lib.licenses.gpl3;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ arnarg ];
     };
   };
 
-  kanagawa = mkTmuxPlugin rec {
+  kanagawa = mkTmuxPlugin {
     pluginName = "kanagawa";
-    version = "0-unstable-2025-02-10";
+    version = "0-unstable-2025-12-17";
     src = fetchFromGitHub {
       owner = "Nybkox";
       repo = "tmux-kanagawa";
-      rev = "5440b9476627bf5f7f3526156a17ae0e3fd232dd";
-      hash = "sha256-sFL9/PMdPJxN7tgpc4YbUHW4PkCXlKmY7a7gi7PLcn8=";
+      rev = "10a59af0a50aacf7e68e6757fb42e94d1804246e";
+      hash = "sha256-ldc++p2PcYdzoOLrd4PGSrueAGNWncdbc5k6wmFM9kQ=";
     };
     meta = {
       homepage = "https://github.com/Nybkox/tmux-kanagawa";
       downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
-      description = "Feature packed kanagawa theme for tmux!";
+      description = "Feature packed kanagawa theme for tmux";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
+  lazy-restore = mkTmuxPlugin rec {
+    pluginName = "lazy-restore";
+    rtpFilePath = "tmux-lazy-restore.tmux";
+    version = "0.1.1";
+    src = fetchFromGitHub {
+      owner = "bcampolo";
+      repo = "tmux-lazy-restore";
+      tag = "v${version}";
+      hash = "sha256-rI9KhV6CiAHTErOKuTla+xVbpiP8RK9wu6goxCKhKiA=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in LICENSE README.md; do
+        rm -rf $target/$f
+      done
+      wrapProgram $target/scripts/tmux-session-manager.sh \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            coreutils
+            findutils
+            fzf
+            gnused
+            jq
+            tmux
+          ]
+        }
+    '';
+    meta = {
+      homepage = "https://github.com/bcampolo/tmux-lazy-restore";
+      description = "session manager plugin that allows sessions to be lazily restored in order to save memory and processing power";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ bbigras ];
     };
   };
 
@@ -408,7 +488,34 @@ in
     };
   };
 
-  mode-indicator = mkTmuxPlugin rec {
+  minimal-tmux-status = mkTmuxPlugin {
+    pluginName = "minimal-tmux-status";
+    rtpFilePath = "minimal.tmux";
+    version = "0-unstable-2025-06-04";
+    src = fetchFromGitHub {
+      owner = "niksingh710";
+      repo = "minimal-tmux-status";
+      rev = "de2bb049a743e0f05c08531a0461f7f81da0fc72";
+      hash = "sha256-0gXtFVan+Urb79AjFOjHdjl3Q73m8M3wFSo3ZhjxcBA=";
+    };
+    meta = {
+      description = "Minimal tmux status line plugin with prefix key indicator";
+      longDescription = ''
+        minimal-tmux-status is a lightweight plugin for tmux that provides a simple, customizable status line.
+        In addition to basic session info, it shows whether the tmux prefix key is currently pressed, helping users
+        quickly identify the prefix state. Designed to be minimal in appearance and dependencies, it is ideal for users
+        who want essential information without clutter.
+      '';
+      homepage = "https://github.com/niksingh710/minimal-tmux-status.git";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        niksingh710
+      ];
+      platforms = lib.platforms.unix;
+    };
+  };
+
+  mode-indicator = mkTmuxPlugin {
     pluginName = "mode-indicator";
     version = "unstable-2021-10-01";
     src = fetchFromGitHub {
@@ -417,12 +524,12 @@ in
       rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
       hash = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
       description = "Plugin that displays prompt indicating currently active Tmux mode";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ aacebedo ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ aacebedo ];
     };
   };
 
@@ -536,7 +643,7 @@ in
       wrapProgram $target/scripts/main.sh \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             findutils
             fzf
             gnugrep
@@ -544,7 +651,7 @@ in
             ncurses
             pkgs.pass
             tmux
-          ])
+          ]
         }
     '';
 
@@ -580,11 +687,11 @@ in
       rev = "16bbde801378a70512059541d104c5ae35be32b9";
       hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
     };
-    meta = with lib; {
+    meta = {
       description = "Tmux powerline theme";
       homepage = "https://github.com/wfxr/tmux-power";
-      license = licenses.mit;
-      platforms = platforms.unix;
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
     };
   };
 
@@ -677,7 +784,7 @@ in
       rev = "V${version}";
       hash = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
       description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
       longDescription = ''
@@ -687,9 +794,9 @@ in
         * Switching sessions
         * Viewing current or creating new sessions in one popup
       '';
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ mandos ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ mandos ];
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -700,13 +807,13 @@ in
       wrapProgram $target/bin/t \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             fzf
             zoxide
             coreutils
             gnugrep
             gnused
-          ])
+          ]
         }
     '';
   };
@@ -754,31 +861,31 @@ in
       hash = "sha256-wP3c+p/DM6ve7GUhi0QEzggct7NS4XUa78sVQFSKrfo=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/jabirali/tmux-tilish";
       description = "Plugin which makes tmux work and feel like i3wm";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ arnarg ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ arnarg ];
     };
   };
 
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.5.3";
+    version = "1.6.6";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
-      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
+      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
-      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night.";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ redyf ];
+      description = "Clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ redyf ];
     };
   };
 
@@ -860,11 +967,29 @@ in
     rtpFilePath = "main.tmux";
     meta = {
       homepage = "https://github.com/erikw/tmux-powerline";
-      description = "Empowering your tmux (status bar) experience!";
+      description = "Empowering your tmux (status bar) experience";
       longDescription = "A tmux plugin giving you a hackable status bar consisting of dynamic & beautiful looking powerline segments, written purely in bash.";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ thomasjm ];
+    };
+  };
+
+  tmux-session-manager = mkTmuxPlugin rec {
+    pluginName = "tmux-session-manager";
+    version = "1.1.1";
+    src = fetchFromGitHub {
+      owner = "PhilVoel";
+      repo = "tmux-session-manager";
+      tag = "v${version}";
+      hash = "sha256-WzzqfMRAF8vxrnYnudD6CZVn52bZyCSRaByQRRRK9X8=";
+    };
+    rtpFilePath = "session_manager.tmux";
+    meta = {
+      homepage = "https://github.com/PhilVoel/tmux-session-manager";
+      description = "Save and restore your tmux sessions, one by one";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ PhilVoel ];
     };
   };
 
@@ -947,11 +1072,11 @@ in
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
           --prefix PATH : ${
-            with pkgs;
-            lib.makeBinPath ([
+
+            lib.makeBinPath [
               pkgs.fzf
               pkgs.zoxide
-            ])
+            ]
           }
 
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
@@ -983,24 +1108,24 @@ in
       hash = "sha256-ITZMu2q80deOf0zqgYJDDgWQHWhJEzZlK6lVFPY4FIw=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events";
       description = "Makes FocusGained and FocusLost autocommand events work in vim when using tmux";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2022-08-21";
+    version = "unstable-2025-07-15";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
-      rev = "afb45a55b452b9238159047ce7c6e161bd4a9907";
-      hash = "sha256-8A+Yt9uhhAP76EiqUopE8vl7/UXkgU2x000EOcF7pl0=";
+      rev = "c45243dc1f32ac6bcf6068e5300f3b2b237e576a";
+      hash = "sha256-IEPnr/GdsAnHzdTjFnXCuMyoNLm3/Jz4cBAM0AJBrj8=";
     };
   };
 
@@ -1015,12 +1140,12 @@ in
       hash = "sha256-of9E/npEsF1JVc9ttwrbC5WkIAwCNBJAgTfExfj79i4=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/xamut/tmux-weather";
       description = "Shows weather in the status line";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ jfvillablanca ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ jfvillablanca ];
     };
   };
 
@@ -1049,12 +1174,31 @@ in
       rev = "v${version}";
       hash = "sha256-0LIql8as2+OendEHVqR0F3pmQTxC1oqapwhxT+34lJo=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/o0th/tmux-nova";
-      description = "tmux-nova theme";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ o0th ];
+      description = "Tmux-nova theme";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ o0th ];
+    };
+  };
+
+  tmux-toggle-popup = mkTmuxPlugin rec {
+    pluginName = "tmux-toggle-popup";
+    rtpFilePath = "toggle-popup.tmux";
+    version = "0.4.4";
+    src = fetchFromGitHub {
+      owner = "loichyan";
+      repo = "tmux-toggle-popup";
+      tag = "v${version}";
+      hash = "sha256-tiiM5ETSrceyAyqhYRXjG1qCbjzZ0NJL5GWWbWX7Cbo=";
+    };
+    meta = {
+      homepage = "https://github.com/loichyan/tmux-toggle-popup";
+      description = "Handy plugin to create toggleable popups";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ szaffarano ];
     };
   };
 }

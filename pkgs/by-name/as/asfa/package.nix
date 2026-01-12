@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage {
   pname = "asfa";
   inherit version src;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1aSUH1F6W7+3YQOphmF9olYmPuH/OJ9eIW5j6Jebn+s=";
 
   outputs = [

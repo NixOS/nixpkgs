@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0yLEpNkl7KjBEGxNONtfMjVlWMSKGZ6TbYJMsCeQ3ms=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-v4lgHx+sR58CshZJCUYrtaW4EDFBUKFPJJ6V+eyf5Bc=";
 
   cargoBuildFlags = [
@@ -23,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     "ezno"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript compiler and TypeScript checker with a focus on static analysis and runtime performance";
     mainProgram = "ezno";
     homepage = "https://github.com/kaleidawave/ezno";
     changelog = "https://github.com/kaleidawave/ezno/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

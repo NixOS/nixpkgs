@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emoji on the command line";
     homepage = "https://github.com/mrowa44/emojify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ snowflake ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "emojify";
   };
 }

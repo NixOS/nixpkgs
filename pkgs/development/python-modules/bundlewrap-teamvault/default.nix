@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bwtv" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trehn/bundlewrap-teamvault";
     description = "Pull secrets from TeamVault into your BundleWrap repo";
-    license = [ licenses.gpl3 ];
+    license = [ lib.licenses.gpl3 ];
     maintainers = [ ];
   };
 }

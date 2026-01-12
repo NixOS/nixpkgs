@@ -8,23 +8,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
-  version = "1.32.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "typos";
     tag = "v${version}";
-    hash = "sha256-1IILk52HyeGMZC+oD2tIUApEgV8RAojmAlVP/uQIng0=";
+    hash = "sha256-daiM9mhLcYNdz8UPqGfUgKQ0CtULCQvHH/tAbk32w1c=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-HKJ9ndh23ho3PtWUpGPaGOaECQC2dEfKp0D1N2PY9Ew=";
+  cargoHash = "sha256-BQj3RZWFIO+BucHVHdjEH60iwjunPJwlfdIFHBRmxls=";
 
   passthru.updateScript = nix-update-script { };
 
+  preCheck = ''
+    export LC_ALL=C.UTF-8
+  '';
+
+  postCheck = ''
+    unset LC_ALL
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Source code spell checker";
@@ -36,7 +42,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       mgttlinger
     ];
   };

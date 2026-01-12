@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yaydl";
-  version = "0.17.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "dertuxmalwieder";
     repo = "yaydl";
     rev = "release-${version}";
-    sha256 = "sha256-r+UkwEtuGL6los9ohv86KA/3qsaEkpnI4yV/UnYelgk=";
+    sha256 = "sha256-X5D4kC5P5qHLSlTa9sQUAql1zK+Iut24224wvqihfAY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-pljSw8iQFV6ymg2GKwI+P7R4jvysyFFC1EM25Wi8Los=";
+  cargoHash = "sha256-nt9S9KrHO8Vp75XZMQ0RAiALpdQ5LxI2Yaf3LRQD+fE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,10 +33,10 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://code.rosaelefanten.org/yaydl";
     description = "Yet another youtube down loader";
-    license = licenses.cddl;
+    license = lib.licenses.cddl;
     maintainers = [ ];
     mainProgram = "yaydl";
   };

@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "eth-account";
-  version = "0.13.5";
+  version = "0.13.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-account";
     tag = "v${version}";
-    hash = "sha256-CBD0vJLYA+3FreOTsVXJlDJhRvPbDUn4X55o6EF+uBA=";
+    hash = "sha256-Ipz2zIKCpIzKBtX0UZnvpKZeTUcDPbGTzMgmcJC/4qs=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     eth-rlp
     eth-utils
     hexbytes
+    pydantic
     rlp
     websockets
   ];
@@ -73,6 +74,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "eth_account" ];
+
+  pythonRelaxDeps = [ "eth-keyfile" ];
 
   meta = {
     description = "Account abstraction library for web3.py";

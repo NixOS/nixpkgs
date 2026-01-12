@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.1.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "pyfma";
@@ -43,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfma" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fused multiply-add for Python";
     homepage = "https://github.com/nschloe/pyfma";
     changelog = "https://github.com/nschloe/pyfma/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

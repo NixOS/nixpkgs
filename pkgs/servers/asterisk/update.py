@@ -10,7 +10,7 @@ from pathlib import Path
 URL = "https://downloads.asterisk.org/pub/telephony/asterisk/"
 
 page = requests.get(URL)
-changelog = re.compile("^ChangeLog-\d+\.\d+\.\d+\.md$")
+changelog = re.compile(r"^ChangeLog-\d+\.\d+\.\d+\.md$")
 changelogs = [a.get_text() for a in BeautifulSoup(page.text, 'html.parser').find_all('a') if changelog.match(a.get_text())]
 major_versions = {}
 for changelog in changelogs:

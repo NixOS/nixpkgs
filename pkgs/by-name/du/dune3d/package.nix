@@ -37,16 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    cmake
     gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook3
     libxml2 # for xmllints
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
-    cmake
     eigen
     glm
     gtkmm4

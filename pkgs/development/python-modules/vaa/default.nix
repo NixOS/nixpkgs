@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vaa" ];
 
-  meta = with lib; {
+  meta = {
     description = "VAlidators Adapter makes validation by any existing validator with the same interface";
     homepage = "https://github.com/life4/vaa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

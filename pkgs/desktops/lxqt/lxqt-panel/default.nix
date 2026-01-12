@@ -33,15 +33,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel";
-  version = "2.2.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash = "sha256-PKiuFstkUGrRZE4TOvMq8R5991Ay6Ghw17GCtzlybuU=";
+    repo = "lxqt-panel";
+    tag = finalAttrs.version;
+    hash = "sha256-n/U2EgEZfh8mJWtEX+HByqHqtm9NqIXnURqUzSOcvns=";
   };
 
   nativeBuildInputs = [
@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-panel";
     description = "LXQt desktop panel";
     mainProgram = "lxqt-panel";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

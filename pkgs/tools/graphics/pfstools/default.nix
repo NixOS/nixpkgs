@@ -54,25 +54,24 @@ mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      openexr
-      zlib
-      imagemagick6
-      fftwFloat
-      fftw
-      gsl
-      libexif
-      perl
-      qtbase
-      netpbm
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGLU
-      libGL
-      libglut
-    ]
-    ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
+  buildInputs = [
+    openexr
+    zlib
+    imagemagick6
+    fftwFloat
+    fftw
+    gsl
+    libexif
+    perl
+    qtbase
+    netpbm
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGLU
+    libGL
+    libglut
+  ]
+  ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
 
   patches = [
     ./glut.patch
@@ -81,11 +80,11 @@ mkDerivation rec {
     ./pfsalign.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

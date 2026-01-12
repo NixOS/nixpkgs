@@ -12,7 +12,7 @@
   setuptools,
   setuptools-scm,
   withTesseractSupport ? true,
-  withCuneiformSupport ? stdenv.hostPlatform.isLinux,
+  withCuneiformSupport ? false,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
         tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
       }
     ))
-    ++ (lib.optional stdenv.hostPlatform.isLinux (
+    ++ (lib.optional withCuneiformSupport (
       replaceVars ./paths-cuneiform.patch {
         inherit cuneiform;
       }
@@ -54,12 +54,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
     description = "Python wrapper for Tesseract and Cuneiform";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       symphorien
       tomodachi94
     ];

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ dejagnu ];
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
       conversions for values passed between the two languages.
     '';
     homepage = "http://sourceware.org/libffi/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ armeenm ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ armeenm ];
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

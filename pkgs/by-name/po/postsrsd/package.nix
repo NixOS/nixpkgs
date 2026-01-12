@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "postsrsd";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
     rev = version;
-    sha256 = "sha256-8uy7a3wUGuLE4+6ZPqbFMdPzm6IZqQSvpZzLYAkBxNg=";
+    sha256 = "sha256-Q7tXCd2Mz3WIGnIrbb8mfgT7fcmtVS4EtF0ztYmEsmM=";
   };
 
   cmakeFlags = [
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     libconfuse
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/roehling/postsrsd";
     description = "Postfix Sender Rewriting Scheme daemon";
     mainProgram = "postsrsd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

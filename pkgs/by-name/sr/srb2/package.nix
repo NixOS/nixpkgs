@@ -5,10 +5,9 @@
   fetchFromGitHub,
   cmake,
   curl,
-  nasm,
   libopenmpt,
+  miniupnpc,
   game-music-emu,
-  libGLU,
   libpng,
   SDL2,
   SDL2_mixer,
@@ -20,18 +19,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "srb2";
-  version = "2.2.13";
+  version = "2.2.15";
 
   src = fetchFromGitHub {
     owner = "STJr";
     repo = "SRB2";
     rev = "SRB2_release_${finalAttrs.version}";
-    hash = "sha256-OSkkjCz7ZW5+0vh6l7+TpnHLzXmd/5QvTidRQSHJYX8=";
+    hash = "sha256-eJ0GYe3Rw6qQXj+jtyt8MkP87DaCiO9ffChg+SpQqaI=";
   };
 
   nativeBuildInputs = [
     cmake
-    nasm
     makeWrapper
     copyDesktopItems
   ];
@@ -41,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     game-music-emu
     libpng
     libopenmpt
+    miniupnpc
     SDL2
     SDL2_mixer
     zlib
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     src = fetchgit {
       url = "https://git.do.srb2.org/STJr/srb2assets-public";
       rev = "SRB2_release_${finalAttrs.version}";
-      hash = "sha256-OXvO5ZlujIYmYevc62Dtx192dxoujQMNFUCrH5quBBg=";
+      hash = "sha256-1kwhWHzL2TbSx1rhFExbMhXqn0HMBRhR6LZiuoRx+iI=";
       fetchLFS = true;
     };
 
@@ -67,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  # Fix build with gcc15 (-std=gnu23)
+  # Note that upstream fixed compatibility with C23 as of commit 639b58c6d718452ef343a0bc927d043bed9e40d6,
+  # so it's likely this can be removed on the next version after 2.2.15.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}/share/srb2"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
@@ -76,22 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Make the build work without internet connectivity
-    # See: https://build.opensuse.org/request/show/1109889
     ./cmake.patch
-    ./thirdparty.patch
   ];
-
-  postPatch = ''
-    substituteInPlace ./src/sdl/ogl_sdl.c \
-      --replace libGLU.so.1 ${libGLU}/lib/libGLU.so.1
-  '';
 
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2";
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      exec = "srb2";
+      icon = "srb2";
       comment = finalAttrs.meta.description;
       desktopName = name;
       genericName = name;
@@ -116,12 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sonic Robo Blast 2 is a 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy";
     homepage = "https://www.srb2.org/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       zeratax
       donovanglover
     ];

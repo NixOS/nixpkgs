@@ -5,5 +5,7 @@
 mkKdeDerivation {
   pname = "kstatusnotifieritem";
 
+  hasPythonBindings = true;
+
   extraNativeBuildInputs = [ qttools ];
 }

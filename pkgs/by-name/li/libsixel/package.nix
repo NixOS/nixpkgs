@@ -60,11 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dpng=disabled"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SIXEL library for console graphics, and converter programs";
     homepage = "https://github.com/libsixel/libsixel";
     maintainers = with lib.maintainers; [ hzeller ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 })

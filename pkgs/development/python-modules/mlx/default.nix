@@ -1,14 +1,31 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   buildPythonPackage,
-  pybind11,
-  cmake,
-  xcbuild,
-  zsh,
-  blas,
-  lapack,
+  fetchFromGitHub,
+  replaceVars,
+
+  # build-system
   setuptools,
+
+  # nativeBuildInputs
+  cmake,
+
+  # buildInputs
+  apple-sdk,
+  fmt,
+  nanobind,
+  nlohmann_json,
+  pybind11,
+
+  # tests
+  numpy,
+  pytestCheckHook,
+  python,
+  runCommand,
+
+  # passthru
+  mlx,
 }:
 
 let
@@ -16,79 +33,124 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
-    rev = "af7d88d808a7608a33723fba067036202910acb3";
-    hash = "sha256-LqNvnUbmq0iziD9VP5OTJCSIy+y/hp5lKCUV7RtKTvM=";
+    rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
+    hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
-  nlohmann_json = fetchFromGitHub {
-    owner = "nlohmann";
-    repo = "json";
-    rev = "v3.11.3";
-    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
-  };
+
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.21.1";
+  version = "0.30.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wxv9bA9e8VyFv/FMh63sUTTNgkXHGQJNQhLuVynczZA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
   };
 
-  pyproject = true;
-
   patches = [
-    # With Darwin SDK 11 we cannot include vecLib/cblas_new.h, this needs to wait for PR #229210
-    # In the meantime, pretend Accelerate is not available and use blas/lapack instead.
-    ./disable-accelerate.patch
+    (replaceVars ./darwin-build-fixes.patch {
+      sdkVersion = apple-sdk.version;
+    })
   ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun" \
+    substituteInPlace pyproject.toml \
+      --replace-fail "nanobind==2.10.2" "nanobind"
+
+    substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
+      --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
   '';
 
   dontUseCmakeConfigure = true;
+
+  enableParallelBuilding = true;
+
+  # Allows multiple cores to be used in Python builds.
+  postUnpack = ''
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
+  '';
 
   # updates the wrong fetcher rev attribute
   passthru.skipBulkUpdate = true;
 
   env = {
-    PYPI_RELEASE = version;
-    # we can't use Metal compilation with Darwin SDK 11
+    DEV_RELEASE = 1;
     CMAKE_ARGS = toString [
+      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
       (lib.cmakeBool "MLX_BUILD_METAL" false)
+      (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
     ];
   };
 
-  nativeBuildInputs = [
-    cmake
-    pybind11
-    xcbuild
-    zsh
-    gguf-tools
-    nlohmann_json
+  build-system = [
     setuptools
   ];
 
-  buildInputs = [
-    blas
-    lapack
+  nativeBuildInputs = [
+    cmake
   ];
 
-  meta = with lib; {
+  buildInputs = [
+    fmt
+    gguf-tools
+    nanobind
+    nlohmann_json
+    pybind11
+  ];
+
+  pythonImportsCheck = [ "mlx" ];
+
+  # Run the mlx Python test suite.
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    "python/tests/"
+  ];
+
+  # Additional testing by executing the example Python scripts supplied with mlx
+  # using the version of the library we've built.
+  passthru.tests = {
+    mlxTest =
+      runCommand "run-mlx-examples"
+        {
+          buildInputs = [ mlx ];
+          nativeBuildInputs = [ python ];
+        }
+        ''
+          cp ${finalAttrs.src}/examples/python/logistic_regression.py .
+          ${python.interpreter} logistic_regression.py
+          rm logistic_regression.py
+
+          cp ${finalAttrs.src}/examples/python/linear_regression.py .
+          ${python.interpreter} linear_regression.py
+          rm linear_regression.py
+
+          touch $out
+        '';
+  };
+
+  meta = {
     homepage = "https://github.com/ml-explore/mlx";
     description = "Array framework for Apple silicon";
-    changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [
-      viraptor
+    maintainers = with lib.maintainers; [
       Gabriella439
+      booxter
+      cameronyule
+      viraptor
     ];
   };
-}
+})

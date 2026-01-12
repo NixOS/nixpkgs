@@ -7,7 +7,6 @@
   flask,
   poetry-core,
   progress,
-  pythonOlder,
   requests,
   yt-dlp,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "yark";
   version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,12 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for YouTube archiving";
     mainProgram = "yark";
     homepage = "https://github.com/Owez/yark";
     changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

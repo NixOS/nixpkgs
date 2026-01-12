@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sexpdata";
   version = "1.0.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sexpdata" ];
 
-  meta = with lib; {
+  meta = {
     description = "S-expression parser for Python";
     homepage = "https://github.com/jd-boyd/sexpdata";
     changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

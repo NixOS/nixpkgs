@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation {
   pname = "gbar";
-  version = "unstable-2024-12-17";
+  version = "0-unstable-2024-12-17";
 
   src = fetchFromGitHub {
     owner = "scorpion-26";
@@ -48,12 +48,12 @@ stdenv.mkDerivation {
     libdbusmenu-gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazingly fast status bar written with GTK";
     homepage = "https://github.com/scorpion-26/gBar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ocfox ];
     mainProgram = "gBar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

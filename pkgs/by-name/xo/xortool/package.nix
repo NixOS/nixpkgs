@@ -28,11 +28,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "xortool" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze multi-byte XOR cipher";
     homepage = "https://github.com/hellman/xortool";
     changelog = "https://github.com/hellman/xortool/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

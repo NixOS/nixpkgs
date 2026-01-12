@@ -7,6 +7,7 @@ import shlex
 import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
+from ipaddress import AddressValueError, IPv6Address
 from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
@@ -55,13 +56,30 @@ class Remote:
             if o in ["-t", "-tt", "RequestTTY=yes", "RequestTTY=force"]:
                 logger.warning(
                     f"detected option '{o}' in NIX_SSHOPTS. SSH's TTY may "
-                    + "cause issues, it is recommended to remove this option"
+                    "cause issues, it is recommended to remove this option"
                 )
                 if not ask_sudo_password:
                     logger.warning(
                         "if you want to prompt for sudo password use "
-                        + "'--ask-sudo-password' option instead"
+                        "'--ask-sudo-password' option instead"
                     )
+
+    def ssh_host(self) -> str:
+        """Fix up host string for SSH.
+
+        It returns an SSH-compatible host string if the host is using an
+        IPv6 address, otherwise it returns the passed host string unmodified.
+        """
+        try:
+            host_split = self.host.split("@")
+            host_fixed = host_split[-1].strip("[]").replace("%25", "%")
+            IPv6Address(host_fixed)
+            if len(host_split) > 1:
+                return host_split[0] + "@" + host_fixed
+            else:
+                return host_fixed
+        except AddressValueError:
+            return self.host
 
 
 # Not exhaustive, but we can always extend it later.
@@ -112,7 +130,7 @@ def run_wrapper(
             "ssh",
             *remote.opts,
             *SSH_DEFAULT_OPTS,
-            remote.host,
+            remote.ssh_host(),
             "--",
             # SSH will join the parameters here and pass it to the shell, so we
             # need to quote it to avoid issues.
@@ -161,7 +179,7 @@ def run_wrapper(
         if sudo and remote and remote.sudo_password is None:
             logger.error(
                 "while running command with remote sudo, did you forget to use "
-                + "--ask-sudo-password?"
+                "--ask-sudo-password?"
             )
         raise
 
@@ -187,7 +205,7 @@ def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
                 "ssh",
                 *remote.opts,
                 *SSH_DEFAULT_OPTS,
-                remote.host,
+                remote.ssh_host(),
                 "--",
                 "pkill",
                 "--signal",

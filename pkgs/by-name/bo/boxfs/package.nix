@@ -56,14 +56,15 @@ stdenv.mkDerivation {
   buildFlags = [
     "static"
     "CC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-D_BSD_SOURCE";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-D_BSD_SOURCE";
 
   installPhase = ''
     mkdir -p $out/bin
     install boxfs boxfs-init $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FUSE file system for box.com accounts";
     longDescription = ''
       Store files on box.com (an account is required). The first time you run
@@ -73,7 +74,7 @@ stdenv.mkDerivation {
       unmount the file system with `fusermount -u mountpoint`.
     '';
     homepage = "https://github.com/drotiro/boxfs2";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "--with-cyrus-sasl=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moriyoshi/cyrus-sasl-xoauth2";
     description = "XOAUTH2 mechanism plugin for cyrus-sasl";
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wentasah ];
   };
 }

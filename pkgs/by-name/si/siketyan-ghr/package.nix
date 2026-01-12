@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-L9+rcdt+MGZSCOJyCE4t/TT6Fjtxvfr9LBJYyRrx208=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xRa/brOYJ19J25wGdtNR2g+ouMyvz9YFXnzepeipWNQ=";
 
   nativeBuildInputs = [
@@ -53,11 +52,11 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Yet another repository management with auto-attaching profiles";
     homepage = "https://github.com/siketyan/ghr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sei40kr ];
     mainProgram = "ghr";
   };
 }

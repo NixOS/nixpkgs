@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.15";
+  version = "6.18";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-hVLfqwirwioPIEjJj9lUH9TXG2iCUHlSeA2rfHxRL1E=";
+    hash = "sha256-CtXcupc6aed5ZQ7xyzNbEu5gcW/HMmYJiVvTPm0qcyU=";
   };
 
   separateDebugInfo = true;
@@ -33,14 +33,16 @@ stdenv.mkDerivation rec {
   # libunwind for -k.
   # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
   # The build will silently fall back and -k will not work on RISC-V.
-  buildInputs =
-    [ libunwind ]
-    # -kk
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
+  buildInputs = [
+    libunwind
+  ]
+  # -kk
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   configureFlags = [
     "--enable-mpers=check"
-  ] ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
+  ]
+  ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
@@ -48,15 +50,15 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://strace.io/";
     description = "System call tracer for Linux";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ]; # gpl2Plus is for the test suite
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       globin
       ma27
       qyliss

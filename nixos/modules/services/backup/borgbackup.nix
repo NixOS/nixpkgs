@@ -89,19 +89,24 @@ let
           ${cfg.postInit}
         fi
       ''
-      + ''
-        (
-          set -o pipefail
-          ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
-          borgWrapper create "''${extraArgs[@]}" \
-            --compression ${cfg.compression} \
-            --exclude-from ${mkExcludeFile cfg} \
-            --patterns-from ${mkPatternsFile cfg} \
-            "''${extraCreateArgs[@]}" \
-            "::$archiveName$archiveSuffix" \
-            ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
-        )
-      ''
+      + (
+        let
+          import-tar = cfg.createCommand == "import-tar";
+        in
+        ''
+          (
+            set -o pipefail
+            ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
+            borgWrapper ${lib.escapeShellArg cfg.createCommand} "''${extraArgs[@]}" \
+              --compression ${cfg.compression} \
+              ${lib.optionalString (!import-tar) "--exclude-from ${mkExcludeFile cfg}"} \
+              ${lib.optionalString (!import-tar) "--patterns-from ${mkPatternsFile cfg}"} \
+              "''${extraCreateArgs[@]}" \
+              "::$archiveName$archiveSuffix" \
+              ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
+          )
+        ''
+      )
       + lib.optionalString cfg.appendFailedSuffix ''
         borgWrapper rename "''${extraArgs[@]}" \
           "::$archiveName$archiveSuffix" "$archiveName"
@@ -165,22 +170,20 @@ let
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
         ProtectSystem = "strict";
-        ReadWritePaths =
-          [
-            "${userHome}/.config/borg"
-            "${userHome}/.cache/borg"
-          ]
-          ++ cfg.readWritePaths
-          # Borg needs write access to repo if it is not remote
-          ++ lib.optional (isLocalPath cfg.repo) cfg.repo;
+        ReadWritePaths = [
+          "${userHome}/.config/borg"
+          "${userHome}/.cache/borg"
+        ]
+        ++ cfg.readWritePaths
+        # Borg needs write access to repo if it is not remote
+        ++ lib.optional (isLocalPath cfg.repo) cfg.repo;
         PrivateTmp = cfg.privateTmp;
       };
-      environment =
-        {
-          BORG_REPO = cfg.repo;
-        }
-        // (mkPassEnv cfg)
-        // cfg.environment;
+      environment = {
+        BORG_REPO = cfg.repo;
+      }
+      // (mkPassEnv cfg)
+      // cfg.environment;
     };
 
   mkBackupTimers =
@@ -208,23 +211,26 @@ let
       {
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
-      (
-        with lib;
-        ''
-          makeWrapper "${original}" "$out/bin/${name}" \
-            ${lib.concatStringsSep " \\\n " (
-              lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
-            )}
-        ''
-      );
 
+      ''
+        makeWrapper "${original}" "$out/bin/${name}" \
+          ${lib.concatStringsSep " \\\n " (
+            lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
+          )}
+      '';
+
+  # Returns a singleton list, due to usage of lib.optional
   mkBorgWrapper =
     name: cfg:
-    mkWrapperDrv {
+    lib.optional (cfg.wrapper != "" && cfg.wrapper != null) (mkWrapperDrv {
       original = lib.getExe config.services.borgbackup.package;
-      name = "borg-job-${name}";
-      set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
-    };
+      name = cfg.wrapper;
+      set = {
+        BORG_REPO = cfg.repo;
+      }
+      // (mkPassEnv cfg)
+      // cfg.environment;
+    });
 
   # Paths listed in ReadWritePaths must exist before service is started
   mkTmpfiles =
@@ -309,6 +315,23 @@ let
     '';
   };
 
+  mkCreateCommandImportTarDumpCommandAssertion = name: cfg: {
+    assertion = cfg.createCommand != "import-tar" || cfg.dumpCommand != null;
+    message = ''
+      Option borgbackup.jobs.${name}.dumpCommand is required when createCommand
+      is set to "import-tar".
+    '';
+  };
+
+  mkCreateCommandImportTarExclusionsAssertion = name: cfg: {
+    assertion = cfg.createCommand != "import-tar" || (cfg.exclude == [ ] && cfg.patterns == [ ]);
+    message = ''
+      Options borgbackup.jobs.${name}.exclude and
+      borgbackup.jobs.${name}.patterns have no effect when createCommand is set
+      to "import-tar".
+    '';
+  };
+
   mkRemovableDeviceAssertions = name: cfg: {
     assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
     message = ''
@@ -376,6 +399,25 @@ in
         { name, config, ... }:
         {
           options = {
+            createCommand = lib.mkOption {
+              type = lib.types.enum [
+                "create"
+                "import-tar"
+              ];
+              description = ''
+                Borg command to use for archive creation. The default (`create`)
+                creates a regular Borg archive.
+
+                Use `import-tar` to instead read a tar archive stream from
+                {option}`dumpCommand` output and import its contents into the
+                repository.
+
+                `import-tar` can not be used together with {option}`exclude` or
+                {option}`patterns`.
+              '';
+              default = "create";
+              example = "import-tar";
+            };
 
             paths = lib.mkOption {
               type = with lib.types; nullOr (coercedTo str lib.singleton (listOf str));
@@ -486,6 +528,16 @@ in
               default = "root";
             };
 
+            wrapper = lib.mkOption {
+              type = with lib.types; nullOr str;
+              description = ''
+                Name of the wrapper that is installed into {env}`PATH`.
+                Set to `null` or `""` to disable it altogether.
+              '';
+              default = "borg-job-${name}";
+              defaultText = "borg-job-<name>";
+            };
+
             encryption.mode = lib.mkOption {
               type = lib.types.enum [
                 "repokey"
@@ -545,6 +597,9 @@ in
               description = ''
                 Exclude paths matching any of the given patterns. See
                 {command}`borg help patterns` for pattern syntax.
+
+                Can not be set when {option}`createCommand` is set to
+                `import-tar`.
               '';
               default = [ ];
               example = [
@@ -560,6 +615,9 @@ in
                 matching patterns is used, so if an include pattern (prefix `+`)
                 matches before an exclude pattern (prefix `-`), the file is
                 backed up. See [{command}`borg help patterns`](https://borgbackup.readthedocs.io/en/stable/usage/help.html#borg-patterns) for pattern syntax.
+
+                Can not be set when {option}`createCommand` is set to
+                `import-tar`.
               '';
               default = [ ];
               example = [
@@ -877,6 +935,8 @@ in
         lib.mapAttrsToList mkPassAssertion jobs
         ++ lib.mapAttrsToList mkKeysAssertion repos
         ++ lib.mapAttrsToList mkSourceAssertions jobs
+        ++ lib.mapAttrsToList mkCreateCommandImportTarDumpCommandAssertion jobs
+        ++ lib.mapAttrsToList mkCreateCommandImportTarExclusionsAssertion jobs
         ++ lib.mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       systemd.tmpfiles.settings = lib.mapAttrs' mkTmpfiles jobs;
@@ -895,7 +955,8 @@ in
 
       environment.systemPackages = [
         config.services.borgbackup.package
-      ] ++ (lib.mapAttrsToList mkBorgWrapper jobs);
+      ]
+      ++ (lib.flatten (lib.mapAttrsToList mkBorgWrapper jobs));
     }
   );
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   scapy,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "boiboite-opener-framework";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
@@ -70,12 +67,12 @@ buildPythonPackage rec {
     "test_0802_search_valid"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Testing framework for industrial protocols implementations and devices";
     homepage = "https://github.com/Orange-Cyberdefense/bof";
     changelog = "https://github.com/Orange-Cyberdefense/bof/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kubexporter";
-  version = "0.6.3";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "bakito";
     repo = "kubexporter";
     tag = "v${version}";
-    hash = "sha256-9TtoACuX6dEcoWX246a5PofEIksB5KnxzRjdk/HV/Ww=";
+    hash = "sha256-GSM4sO28RpCSAJRhhntkqD3RrMyZ1zEaEVeWFTqArAE=";
   };
 
-  vendorHash = "sha256-SWStAW5XkZGM57ZoxrVdxM7vtmZpSPkByrhFREHqfW0=";
+  vendorHash = "sha256-+2wzD7V6De8wd8W+ML+Lr7A8bzpxVExPDg6uuvTh/zE=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,6 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

@@ -35,14 +35,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
   };
 
-  buildInputs =
-    [ perl' ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
-    ++ lib.optional withAbook abook
-    ++ lib.optional withGnupg gnupg
-    ++ lib.optional withGoobook goobook
-    ++ lib.optional withKhard khard
-    ++ lib.optional withMu mu;
+  buildInputs = [
+    perl'
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
+  ++ lib.optional withAbook abook
+  ++ lib.optional withGnupg gnupg
+  ++ lib.optional withGoobook goobook
+  ++ lib.optional withKhard khard
+  ++ lib.optional withMu mu;
 
   configureFlags =
     [ ]
@@ -56,14 +57,14 @@ stdenv.mkDerivation rec {
     ./add-methods-to-rc.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.spinnaker.de/lbdb/";
     description = "Little Brother's Database";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       kaiha
       bfortz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

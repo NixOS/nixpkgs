@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pathspec,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "trailrunner";
   version = "1.4.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "omnilib";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trailrunner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to walk paths and run things";
     homepage = "https://github.com/omnilib/trailrunner";
     changelog = "https://github.com/omnilib/trailrunner/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

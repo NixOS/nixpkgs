@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.23.1";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-sumo";
     repo = "sumo";
-    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-yXXOCvlHAzGmNQeXyWQtmq1UdkQ6qt4L9noUii/voP4=";
+    tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-rUa5DpoBfnviSEmzPEiVnZU0KGavAIOFoysQ74uTll0=";
     fetchSubmodules = true;
   };
 
@@ -48,41 +48,40 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs =
-    [
-      bzip2
-      eigen
-      ffmpeg
-      fox_1_6
-      gdal
-      gl2ps
-      gpp
-      gtest
-      jdk
-      libGL
-      libGLU
-      libjpeg
-      libpng
-      libtiff
-      libxcrypt
-      openscenegraph
-      proj
-      python3Packages.setuptools
-      xercesc
-      zlib
-      python3
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcursor
-      libXext
-      libXfixes
-      libXft
-      libXrandr
-      libXrender
-    ]);
+  buildInputs = [
+    bzip2
+    eigen
+    ffmpeg
+    fox_1_6
+    gdal
+    gl2ps
+    gpp
+    gtest
+    jdk
+    libGL
+    libGLU
+    libjpeg
+    libpng
+    libtiff
+    libxcrypt
+    openscenegraph
+    proj
+    python3Packages.setuptools
+    xercesc
+    zlib
+    python3
+  ]
+  ++ (with xorg; [
+    libX11
+    libXcursor
+    libXext
+    libXfixes
+    libXft
+    libXrandr
+    libXrender
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "SUMO traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
@@ -92,7 +91,8 @@ stdenv.mkDerivation rec {
       tools for scenario creation.
     '';
     homepage = "https://github.com/eclipse/sumo";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.epl20;
+    maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
   };
 }

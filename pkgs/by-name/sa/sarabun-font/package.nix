@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "sarabun";
-  version = "unstable-2018-08-24";
+  version = "0-unstable-2018-08-24";
 
   src = fetchFromGitHub {
     owner = "cadsondemak";
@@ -20,11 +20,12 @@ stdenv.mkDerivation {
     "doc"
   ];
 
-  buildPhase = ''
+  installPhase = ''
+    runHook preInstall
     mkdir -p $doc/sarabun $out/share/fonts/truetype
-
     cp -r $src/OFL.txt $src/docs/* $doc/sarabun
     cp $src/fonts/*.ttf $out/share/fonts/truetype
+    runHook postInstall
   '';
 
   meta = {

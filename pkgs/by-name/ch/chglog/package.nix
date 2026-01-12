@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "chglog";
-  version = "0.7.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "chglog";
     tag = "v${version}";
-    hash = "sha256-i7KJB5EWq1khP4oxxXGH2tYLJ9s6MAWd1Ndfk7LV0Vc=";
+    hash = "sha256-gDTZFUaaAnv/eJ9ZoygUNvfJE8PJc5vcGhd+Qown0SY=";
   };
 
-  vendorHash = "sha256-EyA440J3QLQI+NvSZrksjIlmNOIOt1YO/5ZZMTV/GIs=";
+  vendorHash = "sha256-1IZJ/Mq1Oskm7UU0IYfGtOHBFwIzpTLn68OSD0K8hyM=";
 
   ldflags = [
     "-s"
@@ -30,7 +30,7 @@ buildGoModule rec {
     changelog = "https://github.com/goreleaser/chglog/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "chglog";
   };
 }

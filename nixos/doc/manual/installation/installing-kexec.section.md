@@ -41,15 +41,12 @@ In case you want to describe your own system closure to kexec into, instead of
 the default installer image, you can build your own `configuration.nix`:
 
 ```nix
-{ modulesPath, ... }: {
-  imports = [
-    (modulesPath + "/installer/netboot/netboot-minimal.nix")
-  ];
+{ modulesPath, ... }:
+{
+  imports = [ (modulesPath + "/installer/netboot/netboot-minimal.nix") ];
 
   services.openssh.enable = true;
-  users.users.root.openssh.authorizedKeys.keys = [
-    "my-ssh-pubkey"
-  ];
+  users.users.root.openssh.authorizedKeys.keys = [ "my-ssh-pubkey" ];
 }
 ```
 

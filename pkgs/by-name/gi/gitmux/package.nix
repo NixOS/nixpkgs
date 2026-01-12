@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitmux";
-  version = "0.11.2";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "arl";
     repo = "gitmux";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0Cw98hTg8qPu7BUTBDEgFBOpoCxstPW9HeNXQUUjgGA=";
+    sha256 = "sha256-TObnmV/NiMCcyC9zG0OcCuCqUChQZmpqPptQUDtF85A=";
   };
 
-  vendorHash = "sha256-PHY020MIuLlC1LqNGyBJRNd7J+SzoHbNMPAil7CKP/M=";
+  vendorHash = "sha256-MvvJGB9KPMYeqYclmAAF6qlU7vrJFMPToogbGDRoCpU=";
 
   nativeCheckInputs = [ git ];
 
@@ -36,11 +36,11 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Git in your tmux status bar";
     homepage = "https://github.com/arl/gitmux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nialov ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nialov ];
     mainProgram = "gitmux";
   };
 })

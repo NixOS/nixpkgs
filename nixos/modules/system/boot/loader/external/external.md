@@ -12,7 +12,8 @@ FooBoot provides a program at `${pkgs.fooboot}/bin/fooboot-install` which takes 
 You can enable FooBoot like this:
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   boot.loader.external = {
     enable = true;
     installHook = "${pkgs.fooboot}/bin/fooboot-install";

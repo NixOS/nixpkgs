@@ -2,13 +2,23 @@
   lib,
   stdenv,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
   callPackage,
   nixosTests,
-  authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; },
+  authelia-web ? callPackage ./web.nix {
+    inherit
+      nodejs
+      fetchPnpmDeps
+      pnpmConfigHook
+      pnpm
+      fetchFromGitHub
+      ;
+  },
 }:
 
 let
@@ -60,17 +70,16 @@ buildGoModule rec {
   # several tests with networking and several that want chromium
   doCheck = false;
 
-  postInstall =
-    ''
-      mkdir -p $out/etc/authelia
-      cp config.template.yml $out/etc/authelia
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd authelia \
-        --bash <($out/bin/authelia completion bash) \
-        --fish <($out/bin/authelia completion fish) \
-        --zsh <($out/bin/authelia completion zsh)
-    '';
+  postInstall = ''
+    mkdir -p $out/etc/authelia
+    cp config.template.yml $out/etc/authelia
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd authelia \
+      --bash <($out/bin/authelia completion bash) \
+      --fish <($out/bin/authelia completion fish) \
+      --zsh <($out/bin/authelia completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -90,7 +99,7 @@ buildGoModule rec {
     tests = { inherit (nixosTests) authelia; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.authelia.com/";
     changelog = "https://github.com/authelia/authelia/releases/tag/v${version}";
     description = "Single Sign-On Multi-Factor portal for web apps";
@@ -102,8 +111,8 @@ buildGoModule rec {
       should either be allowed or redirected to Authelia's portal for
       authentication.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       dit7ya
       nicomem

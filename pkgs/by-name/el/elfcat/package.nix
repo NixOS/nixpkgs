@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-8jyOYV455APlf8F6HmgyvgfNGddMzrcGhj7yFQT6qvg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-oVl+40QunvKZIbhsOgqNTsvWduCXP/QJ0amT8ECSsMU=";
 
-  meta = with lib; {
+  meta = {
     description = "ELF visualizer, generates HTML files from ELF binaries";
     homepage = "https://github.com/ruslashev/elfcat";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ moni ];
     mainProgram = "elfcat";
   };
 }

@@ -12,17 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${version}";
-    hash = "sha256-pk7xlNgYybKHm7Zn6cbO1CMUOAKVtX1uxq+6vl48FZk=";
+    hash = "sha256-ahinXciTzG4fBtWKLSWP9uFG3Z3M7NHg60mcziMV1qM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3Po9PA5XJeiwkMaq/8glfaC1E7QmSeuR81BwOyMznOM=";
+  cargoHash = "sha256-37AoQOfntpdLb0EPRmlgqrElLts7IGW0fr8g2TeTTRc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,13 +43,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = zola; };
 
-  meta = with lib; {
+  meta = {
     description = "Fast static site generator with everything built-in";
     mainProgram = "zola";
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dandellion
       dywedir
       _0x4A6F

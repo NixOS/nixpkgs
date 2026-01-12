@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stb";
-  version = "unstable-2023-01-29";
+  version = "0-unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "nothings";
@@ -38,14 +38,19 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/include/stb
     cp *.h $out/include/stb/
+    cp *.c $out/include/stb/
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single-file public domain libraries for C/C++";
     homepage = "https://github.com/nothings/stb";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      mit
+      # OR
+      unlicense
+    ];
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

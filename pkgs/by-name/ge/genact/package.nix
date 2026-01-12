@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "genact";
     rev = "v${version}";
-    sha256 = "sha256-Rn9kJWutWKPj9cLu2ZJKITmC+I8/ikhCAoIp00Yg6ZA=";
+    sha256 = "sha256-6d8p+Hon9zZMNRLX9+eBB3K5PffsX7w5PcbIiesCvSc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ttg9stfiIYCXk35+GWdGOzQrM/aYZPZK+e9y+zw1ZXQ=";
+  cargoHash = "sha256-umb+hf61k/sSfPVUCS1qJ0p+NLfjgZffuEWoQj1NIVY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,12 +31,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/genact --print-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nonsense activity generator";
     homepage = "https://github.com/svenstaro/genact";
     changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "genact";
   };
 }

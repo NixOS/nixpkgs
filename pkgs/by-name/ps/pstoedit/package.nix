@@ -36,31 +36,30 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
   ];
-  buildInputs =
-    [
-      zlib
-      ghostscript
-      imagemagick
-      plotutils
-      gd
-      libjpeg
-      libwebp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    zlib
+    ghostscript
+    imagemagick
+    plotutils
+    gd
+    libjpeg
+    libwebp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/pstoedit \
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translates PostScript and PDF graphics into other vector formats";
     homepage = "https://sourceforge.net/projects/pstoedit/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
     mainProgram = "pstoedit";
   };
 }

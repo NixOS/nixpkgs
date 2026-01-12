@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mac-alias,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ds-store";
   version = "1.3.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "al45tair";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ds_store" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/al45tair/ds_store";
     description = "Manipulate Finder .DS_Store files from Python";
     mainProgram = "ds_store";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

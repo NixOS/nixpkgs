@@ -4,14 +4,15 @@
   fetchFromGitHub,
   fetchPypi,
   nodejs,
-  python3,
+  python312,
   gettext,
   nixosTests,
+  pretix,
   plugins ? [ ],
 }:
 
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       django = super.django_4;
@@ -35,18 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
     };
   };
 
   pname = "pretix";
-  version = "2025.4.0";
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K/llv85CWp+V70BiYAR7lT+urGdLbXBhWpCptxUqDrc=";
+    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
   };
 
   npmDeps = buildNpmPackage {
@@ -54,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-FqwgHmIUfcipVbeXmN4uYPHdmnuaSgOQ9LHgKRf16ys=";
+    npmDepsHash = "sha256-GaUPVSHRZg5Aihk4WAjmF8M6zIL99DU9Z3F3dym78bs=";
 
     dontBuild = true;
 
@@ -80,8 +82,13 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "bleach"
     "celery"
+    "css-inline"
     "django-bootstrap3"
+    "django-compressor"
+    "django-formset-js-improved"
+    "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
@@ -89,9 +96,11 @@ python.pkgs.buildPythonApplication rec {
     "importlib-metadata"
     "kombu"
     "markdown"
+    "oauthlib"
     "phonenumberslite"
     "pillow"
     "protobuf"
+    "pycparser"
     "pycryptodome"
     "pyjwt"
     "pypdf"
@@ -101,6 +110,7 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "sentry-sdk"
+    "sepaxml"
     "ua-parser"
     "webauthn"
   ];
@@ -121,6 +131,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
+
+    # npm ci would remove and try to reinstall node_modules
+    substituteInPlace src/pretix/_build.py \
+      --replace-fail "npm ci" "npm install"
   '';
 
   build-system = with python.pkgs; [
@@ -220,7 +234,9 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ./src/manage.py $out/bin/pretix-manage
+    cp ./src/manage.py $out/${python.sitePackages}/pretix/manage.py
+    makeWrapper $out/${python.sitePackages}/pretix/manage.py $out/bin/pretix-manage \
+      --prefix PYTHONPATH : "$PYTHONPATH"
 
     # Trim packages size
     rm -rfv $out/${python.sitePackages}/pretix/static.dist/node_prefix
@@ -241,23 +257,15 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
-    "--reruns"
-    "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
-
-    # outdated translation files
-    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
-    "test_different_dates_spanish"
-    "test_same_day_spanish"
-    "test_same_month_spanish"
-    "test_same_year_spanish"
   ];
 
   preCheck = ''
@@ -281,10 +289,10 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       # 3rd party components below src/pretix/static
       bsd2
@@ -295,8 +303,8 @@ python.pkgs.buildPythonApplication rec {
       # all other files below src/pretix/static and src/pretix/locale and aux scripts
       asl20
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

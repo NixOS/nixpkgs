@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
     xorgproto
   ];
 
+  postPatch = ''
+    sed -i '/AM_ICONV/i AC_CONFIG_MACRO_DIRS([m4])' configure.ac
+  '';
+
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   enableParallelBuilding = true;

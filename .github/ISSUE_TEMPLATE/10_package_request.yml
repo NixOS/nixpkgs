@@ -1,0 +1,36 @@
+name: "Request: Nix Package"
+description: "Package requests are no longer accepted. Please open a Pull Request with your desired package instead."
+title: "Package Request"
+labels: ["0.kind: packaging request", "4.workflow: auto-close"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        Thank you for your interest in packaging new software in Nixpkgs. Unfortunately, to mitigate the unsustainable growth of unmaintained packages, **Nixpkgs is no longer accepting package requests** via Issues.
+
+        As a [volunteer community][community], we are always open to new contributors. If you wish to see this package in Nixpkgs, **we encourage you to [contribute] it yourself**, via a Pull Request. Anyone can [become a package maintainer][maintainers]! You can find language-specific packaging information in the [Nixpkgs Manual][nixpkgs]. Should you need any help, please reach out to the community on [Matrix] or [Discourse].
+
+        [community]: https://nixos.org/community
+        [contribute]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#quick-start-to-adding-a-package
+        [maintainers]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md
+        [nixpkgs]: https://nixos.org/manual/nixpkgs/unstable/
+        [Matrix]: https://matrix.to/#/#dev:nixos.org
+        [Discourse]: https://discourse.nixos.org/c/dev/14
+
+        ---
+  - type: "checkboxes"
+    id: "ignored"
+    attributes:
+      label: "Issues for new package requests are not accepted. Please open a Pull Request instead."
+      options:
+        - label: "I didn't read any of that."

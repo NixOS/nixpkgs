@@ -14,17 +14,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ashell";
-  version = "0.4.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
     tag = version;
-    hash = "sha256-J97MRYYkNx8Ze4vcxZTDVOSQLCANyIBcDtqZEsEZ80w=";
+    hash = "sha256-nQrBW2pfsExHERGZzJqMG7MskzsJ3zwVyoX6wJZBils=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XDcCCKq/NOzaKTDwVu0GCeGV70IlJ2TvD0w8ib+lEhg=";
+  cargoHash = "sha256-F8oh8uQFthx5gex/ovKADO+ukqzIbmlBM5+shej/OTA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,7 +42,8 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     pipewire
     udev
-  ] ++ runtimeDependencies;
+  ]
+  ++ runtimeDependencies;
 
   meta = {
     description = "Ready to go Wayland status bar for Hyprland";

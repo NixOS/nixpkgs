@@ -13,14 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "hpx";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
     rev = "v${version}";
-    hash = "sha256-yrKG0n5BhrUNXjFWZRpb38/GYQlvMr0PSqUbhmZlgm0=";
+    hash = "sha256-AhByaw1KnEDuRfKiN+/vQMbkG0BJ6Z3+h+QT8scFzAY=";
   };
+
+  patches = [
+    # https://github.com/STEllAR-GROUP/hpx/pull/6731
+    # Fix build with asio >= 1.34.0
+    ./remove_deprecated_asio_features.patch
+  ];
 
   propagatedBuildInputs = [ hwloc ];
   buildInputs = [

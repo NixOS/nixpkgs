@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pylode";
   version = "2.13.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.6";
 
@@ -18,7 +18,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-AtqkxnpEL+580S/iKCaRcsQO6LLYhkJxyNx6fi3atbE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     falcon
     jinja2
@@ -37,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "pylode"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OWL ontology documentation tool using Python and templating, based on LODE";
     homepage = "https://github.com/RDFLib/pyLODE";
     # Next release will move to BSD3
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ koslambrou ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ koslambrou ];
     mainProgram = "pylode";
   };
 }

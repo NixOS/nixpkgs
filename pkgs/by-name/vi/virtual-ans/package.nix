@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://warmplace.ru/soft/ans/virtual_ans-${version}.zip";
-    sha256 = "sha256-tqR7icgURUFOyLJ8+mS17JRf2gK53I2FW/2m8IJPtJE=";
+    hash = "sha256-QrYWTRYCh1YYJFtBukC2kUNoiRlsAJOD1NdB9rcx7yM=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     else
       "";
 
-  meta = with lib; {
+  meta = {
     description = "Photoelectronic microtonal/spectral musical instrument";
     longDescription = ''
       Virtual ANS is a software simulator of the unique Russian synthesizer ANS
@@ -90,14 +90,14 @@ stdenv.mkDerivation rec {
       + supported sound systems: ASIO, DirectSound, MME, ALSA, OSS, JACK, Audiobus, IAA.
     '';
     homepage = "https://warmplace.ru/soft/ans/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
     # I cannot test the Darwin version, so I'll leave it disabled
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ jacg ];
+    maintainers = with lib.maintainers; [ jacg ];
   };
 
 }

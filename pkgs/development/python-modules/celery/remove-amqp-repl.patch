@@ -1,0 +1,32 @@
+diff --git a/celery/bin/celery.py b/celery/bin/celery.py
+index e1fae1a77..cf05a927a 100644
+--- a/celery/bin/celery.py
++++ b/celery/bin/celery.py
+@@ -12,7 +12,6 @@ from click_plugins import with_plugins
+ 
+ from celery import VERSION_BANNER
+ from celery.app.utils import find_app
+-from celery.bin.amqp import amqp
+ from celery.bin.base import CeleryCommand, CeleryOption, CLIContext
+ from celery.bin.beat import beat
+ from celery.bin.call import call
+@@ -186,7 +185,6 @@ celery.add_command(control)
+ celery.add_command(graph)
+ celery.add_command(upgrade)
+ celery.add_command(logtool)
+-celery.add_command(amqp)
+ celery.add_command(shell)
+ celery.add_command(multi)
+ 
+diff --git a/requirements/default.txt b/requirements/default.txt
+index 185b6eddd..fbfc59fd7 100644
+--- a/requirements/default.txt
++++ b/requirements/default.txt
+@@ -3,7 +3,6 @@ kombu>=5.6.0rc1,<5.7
+ vine>=5.1.0,<6.0
+ click>=8.1.2,<9.0
+ click-didyoumean>=0.3.0
+-click-repl>=0.2.0
+ click-plugins>=1.1.1
+ backports.zoneinfo[tzdata]>=0.2.1; python_version < '3.9'
+ python-dateutil>=2.8.2

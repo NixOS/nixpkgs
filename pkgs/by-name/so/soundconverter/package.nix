@@ -18,6 +18,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "soundconverter";
   version = "4.0.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kassoulet";

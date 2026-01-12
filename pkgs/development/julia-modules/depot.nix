@@ -14,7 +14,7 @@
   juliaCpuTarget,
   overridesToml,
   packageImplications,
-  packageNames,
+  project,
   precompile,
   registry,
 }:
@@ -42,8 +42,9 @@ runCommand "julia-depot"
       git
       julia
       (python3.withPackages (ps: with ps; [ pyyaml ]))
-    ] ++ extraLibs;
-    inherit precompile registry;
+    ]
+    ++ extraLibs;
+    inherit precompile project registry;
   }
   (
     ''
@@ -51,19 +52,21 @@ runCommand "julia-depot"
 
       echo "Building Julia depot and project with the following inputs"
       echo "Julia: ${julia}"
+      echo "Project: $project"
       echo "Registry: $registry"
       echo "Overrides ${overridesToml}"
 
       mkdir -p $out/project
       export JULIA_PROJECT="$out/project"
+      cp "$project/Manifest.toml" "$JULIA_PROJECT/Manifest.toml"
+      cp "$project/Project.toml" "$JULIA_PROJECT/Project.toml"
 
       mkdir -p $out/depot/artifacts
       export JULIA_DEPOT_PATH="$out/depot"
       cp ${overridesToml} $out/depot/artifacts/Overrides.toml
 
       # These can be useful to debug problems
-      # export JULIA_DEBUG=Pkg
-      # export JULIA_DEBUG=loading
+      # export JULIA_DEBUG=Pkg,loading
 
       ${setJuliaSslCaRootsPath}
 
@@ -103,26 +106,21 @@ runCommand "julia-depot"
 
         Pkg.Registry.add(Pkg.RegistrySpec(path="${registry}"))
 
-        input = ${lib.generators.toJSON { } packageNames} ::Vector{String}
+        # No need to Pkg.activate() since we set JULIA_PROJECT above
+        println("Running Pkg.instantiate()")
+        Pkg.instantiate()
 
-        if isfile("extra_package_names.txt")
-          append!(input, readlines("extra_package_names.txt"))
-        end
+        # Build is a separate step from instantiate.
+        # Needed for packages like Conda.jl to set themselves up.
+        println("Running Pkg.build()")
+        Pkg.build()
 
-        input = unique(input)
-
-        if !isempty(input)
-          println("Adding packages: " * join(input, " "))
-          Pkg.add(input; preserve=PRESERVE_NONE)
-          Pkg.instantiate()
-
-          if "precompile" in keys(ENV) && ENV["precompile"] != "0" && ENV["precompile"] != ""
-            if isdefined(Sys, :CPU_NAME)
-              println("Precompiling with CPU_NAME = " * Sys.CPU_NAME)
-            end
-
-            Pkg.precompile()
+        if "precompile" in keys(ENV) && ENV["precompile"] != "0" && ENV["precompile"] != ""
+          if isdefined(Sys, :CPU_NAME)
+            println("Precompiling with CPU_NAME = " * Sys.CPU_NAME)
           end
+
+          Pkg.precompile()
         end
 
         # Remove the registry to save space

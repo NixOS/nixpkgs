@@ -88,7 +88,8 @@ mkDerivation rec {
     soundtouch
     libzip
     libhdhomerun
-  ] ++ lib.optional withWebKit qtwebkit;
+  ]
+  ++ lib.optional withWebKit qtwebkit;
   nativeBuildInputs = [
     pkg-config
     which
@@ -103,11 +104,11 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

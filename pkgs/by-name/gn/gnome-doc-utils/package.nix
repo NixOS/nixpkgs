@@ -55,13 +55,13 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of documentation utilities for the GNOME project";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-doc-utils";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

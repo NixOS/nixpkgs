@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
-  version = "8.0.7";
+  version = "8.0.12";
 
   src = fetchFromGitHub {
     owner = "juce-framework";
     repo = "juce";
     tag = finalAttrs.version;
-    hash = "sha256-nl4pUSkUKqpMoehzq0MS5pjHpYDkrFpUsY8BwpQObCM=";
+    hash = "sha256-mq7lpPHbb1uF3o50/UZY9LiT81ACAk9ptHQ98fhdk1Q=";
   };
 
   patches = [
@@ -55,30 +55,29 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      freetype # libfreetype.so
-      curl # libcurl.so
-      (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
-      pcre2 # libpcre2.pc
-      libsysprof-capture
-      libthai
-      libdatrie
-      lerc
-      libepoxy
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib # libasound.so
-      libglvnd # libGL.so
-      webkitgtk_4_1 # webkit2gtk-4.0
-      util-linuxMinimal
-      libselinux
-      libsepol
-      libXdmcp
-      libxkbcommon
-      libXtst
-    ];
+  buildInputs = [
+    freetype # libfreetype.so
+    curl # libcurl.so
+    (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
+    pcre2 # libpcre2.pc
+    libsysprof-capture
+    libthai
+    libdatrie
+    lerc
+    libepoxy
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib # libasound.so
+    libglvnd # libGL.so
+    webkitgtk_4_1 # webkit2gtk-4.0
+    util-linuxMinimal
+    libselinux
+    libsepol
+    libXdmcp
+    libxkbcommon
+    libXtst
+  ];
 
   propagatedBuildInputs = [ fontconfig ];
 

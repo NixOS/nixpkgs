@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   mpv,
   setuptools,
 }:
@@ -29,8 +28,6 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = pythonOlder "3.9";
-
   nativeBuildInputs = [ setuptools ];
 
   buildInputs = [ mpv ];
@@ -43,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "xrdp";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

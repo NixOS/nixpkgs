@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "payme";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "payme";
     rev = "v${version}";
-    hash = "sha256-jkJGR6i68kNzA60T5ZOu2u+fPvZht4ssEtr8aYocGUk=";
+    hash = "sha256-GXJjjCruDjL5+ag3aUJAHPLOvbwux9FBnyqXJ52WifE=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"

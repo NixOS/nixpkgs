@@ -38,7 +38,7 @@ let
         cp -r --no-preserve=all "${expected}" src-expected
 
         pushd src
-        for patch in ${lib.escapeShellArgs (builtins.map (p: "${p}") patches)}; do
+        for patch in ${lib.escapeShellArgs (map (p: "${p}") patches)}; do
             patch < "$patch"
         done
         patch < "${patch}"

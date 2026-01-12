@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchDebianPatch,
+  fetchpatch,
   cmake,
   pkg-config,
   fluidsynth,
@@ -36,6 +37,11 @@ stdenv.mkDerivation rec {
       patch = "ftbfs_gcc14.patch";
       hash = "sha256-eMx/RlUpq5Ez+1L8VZo40Y3h2ZKkqiQEmKTlkZRMXnI=";
     })
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://github.com/garglk/garglk/commit/8d976852e2db0215e9cf4f926e626f1aa766f751.patch?full_index=1";
+      hash = "sha256-lJAuiOErSp3oDmeoqrfCdnHH816VLYiVthIG4U8BJ5E=";
+    })
   ];
 
   postPatch = ''
@@ -50,23 +56,22 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      fluidsynth
-      fmt
-      freetype
-      libjpeg
-      libopenmpt
-      libpng
-      libsndfile
-      libvorbis
-      mpg123
-      qt6.qtbase
-      qt6.qtmultimedia
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    fluidsynth
+    fmt
+    freetype
+    libjpeg
+    libopenmpt
+    libpng
+    libsndfile
+    libvorbis
+    mpg123
+    qt6.qtbase
+    qt6.qtmultimedia
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    qt6.qtwayland
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "INTERFACE" "QT")
@@ -78,12 +83,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "WITH_MAGNETIC" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ccxvii.net/gargoyle/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

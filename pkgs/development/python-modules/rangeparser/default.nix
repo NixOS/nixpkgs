@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "rangeparser";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "RangeParser";
@@ -26,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rangeparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parses ranges";
     homepage = "https://pypi.org/project/RangeParser/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

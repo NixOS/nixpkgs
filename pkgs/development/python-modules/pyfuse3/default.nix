@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   pkg-config,
   setuptools,
+  setuptools-scm,
   fuse3,
   trio,
   python,
@@ -16,27 +16,20 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.4.0";
+  version = "3.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
-    tag = version;
-    hash = "sha256-J4xHiaV8GCtUQ9GJS8YRXpMsuzuwbtnzspvuIonHT24=";
+    tag = "v${version}";
+    hash = "sha256-3mhtpXhia2w9VtdFctN+cGrvOmhRE3656fEciseY2u4=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "if DEVELOPER_MODE" "if False" \
-      --replace-fail "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
-  '';
 
   build-system = [
     cython
     setuptools
+    setuptools-scm
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,10 +37,6 @@ buildPythonPackage rec {
   buildInputs = [ fuse3 ];
 
   dependencies = [ trio ];
-
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -61,17 +50,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pyfuse3"
-    "pyfuse3_asyncio"
+    "pyfuse3.asyncio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       dotlambda
     ];
-    changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
+    changelog = "https://github.com/libfuse/pyfuse3/blob/${src.tag}/Changes.rst";
   };
 }

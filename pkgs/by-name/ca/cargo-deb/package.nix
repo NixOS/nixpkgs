@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "2.12.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "cargo-deb";
     rev = "v${version}";
-    hash = "sha256-Ov3rVfURzzZ6+YFq4Cqtoq5RQVHHjqvgkOcpsvAy1jc=";
+    hash = "sha256-MzaZqympQXsqg6Jo8bHGQ3NaZFe+f1rveCH/Yqk0TVI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-11l/9l1WD7vLHNOKFVOxcR4OI2ft1IrT5bRX77XS+BI=";
+  cargoHash = "sha256-drrSsrySzDHRKy/yYzNR75tTDuT3daJ0hu8mFUGKgrc=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -48,13 +47,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ dpkg ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand that generates Debian packages from information in Cargo.toml";
     mainProgram = "cargo-deb";
     homepage = "https://github.com/kornelski/cargo-deb";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

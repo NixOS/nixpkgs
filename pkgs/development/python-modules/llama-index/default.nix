@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   hatchling,
-  llama-index-agent-openai,
   llama-index-cli,
   llama-index-core,
   llama-index-embeddings-openai,
@@ -9,8 +8,6 @@
   llama-index-legacy,
   llama-index-llms-openai,
   llama-index-multi-modal-llms-openai,
-  llama-index-program-openai,
-  llama-index-question-gen-openai,
   llama-index-readers-file,
   llama-index-readers-llama-parse,
 }:
@@ -30,7 +27,6 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    llama-index-agent-openai
     llama-index-cli
     llama-index-core
     llama-index-embeddings-openai
@@ -38,8 +34,6 @@ buildPythonPackage {
     llama-index-legacy
     llama-index-llms-openai
     llama-index-multi-modal-llms-openai
-    llama-index-program-openai
-    llama-index-question-gen-openai
     llama-index-readers-file
     llama-index-readers-llama-parse
   ];

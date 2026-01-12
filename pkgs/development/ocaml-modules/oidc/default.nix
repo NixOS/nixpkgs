@@ -27,7 +27,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "OpenID Connect implementation in OCaml.";
+    description = "OpenID Connect implementation in OCaml";
     homepage = "https://github.com/ulrikstrid/ocaml-oidc";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

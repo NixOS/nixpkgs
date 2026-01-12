@@ -26,8 +26,7 @@ let
   dotnet-sdk =
     with dotnetCorePackages;
     combinePackages [
-      sdk_7_0_1xx-bin
-      runtime_6_0-bin
+      sdk_8_0_4xx
     ];
 
   npmDepsFile = ./npm-deps.nix;
@@ -47,14 +46,14 @@ stdenvNoCC.mkDerivation (
     }
     rec {
       pname = "Avalonia";
-      version = "11.0.11";
+      version = "11.3.9";
 
       src = fetchFromGitHub {
         owner = "AvaloniaUI";
         repo = "Avalonia";
-        rev = version;
+        tag = version;
         fetchSubmodules = true;
-        hash = "sha256-Du8DEsZKl7rnVH9YZKAWTCpEQ/5HrNlgacgK/46kx/o=";
+        hash = "sha256-qvkQKlz9GQayAxCPITYJbCk+w4d9xJNo+P1I9J1SYho=";
       };
 
       patches = [
@@ -63,6 +62,9 @@ stdenvNoCC.mkDerivation (
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: System.IO.IOException: The process cannot access the file '/build/source/src/tools/DevAnalyzers/bin/Release/netstandard2.0/DevAnalyzers.deps.json' because it is being used by another process. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         ./0002-disable-parallel-compile.patch
+        # Microsoft.Common.CurrentVersion.targets(5034,5): error MSB3021: Unable to copy file "[...]/JetBrains.Annotations.dll" to "bin/Debug/JetBrains.Annotations.dll". Access to the path '/build/source/nukebuild/bin/Debug/JetBrains.Annotations.dll' is denied. [/build/source/nukebuild/_build.csproj]
+        # This happens because the source packages have symlinks due to linkNuGetPackagesAndSources.
+        ./0003-disable-hard-links.patch
       ];
 
       # this needs to be match the version being patched above
@@ -72,52 +74,57 @@ stdenvNoCC.mkDerivation (
         stripRoot = false;
       };
 
-      postPatch =
-        ''
-          patchShebangs build.sh
+      postPatch = ''
+        patchShebangs build.sh
 
-          substituteInPlace src/Avalonia.X11/ICELib.cs \
-            --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
-          substituteInPlace src/Avalonia.X11/SMLib.cs \
-            --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
-          substituteInPlace src/Avalonia.X11/XLib.cs \
-            --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
-            --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
-            --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
-            --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
-            --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
+        substituteInPlace src/Avalonia.X11/ICELib.cs \
+          --replace-fail '"libICE.so.6"' '"${lib.getLib libICE}/lib/libICE.so.6"'
+        substituteInPlace src/Avalonia.X11/SMLib.cs \
+          --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
+        substituteInPlace src/Avalonia.X11/XLib.cs \
+          --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
+          --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \
+          --replace-fail '"libXext.so.6"' '"${lib.getLib libXext}/lib/libXext.so.6"' \
+          --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
+          --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
 
-          # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
-          dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json
+        # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
+        dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json
 
-          # Tricky way to run npmConfigHook multiple times (borrowed from pagefind)
-          (
-            local postPatchHooks=() # written to by npmConfigHook
-            source ${npmHooks.npmConfigHook}/nix-support/setup-hook
-        ''
-        +
-          # TODO: implement updateScript
-          lib.concatMapStrings (
-            { path, hash }:
-            let
-              deps = fetchNpmDeps {
-                src = "${src}/${path}";
-                inherit hash;
-              };
-            in
-            ''
-              npmRoot=${path} npmDeps="${deps}" npmConfigHook
-              rm -rf "$TMPDIR/cache"
-            ''
-          ) (import npmDepsFile)
-        + ''
-          )
-          # Avalonia.Native is normally only packed on darwin.
-          substituteInPlace src/Avalonia.Native/Avalonia.Native.csproj \
-            --replace-fail \
-              '<IsPackable>$(PackAvaloniaNative)</IsPackable>' \
-              '<IsPackable>true</IsPackable>'
-        '';
+        # Tricky way to run npmConfigHook multiple times (borrowed from pagefind)
+        (
+          local postPatchHooks=() # written to by npmConfigHook
+          source ${npmHooks.npmConfigHook}/nix-support/setup-hook
+      ''
+      +
+        # TODO: implement updateScript
+        lib.concatMapStrings (
+          { path, hash }:
+          let
+            deps = fetchNpmDeps {
+              src = "${src}/${path}";
+              inherit hash;
+            };
+          in
+          ''
+            npmRoot=${path} npmDeps="${deps}" npmConfigHook
+            rm -rf "$TMPDIR/cache"
+          ''
+        ) (import npmDepsFile)
+      + ''
+        )
+        # Avalonia.Native is normally only packed on darwin.
+        substituteInPlace src/Avalonia.Native/Avalonia.Native.csproj \
+          --replace-fail \
+            '<IsPackable>$(PackAvaloniaNative)</IsPackable>' \
+            '<IsPackable>true</IsPackable>'
+
+        # stop 'Clean' target from removing node_modules
+        substituteInPlace nukebuild/Build.cs \
+          --replace-fail \
+            'Parameters.BuildDirs.ForEach(DeleteDirectory);' \
+            ""
+      '';
 
       makeCacheWritable = true;
 
@@ -130,7 +137,7 @@ stdenvNoCC.mkDerivation (
       #  ---> System.ArgumentException: Could not find package 'Microsoft.DotNet.ApiCompat.Tool' using:
       #  - Project assets file '/build/source/nukebuild/obj/project.assets.json'
       #  - NuGet packages config '/build/source/nukebuild/_build.csproj'
-      makeEmptyNupkgInPackages = true;
+      linkNuGetPackagesAndSources = true;
 
       FONTCONFIG_FILE =
         let
@@ -144,6 +151,11 @@ stdenvNoCC.mkDerivation (
       preConfigure = ''
         # closed source (telemetry?) https://github.com/AvaloniaUI/Avalonia/discussions/16878
         dotnet remove packages/Avalonia/Avalonia.csproj package Avalonia.BuildServices
+
+        # upgrade to fix dependency downgrade
+        # https://github.com/AvaloniaUI/Avalonia/issues/9603
+        dotnet add tests/Avalonia.Direct2D1.UnitTests/Avalonia.Direct2D1.UnitTests.csproj \
+          package Microsoft.NETCore.App --version 1.1.13 --no-restore
       '';
 
       runtimeIds = [ (systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
@@ -189,7 +201,7 @@ stdenvNoCC.mkDerivation (
         homepage = "https://avaloniaui.net/";
         license = [ lib.licenses.mit ];
         maintainers = with lib.maintainers; [ corngood ];
-        description = "A cross-platform UI framework for dotnet";
+        description = "Cross-platform UI framework for dotnet";
         sourceProvenance = with lib.sourceTypes; [
           fromSource
           binaryNativeCode # npm dependencies contain binaries

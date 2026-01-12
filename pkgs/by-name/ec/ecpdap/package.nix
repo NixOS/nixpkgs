@@ -17,19 +17,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-pgQqDRdewBSCm1/9/r8E9DBzwSKAaons3e6OLNv5gHM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-o+qm4MFZt+BzqhQsaI5EU9lZz4LI9D75eL+VKIKbIyI=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
     cp drivers/*.rules $out/etc/udev/rules.d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to program ECP5 FPGAs";
     mainProgram = "ecpdap";
     longDescription = ''
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
       using CMSIS-DAP probes in JTAG mode.
     '';
     homepage = "https://github.com/adamgreig/ecpdap";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

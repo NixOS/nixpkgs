@@ -2,32 +2,42 @@
   lib,
   stdenv,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_22,
   fetchFromGitHub,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
+let
+  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.19";
+  version = "1.3.33";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cFsVYlIkSNEpGw4qT9Eea6sa1+dZyaCRZNrgQTc8wu4=";
+    hash = "sha256-lQpl6ecQfQ7KzEIytH3k4hLtvq+KkTL+3IR2ZukdZWM=";
   };
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm'
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm';
 
-    buildInputs = [ nodejs_22 ];
-
-    hash = "sha256-Z/OypVPARLrSfvp9U2sPdgv194nj/f2VBxcxwtvaU5Q=";
+    fetcherVersion = 2;
+    hash = "sha256-PRlgwyePFpFdQRcojGDEC4ESZEGTJf1Ad9EFgm8hmKY=";
   };
 
   env = {
@@ -56,9 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withMoonlight
+    );
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Discord client modification, focused on enhancing user and developer experience";
     longDescription = ''
       Moonlight is a ***passion project***—yet another Discord client mod—focused on providing a decent user
@@ -69,10 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://moonlight-mod.github.io/using/install/#nix";
     changelog = "https://raw.githubusercontent.com/moonlight-mod/moonlight/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
 
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       ilys
-      donteatoreo
+      FlameFlag
     ];
   };
 })

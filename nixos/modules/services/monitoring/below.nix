@@ -91,7 +91,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.below ];
-    # /etc/below.conf is also refered to by the `below` CLI tool,
+    # /etc/below.conf is also referred to by the `below` CLI tool,
     #  so this can't be a store-only file whose path is passed to the service
     environment.etc."below/below.conf".text = cfgContents;
 

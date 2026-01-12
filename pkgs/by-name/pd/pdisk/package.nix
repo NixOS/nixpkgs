@@ -44,15 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmdline.patch
   ];
 
-  postPatch =
-    ''
-      substituteInPlace makefile \
-        --replace-fail 'cc' '${stdenv.cc.targetPrefix}cc'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace makefile \
-        --replace-fail '-lbsd' '-framework CoreFoundation -framework IOKit'
-    '';
+  postPatch = ''
+    substituteInPlace makefile \
+      --replace-fail 'cc' '${stdenv.cc.targetPrefix}cc'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace makefile \
+      --replace-fail '-lbsd' '-framework CoreFoundation -framework IOKit'
+  '';
 
   strictDeps = true;
 

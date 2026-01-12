@@ -241,15 +241,14 @@ in
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages =
-      [
-        cfg.package
-        cfg.package.run
-      ]
-      ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
-      ++ lib.optional cfg.protontricks.enable (
-        cfg.protontricks.package.override { inherit extraCompatPaths; }
-      );
+    environment.systemPackages = [
+      cfg.package
+      cfg.package.run
+    ]
+    ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
+    ++ lib.optional cfg.protontricks.enable (
+      cfg.protontricks.package.override { inherit extraCompatPaths; }
+    );
 
     networking.firewall = lib.mkMerge [
       (lib.mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {
@@ -257,7 +256,16 @@ in
       })
 
       (lib.mkIf cfg.remotePlay.openFirewall {
-        allowedTCPPorts = [ 27036 ];
+        # https://help.steampowered.com/en/faqs/view/3E3D-BE6B-787D-A5D2
+        # https://help.steampowered.com/en/faqs/view/2EA8-4D75-DA21-31EB
+        allowedTCPPorts = [
+          27036
+          27037
+        ];
+        allowedUDPPorts = [
+          10400
+          10401
+        ];
         allowedUDPPortRanges = [
           {
             from = 27031;

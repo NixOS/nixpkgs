@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = "erigon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MQpHRlKxWCBD2Tj9isxMKwvYBy9HtDkQPyKPse8uB3g=";
     fetchSubmodules = true;
   };
@@ -51,17 +51,22 @@ buildGoModule {
     "nosilkworm"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid testing‐releases
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [
-      d-xo
+    maintainers = with lib.maintainers; [
       happysalada
     ];
   };

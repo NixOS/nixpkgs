@@ -1,4 +1,4 @@
-From 78c826e1f4ccee24652f5301b720f05866ec00c6 Mon Sep 17 00:00:00 2001
+From 15dc4c64531845b64b574647fc7218170b100533 Mon Sep 17 00:00:00 2001
 From: Morgan Helton <mhelton@gmail.com>
 Date: Tue, 25 Feb 2025 20:36:19 -0600
 Subject: [PATCH] feat: use pre-fetched par2-turbo
@@ -8,10 +8,10 @@ Subject: [PATCH] feat: use pre-fetched par2-turbo
  1 file changed, 7 insertions(+), 12 deletions(-)
 
 diff --git a/cmake/par2-turbo.cmake b/cmake/par2-turbo.cmake
-index b0f2e70e..ff3389e0 100644
+index 0062b4d3..c0dd56ea 100644
 --- a/cmake/par2-turbo.cmake
 +++ b/cmake/par2-turbo.cmake
-@@ -39,18 +39,13 @@ if(CMAKE_SYSROOT)
+@@ -48,18 +48,13 @@ if(CMAKE_SYSROOT)
  	)
  endif()
  
@@ -19,7 +19,7 @@ index b0f2e70e..ff3389e0 100644
 -	par2-turbo
 -	PREFIX			par2-turbo
 -	GIT_REPOSITORY	https://github.com/nzbgetcom/par2cmdline-turbo.git
--	GIT_TAG			v1.2.0-nzbget-20250213
+-	GIT_TAG			v1.3.0-20250808
 -	TLS_VERIFY		TRUE
 -	GIT_SHALLOW		TRUE
 -	GIT_PROGRESS	TRUE
@@ -28,15 +28,15 @@ index b0f2e70e..ff3389e0 100644
 -	CMAKE_ARGS		 ${CMAKE_ARGS}
 -	INSTALL_COMMAND	""
 +ExternalProject_Add(
-+    par2-turbo
-+    PREFIX par2-turbo 
-+    SOURCE_DIR ${CMAKE_BINARY_DIR}/par2-turbo/src/par2-turbo
-+    BUILD_BYPRODUCTS ${PAR2_LIBS}
-+    CMAKE_ARGS ${CMAKE_ARGS}
-+    INSTALL_COMMAND ""
++    	par2-turbo
++    	PREFIX par2-turbo 
++    	SOURCE_DIR ${CMAKE_BINARY_DIR}/par2-turbo/src/par2-turbo
++    	BUILD_BYPRODUCTS ${PAR2_LIBS}
++    	CMAKE_ARGS ${CMAKE_ARGS}
++    	INSTALL_COMMAND ""
  )
  
  set(LIBS ${LIBS} ${PAR2_LIBS})
 -- 
-2.48.1
+2.50.1
 

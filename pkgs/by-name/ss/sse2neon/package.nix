@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pkg-config,
   stdenv,
 }:
 
@@ -16,24 +15,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vb9k+KjiGodVngza0R18LjfPTlsqFbzqXZqefm6KHj0=";
   };
 
-  postPatch = ''
-    # remove warning about gcc < 10
-    substituteInPlace sse2neon.h --replace-fail "#warning \"GCC versions" "// "
-  '';
+  doCheck = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  installPhase = ''
+    runHook preInstall
 
-  dontInstall = true;
-  # use postBuild instead of installPhase, because the build
-  # in itself doesn't produce any ($out) output
-  postBuild = ''
-    mkdir -p $out/lib
-    install -m444 sse2neon.h $out/lib/
+    install -Dm644 sse2neon.h $out/include/sse2neon.h
+
+    runHook postInstall
   '';
 
   meta = {
-    description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
-    homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
+    description = "C/C++ header file that converts Intel SSE intrinsics to Arm/Aarch64 NEON intrinsics";
+    homepage = "https://github.com/DLTcollab/sse2neon";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.gador ];

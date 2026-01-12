@@ -13,7 +13,7 @@
   xlrd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nemosis";
   version = "3.8.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "UNSW-CEEM";
     repo = "NEMOSIS";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4Bb9yZUfwkFQVNSVGtg3APXPovos23oHAx4v+6aa7MM=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

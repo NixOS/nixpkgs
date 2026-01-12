@@ -7,21 +7,18 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-ocsf-models";
-  version = "0.5.0";
+  version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "py-ocsf-models";
     tag = version;
-    hash = "sha256-AK/QaeJNVrVa5TRMJZAjZnemvRwHuxqIWA/mK7Cs4Xc=";
+    hash = "sha256-8HtX0kbd+5oYtzRpH3JtdyV+K+n+FWOQQ5CpJ+pejEo=";
   };
 
   pythonRelaxDeps = true;

@@ -79,7 +79,8 @@ in
         InaccessiblePaths = [ "-+${rootDir}" ];
         BindReadOnlyPaths = [
           builtins.storeDir
-        ] ++ lib.optional (types.path.check cfg.pass) cfg.pass;
+        ]
+        ++ lib.optional (types.path.check cfg.pass) cfg.pass;
         # This is for BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";

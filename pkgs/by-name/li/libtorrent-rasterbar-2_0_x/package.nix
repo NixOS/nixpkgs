@@ -1,46 +1,43 @@
 {
   lib,
   stdenv,
+  boost,
   fetchFromGitHub,
   cmake,
-  zlib,
-  boost,
   openssl,
   python3,
-  ncurses,
 }:
 
 let
-  version = "2.0.11";
-
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override {
     enablePython = true;
     python = python3;
   };
-
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rasterbar";
-  inherit version;
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   buildInputs = [
     boostPython
     openssl
-    zlib
-    python3
-    ncurses
   ];
+
+  strictDeps = true;
 
   patches = [
     # provide distutils alternative for python 3.12
@@ -50,11 +47,17 @@ stdenv.mkDerivation {
   # https://github.com/arvidn/libtorrent/issues/6865
   postPatch = ''
     substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
-      --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
-                'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
-                 set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+      --replace-fail \
+        'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
+        'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
+         set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+  ''
+  # a: libdir=''${prefix}//nix/store/...
+  # b: libdir=/nix/store/...
+  # https://github.com/NixOS/nixpkgs/issues/144170
+  + ''
     substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
-      --replace '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''
@@ -64,7 +67,13 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+  ''
+  # a: Cflags: ... -I/nix/store/x//nix/store/x-dev/include ...
+  # b: Cflags: ... -I/nix/store/x-dev/include ...
+  + ''
+    substituteInPlace $dev/lib/pkgconfig/libtorrent-rasterbar.pc \
+      --replace-fail "$out/$dev" "$dev"
   '';
 
   outputs = [
@@ -74,14 +83,15 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-Dpython-bindings=on"
+    (lib.cmakeBool "python-bindings" true)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libtorrent.org/";
-    description = "C++ BitTorrent implementation focusing on efficiency and scalability";
-    license = licenses.bsd3;
+    description = "Efficient feature complete C++ bittorrent implementation";
+    changelog = "https://github.com/arvidn/libtorrent/blob/${finalAttrs.src.tag}/ChangeLog";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

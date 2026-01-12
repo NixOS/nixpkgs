@@ -45,10 +45,10 @@ let
 
       enableParallelBuilding = true;
 
-      meta = with lib; {
+      meta = {
         description = "Hercules ${depName} library";
         license = lib.licenses.free; # Mixture of Public Domain, ICU (MIT compatible) and others
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           anna328p
           vifino
         ];
@@ -122,30 +122,28 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ libtool ];
-  buildInputs =
-    [
-      (lib.getOutput "lib" libtool)
-      zlib
-      bzip2
-      extpkgs
-    ]
-    ++ lib.optionals enableRexx [
-      regina
-    ];
+  buildInputs = [
+    (lib.getOutput "lib" libtool)
+    zlib
+    bzip2
+    extpkgs
+  ]
+  ++ lib.optionals enableRexx [
+    regina
+  ];
 
-  configureFlags =
-    [
-      "--enable-extpkgs=${extpkgs}"
-      "--without-included-ltdl"
-      "--enable-ipv6"
-      "--enable-cckd-bzip2"
-      "--enable-het-bzip2"
-    ]
-    ++ lib.optionals enableRexx [
-      "--enable-regina-rexx"
-    ];
+  configureFlags = [
+    "--enable-extpkgs=${extpkgs}"
+    "--without-included-ltdl"
+    "--enable-ipv6"
+    "--enable-cckd-bzip2"
+    "--enable-het-bzip2"
+  ]
+  ++ lib.optionals enableRexx [
+    "--enable-regina-rexx"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sdl-hercules-390.github.io/html/";
     description = "IBM mainframe emulator";
     longDescription = ''
@@ -154,8 +152,8 @@ stdenv.mkDerivation rec {
       z/Architecture. Hercules runs under Linux, Windows, Solaris, FreeBSD, and
       Mac OS X.
     '';
-    license = licenses.qpl;
-    maintainers = with maintainers; [
+    license = lib.licenses.qpl;
+    maintainers = with lib.maintainers; [
       anna328p
       vifino
     ];

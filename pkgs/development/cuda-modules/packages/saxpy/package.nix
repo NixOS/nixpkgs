@@ -1,50 +1,35 @@
 {
-  autoAddDriverRunpath,
+  backendStdenv,
   cmake,
-  cudaPackages,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cudaNamePrefix,
+  flags,
   lib,
+  libcublas,
   saxpy,
 }:
-let
-  inherit (cudaPackages)
-    backendStdenv
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cudaAtLeast
-    cudaOlder
-    cudatoolkit
-    flags
-    libcublas
-    ;
-  inherit (lib) getDev getLib getOutput;
-in
-backendStdenv.mkDerivation {
-  pname = "saxpy";
-  version = "unstable-2023-07-11";
-
-  src = ./src;
-
+backendStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      autoAddDriverRunpath
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
+  pname = "saxpy";
+  version = "0-unstable-2023-07-11";
 
-  buildInputs =
-    lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      (getDev libcublas)
-      (getLib libcublas)
-      (getOutput "static" libcublas)
-      cuda_cudart
-    ]
-    ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
+  src = ./src;
+
+  nativeBuildInputs = [
+    cmake
+    cuda_nvcc
+  ];
+
+  buildInputs = [
+    cuda_cccl
+    cuda_cudart
+    libcublas
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -59,12 +44,11 @@ backendStdenv.mkDerivation {
     '';
   });
 
-  meta = rec {
+  meta = {
     description = "Simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
     license = lib.licenses.mit;
     teams = [ lib.teams.cuda ];
     mainProgram = "saxpy";
     platforms = lib.platforms.unix;
-    badPlatforms = lib.optionals (flags.isJetsonBuild && cudaOlder "11.4") platforms;
   };
-}
+})

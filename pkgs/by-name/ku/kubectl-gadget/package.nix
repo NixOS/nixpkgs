@@ -2,22 +2,20 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  kubectl-gadget,
-  testers,
 }:
 
 buildGoModule rec {
   pname = "kubectl-gadget";
-  version = "0.40.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
-    rev = "v${version}";
-    hash = "sha256-fizq0S2pvhrMwGR/l6yqzq3IXDuD01Abi3VRiNJqs48=";
+    tag = "v${version}";
+    hash = "sha256-g2nJYiGukgi6CEhIJRuqqpPT9XbfQGFVmQD4Ne8gul0=";
   };
 
-  vendorHash = "sha256-zBEb61gxjCRXjdANIHWKVNu5Do+iEmxttKvyiYp8FYQ=";
+  vendorHash = "sha256-FLWpvCHeZUnlGZM1lxNoArqfSP2iQuYnhBRtD2ymclI=";
 
   env.CGO_ENABLED = 0;
 
@@ -35,18 +33,13 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-gadget" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = kubectl-gadget;
-    command = "kubectl-gadget version";
-    version = "v${version}";
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/inspektor-gadget/inspektor-gadget/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kranurag7
       devusb
     ];

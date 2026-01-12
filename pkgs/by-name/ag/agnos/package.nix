@@ -8,25 +8,25 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "agnos";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "krtab";
     repo = "agnos";
-    rev = "v${version}";
-    hash = "sha256-hSiJvpTQIbhz/0AFBTvgfRDTqOi9YcDOvln15SksMJs=";
+    tag = "v${version}";
+    hash = "sha256-wHzKHduxqG7PBsGK39lCRyzhf47mdjCXhn3W1pOXQO0=";
   };
 
-  cargoHash = "sha256-wmnfAvtTjioslSdD6z0mMl3Hz46wpPYMk494r9xXj44=";
+  cargoHash = "sha256-iRHJ8xmF9CzuVDkBVHD1LGv/YQS5V+oV05+7Pe04ckM=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Obtains certificates from Let's Encrypt using DNS-01 without the need for API access to the DNS provider";
     homepage = "https://github.com/krtab/agnos";
-    license = licenses.mit;
-    maintainers = with maintainers; [ justinas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ justinas ];
   };
 
   passthru.tests = nixosTests.agnos;

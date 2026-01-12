@@ -26,18 +26,17 @@ stdenv.mkDerivation rec {
   pname = "bamf";
   version = "0.5.6";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withDocs [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocs [
+    "devdoc"
+  ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    rev = version;
+    tag = version;
     sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
@@ -74,13 +73,12 @@ stdenv.mkDerivation rec {
       --replace '/usr/lib/systemd/user' '@prefix@/lib/systemd/user'
   '';
 
-  configureFlags =
-    [
-      "--enable-headless-tests"
-    ]
-    ++ lib.optionals withDocs [
-      "--enable-gtk-doc"
-    ];
+  configureFlags = [
+    "--enable-headless-tests"
+  ]
+  ++ lib.optionals withDocs [
+    "--enable-gtk-doc"
+  ];
 
   # Fix paths
   makeFlags = [
@@ -99,16 +97,16 @@ stdenv.mkDerivation rec {
     ignoredVersions = ".ubuntu.*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
     homepage = "https://launchpad.net/bamf";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
-    teams = [ teams.pantheon ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ davidak ];
+    teams = [ lib.teams.pantheon ];
   };
 }

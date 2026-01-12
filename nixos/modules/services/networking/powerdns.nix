@@ -53,7 +53,7 @@ in
       after = [
         "network.target"
         "mysql.service"
-        "postgresql.service"
+        "postgresql.target"
         "openldap.service"
       ];
 

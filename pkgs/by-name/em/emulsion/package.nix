@@ -18,20 +18,19 @@
   wayland,
 }:
 let
-  rpathLibs =
-    [
-      libGL
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-      libXxf86vm
-      libxcb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    libGL
+    libX11
+    libXcursor
+    libXi
+    libXrandr
+    libXxf86vm
+    libxcb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    wayland
+  ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "emulsion";
@@ -44,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1s5kCUxn4t1A40QHuygGKaqphLmcl+EYfx++RZQmL00=";
 
   nativeBuildInputs = [
@@ -60,12 +58,12 @@ rustPlatform.buildRustPackage rec {
     patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/emulsion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and minimalistic image viewer";
     homepage = "https://arturkovacs.github.io/emulsion-website/";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "emulsion";
   };
 }

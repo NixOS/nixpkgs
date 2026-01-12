@@ -10,17 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "elkhound";
-  version = "unstable-2020-04-13";
+  version = "0-unstable-2020-04-13";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
     repo = "elkhound";
     rev = "a7eb4bb2151c00cc080613a770d37560f62a285c";
-    sha256 = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
+    hash = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
   };
 
   postPatch = ''
     patchShebangs scripts
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   sourceRoot = "${src.name}/src";
@@ -31,6 +34,8 @@ stdenv.mkDerivation rec {
     flex
     perl
   ];
+
+  cmakeFlags = [ "-Wno-dev" ]; # it vomits warnings that only upstream cares about
 
   installPhase = ''
     runHook preInstall
@@ -45,11 +50,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parser generator which emits GLR parsers, either in OCaml or C++";
     homepage = "https://scottmcpeak.com/elkhound/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
+    mainProgram = "elkhound";
   };
 }

@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2+ZkyWhEnnO/QgCzWscbMr0u5kwdv2HqPLjtiXDfv/o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XvtEXBsdxUMJJntzzKVbUIjg78JpwyuUlTm6J3huDPE=";
 
   nativeBuildInputs = [
@@ -31,17 +30,18 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     asciidoctor
   ];
-  buildInputs =
-    [ ncurses ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          curl
-          libiconv
-        ]
-      else
-        [ openssl ]
-    );
+  buildInputs = [
+    ncurses
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        curl
+        libiconv
+      ]
+    else
+      [ openssl ]
+  );
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;
@@ -54,17 +54,16 @@ rustPlatform.buildRustPackage rec {
     installManPage build/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unit-aware calculator";
     mainProgram = "rink";
     homepage = "https://rinkcalc.app";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       gpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sb0
-      Br1ght0ne
     ];
   };
 }

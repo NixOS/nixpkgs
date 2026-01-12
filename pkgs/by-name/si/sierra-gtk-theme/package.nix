@@ -37,7 +37,7 @@ lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVaria
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "sierra-gtk-theme";
       rev = "05899001c4fc2fec87c4d222cb3997c414e0affd";
       sha256 = "174l5mryc34ma1r42pk6572c6i9hmzr9vj1a6w06nqz5qcfm1hds";
     };
@@ -63,10 +63,10 @@ lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVaria
 
       mkdir -p $out/share/themes
       name= ./install.sh --dest $out/share/themes \
-        ${lib.optionalString (buttonVariants != [ ]) "--alt " + builtins.toString buttonVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (opacityVariants != [ ]) "--opacity " + builtins.toString opacityVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--flat " + builtins.toString sizeVariants}
+        ${lib.optionalString (buttonVariants != [ ]) "--alt " + toString buttonVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (opacityVariants != [ ]) "--opacity " + toString opacityVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--flat " + toString sizeVariants}
 
       # Replace duplicate files with hardlinks to the first file in each
       # set of duplicates, reducing the installed size in about 79%
@@ -75,11 +75,11 @@ lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVaria
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Mac OSX like theme for GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/Sierra-gtk-theme";
-      license = licenses.gpl3;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

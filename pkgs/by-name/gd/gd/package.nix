@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags =
-    [
-      "--enable-gd-formats"
-    ]
-    # -pthread gets passed to clang, causing warnings
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
+  configureFlags = [
+    "--enable-gd-formats"
+  ]
+  # -pthread gets passed to clang, causing warnings
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [
     autoconf
@@ -51,20 +50,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      freetype
-      libpng
-      libjpeg
-      libwebp
-      libtiff
-      libavif
-    ]
-    ++ lib.optionals withXorg [
-      fontconfig
-      libXpm
-    ];
+  buildInputs = [
+    zlib
+    freetype
+    libpng
+    libjpeg
+    libwebp
+    libtiff
+    libavif
+  ]
+  ++ lib.optionals withXorg [
+    fontconfig
+    libXpm
+  ];
 
   outputs = [
     "bin"
@@ -76,11 +74,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
-    license = licenses.free; # some custom license
-    platforms = platforms.unix;
+    license = lib.licenses.free; # some custom license
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

@@ -19,14 +19,13 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-iwoZ6xRzEDArmhWYxIrbIXRTQjOizyTsXCvMdnUrs2g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9fro1Dx7P+P9NTsg0gtMfr0s4TEpkZA31EFAnObiNFo=";
-  meta = with lib; {
-    description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants.";
+  meta = {
+    description = "Ultra-fast, adaptable deployment of the tantivy search engine via REST";
     mainProgram = "lnx";
     homepage = "https://lnx.rs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
   };
 }

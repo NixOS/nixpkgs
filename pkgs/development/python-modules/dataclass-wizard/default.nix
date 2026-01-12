@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "dataclass-wizard";
-  version = "0.35.0";
+  version = "0.39.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dataclass-wizard";
     tag = "v${version}";
-    hash = "sha256-Ed9/y2blOGYfNcmCCAe4TPWssKWUS0gxvRXKMf+cJh0=";
+    hash = "sha256-X4/qe1nv/NwUvQGvVqbqIgi9Ej43jwJjzXyMaKAtN2A=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests =
     [ ]
@@ -56,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclass_wizard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wizarding tools for interacting with the Python dataclasses module";
     homepage = "https://github.com/rnag/dataclass-wizard";
     changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ codifryed ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ codifryed ];
     mainProgram = "wiz";
   };
 }

@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-fB7PnWWahCMKhGREg6neLmOZjh2OWLu61Vpmfsl03wA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-jsaWrdJRKfu75Gw8qGHxx0FHK7rOEK8IEDiQ6ktZsM0=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -59,11 +58,11 @@ rustPlatform.buildRustPackage rec {
   # fixes error caused by https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
   env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and elegant pipewire graph editor";
     homepage = "https://github.com/ax9d/pw-viz";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

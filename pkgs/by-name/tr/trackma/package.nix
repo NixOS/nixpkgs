@@ -38,21 +38,20 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "Hov9qdVabu1k3SIoUmvcRtSK8TcETqGPXI2RqN/bei4=";
     fetchSubmodules = true; # for anime-relations submodule
   };
 
-  nativeBuildInputs =
-    [
-      copyDesktopItems
-      python3.pkgs.poetry-core
-    ]
-    ++ lib.optionals withGTK [
-      wrapGAppsHook3
-      gobject-introspection
-    ]
-    ++ lib.optionals withQT [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    python3.pkgs.poetry-core
+  ]
+  ++ lib.optionals withGTK [
+    wrapGAppsHook3
+    gobject-introspection
+  ]
+  ++ lib.optionals withQT [ qt5.wrapQtAppsHook ];
 
   buildInputs = lib.optionals withGTK [
     glib
@@ -109,11 +108,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/z411/trackma";
     description = "Open multi-site list manager for Unix-like systems (ex-wMAL)";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

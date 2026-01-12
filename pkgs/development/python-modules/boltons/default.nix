@@ -4,15 +4,12 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
   version = "25.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mahmoud";
@@ -30,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boltons" ];
 
-  meta = with lib; {
+  meta = {
     description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
       Boltons is a set of over 200 BSD-licensed, pure-Python utilities
@@ -49,7 +46,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mahmoud/boltons";
     changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

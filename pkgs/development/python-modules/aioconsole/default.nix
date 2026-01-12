@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
@@ -19,16 +20,14 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aioconsole";
     tag = "v${version}";
-    hash = "sha256-gFkRhewuRScEhXy0lv2R0kHfaHT1gSp3TVrqL36cRVs=";
+    hash = "sha256-j4nzt8mvn+AYObh1lvgxS8wWK662KN+OxjJ2b5ZNAcQ=";
   };
 
   postPatch = ''
@@ -52,14 +51,18 @@ buildPythonPackage rec {
     "test_interact_multiple_indented_lines"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: AF_UNIX path too long
+    "tests/test_server.py::test_uds_server[default]"
+  ];
+
   pythonImportsCheck = [ "aioconsole" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous console and interfaces for asyncio";
     changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ catern ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "apython";
   };
 }

@@ -5,72 +5,34 @@
   nix-update-script,
   nodejs,
   lib,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
-  buf,
-  cacert,
-  grpc-gateway,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  protoc-gen-validate,
 }:
 let
-  version = "0.24.2";
+  version = "0.25.3";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    hash = "sha256-DWOJ6+lUTbOzMLsfTDNZfhgNomajNCnNi7U1A+tqXm4=";
+    hash = "sha256-lAKzPteGjGa7fnbB0Pm3oWId5DJekbVWI9dnPEGbiBo=";
   };
 
-  protobufsGenerated = stdenvNoCC.mkDerivation {
-    name = "memos-protobuf-gen";
-    inherit src;
-
-    nativeBuildInputs = [
-      buf
-      cacert
-      grpc-gateway
-      protoc-gen-go
-      protoc-gen-go-grpc
-      protoc-gen-validate
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-      pushd proto
-      HOME=$TMPDIR buf generate
-      popd
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/{proto,web/src/types}
-      cp -r {.,$out}/proto/gen
-      cp -r {.,$out}/web/src/types/proto
-      runHook postInstall
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-u+Wq/fXvWTjXdhC2h6RCsn7pjdFJ+gUdTPRvrn9cZ+k=";
-  };
-
-  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
+  memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "memos-web";
     inherit version src;
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
-      hash = "sha256-lopCa7F/foZ42cAwCxE+TWAnglTZg8jY8eRWmeck/W8=";
+      fetcherVersion = 1;
+      hash = "sha256-k+pykzAiZ72cMMH+6qtnNxjaq4m4QyCQuWvQPbZSZho=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
     ];
-    preBuild = ''
-      cp -r {${protobufsGenerated},.}/web/src/types/proto
-    '';
     buildPhase = ''
       runHook preBuild
       pnpm -C web build
@@ -85,33 +47,30 @@ let
 in
 buildGoModule {
   pname = "memos";
-  inherit version src;
+  inherit
+    version
+    src
+    memos-web
+    ;
 
-  vendorHash = "sha256-hdL4N0tg/lYGTeiKl9P2QsV8HTxlvHfsSqsqq/C0cg8=";
+  vendorHash = "sha256-BoJxFpfKS/LByvK4AlTNc4gA/aNIvgLzoFOgyal+aF8=";
 
   preBuild = ''
     rm -rf server/router/frontend/dist
-    cp -r ${frontend} server/router/frontend/dist
-    cp -r {${protobufsGenerated},.}/proto/gen
+    cp -r ${memos-web} server/router/frontend/dist
   '';
-
-  patches = [
-    # to be removed in next release (test was removed upstream as part of a bigger commit)
-    ./nixbuild-check.patch
-  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--subpackage"
       "memos-web"
-      "--subpackage"
-      "memos-protobuf-gen"
     ];
   };
 
   meta = {
     homepage = "https://usememos.com";
     description = "Lightweight, self-hosted memo hub";
+    changelog = "https://github.com/usememos/memos/releases/tag/${src.rev}";
     maintainers = with lib.maintainers; [
       indexyz
       kuflierl

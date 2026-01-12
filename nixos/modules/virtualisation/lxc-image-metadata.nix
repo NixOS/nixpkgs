@@ -77,7 +77,7 @@ in
   options = {
     virtualisation.lxc = {
       templates = lib.mkOption {
-        description = "Templates for LXD";
+        description = "Templates for LXC images";
         type = lib.types.attrsOf (lib.types.submodule templateSubmodule);
         default = { };
         example = lib.literalExpression ''
@@ -134,7 +134,8 @@ in
           };
           target = "/metadata.yaml";
         }
-      ] ++ templates.files;
+      ]
+      ++ templates.files;
     };
   };
 }

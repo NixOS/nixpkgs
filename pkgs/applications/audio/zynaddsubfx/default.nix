@@ -24,8 +24,6 @@
   ladspaH,
   jackSupport ? true,
   libjack2,
-  lashSupport ? false,
-  lash,
   ossSupport ? true,
   portaudioSupport ? true,
   portaudio,
@@ -48,7 +46,7 @@
   ctestCheckHook,
 }:
 
-assert builtins.any (g: guiModule == g) [
+assert builtins.elem guiModule [
   "fltk"
   "ntk"
   "zest"
@@ -71,8 +69,8 @@ stdenv.mkDerivation rec {
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "zynaddsubfx";
+    repo = "zynaddsubfx";
     tag = version;
     fetchSubmodules = true;
     hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
@@ -101,47 +99,45 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftw
-      liblo
-      minixml
-      zlib
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals dssiSupport [
-      dssi
-      ladspaH
-    ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals lashSupport [ lash ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
-    ++ lib.optionals sndioSupport [ sndio ]
-    ++ lib.optionals (guiModule == "fltk") [
-      fltk
-      libjpeg
-      libXpm
-    ]
-    ++ lib.optionals (guiModule == "ntk") [
-      ntk
-      cairo
-      libXpm
-    ]
-    ++ lib.optionals (guiModule == "zest") [
-      libGL
-      libX11
-    ];
+  buildInputs = [
+    fftw
+    liblo
+    minixml
+    zlib
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals dssiSupport [
+    dssi
+    ladspaH
+  ]
+  ++ lib.optionals jackSupport [ libjack2 ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals sndioSupport [ sndio ]
+  ++ lib.optionals (guiModule == "fltk") [
+    fltk
+    libjpeg
+    libXpm
+  ]
+  ++ lib.optionals (guiModule == "ntk") [
+    ntk
+    cairo
+    libXpm
+  ]
+  ++ lib.optionals (guiModule == "zest") [
+    libGL
+    libX11
+  ];
 
-  cmakeFlags =
-    [
-      "-DGuiModule=${guiModule}"
-      "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
-    ]
-    # OSS library is included in glibc.
-    # Must explicitly disable if support is not wanted.
-    ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
-    # Find FLTK without requiring an OpenGL library in buildInputs
-    ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
+  cmakeFlags = [
+    "-DGuiModule=${guiModule}"
+    "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ]
+  # OSS library is included in glibc.
+  # Must explicitly disable if support is not wanted.
+  ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
+  # Find FLTK without requiring an OpenGL library in buildInputs
+  ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
 
   CXXFLAGS = [
     # GCC 13: error: 'uint8_t' does not name a type
@@ -188,7 +184,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${mruby-zest}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High quality software synthesizer (${guiName} GUI)";
     mainProgram = "zynaddsubfx";
     homepage =
@@ -197,9 +193,9 @@ stdenv.mkDerivation rec {
       else
         "https://zynaddsubfx.sourceforge.io";
 
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.all;
 
     # On macOS:
     # - Tests don't compile (ld: unknown option: --no-as-needed)

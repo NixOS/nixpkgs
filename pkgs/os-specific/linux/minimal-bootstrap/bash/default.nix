@@ -18,12 +18,13 @@
   coreutils,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bash";
-  version = "5.2.15";
+  version = "5.2.37";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    sha256 = "132qng0jy600mv1fs95ylnlisx2wavkkgpb19c6kmz7lnmjhjwhk";
+    hash = "sha256-lZmyLs0dV4etfTt78MWfMSszltHigRdd0fikAU2mIf8=";
   };
 
   patches = [
@@ -33,7 +34,7 @@ let
 in
 bootBash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       coreutils
@@ -83,26 +84,17 @@ bootBash.runCommand "${pname}-${version}"
             ]
           );
         }
-        // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+        // (removeAttrs env [ "nativeBuildInputs" ])
       );
-
     passthru.tests.get-version =
       result:
       bootBash.runCommand "${pname}-get-version-${version}" { } ''
         ${result}/bin/bash --version
         mkdir $out
       '';
-
-    meta = with lib; {
-      description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
-      homepage = "https://www.gnu.org/software/bash";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
   }
   ''
-    # Unpack
+    # unpack
     tar xzf ${src}
     cd bash-${version}
 

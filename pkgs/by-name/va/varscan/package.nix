@@ -27,18 +27,18 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Variant calling and somatic mutation/CNV detection for next-generation sequencing data";
     # VarScan 2 is free for non-commercial use by academic,
     # government, and non-profit/not-for-profit institutions. A
     # commercial version of the software is available, and licensed
     # through the Office of Technology Management at Washington
     # University School of Medicine.
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     homepage = "https://github.com/dkoboldt/varscan";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.all;
   };
 
 }

@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   ujson,
   yarl,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
   version = "2023.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyoutbreaksnearme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for retrieving data from for Outbreaks Near Me";
     homepage = "https://github.com/bachya/pyoutbreaksnearme";
     changelog = "https://github.com/bachya/pyoutbreaksnearme/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

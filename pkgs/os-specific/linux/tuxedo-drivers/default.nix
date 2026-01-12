@@ -7,28 +7,46 @@
   kmod,
   pahole,
   gitUpdater,
+  udevCheckHook,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.13.0";
+  version = "4.18.1";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hEMar2Bfg34HJQChb9e1enrX/RNvfujPsArkPnTyxPs=";
+    hash = "sha256-TkzdFVffYpVYEKImhRj6nqeVTr4yvzh//wSSRqIrPyA=";
   };
 
+  patches = [ ./no-cp-usr.patch ];
+
+  postInstall = ''
+    echo "Running postInstallhook"
+    substituteInPlace usr/lib/udev/rules.d/* \
+      --replace-quiet "/bin/bash" "${lib.getExe bash}" \
+      --replace-quiet "/bin/sh" "${lib.getExe bash}"
+    install -Dm 0644 -t $out/etc/udev/rules.d usr/lib/udev/rules.d/*
+  '';
+
   buildInputs = [ pahole ];
-  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    kmod
+    udevCheckHook
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
+
+  doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -53,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       keksgesicht
       xaverdh
       XBagon
+      wetisobe
     ];
     platforms = lib.platforms.linux;
   };

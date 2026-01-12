@@ -37,11 +37,13 @@
       with subtest("Wait for login"):
           machine.wait_for_x()
           machine.wait_for_file("/tmp/xauth_*")
+          machine.wait_until_succeeds("test -s /tmp/xauth_*")
           machine.succeed("xauth merge /tmp/xauth_*")
           machine.succeed("su - ${user.name} -c 'xauth merge /tmp/xauth_*'")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-          machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+          # Change back to /dev/snd/timer after systemd-258.1
+          machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if LXQt components actually start"):
           for i in ["openbox", "lxqt-session", "pcmanfm-qt", "lxqt-panel", "lxqt-runner"]:

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rnp";
-  version = "0.17.1";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jUh7BxRnB6KePCk1jIvKzXgxSmWdKlQYmxshZZY4SBQ";
+    hash = "sha256-GEgogKPMqBYYufCcjbaCmlNWtV/hxx3ZMfij+HAoHx8=";
   };
 
   buildInputs = [
@@ -69,11 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     echo "v${finalAttrs.version}" > version.txt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rnpgp/rnp";
     description = "High performance C++ OpenPGP library, fully compliant to RFC 4880";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ribose-jeffreylau ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ribose-jeffreylau ];
   };
 })

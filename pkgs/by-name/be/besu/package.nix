@@ -9,12 +9,12 @@
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "besu";
   version = "24.1.2";
 
   src = fetchurl {
-    url = "https://hyperledger.jfrog.io/artifactory/${pname}-binaries/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "https://hyperledger.jfrog.io/artifactory/besu-binaries/besu/${finalAttrs.version}/besu-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-CC24z0+2dSeqDddX5dJUs7SX9QJ8Iyh/nAp0pqdDvwg=";
   };
 
@@ -26,20 +26,20 @@ stdenv.mkDerivation (finalAttrs: rec {
     cp -r bin $out/
     mkdir -p $out/lib
     cp -r lib $out/
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/besu \
       --set JAVA_HOME "${jre}" \
       --suffix ${
         if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
-      } : ${lib.makeLibraryPath buildInputs}
+      } : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
 
   passthru.tests = {
     version = testers.testVersion {
       package = finalAttrs.finalPackage;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     jemalloc =
-      runCommand "${pname}-test-jemalloc"
+      runCommand "besu-test-jemalloc"
         {
           nativeBuildInputs = [ finalAttrs.finalPackage ];
           meta.platforms = with lib.platforms; linux;
@@ -51,13 +51,13 @@ stdenv.mkDerivation (finalAttrs: rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise-grade Java-based, Apache 2.0 licensed Ethereum client";
     homepage = "https://www.hyperledger.org/projects/besu";
     changelog = "https://github.com/hyperledger/besu/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 })

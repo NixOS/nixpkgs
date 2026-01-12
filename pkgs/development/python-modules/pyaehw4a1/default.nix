@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyaehw4a1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for Hisense AEH-W4A1 module";
     homepage = "https://github.com/bannhead/pyaehw4a1";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
-  version = "1.0.4";
+  version = "1.0.4-unstable-2025-10-30";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    rev = "v${version}";
-    hash = "sha256-MuCdJoBFxKwDCOCltlU3oBS9elFS6F251dHjHcIb4Jg=";
+    rev = "4f1fa3aa9870b00404e6597283b2032a885303b3";
+    hash = "sha256-HwGmtkVQJirKikb37A/dQeEr3AWmqJMfBj46UKsS5m8=";
     fetchSubmodules = true;
   };
 
@@ -64,14 +64,17 @@ stdenv.mkDerivation rec {
       --prefix VK_ADD_LAYER_PATH : "$out/share/vulkan/explicit_layer.d"
     wrapProgram $out/bin/gfxrecon-replay \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+
+    # Remove unrelated files that got installed
+    rm -r $out/lib/{cmake,pkgconfig}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphics API Capture and Replay Tools";
     homepage = "https://github.com/LunarG/gfxreconstruct/";
     changelog = "https://github.com/LunarG/gfxreconstruct/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
 }

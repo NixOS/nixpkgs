@@ -16,18 +16,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Qb9fEPQrdn+Ek9bdOMfaPIxlGGpQ9RfQZOeeqoOf17E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LyiJYKhoSXVf1P+nu56Wgp+z8biPpt0tWgPZQrB2NNQ=";
 
   buildInputs = [
     notmuch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JMAP integration for notmuch mail";
     homepage = "https://github.com/elizagamedev/mujmap/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ elizagamedev ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ elizagamedev ];
     mainProgram = "mujmap";
   };
 }

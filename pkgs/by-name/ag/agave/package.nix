@@ -33,11 +33,11 @@ stdenv.mkDerivation {
     install -D $srcs -t $out/share/fonts/truetype/
   '';
 
-  meta = with lib; {
-    description = "truetype monospaced typeface designed for X environments";
+  meta = {
+    description = "TrueType monospaced typeface designed for X environments";
     homepage = "https://b.agaric.net/page/agave";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

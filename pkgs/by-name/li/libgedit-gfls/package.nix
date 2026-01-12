@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
-  version = "0.3.0";
+  version = "0.3.1";
 
   outputs = [
     "out"
@@ -30,21 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "libgedit-gfls";
     tag = finalAttrs.version;
-    hash = "sha256-X56QPcmNB0Ey+kzSqDnb6/j6/w7IU7MFSAxW8mX8I3w=";
+    hash = "sha256-HBXOphDvFwXea0mlfPqPtaXgNpAZyHYwuHBn5f7hPso=";
   };
 
-  nativeBuildInputs =
-    [
-      docbook-xsl-nons
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     gtk3
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gfls";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   dataclasses-json,
   deprecated,
@@ -21,16 +20,14 @@ in
 
 buildPythonPackage rec {
   pname = "pygltflib";
-  version = "1.16.2";
+  version = "1.16.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitLab {
     owner = "dodgyville";
     repo = "pygltflib";
     tag = "v${version}";
-    hash = "sha256-rUAg05M5biVsdG2yEH0Olng/0jH1R/Jo5/+j4ToKkTI=";
+    hash = "sha256-3XfOlL+l0isMFv71+uY/PBHCwND54qACoCVYntfCot4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygltflib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for reading and writing basic glTF files";
     homepage = "https://gitlab.com/dodgyville/pygltflib";
     changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

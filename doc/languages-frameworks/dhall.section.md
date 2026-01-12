@@ -16,8 +16,8 @@ https://prelude.dhall-lang.org/v20.1.0/package.dhall
   sha256:26b0ef498663d269e4dc6a82b0ee289ec565d683ef4c00d0ebdd25333a5a3c98
 ```
 
-… and if the import is cached then the interpreter will load the import from
-cache instead of fetching the URL.
+… and if the import is cached, then the interpreter will load the import from
+the cache instead of fetching the URL.
 
 Nixpkgs uses this trick to add all of a Dhall expression's dependencies into the
 cache so that the Dhall interpreter never needs to resolve any remote URLs.  In
@@ -89,14 +89,12 @@ buildDhallPackage {
 # ./example.nix
 
 let
-  nixpkgs = builtins.fetchTarball {
+  nixpkgs = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
     hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
-  dhallOverlay = self: super: {
-    true = self.callPackage ./true.nix { };
-  };
+  dhallOverlay = self: super: { true = self.callPackage ./true.nix { }; };
 
   overlay = self: super: {
     dhallPackages = super.dhallPackages.override (old: {
@@ -165,8 +163,8 @@ result
   ```
 
 The `source.dhall` file is only present for packages that specify
-`source = true;`.  By default, Dhall packages omit the `source.dhall` in order
-to conserve disk space when they are used exclusively as dependencies.  For
+`source = true;`. By default, Dhall packages omit the `source.dhall` in order
+to conserve disk space when they are used exclusively as dependencies. For
 example, if we build the Prelude package it will only contain the binary
 encoding of the expression:
 
@@ -184,7 +182,7 @@ result
 ```
 
 Typically, you only specify `source = true;` for the top-level Dhall expression
-of interest (such as our example `true.nix` Dhall package).  However, if you
+of interest (such as our example `true.nix` Dhall package). However, if you
 wish to specify `source = true` for all Dhall packages, then you can amend the
 Dhall overlay like this:
 
@@ -269,7 +267,7 @@ of `buildDhallPackage` that accepts the following arguments:
 * `src`: The directory containing Dhall code that you want to turn into a Dhall
   package
 
-* `file`: The top-level file (`package.dhall` by default) that is the entrypoint
+* `file`: The top-level file (`package.dhall` by default) that is the entry point
   to the rest of the package
 
 * `document`: Set to `true` to generate documentation for the package
@@ -293,7 +291,7 @@ terms of `buildDhallPackage` that accepts the following arguments:
   directory other than the root of the repository)
 
 * `file`: The top-level file (`${directory}/package.dhall` by default) that is
-  the entrypoint to the rest of the package
+  the entry point to the rest of the package
 
 * `document`: Set to `true` to generate documentation for the package
 
@@ -412,9 +410,9 @@ error: build of '/nix/store/0f1hla7ff1wiaqyk1r2ky4wnhnw114fi-true.drv' failed
 ```
 
 … because the default Prelude selected by Nixpkgs revision
-`94b2848559b12a8ed1fe433084686b2a81123c99is` is version 20.1.0, which doesn't
-have the same integrity check as version 19.0.0.  This means that version
-19.0.0 is not cached and the interpreter is not allowed to fall back to
+`94b2848559b12a8ed1fe433084686b2a81123c99` is version 20.1.0, which doesn't
+have the same integrity check as version 19.0.0. This means that version
+19.0.0 is not cached, and the interpreter is not allowed to fall back to
 importing the URL.
 
 However, we can override the default Prelude version by using `dhall-to-nixpkgs`

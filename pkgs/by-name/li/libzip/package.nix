@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.11.3";
+  version = "1.11.4";
 
   src = fetchurl {
     url = "https://libzip.org/download/libzip-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dmU/E13eMDYDbFAOEYYWSP+/nh/FsjP/RzxgiX2dsOo=";
+    hash = "sha256-guny8kIfnXwkZrvDFzzQlZWojqN9sNVZqdCi3GDcci4=";
   };
 
   outputs = [
@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libzip.org/";
     description = "C library for reading, creating and modifying zip archives";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
 })

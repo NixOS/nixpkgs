@@ -13,7 +13,7 @@ makeSetupHook {
   };
   passthru.tests.test = callPackage ./test.nix { };
   meta = {
-    description = "setup hook to patch executable paths in ppd files";
+    description = "Setup hook to patch executable paths in ppd files";
     maintainers = [ lib.maintainers.yarny ];
   };
 } ./patch-ppd-hook.sh

@@ -9,7 +9,6 @@
   poetry-core,
   pprintpp,
   pytestCheckHook,
-  pythonOlder,
   wrapt,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "tbm-utils";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "thebigmunch";
@@ -47,7 +44,10 @@ buildPythonPackage rec {
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
 
-  pythonRelaxDeps = [ "attrs" ];
+  pythonRelaxDeps = [
+    "attrs"
+    "pendulum"
+  ];
 
   build-system = [ poetry-core ];
 
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tbm_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Commonly-used set of utilities";
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

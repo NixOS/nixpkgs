@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paho-mqtt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "adafruit-io";
   version = "2.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adafruit";
@@ -41,10 +38,10 @@ buildPythonPackage rec {
     "tests/test_mqtt_client.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Adafruit IO";
     homepage = "https://github.com/adafruit/Adafruit_IO_Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

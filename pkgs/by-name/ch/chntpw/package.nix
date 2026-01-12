@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pogostick.net/~pnh/ntpasswd/";
     description = "Utility to reset the password of any user that has a valid local account on a Windows system";
     maintainers = with lib.maintainers; [ deepfire ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
 }

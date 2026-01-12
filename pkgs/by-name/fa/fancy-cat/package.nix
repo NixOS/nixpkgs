@@ -12,7 +12,7 @@
   mupdf,
   openjpeg,
   stdenv,
-  zig,
+  zig_0_14,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./0001-changes.patch ];
 
   nativeBuildInputs = [
-    zig.hook
+    zig_0_14.hook
   ];
 
   zigBuildFlags = [ "--release=fast" ];
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ ciflire ];
     mainProgram = "fancy-cat";
-    inherit (zig.meta) platforms;
+    inherit (zig_0_14.meta) platforms;
   };
 })

@@ -14,7 +14,7 @@ class LogFormatter(logging.Formatter):
     }
 
     @override
-    def format(self, record: logging.LogRecord) -> str:
+    def format(self, record: logging.LogRecord) -> Any:
         record.levelname = record.levelname.lower()
         formatter = self.formatters.get(record.levelno, self.formatters["DEFAULT"])
         return formatter.format(record)
@@ -90,11 +90,11 @@ def tabulate(
     def format_row(row: Mapping[str, Any]) -> str:
         s = (2 * " ").join(
             f"{str(row[header]).ljust(width)}"
-            for header, width in zip(data_headers, column_widths)
+            for header, width in zip(data_headers, column_widths, strict=True)
         )
         return s.strip()
 
-    result = [format_row(dict(zip(data_headers, data_headers)))]
+    result = [format_row(dict(zip(data_headers, data_headers, strict=True)))]
     for row in data:
         result.append(format_row(row))
 

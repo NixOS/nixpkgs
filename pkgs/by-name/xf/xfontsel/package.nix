@@ -1,57 +1,68 @@
-# This program used to come with xorg releases, but now I could only find it
-# at https://www.x.org/releases/individual/.
-# That is why this expression is not inside pkgs.xorg
-
 {
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
-  xorg,
   pkg-config,
+  gettext,
+  wrapWithXFileSearchPathHook,
+  xorgproto,
+  libx11,
+  libxaw,
+  libxmu,
+  libxt,
+  writeScript,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfontsel";
-  version = "1.0.6";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/app/xfontsel-${version}.tar.bz2";
-    sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
+    url = "mirror://xorg/individual/app/xfontsel-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ekuGZYp3ASU+0P6KZkceVOTKy7pm1yePF1nTs6M6Ask=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    gettext
+    wrapWithXFileSearchPathHook
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXaw
+    xorgproto
+    libx11
+    libxaw
+    libxmu
+    libxt
   ];
 
-  # Without this, it gets Xmu as a dependency, but without rpath entry
-  NIX_LDFLAGS = "-lXmu";
+  installFlags = [ "appdefaultdir=$(out)/share/X11/app-defaults" ];
 
-  # This will not make xfontsel find its app-defaults, but at least the $out
-  # directory will contain them.
-  # hack: Copying the XFontSel app-defaults file to $HOME makes xfontsel work.
-  installPhase = ''
-    make install appdefaultdir=$out/share/X11/app-defaults
-    wrapProgram $out/bin/xfontsel \
-      --set XAPPLRESDIR $out/share/X11/app-defaults
-  '';
+  passthru = {
+    updateScript = writeScript "update-${finalAttrs.pname}" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts
+      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+        --url https://xorg.freedesktop.org/releases/individual/app/ \
+        | sort -V | tail -n1)"
+      update-source-version ${finalAttrs.pname} "$version"
+    '';
+  };
 
-  meta = with lib; {
-    homepage = "https://www.x.org/";
+  meta = {
     description = "Allows testing the fonts available in an X server";
-    mainProgram = "xfontsel";
-    license = with licenses; [
+    longDescription = ''
+      xfontsel provides a simple way to display the X11 core protocol fonts known to your X server,
+      examine samples of each, and retrieve the X Logical Font Description ("XLFD") full name for a
+      font.
+    '';
+    homepage = "https://gitlab.freedesktop.org/xorg/app/xfontsel";
+    license = with lib.licenses; [
       x11
-      smlnj
+      hpnd
       mit
     ];
+    mainProgram = "xfontsel";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

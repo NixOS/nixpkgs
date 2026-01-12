@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vcyzMw2tWil4MULEkf25S6kXzqMG6JXIx6GibxxspkY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KlWzcJtNBTLCDDH01vI1mn9H7LUqni5o/Q6PsNeI7HE=";
 
   cargoPatches = [
@@ -32,10 +31,10 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Urban Dictionary CLI - written in Rust";
     homepage = "https://github.com/lsmb/udict";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "udict";
   };

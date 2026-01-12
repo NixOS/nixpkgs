@@ -13,7 +13,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcollections,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "aioxmpp";
   version = "0.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -75,23 +72,22 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "benchmarks" ];
 
-  disabledTests =
-    [
-      # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
-      "test_convert_field_datetime_default_locale"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # asyncio issues
-      "test_is_abstract"
-      "Testbackground"
-      "TestCapturingXSO"
-      "Testcheck_x509"
-      "TestClient"
-      "TestIntegerType"
-      "TestStanzaStream"
-      "TestStanzaToken"
-      "TestXMLStream"
-    ];
+  disabledTests = [
+    # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
+    "test_convert_field_datetime_default_locale"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # asyncio issues
+    "test_is_abstract"
+    "Testbackground"
+    "TestCapturingXSO"
+    "Testcheck_x509"
+    "TestClient"
+    "TestIntegerType"
+    "TestStanzaStream"
+    "TestStanzaToken"
+    "TestXMLStream"
+  ];
 
   meta = {
     description = "Pure-python XMPP library for asyncio";

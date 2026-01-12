@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "3.12.2";
+  version = "3.13.6";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    hash = "sha256-iHIHXrGAGZ5vYA/pbFmHVVczRtH34lC5IIqyj0SF1r4=";
+    hash = "sha256-rc/WdBCVZDwensqnVMrQXCPevLg0INidzN9Qwhqw2Mk=";
   };
 
   outputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "YANG data modelling language parser and toolkit";
     longDescription = ''
       libyang is a YANG data modelling language parser and toolkit written (and
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
       sysrepo or FRRouting projects.
     '';
     homepage = "https://github.com/CESNET/libyang";
-    license = with licenses; [ bsd3 ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ woffs ];
+    license = with lib.licenses; [ bsd3 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ woffs ];
   };
 }

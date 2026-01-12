@@ -27,63 +27,60 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2025.05.03";
+  version = "2026.01.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-VYJn1ddDkSHpWVsE7NunwRvuAVRqbvCNw/TzkWe8TLQ=";
+    hash = "sha256-/1DACDf530rzxeLVMLGkB3n6d3d8sN/ci8Q3kHAtZJo=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
   # iconutil is unavailable, replace with png2icns from libicns
   # Patch bad hardcoded compiler
   # Don't mess with codesign, doesn't seem to work?
-  postPatch =
-    ''
-      substituteInPlace Makefile.am \
-        --replace-fail 'sips' '## sips' \
-        --replace-fail 'iconutil -c icns -o contrib/macos/dosbox.icns src/dosbox.iconset' 'png2icns contrib/macos/dosbox.icns contrib/macos/dosbox-x.png' \
-        --replace-fail 'g++' "$CXX" \
-        --replace-fail 'codesign' '## codesign'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      patchShebangs appbundledeps.py
-    '';
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace-fail 'sips' '## sips' \
+      --replace-fail 'iconutil -c icns -o contrib/macos/dosbox.icns src/dosbox.iconset' 'png2icns contrib/macos/dosbox.icns contrib/macos/dosbox-x.png' \
+      --replace-fail 'g++' "$CXX" \
+      --replace-fail 'codesign' '## codesign'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    patchShebangs appbundledeps.py
+  '';
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      makeWrapper
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-      python3
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
+    python3
+  ];
 
-  buildInputs =
-    [
-      ffmpeg
-      fluidsynth
-      freetype
-      glib
-      libpcap
-      libpng
-      libslirp
-      ncurses
-      SDL2
-      SDL2_net
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libxkbfile
-      libXrandr
-    ];
+  buildInputs = [
+    ffmpeg
+    fluidsynth
+    freetype
+    glib
+    libpcap
+    libpng
+    libslirp
+    ncurses
+    SDL2
+    SDL2_net
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxkbfile
+    libXrandr
+  ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";

@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   stdenv,
-  pythonOlder,
   rustPlatform,
   bitstring,
   cachetools,
@@ -21,19 +20,17 @@
 }:
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.14";
+  version = "4.9.4";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-no99VjO1KVE+/JUOJcl0xOz3yZtMr70A8vE1rQVjMH8=";
+    hash = "sha256-KIidEQQeOYgxh1x9F6Nn4+WTewldAGdS5Fx/IwL0Ym0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-DnJ0RFc03+rBg7yNdezgb/YuoQr3RKj+NeMyin/kSRk=";
+    inherit pname version src;
+    hash = "sha256-/tVuR31T38/xx1+jglSGECAT1GmQEddQp9o6zAqlPyY=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -70,12 +67,12 @@ buildPythonPackage rec {
     "test_metagenome_kreport_out_fail"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
     mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
     changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
-    maintainers = with maintainers; [ luizirber ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ luizirber ];
+    license = lib.licenses.bsd3;
   };
 }

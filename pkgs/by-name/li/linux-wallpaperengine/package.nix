@@ -2,114 +2,132 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoPatchelfHook,
   cmake,
+  file,
+  pkg-config,
+  python3,
+  SDL2,
+  SDL2_mixer,
+  cef-binary,
+  egl-wayland,
   ffmpeg,
-  libglut,
+  fftw,
   glew,
   glfw,
   glm,
-  libpulseaudio,
+  gmp,
+  kissfftFloat,
   libXau,
   libXdmcp,
   libXpm,
   libXrandr,
   libXxf86vm,
+  libdecor,
+  libffi,
+  libglut,
+  libpng,
+  libpulseaudio,
   lz4,
   mpv,
-  pkg-config,
-  SDL2,
-  SDL2_mixer,
-  zlib,
   wayland,
   wayland-protocols,
-  egl-wayland,
-  libffi,
   wayland-scanner,
-  cef-binary,
-  libdecor,
-  autoPatchelfHook,
+  zlib,
+  nix-update-script,
 }:
 
 let
-  cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "120.1.10";
-    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
-    gitRevision = "3ce3184";
-    chromiumVersion = "120.0.6099.129";
+  cef = cef-binary.override {
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
+    gitRevision = "cbc1c5b";
+    chromiumVersion = "135.0.7049.52";
 
-    srcHash =
-      {
-        aarch64-linux = "sha256-l0PSW4ZeLhfEauf1bez1GoLfu9cwXZzEocDlGI9yFsQ=";
-        x86_64-linux = "sha256-OdIVEy77tiYRfDWXgyceSstFqCNeZHswzkpw06LSnP0=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  });
+    srcHashes = {
+      aarch64-linux = "sha256-LK5JvtcmuwCavK7LnWmMF2UDpM5iIZOmsuZS/t9koDs=";
+      x86_64-linux = "sha256-JKwZgOYr57GuosM31r1Lx3DczYs35HxtuUs5fxPsTcY=";
+    };
+  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2024-11-08";
+  version = "0-unstable-2025-09-19";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "4a063d0b84d331a0086b3f4605358ee177328d41";
-    hash = "sha256-IRTGFxHPRRRSg0J07pq8fpo1XbMT4aZC+wMVimZlH/Y=";
+    rev = "b39f12757908eda9f4c1039613b914606568bb84";
+    fetchSubmodules = true;
+    hash = "sha256-Lm4BixK+PBCN/I+ecoYfoD96zS9UysEDOfponFy3SDU=";
   };
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
     autoPatchelfHook
+    cmake
+    file
+    pkg-config
+    python3
   ];
 
   buildInputs = [
-    libdecor
+    SDL2
+    SDL2_mixer
+    egl-wayland
     ffmpeg
-    libglut
+    fftw
     glew
     glfw
     glm
-    libpulseaudio
+    gmp
+    kissfftFloat
     libXau
-    SDL2_mixer
     libXdmcp
     libXpm
+    libXrandr
     libXxf86vm
-    mpv
+    libdecor
+    libffi
+    libglut
+    libpng
+    libpulseaudio
     lz4
-    SDL2
-    zlib
+    mpv
     wayland
     wayland-protocols
-    egl-wayland
-    libffi
     wayland-scanner
-    libXrandr
+    zlib
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${cef.buildType}"
     "-DCEF_ROOT=${cef}"
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/share/linux-wallpaperengine"
   ];
 
-  preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef}" $out/app/linux-wallpaperengine/linux-wallpaperengine
-    chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
+  postInstall = ''
+    rm -rf $out/bin $out/lib $out/include
+    chmod 755 $out/share/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
-    ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
+    ln -s $out/share/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
   '';
+
+  preFixup = ''
+    find $out/share/linux-wallpaperengine -type f -exec file {} \; | grep 'ELF' | cut -d: -f1 | while read -r elf_file; do
+      patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$elf_file"
+    done
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Wallpaper Engine backgrounds for Linux";
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
     hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
   };
-}
+})

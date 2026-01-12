@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchFromGitHub,
   cmake,
   zlib,
@@ -11,7 +10,7 @@
   scipopt-papilo,
   scipopt-zimpl,
   ipopt,
-  tbb_2021_11,
+  onetbb,
   boost,
   gfortran,
   criterion,
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-scip";
-  version = "9.2.2";
+  version = "9.2.4";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
     tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-gxR308XrlmuUym/ujwGcD9a7Z+Z7vQNHaK4zO/PWPBQ=";
+    hash = "sha256-nwFRtP63/HPfk9JhcyLKApicgqE9IF+7s5MGGrVJrpM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -39,14 +38,12 @@ stdenv.mkDerivation rec {
     gmp
     readline
     zlib
-    tbb_2021_11
+    onetbb
     boost
     gfortran
     criterion
     mpfr # if not included, throws fatal error: mpfr.h not found
   ];
-
-  cmakeFlags = [ ];
 
   doCheck = true;
 

@@ -4,15 +4,12 @@
   cryptography,
   fetchPypi,
   jeepney,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "secretstorage";
   version = "3.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "SecretStorage";
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "secretstorage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to FreeDesktop.org Secret Service API";
     homepage = "https://github.com/mitya57/secretstorage";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

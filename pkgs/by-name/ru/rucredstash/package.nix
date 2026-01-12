@@ -15,18 +15,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-trupBiinULzD8TAy3eh1MYXhQilO08xu2a4yN7wwhwk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QylZkqE8my2ldCjtg3++6TTDm0om3SVp0jwYUZ9qVes=";
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utility for managing credentials securely in AWS cloud";
     homepage = "https://github.com/psibi/rucredstash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "rucredstash";
   };
 }

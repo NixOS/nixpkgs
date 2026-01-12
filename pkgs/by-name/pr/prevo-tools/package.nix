@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     mainProgram = "prevo";
     maintainers = with lib.maintainers; [
       das-g
-      ehmry
     ];
     platforms = lib.platforms.unix;
   };

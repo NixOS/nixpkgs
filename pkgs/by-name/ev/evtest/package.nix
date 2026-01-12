@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitLab,
   autoreconfHook,
   pkg-config,
   libxml2,
@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "evtest";
-  version = "1.35";
+  version = "1.36";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -17,17 +17,19 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libxml2 ];
 
-  src = fetchgit {
-    url = "git://anongit.freedesktop.org/${pname}";
-    rev = "refs/tags/${pname}-${version}";
-    sha256 = "sha256-xF2dwjTmTOyZ/kmASYWqKfnvqCjw0OmdNKrNMrjNl5g=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "libevdev";
+    repo = "evtest";
+    tag = "evtest-${version}";
+    sha256 = "sha256-M7AGcHklErfRIOu64+OU397OFuqkAn4dqZxx7sDfklc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for input event debugging";
     license = lib.licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "evtest";
   };
 }

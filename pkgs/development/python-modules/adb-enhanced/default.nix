@@ -6,15 +6,12 @@
   setuptools,
   jdk11,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
   version = "2.5.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ashishb";
@@ -40,15 +37,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adbe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for Android testing and development";
     homepage = "https://github.com/ashishb/adb-enhanced";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vtuan10 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vtuan10 ];
     mainProgram = "adbe";
   };
 }

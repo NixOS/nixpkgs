@@ -9,7 +9,6 @@
   mecab-python3,
   jieba,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitHub,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "wordfreq";
   version = "3.0.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rspeer";
@@ -46,9 +43,9 @@ buildPythonPackage rec {
     "test_korean"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for looking up the frequencies of words in many languages, based on many sources of data";
     homepage = "https://github.com/rspeer/wordfreq/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

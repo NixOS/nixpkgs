@@ -45,24 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
 
-      substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
+    substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
 
-      substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
-        --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
+    substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
+      --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
 
-      # Update URI handler database whenever new url-handler is installed system-wide
-      substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/test-sql.sh
-    '';
+    # Update URI handler database whenever new url-handler is installed system-wide
+    substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/test-sql.sh
+  '';
 
   strictDeps = true;
 
@@ -158,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only

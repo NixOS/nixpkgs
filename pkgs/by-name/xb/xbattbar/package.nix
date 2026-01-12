@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Display battery status in X11";
     homepage = "https://salsa.debian.org/debian/xbattbar";
-    license = with lib; licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ q3k ];
     mainProgram = "xbattbar";

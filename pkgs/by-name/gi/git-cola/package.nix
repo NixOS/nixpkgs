@@ -5,7 +5,7 @@
   python3Packages,
   gettext,
   git,
-  qt5,
+  qt6,
   versionCheckHook,
   copyDesktopItems,
   imagemagick,
@@ -14,34 +14,39 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.13.0";
+  version = "4.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-FoCU10EKeNltYh7AEOR+98ryVA6rFVfCDMg5QUSpF0w=";
+    hash = "sha256-no4yvAjrg6q7L3PrMHSLrbm21myL9rXnKvOYjXrY1lw=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];
+  build-system = with python3Packages; [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs =
-    [ git ]
-    ++ (with python3Packages; [
-      setuptools
-      pyqt5
-      qtpy
-      send2trash
-      polib
-    ]);
+  buildInputs = [
+    git
+    qt6.qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+
+  dependencies = with python3Packages; [
+    polib
+    pyqt6
+    qtpy
+    send2trash
+  ];
 
   nativeBuildInputs = [
     gettext
-    qt5.wrapQtAppsHook
-    python3Packages.setuptools-scm
+    qt6.wrapQtAppsHook
     imagemagick
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   nativeCheckInputs = [
     git
@@ -49,12 +54,11 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "cola/inotify.py" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "cola/inotify.py" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

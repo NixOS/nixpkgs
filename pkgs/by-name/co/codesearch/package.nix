@@ -22,10 +22,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/google/codesearch";
-    license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [ bennofs ];
+    license = [ lib.licenses.bsd3 ];
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

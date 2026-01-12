@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openttd-ttf";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "zephyris";
     repo = "openttd-ttf";
     tag = finalAttrs.version;
-    hash = "sha256-HKOG3Ov0LBCW7Z0FK5BrZRycn2S5gVRnwyU9fM3hb5M=";
+    hash = "sha256-ZV74ZQ4Z4jw2tjG3kXj4Vo1J+W3BF0SJIFIae9DWLAc=";
   };
 
   nativeBuildInputs = [

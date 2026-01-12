@@ -20,27 +20,27 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional buildDocs "devdoc";
+  ]
+  ++ lib.optional buildDocs "devdoc";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.xz";
     hash = "sha256-GVkzqacx01dXkbiBulzArSpxXh6cTCPMqqKhfhZMluw=";
   };
 
-  nativeBuildInputs =
-    [
-      glib
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals buildDocs [
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (buildDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals buildDocs [
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (buildDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "python2" false)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ncurses toolkit for creating text-mode graphical user interfaces";
     homepage = "https://keep.imfreedom.org/libgnt/libgnt/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ony ];
   };
 }

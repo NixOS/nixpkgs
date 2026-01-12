@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-71SApct2yQV3ueWDlZv7ScK1s0nWWS57cPCvoMutlLA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-uftsBw8ZegnaoFel/wEqCMhVxiGR13jKbKqVSm+23T4=";
 
   nativeBuildInputs = [
@@ -47,12 +46,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing OpenPGP keys within organizations";
     homepage = "https://openpgp-ca.org/";
     changelog = "https://openpgp-ca.org/doc/changelog/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cherrykitten ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "oca";
   };
 }

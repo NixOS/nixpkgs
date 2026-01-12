@@ -29,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libglut
     libGLU
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -59,10 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = "mkdir -p $bin/bin $dev/include $out/lib $man/share/man/man1";
 
-  meta = with lib; {
+  meta = {
     description = "File format, software library and a tool set for compression of 3D triangle meshes";
     homepage = "https://sourceforge.net/projects/openctm/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 })

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   replaceVars,
 
   # build-system
@@ -33,7 +32,6 @@
   pylibmc,
   pymemcache,
   python,
-  pywatchman,
   pyyaml,
   pytz,
   redis,
@@ -44,35 +42,44 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.1";
+  version = "5.2.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-JmO2IEWrpA7/FXOwESLvIIuHmi2HQgvg28LVNmBXgLA=";
+    hash = "sha256-9URe8hB15WP92AU1YgGGFfZhVxn59gfBRrORZ04L+F0=";
   };
 
-  patches =
-    [
-      (replaceVars ./django_5_set_zoneinfo_dir.patch {
-        zoneinfo = tzdata + "/share/zoneinfo";
-      })
-      # prevent tests from messing with our pythonpath
-      ./django_5_tests_pythonpath.patch
-      # disable test that expects timezone issues
-      ./django_5_disable_failing_tests.patch
-    ]
-    ++ lib.optionals withGdal [
-      (replaceVars ./django_5_set_geos_gdal_lib.patch {
-        geos = geos;
-        gdal = gdal;
-        extension = stdenv.hostPlatform.extensions.sharedLibrary;
-      })
-    ];
+  patches = [
+    (replaceVars ./django_5_set_zoneinfo_dir.patch {
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+    # prevent tests from messing with our pythonpath
+    ./django_5_tests_pythonpath.patch
+    # disable test that expects timezone issues
+    ./django_5_disable_failing_tests.patch
+
+    # 3.14.1/3.13.10 comapt
+    (fetchpatch {
+      # https://github.com/django/django/pull/20390
+      url = "https://github.com/django/django/commit/5ca0f62213911a77dd4a62e843db7e420cc98b78.patch";
+      hash = "sha256-SpVdbS4S5wqvrrUOoZJ7d2cIbtmgI0mvxwwCveSA068=";
+    })
+    (fetchpatch {
+      # https://github.com/django/django/pull/20392
+      url = "https://github.com/django/django/commit/9cc231e8243091519f5d627cd02ee40bbb853ced.patch";
+      hash = "sha256-/aimmqxurMCCntraxOtybEq8qNgZgQWLD5Gxs/3pkIU=";
+    })
+  ]
+  ++ lib.optionals withGdal [
+    (replaceVars ./django_5_set_geos_gdal_lib.patch {
+      geos = geos;
+      gdal = gdal;
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tests/utils_tests/test_autoreload.py \
@@ -101,19 +108,14 @@ buildPythonPackage rec {
     pillow
     pylibmc
     pymemcache
-    pywatchman
     pyyaml
     pytz
     redis
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  doCheck =
-    !stdenv.hostPlatform.isDarwin
-    # pywatchman depends on folly which does not support 32bits
-    && !stdenv.hostPlatform.is32bit;
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -132,7 +134,8 @@ buildPythonPackage rec {
     runHook preCheck
 
     pushd tests
-    ${python.interpreter} runtests.py --settings=test_sqlite
+    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
+    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
     popd
 
     runHook postCheck
@@ -140,11 +143,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

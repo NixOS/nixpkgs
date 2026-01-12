@@ -17,7 +17,6 @@
 
   # dependencies
   filelock,
-  future,
   jinja2,
   networkx,
   numpy,
@@ -35,7 +34,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.7.0";
+  version = "2.9.1";
 in
 buildPythonPackage {
   inherit version;
@@ -45,7 +44,7 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
+  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -66,13 +65,14 @@ buildPythonPackage {
       cuda_cupti
       cuda_nvrtc
       cudnn
-      cusparselt
       libcublas
       libcufft
       libcufile
       libcurand
       libcusolver
       libcusparse
+      libcusparse_lt
+      libnvshmem
       nccl
     ]
   );
@@ -87,7 +87,6 @@ buildPythonPackage {
 
   dependencies = [
     filelock
-    future
     jinja2
     networkx
     numpy
@@ -96,7 +95,8 @@ buildPythonPackage {
     setuptools
     sympy
     typing-extensions
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
 
   postInstall = ''
     # ONNX conversion

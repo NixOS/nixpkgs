@@ -25,23 +25,23 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ eprover ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-    ]);
-  buildInputs =
-    [
-      zlib
-      ocamlPackages.z3
-      z3
-    ]
-    ++ (with ocamlPackages; [
-      ocamlgraph
-      yojson
-      zarith
-    ]);
+  nativeBuildInputs = [
+    eprover
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+  ]);
+  buildInputs = [
+    zlib
+    ocamlPackages.z3
+    z3
+  ]
+  ++ (with ocamlPackages; [
+    ocamlgraph
+    yojson
+    zarith
+  ]);
 
   preConfigure = "patchShebangs .";
 
@@ -55,13 +55,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automated first-order logic theorem prover";
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

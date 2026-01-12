@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   unixtools,
-  php82,
+  php,
   python3,
   makeWrapper,
   nixosTests,
@@ -23,20 +23,20 @@
 }:
 
 let
-  phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
+  phpPackage = php.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.5.0";
+  version = "25.12.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    sha256 = "sha256-I1bHEFWGgwHq1U8Ipbm9tu7t6ikfMG+EIPjCsLAP/tk=";
+    hash = "sha256-d73izEdLWviOp0XcMbQ3goLWgLZupO4QtQv7WUxdfk8=";
   };
 
-  vendorHash = "sha256-bt7DXkQ3Jgab4L9fB8qInbHvlRxFfkzP+F8DVQ9qWJ4=";
+  vendorHash = "sha256-34+srnXDto82xuITDSPEiNnbCgmZbijvpqpmwlszCEg=";
 
   php = phpPackage;
 
@@ -77,7 +77,7 @@ phpPackage.buildComposerProject2 rec {
     patch -p1 -d $out -i ${./broken-binary-paths.diff}
 
     substituteInPlace \
-      $out/misc/config_definitions.json \
+      $out/resources/definitions/config_definitions.json \
       --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
       --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
       --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
@@ -103,7 +103,8 @@ phpPackage.buildComposerProject2 rec {
     substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/app/Listeners/CommandStartingListener.php \
+      --replace-fail "! function_exists('posix_getpwuid') || ! function_exists('posix_geteuid')" "true"
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 
@@ -123,12 +124,12 @@ phpPackage.buildComposerProject2 rec {
     tests.librenms = nixosTests.librenms;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ];
-    teams = [ teams.wdz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ netali ];
+    teams = [ lib.teams.wdz ];
+    platforms = lib.platforms.linux;
   };
 }

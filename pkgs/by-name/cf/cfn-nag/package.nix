@@ -5,14 +5,14 @@
   ruby,
 }:
 
-bundlerEnv rec {
+bundlerEnv {
   pname = "cfn-nag";
   version = "0.8.10";
 
   inherit ruby;
   gemdir = ./.;
 
-  passthru.updateScript = bundlerUpdateScript pname;
+  passthru.updateScript = bundlerUpdateScript "cfn-nag";
 
   meta = {
     description = "Linting tool for CloudFormation templates";

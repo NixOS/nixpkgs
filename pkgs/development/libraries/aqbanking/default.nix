@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/aqbanking-${version}.tar.gz";
     inherit hash;
   };
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to banking tasks, file formats and country information";
     homepage = "https://www.aquamaniac.de/rdm/";
     hydraPlatforms = [ ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

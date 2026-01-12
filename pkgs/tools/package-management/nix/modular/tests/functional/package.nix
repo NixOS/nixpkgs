@@ -15,6 +15,7 @@
   nix-store,
   nix-expr,
   nix-cli,
+  toml11,
 
   busybox-sandbox-shell ? null,
 
@@ -34,28 +35,25 @@ mkMesonDerivation (
 
     workDir = ./.;
 
-    # Hack for sake of the dev shell
-    passthru.externalNativeBuildInputs =
-      [
-        meson
-        ninja
-        pkg-config
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
 
-        jq
-        git
-        mercurial
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        # For various sandboxing tests that needs a statically-linked shell,
-        # etc.
-        busybox-sandbox-shell
-        # For Overlay FS tests need `mount`, `umount`, and `unshare`.
-        # For `script` command (ensuring a TTY)
-        # TODO use `unixtools` to be precise over which executables instead?
-        util-linux
-      ];
-
-    nativeBuildInputs = finalAttrs.passthru.externalNativeBuildInputs ++ [
+      jq
+      git
+      mercurial
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # For various sandboxing tests that needs a statically-linked shell,
+      # etc.
+      busybox-sandbox-shell
+      # For Overlay FS tests need `mount`, `umount`, and `unshare`.
+      # For `script` command (ensuring a TTY)
+      # TODO use `unixtools` to be precise over which executables instead?
+      util-linux
+    ]
+    ++ [
       nix-cli
     ];
 
@@ -71,6 +69,13 @@ mkMesonDerivation (
       ''
         cd $(readlink -e $PWD)
         echo $PWD | grep tests/functional
+      '';
+
+    # `toml11` upgrade causes these to fail in 2.32+: https://github.com/NixOS/nixpkgs/pull/442682
+    # Remove when that PR lands in master.
+    ${if lib.versionAtLeast (lib.versions.majorMinor version) "2.32" then "preCheck" else null} =
+      lib.optionalString (lib.versionOlder toml11.version "4.0") ''
+        rm -f ../lang/eval-fail-fromTOML-{over,under}flow*
       '';
 
     mesonCheckFlags = [

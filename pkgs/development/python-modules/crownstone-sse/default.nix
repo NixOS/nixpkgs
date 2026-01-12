@@ -4,7 +4,6 @@
   buildPythonPackage,
   certifi,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "crownstone-sse";
   version = "2.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "crownstone_sse";
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crownstone_sse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for listening to Crownstone SSE events";
     homepage = "https://github.com/Crownstone-Community/crownstone-lib-python-sse";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

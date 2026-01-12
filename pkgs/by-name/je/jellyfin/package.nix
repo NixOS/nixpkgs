@@ -9,17 +9,18 @@
   freetype,
   jellyfin-web,
   sqlite,
+  versionCheckHook,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "jellyfin";
-  version = "10.10.7"; # ensure that jellyfin-web has matching version
+  version = "10.11.5"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
-    rev = "v${version}";
-    hash = "sha256-GWpzX8DvCafHb5V9it0ZPTXKm+NbLS7Oepe/CcMiFuI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MOzMSubYkxz2kwpvamaOwz3h8drEgeSoiE9Gwassmbk=";
   };
 
   propagatedBuildInputs = [ sqlite ];
@@ -32,8 +33,8 @@ buildDotnetModule rec {
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   makeWrapperArgs = [
@@ -43,24 +44,29 @@ buildDotnetModule rec {
     "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.tests = {
     smoke-test = nixosTests.jellyfin;
   };
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Free Software Media System";
     homepage = "https://jellyfin.org/";
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       minijackson
       purcell
       jojosch
     ];
     mainProgram = "jellyfin";
-    platforms = dotnet-runtime.meta.platforms;
+    platforms = finalAttrs.dotnet-runtime.meta.platforms;
   };
-}
+})

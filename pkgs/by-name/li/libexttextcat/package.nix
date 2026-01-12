@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bXfqziDp6hBsEzDiaO3nDJpKiXRN3CVxVoJ1TsozaN8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "N-Gram-Based Text Categorization library primarily intended for language guessing";
     homepage = "https://wiki.documentfoundation.org/Libexttextcat";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "createfp";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

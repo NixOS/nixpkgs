@@ -19,24 +19,22 @@ let
   lens-profiles = fetchFromGitHub {
     owner = "gyroflow";
     repo = "lens_profiles";
-    tag = "v19";
-    hash = "sha256-8R2mMqKxzoa5Sfqxs8pcfwUfo1PQKSrnM+60Ri3wiXY=";
+    tag = "v36";
+    hash = "sha256-JjH7cGT9hzB9pv0W6FUPaejkiUj357IM2siJNrSHiYY=";
   };
 in
 rustPlatform.buildRustPackage rec {
   pname = "gyroflow";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "gyroflow";
     repo = "gyroflow";
     tag = "v${version}";
-    hash = "sha256-RYTT62u39g4n9++xMlhJala6U0uIn+btGOxp9khEAnU=";
+    hash = "sha256-ncGbM8wIwnyLHp+oArgDnKCCGIeywdH7YGZPgRBLiJM=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-30XSltaw1jzXPpobh0WJ+aIRbdf24nYgnbt7yzuS2gs=";
+  cargoHash = "sha256-9UamQxrKVMSivhZ/cvRRCliaf3eFeHg5XPPtuaRKrg0=";
 
   nativeBuildInputs = [
     clang
@@ -121,7 +119,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   desktopItems = [
-    (makeDesktopItem ({
+    (makeDesktopItem {
       name = "gyroflow";
       desktopName = "Gyroflow";
       genericName = "Video stabilization using gyroscope data";
@@ -139,7 +137,7 @@ rustPlatform.buildRustPackage rec {
       startupNotify = true;
       startupWMClass = "gyroflow";
       prefersNonDefaultGPU = true;
-    }))
+    })
   ];
 
   meta = {
@@ -149,7 +147,7 @@ rustPlatform.buildRustPackage rec {
       gpl3Plus
       cc0
     ];
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

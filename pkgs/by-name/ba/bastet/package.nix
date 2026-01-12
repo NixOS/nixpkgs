@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fph";
     repo = "bastet";
-    rev = version;
+    tag = version;
     sha256 = "09kamxapm9jw9przpsgjfg33n9k94bccv65w95dakj0br33a75wn";
   };
 
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     cp bastet.6 "$out"/share/man/man6
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tetris clone with 'bastard' block-choosing AI";
     mainProgram = "bastet";
     homepage = "http://fph.altervista.org/prog/bastet.html";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.linux;
   };
 }

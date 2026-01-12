@@ -30,13 +30,13 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) smartctl; };
 
-  meta = with lib; {
+  meta = {
     description = "Export smartctl statistics for Prometheus";
     mainProgram = "smartctl_exporter";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       hexa
       Frostman
     ];

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "cx-oracle";
   version = "8.3.0";
+  format = "setuptools";
 
   buildInputs = [ odpic ];
 
@@ -25,10 +26,9 @@ buildPythonPackage rec {
   # Check need an Oracle database to run
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ y0no ];
+    license = lib.licenses.bsd3;
   };
 }

@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KIdhsbD9v2kCM2C/kSJCleyniEz4Bw7UxBsF762fnJs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Zdy6bUgpaDBiAavSlAAH7LyYbNm7UU1qz0wAnVXQzpY=";
 
   nativeBuildInputs = [
@@ -29,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $assets/git-ignore.{bash,fish} --zsh $assets/_git-ignore
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
     changelog = "https://github.com/sondr3/git-ignore/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "git-ignore";
   };
 }

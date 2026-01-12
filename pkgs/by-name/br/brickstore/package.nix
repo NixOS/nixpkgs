@@ -7,7 +7,7 @@
   gst_all_1,
   cmake,
   libglvnd,
-  tbb,
+  onetbb,
   ninja,
   pkg-config,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rgriebl";
     repo = "brickstore";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4sxPplZ1t8sSfwTCeeBtfU4U0gcE9FROt6dKvkfyO6Q=";
     fetchSubmodules = true;
   };
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtwayland
     qt6.wrapQtAppsHook
-    tbb
+    onetbb
   ];
 
   patches = [

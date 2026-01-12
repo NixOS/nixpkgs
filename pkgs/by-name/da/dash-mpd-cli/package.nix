@@ -4,42 +4,36 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  bento4,
   protobuf,
   ffmpeg,
+  gpac,
   libxslt,
   shaka-packager,
   nix-update-script,
+  runCommand,
 }:
 
 let
   # dash-mpd-cli looks for a binary named `shaka-packager`, while
   # shaka-packager provides `packager`.
-  shaka-packager-wrapped = stdenvNoCC.mkDerivation {
-    name = "shaka-packager-wrapped";
-    phases = [ "installPhase" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
-    '';
-  };
+  shaka-packager-wrapped = runCommand "shaka-packager-wrapped" { } ''
+    mkdir -p $out/bin
+    ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
+  '';
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.26";
+  version = "0.2.28";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PMzHWY129Bddl1RQQyEPstqvDLAqXxGv9I3fw1AylBo=";
+    hash = "sha256-Q8+HTDdeaqDroBZ1AS+jDxf0yq20jZ+raRCh7gEJYn8=";
   };
 
-  patches = [
-    ./use-shaka-by-default.patch
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qy8X9DoBD5MIUQ6akalqtyasst0ZKJJLZTEz+6Hp6EI=";
+  cargoHash = "sha256-YnA/LTw9xCLSnNuFDXlsGzAiTdsst2uIDewuohkkgDU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -53,8 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/dash-mpd-cli \
       --prefix PATH : ${
         lib.makeBinPath [
-          (lib.getBin ffmpeg)
-          (lib.getBin libxslt)
+          bento4
+          ffmpeg
+          gpac
+          libxslt
           shaka-packager-wrapped
         ]
       }

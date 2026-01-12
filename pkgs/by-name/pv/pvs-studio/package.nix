@@ -15,7 +15,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "pvs-studio";
-  version = "7.36.91321.455";
+  version = "7.38.97034.608";
 
   src =
     let
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     in
     fetchzip {
       url = selectSystem {
-        aarch64-darwin = "https://web.archive.org/web/20250411093324/https://files.pvs-studio.com/pvs-studio-${version}-macos-arm64.tgz";
-        x86_64-darwin = "https://web.archive.org/web/20250411092440/https://files.pvs-studio.com/pvs-studio-${version}-macos-x86_64.tgz";
-        x86_64-linux = "https://web.archive.org/web/20250411091929/https://files.pvs-studio.com/pvs-studio-${version}-x86_64.tgz";
+        aarch64-darwin = "https://web.archive.org/web/20251002123729/https://files.pvs-studio.com/pvs-studio-${version}-macos-arm64.zip";
+        x86_64-darwin = "https://web.archive.org/web/20251002121955/https://files.pvs-studio.com/pvs-studio-${version}-macos-x86_64.zip";
+        x86_64-linux = "https://web.archive.org/web/20251002124032/https://files.pvs-studio.com/pvs-studio-${version}-x86_64.tgz";
       };
       hash = selectSystem {
-        aarch64-darwin = "sha256-KEDKsWXg+CRwsEi7hNKlC3CWldBtvf9Jw79vuLMKSOE=";
-        x86_64-darwin = "sha256-Esf+pohienMAkWs1q5fYZ+0RzzK/WxOGljRXYJ0AtFI=";
-        x86_64-linux = "sha256-Be4IGFA+307zuMnhXBZko6T27TYeBZHX/zxaXBWVPHo=";
+        aarch64-darwin = "sha256-nZwG2qFnpWnJBVmfdIqT/y3gVs66NUKy4BifFCgA3aE=";
+        x86_64-darwin = "sha256-Q48i518jNQYTGGW7ihcyk7/DauHH1/fWniEvdsp7rSU=";
+        x86_64-linux = "sha256-Dw9PasnbUbBsVCPZoUHHcRIBzq1XqFzThaVY6NB3qFE=";
       };
     };
 
@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

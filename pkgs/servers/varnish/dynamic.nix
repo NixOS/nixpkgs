@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook269,
+  autoreconfHook,
   pkg-config,
   varnish,
   docutils,
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     docutils
-    autoreconfHook269
+    autoreconfHook
     varnish.python
   ];
   buildInputs = [ varnish ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
   configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic director similar to the DNS director from Varnish 3";
     homepage = "https://github.com/nigoroll/libvmod-dynamic";
     inherit (varnish.meta) license platforms teams;

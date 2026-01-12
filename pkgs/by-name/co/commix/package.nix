@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
-  version = "4.0";
+  version = "4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = "commix";
     tag = "v${version}";
-    hash = "sha256-AikhXMacsJ7AZyKWcmu+ngs9KeiwQE60cpM2CV8ej1Y=";
+    hash = "sha256-X2AJIE/Uk6w5bcgCELfmy9+Nzoma96yBva9Aj+sKE3k=";
   };
 
   postPatch = ''
@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automated Command Injection Exploitation Tool";
     mainProgram = "commix";
     homepage = "https://github.com/commixproject/commix";
     changelog = "https://github.com/commixproject/commix/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

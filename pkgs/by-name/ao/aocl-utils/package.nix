@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aocl-utils";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "aocl-utils";
-    rev = version;
-    hash = "sha256-1g5gERVxXKAeCyNR9/HheUfj+MPxJso3NzqDonvuyMo=";
+    tag = version;
+    hash = "sha256-wPnKfPbkW9ILu1YgyymKmg5gZj0l0cWio3/JTXtbylA=";
   };
 
   patches = [ ./pkg-config.patch ];
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "AU_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to all AMD AOCL libraries to access CPU features";
     homepage = "https://github.com/amd/aocl-utils";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.markuskowa ];
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 }

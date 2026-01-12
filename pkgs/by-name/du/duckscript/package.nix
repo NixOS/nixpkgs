@@ -19,20 +19,20 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ft6EUajAj+Zw3cEhdajwwHAaMaUf+/vtTuUYni8E+o0=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple, extendable and embeddable scripting language";
     homepage = "https://github.com/sagiegurari/duckscript";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "duck";
   };
 }

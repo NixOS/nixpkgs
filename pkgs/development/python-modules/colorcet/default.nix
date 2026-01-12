@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colorcet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of perceptually uniform colormaps";
     mainProgram = "colorcet";
     homepage = "https://colorcet.pyviz.org";
-    license = licenses.cc-by-40;
+    license = lib.licenses.cc-by-40;
     maintainers = [ ];
   };
 }

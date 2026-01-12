@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter327,
+  flutter338,
   keybinder3,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3Packages,
   writableTmpDirAsHomeHook,
   buildGoModule,
@@ -22,23 +24,23 @@
 }:
 
 let
-  version = "2.0.0-beta.2";
+  version = "2.0.0-beta.7";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-PPB9eRXit89lwkLCN86+Un/msMqnFAulJxEGi+7Fa/c=";
+    hash = "sha256-uKnuzuR+Qd5yP45kPJELBz8v+LrZEMIHl9I07nNPZpE=";
   };
 
   metaCommon = {
     description = "Cross-platform launcher that simply works";
     homepage = "https://github.com/Wox-launcher/Wox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 
-  ui-flutter = flutter327.buildFlutterApplication {
+  ui-flutter = flutter338.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
@@ -64,17 +66,20 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
-      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
+      pnpm = pnpm_9;
+      fetcherVersion = 2;
+      hash = "sha256-BO3QsybMxbyBhwM6XVmS6s5jGJljyxE1PRUSAreE17Y=";
     };
 
     buildPhase = ''
@@ -96,7 +101,7 @@ let
     meta = metaCommon;
   });
 
-  plugin-python = python3Packages.buildPythonApplication rec {
+  plugin-python = python3Packages.buildPythonApplication {
     pname = "wox-plugin";
     inherit version src;
     pyproject = true;
@@ -108,7 +113,7 @@ let
     meta = metaCommon;
   };
 
-  plugin-host-python = python3Packages.buildPythonApplication rec {
+  plugin-host-python = python3Packages.buildPythonApplication {
     pname = "wox-plugin-host-python";
     inherit version src;
     pyproject = true;
@@ -151,9 +156,10 @@ buildGoModule {
       --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
       --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime" \
       --replace-fail "Exec=%s" "Exec=wox"
+    sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-MKxMHABeKotErM+PEhWxeQmPcHH4jJSGWa8wzj42hoE=";
+  vendorHash = "sha256-UMbhTV6fm9a2SVDsvwV1w9e4pPUhCdTi5FNVf8Rl3XM=";
 
   proxyVendor = true;
 
@@ -199,7 +205,7 @@ buildGoModule {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/pixmaps/wox.png
+    install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
   '';
 
   meta = metaCommon // {

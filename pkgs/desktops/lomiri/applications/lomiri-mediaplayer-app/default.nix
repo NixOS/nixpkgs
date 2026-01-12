@@ -49,24 +49,23 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
+  buildInputs = [
+    qtbase
+    qtmultimedia
 
-      # QML
-      lomiri-action-api
-      lomiri-content-hub
-      lomiri-ui-toolkit
-      qtxmlpatterns
-    ]
-    # QtMultimedia playback support
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # QML
+    lomiri-action-api
+    lomiri-content-hub
+    lomiri-ui-toolkit
+    qtxmlpatterns
+  ]
+  # QtMultimedia playback support
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   nativeCheckInputs = [
     qtdeclarative # qmltestrunner
@@ -119,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Media Player application for Ubuntu Touch devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only

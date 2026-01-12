@@ -24,8 +24,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-0U1ELUMh4YV6M+zrrZGuzvY8SdgyN66F7bJ6sMhOdXs=";
   };
 
@@ -43,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_alignments" ];
 
-  meta = with lib; {
+  meta = {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

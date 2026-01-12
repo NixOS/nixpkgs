@@ -3,22 +3,25 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  perl,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tabiew";
-  version = "0.9.4";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "shshemi";
     repo = "tabiew";
     tag = "v${version}";
-    hash = "sha256-5zeYqSWM/EbwjX7nHqMhERivk0gVra0QntYNh1dIp5Y=";
+    hash = "sha256-OCfxgOXTVizeYJyCk5I/Fb/iDdjtcTeieWx8kWzGb2I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Yic8maNIjo4Kg6nZ29dtN2PougtOa2WCMMMUiIt9iEs=";
+  cargoHash = "sha256-nw5qu1o34dpG9NMxix4Fj3rV53Wm3KOSwZgEqK584Lw=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    perl
+  ];
 
   outputs = [
     "out"

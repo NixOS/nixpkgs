@@ -13,16 +13,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "pinact";
-  version = "3.1.2";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5jJzlMMpfk9fFDoqR0NJNacquZ4Zma0YF/pi80Miv0Y=";
+    hash = "sha256-eZHJ1JK0EwjO6zSH2vKCkwQV3NUVqe2I0+QFMO7VHN0=";
   };
 
-  vendorHash = "sha256-kK4r0mCktlbhJr6iHD0Q/k1DralieN2AUg+zREZ06DA=";
+  vendorHash = "sha256-EqfhHy9OUiaoCI/VFjUJlm917un3Lf4/cUmeHG7w9Bg=";
 
   env.CGO_ENABLED = 0;
 
@@ -47,7 +47,11 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([\\d\\.]+)$"
+      ];
+    };
   };
 
   ldflags = [

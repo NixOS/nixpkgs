@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
-    rev = version;
+    tag = version;
     hash = "sha256-0Ix7KwEZUG/NmGJ380DVJbUA0PcoEJDlcGSc09l5Tbc=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-DAPFEL_VERSION=${version}";
 
-  meta = with lib; {
+  meta = {
     description = "PDF Evolution Library";
     homepage = "https://apfel.mi.infn.it/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
   };
 }

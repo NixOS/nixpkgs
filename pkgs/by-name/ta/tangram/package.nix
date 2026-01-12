@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OtQN8Iigu92iKa7CAaslIpbS0bqJ9Vus++inrgV/eeM=";
     fetchSubmodules = true;
   };
@@ -51,24 +51,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gdk-pixbuf
-      gjs
-      glib
-      glib-networking
-      gsettings-desktop-schemas
-      gtk4
-      libadwaita
-      webkitgtk_6_0
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    gdk-pixbuf
+    gjs
+    glib
+    glib-networking
+    gsettings-desktop-schemas
+    gtk4
+    libadwaita
+    webkitgtk_6_0
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ]);
 
   dontPatchShebangs = true;
 
@@ -88,13 +87,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run web apps on your desktop";
     mainProgram = "re.sonny.Tangram";
     homepage = "https://github.com/sonnyp/Tangram";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       austinbutler
       chuangzhu
     ];

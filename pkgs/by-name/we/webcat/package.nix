@@ -29,11 +29,11 @@ buildGoModule rec {
     installManPage man/webcat.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rumpelsepp.org/blog/ssh-through-websocket/";
     description = "Lightweight swiss army knife for websockets";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ montag451 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ montag451 ];
     mainProgram = "webcat";
   };
 }

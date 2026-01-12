@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/sbin $out/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/mingetty";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

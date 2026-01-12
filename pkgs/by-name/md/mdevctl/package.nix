@@ -4,6 +4,7 @@
   fetchCrate,
   docutils,
   installShellFiles,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,13 +21,15 @@ rustPlatform.buildRustPackage rec {
     ./script-dir.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LG5UaSUTF6pVx7BBLiZ/OmAZNCKswFlTqHymg3bDkuc=";
 
   nativeBuildInputs = [
     docutils
     installShellFiles
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     ln -s mdevctl $out/bin/lsmdev
@@ -39,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/mdevctl-*/out/{lsmdev,mdevctl}.bash
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mdevctl/mdevctl";
     description = "Mediated device management utility for linux";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.linux;
   };
 }

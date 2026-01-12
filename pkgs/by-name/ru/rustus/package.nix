@@ -22,13 +22,14 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ALnb6ICg+TZRuHayhozwJ5+imabgjBYX4W42ydhkzv0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-df92+gp/DtdHwPxJF89zKHjmVWzfrjnD8wAlrPRyyxk=";
 
-  env.OPENSSL_NO_VENDOR = 1;
+  env = {
+    OPENSSL_NO_VENDOR = 1;
 
-  # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING = 1;
+    # needed to dynamically link rdkafka
+    CARGO_FEATURE_DYNAMIC_LINKING = 1;
+  };
 
   nativeBuildInputs = [
     pkg-config

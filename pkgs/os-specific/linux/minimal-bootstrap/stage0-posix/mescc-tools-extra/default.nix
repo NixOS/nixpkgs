@@ -26,11 +26,11 @@ derivationWithMeta {
     ./build.kaem
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools-extra";
-    license = licenses.gpl3Plus;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.minimal-bootstrap ];
     inherit platforms;
   };
 }

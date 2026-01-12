@@ -6,5 +6,9 @@ mkDerivation {
     "sbin/fsck"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-unterminated-string-initialization"
+  ];
+
   meta.platforms = lib.platforms.freebsd;
 }

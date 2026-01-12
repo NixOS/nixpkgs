@@ -1,12 +1,13 @@
 {
   lib,
-  SDL2,
-  callPackage,
+  fetchFromGitHub,
+  sdl3,
   cmake,
   cubeb,
   curl,
   extra-cmake-modules,
   ffmpeg,
+  gtk3,
   libXrandr,
   libaio,
   libbacktrace,
@@ -14,7 +15,6 @@
   libwebp,
   llvmPackages,
   lz4,
-  makeWrapper,
   pkg-config,
   qt6,
   shaderc,
@@ -23,13 +23,22 @@
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wrapGAppsHook3,
   zip,
   zstd,
-  fetchpatch,
+  plutovg,
+  plutosvg,
+  kddockwidgets,
 }:
 
 let
-  sources = callPackage ./sources.nix { };
+  pcsx2_patches = fetchFromGitHub {
+    owner = "PCSX2";
+    repo = "pcsx2_patches";
+    rev = "37b2b6b85dd8a02f3adf5282a7d1aaa3ab493836";
+    hash = "sha256-UkILUj59Mo/pGqe6wfrkJp0h15afyFx0mbZiGcoGkBA=";
+  };
+
   inherit (qt6)
     qtbase
     qtsvg
@@ -37,32 +46,31 @@ let
     qtwayland
     wrapQtAppsHook
     ;
-
-  cubeb' = cubeb.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      (fetchpatch {
-        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
-        stripLen = 2;
-        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
-      })
-    ];
-  });
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
-  inherit (sources.pcsx2) pname version src;
+  pname = "pcsx2";
+  version = "2.6.0";
+  src = fetchFromGitHub {
+    pname = "pcsx2-source";
+    owner = "PCSX2";
+    repo = "pcsx2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v1kSQbJSp7kJNL9KKyLXAsMDjPGIhMraq6ywa7TMq6Y=";
+  };
 
   patches = [
-    # Remove PCSX2_GIT_REV
-    ./0000-define-rev.patch
-
     ./remove-cubeb-vendor.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/Pcsx2Utils.cmake \
+      --replace-fail 'set(PCSX2_GIT_TAG "")' 'set(PCSX2_GIT_TAG "${finalAttrs.src.tag}")'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
   ];
 
   nativeBuildInputs = [
@@ -70,6 +78,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     extra-cmake-modules
     pkg-config
     strip-nondeterminism
+    wrapGAppsHook3
     wrapQtAppsHook
     zip
   ];
@@ -77,6 +86,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     ffmpeg
+    gtk3
     libaio
     libbacktrace
     libpcap
@@ -87,13 +97,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     qtsvg
     qttools
     qtwayland
-    SDL2
+    sdl3
+    plutovg
+    plutosvg
+    kddockwidgets
     shaderc
     soundtouch
     vulkan-headers
     wayland
     zstd
-    cubeb'
+    cubeb
   ];
 
   strictDeps = true;
@@ -102,26 +115,29 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/share/PCSX2/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
+    zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
     strip-nondeterminism $out/share/PCSX2/resources/patches.zip
   '';
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath ([
+      libs = lib.makeLibraryPath [
         vulkan-loader
         shaderc
-      ]);
+      ];
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
-  # https://github.com/PCSX2/pcsx2/pull/10200
-  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
-  postFixup = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/pcsx2-qt \
-      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    inherit pcsx2_patches;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     homepage = "https://pcsx2.net";
@@ -141,7 +157,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
-      hrdinka
+      _0david0mp
       govanify
       matteopacini
     ];

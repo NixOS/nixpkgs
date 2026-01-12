@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitea,
+  fetchpatch,
   cmake,
   gperf,
   zlib,
@@ -23,6 +24,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-6/49rk7pmIpJRj32WmxC171NtdIOaMNhX8RD7o6Jbzs=";
   };
+
+  patches = [
+    # Fix the build with CMake 4.
+    (fetchpatch {
+      name = "libid3tag-fix-cmake-4.patch";
+      url = "https://codeberg.org/tenacityteam/libid3tag/commit/eee94b22508a066f7b9bc1ae05d2d85982e73959.patch";
+      hash = "sha256-OAdMapNr8qpvXZqNOZ3LUHQ1H79zD1rvzrVksqmz6dU=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace packaging/id3tag.pc.in \

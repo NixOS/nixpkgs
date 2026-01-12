@@ -22,43 +22,46 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmanette";
-  version = "0.2.12";
+  version = "0.2.13";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libmanette/${lib.versions.majorMinor finalAttrs.version}/libmanette-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SLNJJnGA8dw01AWp4ekLoW8FShnOkHkw5nlJPZEeodg=";
+    hash = "sha256-KHzC/eDeCSkZNmr3V9heezoCSOsbOVNEcm6XlVp32K4=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      glib
-    ]
-    ++ lib.optionals withIntrospection [
-      vala
-      gobject-introspection
-      gi-docgen
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  depsBuildBuild = lib.optionals withIntrospection [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      glib
-      libevdev
-      hidapi
-    ]
-    ++ lib.optionals withIntrospection [
-      libgudev
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    vala
+    gobject-introspection
+    gi-docgen
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    glib
+    libevdev
+    hidapi
+  ]
+  ++ lib.optionals withIntrospection [
+    libgudev
+  ];
 
   mesonFlags = [
     (lib.mesonBool "doc" withIntrospection)
@@ -68,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -81,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple GObject game controller library";
     mainProgram = "manette-test";
     homepage = "https://gnome.pages.gitlab.gnome.org/libmanette/";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

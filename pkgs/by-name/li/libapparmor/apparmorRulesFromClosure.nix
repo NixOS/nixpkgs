@@ -9,18 +9,18 @@
   # TODO: factorize here some other common paths
   # that may emerge from use cases.
   baseRules ? [
-    "r $path"
-    "r $path/etc/**"
-    "mr $path/share/**"
+    "$path r"
+    "$path/etc/** r"
+    "$path/share/** mr"
     # Note that not all libraries are prefixed with "lib",
     # eg. glibc-2.30/lib/ld-2.30.so
-    "mr $path/lib/**.so*"
-    "mr $path/lib64/**.so*"
+    "$path/lib/**.so* mr"
+    "$path/lib64/**.so* mr"
     # eg. glibc-2.30/lib/gconv/gconv-modules
-    "r $path/lib/**"
-    "r $path/lib64/**"
+    "$path/lib/** r"
+    "$path/lib64/** r"
     # Internal executables
-    "ixr $path/libexec/**"
+    "$path/libexec/** ixr"
   ],
   name ? "",
 }:

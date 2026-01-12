@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "freebox-api";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
@@ -36,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freebox_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
     changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "freebox_api";
   };
 }

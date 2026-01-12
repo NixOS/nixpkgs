@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "8.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "spelling";
@@ -34,7 +32,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     sphinx
     pyenchant
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # No tests included
   doCheck = false;
@@ -43,11 +42,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx spelling extension";
     homepage = "https://github.com/sphinx-contrib/spelling";
     changelog = "https://github.com/sphinx-contrib/spelling/blob/${version}/docs/source/history.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

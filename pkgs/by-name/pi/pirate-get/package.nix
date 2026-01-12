@@ -9,24 +9,29 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "pirate-get";
   version = "0.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-VtnVyJqrdGXTqcyzpHCOMUI9G7/BkXzihDrBrsxl7Eg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = [
     colorama
     veryprettytable
     pyperclip
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pirate" ];
+
+  meta = {
     description = "Command line interface for The Pirate Bay";
     mainProgram = "pirate-get";
     homepage = "https://github.com/vikstrous/pirate-get";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     ninja
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   buildInputs = [
     SDL2
@@ -77,7 +78,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDYN_GTK=OFF"
     "-DDYN_OPENAL=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {

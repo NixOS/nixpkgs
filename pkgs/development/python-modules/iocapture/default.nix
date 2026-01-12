@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   flexmock,
-  pytest,
+  pytestCheckHook,
   pytest-cov-stub,
   six,
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flexmock
-    pytest
+    pytestCheckHook
     pytest-cov-stub
     six
   ];
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Capture stdout, stderr easily";
     homepage = "https://github.com/oinume/iocapture";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

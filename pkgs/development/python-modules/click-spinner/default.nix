@@ -4,7 +4,6 @@
   click,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   versioneer,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "click-spinner";
   version = "0.1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_spinner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Add support for showwing that command line app is active to Click";
     homepage = "https://github.com/click-contrib/click-spinner";
     changelog = "https://github.com/click-contrib/click-spinner/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/caribou/-/commit/d41c8e44b12222a290eaca16703406b113a630c6.patch";
       hash = "sha256-yIsEqSflpAdQPAB6eNr6fctxzyACu7N1HVfMIdCQou0=";
     })
+    # Fix build with gettext 0.25
+    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [
@@ -105,13 +107,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "caribou"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Input assistive technology intended for switch and pointer users";
     mainProgram = "caribou-preferences";
     homepage = "https://gitlab.gnome.org/Archive/caribou";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # checking for a Python interpreter with version >= 2.4... none
     # configure: error: no suitable Python interpreter found
     broken = stdenv.buildPlatform != stdenv.hostPlatform;

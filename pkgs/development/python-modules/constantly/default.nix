@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -18,8 +17,6 @@ let
     version = "23.10.4";
     pyproject = true;
 
-    disabled = pythonOlder "3.8";
-
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
@@ -30,7 +27,8 @@ let
     nativeBuildInputs = [
       setuptools
       versioneer
-    ] ++ versioneer.optional-dependencies.toml;
+    ]
+    ++ versioneer.optional-dependencies.toml;
 
     # would create dependency loop with twisted
     doCheck = false;
@@ -47,10 +45,10 @@ let
 
     passthru.tests.constantly = self.overridePythonAttrs { doCheck = true; };
 
-    meta = with lib; {
+    meta = {
       description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     };
   };

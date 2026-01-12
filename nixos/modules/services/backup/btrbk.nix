@@ -354,12 +354,13 @@ in
       value = {
         description = "Takes BTRFS snapshots and maintains retention policies.";
         unitConfig.Documentation = "man:btrbk(1)";
-        path =
-          [ "/run/wrappers" ]
-          ++ cfg.extraPackages
-          ++ optional (instance.settings.stream_compress != "no") (
-            getAttr instance.settings.stream_compress streamCompressMap
-          );
+        path = [
+          "/run/wrappers"
+        ]
+        ++ cfg.extraPackages
+        ++ optional (instance.settings.stream_compress != "no") (
+          getAttr instance.settings.stream_compress streamCompressMap
+        );
         serviceConfig = {
           User = "btrbk";
           Group = "btrbk";

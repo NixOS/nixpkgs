@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "sem";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "semaphoreci";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-w/QxN8ntfyoHKVLRIawN0SoUI2oTQg8gNzVUiXR7Klc=";
+    sha256 = "sha256-w9j7Lv8aSTWqH75ttazHjop+B1JbcgSuUIIGbJpR2vc=";
   };
 
   vendorHash = "sha256-p8+M+pRp12P7tYlFpXjU94JcJOugQpD8rFdowhonh74=";
@@ -27,12 +27,12 @@ buildGoModule rec {
     install -m755 $out/bin/cli $out/bin/sem
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli to operate on semaphore ci (2.0)";
     homepage = "https://github.com/semaphoreci/cli";
     changelog = "https://github.com/semaphoreci/cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ liberatys ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

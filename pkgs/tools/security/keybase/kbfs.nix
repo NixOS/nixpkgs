@@ -22,16 +22,16 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://keybase.io/docs/kbfs";
     description = "Keybase filesystem";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avaq
       rvolosatovs
       bennofs
       np
       shofius
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

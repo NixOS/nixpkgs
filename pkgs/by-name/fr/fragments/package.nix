@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-i77LHbaAURxWrEpuR40jRkUGPk8wZR+q3DB+rzH3sEc=";
   };
 
@@ -72,15 +71,15 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "Easy to use BitTorrent client for the GNOME desktop environment";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       emilytrau
     ];
     teams = [ lib.teams.gnome-circle ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "fragments";
   };
 }

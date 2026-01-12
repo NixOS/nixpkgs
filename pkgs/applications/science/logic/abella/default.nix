@@ -4,6 +4,7 @@
   fetchurl,
   rsync,
   ocamlPackages,
+  dune,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,14 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ rsync ]
-    ++ (with ocamlPackages; [
-      ocaml
-      dune_3
-      menhir
-      findlib
-    ]);
+  nativeBuildInputs = [
+    rsync
+    dune
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    menhir
+    findlib
+  ]);
   buildInputs = with ocamlPackages; [
     cmdliner
     yojson

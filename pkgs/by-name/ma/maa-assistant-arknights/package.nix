@@ -33,27 +33,27 @@ stdenv.mkDerivation (finalAttr: {
     asio
     cmake
     fastdeploy.cmake
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
+  buildInputs = [
+    fastdeploy
+    libcpr
+    onnxruntime
+    opencv
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      fastdeploy
-      libcpr
-      onnxruntime
-      opencv
+      cuda_cccl # cub/cub.cuh
+      libcublas # cublas_v2.h
+      libcurand # curand.h
+      libcusparse # cusparse.h
+      libcufft # cufft.h
+      cudnn # cudnn.h
+      cuda_cudart
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl # cub/cub.cuh
-        libcublas # cublas_v2.h
-        libcurand # curand.h
-        libcusparse # cusparse.h
-        libcufft # cufft.h
-        cudnn # cudnn.h
-        cuda_cudart
-      ]
-    );
+  );
 
   cmakeBuildType = "None";
 
@@ -77,11 +77,11 @@ stdenv.mkDerivation (finalAttr: {
     mv $out/{Python,resource} $out/share/${finalAttr.pname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Arknights assistant";
     homepage = "https://github.com/MaaAssistantArknights/MaaAssistantArknights";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Cryolitia ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Cryolitia ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

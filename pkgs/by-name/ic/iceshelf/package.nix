@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "iceshelf";
-  version = "unstable-2019-07-03";
+  version = "0-unstable-2019-07-03";
 
   format = "other";
 
@@ -32,10 +32,10 @@ python3.pkgs.buildPythonApplication {
     cp -rv modules $out/${python3.sitePackages}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to allow storage of signed, encrypted, incremental backups using Amazon's Glacier storage";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     homepage = "https://github.com/mrworf/iceshelf";
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

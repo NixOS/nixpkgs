@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "24.2";
+  version = "25.2";
   pyproject = true;
 
   namePrefix = "";
@@ -26,11 +26,12 @@ python3.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "cloud-init";
     tag = version;
-    hash = "sha256-BhTcOeSKZ1XRIx+xJQkqkSw9M8ilr+BRKXDy5MUXB6E=";
+    hash = "sha256-Ww76dhfoGrIbxPiXHxDjpgPsinmfrs42NnGmzhBeGC0=";
   };
 
   patches = [
     ./0001-add-nixos-support.patch
+    ./0002-fix-test-logs-on-nixos.patch
   ];
 
   prePatch = ''
@@ -138,18 +139,18 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gitUpdater { ignoredVersions = ".ubuntu.*"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
     changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       illustris
       jfroche
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

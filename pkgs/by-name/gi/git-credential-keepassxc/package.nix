@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qxNzWuuIoK9BJLVcWtrER+MyA5cyd03xAwGljh8DZC4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-jjexSzxRhnNPW+urG7KpZBWfGcy06Cg4lXlQogF3L/A=";
 
   buildFeatures =
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withStrictCaller "strict-caller"
     ++ lib.optional withAll "all";
 
-  meta = with lib; {
+  meta = {
     description = "Helper that allows Git (and shell scripts) to use KeePassXC as credential store";
     longDescription = ''
       git-credential-keepassxc is a Git credential helper that allows Git
@@ -38,8 +37,8 @@ rustPlatform.buildRustPackage rec {
       originally designed for browser extensions.
     '';
     homepage = "https://github.com/Frederick888/git-credential-keepassxc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-credential-keepassxc";
   };
 }

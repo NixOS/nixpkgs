@@ -7,15 +7,12 @@
   parquet,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flowlogs-reader";
   version = "5.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "obsrvbl";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flowlogs_reader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
     mainProgram = "flowlogs_reader";
     homepage = "https://github.com/obsrvbl/flowlogs-reader";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cransom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cransom ];
   };
 }

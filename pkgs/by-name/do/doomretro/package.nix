@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
-  version = "5.6.2";
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "bradharding";
     repo = "doomretro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-w0stnSYIoxquy3PfbehpwlG5bnGVZWGy/8yNBpxYUSY=";
+    hash = "sha256-UCLIQEeKNJ0qTZQdzybdBxt/6catf8y3lnWKsjg2Mf8=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "doomretro";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

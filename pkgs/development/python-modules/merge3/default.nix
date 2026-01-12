@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-0+rCE9hNVt/J45VSrIJGx4YKlAlk6+7YqL5EIvZJK68=";
@@ -23,11 +20,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "merge3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of 3-way merge";
     mainProgram = "merge3";
     homepage = "https://github.com/breezy-team/merge3";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

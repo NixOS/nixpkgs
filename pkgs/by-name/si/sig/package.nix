@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sig";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "sig";
     rev = "v${version}";
-    hash = "sha256-685VBQ64B+IbSSyqtVXtOgs4wY85WZ/OceHL++v5ip4=";
+    hash = "sha256-KxLSZ4/idlDrhRKFUsC3Ko0DcpSzwLWjees1jObC5KQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-x4/vCFbC+kxhne4iRjuJy4L6QRpRKrJU3r+TPpDh4Pw=";
+  cargoHash = "sha256-nlW9pXgfn/8MjFFXs+HeIiBT9Ew8M1ETtuTZg5Qa4AE=";
 
   meta = {
     description = "Interactive grep (for streaming)";

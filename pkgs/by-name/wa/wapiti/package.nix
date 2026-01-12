@@ -2,34 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  php,
   python3Packages,
-  fetchpatch,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.2.4";
+  version = "3.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = version;
-    hash = "sha256-97RYJKCk3oY715mgkFNstrrhWc1Q7jZqktqt7l8uzGs=";
+    hash = "sha256-/w5t/BcMPewl0Wp6vx9kZamqHArb7+fnfktfEIUDL8Y=";
   };
-
-  patches = [
-    # Fixes:
-    # TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
-    (fetchpatch {
-      name = "fix-wappalyzer-warnings";
-      url = "https://github.com/wapiti-scanner/wapiti/commit/77fe140f8ad4d2fb266f1b49285479f6af25d6b7.patch";
-      hash = "sha256-Htkpr+67V0bp4u8HbMP+yTZ4rlIWDadLZxLDSruDbZY=";
-    })
-  ];
 
   pythonRelaxDeps = true;
 
@@ -53,6 +43,7 @@ python3Packages.buildPythonApplication rec {
     mitmproxy
     msgpack
     packaging
+    playwright
     pyasn1
     sqlalchemy
     tld
@@ -74,10 +65,10 @@ python3Packages.buildPythonApplication rec {
       pytestCheckHook
     ]
     ++ [
+      php
       versionCheckHook
       writableTmpDirAsHomeHook
     ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tests requires network access
@@ -105,6 +96,7 @@ python3Packages.buildPythonApplication rec {
     "test_meta_detection"
     "test_multi_detection"
     "test_no_crash"
+    "test_ns_takeover"
     "test_options"
     "test_out_of_band"
     "test_partial_tag_name_escape"
@@ -147,17 +139,20 @@ python3Packages.buildPythonApplication rec {
     "test_persister_upload"
     # Requires creating a socket to an external URL
     "test_attack_unifi"
+    # AssertionError
+    "test_comment_in_noscript_context"
+    "test_noscript_context"
+    "test_title_context"
   ];
 
-  disabledTestPaths =
-    [
-      # Requires sslyze which is obsolete and was removed
-      "tests/attack/test_mod_ssl.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # PermissionError: [Errno 13] Permission denied: '/tmp/crawl.db'
-      "tests/web/test_persister.py"
-    ];
+  disabledTestPaths = [
+    # Requires sslyze which is obsolete and was removed
+    "tests/attack/test_mod_ssl.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/crawl.db'
+    "tests/web/test_persister.py"
+  ];
 
   pythonImportsCheck = [ "wapitiCore" ];
 
@@ -176,7 +171,7 @@ python3Packages.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${src.tag}/doc/ChangeLog_Wapiti";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wapiti";

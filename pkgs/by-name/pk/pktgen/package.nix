@@ -33,18 +33,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      dpdk
-      libbsd
-      libpcap
-      lua5_3
-      numactl
-      which
-    ]
-    ++ lib.optionals withGtk [
-      gtk2
-    ];
+  buildInputs = [
+    dpdk
+    libbsd
+    libpcap
+    lua5_3
+    numactl
+    which
+  ]
+  ++ lib.optionals withGtk [
+    gtk2
+  ];
 
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
@@ -66,11 +65,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/include $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.abuibrahim ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.abuibrahim ];
   };
 }

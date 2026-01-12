@@ -4,16 +4,15 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  yarnConfigHook,
+  yarn,
   nodejs,
-  fetchYarnDeps,
   jq,
-  electron_35,
+  electron_38,
   element-web,
   sqlcipher,
   callPackage,
   desktopToDarwinBundle,
-  useKeytar ? true,
+  typescript,
   # command line arguments which are always set
   commandLineArgs ? "",
 }:
@@ -22,15 +21,12 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_35;
-  keytar = callPackage ./keytar {
-    inherit electron;
-  };
+  electron = electron_38;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (
   finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
+  removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";
@@ -41,17 +37,24 @@ stdenv.mkDerivation (
       hash = desktopSrcHash;
     };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = desktopYarnHash;
+    # TODO: fetchYarnDeps currently does not deal properly with a dependency
+    # declared as a pin to a commit in a specific git repository.
+    # While it does download everything correctly, `yarn install --offline`
+    # always wants to `git ls-remote` to the repository, ignoring the local
+    # cached tarball.
+    offlineCache = callPackage ./yarn.nix {
+      inherit (finalAttrs) version src;
+      hash = desktopYarnHash;
     };
 
     nativeBuildInputs = [
-      yarnConfigHook
       nodejs
       makeWrapper
       jq
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+      yarn
+      typescript
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
 
@@ -60,15 +63,29 @@ stdenv.mkDerivation (
     # this shouldn't be in the closure just for unused scripts.
     dontPatchShebangs = true;
 
+    configurePhase = ''
+      runHook preConfigure
+
+      mkdir -p node_modules/
+      cp -r $offlineCache/node_modules/* node_modules/
+      substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
+
+      runHook postConfigure
+    '';
+
+    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
+    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TMPDIR="$(mktemp -d)"
+    '';
+
     buildPhase = ''
       runHook preBuild
 
       yarn --offline run build:ts
-      yarn --offline run i18n
+      node node_modules/matrix-web-i18n/scripts/gen-i18n.js
+      yarn --offline run i18n:sort
       yarn --offline run build:res
 
-      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
       ln -s $seshat node_modules/matrix-seshat
 
       runHook postBuild
@@ -81,17 +98,15 @@ stdenv.mkDerivation (
       mkdir -p "$out/share/element"
       ln -s '${element-web}' "$out/share/element/webapp"
       cp -r '.' "$out/share/element/electron"
-      cp -r './res/img' "$out/share/element"
+      chmod -R "a+w" "$out/share/element/electron/node_modules"
       rm -rf "$out/share/element/electron/node_modules"
       cp -r './node_modules' "$out/share/element/electron"
       cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
       ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
-      # icons
-      for icon in $out/share/element/electron/build/icons/*.png; do
-        mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
-        ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/element.png"
-      done
+      # icon
+      mkdir -p "$out/share/icons/hicolor/512x512/apps"
+      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
 
       # desktop item
       mkdir -p "$out/share"
@@ -136,26 +151,15 @@ stdenv.mkDerivation (
     passthru = {
       # run with: nix-shell ./maintainers/scripts/update.nix --argstr package element-desktop
       updateScript = ./update.sh;
-
-      # TL;DR: keytar is optional while seshat isn't.
-      #
-      # This prevents building keytar when `useKeytar` is set to `false`, because
-      # if libsecret is unavailable (e.g. set to `null` or fails to build), then
-      # this package wouldn't even considered for building because
-      # "one of the dependencies failed to build",
-      # although the dependency wouldn't even be used.
-      #
-      # It needs to be `passthru` anyways because other packages do depend on it.
-      inherit keytar;
     };
 
-    meta = with lib; {
-      description = "A feature-rich client for Matrix.org";
+    meta = {
+      description = "Feature-rich client for Matrix.org";
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
-      license = licenses.asl20;
-      teams = [ teams.matrix ];
-      inherit (electron.meta) platforms;
+      license = lib.licenses.asl20;
+      teams = [ lib.teams.matrix ];
+      platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
     };
   }

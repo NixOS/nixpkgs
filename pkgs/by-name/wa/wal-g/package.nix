@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   brotli,
@@ -43,14 +44,16 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/pg $out/bin/wal-g
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd wal-g \
       --bash <($out/bin/wal-g completion bash) \
       --zsh <($out/bin/wal-g completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wal-g/wal-g";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Archival restoration tool for PostgreSQL";
     mainProgram = "wal-g";
     maintainers = [ ];

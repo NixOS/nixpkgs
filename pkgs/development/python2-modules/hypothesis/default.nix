@@ -20,6 +20,7 @@ buildPythonPackage rec {
   # If you need these, you can just add them to your environment.
 
   version = "4.57.1";
+  format = "setuptools";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -52,9 +53,9 @@ buildPythonPackage rec {
     py.test tests/cover
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
   };
 }

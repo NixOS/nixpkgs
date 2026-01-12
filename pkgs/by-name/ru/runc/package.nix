@@ -9,19 +9,20 @@
   libapparmor,
   libseccomp,
   libselinux,
-  makeWrapper,
+  stdenv,
+  makeBinaryWrapper,
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "runc";
-  version = "1.1.15";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    rev = "v${version}";
-    hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XPS9qWgDyKVLYs/QqWof6ydVK1T41QD8yDpvztc3NMc=";
   };
 
   vendorHash = null;
@@ -33,7 +34,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     go-md2man
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
     which
   ];
@@ -44,12 +45,15 @@ buildGoModule rec {
     libapparmor
   ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" ];
+  makeFlags = [
+    "BUILDTAGS+=seccomp"
+    "SHELL=${stdenv.shell}"
+  ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make ${toString makeFlags} runc man
+    make ${toString finalAttrs.makeFlags} runc man
     runHook postBuild
   '';
 
@@ -64,13 +68,13 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cri-o docker podman; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/opencontainers/runc";
     description = "CLI tool for spawning and running containers according to the OCI specification";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ offline ];
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     mainProgram = "runc";
   };
-}
+})

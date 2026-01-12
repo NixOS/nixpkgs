@@ -12,9 +12,9 @@
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "1.2.1";
+  version = "1.5.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   pyproject = true;
 
@@ -22,8 +22,13 @@ buildPythonPackage rec {
     owner = "lawtancool";
     repo = "pyControl4";
     tag = "v${version}";
-    hash = "sha256-0ZuztqHbrd+kMDGv3xyUYoTF/Ho+oHkycjSrKz8JABM=";
+    hash = "sha256-r90v9vy8avvEbNKrzZgYtDS5Z5hV66Fd9fF9XJ4r7B4=";
   };
+
+  patches = [
+    # https://github.com/lawtancool/pyControl4/pull/47
+    ./asyncio-timeout.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -44,11 +49,11 @@ buildPythonPackage rec {
     "pyControl4.light"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lawtancool/pyControl4/releases/tag/v${version}";
     description = "Python 3 asyncio package for interacting with Control4 systems";
     homepage = "https://github.com/lawtancool/pyControl4";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -22,15 +22,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.27.3";
+  version = "2.28.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-6zbKylnnRHGYjwriXHeUVhC4h/d3JVqiH4Bl3vnlHtQ=";
+    hash = "sha256-NbqoGJixX5NXPi3spQ0RrArkB+u2iCmdOlITJlAzcSw=";
   };
 
   postPatch = ''
@@ -47,7 +45,8 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     openapi = [
@@ -61,15 +60,15 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     strict-rfc3339
-  ] ++ optional-dependencies.openapi;
+  ]
+  ++ optional-dependencies.openapi;
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

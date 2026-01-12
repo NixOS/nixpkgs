@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "simplescreenrecorder";
-  version = "0.4.4-unstable-2025-01-25";
+  version = "0.4.4-unstable-2025-06-14";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
     repo = "ssr";
-    rev = "c50e83eea53f45eff503af58e6c86d0e928222f3";
-    hash = "sha256-pTgIooEOIYwOrSuXD0L5S7J7IsUIyzRuEX2ZziiIiAM=";
+    rev = "232eac75c56821b4baf025b7dfd7ce737e73f420";
+    hash = "sha256-0PLAHfVIFSv196dcQ83CCvYoKkJFcKKnKB8vISoprCk=";
   };
 
   cmakeFlags = [
@@ -76,11 +76,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Screen recorder for Linux";
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

@@ -7,8 +7,7 @@
   parse-type,
   poetry-core,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
+  pytest7CheckHook,
   typing-extensions,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pytest-bdd";
   version = "7.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
@@ -37,7 +34,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # requires an update for pytest 8.4 compat
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin
@@ -45,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_bdd" ];
 
-  meta = with lib; {
+  meta = {
     description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
     changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jm2dev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jm2dev ];
     mainProgram = "pytest-bdd";
   };
 }

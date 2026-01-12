@@ -675,9 +675,9 @@ in
       };
 
       extraStatic = mkOption {
-        type = with types; nullOr (attrsOf package);
+        type = with types; nullOr (attrsOf pathInStore);
         description = ''
-          Attribute set of extra packages to add to the static files directory.
+          Attribute set of extra paths to add to the static files directory.
 
           Do not add frontends here. These should be configured through
           [{option}`services.akkoma.frontends`](#opt-services.akkoma.frontends).
@@ -1231,7 +1231,7 @@ in
       requiredBy = [ "akkoma.service" ];
       after = [
         "akkoma-config.service"
-        "postgresql.service"
+        "postgresql.target"
       ];
       before = [ "akkoma.service" ];
 
@@ -1269,7 +1269,7 @@ in
           "akkoma-config.target"
           "network.target"
           "network-online.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
 
         confinement.packages = mkIf isConfined runtimeInputs;

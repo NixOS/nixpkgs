@@ -14,7 +14,7 @@ nix-update "$attr".godot \
 [[ $(nix eval --raw -f. "$attr".godot) != "$prev_version" ]] || exit 0
 
 fetch_deps=$(nix build -f. "$attr".godot-mono.fetch-deps --print-out-paths --no-link)
-"$fetch_deps"
+"$fetch_deps" >&2
 
 update-source-version "$attr".godot.export-templates-bin --ignore-same-version --file="$file"
 update-source-version "$attr".godot-mono.export-templates-bin --ignore-same-version --file="$file"

@@ -26,11 +26,11 @@ buildKodiBinaryAddon rec {
   ];
 
   propagatedBuildInputs = [ glm ];
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xbmc/visualization.starburst";
     description = "Starburst visualization for kodi";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   nbformat,
   nbclient,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "testbook";
   version = "0.4.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nteract";
@@ -42,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "testbook" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unit testing framework extension for testing code in Jupyter Notebooks";
     homepage = "https://testbook.readthedocs.io/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ djacu ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ djacu ];
   };
 }

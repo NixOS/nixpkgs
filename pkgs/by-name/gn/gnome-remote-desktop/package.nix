@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "48.1";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
-    hash = "sha256-vPN3D8oPrtovrjsaP/by6QoCd492pC6P0QPK4YYo9PI=";
+    hash = "sha256-c9ROHnR04WIVgP9WEs3+HZxIr8+rRUjOkh1cpuLZFq0=";
   };
 
   nativeBuildInputs = [
@@ -89,13 +89,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-remote-desktop"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop/-/blob/${version}/NEWS?ref_type=tags";
     description = "GNOME Remote Desktop server";
     mainProgram = "grdctl";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

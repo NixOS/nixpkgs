@@ -38,11 +38,11 @@ buildPythonPackage rec {
     "test_format_code_with_backslash_in_comment"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modifies strings to all use the same quote where possible";
     mainProgram = "unify";
     homepage = "https://github.com/myint/unify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

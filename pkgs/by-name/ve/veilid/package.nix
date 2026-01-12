@@ -12,17 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.4.6";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = "veilid";
     rev = "v${version}";
-    hash = "sha256-bKll7VB6LjkmmhN5lmjcSeP2zZbyWnl4XiZbZe3tKgg=";
+    hash = "sha256-cdFC5KgdLxykXtB2YG/HKJCrEBnw1lYJ3IJkRwMC49s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-505gf4P/Hlo8KFynhAQdBagzEqGXhydhTTknat/jWmk=";
+  cargoHash = "sha256-TtGXCxEEb8PngN3tzybY5P0LgeAMQoxvUp1qSLfj830=";
 
   nativeBuildInputs = [
     capnproto
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--workspace"
   ];
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   doCheck = false;
 
@@ -57,12 +56,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
     mainProgram = "veilid-server";
     homepage = "https://veilid.com";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       bbigras
       qbit
     ];

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-blCDdX4rvfm7eFBWdTa5apNRX2sXUD10ko/2KNsuDpQ=";
@@ -49,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configurations" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper for organizing Django settings";
     mainProgram = "django-cadmin";
     homepage = "https://django-configurations.readthedocs.io/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

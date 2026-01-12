@@ -8,18 +8,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biff";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "biff";
     tag = finalAttrs.version;
-    hash = "sha256-SkrPn6reekoJkKsMH2pB1FtYwObUcmA2W0wVvkbzTEE=";
+    hash = "sha256-7KkzmaWbUHrLUd7lADJLPLSeE/RYJvVAEL+FcE5KIhY=";
   };
 
   buildFeatures = lib.optional withLocaleSupport "locale";
 
-  cargoHash = "sha256-x8nieQ1X5BLDTjYh67ApWDoS6chLy2DYAehgnPnhrVk=";
+  cargoHash = "sha256-pGY1KDcsBz5J/mf4c8zDVbivgzfimSy8ruNoa+Pn9p8=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

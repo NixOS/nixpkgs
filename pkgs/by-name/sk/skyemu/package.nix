@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "skyemu";
-  version = "3-unstable-2025-02-23";
+  version = "4";
 
   src = fetchFromGitHub {
     owner = "skylersaleh";
     repo = "SkyEmu";
-    rev = "f8573db83d15791b0cd94c29ceb46bf683963ff0";
-    hash = "sha256-LI4zBKjB48zYYYVZePzefRFrw/zvg17jzh5ZOPHAWok=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rfXHOff+PG5iA19iwEij4c5aFD9XrSF1GQhIBhWzKgg=";
   };
 
   nativeBuildInputs = [
@@ -37,21 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      curl
-      libGL
-      libGLU
-      openssl
-      SDL2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXi
-      libXcursor
-      lua
-    ];
+  buildInputs = [
+    alsa-lib
+    curl
+    libGL
+    libGLU
+    openssl
+    SDL2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXi
+    libXcursor
+    lua
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_CURL" true)

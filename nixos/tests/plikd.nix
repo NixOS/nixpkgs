@@ -1,8 +1,8 @@
 { lib, ... }:
 {
   name = "plikd";
-  meta = with lib.maintainers; {
-    maintainers = [ freezeboy ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =

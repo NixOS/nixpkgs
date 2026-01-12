@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   accountsservice,
   appstream-glib,
   dbus,
@@ -75,6 +76,14 @@ stdenv.mkDerivation rec {
     pantheon.granite7
     gtk4
     libadwaita
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      name = "gtk-4.20-fix.patch";
+      url = "https://github.com/ErikReider/SwaySettings/commit/e4f3749a053b5fbe0feab93e46d6eba380ee2e58.patch?full_index=1";
+      hash = "sha256-3A0VPAUQ3UjQ2mqR24z5CQ5Tdjw73UzfPz5UUcl/FDA=";
+    })
   ];
 
   postPatch = ''

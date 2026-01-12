@@ -19,14 +19,20 @@ stdenv.mkDerivation rec {
     sha256 = "12l4rvaypv87vigdrmjz48d4d6sq4gfxf5asvnc4adyabxb73i4x";
   };
 
+  # cmake 4 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [ libjack2 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      alsa-lib
-    ];
+  buildInputs = [
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    alsa-lib
+  ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBUILD_TESTS=OFF"
@@ -34,11 +40,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-strict-prototypes";
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform audio input and output";
     homepage = "http://libsound.io/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.andrewrk ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.andrewrk ];
   };
 }

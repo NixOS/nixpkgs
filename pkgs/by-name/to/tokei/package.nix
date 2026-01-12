@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  fetchpatch2,
   libiconv,
   zlib,
   versionCheckHook,
@@ -11,17 +12,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokei";
-  version = "13.0.0-alpha.8";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = "tokei";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jCI9VM3y76RI65E5UGuAPuPkDRTMyi+ydx64JWHcGfE=";
+    hash = "sha256-BpQ+Aurx2CkFRcozUTbmLLAg7v3NkgKXm5y0TiQCfHw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LzlyrKaRjUo6JnVLQnHidtI4OWa+GrhAc4D8RkL+nmQ=";
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/XAMPPRocky/tokei/pull/1209
+      url = "https://github.com/XAMPPRocky/tokei/commit/ce8d8535276a2e41878981a8199232986ab96c6b.patch";
+      hash = "sha256-1tb+WmjVsTxs8Awf1mbKOBIhJ3ddoOT8ZjBKA2BMocg=";
+    })
+  ];
+
+  cargoHash = "sha256-x1Oi+B6DpbsCqnX0Lp5LsmoVHNvdibwj/IEgFvhepqY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
@@ -31,10 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ "all" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Count your code, quickly";

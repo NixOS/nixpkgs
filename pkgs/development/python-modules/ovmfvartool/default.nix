@@ -24,12 +24,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ovmfvartool" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse and generate OVMF_VARS.fd from Yaml";
     mainProgram = "ovmfvartool";
     homepage = "https://github.com/hlandau/ovmfvartool";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       baloo
       raitobezarius
     ];

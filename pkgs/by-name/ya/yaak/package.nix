@@ -15,31 +15,37 @@
   pango,
   cairo,
   pixman,
+  librsvg,
+  gdk-pixbuf,
+  adwaita-icon-theme,
   protobuf,
   perl,
   makeWrapper,
   nix-update-script,
+  stdenv,
+  lld,
+  wasm-pack,
+  wasm-bindgen-cli_0_2_100,
+  wrapGAppsHook3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2025.1.2";
+  version = "2025.6.1";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gD6gp7Qtf162zpRY0b3+g98GSH2aY07s2Auv4+lmbXQ=";
+    hash = "sha256-3sEq7VpzaIMbkvHQTQLf3NRbAJjtpOJpirdcA7y2FIE=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-4D7ETUOLixpFB4luqQlwkGR/C6Ke6+ZmPg3dKKkrw7c=";
+    hash = "sha256-zz9wlJ3yQ3oTyCFrAV7vD1xENLW+vmf2Pzly4yYas/g=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-YxOSfSyn+gUsw0HeKrkXZg568X9CAY1UWKnGHHWCC78=";
+  cargoHash = "sha256-CMx7vTSGeQMXpXeH4LIOKEb29CfKXQV+r8tSYdmW5U4=";
 
   cargoRoot = "src-tauri";
 
@@ -52,35 +58,70 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
     perl
     makeWrapper
+    lld
+    wasm-pack
+    wasm-bindgen-cli_0_2_100
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
     gtk3
     openssl
-    webkitgtk_4_1
     pango
     cairo
     pixman
+    librsvg
+    gdk-pixbuf
+    adwaita-icon-theme
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  # This must be set so that `npm rebuild` doesn't download wasm-pack
+  env.NPM_CONFIG_IGNORE_SCRIPTS = "true";
 
   postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
+
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
+
+    substituteInPlace src-tauri/tauri.commercial.conf.json \
+      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
+      --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
+
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
   '';
 
-  preBuild = ''
-    mkdir -p src-tauri/vendored/node
-    ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-x86_64-unknown-linux-gnu
-    mkdir -p src-tauri/vendored/protoc
-    ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-x86_64-unknown-linux-gnu
-    ln -s ${protobuf}/include src-tauri/vendored/protoc/include
-  '';
+  preBuild =
+    let
+      archPlatforms =
+        {
+          "aarch64-darwin" = "aarch64-apple-darwin";
+          "x86_64-darwin" = "x86_64-apple-darwin";
+          "aarch64-linux" = "aarch64-unknown-linux-gnu";
+          "x86_64-linux" = "x86_64-unknown-linux-gnu";
+        }
+        .${stdenv.hostPlatform.system};
+    in
+    ''
+      mkdir -p src-tauri/vendored/node
+      ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-${archPlatforms}
+      mkdir -p src-tauri/vendored/protoc
+      ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-${archPlatforms}
+      ln -s ${protobuf}/include src-tauri/vendored/protoc/include
+    '';
+
+  tauriBuildFlags = [
+    "--config"
+    "./src-tauri/tauri.commercial.conf.json"
+  ];
 
   # Permission denied (os error 13)
   # write to src-tauri/vendored/protoc/include
@@ -88,12 +129,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preInstall = "pushd src-tauri";
 
-  postInstall = "popd";
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/bin
+      makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app $out/bin/yaak-app
+    ''
+    + ''
+      popd
+    '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/yaak-app \
       --inherit-argv0 \
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1 \
+      --set-default WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -104,7 +153,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mountain-loop/yaak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ redyf ];
-    mainProgram = "yaak";
-    platforms = [ "x86_64-linux" ];
+    mainProgram = "yaak-app";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

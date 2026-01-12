@@ -7,7 +7,6 @@
 let
   inherit (lib.options) mkEnableOption mkPackageOption;
   inherit (lib.modules) mkIf;
-  inherit (lib.meta) getExe;
 
   cfg = config.programs.television;
 in
@@ -26,13 +25,13 @@ in
 
     programs = {
       zsh.interactiveShellInit = mkIf cfg.enableZshIntegration ''
-        eval "$(${getExe cfg.package} init zsh)"
+        source ${cfg.package}/share/television/completion.zsh
       '';
       bash.interactiveShellInit = mkIf cfg.enableBashIntegration ''
-        eval "$(${getExe cfg.package} init bash)"
+        source ${cfg.package}/share/television/completion.bash
       '';
       fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
-        ${getExe cfg.package} init fish | source
+        source ${cfg.package}/share/television/completion.fish
       '';
     };
 

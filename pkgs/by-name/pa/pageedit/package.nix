@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pageedit";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = "pageedit";
     tag = finalAttrs.version;
-    hash = "sha256-Tkc8iOH+HG3ULrdUvVdeOzAl0i1R3QFaZ1U/vjCKGjo=";
+    hash = "sha256-oC4OMYTFXIoLCstAalyJb4ppstmSTiE+mdmqhOY6FUU=";
   };
 
   nativeBuildInputs = with qt6Packages; [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       null;
 
   meta = {
-    description = "ePub XHTML Visual Editor";
+    description = "EPUB XHTML Visual Editor";
     mainProgram = "pageedit";
     homepage = "https://sigil-ebook.com/pageedit/";
     license = lib.licenses.gpl3Plus;

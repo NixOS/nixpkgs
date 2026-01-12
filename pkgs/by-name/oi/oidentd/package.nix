@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yyvcnabxNkcIMOiZBjvoOm/pEjrGXFt4W4SG5lprkbc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Configurable Ident protocol server";
     mainProgram = "oidentd";
     homepage = "https://oidentd.janikrabe.com/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

@@ -11,6 +11,7 @@
   git,
   pkg-config,
   openssl,
+  cmake,
   cacert,
   usage,
   mise,
@@ -21,17 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.5.10";
+  version = "2026.1.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-G6bvWSjFhZRVkIZKUG+v7Ct1AtiLCQYmu5WLsVxfVgA=";
+    hash = "sha256-z2sk7g0XleaV83udcxqvlyqit3NPcqbcttN6Zo9asdI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OVXcmlIrb+Q7B/FAayfrC/e4WdnWUgvjLn6hPDo8Ru4=";
+  cargoHash = "sha256-zau4N7TsgcKmG5AUdUm1WL3AKqT7d8CqTnjnUgqYDvU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -61,18 +61,24 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
-  nativeCheckInputs = [ cacert ];
+  nativeCheckInputs = [
+    cacert
+    cmake
+    rustPlatform.bindgenHook
+  ];
 
-  checkFlags =
-    [
-      # last_modified will always be different in nix
-      "--skip=tera::tests::test_last_modified"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-      # started failing mid-April 2025
-      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
-      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
-    ];
+  # disable warnings as errors for aws-lc-sys in checkPhase
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  checkFlags = [
+    # last_modified will always be different in nix
+    "--skip=tera::tests::test_last_modified"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # started failing mid-April 2025
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
+    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+  ];
 
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
@@ -82,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-v usage' '-v ${lib.getExe usage}' \
+      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
       --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
@@ -95,7 +101,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Ignore subcrate releases (fox, aqua-registry)
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+      ];
+    };
     tests = {
       version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
@@ -113,10 +124,9 @@ rustPlatform.buildRustPackage rec {
           ''
             export HOME=$(mktemp -d)
 
-            spec="$(mise usage)"
             for shl in bash fish zsh; do
               echo "testing $shl"
-              usage complete-word --shell $shl --spec "$spec"
+              usage complete-word --shell $shl --file <(mise usage)
             done
 
             touch $out

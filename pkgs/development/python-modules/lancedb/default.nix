@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # buildInputs
   openssl,
@@ -14,40 +15,48 @@
 
   # dependencies
   deprecation,
-  overrides,
+  lance-namespace,
+  numpy,
   packaging,
   pyarrow,
   pydantic,
   tqdm,
+  pythonOlder,
+  overrides,
 
   # tests
   aiohttp,
+  boto3,
+  datafusion,
+  duckdb,
   pandas,
   polars,
   pylance,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  duckdb,
+  tantivy,
+
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.21.2";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${version}";
-    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
+    tag = "python-v${finalAttrs.version}";
+    hash = "sha256-yx4cwO7qRH9/1rW0UFz17HkvJ8utJynYoAHnN+wPpKw=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-ymoA/KKL7oLgp5u/NcXxbYfOueiKH+bpLxLcO+mn0Eo=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -62,57 +71,63 @@ buildPythonPackage rec {
     openssl
   ];
 
-  pythonRelaxDeps = [
-    # pylance is pinned to a specific release
-    "pylance"
-  ];
-
   dependencies = [
     deprecation
-    overrides
+    lance-namespace
+    numpy
     packaging
     pyarrow
     pydantic
     tqdm
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    overrides
   ];
 
   pythonImportsCheck = [ "lancedb" ];
 
   nativeCheckInputs = [
     aiohttp
+    boto3
+    datafusion
     duckdb
     pandas
     polars
     pylance
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
+    tantivy
   ];
 
   preCheck = ''
     cd python/python/tests
   '';
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
 
-  disabledTests = [
-    # require tantivy which is not packaged in nixpkgs
-    "test_basic"
-    "test_fts_native"
-
-    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
-    # https://github.com/lancedb/lancedb/issues/1539
-    "test_polars"
-  ];
-
-  disabledTestPaths =
-    [
-      # touch the network
-      "test_s3.py"
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.14") [
+      # TypeError: Converting Pydantic type to Arrow Type: unsupported type
+      # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
+      "test_optional_nested_model"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-      "test_remote_db.py"
+      # Flaky (even when the sandbox is disabled):
+      # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
+      # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
+      "test_create_index_from_table"
     ];
+
+  disabledTestPaths = [
+    # touch the network
+    "test_namespace_integration.py"
+    "test_s3.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_remote_db.py"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -124,8 +139,8 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
-    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

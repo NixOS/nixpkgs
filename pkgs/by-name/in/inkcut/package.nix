@@ -9,23 +9,26 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.6";
+  version = "2.1.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "inkcut";
     repo = "inkcut";
     tag = "v${version}";
-    hash = "sha256-qfgzJTFr4VTV/x4PVnUKJzIndfjXB8z2jTWLXvadBuY=";
+    hash = "sha256-inB3yR4ykepN5rYzyPlXW/J/HuSxGs6EDhshpa7n7o8=";
   };
 
   postPatch = ''
     substituteInPlace inkcut/device/transports/printer/plugin.py \
-      --replace ", 'lpr', " ", '${cups}/bin/lpr', "
+      --replace-fail ", 'lpr', " ", '${cups}/bin/lpr', "
   '';
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     enamlx
     twisted
     lxml
@@ -35,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     pycups
     qtconsole
     pyqt5
-    setuptools
   ];
 
   # QtApplication.instance() does not work during tests?
@@ -69,11 +71,11 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_open.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.codelv.com/projects/inkcut/";
     description = "Control 2D plotters, cutters, engravers, and CNC machines";
     mainProgram = "inkcut";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

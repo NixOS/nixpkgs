@@ -15,24 +15,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocThrust";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-c1+hqP/LipaQ2/lPJo79YBd9H0n0Y7yHkxe0/INE14s=";
+    hash = "sha256-IfMBVISClD1dk7FnAakP2GIpyZFrCnAloFRTaNdSKyw=";
   };
 
   nativeBuildInputs = [
@@ -46,24 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  cmakeFlags =
-    [
-      "-DHIP_ROOT_DIR=${clr}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_TEST=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_BENCHMARKS=ON"
-    ];
+  cmakeFlags = [
+    "-DHIP_ROOT_DIR=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_TEST=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_BENCHMARKS=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''
@@ -84,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm parallel algorithm library";
     homepage = "https://github.com/ROCm/rocThrust";
-    license = with licenses; [ asl20 ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ asl20 ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

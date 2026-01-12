@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -7,8 +8,7 @@
   platformio,
   esptool,
   git,
-  inetutils,
-  stdenv,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -33,19 +33,26 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.5.1";
+  version = "2025.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-z4FwymWFjyqNx95r2o7LLCmytRQYkogfCKiUFNyGOuA=";
+    hash = "sha256-PCUxnX/Gtlfo8puayBBJt7T98hQT1/iZtlDyrbDwxog=";
   };
 
-  build-systems = with python.pkgs; [
+  patches = [
+    # Use the esptool executable directly in the ESP32 post build script, that
+    # gets executed by platformio. This is required, because platformio uses its
+    # own python environment through `python -m esptool` and then fails to find
+    # the esptool library.
+    ./esp32-post-build-esptool-reference.patch
+  ];
+
+  build-system = with python.pkgs; [
     setuptools
-    argcomplete
   ];
 
   nativeBuildInputs = [
@@ -61,19 +68,17 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.4.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.46" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
-  # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used.
-  # They have validation functions like:
-  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    bleak
     cairosvg
     click
     colorama
@@ -82,35 +87,31 @@ python.pkgs.buildPythonApplication rec {
     esphome-glyphsets
     freetype-py
     icmplib
-    kconfiglib
-    packaging
+    jinja2
     paho-mqtt
     pillow
     platformio
-    protobuf
     puremagic
     pyparsing
     pyserial
     pyyaml
-    requests
     ruamel-yaml
     tornado
     tzdata
     tzlocal
     voluptuous
+    zeroconf
   ];
 
   makeWrapperArgs = [
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
-    # git is used in esphome/writer.py
-    # inetutils is used in esphome/dashboard/status/ping.py
+    # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
         platformio
         esptool
         git
-        inetutils
       ]
     }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
@@ -123,28 +124,33 @@ python.pkgs.buildPythonApplication rec {
   # Needed for tests
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      hypothesis
+      mock
+      pytest-asyncio
+      pytest-cov-stub
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [
+      git
+      versionCheckHook
+    ];
+
+  disabledTestPaths = [
+    # platformio builds; requires networking for dependency resolution
+    "tests/integration"
   ];
 
-  disabledTests = [
-    # race condition, also visible in upstream tests
-    # tests/dashboard/test_web_server.py:78: IndexError
-    "test_devices_page"
-  ];
-
-  postCheck = ''
-    $out/bin/esphome --help > /dev/null
+  preCheck = ''
+    export PATH=$PATH:$out/bin
   '';
 
   postInstall =
     let
-      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+      argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
     in
     ''
       installShellCompletion --cmd esphome \
@@ -153,22 +159,41 @@ python.pkgs.buildPythonApplication rec {
         --fish <(${argcomplete} --shell fish esphome)
     '';
 
+  doInstallCheck = true;
+
+  disabledTests = [
+    # tries to import platformio, which is wrapped in an fhsenv
+    "test_clean_build"
+    "test_clean_build_empty_cache_dir"
+    "test_clean_all"
+    "test_clean_all_partial_exists"
+    # tries to use esptool, which is wrapped in an fhsenv
+    "test_upload_using_esptool_path_conversion"
+    "test_upload_using_esptool_with_file_path"
+    # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
+    "test_run_platformio_cli_sets_environment_variables"
+    # Expects a full git clone
+    "test_clang_tidy_mode_full_scan"
+    "test_clang_tidy_mode_targeted_scan"
+  ];
+
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
     tests = { inherit (nixosTests) esphome; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hexa
+      thanegill
     ];
     mainProgram = "esphome";
   };

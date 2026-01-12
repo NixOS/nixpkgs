@@ -15,15 +15,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1yJg+rEhKTGXC7mlHxnWGUuAm9/RwhD6/Xg/GBKyQMw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZIswHJBV1uwrnSm5BmQgb8tVD1XQMTQXQ5DWvBj1WDk=";
 
-  meta = with lib; {
+  meta = {
     description = "Google Drive CLI Client";
     homepage = "https://github.com/glotlabs/gdrive";
     changelog = "https://github.com/glotlabs/gdrive/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "gdrive";
   };
 }

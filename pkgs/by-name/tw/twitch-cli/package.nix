@@ -1,6 +1,8 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
   testers,
   twitch-cli,
@@ -33,6 +35,18 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/twitch-cli completion bash > twitch-cli.bash
+    $out/bin/twitch-cli completion fish > twitch-cli.fish
+    $out/bin/twitch-cli completion zsh > _twitch-cli
+    installShellCompletion --cmd twitch-cli \
+      --bash twitch-cli.bash \
+      --fish twitch-cli.fish \
+      --zsh _twitch-cli
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
@@ -41,11 +55,11 @@ buildGoModule rec {
     version = "twitch-cli/${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official Twitch CLI to make developing on Twitch easier";
     mainProgram = "twitch-cli";
     homepage = "https://github.com/twitchdev/twitch-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benediktbroich ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benediktbroich ];
   };
 }

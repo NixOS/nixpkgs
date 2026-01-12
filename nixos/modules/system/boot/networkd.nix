@@ -22,6 +22,7 @@ let
           "SpeedMeterIntervalSec"
           "ManageForeignRoutingPolicyRules"
           "ManageForeignRoutes"
+          "ManageForeignNextHops"
           "RouteTable"
           "IPv6PrivacyExtensions"
           "IPv4Forwarding"
@@ -32,6 +33,7 @@ let
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
+        (assertValueOneOf "ManageForeignNextHops" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (
           boolValues
           ++ [
@@ -374,6 +376,7 @@ let
             "TOS"
             "TTL"
             "DiscoverPathMTU"
+            "IgnoreDontFragment"
             "IPv6FlowLabel"
             "CopyDSCP"
             "EncapsulationLimit"
@@ -396,6 +399,7 @@ let
           (assertInt "TTL")
           (assertRange "TTL" 0 255)
           (assertValueOneOf "DiscoverPathMTU" boolValues)
+          (assertValueOneOf "IgnoreDontFragment" boolValues)
           (assertValueOneOf "CopyDSCP" boolValues)
           (assertValueOneOf "Mode" [
             "ip6ip6"
@@ -744,14 +748,14 @@ let
           "both"
           "any"
         ])
-        (assertValueOneOf "ActivationPolicy" ([
+        (assertValueOneOf "ActivationPolicy" [
           "up"
           "always-up"
           "manual"
           "always-down"
           "down"
           "bound"
-        ]))
+        ])
       ];
 
       sectionNetwork = checkUnitConfig "Network" [
@@ -905,8 +909,8 @@ let
           boolValues
           ++ [
             "static"
-            "dhcp-on-stop"
-            "dhcp"
+            "dynamic-on-stop"
+            "dynamic"
           ]
         ))
       ];
@@ -1277,7 +1281,7 @@ let
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
         (assertValueOneOf "BindToInterface" boolValues)
-        (assertValueOneOf "PersistLeases" boolValues)
+        (assertValueOneOf "PersistLeases" (boolValues ++ [ "runtime" ]))
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
@@ -1884,6 +1888,11 @@ let
   networkdOptions = {
     networkConfig = mkOption {
       default = { };
+      defaultText = lib.literalExpression ''
+        {
+          IPv6PrivacyExtensions = true;
+        }
+      '';
       example = {
         SpeedMeter = true;
         ManageForeignRoutingPolicyRules = false;
@@ -3127,26 +3136,28 @@ let
       };
 
       config = {
-        networkConfig = optionalAttrs (config.routeTables != { }) {
+        networkConfig = {
+          IPv6PrivacyExtensions = lib.mkOptionDefault true;
+        }
+        // optionalAttrs (config.routeTables != { }) {
           RouteTable = mapAttrsToList (name: number: "${name}:${toString number}") config.routeTables;
         };
       };
     };
 
   renderConfig = def: {
-    text =
-      ''
-        [Network]
-        ${attrsToSection def.networkConfig}
-      ''
-      + optionalString (def.dhcpV4Config != { }) ''
-        [DHCPv4]
-        ${attrsToSection def.dhcpV4Config}
-      ''
-      + optionalString (def.dhcpV6Config != { }) ''
-        [DHCPv6]
-        ${attrsToSection def.dhcpV6Config}
-      '';
+    text = ''
+      [Network]
+      ${attrsToSection def.networkConfig}
+    ''
+    + optionalString (def.dhcpV4Config != { }) ''
+      [DHCPv4]
+      ${attrsToSection def.dhcpV4Config}
+    ''
+    + optionalString (def.dhcpV6Config != { }) ''
+      [DHCPv6]
+      ${attrsToSection def.dhcpV6Config}
+    '';
   };
 
   mkUnitFiles =
@@ -3299,10 +3310,11 @@ let
       {
         systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
 
-        systemd.network.wait-online.extraArgs =
-          [ "--timeout=${toString cfg.wait-online.timeout}" ]
-          ++ optional cfg.wait-online.anyInterface "--any"
-          ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
+        systemd.network.wait-online.extraArgs = [
+          "--timeout=${toString cfg.wait-online.timeout}"
+        ]
+        ++ optional cfg.wait-online.anyInterface "--any"
+        ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
       }
 
       (mkIf config.systemd.network.enable {

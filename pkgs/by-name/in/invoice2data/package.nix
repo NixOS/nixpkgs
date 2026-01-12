@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
   version = "0.4.4";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "invoice-x";
@@ -30,16 +30,17 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
     setuptools-git
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dateparser
     pdfminer-six
     pillow
     pyyaml
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
 
   makeWrapperArgs = [
@@ -61,11 +62,11 @@ python3.pkgs.buildPythonApplication rec {
     "invoice2data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data extractor for PDF invoices";
     mainProgram = "invoice2data";
     homepage = "https://github.com/invoice-x/invoice2data";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

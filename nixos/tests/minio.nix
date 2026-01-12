@@ -48,7 +48,10 @@ in
 {
   name = "minio";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bachp ];
+    maintainers = [
+      bachp
+      ryan4yin
+    ];
   };
 
   nodes = {
@@ -82,7 +85,7 @@ in
 
     # Create a test bucket on the server
     machine.succeed(
-        "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+        "mc alias set minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
     )
     machine.succeed("mc mb minio/test-bucket")
     machine.succeed("${minioPythonScript}")
@@ -101,7 +104,7 @@ in
 
     # Create a test bucket on the server
     machine.succeed(
-        "mc config host add minio https://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+        "mc alias set minio https://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
     )
     machine.succeed("mc --insecure mb minio/test-bucket")
     machine.succeed("${minioPythonScript} tls")

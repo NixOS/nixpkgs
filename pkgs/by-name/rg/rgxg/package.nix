@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "050jxc3qhfrm9fdbzd67hlsqlp4qk1fa20q1g2v919sh7s6v77si";
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library and a command-line tool to generate (extended) regular expressions";
     mainProgram = "rgxg";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ hloeffler ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ hloeffler ];
     homepage = "https://rgxg.github.io/";
   };
 }

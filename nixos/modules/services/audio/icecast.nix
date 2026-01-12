@@ -5,8 +5,14 @@
   ...
 }:
 let
+  inherit (lib)
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    ;
+
   cfg = config.services.icecast;
   configFile = pkgs.writeText "icecast.xml" ''
+    <?xml version="1.0"?>
     <icecast>
       <hostname>${cfg.hostname}</hostname>
 
@@ -16,7 +22,7 @@ let
       </authentication>
 
       <paths>
-        <logdir>${cfg.logDir}</logdir>
+        <logdir>/var/log/icecast</logdir>
         <adminroot>${pkgs.icecast}/share/icecast/admin</adminroot>
         <webroot>${pkgs.icecast}/share/icecast/web</webroot>
         <alias source="/" dest="/status.xsl"/>
@@ -29,17 +35,26 @@ let
 
       <security>
         <chroot>0</chroot>
-        <changeowner>
-            <user>${cfg.user}</user>
-            <group>${cfg.group}</group>
-        </changeowner>
       </security>
 
-      ${cfg.extraConf}
+      ${cfg.extraConfig}
     </icecast>
   '';
 in
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "icecast" "logDir" ] ''
+      The log directory is now managed by systemd's LogsDirectory= directive.
+    '')
+    (mkRemovedOptionModule [ "services" "icecast" "user" ] ''
+      The service now runs under the dynamically allocated `icecast` user.
+    '')
+    (mkRemovedOptionModule [ "services" "icecast" "group" ] ''
+      The service now runs under the dynamically allocated `icecast` group.
+    '')
+    (mkRenamedOptionModule [ "services" "icecast" "extraConf" ] [ "services" "icecast" "extraConfig" ])
+  ];
 
   ###### interface
 
@@ -69,12 +84,6 @@ in
         };
       };
 
-      logDir = lib.mkOption {
-        type = lib.types.path;
-        description = "Base directory used for logging.";
-        default = "/var/log/icecast";
-      };
-
       listen = {
         port = lib.mkOption {
           type = lib.types.port;
@@ -89,22 +98,12 @@ in
         };
       };
 
-      user = lib.mkOption {
-        type = lib.types.str;
-        description = "User privileges for the server.";
-        default = "nobody";
-      };
-
-      group = lib.mkOption {
-        type = lib.types.str;
-        description = "Group privileges for the server.";
-        default = "nogroup";
-      };
-
-      extraConf = lib.mkOption {
+      extraConfig = lib.mkOption {
         type = lib.types.lines;
-        description = "icecast.xml content.";
         default = "";
+        description = ''
+          Extra configuration added to {file}`icecast.xml` inside the `<icecast>` element.
+        '';
       };
 
     };
@@ -120,11 +119,20 @@ in
       description = "Icecast Network Audio Streaming Server";
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "mkdir -p ${cfg.logDir} && chown ${cfg.user}:${cfg.group} ${cfg.logDir}";
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.icecast}/bin/icecast -c ${configFile}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        DynamicUser = true;
+        ExecStart = toString [
+          (lib.getExe pkgs.icecast)
+          "-c"
+          configFile
+        ];
+        ExecReload = toString [
+          (lib.getExe' pkgs.coreutils "kill")
+          "-HUP"
+          "$MAINPID"
+        ];
+        LogsDirectory = "icecast";
       };
     };
 

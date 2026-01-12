@@ -75,7 +75,7 @@ in
       or (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression"),
 }:
 runCommand name
-  ({
+  {
     compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
     passthru = {
       compressorExecutableFunction = _compressorFunction;
@@ -96,10 +96,12 @@ runCommand name
     nativeBuildInputs = [
       makeInitrdNGTool
       cpio
-    ] ++ lib.optional makeUInitrd ubootTools;
-  })
+    ]
+    ++ lib.optional makeUInitrd ubootTools;
+  }
   ''
-    mkdir -p ./root/var/empty
+    mkdir -p ./root/{run,tmp,var/empty}
+    ln -s ../run ./root/var/run
     make-initrd-ng "$contentsPath" ./root
     mkdir "$out"
     (cd root && find . -exec touch -h -d '@1' '{}' +)

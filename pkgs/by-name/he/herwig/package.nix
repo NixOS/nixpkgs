@@ -30,19 +30,18 @@ stdenv.mkDerivation rec {
     gfortran
   ];
 
-  buildInputs =
-    [
-      boost
-      fastjet
-      gsl
-      thepeg
-      zlib
-    ]
-    # There is a bug that requires for default PDF's to be present during the build
-    ++ (with lhapdf.pdf_sets; [
-      CT14lo
-      CT14nlo
-    ]);
+  buildInputs = [
+    boost
+    fastjet
+    gsl
+    thepeg
+    zlib
+  ]
+  # There is a bug that requires for default PDF's to be present during the build
+  ++ (with lhapdf.pdf_sets; [
+    CT14lo
+    CT14nlo
+  ]);
 
   postPatch = ''
     patchShebangs ./
@@ -54,16 +53,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-thepeg=${thepeg}"
+    "--with-boost=${lib.getDev boost}"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

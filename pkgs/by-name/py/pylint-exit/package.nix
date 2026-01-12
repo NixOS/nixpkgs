@@ -8,6 +8,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "pylint-exit";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jongracecox";
@@ -32,10 +33,10 @@ buildPythonApplication rec {
     ${python.interpreter} -m doctest pylint_exit.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility to handle pylint exit codes in an OS-friendly way";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jongracecox/pylint-exit";
-    maintainers = [ maintainers.fabiangd ];
+    maintainers = [ lib.maintainers.fabiangd ];
   };
 }

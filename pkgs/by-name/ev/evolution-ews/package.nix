@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.56.1";
+  version = "3.58.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-DgC2qxV9j+r7T1HXchusP2IfI4f1WrS7PEPRN0KFrWs=";
+    hash = "sha256-+m/A39F+9hpjCtM8ZFuDWMQmZ2YSbxcWs8ef79KQyPs=";
   };
 
   patches = [
@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
-    license = licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
-    maintainers = [ maintainers.dasj19 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
+    maintainers = [ lib.maintainers.dasj19 ];
+    platforms = lib.platforms.linux;
   };
 }

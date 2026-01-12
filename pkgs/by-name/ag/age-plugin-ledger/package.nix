@@ -15,11 +15,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Ledger-Donjon";
     repo = "age-plugin-ledger";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g5GbWXhaGEafiM3qkGlRXHcOzPZl2pbDWEBPg4gQWcg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zR7gJNIqno50bQo0kondCxEC0ZgssqXNqACF6fnLDrc=";
 
   nativeBuildInputs = [
@@ -35,14 +34,14 @@ rustPlatform.buildRustPackage rec {
     rage
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ledger Nano plugin for age";
     mainProgram = "age-plugin-ledger";
     homepage = "https://github.com/Ledger-Donjon/age-plugin-ledger";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ erdnaxe ];
+    maintainers = with lib.maintainers; [ erdnaxe ];
   };
 }

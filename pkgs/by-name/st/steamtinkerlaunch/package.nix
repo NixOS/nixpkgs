@@ -20,13 +20,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "steamtinkerlaunch";
-  version = "12.12-unstable-2025-02-21";
+  version = "12.12-unstable-2025-07-14";
 
   src = fetchFromGitHub {
     owner = "sonic2kk";
     repo = "steamtinkerlaunch";
-    rev = "36e917c383a333caa43e187c06c0aed0c30c0421";
-    hash = "sha256-I7Aa7bZ6WB5LfCxyZUbl7fshyr2YWlZTMZDJKCODvhY=";
+    rev = "8550ab26a712b7f5f6d0947070181446b9de61fd";
+    hash = "sha256-mCcxdm8odHvTt4aP58RHY6NkaUMmMbQesUtY6dvIvOc=";
   };
 
   passthru.updateScript = unstableGitUpdater {
@@ -106,12 +106,12 @@ stdenvNoCC.mkDerivation {
       ln -sfn $out/bin/steamtinkerlaunch $steamcompattool/
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux wrapper tool for use with the Steam client for custom launch options and 3rd party programs";
     mainProgram = "steamtinkerlaunch";
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       urandom
       surfaceflinger
     ];

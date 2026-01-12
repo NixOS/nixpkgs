@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
   libX11,
+  libxcb,
   libxkbcommon,
   xinput,
   xorg,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) (
     [
       libX11
+      libxcb
       libxkbcommon
       xinput
     ]
@@ -63,12 +65,12 @@ stdenv.mkDerivation rec {
     cp ./uiohook_tests $test/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library to provide global keyboard and mouse hooks from userland";
     homepage = "https://github.com/kwhat/libuiohook";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ anoa ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ anoa ];
   };
 
   passthru.tests.libuiohook = nixosTests.libuiohook;

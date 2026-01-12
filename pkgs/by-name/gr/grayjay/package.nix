@@ -32,26 +32,27 @@
   libgcc,
   krb5,
   wrapGAppsHook3,
+  _experimental-update-script-combinators,
 }:
 let
-  version = "5";
+  version = "13";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-xrbYghNymny6MQrvFn++GaI+kUoOphPQMWcqH47U1Yg=";
+    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
   frontend = buildNpmPackage {
-    name = "grayjay-frontend";
+    pname = "grayjay-frontend";
     inherit version src;
 
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-pTEbMSAJwTY6ZRriPWfBFnRHSYufSsD0d+hWGz35xFM=";
+    npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
 
     installPhase = ''
       runHook preInstall
@@ -60,7 +61,7 @@ let
     '';
   };
 in
-buildDotnetModule {
+buildDotnetModule (finalAttrs: {
   pname = "grayjay";
 
   inherit version src frontend;
@@ -113,6 +114,16 @@ buildDotnetModule {
 
   nugetDeps = ./deps.json;
 
+  dotnet-sdk = dotnetCorePackages.sdk_9_0 // {
+    inherit
+      (dotnetCorePackages.combinePackages [
+        dotnetCorePackages.sdk_9_0
+        dotnetCorePackages.sdk_8_0
+      ])
+      packages
+      targetPackages
+      ;
+  };
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   executables = [ "Grayjay" ];
@@ -164,14 +175,17 @@ buildDotnetModule {
     libsecret
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "frontend"
-      "--url"
-      "https://github.com/futo-org/Grayjay.Desktop"
-    ];
-  };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+        "--url"
+        "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
+      ];
+    })
+    finalAttrs.passthru.fetch-deps
+  ];
 
   meta = {
     description = "Cross-platform application to stream and download content from various sources";
@@ -184,8 +198,11 @@ buildDotnetModule {
     '';
     homepage = "https://grayjay.app/desktop/";
     license = lib.licenses.sfl;
-    maintainers = with lib.maintainers; [ samfundev ];
+    maintainers = with lib.maintainers; [
+      kruziikrel13
+      samfundev
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };
-}
+})

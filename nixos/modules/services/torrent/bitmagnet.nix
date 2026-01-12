@@ -127,8 +127,9 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-      ] ++ optional cfg.useLocalPostgresDB "postgresql.service";
-      requires = optional cfg.useLocalPostgresDB "postgresql.service";
+      ]
+      ++ optional cfg.useLocalPostgresDB "postgresql.target";
+      requires = optional cfg.useLocalPostgresDB "postgresql.target";
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;

@@ -4,8 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
 
-  pythonOlder,
-
   setuptools,
 
   pytestCheckHook,
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-idzip";
   version = "0.3.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bauman";
@@ -56,12 +52,12 @@ buildPythonPackage rec {
     "test_bufferedio_compat"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Seekable, gzip compatible, compression format";
     mainProgram = "idzip";
     homepage = "https://github.com/bauman/python-idzip";
     changelog = "https://github.com/bauman/python-idzip/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

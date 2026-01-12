@@ -36,22 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
         LIBHDR10PLUS_RS_FOUND = true;
       };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      nasm
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    nasm
+  ];
 
-  buildInputs =
-    [
-      libdovi
-      hdr10plus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      cpuinfo
-    ];
+  buildInputs = [
+    libdovi
+    hdr10plus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    cpuinfo
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     branch = "master";

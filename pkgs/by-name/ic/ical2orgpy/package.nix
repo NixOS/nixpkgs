@@ -1,43 +1,49 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ical2orgpy";
   version = "0.5";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ical2org-py";
     repo = "ical2org.py";
-    rev = version;
+    tag = version;
     hash = "sha256-vBi1WYXMuDFS/PnwFQ/fqN5+gIvtylXidfZklyd6LcI=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     click
-    future
     icalendar
     pytz
     tzlocal
     recurring-ical-events
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  pythonRemoveDeps = [ "future" ];
+
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pytestCheckHook
     pyyaml
+    versionCheckHook
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/ical2org-py/ical2org.py/blob/${src.rev}/CHANGELOG.rst";
+  pythonImportsCheck = [ "ical2orgpy" ];
+
+  meta = {
+    changelog = "https://github.com/ical2org-py/ical2org.py/blob/${src.tag}/CHANGELOG.rst";
     description = "Converting ICAL file into org-mode format";
     homepage = "https://github.com/ical2org-py/ical2org.py";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ StillerHarpo ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ StillerHarpo ];
     mainProgram = "ical2orgpy";
   };
 

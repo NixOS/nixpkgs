@@ -18,7 +18,9 @@ mkDerivation {
     "sys/contrib/pcg-c"
     "sys/opencrypto"
     "sys/crypto"
-  ] ++ extraSrc;
+    "sys/modules/zfs"
+  ]
+  ++ extraSrc;
 
   outputs = [
     "out"

@@ -7,24 +7,25 @@
   tmux,
   fcft,
   arrow-cpp,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "utf8proc";
-  version = "2.10.0";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
     repo = "utf8proc";
-    rev = "v${version}";
-    hash = "sha256-wmtMo6eBK/xxxkIeJfh5Yb293po9cKK+7WjqNPoxM9g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/+/IrsLQ9ykuVOaItd2ZbX60pPlP2omvS1qJz51AnWA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DUTF8PROC_ENABLE_TESTING=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!enableStatic))
+    (lib.cmakeBool "UTF8PROC_ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;
@@ -33,14 +34,14 @@ stdenv.mkDerivation rec {
     inherit fcft tmux arrow-cpp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Clean C library for processing UTF-8 Unicode data";
     homepage = "https://juliastrings.github.io/utf8proc/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [
-      maintainers.ftrvxmtrx
-      maintainers.sternenseemann
+      lib.maintainers.ftrvxmtrx
+      lib.maintainers.sternenseemann
     ];
   };
-}
+})

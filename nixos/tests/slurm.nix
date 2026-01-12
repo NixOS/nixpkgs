@@ -8,6 +8,7 @@ let
       extraConfig = ''
         AccountingStorageHost=dbd
         AccountingStorageType=accounting_storage/slurmdbd
+        AuthAltTypes=auth/jwt
       '';
     };
     environment.systemPackages = [ mpitest ];
@@ -49,6 +50,16 @@ let
       mkdir -p $out/bin
       ${lib.getDev pkgs.mpi}/bin/mpicc ${mpitestC} -o $out/bin/mpitest
     '';
+
+  sbatchOutput = "/tmp/shared/sbatch.log";
+  sbatchScript = pkgs.writeText "sbatchScript" ''
+    #!${pkgs.runtimeShell}
+    #SBATCH --nodes 1
+    #SBATCH --ntasks 1
+    #SBATCH --output ${sbatchOutput}
+
+    echo "sbatch success"
+  '';
 in
 {
   name = "slurm";
@@ -77,6 +88,9 @@ in
           services.slurm = {
             server.enable = true;
           };
+          systemd.tmpfiles.rules = [
+            "f /var/spool/slurmctld/jwt_hs256.key 0400 slurm slurm - thisisjustanexamplejwttoken0000"
+          ];
         };
 
       submit =
@@ -118,13 +132,14 @@ in
                 name = "slurm";
               }
             ];
-            settings.mysqld = {
-              # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
-              innodb_buffer_pool_size = "1024M";
-              innodb_log_file_size = "64M";
-              innodb_lock_wait_timeout = 900;
-            };
           };
+        };
+
+      rest =
+        { ... }:
+        {
+          imports = [ slurmconfig ];
+          services.slurm.rest.enable = true;
         };
 
       node1 = computeNode;
@@ -133,43 +148,43 @@ in
     };
 
   testScript = ''
-    start_all()
-
-    # Make sure DBD is up after DB initialzation
     with subtest("can_start_slurmdbd"):
-        dbd.succeed("systemctl restart slurmdbd")
         dbd.wait_for_unit("slurmdbd.service")
         dbd.wait_for_open_port(6819)
 
-    # there needs to be an entry for the current
-    # cluster in the database before slurmctld is restarted
-    with subtest("add_account"):
-        control.succeed("sacctmgr -i add cluster default")
-        # check for cluster entry
-        control.succeed("sacctmgr list cluster | awk '{ print $1 }' | grep default")
-
-    with subtest("can_start_slurmctld"):
-        control.succeed("systemctl restart slurmctld")
+    with subtest("cluster_is_initialized"):
+        control.wait_for_unit("multi-user.target")
         control.wait_for_unit("slurmctld.service")
+        control.wait_until_succeeds("sacctmgr list cluster | awk '{ print $1 }' | grep default")
+
+    start_all()
 
     with subtest("can_start_slurmd"):
         for node in [node1, node2, node3]:
-            node.succeed("systemctl restart slurmd.service")
             node.wait_for_unit("slurmd")
 
     # Test that the cluster works and can distribute jobs;
+    submit.wait_for_unit("multi-user.target")
 
     with subtest("run_distributed_command"):
         # Run `hostname` on 3 nodes of the partition (so on all the 3 nodes).
         # The output must contain the 3 different names
         submit.succeed("srun -N 3 hostname | sort | uniq | wc -l | xargs test 3 -eq")
 
-        with subtest("check_slurm_dbd"):
+        with subtest("check_slurm_dbd_job"):
             # find the srun job from above in the database
-            control.succeed("sleep 5")
-            control.succeed("sacct | grep hostname")
+            control.wait_until_succeeds("sacct | grep hostname")
 
     with subtest("run_PMIx_mpitest"):
         submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
+
+    with subtest("run_sbatch"):
+        submit.succeed("sbatch --wait ${sbatchScript}")
+        submit.succeed("grep 'sbatch success' ${sbatchOutput}")
+
+    with subtest("rest"):
+        rest.wait_for_unit("slurmrestd.service")
+        token = control.succeed("scontrol token").split('=')[1].rstrip()
+        rest.succeed("${pkgs.curl}/bin/curl -sk -H X-SLURM-USER-TOKEN:%s -X GET 'http://localhost:6820/slurm/v0.0.43/diag'" % token)
   '';
 }

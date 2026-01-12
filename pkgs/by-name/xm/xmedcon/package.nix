@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmedcon";
-  version = "0.25.2";
+  version = "0.25.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-vg14IRLukAOBtAE32AIyXTRzLzwKCGsvIFYRas/hyNs=";
+    sha256 = "sha256-9VrTQP614tIrmZRm9bSpmlXqCbMPzqvhv222eFiKS4M=";
   };
 
   buildInputs = [
@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for medical image conversion";
     homepage = "https://xmedcon.sourceforge.net/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       arianvp
       flokli
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

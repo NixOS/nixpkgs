@@ -18,7 +18,7 @@ index 00000000..d009dfd9
 +++ b/src/__nix-prepend-search-paths.js
 @@ -0,0 +1,2 @@
 +import GIRepository from 'gi://GIRepository';
-+'@typelibPath@'.split(':').forEach(path => GIRepository.Repository.prepend_search_path(path));
++'@typelibPath@'.split(':').forEach(path => GIRepository.Repository.dup_default().prepend_search_path(path));
 diff --git a/src/extension.js b/src/extension.js
 index 53ecd5fc..78782357 100644
 --- a/src/extension.js

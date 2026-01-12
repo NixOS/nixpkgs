@@ -215,15 +215,6 @@ let
             This option can be set or overridden for individual peers.
 
             Setting this to `0` disables periodic refresh.
-
-            ::: {.warning}
-            When {option}`networking.wireguard.useNetworkd` is enabled, this
-            option deletes the Wireguard interface and brings it back up by
-            reconfiguring the network with `networkctl reload` on every refresh.
-            This could have adverse effects on your network and cause brief
-            connectivity blips. See [systemd/systemd#9911](https://github.com/systemd/systemd/issues/9911)
-            for an upstream feature request that can make this less hacky.
-            :::
           '';
         };
 
@@ -740,8 +731,7 @@ in
         ++ optional usingAwg kernel.amneziawg;
       boot.kernelModules = optional usingWg "wireguard" ++ optional usingAwg "amneziawg";
       environment.systemPackages =
-        optional usingWg pkgs.wireguard-tools
-        ++ optional usingAwg pkgs.amneziawg-tools;
+        optional usingWg pkgs.wireguard-tools ++ optional usingAwg pkgs.amneziawg-tools;
 
       systemd.services = mkIf (!cfg.useNetworkd) (
         (mapAttrs' generateInterfaceUnit cfg.interfaces)

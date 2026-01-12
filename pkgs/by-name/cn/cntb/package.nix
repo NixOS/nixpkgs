@@ -30,11 +30,11 @@ buildGoModule rec {
     "-X contabo.com/cli/cntb/cmd.date=1970-01-01T00:00:00Z"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for managing your products from Contabo like VPS and VDS";
     mainProgram = "cntb";
     homepage = "https://github.com/contabo/cntb";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 }

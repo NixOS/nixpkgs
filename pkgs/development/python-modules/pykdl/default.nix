@@ -2,7 +2,6 @@
   lib,
   stdenv,
   toPythonModule,
-  fetchpatch,
   cmake,
   pybind11,
   orocos-kdl,
@@ -16,15 +15,6 @@ toPythonModule (
     inherit (orocos-kdl) version src;
 
     sourceRoot = "${orocos-kdl.src.name}/python_orocos_kdl";
-
-    patches = [
-      # Support system pybind11; the vendored copy doesn't support Python 3.11
-      (fetchpatch {
-        url = "https://github.com/orocos/orocos_kinematics_dynamics/commit/e25a13fc5820dbca6b23d10506407bca9bcdd25f.patch";
-        hash = "sha256-NGMVGEYsa7hVX+SgRZgeSm93BqxFR1uiyFvzyF5H0Y4=";
-        stripLen = 1;
-      })
-    ];
 
     # Fix hardcoded installation path
     postPatch = ''
@@ -44,12 +34,12 @@ toPythonModule (
 
     cmakeFlags = [ "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}" ];
 
-    meta = with lib; {
+    meta = {
       description = "Kinematics and Dynamics Library (Python bindings)";
       homepage = "https://www.orocos.org/kdl.html";
-      license = licenses.lgpl21Only;
-      maintainers = with maintainers; [ lopsided98 ];
-      platforms = platforms.all;
+      license = lib.licenses.lgpl21Only;
+      maintainers = with lib.maintainers; [ lopsided98 ];
+      platforms = lib.platforms.all;
     };
   }
 )

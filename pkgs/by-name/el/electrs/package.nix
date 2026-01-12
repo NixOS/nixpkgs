@@ -2,25 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  rocksdb_7_10,
+  rocksdb_9_10,
 }:
 
 let
-  rocksdb = rocksdb_7_10;
+  rocksdb = rocksdb_9_10;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "electrs";
-  version = "0.10.9";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "electrs";
-    rev = "v${version}";
-    hash = "sha256-Xo7aqP4tIh/kYthPucscxnl+ZtVioEja4TTFdH0Q350=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MDdxu+ITEEUs+DXKfRKlwStT94Bv8tYIqh2eQlqPgrQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wDEtVsgkddGv89tTy96wYzNWVicn34Gxi+YAo7yAfQA=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-D8edLG3Zr/Qsk42husi/Nw1wGjvMb71Enl8hbifvLbk=";
+  };
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -31,11 +33,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Efficient re-implementation of Electrum Server in Rust";
     homepage = "https://github.com/romanz/electrs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "electrs";
   };
-}
+})

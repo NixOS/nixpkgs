@@ -14,7 +14,7 @@
 
 let
   pname = "discord.py";
-  version = "2.5.2";
+  version = "2.6.4";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "Rapptz";
     repo = "discord.py";
     tag = "v${version}";
-    hash = "sha256-xaZeOkfOhm1CL5ceu9g/Vlas4jpYoQDlGMEtACFY7PE=";
+    hash = "sha256-glFXgTNdOQ3cG/jlvi/1ASon2HpcoKli45IhLhjpIvA=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,8 @@ buildPythonPackage {
   dependencies = [
     aiohttp
     audioop-lts
-  ] ++ lib.optionals withVoice [ pynacl ];
+  ]
+  ++ lib.optionals withVoice [ pynacl ];
 
   patchPhase = lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \

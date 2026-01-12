@@ -28,8 +28,10 @@ copyDesktopItems() {
         return
     fi
 
+    concatTo desktopItemsArray desktopItems
+
     applications="${!outputBin}/share/applications"
-    for desktopItem in $desktopItems; do
+    for desktopItem in "${desktopItemsArray[@]}"; do
         if [[ -f "$desktopItem" ]]; then
             echo "Copying '$desktopItem' into '${applications}'"
             install -D -m 444 -t "${applications}" "$desktopItem"

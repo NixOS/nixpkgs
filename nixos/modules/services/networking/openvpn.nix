@@ -11,8 +11,6 @@ let
 
   cfg = config.services.openvpn;
 
-  inherit (pkgs) openvpn;
-
   makeOpenVPNJob =
     cfg: name:
     let
@@ -53,12 +51,15 @@ let
         ${optionalString (
           cfg.down != "" || cfg.updateResolvConf
         ) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
-        ${optionalString (cfg.authUserPass != null)
-          "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-            ${cfg.authUserPass.username}
-            ${cfg.authUserPass.password}
-          ''}"
-        }
+        ${optionalString (cfg.authUserPass != null) (
+          if isAttrs cfg.authUserPass then
+            "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+              ${cfg.authUserPass.username}
+              ${cfg.authUserPass.password}
+            ''}"
+          else
+            "auth-user-pass ${cfg.authUserPass}"
+        )}
       '';
 
     in
@@ -71,10 +72,10 @@ let
       path = [
         pkgs.iptables
         pkgs.iproute2
-        pkgs.nettools
+        pkgs.net-tools
       ];
 
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
+      serviceConfig.ExecStart = "@${config.services.openvpn.package}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -82,13 +83,12 @@ let
   restartService = optionalAttrs cfg.restartAfterSleep {
     openvpn-restart = {
       wantedBy = [ "sleep.target" ];
-      path = [ pkgs.procps ];
       script =
         let
           unitNames = map (n: "openvpn-${n}.service") (builtins.attrNames cfg.servers);
         in
         "systemctl try-restart ${lib.escapeShellArgs unitNames}";
-      description = "Sends a signal to OpenVPN process to trigger a restart after return from sleep";
+      description = "Restart system OpenVPN connections when returning from sleep";
     };
   };
 
@@ -102,6 +102,7 @@ in
   ###### interface
 
   options = {
+    services.openvpn.package = lib.mkPackageOption pkgs "openvpn" { };
 
     services.openvpn.servers = mkOption {
       default = { };
@@ -202,23 +203,28 @@ in
                 This option can be used to store the username / password credentials
                 with the "auth-user-pass" authentication method.
 
-                WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
+                You can either provide an attribute set of `username` and `password`,
+                or the path to a file containing the credentials on two lines.
+
+                WARNING: If you use an attribute set, this option will put the credentials WORLD-READABLE into the Nix store!
               '';
               type = types.nullOr (
-                types.submodule {
+                types.oneOf [
+                  types.singleLineStr
+                  (types.submodule {
+                    options = {
+                      username = mkOption {
+                        description = "The username to store inside the credentials file.";
+                        type = types.str;
+                      };
 
-                  options = {
-                    username = mkOption {
-                      description = "The username to store inside the credentials file.";
-                      type = types.str;
+                      password = mkOption {
+                        description = "The password to store inside the credentials file.";
+                        type = types.str;
+                      };
                     };
-
-                    password = mkOption {
-                      description = "The password to store inside the credentials file.";
-                      type = types.str;
-                    };
-                  };
-                }
+                  })
+                ]
               );
             };
           };
@@ -247,7 +253,7 @@ in
       ))
       // restartService;
 
-    environment.systemPackages = [ openvpn ];
+    environment.systemPackages = [ cfg.package ];
 
     boot.kernelModules = [ "tun" ];
 

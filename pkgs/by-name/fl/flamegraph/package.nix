@@ -44,15 +44,15 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
-  meta = with lib; {
-    license = with licenses; [
+  meta = {
+    license = with lib.licenses; [
       asl20
       cddl
       gpl2Plus
     ];
-    homepage = "http://www.brendangregg.com/flamegraphs.html";
+    homepage = "https://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
     mainProgram = "flamegraph.pl";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

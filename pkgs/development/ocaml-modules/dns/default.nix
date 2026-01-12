@@ -16,15 +16,15 @@
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dns";
-  version = "10.0.0";
+  version = "10.2.3";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-dns/releases/download/v${version}/dns-${version}.tbz";
-    hash = "sha256-dPO9BjvTE0UrpxKrmtgPrgfV/2uG/E9Wd/BNYSMtFwI=";
+    url = "https://github.com/mirage/ocaml-dns/releases/download/v${finalAttrs.version}/dns-${finalAttrs.version}.tbz";
+    hash = "sha256-yJWy0RLEqmDAmHoJ61nw2WAr2AT+z0EkeVvhbkqGc0o=";
   };
 
   propagatedBuildInputs = [
@@ -51,4 +51,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

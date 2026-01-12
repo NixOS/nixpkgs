@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkRemovedOptionModule
     ;
 in
@@ -18,7 +18,7 @@ in
 
     # This alias module can't be where _module.check is defined because it would
     # be added to submodules as well there
-    (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
+    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
@@ -34,6 +34,11 @@ in
       "fontconfig"
       "penultimate"
     ] "The corresponding package has removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "hardware"
+      "amdgpu"
+      "amdvlk"
+    ] "'amdvlk' has been removed. The replacement driver RADV, part of Mesa, is enabled by default.")
     (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
       brightnessctl don't require the udev rules anymore (they can use the
@@ -58,19 +63,55 @@ in
       "networking"
       "wicd"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "programs"
+        "adb"
+      ]
+      "This option is no longer needed as systemd 258 handles uaccess rules automatically. Please add `pkgs.android-tools` to your system packages to get the adb command."
+    )
+    (mkRemovedOptionModule [
+      "programs"
+      "cardboard"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "preload"
+      ]
+      ''
+        The corresponding package was removed from nixpkgs,
+        due to lack of usage and being broken since its introduction.
+      ''
+    ) # added 2025-11-29
+    (mkRemovedOptionModule [
+      "programs"
+      "goldwarden"
+    ] "'goldwarden' has been removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "file-roller"
+    ] "Not required for the package to function anymore, use `pkgs.file-roller` instead.")
     (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
+    '')
+    (mkRemovedOptionModule [ "programs" "thefuck" ] ''
+      The corresponding package was removed from nixpkgs,
+      consider using `programs.pay-respects` instead.
     '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
     ))
+    (mkRemovedOptionModule [ "programs" "yabar" ]
+      "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
+    )
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
@@ -100,6 +141,10 @@ in
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
+      "chatgpt-retrieval-plugin"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
       "chronos"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
@@ -113,6 +158,9 @@ in
       "services"
       "couchpotato"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "crabfit" ]
+      "The corresponding packages were removed from nixpkgs because they are unmaintained upstream and insecure."
+    )
     (mkRemovedOptionModule [ "services" "crowd" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
@@ -120,12 +168,18 @@ in
       "services"
       "dd-agent"
     ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
-    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule [
+      "services"
+      "deepin"
+    ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
     (mkRemovedOptionModule [ "services" "dnscrypt-wrapper" ] ''
       The dnscrypt-wrapper module was removed since the project has been effectively unmaintained since 2018;
       moreover the NixOS module had to rely on an abandoned version of dnscrypt-proxy v1 for the rotation of keys.
 
       To wrap a resolver with DNSCrypt you can instead use dnsdist. See options `services.dnsdist.dnscrypt.*`
+    '')
+    (mkRemovedOptionModule [ "services" "ethercalc" ] ''
+      The ethercalc module has been removed from nixpkgs as the project was old, unmaintained, and could not be packaged well in nixpkgs.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -183,6 +237,10 @@ in
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]
       "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver"
     )
+    (mkRemovedOptionModule [
+      "services"
+      "mx-puppet-discord"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
@@ -193,9 +251,22 @@ in
       "services"
       "moinmoin"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "morty" ]
+      "services.morty has been removed from NixOS. As the morty package was unmaintained and removed and searxng, its main consumer, dropped support for it."
+    )
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "nixseparatedebuginfod" ]
+      "Use `services.nixseparatedebuginfod2.enable = true;` instead. If you only use the official binary cache, no additional configuration should be needed."
+    )
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
+    '')
+    (mkRemovedOptionModule [ "services" "parsoid" ] ''
+      The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
+      and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
+    '')
+    (mkRemovedOptionModule [ "services" "pingvin-share" ] ''
+      The `pingvin-share.backend` package was broken and the project was archived upstream, so it was removed from nixpkgs.
     '')
     (mkRemovedOptionModule [ "services" "polipo" ] ''
       The polipo project is unmaintained and archived upstream.
@@ -207,6 +278,9 @@ in
       "services"
       "quagga"
     ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "quorum" ] ''
+      The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [
       "services"
       "railcar"
@@ -219,10 +293,18 @@ in
       "services"
       "shout"
     ] "shout was removed because it was deprecated upstream in favor of thelounge.")
+    (mkRemovedOptionModule [ "services" "siproxd" ] ''
+      The siproxd package and the corresponding module have been removed due to
+      the service being unmaintained. `services.asterisk.*` or `services.freeswitch.*`
+      could be used instead.
+    '')
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
+    '')
+    (mkRemovedOptionModule [ "services" "sourcehut" ] ''
+      The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
@@ -246,6 +328,18 @@ in
       LightDM. Please use the services.displayManager.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "plasma5"
+    ] "the Plasma 5 desktop environment has been removed from nixpkgs, as it has reached EOL upstream.")
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "desktopManager"
+      "deepin"
+    ] "the Deepin desktop environment has been removed from nixpkgs due to lack of maintenance.")
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
       services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
       as the underlying package isn't being maintained. Working alternatives are
@@ -329,7 +423,40 @@ in
       The signald project is unmaintained and has long been incompatible with the
       official Signal servers.
     '')
-
+    (mkRemovedOptionModule [ "services" "private-gpt" ] ''
+      The private-gpt package and the corresponding module have been removed due to being broken and unmaintained.
+    '')
+    (mkRemovedOptionModule [ "services" "gateone" ] ''
+      The gateone module was removed since the package was removed alongside much other obsolete python 2.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
+      LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+      Consider migrating or switching to Incus, or remove from your configuration.
+      https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+    '')
+    (mkRemovedOptionModule [ "services" "invoiceplane" ] ''
+      services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
+      and removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "filesender" ] ''
+      services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
+    '')
+    (mkRemovedOptionModule [ "services" "postfixadmin" ] ''
+      services.postfixadmin has been removed since it was unmaintained in nixpkgs and the version
+      available only supported PHP 8.1 which is EOL.
+    '')
+    (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
+      services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "security" "rngd" ] ''
+      rngd is not necessary for any device that the kernel recognises
+      as an hardware RNG, as it will automatically run the krngd task
+      to periodically collect random data from the device and mix it
+      into the kernel's RNG.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
+      virtualisation.multipass has been removed since it was unmaintained in nixpkgs
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

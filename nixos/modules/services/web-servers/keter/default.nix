@@ -31,12 +31,7 @@ in
       description = "Mutable state folder for keter";
     };
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.haskellPackages.keter;
-      defaultText = lib.literalExpression "pkgs.haskellPackages.keter";
-      description = "The keter package to be used";
-    };
+    package = lib.mkPackageOption pkgs [ "haskellPackages" "keter" ] { };
 
     globalKeterConfig = lib.mkOption {
       type = lib.types.submodule {
@@ -182,7 +177,7 @@ in
         after = [
           "network.target"
           "local-fs.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
       };
 

@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     icu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Front-end for the diff program that operates at the word level instead of the line level";
     homepage = "https://os.ghalkes.nl/dwdiff.html";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
   };
 
 }

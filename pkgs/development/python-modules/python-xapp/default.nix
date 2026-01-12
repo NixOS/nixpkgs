@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-xapp";
-  version = "2.4.2";
+  version = "3.0.1";
 
   format = "other";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
-    hash = "sha256-Gbm4YT9ZyrROOAbKz5xYd9J9YG9cUL2Oo6dDCPciaBs=";
+    hash = "sha256-mrFKK8541HuMHpRMGvvJcSshbpA99Y712ztAMfFj5m4=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace "xapp/os.py" \
       --replace-fail "/usr/bin/pkexec" "${polkit}/bin/pkexec"
+
+    # We actually want the localedir provided by the caller.
+    substituteInPlace "xapp/util/__init__.py" \
+      --replace-fail "/usr/share/locale" "/run/current-system/sw/share/locale"
   '';
 
   doCheck = false;
@@ -53,11 +57,11 @@ buildPythonPackage rec {
     skipBulkUpdate = true; # This should be bumped as part of Cinnamon update.
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/python-xapp";
     description = "Cross-desktop libraries and common resources for python";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

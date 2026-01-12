@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -35,15 +36,19 @@ buildPythonPackage rec {
     "test_inverse_fourier_transform"
     # our imagemagick doesn't set MagickReleaseDate
     "test_configure_options"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert wand.color.Color('srgb(255,0,1.41553e-14)') == wand.color.Color('srgb(255,0,0)')
+    "test_sparse_color"
   ];
 
   passthru.imagemagick = imagemagickBig;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.wand-py.org/en/${version}/changes.html";
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ dotlambda ];
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

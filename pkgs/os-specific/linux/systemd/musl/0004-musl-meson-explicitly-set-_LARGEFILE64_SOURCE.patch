@@ -1,0 +1,32 @@
+From 59f993d1acb069f3f2b7d6c71b91696388692702 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 10 Jun 2025 00:29:46 +0900
+Subject: [PATCH 04/30] musl: meson: explicitly set _LARGEFILE64_SOURCE
+
+glibc sets it when _GNU_SOURCE is defined, however, musl does not.
+Let's explicitly define it to make getdents64() and struct dirent64
+available even when building with musl.
+---
+ meson.build | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 054752c339..37fb1c2765 100644
+--- a/meson.build
++++ b/meson.build
+@@ -560,6 +560,12 @@ conf.set10('HAVE_WARNING_ZERO_AS_NULL_POINTER_CONSTANT', have)
+ conf.set('_GNU_SOURCE', 1)
+ conf.set('__SANE_USERSPACE_TYPES__', true)
+ 
++if get_option('libc') == 'musl'
++        # glibc always defines _LARGEFILE64_SOURCE when _GNU_SOURCE is set, but musl does not do that,
++        # and it is necessary for making getdents64() and struct dirent64 exist.
++        conf.set('_LARGEFILE64_SOURCE', 1)
++endif
++
+ conf.set('SIZEOF_DEV_T', cc.sizeof('dev_t', prefix : '#include <sys/types.h>'))
+ conf.set('SIZEOF_INO_T', cc.sizeof('ino_t', prefix : '#include <sys/types.h>'))
+ conf.set('SIZEOF_RLIM_T', cc.sizeof('rlim_t', prefix : '#include <sys/resource.h>'))
+-- 
+2.51.0
+

@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "0.6.1";
+  version = "0.8.2";
   inherit (python) pythonVersion;
 
   # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
@@ -46,68 +46,68 @@ let
         };
     in
     {
-      "3.10-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
-        dist = "cp310";
-        hash = "sha256-euWBWtpxtpUyzkQ6ERYKPtJcZ+gqKUoNia+dTSdClDQ=";
-      };
-      "3.10-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
-        dist = "cp310";
-        hash = "sha256-gQbcMW60QNB7nUYooMjirPdtpWBnQsn1wzEEqqd7CsI=";
-      };
-      "3.10-aarch64-darwin" = getSrcFromPypi {
-        platform = "macosx_11_0_arm64";
-        dist = "cp310";
-        hash = "sha256-J3zH6dZX0Ik6VZJhJ3s+rpFq1/pz4wCmKSYftTfcoPE=";
-      };
-
       "3.11-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
+        platform = "manylinux_2_27_x86_64";
         dist = "cp311";
-        hash = "sha256-EfzEscdBoeAFfy/6d9WoK/5+6Xw4ZO2I32dJPnibkXM=";
+        hash = "sha256-zPd9qReiCTUkfJkGkd7Py90Gwl7wrJTZFKBKrbIvcUw=";
       };
       "3.11-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
+        platform = "manylinux_2_27_aarch64";
         dist = "cp311";
-        hash = "sha256-WpDufFmywAdzAm+/kYJpx6hnamqBo0oDr5GffXvc6ag=";
+        hash = "sha256-u4m+RSsbgI0/iPwBxBWzZKJgvkzHrBIMA4AJ9hUKMtw=";
       };
       "3.11-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp311";
-        hash = "sha256-ArrFFTOJ8BYWUWqf0dzWA40j7lBoHawU5N28Q8yzEzo=";
+        hash = "sha256-SQvwywKcc8ZclDESS4bNyVCC28H7dvxUnSTXXaM+VFQ=";
       };
 
       "3.12-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
+        platform = "manylinux_2_27_x86_64";
         dist = "cp312";
-        hash = "sha256-0DkSRGhWW785NjsVBMGQ5nGeaviaeUje4lbx3ugTu5Q=";
+        hash = "sha256-K5eJvQj4sMxaXBKuiW/kMtWULjLkFwkbi1qWqab9XPE=";
       };
       "3.12-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
+        platform = "manylinux_2_27_aarch64";
         dist = "cp312";
-        hash = "sha256-tYwp/nR2IrcJRuqHgjrTkgLMg9o9k6UpO0Mhc7c4qGg=";
+        hash = "sha256-OxblDFtzDJ3QpJ5V8az6pyKwCxrwUipZFVjcwEZCUvI=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-4UGVwj7s1VmmHDECe0Fy6RLlpQ9jAyCRj/366DCQylo=";
+        hash = "sha256-Aj3m8/Vtoq9wN5cJllAFhjMf21C1MOy7VLlmbaYzvQA=";
       };
 
       "3.13-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
+        platform = "manylinux_2_27_x86_64";
         dist = "cp313";
-        hash = "sha256-5zS+cP4+H6KjFBU2JyEYnZdNEKZrD1OWyEWFWH0QGxU=";
+        hash = "sha256-G/vPbD3iIXhPpM22dloJ1xy0KYsVYms9BAmz382Khmc=";
       };
       "3.13-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
+        platform = "manylinux_2_27_aarch64";
         dist = "cp313";
-        hash = "sha256-0MNDxRsQUlk+22A931jPf5iBKylRrmxFvW6T4+Hy9iE=";
+        hash = "sha256-fDBPOgFpZbnR9SOaigOZpzkl9WBP6RTFymbs9zS/ZCI=";
       };
       "3.13-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp313";
-        hash = "sha256-9Mp12dR6LpAJmt/t4OnJJrg+9wPTSbMom4yI6GHAnl0=";
+        hash = "sha256-TQBtuWvgIMgWUhKhIWNy+KysT/T4+wZ3Q9aU7yswGs4=";
+      };
+
+      "3.14-x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux_2_27_x86_64";
+        dist = "cp314";
+        hash = "sha256-5ql9+wIy7tmiu244KOT2gtusGn/qhAv9pXTK4tv1+vk=";
+      };
+      "3.14-aarch64-linux" = getSrcFromPypi {
+        platform = "manylinux_2_27_aarch64";
+        dist = "cp314";
+        hash = "sha256-aBCN/w3nStxGgBa+mhn4Dv5IxmDA1aEiKHCUtEsJKvw=";
+      };
+      "3.14-aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        dist = "cp314";
+        hash = "sha256-vv+wBOfutcmvskQ54rLPRaTuPj6K30XjVe3yr2Ks+Lg=";
       };
     };
 in

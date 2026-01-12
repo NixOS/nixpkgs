@@ -1,14 +1,11 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-}:
+{ runTest }:
 
 {
-  file-sink = import ./file-sink.nix { inherit system pkgs; };
-  api = import ./api.nix { inherit system pkgs; };
-  dnstap = import ./dnstap.nix { inherit system pkgs; };
-  journald-clickhouse = import ./journald-clickhouse.nix { inherit system pkgs; };
-  nginx-clickhouse = import ./nginx-clickhouse.nix { inherit system pkgs; };
-  syslog-quickwit = import ./syslog-quickwit.nix { inherit system pkgs; };
+  file-sink = runTest ./file-sink.nix;
+  api = runTest ./api.nix;
+  caddy-clickhouse = runTest ./caddy-clickhouse.nix;
+  dnstap = runTest ./dnstap.nix;
+  journald-clickhouse = runTest ./journald-clickhouse.nix;
+  nginx-clickhouse = runTest ./nginx-clickhouse.nix;
+  syslog-quickwit = runTest ./syslog-quickwit.nix;
 }

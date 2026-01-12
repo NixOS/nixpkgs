@@ -8,6 +8,7 @@
   ninja,
   pkg-config,
   vala,
+  elementary-settings-daemon,
   libadwaita,
   libgee,
   gettext,
@@ -19,19 +20,18 @@
   libgnomekbd,
   libxklavier,
   ibus,
-  onboard,
   switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "8.0.2";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-keyboard";
     rev = version;
-    sha256 = "sha256-j2D6NSwHTZQJaHm664fHF4VkcExpYwoq/J3SXus30nw=";
+    sha256 = "sha256-8lgoR7nYqUJfLr9UhqnFJWw9x9l97RxgIkAwodHgrzI=";
   };
 
   patches = [
@@ -39,8 +39,13 @@ stdenv.mkDerivation rec {
     # https://github.com/elementary/settings-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
+    # We no longer ship Pantheon X11 session in NixOS.
+    # https://github.com/elementary/session-settings/issues/91
+    # https://github.com/elementary/session-settings/issues/82
+    ./hide-onscreen-keyboard-settings.patch
+
     (replaceVars ./fix-paths.patch {
-      inherit onboard libgnomekbd;
+      inherit libgnomekbd;
     })
   ];
 
@@ -54,6 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-settings-daemon # io.elementary.settings-daemon.applications
     gnome-settings-daemon # media-keys
     granite7
     gsettings-desktop-schemas
@@ -69,11 +75,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Keyboard Plug";
     homepage = "https://github.com/elementary/settings-keyboard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

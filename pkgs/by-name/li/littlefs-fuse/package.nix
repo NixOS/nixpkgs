@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "littlefs-fuse";
-  version = "2.7.12";
+  version = "2.7.14";
   src = fetchFromGitHub {
     owner = "littlefs-project";
     repo = "littlefs-fuse";
     rev = "v${version}";
-    hash = "sha256-BgvdwEEzJ5QtdXTXHLmLPSoyTs6Svd7ESJULxPbjgJk=";
+    hash = "sha256-TWvBEoH4YvK4Jdg+QAMyskBUYhCWnmdtEoVXwoKJqIo=";
   };
   buildInputs = [ fuse ];
   installPhase = ''

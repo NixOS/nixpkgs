@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "primePy" ];
 
-  meta = with lib; {
+  meta = {
     description = "This module contains several useful functions to work with prime numbers. from primePy import primes";
     homepage = "https://pypi.org/project/primePy/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

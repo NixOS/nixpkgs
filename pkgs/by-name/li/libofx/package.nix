@@ -37,12 +37,13 @@ stdenv.mkDerivation rec {
     opensp
     libxml2
     curl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";
     homepage = "https://libofx.sourceforge.net/";
-    license = "LGPL";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };

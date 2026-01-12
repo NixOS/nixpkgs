@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bluemaestro-ble";
-  version = "0.4.1";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluemaestro-ble";
     tag = "v${version}";
-    hash = "sha256-44HUcp8CKQMcaIMKsi3AXdCJlIUGvRrVd2JxGeh1498=";
+    hash = "sha256-H7VAidnClMA/Qmc4ahzrmSaqkWj50zMjfakRD0wX8xM=";
   };
 
   build-system = [ poetry-core ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bluemaestro_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for bluemaestro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bluemaestro-ble";
     changelog = "https://github.com/Bluetooth-Devices/bluemaestro-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

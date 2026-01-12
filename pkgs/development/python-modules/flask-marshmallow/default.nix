@@ -8,15 +8,12 @@
   marshmallow,
   marshmallow-sqlalchemy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
@@ -43,9 +40,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_marshmallow" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

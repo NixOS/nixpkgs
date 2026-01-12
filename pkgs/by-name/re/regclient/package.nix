@@ -18,16 +18,16 @@ in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.8.3";
+  version = "0.11.1";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-vuZPd51nzCasV3WWulbKCQnqVkupMu5jQhQypvTKGvk=";
+    sha256 = "sha256-7HfcwDb4BgpOxkjOau/QVs9x/U6Da5eh5rHB6W1NhwE=";
   };
-  vendorHash = "sha256-ad7IPiOMG4G80BdAZz7IN0hBPJgUIVdO9oFlM7IDmp8=";
+  vendorHash = "sha256-cNbHgb/yHF/ubhnWkyEQOjOz5qmircJJR8jDYj+d8bM=";
 
   outputs = [ "out" ] ++ bins;
 
@@ -76,10 +76,10 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Docker and OCI Registry Client in Go and tooling using those libraries";
     homepage = "https://github.com/regclient/regclient";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ maxbrunet ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ maxbrunet ];
   };
 }

@@ -6,15 +6,12 @@
   jsonschema,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "archspec";
   version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "archspec";
@@ -35,15 +32,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "archspec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
     homepage = "https://archspec.readthedocs.io/";
     changelog = "https://github.com/archspec/archspec/releases/tag/${src.tag}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ atila ];
+    maintainers = with lib.maintainers; [ atila ];
     mainProgram = "archspec";
   };
 }

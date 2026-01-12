@@ -11,7 +11,7 @@ in
 python3.pkgs.buildPythonApplication {
 
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,17 +20,21 @@ python3.pkgs.buildPythonApplication {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     requests
     radon
     pyaml
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "xenon" ];
+
+  meta = {
     description = "Monitoring tool based on radon";
     homepage = "https://github.com/rubik/xenon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "xenon";
   };
 }

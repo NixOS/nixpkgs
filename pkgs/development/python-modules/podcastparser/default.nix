@@ -2,37 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "podcastparser";
-  version = "0.6.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.6.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "podcastparser";
     tag = version;
-    hash = "sha256-P9wVyxTO0nz/DfuBhCE+VjhH1uYx4jBd30Ca26yBzbo=";
+    hash = "sha256-eF/YHKSCMZnavkoX3LcAFHPSPABijn+aPVzaeRYY3WI=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=podcastparser --cov-report html --doctest-modules" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "podcastparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse podcasts";
     homepage = "http://gpodder.org/podcastparser/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/gpodder/podcastparser/releases/tag/${src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

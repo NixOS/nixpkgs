@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   vcrpy,
   citeproc-py,
   looseversion,
@@ -16,18 +16,10 @@ buildPythonPackage rec {
   version = "0.10.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-/nOiDk+7LZcroB7fN97BsLoeZG7+XvTMrwxnJMoofUI=";
   };
-
-  postPatch = ''
-    substituteInPlace tox.ini  \
-      --replace-fail "--cov=duecredit" ""  \
-      --replace-fail "--cov-config=tox.ini" ""
-  '';
 
   nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [
@@ -38,6 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     vcrpy
   ];
   disabledTests = [ "test_import_doi" ]; # tries to access network

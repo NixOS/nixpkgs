@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re2c";
-  version = "4.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "skvadrik";
     repo = "re2c";
     rev = version;
-    sha256 = "sha256-xB4oH0QS0VKTK2we+wdylS8VBijpp6tv7YV7fIX1s4A=";
+    hash = "sha256-ihtAB6HLgYhX+FKPFy01RByy/M468YrHv2v5wB9bJws=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for writing very fast and very flexible scanners";
     homepage = "https://re2c.org";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

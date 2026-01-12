@@ -27,27 +27,25 @@ stdenv.mkDerivation (
       hash = "sha256-QkCc894vrxEIUj4sWsB0XSH57SpceO2HjuncwwNCa4o=";
     };
 
-    nativeBuildInputs =
-      [
-        pkg-config
-      ]
-      ++ (lib.optionals stdenv.hostPlatform.isWindows [
-        autoreconfHook # The Windows patch modifies autotools files
-      ]);
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      autoreconfHook # The Windows patch modifies autotools files
+    ]);
 
-    buildInputs =
-      [
-        icu
-      ]
-      ++ (lib.optionals stdenv.hostPlatform.isUnix [
-        clucene_core
-        curl
-      ])
-      ++ (lib.optionals stdenv.hostPlatform.isWindows [
-        bzip2
-        curlDep
-        xz
-      ]);
+    buildInputs = [
+      icu
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isUnix [
+      clucene_core
+      curl
+    ])
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      bzip2
+      curlDep
+      xz
+    ]);
 
     outputs = [
       "out"
@@ -64,16 +62,15 @@ stdenv.mkDerivation (
 
     patches = lib.optional stdenv.hostPlatform.isWindows ./sword-1.9.0-diatheke-includes.patch;
 
-    configureFlags =
-      [
-        "--without-conf"
-        "--enable-tests=no"
-      ]
-      ++ (lib.optionals stdenv.hostPlatform.isWindows [
-        "--with-xz"
-        "--with-bzip2"
-        "--with-icuregex"
-      ]);
+    configureFlags = [
+      "--without-conf"
+      "--enable-tests=no"
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      "--with-xz"
+      "--with-bzip2"
+      "--with-icuregex"
+    ]);
 
     makeFlags = lib.optionals stdenv.hostPlatform.isWindows [
       "LDFLAGS=-no-undefined"

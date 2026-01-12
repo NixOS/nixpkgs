@@ -4,7 +4,6 @@
   fetchFromGitHub,
   loguru,
   poetry-core,
-  pythonOlder,
   setuptools,
   standard-imghdr,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "mobi";
   version = "0.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iscc";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mobi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for unpacking unencrypted mobi files";
     mainProgram = "mobiunpack";
     homepage = "https://github.com/iscc/mobi";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

@@ -24,18 +24,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapgrep";
-  version = "25.05+1";
+  version = "25.10";
 
   src = fetchFromGitHub {
     owner = "luleyleo";
     repo = "clapgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DL3voYSsNGjPb1CnPuJGg+7UgWYZO7cH5T2Z37BuDSE=";
+    hash = "sha256-Y7XwS4jOj8WHi3ntLwPne86/ZVkdBaWrDtPmUcUG4XE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-hTejIaXIAi8opZdE2X3vEi+VYoSti8RNB41ikVOWGPk=";
+    hash = "sha256-iNGYFyAF3Qo6x2VaBsyrLTSYPn6OZ6TWfXDTXqbovhE=";
   };
 
   nativeBuildInputs = [

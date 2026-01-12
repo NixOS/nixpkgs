@@ -1,0 +1,10 @@
+diff --git a/packages/main/src/plugin/managed-by-constants.ts b/packages/main/src/plugin/managed-by-constants.ts
+index 5a20d2de29e..9fea8a17165 100644
+--- a/packages/main/src/plugin/managed-by-constants.ts
++++ b/packages/main/src/plugin/managed-by-constants.ts
+@@ -29,4 +29,4 @@ export const SYSTEM_LOCKED_FILENAME = 'locked.json';
+ // Folders for managed defaults on different platforms
+ export const SYSTEM_DEFAULTS_FOLDER_MACOS = '/Library/Application Support/io.podman_desktop.PodmanDesktop';
+ export const SYSTEM_DEFAULTS_FOLDER_WINDOWS = 'Podman Desktop';
+-export const SYSTEM_DEFAULTS_FOLDER_LINUX = '/usr/share/podman-desktop';
++export const SYSTEM_DEFAULTS_FOLDER_LINUX = '/etc/podman-desktop';

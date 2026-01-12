@@ -1,11 +1,12 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   git,
   pkg-config,
   openssl,
-  erlang_27,
+  erlang,
   nodejs,
   bun,
   deno,
@@ -15,31 +16,57 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.10.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0qK9dWkKnoXbIIBMN3p5noPEke/bgC8Bjtmf6lwtyr4=";
+    hash = "sha256-KAk5tz7Dlq6cxNv3CTd8lOx7lxuK5do6aSajp0NFBw0=";
   };
 
-  cargoHash = "sha256-EoRu8p6cUe1li54nVUkf+3qywIsDXh4ptIVLluJ3eFs=";
+  cargoHash = "sha256-v7+D8mlvJbEjJZinLYHum93PuHOWBVzJKno19qPbZWs=";
 
   nativeBuildInputs = [
-    git
     pkg-config
-    erlang_27
+    erlang
+  ];
+
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    # used by several tests
+    git
+
+    # js runtimes used for integration tests
     nodejs
     bun
     deno
   ];
 
-  buildInputs = [ openssl ];
-
   checkFlags = [
     # Makes a network request
     "--skip=tests::echo::echo_dict"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Snapshot tests fail because a warning is shown on stdout
+    # warn: CPU lacks AVX support, strange crashes may occur. Reinstall Bun or use *-baseline build:
+    #   https://github.com/oven-sh/bun/releases/download/bun-v1.3.1/bun-darwin-x64-baseline.zip
+    "--skip=tests::echo::echo_bitarray"
+    "--skip=tests::echo::echo_bool"
+    "--skip=tests::echo::echo_charlist"
+    "--skip=tests::echo::echo_circular_reference"
+    "--skip=tests::echo::echo_custom_type"
+    "--skip=tests::echo::echo_float"
+    "--skip=tests::echo::echo_function"
+    "--skip=tests::echo::echo_importing_module_named_inspect"
+    "--skip=tests::echo::echo_int"
+    "--skip=tests::echo::echo_list"
+    "--skip=tests::echo::echo_nil"
+    "--skip=tests::echo::echo_singleton"
+    "--skip=tests::echo::echo_string"
+    "--skip=tests::echo::echo_tuple"
+    "--skip=tests::echo::echo_with_message"
   ];
 
   doInstallCheck = true;
@@ -53,7 +80,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://gleam.run/";
     changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.philtaken ];
+    maintainers = with lib.maintainers; [
+      philtaken
+      llakala
+    ];
     teams = [ lib.teams.beam ];
   };
 })

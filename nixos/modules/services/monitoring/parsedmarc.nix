@@ -11,7 +11,7 @@ let
   opt = options.services.parsedmarc;
   isSecret = v: isAttrs v && v ? _secret && isString v._secret;
   ini = pkgs.formats.ini {
-    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
       mkValueString =
         v:
         if isInt v then
@@ -427,9 +427,9 @@ in
 
     services.postfix = lib.mkIf cfg.provision.localMail.enable {
       enable = true;
-      origin = cfg.provision.localMail.hostname;
-      config = {
+      settings.main = {
         myhostname = cfg.provision.localMail.hostname;
+        myorigin = cfg.provision.localMail.hostname;
         mydestination = cfg.provision.localMail.hostname;
       };
     };
@@ -546,22 +546,21 @@ in
         serviceConfig = {
           ExecStartPre =
             let
-              startPreFullPrivileges =
-                ''
-                  set -o errexit -o pipefail -o nounset -o errtrace
-                  shopt -s inherit_errexit
+              startPreFullPrivileges = ''
+                set -o errexit -o pipefail -o nounset -o errtrace
+                shopt -s inherit_errexit
 
-                  umask u=rwx,g=,o=
-                  cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
-                  chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
-                  ${secretReplacements}
-                ''
-                + lib.optionalString cfg.provision.localMail.enable ''
-                  openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
-                  replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
-                  echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
-                  cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
-                '';
+                umask u=rwx,g=,o=
+                cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
+                chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
+                ${secretReplacements}
+              ''
+              + lib.optionalString cfg.provision.localMail.enable ''
+                openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
+                replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
+                echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
+                cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
+              '';
             in
             "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
           Type = "simple";

@@ -46,5 +46,10 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ orzklv ];
+  meta.maintainers = with lib.maintainers; [
+    orzklv
+    shakhzodkudratov
+    bahrom04
+    bemeritus
+  ];
 }

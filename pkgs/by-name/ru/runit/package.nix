@@ -34,16 +34,15 @@ stdenv.mkDerivation rec {
     stdenv.cc.libc.static
   ];
 
-  postPatch =
-    ''
-      sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
-      # usernamespace sandbox of nix seems to conflict with runit's assumptions
-      # about unix users. Therefor skip the check
-      sed -i '/.\/chkshsgr/d' src/Makefile
-    ''
-    + lib.optionalString (!static) ''
-      sed -i 's,-static,,g' src/Makefile
-    '';
+  postPatch = ''
+    sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
+    # usernamespace sandbox of nix seems to conflict with runit's assumptions
+    # about unix users. Therefor skip the check
+    sed -i '/.\/chkshsgr/d' src/Makefile
+  ''
+  + lib.optionalString (!static) ''
+    sed -i 's,-static,,g' src/Makefile
+  '';
 
   preBuild = ''
     cd src
@@ -61,11 +60,11 @@ stdenv.mkDerivation rec {
     cp -r ../man $man/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UNIX init scheme with service supervision";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://smarden.org/runit";
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

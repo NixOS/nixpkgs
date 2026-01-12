@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "camunda-modeler";
-  version = "5.34.0";
+  version = "5.43.0";
 
   src = fetchurl {
     url = "https://github.com/camunda/camunda-modeler/releases/download/v${version}/camunda-modeler-${version}-linux-x64.tar.gz";
-    hash = "sha256-3A8f371zyfx2GWJSwL0e+pD9M1Nitk4P7voq+V8Fojs=";
+    hash = "sha256-NR1UXnIU0Wf2WeiagqijEXz9qUShFbM1umenFFETOJI=";
   };
   sourceRoot = "camunda-modeler-${version}-linux-x64";
 
@@ -73,11 +73,12 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/camunda/camunda-modeler";
-    description = "An integrated modeling solution for BPMN, DMN and Forms based on bpmn.io";
-    teams = [ teams.wdz ];
-    license = licenses.mit;
+    description = "Integrated modeling solution for BPMN, DMN and Forms based on bpmn.io";
+    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ vringar ];
+    license = lib.licenses.mit;
     inherit (electron.meta) platforms;
     mainProgram = "camunda-modeler";
   };

@@ -47,7 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "True Type to Postscript Type 3 converter, fpdf";
     homepage = "https://ttf2pt1.sourceforge.net/index.html";
-    license = "ttf2pt1";
+    license = with lib.licenses; [
+      gpl2Plus
+      {
+        fullName = "ttf2pt1 License";
+        url = "https://git.altlinux.org/gears/t/ttf2pt1.git?p=ttf2pt1.git;a=blob;f=ttf2pt1/COPYRIGHT;h=75e8f38e5a7638ee7d23892c86442ddcc35f4761;hb=f3cdb9f16159edf8115dc81520be9af791e846b2";
+      }
+    ];
     platforms = lib.platforms.linux;
   };
 })

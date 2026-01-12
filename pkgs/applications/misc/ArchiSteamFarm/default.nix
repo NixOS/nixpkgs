@@ -6,27 +6,41 @@
   libkrb5,
   zlib,
   openssl,
+  stdenv,
   callPackage,
 }:
 
+let
+  plugins = [
+    "ArchiSteamFarm.OfficialPlugins.ItemsMatcher"
+    "ArchiSteamFarm.OfficialPlugins.MobileAuthenticator"
+    "ArchiSteamFarm.OfficialPlugins.Monitoring"
+    "ArchiSteamFarm.OfficialPlugins.SteamTokenDumper"
+  ];
+in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.1.5.2";
+  version = "6.3.1.6";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-BETlzGL/5IjXajyyvQtYb0Q0sra4BILSL9fX4BNPNSI=";
+    hash = "sha256-WbzPlngp+Vjwc14qgQE5i2WVRCGvcs9N8lVv2SpfqdQ=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   nugetDeps = ./deps.json;
 
-  projectFile = "ArchiSteamFarm.sln";
+  projectFile = [
+    "ArchiSteamFarm"
+  ]
+  ++ plugins;
+  testProjectFile = "ArchiSteamFarm.Tests";
+
   executable = "ArchiSteamFarm";
 
   enableParallelBuilding = false;
@@ -38,7 +52,7 @@ buildDotnetModule rec {
     "-p:RuntimeIdentifiers="
   ];
   dotnetBuildFlags = [
-    "--framework=net9.0"
+    "--framework=net10.0"
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 
@@ -48,7 +62,8 @@ buildDotnetModule rec {
     openssl
   ];
 
-  doCheck = true;
+  # times out when trying to connect to something even with relaxed sandbox
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
@@ -65,13 +80,13 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        --no-restore --no-build --runtime $dotnetRuntimeIds \
         $dotnetFlags $dotnetInstallFlags
     }
 
-    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
-    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  ''
+  + lib.concatMapStrings (p: "buildPlugin ${p}\n") plugins
+  + ''
 
     chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
     wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm
@@ -85,11 +100,11 @@ buildDotnetModule rec {
     ui = callPackage ./web-ui { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

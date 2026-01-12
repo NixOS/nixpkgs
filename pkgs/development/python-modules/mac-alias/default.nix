@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "mac_alias" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/al45tair/mac_alias";
     description = "Generate or read binary Alias and Bookmark records from Python code";
     mainProgram = "mac_alias";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       to generate a proper Alias or Bookmark record for a given file,
       so this module currently is not portable to other platforms.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

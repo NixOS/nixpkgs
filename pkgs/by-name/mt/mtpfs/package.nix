@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "07acrqb17kpif2xcsqfqh5j4axvsa4rnh6xwnpqab5b9w5ykbbqv";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cjd/mtpfs";
     description = "FUSE Filesystem providing access to MTP devices";
-    platforms = platforms.all;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.qknight ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.qknight ];
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/mtpfs.x86_64-darwin
     mainProgram = "mtpfs";
   };

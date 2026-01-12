@@ -1,14 +1,12 @@
 {
   lib,
   stdenv,
-  auditwheel,
   buildPythonPackage,
   gitMinimal,
   greenlet,
   fetchFromGitHub,
   pyee,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   playwright-driver,
@@ -22,15 +20,14 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.52.0";
+  version = "1.57.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${version}";
-    hash = "sha256-8hl+5kIORq9uwYbf9354iqlL0RIkhTnokzQXoYFr5AI=";
+    hash = "sha256-LXTMVC6ytjo7l0QDkNPxtoMTYjmYMjCVqHz61BgAn6A=";
   };
 
   patches = [
@@ -67,7 +64,7 @@ buildPythonPackage rec {
     gitMinimal
     setuptools-scm
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+  ];
 
   pythonRelaxDeps = [
     "greenlet"
@@ -90,26 +87,25 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
-    tests =
-      {
-        driver = playwright-driver;
-        browsers = playwright-driver.browsers;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) playwright-python;
-      };
+    tests = {
+      driver = playwright-driver;
+      browsers = playwright-driver.browsers;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) playwright-python;
+    };
     # Package and playwright driver versions are tightly coupled.
     # Use the update script to ensure synchronized updates.
     skipBulkUpdate = true;
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python version of the Playwright testing and automation library";
     mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       techknowlogick
       yrd
     ];

@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools-scm,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.2.1";
+  version = "32.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "commoncode";
     tag = "v${version}";
-    hash = "sha256-dCiERdNVup95UnvmJEzkpQsRvpk2eKqvwD6jkEBrXfE=";
+    hash = "sha256-k9E/Yz6G3IHJPf3BlscZNSL4Qk9WyGU3vXA+U+GwWA0=";
   };
 
   dontConfigure = true;
@@ -49,29 +46,28 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  disabledTests =
-    [
-      # chinese character translates different into latin
-      "test_safe_path_posix_style_chinese_char"
-      # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
-      "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
-      "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
-      "test_walk_can_walk_non_utf8_path_from_unicode_path"
-      "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # expected result is tailored towards the quirks of upstream's
-      # CI environment on darwin
-      "test_searchable_paths"
-    ];
+  disabledTests = [
+    # chinese character translates different into latin
+    "test_safe_path_posix_style_chinese_char"
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
+    "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
+    "test_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # expected result is tailored towards the quirks of upstream's
+    # CI environment on darwin
+    "test_searchable_paths"
+  ];
 
   pythonImportsCheck = [ "commoncode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
-    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    changelog = "https://github.com/nexB/commoncode/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

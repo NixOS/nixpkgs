@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/calmopyrin/yapesdl/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "yapesdl";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

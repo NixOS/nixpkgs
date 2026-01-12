@@ -1,63 +1,56 @@
 {
   fetchFromGitHub,
   glib,
-  gtk3,
-  iproute2,
+  gtk4,
   kdePackages,
   lib,
-  libappindicator,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
-  libayatana-appindicator,
-  libsoup_3,
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_1,
+  wrapGAppsHook4,
+  graphene,
   nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snx-rs";
-  version = "3.1.2";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
     tag = "v${version}";
-    hash = "sha256-bLuIXd2pqqiyEP+lDTJYVDZkRZ0HcDkKFZd/qlpuf98=";
+    hash = "sha256-7qmwi/hV8Ev+rdG00hIrQ8yMkb/yxAvG49SAvjsO4GQ=";
   };
 
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
-    iproute2
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     kdePackages.kstatusnotifieritem
-    libappindicator
-    libappindicator-gtk2
-    libappindicator-gtk3
-    libayatana-appindicator
-    libsoup_3
     openssl
-    webkitgtk_4_1
+    graphene
   ];
-
-  postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-  '';
 
   checkFlags = [
     "--skip=platform::linux::net::tests::test_default_ip"
+    "--skip=platform::linux::tests::test_xfrm_check"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-E5OJVf9CkLn5mFtk4Yacs2OIvAuIw0idSs7QuTNvfgU=";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  cargoHash = "sha256-RRmssKIzxhcmZjTqF0fRmw8XyyHFRwLJtGOF/xeD78w=";
+
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";

@@ -6,26 +6,50 @@
   fetchFromGitHub,
   replaceVars,
 
+  copyDesktopItems,
   makeWrapper,
+  makeDesktopItem,
 
-  electron_34,
+  electron_37,
+  nodejs_22,
   commandLineArgs ? "",
 }:
 
 let
-  # if we want to use later electron, we'll need to bump the `node-abi` npm package version
-  electron = electron_34;
+  electron = electron_37;
 in
 buildNpmPackage rec {
   pname = "lx-music-desktop";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${version}";
-    hash = "sha256-NMj8rb5PAejT1HCE5nxi2+SS9lFUVdLEqN0id23QjVc=";
+    hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Utility"
+        "AudioVideo"
+        "Audio"
+        "Player"
+        "Music"
+      ];
+      desktopName = "LX Music Desktop";
+      exec = "lx-music-desktop";
+      genericName = "Music Player";
+      icon = "lx-music-desktop";
+      mimeTypes = [ "x-scheme-handler/lxmusic" ];
+      name = "lx-music-desktop";
+      startupNotify = false;
+      startupWMClass = "lx-music-desktop";
+      terminal = false;
+      type = "Application";
+    })
+  ];
 
   patches = [
     # set electron version and dist dir
@@ -37,9 +61,13 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
+    copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-cA9NdHe3lEg8twMLWoeomWgobidZ34TKwdC5rDezZ5g=";
+  # Npm 11 (nodejs 24) can't resolve all dependencies from the prefetched cache.
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
 
   makeCacheWritable = true;
 
@@ -76,25 +104,30 @@ buildNpmPackage rec {
     cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/opt/lx-music-desktop"
     rm "$out/opt/lx-music-desktop/resources/app-update.yml"
 
+    for size in 16 32 48 64 128 256 512; do
+      install -D -m 444 resources/icons/"$size"x"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/lx-music-desktop.png
+    done
+
     runHook postInstall
   '';
 
   postFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/lx-music-desktop \
-        --add-flags $out/opt/lx-music-desktop/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+      --add-flags $out/opt/lx-music-desktop/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with maintainers; [ oosquare ];
+    maintainers = with lib.maintainers; [ starryreverie ];
   };
 }

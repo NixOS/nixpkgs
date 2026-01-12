@@ -98,11 +98,11 @@ buildPythonPackage {
     substituteInPlace $out/${python.sitePackages}/matrix/uploads.py --replace-fail \"matrix_upload\" \"$out/bin/matrix_upload\"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tilpner ];
   };
 }

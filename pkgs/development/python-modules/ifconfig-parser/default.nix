@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "ifconfig-parser";
   version = "0.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KnightWhoSayNi";
@@ -29,10 +26,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ifconfigparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for parsing raw output of ifconfig";
     homepage = "https://github.com/KnightWhoSayNi/ifconfig-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atemu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atemu ];
   };
 }

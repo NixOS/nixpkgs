@@ -3,35 +3,34 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  wheel,
   sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-cockroachdb";
-  version = "2.0.2";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EZdW65BYVdahE0W5nP6FMDGj/lmKnEvzWo3ayfif6Mw=";
+    pname = "sqlalchemy_cockroachdb";
+    inherit version;
+    hash = "sha256-SLdj/9iypNydVkWZNKVtfV/61BXG5o0RS67l0Sz3nB0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     sqlalchemy
   ];
 
   pythonImportsCheck = [ "sqlalchemy_cockroachdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "CockroachDB dialect for SQLAlchemy";
-    homepage = "https://pypi.org/project/sqlalchemy-cockroachdb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pinpox ];
+    homepage = "https://github.com/cockroachdb/sqlalchemy-cockroachdb/tree/master/sqlalchemy_cockroachdb";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pinpox ];
   };
 }

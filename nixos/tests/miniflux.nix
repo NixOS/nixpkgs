@@ -80,9 +80,6 @@ in
             host sameuser miniflux samenet scram-sha-256
           '';
         };
-        systemd.services.postgresql.postStart = lib.mkAfter ''
-          $PSQL -tAd miniflux -c 'CREATE EXTENSION hstore;'
-        '';
         networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
       };
     externalDb =
@@ -123,7 +120,7 @@ in
     runTest(withoutSudo, ${toString defaultPort}, "${defaultUsername}:${defaultPassword}")
     runTest(customized, ${toString port}, "${username}:${password}")
 
-    postgresTcp.wait_for_unit("postgresql.service")
+    postgresTcp.wait_for_unit("postgresql.target")
     externalDb.start()
     runTest(externalDb, ${toString defaultPort}, "${defaultUsername}:${defaultPassword}")
   '';

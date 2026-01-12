@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   hypothesis,
   numpy,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "siuba";
   version = "0.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "machow";
@@ -55,11 +52,11 @@ buildPythonPackage rec {
     "siuba.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Use dplyr-like syntax with pandas and SQL";
     homepage = "https://siuba.org";
     changelog = "https://github.com/machow/siuba/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -43,9 +43,9 @@ mkCoqDerivation {
   propagatedBuildInputs = [ flocq ];
   useMelquiondRemake.logpath = "Gappa";
 
-  meta = with lib; {
+  meta = {
     description = "Coq support library for Gappa";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

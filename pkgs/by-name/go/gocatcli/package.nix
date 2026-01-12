@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "gocatcli";
-  version = "1.0.6";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "deadc0de6";
     repo = "gocatcli";
     tag = "v${version}";
-    hash = "sha256-qB7BDPDGcngPhd82V4FrsycFd7CNb6hPaHJQ+ECmo48=";
+    hash = "sha256-MUOyxDdU5xCQ7mQpNP1sS1zKGe/6/bqN1sSu5JqW36o=";
   };
 
-  vendorHash = "sha256-gJfqnxCTKXmTH8L4qjSXzTr+LsP+jzzivfQOplRkfao=";
+  vendorHash = "sha256-Zp9m0v/F4AJ9b3GH3/SoZx1jijHGR854f8KhhcIPjS8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,7 +38,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/deadc0de6/gocatcli";
     changelog = "https://github.com/deadc0de6/gocatcli/releases/tag/v${version}";
-    description = "The command line catalog tool for your offline data";
+    description = "Command line catalog tool for your offline data";
     longDescription = ''
       gocatcli is a catalog tool for your offline data. It indexes external
       media in a catalog file and allows to quickly find specific files or even

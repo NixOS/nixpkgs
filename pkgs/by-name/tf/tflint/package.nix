@@ -1,7 +1,8 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
+  versionCheckHook,
   runCommand,
   makeWrapper,
   tflint,
@@ -9,21 +10,18 @@
   symlinkJoin,
 }:
 
-let
+buildGo125Module (finalAttrs: {
   pname = "tflint";
-  version = "0.58.0";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.60.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = "tflint";
-    tag = "v${version}";
-    hash = "sha256-AaY2UghPvYveZ4xtUphPOnnoA6FcyO9Y2Uzz3bN8Q8I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hf4C8DaI+u7cAbOiQ6XvQLlF+Kl484TeJ1oJsvIw/wo=";
   };
 
-  vendorHash = "sha256-lmV23xDzBaMxV4MQeatX4sF0UwDZBlekdW21CMGtIqs=";
+  vendorHash = "sha256-aOa+FO3LA9S97wgbayAW3vY5ZCAqn72N8HxvVfThGY4=";
 
   doCheck = false;
 
@@ -34,6 +32,10 @@ buildGoModule {
     "-w"
   ];
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.withPlugins =
     plugins:
     let
@@ -43,10 +45,10 @@ buildGoModule {
         paths = [ actualPlugins ];
       };
     in
-    runCommand "tflint-with-plugins-${version}"
+    runCommand "tflint-with-plugins-${finalAttrs.version}"
       {
         nativeBuildInputs = [ makeWrapper ];
-        inherit version;
+        inherit (finalAttrs) version;
       }
       ''
         makeWrapper ${tflint}/bin/tflint $out/bin/tflint \
@@ -57,8 +59,8 @@ buildGoModule {
     description = "Terraform linter focused on possible errors, best practices, and so on";
     mainProgram = "tflint";
     homepage = "https://github.com/terraform-linters/tflint";
-    changelog = "https://github.com/terraform-linters/tflint/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/terraform-linters/tflint/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ momeemt ];
   };
-}
+})

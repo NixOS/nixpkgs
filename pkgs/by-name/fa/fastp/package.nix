@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastp";
-  version = "0.24.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "OpenGene";
     repo = "fastp";
     rev = "v${version}";
-    sha256 = "sha256-8AJ6wgqbCqH/f3flgdVYUb5u0C5/CQl6MJe7HmZrp60=";
+    sha256 = "sha256-NR41Hklcz2wOQ39OzQYaYs5+eGjSWxCtcTGDAixZCmg=";
   };
 
   buildInputs = [
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     install -D fastp $out/bin/fastp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ultra-fast all-in-one FASTQ preprocessor";
     mainProgram = "fastp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/OpenGene/fastp";
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.x86_64;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.x86_64;
   };
 }

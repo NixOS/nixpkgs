@@ -1,0 +1,12 @@
+diff --git a/src/device/cart.rs b/src/device/cart.rs
+index 97bf09f..4406fec 100644
+--- a/src/device/cart.rs
++++ b/src/device/cart.rs
+@@ -21,6 +21,7 @@ const JDT_EEPROM_16K: u16 = 0xc000; /* 16k EEPROM */
+ const EEPROM_BLOCK_SIZE: usize = 8;
+ pub const EEPROM_MAX_SIZE: usize = 0x800;
+ 
++#[allow(warnings)]
+ #[derive(serde::Serialize, serde::Deserialize)]
+ pub enum CicType {
+     CicNus6101,

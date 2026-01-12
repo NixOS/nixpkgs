@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
-  version = "1.18.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     tag = "v${version}";
-    hash = "sha256-Ic4Kcc5Vx1QXFt28o5ItGwcvsKCB2HdZvILPRoEKbgI=";
+    hash = "sha256-aE40mS3wcZHQIPyE9YEv5tRkrz4nClF8Brsbt0M0jK4=";
   };
 
-  vendorHash = "sha256-xp/zdkNV4z3rQMV0b/7TD+ApiaDWxR/aqOKvakGKAcI=";
+  vendorHash = "sha256-jtQSAP/QiSeLn37bg2uapzMBYGo9QvuH4V2YgmPrDN8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -45,12 +45,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cast media files to UPnP/DLNA Media Renderers and Smart TVs";
     homepage = "https://github.com/alexballas/go2tv";
     changelog = "https://github.com/alexballas/go2tv/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gdamjan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gdamjan ];
     mainProgram = pname;
   };
 }

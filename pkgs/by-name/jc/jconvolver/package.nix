@@ -123,11 +123,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "JACK client and audio file convolver with reverb samples";
     homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

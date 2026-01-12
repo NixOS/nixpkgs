@@ -8,12 +8,12 @@
 }:
 buildPythonPackage rec {
   pname = "dtfabric";
-  version = "20230520";
+  version = "20251118";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rJPBEe/eAQ7OPPZHeFbomkb8ca3WTheDhs/ic6GohVM=";
+    hash = "sha256-v2qsZtqGb40p5/Q1IGhI+prMCkuruxFB0BTMORKzmX4=";
   };
 
   build-system = [ setuptools ];

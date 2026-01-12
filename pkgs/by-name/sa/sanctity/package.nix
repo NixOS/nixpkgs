@@ -16,14 +16,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-y6xj4A5SHcW747aFE9TfuurNnuUxjTUeKJmzxeiWqVc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-r+0Qd88slA4ke90U1urVjdoiXwGWv42AViUpRCTucxs=";
 
-  meta = with lib; {
+  meta = {
     description = "Test the 16 terminal colors in all combinations";
     homepage = "https://codeberg.org/annaaurora/sanctity";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "sanctity";
   };
 }

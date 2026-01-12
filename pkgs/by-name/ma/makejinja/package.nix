@@ -6,26 +6,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "makejinja";
-  version = "2.7.2";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
     tag = "v${version}";
-    hash = "sha256-WyTv4eTsEPn3pCCXUB0YUfv9SyR/6Ml4UU4zt1k5z2c=";
+    hash = "sha256-TH4pgohh6yIgsPtsHnYSUr17Apk8C02KD+8sNO5GOf8=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
     [
+      frozendict
       jinja2
       pyyaml
       rich-click
       typed-settings
-      immutables
     ]
     ++ typed-settings.optional-dependencies.attrs
     ++ typed-settings.optional-dependencies.cattrs

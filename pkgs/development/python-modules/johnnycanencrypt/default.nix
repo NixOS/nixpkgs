@@ -9,7 +9,6 @@
   pcsclite,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
   vcrpy,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   version = "0.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
@@ -29,8 +26,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-V1z16GKaSQVjp+stWir7kAO2wsnOYPdhKi4KzIKmKx8=";
   };
 
@@ -40,20 +36,22 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with rustPlatform; [
-      bindgenHook
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with rustPlatform; [
+    bindgenHook
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
-  buildInputs =
-    [ nettle ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    nettle
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   dependencies = [ httpx ];
 
@@ -69,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for OpenPGP written in Rust";
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
   };
 }

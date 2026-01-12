@@ -12,6 +12,7 @@
   crypto ? false,
   libgcrypt,
   gnutls,
+  fuse,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,18 +33,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
   };
 
-  buildInputs =
-    [
-      gettext
-      libuuid
-    ]
-    ++ lib.optionals crypto [
-      gnutls
-      libgcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      macfuse-stubs
-    ];
+  buildInputs = [
+    gettext
+    libuuid
+    fuse
+  ]
+  ++ lib.optionals crypto [
+    gnutls
+    libgcrypt
+  ];
 
   # Note: libgcrypt is listed here non-optionally because its m4 macros are
   # being used in ntfs-3g's configure.ac.
@@ -59,21 +57,21 @@ stdenv.mkDerivation rec {
     ./consistent-sbindir-usage.patch
   ];
 
-  configureFlags =
-    [
-      "--disable-ldconfig"
-      "--exec-prefix=\${prefix}"
-      "--enable-mount-helper"
-      "--enable-posix-acls"
-      "--enable-xattr-mappings"
-      "--${if crypto then "enable" else "disable"}-crypto"
-      "--enable-extras"
-      "--with-mount-helper=${mount}/bin/mount"
-      "--with-umount-helper=${mount}/bin/umount"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--with-modprobe-helper=${kmod}/bin/modprobe"
-    ];
+  configureFlags = [
+    "--disable-ldconfig"
+    "--exec-prefix=\${prefix}"
+    "--enable-mount-helper"
+    "--enable-posix-acls"
+    "--enable-xattr-mappings"
+    "--${if crypto then "enable" else "disable"}-crypto"
+    "--enable-extras"
+    "--with-mount-helper=${mount}/bin/mount"
+    "--with-umount-helper=${mount}/bin/umount"
+    "--with-fuse=external"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--with-modprobe-helper=${kmod}/bin/modprobe"
+  ];
 
   postInstall = ''
     # Prefer ntfs-3g over the ntfs driver in the kernel.
@@ -82,12 +80,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = with platforms; darwin ++ linux;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ dezgeg ];
+    mainProgram = "ntfs-3g";
+    platforms = with lib.platforms; darwin ++ linux;
+    license = with lib.licenses; [
       gpl2Plus # ntfs-3g itself
       lgpl2Plus # fuse-lite
     ];

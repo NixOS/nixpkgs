@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ACYbSQKaOJ2hS8NbOAppfKo+Mk3CKg0OAwb56AH42Zs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-S+/Oh1Cwulw8FyakF+d2E51AioFuQBGMAOG3y27YM2Q=";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,11 +37,11 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Learn foreign languages using audio and subtitles extracted from video files";
-    homepage = "http://www.randomhacks.net/substudy";
-    license = licenses.asl20;
+    homepage = "https://www.randomhacks.net/substudy";
+    license = lib.licenses.asl20;
     mainProgram = "substudy";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = [ ];
   };
 }

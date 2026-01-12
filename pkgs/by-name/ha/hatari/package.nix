@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hatari";
-  version = "2.5.0";
+  version = "2.6.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "hatari";
     repo = "hatari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RC+KA6rNG4Hk3dvTtejiHl9+pPHImALF0Ho5QuTtjz4=";
+    hash = "sha256-hfSlpYwS6PcA4pqpYeFnOptN4hX7ZjLB8cu9cZ8pr7Y=";
   };
 
   # For pthread_cancel

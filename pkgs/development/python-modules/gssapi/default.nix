@@ -2,7 +2,6 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "gssapi";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
@@ -72,9 +69,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gssapi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.python.org/pypi/gssapi";
     description = "Python GSSAPI Wrapper";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

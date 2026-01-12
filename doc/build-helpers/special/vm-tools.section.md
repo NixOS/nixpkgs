@@ -23,7 +23,7 @@ If the build fails and Nix is run with the `-K/--keep-failed` option, a script `
 ### Attributes {#vm-tools-runInLinuxVM-attributes}
 
 * `preVM` (optional). Shell command to be evaluated *before* the VM is started (i.e., on the host).
-* `memSize` (optional, default `512`). The memory size of the VM in MiB.
+* `memSize` (optional, default `512`). The memory size of the VM in MiB (1024×1024 bytes).
 * `diskImage` (optional). A file system image to be attached to `/dev/sda`.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
 
@@ -92,14 +92,14 @@ Generate a script that can be used to run an interactive session in the given im
 
 ### Examples {#vm-tools-makeImageTestScript-examples}
 
-Create a script for running a Fedora 27 VM:
+Create a script for running a Fedora 43 VM:
 ```nix
-{ pkgs }: with pkgs; with vmTools; makeImageTestScript diskImages.fedora27x86_64
+{ pkgs }: pkgs.vmTools.makeImageTestScript pkgs.vmTools.diskImages.fedora43x86_64
 ```
 
-Create a script for running an Ubuntu 20.04 VM:
+Create a script for running an Ubuntu 24.04 VM:
 ```nix
-{ pkgs }: with pkgs; with vmTools; makeImageTestScript diskImages.ubuntu2004x86_64
+{ pkgs }: pkgs.vmTools.makeImageTestScript pkgs.vmTools.diskImages.ubuntu2404x86_64
 ```
 
 ## `vmTools.diskImageFuns` {#vm-tools-diskImageFuns}
@@ -109,30 +109,29 @@ A set of functions that build a predefined set of minimal Linux distributions im
 ### Images {#vm-tools-diskImageFuns-images}
 
 * Fedora
-  * `fedora26x86_64`
-  * `fedora27x86_64`
-* CentOS
-  * `centos6i386`
-  * `centos6x86_64`
-  * `centos7x86_64`
+  * `fedora42x86_64`
+  * `fedora43x86_64`
+* Rocky Linux
+  * `rocky9x86_64`
+  * `rocky10x86_64`
+* AlmaLinux
+  * `alma9x86_64`
+  * `alma10x86_64`
+* Oracle Linux
+  * `oracle9x86_64`
+* Amazon Linux
+  * `amazon2023x86_64`
 * Ubuntu
-  * `ubuntu1404i386`
-  * `ubuntu1404x86_64`
-  * `ubuntu1604i386`
-  * `ubuntu1604x86_64`
-  * `ubuntu1804i386`
-  * `ubuntu1804x86_64`
-  * `ubuntu2004i386`
-  * `ubuntu2004x86_64`
   * `ubuntu2204i386`
   * `ubuntu2204x86_64`
+  * `ubuntu2404x86_64`
 * Debian
-  * `debian10i386`
-  * `debian10x86_64`
   * `debian11i386`
   * `debian11x86_64`
   * `debian12i386`
   * `debian12x86_64`
+  * `debian13i386`
+  * `debian13x86_64`
 
 ### Attributes {#vm-tools-diskImageFuns-attributes}
 
@@ -144,9 +143,7 @@ A set of functions that build a predefined set of minimal Linux distributions im
 8GiB image containing Firefox in addition to the default packages:
 ```nix
 { pkgs }:
-with pkgs;
-with vmTools;
-diskImageFuns.ubuntu2004x86_64 {
+pkgs.vmTools.diskImageFuns.ubuntu2404x86_64 {
   extraPackages = [ "firefox" ];
   size = 8192;
 }

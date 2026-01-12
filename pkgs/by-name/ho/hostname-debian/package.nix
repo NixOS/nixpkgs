@@ -1,35 +1,41 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hostname-debian";
-  version = "3.23";
+  version = "3.25";
 
-  src = fetchurl {
-    url = "https://deb.debian.org/debian/pool/main/h/hostname/hostname_${version}.tar.gz";
-    sha256 = "sha256-vG0ZVLIoSYaf+LKmAuOfCLFwL2htS1jdeSfN61tIdu8=";
-  };
-
-  postPatch = ''
-    substituteInPlace Makefile --replace 'install -o root -g root' 'install'
-  '';
-  makeFlags = [
-    "BINDIR=$(out)/bin"
-    "MANDIR=$(out)/share/man"
+  outputs = [
+    "out"
+    "man"
   ];
 
-  meta = with lib; {
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "meskes";
+    repo = "hostname";
+    tag = "debian/${version}";
+    hash = "sha256-Yq8P5bF/RRZnWuFW0y2u08oZrydAKfopOtbrwbeIu3w=";
+  };
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
+
+  meta = {
+    changelog = "https://salsa.debian.org/meskes/hostname/-/blob/${src.tag}/debian/changelog";
     description = "Utility to set/show the host name or domain name";
     longDescription = ''
       This package provides commands which can be used to display the system's
       DNS name, and to display or set its hostname or NIS domain name.
     '';
     homepage = "https://tracker.debian.org/pkg/hostname";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ posch ];
-    platforms = platforms.gnu;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "hostname";
+    maintainers = with lib.maintainers; [ posch ];
+    platforms = lib.platforms.gnu;
   };
 }

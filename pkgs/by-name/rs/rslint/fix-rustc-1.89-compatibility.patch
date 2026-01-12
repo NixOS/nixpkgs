@@ -1,0 +1,22 @@
+From 1ceaa3a78d591599a5fe30f702bdb3dae1004f70 Mon Sep 17 00:00:00 2001
+From: Daeho Ro <40587651+daeho-ro@users.noreply.github.com>
+Date: Sun, 14 Sep 2025 15:47:53 +0900
+Subject: [PATCH] fix: rust 1.89 compatibility
+
+---
+ crates/rslint_rowan/src/arc.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crates/rslint_rowan/src/arc.rs b/crates/rslint_rowan/src/arc.rs
+index 0977f4422e85384872183d999603be4d563a4a55..9d2e00c5844412bf0d097f5b219f877e67cab7e0 100644
+--- a/crates/rslint_rowan/src/arc.rs
++++ b/crates/rslint_rowan/src/arc.rs
+@@ -575,7 +575,7 @@ impl<H, T> Arc<HeaderSlice<H, [T]>> {
+             // we'll just leak the uninitialized memory.
+             ptr::write(&mut ((*ptr).count), atomic::AtomicUsize::new(1));
+             ptr::write(&mut ((*ptr).data.header), header);
+-            if let Some(current) = (*ptr).data.slice.get_mut(0) {
++            if let Some(current) = (&mut (*ptr).data.slice).get_mut(0) {
+                 let mut current: *mut T = current;
+                 for _ in 0..num_items {
+                     ptr::write(

@@ -33,31 +33,30 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace unar.m lsar.m \
-        --replace-fail "v1.10.7" "v${version}"
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
-            --replace "libstdc++.6.dylib" "libc++.1.dylib"
-        ''
-      else
-        ''
-          for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
-            substituteInPlace $f \
-              --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
-              --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
-              --replace "-DGNU_RUNTIME=1" "" \
-              --replace "-fgnu-runtime" "-fobjc-runtime=gnustep-2.0"
-          done
+  postPatch = ''
+    substituteInPlace unar.m lsar.m \
+      --replace-fail "v1.10.7" "v${version}"
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
+          --replace "libstdc++.6.dylib" "libc++.1.dylib"
+      ''
+    else
+      ''
+        for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
+          substituteInPlace $f \
+            --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
+            --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
+            --replace "-DGNU_RUNTIME=1" "" \
+            --replace "-fgnu-runtime" "-fobjc-runtime=gnustep-2.0"
+        done
 
-          # we need to build inside this directory as well, so we have to make it writeable
-          chmod +w ../UniversalDetector -R
-        ''
-    );
+        # we need to build inside this directory as well, so we have to make it writeable
+        chmod +w ../UniversalDetector -R
+      ''
+  );
 
   buildInputs = [
     bzip2
@@ -65,11 +64,13 @@ stdenv.mkDerivation rec {
     openssl
     wavpack
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ];
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
 
   xcbuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-target unar"
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://theunarchiver.com";
     description = "Archive unpacker program";
     longDescription = ''
@@ -108,9 +109,9 @@ stdenv.mkDerivation rec {
       Compact Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH,
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "unar";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -24,11 +24,11 @@ buildGoModule rec {
     command = "asouldocs --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web server for multi-language, real-time synchronization and searchable documentation";
     homepage = "https://asouldocs.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "asouldocs";
   };
 }

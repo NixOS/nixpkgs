@@ -4,13 +4,12 @@
 #   3. jenkins service not started on slave node
 #   4. declarative jobs can be added and removed
 
-{ pkgs, ... }:
+{ config, lib, ... }:
 {
   name = "jenkins";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [
       bjornfor
-      domenkozar
     ];
   };
 
@@ -61,7 +60,7 @@
         };
 
         specialisation.noJenkinsJobs.configuration = {
-          services.jenkins.jobBuilder.nixJobs = pkgs.lib.mkForce [ ];
+          services.jenkins.jobBuilder.nixJobs = lib.mkForce [ ];
         };
 
         # should have no effect
@@ -90,9 +89,11 @@
   testScript =
     { nodes, ... }:
     let
+      pkgs = config.node.pkgs;
       configWithoutJobs = "${nodes.master.system.build.toplevel}/specialisation/noJenkinsJobs";
       jenkinsPort = nodes.master.services.jenkins.port;
       jenkinsUrl = "http://localhost:${toString jenkinsPort}";
+      jenkinsHome = nodes.master.services.jenkins.home;
     in
     ''
       start_all()
@@ -112,12 +113,12 @@
 
       with subtest("jobs are declarative"):
           # Check that jobs are created on disk.
-          master.wait_until_succeeds("test -f /var/lib/jenkins/jobs/job-1/config.xml")
-          master.wait_until_succeeds("test -f /var/lib/jenkins/jobs/folder-1/config.xml")
-          master.wait_until_succeeds("test -f /var/lib/jenkins/jobs/folder-1/jobs/job-2/config.xml")
+          master.wait_until_succeeds("test -f ${jenkinsHome}/jobs/job-1/config.xml")
+          master.wait_until_succeeds("test -f ${jenkinsHome}/jobs/folder-1/config.xml")
+          master.wait_until_succeeds("test -f ${jenkinsHome}/jobs/folder-1/jobs/job-2/config.xml")
 
           # Verify that jenkins also sees the jobs.
-          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) list-jobs")
+          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat ${jenkinsHome}/secrets/initialAdminPassword) list-jobs")
           jobs = [x.strip() for x in out.splitlines()]
           # Seeing jobs inside folders requires the Folders plugin
           # (https://plugins.jenkins.io/cloudbees-folder/), which we don't have
@@ -129,12 +130,12 @@
           )
 
           # Check that jobs are removed from disk.
-          master.wait_until_fails("test -f /var/lib/jenkins/jobs/job-1/config.xml")
-          master.wait_until_fails("test -f /var/lib/jenkins/jobs/folder-1/config.xml")
-          master.wait_until_fails("test -f /var/lib/jenkins/jobs/folder-1/jobs/job-2/config.xml")
+          master.wait_until_fails("test -f ${jenkinsHome}/jobs/job-1/config.xml")
+          master.wait_until_fails("test -f ${jenkinsHome}/jobs/folder-1/config.xml")
+          master.wait_until_fails("test -f ${jenkinsHome}/jobs/folder-1/jobs/job-2/config.xml")
 
           # Verify that jenkins also sees the jobs as removed.
-          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) list-jobs")
+          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat ${jenkinsHome}/secrets/initialAdminPassword) list-jobs")
           jobs = [x.strip() for x in out.splitlines()]
           assert jobs == [], f"jobs != []: {jobs}"
     '';

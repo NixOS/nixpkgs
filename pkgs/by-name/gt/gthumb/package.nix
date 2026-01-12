@@ -6,44 +6,42 @@
   pkg-config,
   meson,
   ninja,
-  adwaita-icon-theme,
   exiv2,
   libheif,
   libjpeg,
   libtiff,
   gst_all_1,
   libraw,
-  libsoup_2_4,
-  libsecret,
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  libchamplain,
+  libjxl,
   librsvg,
   libwebp,
   libX11,
-  json-glib,
   lcms2,
   bison,
+  brasero,
   flex,
   clutter-gtk,
+  colord,
   wrapGAppsHook3,
   shared-mime-info,
   python3,
   desktop-file-utils,
   itstool,
-  withWebservices ? true,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.7";
+  version = "3.12.8.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
+    sha256 = "sha256-q8V7EQMWXdaRU1eW99vbp2hiF8fQael07Q89gA/oh5Y=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     bison
@@ -58,10 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    brasero
     clutter-gtk
+    colord
     exiv2
     glib
-    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -69,23 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk3
-    json-glib
     lcms2
-    libchamplain
     libheif
     libjpeg
+    libjxl
     libraw
     librsvg
-    libsecret
-    libsoup_2_4
     libtiff
     libwebp
     libX11
-  ] ++ lib.optional withWebservices webkitgtk_4_0;
-
-  mesonFlags = [
-    "-Dlibchamplain=true"
-    (lib.mesonBool "webservices" withWebservices)
   ];
 
   postPatch = ''
@@ -94,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs data/gschemas/make-enums.py \
       gthumb/make-gthumb-h.py \
       po/make-potfiles-in.py \
-      postinstall.py \
       gthumb/make-authors-tab.py
   '';
 
@@ -109,12 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
     mainProgram = "gthumb";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimame ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      bobby285271
+      mimame
+    ];
   };
 })

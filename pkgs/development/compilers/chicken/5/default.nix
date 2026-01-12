@@ -3,7 +3,14 @@
   newScope,
   fetchurl,
 }:
-
+let
+  # Some eggs mistakenly declare dependencies on modules which are part of chicken itself and thus
+  # need not (and cannot) be installed as eggs. Instead of marking such eggs as broken, we remove
+  # these invalid dependencies.
+  invalidDependencies = [
+    "srfi-4"
+  ];
+in
 lib.makeScope newScope (self: {
 
   fetchegg =
@@ -37,9 +44,9 @@ lib.makeScope newScope (self: {
           ...
         }:
         self.eggDerivation {
-          name = "${pname}-${version}";
+          inherit pname version;
           src = self.fetchegg (eggData // { inherit pname; });
-          buildInputs = map (x: eggself.${x}) dependencies;
+          buildInputs = map (x: eggself.${x}) (lib.subtractLists invalidDependencies dependencies);
           meta.homepage = "https://wiki.call-cc.org/eggref/5/${pname}";
           meta.description = synopsis;
           meta.license =
@@ -51,6 +58,7 @@ lib.makeScope newScope (self: {
                 "bsd" = lib.licenses.bsd3;
                 "bsd-1-clause" = lib.licenses.bsd1;
                 "bsd-2-clause" = lib.licenses.bsd2;
+                "bsd-3" = lib.licenses.bsd3;
                 "bsd-3-clause" = lib.licenses.bsd3;
                 "gpl" = lib.licenses.gpl3Only;
                 "gpl-2" = lib.licenses.gpl2Only;
@@ -68,6 +76,7 @@ lib.makeScope newScope (self: {
                 "public-domain" = lib.licenses.publicDomain;
                 "srfi" = lib.licenses.bsd3;
                 "unicode" = lib.licenses.ucd;
+                "unknown" = lib.licenses.free;
                 "zlib-acknowledgement" = lib.licenses.zlib;
               }
             ).${license} or license;

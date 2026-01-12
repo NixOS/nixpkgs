@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-M4/vD1sVny7hAf4h56Z2xy7yuCqH/H3qHYod6haZOs0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-20Fz98mAkmhk7g0359S7Gjg6i89cXtKuS/9bVzOagBs=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,14 +29,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_external_download"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Recursively visit and download a website's content to your disk";
     homepage = "https://github.com/skallwar/suckit";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "suckit";
   };
 }

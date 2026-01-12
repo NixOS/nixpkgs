@@ -38,11 +38,11 @@ buildPythonPackage rec {
     ${python.interpreter} python${pythonSuffix}/pythontest.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Bindings for Xapian";
     homepage = "https://xapian.org/";
     changelog = "https://xapian.org/docs/xapian-bindings-${version}/NEWS";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

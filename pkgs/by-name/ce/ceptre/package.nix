@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "ceptre";
-  version = "0-unstable-2024-8-26";
+  version = "0-unstable-2024-08-26";
 
   src = fetchFromGitHub {
     owner = "chrisamaphone";

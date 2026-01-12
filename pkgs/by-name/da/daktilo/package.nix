@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gIBWonJGX6IpxyBeMulcfQEExsG1GrBVQLZbBBA1ruc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-MV2XvBtVQyxu2PVCgE+5C9EBec11JwYgyeoyg29C7Ig=";
 
   nativeBuildInputs = [
@@ -53,15 +52,15 @@ rustPlatform.buildRustPackage rec {
     rm $out/bin/daktilo-{completions,mangen}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Turn your keyboard into a typewriter";
     homepage = "https://github.com/orhun/daktilo";
     changelog = "https://github.com/orhun/daktilo/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ orhun ];
+    maintainers = with lib.maintainers; [ orhun ];
     mainProgram = "daktilo";
   };
 }

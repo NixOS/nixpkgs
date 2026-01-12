@@ -25,13 +25,12 @@ buildNpmPackage rec {
     hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   # robotjs node-gyp dependencies
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -121,14 +120,14 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = [ maintainers.tomasajt ];
-    teams = [ teams.jitsi ];
+    maintainers = [ lib.maintainers.tomasajt ];
+    teams = [ lib.teams.jitsi ];
     inherit (electron.meta) platforms;
   };
 }

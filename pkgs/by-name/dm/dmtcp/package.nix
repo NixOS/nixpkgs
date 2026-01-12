@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed MultiThreaded Checkpointing";
     longDescription = ''
       DMTCP (Distributed MultiThreaded Checkpointing) is a tool to
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       not modify the user's program or the operating system.
     '';
     homepage = "http://dmtcp.sourceforge.net/";
-    license = licenses.lgpl3Plus; # most files seem this or LGPL-2.1+
-    platforms = intersectLists platforms.linux platforms.x86; # broken on ARM and Darwin
+    license = lib.licenses.lgpl3Plus; # most files seem this or LGPL-2.1+
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86; # broken on ARM and Darwin
   };
 }

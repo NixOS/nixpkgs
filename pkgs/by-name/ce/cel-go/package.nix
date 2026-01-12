@@ -32,12 +32,12 @@ buildGoModule rec {
     mv $out/bin/{main,cel-go}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
     mainProgram = "cel-go";
     homepage = "https://github.com/google/cel-go";
     changelog = "https://github.com/google/cel-go/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

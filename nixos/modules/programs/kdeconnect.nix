@@ -15,7 +15,8 @@
       `gnomeExtensions.gsconnect` as an alternative
       implementation if you use Gnome
     '';
-    package = lib.mkPackageOption pkgs [ "plasma5Packages" "kdeconnect-kde" ] {
+    package = lib.mkPackageOption pkgs [ "kdePackages" "kdeconnect-kde" ] {
+      nullable = true;
       example = "gnomeExtensions.gsconnect";
     };
   };
@@ -24,7 +25,7 @@
       cfg = config.programs.kdeconnect;
     in
     lib.mkIf cfg.enable {
-      environment.systemPackages = [
+      environment.systemPackages = lib.optionals (cfg.package != null) [
         cfg.package
       ];
       networking.firewall = rec {

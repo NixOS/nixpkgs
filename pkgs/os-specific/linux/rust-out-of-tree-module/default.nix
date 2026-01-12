@@ -7,14 +7,14 @@
 }:
 kernel.stdenv.mkDerivation {
   pname = "rust-out-of-tree-module";
-  version = "0-unstable-2024-05-06";
+  version = "0-unstable-2025-03-10";
 
   src = fetchFromGitHub {
     owner = "Rust-for-linux";
     repo = "rust-out-of-tree-module";
 
-    rev = "9872947486bb8f60b0d11db15d546a3d06156ec5";
-    hash = "sha256-TzCySY7uQac98dU+Nu5dC4Usm7oG0iIdZZmZgAOpni4=";
+    rev = "df508ea156314fe281cdaded07bcf89d22c3373a";
+    hash = "sha256-pPK+bvtYOKQDllsK2IzhgaNZzdawbIoK20rLU/olHow=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -28,7 +28,7 @@ kernel.stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    broken = !kernel.withRust;
+    broken = kernel.kernelOlder "6.17" || !kernel.withRust;
     description = "Basic template for an out-of-tree Linux kernel module written in Rust";
     homepage = "https://github.com/Rust-for-Linux/rust-out-of-tree-module";
     license = lib.licenses.gpl2Only;

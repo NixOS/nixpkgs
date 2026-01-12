@@ -16,18 +16,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PhA7uC2gJcBnUQPWgZC51p/KTSxSGld3m+dd6BhW6q8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5UyG/zGF+D5DOYWLiJPnGjAsr7e8xz+e4YUoZYerz80=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Increments the version number of the current project";
     mainProgram = "cargo-bump";
     homepage = "https://github.com/wraithan/cargo-bump";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ cafkafk ];
+    license = with lib.licenses; [ isc ];
+    maintainers = with lib.maintainers; [ cafkafk ];
   };
 }

@@ -36,55 +36,52 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libjack2
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals enableVorbis [
-      libvorbis
-    ];
+  buildInputs = [
+    libjack2
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals enableVorbis [
+    libvorbis
+  ];
 
-  enabledOutputModes =
-    [
-      "jack"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "oss"
-      "alsa"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "darwin"
-    ]
-    ++ lib.optionals enableVorbis [
-      "vorbis"
-    ];
+  enabledOutputModes = [
+    "jack"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "oss"
+    "alsa"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "darwin"
+  ]
+  ++ lib.optionals enableVorbis [
+    "vorbis"
+  ];
 
-  configureFlags =
-    [
-      "--enable-ncurses"
-      ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
-      "lib_cv_va_copy=yes"
-      "lib_cv___va_copy=yes"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-alsaseq"
-      "--with-default-output=alsa"
-      "lib_cv_va_val_copy=yes"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "lib_cv_va_val_copy=no"
-      "timidity_cv_ccoption_rdynamic=yes"
-      # These configure tests fail because of incompatible function pointer conversions.
-      "ac_cv_func_vprintf=yes"
-      "ac_cv_func_popen=yes"
-      "ac_cv_func_vsnprintf=yes"
-      "ac_cv_func_snprintf=yes"
-      "ac_cv_func_open_memstream=yes"
-    ];
+  configureFlags = [
+    "--enable-ncurses"
+    ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
+    "lib_cv_va_copy=yes"
+    "lib_cv___va_copy=yes"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-alsaseq"
+    "--with-default-output=alsa"
+    "lib_cv_va_val_copy=yes"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "lib_cv_va_val_copy=no"
+    "timidity_cv_ccoption_rdynamic=yes"
+    # These configure tests fail because of incompatible function pointer conversions.
+    "ac_cv_func_vprintf=yes"
+    "ac_cv_func_popen=yes"
+    "ac_cv_func_vsnprintf=yes"
+    "ac_cv_func_snprintf=yes"
+    "ac_cv_func_open_memstream=yes"
+  ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
@@ -102,6 +99,9 @@ stdenv.mkDerivation rec {
     sed -i 's/^\(calcnewt\$(EXEEXT):\).*/\1/g' timidity/Makefile
   '';
 
+  # Fix build with gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   # the instruments could be compressed (?)
   postInstall = ''
     mkdir -p $out/share/timidity/;
@@ -115,12 +115,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.timidity;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/timidity/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Software MIDI renderer";
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
     mainProgram = "timidity";
   };
 }

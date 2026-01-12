@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   stdenv,
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "darkdetect";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "albertosottile";
@@ -32,10 +29,10 @@ buildPythonPackage rec {
       --replace "'gsettings'" "'${glib.bin}/bin/gsettings'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Detect OS Dark Mode from Python";
     homepage = "https://github.com/albertosottile/darkdetect";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

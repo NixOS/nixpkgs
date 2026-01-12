@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pb";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = "pb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OXxLHi7v/xJZVvxHZvJ0eH4MYrlLFxDAMT9CVG2mWTM=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   tags = [ "kqueue" ];
@@ -29,10 +29,10 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/parseablehq/pb";
-    changelog = "https://github.com/parseablehq/pb/releases/tag/v${version}";
+    changelog = "https://github.com/parseablehq/pb/releases/tag/v${finalAttrs.version}";
     description = "CLI client for Parseable server";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "pb";
   };
-}
+})

@@ -619,8 +619,10 @@ in
             index = "index.php";
           };
 
-          locations."^~ /feed-icons" = {
-            root = "${cfg.root}";
+          # some clients might still access this old path directly, forward them to the API instead
+          # e.g. https://apps.apple.com/de/app/tiny-reader-rss/id689519762 at version 2.2.0
+          locations."~* /feed-icons/(\\d+)\\.ico" = {
+            return = "302 /public.php?op=feed_icon&id=$1";
           };
 
           locations."~ \\.php$" = {
@@ -641,7 +643,7 @@ in
       "d '${cfg.root}/cache/upload' 0755 ${cfg.user} tt_rss - -"
       "d '${cfg.root}/cache/images' 0755 ${cfg.user} tt_rss - -"
       "d '${cfg.root}/cache/export' 0755 ${cfg.user} tt_rss - -"
-      "d '${cfg.root}/feed-icons' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/feed-icons' 0755 ${cfg.user} tt_rss - -"
       "L+ '${cfg.root}/www' - - - - ${servedRoot}"
     ];
 
@@ -667,11 +669,12 @@ in
         };
 
         wantedBy = [ "multi-user.target" ];
-        requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
-        after =
-          [ "network.target" ]
-          ++ optional mysqlLocal "mysql.service"
-          ++ optional pgsqlLocal "postgresql.service";
+        requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
+        after = [
+          "network.target"
+        ]
+        ++ optional mysqlLocal "mysql.service"
+        ++ optional pgsqlLocal "postgresql.target";
       };
     };
 

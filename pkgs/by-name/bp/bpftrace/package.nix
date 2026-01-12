@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   llvmPackages,
   elfutils,
   bcc,
@@ -16,18 +17,19 @@
   flex,
   bison,
   util-linux,
+  xxd,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.23.3";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-Jvl8Up3IH2/G0QMb0pZmQ2SSXOmjTj08KXoJXOR3Z48=";
+    hash = "sha256-LkiHwmKU+TOtn6mDvlqIKvSOQaU320aVQOkcElzB7gM=";
   };
 
   buildInputs = with llvmPackages; [
@@ -49,11 +51,12 @@ stdenv.mkDerivation rec {
     bison
     llvmPackages.llvm.dev
     util-linux
+    xxd
   ];
 
   cmakeFlags = [
     "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
-    "-DINSTALL_TOOL_DOCS=OFF"
+    "-DUSE_SYSTEM_LIBBPF=ON"
     "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
   ];
 
@@ -72,22 +75,22 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    bpf = nixosTests.bpf;
+    inherit (nixosTests) bpf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-level tracing language for Linux eBPF";
     homepage = "https://github.com/bpftrace/bpftrace";
     changelog = "https://github.com/bpftrace/bpftrace/releases/tag/v${version}";
     mainProgram = "bpftrace";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rvl
       thoughtpolice
       martinetd
       mfrw
       illustris
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

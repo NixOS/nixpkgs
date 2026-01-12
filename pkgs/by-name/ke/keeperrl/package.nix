@@ -21,7 +21,7 @@ let
 
   free_src = fetchFromGitHub {
     owner = "miki151";
-    repo = pname;
+    repo = "keeperrl";
     rev = version;
     sha256 = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
   };
@@ -90,12 +90,12 @@ stdenv.mkDerivation {
     ${lib.optionalString unfree_assets "cp -r data $out/share"}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dungeon management rogue-like";
     mainProgram = "keeper";
     homepage = "https://keeperrl.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ onny ];
     # TODO: Add OS X
     platforms = [
       "i686-linux"

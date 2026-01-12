@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Per-Face Texture Mapping for Production Rendering";
     mainProgram = "ptxinfo";
     homepage = "http://ptex.us/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.guibou ];
   };
 }

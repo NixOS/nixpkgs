@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "pylsp-mypy";
@@ -33,7 +31,8 @@ buildPythonPackage rec {
   dependencies = [
     mypy
     python-lsp-server
-  ] ++ lib.optional (pythonOlder "3.11") tomli;
+  ]
+  ++ lib.optional (pythonOlder "3.11") tomli;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

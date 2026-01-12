@@ -3,13 +3,14 @@
   lib,
   binutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost186,
+  boost183,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -34,8 +35,8 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021_11,
-  webkitgtk_4_0,
+  onetbb,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -54,15 +55,15 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "01.10.02.76";
+  version = "02.04.00.70";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
-    rev = "v${version}";
-    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BrH8gKbc0y76wbWrQxU+0xMJcYAm4Gi/xmECVf6pGkI=";
   };
 
   nativeBuildInputs = [
@@ -72,44 +73,43 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      binutils
-      boost186
-      cereal
-      cgal
-      curl
-      dbus
-      eigen
-      expat
-      ffmpeg
-      gcc-unwrapped
-      glew
-      glfw
-      glib
-      glib-networking
-      gmp
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-good
-      gtk3
-      hicolor-icon-theme
-      ilmbase
-      libpng
-      mpfr
-      nlopt
-      opencascade-occt_7_6
-      openvdb
-      pcre
-      tbb_2021_11
-      webkitgtk_4_0
-      wxGTK'
-      xorg.libX11
-      opencv
-    ]
-    ++ lib.optionals withSystemd [ systemd ]
-    ++ checkInputs;
+  buildInputs = [
+    binutils
+    boost183
+    cereal
+    cgal_5
+    curl
+    dbus
+    eigen
+    expat
+    ffmpeg
+    gcc-unwrapped
+    glew
+    glfw
+    glib
+    glib-networking
+    gmp
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+    gtk3
+    hicolor-icon-theme
+    ilmbase
+    libpng
+    mpfr
+    nlopt
+    opencascade-occt_7_6
+    openvdb
+    pcre
+    onetbb
+    webkitgtk_4_1
+    wxGTK'
+    xorg.libX11
+    opencv
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -118,12 +118,17 @@ stdenv.mkDerivation rec {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
-    # Fix the build with newer Boost versions. All but one commit is
-    # from <https://github.com/bambulab/BambuStudio/pull/3968>.
-    ./0001-Replace-deprecated-boost-filesystem-string_file.hpp-.patch
-    ./0002-Replace-deprecated-Boost-methods-options.patch
-    ./0003-Fix-additional-Boost-upgrade-issues.patch
-    ./0004-Remove-deprecated-Boost-filesystem-header.patch
+    # Don't link cereal
+    ./patches/no-cereal.patch
+    # Cmake 4 support
+    ./patches/cmake.patch
+    # Fix build with gcc15
+    # https://github.com/bambulab/BambuStudio/pull/8555
+    (fetchpatch {
+      name = "bambu-studio-include-stdint-header.patch";
+      url = "https://github.com/bambulab/BambuStudio/commit/434752bf643933f22348d78335abe7f60550e736.patch";
+      hash = "sha256-vWqTM6IHL/gBncLk6gZHw+dFe0sdVuPdUqYeVJUbTis=";
+    })
   ];
 
   doCheck = true;
@@ -143,11 +148,11 @@ stdenv.mkDerivation rec {
     # It seems to be a known issue for Eigen:
     # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
     "-Wno-ignored-attributes"
-    "-I${opencv.out}/include/opencv4"
+    "-I${opencv}/include/opencv4"
   ];
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
+  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
 
   # TODO: macOS
   prePatch = ''
@@ -189,16 +194,16 @@ stdenv.mkDerivation rec {
     mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
     ];
     mainProgram = "bambu-studio";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

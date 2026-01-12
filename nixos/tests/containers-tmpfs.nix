@@ -79,7 +79,7 @@
     with subtest(
         "files created in the hosts container dir in a path where a tmpfs "
         + "file system has been mounted are not visible to the container as "
-        + "the do not exist in the tmpfs"
+        + "they do not exist in the tmpfs"
     ):
         machine.succeed(
             "touch /var/lib/nixos-containers/tmpfs/var/test.file",

@@ -25,7 +25,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.package
-    ] ++ (if cfg.theme-package != null then [ cfg.theme-package ] else [ ]);
+    ]
+    ++ (if cfg.theme-package != null then [ cfg.theme-package ] else [ ]);
 
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];

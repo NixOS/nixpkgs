@@ -17,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "2503-5";
+  version = "2509-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${version}";
-    hash = "sha256-hQ0tXPore1kbezBCsacAsSZAB1GHXEp5BJatxdi19eI=";
+    hash = "sha256-XisQA5WNmFaFfY7T4EMcwlOD8FUfAjmLDV7NSWsh3vA=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -44,8 +44,7 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fK8EBgIdXHfxpNWUyquEutZpkTGSe11ZsLwe13ZZ1+0=";
+  cargoHash = "sha256-QqtLr6SvJGYrY0wGZw196amrGqLZg/Nea+QTYM1RzIs=";
 
   buildType = "production";
   buildAndTestSubdir = "polkadot";
@@ -60,29 +59,34 @@ rustPlatform.buildRustPackage rec {
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 
   checkInputs = [
     cacert
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-  PROTOC = "${protobuf}/bin/protoc";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  doCheck = false;
 
-  meta = with lib; {
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    PROTOC = "${protobuf}/bin/protoc";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
+
+  meta = {
     description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
     homepage = "https://github.com/paritytech/polkadot-sdk";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       akru
       andresilva
       FlorianFranzen
       RaghavSood
     ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
-    platforms = intersectLists platforms.unix (
-      platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86
+    platforms = lib.intersectLists lib.platforms.unix (
+      lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
     );
   };
 }

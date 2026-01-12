@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";
-  version = "1.7.1";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
     rev = version;
-    hash = "sha256-XPWfSL1395TBkUmAO5kB9TdAZHL011o6t/2s01W/kk8=";
+    hash = "sha256-hWjjl11NGhbv0VrLpdJ/W+a8tJPjg8OtUTKgDIqpsfs=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple general purpose plotting utility for tty with data input from stdin";
     homepage = "https://github.com/tenox7/ttyplot";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ lassulus ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ lassulus ];
     mainProgram = "ttyplot";
   };
 }

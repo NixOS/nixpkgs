@@ -38,51 +38,50 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      blas
-      lapack
-      readline
-      elpa
-    ]
-    ++ lib.optionals useMpi [
-      mpi
-      scalapack
-    ];
+  buildInputs = [
+    blas
+    lapack
+    readline
+    elpa
+  ]
+  ++ lib.optionals useMpi [
+    mpi
+    scalapack
+  ];
 
   NIX_LDFLAGS = "-lm";
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   enableParallelBuilding = false; # Started making trouble with gcc-11
 
-  preBuild =
-    ''
-      # See https://gitlab.com/siesta-project/siesta/-/commit/a10bf1628e7141ba263841889c3503c263de1582
-      # This may be fixed in the next release.
-      makeFlagsArray=(
-          FFLAGS="-fallow-argument-mismatch"
-      )
-    ''
-    + (
-      if useMpi then
-        ''
-          makeFlagsArray+=(
-              CC="mpicc" FC="mpifort"
-              FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
-              COMP_LIBS="" LIBS="-lblas -llapack -lscalapack"
-          );
-        ''
-      else
-        ''
-          makeFlagsArray+=(
-            COMP_LIBS="" LIBS="-lblas -llapack"
-          );
-        ''
-    );
+  preBuild = ''
+    # See https://gitlab.com/siesta-project/siesta/-/commit/a10bf1628e7141ba263841889c3503c263de1582
+    # This may be fixed in the next release.
+    makeFlagsArray=(
+        FFLAGS="-fallow-argument-mismatch"
+    )
+  ''
+  + (
+    if useMpi then
+      ''
+        makeFlagsArray+=(
+            CC="mpicc" FC="mpifort"
+            FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
+            COMP_LIBS="" LIBS="-lblas -llapack -lscalapack"
+        );
+      ''
+    else
+      ''
+        makeFlagsArray+=(
+          COMP_LIBS="" LIBS="-lblas -llapack"
+        );
+      ''
+  );
 
   meta = {
     description = "First-principles materials simulation code using DFT";

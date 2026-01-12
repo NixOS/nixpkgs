@@ -6,7 +6,7 @@
   rustPlatform,
   cargo-c,
   validatePkgConfig,
-  rust,
+  buildPackages,
   libiconv,
   curl,
   apacheHttpd,
@@ -25,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-gqc6en59QQpD14hOgRuGEPWLvrkyGn9tPR9vQmRAxIg=";
   };
 
@@ -43,19 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ${rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    ${rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
-    ${rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postCheck
   '';
 
@@ -68,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C-to-rustls bindings";
     homepage = "https://github.com/rustls/rustls-ffi/";
     pkgConfigModules = [ "rustls" ];
@@ -77,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       isc
     ];
-    maintainers = [ maintainers.lesuisse ];
+    maintainers = [ lib.maintainers.lesuisse ];
   };
 })

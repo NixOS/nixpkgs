@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   flit,
   async-timeout,
   lxml,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyrmvtransport";
   version = "0.3.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "cgtobi";
@@ -57,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RMVtransport" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cgtobi/PyRMVtransport";
     description = "Get transport information from opendata.rmv.de";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

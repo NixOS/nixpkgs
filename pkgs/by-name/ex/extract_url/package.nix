@@ -9,13 +9,12 @@
 }:
 
 let
-  perlDeps =
-    [
-      perlPackages.MIMETools
-      perlPackages.HTMLParser
-    ]
-    ++ lib.optional cursesSupport perlPackages.CursesUI
-    ++ lib.optional uriFindSupport perlPackages.URIFind;
+  perlDeps = [
+    perlPackages.MIMETools
+    perlPackages.HTMLParser
+  ]
+  ++ lib.optional cursesSupport perlPackages.CursesUI
+  ++ lib.optional uriFindSupport perlPackages.URIFind;
 
 in
 stdenv.mkDerivation rec {
@@ -40,12 +39,12 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.memoryhole.net/~kyle/extract_url/";
     description = "Extracts URLs from MIME messages or plain text";
     mainProgram = "extract_url";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.qyliss ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.qyliss ];
+    platforms = lib.platforms.unix;
   };
 }

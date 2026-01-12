@@ -4,7 +4,6 @@
   cmark,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   fmt,
   fontconfig,
   freetype,
@@ -22,6 +21,8 @@
   libXext,
   libXi,
   libXxf86vm,
+  libxcb,
+  libXrandr,
   ninja,
   pcre2,
   pixman,
@@ -33,15 +34,35 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.7";
+  version = "1.3.16.1";
 
-  src = fetchFromGitHub {
-    owner = "aseprite";
-    repo = "aseprite";
-    rev = "v" + finalAttrs.version;
-    fetchSubmodules = true;
-    hash = "sha256-75kYJXmyags0cW2D5Ksq1uUrFSCAkFOdmn7Ya/6jLXc=";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      name = "aseprite-source";
+      owner = "aseprite";
+      repo = "aseprite";
+      tag = "v${finalAttrs.version}";
+      fetchSubmodules = true;
+      hash = "sha256-s2lWg5udg/8pXjOcj2nXDS2uE3urkg1iC0Div7wkxUY=";
+    })
+
+    # Translation strings
+    (fetchFromGitHub {
+      name = "aseprite-strings";
+      owner = "aseprite";
+      repo = "strings";
+      rev = "0f49265d7e7aea4b862b7d1e670ed969e8a469b8";
+      hash = "sha256-S3YkWA5ECvyyqGvojDhIZci04CTjbJzTQiJ5FZsB4lU=";
+    })
+  ];
+
+  # Sets the main build directory to "aseprite-source" since multiple sources are fetched.
+  sourceRoot = "aseprite-source";
+
+  # Translation files are copied without overwriting existing ones to preserve the potentially more up-to-date English file from the main source.
+  postUnpack = ''
+    cp --no-clobber $PWD/aseprite-strings/* ./aseprite-source/data/strings
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +88,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     libXext
     libXi
     libXxf86vm
+    libxcb
+    libXrandr
     pcre2
     pixman
     skia-aseprite
@@ -75,33 +98,21 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # https://github.com/aseprite/aseprite/issues/4486
-    # FIXME: remove on next release.
-    (fetchpatch {
-      name = "ENABLE_UPDATER-fix.patch";
-      url = "https://github.com/aseprite/aseprite/commit/8fce589.patch";
-      hash = "sha256-DbL6kK//gQXbsXEn/t+KTuoM7E9ocPAsVqEO+lYrka4=";
-    })
     ./shared-fmt.patch
     ./shared-libwebp.patch
     ./shared-skia-deps.patch
+    ./shared-libjpeg-turbo.patch
   ];
 
-  postPatch =
-    let
-      # Translation strings
-      strings = fetchFromGitHub {
-        owner = "aseprite";
-        repo = "strings";
-        rev = "e18a09fefbb6cd904e506183d5fbe08558a52ed4";
-        hash = "sha256-GyCCxbhgf0vST20EH/+KkNLrF+U9Xzgpxlao8s925PQ=";
-      };
-    in
-    ''
-      sed -i src/ver/CMakeLists.txt -e "s-set(VERSION \".*\")-set(VERSION \"$version\")-"
-      rm -rf data/strings
-      cp -r ${strings} data/strings
-    '';
+  postPatch = ''
+    substituteInPlace src/ver/CMakeLists.txt \
+      --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
+
+    # Using substituteInPlace because no upstream patch for GCC 15 was found for this bundled library.
+    substituteInPlace third_party/json11/json11.cpp \
+      --replace-fail "#include <cmath>" "#include <cmath>
+    #include <cstdint>"
+  '';
 
   cmakeFlags = [
     "-DENABLE_DESKTOP_INTEGRATION=ON"
@@ -112,11 +123,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DUSE_SHARED_FREETYPE=ON"
     "-DUSE_SHARED_GIFLIB=ON"
     "-DUSE_SHARED_HARFBUZZ=ON"
-    "-DUSE_SHARED_JPEGLIB=ON"
     "-DUSE_SHARED_LIBPNG=ON"
-    "-DUSE_SHARED_LIBWEBP=ON"
     "-DUSE_SHARED_PIXMAN=ON"
-    "-DUSE_SHARED_TINYXML=ON"
+    "-DUSE_SHARED_TINYXML=OFF"
     "-DUSE_SHARED_WEBP=ON"
     "-DUSE_SHARED_ZLIB=ON"
     # Disable libarchive programs.
@@ -124,7 +133,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DENABLE_CPIO=OFF"
     "-DENABLE_TAR=OFF"
     # UI backend.
-    "-DLAF_OS_BACKEND=skia"
+    "-DLAF_BACKEND=skia"
     "-DLAF_WITH_EXAMPLES=OFF"
     "-DSKIA_DIR=${skia-aseprite}"
     "-DSKIA_LIBRARY_DIR=${skia-aseprite}/lib"
@@ -162,9 +171,8 @@ clangStdenv.mkDerivation (finalAttrs: {
                 - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
                 - Onion skinning.
     '';
-    maintainers = with lib.maintainers; [
-      orivej
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "aseprite";
   };
 })

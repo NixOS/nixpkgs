@@ -8,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.51.1";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazygit";
     tag = "v${version}";
-    hash = "sha256-PktxVf+2xOpkZBHlm9oLV4WXoz9bNaXa+cvnI9RCcRA=";
+    hash = "sha256-+xWryg9iLip0VF6GFCDXPKayooNPurBgBfZestpSv4M=";
   };
 
   vendorHash = null;
@@ -42,10 +42,8 @@ buildGoModule rec {
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       equirosa
       khaneliman
-      paveloom
       starsep
       sigmasquadron
     ];

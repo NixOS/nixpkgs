@@ -11,7 +11,7 @@ mkDerivation {
   src = builtins.path {
     path = ./.;
     name = "source";
-    filter = path: _: (builtins.baseNameOf path) != "default.nix";
+    filter = path: _: (baseNameOf path) != "default.nix";
   };
   isLibrary = false;
   isExecutable = true;

@@ -6,21 +6,18 @@
   openslide,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "openslide";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide-python";
     tag = "v${version}";
-    hash = "sha256-iI92lsW+hshMxl2rtc3/iq0LmQBuvpwqpqJXMXcCiLc=";
+    hash = "sha256-v8JrZdDwZPtnWYOmvJXbq22k6/MQqMzWweD86Eof0e4=";
   };
 
   postPatch = ''

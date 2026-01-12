@@ -13,6 +13,7 @@
   bison,
   flex,
   fontforge,
+  gettext,
   makeWrapper,
   pkg-config,
   nixosTests,
@@ -38,12 +39,6 @@ let
       mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
     };
   } ./setup-hook-darwin.sh;
-
-  # Using the 14.4 SDK allows Wine to use `os_sync_wait_on_address` for its futex implementation on Darwin.
-  # It does an availability check, so older systems will still work.
-  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (
-    toBuildInputs pkgArches (pkgs: [ pkgs.apple-sdk_14 ])
-  );
 
   # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
   # because they will put Darwin in `meta.badPlatforms`.
@@ -93,6 +88,7 @@ stdenv.mkDerivation (
     strictDeps = true;
 
     nativeBuildInputs =
+      with supportFlags;
       [
         bison
         flex
@@ -100,7 +96,8 @@ stdenv.mkDerivation (
         makeWrapper
         pkg-config
       ]
-      ++ lib.optionals supportFlags.mingwSupport (
+      ++ lib.optional gettextSupport gettext
+      ++ lib.optionals mingwSupport (
         mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
       );
 
@@ -116,7 +113,6 @@ stdenv.mkDerivation (
         ++ lib.optional stdenv.hostPlatform.isLinux pkgs.libcap
         ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue
         ++ lib.optional cupsSupport pkgs.cups
-        ++ lib.optional gettextSupport pkgs.gettext
         ++ lib.optional dbusSupport pkgs.dbus
         ++ lib.optional cairoSupport pkgs.cairo
         ++ lib.optional odbcSupport pkgs.unixODBC
@@ -166,8 +162,7 @@ stdenv.mkDerivation (
           pkgs.libGL
           pkgs.libdrm
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
-        ++ lib.optionals (x11Support) (
+        ++ lib.optionals x11Support (
           with pkgs.xorg;
           [
             libX11
@@ -193,6 +188,9 @@ stdenv.mkDerivation (
             libgbm
           ]
         )
+        ++ lib.optionals ffmpegSupport [
+          pkgs.ffmpeg-headless
+        ]
       )
     );
 
@@ -209,13 +207,9 @@ stdenv.mkDerivation (
     # Wine locates a lot of libraries dynamically through dlopen().  Add
     # them to the RPATH so that the user doesn't have to set them in
     # LD_LIBRARY_PATH.
-    NIX_LDFLAGS = toString (
+    env.NIX_LDFLAGS = toString (
       map (path: "-rpath " + path) (
-        map (x: "${lib.getLib x}/lib") (
-          [ stdenv.cc.cc ]
-          # Avoid adding rpath references to non-existent framework `lib` paths.
-          ++ lib.subtractLists darwinFrameworks finalAttrs.buildInputs
-        )
+        map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise
         ++ lib.optionals supportFlags.pulseaudioSupport (
           map (x: "${lib.getLib x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ]))
@@ -227,6 +221,7 @@ stdenv.mkDerivation (
         )
       )
     );
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (wineRelease == "yabridge") "-std=gnu17";
 
     # Don't shrink the ELF RPATHs in order to keep the extra RPATH
     # elements specified above.
@@ -276,13 +271,12 @@ stdenv.mkDerivation (
 
     # https://bugs.winehq.org/show_bug.cgi?id=43530
     # https://github.com/NixOS/nixpkgs/issues/31989
-    hardeningDisable =
-      [
-        "bindnow"
-        "stackclashprotection"
-      ]
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
-      ++ lib.optional (supportFlags.mingwSupport) "format";
+    hardeningDisable = [
+      "bindnow"
+      "stackclashprotection"
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
+    ++ lib.optional (supportFlags.mingwSupport) "format";
 
     passthru = {
       inherit pkgArches;

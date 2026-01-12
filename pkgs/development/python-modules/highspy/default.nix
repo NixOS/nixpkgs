@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   scikit-build-core,
   pybind11,
   numpy,
@@ -15,8 +14,6 @@ buildPythonPackage {
   pname = "highspy";
   version = highs.version;
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   inherit (highs) src;
 
@@ -36,10 +33,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Linear optimization software";
     homepage = "https://github.com/ERGO-Code/HiGHS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }

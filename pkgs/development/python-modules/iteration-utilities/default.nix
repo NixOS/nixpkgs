@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "iteration-utilities";
   version = "0.13.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MSeifert04";
@@ -24,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iteration_utilities" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities based on Pythons iterators and generators";
     homepage = "https://github.com/MSeifert04/iteration_utilities";
     changelog = "https://github.com/MSeifert04/iteration_utilities/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

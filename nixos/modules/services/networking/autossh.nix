@@ -33,7 +33,7 @@ in
                 description = "Name of the user the AutoSSH session should run as";
               };
               monitoringPort = lib.mkOption {
-                type = lib.types.int;
+                type = lib.types.port;
                 default = 0;
                 example = 20000;
                 description = ''

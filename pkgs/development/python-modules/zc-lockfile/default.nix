@@ -27,7 +27,7 @@ buildPythonPackage rec {
     zope-testing
   ];
 
-  pytestFlagsArray = [ "src/zc/lockfile/tests.py" ];
+  enabledTestPaths = [ "src/zc/lockfile/tests.py" ];
 
   pythonNamespaces = [ "zc" ];
 

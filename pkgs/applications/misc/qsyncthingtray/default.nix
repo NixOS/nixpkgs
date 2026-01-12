@@ -28,7 +28,8 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebengine
-  ] ++ lib.optional preferQWebView qtwebkit;
+  ]
+  ++ lib.optional preferQWebView qtwebkit;
 
   nativeBuildInputs = [ cmake ];
 
@@ -43,7 +44,8 @@ mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/sieren/QSyncthingTray/pull/225.patch";
       sha256 = "0w665xdlsbjxs977pdpzaclxpswf7xys1q3rxriz181lhk2y66yy";
     })
-  ] ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
+  ]
+  ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
 
   postPatch = ''
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -72,7 +74,7 @@ mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "Traybar Application for Syncthing written in C++";
     longDescription = ''
@@ -80,12 +82,12 @@ mkDerivation rec {
       Currently supports macOS, Windows and Linux.
       Written in C++ with Qt.
     '';
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       zraexy
       peterhoeg
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = !preferNative || stdenv.hostPlatform.isDarwin;
   };
 }

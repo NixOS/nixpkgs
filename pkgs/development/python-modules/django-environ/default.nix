@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "django-environ";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "django_environ";
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "environ" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilize environment variables to configure your Django application";
     homepage = "https://github.com/joke2k/django-environ/";
     changelog = "https://github.com/joke2k/django-environ/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

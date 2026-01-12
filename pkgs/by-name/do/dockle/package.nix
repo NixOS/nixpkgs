@@ -45,7 +45,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://containers.goodwith.tech";
     changelog = "https://github.com/goodwithtech/dockle/releases/tag/v${version}";
     description = "Container Image Linter for Security";
@@ -55,7 +55,7 @@ buildGoModule rec {
       Helping build the Best-Practice Docker Image.
       Easy to start.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.12.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
-    rev = "v${version}";
-    sha256 = "sha256-WYolvHAK7l1HJZuBXsPJ+X6uzWFHBlHELx4zvD/S934=";
+    tag = "v${version}";
+    hash = "sha256-kVkw+/Z3+ZM1wXV/OmfaVPoUKc6MRuz8GRwpvOscuEM=";
   };
 
   nativeBuildInputs = [
@@ -44,16 +44,15 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  propagatedBuildInputs =
-    [
-      coreutils
-      unzip
-      zip
-    ]
-    ++ lib.optionals doCheck [
-      mtools
-      dosfstools
-    ];
+  propagatedBuildInputs = [
+    coreutils
+    unzip
+    zip
+  ]
+  ++ lib.optionals doCheck [
+    mtools
+    dosfstools
+  ];
 
   nativeCheckInputs = [
     which
@@ -62,11 +61,12 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/fwup-home/fwup/blob/${src.tag}/CHANGELOG.md";
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
-    license = licenses.asl20;
-    maintainers = [ maintainers.georgewhewell ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.georgewhewell ];
+    platforms = lib.platforms.all;
   };
 }

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "containernetworking";
-    repo = pname;
+    repo = "cni";
     rev = "v${version}";
     hash = "sha256-xeajsM8ZIlI6Otv9CQhPfYaVQwmJ5QcFEn1xt6e/ivQ=";
   };
@@ -26,12 +26,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Container Network Interface - networking for Linux containers";
     mainProgram = "cnitool";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       vdemeester
     ];

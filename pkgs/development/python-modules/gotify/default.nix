@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   flit-core,
   nix-update-script,
   httpx,
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   pname = "gotify";
   version = "0.6.0";
   pyproject = true;
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "d-k-bo";
@@ -33,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   # tests raise an exception if the system is not Linux or Windows
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.buildPlatform.isDarwin;
 
   # tests require gotify-server to be located in ./tests/test-server/gotify-linux-{arch}
   postPatch = ''

@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
   pythonOlder,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "2.1.1";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,13 +25,12 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     tag = "v${version}";
-    hash = "sha256-KOeYdTruD8AN/NkLEKKJDUB/JkOoQwfAMZkp/RvvUQE=";
+    hash = "sha256-Tisng08X/jyNtT27qy1hH6qM6Nqho/X8bg1tFg1oIx8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"' \
-      --replace-fail 'addopts = "--cov"' ""
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-freezer
     pytestCheckHook
     syrupy
@@ -50,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "energyzero" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for getting the dynamic prices from EnergyZero";
     homepage = "https://github.com/klaasnicolaas/python-energyzero";
     changelog = "https://github.com/klaasnicolaas/python-energyzero/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

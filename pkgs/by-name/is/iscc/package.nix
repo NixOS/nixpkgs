@@ -53,11 +53,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  # Stripping causes `$out/bin/Setup.e32` to lose something important and causes the built windows installers to not run on windows "This app can't run on your PC".
+  # They worked in wine but not on real windows.
+  dontStrip = 1;
+
+  meta = {
     description = "Compiler for Inno Setup, a tool for creating Windows installers";
     homepage = "https://jrsoftware.org/isinfo.php";
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
     platforms = wineWow64Packages.stable.meta.platforms;
   };

@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "material-symbols";
-  version = "4.0.0-unstable-2024-05-17";
+  version = "4.0.0-unstable-2025-09-18";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = "ace1af08508a6562ef05055a606cf44ea583ce3b";
-    hash = "sha256-d5lojgYCXCcvcSfLWfcSKFsBGKB6Si/XreRqpkEKsa0=";
+    rev = "bb04090f930e272697f2a1f0d7b352d92dfeee43";
+    hash = "sha256-aFKG8U4OBqh2hoHYm1n/L4bK7wWPs6o0rYVhNC7QEpI=";
     sparseCheckout = [ "variablefont" ];
   };
 
@@ -39,6 +39,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       fufexan
       luftmensch-luftmensch
+      alexphanna
     ];
     platforms = lib.platforms.all;
   };

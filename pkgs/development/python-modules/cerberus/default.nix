@@ -4,22 +4,19 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cerberus";
-  version = "1.3.7";
+  version = "1.3.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "cerberus";
     tag = version;
-    hash = "sha256-KYZpd8adKXahSc/amQHZMFdJtEtZLklZZgwfkYu8/qY=";
+    hash = "sha256-C7YZjqQtdkakqHXBU3cFUl/gCFvCl3saP14eqt2fdAM=";
   };
 
   build-system = [
@@ -36,11 +33,11 @@ buildPythonPackage rec {
     "cerberus/benchmarks/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Schema and data validation tool for Python dictionaries";
     homepage = "http://python-cerberus.org/";
     changelog = "https://github.com/pyeve/cerberus/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

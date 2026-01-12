@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-cmake";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-U4vGkH2iUlNJkqiNmVuFianD4WR9yuGvZsYG58smg0k=";
+    hash = "sha256-wAipNWAB66YNf7exLSNPAzg3NgkGD9LPKfKiulL5yak=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/ROCm/rocm-cmake";
-    license = licenses.mit;
-    teams = [ teams.rocm ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -3,15 +3,12 @@
   buildPythonPackage,
   requests,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rjpl";
   version = "0.3.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rjpl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with the Rejseplanen API";
     homepage = "https://github.com/tomatpasser/python-rejseplanen";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

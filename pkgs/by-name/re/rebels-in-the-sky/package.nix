@@ -14,29 +14,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.0.30";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eC8n9g2kFErTRWWNo6jwAMGBX3+xGjtzq23+r3w0n0I=";
+    hash = "sha256-VyQfwZWvutc5BnAi6BbIfgRm5G4xBre76cyraQSvn6o=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-dGD0RpelENEWe9W/3CXUS2GhOXRaWhCoD8AI2n4mUfs=";
+
+  cargoHash = "sha256-PL5WhqCLlH482uDoWETfwHarz3e2NJ0vezDMs52QavQ=";
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   nativeCheckInputs = [
@@ -48,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rebels";
-  versionCheckProgramArg = "--version";
   # Darwin: "Error: Operation not permitted (os error 1)"
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

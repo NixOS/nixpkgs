@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   doCheck = false; # No such file or directory errors on 32bit
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pyptlib/";
     description = "Python implementation of the Pluggable Transports for Circumvention specification for Tor";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

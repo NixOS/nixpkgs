@@ -5,15 +5,12 @@
   cython,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tinycss";
   version = "0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tinycss" ];
 
-  meta = with lib; {
+  meta = {
     description = "Complete yet simple CSS parser for Python";
     homepage = "https://tinycss.readthedocs.io";
     changelog = "https://github.com/Kozea/tinycss/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

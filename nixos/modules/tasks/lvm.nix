@@ -49,10 +49,10 @@ in
   };
 
   config = mkMerge [
-    ({
+    {
       # minimal configuration file to make lvmconfig/lvm2-activation-generator happy
       environment.etc."lvm/lvm.conf".text = "config {}";
-    })
+    }
     (mkIf cfg.enable {
       systemd.tmpfiles.packages = [ cfg.package.out ];
       environment.systemPackages = [ cfg.package ];
@@ -137,7 +137,8 @@ in
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptlvm|vdorecover)' | while read BIN; do
+            exclude='adaptlvm|vdorecover|vdocalculatesize'
+            ls ${pkgs.vdo}/bin/ | grep -vE "($exclude)" | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';

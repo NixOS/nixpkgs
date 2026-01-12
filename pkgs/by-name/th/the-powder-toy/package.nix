@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     bzip2
@@ -64,13 +65,12 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ "resources/powder.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free 2D physics sandbox game";
     homepage = "https://powdertoy.co.uk/";
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      abbradar
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       siraben
     ];
     mainProgram = "powder";

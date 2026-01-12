@@ -24,24 +24,23 @@ stdenv.mkDerivation rec {
     flex
     bison
   ];
-  buildInputs =
-    [
-      perl
-      libnsl
-    ]
-    ++ lib.optionals withLibWrap [
-      tcp_wrappers
-    ];
+  buildInputs = [
+    perl
+    libnsl
+  ]
+  ++ lib.optionals withLibWrap [
+    tcp_wrappers
+  ];
 
   configureFlags = lib.optionals (!withLibWrap) [
     "--with-libwrap=no"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Protocol for authentication, authorization and accounting (AAA) services for routers and network devices";
     homepage = "http://www.shrubbery.net/tac_plus/";
-    license = licenses.free;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = with platforms; linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = with lib.platforms; linux;
   };
 }

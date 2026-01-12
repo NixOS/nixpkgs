@@ -1,7 +1,7 @@
 {
+  lib,
   copyDesktopItems,
   fetchFromGitLab,
-  lib,
   makeDesktopItem,
   python3Packages,
   qt5,
@@ -10,15 +10,16 @@
 let
   pname = "amphetype";
   version = "1.0.0";
-  description = "An advanced typing practice program";
+  description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
+  format = "pyproject";
   inherit pname version;
 
   src = fetchFromGitLab {
     owner = "franksh";
     repo = "amphetype";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pve2f+XMfFokMCtW3KdeOJ9Ey330Gwv/dk1+WBtrBEQ=";
   };
 
@@ -28,22 +29,24 @@ python3Packages.buildPythonApplication {
   ];
 
   buildInputs = [
-    qt5.qtbase
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     editdistance
     pyqt5
     translitcodec
   ];
 
-  dontWrapQtApps = true;
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
 
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  '';
-
+  # no tests
   doCheck = false;
 
   desktopItems = [
@@ -60,11 +63,11 @@ python3Packages.buildPythonApplication {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     inherit description;
     mainProgram = "amphetype";
     homepage = "https://gitlab.com/franksh/amphetype";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rycee ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rycee ];
   };
 }

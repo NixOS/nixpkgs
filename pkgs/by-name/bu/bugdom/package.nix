@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jorio";
     repo = "bugdom";
-    rev = version;
+    tag = version;
     hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;
   };
@@ -46,39 +46,38 @@ stdenv.mkDerivation rec {
     "-DSDL2_INCLUDE_DIRS=${lib.getInclude SDL2}/include/SDL2"
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir -p $out/{bin,Applications}
-          mv {,$out/Applications/}Bugdom.app
-          makeWrapper $out/{Applications/Bugdom.app/Contents/MacOS,bin}/Bugdom
-        ''
-      else
-        ''
-          mkdir -p $out/share/bugdom
-          mv Data $out/share/bugdom
-          install -Dm755 {.,$out/bin}/Bugdom
-          wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
-          install -Dm644 $src/packaging/io.jor.bugdom.desktop $out/share/applications/io.jor.bugdom.desktop
-          install -Dm644 $src/packaging/io.jor.bugdom.png $out/share/pixmaps/io.jor.bugdom.png
-        ''
-    )
-    + ''
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/{bin,Applications}
+        mv {,$out/Applications/}Bugdom.app
+        makeWrapper $out/{Applications/Bugdom.app/Contents/MacOS,bin}/Bugdom
+      ''
+    else
+      ''
+        mkdir -p $out/share/bugdom
+        mv Data $out/share/bugdom
+        install -Dm755 {.,$out/bin}/Bugdom
+        wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
+        install -Dm644 $src/packaging/io.jor.bugdom.desktop $out/share/applications/io.jor.bugdom.desktop
+        install -Dm644 $src/packaging/io.jor.bugdom.png $out/share/pixmaps/io.jor.bugdom.png
+      ''
+  )
+  + ''
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Port of Bugdom, a 1999 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/Bugdom";
-    license = with licenses; [ cc-by-sa-40 ];
-    maintainers = with maintainers; [ lux ];
+    license = with lib.licenses; [ cc-by-sa-40 ];
+    maintainers = with lib.maintainers; [ lux ];
     mainProgram = "Bugdom";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

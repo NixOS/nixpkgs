@@ -8,33 +8,32 @@
   enableSdl2 ? true,
   SDL2,
   SDL2_image,
-  SDL2_sound,
   SDL2_mixer,
   SDL2_ttf,
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";
-  version = "1.4.0-49-g64a513fe4";
+  version = "1.4.0-112-gaa252eb26";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
     tag = version;
-    hash = "sha256-YSPaquQfWTRGswttA+z7zIDJu+i8bDegzAetQMKlgZA=";
+    hash = "sha256-FqWoyq6FFCknT29Zkrkozi0+2JkrhJ2fKXVSbh5ZWXo=";
   };
 
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals enableSdl2 [
-      SDL2
-      SDL2_image
-      SDL2_sound
-      SDL2_mixer
-      SDL2_ttf
-    ];
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals enableSdl2 [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+  ];
 
   enableParallelBuilding = true;
 

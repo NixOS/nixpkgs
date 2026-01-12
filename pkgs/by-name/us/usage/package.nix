@@ -1,36 +1,46 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   installShellFiles,
   nix-update-script,
+  nodejs,
   usage,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.0.5";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
-    rev = "v${version}";
-    hash = "sha256-No/BDBW/NRnF81UOuAMrAs4cXEdzEAxnmkn67mReUcM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AFfI843y1fKdw2f4alz7WoeMQR2IPWDJ3SofCCMJVpQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W/CuXzwacarxgVv12TMVfo7Fr9qKJ7aZIO8xf4SygNA=";
+  cargoHash = "sha256-WC/q9yd1XJT/EtC9ES5fw6j45gyRo3k2eNEDwGmvDWo=";
 
   postPatch = ''
-    substituteInPlace ./examples/mounted.sh \
+    substituteInPlace ./examples/*.sh \
       --replace-fail '/usr/bin/env -S usage' "$(pwd)/target/${stdenv.targetPlatform.rust.rustcTargetSpec}/release/usage"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  nativeCheckInputs = [
+    # for some tests
+    nodejs
+  ];
+
+  checkFlags = [
+    # has --include-bash-completion-lib so requires external lib downloaded on runtime
+    "--skip=test_bash_completion_integration"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \
@@ -45,9 +55,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://usage.jdx.dev";
     description = "Specification for CLIs";
-    changelog = "https://github.com/jdx/usage/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/usage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "usage";
   };
-}
+})

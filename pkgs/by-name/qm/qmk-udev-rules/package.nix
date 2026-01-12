@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 ## Usage
@@ -20,6 +21,12 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -33,6 +40,5 @@ stdenv.mkDerivation rec {
     description = "Official QMK udev rules list";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ekleog ];
   };
 }

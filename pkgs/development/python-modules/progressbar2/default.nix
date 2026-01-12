@@ -6,7 +6,6 @@
   freezegun,
   pytestCheckHook,
   python-utils,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "progressbar2";
   version = "4.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "progressbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Text progressbar library";
     homepage = "https://progressbar-2.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

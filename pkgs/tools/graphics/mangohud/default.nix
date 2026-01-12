@@ -10,6 +10,8 @@
   gnused,
   xdg-utils,
   dbus,
+  libGL,
+  libX11,
   hwdata,
   mangohud32,
   addDriverRunpath,
@@ -20,13 +22,10 @@
   ninja,
   pkg-config,
   unzip,
-  libX11,
   wayland,
   libXNVCtrl,
-  nlohmann_json,
   spdlog,
   libxkbcommon,
-  glew,
   glfw,
   libXrandr,
   x11Support ? true,
@@ -94,14 +93,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FvPhnOvcYE8vVB5R+ZRmuZxrC9U4GA338V7VAuUlHCE=";
+    hash = "sha256-BZ3R7D2zOlg69rx4y2FzzjpXuPOv913TOz9kSvRN+Wg=";
   };
 
   outputs = [
@@ -138,6 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       libdbus = dbus.lib;
+      libGL = libGL;
+      libX11 = libX11;
       inherit hwdata;
     })
   ];
@@ -185,21 +186,18 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
   ];
 
-  buildInputs =
-    [
-      dbus
-      nlohmann_json
-      spdlog
-    ]
-    ++ lib.optional waylandSupport wayland
-    ++ lib.optional x11Support libX11
-    ++ lib.optional nvidiaSupport libXNVCtrl
-    ++ lib.optional (x11Support || waylandSupport) libxkbcommon
-    ++ lib.optionals mangoappSupport [
-      glew
-      glfw
-      libXrandr
-    ];
+  buildInputs = [
+    dbus
+    spdlog
+  ]
+  ++ lib.optional waylandSupport wayland
+  ++ lib.optional x11Support libX11
+  ++ lib.optional nvidiaSupport libXNVCtrl
+  ++ lib.optional (x11Support || waylandSupport) libxkbcommon
+  ++ lib.optionals mangoappSupport [
+    glfw
+    libXrandr
+  ];
 
   doCheck = true;
 
@@ -240,15 +238,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
     homepage = "https://github.com/flightlessmango/MangoHud";
     changelog = "https://github.com/flightlessmango/MangoHud/releases/tag/v${finalAttrs.version}";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kira-bruneau
       zeratax
     ];
+    mainProgram = "mangohud";
   };
 })

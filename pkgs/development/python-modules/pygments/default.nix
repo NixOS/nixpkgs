@@ -13,16 +13,14 @@
 }:
 
 let
-  pygments = buildPythonPackage rec {
+  pygments = buildPythonPackage (finalAttrs: {
     pname = "pygments";
-    version = "2.19.1";
+    version = "2.19.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.8"; # 2.18.0 requirement
-
     src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-YcFtKoV23AZJ2fOeCJtfArzSf7oQ2PtNzCgXP3pFFR8=";
+      inherit (finalAttrs) pname version;
+      hash = "sha256-Y2yyR3zsf4lSU2lwvFM7xDdDVC9wOSrgJjdGAK3VuIc=";
     };
 
     nativeBuildInputs = [ hatchling ];
@@ -49,13 +47,16 @@ let
     };
 
     meta = {
-      changelog = "https://github.com/pygments/pygments/releases/tag/${version}";
+      changelog = "https://github.com/pygments/pygments/releases/tag/${finalAttrs.version}";
       homepage = "https://pygments.org/";
       description = "Generic syntax highlighter";
       mainProgram = "pygmentize";
       license = lib.licenses.bsd2;
-      maintainers = with lib.maintainers; [ sigmanificient ];
+      maintainers = with lib.maintainers; [
+        sigmanificient
+        ryand56
+      ];
     };
-  };
+  });
 in
 pygments

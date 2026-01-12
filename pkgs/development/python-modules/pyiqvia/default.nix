@@ -10,7 +10,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyiqvia";
   version = "2023.12.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -53,7 +50,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyiqvia" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for working with IQVIA data";
     longDescription = ''
       pyiqvia is an async-focused Python library for allergen, asthma, and
@@ -62,7 +59,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/pyiqvia";
     changelog = "https://github.com/bachya/pyiqvia/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

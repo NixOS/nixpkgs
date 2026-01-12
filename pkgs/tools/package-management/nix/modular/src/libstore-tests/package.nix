@@ -3,6 +3,7 @@
   buildPackages,
   stdenv,
   mkMesonExecutable,
+  writableTmpDirAsHomeHook,
 
   nix-store,
   nix-store-c,
@@ -25,20 +26,21 @@ mkMesonExecutable (finalAttrs: {
 
   workDir = ./.;
 
-  # Hack for sake of the dev shell
-  passthru.externalBuildInputs = [
+  buildInputs = [
     sqlite
     rapidcheck
     gtest
-  ];
 
-  buildInputs = finalAttrs.passthru.externalBuildInputs ++ [
     nix-store
     nix-store-c
     nix-store-test-support
   ];
 
   mesonFlags = [
+  ];
+
+  excludedTestPatterns = lib.optionals (lib.versionOlder finalAttrs.version "2.31") [
+    "nix_api_util_context.nix_store_real_path_binary_cache"
   ];
 
   passthru = {
@@ -58,18 +60,15 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
+            buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          (
-            lib.optionalString stdenv.hostPlatform.isWindows ''
-              export HOME="$PWD/home-dir"
-              mkdir -p "$HOME"
-            ''
-            + ''
-              export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}
-              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-              touch $out
-            ''
-          );
+          ''
+            export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}
+            export NIX_REMOTE=$HOME/store
+            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage} \
+              --gtest_filter=-${lib.concatStringsSep ":" finalAttrs.excludedTestPatterns}
+            touch $out
+          '';
     };
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs examples/test_c_child_requires_c_no_deps.bash
     substituteInPlace examples/CMakeLists.txt --replace-fail \
-      "$""{CMAKE_INSTALL_LIBDIR}" "${if stdenv.isDarwin then "lib" else "lib64"}"
+      "$""{CMAKE_INSTALL_LIBDIR}" "${if stdenv.hostPlatform.isDarwin then "lib" else "lib64"}"
   '';
 
   nativeBuildInputs = [

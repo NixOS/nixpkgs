@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${openssl.bin}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sslmate.com";
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     description = "Easy to buy, deploy, and manage your SSL certs";
     mainProgram = "sslmate";
-    platforms = platforms.unix;
-    license = licenses.mit; # X11
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit; # X11
   };
 }

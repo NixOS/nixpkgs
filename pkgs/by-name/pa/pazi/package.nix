@@ -18,17 +18,16 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/r/nRQ/7KyUmJK19F557AcxXEXa85E/CE6+YFU6DdR4=";
 
   postInstall = ''
     installManPage packaging/man/pazi.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Autojump \"zap to directory\" helper";
     homepage = "https://github.com/euank/pazi";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "pazi";
   };

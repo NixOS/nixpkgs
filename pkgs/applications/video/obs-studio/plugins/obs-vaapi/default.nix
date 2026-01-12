@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fzwoch";
-    repo = pname;
+    repo = "obs-vaapi";
     rev = version;
     hash = "sha256-ykiLsHL3hoe0ibxMxp4zrqeSeQfgnJfNg7Yb5i9HDJQ=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         package: "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${lib.getLib package}/lib/gstreamer-1.0";
     in
     with gst_all_1;
-    builtins.map gstreamerHook [
+    map gstreamerHook [
       gstreamer
       gst-plugins-base
       gst-plugins-bad
@@ -57,18 +57,15 @@ stdenv.mkDerivation rec {
     mv $out/lib/obs-vaapi.so $out/lib/obs-plugins/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio VAAPI support via GStreamer";
     homepage = "https://github.com/fzwoch/obs-vaapi";
     changelog = "https://github.com/fzwoch/obs-vaapi/releases/tag/${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ahuzik
       pedrohlc
     ];
-    license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    license = lib.licenses.gpl2Plus;
+    inherit (obs-studio.meta) platforms;
   };
 }

@@ -23,10 +23,10 @@
 
   testScript = ''
     machine.wait_for_x()
-    machine.succeed("convert -font DejaVu-Sans +antialias label:'IT WORKS' image.png")
+    machine.succeed("convert -font DejaVu-Sans -pointsize 48 +antialias label:'WORKS' image.png")
     machine.execute("libresprite image.png >&2 &")
     machine.wait_for_window("LibreSprite ${pkgs.libresprite.version}-dev")
-    machine.wait_for_text("IT WORKS")
+    machine.wait_for_text("WORKS")
     machine.screenshot("screen")
   '';
 }

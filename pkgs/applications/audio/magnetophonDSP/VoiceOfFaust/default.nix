@@ -32,10 +32,6 @@ stdenv.mkDerivation rec {
     faust2lv2
   ];
 
-  # ld: crtbegin.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a PIE object
-  # ld: failed to set dynamic section sizes: bad value
-  hardeningDisable = [ "pie" ];
-
   enableParallelBuilding = true;
 
   dontWrapQtApps = true;

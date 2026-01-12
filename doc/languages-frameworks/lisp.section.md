@@ -20,7 +20,7 @@ The `withPackages` function is of primary utility. It is used to build
 [runnable wrappers](#lisp-building-wrappers), with a pinned and pre-built
 [ASDF FASL](#lisp-loading-asdf) available in the `ASDF` environment variable,
 and `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` configured to
-[find the desired systems on runtime](#lisp-loading-systems).
+[find the desired systems at runtime](#lisp-loading-systems).
 
 In addition, Lisps have the `withOverrides` function, which can be used to
 [substitute](#lisp-including-external-pkg-in-scope) any package in the scope of
@@ -49,9 +49,7 @@ Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
 in
-mkShell {
-  packages = [ sbcl' ];
-}
+mkShell { packages = [ sbcl' ]; }
 ```
 
 Such a Lisp can be now used e.g. to compile your sources:
@@ -192,11 +190,7 @@ let
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
-  sbcl' = sbcl.withOverrides (
-    self: super: {
-      inherit alexandria;
-    }
-  );
+  sbcl' = sbcl.withOverrides (self: super: { inherit alexandria; });
 in
 sbcl'.pkgs.alexandria
 ```
@@ -229,7 +223,7 @@ argument to the `build-asdf-system`/`buildASDFSystem` functions.
 
 The reason is that ASDF searches for a secondary system in the `.asd` of the
 parent package. Thus, having them separate would cause either one of them not to
-load cleanly, because one will contains FASLs of itself but not the other, and
+load cleanly, because one will contain FASLs of itself but not the other, and
 vice versa.
 
 To package slashy systems, use `overrideLispAttrs`, like so:
@@ -246,7 +240,7 @@ See the [respective section](#lisp-including-external-pkg-in-scope) on using
 
 Note that sometimes the slashy systems might not only have more dependencies
 than the main one, but create a circular dependency between `.asd`
-files. Unfortunately, in this case an adhoc solution becomes necessary.
+files. Unfortunately, in this case an ad-hoc solution becomes necessary.
 
 ## Building Wrappers {#lisp-building-wrappers}
 
@@ -268,7 +262,7 @@ $ sbcl
 
 ### Loading ASDF {#lisp-loading-asdf}
 
-For best results, avoid calling `(require 'asdf)` When using the
+For best results, avoid calling `(require 'asdf)` when using the
 library-generated wrappers.
 
 Use `(load (ext:getenv "ASDF"))` instead, supplying your implementation's way of

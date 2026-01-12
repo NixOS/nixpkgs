@@ -7,6 +7,7 @@
   gtest,
   llvmPackages,
   meson,
+  mesonEmulatorHook,
   ninja,
   nixVersions,
   nix-update-script,
@@ -20,15 +21,15 @@
 }:
 
 let
-  nix = nixVersions.nix_2_28;
+  nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.6.4";
+    version = "2.8.2";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
+      hash = "sha256-rlV3ZAe7HKdt1SlPS6xy+vAxhddKhjn7XvoDnbq2AnE=";
     };
 
     nativeBuildInputs = [
@@ -36,6 +37,7 @@ let
       ninja
       python3
       pkg-config
+      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
@@ -71,7 +73,12 @@ in
         "dev"
       ];
 
+      nativeBuildInputs =
+        common.nativeBuildInputs
+        ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+
       buildInputs = [
+        nixComponents.nix-expr
         gtest
         boost
         nlohmann_json
@@ -102,7 +109,10 @@ in
       ];
 
       buildInputs = [
-        nix
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         gtest
         boost
       ];
@@ -126,7 +136,10 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nix
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         nixf
         nixt
         llvmPackages.llvm

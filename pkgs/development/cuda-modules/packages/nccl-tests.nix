@@ -2,87 +2,109 @@
 # the names of dependencies from that package set directly to avoid evaluation errors
 # in the case redistributable packages are not available.
 {
-  config,
-  cudaPackages,
+  backendStdenv,
+  _cuda,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cudaNamePrefix,
   fetchFromGitHub,
+  flags,
   gitUpdater,
   lib,
   mpi,
   mpiSupport ? false,
+  nccl,
   which,
 }:
 let
-  inherit (cudaPackages)
-    backendStdenv
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cudaAtLeast
-    cudaOlder
-    cudatoolkit
-    nccl
-    ;
+  inherit (_cuda.lib) _mkMetaBroken;
+  inherit (lib) licenses maintainers teams;
+  inherit (lib.attrsets) getBin getInclude getLib;
+  inherit (lib.lists) optionals;
 in
 backendStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
 
+  # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
+  name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl-tests";
-  version = "2.15.0";
+  version = "2.17.8";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OgffbW9Vx/sm1I1tpaPGdAhIpV4jbB4hJa9UcEAWkdE=";
+    hash = "sha256-vZ3PP1NbNBv3bvJaiKq5rkIzaT7bcZpHawu3nbSqK60=";
   };
 
   postPatch = ''
-    # fix build failure with GCC14
-    substituteInPlace src/Makefile --replace-fail "-std=c++11" "-std=c++14"
+    nixLog "patching $PWD/src/common.mk to remove NVIDIA's ccbin declaration"
+    substituteInPlace ./src/common.mk \
+      --replace-fail \
+        '-ccbin $(CXX)' \
+        ""
   '';
 
-  strictDeps = true;
+  nativeBuildInputs = [
+    which
+    cuda_nvcc
+  ];
 
-  nativeBuildInputs =
-    [ which ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  buildInputs = [
+    cuda_cccl # <nv/target>
+    cuda_cudart
+    nccl
+  ]
+  ++ optionals mpiSupport [ mpi ];
 
-  buildInputs =
-    [ nccl ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      cuda_nvcc # crt/host_config.h
-      cuda_cudart
-    ]
-    ++ lib.optionals (cudaAtLeast "12.0") [
-      cuda_cccl # <nv/target>
-    ]
-    ++ lib.optionals mpiSupport [ mpi ];
-
-  makeFlags =
-    [ "NCCL_HOME=${nccl}" ]
-    ++ lib.optionals (cudaOlder "11.4") [ "CUDA_HOME=${cudatoolkit}" ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ "CUDA_HOME=${cuda_nvcc}" ]
-    ++ lib.optionals mpiSupport [ "MPI=1" ];
+  # NOTE: CUDA_HOME is expected to have the bin directory
+  # TODO: This won't work with cross-compilation since cuda_nvcc will come from hostPackages by default (aka pkgs).
+  makeFlags = [
+    "CXXSTD=-std=c++17"
+    "CUDA_HOME=${getBin cuda_nvcc}"
+    "CUDA_INC=${getInclude cuda_cudart}/include"
+    "CUDA_LIB=${getLib cuda_cudart}/lib"
+    "NVCC_GENCODE=${flags.gencodeString}"
+    "PREFIX=$(out)"
+  ]
+  ++ optionals mpiSupport [ "MPI=1" ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r build/* $out/bin/
+    runHook preInstall
+    mkdir -p "$out/bin"
+    install -Dm755 \
+      $(find build -type f -executable) \
+      "$out/bin"
+    runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit (finalAttrs) pname version;
-    rev-prefix = "v";
+  passthru = {
+    brokenAssertions = [
+      {
+        message = "mpi is non-null when mpiSupport is true";
+        assertion = mpiSupport -> mpi != null;
+      }
+    ];
+
+    updateScript = gitUpdater {
+      inherit (finalAttrs) pname version;
+      rev-prefix = "v";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tests to check both the performance and the correctness of NVIDIA NCCL operations";
     homepage = "https://github.com/NVIDIA/nccl-tests";
-    platforms = platforms.linux;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     license = licenses.bsd3;
-    broken = !config.cudaSupport || (mpiSupport && mpi == null);
+    broken = _mkMetaBroken finalAttrs;
     maintainers = with maintainers; [ jmillerpdt ];
     teams = [ teams.cuda ];
   };

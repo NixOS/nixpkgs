@@ -6,6 +6,7 @@
   python3,
   pkg-config,
   pixman,
+  nodejs_22,
   cairo,
   pango,
   stdenv,
@@ -13,16 +14,18 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.7.0";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
-    rev = "v${version}";
-    hash = "sha256-x4cRZ0XfyvRqOWIqtsVBiIPDxC3J9SUdoReiWNUB/X8=";
+    tag = "v${version}";
+    hash = "sha256-RPFEquxMRnNW+L6azcDmrIKXG27DAF2PxDmSB3ErOHk=";
   };
 
-  npmDepsHash = "sha256-s8dKMGwg6DL+aEq0Sk04VF1pSDpAW18Dok113xDWb8Q=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-h4Ipmmo0Jf6/rzCAKtLLCYrUi1anVKZSgy/kcEKDQJg=";
 
   nativeBuildInputs = [
     python3
@@ -33,7 +36,8 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall

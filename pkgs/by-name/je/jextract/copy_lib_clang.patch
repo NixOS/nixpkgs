@@ -1,0 +1,13 @@
+diff --git a/build.gradle b/build.gradle
+index 9ce544a..0c77609 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -79,7 +79,7 @@ task copyLibClang(type: Sync) {
+             "libclang.so.${clang_version}" : "*clang*"
+ 
+     from("${libclang_dir}") {
+-        include(clang_path_include)
++        include("libclang.so*")
+         include("libLLVM.*")
+         exclude("clang.exe")
+         into("libs")

@@ -9,22 +9,21 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tritonclient,
   typeguard,
   versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "monai-deploy";
-  version = "0.5.1";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "monai-deploy-app-sdk";
     tag = version;
-    hash = "sha256-a5WtU+1XjsYsXB/uZS8ufE0fOOWDf+Wy7mOX2xPEQEg=";
+    hash = "sha256-W2GXVd4gWgfGLjXR+8m/Ztm52Agj4FGWtEFrh4mjYk0=";
   };
 
   postPatch = ''
@@ -43,6 +42,7 @@ buildPythonPackage rec {
     numpy
     networkx
     colorama
+    tritonclient
     typeguard
   ];
 
@@ -64,12 +64,13 @@ buildPythonPackage rec {
     # like highdicom and pydicom
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework and tools to design, develop and verify AI applications in healthcare imaging";
     mainProgram = "monai-deploy";
     homepage = "https://monai.io/deploy.html";
-    changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/v${version}.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/${src.tag}.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true; # requires holoscan and holoscan-cli, not in Nixpkgs
   };
 }

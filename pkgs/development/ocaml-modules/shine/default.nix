@@ -20,10 +20,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ shine ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-shine";
     description = "Bindings to the fixed-point mp3 encoding library shine";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

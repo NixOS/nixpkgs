@@ -8,10 +8,10 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-prosody";
-  version = "1.0.8542";
+  version = "1.0.8737";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "dVqKnDq8rNmLbhMUvDGAT2pKLPZjW4ZXUwvz1wxM2Rs=";
+    sha256 = "fZs1ng1mtxwXgJAQqxAlrNrqUQJc9fGlxJKwuTJLENc=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Prosody configuration for Jitsi Meet";
     longDescription = ''
       This package contains configuration for Prosody to be used with Jitsi Meet.
     '';
     homepage = "https://github.com/jitsi/jitsi-meet/";
-    license = licenses.asl20;
-    teams = [ teams.jitsi ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.jitsi ];
+    platforms = lib.platforms.linux;
   };
 }

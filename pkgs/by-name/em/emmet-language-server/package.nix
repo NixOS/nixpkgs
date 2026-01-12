@@ -3,29 +3,33 @@
   stdenvNoCC,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   nix-update-script,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
-  version = "2.6.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "olrtg";
     repo = "emmet-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ptIdZPGLjKsdFJKjt5LZ8JQNNBU5KR62Yw78qzfRxg=";
+    hash = "sha256-EY/xfrf6sGnZPbkbf9msauOoZ0h0EjLSwQC0aiS/Kco=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hh5PEtmSHPs6QBgwWHS0laGU21e82JckIP3mB/P9/vE=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-sMOC5MQmJKwXZoUZnOmBy2I83SNMdrPc6WQKmeVGiCc=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildPhase = ''
@@ -39,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # remove unnecessary and non-deterministic files
   preInstall = ''
-    pnpm --ignore-scripts --prod prune
+    CI=true pnpm --ignore-scripts --prod prune
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules -xtype l -delete
@@ -52,8 +56,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/emmet-language-server}
     mv {node_modules,dist} $out/lib/emmet-language-server
+
+    chmod +x $out/lib/emmet-language-server/dist/index.js
+    patchShebangs $out/lib/emmet-language-server/dist/index.js
     ln -s $out/lib/emmet-language-server/dist/index.js $out/bin/emmet-language-server
-    chmod +x $out/bin/emmet-language-server
 
     runHook postInstall
   '';

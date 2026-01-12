@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     perl
     readline
     ssh
-  ] ++ (lib.optional slurmSupport slurm);
+  ]
+  ++ (lib.optional slurmSupport slurm);
 
   nativeBuildInputs = [ autoreconfHook ];
 

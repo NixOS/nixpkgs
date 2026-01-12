@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyusb,
   pyserial,
   prompt-toolkit,
@@ -12,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "facedancer";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "facedancer";
     tag = version;
-    hash = "sha256-u1fvrfjk79R16MUuYx8m63EkgHJiMmAksaduk4lVnTw=";
+    hash = "sha256-Qe8DPUKwlukPftc7SOZIcY/do/14UdS61WH0g5dFeMI=";
   };
 
   postPatch = ''
@@ -45,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/facedancer/releases/tag/${version}";
+    changelog = "https://github.com/greatscottgadgets/facedancer/releases/tag/${src.tag}";
     description = "Implement your own USB device in Python, supported by a hardware peripheral such as Cynthion or GreatFET";
     homepage = "https://github.com/greatscottgadgets/facedancer";
     license = lib.licenses.bsd3;

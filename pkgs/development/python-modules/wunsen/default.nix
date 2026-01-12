@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  pythonOlder,
-
   unittestCheckHook,
 
   hatchling,
@@ -16,8 +14,6 @@ buildPythonPackage rec {
   pname = "wunsen";
   version = "0.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cakimpei";
@@ -39,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wunsen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transliterate/transcribe other languages into Thai Topics";
     homepage = "https://github.com/cakimpei/wunsen";
     changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

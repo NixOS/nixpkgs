@@ -25,14 +25,14 @@ fluent,,,,,,alerque
 funnyfiles.nvim,,,,,,mrcjkb
 fzf-lua,,,,,,mrcjkb
 fzy,,,,,,mrcjkb
-gitsigns.nvim,https://raw.githubusercontent.com/lewis6991/gitsigns.nvim/main/gitsigns.nvim-scm-1.rockspec,,,,5.1,
+gitsigns.nvim,,,,,5.1,
 grug-far.nvim,,,,,,teto
 haskell-tools.nvim,,,,,,mrcjkb
 http,,,,0.4-0,,vcunat
 image.nvim,,,,,,teto
 inspect,,,,,,
 jsregexp,,,,,,
-ldbus,,,http://luarocks.org/dev,,,
+ldbus,,,https://luarocks.org/dev,,,
 ldoc,,,,,,
 lgi,,,,,,
 linenoise,https://raw.githubusercontent.com/hoelzro/lua-linenoise/master/linenoise-0.9-1.rockspec,,,,,
@@ -41,11 +41,12 @@ llscheck,,,,,,mrcjkb
 lmathx,,,,,5.3,alexshpilkin
 lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
-lpeg,,,,,,vyp
+lpeg,,,,,,
 lpeg_patterns,,,,,,
 lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
-lrexlib-pcre,,,,,,vyp
+lrexlib-oniguruma,,,,,,junestepp
+lrexlib-pcre,,,,,,
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,,gepbird
 lua-cjson,,,,,,
@@ -79,13 +80,13 @@ luadbi-sqlite3,,,,,,
 luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
-luaffi,,,http://luarocks.org/dev,,,
+luaffi,,,https://luarocks.org/dev,,,
 luafilesystem,,,,1.8.0-1,,flosse
 lualdap,,,,,,aanderse
-lualine.nvim,,,http://luarocks.org/dev,,,
+lualine.nvim,,,https://luarocks.org/dev,,,
 lualogging,,,,,,
 luaossl,,,,,5.1,
-luaposix,,,,34.1.1-1,,vyp lblasc
+luaposix,,,,34.1.1-1,,lblasc
 luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
@@ -95,7 +96,7 @@ luarocks-build-treesitter-parser-cpp,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasnip,,,,,,
 luasocket,,,,,,
-luasql-sqlite3,,,,,,vyp
+luasql-sqlite3,,,,,,
 luassert,,,,,,
 luasystem,,,,,,
 luatext,,,,,,
@@ -120,6 +121,7 @@ mini.test,,,,,,
 moonscript,https://raw.githubusercontent.com/leafo/moonscript/master/moonscript-dev-1.rockspec,,,,,arobyn
 mpack,,,,,,
 neorg,,,,,,GaetanLepage
+neorg-interim-ls,,,,,,
 neotest,,,,,,mrcjkb
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
@@ -143,10 +145,11 @@ rtp.nvim,,,,,,mrcjkb
 rustaceanvim,,,,,,mrcjkb
 say,,,,,,
 serpent,,,,,,lockejan
+sofa,,,,,,f4z3r
 sqlite,,,,,,
 std._debug,,,,,,
 std.normalize,,,,,,
-stdlib,,,,41.2.2,,vyp
+stdlib,,,,41.2.2,,
 teal-language-server,,,,,,
 telescope-manix,,,,,,
 telescope.nvim,,,,,5.1,
@@ -157,5 +160,5 @@ tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb
 tree-sitter-orgmode,,,,,,
 vstruct,,,,,,
-vusted,,,,,,figsoda
+vusted,,,,,,
 xml2lua,,,,,,teto

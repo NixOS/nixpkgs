@@ -66,11 +66,18 @@ stdenv.mkDerivation {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck/commit/6dcfe5ae869fddd51940c6c37a95f7bc639f4389.patch";
       hash = "sha256-b9eI3iR7dmFqCrktPyn6QJ9U2A/7LvfYRS+vE3BOaqk=";
     })
+    (fetchpatch {
+      name = "use-the-glew-cmake-target.patch";
+      url = "https://github.com/svenstaro/dwarf_fortress_unfuck/commit/abd2961836ace8cf6277ceff997b02704c6edd7a.patch";
+      hash = "sha256-2VS/Mvhl6oLoMcH4x3hX9RO0VrHha8hhkdKwN0ZfUTs=";
+    })
   ];
 
   postPatch = ''
-    # https://github.com/svenstaro/dwarf_fortress_unfuck/pull/27
-    substituteInPlace CMakeLists.txt --replace \''${GLEW_LIBRARIES} GLEW::glew
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
+    sed -i "1i #include <cstdint>" g_src/files.h
   '';
 
   cmakeFlags = [
@@ -82,30 +89,29 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      libSM
-      SDL
-      SDL_image
-      SDL_ttf
-      glew
-      openalSoft
-      ncurses
-      libsndfile
-      zlib
-      libGL
-    ]
-    # switched to gtk3 in 0.47.05
-    ++ (
-      if versionOlder release.unfuckRelease "0.47.05" then
-        [
-          gtk2
-        ]
-      else
-        [
-          gtk3
-        ]
-    );
+  buildInputs = [
+    libSM
+    SDL
+    SDL_image
+    SDL_ttf
+    glew
+    openalSoft
+    ncurses
+    libsndfile
+    zlib
+    libGL
+  ]
+  # switched to gtk3 in 0.47.05
+  ++ (
+    if versionOlder release.unfuckRelease "0.47.05" then
+      [
+        gtk2
+      ]
+    else
+      [
+        gtk3
+      ]
+  );
 
   # Don't strip unused symbols; dfhack hooks into some of them.
   dontStrip = true;
@@ -125,7 +131,6 @@ stdenv.mkDerivation {
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      abbradar
       numinit
     ];
   };

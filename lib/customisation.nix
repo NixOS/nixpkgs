@@ -3,6 +3,7 @@
 let
   inherit (builtins)
     intersectAttrs
+    unsafeGetAttrPos
     ;
   inherit (lib)
     functionArgs
@@ -21,7 +22,6 @@ let
     filterAttrs
     optionalString
     flip
-    pathIsDirectory
     head
     pipe
     isDerivation
@@ -156,8 +156,25 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
+      # Recover overrider and additional attributes for f
+      # When f is a callable attribute set,
+      # it may contain its own `f.override` and additional attributes.
+      # This helper function recovers those attributes and decorate the overrider.
+      recoverMetadata =
+        if isAttrs f then
+          fDecorated:
+          # Preserve additional attributes for f
+          f
+          // fDecorated
+          # Decorate f.override if presented
+          // lib.optionalAttrs (f ? override) {
+            override = fdrv: makeOverridable (f.override fdrv);
+          }
+        else
+          id;
+      decorate = f': recoverMetadata (mirrorArgs f');
     in
-    mirrorArgs (
+    decorate (
       origArgs:
       let
         result = f origArgs;
@@ -166,7 +183,16 @@ rec {
         overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
 
         # Re-call the function but with different arguments
-        overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
+        overrideArgs = mirrorArgs (
+          /**
+            Change the arguments with which a certain function is called.
+
+            In some cases, you may find a list of possible attributes to pass in this function's `__functionArgs` attribute, but it will not be complete for an original function like `args@{foo, ...}: ...`, which accepts arbitrary attributes.
+
+            This function was provided by `lib.makeOverridable`.
+          */
+          newArgs: makeOverridable f (overrideWith newArgs)
+        );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
       in
@@ -176,6 +202,16 @@ rec {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
+            /**
+              Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
+
+              This function is provided by `lib.makeOverridable`, and indirectly by `callPackage` among others, in order to make the combination of `override` and `overrideAttrs` work.
+              Specifically, it re-adds the `override` attribute to the result of `overrideAttrs`.
+
+              The real implementation of `overrideAttrs` is provided by `stdenv.mkDerivation`.
+            */
+            # NOTE: part of the above documentation had to be duplicated in `mkDerivation`'s `overrideAttrs`.
+            #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
             fdrv: overrideResult (x: x.overrideAttrs fdrv);
         }
       else if isFunction result then
@@ -284,16 +320,8 @@ rec {
       errorForArg =
         arg:
         let
-          loc = builtins.unsafeGetAttrPos arg fargs;
-          # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
-          # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
-          loc' =
-            if loc != null then
-              loc.file + ":" + toString loc.line
-            else if !isFunction fn then
-              toString fn + optionalString (pathIsDirectory fn) "/default.nix"
-            else
-              "<unknown location>";
+          loc = unsafeGetAttrPos arg fargs;
+          loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
         in
         "Function called without required argument \"${arg}\" at "
         + "${loc'}${prettySuggestions (getSuggestions arg)}";
@@ -312,7 +340,7 @@ rec {
       abort "lib.customisation.callPackageWith: ${error}";
 
   /**
-    Like callPackage, but for a function that returns an attribute
+    Like `callPackage`, but for a function that returns an attribute
     set of derivations. The override function is added to the
     individual attributes.
 
@@ -385,7 +413,7 @@ rec {
       outputs = drv.outputs or [ "out" ];
 
       commonAttrs =
-        drv // (listToAttrs outputsList) // ({ all = map (x: x.value) outputsList; }) // passthru;
+        drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
       outputToAttrListElement = outputName: {
         name = outputName;
@@ -446,16 +474,15 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs =
-        {
-          inherit (drv) name system meta;
-          inherit outputs;
-        }
-        // optionalAttrs (drv._hydraAggregate or false) {
-          _hydraAggregate = true;
-          constituents = map hydraJob (flatten drv.constituents);
-        }
-        // (listToAttrs outputsList);
+      commonAttrs = {
+        inherit (drv) name system meta;
+        inherit outputs;
+      }
+      // optionalAttrs (drv._hydraAggregate or false) {
+        _hydraAggregate = true;
+        constituents = map hydraJob (flatten drv.constituents);
+      }
+      // (listToAttrs outputsList);
 
       makeOutput =
         outputName:
@@ -655,7 +682,7 @@ rec {
     };
 
   /**
-    Like makeScope, but aims to support cross compilation. It's still ugly, but
+    Like `makeScope`, but aims to support cross compilation. It's still ugly, but
     hopefully it helps a little bit.
 
     # Type
@@ -753,11 +780,26 @@ rec {
     # Inputs
 
     `extendMkDerivation`-specific configurations
-    : `constructDrv`: Base build helper, the `mkDerivation`-like build helper to extend.
-    : `excludeDrvArgNames`: Argument names not to pass from the input fixed-point arguments to `constructDrv`. Note: It doesn't apply to the updating arguments returned by `extendDrvArgs`.
-    : `extendDrvArgs` : An extension (overlay) of the argument set, like the one taken by [overrideAttrs](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
-    : `inheritFunctionArgs`: Whether to inherit `__functionArgs` from the base build helper (default to `true`).
-    : `transformDrv`: Function to apply to the result derivation (default to `lib.id`).
+    : `constructDrv` (required)
+      : Base build helper, the `mkDerivation`-like build helper to extend.
+
+      `excludeDrvArgNames` (default to `[ ]`)
+      : Argument names not to pass from the input fixed-point arguments to `constructDrv`.
+        It doesn't apply to the updating arguments returned by `extendDrvArgs`.
+
+      `excludeFunctionArgNames` (default to `[ ]`)
+      : `__functionArgs` attribute names to remove from the result build helper.
+        `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
+
+      `extendDrvArgs` (required)
+      : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+
+      `inheritFunctionArgs` (default to `true`)
+      : Whether to inherit `__functionArgs` from the base build helper.
+        Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
+
+      `transformDrv` (default to `lib.id`)
+      : Function to apply to the result derivation.
 
     # Type
 
@@ -766,6 +808,7 @@ rec {
       {
         constructDrv :: ((FixedPointArgs | AttrSet) -> a)
         excludeDrvArgNames :: [ String ],
+        excludeFunctionArgNames :: [ String ]
         extendDrvArgs :: (AttrSet -> AttrSet -> AttrSet)
         inheritFunctionArgs :: Bool,
         transformDrv :: a -> a,
@@ -826,6 +869,7 @@ rec {
     {
       constructDrv,
       excludeDrvArgNames ? [ ],
+      excludeFunctionArgNames ? [ ],
       extendDrvArgs,
       inheritFunctionArgs ? true,
       transformDrv ? id,
@@ -840,10 +884,12 @@ rec {
       )
       # Add __functionArgs
       (
-        # Inherit the __functionArgs from the base build helper
-        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
-        # Recover the __functionArgs from the derived build helper
-        // functionArgs (extendDrvArgs { })
+        removeAttrs (
+          # Inherit the __functionArgs from the base build helper
+          optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+          # Recover the __functionArgs from the derived build helper
+          // functionArgs (extendDrvArgs { })
+        ) excludeFunctionArgNames
       )
     // {
       inherit
@@ -853,5 +899,140 @@ rec {
         extendDrvArgs
         transformDrv
         ;
+    };
+
+  /**
+    Removes a prefix from the attribute names of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
+
+    # Inputs
+
+    `prefix`
+    : The prefix to remove from cross index attribute names
+
+    `crossIndex`
+    : A cross index with prefixed names
+
+    # Type
+
+    ```
+    renameCrossIndexFrom :: String -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.renameCrossIndexFrom` usage example
+
+    ```nix
+    renameCrossIndexFrom "pkgs" { pkgsBuildBuild = ...; pkgsBuildHost = ...; ... }
+    => { buildBuild = ...; buildHost = ...; ... }
+    ```
+    :::
+  */
+  renameCrossIndexFrom = prefix: x: {
+    buildBuild = x."${prefix}BuildBuild";
+    buildHost = x."${prefix}BuildHost";
+    buildTarget = x."${prefix}BuildTarget";
+    hostHost = x."${prefix}HostHost";
+    hostTarget = x."${prefix}HostTarget";
+    targetTarget = x."${prefix}TargetTarget";
+  };
+
+  /**
+    Adds a prefix to the attribute names of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
+
+    # Inputs
+
+    `prefix`
+    : The prefix to add to cross index attribute names
+
+    `crossIndex`
+    : A cross index to be prefixed
+
+    # Type
+
+    ```
+    renameCrossIndexTo :: String -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.renameCrossIndexTo` usage example
+
+    ```nix
+    renameCrossIndexTo "self" { buildBuild = ...; buildHost = ...; ... }
+    => { selfBuildBuild = ...; selfBuildHost = ...; ... }
+    ```
+    :::
+  */
+  renameCrossIndexTo = prefix: x: {
+    "${prefix}BuildBuild" = x.buildBuild;
+    "${prefix}BuildHost" = x.buildHost;
+    "${prefix}BuildTarget" = x.buildTarget;
+    "${prefix}HostHost" = x.hostHost;
+    "${prefix}HostTarget" = x.hostTarget;
+    "${prefix}TargetTarget" = x.targetTarget;
+  };
+
+  /**
+    Takes a function and applies it pointwise to each field of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
+
+    # Inputs
+
+    `f`
+    : Function to apply to each cross index value
+
+    `crossIndex`
+    : A cross index to transform
+
+    # Type
+
+    ```
+    mapCrossIndex :: (a -> b) -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.mapCrossIndex` usage example
+
+    ```nix
+    mapCrossIndex (x: x * 10) { buildBuild = 1; buildHost = 2; ... }
+    => { buildBuild = 10; buildHost = 20; ... }
+    ```
+
+    ```nix
+    # Extract a package from package sets
+    mapCrossIndex (pkgs: pkgs.hello) crossIndexedPackageSets
+    ```
+    :::
+  */
+  mapCrossIndex =
+    f:
+    {
+      buildBuild,
+      buildHost,
+      buildTarget,
+      hostHost,
+      hostTarget,
+      targetTarget,
+    }:
+    {
+      buildBuild = f buildBuild;
+      buildHost = f buildHost;
+      buildTarget = f buildTarget;
+      hostHost = f hostHost;
+      hostTarget = f hostTarget;
+      targetTarget = f targetTarget;
     };
 }

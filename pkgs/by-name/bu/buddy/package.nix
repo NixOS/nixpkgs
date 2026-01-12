@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/buddy/";
     description = "Binary decision diagram package";
-    license = "as-is";
+    license = {
+      url = "https://sourceforge.net/p/buddy/gitcode/ci/master/tree/README";
+      fullName = "Buddy License";
+    };
 
     platforms = lib.platforms.unix; # Once had cygwin problems
   };

@@ -7,13 +7,13 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxawesome-theme";
   version = "5.3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinxawesome_theme";
     hash = "sha256-BinTi4Cu/CebEYbFOnpvryHnIbWy7NoU9IjKEHTiYx8=";
   };
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

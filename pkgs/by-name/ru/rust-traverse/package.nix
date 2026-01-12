@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OcCWmBNDo4AA5Pk5TQqb8hen9LlHaY09Wrm4BkrU7qA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UGPXV55+0w6QFYxfmmimSX/dleCdtEahveNi8DgSVzQ=";
 
   nativeBuildInputs = [
@@ -34,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based file explorer";
     homepage = "https://github.com/dmcg310/Rust-Traverse";
     changelog = "https://github.com/dmcg310/Rust-Traverse/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "rt";
   };
 }

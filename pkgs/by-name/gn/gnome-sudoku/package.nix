@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "48.1";
+  version = "49.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/gnome-sudoku-${version}.tar.xz";
-    hash = "sha256-eXE62CpZkEzWlv8CJV627ZNk6I8+eDNDsfnQygnyx+M=";
+    hash = "sha256-ybVGyN/pcWHfXVD1U4GCp0FTYmy8NoBbB4FSjvM7xZU=";
   };
 
   nativeBuildInputs = [
@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-sudoku"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-sudoku";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-sudoku/-/blob/${version}/NEWS?ref_type=tags";
     description = "Test your logic skills in this number grid puzzle";
     mainProgram = "gnome-sudoku";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

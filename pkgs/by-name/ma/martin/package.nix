@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -54,13 +53,15 @@ rustPlatform.buildRustPackage rec {
     "--skip tables_multiple_geom_ok"
   ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

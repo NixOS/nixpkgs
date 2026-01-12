@@ -1,127 +1,168 @@
-# NOTE: Though NCCL is called within the cudaPackages package set, we avoid passing in
-# the names of dependencies from that package set directly to avoid evaluation errors
-# in the case redistributable packages are not available.
 {
-  lib,
+  _cuda,
+  backendStdenv,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cudaAtLeast,
+  cudaNamePrefix,
   fetchFromGitHub,
+  flags,
+  lib,
   python3,
+  removeReferencesTo,
   which,
-  autoAddDriverRunpath,
-  cudaPackages,
   # passthru.updateScript
   gitUpdater,
 }:
 let
-  inherit (cudaPackages)
-    backendStdenv
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cudaAtLeast
-    cudaOlder
-    cudatoolkit
-    flags
+  inherit (_cuda.lib) _mkMetaBadPlatforms;
+  inherit (backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
+  inherit (lib)
+    all
+    flip
+    getAttr
+    getBin
+    getInclude
+    getLib
+    licenses
+    maintainers
+    optionalString
+    teams
+    versionAtLeast
+    versionOlder
     ;
-  # versions 2.26+ with CUDA 11.x error with
-  # fatal error: cuda/atomic: No such file or directory
-  version = if cudaAtLeast "12.0" then "2.26.2-1" else "2.25.1-1";
-  hash =
-    if cudaAtLeast "12.0" then
-      "sha256-iLEuru3gaNLcAdH4V8VIv3gjdTGjgb2/Mr5UKOh69N4="
-    else
-      "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
+  name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl";
-  version = version;
+
+  # NOTE:
+  #   Compilation errors resulting from newer versions of NCCL on older releases of CUDA seem to be caused (mostly)
+  #   by differences in assumed version of CCCL: using a newer CCCL with an older release of CUDA can (sometimes) allow
+  #   newer versions of NCCL than what we provide here.
+  version =
+    if cudaAtLeast "11.7" then
+      "2.28.7-1"
+    else if cudaAtLeast "11.6" then
+      "2.26.6-1"
+    else
+      "2.25.1-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
-    rev = "v${finalAttrs.version}";
-    hash = hash;
+    tag = "v${finalAttrs.version}";
+    hash = getAttr finalAttrs.version {
+      "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
+      "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
+      "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
+    };
   };
-
-  __structuredAttrs = true;
-  strictDeps = true;
 
   outputs = [
     "out"
     "dev"
+    "static"
   ];
 
-  nativeBuildInputs =
-    [
-      which
-      autoAddDriverRunpath
-      python3
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    cuda_nvcc
+    python3
+    removeReferencesTo
+    which
+  ];
 
-  buildInputs =
-    lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      cuda_nvcc # crt/host_config.h
-      cuda_cudart
-    ]
-    # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons
-    # against other version, like below, it's important that we use the same format. Otherwise,
-    # we'll get incorrect results.
-    # For example, lib.versionAtLeast "12.0" "12.0.0" == false.
-    ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
+  buildInputs = [
+    (getInclude cuda_nvcc)
+    cuda_cccl
+    cuda_cudart
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
-  postPatch =
-    ''
-      patchShebangs ./src/device/generate.py
-    ''
-    # CUDA 12.8 uses GCC 14 and we need to bump C++ standard to C++14
-    # in order to work with new constexpr handling
-    + lib.optionalString (cudaAtLeast "12.8") ''
-      substituteInPlace ./makefiles/common.mk \
-        --replace-fail "-std=c++11" "-std=c++14"
-    '';
+  postPatch = ''
+    patchShebangs ./src/device/generate.py
+    patchShebangs ./src/device/symmetric/generate.py
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "NVCC_GENCODE=${flags.gencodeString}"
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [
-      "CUDA_HOME=${cudatoolkit}"
-      "CUDA_LIB=${lib.getLib cudatoolkit}/lib"
-      "CUDA_INC=${lib.getDev cudatoolkit}/include"
-    ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      "CUDA_HOME=${cuda_nvcc}"
-      "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
-      "CUDA_INC=${lib.getDev cuda_cudart}/include"
-    ];
+    nixLog "patching $PWD/makefiles/common.mk to remove NVIDIA's ccbin declaration"
+    substituteInPlace ./makefiles/common.mk \
+      --replace-fail \
+        '-ccbin $(CXX)' \
+        ""
+  ''
+  # 2.27.3-1 was the first to introuce CXXSTD
+  + optionalString (versionOlder finalAttrs.version "2.27.3-1") ''
+    nixLog "patching $PWD/makefiles/common.mk to remove NVIDIA's std hardcoding"
+    substituteInPlace ./makefiles/common.mk \
+      --replace-fail \
+        '-std=c++11' \
+        '$(CXXSTD)'
+  '';
+
+  # TODO: This would likely break under cross; need to delineate between build and host packages.
+  makeFlags = [
+    "CXXSTD=-std=c++17"
+    "CUDA_HOME=${getBin cuda_nvcc}"
+    "CUDA_INC=${getInclude cuda_cudart}/include"
+    "CUDA_LIB=${getLib cuda_cudart}/lib"
+    "NVCC_GENCODE=${flags.gencodeString}"
+    "PREFIX=$(out)"
+  ];
 
   enableParallelBuilding = true;
 
   postFixup = ''
-    moveToOutput lib/libnccl_static.a $dev
+    _overrideFirst outputStatic "static" "lib" "out"
+    moveToOutput lib/libnccl_static.a "''${!outputStatic:?}"
+  ''
+  # Since CUDA 12.8, the cuda_nvcc path leaks in:
+  # - libnccl.so's .nv_fatbin section
+  # - libnccl_static.a
+  # &devrt -L /nix/store/00000000000000000000000000000000-...nvcc-.../bin/...
+  # This string makes cuda_nvcc a runtime dependency of nccl.
+  # See https://github.com/NixOS/nixpkgs/pull/457803
+  + ''
+    remove-references-to -t "${lib.getBin cuda_nvcc}" \
+      ''${!outputLib}/lib/libnccl.so.* \
+      ''${!outputStatic}/lib/*.a
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit (finalAttrs) pname version;
-    rev-prefix = "v";
+  # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed
+  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
+
+  passthru = {
+    platformAssertions = [
+      {
+        message = "Pre-Thor Jetson devices (CUDA capabilities < 10.1) are not supported by NCCL";
+        assertion =
+          !hasJetsonCudaCapability || all (flip versionAtLeast "10.1") requestedJetsonCudaCapabilities;
+      }
+    ];
+
+    updateScript = gitUpdater {
+      inherit (finalAttrs) pname version;
+      rev-prefix = "v";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    # NCCL is not supported on Pre-Thor Jetsons, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
-    badPlatforms = lib.optionals flags.isJetsonBuild [ "aarch64-linux" ];
+    badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter
-      orivej
     ];
     teams = [ teams.cuda ];
   };

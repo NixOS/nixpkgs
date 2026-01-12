@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pymysql-sa";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -21,9 +22,9 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PyMySQL dialect for SQL Alchemy";
     homepage = "https://pypi.python.org/pypi/pymysql_sa";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

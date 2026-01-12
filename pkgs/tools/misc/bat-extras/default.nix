@@ -1,4 +1,3 @@
-{ }:
 self: {
   buildBatExtrasPkg = self.callPackage ./buildBatExtrasPkg.nix { };
 

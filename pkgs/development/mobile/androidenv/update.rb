@@ -2,6 +2,7 @@
 #!nix-shell -i ruby -p "ruby.withPackages (ps: with ps; [ slop curb nokogiri ])"
 
 require 'json'
+require 'digest'
 require 'rubygems'
 require 'shellwords'
 require 'erb'
@@ -560,11 +561,15 @@ fixup_result = fixup(result)
 # Regular installation of Android SDK would keep the previously installed packages even if they are not
 # in the uptodate XML files, so here we try to support this logic by keeping un-available packages,
 # therefore the old packages will work as long as the links are working on the Google servers.
-output = merge input, fixup_result
+output = sort_recursively(merge(input, fixup_result))
+
+# Fingerprint the latest versions.
+fingerprint = Digest::SHA256.hexdigest(output['latest'].tap {_1.delete 'fingerprint'}.to_json)[0...16]
+output['latest']['fingerprint'] = fingerprint
 
 # Write the repository. Append a \n to keep nixpkgs Github Actions happy.
 STDERR.puts "Writing #{opts[:output]}"
-File.write opts[:output], (JSON.pretty_generate(sort_recursively(output)) + "\n")
+File.write opts[:output], (JSON.pretty_generate(output) + "\n")
 
 # Output metadata for the nixpkgs update script.
 if ENV['UPDATE_NIX_ATTR_PATH']
@@ -578,7 +583,7 @@ if ENV['UPDATE_NIX_ATTR_PATH']
 
   cur_latest.each do |k, v|
     prev = prev_latest[k]
-    if prev && prev != v
+    if k != 'fingerprint' && prev && prev != v
       old_versions << "#{k}:#{prev}"
       new_versions << "#{k}:#{v}"
       changes << "#{k}: #{prev} -> #{v}"

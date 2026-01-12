@@ -12,14 +12,14 @@
 let
   textx = buildPythonPackage rec {
     pname = "textx";
-    version = "4.0.1";
+    version = "4.3.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
-      rev = version;
-      hash = "sha256-qiKOG6B7yWWzkL7bmcRAVv6AOHKTWmrlrsJlXD5RoaQ=";
+      tag = version;
+      hash = "sha256-2sRMMbWJN9H34zD++9T499Y4+wv5ZSSkN6xevH2fuVs=";
     };
 
     outputs = [
@@ -57,12 +57,13 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
+      changelog = "https://github.com/textX/textX/blob/${src.tag}/CHANGELOG.md";
       description = "Domain-specific languages and parsers in Python";
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ yuu ];
+      license = lib.licenses.mit;
+      maintainers = [ ];
     };
   };
 
@@ -82,10 +83,10 @@ let
       textx-types-dsl
     ];
 
-    meta = with lib; {
+    meta = {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -105,10 +106,10 @@ let
       click
     ];
 
-    meta = with lib; {
+    meta = {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -125,10 +126,10 @@ let
     build-system = [ flit-core ];
     dependencies = [ textx ];
 
-    meta = with lib; {
+    meta = {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -145,10 +146,10 @@ let
     build-system = [ flit-core ];
     dependencies = [ textx ];
 
-    meta = with lib; {
+    meta = {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -165,10 +166,10 @@ let
     build-system = [ flit-core ];
     dependencies = [ textx ];
 
-    meta = with lib; {
+    meta = {
       inherit (textx.meta) license maintainers;
       description = "Sample textX sub-command for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 in

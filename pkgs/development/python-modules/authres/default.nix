@@ -20,7 +20,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m authres
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Email Authentication-Results Headers generation and parsing for Python/Python3";
     longDescription = ''
       Python module that implements various internet RFC's: 5451/7001/7601
@@ -28,7 +28,6 @@ buildPythonPackage rec {
       Python/Python3.
     '';
     homepage = "https://launchpad.net/authentication-results-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.bsd3;
   };
 }

@@ -44,7 +44,8 @@ stdenv.mkDerivation {
 
   prePatch = ''
     substituteInPlace etc/Makefile.am \
-      --replace-fail 02770 0770
+      --replace-fail 02770 0770 \
+      --replace-fail '../../../$(pkglibdir)' '$(pkglibdir)'
   '';
 
   postPatch = ''

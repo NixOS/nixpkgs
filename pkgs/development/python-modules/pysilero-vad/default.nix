@@ -7,46 +7,43 @@
   # build-system
   setuptools,
 
-  # dependencies
-  numpy,
-  onnxruntime,
-
   # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysilero-vad";
-  version = "2.1.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${version}";
-    hash = "sha256-h49AD3ICh0NYyh2EDogynQ0qgkKCAQTVKS9rbXbrqPE=";
+    hash = "sha256-DZjinW4jXsygJSUq3iNt82mbnVj7DN8hUxUDe1NkpHM=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "numpy" ];
-
-  dependencies = [
-    numpy
-    onnxruntime
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pysilero_vad" ];
 
-  meta = with lib; {
-    # what():  /build/source/include/onnxruntime/core/common/logging/logging.h:294 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
+  # aarch64-linux onnxruntime tries to get cpu information from /sys, which isn't available
+  # inside the nix build sandbox.
+  #doCheck = stdenv.buildPlatform.system != "aarch64-linux";
+  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+
+  preCheck = ''
+    # don't shadow the build result during tests
+    rm -rf pysilero_vad
+  '';
+
+  meta = {
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

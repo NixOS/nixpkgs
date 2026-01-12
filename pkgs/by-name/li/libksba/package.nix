@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libgpg-error ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ];
 
   postInstall = ''
@@ -34,12 +36,12 @@ stdenv.mkDerivation rec {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
     mainProgram = "ksba-config";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
   };
 }

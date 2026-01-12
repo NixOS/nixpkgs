@@ -13,7 +13,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sphinx-rtd-theme,
   sphinxHook,
   uart-devices,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.21.4";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     tag = "v${version}";
-    hash = "sha256-JUh4v9YeqMeecJh/eTpmLMwNsxbc/oqZY2CrEJUO418=";
+    hash = "sha256-M9Me+fTaw//wGVd9Ss9iYB7RMgfkxJZz2lT60lHe3Vg=";
   };
 
   outputs = [
@@ -40,8 +37,11 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    myst-parser
     poetry-core
+  ];
+
+  nativeBuildInputs = [
+    myst-parser
     sphinx-rtd-theme
     sphinxHook
   ];
@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bluetooth_adapters" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to enumerate and find Bluetooth Adapters";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-adapters";
-    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-adapters/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

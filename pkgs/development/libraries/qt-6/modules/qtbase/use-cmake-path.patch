@@ -1,0 +1,60 @@
+diff --git a/cmake/QtConfig.cmake.in b/cmake/QtConfig.cmake.in
+index 93f47570706..b00d398d671 100644
+--- a/cmake/QtConfig.cmake.in
++++ b/cmake/QtConfig.cmake.in
+@@ -190,7 +190,6 @@ foreach(module ${__qt_umbrella_find_components})
+                 ${_qt_additional_packages_prefix_paths}
+                 ${__qt_find_package_host_qt_path}
+                 ${_qt_additional_host_packages_prefix_paths}
+-            ${__qt_use_no_default_path_for_qt_packages}
+         )
+     endif()
+ 
+diff --git a/cmake/QtFindWrapHelper.cmake b/cmake/QtFindWrapHelper.cmake
+index c43824b8234..7ef65eb0f36 100644
+--- a/cmake/QtFindWrapHelper.cmake
++++ b/cmake/QtFindWrapHelper.cmake
+@@ -79,7 +79,6 @@ macro(qt_find_package_system_or_bundled _unique_prefix)
+                     "${CMAKE_CURRENT_LIST_DIR}/.."
+                     ${_qt_cmake_dir}
+                     ${_qt_additional_packages_prefix_paths}
+-                ${${_unique_prefix}_qt_use_no_default_path_for_qt_packages}
+             )
+         else()
+             # For the non-bundled case we will look for FindWrapSystemFoo.cmake module files,
+diff --git a/cmake/QtModuleConfig.cmake.in b/cmake/QtModuleConfig.cmake.in
+index e3af0299c57..2bbc06ddec3 100644
+--- a/cmake/QtModuleConfig.cmake.in
++++ b/cmake/QtModuleConfig.cmake.in
+@@ -59,7 +59,6 @@ if (@INSTALL_CMAKE_NAMESPACE@@target@_FOUND
+             "${CMAKE_CURRENT_LIST_DIR}/.."
+             "${_qt_cmake_dir}"
+             ${_qt_additional_packages_prefix_paths}
+-        ${__qt_use_no_default_path_for_qt_packages}
+     )
+ 
+     if(NOT @INSTALL_CMAKE_NAMESPACE@@target_private@_FOUND)
+diff --git a/cmake/QtModuleDependencies.cmake.in b/cmake/QtModuleDependencies.cmake.in
+index 78ada0a7425..74659943a83 100644
+--- a/cmake/QtModuleDependencies.cmake.in
++++ b/cmake/QtModuleDependencies.cmake.in
+@@ -23,7 +23,6 @@ if(NOT @INSTALL_CMAKE_NAMESPACE@_FOUND)
+             "${CMAKE_CURRENT_LIST_DIR}/.."
+             "${_qt_cmake_dir}"
+             ${_qt_additional_packages_prefix_paths}
+-        ${__qt_use_no_default_path_for_qt_packages}
+     )
+ endif()
+ 
+diff --git a/cmake/QtPublicDependencyHelpers.cmake b/cmake/QtPublicDependencyHelpers.cmake
+index b4a0342ad87..a7de8750485 100644
+--- a/cmake/QtPublicDependencyHelpers.cmake
++++ b/cmake/QtPublicDependencyHelpers.cmake
+@@ -144,7 +144,6 @@ macro(_qt_internal_find_qt_dependencies target target_dep_list find_dependency_p
+                     ${QT_BUILD_CMAKE_PREFIX_PATH}
+                     ${${find_dependency_path_list}}
+                     ${_qt_additional_packages_prefix_paths}
+-                ${__qt_use_no_default_path_for_qt_packages}
+             )
+             if(NOT ${__qt_${target}_pkg}_FOUND)
+                 list(APPEND __qt_${target}_missing_deps "${__qt_${target}_pkg}")

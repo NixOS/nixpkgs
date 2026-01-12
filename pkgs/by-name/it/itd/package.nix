@@ -32,12 +32,12 @@ buildGoModule rec {
     install -Dm644 itd.toml $out/etc/itd.toml
   '';
 
-  meta = with lib; {
-    description = "itd is a daemon to interact with the PineTime running InfiniTime";
+  meta = {
+    description = "Daemon to interact with the PineTime running InfiniTime";
     homepage = "https://gitea.elara.ws/Elara6331/itd";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mindavi
       raphaelr
     ];

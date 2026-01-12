@@ -4,7 +4,6 @@
   fetchPypi,
   jellyfish,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

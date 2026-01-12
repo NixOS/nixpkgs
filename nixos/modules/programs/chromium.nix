@@ -27,7 +27,7 @@ in
       enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
       plasmaBrowserIntegrationPackage = lib.mkPackageOption pkgs [
-        "plasma5Packages"
+        "kdePackages"
         "plasma-browser-integration"
       ] { };
 

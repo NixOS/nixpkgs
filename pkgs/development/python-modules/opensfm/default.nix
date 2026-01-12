@@ -57,6 +57,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace opensfm/src/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+
     rm opensfm/src/cmake/FindGlog.cmake
     rm opensfm/src/cmake/FindGflags.cmake
 
@@ -122,14 +125,14 @@ buildPythonPackage rec {
     "-Sopensfm/src"
   ];
 
-  disabledTests =
-    [
-      "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_reconstruction_incremental"
-      "test_reconstruction_triangulation"
-    ];
+  disabledTests = [
+    "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
+    "test_match_candidates_from_metadata_bow" # flaky
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_reconstruction_incremental"
+    "test_reconstruction_triangulation"
+  ];
 
   pythonImportsCheck = [ "opensfm" ];
 

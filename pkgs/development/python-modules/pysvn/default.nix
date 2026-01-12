@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchurl,
   python,
-  pythonAtLeast,
   apr,
   aprutil,
   bash,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   version = "1.9.23";
   pyproject = false;
 
-  disabled = pythonAtLeast "3.13";
-
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
     hash = "sha256-ABru1nng1RaYfZwe0Z0NxE90rU/J2h/BhzUnvgrasCk=";
@@ -31,7 +28,8 @@ buildPythonPackage rec {
     subversion
     apr
     aprutil
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
@@ -70,11 +68,11 @@ buildPythonPackage rec {
     rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Subversion";
     homepage = "https://pysvn.sourceforge.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
     # g++: command not found
     broken = stdenv.hostPlatform.isDarwin;
   };

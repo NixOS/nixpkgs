@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DHXUhAAOmPSt4aVp93I1y69of+MEboXJBZH50mzQTm8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6x/IPFncfOPxautW7gVUh5LG0hK4h6T4QL7B82Moi6o=";
 
   checkFlags = [
@@ -31,13 +30,13 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = pgcat; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/postgresml/pgcat";
     description = "PostgreSQL pooler with sharding, load balancing and failover support";
     changelog = "https://github.com/postgresml/pgcat/releases";
-    license = with licenses; [ mit ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cathalmullan ];
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ cathalmullan ];
     mainProgram = "pgcat";
   };
 }

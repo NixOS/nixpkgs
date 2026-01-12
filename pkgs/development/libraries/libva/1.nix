@@ -40,17 +40,18 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [ libdrm ]
-    ++ lib.optionals (!minimal) [
-      libva1-minimal
-      libX11
-      libXext
-      libXfixes
-      wayland
-      libffi
-      libGL
-    ];
+  buildInputs = [
+    libdrm
+  ]
+  ++ lib.optionals (!minimal) [
+    libva1-minimal
+    libX11
+    libXext
+    libXfixes
+    wayland
+    libffi
+    libGL
+  ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   # Add FHS paths for non-NixOS applications.
@@ -62,11 +63,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/vaapi/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "VAAPI library: Video Acceleration API";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

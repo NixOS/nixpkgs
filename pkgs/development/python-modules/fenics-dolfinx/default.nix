@@ -16,6 +16,7 @@
 
   # buildInputs
   dolfinx,
+  darwinMinVersionHook,
 
   # dependency
   numpy,
@@ -32,7 +33,6 @@
   # nativeCheckInputs
   scipy,
   matplotlib,
-  pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   mpiCheckPhaseHook,
@@ -55,7 +55,7 @@ let
     }
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (dolfinx)
     version
     src
@@ -64,7 +64,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   pythonRelaxDeps = [
-    "cffi"
     "fenics-ufl"
   ];
 
@@ -88,7 +87,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     fenicsPackages.dolfinx
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
 
   dependencies = [
     numpy
@@ -103,50 +103,40 @@ buildPythonPackage rec {
     (mpi4py.override { inherit (fenicsPackages) mpi; })
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     scipy
     matplotlib
-    pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
     mpiCheckPhaseHook
   ];
 
   preCheck = ''
-    rm -rf dolfinx
+    cd test
   '';
 
   pythonImportsCheck = [
     "dolfinx"
   ];
 
-  disabledTests = [
-    # require cffi<1.17
-    "test_cffi_expression"
-    "test_hexahedron_mesh"
-  ];
-
   passthru = {
-    tests =
-      {
-        complex = fenics-dolfinx.override {
-          petsc4py = petsc4py.override { scalarType = "complex"; };
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        mpich = fenics-dolfinx.override {
-          petsc4py = petsc4py.override { mpi = mpich; };
-        };
+    tests = {
+      complex = fenics-dolfinx.override {
+        petsc4py = petsc4py.override { scalarType = "complex"; };
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      mpich = fenics-dolfinx.override {
+        petsc4py = petsc4py.override { mpi = mpich; };
+      };
+    };
   };
 
   meta = {
     homepage = "https://fenicsproject.org";
     downloadPage = "https://github.com/fenics/dolfinx";
     description = "Computational environment of FEniCSx and implements the FEniCS Problem Solving Environment in C++ and Python";
-    changelog = "https://github.com/fenics/dolfinx/releases/tag/${src.tag}";
+    changelog = "https://github.com/fenics/dolfinx/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       bsd2
       lgpl3Plus
@@ -154,4 +144,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

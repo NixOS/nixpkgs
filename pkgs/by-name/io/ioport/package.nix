@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "Direct access to I/O ports from the command line";
     homepage = "https://people.redhat.com/rjones/ioport/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.cleverca22 ];
+    maintainers = [ lib.maintainers.cleverca22 ];
   };
 }

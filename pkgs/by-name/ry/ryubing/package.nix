@@ -26,24 +26,30 @@
   udev,
   SDL2,
   SDL2_mixer,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
   pname = "ryubing";
-  version = "1.2.86";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     domain = "git.ryujinx.app";
     owner = "Ryubing";
     repo = "Ryujinx";
     tag = version;
-    hash = "sha256-Goxg2+zaKaqbGv5q/ril4TBtfTbPEYEwQQ/M6NlEpus=";
+    hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin [
-    cctools
-    darwin.sigtool
-  ];
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      cctools
+      darwin.sigtool
+    ];
 
   enableParallelBuilding = false;
 
@@ -52,35 +58,35 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  runtimeDeps =
-    [
-      libX11
-      libgdiplus
-      SDL2_mixer
-      openal
-      libsoundio
-      sndio
-      vulkan-loader
-      ffmpeg
+  runtimeDeps = [
+    libX11
+    libgdiplus
+    SDL2_mixer
+    openal
+    libsoundio
+    sndio
+    vulkan-loader
+    ffmpeg
 
-      # Avalonia UI
-      glew
-      libICE
-      libSM
-      libXcursor
-      libXext
-      libXi
-      libXrandr
+    # Avalonia UI
+    glew
+    libICE
+    libSM
+    libXcursor
+    libXext
+    libXi
+    libXrandr
+    gtk3
 
-      # Headless executable
-      libGL
-      SDL2
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
-      udev
-      pulseaudio
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
+    # Headless executable
+    libGL
+    SDL2
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+    udev
+    pulseaudio
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
@@ -96,12 +102,12 @@ buildDotnetModule rec {
     "Ryujinx"
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = lib.optional stdenv.hostPlatform.isLinux [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
     "--set SDL_VIDEODRIVER x11"
   ];
 
-  preInstall = lib.optionalString stdenv.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
@@ -127,7 +133,7 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ryujinx.app";
     changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
@@ -139,8 +145,8 @@ buildDotnetModule rec {
       2017. The project has since been abandoned on October 1st 2024 and QoL
       updates are now managed under a fork.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       artemist
       willow

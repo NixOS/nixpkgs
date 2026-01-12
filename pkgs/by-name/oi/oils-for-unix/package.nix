@@ -16,13 +16,13 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oils-for-unix";
-  version = "0.29.0";
+  version = "0.37.0";
 
   src = fetchurl {
-    url = "https://oils.pub/download/oils-for-unix-${version}.tar.gz";
-    hash = "sha256-NP21Px29K4dC73TNOkbYer/NoY0NZF8pdixP3bmis6w=";
+    url = "https://oils.pub/download/oils-for-unix-${finalAttrs.version}.tar.gz";
+    hash = "sha256-9NQdIKBSPbz71LojH4Lt8lsI1JZdZbxx/LVmZtZ0MAA=";
   };
 
   postPatch = ''
@@ -55,18 +55,21 @@ stdenv.mkDerivation rec {
   # whereas running it outside of Nix with clang version 15.0.0 generates just a warning. The shell seems to
   # work just fine though, so we disable the error here.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
-  configureFlags =
-    [
-      "--datarootdir=${placeholder "out"}"
-    ]
-    ++ lib.optionals withReadline [
-      "--with-readline"
-      "--readline=${readline-all}"
-    ];
+  configureFlags = [
+    "--datarootdir=${placeholder "out"}"
+  ]
+  ++ lib.optionals withReadline [
+    "--with-readline"
+    "--readline=${readline-all}"
+  ];
 
   meta = {
     description = "Unix shell with JSON-compatible structured data. It's our upgrade path from bash to a better language and runtime";
     homepage = "https://www.oils.pub/";
+    longDescription = ''
+      This package installs both `osh` and `ysh`. To use one as a login shell,
+      select one of `pkgs.oils-for-unix.osh`, `pkgs.oils-for-unix.ysh`.
+    '';
 
     license = lib.licenses.asl20;
 
@@ -75,10 +78,24 @@ stdenv.mkDerivation rec {
       mkg20001
       melkor333
     ];
-    changelog = "https://www.oils.pub/release/${version}/changelog.html";
+    changelog = "https://www.oils.pub/release/${finalAttrs.version}/changelog.html";
   };
 
-  passthru = {
-    shellPath = "/bin/osh";
-  };
-}
+  passthru =
+    let
+      mkShell =
+        shellName:
+        symlinkJoin {
+          name = "oils-for-unix-${shellName}-${finalAttrs.version}";
+          paths = [ finalAttrs.finalPackage ];
+          passthru.shellPath = "/bin/${shellName}";
+          meta = finalAttrs.meta // {
+            mainProgram = shellName;
+          };
+        };
+    in
+    {
+      osh = mkShell "osh";
+      ysh = mkShell "ysh";
+    };
+})

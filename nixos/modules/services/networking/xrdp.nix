@@ -25,17 +25,17 @@ let
     chmod +x $out/startwm.sh
 
     substituteInPlace $out/xrdp.ini \
-      --replace "#rsakeys_ini=" "rsakeys_ini=/run/xrdp/rsakeys.ini" \
-      --replace "certificate=" "certificate=${cfg.sslCert}" \
-      --replace "key_file=" "key_file=${cfg.sslKey}" \
-      --replace LogFile=xrdp.log LogFile=/dev/null \
-      --replace EnableSyslog=true EnableSyslog=false
+      --replace-fail "#rsakeys_ini=" "rsakeys_ini=/run/xrdp/rsakeys.ini" \
+      --replace-fail "certificate=" "certificate=${cfg.sslCert}" \
+      --replace-fail "key_file=" "key_file=${cfg.sslKey}" \
+      --replace-fail LogFile=xrdp.log LogFile=/dev/null \
+      --replace-fail EnableSyslog=true EnableSyslog=false
 
     substituteInPlace $out/sesman.ini \
-      --replace LogFile=xrdp-sesman.log LogFile=/dev/null \
-      --replace EnableSyslog=1 EnableSyslog=0 \
-      --replace startwm.sh $out/startwm.sh \
-      --replace reconnectwm.sh $out/reconnectwm.sh \
+      --replace-fail LogFile=xrdp-sesman.log LogFile=/dev/null \
+      --replace-fail EnableSyslog=true EnableSyslog=false \
+      --replace-fail startwm.sh $out/startwm.sh \
+      --replace-fail reconnectwm.sh $out/reconnectwm.sh \
 
     # Ensure that clipboard works for non-ASCII characters
     sed -i -e '/.*SessionVariables.*/ a\
@@ -127,8 +127,8 @@ in
         '';
         example = ''
           substituteInPlace $out/sesman.ini \
-            --replace LogLevel=INFO LogLevel=DEBUG \
-            --replace LogFile=/dev/null LogFile=/var/log/xrdp.log
+            --replace-fail LogLevel=INFO LogLevel=DEBUG \
+            --replace-fail LogFile=/dev/null LogFile=/var/log/xrdp.log
         '';
       };
     };

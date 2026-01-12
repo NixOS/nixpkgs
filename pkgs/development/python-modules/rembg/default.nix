@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "rembg";
-  version = "2.0.66";
+  version = "2.0.69";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${version}";
-    hash = "sha256-MTwi9Cy9JWcI0CgUKfnPiA3MFBl/Ie0rYQOm0jqgyS4=";
+    hash = "sha256-9Ncs1DHPG3ouU5yFyeH0M2ZCQ9yHqJhVjkDO8fNSqIg=";
   };
 
   build-system = [
@@ -59,7 +59,8 @@ buildPythonPackage rec {
     scikit-image
     scipy
     tqdm
-  ] ++ lib.optionals withCli optional-dependencies.cli;
+  ]
+  ++ lib.optionals withCli optional-dependencies.cli;
 
   optional-dependencies = {
     cli = [
@@ -83,7 +84,6 @@ buildPythonPackage rec {
 
   # not running python tests, as they require network access
   nativeCheckInputs = lib.optionals withCli [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "rembg" ];
 
@@ -94,6 +94,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";
-    platforms = [ "x86_64-linux" ];
   };
 }

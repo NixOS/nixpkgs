@@ -41,20 +41,20 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glibmm";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GLib library";
 
     homepage = "https://gtkmm.org/";
 
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

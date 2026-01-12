@@ -28,7 +28,7 @@
       description = ''
         List of nghttpx backend patterns.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more information on the pattern syntax and nghttpxs behavior.
       '';
     };

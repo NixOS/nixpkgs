@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   webcolors,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "flux-led";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
@@ -43,13 +40,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flux_led" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with the flux_led smart bulbs";
     homepage = "https://github.com/Danielhiversen/flux_led";
     changelog = "https://github.com/Danielhiversen/flux_led/releases/tag/${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "flux_led";
   };
 }

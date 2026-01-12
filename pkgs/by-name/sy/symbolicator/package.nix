@@ -10,18 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "25.4.0";
+  version = "25.10.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-TMQzrwPjQnLcIveJIwHMMbglagrtH6sNqGIbUD/Q8Xs=";
+    hash = "sha256-bXoLhQVOzCic/n6/YlmFEpvN1lBD9sFDKzwi7VxW8iM=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Q148QzBHNOty/icF8oarEOD3p8cjSMA/IdjJaE9ncn8=";
+  cargoHash = "sha256-r7HtHvizA/NoJI496db5ahQ/6Qwp+KwQRmYQ7S72cqQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,12 +42,12 @@ rustPlatform.buildRustPackage rec {
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Native Symbolication as a Service";
     homepage = "https://getsentry.github.io/symbolicator/";
     changelog = "https://github.com/getsentry/symbolicator/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "symbolicator";
   };
 }

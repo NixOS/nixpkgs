@@ -32,28 +32,26 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
   ];
-  buildInputs =
-    [
-      glib
-      gnutls
-      libbfd
-      libxml2
-      zlib
-    ]
-    ++ lib.optionals enableGui [
-      gtk2
-    ];
+  buildInputs = [
+    glib
+    gnutls
+    libbfd
+    libxml2
+    zlib
+  ]
+  ++ lib.optionals enableGui [
+    gtk2
+  ];
 
   configureScript = "./build.sh";
-  configureFlags =
-    [
-      "--configure-only"
-      # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
-      "--disable-malloc"
-    ]
-    ++ lib.optionals (!enableGui) [
-      "--topless"
-    ];
+  configureFlags = [
+    "--configure-only"
+    # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
+    "--disable-malloc"
+  ]
+  ++ lib.optionals (!enableGui) [
+    "--topless"
+  ];
 
   enableParallelBuilding = true;
 
@@ -61,13 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm0444 src/gtk-gnutella.man $out/share/man/man1/gtk-gnutella.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK Gnutella client, optimized for speed and scalability";
     mainProgram = "gtk-gnutella";
     homepage = "https://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
     changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${finalAttrs.version}/ChangeLog";
-    maintainers = [ maintainers.doronbehar ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

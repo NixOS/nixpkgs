@@ -31,10 +31,7 @@ let
 
     {
       name = "forgejo-${type}";
-      meta.maintainers = with lib.maintainers; [
-        bendlas
-        emilylange
-      ];
+      meta.maintainers = lib.teams.forgejo.members;
 
       nodes = {
         server =
@@ -175,7 +172,7 @@ let
               + "Please contact your site administrator.'"
           )
           server.succeed(
-              "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea admin user create "
+              "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo admin user create "
               + "--username test --password totallysafe --email test@localhost --must-change-password=false'"
           )
 
@@ -222,7 +219,7 @@ let
 
           with subtest("Testing runner registration and action workflow"):
               server.succeed(
-                  "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
+                  "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
               )
               server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
               server.wait_for_unit("gitea-runner-test.service")

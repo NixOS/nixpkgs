@@ -85,23 +85,25 @@ dedicated {file}`emacs.nix` file such as:
 
 ```nix
 /*
-This is a nix expression to build Emacs and some Emacs packages I like
-from source on any distribution where Nix is installed. This will install
-all the dependencies from the nixpkgs repository and build the binary files
-without interfering with the host distribution.
+  This is a nix expression to build Emacs and some Emacs packages I like
+  from source on any distribution where Nix is installed. This will install
+  all the dependencies from the nixpkgs repository and build the binary files
+  without interfering with the host distribution.
 
-To build the project, type the following from the current directory:
+  To build the project, type the following from the current directory:
 
-$ nix-build emacs.nix
+  $ nix-build emacs.nix
 
-To run the newly compiled executable:
+  To run the newly compiled executable:
 
-$ ./result/bin/emacs
+  $ ./result/bin/emacs
 */
 
 # The first non-comment line in this file indicates that
 # the whole file represents a function.
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 let
   # The let expression below defines a myEmacs binding pointing to the
@@ -113,29 +115,32 @@ let
   # argument: a function from a package set to a list of packages
   # (the packages that will be available in Emacs).
   emacsWithPackages = (pkgs.emacsPackagesFor myEmacs).emacsWithPackages;
-in
   # The rest of the file specifies the list of packages to install. In the
   # example, two packages (magit and zerodark-theme) are taken from
   # MELPA stable.
-  emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
-    magit          # ; Integrate git <C-x g>
+in
+emacsWithPackages (
+  epkgs:
+  (with epkgs.melpaStablePackages; [
+    magit # ; Integrate git <C-x g>
     zerodark-theme # ; Nicolas' theme
   ])
   # Two packages (undo-tree and zoom-frm) are taken from MELPA.
   ++ (with epkgs.melpaPackages; [
-    undo-tree      # ; <C-x u> to show the undo tree
-    zoom-frm       # ; increase/decrease font size for all buffers %lt;C-x C-+>
+    undo-tree # ; <C-x u> to show the undo tree
+    zoom-frm # ; increase/decrease font size for all buffers %lt;C-x C-+>
   ])
   # Three packages are taken from GNU ELPA.
   ++ (with epkgs.elpaPackages; [
-    auctex         # ; LaTeX mode
-    beacon         # ; highlight my cursor when scrolling
-    nameless       # ; hide current package name everywhere in elisp code
+    auctex # ; LaTeX mode
+    beacon # ; highlight my cursor when scrolling
+    nameless # ; hide current package name everywhere in elisp code
   ])
   # notmuch is taken from a nixpkgs derivation which contains an Emacs mode.
   ++ [
-    pkgs.notmuch   # From main packages set
-  ])
+    pkgs.notmuch # From main packages set
+  ]
+)
 ```
 :::
 
@@ -180,9 +185,9 @@ file {file}`configuration.nix` to make it contain:
 
 ```nix
 {
- environment.systemPackages = [
-   # [...]
-   (import ./emacs.nix { inherit pkgs; })
+  environment.systemPackages = [
+    # [...]
+    (import ./emacs.nix { inherit pkgs; })
   ];
 }
 ```
@@ -205,9 +210,14 @@ adding it to your {file}`~/.config/nixpkgs/config.nix` (see
 
 ```nix
 {
-  packageOverrides = super: let self = super.pkgs; in {
-    myemacs = import ./emacs.nix { pkgs = self; };
-  };
+  packageOverrides =
+    super:
+    let
+      self = super.pkgs;
+    in
+    {
+      myemacs = import ./emacs.nix { pkgs = self; };
+    };
 }
 ```
 :::
@@ -229,20 +239,27 @@ only use {command}`emacsclient`), you can change your file
 ### Custom Emacs build
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 let
-  myEmacs = (pkgs.emacs.override {
-    # Use gtk3 instead of the default gtk2
-    withGTK3 = true;
-    withGTK2 = false;
-  }).overrideAttrs (attrs: {
-    # I don't want emacs.desktop file because I only use
-    # emacsclient.
-    postInstall = (attrs.postInstall or "") + ''
-      rm $out/share/applications/emacs.desktop
-    '';
-  });
-in [ /* ... */ ]
+  myEmacs =
+    (pkgs.emacs.override {
+      # Use gtk3 instead of the default gtk2
+      withGTK3 = true;
+      withGTK2 = false;
+    }).overrideAttrs
+      (attrs: {
+        # I don't want emacs.desktop file because I only use
+        # emacsclient.
+        postInstall = (attrs.postInstall or "") + ''
+          rm $out/share/applications/emacs.desktop
+        '';
+      });
+in
+[
+  # ...
+]
 ```
 :::
 
@@ -263,9 +280,7 @@ with the user's login session.
 To install and enable the {command}`systemd` user service for Emacs
 daemon, add the following to your {file}`configuration.nix`:
 ```nix
-{
-  services.emacs.enable = true;
-}
+{ services.emacs.enable = true; }
 ```
 
 The {var}`services.emacs.package` option allows a custom

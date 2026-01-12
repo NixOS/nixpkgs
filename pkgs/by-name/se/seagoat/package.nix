@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "0.54.18";
+  version = "1.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-vRaC6YrqejtRs8NHoTj6DB0CAYMSygRMDOTaJyk1BZc=";
+    hash = "sha256-XXKLvm3sEYgfLojtYKI3i8o3HERdH4+FRSo28FBqONg=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
     "chromadb"
     "psutil"
     "setuptools"
+    "ollama"
   ];
 
   dependencies = with python3Packages; [
@@ -46,6 +47,7 @@ python3Packages.buildPythonApplication rec {
     ollama
     psutil
     pygments
+    python-dotenv
     requests
     stop-words
     waitress
@@ -66,7 +68,6 @@ python3Packages.buildPythonApplication rec {
       versionCheckHook
       writableTmpDirAsHomeHook
     ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = import ./failing_tests.nix;
 

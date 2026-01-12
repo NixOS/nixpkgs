@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LtZTfmVVUqxc9GAM6mLLmlJXBhLqnfrvBZWh0RWrR/0=";
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
@@ -25,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     "device"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wireguard network manager";
     longDescription = ''
       Wireguard network manager, written in rust, simplifies the setup of wireguard nodes,
@@ -34,14 +33,14 @@ rustPlatform.buildRustPackage rec {
       To achieve this, wireguard network manager needs to be running on each node.
     '';
     homepage = "https://github.com/gin66/wg_netmanager";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
       bsd3
       mpl20
     ];
-    maintainers = with maintainers; [ gin66 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ gin66 ];
+    platforms = lib.platforms.linux;
     mainProgram = "wg_netmanager";
   };
 }

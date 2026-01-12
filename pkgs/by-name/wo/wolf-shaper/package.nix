@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wolf-plugins";
     repo = "wolf-shaper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4oi1wnex6eNRHUWXZHnvrmqp4veFuPJqD0YuOhDepg4=";
     fetchSubmodules = true;
   };
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     cp -r bin/wolf-shaper        $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wolf-plugins.github.io/wolf-shaper/";
     description = "Waveshaper plugin with spline-based graph editor";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.magnetophon ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

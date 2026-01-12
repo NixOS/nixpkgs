@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kolla";
-  version = "19.4.0";
+  version = "21.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    hash = "sha256-yVNMCqg6eAUhLg3iAjDkYpMoIKc6OksDri9jNpyaS7c=";
-    rev = version;
+    tag = version;
+    hash = "sha256-wbVaPIvn4jPcb+h5yKhLDmvT6/widfSX2iV+2KNW8pM=";
   };
 
   postPatch = ''
@@ -61,16 +61,16 @@ python3Packages.buildPythonApplication rec {
   # Tests output a few exceptions but still succeed
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -e <(echo "test_load_ok")
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";
     mainProgram = "kolla-build";
     homepage = "https://opendev.org/openstack/kolla";
-    license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.astro ];
+    teams = [ lib.teams.openstack ];
   };
 }

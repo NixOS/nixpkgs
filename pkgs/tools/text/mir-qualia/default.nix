@@ -7,6 +7,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mir.qualia";
   version = "2.0.0";
+  format = "setuptools";
   doCheck = false; # 2.0.0-released pytests are broken
 
   buildInputs = with pythonPackages; [ pytest ];

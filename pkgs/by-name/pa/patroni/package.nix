@@ -10,13 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.5";
+  version = "4.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
     tag = "v${version}";
-    sha256 = "sha256-1Afwdv1kX8/zc9TB4kbA2NakXycJlf/wUcYAYKWwITM=";
+    sha256 = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
   };
 
   dependencies = with python3Packages; [
@@ -44,12 +45,11 @@ python3Packages.buildPythonApplication rec {
     flake8
     mock
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     requests
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 

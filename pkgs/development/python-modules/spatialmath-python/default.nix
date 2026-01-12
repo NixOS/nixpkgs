@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   oldest-supported-numpy,
   setuptools,
   ansitable,
@@ -16,15 +15,13 @@
 
 buildPythonPackage rec {
   pname = "spatialmath-python";
-  version = "1.1.14";
+  version = "1.1.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;
-    hash = "sha256-DI5+aSmAlOSbUSPPOrnMoSDBG+xp4zxURSGtZbsv5X4=";
+    hash = "sha256-yrcPLNN15hB4WMkB8TSNWU9QnV8sEh8EL9HNQrrXPd8=";
   };
 
   build-system = [
@@ -55,11 +52,11 @@ buildPythonPackage rec {
 
   env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "Agg";
 
-  meta = with lib; {
+  meta = {
     description = "Provides spatial maths capability for Python";
     homepage = "https://pypi.org/project/spatialmath-python/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       djacu
       a-camarillo
     ];

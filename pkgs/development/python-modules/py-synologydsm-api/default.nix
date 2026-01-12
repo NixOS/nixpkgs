@@ -7,22 +7,20 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "2.7.2";
+  version = "2.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-synologydsm-api";
     tag = "v${version}";
-    hash = "sha256-I9Ew3rBmgG+FuT66e8VgMa0WzAwr+ng5R8uYMzSyYyg=";
+    hash = "sha256-LaeqAY+8WfoMwrZhwZUEcuafGvv+7reuxEh8zQ7j5S4=";
   };
 
   build-system = [ setuptools ];
@@ -36,16 +34,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "synology_dsm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Synology DSM";
     mainProgram = "synologydsm-api";
     homepage = "https://github.com/mib1185/py-synologydsm-api";
     changelog = "https://github.com/mib1185/py-synologydsm-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
   };
 }

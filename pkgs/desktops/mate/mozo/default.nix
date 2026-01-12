@@ -9,7 +9,7 @@
   glib,
   wrapGAppsHook3,
   gobject-introspection,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/mozo-${version}.tar.xz";
     sha256 = "/piYT/1qqMNtBZS879ugPeObQtQeAHJRaAOE8870SSQ=";
   };
 
@@ -43,14 +43,18 @@ python3.pkgs.buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mozo";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "MATE Desktop menu editor";
     mainProgram = "mozo";
     homepage = "https://github.com/mate-desktop/mozo";
-    license = with licenses; [ lgpl2Plus ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = with lib.licenses; [ lgpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

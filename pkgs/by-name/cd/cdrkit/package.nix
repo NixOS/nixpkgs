@@ -12,15 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdrkit";
-  version = "1.1.11-3.5";
+  version = "1.1.11-4";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "cdrkit";
     rev = "debian/9%${finalAttrs.version}";
-    hash = "sha256-T7WhztbpVvGegF6rTHGTkEALq+mcAtTerzDQ3f6Cq78=";
+    hash = "sha256-oOqvSA2MAURf0YOrWM5Ft6Ln43gXw7SEvNxxRrDs8sI=";
   };
+
+  patches = [
+    ./cmake-4.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -30,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     bzip2
     perl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isMusl [
@@ -41,22 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  postPatch =
-    ''
-      QUILT_PATCHES=debian/patches quilt push -a
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace libusal/scsi-mac-iokit.c \
-        --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
-      substituteInPlace genisoimage/sha256.c \
-        --replace "<endian.h>" "<machine/endian.h>"
-      substituteInPlace genisoimage/sha512.c \
-        --replace "<endian.h>" "<machine/endian.h>"
-      substituteInPlace genisoimage/sha256.h \
-        --replace "__THROW" ""
-      substituteInPlace genisoimage/sha512.h \
-        --replace "__THROW" ""
-    '';
+  postPatch = ''
+    QUILT_PATCHES=debian/patches quilt push -a
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace libusal/scsi-mac-iokit.c \
+      --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
+    substituteInPlace genisoimage/sha256.c \
+      --replace "<endian.h>" "<machine/endian.h>"
+    substituteInPlace genisoimage/sha512.c \
+      --replace "<endian.h>" "<machine/endian.h>"
+    substituteInPlace genisoimage/sha256.h \
+      --replace "__THROW" ""
+    substituteInPlace genisoimage/sha512.h \
+      --replace "__THROW" ""
+  '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace include/xconfig.h.in \

@@ -10,11 +10,12 @@
   crccheck,
   cryptography,
   fetchFromGitHub,
+  filelock,
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio,
-  pytest-asyncio,
+  pyserial-asyncio-fast,
+  pytest-asyncio_0,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.79.0";
+  version = "0.90.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-4bvVn9Pv37zngsiwy54g+z05uej5Bfwpt3mC9cxF2hk=";
+    hash = "sha256-HTQ9azIXnNkNM+s7w0oerDf9+RcCO8DF9+kL9Uzevyk=";
   };
 
   postPatch = ''
@@ -51,31 +52,32 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio
+    pyserial-asyncio-fast
     typing-extensions
     voluptuous
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses
+    filelock
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-      "test_quirks_v2"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      "test_periodic_scan_priority"
-    ];
+  disabledTests = [
+    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+    "test_quirks_v2"
+  ];
 
   disabledTestPaths = [
     # Tests require network access
+    "tests/ota/test_ota_image.py"
     "tests/ota/test_ota_providers.py"
+    # All tests fail to shutdown thread during teardown
+    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [
@@ -86,12 +88,12 @@ buildPythonPackage rec {
     "zigpy.zcl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

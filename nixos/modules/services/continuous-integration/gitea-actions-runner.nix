@@ -126,7 +126,7 @@ in
           settings = mkOption {
             description = ''
               Configuration for `act_runner daemon`.
-              See https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml for an example configuration
+              See <https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml> for an example configuration
             '';
 
             type = types.submodule {
@@ -197,16 +197,15 @@ in
             inherit (instance) enable;
             description = "Gitea Actions Runner";
             wants = [ "network-online.target" ];
-            after =
-              [
-                "network-online.target"
-              ]
-              ++ optionals (wantsDocker) [
-                "docker.service"
-              ]
-              ++ optionals (wantsPodman) [
-                "podman.service"
-              ];
+            after = [
+              "network-online.target"
+            ]
+            ++ optionals wantsDocker [
+              "docker.service"
+            ]
+            ++ optionals wantsPodman [
+              "podman.service"
+            ];
             wantedBy = [
               "multi-user.target"
             ];
@@ -214,7 +213,7 @@ in
               optionalAttrs (instance.token != null) {
                 TOKEN = "${instance.token}";
               }
-              // optionalAttrs (wantsPodman) {
+              // optionalAttrs wantsPodman {
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }
               // {
@@ -226,58 +225,57 @@ in
                 coreutils
               ]
               ++ lib.optionals wantsHost instance.hostPackages;
-            serviceConfig =
-              {
-                DynamicUser = true;
-                User = "gitea-runner";
-                StateDirectory = "gitea-runner";
-                WorkingDirectory = "-/var/lib/gitea-runner/${name}";
+            serviceConfig = {
+              DynamicUser = true;
+              User = "gitea-runner";
+              StateDirectory = "gitea-runner";
+              WorkingDirectory = "-/var/lib/gitea-runner/${name}";
 
-                # gitea-runner might fail when gitea is restarted during upgrade.
-                Restart = "on-failure";
-                RestartSec = 2;
+              # gitea-runner might fail when gitea is restarted during upgrade.
+              Restart = "on-failure";
+              RestartSec = 2;
 
-                ExecStartPre = [
-                  (pkgs.writeShellScript "gitea-register-runner-${name}" ''
-                    export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
-                    mkdir -vp "$INSTANCE_DIR"
-                    cd "$INSTANCE_DIR"
+              ExecStartPre = [
+                (pkgs.writeShellScript "gitea-register-runner-${name}" ''
+                  export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
+                  mkdir -vp "$INSTANCE_DIR"
+                  cd "$INSTANCE_DIR"
 
-                    # force reregistration on changed labels
-                    export LABELS_FILE="$INSTANCE_DIR/.labels"
-                    export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
-                    export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
+                  # force reregistration on changed labels
+                  export LABELS_FILE="$INSTANCE_DIR/.labels"
+                  export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
+                  export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
-                    if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
-                      # remove existing registration file, so that changing the labels forces a re-registration
-                      rm -v "$INSTANCE_DIR/.runner" || true
+                  if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
+                    # remove existing registration file, so that changing the labels forces a re-registration
+                    rm -v "$INSTANCE_DIR/.runner" || true
 
-                      # perform the registration
-                      ${cfg.package}/bin/act_runner register --no-interactive \
-                        --instance ${escapeShellArg instance.url} \
-                        --token "$TOKEN" \
-                        --name ${escapeShellArg instance.name} \
-                        --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
-                        --config ${configFile}
+                    # perform the registration
+                    ${cfg.package}/bin/act_runner register --no-interactive \
+                      --instance ${escapeShellArg instance.url} \
+                      --token "$TOKEN" \
+                      --name ${escapeShellArg instance.name} \
+                      --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
+                      --config ${configFile}
 
-                      # and write back the configured labels
-                      echo "$LABELS_WANTED" > "$LABELS_FILE"
-                    fi
+                    # and write back the configured labels
+                    echo "$LABELS_WANTED" > "$LABELS_FILE"
+                  fi
 
-                  '')
+                '')
+              ];
+              ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
+              SupplementaryGroups =
+                optionals wantsDocker [
+                  "docker"
+                ]
+                ++ optionals wantsPodman [
+                  "podman"
                 ];
-                ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
-                SupplementaryGroups =
-                  optionals (wantsDocker) [
-                    "docker"
-                  ]
-                  ++ optionals (wantsPodman) [
-                    "podman"
-                  ];
-              }
-              // optionalAttrs (instance.tokenFile != null) {
-                EnvironmentFile = instance.tokenFile;
-              };
+            }
+            // optionalAttrs (instance.tokenFile != null) {
+              EnvironmentFile = instance.tokenFile;
+            };
           };
       in
       mapAttrs' mkRunnerService cfg.instances;

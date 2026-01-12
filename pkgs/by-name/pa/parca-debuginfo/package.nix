@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "parca-debuginfo";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-debuginfo";
     tag = "v${version}";
-    hash = "sha256-FXi/iLVDdzyfClRD1tk0FQ9oF5zxW2dfGl4JuDPyZQE=";
+    hash = "sha256-aFG4lMwiVZuuNq1+Q4Jz1+OywSy0oIF+VO7ZjDGQvi4=";
   };
 
   vendorHash = "sha256-bH7Y1y9BDMQJGtYfEaSrq+sWVLnovvV/uGbutJUXV2w=";
@@ -27,7 +27,10 @@ buildGoModule rec {
     changelog = "https://github.com/parca-dev/parca-debuginfo/releases/tag/v${version}";
     homepage = "https://github.com/parca-dev/parca-debuginfo";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      brancz
+      metalmatze
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "parca-debuginfo";
   };

@@ -4,8 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -18,25 +17,25 @@
   syrupy,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-deepseek";
-  version = "0.1.3";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-deepseek==${version}";
-    hash = "sha256-nkL8QO1H29sA6g61Hgt7QrRAfwD3t+0m5JEHyPx8B7Y=";
+    hash = "sha256-9iLJ0+wSBdPJqu71waYlq2pZV594mSoZcewsnMOeT64=";
   };
 
   sourceRoot = "${src.name}/libs/partners/deepseek";
 
   build-system = [
-    pdm-backend
+    hatchling
   ];
 
   pythonRelaxDeps = [
@@ -57,19 +56,20 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_deepseek" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-deepseek==([0-9.]+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-deepseek==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-deepseek==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting DeepSeek and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/deepseek";
     license = lib.licenses.mit;

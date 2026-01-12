@@ -59,14 +59,16 @@ stdenv.mkDerivation rec {
     gts
     pango
     bash
-  ] ++ optionals withXorg (with xorg; [ libXrender ]);
+  ]
+  ++ optionals withXorg (with xorg; [ libXrender ]);
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ optional (xorg == null) "--without-x";
+  ]
+  ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
@@ -101,12 +103,12 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       raskin
     ];

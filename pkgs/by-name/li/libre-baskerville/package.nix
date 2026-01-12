@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webfont family optimized for body text";
     longDescription = ''
       Libre Baskerville is a webfont family optimized for body text. It's Based
@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation rec {
       screen.
     '';
     homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

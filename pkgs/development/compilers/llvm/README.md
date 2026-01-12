@@ -2,7 +2,7 @@
 
 - Run `update-git.py`.
   This will set the github revision and sha256 for `llvmPackages_git.llvm` to whatever the latest chromium build is using.
-  For a more recent, commit run `nix-prefetch-github` and change the rev and sha256 accordingly.
+  For a more recent commit, run `nix-prefetch-github` and change the rev and sha256 accordingly.
 
 - That was the easy part.
   The hard part is updating the patch files.
@@ -50,7 +50,7 @@
     which can be an easily missed reason for failures.
     For cases where the hunk is no longer needed you can simply remove it from the patch.
 
- This is fine for small corrections, but when more serious changes are needed its better to use git.
+ This is fine for small corrections, but when more serious changes are needed, it's better to use git.
 
  1. Clone the LLVM monorepo at https://github.com/llvm/llvm-project/
 
@@ -68,13 +68,13 @@
 
 Use CMake's [`GNUInstallDirs`](https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html) to support multiple outputs.
 
-Previously, LLVM Just hard-coded `bin`, `include`, and `lib${LLVM_TARGET_PREFIX}`.
+Previously, LLVM just hard-coded `bin`, `include`, and `lib${LLVM_TARGET_PREFIX}`.
 We are making it use these variables.
 
 For the older LLVM versions, these patches live in https://github.com/Ericson2314/llvm-project branches `split-prefix`.
 Instead of applying the patches to the worktree per the above instructions, one can checkout those directly and rebase those instead.
 
-For newer LLVM versions, enough has has been upstreamed,
+For newer LLVM versions, enough has been upstreamed,
 (see https://reviews.llvm.org/differential/query/5UAfpj_9zHwY/ for my progress upstreaming),
 that I have just assembled new gnu-install-dirs patches from the remaining unmerged patches instead of rebasing from the prior LLVM's gnu install dirs patch.
 

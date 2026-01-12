@@ -20,7 +20,7 @@
   fontconfig,
   dpkg,
   libproxy,
-  libxml2,
+  libxml2_13,
   gst_all_1,
   dbus,
   makeWrapper,
@@ -70,7 +70,7 @@ mkDerivation rec {
     libXrender
     libproxy
     libxcb
-    libxml2
+    libxml2_13
     sqlite
     zlib
     alsa-lib
@@ -81,9 +81,13 @@ mkDerivation rec {
   dontBuild = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     mkdir deb
     dpkg --fsys-tarfile $src | tar --extract -C deb
+
+    runHook postUnpack
   '';
 
   installPhase = ''
@@ -124,16 +128,16 @@ mkDerivation rec {
       --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "World sphere viewer";
     homepage = "https://www.google.com/earth/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       shamilton
       xddxdd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     knownVulnerabilities = [
       "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj."
     ];

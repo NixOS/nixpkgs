@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
 
   # build-system
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   version = "3.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-YHI86UXBkyhnl5DjKCzHWKpKYEDkuzMPU9MPpUbUR0Y=";
@@ -52,7 +49,8 @@ buildPythonPackage rec {
     ephemeral-port-reserve
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "werkzeug" ];
 
@@ -62,17 +60,18 @@ buildPythonPackage rec {
     # ResourceWarning: subprocess 309 is still running
     "test_basic"
     "test_long_build"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused
     "tests/test_serving.py"
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # don't run tests that are marked with filterwarnings, they fail with
     # warnings._OptionError: unknown warning category: 'pytest.PytestUnraisableExceptionWarning'
-    "-m 'not filterwarnings'"
+    "filterwarnings"
   ];
 
   passthru.tests = {

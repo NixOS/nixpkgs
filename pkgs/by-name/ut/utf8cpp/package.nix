@@ -7,24 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "utf8cpp";
-  version = "4.0.6";
+  version = "4.0.8";
 
   src = fetchFromGitHub {
     owner = "nemtrif";
     repo = "utfcpp";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-e8qH4eygLnQw7B8x+HN+vH8cr8fkxnTFz+PKtFJ8dGE=";
+    hash = "sha256-9lfs2tqsSDbf1appDC+S3qdmS4DipHhXoiJQluKytbM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nemtrif/utfcpp";
     changelog = "https://github.com/nemtrif/utfcpp/releases/tag/v${version}";
     description = "UTF-8 with C++ in a Portable Way";
-    license = licenses.boost;
-    maintainers = with maintainers; [ jobojeha ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ jobojeha ];
+    platforms = lib.platforms.all;
   };
 }

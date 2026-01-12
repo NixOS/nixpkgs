@@ -7,7 +7,6 @@
   node.pkgsReadOnly = false;
 
   nodes.machine = {
-    nixpkgs.config.allowUnfree = true;
     hardware.sane = {
       enable = true;
       brscan5 = {

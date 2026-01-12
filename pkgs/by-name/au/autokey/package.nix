@@ -14,6 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
   version = "0.96.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "autokey";
@@ -36,12 +37,17 @@ python3Packages.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     dbus-python
     pyinotify
     xlib
     pygobject3
     packaging
+    standard-imghdr
   ];
 
   runtimeDeps = [

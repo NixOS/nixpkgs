@@ -48,16 +48,15 @@ let
       setuptools-scm
     ];
 
-    propagatedBuildInputs =
-      [
-        iniconfig
-        packaging
-        pluggy
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [
-        exceptiongroup
-        tomli
-      ];
+    propagatedBuildInputs = [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
     optional-dependencies = {
       testing = [
@@ -103,17 +102,15 @@ let
 
     pythonImportsCheck = [ "pytest" ];
 
-    meta = with lib; {
+    meta = {
       description = "Framework for writing tests";
       homepage = "https://docs.pytest.org";
       changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-      maintainers = with maintainers; [
-        domenkozar
+      maintainers = with lib.maintainers; [
         lovek323
         madjar
-        lsix
       ];
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in

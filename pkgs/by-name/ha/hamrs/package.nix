@@ -9,7 +9,7 @@ let
   version = "1.0.7";
 
   meta = {
-    description = "Simple, portable logger tailored for activities like Parks on the Air, Field Day, and more.";
+    description = "Simple, portable logger tailored for activities like Parks on the Air, Field Day, and more";
     homepage = "https://hamrs.app/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [

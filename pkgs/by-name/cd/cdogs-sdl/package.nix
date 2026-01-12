@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cdogs-sdl";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     repo = "cdogs-sdl";
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-I4v13CPdA2KYwhlIJjz+qgKe2EoXUtV6iWeadrg4Usc=";
+    sha256 = "sha256-g1eLFdHsmqnz6zTlmaiLOXgX5dnS94k/PvaFJE3gfLo=";
   };
 
   postPatch = ''
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
   # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nixinator ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nixinator ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
 }

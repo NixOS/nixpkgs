@@ -1,5 +1,5 @@
 # QEMU-related utilities shared between various Nix expressions.
-{ lib, pkgs }:
+{ lib, stdenv }:
 
 let
   zeroPad =
@@ -17,19 +17,19 @@ rec {
   ];
 
   qemuSerialDevice =
-    if with pkgs.stdenv.hostPlatform; isx86 || isLoongArch64 || isMips64 || isRiscV then
+    if with stdenv.hostPlatform; isx86 || isLoongArch64 || isMips64 || isRiscV then
       "ttyS0"
-    else if (with pkgs.stdenv.hostPlatform; isAarch || isPower) then
+    else if (with stdenv.hostPlatform; isAarch || isPower) then
       "ttyAMA0"
     else
-      throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
+      throw "Unknown QEMU serial device for system '${stdenv.hostPlatform.system}'";
 
   qemuBinary =
     qemuPkg:
     let
       hostStdenv = qemuPkg.stdenv;
       hostSystem = hostStdenv.system;
-      guestSystem = pkgs.stdenv.hostPlatform.system;
+      guestSystem = stdenv.hostPlatform.system;
 
       linuxHostGuestMatrix = {
         x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=kvm:tcg -cpu max";

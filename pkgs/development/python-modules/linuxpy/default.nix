@@ -5,7 +5,6 @@
   pytestCheckHook,
   setuptools,
   ward,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   version = "0.21.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +31,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Human friendly interface to Linux subsystems using Python";
     homepage = "https://github.com/tiagocoutinho/linuxpy";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ willow ];
     platforms = lib.platforms.linux;
   };

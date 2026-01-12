@@ -8,6 +8,8 @@
   librsvg,
   gdk-pixbuf,
   glib,
+  gobject-introspection,
+  askalono,
   borgbackup,
   writeText,
   nixosTests,
@@ -16,17 +18,13 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5;
-      djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
-        # https://github.com/encode/django-rest-framework/discussions/9342
-        disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
-      });
+      django = prev.django_5_2;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.11.4";
+  version = "5.15.1";
 
   pyproject = true;
 
@@ -39,13 +37,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-0/PYl8A95r0xulaSawnSyrSqB7SiEBgd9TVP7OIla00=";
+    hash = "sha256-9k6H9/XW7vbXix+zadxHCNl9UJ3yE1ONa/+VRvIGk28=";
   };
-
-  patches = [
-    # FIXME This shouldn't be necessary and probably has to do with some dependency mismatch.
-    ./cache.lock.patch
-  ];
 
   build-system = with python.pkgs; [ setuptools ];
 
@@ -71,6 +64,14 @@ python.pkgs.buildPythonApplication rec {
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
 
+  pythonRelaxDeps = [
+    "celery"
+    "certifi"
+    "cyrtranslit"
+    "django-appconf"
+    "urllib3"
+  ];
+
   dependencies =
     with python.pkgs;
     [
@@ -81,7 +82,9 @@ python.pkgs.buildPythonApplication rec {
       celery
       certifi
       charset-normalizer
-      django-crispy-bootstrap3
+      confusable-homoglyphs
+      crispy-bootstrap3
+      crispy-bootstrap5
       cryptography
       cssselect
       cython
@@ -104,6 +107,7 @@ python.pkgs.buildPythonApplication rec {
       docutils
       drf-spectacular
       drf-standardized-errors
+      fedora-messaging
       filelock
       fluent-syntax
       gitpython
@@ -118,13 +122,13 @@ python.pkgs.buildPythonApplication rec {
       packaging
       phply
       pillow
+      pyaskalono
       pycairo
       pygments
       pygobject3
       pyicumessageformat
       pyparsing
       python-dateutil
-      python-redis-lock
       qrcode
       rapidfuzz
       redis
@@ -143,12 +147,12 @@ python.pkgs.buildPythonApplication rec {
       weblate-schemas
     ]
     ++ django.optional-dependencies.argon2
-    ++ python-redis-lock.optional-dependencies.django
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
-    ++ drf-standardized-errors.optional-dependencies.openapi;
-
-  pythonRelaxDeps = [ "django-otp-webauthn" ];
+    ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ translate-toolkit.optional-dependencies.toml
+    ++ urllib3.optional-dependencies.brotli
+    ++ urllib3.optional-dependencies.zstd;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
@@ -161,6 +165,7 @@ python.pkgs.buildPythonApplication rec {
     librsvg
     gdk-pixbuf
     glib
+    gobject-introspection
   ];
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
@@ -183,5 +188,6 @@ python.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
+    mainProgram = "weblate";
   };
 }

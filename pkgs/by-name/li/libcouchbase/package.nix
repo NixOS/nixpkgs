@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcouchbase";
-  version = "3.3.9";
+  version = "3.3.18";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "sha256-dvXRbAdgb1WmKLijYkx6+js60ZxK1Tl2aTFSF7EpN74=";
+    sha256 = "sha256-+6RrApyml/FPv8pRjmwY1yuZIX1YXNKqdeNjP1y4cbU=";
   };
 
   cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "C client library for Couchbase";
     homepage = "https://github.com/couchbase/libcouchbase";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

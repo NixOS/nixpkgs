@@ -47,21 +47,28 @@ let
       };
       find_lib-in-FHS = "${find_libFHSEnv}/bin/${find_libFHSEnv.name}";
     in
-    runCommand "FHS-lib-test" { } ''
-      echo original ldd output is:
-      ${ldd} ${sharedObject}
-      lddOutput="$(${ldd-in-FHS} ${sharedObject})"
-      echo ldd output inside FHS is:
-      echo "$lddOutput"
-      if echo $lddOutput | grep -q "not found"; then
-        echo "shared object could not find all dependencies in the FHS!"
-        echo The libraries below where found in the FHS:
-        ${find_lib-in-FHS}
-        exit 1
-      else
-        echo $lddOutput > $out
-      fi
-    '';
+    runCommand "FHS-lib-test"
+      {
+        meta = {
+          # Downloads an x86_64-linux only binary
+          platforms = [ "x86_64-linux" ];
+        };
+      }
+      ''
+        echo original ldd output is:
+        ${ldd} ${sharedObject}
+        lddOutput="$(${ldd-in-FHS} ${sharedObject})"
+        echo ldd output inside FHS is:
+        echo "$lddOutput"
+        if echo $lddOutput | grep -q "not found"; then
+          echo "shared object could not find all dependencies in the FHS!"
+          echo The libraries below where found in the FHS:
+          ${find_lib-in-FHS}
+          exit 1
+        else
+          echo $lddOutput > $out
+        fi
+      '';
 
 in
 {

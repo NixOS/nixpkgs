@@ -33,52 +33,12 @@ makeScopeWithSplicing' {
         let
           mkFrameworks = import ../development/libraries/kde-frameworks;
           attrs = {
+            inherit config;
             inherit libsForQt5;
             inherit (pkgs) lib fetchurl;
           };
         in
         (lib.makeOverridable mkFrameworks attrs);
-
-      plasma5 =
-        let
-          mkPlasma5 = import ../desktops/plasma-5;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) config lib fetchurl;
-            inherit (pkgs) gsettings-desktop-schemas;
-          };
-        in
-        (lib.makeOverridable mkPlasma5 attrs);
-
-      kdeGear =
-        let
-          mkGear = import ../applications/kde;
-          attrs = {
-            inherit config libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkGear attrs);
-
-      plasmaMobileGear =
-        let
-          mkPlamoGear = import ../applications/plasma-mobile;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkPlamoGear attrs);
-
-      mauiPackages =
-        let
-          mkMaui = import ../applications/maui;
-          attrs = {
-            inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
-          };
-        in
-        (lib.makeOverridable mkMaui attrs);
 
       noExtraAttrs =
         set:
@@ -92,37 +52,19 @@ makeScopeWithSplicing' {
     in
     (noExtraAttrs (
       kdeFrameworks
-      // plasmaMobileGear
-      // plasma5
-      // plasma5.thirdParty
-      // kdeGear
-      // mauiPackages
       // qt5
       // {
 
         inherit
           kdeFrameworks
-          plasmaMobileGear
-          plasma5
-          kdeGear
-          mauiPackages
           qt5
           ;
-
-        # Alias for backwards compatibility. Added 2021-05-07.
-        kdeApplications = kdeGear;
 
         ### LIBRARIES
 
         accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
 
         accounts-qt = callPackage ../development/libraries/accounts-qt { };
-
-        alkimia = callPackage ../development/libraries/alkimia { };
-
-        applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
-
-        applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
 
         appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
@@ -132,19 +74,9 @@ makeScopeWithSplicing' {
 
         fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
-        fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
-
-        fcitx5-configtool = callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
-
-        fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
-
-        fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
-
-        fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
-
         futuresql = callPackage ../development/libraries/futuresql { };
 
-        qgpgme = callPackage ../development/libraries/gpgme { };
+        qgpgme = callPackage ../development/libraries/qgpgme { };
 
         grantlee = callPackage ../development/libraries/grantlee/5 { };
 
@@ -154,15 +86,11 @@ makeScopeWithSplicing' {
 
         kdb = callPackage ../development/libraries/kdb { };
 
-        kde2-decoration = callPackage ../data/themes/kde2 { };
-
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
         kdiagram = callPackage ../development/libraries/kdiagram { };
 
         kdsoap = callPackage ../development/libraries/kdsoap { };
-
-        kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
 
         kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
 
@@ -170,29 +98,19 @@ makeScopeWithSplicing' {
 
         kproperty = callPackage ../development/libraries/kproperty { };
 
-        kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
-
-        kreport = callPackage ../development/libraries/kreport { };
-
-        kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+        kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
 
         kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
-
-        kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
         ldutils = callPackage ../development/libraries/ldutils { };
 
         libcommuni = callPackage ../development/libraries/libcommuni { };
-
-        libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
         libiodata = callPackage ../development/libraries/libiodata { };
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
         libopenshot = callPackage ../development/libraries/libopenshot { };
-
-        packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
         libopenshot-audio = callPackage ../development/libraries/libopenshot-audio { };
 
@@ -201,8 +119,6 @@ makeScopeWithSplicing' {
         libqofono = callPackage ../development/libraries/libqofono { };
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
-
-        libquotient = callPackage ../development/libraries/libquotient { };
 
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
@@ -245,15 +161,11 @@ makeScopeWithSplicing' {
 
         qcoro = callPackage ../development/libraries/qcoro { };
 
-        qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
-
         qcustomplot = callPackage ../development/libraries/qcustomplot { };
 
         qjson = callPackage ../development/libraries/qjson { };
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-
-        qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
         qoauth = callPackage ../development/libraries/qoauth { };
 
@@ -301,33 +213,21 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced {
-          useQt5 = true;
-        };
-
-        soqt = callPackage ../development/libraries/soqt { };
-
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
         qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
-        # Not a library, but we do want it to be built for every qt version there
-        # is, to allow users to choose the right build if needed.
-        sddm = callPackage ../applications/display-managers/sddm { };
-
         signond = callPackage ../development/libraries/signond { };
-
-        soundkonverter = callPackage ../applications/audio/soundkonverter { };
 
         timed = callPackage ../applications/system/timed { };
 
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
-
-        xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
-
-        xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
-
-        yuview = callPackage ../applications/video/yuview { };
+      }
+      // lib.optionalAttrs config.allowAliases {
+        kf5gpgmepp = throw ''
+          'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
+          Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
+        ''; # Added 2025-10-25
       }
     ))
   );

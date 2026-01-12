@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   libgpiod,
   cmake,
@@ -10,21 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gcfflasher";
-  version = "4.8.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
     repo = "gcfflasher";
     tag = "v${version}";
-    hash = "sha256-W1sL3RyauEYAC/Fj0JhNnk0k5DT6Q8qIEuZNke3xNAE=";
+    hash = "sha256-nYLGKem4+Ty2QyhDQIyo9wLEKrbumYKuoGIA9Ore7XM=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/dresden-elektronik/gcfflasher/commit/c1019d7ef2ab55a598ddd938db1b08169b05fc37.patch";
-      hash = "sha256-Frd3Xerkv3QolGCOrTE4AqBPqPHTKjjhk+DzhHABTqo=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -41,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CFFlasher is the tool to program the firmware of dresden elektronik's Zigbee products";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/dresden-elektronik/gcfflasher";
-    maintainers = with maintainers; [ fleaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fleaz ];
+    platforms = lib.platforms.all;
     mainProgram = "GCFFlasher";
   };
 }

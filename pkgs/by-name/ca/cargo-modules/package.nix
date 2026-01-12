@@ -6,17 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = "cargo-modules";
     tag = "v${version}";
-    hash = "sha256-MJswCl5eJjKarB2ufeNLQL0ZPDaRPpX6OGOqszG+a0g=";
+    hash = "sha256-FghGqRV9KaRPZ7l3t/AB7f1XufOsNdiGFUk8GUwAxtY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-N1Bj0fqyirp51DNsrZEtRGOSUPS1YNbk+O3kdboQ+TQ=";
+  cargoHash = "sha256-Lt5zqhBpHlPYoPgIVmVYu35SnuguqPw5Qg0oTL5cgCs=";
 
   checkFlags = [
     "--skip=cfg_test::with_tests::smoke"
@@ -45,7 +44,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Cargo plugin for showing a tree-like overview of a crate's modules";
@@ -53,7 +51,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/regexident/cargo-modules/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      figsoda
       rvarago
       matthiasbeyer
     ];

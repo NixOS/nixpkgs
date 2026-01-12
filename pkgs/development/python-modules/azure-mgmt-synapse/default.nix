@@ -6,7 +6,6 @@
   fetchPypi,
   msrest,
   msrestazure,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.synapse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Synapse Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-mgmt-synapse";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-synapse_${version}/sdk/synapse/azure-mgmt-synapse/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

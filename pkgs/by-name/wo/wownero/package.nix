@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitea,
+  fetchpatch,
   cmake,
   python3,
   boost186,
@@ -54,6 +55,14 @@ stdenv.mkDerivation rec {
     "-Wno-error=int-conversion"
   ];
 
+  patches = [
+    # build: set cmake_minimum_required(VERSION 3.5) consistently
+    (fetchpatch {
+      url = "https://codeberg.org/wownero/wownero/commit/0d0a656618e396de7ff60368dde708ad9d45f866.patch";
+      hash = "sha256-xnpEZxWg5YzOhDIWZjNyXH8GBdK7c2rxL9DewPKghIg=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     python3
@@ -85,7 +94,7 @@ stdenv.mkDerivation rec {
     "-DMANUAL_SUBMODULES=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''
       A privacy-centric memecoin that was fairly launched on April 1, 2018 with
       no pre-mine, stealth-mine or ICO
@@ -98,8 +107,8 @@ stdenv.mkDerivation rec {
       opposing forks.
     '';
     homepage = "https://wownero.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

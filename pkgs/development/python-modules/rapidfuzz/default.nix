@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   cython,
   ninja,
@@ -17,15 +18,29 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.13.0";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-vwAqlTq4HIbmCL1HsHcgfVWETImxdqTsnenmX2RGXw8=";
+    hash = "sha256-DOXeZaD21Qsum4brBlMSFcBAUbNEOgCXc6AqEboP1e4=";
   };
+
+  patches = [
+    # https://github.com/rapidfuzz/RapidFuzz/pull/463
+    (fetchpatch {
+      name = "support-taskflow-3.11.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/0ef2a4980c41b852283e6db7a747a1632307c75e.patch";
+      hash = "sha256-xb+J3PXwD51lZqIJcTzPJWrT/oqrIXxh1cLp91DhIPg=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.1.6, <3.2.0" "Cython >=3.1.6"
+  '';
 
   build-system = [
     cmake
@@ -59,11 +74,6 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # segfaults
-    "test_cdist"
   ];
 
   pythonImportsCheck = [

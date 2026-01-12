@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-zlint";
-  version = "0.7.6";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     name = "zlint"; # tests expect this
     owner = "DonIsaac";
     repo = "zlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0FhugmrNHCEpIWX7oL1vZ8heikpo/mok7ciTgSdOpg=";
+    hash = "sha256-qJPOFMBvkvF10ixE17pV9X5LX3EyCVzzhrMGx1omTzE=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/zlint";
-  versionCheckProgramArg = "--version";
 
   # `zig build` produces a lot more artifacts, just copy over the ones we want
   installPhase = ''

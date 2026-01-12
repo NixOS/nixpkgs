@@ -10,7 +10,6 @@
   pretend,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   twisted,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pem";
   version = "23.1.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hynek";
@@ -41,15 +38,16 @@ buildPythonPackage rec {
     pyopenssl
     pytestCheckHook
     twisted
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "pem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy PEM file parsing in Python";
     homepage = "https://pem.readthedocs.io/";
     changelog = "https://github.com/hynek/pem/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyanotech ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyanotech ];
   };
 }

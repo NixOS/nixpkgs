@@ -18,20 +18,20 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "owmods-gui";
-  version = "0.15.0";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     tag = "gui_v${version}";
-    hash = "sha256-rTANG+yHE8YfWYUyELoKgj4El+1ZW6vI9NkgADD40pw=";
+    hash = "sha256-1m648o9hm7j/etNNhGy2Yq9paz6ZHWDxVBLGdzGMbZQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Y57EGKl/wJnZ/eTlKL984GlxMWTq/ZUT5Rns/MEGOCE=";
+  cargoHash = "sha256-/id7DC3W22musOI4r4b0RPqSnIQVn1yHYLZcTilShVk=";
 
+  buildNoDefaultFeatures = true;
   buildFeatures = [
-    "tauri/custom-protocol"
+    "custom-protocol"
   ];
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
         src = "${src}/owmods_gui/frontend";
 
         packageJSON = "${src}/owmods_gui/frontend/package.json";
-        npmDepsHash = "sha256-h6e+hQzd52G3XtufioEYlBuXNu6I+ZTQcNgJaQdaAck=";
+        npmDepsHash = "sha256-PDpL8Cdl6U17wPBGmyg5kYP5zh1NXRPVnaW4WrFD3oM=";
 
         postBuild = ''
           cp -r ../dist/ $out

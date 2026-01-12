@@ -2,25 +2,29 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-code-runner";
-  version = "0-unstable-2025-04-18";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "markdown-code-runner";
-    rev = "9907df63574d714abcd78f9dfdf4bdda73ff30d6";
-    hash = "sha256-Bn+IsZzV07bm5TNRX3+OOuxi3kj7d73gYPzcdIxWMi8=";
+    tag = finalAttrs.version;
+    hash = "sha256-0AIW9rRIGKOCVdOmWH+vs4T3k++joo8DQpdiok6aAX0=";
   };
 
-  cargoHash = "sha256-HOJCnuzd6i4v1SpR4jstlpNkvSgH/4kvvE6Lsr4cgbI=";
+  cargoHash = "sha256-Q2KhNPrUU8X95Z7qsWqwkFDzJlLAmpH1Fn5f47fYr1o=";
 
   dontUseCargoParallelTests = true;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
-    description = "A configurable Markdown code runner that executes and optionally replaces code blocks using external commands";
+    description = "Configurable Markdown code runner that executes and optionally replaces code blocks using external commands";
     longDescription = ''
       markdown-code-runner is a command-line tool that scans Markdown files for fenced code blocks,
       executes them using per-language configuration, and optionally replaces the block content
@@ -35,4 +39,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
-}
+})

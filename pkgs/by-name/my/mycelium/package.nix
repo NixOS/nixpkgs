@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DP6gCTuWraCwprY5C0JlTR1VrOwrOnUMSVxuPSVMjo0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5TyJNYBTULSu886D+vy8YRh50oFBubNZ9KkMu1/PvgU=";
 
   nativeBuildInputs = [ versionCheckHook ];
@@ -41,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "End-2-end encrypted IPv6 overlay network";
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       flokli
       matthewcroughan
       rvdp

@@ -23,6 +23,7 @@
   anthropic,
   diskcache,
   fastapi,
+  google-genai,
   google-generativeai,
   pytest-asyncio,
   pytestCheckHook,
@@ -32,21 +33,23 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.9";
+  version = "1.11.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    tag = version;
-    hash = "sha256-3IwvbepDrylOIlL+IteyFChqYc/ZIu6IieIkbAPL+mw=";
+    tag = "v${version}";
+    hash = "sha256-VWFrMgfe92bHUK1hueqJLHQ7G7ATCgK7wXr+eqrVWcw=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "jiter"
+    "openai"
+    "rich"
+  ];
 
   dependencies = [
     aiohttp
@@ -65,6 +68,7 @@ buildPythonPackage rec {
     anthropic
     diskcache
     fastapi
+    google-genai
     google-generativeai
     pytest-asyncio
     pytestCheckHook
@@ -79,6 +83,7 @@ buildPythonPackage rec {
     "successfully"
     "test_mode_functions_deprecation_warning"
     "test_partial"
+    "test_provider_invalid_type_raises_error"
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
@@ -90,12 +95,20 @@ buildPythonPackage rec {
     # Performance benchmarks that sometimes fail when running many parallel builds
     "test_combine_system_messages_benchmark"
     "test_extract_system_messages_benchmark"
+
+    # pydantic validation mismatch
+    "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
+    "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
   ];
 
   disabledTestPaths = [
     # Tests require OpenAI API key
-    "tests/test_distil.py"
     "tests/llm/"
+    # Network and requires API keys
+    "tests/test_auto_client.py"
+    # annoying dependencies
+    "tests/docs"
+    "examples"
   ];
 
   meta = {

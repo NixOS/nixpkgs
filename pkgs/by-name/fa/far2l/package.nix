@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   cmake,
@@ -27,7 +28,7 @@
   # Plugins
   withColorer ? true,
   spdlog,
-  xercesc,
+  libxml2,
   withMultiArc ? true,
   libarchive,
   pcre,
@@ -43,14 +44,22 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.6.3";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-iWZQpLe+shdepCVOHZDp7QEQoqelbHGRJh09KWb6aD0=";
+    sha256 = "sha256-a/k36O19z/lHnETOGIbTJ7BNAI5zOQxVUSp+nIM08i4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://github.com/elfmz/far2l/commit/97ac0a3a0f29110a330d8f8634775e024561e817.patch?full_index=1";
+      hash = "sha256-LlCKgFPxoRrb2nD+PARsJCpUXqMO0rLyNbuvLh949fU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -67,7 +76,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUCD libuchardet
     ++ lib.optionals withColorer [
       spdlog
-      xercesc
+      libxml2
     ]
     ++ lib.optionals withMultiArc [
       libarchive
@@ -95,20 +104,19 @@ stdenv.mkDerivation rec {
     patchShebangs far2l/bootstrap/view.sh
   '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "TTYX" withTTYX)
-      (lib.cmakeBool "USEWX" withGUI)
-      (lib.cmakeBool "USEUCD" withUCD)
-      (lib.cmakeBool "COLORER" withColorer)
-      (lib.cmakeBool "MULTIARC" withMultiArc)
-      (lib.cmakeBool "NETROCKS" withNetRocks)
-      (lib.cmakeBool "PYTHON" withPython)
-    ]
-    ++ lib.optionals withPython [
-      (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
-      (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "TTYX" withTTYX)
+    (lib.cmakeBool "USEWX" withGUI)
+    (lib.cmakeBool "USEUCD" withUCD)
+    (lib.cmakeBool "COLORER" withColorer)
+    (lib.cmakeBool "MULTIARC" withMultiArc)
+    (lib.cmakeBool "NETROCKS" withNetRocks)
+    (lib.cmakeBool "PYTHON" withPython)
+  ]
+  ++ lib.optionals withPython [
+    (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
+    (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
+  ];
 
   runtimeDeps = [
     unzip
@@ -122,16 +130,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/far2l \
-      --argv0 $out/bin/far2l \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hypersw ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hypersw ];
+    platforms = lib.platforms.unix;
   };
 }

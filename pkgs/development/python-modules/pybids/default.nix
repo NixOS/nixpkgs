@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.19.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "pybids";
     tag = version;
-    hash = "sha256-x1OlqfuRZvfWwOt+WTR8lAtOPWcrsymQyXPfiEj4lk4=";
+    hash = "sha256-yCfEE142OQCfgKVJB2lw1Rweax1gakHPoD91SUtZpUs=";
   };
 
   postPatch = ''
@@ -43,7 +43,8 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml;
 
   dependencies = [
     bids-validator

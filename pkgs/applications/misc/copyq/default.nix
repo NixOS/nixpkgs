@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   cmake,
   ninja,
   qtbase,
@@ -18,15 +18,15 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "10.0.0";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    hash = "sha256-lH3WJ6cK2eCnmcLVLnYUypABj73UZjGqqDPp92QE+V4=";
+    hash = "sha256-wxjUL5mGXAMNVGP+dAh1NrE9tw71cJW9zmLsaCVphTo=";
   };
 
   nativeBuildInputs = [
@@ -49,19 +49,19 @@ stdenv.mkDerivation (rec {
     kdePackages.kconfig
     kdePackages.kstatusnotifieritem
     kdePackages.knotifications
-  ];
-
-  patches = [
-    (fetchpatch {
-      # Can be removed after next release
-      name = "fix-qchar-construction-for-qt-6.9.patch";
-      url = "https://github.com/hluk/CopyQ/commit/f08c0d46a239362c5d3525ef9c3ba943bb00f734.patch";
-      hash = "sha256-dsDIUVJHFFqzZ3tFOcYdwol/tm4viHM0CRs6wYfVKbQ=";
-    })
+    kdePackages.kguiaddons
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_QT6" true)
+  ];
+
+  patches = [
+    # https://github.com/hluk/CopyQ/pull/3268
+    (fetchpatch2 {
+      url = "https://github.com/hluk/CopyQ/commit/103903593c37c9db5406d276e0097fbf18d2a8c4.patch?full_index=1";
+      hash = "sha256-zywE6ntMw+WvTyilXwvd4lfQRAAB9R/AGpwtwwPFZZE=";
+    })
   ];
 
   meta = {
@@ -73,4 +73,4 @@ stdenv.mkDerivation (rec {
     platforms = lib.platforms.linux;
     mainProgram = "copyq";
   };
-})
+}

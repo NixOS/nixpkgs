@@ -57,19 +57,19 @@ in
               type = "custom";
               status = {
                 source = "script";
-                cmd = "/bin/sh -c 'echo charger status A'";
+                cmd = "/bin/sh -c 'echo A'";
               };
               enabled = {
                 source = "script";
-                cmd = "/bin/sh -c 'echo charger enabled state false'";
+                cmd = "/bin/sh -c 'echo false'";
               };
               enable = {
                 source = "script";
-                cmd = "/bin/sh -c 'echo set charger enabled state true'";
+                cmd = "/bin/sh -c 'echo true'";
               };
               maxcurrent = {
                 source = "script";
-                cmd = "/bin/sh -c 'echo set charger max current 7200'";
+                cmd = "/bin/sh -c 'echo 7200'";
               };
             }
           ];

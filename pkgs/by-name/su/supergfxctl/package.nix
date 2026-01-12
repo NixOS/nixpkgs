@@ -4,6 +4,7 @@
   fetchFromGitLab,
   pkg-config,
   systemd,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-d3jN4i4oHRFDgr5f6y42gahrCfXBPB61T72x6IeiskM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-BM/fcXWyEWjAkqOdj2MItOzKknNUe9HMns30H1n5/xo=";
 
   postPatch = ''
@@ -25,11 +25,16 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/99-nvidia-ac.rules --replace /usr/bin/systemctl ${systemd}/bin/systemctl
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ systemd ];
 
   # upstream doesn't have tests, don't build twice just to find that out
   doCheck = false;
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm444 -t $out/lib/udev/rules.d/ data/*.rules
@@ -37,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/lib/systemd/system/ data/supergfxd.service
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPU switching utility, mostly for ASUS laptops";
     homepage = "https://gitlab.com/asus-linux/supergfxctl";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.k900 ];
+    maintainers = [ lib.maintainers.k900 ];
   };
 }

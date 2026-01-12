@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   python3,
   fetchPypi,
@@ -28,6 +29,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
+        format = "setuptools";
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -99,6 +101,7 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
+        format = "setuptools";
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";
@@ -189,6 +192,41 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
           "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
 
+      # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
+      azure-mgmt-resource-all = py.pkgs.buildPythonPackage {
+        pname = "azure-mgmt-resource-all";
+        inherit version;
+
+        format = "other"; # we're not building from sdist/wheel
+
+        src = py.pkgs.azure-mgmt-resource.src;
+
+        # No real build, just symlink all site-packages into one dir
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p $out/${py.sitePackages}
+          for pkg in ${
+            lib.concatStringsSep " " (
+              map (p: "${p}") [
+                py.pkgs.azure-mgmt-resource
+                py.pkgs.azure-mgmt-resource-deployments
+                py.pkgs.azure-mgmt-resource-deploymentscripts
+                py.pkgs.azure-mgmt-resource-deploymentstacks
+                py.pkgs.azure-mgmt-resource-templatespecs
+              ]
+            )
+          }; do
+            # Copy recursively, keep symlinks, skip duplicates silently
+            cp -rs --no-preserve=mode "$pkg/${py.sitePackages}/." "$out/${py.sitePackages}/" || true
+          done
+
+          runHook postInstall
+        '';
+
+        doCheck = false;
+      };
+
       # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
       azure-mgmt-signalr =
         overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b2" "tar.gz"
@@ -196,11 +234,11 @@ let
 
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
-        version = "4.0.0b20";
+        version = "4.0.0b22";
         src = fetchPypi {
           pname = "azure_mgmt_sql"; # Different from src.pname in the original package.
           inherit version;
-          hash = "sha256-mphqHUet4AhmL8aUoRbrGOjbookCHR3Ex+unpOq7aQM=";
+          hash = "sha256-ku3YN9W9Cyx4zsKxAs4k9/oeDXApzi2uqAURqa72H0k=";
         };
       });
 
@@ -213,14 +251,6 @@ let
       azure-mgmt-synapse =
         overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
           "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
-
-      # Observed error during runtime:
-      # AttributeError: Can't get attribute 'NormalizedResponse' on <module 'msal.throttled_http_client' from
-      # '/nix/store/xxx-python3.12-msal-1.32.0/lib/python3.12/site-packages/msal/throttled_http_client.py'>.
-      # Did you mean: '_msal_public_app_kwargs'?
-      msal =
-        overrideAzureMgmtPackage super.msal "1.32.3" "tar.gz"
-          "sha256-XuoDhonHilpwyo7L4SRUWLVahXvQlu+2mJxpuhWYXTU=";
     };
   };
 in

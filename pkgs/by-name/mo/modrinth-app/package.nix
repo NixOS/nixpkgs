@@ -4,7 +4,10 @@
   addDriverRunpath,
   alsa-lib,
   flite,
+  glib,
   glib-networking,
+  gsettings-desktop-schemas,
+  jdk25,
   jdk17,
   jdk21,
   jdk8,
@@ -12,6 +15,7 @@
     jdk8
     jdk17
     jdk21
+    jdk25
   ],
   libGL,
   libjack2,
@@ -20,7 +24,7 @@
   pipewire,
   symlinkJoin,
   udev,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   xorg,
 }:
 
@@ -30,9 +34,17 @@ symlinkJoin {
 
   paths = [ modrinth-app-unwrapped ];
 
-  nativeBuildInputs = [ wrapGAppsHook4 ];
+  strictDeps = true;
 
-  buildInputs = [ glib-networking ];
+  nativeBuildInputs = [
+    glib
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    glib-networking
+    gsettings-desktop-schemas
+  ];
 
   runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux (
     lib.makeLibraryPath [
@@ -72,6 +84,8 @@ symlinkJoin {
       ''}
     )
 
+    glibPostInstallHook
+    gappsWrapperArgsHook
     wrapGAppsHook
   '';
 

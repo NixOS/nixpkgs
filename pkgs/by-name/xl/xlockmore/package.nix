@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xlockmore";
-  version = "5.82";
+  version = "5.86";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
-    sha256 = "sha256-1pB43ywLfflQLg2PooSTKwWSepcrYo16tnyJwG/mt7I=";
+    sha256 = "sha256-fvsR499tYAlTj9Ld8SpGpAbvh4iT5+USmZllCU3S9Fw=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-setuid"
     "--enable-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-  ] ++ (lib.optional (pam != null) "--enable-pam");
+  ]
+  ++ (lib.optional (pam != null) "--enable-pam");
 
   postPatch =
     let
@@ -51,12 +52,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ]; # no build output otherwise
 
-  meta = with lib; {
+  meta = {
     description = "Screen locker for the X Window System";
     homepage = "http://sillycycle.com/xlockmore.html";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
     mainProgram = "xlock";
   };
 }

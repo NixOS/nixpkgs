@@ -6,14 +6,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcmidi";
-  version = "2025.02.16";
+  version = "2025.11.26";
 
   src = fetchFromGitHub {
     owner = "sshlien";
     repo = "abcmidi";
     tag = finalAttrs.version;
-    hash = "sha256-/woeQ5JyoEfDxMclWNeiqHR/I/iWocp1MWXwB3cvxbo=";
+    hash = "sha256-OBlkk5Fq3ep+wZqFfSXNqrXtznisNFjn9uDVj/Q4Odk=";
   };
+
+  # TODO: remove once https://github.com/sshlien/abcmidi/pull/15 merged
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   meta = {
     homepage = "https://abc.sourceforge.net/abcMIDI/";

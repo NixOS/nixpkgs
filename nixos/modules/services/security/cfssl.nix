@@ -154,14 +154,7 @@ in
 
     logLevel = lib.mkOption {
       default = 1;
-      type = lib.types.enum [
-        0
-        1
-        2
-        3
-        4
-        5
-      ];
+      type = lib.types.ints.between 0 5;
       description = "Log level (0 = DEBUG, 5 = FATAL).";
     };
 

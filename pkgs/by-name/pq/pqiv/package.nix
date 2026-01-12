@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pqiv";
-  version = "2.13.2";
+  version = "2.13.3";
 
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "pqiv";
-    rev = finalAttrs.version;
-    hash = "sha256-wpM8eG2/sEfwYLfh6s3AL+z73IzeXxwGm/scWRRKLPo=";
+    tag = finalAttrs.version;
+    hash = "sha256-A02YB2VJ3gajnUqzkvmGUGQrEU5XIMSnHS1HLmPnN00=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = "patchShebangs .";
 
-  meta = with lib; {
+  meta = {
     description = "Powerful image viewer with minimal UI";
     homepage = "https://www.pberndt.com/Programme/Linux/pqiv";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ donovanglover ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ donovanglover ];
+    platforms = lib.platforms.unix;
     mainProgram = "pqiv";
   };
 })

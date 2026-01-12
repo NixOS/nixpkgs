@@ -1,0 +1,13 @@
+diff --git a/main.go b/main.go
+index 1814da0..2befc13 100644
+--- a/main.go
++++ b/main.go
+@@ -175,6 +175,8 @@ func main() {
+ 		if os.Getenv("APP_ENV") == "development" {
+ 			log.Println("Loading `" + envFileDev + "`")
+ 			return godotenv.Load(envFileDev)
++		} else if os.Getenv("APP_ENV") == "nixos" {
++			return nil
+ 		} else {
+ 			if _, err := os.Stat("./web/build"); os.IsNotExist(err) {
+ 				return noBuildDirectoryErr

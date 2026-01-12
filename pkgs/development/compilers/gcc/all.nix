@@ -2,12 +2,12 @@
   lib,
   stdenv,
   pkgs,
+  overrideCC,
+  buildPackages,
+  targetPackages,
   callPackage,
   isl_0_20,
-  libcCross,
-  threadsCross,
   noSysDirs,
-  lowPrio,
   wrapCC,
 }@args:
 
@@ -19,7 +19,7 @@ let
       majorVersion = lib.versions.major majorMinorVersion;
       atLeast = lib.versionAtLeast majorMinorVersion;
       attrName = "gcc${lib.replaceStrings [ "." ] [ "" ] majorMinorVersion}";
-      pkg = lowPrio (
+      pkg = lib.lowPrio (
         wrapCC (
           callPackage ./default.nix {
             inherit noSysDirs;
@@ -27,9 +27,15 @@ let
             reproducibleBuild = true;
             profiledCompiler = false;
             libcCross =
-              if !lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform then args.libcCross else null;
+              if !lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform then
+                targetPackages.libc or pkgs.libc
+              else
+                null;
             threadsCross =
-              if !lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform then threadsCross else { };
+              if !lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform then
+                targetPackages.threads or pkgs.threads
+              else
+                { };
             isl = if stdenv.hostPlatform.isDarwin then null else isl_0_20;
             # do not allow version skew when cross-building gcc
             #
@@ -57,7 +63,7 @@ let
                 )
                 && stdenv.cc.isGNU
               then
-                pkgs."gcc${majorVersion}Stdenv"
+                overrideCC stdenv buildPackages."gcc${majorVersion}"
               else
                 stdenv;
           }

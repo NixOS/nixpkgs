@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "qgrep";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-TeXOzfb1Nu6hz9l6dXGZY+xboscPapKm0Z264hv1Aww=";
   };
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast regular expression grep for source code with incremental index updates";
     mainProgram = "qgrep";
     homepage = "https://github.com/zeux/qgrep";
-    license = licenses.mit;
-    maintainers = [ maintainers.yrashk ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.yrashk ];
+    platforms = lib.platforms.all;
   };
 }

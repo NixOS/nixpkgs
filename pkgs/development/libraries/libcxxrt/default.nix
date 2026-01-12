@@ -17,6 +17,11 @@ stdenv.mkDerivation {
     sha256 = "+oTjU/DgOEIwJebSVkSEt22mJSdeONozB8FfzEiESHU=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   outputs = [
@@ -35,11 +40,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libcxxrt/libcxxrt";
     description = "Implementation of the Code Sourcery C++ ABI";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 }

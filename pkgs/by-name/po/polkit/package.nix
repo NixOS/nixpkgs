@@ -74,39 +74,37 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      glib
-      pkg-config
-      gettext
-      meson
-      ninja
-      perl
+  nativeBuildInputs = [
+    glib
+    pkg-config
+    gettext
+    meson
+    ninja
+    perl
 
-      # man pages
-      libxslt
-      docbook-xsl-nons
-      docbook_xml_dtd_412
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gtk-doc
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+    # man pages
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      expat
-      pam
-      dbus
-      duktape
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # On Linux, fall back to elogind when systemd support is off.
-      (if useSystemd then systemdMinimal else elogind)
-    ];
+  buildInputs = [
+    expat
+    pam
+    dbus
+    duktape
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # On Linux, fall back to elogind when systemd support is off.
+    (if useSystemd then systemdMinimal else elogind)
+  ];
 
   propagatedBuildInputs = [
     glib # in .pc Requires
@@ -118,10 +116,10 @@ stdenv.mkDerivation rec {
     (python3.pythonOnBuildForHost.withPackages (
       pp: with pp; [
         dbus-python
-        (python-dbusmock.overridePythonAttrs (attrs: {
+        (python-dbusmock.override {
           # Avoid dependency cycle.
           doCheck = false;
-        }))
+        })
       ]
     ))
   ];
@@ -142,21 +140,20 @@ stdenv.mkDerivation rec {
     PKG_CONFIG_SYSTEMD_TMPFILES_DIR = "/usr/lib/tmpfiles.d";
   };
 
-  mesonFlags =
-    [
-      "--datadir=${system}/share"
-      "--sysconfdir=/etc"
-      "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
-      "-Dos_type=redhat" # affects PAM includes and privileged group name (wheel)
-      "-Dintrospection=${lib.boolToString withIntrospection}"
-      "-Dtests=${lib.boolToString doCheck}"
-      "-Dgtk_doc=${lib.boolToString withIntrospection}"
-      "-Dman=true"
-      "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
-    ];
+  mesonFlags = [
+    "--datadir=${system}/share"
+    "--sysconfdir=/etc"
+    "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
+    "-Dos_type=redhat" # affects PAM includes and privileged group name (wheel)
+    "-Dintrospection=${lib.boolToString withIntrospection}"
+    "-Dtests=${lib.boolToString doCheck}"
+    "-Dgtk_doc=${lib.boolToString withIntrospection}"
+    "-Dman=true"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
+  ];
 
   inherit doCheck;
 
@@ -191,15 +188,15 @@ stdenv.mkDerivation rec {
     ! test -e "$DESTDIR"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/polkit-org/polkit";
     description = "Toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # mandatory libpolkit-gobject shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    teams = [ teams.freedesktop ];
+    teams = [ lib.teams.freedesktop ];
   };
 }

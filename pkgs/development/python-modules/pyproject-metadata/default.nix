@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.9.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "pyproject_metadata";
     inherit version;
@@ -33,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyproject_metadata" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP 621 metadata parsing";
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
     changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -27,7 +27,6 @@
   calindori = callPackage ./calindori { };
   calligra = callPackage ./calligra { };
   cantor = callPackage ./cantor { };
-  cervisia = callPackage ./cervisia { };
   colord-kde = callPackage ./colord-kde { };
   dolphin = callPackage ./dolphin { };
   dolphin-plugins = callPackage ./dolphin-plugins { };

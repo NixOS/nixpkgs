@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "jetbrains-runner";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "alex1701c";
     repo = "JetBrainsRunner";
-    rev = version;
-    hash = "sha256-fzGwwvBgvUVU6Ra66KrIAqRjWWR6pWYbWVkOk2tDwkc=";
+    tag = version;
+    hash = "sha256-TaueSAxGiKiPVT26DSy1mzwsw2vBUK3D//vtOLtw2KQ=";
     fetchSubmodules = true;
   };
 

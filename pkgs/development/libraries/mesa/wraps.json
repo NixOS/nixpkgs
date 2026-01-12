@@ -1,0 +1,137 @@
+[
+    {
+        "pname": "errno",
+        "version": "0.3.12",
+        "hash": "sha256-zqFO+TVeO+qwY3A6qdqxWv0l8GZ8NBMQweUnS7HQ2hg="
+    },
+    {
+        "pname": "quote",
+        "version": "1.0.35",
+        "hash": "sha256-KR7Jq179k0qvUDpkZsXVJRU10QjudHRyw5d8xazIaO8="
+    },
+    {
+        "pname": "pest",
+        "version": "2.8.0",
+        "hash": "sha256-GY23RTHVjHCjYcQiAe/efiWR6XbVGMr3ZipH3Fcg57Y="
+    },
+    {
+        "pname": "equivalent",
+        "version": "1.0.1",
+        "hash": "sha256-VEOAfW3/aTc9Qzq571N4rY31DKYpjK8V3m5S4kqvVNU="
+    },
+    {
+        "pname": "syn",
+        "version": "2.0.87",
+        "hash": "sha256-JapM40bQOm3NaN2LQBC8t05U5iyQxXPzlMRurpmroy0="
+    },
+    {
+        "pname": "remain",
+        "version": "0.2.12",
+        "hash": "sha256-GtXgESMMrSdNBTJGDFq2mCjqR651aBtCqEFmPv/695Q="
+    },
+    {
+        "pname": "unicode-ident",
+        "version": "1.0.12",
+        "hash": "sha256-M1S5rD+uH/Z1XLbbU2g622YWNPZ1V5Qt6k+s6+wP7ks="
+    },
+    {
+        "pname": "cfg-if",
+        "version": "1.0.0",
+        "hash": "sha256-uvHeQzl2FYi8Bhnjy8ASDuWC67dLU7Tvv3kRe9LaQP0="
+    },
+    {
+        "pname": "bitflags",
+        "version": "2.9.1",
+        "hash": "sha256-G45WmF7GLRfpwQAdyJyI7NfcCOR+ul7Hwpx7Xu7N6Wc="
+    },
+    {
+        "pname": "pest_derive",
+        "version": "2.8.0",
+        "hash": "sha256-1yXZz9eeh9zMk0Gi7znRtvY1PWjEszwXf+u+GkAsl8U="
+    },
+    {
+        "pname": "rustc-hash",
+        "version": "2.1.1",
+        "hash": "sha256-NXcD1BNltLJ8WQ4+2R6rsbZj8HxMCECV5gy+1DYt/w0="
+    },
+    {
+        "pname": "ucd-trie",
+        "version": "0.1.6",
+        "hash": "sha256-7WRikv/IGI746k0eDgFQ+xWlwuEq2bj8GRrnqKfzxLk="
+    },
+    {
+        "pname": "indexmap",
+        "version": "2.2.6",
+        "hash": "sha256-Fo+3Fd2kchXjYJEsCWZJ0j1Yvzkqxi9zkZ6DF0XkDyY="
+    },
+    {
+        "pname": "paste",
+        "version": "1.0.14",
+        "hash": "sha256-3jFFrwgCTeqfqZFPOBoXuPxgNN+wDzqEAT9/9D8p7Uw="
+    },
+    {
+        "pname": "hashbrown",
+        "version": "0.14.1",
+        "hash": "sha256-ff2mKhL1Xa6uUBX4GwuuoUU5HLRSD4bCSPxhXXJkDRI="
+    },
+    {
+        "pname": "libc",
+        "version": "0.2.168",
+        "hash": "sha256-Wq6ymB4GBsoR15cY+LsBFk8dbtdQgBgtOr8Bfm0kS20="
+    },
+    {
+        "pname": "thiserror-impl",
+        "version": "2.0.11",
+        "hash": "sha256-Jq/BuuqKmJM37rUrbnKgOXgM5Fw+38ycW50RL+6xc8I="
+    },
+    {
+        "pname": "once_cell",
+        "version": "1.8.0",
+        "hash": "sha256-aS/LY7ZLF1gCngqW7mPgSc6MWUhYfy9yCN8EYl5fa1Y="
+    },
+    {
+        "pname": "rustix",
+        "version": "1.0.7",
+        "hash": "sha256-xx6D1q/n/2SJDsa3HWppu4phCreM42SzNSh2u0yAEmY="
+    },
+    {
+        "pname": "pest_generator",
+        "version": "2.8.0",
+        "hash": "sha256-230Bcmvoq2arMvnfRnrosRSJBmhbvnXILR5l1/Wz+EE="
+    },
+    {
+        "pname": "thiserror",
+        "version": "2.0.11",
+        "hash": "sha256-1FLyhLc+bXbdNnWKDIaEsdW+MfkridB/1YIhdXMiBvw="
+    },
+    {
+        "pname": "proc-macro2",
+        "version": "1.0.86",
+        "hash": "sha256-XnGejfZl3w0cj7/SOAFXRHNhUdREXsCDa45iiq4QO3c="
+    },
+    {
+        "pname": "zerocopy",
+        "version": "0.8.13",
+        "hash": "sha256-Z5FKtFHzv9Lmnl6dLvOFhITnB01j8gT9Fm7DkbVN4h0="
+    },
+    {
+        "pname": "roxmltree",
+        "version": "0.20.0",
+        "hash": "sha256-bCC2eTtcL6ZVOyUBVLeNbQ2zfnJwCuNfrZOHpG9IfJc="
+    },
+    {
+        "pname": "zerocopy-derive",
+        "version": "0.8.13",
+        "hash": "sha256-eYjXOkMDyiid8DMWvEkOk0rM83Gva8dFOTzzwsXE8l0="
+    },
+    {
+        "pname": "pest_meta",
+        "version": "2.8.0",
+        "hash": "sha256-f5+DJHBJSQbR/KUyn4q1eRzGC+sjDHSBXf9UHL0rXKA="
+    },
+    {
+        "pname": "log",
+        "version": "0.4.27",
+        "hash": "sha256-E9wt81HjICeDof4NRDdfcpX/tASSZ7DzAYNG3BIqHZQ="
+    }
+]

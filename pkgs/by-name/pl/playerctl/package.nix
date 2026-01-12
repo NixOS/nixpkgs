@@ -25,18 +25,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
-  nativeBuildInputs =
-    [
-      docbook_xsl
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook_xsl
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
   buildInputs = [ glib ];
 
   mesonFlags = [
@@ -45,12 +44,12 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "gtk-doc" withDocs)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
     homepage = "https://github.com/acrisci/playerctl";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ puffnfresh ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ puffnfresh ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "playerctl";
   };

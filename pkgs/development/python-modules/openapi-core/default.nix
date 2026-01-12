@@ -40,6 +40,13 @@ buildPythonPackage rec {
     hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
   };
 
+  postPatch = ''
+    # https://github.com/python-openapi/openapi-core/issues/1009
+    substituteInPlace tests/unit/extensions/test_factories.py \
+      --replace-fail 'assert test_model_class.__dataclass_fields__["name"].type == str(Any)' \
+                     'assert str(test_model_class.__dataclass_fields__["name"].type) == str(Any)'
+  '';
+
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
@@ -82,7 +89,8 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     webob
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
@@ -95,11 +103,11 @@ buildPythonPackage rec {
     "openapi_core.validation.response.validators"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

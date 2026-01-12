@@ -1,0 +1,10 @@
+prefix=@dev@
+includedir=${prefix}/include
+libdir=@lib@/lib
+
+Name: openonload
+Description: OpenOnLoad high performance network stack from Solarflare
+URL: http://www.openonload.org/
+Version: @version@
+Cflags: -isystem${includedir}
+Libs: -L${libdir} -Wl,-rpath,${libdir} @dash_l@

@@ -5,8 +5,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-aiohttp,
-  pytestCheckHook,
-  pythonOlder,
+  pytest-asyncio_0,
+  pytest8_3CheckHook,
   setuptools,
 }:
 
@@ -14,8 +14,6 @@ buildPythonPackage rec {
   pname = "caio";
   version = "0.9.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
@@ -28,8 +26,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiomisc
-    pytest-aiohttp
-    pytestCheckHook
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest8_3CheckHook
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -38,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "caio" ];
 
-  meta = with lib; {
+  meta = {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/caio";
     changelog = "https://github.com/mosquito/caio/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

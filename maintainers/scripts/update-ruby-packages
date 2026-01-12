@@ -1,16 +1,59 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bundler bundix
+#!nix-shell -i bash -p bundler bundix nixfmt
+# shellcheck shell=bash
 
 set -euf -o pipefail
 
-(
-  cd pkgs/development/ruby-modules/with-packages
-  rm -f gemset.nix Gemfile.lock
-  # Since bundler 2+, the lock command generates a platform-dependent
-  # Gemfile.lock, hence causing to bundix to generate a gemset tied to the
-  # platform from where it was executed.
-  BUNDLE_FORCE_RUBY_PLATFORM=1 bundle lock
-  bundix
-  mv gemset.nix ../../../top-level/ruby-packages.nix
-  rm -f Gemfile.lock
-)
+self="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+
+getSpecifiedGems() {
+  grep '^\s*gem' "$1" | cut -d"'" -f2
+}
+
+cd pkgs/development/ruby-modules/with-packages
+
+# Cleanup possible leftovers from a failed run.
+rm -f gemset.nix Gemfile.lock
+
+# Since bundler 2+, the lock command generates a platform-dependent
+# Gemfile.lock, hence causing to bundix to generate a gemset tied to the
+# platform from where it was executed.
+BUNDLE_FORCE_RUBY_PLATFORM=1 bundle lock
+bundix
+nixfmt gemset.nix
+
+# Run checks against the update.
+if ! \
+  nix-instantiate --eval --strict \
+    --argstr specifiedGems "$(getSpecifiedGems Gemfile)"\
+    --arg old ../../../top-level/ruby-packages.nix \
+    --arg new ./gemset.nix \
+    "$self/update-ruby-packages.checks.nix"
+then
+  (
+  echo ""
+  echo "NOTE: The Gemfile.lock and gemset.nix files were left intact for comparison."
+  echo ""
+  echo "Do not simply continue through with the update."
+  echo "Make sure to get the Ruby maintainers involved in finding a solution to this problem."
+  echo ""
+  echo "The non-specified gems listed are generally not at fault."
+  echo "Regressions likely come from specified gems getting updated and having clashing requirements."
+  echo ""
+  echo "Start by pessimistically pinning (~>) specified gems to their current full version that look like they could be the cause."
+  echo "Then once only non-specified gems are regressed, pessimistically pin the leftover ones."
+  echo "Once this passes with pessimistic pinning of gems, try reducing specificity in pessimistic bounds, then try using minimum version bounds (>=)."
+  echo "At some point bundler will tell you why it can't give you the bounds being asked for."
+  echo ""
+  echo "Don't forget to re-generate the ruby-packages.nix nix from scratch for the proper report once the minimum required set of pins is known!"
+  echo ""
+  ) >&2
+  exit 1
+fi
+
+{
+  echo "# This file is generated and should be updated with maintainers/scripts/update-ruby-packages."
+  echo ""
+  cat gemset.nix
+} > ../../../top-level/ruby-packages.nix
+rm -v -f gemset.nix Gemfile.lock

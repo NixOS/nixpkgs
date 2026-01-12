@@ -1,48 +1,53 @@
 {
   lib,
   writeShellApplication,
-  gnumake,
-  pkgsCross,
   klipper,
   klipper-firmware,
-  python3,
   avrdude,
+  dfu-util,
   stm32flash,
   mcu ? "mcu",
   flashDevice ? "/dev/null",
   firmwareConfig ? ./simulator.cfg,
 }:
 let
-  supportedArches = [
-    "avr"
-    "stm32"
-    "lpc176x"
-  ];
-  matchBoard =
+  getConfigField =
+    field:
     with builtins;
-    match ''^.*CONFIG_BOARD_DIRECTORY="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
-  boardArch = if matchBoard == null then null else builtins.head matchBoard;
+    let
+      matches = match ''^.*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
+    in
+    if matches != null then head matches else null;
+  matchPlatform = getConfigField "CONFIG_BOARD_DIRECTORY";
+  matchBoard = getConfigField "CONFIG_MCU";
 in
 writeShellApplication {
   name = "klipper-flash-${mcu}";
   runtimeInputs =
-    [
-      python3
-      pkgsCross.avr.stdenv.cc
-      gnumake
+    [ ]
+    ++ lib.optionals (matchPlatform == "avr") [ avrdude ]
+    ++ lib.optionals (matchPlatform == "stm32") [
+      stm32flash
+      dfu-util
     ]
-    ++ lib.optionals (boardArch == "avr") [ avrdude ]
-    ++ lib.optionals (boardArch == "stm32") [ stm32flash ];
-  text = ''
-    if ${lib.boolToString (!builtins.elem boardArch supportedArches)}; then
-      printf "Flashing Klipper firmware to your board is not supported yet.\n"
-      printf "Please use the compiled firmware at ${klipper-firmware} and flash it using the tools provided for your microcontroller."
-      exit 1
-    fi
-    if ${lib.boolToString (boardArch == "stm32")}; then
-      make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" serialflash
+    ++ lib.optionals (matchPlatform == "lpc176x") [ dfu-util ]
+  # bossac, hid-flash and RP2040 flash binaries are built by klipper-firmware
+  ;
+  text =
+    # generic USB script for most things with serial and bootloader (see MCU_TYPES in scripts/flash_usb.py)
+    if matchBoard != null && matchPlatform != null then
+      ''
+        pushd ${klipper-firmware}
+        ${klipper}/lib/scripts/flash_usb.py -t ${matchBoard} -d ${flashDevice} ${klipper-firmware}/klipper.bin "$@"
+        popd
+      ''
     else
-      make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" flash
-    fi
-  '';
+      ''
+        cat <<EOF
+        Board pair ${toString matchBoard}/${toString matchPlatform} (config ${firmwareConfig}) is not supported in NixOS auto flashing script.
+        Please manually flash the firmware using the appropriate tool for your board.
+        Built firmware is located here:
+        ${klipper-firmware}
+        EOF
+      '';
 }

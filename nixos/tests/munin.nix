@@ -4,8 +4,8 @@
 { pkgs, ... }:
 {
   name = "munin";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

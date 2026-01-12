@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
-    rev = version;
+    tag = version;
     hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
 
@@ -64,20 +64,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     lazarus
     fpc
-  ] ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
+  ]
+  ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
 
-  buildInputs =
-    [ libX11 ]
-    ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
-      pango
-      cairo
-      glib
-      atk
-      gdk-pixbuf
-    ]
-    ++ lib.optional (widgetset == "gtk2") gtk2
-    ++ lib.optional (widgetset == "gtk3") gtk3
-    ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
+  buildInputs = [
+    libX11
+  ]
+  ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
+    pango
+    cairo
+    glib
+    atk
+    gdk-pixbuf
+  ]
+  ++ lib.optional (widgetset == "gtk2") gtk2
+  ++ lib.optional (widgetset == "gtk3") gtk3
+  ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -106,28 +108,27 @@ stdenv.mkDerivation rec {
         app/cudatext.lpi
     '';
 
-  installPhase =
-    ''
-      install -Dm755 app/cudatext -t $out/bin
+  installPhase = ''
+    install -Dm755 app/cudatext -t $out/bin
 
-      install -dm755 $out/share/cudatext
-      cp -r app/{data,py,settings_default} $out/share/cudatext
+    install -dm755 $out/share/cudatext
+    cp -r app/{data,py,settings_default} $out/share/cudatext
 
-      install -Dm644 setup/debfiles/cudatext-512.png -t $out/share/pixmaps
-      install -Dm644 setup/debfiles/cudatext.desktop -t $out/share/applications
-    ''
-    + lib.concatMapStringsSep "\n" (lexer: ''
-      if [ -d "CudaText-lexers/${lexer}" ]; then
-        install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
-      else
-        echo "${lexer} lexer not found"
-        exit 1
-      fi
-    '') additionalLexers;
+    install -Dm644 setup/debfiles/cudatext-512.png -t $out/share/pixmaps
+    install -Dm644 setup/debfiles/cudatext.desktop -t $out/share/applications
+  ''
+  + lib.concatMapStringsSep "\n" (lexer: ''
+    if [ -d "CudaText-lexers/${lexer}" ]; then
+      install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+    else
+      echo "${lexer} lexer not found"
+      exit 1
+    fi
+  '') additionalLexers;
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform code editor";
     longDescription = ''
       Text/code editor with lite UI. Syntax highlighting for 200+ languages.
@@ -136,9 +137,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://cudatext.github.io/";
     changelog = "https://cudatext.github.io/history.txt";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
     mainProgram = "cudatext";
   };
 }

@@ -79,63 +79,60 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      cmake
-      gettext
-      libxslt
-      xmlto
-      docbook-xsl-nons
-      docbook_xml_dtd_45
-      glib
-      itstool
-      gperf
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ]
-    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-      appstream
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    cmake
+    gettext
+    libxslt
+    xmlto
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    glib
+    itstool
+    gperf
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ]
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    appstream
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      libstemmer
-      glib
-      xapian
-      libxml2
-      libxmlb
-      libyaml
-      curl
-      cairo
-      gdk-pixbuf
-      pango
-      librsvg
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    libstemmer
+    glib
+    xapian
+    libxml2
+    libxmlb
+    libyaml
+    curl
+    cairo
+    gdk-pixbuf
+    pango
+    librsvg
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
-  mesonFlags =
-    [
-      "-Dapidocs=false"
-      "-Dc_args=-Wno-error=missing-include-dirs"
-      "-Ddocs=false"
-      "-Dvapi=true"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "-Dcompose=true"
-      (lib.mesonBool "gir" withIntrospection)
-    ]
-    ++ lib.optionals (!withSystemd) [
-      "-Dsystemd=false"
-    ];
+  mesonFlags = [
+    "-Dapidocs=false"
+    "-Dc_args=-Wno-error=missing-include-dirs"
+    "-Ddocs=false"
+    "-Dvapi=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dcompose=true"
+    (lib.mesonBool "gir" withIntrospection)
+  ]
+  ++ lib.optionals (!withSystemd) [
+    "-Dsystemd=false"
+  ];
 
   passthru.tests = {
     installed-tests = nixosTests.installed-tests.appstream;
@@ -144,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software metadata handling library";
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
@@ -153,9 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
       can be consumed by other software.
     '';
     homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "appstreamcli";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "appstream" ];
   };
 })

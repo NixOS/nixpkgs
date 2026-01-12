@@ -27,11 +27,10 @@ buildPythonPackage rec {
     reportlab
   ];
 
-  meta = with lib; {
-    description = "
-Tools for manipulating and evaluating the hOCR format for representing multi-lingual OCR results by embedding them into HTML";
+  meta = {
+    description = "Tools for manipulating and evaluating the hOCR format for representing multi-lingual OCR results by embedding them into HTML";
     homepage = "https://github.com/tmbdev/hocr-tools";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-storm";
-  version = "2.8.0";
+  version = "2.8.2";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   src = fetchurl {
     url = "mirror://apache/storm/${finalAttrs.name}/${finalAttrs.name}.tar.gz";
-    hash = "sha256-BpRJ1wfrD0TM25plVvSP2DV7dtCJ3MFa04t3jzZcXno=";
+    hash = "sha256-gG2ZruU2Ua5EmVbXYP9DivtPCNwisjhk1SgZXCciPFs=";
   };
 
   nativeBuildInputs = [
@@ -74,15 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     command = "storm version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://storm.apache.org/";
     description = "Distributed realtime computation system";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      edwtjo
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       vizanto
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 })

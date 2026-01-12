@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,13 +8,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "1.26.1";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
     tag = "v${version}";
-    hash = "sha256-xWQxxrKHBr6GizXbCiMhc7IFlVY7xo1kvyB3RsFFDsQ=";
+    hash = "sha256-aU7i+bjOB6lM5/i/lDuncbCiCQdwkQxglgr4lawof1Q=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +29,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-mK46xzwQ+Qjey0IrAuYdrt2Mz8rA4RdhrT2ayAK3TTw=";
+  vendorHash = "sha256-W2Ea+2Pq2zPhVSWI/7NlG1/LeNfOE1kUnAB8Kp7AqgM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -56,7 +57,7 @@ buildGoModule rec {
   # tests require a running docker instance
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd syft \
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \
@@ -73,7 +74,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
     changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
@@ -82,8 +83,8 @@ buildGoModule rec {
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       developer-guy
       jk
       kashw2

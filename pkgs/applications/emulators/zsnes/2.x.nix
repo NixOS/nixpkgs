@@ -10,6 +10,7 @@
   nasm,
   pkg-config,
   zlib,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nasm
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -55,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 icons/48x48x32.png $out/share/icons/hicolor/48x48/apps/zsnes.png
     install -Dm644 icons/64x64x32.png $out/share/icons/hicolor/64x64/apps/zsnes.png
   '';
+
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/xyproto/zsnes";

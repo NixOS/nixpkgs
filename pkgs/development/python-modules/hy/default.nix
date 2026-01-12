@@ -52,16 +52,16 @@ buildPythonPackage rec {
       python-packages:
       (python.withPackages (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
         name = "${hy.name}-env";
-        meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
+        meta = lib.mergeAttrs (removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
       });
   };
 
-  meta = with lib; {
+  meta = {
     description = "LISP dialect embedded in Python";
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mazurel
       nixy
     ];

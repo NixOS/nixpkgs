@@ -23,11 +23,11 @@ buildGoModule rec {
     "cmd/cuelsp"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server implementation for CUE, with built-in support for Dagger";
     mainProgram = "cuelsp";
     homepage = "https://github.com/dagger/cuelsp";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sagikazarmark ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sagikazarmark ];
   };
 }

@@ -10,7 +10,7 @@
 let
   common =
     { edition, sha256 }:
-    stdenv.mkDerivation (rec {
+    stdenv.mkDerivation rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.16.0";
 
@@ -65,15 +65,15 @@ let
         chmod 700 $out/data
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
-        license = with licenses; if edition == "" then unfree else agpl3Only;
-        platforms = platforms.all;
-        maintainers = with maintainers; [ das_j ];
+        license = with lib.licenses; if edition == "" then unfree else agpl3Only;
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [ das_j ];
       };
-    });
+    };
 in
 {
   rainloop-community = common {

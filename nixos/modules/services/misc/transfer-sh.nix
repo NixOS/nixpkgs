@@ -85,50 +85,48 @@ in
       stateDirectory = "/var/lib/transfer.sh";
     in
     mkIf cfg.enable {
-      services.transfer-sh.settings =
-        {
-          LISTENER = mkDefault ":8080";
-        }
-        // optionalAttrs localProvider {
-          BASEDIR = mkDefault stateDirectory;
-        };
+      services.transfer-sh.settings = {
+        LISTENER = mkDefault ":8080";
+      }
+      // optionalAttrs localProvider {
+        BASEDIR = mkDefault stateDirectory;
+      };
 
       systemd.services.transfer-sh = {
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
-        serviceConfig =
-          {
-            DevicePolicy = "closed";
-            DynamicUser = true;
-            ExecStart = "${getExe cfg.package} --provider ${cfg.provider}";
-            LockPersonality = true;
-            MemoryDenyWriteExecute = true;
-            PrivateDevices = true;
-            PrivateUsers = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            RestrictAddressFamilies = [
-              "AF_INET"
-              "AF_INET6"
-            ];
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = [ "native" ];
-            SystemCallFilter = [ "@system-service" ];
-            StateDirectory = baseNameOf stateDirectory;
-          }
-          // optionalAttrs (cfg.secretFile != null) {
-            EnvironmentFile = cfg.secretFile;
-          }
-          // optionalAttrs localProvider {
-            ReadWritePaths = cfg.settings.BASEDIR;
-          };
+        serviceConfig = {
+          DevicePolicy = "closed";
+          DynamicUser = true;
+          ExecStart = "${getExe cfg.package} --provider ${cfg.provider}";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = [ "native" ];
+          SystemCallFilter = [ "@system-service" ];
+          StateDirectory = baseNameOf stateDirectory;
+        }
+        // optionalAttrs (cfg.secretFile != null) {
+          EnvironmentFile = cfg.secretFile;
+        }
+        // optionalAttrs localProvider {
+          ReadWritePaths = cfg.settings.BASEDIR;
+        };
       };
     };
 

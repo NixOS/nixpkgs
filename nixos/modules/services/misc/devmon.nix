@@ -22,7 +22,7 @@ in
       path = [
         pkgs.udevil
         pkgs.procps
-        pkgs.udisks2
+        pkgs.udisks
         pkgs.which
       ];
       serviceConfig.ExecStart = "${pkgs.udevil}/bin/devmon";

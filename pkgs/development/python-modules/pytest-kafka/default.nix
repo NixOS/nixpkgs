@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Pytest fixture factories for Zookeeper, Kafka server and Kafka consumer";
     homepage = "https://gitlab.com/karolinepauls/pytest-kafka";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

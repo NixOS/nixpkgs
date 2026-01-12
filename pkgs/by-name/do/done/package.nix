@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-yEpaQa9hKOq0k9MurihbFM4tDB//TPCJdOgKA9tyqVc=";
   };
 
@@ -60,12 +59,12 @@ stdenv.mkDerivation rec {
     GETTEXT_DIR = gettext;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate task management solution for seamless organization and efficiency";
     homepage = "https://done.edfloreshz.dev/";
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "done";
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

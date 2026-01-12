@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       "${lib.makeBinPath [ gnupg ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPG wrapper utility for storing secrets in VCS";
     mainProgram = "regpg";
     homepage = "https://dotat.at/prog/regpg";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ _0xC45 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ _0xC45 ];
   };
 }

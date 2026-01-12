@@ -8,15 +8,12 @@
   terminaltables,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "emv";
   version = "1.0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "russss";
@@ -48,12 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the EMV chip-and-pin smartcard protocol";
     homepage = "https://github.com/russss/python-emv";
     changelog = "https://github.com/russss/python-emv/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukegb ];
     mainProgram = "emvtool";
   };
 }

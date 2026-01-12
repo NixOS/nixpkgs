@@ -10,29 +10,23 @@
 
 buildGoModule rec {
   pname = "aws-nuke";
-  version = "3.54.0";
+  version = "3.61.0";
 
   src = fetchFromGitHub {
     owner = "ekristen";
     repo = "aws-nuke";
     tag = "v${version}";
-    hash = "sha256-BicxJhisCmUXWaBGA/VZSKkh7F3PUjArJC75n1G5jpE=";
+    hash = "sha256-XP/bJfrzo2GxjHyqcapCVteNlAzzL5Fn5XF1wPF50G8=";
   };
 
-  vendorHash = "sha256-6BIPF4bBEBnMHLjnH1rSCrh+cbwWjcpBKxHeQcTbEPk=";
-
-  overrideModAttrs = _: {
-    preBuild = ''
-      go generate ./...
-    '';
-  };
+  vendorHash = "sha256-4/FHINd+xeHgaJmEP54KiP2AQo+3L4p4/QO0GqIspvQ=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ekristen/aws-nuke/v${lib.versions.major version}/pkg/common.SUMMARY=${version}"
+    "-X=github.com/ekristen/aws-nuke/v${lib.versions.major version}/pkg/common.SUMMARY=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -52,8 +46,6 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   postInstallCheck = ''
     $out/bin/aws-nuke resource-types | grep "IAMUser"
   '';
@@ -63,9 +55,8 @@ buildGoModule rec {
   meta = {
     description = "Remove all the resources from an AWS account";
     homepage = "https://github.com/ekristen/aws-nuke";
-    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/v${version}";
+    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "aws-nuke";
     # fork/exec exe/mockgen: exec format error
     # resources/autoscaling_mock_test.go:1: running "../mocks/generate_mocks.sh": exit status 1

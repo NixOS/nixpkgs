@@ -38,23 +38,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [ libxcrypt ]
-    ++ lib.optionals freeipmiSupport [ freeipmi ]
-    ++ lib.optionals gssapiSupport [ libkrb5 ]
-    ++ lib.optionals opensslSupport [ openssl ];
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ lib.optionals freeipmiSupport [ freeipmi ]
+  ++ lib.optionals gssapiSupport [ libkrb5 ]
+  ++ lib.optionals opensslSupport [ openssl ];
 
-  configureFlags =
-    [
-      "--with-ccffile=/dev/null"
-      "--with-cffile=/dev/null"
-    ]
-    ++ lib.optionals freeipmiSupport [ "--with-freeipmi=${freeipmi}/include" ]
-    ++ lib.optionals gssapiSupport [ "--with-gssapi=${libkrb5.dev}/include" ]
-    ++ lib.optionals ipv6Support [ "--with-ipv6" ]
-    ++ lib.optionals opensslSupport [ "--with-openssl=${openssl.dev}/include" ]
-    ++ lib.optionals trustUdsCredSupport [ "--with-trust-uds-cred" ]
-    ++ lib.optionals udsSupport [ "--with-uds" ];
+  configureFlags = [
+    "--with-ccffile=/dev/null"
+    "--with-cffile=/dev/null"
+  ]
+  ++ lib.optionals freeipmiSupport [ "--with-freeipmi=${freeipmi}/include" ]
+  ++ lib.optionals gssapiSupport [ "--with-gssapi=${libkrb5.dev}/include" ]
+  ++ lib.optionals ipv6Support [ "--with-ipv6" ]
+  ++ lib.optionals opensslSupport [ "--with-openssl=${openssl.dev}/include" ]
+  ++ lib.optionals trustUdsCredSupport [ "--with-trust-uds-cred" ]
+  ++ lib.optionals udsSupport [ "--with-uds" ];
 
   # Disabled due to exist upstream cases failing 8/15 tests
   doCheck = false;
@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
       --replace-fail "@INSTALL_PROGRAM@ -s" "@INSTALL_PROGRAM@"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.conserver.com/";
     description = "Application that allows multiple users to watch a serial console at the same time";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 }

@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchurl {
     url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
-    hash = "sha256-e2xCX3ktBtFOT1sXIE02J+LI67Qj69rpLAxkZxDT1sc=";
+    hash = "sha256-cSn+O3rVAPiLivhgXvB7lsh6deyYamlf/8CkCfRKfIY=";
   };
 
   strictDeps = true;
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     description = "Multilingual text processing library (runtime)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ astsmtl ];
   };
 }

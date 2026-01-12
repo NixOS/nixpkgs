@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch =
-    ''
-      sed -i "8i #include <time.h>" xprompt.c
-    ''
-    + (
-      let
-        configFile =
-          if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
-      in
-      lib.optionalString (conf != null) "cp ${configFile} config.h"
-    );
+  postPatch = ''
+    sed -i "8i #include <time.h>" xprompt.c
+  ''
+  + (
+    let
+      configFile =
+        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
+    in
+    lib.optionalString (conf != null) "cp ${configFile} config.h"
+  );
 
   makeFlags = [
     "CC:=$(CC)"
@@ -48,16 +47,16 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Dmenu rip-off with contextual completion";
     longDescription = ''
       XPrompt is a prompt for X. XPrompt features a text input field where the
       user can type in a text subject to tab-completion.
     '';
     homepage = "https://github.com/phillbush/xprompt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "xprompt";
   };
 }

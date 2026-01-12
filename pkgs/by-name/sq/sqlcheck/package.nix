@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jarulraj";
     repo = "sqlcheck";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rGqCtEO2K+OT44nYU93mF1bJ07id+ixPkRSC8DcO6rY=";
     fetchSubmodules = true;
   };
@@ -28,16 +28,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace external/gflags/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Automatically identify anti-patterns in SQL queries";
     mainProgram = "sqlcheck";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; unix ++ windows;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [ h7x4 ];
   };
 }

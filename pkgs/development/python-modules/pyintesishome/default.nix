@@ -3,15 +3,12 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyintesishome";
   version = "1.8.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jnimmo";
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyintesishome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for IntesisHome devices";
     homepage = "https://github.com/jnimmo/pyIntesisHome";
     changelog = "https://github.com/jnimmo/pyIntesisHome/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

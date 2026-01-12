@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "adminerevo";
     repo = "adminerevo";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cyKSwzoVbS/0Fiv02kFIF4MTOqzpKSEFwwUwS4yqL6Q=";
     fetchSubmodules = true;
   };
@@ -62,16 +62,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Database management in a single PHP file";
     homepage = "https://docs.adminerevo.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl2Only
     ];
-    maintainers = with maintainers; [
-      shyim
-    ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 })

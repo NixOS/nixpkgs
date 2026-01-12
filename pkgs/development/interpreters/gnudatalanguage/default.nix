@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   wrapGAppsHook3,
   readline,
@@ -121,6 +122,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gnudatalanguage/gdl/commit/b648a63c5070f38e90167f858a79ba6f01dad1d3.patch?full_index=1";
+      includes = [ "CMakeLists.txt" ];
+      hash = "sha256-lYtAstI21Up4RArf6pXnjiTwJ3Omoisw43Ih1H2Wc0s=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'FATAL_ERROR "The src' 'WARNING "The src' \
@@ -131,41 +140,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ] ++ lib.optional enableWX wrapGAppsHook3;
 
-  buildInputs =
-    [
-      qhull
-      readline
-      ncurses
-      zlib
-      gsl
-      openmp
-      graphicsmagick
-      fftw
-      fftwFloat
-      fftwLongDouble
-      proj
-      shapelib
-      expat
-      mpi
-      udunits
-      eigen
-      pslib
-      libpng
-      libtiff
-      libgeotiff
-      libjpeg
-      hdf4-custom
-      hdf5-custom
-      netcdf-custom
-      plplot-with-drivers
-    ]
-    ++ lib.optional enableXWin plplot-with-drivers.libX11
-    ++ lib.optional enableGRIB eccodes
-    ++ lib.optional enableGLPK glpk
-    ++ lib.optional enableWX wxGTK32
-    ++ lib.optional enableMPI mpi
-    ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
-    ++ lib.optional enableSzip szip;
+  buildInputs = [
+    qhull
+    readline
+    ncurses
+    zlib
+    gsl
+    openmp
+    graphicsmagick
+    fftw
+    fftwFloat
+    fftwLongDouble
+    proj
+    shapelib
+    expat
+    mpi
+    udunits
+    eigen
+    pslib
+    libpng
+    libtiff
+    libgeotiff
+    libjpeg
+    hdf4-custom
+    hdf5-custom
+    netcdf-custom
+    plplot-with-drivers
+  ]
+  ++ lib.optional enableXWin plplot-with-drivers.libX11
+  ++ lib.optional enableGRIB eccodes
+  ++ lib.optional enableGLPK glpk
+  ++ lib.optional enableWX wxGTK32
+  ++ lib.optional enableMPI mpi
+  ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
+  ++ lib.optional enableSzip szip;
 
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy ]))

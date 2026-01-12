@@ -8,6 +8,7 @@
   babel,
   buildPythonPackage,
   certifi,
+  cryptography,
   fetchFromGitHub,
   gitUpdater,
   hatchling,
@@ -20,7 +21,6 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   redis,
   uvloop,
@@ -28,16 +28,14 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.20.0.post0";
+  version = "3.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
     tag = "v${version}";
-    hash = "sha256-OQH5wes2RGSbT9GPKcZVVxpsFbtOnXd6aAeYfQST1Xs=";
+    hash = "sha256-8+neei3GXb8vIb7EXUposWFo8oU1PA/zDLmC1drYKAA=";
   };
 
   build-system = [ hatchling ];
@@ -64,6 +62,7 @@ buildPythonPackage rec {
     redis = [ redis ];
     proxy = [ aiohttp-socks ];
     i18n = [ babel ];
+    signature = [ cryptography ];
   };
 
   nativeCheckInputs = [
@@ -74,7 +73,13 @@ buildPythonPackage rec {
     pytest-lazy-fixture
     pytestCheckHook
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slate...
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "aiogram" ];
 

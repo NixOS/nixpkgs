@@ -49,14 +49,7 @@ in
 
       theme = {
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.gnome-themes-extra;
-          defaultText = literalExpression "pkgs.gnome-themes-extra";
-          description = ''
-            The package path that contains the theme given in the name option.
-          '';
-        };
+        package = mkPackageOption pkgs "gnome-themes-extra" { };
 
         name = mkOption {
           type = types.str;
@@ -70,14 +63,7 @@ in
 
       iconTheme = {
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.adwaita-icon-theme";
-          description = ''
-            The package path that contains the icon theme given in the name option.
-          '';
-        };
+        package = mkPackageOption pkgs "adwaita-icon-theme" { };
 
         name = mkOption {
           type = types.str;
@@ -91,14 +77,7 @@ in
 
       cursorTheme = {
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.adwaita-icon-theme";
-          description = ''
-            The package path that contains the cursor theme given in the name option.
-          '';
-        };
+        package = mkPackageOption pkgs "adwaita-icon-theme" { };
 
         name = mkOption {
           type = types.str;

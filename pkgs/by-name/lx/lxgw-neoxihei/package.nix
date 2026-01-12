@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-neoxihei";
-  version = "1.216.2";
+  version = "1.237";
 
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v${version}/LXGWNeoXiHei.ttf";
-    hash = "sha256-fRg0JhN3VxO2si5yuN//SddgiA/A5D7AHkCXhQuI0SA=";
+    hash = "sha256-yeHBsWn9XyZOaRaHxb1n6Q1dPt5O35hp7Tzu7M6JeJQ=";
   };
 
   dontUnpack = true;
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simplified Chinese sans-serif font derived from IPAex Gothic";
     homepage = "https://github.com/lxgw/LxgwNeoXiHei";
-    license = licenses.ipa;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.ipa;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

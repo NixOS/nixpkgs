@@ -1,6 +1,7 @@
 { buildPythonPackage, usbrelay }:
 
 buildPythonPackage {
+  format = "setuptools";
   pname = "usbrelay_py";
   inherit (usbrelay) version src;
 

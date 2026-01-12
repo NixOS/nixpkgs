@@ -3,6 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  cargo,
+  rustc,
   stfl,
   sqlite,
   curl,
@@ -17,55 +19,52 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsboat";
-  version = "2.39";
+  version = "2.42";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
-    rev = "r${finalAttrs.version}";
-    hash = "sha256-ypAn9Z27S20f82wqsZIELO1DHN0deqcTHYA77ddtb8g=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-ZBqYxAX2jPaRycdw7BbhySt2uviICadT/5Z5WZqsqJM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LDv5Rrv5ZKs7cspPTWt49omvLWY01y1TDGrfl7Jea3g=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-T6zBr3LoOkPLVkBvfhUdqs7iF2I6fRTZo+uMsrnv+5g=";
+  };
 
-  # TODO: Check if that's still needed
+  # allow other ncurses versions on Darwin
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Allow other ncurses versions on Darwin
-    substituteInPlace config.sh \
-      --replace "ncurses5.4" "ncurses"
+    substituteInPlace config.sh --replace-fail "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      asciidoctor
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-      ncurses
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    gettext
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+    ncurses
+  ];
 
-  buildInputs =
-    [
-      stfl
-      sqlite
-      curl
-      libxml2
-      json_c
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      gettext
-    ];
-
-  postBuild = ''
-    make -j $NIX_BUILD_CORES prefix="$out"
-  '';
+  buildInputs = [
+    stfl
+    sqlite
+    curl
+    libxml2
+    json_c
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    gettext
+  ];
 
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might
@@ -74,36 +73,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
   GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
 
+  makeFlags = [ "prefix=$(out)" ];
+  enableParallelBuilding = true;
+
   doCheck = true;
+  checkTarget = "test";
 
-  preCheck = ''
-    make -j $NIX_BUILD_CORES test
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
+    done
   '';
-
-  postInstall =
-    ''
-      make -j $NIX_BUILD_CORES prefix="$out" install
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-      done
-    '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 newsboat $out/bin/newsboat
-    install -Dm755 podboat $out/bin/podboat
-    runHook postInstall
-  '';
-
   meta = {
     homepage = "https://newsboat.org/";
-    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [
       dotlambda

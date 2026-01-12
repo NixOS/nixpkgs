@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BJa6T+qlbn7uABKIEhFhwLrw5sG/9al4L/2sbllfPFg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4EBMl5yvteoot6/r0tTZ95MQ6HGqgBzlRWClnlyqz/M=";
 
   cargoPatches = [
@@ -29,14 +28,14 @@ rustPlatform.buildRustPackage rec {
   # tests fail for unknown reasons on aarch64-darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  meta = with lib; {
+  meta = {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "texture-synthesis";
   };
 }

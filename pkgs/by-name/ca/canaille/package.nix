@@ -58,7 +58,7 @@ python.pkgs.buildPythonApplication rec {
       coverage
       flask-webtest
       pyquery
-      pytest-cov
+      pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
       pytest-smtpd
@@ -123,7 +123,8 @@ python.pkgs.buildPythonApplication rec {
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    ]
+    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
     otp = [
       otpauth
       pillow
@@ -140,13 +141,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
     changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
   };
 

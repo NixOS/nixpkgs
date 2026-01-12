@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # tests not included with pypi release (in examples)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Formulate and solve resource-constrained scheduling problems";
     homepage = "https://github.com/timnon/pyschedule";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pyusb,
   influxdb-client,
   pyserial,
   pytestCheckHook,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "openant-unstable";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Tigge";
@@ -24,7 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    udevCheckHook
+  ];
 
   postInstall = ''
     install -dm755 "$out/etc/udev/rules.d"
@@ -42,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openant" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Tigge/openant";
     description = "ANT and ANT-FS Python Library";
     mainProgram = "openant";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

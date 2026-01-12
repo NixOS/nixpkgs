@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     qt5.qtbase
     qt5.qtmultimedia
     qt5.qttools
-  ] ++ lib.optional withEspeak espeak;
+  ]
+  ++ lib.optional withEspeak espeak;
 
   cmakeDir = "../utils";
 
@@ -55,12 +56,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rockbox.org";
     description = "Open source firmware for digital music players";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ozkutuk ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ozkutuk ];
     mainProgram = "RockboxUtility";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

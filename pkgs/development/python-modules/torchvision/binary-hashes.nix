@@ -7,81 +7,81 @@
 
 version:
 builtins.getAttr version {
-  "0.22.0" = {
-    x86_64-linux-39 = {
-      name = "torchvision-0.22.0-cp39-cp39-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu128/torchvision-0.22.0%2Bcu128-cp39-cp39-manylinux_2_28_x86_64.whl";
-      hash = "sha256-ySo1P/gtszEmRLWybUELWGtylptTWUjVhMJHVp91YFw=";
-    };
+  "0.24.1" = {
     x86_64-linux-310 = {
-      name = "torchvision-0.22.0-cp310-cp310-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu128/torchvision-0.22.0%2Bcu128-cp310-cp310-manylinux_2_28_x86_64.whl";
-      hash = "sha256-Wd9aVQETqAzlIwRwZuqu2xaMaUgtqIw6skZxarRboJI=";
+      name = "torchvision-0.24.1-cp310-cp310-linux_x86_64.whl";
+      url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp310-cp310-manylinux_2_28_x86_64.whl";
+      hash = "sha256-h/bjLS2Y0nefn6WKqTz2rwSeP4doE0SiCI4vx9ndPgA=";
     };
     x86_64-linux-311 = {
-      name = "torchvision-0.22.0-cp311-cp311-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu128/torchvision-0.22.0%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl";
-      hash = "sha256-86xSfVi0wgQ+uNnin8Vs0XUfNvKqptx1407FTJUby5w=";
+      name = "torchvision-0.24.1-cp311-cp311-linux_x86_64.whl";
+      url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl";
+      hash = "sha256-G0T2fL2PNuKli/qjF201s331VgSt9ZKeiQBuUx+En6o=";
     };
     x86_64-linux-312 = {
-      name = "torchvision-0.22.0-cp312-cp312-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu128/torchvision-0.22.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl";
-      hash = "sha256-BsEB9A4f+UhpvhRIfJH9U1LjdvIC/er7j1PFjO4vvrU=";
+      name = "torchvision-0.24.1-cp312-cp312-linux_x86_64.whl";
+      url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl";
+      hash = "sha256-z4Tq4dLRKn0mGnSW7KAN2Se3F5IBGx6E1BYslQ6zIB0=";
     };
     x86_64-linux-313 = {
-      name = "torchvision-0.22.0-cp313-cp313-linux_x86_64.whl";
-      url = "https://download.pytorch.org/whl/cu128/torchvision-0.22.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl";
-      hash = "sha256-7k+m1AUtmuJcEjMomUf7+kuI0jcQJUqxdysQjB/F+00=";
+      name = "torchvision-0.24.1-cp313-cp313-linux_x86_64.whl";
+      url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl";
+      hash = "sha256-X3xeD6CNLL7pO24Eu+3Vm14RRiz/bO/QeUkhcmXfI3A=";
     };
-    aarch64-darwin-39 = {
-      name = "torchvision-0.22.0-cp39-cp39-macosx_11_0_arm64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp39-cp39-macosx_11_0_arm64.whl";
-      hash = "sha256-LvOKOX8bnPYoRvsgZZy5kQH502HejEXXkoTuRcb0DVA=";
+    x86_64-linux-314 = {
+      name = "torchvision-0.24.1-cp314-cp314-linux_x86_64.whl";
+      url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl";
+      hash = "sha256-O3LjI3fl6ROY3cRXnHd4SyaWUqV5X0sgpaHUyA6b090=";
     };
     aarch64-darwin-310 = {
-      name = "torchvision-0.22.0-cp310-cp310-macosx_11_0_arm64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp310-cp310-macosx_11_0_arm64.whl";
-      hash = "sha256-ciVvHX/1ELFsn7TdSIWE0Gk/QMeS8oapYgZ0Q4qBzMo=";
+      name = "torchvision-0.24.1-cp310-cp310-macosx_11_0_arm64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp310-cp310-macosx_11_0_arm64.whl";
+      hash = "sha256-62yB50mCzCWBhdmHAG7Xg1xuWJNSfuKBKUyFovP3JYo=";
     };
     aarch64-darwin-311 = {
-      name = "torchvision-0.22.0-cp311-cp311-macosx_11_0_arm64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp311-cp311-macosx_11_0_arm64.whl";
-      hash = "sha256-GR6igyH8Ji2Koaf+ecQf8oSIZL84L59upFxB3egxN5I=";
+      name = "torchvision-0.24.1-cp311-cp311-macosx_11_0_arm64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp311-cp311-macosx_11_0_arm64.whl";
+      hash = "sha256-c0gffA2jjsGgQCHy2WcoLIfaSKL4MyvpYAkWcs/+gGs=";
     };
     aarch64-darwin-312 = {
-      name = "torchvision-0.22.0-cp312-cp312-macosx_11_0_arm64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp312-cp312-macosx_11_0_arm64.whl";
-      hash = "sha256-McMWVBj+IcPYH+NFnlEHfC+UiAG4kz7RgWn1RlJ5ag8=";
+      name = "torchvision-0.24.1-cp312-cp312-macosx_11_0_arm64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp312-cp312-macosx_11_0_arm64.whl";
+      hash = "sha256-TwlWglurWTLdUzlN6OEQXtkYJQKzZ/8Eddvw5plVBhI=";
     };
     aarch64-darwin-313 = {
-      name = "torchvision-0.22.0-cp313-cp313-macosx_11_0_arm64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp313-cp313-macosx_11_0_arm64.whl";
-      hash = "sha256-7OF5lYV90yhIXJwCfAsg/8UtsjLjDIT/bJWrdyAREsU=";
+      name = "torchvision-0.24.1-cp313-cp313-macosx_12_0_arm64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313-macosx_12_0_arm64.whl";
+      hash = "sha256-yFj5RO/qIXCsvaL4AWE7FRk75J6EGcmMIE6fXoxlqVU=";
     };
-    aarch64-linux-39 = {
-      name = "torchvision-0.22.0-cp39-cp39-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp39-cp39-manylinux_2_28_aarch64.whl";
-      hash = "sha256-QJX6wrLkmpww9wHgnsG989EbHkiwBqdqkBWi7Ys5VW4=";
+    aarch64-darwin-314 = {
+      name = "torchvision-0.24.1-cp314-cp314-macosx_11_0_arm64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314-macosx_11_0_arm64.whl";
+      hash = "sha256-mDmEiv9H2Y53JKvRowdhIduWBmwy3bMZtoXf4Hc2D0A=";
     };
     aarch64-linux-310 = {
-      name = "torchvision-0.22.0-cp310-cp310-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp310-cp310-manylinux_2_28_aarch64.whl";
-      hash = "sha256-gQ6krzvGPPOeg0+R9CGP9ZmSccqv/iRWJH35BQAr1sA=";
+      name = "torchvision-0.24.1-cp310-cp310-linux_aarch64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp310-cp310-manylinux_2_28_aarch64.whl";
+      hash = "sha256-VnnMvWaaiLq5ghwyI00kBzXTZJkpGIfyYqSS8Nlti4I=";
     };
     aarch64-linux-311 = {
-      name = "torchvision-0.22.0-cp311-cp311-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp311-cp311-manylinux_2_28_aarch64.whl";
-      hash = "sha256-bFYg4Q/+OI629HRJYhBu188VCNJub9+gwQUi0ySa6iQ=";
+      name = "torchvision-0.24.1-cp311-cp311-linux_aarch64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp311-cp311-manylinux_2_28_aarch64.whl";
+      hash = "sha256-RScwj/tX9tLBfoLuCOJb+9CkHxN99tDqiAWyPvKvDms=";
     };
     aarch64-linux-312 = {
-      name = "torchvision-0.22.0-cp312-cp312-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp312-cp312-manylinux_2_28_aarch64.whl";
-      hash = "sha256-jxFryC4MB25wund25hHtOSuWZqpENmLmh4CLCJk9Jq8=";
+      name = "torchvision-0.24.1-cp312-cp312-linux_aarch64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp312-cp312-manylinux_2_28_aarch64.whl";
+      hash = "sha256-KBV2SXWPuXSR3g20eNXW5zwjtQjlTeIK28NeazqnJEM=";
     };
     aarch64-linux-313 = {
-      name = "torchvision-0.22.0-cp313-cp313-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/cpu/torchvision-0.22.0-cp313-cp313-manylinux_2_28_aarch64.whl";
-      hash = "sha256-Rxxt11u5hMbr5PYDIolKKQvz1LGV52nYB1TzaJzX8jg=";
+      name = "torchvision-0.24.1-cp313-cp313-linux_aarch64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp313-cp313-manylinux_2_28_aarch64.whl";
+      hash = "sha256-Wd2+V3mUOvmaiX/NWJR1eufP/rHCWlGbec2TOBiKhmQ=";
+    };
+    aarch64-linux-314 = {
+      name = "torchvision-0.24.1-cp314-cp314-linux_aarch64.whl";
+      url = "https://download.pytorch.org/whl/cpu/torchvision-0.24.1-cp314-cp314-manylinux_2_28_aarch64.whl";
+      hash = "sha256-MqXOmewggf1aswTaCqlpG27AR9EqMpwNmRxp0KG+7kU=";
     };
   };
 }

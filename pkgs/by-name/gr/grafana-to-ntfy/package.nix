@@ -15,12 +15,10 @@ rustPlatform.buildRustPackage {
     hash = "sha256-GO9VE9wymRk+QKGFyDpd0wS9GCY3pjpFUe37KIcnKxc=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-w4HSxdihElPz0q05vWjajQ9arZjAzd82L0kEKk1Uk8s=";
 
   meta = {
-    description = "Grafana-to-ntfy (ntfy.sh) alerts channel";
+    description = "Bridge to forward Grafana alerts to ntfy.sh notification service";
     homepage = "https://github.com/kittyandrew/grafana-to-ntfy";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;

@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snis";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "smcameron";
     repo = "space-nerds-in-space";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WxxJW0o4PtOhmloeRLqxJahJwWlGpcdpQjrjrah+Ixk=";
+    hash = "sha256-H6ZeZOeKy8Z5HGicQs9CmjR2tDzD8AGvLr75Xx0YkAg=";
   };
 
   enableParallelBuilding = true;
@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
     homepage = "https://smcameron.github.io/space-nerds-in-space/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alyaeanyx ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pentane ];
+    platforms = lib.platforms.linux;
     mainProgram = "snis_launcher";
   };
 })

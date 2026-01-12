@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "tproxy";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "kevwan";
     repo = "tproxy";
     tag = "v${version}";
-    hash = "sha256-LiYZ9S7Jga4dQWHmqsPvlGDAAw5reO16LAYaNJZFnhE=";
+    hash = "sha256-rVcPI0cB1TMiG4swdflOwFq+W23suM97qqPs6T4vmqw=";
   };
 
-  vendorHash = "sha256-YjkYb5copw0SM2lago+DyVgHIrqLDSBnO+4zLMq+YJ8=";
+  vendorHash = "sha256-ygaRcSIYNesA1zWdUlL0AqSxec4dwIE0cbGImHX7+wU=";
 
   ldflags = [
     "-w"

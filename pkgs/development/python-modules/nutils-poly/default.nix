@@ -7,15 +7,12 @@
   libiconv,
   numpy,
   unittestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nutils-poly";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nutils";
@@ -25,8 +22,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
     hash = "sha256-3UBQJfMPVo37V7mJnN9loF1+vKh3JxFJWgynwsOnAg4=";
   };
 

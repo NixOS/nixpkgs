@@ -3,6 +3,7 @@
   aioquic,
   argon2-cffi,
   asgiref,
+  bcrypt,
   brotli,
   buildPythonPackage,
   certifi,
@@ -15,10 +16,9 @@
   hypothesis,
   kaitaistruct,
   ldap3,
-  mitmproxy-linux,
   mitmproxy-rs,
   msgpack,
-  passlib,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -31,7 +31,6 @@
   ruamel-yaml,
   setuptools,
   sortedcontainers,
-  stdenv,
   tornado,
   urwid,
   wsproto,
@@ -40,21 +39,23 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.0.1";
+  version = "12.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-BKT/qBWlfShAveL1KY5XXgQjhxR3Vr4zoJwiRxtBJkE=";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
   pythonRelaxDeps = [
-    "h11" # https://github.com/NixOS/nixpkgs/pull/399393
-    "h2"
-    "passlib"
-    "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
+    "zstandard"
+
+    # requested by maintainer
+    "brotli"
+    # just keep those
+    "typing-extensions"
   ];
 
   build-system = [ setuptools ];
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     argon2-cffi
     asgiref
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -74,7 +76,6 @@ buildPythonPackage rec {
     ldap3
     mitmproxy-rs
     msgpack
-    passlib
     publicsuffix2
     pyopenssl
     pyparsing
@@ -124,6 +125,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
@@ -141,11 +145,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "mitmproxy";
   };
 }

@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.3.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "accupy";
@@ -42,7 +40,8 @@ buildPythonPackage rec {
     mpmath
     numpy
     pyfma
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ]
+  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     perfplot
@@ -79,10 +78,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "accupy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Accurate sums and dot products for Python";
     homepage = "https://github.com/nschloe/accupy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

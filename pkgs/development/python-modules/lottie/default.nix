@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lottie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework to work with lottie files and telegram animated stickers (tgs)";
     homepage = "https://gitlab.com/mattbas/python-lottie/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "juju";
-  version = "3.6.5";
+  version = "3.6.12";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
     rev = "v${version}";
-    hash = "sha256-Ruwmj+MrqulB+XwbE3qvqFJ/yt0ttwFuM9lqXV9YI7k=";
+    hash = "sha256-c47+BmknMWoZr5xFGkR0Y8m7aNBm26441qOAsrHhUk8=";
   };
 
-  vendorHash = "sha256-/BejA4Wn+SbKQHDqA7hanVaTKzaInLNOMSlesy714VI=";
+  vendorHash = "sha256-v460n6UnaXrimyYCmSgVmWlvkhRn6mYBm1KbH4fMxqM=";
 
   subPackages = [
     "cmd/juju"
@@ -40,11 +40,11 @@ buildGoModule rec {
     command = "HOME=\"$(mktemp -d)\" juju --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source modelling tool for operating software in the cloud";
     homepage = "https://juju.is";
-    license = licenses.mit;
-    maintainers = with maintainers; [ citadelcore ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ citadelcore ];
     mainProgram = "juju";
   };
 }

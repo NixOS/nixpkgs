@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aiken";
-  version = "1.1.17";
+  version = "1.1.21";
 
   src = fetchFromGitHub {
     owner = "aiken-lang";
     repo = "aiken";
-    rev = "v${version}";
-    hash = "sha256-bEsBLihMqYHJa5913Q434xKVufxTrcaxwcANPV9u37U=";
+    tag = "v${version}";
+    hash = "sha256-8Oq6Bem4mREHXsBC0FwBnU2MVmTh8b7KtJ/KrPDMqLU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ob4UuBLD6HFbghv4E2XMj+xVeUSFtc9qPUNuUDgZeQA=";
+  cargoHash = "sha256-5TplKj7q8G1XX6o4d8Vlgf5eGXB8fpnvkl7TwVcuTw0=";
 
   buildInputs = [ openssl ];
 
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     description = "Modern smart contract platform for Cardano";
     homepage = "https://aiken-lang.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ t4ccer ];
+    maintainers = with lib.maintainers; [ aciceri ];
     mainProgram = "aiken";
   };
 }

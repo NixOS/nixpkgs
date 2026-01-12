@@ -21,12 +21,12 @@
 with lib;
 
 let
-  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix (
+  rootfsImage = pkgs.callPackage config.sdImage.rootFilesystemCreator (
     {
       inherit (config.sdImage) storePaths;
       compressImage = config.sdImage.compressImage;
       populateImageCommands = config.sdImage.populateRootCommands;
-      volumeLabel = "NIXOS_SD";
+      volumeLabel = config.sdImage.rootVolumeLabel;
     }
     // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
       uuid = config.sdImage.rootPartitionUUID;
@@ -80,8 +80,7 @@ in
       type = types.int;
       default = 8;
       description = ''
-        Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
-        bytes).
+        Gap in front of the /boot/firmware partition, in MiB (1024×1024 bytes).
         Can be increased to make more space for boards requiring to dd u-boot
         SPL before actual partitions.
 
@@ -115,6 +114,40 @@ in
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
         UUID for the filesystem on the main NixOS partition on the SD card.
+      '';
+    };
+
+    rootVolumeLabel = mkOption {
+      type = types.str;
+      default = "NIXOS_SD";
+      example = "NIXOS_PENDRIVE";
+      description = ''
+        Label for the NixOS root volume.
+        Usually used when creating a recovery NixOS media installation
+        that avoids conflicting with previous instalation label.
+      '';
+    };
+
+    rootFilesystemCreator = mkOption {
+      type = types.oneOf [
+        types.package
+        types.path
+      ];
+      default = ../../../lib/make-ext4-fs.nix;
+      example = ''
+        nixpkgs/nixos/lib/make-btrfs-fs.nix
+      '';
+      description = ''
+        The filesystem creator used for the root partition.
+      '';
+    };
+
+    rootFilesystemImage = mkOption {
+      type = types.package;
+      default = rootfsImage;
+      description = ''
+        The finished root partition image with all custom fileystem modifications.
+        Used to override the filesystem creator itself.
       '';
     };
 
@@ -198,7 +231,7 @@ in
         ];
       };
       "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
+        device = "/dev/disk/by-label/${config.sdImage.rootVolumeLabel}";
         fsType = "ext4";
       };
     };
@@ -206,7 +239,7 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     image.extension = if config.sdImage.compressImage then "img.zst" else "img";
-    image.filePath = "sd-card/${config.image.fileName}";
+    image.filePath = "sd-image/${config.image.fileName}";
     system.nixos.tags = [ "sd-card" ];
     system.build.image = config.system.build.sdImage;
     system.build.sdImage = pkgs.callPackage (
@@ -228,7 +261,8 @@ in
           libfaketime
           mtools
           util-linux
-        ] ++ lib.optional config.sdImage.compressImage zstd;
+        ]
+        ++ lib.optional config.sdImage.compressImage zstd;
 
         inherit (config.sdImage) compressImage;
 
@@ -243,11 +277,11 @@ in
             echo "file sd-image $img" >> $out/nix-support/hydra-build-products
           fi
 
-          root_fs=${rootfsImage}
+          root_fs=${config.sdImage.rootFilesystemImage}
           ${lib.optionalString config.sdImage.compressImage ''
             root_fs=./root-fs.img
             echo "Decompressing rootfs image"
-            zstd -d --no-progress "${rootfsImage}" -o $root_fs
+            zstd -d --no-progress "${config.sdImage.rootFilesystemImage}" -o $root_fs
           ''}
 
           # Gap in front of the first partition, in MiB

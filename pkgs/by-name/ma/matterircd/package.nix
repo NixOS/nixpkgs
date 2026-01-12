@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal IRC server bridge to Mattermost";
     mainProgram = "matterircd";
     homepage = "https://github.com/42wim/matterircd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ numinit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ numinit ];
   };
 }

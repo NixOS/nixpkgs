@@ -29,6 +29,7 @@ buildPythonPackage rec {
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
   version = "2021.12.17";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
@@ -77,8 +78,11 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath =
-        [ atomicparsley ] ++ lib.optional ffmpegSupport ffmpeg ++ lib.optional rtmpSupport rtmpdump;
+      packagesToBinPath = [
+        atomicparsley
+      ]
+      ++ lib.optional ffmpegSupport ffmpeg
+      ++ lib.optional rtmpSupport rtmpdump;
     in
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
@@ -93,7 +97,7 @@ buildPythonPackage rec {
   # Requires network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
@@ -102,12 +106,11 @@ buildPythonPackage rec {
       the public domain, which means you can modify it, redistribute it or use
       it however you like.
     '';
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [
-      bluescreen303
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       fpletz
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "youtube-dl";
     knownVulnerabilities = [
       "youtube-dl is unmaintained, migrate to yt-dlp, if possible"

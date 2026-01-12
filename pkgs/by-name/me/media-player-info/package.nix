@@ -6,6 +6,7 @@
   pkg-config,
   python3,
   udev,
+  udevCheckHook,
   systemd,
 }:
 
@@ -29,7 +30,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     python3
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs ./tools
@@ -37,11 +41,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-udevdir=${placeholder "out"}/lib/udev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Repository of data files describing media player capabilities";
     homepage = "https://www.freedesktop.org/wiki/Software/media-player-info/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel ];
-    platforms = with platforms; linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = with lib.platforms; linux;
   };
 }

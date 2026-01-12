@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.1.0";
+  version = "11.6.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
-      url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-42NP+23PlyIiqzwjpktz8ipJ5tjzbbszSB9qkeE5jVU=";
+      url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
+      hash = "sha256-MU/WB4RsNViEulvE6fB7S4QTjjMI/50enlyCIX+xar4=";
     };
 
     x86_64-darwin = fetchzip {
-      url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-/GiHFVz9RyC/bliA8m2YwCwnUQfxT9C0qR+YPr6zdqQ=";
+      url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
+      hash = "sha256-Ty+eRZJ6bnBsrs1VtGem1+m9WDZZf/PgiOvFIazQF6I=";
     };
 
     aarch64-darwin = fetchzip {
-      url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-CfhloCczC2z1AHNh0vGXk9Np+BnFI0U/QrPIFBWsYjs=";
+      url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
+      hash = "sha256-mpJNhvKIBYt3Yd+RjxSgzRP6AfnfHPRbQ0dzd5kQQIQ=";
     };
   };
 
@@ -154,11 +154,12 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = "GitKraken Desktop";
+        name = "gitkraken";
         exec = "gitkraken";
         icon = "gitkraken";
         desktopName = "GitKraken Desktop";
         genericName = "Git Client";
+        startupWMClass = "GitKraken";
         categories = [ "Development" ];
         comment = "Unleash your repo";
       })
@@ -207,9 +208,9 @@ let
 
       # SSL and permissions fix for bundled nodegit
       pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
-      mv nodegit-ubuntu-18.node nodegit-ubuntu-18-ssl-1.1.1.node
-      mv nodegit-ubuntu-18-ssl-static.node nodegit-ubuntu-18.node
-      chmod 755 nodegit-ubuntu-18.node
+      mv nodegit-ubuntu-20.node nodegit-ubuntu-20-ssl-1.1.1.node
+      mv nodegit-ubuntu-20-ssl-static.node nodegit-ubuntu-20.node
+      chmod 755 nodegit-ubuntu-20.node
       popd
 
       # Devendor bundled git

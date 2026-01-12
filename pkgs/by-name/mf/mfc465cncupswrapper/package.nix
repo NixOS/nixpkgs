@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
     chmod 755 $out/lib/cups/filter/brlpdwrappermfc465cn
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Brother MFC-465CN CUPS wrapper driver";
     homepage = "http://www.brother.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ phrogg ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ phrogg ];
   };
 }

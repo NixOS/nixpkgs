@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-dock";
-  version = "8.1.1";
+  version = "8.3.1";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "elementary";
     repo = "dock";
     rev = finalAttrs.version;
-    hash = "sha256-Z6Y/UR6B4tygmetfZq5sOyn5nfq8+CmuR3NpegzCyo8=";
+    hash = "sha256-BJkJ6U9fnGSFeY/Z9tcomZ0umRDENxPl0koioUYhFYg=";
   };
 
   depsBuildBuild = [ pkg-config ];

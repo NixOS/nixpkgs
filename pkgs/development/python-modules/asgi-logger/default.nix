@@ -23,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "asgi_logger" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access logger for ASGI servers";
     homepage = "https://github.com/Kludex/asgi-logger";
-    license = licenses.mit;
-    teams = [ teams.wdz ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.wdz ];
   };
 }

@@ -5,7 +5,7 @@
   makeWrapper,
   cvs,
   perl,
-  nettools,
+  net-tools,
   findutils,
   rsync,
   coreutils,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cvs
     perl
-    nettools
+    net-tools
     findutils
     rsync
     coreutils
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq-branch --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq-merge --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cvsq-switch --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lcvs --prefix PATH : ${
       lib.makeBinPath [
         cvs
-        nettools
+        net-tools
         findutils
         rsync
         coreutils

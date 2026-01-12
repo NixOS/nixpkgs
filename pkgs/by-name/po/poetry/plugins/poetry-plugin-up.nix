@@ -6,6 +6,7 @@
   pytestCheckHook,
   pytest-mock,
   poetry,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MousaZeidBaker";
-    repo = pname;
+    repo = "poetry-plugin-up";
     tag = "v${version}";
     hash = "sha256-gVhx8Vhk+yT/QjcEme8w0F+6BBpnEZOqzCkUJgM9eck=";
   };
@@ -31,17 +32,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  disabledTests = [
+    # https://github.com/MousaZeidBaker/poetry-plugin-up/issues/78
+    "test_command_preserve_wildcard_project"
+    "test_command_with_latest_project"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Poetry plugin to simplify package updates";
     homepage = "https://github.com/MousaZeidBaker/poetry-plugin-up";
     changelog = "https://github.com/MousaZeidBaker/poetry-plugin-up/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.k900 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.k900 ];
   };
 }

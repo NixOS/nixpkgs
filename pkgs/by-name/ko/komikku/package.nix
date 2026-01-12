@@ -4,11 +4,12 @@
   desktop-file-utils,
   gettext,
   glib,
+  glib-networking,
   gobject-introspection,
   blueprint-compiler,
   gtk4,
   libadwaita,
-  libnotify,
+  libglycin,
   webkitgtk_6_0,
   meson,
   ninja,
@@ -23,7 +24,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.77.0";
+  version = "1.99.0";
   pyproject = false;
 
   src = fetchFromGitea {
@@ -31,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     tag = "v${version}";
-    hash = "sha256-UTAK8gzgOEuYw1S4htoInr8pCkx5s+/cblOfk/F6a4M=";
+    hash = "sha256-JKPAY6vfoU0FIXW8BDjUimeDkqp6K1/DG81wNWBGLbY=";
   };
 
   nativeBuildInputs = [
@@ -48,26 +49,28 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+    glib-networking
     gtk4
     libadwaita
-    libnotify
+    libglycin
     webkitgtk_6_0
   ];
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
+    colorthief
     dateparser
     emoji
     keyring
     lxml
-    modern-colorthief
     natsort
     piexif
     pillow
-    pillow-heif
     curl-cffi
     pygobject3
+    pyjwt
+    pypdf
     python-magic
     rarfile
     requests

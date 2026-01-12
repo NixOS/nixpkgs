@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "whereami";
-  version = "unstable-2022-02-18";
+  version = "0-unstable-2022-02-18";
 
   src = fetchFromGitHub {
     owner = "gpakosz";
@@ -38,14 +38,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Locate the current executable and running module/library";
     homepage = "https://github.com/gpakosz/whereami";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       wtfpl
     ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.all;
   };
 }

@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate Oldschool PC Font Pack (TTF Fonts)";
     homepage = "https://int10h.org/oldschool-pc-fonts/";
     changelog = "https://int10h.org/oldschool-pc-fonts/readme/#history";
-    license = licenses.cc-by-sa-40;
-    maintainers = [ maintainers.endgame ];
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = [ lib.maintainers.endgame ];
   };
 }

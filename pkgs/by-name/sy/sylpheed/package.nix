@@ -36,24 +36,32 @@ stdenv.mkDerivation rec {
       url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=ac286a71ed78429e16c612161251b9ea90ccd431";
       sha256 = "sha256-oLmUShtvO6io3jibKT67eO0O58vEDZEeaB51QTd3UkU=";
     })
+    (fetchurl {
+      name = "0013-fix-FTBFS-GCC-14.patch";
+      url = "https://salsa.debian.org/sylpheed-team/sylpheed/-/raw/22984c6d2bf76b0667256a9e8b660447497e1220/debian/patches/0013-fix-FTBFS-GCC-14.patch?inline=false";
+      sha256 = "sha256-ZfQKiOK8pMrN87hrP0/2LxYZZdnaciBoa0khG1Djelo=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ gtk2 ] ++ lib.optionals gpgSupport [ gpgme ] ++ lib.optionals sslSupport [ openssl ];
+  buildInputs = [
+    gtk2
+  ]
+  ++ lib.optionals gpgSupport [ gpgme ]
+  ++ lib.optionals sslSupport [ openssl ];
 
   configureFlags = lib.optional gpgSupport "--enable-gpgme" ++ lib.optional sslSupport "--enable-ssl";
 
   # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Foundation";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     mainProgram = "sylpheed";
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2;
   };
 }

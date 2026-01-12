@@ -23,11 +23,11 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Steam depot downloader utilizing the SteamKit2 library";
     changelog = "https://github.com/SteamRE/DepotDownloader/releases/tag/DepotDownloader_${version}";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.babbaj ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.babbaj ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

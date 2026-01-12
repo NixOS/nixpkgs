@@ -10,7 +10,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   virtualenv,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox
@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.travis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Travis CI configurations for PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-travis/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

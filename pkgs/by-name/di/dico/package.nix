@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
   # ERROR: All 188 tests were run, 90 failed unexpectedly.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage = "https://www.gnu.org/software/dico/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       GNU Dico is a flexible modular implementation of DICT server

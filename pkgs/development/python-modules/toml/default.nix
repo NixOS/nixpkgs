@@ -19,10 +19,10 @@ buildPythonPackage rec {
   # git to download a test suite.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python library for parsing and creating TOML";
     homepage = "https://github.com/uiri/toml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

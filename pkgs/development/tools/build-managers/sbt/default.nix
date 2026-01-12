@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.10.11";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-UDSmSEG4qc+1KjQeRbAd8rjC/6qH2NKw/jPEzcq9jww=";
+    hash = "sha256-5K3j9L2+HnRFvprPAssbNXS+tGA2LhcofiRrfq+buVI=";
   };
 
   postPatch = ''
@@ -51,18 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.scala-sbt.org/";
-    license = licenses.bsd3;
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
     description = "Build tool for Scala, Java and more";
-    maintainers = with maintainers; [
-      nequissimus
+    maintainers = with lib.maintainers; [
       kashw2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

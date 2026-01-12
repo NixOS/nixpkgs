@@ -52,6 +52,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSYSTEM_INSTALL=ON" ];
 
+  # CMake 3.0 is deprecated and no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.0)" \
+      "cmake_minimum_required(VERSION 3.10)" \
+    --replace-fail \
+      "cmake_policy(SET CMP0004 OLD)" ""
+  '';
+
   meta = {
     description = "Third person ninja rabbit fighting game";
     mainProgram = "lugaru";

@@ -10,7 +10,7 @@
   openssl,
   zlib,
   which,
-  libsForQt5,
+  kdePackages,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-uGzgkXOXmpByXewDuo0NieXHYT6fzaHqyfP60V5fMOY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3JcE963GSAUs82OF59Yf7PjQV0FHKsCYx+q3TWQsHpY=";
     fetchSubmodules = true;
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
         which
-        libsForQt5.kdialog
+        kdePackages.kdialog
       ]
     }
     mkdir -p $out/share/icons/hicolor/{64x64,512x512}/apps

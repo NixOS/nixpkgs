@@ -33,14 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
   version = "0.1.12";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withDocumentation [
-      "doc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
+  ];
 
   src = fetchFromGitLab {
     owner = "ubports";
@@ -67,20 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
-      gobject-introspection
-      lttng-ust
-      pkg-config
-      validatePkgConfig
-    ]
-    ++ lib.optionals withDocumentation [
-      doxygen
-      python3Packages.breathe
-      sphinx
-    ];
+  nativeBuildInputs = [
+    cmake
+    dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
+    gobject-introspection
+    lttng-ust
+    pkg-config
+    validatePkgConfig
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    python3Packages.breathe
+    sphinx
+  ];
 
   buildInputs = [
     cmake-extras

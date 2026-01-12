@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  enabledTestPaths = [
     "tests"
   ];
 

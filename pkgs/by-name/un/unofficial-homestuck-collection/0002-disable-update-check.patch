@@ -1,0 +1,63 @@
+From 03ab3354eb9acb41c271238e7b9a5e77570809ae Mon Sep 17 00:00:00 2001
+From: Freya Murphy <freya@freyacat.org>
+Date: Sun, 20 Jul 2025 12:06:21 -0400
+Subject: [PATCH 2/3] disable update check
+
+---
+ src/components/SystemPages/Settings.vue | 15 +++++++++------
+ src/components/UIElements/Updater.vue   | 13 +------------
+ 2 files changed, 10 insertions(+), 18 deletions(-)
+
+diff --git a/src/components/SystemPages/Settings.vue b/src/components/SystemPages/Settings.vue
+index 3371358..47c5ea6 100644
+--- a/src/components/SystemPages/Settings.vue
++++ b/src/components/SystemPages/Settings.vue
+@@ -598,12 +598,15 @@ export default {
+           label: "Use system window decorations",
+           desc: "Use OS-native window decorations instead of the electron title bar. <strong>Will restart the application.</strong>",
+           platform_whitelist: ['electron']
+-        }, {
+-          model: "allowSysUpdateNotifs",
+-          label: "Update notifications",
+-          desc: "Unless this setting is disabled, the collection will check to see if there's a new version of the app available when it starts up and alert you if there is.",
+-          platform_whitelist: ['electron']
+-        }, {
++        },
++        // MOD: patch out update notifs
++        // {
++        //   model: "allowSysUpdateNotifs",
++        //   label: "Update notifications",
++        //   desc: "Unless this setting is disabled, the collection will check to see if there's a new version of the app available when it starts up and alert you if there is.",
++        //   platform_whitelist: ['electron']
++        // },
++        {
+           model: "useTabbedBrowsing",
+           label: "Tabbed Browsing",
+           desc: "By default, the web app only shows one page at a time, like a standard website. This setting re-enables the in-app tab bar, and the app will store your tabs in settings.",
+diff --git a/src/components/UIElements/Updater.vue b/src/components/UIElements/Updater.vue
+index 6b3f677..d9bae45 100644
+--- a/src/components/UIElements/Updater.vue
++++ b/src/components/UIElements/Updater.vue
+@@ -73,18 +73,7 @@ export default {
+   watch: {
+   },
+   mounted(){
+-    const is_flatpak = !!(process.env.container)
+-    if (this.$localData.settings.allowSysUpdateNotifs && !is_flatpak) {
+-      const now = new Date()
+-      const last_checked = new Date(this.$localData.settings.lastCheckedUpdate)
+-      const one_day = (12 * 60 * 60 * 1000)
+-      if (last_checked == "Invalid Date" || now - last_checked > one_day) {
+-        this.doUpdateCheck()
+-        this.$localData.settings.lastCheckedUpdate = now.toISOString()
+-      } else {
+-        this.$logger.info("Skipping update check, already checked", last_checked)
+-      }
+-    }
++    // MOD: patch out update check
+   }
+ }
+ </script>
+--
+2.50.1
+

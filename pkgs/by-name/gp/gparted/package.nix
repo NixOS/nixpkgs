@@ -5,7 +5,6 @@
   gettext,
   coreutils,
   gnused,
-  gnome,
   adwaita-icon-theme,
   gnugrep,
   parted,
@@ -17,22 +16,38 @@
   gpart,
   hdparm,
   procps,
-  util-linux,
   polkit,
   wrapGAppsHook3,
   replaceVars,
   mtools,
-  dosfstools,
   xhost,
+  dosfstools,
+  e2fsprogs,
+  util-linuxMinimal,
+  withAllTools ? false,
+  bcachefs-tools,
+  btrfs-progs,
+  exfatprogs,
+  f2fs-tools,
+  hfsprogs,
+  jfsutils,
+  cryptsetup,
+  lvm2,
+  nilfs-utils,
+  ntfs3g,
+  reiserfsprogs,
+  udftools,
+  xfsprogs,
+  xfsdump,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
   version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/gparted-${version}.tar.gz";
-    sha256 = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
+    url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -66,6 +81,28 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
+  runtimeDeps = [
+    dosfstools
+    e2fsprogs
+    util-linuxMinimal
+  ]
+  ++ lib.optionals withAllTools [
+    bcachefs-tools
+    btrfs-progs
+    exfatprogs
+    f2fs-tools
+    hfsprogs
+    jfsutils
+    cryptsetup
+    lvm2
+    nilfs-utils
+    ntfs3g
+    reiserfsprogs
+    udftools
+    xfsprogs
+    xfsdump
+  ];
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
@@ -74,18 +111,19 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
        --prefix PATH : "${
-         lib.makeBinPath [
-           gpart
-           hdparm
-           util-linux
-           procps
-           coreutils
-           gnused
-           gnugrep
-           mtools
-           dosfstools
-           xhost
-         ]
+         lib.makeBinPath (
+           [
+             gpart
+             hdparm
+             procps
+             coreutils
+             gnused
+             gnugrep
+             mtools
+             xhost
+           ]
+           ++ finalAttrs.runtimeDeps
+         )
        }"
     )
   '';
@@ -108,4 +146,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gparted";
   };
-}
+})

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   installShellFiles,
@@ -9,6 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "nimbo";
   version = "0.3.0";
+  format = "setuptools";
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -50,17 +52,17 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath [ awscli ])
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nimbo \
       --zsh <(_NIMBO_COMPLETE=source_zsh $out/bin/nimbo) \
       --bash <(_NIMBO_COMPLETE=source_bash $out/bin/nimbo) \
       --fish  <(_NIMBO_COMPLETE=source_fish $out/bin/nimbo)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run machine learning jobs on AWS with a single command";
     homepage = "https://github.com/nimbo-sh/nimbo";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ noreferences ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ noreferences ];
   };
 }

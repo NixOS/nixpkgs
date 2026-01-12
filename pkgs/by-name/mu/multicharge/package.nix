@@ -3,8 +3,10 @@
   lib,
   fetchFromGitHub,
   gfortran,
+  buildType ? "meson",
   meson,
   ninja,
+  cmake,
   pkg-config,
   python3,
   blas,
@@ -14,6 +16,12 @@
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "multicharge";
@@ -26,17 +34,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
   };
 
+  patches = [
+    # Fix wrong generation of package config include paths
+    ./pkgconfig.patch
+  ];
+
   nativeBuildInputs = [
     gfortran
-    meson
-    ninja
     pkg-config
     python3
-  ];
+  ]
+  ++ lib.optionals (buildType == "meson") [
+    meson
+    ninja
+  ]
+  ++ lib.optional (buildType == "cmake") cmake;
 
   buildInputs = [
     blas
     lapack
+  ];
+
+  propagatedBuildInputs = [
     mctc-lib
     mstore
   ];
@@ -56,12 +75,12 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Electronegativity equilibration model for atomic partial charges";
     mainProgram = "multicharge";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/grimme-lab/multicharge";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

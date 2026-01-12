@@ -35,10 +35,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Light library to deal with RPCs in OCaml";
-    license = licenses.isc;
-    maintainers = [ maintainers.vyorkin ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vyorkin ];
   };
 }

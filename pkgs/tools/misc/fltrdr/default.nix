@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octobanana.com/software/fltrdr";
     description = "TUI text reader for the terminal";
 
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       setting.
     '';
 
-    platforms = platforms.linux; # can only test linux
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = lib.platforms.linux; # can only test linux
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "fltrdr";
   };
 }

@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.36.0";
+  version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    hash = "sha256-xqHc4Eb0mHQezmElJv20AMNQPgusXdvskNmlO+JP1lw=";
+    hash = "sha256-92xjoCjH5O7wx8U7OFG8Lw9eDOAdeVKNvxBHW+TiniM=";
   };
 
-  vendorHash = "sha256-+7HnbJ6cIzYHkEJVcp2IydHyuqD5PfdL6TUcq7Dpluk=";
+  vendorHash = "sha256-SAIGFQGACTB3Q0KnIdiKKNYY6fVjf/09wGqNr0Hkg+M=";
 
   # we have no bash at the moment for windows
   BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
@@ -48,7 +48,11 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    rm -rf "$out/share/fish"
+  '';
+
+  meta = {
     description = "Shell extension that manages your environment";
     longDescription = ''
       Once hooked into your shell direnv is looking for an .envrc file in your
@@ -62,8 +66,8 @@ buildGoModule rec {
       environment variables.
     '';
     homepage = "https://direnv.net";
-    license = licenses.mit;
-    maintainers = [ maintainers.zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimbatm ];
     mainProgram = "direnv";
   };
 }

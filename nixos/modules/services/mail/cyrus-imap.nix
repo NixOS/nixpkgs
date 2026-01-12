@@ -15,6 +15,7 @@ let
     optionalString
     generators
     mapAttrsToList
+    boolToYesNo
     ;
   inherit (lib.strings) concatStringsSep;
   inherit (lib.types)
@@ -63,7 +64,7 @@ let
         mkValueString =
           v:
           if builtins.isBool v then
-            if v then "yes" else "no"
+            boolToYesNo v
           else if builtins.isList v then
             concatStringsSep " " v
           else

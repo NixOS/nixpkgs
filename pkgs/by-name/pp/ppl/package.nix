@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
+    url = "https://mirror.metanet.ch/sage/spkg/upstream/ppl/ppl-${version}.tar.bz2";
     sha256 = "1wgxcbgmijgk11df43aiqfzv31r3bkxmgb4yl68g21194q60nird";
   };
 
@@ -42,14 +42,15 @@ stdenv.mkDerivation {
   ];
   propagatedBuildInputs = [ gmpxx ];
 
-  configureFlags =
-    [ "--disable-watchdog" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "CPPFLAGS=-fexceptions"
-      "--disable-ppl_lcdd"
-      "--disable-ppl_lpsol"
-      "--disable-ppl_pips"
-    ];
+  configureFlags = [
+    "--disable-watchdog"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "CPPFLAGS=-fexceptions"
+    "--disable-ppl_lcdd"
+    "--disable-ppl_lpsol"
+    "--disable-ppl_pips"
+  ];
 
   # Beware!  It took ~6 hours to compile PPL and run its tests on a 1.2 GHz
   # x86_64 box.  Nevertheless, being a dependency of GCC, it probably ought

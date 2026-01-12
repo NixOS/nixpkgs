@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  dontWrapQtApps = true;
+
   meta = {
     description = "Shared assets for OpenCloud desktop shell integrations";
     homepage = "https://github.com/opencloud-eu/desktop-shell-integration-resources";

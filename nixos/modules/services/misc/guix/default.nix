@@ -65,7 +65,7 @@ let
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
+  meta.maintainers = [ ];
 
   options.services.guix = with lib; {
     enable = mkEnableOption "Guix build daemon service";

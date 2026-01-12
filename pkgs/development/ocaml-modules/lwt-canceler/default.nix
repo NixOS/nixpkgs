@@ -5,17 +5,16 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwt-canceler";
   version = "0.3";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "lwt-canceler";
-    rev = "v${version}";
-    sha256 = "1xbb7012hp901b755kxmfgg293rz34rkhwzg2z9i6sakwd7i0h9p";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N0EQT+NTaRPTF+9zODMZP48k3nO1z1LOCiBdKAI4a/U=";
   };
-  useDune2 = true;
 
   propagatedBuildInputs = [
     lwt
@@ -29,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

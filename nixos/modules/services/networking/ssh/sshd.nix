@@ -21,7 +21,6 @@ let
     let
       # reports boolean as yes / no
       mkValueString =
-        with lib;
         v:
         if lib.isInt v then
           toString v
@@ -42,13 +41,14 @@ let
       # values must be separated by whitespace or even commas.
       # Consult either sshd_config(5) or, as last resort, the OpehSSH source for parsing
       # the options at servconf.c:process_server_config_line_depth() to determine the right "mode"
-      # for each. But fortunaly this fact is documented for most of them in the manpage.
+      # for each. But fortunately this fact is documented for most of them in the manpage.
       commaSeparated = [
         "Ciphers"
         "KexAlgorithms"
         "Macs"
       ];
       spaceSeparated = [
+        "AcceptEnv"
         "AuthorizedKeysFile"
         "AllowGroups"
         "AllowUsers"
@@ -178,8 +178,8 @@ in
 
 {
   imports = [
-    (lib.mkAliasOptionModuleMD [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
-    (lib.mkAliasOptionModuleMD [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+    (lib.mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
+    (lib.mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
     (lib.mkRenamedOptionModule
       [ "services" "openssh" "challengeResponseAuthentication" ]
       [ "services" "openssh" "kbdInteractiveAuthentication" ]
@@ -319,7 +319,7 @@ in
                 '';
               };
               port = lib.mkOption {
-                type = lib.types.nullOr lib.types.int;
+                type = lib.types.nullOr lib.types.port;
                 default = null;
                 description = ''
                   Port to listen to.
@@ -366,13 +366,11 @@ in
             type = "rsa";
             bits = 4096;
             path = "/etc/ssh/ssh_host_rsa_key";
-            rounds = 100;
             openSSHFormat = true;
           }
           {
             type = "ed25519";
             path = "/etc/ssh/ssh_host_ed25519_key";
-            rounds = 100;
             comment = "key comment";
           }
         ];
@@ -382,6 +380,19 @@ in
           {manpage}`ssh-keygen(1)` for supported types
           and sizes.
         '';
+      };
+
+      generateHostKeys = lib.mkOption {
+        type = lib.types.bool;
+        default = config.services.openssh.enable;
+        defaultText = lib.literalExpression "services.openssh.enable";
+        description = ''
+          Whether to generate SSH host keys.
+
+          This can be enabled explicitly if you want to generate host keys but
+          don't want to enable the SSH daemon.
+        '';
+        example = true;
       };
 
       banner = lib.mkOption {
@@ -453,12 +464,21 @@ in
           {
             freeformType = settingsFormat.type;
             options = {
+              AcceptEnv = lib.mkOption {
+                type = lib.types.nullOr (lib.types.listOf lib.types.str);
+                default = null;
+                description = ''
+                  Specifies what environment variables sent by the client will be copied into the session's
+                  environment. The TERM environment variable is always accepted whenever the client requests
+                  a pseudo-terminal as it is required by the protocol.
+                '';
+              };
               AuthorizedPrincipalsFile = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = "none"; # upstream default
                 description = ''
                   Specifies a file that lists principal names that are accepted for certificate authentication. The default
-                  is `"none"`, i.e. not to use	a principals file.
+                  is `"none"`, i.e. not to use a principals file.
                 '';
               };
               LogLevel = lib.mkOption {
@@ -487,7 +507,6 @@ in
               };
               UseDns = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                # apply if cfg.useDns then "yes" else "no"
                 default = false;
                 description = ''
                   Specifies whether {manpage}`sshd(8)` should look up the remote host name, and to check that the resolved host name for
@@ -673,215 +692,180 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
 
-    users.users.sshd = {
-      isSystemUser = true;
-      group = "sshd";
-      description = "SSH privilege separation user";
-    };
-    users.groups.sshd = { };
+      users.users.sshd = {
+        isSystemUser = true;
+        group = "sshd";
+        description = "SSH privilege separation user";
+      };
+      users.groups.sshd = { };
 
-    services.openssh.moduliFile = lib.mkDefault "${cfg.package}/etc/ssh/moduli";
-    services.openssh.sftpServerExecutable = lib.mkDefault "${cfg.package}/libexec/sftp-server";
+      services.openssh.moduliFile = lib.mkDefault "${cfg.package}/etc/ssh/moduli";
+      services.openssh.sftpServerExecutable = lib.mkDefault "${cfg.package}/libexec/sftp-server";
 
-    environment.etc =
-      authKeysFiles
-      // authPrincipalsFiles
-      // {
-        "ssh/moduli".source = cfg.moduliFile;
-        "ssh/sshd_config".source = sshconf;
+      environment.etc =
+        authKeysFiles
+        // authPrincipalsFiles
+        // {
+          "ssh/moduli".source = cfg.moduliFile;
+          "ssh/sshd_config".source = sshconf;
+        };
+
+      systemd.tmpfiles.settings."ssh-root-provision" = {
+        "/root"."d-" = {
+          user = "root";
+          group = ":root";
+          mode = ":700";
+        };
+        "/root/.ssh"."d-" = {
+          user = "root";
+          group = ":root";
+          mode = ":700";
+        };
+        "/root/.ssh/authorized_keys"."f^" = {
+          user = "root";
+          group = ":root";
+          mode = ":600";
+          argument = "ssh.authorized_keys.root";
+        };
       };
 
-    systemd.tmpfiles.settings."ssh-root-provision" = {
-      "/root"."d-" = {
-        user = "root";
-        group = ":root";
-        mode = ":700";
-      };
-      "/root/.ssh"."d-" = {
-        user = "root";
-        group = ":root";
-        mode = ":700";
-      };
-      "/root/.ssh/authorized_keys"."f^" = {
-        user = "root";
-        group = ":root";
-        mode = ":600";
-        argument = "ssh.authorized_keys.root";
-      };
-    };
+      systemd = {
+        sockets.sshd = lib.mkIf cfg.startWhenNeeded {
+          description = "SSH Socket";
+          wantedBy = [ "sockets.target" ];
+          socketConfig.ListenStream =
+            if cfg.listenAddresses != [ ] then
+              lib.concatMap (
+                { addr, port }:
+                if port != null then [ "${addr}:${toString port}" ] else map (p: "${addr}:${toString p}") cfg.ports
+              ) cfg.listenAddresses
+            else
+              cfg.ports;
+          socketConfig.Accept = true;
+          # Prevent brute-force attacks from shutting down socket
+          socketConfig.TriggerLimitIntervalSec = 0;
+        };
 
-    systemd = {
-      sockets.sshd = lib.mkIf cfg.startWhenNeeded {
-        description = "SSH Socket";
-        wantedBy = [ "sockets.target" ];
-        socketConfig.ListenStream =
-          if cfg.listenAddresses != [ ] then
-            lib.concatMap (
-              { addr, port }:
-              if port != null then [ "${addr}:${toString port}" ] else map (p: "${addr}:${toString p}") cfg.ports
-            ) cfg.listenAddresses
-          else
-            cfg.ports;
-        socketConfig.Accept = true;
-        # Prevent brute-force attacks from shutting down socket
-        socketConfig.TriggerLimitIntervalSec = 0;
-      };
-
-      services."sshd@" = {
-        description = "SSH per-connection Daemon";
-        after = [
-          "network.target"
-          "sshd-keygen.service"
-        ];
-        wants = [ "sshd-keygen.service" ];
-        stopIfChanged = false;
-        path = [ cfg.package ];
-        environment.LD_LIBRARY_PATH = nssModulesPath;
-
-        serviceConfig = {
-          ExecStart = lib.concatStringsSep " " [
-            "-${lib.getExe' cfg.package "sshd"}"
-            "-i"
-            "-D"
-            "-f /etc/ssh/sshd_config"
+        services."sshd@" = {
+          description = "SSH per-connection Daemon";
+          after = [
+            "network.target"
+            "sshd-keygen.service"
           ];
-          KillMode = "process";
-          StandardInput = "socket";
-          StandardError = "journal";
+          wants = lib.mkIf cfg.generateHostKeys [ "sshd-keygen.service" ];
+          stopIfChanged = false;
+          path = [ cfg.package ];
+          environment.LD_LIBRARY_PATH = nssModulesPath;
+
+          serviceConfig = {
+            ExecStart = lib.concatStringsSep " " [
+              "-${lib.getExe' cfg.package "sshd"}"
+              "-i"
+              "-D"
+              "-f /etc/ssh/sshd_config"
+            ];
+            KillMode = "process";
+            StandardInput = "socket";
+            StandardError = "journal";
+          };
         };
-      };
 
-      services.sshd = lib.mkIf (!cfg.startWhenNeeded) {
-        description = "SSH Daemon";
-        wantedBy = [ "multi-user.target" ];
-        after = [
-          "network.target"
-          "sshd-keygen.service"
-        ];
-        wants = [ "sshd-keygen.service" ];
-        stopIfChanged = false;
-        path = [ cfg.package ];
-        environment.LD_LIBRARY_PATH = nssModulesPath;
-
-        restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
-
-        serviceConfig = {
-          Restart = "always";
-          ExecStart = lib.concatStringsSep " " [
-            (lib.getExe' cfg.package "sshd")
-            "-D"
-            "-f"
-            "/etc/ssh/sshd_config"
+        services.sshd = lib.mkIf (!cfg.startWhenNeeded) {
+          description = "SSH Daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "sshd-keygen.service"
           ];
-          KillMode = "process";
+          wants = lib.mkIf cfg.generateHostKeys [ "sshd-keygen.service" ];
+          stopIfChanged = false;
+          path = [ cfg.package ];
+          environment.LD_LIBRARY_PATH = nssModulesPath;
+
+          restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
+
+          serviceConfig = {
+            Type = "notify-reload";
+            Restart = "always";
+            ExecStart = lib.concatStringsSep " " [
+              (lib.getExe' cfg.package "sshd")
+              "-D"
+              "-f"
+              "/etc/ssh/sshd_config"
+            ];
+            KillMode = "process";
+          };
         };
       };
 
-      services.sshd-keygen = {
-        description = "SSH Host Keys Generation";
-        unitConfig = {
-          ConditionFileNotEmpty = map (k: "|!${k.path}") cfg.hostKeys;
-        };
-        serviceConfig = {
-          Type = "oneshot";
-        };
-        path = [ cfg.package ];
-        script = lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
-          if ! [ -s "${k.path}" ]; then
-              if ! [ -h "${k.path}" ]; then
-                  rm -f "${k.path}"
-              fi
-              mkdir -p "$(dirname '${k.path}')"
-              chmod 0755 "$(dirname '${k.path}')"
-              ssh-keygen \
-                -t "${k.type}" \
-                ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
-                ${lib.optionalString (k ? rounds) "-a ${toString k.rounds}"} \
-                ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
-                ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
-                -f "${k.path}" \
-                -N ""
-          fi
-        '');
+      networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall cfg.ports;
+
+      security.pam.services.sshd = lib.mkIf (cfg.settings.UsePAM == true) {
+        startSession = true;
+        showMotd = true;
+        unixAuth = if cfg.settings.PasswordAuthentication == true then true else false;
       };
-    };
 
-    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall cfg.ports;
+      # These values are merged with the ones defined externally, see:
+      # https://github.com/NixOS/nixpkgs/pull/10155
+      # https://github.com/NixOS/nixpkgs/pull/41745
+      services.openssh.authorizedKeysFiles =
+        lib.optional cfg.authorizedKeysInHomedir "%h/.ssh/authorized_keys"
+        ++ [ "/etc/ssh/authorized_keys.d/%u" ];
 
-    security.pam.services.sshd = lib.mkIf cfg.settings.UsePAM {
-      startSession = true;
-      showMotd = true;
-      unixAuth = if cfg.settings.PasswordAuthentication == true then true else false;
-    };
+      services.openssh.settings.AuthorizedPrincipalsFile = lib.mkIf (
+        authPrincipalsFiles != { }
+      ) "/etc/ssh/authorized_principals.d/%u";
 
-    # These values are merged with the ones defined externally, see:
-    # https://github.com/NixOS/nixpkgs/pull/10155
-    # https://github.com/NixOS/nixpkgs/pull/41745
-    services.openssh.authorizedKeysFiles =
-      lib.optional cfg.authorizedKeysInHomedir "%h/.ssh/authorized_keys"
-      ++ [ "/etc/ssh/authorized_keys.d/%u" ];
+      services.openssh.extraConfig = lib.mkOrder 0 (
+        lib.concatStringsSep "\n" (
+          [
+            "Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}"
+            "AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}"
+          ]
+          ++ lib.map (port: ''Port ${toString port}'') cfg.ports
+          ++ lib.map (
+            { port, addr, ... }:
+            ''ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}''
+          ) cfg.listenAddresses
+          ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${lib.getExe pkgs.xorg.xauth}"
+          ++ lib.optional cfg.allowSFTP ''Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}''
+          ++ [
+            "AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}"
+          ]
+          ++ lib.optional (cfg.authorizedKeysCommand != "none") ''
+            AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+            AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+          ''
+          ++ lib.map (k: "HostKey ${k.path}") cfg.hostKeys
+        )
+      );
 
-    services.openssh.settings.AuthorizedPrincipalsFile = lib.mkIf (
-      authPrincipalsFiles != { }
-    ) "/etc/ssh/authorized_principals.d/%u";
+      system.checks = [
+        (pkgs.runCommand "check-sshd-config"
+          {
+            nativeBuildInputs = [ validationPackage ];
+          }
+          ''
+            ${lib.concatMapStringsSep "\n" (
+              lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null"
+            ) cfg.ports}
+            ${lib.concatMapStringsSep "\n" (
+              la:
+              lib.concatMapStringsSep "\n" (
+                port:
+                "sshd -G -T -C ${lib.escapeShellArg "laddr=${la.addr},lport=${toString port}"} -f ${sshconf} > /dev/null"
+              ) (if la.port != null then [ la.port ] else cfg.ports)
+            ) cfg.listenAddresses}
+            touch $out
+          ''
+        )
+      ];
 
-    services.openssh.extraConfig = lib.mkOrder 0 ''
-      Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
-
-      AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-      ${lib.concatMapStrings (port: ''
-        Port ${toString port}
-      '') cfg.ports}
-
-      ${lib.concatMapStrings (
-        { port, addr, ... }:
-        ''
-          ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}
-        ''
-      ) cfg.listenAddresses}
-
-      ${lib.optionalString cfgc.setXAuthLocation ''
-        XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-      ''}
-      ${lib.optionalString cfg.allowSFTP ''
-        Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}
-      ''}
-      AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-      ${lib.optionalString (cfg.authorizedKeysCommand != "none") ''
-        AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
-        AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
-      ''}
-
-      ${lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
-        HostKey ${k.path}
-      '')}
-    '';
-
-    system.checks = [
-      (pkgs.runCommand "check-sshd-config"
-        {
-          nativeBuildInputs = [ validationPackage ];
-        }
-        ''
-          ${lib.concatMapStringsSep "\n" (
-            lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null"
-          ) cfg.ports}
-          ${lib.concatMapStringsSep "\n" (
-            la:
-            lib.concatMapStringsSep "\n" (
-              port:
-              "sshd -G -T -C ${lib.escapeShellArg "laddr=${la.addr},lport=${toString port}"} -f ${sshconf} > /dev/null"
-            ) (if la.port != null then [ la.port ] else cfg.ports)
-          ) cfg.listenAddresses}
-          touch $out
-        ''
-      )
-    ];
-
-    assertions =
-      [
+      assertions = [
         {
           assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
           message = "cannot enable X11 forwarding without setting xauth location";
@@ -928,6 +912,37 @@ in
           message = "addr must be specified in each listenAddresses entry";
         }
       );
-  };
+    })
+
+    (lib.mkIf cfg.generateHostKeys {
+      systemd.services.sshd-keygen = {
+        description = "SSH Host Keys Generation";
+        wantedBy = [ "multi-user.target" ];
+        unitConfig = {
+          ConditionFileNotEmpty = map (k: "|!${k.path}") cfg.hostKeys;
+        };
+        serviceConfig = {
+          Type = "oneshot";
+        };
+        path = [ cfg.package ];
+        script = lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
+          if ! [ -s "${k.path}" ]; then
+              if ! [ -h "${k.path}" ]; then
+                  rm -f "${k.path}"
+              fi
+              mkdir -p "$(dirname '${k.path}')"
+              chmod 0755 "$(dirname '${k.path}')"
+              ssh-keygen \
+                -t "${k.type}" \
+                ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
+                ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
+                ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
+                -f "${k.path}" \
+                -N ""
+          fi
+        '');
+      };
+    })
+  ];
 
 }

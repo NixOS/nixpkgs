@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   ordered-set,
   pytestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pylatex";
   version = "1.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JelteF";
@@ -41,12 +38,12 @@ buildPythonPackage rec {
     (texlive.combine { inherit (texlive) scheme-small lastpage collection-fontsrecommended; })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for creating LaTeX files and snippets";
     homepage = "https://jeltef.github.io/PyLaTeX/current/";
     downloadPage = "https://github.com/JelteF/PyLaTeX/releases";
     changelog = "https://jeltef.github.io/PyLaTeX/current/changelog.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MayNiklas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MayNiklas ];
   };
 }

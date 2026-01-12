@@ -5,16 +5,13 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-security";
   version = "7.0.0";
-  fpyproject = true;
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -37,11 +34,11 @@ buildPythonPackage rec {
     "azure.mgmt.security"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Security Center Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/security/azure-mgmt-security";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-security_${version}/sdk/security/azure-mgmt-security/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

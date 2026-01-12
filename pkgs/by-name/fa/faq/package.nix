@@ -40,11 +40,11 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    description = "faq is a tool intended to be a more flexible jq, supporting additional formats";
+  meta = {
+    description = "Intended to be a more flexible jq, supporting additional formats";
     mainProgram = "faq";
     homepage = "https://github.com/jzelinskie/faq";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ quentin-m ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ quentin-m ];
   };
 }

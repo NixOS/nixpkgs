@@ -64,7 +64,7 @@
   #     url = "https://github.com/mndrix/list_util/archive/v0.13.0.zip";
   #     sha256 = "0lx7vffflak0y8l8vg8k0g8qddwwn23ksbz02hi3f8rbarh1n89q";
   #   };
-  #   typedef = builtins.fetchTarball {
+  #   typedef = fetchTarball {
   #     name = "swipl-pack-typedef";
   #     url = "https://raw.githubusercontent.com/samer--/prolog/master/typedef/release/typedef-0.1.9.tgz";
   #     sha256 = "056nqjn01g18fb1b2qivv9s7hb4azk24nx2d4kvkbmm1k91f44p3";
@@ -148,23 +148,25 @@ stdenv.mkDerivation {
     gmp
     readline
     libedit
-  ] ++ optionalDependencies;
+  ]
+  ++ optionalDependencies;
 
   hardeningDisable = [ "format" ];
 
-  cmakeFlags =
-    [ "-DSWIPL_INSTALL_IN_LIB=ON" ]
-    ++ lib.optionals (!withNativeCompiler) [
-      # without these options, the build will embed full compiler paths
-      "-DSWIPL_CC=${if stdenv.hostPlatform.isDarwin then "clang" else "gcc"}"
-      "-DSWIPL_CXX=${if stdenv.hostPlatform.isDarwin then "clang++" else "g++"}"
-    ];
+  cmakeFlags = [
+    "-DSWIPL_INSTALL_IN_LIB=ON"
+  ]
+  ++ lib.optionals (!withNativeCompiler) [
+    # without these options, the build will embed full compiler paths
+    "-DSWIPL_CC=${if stdenv.hostPlatform.isDarwin then "clang" else "gcc"}"
+    "-DSWIPL_CXX=${if stdenv.hostPlatform.isDarwin then "clang++" else "g++"}"
+  ];
 
   preInstall = ''
     mkdir -p $out/lib/swipl/extra-pack
   '';
 
-  postInstall = builtins.concatStringsSep "\n" (builtins.map (packInstall "$out") extraPacks);
+  postInstall = builtins.concatStringsSep "\n" (map (packInstall "$out") extraPacks);
 
   meta = {
     homepage = "https://www.swi-prolog.org";

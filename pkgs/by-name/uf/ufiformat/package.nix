@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "heFETZj9migz2s9kvmw0ZQ1ieNpU4V4Lwfp91ek2cS4=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tedigh/ufiformat";
     description = "Low-level disk formatting utility for USB floppy drives";
-    maintainers = [ maintainers.amarshall ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.amarshall ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ufiformat";
   };
 }

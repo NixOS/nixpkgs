@@ -6,22 +6,22 @@
 
 buildGoModule rec {
   pname = "matcha-rss-digest";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "piqoni";
     repo = "matcha";
     rev = "v${version}";
-    hash = "sha256-Zs6Och5CsqN2mpnCLgV1VkH4+CV1fklfP20A22rE5y0=";
+    hash = "sha256-ezwZmJVJjbrrWJAsZ3+CUZ7K4WpA1HLKL9V+kTZTfj8=";
   };
 
   vendorHash = "sha256-CURFy92K4aNF9xC8ik6RDadRAvlw8p3Xc+gWE2un6cc=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/piqoni/matcha";
     description = "Daily digest generator from a list of RSS feeds";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "matcha";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
 }

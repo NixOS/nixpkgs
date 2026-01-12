@@ -7,7 +7,7 @@
   xdotool,
   wmctrl,
   xprop,
-  nettools,
+  net-tools,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     xdotool
     wmctrl
     xprop
-    nettools
+    net-tools
     perl
   ];
   postFixup =

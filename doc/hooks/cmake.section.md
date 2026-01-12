@@ -25,10 +25,18 @@ Controls the flags passed to `cmake setup` during configure phase.
 Directory where CMake will put intermediate files.
 
 Setting this can be useful for debugging multiple CMake builds while in the same source directory, for example, when building for different platforms.
-Different values for each build will prevent build artefacts from interefering with each other.
+Different values for each build will prevent build artifacts from interfering with each other.
 This setting has no tangible effect when running the build in a sandboxed derivation.
 
 The default value is `build`.
+
+#### `cmakeBuildType` {#cmake-build-type}
+
+Build type of cmake output.
+
+Internally populates the `CMAKE_BUILD_TYPE` cmake flag.
+
+The default value is `Release`.
 
 #### `dontUseCmakeConfigure` {#dont-use-cmake-configure}
 

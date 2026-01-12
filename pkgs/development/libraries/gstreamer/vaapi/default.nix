@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer-vaapi";
-  version = "1.26.0";
+  version = "1.26.5";
 
   outputs = [
     "out"
@@ -39,48 +39,47 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Vzkx1FX1qW9j23yNNdUTIrjSh4FujGp32Ez7ufoTUfE=";
+    hash = "sha256-tC1E22PzGVpvMyluHq0ywU0B7ydFK3Bo8aLYZiT1Xqk=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      python3
-      bzip2
-      wayland-scanner
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    bzip2
+    wayland-scanner
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      libva
-      wayland
-      wayland-protocols
-      libdrm
-      udev
-      xorg.libX11
-      xorg.libXext
-      xorg.libXv
-      xorg.libXrandr
-      xorg.libSM
-      xorg.libICE
-      nasm
-      libvpx
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    libva
+    wayland
+    wayland-protocols
+    libdrm
+    udev
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXext
+    xorg.libXv
+    xorg.libXrandr
+    xorg.libSM
+    xorg.libICE
+    nasm
+    libvpx
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   strictDeps = true;
 
@@ -98,11 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })

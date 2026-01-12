@@ -29,9 +29,9 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for Read the Docs overrides";
     homepage = "https://github.com/rtfd/readthedocs-sphinx-ext";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

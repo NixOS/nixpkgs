@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  fetchFromGitHub,
   fetchpatch,
   callPackages,
   cmake,
@@ -22,40 +21,27 @@
   gmp,
   python3,
   onnxruntime,
+  pkg-config,
+  curl,
+  onetbb,
 }:
 let
-  glog-lock = glog.overrideAttrs (oldAttrs: rec {
-    version = "0.6.0";
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "glog";
-      rev = "v${version}";
-      sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
-    };
-  });
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2025-04-14";
+    version = "2025-12-16";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "51d198884cde2ecda643071a1a6cb4ec0e09d881";
-      sha256 = "sha256-kDVEAttSqa8l7qcRs7MQiBgPbAKBExEQvIE8tc7PLpM=";
+      rev = "b73be0f1909294b56b2dbb27dba04b6cd9e0070d";
+      sha256 = "sha256-bvSHfQXDk7caTELtjgpSZhJdYfRzfk9VmFm2iBW2lRw=";
     };
 
     patches = [
-      # This patch is to fix the build error caused by the missing of the header file,
-      # and remove some libs or path that they hard-coded in the source code.
-      # Should be removed after we upstream these changes.
+      # This patch is to fix the build system to properly find and link against rust libraries.
+      # Due to the way they organized the source code, it's hard to upstream this patch.
+      # So we have to maintain this patch locally.
       (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/e899b432776010048b558a939ad9ba17452cb44f.patch";
-        hash = "sha256-fLKsb/dgbT1mFCWEldFwhyrA1HSkKGMAbAs/IxV9pwM=";
-      })
-      # This patch is to fix the compile error on the newer version of gcc/g++
-      # which is caused by some incorrect declarations and usages of the Boost library.
-      # Should be removed after we upstream these changes.
-      (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/3a2c7e27a5bd349d72b3a7198358cd640c678802.patch";
-        hash = "sha256-2YROkQ92jGOJZr+4+LrwRJKxhA39Bypb1xFdo6aftu8=";
+        url = "https://github.com/Emin017/iEDA/commit/e5f3ce024965df5e1d400b6a1d7f8b5b307a4bf3.patch";
+        hash = "sha256-YJnY+r9A887WT0a/H/Zf++r1PpD7t567NpkesDmIsD0=";
       })
     ];
 
@@ -71,7 +57,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0-unstable-2025-04-14";
+  version = "0.1.0-unstable-2025-12-16";
 
   src = rootSrc;
 
@@ -82,6 +68,7 @@ stdenv.mkDerivation {
     bison
     python3
     tcl
+    pkg-config
   ];
 
   cmakeFlags = [
@@ -102,7 +89,7 @@ stdenv.mkDerivation {
     rustpkgs.verilog-parser
     rustpkgs.liberty-parser
     gtest
-    glog-lock
+    glog
     gflags
     boost
     onnxruntime
@@ -113,6 +100,8 @@ stdenv.mkDerivation {
     gmp
     tcl
     zlib
+    curl
+    onetbb
   ];
 
   postInstall = ''
@@ -133,7 +122,7 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.hostPlatform.isAarch64; # Tests will fail on aarch64-linux, wait for upstream fix: https://github.com/microsoft/onnxruntime/issues/10038
 
   enableParallelBuild = true;
 

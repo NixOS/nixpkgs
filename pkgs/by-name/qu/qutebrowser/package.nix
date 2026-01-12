@@ -8,12 +8,14 @@
   asciidoc,
   docbook_xml_dtd_45,
   docbook_xsl,
+  desktopToDarwinBundle,
   libxml2,
   libxslt,
   withPdfReader ? true,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   qt6Packages,
+  wayland,
   enableWideVine ? false,
   widevine-cdm,
   # can cause issues on some graphics chips
@@ -25,15 +27,15 @@ let
   isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "5.1.91";
+      version = "5.4.394";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-e1zBpH9F8TI4ET4FvkxJsoOYVKLWJBP2KaNNC2kpaVk=";
+      hash = "sha256-KMpSwF5MmoWdNoIUd4ZOwbJZZmjkid8wUoFKw7XjQFA=";
       stripRoot = false;
     };
 
-  version = "3.5.0";
+  version = "3.6.3";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -43,20 +45,19 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-+hQsjRwoJbBotxs2BKiy1oLi7YShTD5ott54RDMdgLs=";
+    hash = "sha256-bb4oieYevWMAOuQLMZ4egfMG6SToMWxnla5IhAIcL68=";
   };
 
   # Needs tox
   doCheck = false;
 
-  buildInputs =
-    [
-      qt6Packages.qtbase
-      glib-networking
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6Packages.qtwayland
-    ];
+  buildInputs = [
+    qt6Packages.qtbase
+    glib-networking
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6Packages.qtwayland
+  ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -69,7 +70,8 @@ python3.pkgs.buildPythonApplication {
     docbook_xsl
     libxml2
     libxslt
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   dependencies = with python3.pkgs; [
     colorama
@@ -96,15 +98,19 @@ python3.pkgs.buildPythonApplication {
 
   dontWrapQtApps = true;
 
-  postPatch =
-    ''
-      substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+  postPatch = ''
+    substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
-      sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
-    ''
-    + lib.optionalString withPdfReader ''
-      sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
-    '';
+    sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
+  ''
+  + lib.optionalString withPdfReader ''
+    sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  ''
+  + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform wayland) ''
+    substituteInPlace qutebrowser/misc/wmname.py \
+      --replace-fail '_load_library("wayland-client")' \
+                     'ctypes.CDLL("${lib.getLib wayland}/lib/libwayland-client${stdenv.hostPlatform.extensions.sharedLibrary}")'
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -131,6 +137,11 @@ python3.pkgs.buildPythonApplication {
   preFixup =
     let
       libPath = lib.makeLibraryPath [ pipewire ];
+      resourcesPath =
+        if (isQt6 && stdenv.hostPlatform.isDarwin) then
+          "${qt6Packages.qtwebengine}/lib/QtWebEngineCore.framework/Resources"
+        else
+          "${qt6Packages.qtwebengine}/resources";
     in
     ''
       makeWrapperArgs+=(
@@ -140,26 +151,24 @@ python3.pkgs.buildPythonApplication {
         # avoid persistant warning on starup
         --set QT_STYLE_OVERRIDE Fusion
         ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
-        ${lib.optionalString (enableVulkan) ''
+        ${lib.optionalString enableVulkan ''
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
           --set-default QSG_RHI_BACKEND vulkan
         ''}
         ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
-        --set QTWEBENGINE_RESOURCES_PATH "${qt6Packages.qtwebengine}/resources"
+        --set QTWEBENGINE_RESOURCES_PATH "${resourcesPath}"
       )
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qutebrowser/qutebrowser";
     changelog = "https://github.com/qutebrowser/qutebrowser/blob/v${version}/doc/changelog.asciidoc";
     description = "Keyboard-focused browser with a minimal GUI";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
-    maintainers = with maintainers; [
-      jagajaga
+    maintainers = with lib.maintainers; [
       rnhmjoj
-      ebzzry
       dotlambda
     ];
   };

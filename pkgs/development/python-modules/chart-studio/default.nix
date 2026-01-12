@@ -10,21 +10,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "chart-studio";
-  version = "1.1.0-unstable-2024-07-23";
+  version = "1.1.0-unstable-2025-01-30";
   pyproject = true;
 
-  # chart-studio was split from plotly
   src = fetchFromGitHub {
     owner = "plotly";
-    repo = "plotly.py";
-    # We use plotly's upstream version as it's the same repo, but chart studio has its own version number.
-    rev = "v5.23.0";
-    hash = "sha256-K1hEs00AGBCe2fgytyPNWqE5M0jU5ESTzynP55kc05Y=";
+    repo = "chart-studio";
+    rev = "44c7c43be0fe7e031ec281c86ee7dae0efa0619e";
+    hash = "sha256-RekcZzUcunIqXOSriW+RvpLdvATQWTeRAiR8LFodfQg=";
   };
-
-  sourceRoot = "${src.name}/packages/python/chart-studio";
 
   build-system = [ setuptools ];
 
@@ -36,6 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    plotly
     pytestCheckHook
   ];
 
@@ -44,15 +41,14 @@ buildPythonPackage rec {
   '';
 
   # most tests talk to a network service, so only run ones that don't do that.
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "chart_studio/tests/test_core"
-    "chart_studio/tests/test_plot_ly/test_api"
   ];
 
   meta = {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
-    homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
+    homepage = "https://github.com/plotly/chart-studio";
     license = with lib.licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

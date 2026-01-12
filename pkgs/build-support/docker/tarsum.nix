@@ -24,8 +24,9 @@ stdenv.mkDerivation {
     cp ${./tarsum.go} tarsum.go
     export GOPATH=$(pwd)
     export GOCACHE="$TMPDIR/go-cache"
-    mkdir -p src/github.com/docker/docker/pkg
-    ln -sT ${docker.moby-src}/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
+    mkdir -p src/github.com/docker/docker/daemon/builder/remotecontext
+    # We need to drop the internal as otherwise go refuses to use it.
+    ln -sT ${docker.moby-src}/daemon/builder/remotecontext/internal/tarsum src/github.com/docker/docker/daemon/builder/remotecontext/tarsum
     go build
     runHook postBuild
   '';

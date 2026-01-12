@@ -35,18 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-      "-DMZ_OPENSSL=ON"
-      "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-      "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-      "-DMZ_LIB_SUFFIX='-ng'"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # missing header file
-      "-DMZ_LIBCOMP=OFF"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+    "-DMZ_OPENSSL=ON"
+    "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    "-DMZ_LIB_SUFFIX='-ng'"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # missing header file
+    "-DMZ_LIBCOMP=OFF"
+  ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
 
@@ -66,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ gtest ];
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fork of the popular zip manipulation library found in the zlib distribution";
     homepage = "https://github.com/zlib-ng/minizip-ng";
-    license = licenses.zlib;
-    maintainers = with maintainers; [
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [
       ris
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchsvn,
+  fetchgit,
   ant,
   jdk,
   jre,
@@ -14,14 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jedit";
   version = "5.7.0";
 
-  src =
-    let
-      versionWithDashes = lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
-    in
-    fetchsvn {
-      url = "https://svn.code.sf.net/p/jedit/svn/jEdit/tags/jedit-${versionWithDashes}";
-      hash = "sha256-XfYK2C0QZrg4b//1eQcUNViRthBbXV+cbcYetzw2RG8=";
-    };
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/jedit/jEdit";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q2uarFMWXTWuJ0brw1PNS/vKWUa9gOTpD6Fumn0wMoI=";
+  };
 
   ivyDeps = stdenv.mkDerivation {
     name = "${finalAttrs.pname}-${finalAttrs.version}-ivy-deps";
@@ -107,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "${finalAttrs.src.url}/doc/CHANGES.txt";
+    changelog = "https://sourceforge.net/p/jedit/jEdit/ci/v${finalAttrs.version}/tree/doc/CHANGES.txt";
     description = "Programmer's text editor written in Java";
     homepage = "https://www.jedit.org";
     license = lib.licenses.gpl2Only;

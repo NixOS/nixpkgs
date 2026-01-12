@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pamqp,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aioamqp";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Polyconseil";
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioamqp" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP implementation using asyncio";
     homepage = "https://github.com/polyconseil/aioamqp";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -15,6 +15,7 @@
   libadwaita,
   libgweather,
   libseccomp,
+  libglycin,
   glycin-loaders,
   gnome,
   common-updater-scripts,
@@ -24,18 +25,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "48.1";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EHE9PpZ4nQd659M4lFKl9sOX3fQ6UMBxy/4tEnJZcN4=";
+    hash = "sha256-WFPnXM66f6K+oBvic80vCjBhlB573+OgCLIzFxBnFCw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "loupe-deps-${finalAttrs.version}";
-    hash = "sha256-PKkyZDd4FLWGZ/kDKWkaSV8p8NDniSQGcR9Htce6uCg=";
+    hash = "sha256-9jEz6hcdFUv5Daeh/0co1hHt49bE9kFAbFvnyiEaGJg=";
   };
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()," \
+  '';
 
   nativeBuildInputs = [
     cargo
@@ -60,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     # Dirty approach to add patches after cargoSetupPostUnpackHook
     # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+    pushd ../$(stripHash $cargoDeps)/glycin-3.*
+      patch -p3 < ${libglycin.passthru.glycin3PathsPatch}
     popd
   '';
 
@@ -72,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
+
+  # For https://gitlab.gnome.org/GNOME/loupe/-/blob/0e6ddb0227ac4f1c55907f8b43eaef4bb1d3ce70/src/meson.build#L34-35
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript =
@@ -103,14 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
     changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Simple image viewer application written with GTK4 and Rust";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jk ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jk ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     mainProgram = "loupe";
   };
 })

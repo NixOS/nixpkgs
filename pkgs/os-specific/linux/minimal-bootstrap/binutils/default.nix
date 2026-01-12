@@ -18,6 +18,7 @@
 
 let
   # Based on https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a1-static-binutils.nix
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "binutils";
   version = "2.41";
 
@@ -53,7 +54,7 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -73,14 +74,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/ld --version
         mkdir $out
       '';
-
-    meta = with lib; {
-      description = "Tools for manipulating binaries (linker, assembler, etc.)";
-      homepage = "https://www.gnu.org/software/binutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack

@@ -6,41 +6,33 @@
   libGL,
   SDL2,
   libGLU,
-  catch,
+  catch2_3,
 }:
 
 stdenv.mkDerivation {
   pname = "recastai";
-  # use latest revision for the CMake build process and OpenMW
+  # use latest revision for CMake v4
   # OpenMW use e75adf86f91eb3082220085e42dda62679f9a3ea
-  version = "unstable-2023-01-02";
+  version = "unstable-2025-08-12";
 
   src = fetchFromGitHub {
     owner = "recastnavigation";
     repo = "recastnavigation";
-    rev = "405cc095ab3a2df976a298421974a2af83843baf";
-    sha256 = "sha256-WVzDI7+UuAl10Tm1Zjkea/FMk0cIe7pWg0iyFLbwAdI=";
+    rev = "40ec6fcd6c0263a3d7798452aee531066072d15d";
+    hash = "sha256-4flJMJsuCecpHDtgAsnDU7WoAtUg/XJfRXx096Zw6bE=";
   };
 
-  postPatch =
-    ''
-      cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
-
-      # https://github.com/recastnavigation/recastnavigation/issues/524
-      substituteInPlace CMakeLists.txt \
-        --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Expects SDL2.framework in specific location, which we don't have
-      # Change where SDL2 headers are searched for to match what we do have
-      substituteInPlace RecastDemo/CMakeLists.txt \
-        --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${lib.getInclude SDL2}/include/SDL2)'
-    '';
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Expects SDL2.framework in specific location, which we don't have
+    # Change where SDL2 headers are searched for to match what we do have
+    substituteInPlace RecastDemo/CMakeLists.txt \
+      --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${lib.getInclude SDL2}/include/SDL2)'
+  '';
 
   doCheck = true;
 
   nativeBuildInputs = [ cmake ];
+  checkInputs = [ catch2_3 ];
 
   buildInputs = [
     libGL
@@ -48,12 +40,12 @@ stdenv.mkDerivation {
     libGLU
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
     mainProgram = "RecastDemo";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ marius851000 ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    platforms = lib.platforms.all;
   };
 }

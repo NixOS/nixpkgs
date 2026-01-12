@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build
-  poetry-core,
+  pdm-backend,
 
   # propagates
   aiohttp,
@@ -19,28 +18,23 @@
   pytestCheckHook,
 }:
 
-let
-  pname = "kanidm";
-  version = "1.0.0-2024-04-22";
-in
 buildPythonPackage rec {
-  inherit pname version;
+  pname = "kanidm";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "kanidm";
     repo = "kanidm";
-    rev = "a0f743d8c8e7a6b6b0775e64774fc5175464cab6";
-    hash = "sha256-W2v3/osDrjRQqz2DqoG90SGcu4K6G2ypMTfE6Xq5qNI=";
+    rev = "1774f9428ccdc357d514652acbcae49f6b16687a";
+    hash = "sha256-SE3b9Ug0EZFygGf9lsmVsQzmop9qOMiCUsbO//1QWF8=";
   };
 
   sourceRoot = "${src.name}/pykanidm";
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     authlib
     pydantic
@@ -53,15 +47,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   pythonImportsCheck = [ "kanidm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kanidm client library";
     homepage = "https://github.com/kanidm/kanidm/tree/master/pykanidm";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       arianvp
       hexa
     ];

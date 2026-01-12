@@ -7,29 +7,28 @@
   nix-update-script,
   pkg-config,
   rustPlatform,
-  solc,
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
-  version = "1.2.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
-    tag = "v${version}";
-    hash = "sha256-hHvHnSq6XarfofX0G5RE2hIai2eY8Nf1aqgJ5Z6ZuDg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dMYuv5noIn86WuUJkUixnoNGLgByacung/TBU+EYhUw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-spB89RmR6+9L+zo2YOl7fBxcmRdLUELXr8OmUt3waO4=";
+  cargoHash = "sha256-+5RLCkAQR8UepdUIsq1FnQmjKMg7YNC1Sxu0CVpWcnc=";
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/forge";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -56,16 +54,17 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/foundry-rs/foundry";
-    description = "Portable, modular toolkit for Ethereum application development written in Rust.";
-    changelog = "https://github.com/foundry-rs/foundry/blob/v${version}/CHANGELOG.md";
+    description = "Portable, modular toolkit for Ethereum application development written in Rust";
+    changelog = "https://github.com/foundry-rs/foundry/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [
+      beeb
       mitchmindtree
       msanft
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

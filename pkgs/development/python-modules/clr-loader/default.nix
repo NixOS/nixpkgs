@@ -89,10 +89,10 @@ buildPythonPackage {
 
   passthru.fetch-deps = dotnet-build.fetch-deps;
 
-  meta = with lib; {
+  meta = {
     description = "Generic pure Python loader for .NET runtimes";
     homepage = "https://pythonnet.github.io/clr-loader/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mdarocha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mdarocha ];
   };
 }

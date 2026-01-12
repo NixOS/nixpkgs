@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   gettext,
   pkg-config,
@@ -13,30 +12,22 @@
   inih,
   liburcu,
   nixosTests,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.13.0";
+  version = "6.17.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-BFmTP5PZTIK8J4nnvWN0InPZ10IHza5n3DAyA42ggzc=";
+    hash = "sha256-Ww9WqB9kEyYmb3Yq6KVjsp2Vzbzag7x5OPaM4SLx7dk=";
   };
 
-  patches = [
-    (fetchurl {
-      name = "icu76.patch";
-      url = "https://lore.kernel.org/linux-xfs/20250212081649.3502717-1-hi@alyssa.is/raw";
-      hash = "sha256-Z7BW0B+/5eHWXdHre++wRtdbU/P6XZqudYx6EK5msIU=";
-    })
-    # Backport which fixes pkgsCross.armv7l-hf-multiplatform.xfsprogs
-    (fetchpatch {
-      name = "32-bit.patch";
-      url = "https://web.git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/patch/mkfs/proto.c?id=a5466cee9874412cfdd187f07c5276e1d4ef0fea";
-      hash = "sha256-svC7pSbblWfO5Khots2kWWfDMBXUrU35fk5wsdYuPQI=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace {./scrub/xfs_scrub_all.py.in,./mkfs/xfs_protofile.py.in}\
+      --replace-fail '#!/usr/bin/python3' '#!/usr/bin/env python3'
+  '';
 
   outputs = [
     "bin"
@@ -58,6 +49,7 @@ stdenv.mkDerivation rec {
     icu
     inih
     liburcu
+    (python3.withPackages (ps: [ ps.dbus-python ]))
   ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
@@ -73,7 +65,8 @@ stdenv.mkDerivation rec {
     for file in scrub/*.in; do
       substituteInPlace "$file" \
         --replace-quiet '@sbindir@' '/run/current-system/sw/bin' \
-        --replace-quiet '@pkg_state_dir@' '/var'
+        --replace-quiet '@stampfile@' '@pkg_state_dir@/xfs_scrub_all_media.stamp' \
+        --replace-quiet '@pkg_state_dir@' '/var/lib/xfsprogs'
     done
     patchShebangs ./install-sh
   '';
@@ -100,18 +93,21 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer) lvm;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xfs.wiki.kernel.org";
     description = "SGI XFS utilities";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       gpl3Plus
     ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       dezgeg
       ajs124
     ];
+    # error: ‘struct statx’ has no member named ‘stx_atomic_write_unit_min’ ‘stx_atomic_write_unit_max’ ‘stx_atomic_write_segments_max’
+    # remove if https://www.openwall.com/lists/musl/2024/10/23/6 gets merged
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

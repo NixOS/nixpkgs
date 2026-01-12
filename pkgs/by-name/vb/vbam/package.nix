@@ -4,7 +4,7 @@
   cairo,
   cmake,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   gettext,
   wxGTK32,
   gtk3,
@@ -22,12 +22,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visualboyadvance-m";
-  version = "2.1.11";
+  version = "2.2.3";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
+    hash = "sha256-/yvwr3Of4aox4pOBwiC4gUzGsrPDwaFYPgJVivuOAvo=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    ffmpeg
+    ffmpeg_7
     gettext
     libGLU
     libGL
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       lassulus
       netali
     ];
-    homepage = "https://vba-m.com/";
+    homepage = "https://www.visualboyadvance-m.org/";
     platforms = lib.platforms.linux;
     mainProgram = "visualboyadvance-m";
   };

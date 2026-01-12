@@ -12,17 +12,18 @@
   libidn2,
   iproute2,
   apparmorRulesFromClosure,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iputils";
-  version = "20240905";
+  version = "20250605";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    hash = "sha256-2CjzIOe1hrW3He9DN+w+Wi2zaaMBkVEdA7dezTpkx8I=";
+    owner = "iputils";
+    repo = "iputils";
+    tag = finalAttrs.version;
+    hash = "sha256-AJgNPIE90kALu4ihANELr9Dh28LhJ4camLksOIRV8Xo=";
   };
 
   outputs = [
@@ -34,15 +35,14 @@ stdenv.mkDerivation rec {
   # /build/source/build/ping/ping: socket: Operation not permitted
   doCheck = false;
 
-  mesonFlags =
-    [
-      "-DNO_SETCAP_OR_SUID=true"
-      "-Dsystemdunitdir=etc/systemd/system"
-      "-DINSTALL_SYSTEMD_UNITS=true"
-      "-DSKIP_TESTS=${lib.boolToString (!doCheck)}"
-    ]
-    # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
-    ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
+  mesonFlags = [
+    "-DNO_SETCAP_OR_SUID=true"
+    "-Dsystemdunitdir=etc/systemd/system"
+    "-DINSTALL_SYSTEMD_UNITS=true"
+    "-DSKIP_TESTS=${lib.boolToString (!finalAttrs.doCheck)}"
+  ]
+  # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
+  ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
   nativeBuildInputs = [
     meson
@@ -79,9 +79,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/iputils/iputils";
-    changelog = "https://github.com/iputils/iputils/releases/tag/${version}";
+    changelog = "https://github.com/iputils/iputils/releases/tag/${finalAttrs.version}";
     description = "Set of small useful utilities for Linux networking";
     longDescription = ''
       A set of small useful utilities for Linux networking including:
@@ -91,11 +93,11 @@ stdenv.mkDerivation rec {
       - ping: send ICMP ECHO_REQUEST to network hosts
       - tracepath: traces path to a network host discovering MTU along this path
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       bsd3
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

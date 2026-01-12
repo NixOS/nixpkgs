@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   httpx,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "youtube-search-python";
   version = "1.6.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,10 +24,10 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   sysctl,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "py-cpuinfo";
   version = "9.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "workhorsy";
@@ -33,7 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cpuinfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get CPU info with pure Python";
     mainProgram = "cpuinfo";
     longDescription = ''
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/workhorsy/py-cpuinfo";
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -25,6 +25,7 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -71,13 +72,13 @@ let
   embedded = {
     buildPackages.binutils = nativePlatforms;
     buildPackages.gcc = nativePlatforms;
-    libcCross = nativePlatforms;
+    libc = nativePlatforms;
   };
 
   common = {
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
-    libcCross = nativePlatforms;
+    libc = nativePlatforms;
     nix = nativePlatforms;
     nixVersions.git = nativePlatforms;
     mesa = nativePlatforms;
@@ -108,7 +109,12 @@ let
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
-    windows.mingw_w64_pthreads = nativePlatforms;
+    windows.pthreads = nativePlatforms;
+  };
+
+  cygwinCommon = {
+    hello = nativePlatforms;
+    nixVersions.git = nativePlatforms;
   };
 
   wasiCommon = {
@@ -205,13 +211,14 @@ in
   # Test some cross builds on 64 bit mingw-w64
   crossMingwW64 = mapTestOnCross systems.examples.mingwW64 windowsCommon;
 
+  x86_64-cygwin = mapTestOnCross systems.examples.x86_64-cygwin cygwinCommon;
+
   # Linux on mipsel
   fuloongminipc = mapTestOnCross systems.examples.fuloongminipc linuxCommon;
   ben-nanonote = mapTestOnCross systems.examples.ben-nanonote linuxCommon;
 
   # Javascript
   ghcjs = mapTestOnCross systems.examples.ghcjs {
-    haskell.packages.ghcjs.hello = nativePlatforms;
     haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;
     haskellPackages.hello = nativePlatforms;
   };
@@ -249,6 +256,10 @@ in
   i686-musl = mapTestOnCross systems.examples.musl32 linuxCommon;
   i686-gnu = mapTestOnCross systems.examples.gnu32 linuxCommon;
 
+  # Linux on POWER
+  ppc64-elfv1 = mapTestOnCross systems.examples.ppc64-elfv1 linuxCommon;
+  ppc64-elfv2 = mapTestOnCross systems.examples.ppc64-elfv2 linuxCommon;
+  ppc64-musl = mapTestOnCross systems.examples.ppc64-musl linuxCommon;
   ppc64le = mapTestOnCross systems.examples.powernv linuxCommon;
   ppc64le-musl = mapTestOnCross systems.examples.musl-power linuxCommon;
 

@@ -24,13 +24,13 @@ let
 in
 buildGoModule rec {
   pname = "faas-cli";
-  version = "0.17.4";
+  version = "0.17.8";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "sha256-GM2gRfrdfUhfBn2atG21H7bNbW1HtgwQ7d7kMXvyMAs=";
+    sha256 = "sha256-gyd9uX5i5nl7x476SGfBwWUL1hTLsPCCdsmwo783x5Q=";
   };
 
   vendorHash = null;
@@ -66,12 +66,12 @@ buildGoModule rec {
     package = faas-cli;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official CLI for OpenFaaS";
     mainProgram = "faas-cli";
     homepage = "https://github.com/openfaas/faas-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       welteki
       techknowlogick
     ];

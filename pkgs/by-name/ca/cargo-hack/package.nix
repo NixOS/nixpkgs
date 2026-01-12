@@ -2,32 +2,42 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-hack";
-  version = "0.6.36";
+  version = "0.6.41";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-AO4bB+aqAzGxFyPhuwaEQDAbL+fCIWY2rv3QFdBAq7s=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-JfYsMlu+eYZvQ5HtAIhJ/y33BNkdj9LvQeSJUVL5F7Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fWKrHo5WdeEhnPxATbZ9Cjv+aiSxOh0pRDeeHHDk8u4=";
+  cargoHash = "sha256-fC9EUu0j/M2dfpFS5Th2pqveFia+lSEtQdaH6Xv32ww=";
 
   # some necessary files are absent in the crate version
   doCheck = false;
 
-  meta = with lib; {
+  # versionCheckHook doesn't support multiple arguments yet
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/cargo-hack hack --version | grep -F 'cargo-hack ${finalAttrs.version}'
+    runHook postInstallCheck
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cargo subcommand to provide various options useful for testing and continuous integration";
     mainProgram = "cargo-hack";
     homepage = "https://github.com/taiki-e/cargo-hack";
-    changelog = "https://github.com/taiki-e/cargo-hack/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/taiki-e/cargo-hack/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ defelo ];
   };
-}
+})

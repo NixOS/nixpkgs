@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-FnUYnSWarQf68jBfSlIKVZbQHJt5U93MvA6rbNJE23U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+2koGrhM9VMLh8uO1YcaugcfmZaCP4S2twKem+y2oks=";
 
   nativeBuildInputs = [
@@ -39,14 +38,14 @@ rustPlatform.buildRustPackage {
     branch = "main";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
     changelog = "https://github.com/lunatic-solutions/lunatic/blob/main/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

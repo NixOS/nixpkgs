@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
-  version = "25.04";
+  version = "25.10";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-rUXtfJ23gHqoA4RcqIutlSaqjaiDpYEn5TkKqi2Bu7E=";
+    hash = "sha256-rRPZeXsEbOOdDGWm+B0q7yQpc0whhlpqTFksfAHySd0=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +35,12 @@ stdenv.mkDerivation rec {
       --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
   '';
 
-  configureFlags =
-    [
-      "--enable-shared"
-    ]
-    ++ lib.optionals curlSupport [
-      "--with-libcurl"
-    ];
+  configureFlags = [
+    "--enable-shared"
+  ]
+  ++ lib.optionals curlSupport [
+    "--with-libcurl"
+  ];
 
   enableParallelBuilding = true;
 
@@ -49,12 +48,12 @@ stdenv.mkDerivation rec {
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shared library for mediainfo";
     homepage = "https://mediaarea.net/";
     changelog = "https://mediaarea.net/MediaInfo/ChangeLog";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.devhell ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.devhell ];
   };
 }

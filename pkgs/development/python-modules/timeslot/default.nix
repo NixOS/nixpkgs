@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   pytestCheckHook,
 }:
@@ -21,25 +20,23 @@ buildPythonPackage {
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # The pyproject.toml specifies the flag `--cov=timeslot`,
     # This causes an error when running without pytest-cov,
     # so use this flag to override that option, as we don't need coverage.
-    "--override-ini addopts=''"
+    "--override-ini=addopts="
   ];
 
   pythonImportsCheck = [ "timeslot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data type for representing time slots with a start and end";
     homepage = "https://github.com/ErikBjare/timeslot";
-    maintainers = with maintainers; [ huantian ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ huantian ];
+    license = lib.licenses.mit;
   };
 }

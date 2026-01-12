@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "teletype";
   version = "1.3.4";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "teletype" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level cross platform tty library";
     homepage = "https://github.com/jkwill87/teletype";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urlordjames ];
   };
 }

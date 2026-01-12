@@ -10,18 +10,16 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unixcw";
-  version = "3.5.1";
+  version = "3.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/unixcw/unixcw_${version}.orig.tar.gz";
-    hash = "sha256-Xzqs2KJuFubv9DfHrh6bOJlW+xN+6z3iRnDOBd5Hnno=";
+    url = "mirror://sourceforge/unixcw/unixcw-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Cvg4VSFL+QtMDRSSIYhKtEWPOFfDiXLUKNrr87rdbjI=";
   };
 
   patches = [
-    ./remove-use-of-dlopen.patch
-
     # fix pkg-config searching for ncurses
     # yoinked from gentoo (https://gitweb.gentoo.org/repo/gentoo.git/tree/media-radio/unixcw/files/unixcw-3.6-tinfo.patch), with modifications
     ./unixcw-3.6-tinfo.patch
@@ -69,4 +67,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

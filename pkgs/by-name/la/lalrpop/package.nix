@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lalrpop";
-  version = "0.22.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "lalrpop";
     repo = "lalrpop";
     rev = version;
-    hash = "sha256-RvKJ3PKOKJbY0/WBpUwbau9LyCzb/peD73Ey9stECeg=";
+    hash = "sha256-/mk4sTgwxBrB+LEBbWv4OQEEh2P2KVSh6v5ry9/Et4s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-KqG8AqYK1sslZyqCMKesxuyy9+IenXW56edoxygKj4k=";
+  cargoHash = "sha256-3Lm25X2QQQ4+3Spe6Nz5PkIvFcgwHQ+hqAdjsFesgro=";
 
   patches = [
     (replaceVars ./use-correct-binary-path-in-tests.patch {
@@ -34,15 +33,15 @@ rustPlatform.buildRustPackage rec {
     cargoCheckHook
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LR(1) parser generator for Rust";
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "lalrpop";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

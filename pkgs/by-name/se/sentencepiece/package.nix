@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentencepiece";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "sentencepiece";
     tag = "v${version}";
-    sha256 = "sha256-tMt6UBDqpdjAhxAJlVOFFlE3RC36/t8K0gBAzbesnsg=";
+    sha256 = "sha256-q0JgMxoD9PLqr6zKmOdrK2A+9RXVDub6xy7NOapS+vs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,11 +36,17 @@ stdenv.mkDerivation rec {
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
-  meta = with lib; {
+  # On Darwin, non-static build segfaults on python module import.
+  # See: https://github.com/NixOS/nixpkgs/issues/466092
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DSPM_ENABLE_SHARED=OFF"
+  ];
+
+  meta = {
     homepage = "https://github.com/google/sentencepiece";
     description = "Unsupervised text tokenizer for Neural Network-based text generation";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pashashocky ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pashashocky ];
   };
 }

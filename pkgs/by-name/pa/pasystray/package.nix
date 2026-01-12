@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0002-Require-X11-backend.patch";
       sha256 = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
     })
+    # Fix build with GCC 15
+    # https://github.com/christophgysin/pasystray/pull/183.patch
+    (fetchpatch {
+      url = "https://github.com/christophgysin/pasystray/commit/9883809c7956471cf085ae90af4a9831c1234417.patch";
+      hash = "sha256-BQ10LddqE3XwUeRklZE3S3+KOjJ9BtfddaFswgUqZ5g=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -56,15 +62,15 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PulseAudio system tray";
     homepage = "https://github.com/christophgysin/pasystray";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       exlevan
       kamilchm
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "pasystray";
   };
 }

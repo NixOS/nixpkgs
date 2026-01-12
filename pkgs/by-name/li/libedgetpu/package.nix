@@ -41,6 +41,8 @@ stdenv.mkDerivation {
       url = "https://patch-diff.githubusercontent.com/raw/google-coral/libedgetpu/pull/66.patch";
       hash = "sha256-mMODpQmikfXtsQvtgh26cy97EiykYNLngSjidOBt/3I=";
     })
+    ./fix-abseil-20250512.0.patch
+    ./cstdint.patch
   ];
 
   postPatch = ''
@@ -60,6 +62,8 @@ stdenv.mkDerivation {
     libusb1
     flatbuffers_23_5_26
   ];
+
+  doInstallCheck = true;
 
   nativeBuildInputs = [ xxd ];
 

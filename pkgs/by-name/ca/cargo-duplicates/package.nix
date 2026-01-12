@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JzS1+BHSCEcZM5MokbQsck/AGJ7EeSwbzjNz0uLQsgE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-58H6wFToCgW+J7QYXb6W6BiCFUVIG8MmxgZtWnPNkrI=";
 
   nativeBuildInputs = [
@@ -35,13 +34,12 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for displaying when different versions of a same dependency are pulled in";
     mainProgram = "cargo-duplicates";
     homepage = "https://github.com/Keruspe/cargo-duplicates";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

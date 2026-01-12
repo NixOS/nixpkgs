@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deprecated" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tilpner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tilpner ];
   };
 }

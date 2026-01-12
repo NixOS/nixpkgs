@@ -286,7 +286,16 @@ in
       in
       {
         sudo = {
-          source = "${lib.getExe cfg.package}";
+          source = lib.getExe cfg.package;
+          inherit
+            owner
+            group
+            setuid
+            permissions
+            ;
+        };
+        sudoedit = {
+          source = lib.getExe' cfg.package "sudoedit";
           inherit
             owner
             group
@@ -298,13 +307,20 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    security.pam.services.sudo = {
-      sshAgentAuth = true;
-      usshAuth = true;
-    };
-    security.pam.services.sudo-i = {
-      sshAgentAuth = true;
-      usshAuth = true;
+    security.pam.services = {
+      su-l = {
+        rootOK = true;
+        forwardXAuth = true;
+        logFailures = true;
+      };
+      sudo = {
+        sshAgentAuth = true;
+        usshAuth = true;
+      };
+      sudo-i = {
+        sshAgentAuth = true;
+        usshAuth = true;
+      };
     };
 
     environment.etc.sudoers = {

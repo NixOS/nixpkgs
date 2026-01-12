@@ -10,7 +10,7 @@
   gettext,
   povray,
   imagemagick,
-  gimp,
+  gimp2,
 
   sdl2-compat,
   SDL2_mixer,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     povray
     imagemagick
-    gimp
+    gimp2
     # GIMP needs a writable home
     writableTmpDirAsHomeHook
   ];

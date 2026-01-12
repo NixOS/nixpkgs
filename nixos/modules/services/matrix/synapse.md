@@ -44,7 +44,12 @@ the host `myhostname.example.org`. For more information,
 please refer to the
 [installation instructions of Synapse](https://element-hq.github.io/synapse/latest/setup/installation.html) .
 ```nix
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   fqdn = "${config.networking.hostName}.${config.networking.domain}";
   baseUrl = "https://${fqdn}";
@@ -55,10 +60,14 @@ let
     add_header Access-Control-Allow-Origin *;
     return 200 '${builtins.toJSON data}';
   '';
-in {
+in
+{
   networking.hostName = "myhostname";
   networking.domain = "example.org";
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   services.postgresql.enable = true;
 
@@ -117,15 +126,21 @@ in {
     # in client applications.
     settings.public_baseurl = baseUrl;
     settings.listeners = [
-      { port = 8008;
+      {
+        port = 8008;
         bind_addresses = [ "::1" ];
         type = "http";
         tls = false;
         x_forwarded = true;
-        resources = [ {
-          names = [ "client" "federation" ];
-          compress = true;
-        } ];
+        resources = [
+          {
+            names = [
+              "client"
+              "federation"
+            ];
+            compress = true;
+          }
+        ];
       }
     ];
   };
@@ -173,9 +188,7 @@ in an additional file like this:
 
     ```nix
     {
-      services.matrix-synapse.extraConfigFiles = [
-        "/run/secrets/matrix-shared-secret"
-      ];
+      services.matrix-synapse.extraConfigFiles = [ "/run/secrets/matrix-shared-secret" ];
     }
     ```
 :::
@@ -208,9 +221,7 @@ for a list of existing clients and their supported featureset.
   services.nginx.virtualHosts."element.${fqdn}" = {
     enableACME = true;
     forceSSL = true;
-    serverAliases = [
-      "element.${config.networking.domain}"
-    ];
+    serverAliases = [ "element.${config.networking.domain}" ];
 
     root = pkgs.element-web.override {
       conf = {

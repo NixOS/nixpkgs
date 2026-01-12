@@ -19,11 +19,9 @@ darwin.sigtool.overrideAttrs (old: {
     makeWrapper
   ];
 
-  postInstall =
-    old.postInstall or ""
-    + ''
-      wrapProgram $out/bin/codesign \
-        --set-default CODESIGN_ALLOCATE \
-          "${cctools}/bin/${cctools.targetPrefix}codesign_allocate"
-    '';
+  postInstall = old.postInstall or "" + ''
+    wrapProgram $out/bin/codesign \
+      --set-default CODESIGN_ALLOCATE \
+        "${cctools}/bin/${cctools.targetPrefix}codesign_allocate"
+  '';
 })

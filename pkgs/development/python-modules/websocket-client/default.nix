@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   python-socks,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "websocket-client";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "websocket_client";
@@ -34,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Websocket client for Python";
     homepage = "https://github.com/websocket-client/websocket-client";
     changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wsdump";
   };
 }

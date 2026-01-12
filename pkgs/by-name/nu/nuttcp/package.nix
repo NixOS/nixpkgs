@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     installManPage nuttcp.8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network performance measurement tool";
     longDescription = ''
       nuttcp is a network performance measurement tool intended for use by
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
       system, and wall-clock time, transmitter and receiver CPU utilization,
       and loss percentage (for UDP transfers).
     '';
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "http://nuttcp.net/";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "nuttcp";
   };
 }

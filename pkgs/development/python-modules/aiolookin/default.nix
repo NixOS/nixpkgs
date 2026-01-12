@@ -7,15 +7,12 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiolookin";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ANMalko";
@@ -26,6 +23,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
+  doCheck = false; # all tests are async and no async plugin is configured
+
   nativeCheckInputs = [
     faker
     pytest-aiohttp
@@ -33,18 +32,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Not all tests are ready yet
-    "test_successful"
-  ];
-
   pythonImportsCheck = [ "aiolookin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for interacting with LOOKin devices";
     homepage = "https://github.com/ANMalko/aiolookin";
     changelog = "https://github.com/ANMalko/aiolookin/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

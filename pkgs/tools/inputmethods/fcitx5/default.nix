@@ -12,7 +12,6 @@
   pango,
   expat,
   fribidi,
-  fmt,
   wayland,
   systemd,
   wayland-protocols,
@@ -46,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.12";
+  version = "5.1.16";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-Jk7YY6nrY1Yn9KeNlRJbMF/fCMIlUVg/Elt7SymlK84=";
+    hash = "sha256-aedYDpxYeUXadJnV+u1cQrNGoiW8WZKAgP4eNcvkScI=";
   };
 
   prePatch = ''
@@ -69,7 +68,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    fmt
     isocodes
     cairo
     enchant
@@ -109,12 +107,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "fcitx5";
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

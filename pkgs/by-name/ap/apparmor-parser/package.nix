@@ -9,6 +9,7 @@
 
   # apparmor deps
   libapparmor,
+  apparmor-bin-utils,
 
   # testing
   perl,
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace rc.apparmor.functions \
       --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser" # FIXME
     substituteInPlace rc.apparmor.functions \
-      --replace-fail "/usr/sbin/aa-status" '$(which aa-status)'
+      --replace-fail "/usr/sbin/aa-status" "${lib.getExe' apparmor-bin-utils "aa-status"}"
     sed -i rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
   '';
 
@@ -48,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     "POD2MAN=${lib.getExe' buildPackages.perl "pod2man"}"
     "POD2HTML=${lib.getExe' buildPackages.perl "pod2html"}"
     "MANDIR=share/man"
-  ] ++ lib.optional finalAttrs.doCheck "PROVE=${lib.getExe' perl "prove"}";
+  ]
+  ++ lib.optional finalAttrs.doCheck "PROVE=${lib.getExe' perl "prove"}";
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -61,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postCheck = "popd";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMusl;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkInputs = [
     bashInteractive
     perl

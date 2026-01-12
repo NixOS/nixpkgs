@@ -5,11 +5,9 @@
   fetchFromGitHub,
   freezegun,
   tzdata,
-  pyparsing,
   pydantic,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
   python-dateutil,
   setuptools,
   syrupy,
@@ -17,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "9.2.5";
+  version = "12.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
     tag = version;
-    hash = "sha256-db7xwNN7xAoeqPngZNJxQNM2wLVcr7VpuG2IWswLCEE=";
+    hash = "sha256-A3rFZUjUdDkkMhh3ytsBg89o1BtCYWFB0d/usmiuyec=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +31,6 @@ buildPythonPackage rec {
     python-dateutil
     tzdata
     pydantic
-    pyparsing
   ];
 
   nativeCheckInputs = [
@@ -45,6 +40,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "ical" ];
 

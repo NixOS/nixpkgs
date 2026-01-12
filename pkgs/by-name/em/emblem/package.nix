@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-CsISaVlRGtVVEna1jyGZo/IdWcJdwHJv6LXcXYha2UE=";
   };
 
@@ -68,10 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      figsoda
-      foo-dogsquared
-    ];
+    maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
   };
 }

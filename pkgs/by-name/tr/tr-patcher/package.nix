@@ -33,13 +33,13 @@ stdenv.mkDerivation {
     --add-flags "-jar $out/lib/tr-patcher.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Allow to update dependancies of the Tamriel-Data mod for morrowind";
     mainProgram = "tr-patcher";
     homepage = "https://gitlab.com/bmwinger/tr-patcher";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3;
-    maintainers = [ maintainers.marius851000 ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.marius851000 ];
+    platforms = lib.platforms.linux;
   };
 }

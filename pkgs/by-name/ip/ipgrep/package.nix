@@ -5,10 +5,9 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.0.1";
   pname = "ipgrep";
-
-  disabled = python3Packages.isPy27;
+  version = "1.0.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
@@ -20,24 +19,27 @@ python3Packages.buildPythonApplication rec {
   patchPhase = ''
     mkdir -p ipgrep
     substituteInPlace setup.py \
-      --replace "'scripts': []" "'scripts': { 'ipgrep.py' }"
+      --replace-fail "'scripts': []" "'scripts': { 'ipgrep.py' }"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pycares
     urllib3
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract, defang, resolve names and IPs from text";
     mainProgram = "ipgrep.py";
     longDescription = ''
       ipgrep extracts possibly obfuscated host names and IP addresses
       from text, resolves host names, and prints them, sorted by ASN.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   setuptools,
   prettytable,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "chispa";
   version = "0.11.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrPowers";
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   # pythonImportsCheck needs spark installation
 
-  meta = with lib; {
+  meta = {
     description = "PySpark test helper methods with beautiful error messages";
     homepage = "https://github.com/MrPowers/chispa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ratsclub ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ratsclub ];
   };
 }

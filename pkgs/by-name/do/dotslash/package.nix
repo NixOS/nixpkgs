@@ -9,15 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotslash";
-  version = "0.5.3";
+  version = "0.5.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-csggbV5IyO9TlhN8S/E3LRfqqFJvj4cshByC6S7qpDk=";
+    hash = "sha256-VFesGum2xjknUuCwIojntdst5dmhvZb78ejJ2OG1FVI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FyFrKaV5itdr0HtE5Ize21mwCwHRTzmIt+kmB972s9M=";
+  cargoHash = "sha256-+FWDeR4AcFSFz0gGQ8VMvX68/F0yEm25cNfHeedqsWE=";
   doCheck = false; # http tests
 
   passthru = {
@@ -27,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dotslash-cli.com";
     description = "Simplified multi-platform executable deployment";
     longDescription = ''
@@ -39,11 +38,11 @@ rustPlatform.buildRustPackage rec {
       your developers seamlessly get the tools they need, ensuring consistent
       builds across platforms.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "dotslash";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

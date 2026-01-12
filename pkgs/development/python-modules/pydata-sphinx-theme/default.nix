@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   accessible-pygments,
@@ -17,10 +16,9 @@ buildPythonPackage rec {
 
   format = "wheel";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
@@ -38,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydata_sphinx_theme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap-based Sphinx theme from the PyData community";
     homepage = "https://github.com/pydata/pydata-sphinx-theme";
     changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

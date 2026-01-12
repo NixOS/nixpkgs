@@ -21,10 +21,10 @@ buildPythonPackage rec {
   # Upstream has no tests:
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of NLP visualizations for NER and syntax tree markup";
     homepage = "https://github.com/natasha/ipymarkup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ npatsakula ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ npatsakula ];
   };
 }

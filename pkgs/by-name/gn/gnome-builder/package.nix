@@ -24,6 +24,7 @@
   libspelling,
   libsysprof-capture,
   libxml2,
+  libyaml,
   meson,
   ninja,
   ostree,
@@ -42,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "48.0";
+  version = "49.1";
 
   outputs = [
     "out"
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ev6aejs8ZiF2i8RqYdaY3XiLNlP7RqcII4vcz03me6Q=";
+    hash = "sha256-O55HmDiPlZ4QMsas5KX7e05Yi2M5/OTCLsJqvoafiis=";
   };
 
   patches = [
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libspelling
     libsysprof-capture
     libxml2
+    libyaml
     ostree
     pcre2
     python3
@@ -161,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "gnome-builder";
   };
 
-  meta = with lib; {
+  meta = {
     description = "IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation
@@ -174,9 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
       appropriate dependencies loaded.
     '';
     homepage = "https://apps.gnome.org/Builder/";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-builder";
   };
 })

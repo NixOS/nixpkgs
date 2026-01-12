@@ -17,6 +17,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
   version = "2.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
@@ -41,7 +42,9 @@ python3.pkgs.buildPythonApplication rec {
     vte
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     configobj
     dbus-python
     pygobject3
@@ -54,6 +57,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   doCheck = false;
+
+  pythonImportsCheck = [ "terminatorlib" ];
 
   dontWrapGApps = true;
 
@@ -70,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal emulator with support for tiling and tabs";
     longDescription = ''
       The goal of this project is to produce a useful tool for arranging
@@ -80,8 +85,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${src.tag}";
     homepage = "https://github.com/gnome-terminator/terminator";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.linux;
   };
 }

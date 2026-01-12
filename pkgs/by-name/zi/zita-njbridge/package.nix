@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "SUFFIX=''"
   ];
 
-  meta = with lib; {
-    description = "command line Jack clients to transmit full quality multichannel audio over a local IP network";
+  meta = {
+    description = "Command line Jack clients to transmit full quality multichannel audio over a local IP network";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

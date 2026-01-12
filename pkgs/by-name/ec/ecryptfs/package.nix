@@ -58,20 +58,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ " --disable-openssl" ] ++ lib.optionals (!enablePython) [ "--disable-pywrap" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      makeWrapper
-      intltool
-    ]
-    # if python2 support is requested, it is needed at builtime as well as runtime.
-    ++ lib.optionals (enablePython) [ python2 ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    intltool
+  ]
+  # if python2 support is requested, it is needed at builtime as well as runtime.
+  ++ lib.optionals enablePython [ python2 ];
   buildInputs = [
     perl
     nss
     nspr
     pam
-  ] ++ lib.optionals (enablePython) [ python2 ];
+  ]
+  ++ lib.optionals enablePython [ python2 ];
   propagatedBuildInputs = [
     coreutils
     gettext
@@ -98,10 +98,10 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ecryptfs; };
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise-class stacked cryptographic filesystem";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.linux;
   };
 }

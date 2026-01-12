@@ -11,15 +11,17 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.9.0";
+  version = "6.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = "whitenoise";
     tag = version;
-    hash = "sha256-UmM8Az22ql3uUpyY6jj7ky3LelmttFBqGMYlzlNRAHg=";
+    hash = "sha256-pcU4qa2dlyPfMgyi1O8zME4GukIvKN4MQhFtJJjdn9w=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -31,15 +33,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  __darwinAllowLocalNetworking = true;
-
-  disabledTestPaths = [
-    # Don't run Django tests
-    "tests/test_django_whitenoise.py"
-    "tests/test_runserver_nostatic.py"
-    "tests/test_storage.py"
-  ];
-
   disabledTests = [
     # Test fails with AssertionError
     "test_modified"
@@ -47,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whitenoise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to serve static file for WSGI applications";
     homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

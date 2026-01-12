@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     sed -i 's@LIBS := \(.*\) -lm \(.*\)@LIBS := \1 \2@' Make.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tracks the route taken by packets over an IP network";
     homepage = "https://traceroute.sourceforge.net/";
     changelog = "https://sourceforge.net/projects/traceroute/files/traceroute/traceroute-${version}/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ koral ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ koral ];
+    platforms = lib.platforms.linux;
     mainProgram = "traceroute";
   };
 }

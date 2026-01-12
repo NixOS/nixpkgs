@@ -3,33 +3,33 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "srgn";
-  version = "0.13.7";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
     rev = "srgn-v${version}";
-    hash = "sha256-JHO++d25UmYgTuSOvkZaF0rkab8B6XetHcoEchpLimk=";
+    hash = "sha256-bwrV6wj9PrX2cYAnqB0fXiG/vuL28M0q9a+WER0A/9w=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-H0LBH8nd/uyFufrUWVyNZjn9AKJcAlsv3UVuXoM7ZGM=";
+  cargoHash = "sha256-9quoyNqADezMdziiaGCVIKJWBWaTgrMsfWVUw4Zlo94=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash zsh fish; do
       installShellCompletion --cmd srgn "--$shell" <("$out/bin/srgn" --completions "$shell")
     done
   '';
 
-  meta = with lib; {
-    description = "A code surgeon for precise text and code transplantation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ magistau ];
+  meta = {
+    description = "Code surgeon for precise text and code transplantation";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ magistau ];
     mainProgram = "srgn";
     homepage = "https://github.com/${src.owner}/${src.repo}/";
     downloadPage = "https://github.com/${src.owner}/${src.repo}/releases/tag/${src.rev}";

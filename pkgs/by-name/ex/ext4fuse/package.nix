@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EXT4 implementation for FUSE";
     mainProgram = "ext4fuse";
     homepage = "https://github.com/gerard/ext4fuse";
-    maintainers = with maintainers; [ felixalbrigtsen ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ felixalbrigtsen ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 })

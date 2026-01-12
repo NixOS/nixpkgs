@@ -23,10 +23,10 @@ mkAppleDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Clang 18 requires that no non-private symbols by defined after cfi_startproc. Apply the upstream libffi fix.
-    ./patches/llvm-18-compatibility.patch
     # Fix a memory leak when using the trampoline dylib. See https://github.com/libffi/libffi/pull/621#discussion_r955298301.
     ./patches/fix-tramponline-memory-leak.patch
+    # Fix automake-18.18 compatibility, https://github.com/libffi/libffi/issues/853#issuecomment-2909994482
+    ./patches/automake-1.18.patch
   ];
 
   # Make sure libffi is using the trampolines dylib in this package not the system one.

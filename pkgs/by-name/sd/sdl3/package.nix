@@ -3,12 +3,11 @@
   stdenv,
   config,
   alsa-lib,
-  apple-sdk_11,
   cmake,
   darwinMinVersionHook,
   dbus,
   fetchFromGitHub,
-  ibus,
+  ibusMinimal,
   installShellFiles,
   libGL,
   libayatana-appindicator,
@@ -50,7 +49,7 @@
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
-  testSupport ? true,
+  traySupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
@@ -58,32 +57,36 @@
 assert lib.assertMsg (
   waylandSupport -> openglSupport
 ) "SDL3 requires OpenGL support to enable Wayland";
+assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to enable ibus";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.12";
+  version = "3.2.28";
 
   outputs = [
     "lib"
     "dev"
     "out"
+    "installedTests"
   ];
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-CPCbbVbi0gwSUkaEBOQPJwCU2NN9Lex2Z4hqBfIjn+o=";
+    hash = "sha256-nfnvzog1bON2IaBOeWociV82lmRY+qXgdeXBe6GYlww=";
   };
 
   postPatch =
     # Tests timeout on Darwin
-    lib.optionalString testSupport ''
+    lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
+        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+      substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
     '';
 
@@ -93,27 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ] ++ lib.optional waylandSupport wayland-scanner;
+  ]
+  ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
-    finalAttrs.dlopenBuildInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
-    ++ lib.optionals ibusSupport [
-      ibus
-    ]
-    ++ lib.optional waylandSupport zenity;
-
-  dlopenBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       libusb1
     ]
     ++ lib.optional (
-      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin
+      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin && traySupport
     ) libayatana-appindicator
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
@@ -134,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals x11Support [
       xorg.libX11
+      xorg.libxcb
       xorg.libXScrnSaver
       xorg.libXcursor
       xorg.libXext
@@ -146,7 +138,14 @@ stdenv.mkDerivation (finalAttrs: {
       vulkan-loader
     ]
     ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
-    ++ lib.optional x11Support xorg.libX11;
+    ++ lib.optional x11Support xorg.libX11
+    ++ lib.optionals ibusSupport [
+      # sdl3 only uses some constants of the ibus headers
+      # it never actually loads the library
+      # thus, it also does not have to care about gtk integration,
+      # so using ibusMinimal avoids an unnecessarily large closure here.
+      ibusMinimal
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
@@ -159,26 +158,36 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "SDL_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
-    (lib.cmakeBool "SDL_TEST_LIBRARY" testSupport)
+    (lib.cmakeBool "SDL_TEST_LIBRARY" true)
+    (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
 
-    (lib.cmakeBool "SDL_TESTS" finalAttrs.finalPackage.doCheck)
-  ];
+    (lib.cmakeBool "SDL_TESTS" true)
+    (lib.cmakeBool "SDL_INSTALL_TESTS" true)
+    (lib.cmakeBool "SDL_DEPS_SHARED" false)
 
-  doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    # Only ppc64le baseline guarantees AltiVec
+    (lib.cmakeBool "SDL_ALTIVEC" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+  ]
+  ++
+    lib.optionals
+      (
+        stdenv.hostPlatform.isUnix
+        && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
+        && !(x11Support || waylandSupport)
+      )
+      [
+        (lib.cmakeBool "SDL_UNIX_CONSOLE_BUILD" true)
+      ];
 
-  # See comment below. We actually *do* need these RPATH entries
-  dontPatchELF = true;
+  doCheck = true;
 
-  env = {
-    # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
-    # helps them be found
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
-    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
-  };
+  postInstall = ''
+    moveToOutput "share/installed-tests" "$installedTests"
+    moveToOutput "libexec/installed-tests" "$installedTests"
+  '';
 
   passthru = {
     # Building this in its own derivation to make sure the rpath hack above propagate to users

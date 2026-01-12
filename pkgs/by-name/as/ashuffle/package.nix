@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HQ4+vyTvX0mhfuRclbiC+MvllV3300ztAwL0IxrUiC8=";
     fetchSubmodules = true;
   };
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-framework CoreFoundation";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joshkunz/ashuffle";
     description = "Automatic library-wide shuffle for mpd";
-    maintainers = [ maintainers.tcbravo ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.tcbravo ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "ashuffle";
   };
 }

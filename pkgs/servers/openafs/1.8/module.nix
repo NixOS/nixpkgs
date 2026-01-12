@@ -28,53 +28,38 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # LINUX: Refactor afs_linux_dentry_revalidate()
+    # Linux: Use struct kiocb * for aops write_begin/end
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16276/revisions/c1d074317e5c8cb8212e0b19a29f7d710bcabb32/patch";
-      decode = "base64 -d";
-      hash = "sha256-8ga9ks9pr6pWaV2t67v+FaG0yVExhqELkvkpdLvO8Nc=";
+      url = "https://github.com/openafs/openafs/commit/a765a9ddd412c8d1e5cb0f5cf497a8606251811e.patch";
+      hash = "sha256-RkIAdXMvelnWs4YB3OMj6AIQlUbSqdKJpwc6wiSZzrM=";
     })
-    # Linux-6.14: Handle dops.d_revalidate with parent
+    # linux: remove implied def HAVE_LINUX_FILEMAP_GET_FOLIO
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16277/revisions/0051bd0ee82b05e8caacdc0596e5b62609bebd2e/patch";
-      decode = "base64 -d";
-      hash = "sha256-08jedwZ1KX1RSs8y9sh7BUvv5xK9tlzZ6uBOR4kS0Jo=";
+      url = "https://github.com/openafs/openafs/commit/c379ff006d8b7db425f7648321c549ab24919d92.patch";
+      hash = "sha256-fDtX3NhWIWupTArEauCM2rEaO3l8jWBVC5mAMil2+nU=";
     })
-    # Linux: Add required MODULE_DESCRIPTION
+    # LINUX: Zero code on EEXIST in afs_linux_read_cache
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16372/revisions/39189eba45542376e668636bd79a93ae6a8a7cd2/patch";
-      decode = "base64 -d";
-      hash = "sha256-j5ckKQvybEvmlnFs5jX8g8Dfw37LYWGnfsl4hnZ3+A4=";
+      url = "https://github.com/openafs/openafs/commit/eb6753d93b930ad7d65772a9751117f6969a5e92.patch";
+      hash = "sha256-97/MdG9DrHEtOKCRLCTgl6ZEtqLUsaNs9LcAzcyrTF4=";
     })
-    # linux: inode_ops mkdir returns struct dentry *
+    # Linux: mount_nodev removed, use new mount API
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16373/revisions/769847e205d5908a0c430f7bcfbd2f48e19f8bf8/patch";
+      url = "https://gerrit.openafs.org/changes/16646/revisions/93db75395149e1f0dbdc3a0572f58449dd9da98d/patch";
       decode = "base64 -d";
-      hash = "sha256-znv5gunyPnJgi4SRFERJudtYFqiS+AVYDWfvr52Ku3s=";
+      hash = "sha256-5eYliZV3WPjbQ3WGvZuqzeu060MHRof2yozSWPn+Njg=";
     })
-    # Linux: Use __filemap_get_folio()
+    # Linux: Rename LINUX_WRITEPAGES_USES_FOLIOS
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16374/revisions/f187add554da9e9c52752edbfa98f486f683cf25/patch";
+      url = "https://gerrit.openafs.org/changes/16650/revisions/1e5801afe3069a9ca586c745ae1e26feb8f1048f/patch";
       decode = "base64 -d";
-      hash = "sha256-+ay87ThSn6QyPZcN0+oE01Wqbxmz0Z1KXYwocQCvYLg=";
+      hash = "sha256-qtqe64qhRwNBwfKkGhuEAKFDMFDirFxz9M0Wvtk+r1Q=";
     })
-    # Linux: Use folio_wait_locked()
+    # Linux: Don't use write_cache_pages for writepages
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16375/revisions/87a93f6488585553d833e1397e7f0dae0545cb7e/patch";
+      url = "https://gerrit.openafs.org/changes/16648/revisions/652674cec6c6c7349709dc080b6a2db3253424e6/patch";
       decode = "base64 -d";
-      hash = "sha256-MOVX2LFe8OBnvsQ2UdLvwKrwztOmnu1rdIou4CF+EBs=";
-    })
-    # cf: Introduce AC_CHECK_LINUX_SYMBOL
-    (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16376/revisions/bab5968d7f4639d4a0cbe81aaa3e9716dda00632/patch";
-      decode = "base64 -d";
-      hash = "sha256-d6DZqDTW1uEKSB5PsomS4ix9fYYQzdQVmDATKl6n7x4=";
-    })
-    # cf: check for dentry flag macros/enums
-    (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16377/revisions/f791d8ca4804486c656bc7c221076480df39b465/patch";
-      decode = "base64 -d";
-      hash = "sha256-7B0VJE3FeSQU1ElvXI5zXCPq1JRLAycyhqIQuDdR7xE=";
+      hash = "sha256-5T4hOge3U5uk3NSFxocYEjgfXU1Se5FkQk2rCRZDlfU=";
     })
   ];
 
@@ -86,7 +71,8 @@ stdenv.mkDerivation {
     perl
     which
     bison
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
 
@@ -121,14 +107,13 @@ stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       andersk
-      maggesi
       spacefrogg
     ];
     broken = kernel.isHardened;

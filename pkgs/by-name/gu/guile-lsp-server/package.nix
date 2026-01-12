@@ -10,14 +10,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lsp-server";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "rgherdt";
     repo = "scheme-lsp-server";
     tag = finalAttrs.version;
-    hash = "sha256-XNzon1l6CnCd4RasNrHHxWEBNhyaHXgdNLsvjvRLbfk=";
+    hash = "sha256-x0BqN2JM1eVmaHp+F4N8OsotqL8hlWNIE2rmCq9Qn+w=";
   };
 
   strictDeps = true;
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/rgherdt/scheme-lsp-server";
-    description = "An LSP server for Guile";
+    description = "LSP server for Guile";
     mainProgram = "guile-lsp-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ knightpp ];

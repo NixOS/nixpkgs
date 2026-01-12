@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xlsxwriter";
-  version = "3.2.2";
+  version = "3.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "XlsxWriter";
     rev = "RELEASE_${version}";
-    hash = "sha256-bacoOZckZVADMa81raUV9z3V1xj2Eid7B+gLb+MCccg=";
+    hash = "sha256-Z384IYFQzGViJXJQe+zovXn5X+MyOqGv0NKKlktcF4o=";
   };
 
   build-system = [ setuptools ];
@@ -27,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xlsxwriter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for creating Excel XLSX files";
     homepage = "https://xlsxwriter.readthedocs.io/";
     changelog = "https://xlsxwriter.readthedocs.io/changes.html";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jluttine ];
     mainProgram = "vba_extract.py";
   };
 }

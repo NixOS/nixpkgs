@@ -4,15 +4,12 @@
   bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cometblue-lite";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "neffs";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cometblue_lite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Eurotronic Comet Blue thermostats";
     homepage = "https://github.com/neffs/python-cometblue_lite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

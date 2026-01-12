@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   cython,
   catalogue,
   mock,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "srsly";
   version = "2.5.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srsly" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";
     description = "Modern high-performance serialization utilities for Python";
     homepage = "https://github.com/explosion/srsly";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

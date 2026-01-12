@@ -16,19 +16,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-hSBh1LTfe3rQDPUryo2Swdf/yLYrOQ/Fg3Dz7ZqV3gw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xnmns0YXsKuoNxxax3St5pLiFwu6BD0iIYHNi9N9mO0=";
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tool that shows desktop notifications using notify-rust";
     homepage = "https://github.com/hoodie/toastify";
     changelog = "https://github.com/hoodie/toastify/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "toastify";
   };
 }

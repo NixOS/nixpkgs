@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   ziafont,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "ziamath";
   version = "0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
@@ -45,7 +42,7 @@ buildPythonPackage rec {
     in
     lib.concatMapStrings copyFontCmd checkFonts;
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "ziamath" ];
 

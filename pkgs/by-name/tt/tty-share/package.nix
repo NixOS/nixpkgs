@@ -24,11 +24,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tty-share.com";
     description = "Share terminal via browser for remote work or shared sessions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andys8 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andys8 ];
     mainProgram = "tty-share";
   };
 }

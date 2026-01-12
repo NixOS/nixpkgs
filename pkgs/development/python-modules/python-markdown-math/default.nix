@@ -1,23 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   markdown,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "python-markdown-math";
-  version = "0.8";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "0.9";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8564212af679fc18d53f38681f16080fcd3d186073f23825c7ce86fadd3e3635";
+  src = fetchFromGitHub {
+    owner = "mitya57";
+    repo = "python-markdown-math";
+    tag = version;
+    hash = "sha256-m/i43lvOehZSazHXhoAZTRSB5BQgn2VFjXADxSKeXfs=";
   };
 
-  nativeCheckInputs = [ markdown ];
+  build-system = [ setuptools ];
+
+  dependencies = [ markdown ];
 
   meta = {
     description = "Math extension for Python-Markdown";

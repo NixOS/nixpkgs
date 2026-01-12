@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for viewing/manipulating the MAC address of network interfaces";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       joachifm
       dotlambda
     ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/alobbs/macchanger";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "macchanger";
   };
 }

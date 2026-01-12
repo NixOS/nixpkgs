@@ -23,7 +23,7 @@ git clone --depth 1 --branch "v${version}" -c advice.detachedHead=false 'https:/
 git -C "$repo" checkout "tags/v${version}"
 
 rm -rf "${repo}/.git"
-hashcheck=$(nix hash path "$repo")
+hashcheck=$(nix --extra-experimental-features nix-command hash path "$repo")
 
 (cd "$nixpkgs" && update-source-version teos "$version" "$hashcheck" && update-source-version teos --ignore-same-version --source-key=cargoDeps)
 echo

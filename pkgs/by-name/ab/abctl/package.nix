@@ -8,22 +8,20 @@
 
 buildGoModule rec {
   pname = "abctl";
-  version = "0.25.0";
+  version = "0.30.3";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = "abctl";
     tag = "v${version}";
-    hash = "sha256-ZM0ae4Oiz/q4KSkxVxEXPe6oJa5fsNWzw+fX5hobc1c=";
+    hash = "sha256-pQvLFfj7/uZQUqtWAsTcw2RQ3KHFuoQCBP3lBvb2LTs=";
   };
 
   checkFlags =
     let
       skippedTests = [
         # network access
-        "TestManifestCmd"
-        "TestManifestCmd_Enterprise"
-        "TestManifestCmd_Nightly"
+        "TestResolveChartReference"
         # docker
         "TestValues_BadYaml"
         "TestInvalidHostFlag_IpAddr"
@@ -33,7 +31,7 @@ buildGoModule rec {
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-9djIgVLPQmqEzDqUBipmXA8DlwYx9D4QlMna26vyJKI=";
+  vendorHash = "sha256-ZJbZDfVB6gxToinuUNLsjBEB+7+OgC19Cc2Q8Ej7kfo=";
 
   passthru.updateScript = nix-update-script { };
 

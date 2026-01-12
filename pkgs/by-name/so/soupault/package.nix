@@ -10,25 +10,26 @@
   testers,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "soupault";
-  version = "5.0.0";
+  version = "5.2.1";
 
-  minimalOCamlVersion = "4.13";
+  minimalOCamlVersion = "5.3";
 
   src = fetchzip {
     urls = [
-      "https://github.com/PataphysicalSociety/soupault/archive/${version}.tar.gz"
-      "https://codeberg.org/PataphysicalSociety/soupault/archive/${version}.tar.gz"
+      "https://github.com/PataphysicalSociety/soupault/archive/${finalAttrs.version}.tar.gz"
+      "https://codeberg.org/PataphysicalSociety/soupault/archive/${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-patZn5z+ZT3dONdUojSvFgaVOmG1IpVGdehCUh2uRT8=";
+    hash = "sha256-jwVos7KeQ6fBuBWUslFyvrwDuJ3Wgb7pieERm9+b3Zg=";
   };
 
-  nativeBuildInputs =
-    [ removeReferencesTo ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      darwin.sigtool
-    ];
+  nativeBuildInputs = [
+    removeReferencesTo
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.sigtool
+  ];
 
   buildInputs = with ocamlPackages; [
     base64
@@ -70,4 +71,4 @@ ocamlPackages.buildDunePackage rec {
     maintainers = with lib.maintainers; [ toastal ];
     mainProgram = "soupault";
   };
-}
+})

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "hid";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P4CeKSq1LEQ1rRRCyO8gW+TJyk7rgPtHx9mODHVSeyo=";
+    hash = "sha256-XKEpp7lDSs5ePkKcEJKhZ5L+/68Geka2ZunFhocs3P4=";
   };
 
   postPatch = ''
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hid" ];
 
-  meta = with lib; {
-    description = "hidapi bindings in ctypes";
+  meta = {
+    description = "Hidapi bindings in ctypes";
     homepage = "https://github.com/apmorton/pyhidapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ ];
   };
 }

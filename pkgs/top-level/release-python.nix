@@ -12,6 +12,7 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -35,11 +36,7 @@ let
       res = builtins.tryEval (
         if isDerivation value then
           value.meta.isBuildPythonPackage or [ ]
-        else if
-          value.recurseForDerivations or false
-          || value.recurseForRelease or false
-          || value.__recurseIntoDerivationForReleaseJobs or false
-        then
+        else if value.recurseForDerivations or false || value.recurseForRelease or false then
           packagePython value
         else
           [ ]
@@ -49,7 +46,7 @@ let
   );
 
   jobs = {
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    # for pkgs.formats tests, which rely on remarshal
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     tested = pkgs.releaseTools.aggregate {
@@ -58,15 +55,16 @@ let
       constituents = [
         jobs.nixos-render-docs.x86_64-linux # Used in nixos manual
         jobs.remarshal_0_17.x86_64-linux # Used in pkgs.formats.yaml_1_1
-        jobs.python312Packages.afdko.x86_64-linux # Used in noto-fonts-color-emoji
-        jobs.python312Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
-        jobs.python312Packages.colorama.x86_64-linux # Used in nixos test-driver
-        jobs.python312Packages.ptpython.x86_64-linux # Used in nixos test-driver
-        jobs.python312Packages.requests.x86_64-linux # Almost ubiquous package
-        jobs.python312Packages.sphinx.x86_64-linux # Document creation for many packages
+        jobs.python313Packages.afdko.x86_64-linux # Used in noto-fonts-color-emoji
+        jobs.python313Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
+        jobs.python313Packages.colorama.x86_64-linux # Used in nixos test-driver
+        jobs.python313Packages.ptpython.x86_64-linux # Used in nixos test-driver
+        jobs.python313Packages.requests.x86_64-linux # Almost ubiquous package
+        jobs.python313Packages.sphinx.x86_64-linux # Document creation for many packages
       ];
     };
 
-  } // (mapTestOn (packagePython pkgs));
+  }
+  // (mapTestOn (packagePython pkgs));
 in
 jobs

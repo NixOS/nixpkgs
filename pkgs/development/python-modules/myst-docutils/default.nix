@@ -12,7 +12,6 @@
   pytest-param-files,
   pytest-regressions,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   sphinx-pytest,
   sphinx,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "myst-docutils";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
@@ -69,11 +66,10 @@ buildPythonPackage rec {
     "tests/test_sphinx/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extended commonmark compliant parser, with bridges to docutils/sphinx";
     homepage = "https://github.com/executablebooks/MyST-Parser";
     changelog = "https://github.com/executablebooks/MyST-Parser/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dpausp ];
+    license = lib.licenses.mit;
   };
 }

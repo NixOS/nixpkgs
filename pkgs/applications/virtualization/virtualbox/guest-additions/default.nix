@@ -4,6 +4,7 @@
   callPackage,
   lib,
   dbus,
+  kmod,
   xorg,
   zlib,
   patchelf,
@@ -12,12 +13,25 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.1.8";
+  virtualboxVersion = "7.2.4";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "3f7132c55ac6c5f50585bfaa115d29e30b47ccf535cb0a12ff50214ddae2f63d";
+  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
+
+  platform =
+    if stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else if stdenv.hostPlatform.is32bit then
+      "x86"
+    else
+      "amd64";
 
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
-    inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
+    inherit
+      virtualboxVersion
+      virtualboxSubVersion
+      virtualboxSha256
+      platform
+      ;
   };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
@@ -54,9 +68,7 @@ stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
   version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
-  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
-    if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-  }.tar.bz2";
+  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -70,7 +82,9 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ] ++ kernel.moduleBuildDependencies;
+    kmod
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildPhase = ''
     runHook preBuild
@@ -128,6 +142,11 @@ stdenv.mkDerivation {
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
 
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
+
     runHook postInstall
   '';
 
@@ -152,12 +171,12 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

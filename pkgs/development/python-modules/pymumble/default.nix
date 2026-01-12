@@ -6,7 +6,6 @@
   protobuf,
   pytestCheckHook,
   pycrypto,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage {
   pname = "pymumble";
   version = "unstable-2024-10-20";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tjni";
@@ -43,13 +40,12 @@ buildPythonPackage {
     "pymumble_py3.constants"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to create mumble bots";
     homepage = "https://github.com/tjni/pymumble";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       thelegy
-      tjni
     ];
   };
 }

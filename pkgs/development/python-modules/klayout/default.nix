@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "klayout";
-  version = "0.30.1";
+  version = "0.30.4.post1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QR/JK6n8Gnofdw7/RyeeA6OZJmVeIa0WbbuQAecASVY=";
+    hash = "sha256-jQLVD3IsekQfO0P80miKOtyTyGldc2Vn/mJFfvvgMFo=";
   };
 
   build-system = [
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "klayout" ];
 
-  meta = with lib; {
+  meta = {
     description = "KLayout’s Python API";
     homepage = "https://github.com/KLayout/klayout";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

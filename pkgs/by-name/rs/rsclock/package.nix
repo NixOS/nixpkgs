@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-l5750zP90KnB+OIg1WOikQ6OgQZK4iwVvGBN3jegjGc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Bnec98FEG2aWUa2IoBOLy0K6mqggcSwOBL3S5+0mSkU=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal clock written in Rust";
     homepage = "https://github.com/valebes/rsClock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ valebes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ valebes ];
     mainProgram = "rsclock";
   };
 }

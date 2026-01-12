@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
-    rev = version;
+    tag = version;
     hash = "sha256-9Z0e6RCJfqQlq3oT4fBu8rwPH1OWEKQ52rVDa0Y0rJU=";
   };
 
@@ -48,28 +48,27 @@ stdenv.mkDerivation rec {
     aocl-utils
   ];
 
-  cmakeFlags =
-    [
-      "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
-      "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
-      "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
-      "-DENABLE_CBLAS_INTERFACES=ON"
-      "-DENABLE_EXT_LAPACK_INTERFACE=ON"
-    ]
-    ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
-    ++ lib.optional blas64 "-DENABLE_ILP64=ON"
-    ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
+  cmakeFlags = [
+    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
+    "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
+    "-DENABLE_CBLAS_INTERFACES=ON"
+    "-DENABLE_EXT_LAPACK_INTERFACE=ON"
+  ]
+  ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
+  ++ lib.optional blas64 "-DENABLE_ILP64=ON"
+  ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
 
   postInstall = ''
     ln -s $out/lib/libflame.so $out/lib/liblapack.so.3
     ln -s $out/lib/libflame.so $out/lib/liblapacke.so.3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
 }

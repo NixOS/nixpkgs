@@ -20,11 +20,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bird; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for the bird routing daemon";
     mainProgram = "bird_exporter";
     homepage = "https://github.com/czerwonk/bird_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukegb ];
   };
 }

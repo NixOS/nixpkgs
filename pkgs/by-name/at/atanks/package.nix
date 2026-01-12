@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     "CXX=g++"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Atomic Tanks ballistics game";
     mainProgram = "atanks";
     homepage = "http://atanks.sourceforge.net/";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

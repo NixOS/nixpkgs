@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://acme.sh/";
     changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${version}";
     description = "Pure Unix shell script implementing ACME client protocol";
@@ -73,8 +73,7 @@ stdenv.mkDerivation rec {
       - IPv6 ready
       - Cron job notifications for renewal or error etc.
     '';
-    license = licenses.gpl3Only;
-    teams = [ lib.teams.serokell ];
+    license = lib.licenses.gpl3Only;
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";
   };

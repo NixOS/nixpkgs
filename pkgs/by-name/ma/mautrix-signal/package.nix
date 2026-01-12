@@ -5,6 +5,7 @@
   fetchFromGitHub,
   olm,
   libsignal-ffi,
+  zlib,
   versionCheckHook,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
@@ -19,13 +20,14 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.8.3";
+  version = "25.12";
+  tag = "v0.2512.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    tag = "v${version}";
-    hash = "sha256-BummgGQ+LNe4JYJHF4a2JfKEzgo7wVEMnAIbi1D0hS0=";
+    inherit tag;
+    hash = "sha256-qD3kehVZINfAg6ZitYlkabo19Zfn7X//5BoMbub9Y60=";
   };
 
   buildInputs =
@@ -35,24 +37,29 @@ buildGoModule rec {
       # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
       # see https://github.com/mautrix/signal/issues/401
       libsignal-ffi
+      zlib
     ];
 
   tags = lib.optional withGoolm "goolm";
 
   CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
 
-  vendorHash = "sha256-aJrcX2aK4Ge7yELEssoVdsrR+/2qoqTr3usRFGooLGU=";
+  vendorHash = "sha256-zfe3mdM3azHe+NssRKJqjaP7A0wrvHyIVnqUWJMsylw=";
+
+  ldflags = [
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   doCheck = true;
-  preCheck =
-    ''
-      # Needed by the tests to be able to find libstdc++
-      export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
-    ''
-    + (lib.optionalString (!withGoolm) ''
-      # When using libolm, the tests need explicit linking to libstdc++
-      export CGO_LDFLAGS="${cppStdLib}"
-    '');
+  preCheck = ''
+    # Needed by the tests to be able to find libstdc++
+    export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+  ''
+  + (lib.optionalString (!withGoolm) ''
+    # When using libolm, the tests need explicit linking to libstdc++
+    export CGO_LDFLAGS="${cppStdLib}"
+  '');
 
   postCheck = ''
     unset LD_LIBRARY_PATH
@@ -60,15 +67,15 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/signal";
     description = "Matrix-Signal puppeting bridge";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
-      alyaeanyx
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      pentane
       ma27
+      SchweGELBin
     ];
     mainProgram = "mautrix-signal";
   };

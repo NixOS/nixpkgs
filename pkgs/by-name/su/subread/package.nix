@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     cd src
     cp Makefile.${if stdenv.hostPlatform.isLinux then "Linux" else "MacOS"} Makefile
+
+    runHook postConfigure
   '';
 
   makeFlags = [ "CC_EXEC=cc" ];
@@ -30,11 +34,11 @@ stdenv.mkDerivation rec {
     cp -r ../bin $out
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "High-performance read alignment, quantification and mutation discovery";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ jbedo ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ jbedo ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

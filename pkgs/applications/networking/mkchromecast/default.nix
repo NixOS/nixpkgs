@@ -11,7 +11,7 @@
   vorbis-tools,
   pulseaudio,
   nodejs,
-  youtube-dl,
+  yt-dlp,
   opusTools,
   gst_all_1,
   enableSonos ? true,
@@ -27,19 +27,21 @@ let
     gst_all_1.gstreamer
     nodejs
     ffmpeg
-    youtube-dl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
+    yt-dlp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2022-10-31";
+  version = "2025-12-21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
-    sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
+    rev = "9cdc5f3f9060ef4078522366ce896356515d8e52";
+    hash = "sha256-UMzOIxgeTpAFQZtYirOYPoVcKgiKdGx2zwVyWmo32w4=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
@@ -77,22 +79,21 @@ python3Packages.buildPythonApplication {
     "--prefix PATH : ${lib.makeBinPath packages}"
   ];
 
-  postInstall =
-    ''
-      substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
-        --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install -Dm 755 -t $out/bin bin/audiodevice
-      substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
-        --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
-    '';
+  postInstall = ''
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
+      --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm 755 -t $out/bin bin/audiodevice
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
+      --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mkchromecast.com/";
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shou ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shou ];
     mainProgram = "mkchromecast";
   };
 }

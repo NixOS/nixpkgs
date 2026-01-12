@@ -1,10 +1,13 @@
 {
-  buildGo123Module,
+  stdenv,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   envoy,
-  mkYarnPackage,
+  yarnConfigHook,
+  yarnBuildHook,
   fetchYarnDeps,
+  nodejs,
   nixosTests,
   pomerium-cli,
 }:
@@ -17,41 +20,39 @@ let
     mapAttrsToList
     ;
 in
-buildGo123Module rec {
+buildGoModule rec {
   pname = "pomerium";
-  version = "0.29.4";
+  version = "0.30.5";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-Oj/wC3rr7CAw2iB0H8yUvzv5VCEIo8kc5sZrxFX6NrI=";
+    hash = "sha256-3SmcuLEWqsw/B10jTIG2TKGa7tyMLa/lpkD6Iq/Fm4g=";
   };
 
-  vendorHash = "sha256-K9LcGvANajoVKEDIswahD0mT5845qGZzafmWMKkVn8Q=";
+  vendorHash = "sha256-mOTjBH8VqsMdyW5jTIZ76bf55WnHw9XuUSh6zsBktt0=";
 
-  ui = mkYarnPackage {
+  ui = stdenv.mkDerivation {
+    pname = "pomerium-ui";
     inherit version;
     src = "${src}/ui";
 
-    packageJSON = ./package.json;
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      sha256 = lib.fileContents ./yarn-hash;
+      hash = "sha256-V2nSSMvTCK+SYmEhTbLMArIOmNs/AgB5xfhQGx3e/x8=";
     };
 
-    buildPhase = ''
-      runHook preBuild
-      yarn --offline build
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     installPhase = ''
       runHook preInstall
-      cp -R deps/pomerium/dist $out
+      cp -R dist $out
       runHook postInstall
     '';
-
-    doDist = false;
   };
 
   subPackages = [
@@ -127,12 +128,12 @@ buildGo123Module rec {
     updateScript = ./updater.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
     mainProgram = "pomerium";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lukegb
       devusb
     ];

@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_homeassistant_analytics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for Home Assistant Analytics";
     changelog = "https://github.com/joostlek/python-homeassistant-analytics/releases/tag/v${version}";
     homepage = "https://github.com/joostlek/python-homeassistant-analytics";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

@@ -24,11 +24,11 @@ buildGoModule rec {
     "-X main.build=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Top-like interface for container metrics";
     homepage = "https://ctop.sh/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ apeyroux ];
     mainProgram = "ctop";
   };
 }

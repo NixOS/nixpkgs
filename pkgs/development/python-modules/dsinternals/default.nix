@@ -5,15 +5,12 @@
   pycryptodomex,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dsinternals";
   version = "1.2.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
@@ -31,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsinternals" ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Windows Active Directory";
     homepage = "https://github.com/p0dalirius/pydsinternals";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

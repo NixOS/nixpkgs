@@ -22,6 +22,8 @@
   makeWrapper,
   nixosTests,
   ffmpeg,
+  autoconf,
+  automake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -123,57 +125,57 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/vncviewer
     '';
 
-  buildInputs =
+  buildInputs = [
+    fltk
+    gnutls
+    libjpeg_turbo
+    pixman
+    gawk
+    ffmpeg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
+    with xorg;
     [
-      fltk
-      gnutls
-      libjpeg_turbo
-      pixman
-      gawk
-      ffmpeg
+      nettle
+      pam
+      perl
+      xorgproto
+      utilmacros
+      libXtst
+      libXext
+      libX11
+      libXext
+      libICE
+      libXi
+      libSM
+      libXft
+      libxkbfile
+      libXfont2
+      libpciaccess
+      libGLU
+      libXrandr
+      libXdamage
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        nettle
-        pam
-        perl
-        xorgproto
-        utilmacros
-        libXtst
-        libXext
-        libX11
-        libXext
-        libICE
-        libXi
-        libSM
-        libXft
-        libxkbfile
-        libXfont2
-        libpciaccess
-        libGLU
-        libXrandr
-        libXdamage
-      ]
-      ++ xorg.xorgserver.buildInputs
-    );
+    ++ xorg.xorgserver.buildInputs
+  );
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    gettext
+    autoconf
+    automake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
+    with xorg;
     [
-      cmake
-      gettext
+      fontutil
+      libtool
+      makeWrapper
+      utilmacros
+      zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        fontutil
-        libtool
-        makeWrapper
-        utilmacros
-        zlib
-      ]
-      ++ xorg.xorgserver.nativeBuildInputs
-    );
+    ++ xorg.xorgserver.nativeBuildInputs
+  );
 
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg.xorgserver.propagatedBuildInputs;
 

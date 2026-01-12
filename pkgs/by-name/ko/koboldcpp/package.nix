@@ -7,8 +7,6 @@
   tk,
   addDriverRunpath,
 
-  apple-sdk_12,
-
   koboldLiteSupport ? true,
 
   config,
@@ -23,8 +21,9 @@
   clblast,
   ocl-icd,
 
-  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
+  vulkanSupport ? true,
   vulkan-loader,
+  shaderc,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
 }:
@@ -40,13 +39,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.86.2";
+  version = "1.105.3";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zB/X4tfygpf3ZrQ9FtQCd3sxN11Ewlxz1+YCiw7iUZU=";
+    hash = "sha256-8PgliEwe9ETFmdqHZdmbApz2uxhLLV/fcC2p/N8rOkY=";
   };
 
   enableParallelBuilding = true;
@@ -56,23 +55,34 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     python3Packages.wrapPython
   ];
 
+  postPatch = ''
+    nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
+    substituteInPlace "$PWD/Makefile" \
+      --replace-fail \
+        'CUBLASLD_FLAGS = -lcuda ' \
+        'CUBLASLD_FLAGS = '
+  '';
+
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
-  buildInputs =
-    [ tk ]
-    ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals cublasSupport [
-      cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ]
-    ++ lib.optionals clblastSupport [
-      clblast
-      ocl-icd
-    ]
-    ++ lib.optionals vulkanSupport [ vulkan-loader ];
+  buildInputs = [
+    tk
+  ]
+  ++ finalAttrs.pythonInputs
+  ++ lib.optionals cublasSupport [
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ]
+  ++ lib.optionals clblastSupport [
+    clblast
+    ocl-icd
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
+    shaderc
+  ];
 
   pythonPath = finalAttrs.pythonInputs;
 
@@ -91,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp *.embd "$out/bin"
+    cp embd_res/*.embd "$out/bin"
 
     ${lib.optionalString metalSupport ''
       cp *.metal "$out/bin"
@@ -121,7 +131,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
-      donteatoreo
+      FlameFlag
     ];
     platforms = lib.platforms.unix;
   };

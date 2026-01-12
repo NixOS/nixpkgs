@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "upa";
     repo = "mscp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5lX0b3JfjmQh/HlESRMNxqCe2qFRAEZoazysoy252dY=";
     fetchSubmodules = true;
   };

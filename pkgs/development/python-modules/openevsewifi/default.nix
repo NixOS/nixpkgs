@@ -6,7 +6,6 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miniconfig";
@@ -53,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openevsewifi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for communicating with the wifi module from OpenEVSE";
     homepage = "https://github.com/miniconfig/python-openevse-wifi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

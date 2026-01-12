@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "balanceofsatoshis";
-  version = "19.4.10";
+  version = "19.4.14";
 
   src = fetchFromGitHub {
     owner = "alexbosworth";
     repo = "balanceofsatoshis";
     tag = "v${version}";
-    hash = "sha256-WJuxe3k8ZLlkB5SpvE1DSyxQsc5bYEKVsM8tt5vdYOU=";
+    hash = "sha256-lXwE7/7ZWO6GD4SY0BPh/QXNpxkCYJS00Gjna0DkOE0=";
   };
 
-  npmDepsHash = "sha256-dsWYUCPbiF/L3RcdcaWVn6TnU1/XMy9l7eQgHrBYW4o=";
+  npmDepsHash = "sha256-WKpbYzNd0srD8yVB7Xa4v4qF9qHBiHHtKrYitnqEPTM=";
 
   nativeBuildInputs = [ python3 ];
 

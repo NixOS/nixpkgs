@@ -11,7 +11,6 @@
   oslo-serialization,
   pbr,
   prettytable,
-  pythonOlder,
   requests-mock,
   setuptools,
   sphinxcontrib-apidoc,
@@ -22,15 +21,13 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.9.0";
+  version = "18.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "python_novaclient";
     inherit version;
-    hash = "sha256-z2pLjwHsVD1adcAcIYR0upsGO9n9N0OCH+3GioRcq04=";
+    hash = "sha256-CjGuIHedTNFxuynB/k5rIrnH2Xx5Zw21FJu9+sA/V9w=";
   };
 
   nativeBuildInputs = [
@@ -73,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "novaclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for OpenStack Compute API";
     mainProgram = "nova";
     homepage = "https://github.com/openstack/python-novaclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

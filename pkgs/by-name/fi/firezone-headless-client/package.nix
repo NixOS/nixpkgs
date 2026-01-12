@@ -6,19 +6,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "firezone-headless-client";
-  version = "1.4.8";
+  version = "1.5.5";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "headless-client-${version}";
-    hash = "sha256-JfsOiNTwwpO998mKA1ZGZTdZfzOgP6AKBkg8cuaqKr0=";
+    hash = "sha256-Lo5iUXlpAecglr0uohOdsefeaDQZor2YoF0O99CxvEo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ok+pyGG5VHJbsKenKBr0mM1XRoOiAso0ebeQ5hDuwjM=";
+  cargoHash = "sha256-1e2uqxZFDbtcQREB0s2jxfSFgs/hnPxTlUGFeK5L9yw=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "headless-client";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   # Required to remove profiling arguments which conflict with this builder
   postPatch = ''

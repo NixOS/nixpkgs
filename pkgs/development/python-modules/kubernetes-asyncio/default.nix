@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "kubernetes-asyncio";
-  version = "32.3.0";
+  version = "33.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomplus";
     repo = "kubernetes_asyncio";
     tag = version;
-    hash = "sha256-EqFecu389zS/DqwoMz9ptaLv+jwJhABTEdMv8nwCSTQ=";
+    hash = "sha256-Ei5Y2IBBk8AoMQQBHOvKkJ1H+9dmnz22qrrZKrWazVE=";
   };
 
   postPatch = ''

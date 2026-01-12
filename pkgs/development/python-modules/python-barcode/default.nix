@@ -2,18 +2,16 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   pillow,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "python-barcode";
   version = "0.15.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,23 +24,20 @@ buildPythonPackage rec {
     images = [ pillow ];
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=barcode" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.images;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ]
+  ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create standard barcodes with Python";
     mainProgram = "python-barcode";
     homepage = "https://github.com/WhyNotHugo/python-barcode";
     changelog = "https://github.com/WhyNotHugo/python-barcode/blob/v${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

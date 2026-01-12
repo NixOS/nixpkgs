@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   passthru.libusb = libusb1.override { withExamples = true; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libusb/libusb";
     description = "Tool to upload firmware to into an21, fx, fx2, fx2lp and fx3 ez-usb devices";
     mainProgram = "fxload";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ realsnick ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ logger ];
   };
 }

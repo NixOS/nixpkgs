@@ -22,8 +22,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-9kKHLYD0tXMGJFhsCBgO/NpWB4J5QZh0qKIuI3PFn2c=";
   };
 
@@ -39,16 +38,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyperscan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hyperscan binding for Python, which supports vectorscan";
     homepage = "https://vlaci.github.io/pyperscan/";
     changelog = "https://github.com/vlaci/pyperscan/releases/tag/${src.rev}";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];

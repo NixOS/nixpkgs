@@ -69,11 +69,11 @@ lib.checkListOfEnum "${pname}: theme variants" [ "Fuchsia" "Fuchsia-Pop" "Fuchsi
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "First OpenSource port of FuchsiaOS's cursors for Linux and Windows";
       homepage = "https://github.com/ful1e5/fuchsia-cursor";
-      maintainers = with maintainers; [ d3vil0p3r ];
-      platforms = platforms.all;
-      license = licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [ d3vil0p3r ];
+      platforms = lib.platforms.all;
+      license = lib.licenses.gpl3Plus;
     };
   }

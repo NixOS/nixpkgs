@@ -12,4 +12,4 @@ latestVersion="$(expr "$latestTag" : 'v\(.*\)')"
 
 nix-update --version "$latestVersion" webcord
 electronVersion=$(curl_github "https://raw.githubusercontent.com/SpacingBat3/WebCord/v$latestVersion/package.json" | jq -r ".devDependencies.electron" | sed -r 's|^\^([0-9]+).*|\1|')
-sed -r "/webcord = / s|(electron_)[0-9]+|\1$electronVersion|" -i pkgs/top-level/all-packages.nix
+sed -r "s|(electron_)[0-9]+|\1$electronVersion|" -i pkgs/by-name/we/webcord{,-vencord}/package.nix

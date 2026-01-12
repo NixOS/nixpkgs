@@ -8,7 +8,6 @@
   dacite,
   decorator,
   fetchFromGitHub,
-  future,
   first,
   jsonpath-ng,
   loguru,
@@ -18,7 +17,6 @@
   pyfiglet,
   pyperclip,
   pytestCheckHook,
-  pythonOlder,
   antlr4,
   pyyaml,
   setuptools,
@@ -33,8 +31,6 @@ buildPythonPackage rec {
   version = "0.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
@@ -46,6 +42,10 @@ buildPythonPackage rec {
     rm src/pyfx/model/common/jsonpath/*.py # upstream checks in generated files, remove to ensure they were regenerated
     antlr -Dlanguage=Python3 -visitor src/pyfx/model/common/jsonpath/*.g4
     rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens} # no need to install
+
+    # https://github.com/cielong/pyfx/pull/148
+    substituteInPlace src/pyfx/view/common/frame.py \
+      --replace-fail "self.__super.__init__()" "super().__init__()"
   '';
 
   pythonRelaxDeps = true;
@@ -54,14 +54,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ antlr4 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     antlr4-python3-runtime
     asciimatics
     click
     dacite
     decorator
     first
-    future
     jsonpath-ng
     loguru
     overrides
@@ -85,12 +84,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfx" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "test_start"
+  ];
+
+  meta = {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";
-    changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cielong/pyfx/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyfx";
   };
 }

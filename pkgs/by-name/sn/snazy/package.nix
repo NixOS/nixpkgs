@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "snazy";
-  version = "0.56.0";
+  version = "0.58.1";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "snazy";
     rev = version;
-    hash = "sha256-VR4IRMmSQCF/CXgKfJ5OEFbXg9o/40lBonupOF38lFg=";
+    hash = "sha256-sm3FTQ3+cILoKkMe3qvZg2K+rspvJI3SXpDFD3YPXXk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tZYAIlQW1IsQSpMF4BmiiCo1CVYjM2GNXcEXT3gCoPA=";
+  cargoHash = "sha256-uRX6qE7tlCvJlWuLtgvuL2DLnqf7+exHLZjAoF0F2PM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Snazzy json log viewer";
     mainProgram = "snazy";
     longDescription = ''
@@ -46,9 +45,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/chmouel/snazy/";
     changelog = "https://github.com/chmouel/snazy/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
     ];
   };

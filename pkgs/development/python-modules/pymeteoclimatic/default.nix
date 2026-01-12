@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pymeteoclimatic";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adrianmo";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meteoclimatic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the Meteoclimatic service";
     homepage = "https://github.com/adrianmo/pymeteoclimatic";
     changelog = "https://github.com/adrianmo/pymeteoclimatic/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

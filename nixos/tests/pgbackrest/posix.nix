@@ -27,6 +27,13 @@ in
           CREATE TABLE t(c text);
           INSERT INTO t VALUES ('hello world');
         '';
+        # To make sure we're waiting for read-write after recovery.
+        ensureUsers = [
+          {
+            name = "app-user";
+            ensureClauses.login = true;
+          }
+        ];
       };
 
       services.pgbackrest = {
@@ -141,7 +148,7 @@ in
         primary.succeed("sudo -u postgres pgbackrest --stanza=default restore --delta")
 
         primary.systemctl("start postgresql")
-        primary.wait_for_unit("postgresql.service")
+        primary.wait_for_unit("postgresql.target")
         assert "hello world" in primary.succeed("sudo -u postgres psql -c 'TABLE t;'")
     '';
 }

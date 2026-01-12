@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kool";
-  version = "3.5.0";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "kool-dev";
     repo = "kool";
     rev = version;
-    hash = "sha256-iB/9owaBNQVzdA4edrx0zl+COs7yVLs61Mij5kfjEhg=";
+    hash = "sha256-pZ667bDyRWIrImBNHyhkOGl/22gjHKX6KsVSTckS1U4=";
   };
 
   vendorHash = "sha256-IqUkIf0uk4iUTedTO5xRzjmJwHS+p6apo4E0WEEU6cc=";
@@ -31,12 +31,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "From local development to the cloud: development workflow made easy";
     mainProgram = "kool";
     homepage = "https://kool.dev";
     changelog = "https://github.com/kool-dev/kool/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

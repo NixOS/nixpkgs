@@ -26,14 +26,13 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-65jk8UlXZgQoxuwRcGlMnI4e+LpCJuP2TaqK+Kn4GnQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Vendor-neutral implementation of RFC-0125's datatype and synthesis tooling";
     homepage = "https://git.lix.systems/lix-community/bootspec";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raitobezarius ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

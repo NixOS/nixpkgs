@@ -18,13 +18,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gXPX5drVXsfkssPMdhqIpFsYNSbelE9mKwO+nGEy4Qs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bsyEEbwBTDcIOc+PRkZqcfqcDgQnchuVy8a8eSZZUHU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files
@@ -50,9 +48,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/imsnif/bandwhich";
     changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      figsoda
+    maintainers = [
     ];
     platforms = lib.platforms.unix;
     mainProgram = "bandwhich";

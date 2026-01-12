@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # no tests included in distributed archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jackparmer/colorlover";
     description = "Color scales in Python for humans";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

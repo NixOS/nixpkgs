@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+gem 'danger-gitlab'
+
+gem "faraday-retry", "~> 2.3"

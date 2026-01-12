@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    description = "Guile-zlib is a GNU Guile library providing bindings to zlib";
+  meta = {
+    description = "GNU Guile library providing bindings to zlib";
     homepage = "https://notabug.org/guile-zlib/guile-zlib";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

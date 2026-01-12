@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.19.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "sphinx-automodapi";
     tag = "v${version}";
-    hash = "sha256-idz14x6ErHqkbAYzEpBmZFpv2lY+dJqhM2ChJys+Ed8=";
+    hash = "sha256-L+noKcyhT3wsbgdgyd29I9yCN81BlB8Fvfyl4fKioEw=";
     leaveDotGit = true;
   };
 
@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_automodapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for generating API documentation";
     homepage = "https://github.com/astropy/sphinx-automodapi";
     changelog = "https://github.com/astropy/sphinx-automodapi/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

@@ -57,11 +57,13 @@ buildGoModule rec {
       wrapProgram $out/bin/olaris-server --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Media manager and transcoding server";
     homepage = "https://gitlab.com/olaris/olaris-server";
     changelog = "https://gitlab.com/olaris/olaris-server/-/releases/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

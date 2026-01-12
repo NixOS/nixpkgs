@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jiJ5XW7S6/pVEOPYJKurolLI3UrOyuaEP/cqm1a0rIU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Gqa2aA8jr6SZexa6EejYHv/aEYcm51qvEJSUm4m1AVc=";
 
   patches = [
@@ -28,15 +27,15 @@ rustPlatform.buildRustPackage {
     shellPath = "/bin/ion";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern system shell with simple (and powerful) syntax";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dywedir
       arthsmn
     ];
     mainProgram = "ion";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

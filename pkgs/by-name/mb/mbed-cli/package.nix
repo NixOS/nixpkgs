@@ -11,6 +11,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "mbed-cli";
   version = "1.10.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +31,10 @@ buildPythonApplication rec {
     pytest test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ARMmbed/mbed-cli";
     description = "Arm Mbed Command Line Interface";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

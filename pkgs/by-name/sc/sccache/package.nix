@@ -4,21 +4,26 @@
   rustPlatform,
   pkg-config,
   openssl,
+  distributed ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "0.10.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  version = "0.12.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
-    rev = "v${version}";
-    sha256 = "sha256-VEDMeRFQKNPS3V6/DhMWxHR7YWsCzAXTzp0lO+COl08=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-QNLcA31SJf7XmxYvzDC5LCKVu5ZWiw7U249KjUAGIZw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1kfKBN4uRbU5LjbC0cLgMqoGnOSEAdC0S7EzXlfaDPo=";
+  cargoHash = "sha256-tJGGS6Zpsz9nye2VKdZRuFeeqJ71MsXn3C9ytqeEW5I=";
+
+  buildFeatures = lib.optionals distributed [
+    "dist-client"
+    "dist-server"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -31,15 +36,14 @@ rustPlatform.buildRustPackage rec {
   # pure environment, see https://github.com/mozilla/sccache/issues/460
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Ccache with Cloud Storage";
     mainProgram = "sccache";
     homepage = "https://github.com/mozilla/sccache";
-    changelog = "https://github.com/mozilla/sccache/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mozilla/sccache/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       doronbehar
-      figsoda
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

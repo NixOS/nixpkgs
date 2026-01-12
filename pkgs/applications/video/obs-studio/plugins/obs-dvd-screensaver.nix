@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-dvd-screensaver";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "wimpysworld";
     repo = "obs-dvd-screensaver";
     tag = "${finalAttrs.version}";
-    hash = "sha256-uZdFP3TULECzYNKtwaxFIcFYeFYdEoJ+ZKAqh9y9MEo=";
+    hash = "sha256-eUfy3m0r/sLrGLbp3en1ofcVVWZ+t2rZ4knjwfrorhw=";
   };
   strictDeps = true;
   nativeBuildInputs = [ cmake ];

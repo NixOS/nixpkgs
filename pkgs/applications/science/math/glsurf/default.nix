@@ -25,29 +25,27 @@ stdenv.mkDerivation rec {
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-    ]);
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+  ]);
 
-  buildInputs =
-    [
-      libglut
-      libGL
-      libGLU
-      mpfr
-      gmp
-    ]
-    ++ (with ocamlPackages; [
-      camlp4
-      lablgl
-      camlimages
-      num
-    ]);
+  buildInputs = [
+    libglut
+    libGL
+    libGLU
+    mpfr
+    gmp
+  ]
+  ++ (with ocamlPackages; [
+    camlp4
+    lablgl
+    camlimages
+    num
+  ]);
 
   postPatch = ''
     for f in callbacks*/Makefile; do

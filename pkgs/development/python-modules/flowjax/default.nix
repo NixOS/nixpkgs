@@ -21,16 +21,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flowjax";
-  version = "17.1.2";
+  version = "17.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielward27";
     repo = "flowjax";
-    tag = "v${version}";
-    hash = "sha256-NTP5QFJDe4tSAuHsQB4ZWyCcqLgW6uUaABfOG/TFgu0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ghK3CxBlybajsvhjzjyDapUC71JwMz+njHn4hAztVUM=";
   };
 
   build-system = [
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Distributions, bijections and normalizing flows using Equinox and JAX";
     homepage = "https://github.com/danielward27/flowjax";
-    changelog = "https://github.com/danielward27/flowjax/releases/tag/v${version}";
+    changelog = "https://github.com/danielward27/flowjax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -14,12 +14,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-uV0umUoJkYgmjWjv8GMnk5TRRbCCJS1ut3VV1HvkaAw=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zDgAGOuK0Jkmm554qZsaA/ABFhuupJ+WToO8HSPp7Xc=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
@@ -63,11 +62,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_get_identity_document"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/awslabs/mountpoint-s3";
     description = "Simple, high-throughput file client for mounting an Amazon S3 bucket as a local file system";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lblasc ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lblasc ];
+    platforms = lib.platforms.linux;
   };
 }

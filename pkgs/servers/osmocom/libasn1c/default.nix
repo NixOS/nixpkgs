@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Runtime library of Lev Walkin's asn1c split out as separate library";
     homepage = "https://github.com/osmocom/libasn1c/";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

@@ -46,17 +46,18 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional sslSupport "openssl";
+  ]
+  ++ lib.optional sslSupport "openssl";
   outputBin = "dev";
   propagatedBuildOutputs = [ "out" ] ++ lib.optional sslSupport "openssl";
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs =
-    lib.optional sslSupport openssl
-    ++ lib.optional stdenv.hostPlatform.isCygwin findutils;
+    lib.optional sslSupport openssl ++ lib.optional stdenv.hostPlatform.isCygwin findutils;
 
   doCheck = false; # needs the net
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Event notification library";
     mainProgram = "event_rpcgen.py";
     longDescription = ''
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
       the event loop.
     '';
     homepage = "https://libevent.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

@@ -5,8 +5,9 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.4.0";
   pname = "undervolt";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "georgewhewell";
@@ -15,7 +16,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-G+CK/lnZXkQdyNZPqY9P3owVJsd22H3K8wSpjHFG0ow=";
   };
 
-  meta = with lib; {
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonImportsCheck = [ "undervolt" ];
+
+  meta = {
     homepage = "https://github.com/georgewhewell/undervolt/";
     description = "Program for undervolting Intel CPUs on Linux";
     mainProgram = "undervolt";
@@ -26,7 +31,7 @@ python3Packages.buildPythonApplication rec {
       voltage offset to one of 5 voltage planes, and override your systems temperature
       target (CPU will throttle when this temperature is reached).
     '';
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
   };
 }

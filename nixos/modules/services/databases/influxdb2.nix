@@ -415,54 +415,53 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion = !(hasAttr "bolt-path" cfg.settings) && !(hasAttr "engine-path" cfg.settings);
-          message = "services.influxdb2.config: bolt-path and engine-path should not be set as they are managed by systemd";
-        }
-      ]
-      ++ flatten (
-        flip mapAttrsToList cfg.provision.organizations (
-          orgName: org:
-          flip mapAttrsToList org.auths (
-            authName: auth: [
+    assertions = [
+      {
+        assertion = !(hasAttr "bolt-path" cfg.settings) && !(hasAttr "engine-path" cfg.settings);
+        message = "services.influxdb2.config: bolt-path and engine-path should not be set as they are managed by systemd";
+      }
+    ]
+    ++ flatten (
+      flip mapAttrsToList cfg.provision.organizations (
+        orgName: org:
+        flip mapAttrsToList org.auths (
+          authName: auth: [
+            {
+              assertion =
+                1 == count (x: x) [
+                  auth.operator
+                  auth.allAccess
+                  (
+                    auth.readPermissions != [ ]
+                    || auth.writePermissions != [ ]
+                    || auth.readBuckets != [ ]
+                    || auth.writeBuckets != [ ]
+                  )
+                ];
+              message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: The `operator` and `allAccess` options are mutually exclusive with each other and the granular permission settings.";
+            }
+            (
+              let
+                unknownBuckets = subtractLists (attrNames org.buckets) auth.readBuckets;
+              in
               {
-                assertion =
-                  1 == count (x: x) [
-                    auth.operator
-                    auth.allAccess
-                    (
-                      auth.readPermissions != [ ]
-                      || auth.writePermissions != [ ]
-                      || auth.readBuckets != [ ]
-                      || auth.writeBuckets != [ ]
-                    )
-                  ];
-                message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: The `operator` and `allAccess` options are mutually exclusive with each other and the granular permission settings.";
+                assertion = unknownBuckets == [ ];
+                message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in readBuckets: ${toString unknownBuckets}";
               }
-              (
-                let
-                  unknownBuckets = subtractLists (attrNames org.buckets) auth.readBuckets;
-                in
-                {
-                  assertion = unknownBuckets == [ ];
-                  message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in readBuckets: ${toString unknownBuckets}";
-                }
-              )
-              (
-                let
-                  unknownBuckets = subtractLists (attrNames org.buckets) auth.writeBuckets;
-                in
-                {
-                  assertion = unknownBuckets == [ ];
-                  message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in writeBuckets: ${toString unknownBuckets}";
-                }
-              )
-            ]
-          )
+            )
+            (
+              let
+                unknownBuckets = subtractLists (attrNames org.buckets) auth.writeBuckets;
+              in
+              {
+                assertion = unknownBuckets == [ ];
+                message = "influxdb2: provision.organizations.${orgName}.auths.${authName}: Refers to invalid buckets in writeBuckets: ${toString unknownBuckets}";
+              }
+            )
+          ]
         )
-      );
+      )
+    );
 
     services.influxdb2.provision = mkIf cfg.provision.enable {
       organizations.${cfg.provision.initialSetup.organization} = {
@@ -500,16 +499,15 @@ in
           "admin-token:${cfg.provision.initialSetup.tokenFile}"
         ];
 
-        ExecStartPost =
-          [
-            waitUntilServiceIsReady
-          ]
-          ++ (lib.optionals cfg.provision.enable (
-            [ provisioningScript ]
-            ++
-              # Only the restarter runs with elevated privileges
-              optional anyAuthDefined "+${restarterScript}"
-          ));
+        ExecStartPost = [
+          waitUntilServiceIsReady
+        ]
+        ++ (lib.optionals cfg.provision.enable (
+          [ provisioningScript ]
+          ++
+            # Only the restarter runs with elevated privileges
+            optional anyAuthDefined "+${restarterScript}"
+        ));
       };
 
       path = [

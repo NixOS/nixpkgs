@@ -88,9 +88,6 @@ in
       }
     ];
 
-    system.activationScripts.users = lib.mkForce "";
-    system.activationScripts.hashes = lib.mkForce "";
-
     systemd = {
 
       # Create home directories, do not create /var/empty even if that's a user's

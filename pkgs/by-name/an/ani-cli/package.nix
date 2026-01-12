@@ -32,22 +32,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R/YQ02ctTcAEzrVyWlaCHi1YW82iPrMBbbMNP21r0p8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeInputs =
-    [
-      gnugrep
-      gnused
-      curl
-      fzf
-      ffmpeg
-      aria2
-    ]
-    ++ lib.optional chromecastSupport catt
-    ++ lib.optional syncSupport syncplay;
+  runtimeInputs = [
+    gnugrep
+    gnused
+    curl
+    fzf
+    ffmpeg
+    aria2
+  ]
+  ++ lib.optional chromecastSupport catt
+  ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall

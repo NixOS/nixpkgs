@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "oocsi";
   version = "0.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oocsi" ];
 
-  meta = with lib; {
+  meta = {
     description = "OOCSI library for Python";
     homepage = "https://github.com/iddi/oocsi-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

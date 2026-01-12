@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "streamcontroller-plugin-tools";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "StreamController";
@@ -23,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "streamcontroller_plugin_tools" ];
 
-  meta = with lib; {
+  meta = {
     description = "StreamController plugin tools";
     homepage = "https://github.com/StreamController/streamcontroller-plugin-tools";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ sifmelcara ];
+    platforms = lib.platforms.linux;
   };
 }

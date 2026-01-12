@@ -62,20 +62,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      flex
-      readline
-      libexif
-      bash
-    ]
-    ++ lib.optional x11Support SDL
-    ++ lib.optional svgSupport inkscape
-    ++ lib.optional asciiArtSupport aalib
-    ++ lib.optional gifSupport giflib
-    ++ lib.optional tiffSupport libtiff
-    ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional pngSupport libpng;
+  buildInputs = [
+    flex
+    readline
+    libexif
+    bash
+  ]
+  ++ lib.optional x11Support SDL
+  ++ lib.optional svgSupport inkscape
+  ++ lib.optional asciiArtSupport aalib
+  ++ lib.optional gifSupport giflib
+  ++ lib.optional tiffSupport libtiff
+  ++ lib.optional jpegSupport libjpeg
+  ++ lib.optional pngSupport libpng;
 
   configureFlags = [
     # mmap works on all relevant platforms
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
   env.LIBPNG_CONFIG = lib.getExe' (lib.getDev libpng) "libpng-config";
   env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, highly customizable and scriptable image viewer";
     longDescription = ''
       FIM (Fbi IMproved) is a lightweight, console based image viewer that aims
@@ -96,8 +95,8 @@ stdenv.mkDerivation rec {
       with software like the VIM text editor or the Mutt mail user agent.
     '';
     homepage = "https://www.nongnu.org/fbi-improved/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

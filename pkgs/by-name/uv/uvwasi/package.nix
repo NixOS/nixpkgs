@@ -7,24 +7,19 @@
   nix-update-script,
   stdenv,
   testers,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uvwasi";
-  version = "0.0.21";
+  version = "0.0.23";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "uvwasi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-po2Pwqf97JXGKY8WysvyR1vSkqQ4XIF0VQG+83yV9nM=";
+    hash = "sha256-+vz/qTMRRDHV1VE4nny9vYYtarZHk1xoM4EZiah3jnY=";
   };
-
-  # Patch was sent upstream: https://github.com/nodejs/uvwasi/pull/302.
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}/uvwasi' 'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}'
-  '';
 
   outputs = [
     "out"
@@ -32,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
   buildInputs = [
     libuv
@@ -42,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "uvwasi" ];
     };
   };
 
@@ -53,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "uvwasi" ];
   };
 })

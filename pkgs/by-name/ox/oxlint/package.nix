@@ -2,41 +2,60 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cmake,
+  makeBinaryWrapper,
+  nix-update-script,
   rust-jemalloc-sys,
+  tsgolint,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "0.16.9";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
-    owner = "web-infra-dev";
+    owner = "oxc-project";
     repo = "oxc";
-    rev = "oxlint_v${version}";
-    hash = "sha256-6CTDUtui1YwfmR2f0MdqpNGmZ+fLyxtsf7NdhQTgsoI=";
+    tag = "oxlint_v${finalAttrs.version}";
+    hash = "sha256-kMCGKbc7qaY0KUOR+67mLvKW4J5CuvYUmC6Aj9xlzSk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Pt67KLcUiHRiQ7E6Rm3MuJ3kPYwmXzfUo0u6IVZn8D8=";
+  cargoHash = "sha256-cesj9jwWHIFxpFV62QDgYl22EUE8qVjIbb2nRObAyLo=";
 
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+  ];
   buildInputs = [
     rust-jemalloc-sys
   ];
 
-  env.OXC_VERSION = version;
+  env.OXC_VERSION = finalAttrs.version;
 
   cargoBuildFlags = [
     "--bin=oxlint"
-    "--bin=oxc_language_server"
   ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
-  meta = with lib; {
-    description = "Suite of high-performance tools for JavaScript and TypeScript written in Rust";
-    homepage = "https://github.com/web-infra-dev/oxc";
-    changelog = "https://github.com/web-infra-dev/oxc/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+  postFixup = ''
+    wrapProgram $out/bin/oxlint \
+      --prefix PATH : "${lib.makeBinPath [ tsgolint ]}"
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^oxlint_v([0-9.]+)$" ];
+  };
+
+  meta = {
+    description = "Collection of JavaScript tools written in Rust";
+    homepage = "https://github.com/oxc-project/oxc";
+    changelog = "https://github.com/oxc-project/oxc/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "oxlint";
   };
-}
+})

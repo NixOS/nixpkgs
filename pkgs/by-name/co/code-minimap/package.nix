@@ -17,19 +17,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-unf7gFc/tQiUw3VqQ0KC96Srxn1E27WsmJviSggaCF4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-35qMpxROBnXfnTIAkCRUg7zRQTvSIIA2qGD0Vu9r488=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  meta = with lib; {
+  meta = {
     description = "High performance code minimap render";
     homepage = "https://github.com/wfxr/code-minimap";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ bsima ];
+    maintainers = with lib.maintainers; [ bsima ];
     mainProgram = "code-minimap";
   };
 }

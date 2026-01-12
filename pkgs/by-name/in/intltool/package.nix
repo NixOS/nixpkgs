@@ -33,23 +33,24 @@ stdenv.mkDerivation rec {
     perl
     XMLParser
   ];
-  propagatedBuildInputs =
-    [ gettext ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ]);
+  propagatedBuildInputs = [
+    gettext
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
 
   postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done
   '';
-  meta = with lib; {
+  meta = {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 }

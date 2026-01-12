@@ -61,12 +61,12 @@ mkDerivation {
       --replace '/usr/bin/coreboot-configurator' 'coreboot-configurator'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple GUI to change settings in Coreboot's CBFS";
     homepage = "https://support.starlabs.systems/kb/guides/coreboot-configurator";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ danth ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ danth ];
     mainProgram = "coreboot-configurator";
   };
 }

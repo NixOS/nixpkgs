@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-aNU4Ik033+kl9ZPHFzaAXZ6Hs+b7m5s0lpr1oovmWm0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rf/aBxuiv6c0cUJcFTCYoQPIEwCfhQQZqVSk0BxSzfQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Simplified Find command made with Rust";
     homepage = "https://github.com/LyonSyonII/hunt-rs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "hunt";
   };
 }

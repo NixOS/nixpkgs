@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qtcharts,
   setuptools,
   sip,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyqtchart";
   version = "5.15.7";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyQtChart";
@@ -65,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyQt5.QtChart" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Qt Charts library";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

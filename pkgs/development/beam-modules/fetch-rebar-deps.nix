@@ -12,7 +12,7 @@
   meta ? { },
 }:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = "rebar-deps-${name}";
   inherit version;
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation ({
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit meta;
-})
+}

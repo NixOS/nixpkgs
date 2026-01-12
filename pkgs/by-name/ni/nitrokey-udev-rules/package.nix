@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
+  udevCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,7 +17,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-LKpd6O9suAc2+FFgpuyTClEgL/JiZiokH3DV8P3C7Aw=";
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   buildPhase = ''
     runHook preBuild
@@ -30,11 +36,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D 41-nitrokey.rules -t $out/etc/udev/rules.d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "udev rules for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-udev-rules";
-    license = [ licenses.cc0 ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.cc0 ];
+    maintainers = with lib.maintainers; [
       frogamic
       robinkrahl
     ];

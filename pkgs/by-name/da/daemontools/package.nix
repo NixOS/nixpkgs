@@ -38,9 +38,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   configurePhase = ''
+    runHook preConfigure
+
     cd daemontools-${version}
 
-    sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
+    sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h -std=gnu17_' src/conf-cc
 
     substituteInPlace src/Makefile \
       --replace-fail '/bin/sh' '${bash}/bin/bash -oxtrace'
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
 
     cat ${glibc.dev}/include/errno.h
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

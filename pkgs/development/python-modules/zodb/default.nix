@@ -18,18 +18,21 @@
 
 buildPythonPackage rec {
   pname = "zodb";
-  version = "6.0";
+  version = "6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zodb";
     tag = version;
-    hash = "sha256-AFlRDci/OnRDGVNHAMAssefZshaGT0XlkhaO/Aee2Ao=";
+    hash = "sha256-O6mu4RWi5qNcPyIgre5+bk4ZGZOZdG1vIdc8HqbfcaQ=";
   };
 
-  # remove broken test
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+
+    # remove broken test
     rm -vf src/ZODB/tests/testdocumentation.py
   '';
 
