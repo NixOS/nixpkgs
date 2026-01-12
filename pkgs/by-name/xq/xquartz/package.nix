@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xcursorgen,
   xcmsdb,
   xclock,
   xbacklight,
@@ -147,7 +148,7 @@ let
     xbacklight
     xclock
     xcmsdb
-    xorg.xcursorgen
+    xcursorgen
     xorg.xdm
     xorg.xdpyinfo
     xorg.xdriinfo
