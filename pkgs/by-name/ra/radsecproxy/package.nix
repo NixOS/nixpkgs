@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://radsecproxy.github.io/";
     description = "Generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sargon ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }
