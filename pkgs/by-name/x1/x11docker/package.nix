@@ -5,6 +5,7 @@
   makeWrapper,
   nx-libs,
   xorg,
+  libxcvt,
   getopt,
   gnugrep,
   gawk,
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
           xorg.xinit
           python3
           jq
-          xorg.libxcvt
+          libxcvt
           wmctrl
           xdotool
           xclip
