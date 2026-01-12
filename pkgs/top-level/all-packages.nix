@@ -6656,9 +6656,7 @@ with pkgs;
     ]
   );
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
-
-  clucene_core = clucene_core_2;
+  clucene-core = clucene-core_2;
 
   codecserver = callPackage ../applications/audio/codecserver {
     protobuf = protobuf_21;
