@@ -10,7 +10,7 @@
   automake,
   libnotify,
   libx11,
-  xf86inputevdev,
+  xf86-input-evdev,
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     glibc
     libnotify
     libx11
-    xf86inputevdev
+    xf86-input-evdev
   ];
 
   preConfigure = ''

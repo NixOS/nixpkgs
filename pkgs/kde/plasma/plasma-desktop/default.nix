@@ -14,6 +14,7 @@
   SDL2,
   xkeyboard_config,
   xorg,
+  xf86-input-evdev,
   libxft,
   libxcursor,
   libcanberra,
@@ -60,7 +61,7 @@ mkKdeDerivation {
     libxcursor
     libxft
     xorg.xf86inputlibinput
-    xorg.xf86inputevdev
+    xf86-input-evdev
     xorg.xorgserver
 
     ibus
