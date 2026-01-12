@@ -128,8 +128,8 @@ let
     lndir
     luit
     makedepend
-    xorg.mkfontscale
-    xorg.mkfontscale
+    mkfontscale
+    mkfontscale
     xorg.sessreg
     xorg.setxkbmap
     xorg.smproxy

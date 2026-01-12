@@ -4,7 +4,7 @@
   fetchzip,
   fontforge,
   bdftopcf,
-  xorg,
+  mkfontscale,
   fonttosfnt,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     fontforge
     bdftopcf
-    xorg.mkfontscale
+    mkfontscale
     fonttosfnt
   ];
 

@@ -13,14 +13,15 @@ let
       runCommand,
       gzip,
       xorg,
+      mkfontscale,
     }:
     runCommand "X11-fonts"
       {
         preferLocalBuild = true;
         nativeBuildInputs = [
           gzip
-          xorg.mkfontscale
-          xorg.mkfontscale
+          mkfontscale
+          mkfontscale
         ];
       }
       ''

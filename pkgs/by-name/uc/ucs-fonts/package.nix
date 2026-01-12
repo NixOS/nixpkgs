@@ -4,7 +4,7 @@
   fetchurl,
   bdftopcf,
   libfaketime,
-  xorg,
+  mkfontscale,
   fonttosfnt,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     bdftopcf
     libfaketime
     fonttosfnt
-    xorg.mkfontscale
+    mkfontscale
   ];
 
   buildPhase = ''

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  mkfontscale,
   fonttosfnt,
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     fonttosfnt
-    xorg.mkfontscale
+    mkfontscale
   ];
 
   buildPhase = ''

@@ -5,7 +5,7 @@
   perl,
   bdftopcf,
   bdf2psf,
-  xorg,
+  mkfontscale,
   fonttosfnt,
   targetsDat ? null,
   variantsDat ? null,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     bdftopcf
     bdf2psf
     fonttosfnt
-    xorg.mkfontscale
+    mkfontscale
   ];
 
   # configure sizes, encodings and variants

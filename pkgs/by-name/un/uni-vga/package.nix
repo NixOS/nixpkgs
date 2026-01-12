@@ -6,7 +6,7 @@
   kbd,
   bdftopcf,
   libfaketime,
-  xorg,
+  mkfontscale,
   fonttosfnt,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     bdftopcf
     libfaketime
     fonttosfnt
-    xorg.mkfontscale
+    mkfontscale
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     perl

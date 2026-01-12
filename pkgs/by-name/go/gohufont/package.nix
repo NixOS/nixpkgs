@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  mkfontscale,
   fonttosfnt,
   bdf2psf,
   bdftopcf,
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    xorg.mkfontscale
+    mkfontscale
     bdf2psf
     bdftopcf
     fonttosfnt
