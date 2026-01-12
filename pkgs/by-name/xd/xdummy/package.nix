@@ -2,6 +2,7 @@
   writeText,
   writeScriptBin,
   xorg,
+  xf86-video-dummy,
   font-misc-misc,
   font-cursor-misc,
   font-bh-lucidatypewriter-75dpi,
@@ -34,7 +35,7 @@ let
 
     Section "Files"
       ModulePath "${xorg.xorgserver.out}/lib/xorg/modules"
-      ModulePath "${xorg.xf86videodummy}/lib/xorg/modules"
+      ModulePath "${xf86-video-dummy}/lib/xorg/modules"
       XkbDir "${xkeyboard_config}/share/X11/xkb"
       FontPath "${font-adobe-75dpi}/share/fonts/X11/75dpi"
       FontPath "${font-adobe-100dpi}/share/fonts/X11/100dpi"
