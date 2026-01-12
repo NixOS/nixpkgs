@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";

@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "markups";
   version = "4.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "retext-project";

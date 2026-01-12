@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "aiojobs";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";

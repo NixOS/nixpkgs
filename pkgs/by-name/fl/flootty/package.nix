@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "Flootty";
   version = "3.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

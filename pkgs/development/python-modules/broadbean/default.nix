@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "broadbean";
   version = "0.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

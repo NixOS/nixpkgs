@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-youtube";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ flit-core ];
 

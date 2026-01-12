@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "ledgercomm";
   version = "1.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

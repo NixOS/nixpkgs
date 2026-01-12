@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "enaml";
   version = "0.19.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nucleic";

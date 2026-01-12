@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "teletype";
   version = "1.3.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

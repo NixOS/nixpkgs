@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "port-for";
   version = "0.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kmike";

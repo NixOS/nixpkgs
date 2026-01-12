@@ -37,7 +37,7 @@ in
 
 buildPythonPackage {
   inherit pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     hatch-vcs

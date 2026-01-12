@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "attrs";
   version = "25.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

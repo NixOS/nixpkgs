@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pdm-pep517";
   version = "1.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "swspotify";
   version = "1.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";

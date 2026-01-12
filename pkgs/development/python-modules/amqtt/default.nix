@@ -19,7 +19,7 @@
 buildPythonPackage {
   pname = "amqtt";
   version = "unstable-2022-05-29";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yakifo";
