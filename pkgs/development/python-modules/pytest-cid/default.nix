@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-cid";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ntninja";

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "testbook";
   version = "0.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nteract";

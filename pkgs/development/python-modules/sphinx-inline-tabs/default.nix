@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
   version = "2023.04.21";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pradyunsg";

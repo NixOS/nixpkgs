@@ -16,7 +16,7 @@ buildPythonPackage rec {
     src
     meta
     ;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/Wrapping/Python";
   preBuild = ''

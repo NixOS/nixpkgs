@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "polyline";
   version = "2.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frederickjansen";

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "ipwhl";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";

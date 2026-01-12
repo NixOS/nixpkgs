@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pyinstrument";
   version = "5.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joerick";

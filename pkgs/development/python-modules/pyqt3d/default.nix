@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pyqt3d";
   version = "5.15.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyQt3D";

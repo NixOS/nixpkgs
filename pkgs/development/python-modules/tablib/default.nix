@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "tablib";
   version = "3.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

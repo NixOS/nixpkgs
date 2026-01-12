@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "autopage";
   version = "0.5.2";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

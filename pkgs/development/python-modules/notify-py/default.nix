@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "notify-py";
   version = "0.3.43";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms7m";

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "jaraco-logging";
   version = "3.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_logging";

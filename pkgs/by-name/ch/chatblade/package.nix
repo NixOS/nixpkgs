@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "chatblade";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

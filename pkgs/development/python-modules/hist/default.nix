@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "hist";
   version = "2.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

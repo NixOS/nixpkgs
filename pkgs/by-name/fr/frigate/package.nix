@@ -77,7 +77,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "frigate";
   inherit version;
-  format = "other";
+  pyproject = false;
 
   inherit src;
 

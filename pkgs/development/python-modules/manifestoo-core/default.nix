@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "manifestoo-core";
   version = "1.14";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "reedsolo";
   version = "1.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   # Pypi does not have the tests
   src = fetchFromGitHub {

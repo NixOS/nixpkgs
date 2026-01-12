@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "imgp";
   version = "2.9";
-  format = "pyproject";
+  pyproject = true;
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {

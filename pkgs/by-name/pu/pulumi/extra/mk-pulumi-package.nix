@@ -64,7 +64,7 @@ let
           src
           version
           ;
-        format = "pyproject";
+        pyproject = true;
 
         sourceRoot = "${src.name}/sdk/python";
 

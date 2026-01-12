@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eye-witness";
   version = "20230525.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "redsiege";

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "graphqlmap";
   version = "0-unstable-2022-01-17";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swisskyrepo";

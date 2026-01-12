@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.16.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JessicaTegner";

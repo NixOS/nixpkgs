@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "requests-ntlm";
   version = "1.3.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "requests_ntlm";

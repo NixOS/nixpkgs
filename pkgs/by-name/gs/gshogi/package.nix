@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gshogi";
   version = "0.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johncheetham";

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "gspread";
   version = "6.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "burnash";

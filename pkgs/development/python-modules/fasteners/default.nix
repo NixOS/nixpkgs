@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "fasteners";
   version = "0.20";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "harlowja";

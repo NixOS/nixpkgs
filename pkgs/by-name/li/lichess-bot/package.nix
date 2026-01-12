@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "lichess-bot";
   version = "2025.12.23.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lichess-bot-devs";
