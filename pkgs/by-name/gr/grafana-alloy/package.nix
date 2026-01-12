@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchNpmDeps,
   buildGoModule,
   buildNpmPackage,
   systemd,
@@ -24,24 +25,27 @@ buildGoModule (finalAttrs: rec {
     hash = "sha256-DfezWaLbCty8FiFA+oEqiDoZ1QKIdYGtywQ6t2vm/N0=";
   };
 
-  frontend =
-    let
-      fsrc = "${src}/internal/web/ui";
-    in
-    buildNpmPackage {
-      pname = "alloy-frontend";
-      inherit version;
+  npmDeps = fetchNpmDeps {
+    src = "${finalAttrs.src}/internal/web/ui";
+    hash = "sha256-mEcPH+kuj+o60sK+JsRAwHauT7vHnZQZ+KBhKcDSeok=";
+  };
 
-      src = fsrc;
+  frontend = buildNpmPackage {
+    pname = "alloy-frontend";
+    inherit version src;
 
-      npmDepsHash = "sha256-mEcPH+kuj+o60sK+JsRAwHauT7vHnZQZ+KBhKcDSeok=";
+    inherit npmDeps;
+    sourceRoot = "${src.name}/internal/web/ui";
 
-      installPhase = ''
-        mkdir $out
-        cp -av dist $out/share
-      '';
+    installPhase = ''
+      runHook preInstall
 
-    };
+      mkdir $out
+      cp -av dist $out/share
+
+      runHook postInstall
+    '';
+  };
 
   proxyVendor = true;
   vendorHash = "sha256-pZNPJ4rSsvOHubCYKx+CblOUwI6eb6ckHwzRRtyRNu4=";
@@ -126,8 +130,8 @@ buildGoModule (finalAttrs: rec {
         "v(.+)"
       ];
     };
-    # alias for nix-update to be able to find and update this attribute
-    inherit frontend;
+    # for nix-update to be able to find and update the hash
+    inherit npmDeps;
   };
 
   meta = {
