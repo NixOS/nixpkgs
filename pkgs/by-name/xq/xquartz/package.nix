@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  font-bh-lucidatypewriter-75dpi,
   font-bh-lucidatypewriter-100dpi,
   font-bh-100dpi,
   xwud,
@@ -134,7 +135,7 @@ let
   ]
   ++ lib.optionals unfreeFonts [
     font-bh-lucidatypewriter-100dpi
-    xorg.fontbhlucidatypewriter75dpi
+    font-bh-lucidatypewriter-75dpi
     font-bh-100dpi
   ]
   ++ extraFontDirs;
