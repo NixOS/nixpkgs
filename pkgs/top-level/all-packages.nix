@@ -7086,10 +7086,6 @@ with pkgs;
   # Not moved to aliases while we decide if we should split the package again.
   atk = at-spi2-core;
 
-  atkmm = callPackage ../development/libraries/atkmm { };
-
-  atkmm_2_36 = callPackage ../development/libraries/atkmm/2.36.nix { };
-
   cairomm = callPackage ../development/libraries/cairomm { };
 
   cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
