@@ -14,7 +14,7 @@
   opencv,
   pcl,
   liblapack,
-  xorg,
+  libxt,
   libsm,
   libice,
   libusb1,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     liblapack
     libsm
     libice
-    xorg.libXt
+    libxt
 
     ## Optional
     libusb1

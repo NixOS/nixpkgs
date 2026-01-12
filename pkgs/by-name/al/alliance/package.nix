@@ -5,7 +5,7 @@
   xorgproto,
   motif,
   libx11,
-  libXt,
+  libxt,
   libxpm,
   bison,
   flex,
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     xorgproto
     motif
     libx11
-    libXt
+    libxt
     libxpm
     bison
   ];

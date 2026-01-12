@@ -18,7 +18,7 @@
   lib,
   libGL,
   libx11,
-  libXt,
+  libxt,
   materialx,
   ninja,
   numpy,
@@ -129,7 +129,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-    libXt
+    libxt
   ]
   ++ lib.optionals withOsl [ osl ]
   ++ lib.optionals withUsdView [ qt6.qtbase ]

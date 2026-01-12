@@ -10,7 +10,7 @@
   ngspice,
   tcl,
   tk,
-  xorg,
+  libxt,
   libxpm,
   libx11,
   libsm,
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     cairo
     ghostscript
     libsm
-    xorg.libXt
+    libxt
     libice
     libx11
     libxpm

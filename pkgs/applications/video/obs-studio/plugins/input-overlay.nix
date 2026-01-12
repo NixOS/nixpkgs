@@ -7,7 +7,7 @@
   ninja,
   obs-studio,
   qtbase,
-  xorg,
+  libxt,
   libxtst,
   libxi,
   libxinerama,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxtst
     libxext
     libxi
-    xorg.libXt
+    libxt
     libxinerama
     libxkbcommon
     libxkbfile

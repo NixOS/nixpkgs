@@ -8,7 +8,7 @@
   libx11,
   libxaw,
   libxmu,
-  libXt,
+  libxt,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libx11
     libxaw
     libxmu
-    libXt
+    libxt
   ];
 
   configureFlags = [

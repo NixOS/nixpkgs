@@ -7,7 +7,7 @@
   libxext,
   libxinerama,
   libxdmcp,
-  libXt,
+  libxt,
   autoreconfHook,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libxext.dev
     libxinerama
     libxdmcp
-    libXt
+    libxt
   ];
   nativeBuildInputs = [ autoreconfHook ];
 

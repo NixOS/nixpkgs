@@ -93,7 +93,7 @@ in
   nss_latest,
   onnxruntime,
   pango,
-  xorg,
+  libxt,
   libxtst,
   libxrender,
   libxi,
@@ -575,7 +575,7 @@ buildStdenv.mkDerivation {
       libxft
       libxi
       libxrender
-      xorg.libXt
+      libxt
       libxtst
       pixman
       xorgproto

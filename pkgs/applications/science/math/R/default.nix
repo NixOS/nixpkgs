@@ -6,7 +6,7 @@
   gfortran,
   libx11,
   libxmu,
-  libXt,
+  libxt,
   libjpeg,
   libpng,
   libtiff,
@@ -75,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     libx11
     libxmu
-    libXt
-    libXt
+    libxt
+    libxt
     libjpeg
     libpng
     libtiff

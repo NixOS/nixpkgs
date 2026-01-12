@@ -5,7 +5,7 @@
   lib,
   dbus,
   kmod,
-  xorg,
+  libxt,
   libxrandr,
   libxmu,
   libxfixes,
@@ -65,7 +65,7 @@ let
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
@@ -109,7 +109,7 @@ stdenv.mkDerivation {
             stdenv.cc.libc
             zlib
             libx11
-            xorg.libXt
+            libxt
             libxext
             libxmu
             libxfixes

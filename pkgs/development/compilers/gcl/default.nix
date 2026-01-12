@@ -14,7 +14,7 @@
   libxi,
   gmp,
   libxext,
-  libXt,
+  libxt,
   libxaw,
   libxmu,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libxi
     libxext
-    libXt
+    libxt
     libxaw
     libxmu
     zlib

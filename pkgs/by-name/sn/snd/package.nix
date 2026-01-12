@@ -7,7 +7,7 @@
   fftw,
   gsl,
   motif,
-  xorg,
+  libxt,
   libxpm,
   libxft,
   libxext,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libxext
     libxft
     libxpm
-    xorg.libXt
+    libxt
   ];
 
   configureFlags = [

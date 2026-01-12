@@ -469,7 +469,7 @@ let
       libtiff
       libjpeg
       cairo.dev
-      xorg.libXt.dev
+      libxt.dev
       fontconfig.lib
     ];
     Cardinal = [ pkgs.which ];

@@ -4,7 +4,7 @@
   fetchurl,
   gccmakedep,
   imake,
-  libXt,
+  libxt,
   libxaw,
   libxpm,
   libxext,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
   buildInputs = [
-    libXt
+    libxt
     libxaw
     libxpm
     libxext

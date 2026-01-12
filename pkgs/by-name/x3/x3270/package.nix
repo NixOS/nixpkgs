@@ -6,7 +6,7 @@
   m4,
   expat,
   libx11,
-  libXt,
+  libxt,
   libxaw,
   libxmu,
   bdftopcf,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     expat
     libx11
-    libXt
+    libxt
     libxaw
     libxmu
     bdftopcf

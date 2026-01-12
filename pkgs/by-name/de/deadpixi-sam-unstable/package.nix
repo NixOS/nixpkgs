@@ -5,7 +5,7 @@
   freetype,
   libx11,
   libxi,
-  libXt,
+  libxt,
   libxft,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     libxi
-    libXt
+    libxt
     libxft
   ];
   # build fails when run in parallel

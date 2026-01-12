@@ -7,7 +7,7 @@
   libx11,
   libxmu,
   libxaw,
-  libXt,
+  libxt,
   tcl,
   tk,
   libxext,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libx11
     libxmu
     libxaw
-    libXt
+    libxt
     tcl
     tk
     libxext

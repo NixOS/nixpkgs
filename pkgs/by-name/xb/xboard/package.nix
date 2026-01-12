@@ -5,7 +5,7 @@
   fetchpatch,
   libx11,
   xorgproto,
-  libXt,
+  libxt,
   libxaw,
   libsm,
   libice,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     xorgproto
-    libXt
+    libxt
     libxaw
     libsm
     libice

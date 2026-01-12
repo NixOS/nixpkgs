@@ -6,7 +6,7 @@
   libxext,
   libxi,
   libxmu,
-  libXt,
+  libxt,
   libxtst,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libxext
     libxi
     libxmu
-    libXt
+    libxt
     libxtst
   ];
 

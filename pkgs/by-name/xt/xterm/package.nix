@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libxt,
   libxft,
   libxext,
   libxaw,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxaw
     xorgproto
-    xorg.libXt
+    libxt
     libxext
     libx11
     libsm

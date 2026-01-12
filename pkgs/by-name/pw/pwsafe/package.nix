@@ -10,7 +10,7 @@
   wxGTK32,
   libxext,
   libxi,
-  libXt,
+  libxt,
   libxtst,
   xercesc,
   qrencode,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxext
     libxi
-    libXt
+    libxt
     libxtst
     libuuid
     libyubikey

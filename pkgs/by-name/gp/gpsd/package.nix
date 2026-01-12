@@ -19,7 +19,7 @@
   guiSupport ? true,
   dbus-glib,
   libx11,
-  libXt,
+  libxt,
   libxpm,
   libxaw,
   libxext,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libxaw
     libxext
     libxpm
-    libXt
+    libxt
     pango
   ];
 

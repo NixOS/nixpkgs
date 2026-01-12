@@ -5,7 +5,7 @@
   ncurses,
   libjpeg,
   libx11,
-  libXt,
+  libxt,
   alsa-lib,
   aalib,
   libxft,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ncurses
     libjpeg
     libx11
-    libXt
+    libxt
     libxft
     xorgproto
     libfs

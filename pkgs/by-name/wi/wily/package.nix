@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libx11,
-  libXt,
+  libxt,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXt
+    libxt
   ];
 
   patches = [ ./fix-gcc14-build.patch ];

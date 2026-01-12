@@ -6,7 +6,7 @@
   dpkg,
   nss,
   nspr,
-  xorg,
+  libxt,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -89,7 +89,7 @@ let
     xcbutilkeysyms
     xcbutilrenderutil
     libx11
-    xorg.libXt
+    libxt
     libxext
     libsm
     libice

@@ -10,7 +10,7 @@
   libxi,
   libxpm,
   libxrandr,
-  libXt,
+  libxt,
   libxtst,
   perl,
   pkg-config,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxpm
     libxrandr
-    libXt
+    libxt
     libxtst
     perl
     readline

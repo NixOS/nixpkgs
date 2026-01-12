@@ -6,7 +6,7 @@
   cmake,
   setuptools,
   libx11,
-  libXt,
+  libxt,
   libGL,
   openimageio,
   imath,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libx11
-    libXt
+    libxt
     libGL
   ];
 

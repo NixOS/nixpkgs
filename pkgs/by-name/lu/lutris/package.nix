@@ -46,7 +46,7 @@ let
       libxtst
       libxscrnsaver
       libice
-      xorg.libXt
+      libxt
     ];
   gstreamerDeps =
     pkgs: with pkgs.gst_all_1; [

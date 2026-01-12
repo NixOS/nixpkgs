@@ -5,7 +5,7 @@
   autoreconfHook,
   libglut,
   libx11,
-  libXt,
+  libxt,
   libxmu,
   libxi,
   libxext,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libGL
     libglut
     libx11
-    libXt
+    libxt
     libxmu
     libxi
     libxext

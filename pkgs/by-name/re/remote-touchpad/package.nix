@@ -4,7 +4,7 @@
   lib,
   libxi,
   libxrandr,
-  libXt,
+  libxt,
   libxtst,
 }:
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   buildInputs = [
     libxi
     libxrandr
-    libXt
+    libxt
     libxtst
   ];
   tags = [ "portal,x11" ];

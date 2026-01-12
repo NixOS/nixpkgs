@@ -17,7 +17,7 @@
   libxi,
   libxinerama,
   libxrandr,
-  libXt,
+  libxt,
   libXxf86vm,
   libxml2,
   makeWrapper,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxrandr
-    libXt
+    libxt
     libXxf86vm
     libxml2
     pam

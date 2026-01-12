@@ -11,7 +11,7 @@
   libxkbcommon,
   libxshmfence,
   libxfixes,
-  libXt,
+  libxt,
   libxi,
   libxcursor,
   libxscrnsaver,
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.libc
     zlib
     libx11
-    libXt
+    libxt
     libxext
     libsm
     libice

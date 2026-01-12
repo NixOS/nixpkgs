@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  xorg,
+  libxt,
   libx11,
   libpng,
   libwebp,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libx11
-    xorg.libXt
+    libxt
     libpng
     libwebp
     libtiff

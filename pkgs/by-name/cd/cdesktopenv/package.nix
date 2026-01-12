@@ -7,7 +7,7 @@
   ksh,
   perl,
   libxinerama,
-  libXt,
+  libxt,
   libxext,
   libtirpc,
   motif,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxinerama
-    libXt
+    libxt
     libxext
     libtirpc
     motif

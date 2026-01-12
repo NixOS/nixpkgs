@@ -7,7 +7,7 @@
   xorgproto,
   libx11,
   libxpm,
-  libXt,
+  libxt,
   libxcursor,
   alsa-lib,
   cmake,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     xorgproto
     libx11
     libxpm
-    libXt
+    libxt
     libxcursor
     alsa-lib
     zlib

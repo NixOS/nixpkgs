@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  xorg,
+  libxt,
   libxmu,
   libxext,
   libxaw,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libsm
     libxmu
     libxaw
-    xorg.libXt
+    libxt
   ];
 
   meta = {

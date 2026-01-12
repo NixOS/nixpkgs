@@ -38238,7 +38238,7 @@ with self;
     buildInputs = [
       pkgs.libx11
       pkgs.libxi
-      pkgs.xorg.libXt
+      pkgs.libxt
       pkgs.libxtst
     ];
     NIX_CFLAGS_LINK = "-lX11";

@@ -13,7 +13,7 @@
   libxi,
   libxmu,
   libxext,
-  libXt,
+  libxt,
   libsm,
   libice,
   libpng,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxmu
     libxext
-    libXt
+    libxt
     libsm
     libice
     libpng

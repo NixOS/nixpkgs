@@ -7,7 +7,7 @@
   libharu,
   libx11,
   libpng,
-  libXt,
+  libxt,
   zlib,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libharu
     libpng
     libx11
-    libXt
+    libxt
     zlib
   ];
 

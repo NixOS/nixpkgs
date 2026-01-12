@@ -46,7 +46,7 @@ buildFHSEnv {
       libsm
       libxmu
       libxi
-      xorg.libXt
+      libxt
       libxext
       libx11
       libxrender

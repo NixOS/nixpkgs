@@ -94,7 +94,7 @@
   x11Support ? true,
   libx11,
   xorgproto,
-  libXt,
+  libxt,
   libxmu,
   libxext,
   libxinerama,
@@ -352,7 +352,7 @@ stdenv.mkDerivation (
     ++ lib.optionals x11Support [
       libx11
       xorgproto
-      libXt
+      libxt
       libxmu
       libxext.dev
       libxdmcp

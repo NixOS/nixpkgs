@@ -5,7 +5,7 @@
   fetchpatch,
   makeDesktopItem,
   libx11,
-  libXt,
+  libxt,
   libxft,
   libxrender,
   libxext,
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libx11
-    libXt
+    libxt
     libxft
     ncurses # required to build the terminfo file
     fontconfig

@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  xorg,
+  libxt,
   libxrandr,
   libxi,
   libxinerama,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxrandr
-    xorg.libXt
+    libxt
     xorgproto
     wayland
     wayland-protocols

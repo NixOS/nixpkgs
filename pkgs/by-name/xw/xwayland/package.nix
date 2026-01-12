@@ -22,7 +22,7 @@
   libxpm,
   libxrender,
   libxres,
-  libXt,
+  libxt,
   libdrm,
   libtirpc,
   # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     libxpm
     libxrender
     libxres
-    libXt
+    libxt
     libdrm
     libtirpc
     libxcb

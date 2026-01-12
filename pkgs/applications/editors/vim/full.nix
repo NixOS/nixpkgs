@@ -20,7 +20,7 @@
   libxext,
   libsm,
   libxpm,
-  libXt,
+  libxt,
   libxaw,
   libxau,
   libxmu,
@@ -182,7 +182,7 @@ stdenv.mkDerivation {
     libx11
     libxext
     libxpm
-    libXt
+    libxt
     libxaw
     libxau
     libxmu

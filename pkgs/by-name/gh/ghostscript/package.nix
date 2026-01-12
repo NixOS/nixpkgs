@@ -30,7 +30,7 @@
   libice,
   libx11,
   libxext,
-  xorg, # with CUPS, X11 only adds very little
+  libxt,
   dynamicDrivers ? true,
 
   # for passthru.tests
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     libice
     libx11
     libxext
-    xorg.libXt
+    libxt
   ]
   ++ lib.optional cupsSupport cups;
 

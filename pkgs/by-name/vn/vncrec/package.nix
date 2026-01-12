@@ -6,7 +6,7 @@
   xorgproto,
   imake,
   gccmakedep,
-  libXt,
+  libxt,
   libxmu,
   libxaw,
   libxext,
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libx11
     xorgproto
-    libXt
+    libxt
     libxmu
     libxaw
     libxext

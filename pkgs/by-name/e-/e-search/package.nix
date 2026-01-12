@@ -26,7 +26,7 @@
   libsForQt5,
   pango,
   pangomm,
-  xorg,
+  libxt,
   libxtst,
   libxrandr,
   libx11,
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     pangomm
     libx11
     libxrandr
-    xorg.libXt
+    libxt
     libxtst
     libxcb
     zlib

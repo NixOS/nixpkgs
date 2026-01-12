@@ -6,7 +6,7 @@
   libpng,
   udunits,
   netcdf,
-  xorg,
+  libxt,
   libxaw,
   libx11,
   libsm,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libx11
     libxaw
-    xorg.libXt
+    libxt
   ];
 
   meta = {

@@ -5,7 +5,7 @@
   unstableGitUpdater,
   installShellFiles,
   makeWrapper,
-  xorg,
+  libxt,
   libx11,
   pkg-config,
   wayland-scanner,
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals withXorg [
       libx11
-      xorg.libXt
+      libxt
     ];
 
   makeFlags =

@@ -3,7 +3,7 @@
   stdenv,
   requireFile,
   unzip,
-  xorg,
+  libxt,
   libxpm,
   libx11,
   libsm,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   libraries = [
     libxpm
-    xorg.libXt
+    libxt
     libx11
     libice
     libsm

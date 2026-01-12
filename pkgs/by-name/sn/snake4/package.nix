@@ -4,7 +4,7 @@
   fetchurl,
   shhmsg,
   shhopt,
-  xorg,
+  libxt,
   libxpm,
   libxext,
   libxaw,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     shhmsg
     shhopt
     libx11
-    xorg.libXt
+    libxt
     libxpm
     libxaw
     libxext

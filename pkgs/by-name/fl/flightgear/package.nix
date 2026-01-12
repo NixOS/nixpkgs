@@ -18,7 +18,7 @@
   libxext,
   libxi,
   libxmu,
-  libXt,
+  libxt,
   simgear,
   zlib,
   boost,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     libxext
     libxi
     libxmu
-    libXt
+    libxt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost

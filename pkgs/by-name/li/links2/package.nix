@@ -19,7 +19,7 @@
   directfb,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libx11,
-  libXt,
+  libxt,
   libxau, # GUI support
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     libx11
     libxau
-    libXt
+    libxt
   ]
   ++ lib.optionals enableDirectFB [ directfb ];
 

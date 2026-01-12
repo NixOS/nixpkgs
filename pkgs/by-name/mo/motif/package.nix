@@ -11,7 +11,7 @@
   libxft,
   libxrender,
   libxmu,
-  libXt,
+  libxt,
   expat,
   libjpeg,
   libpng,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libxft
     libxrender
     libxmu
-    libXt
+    libxt
     expat
     libjpeg
     libpng

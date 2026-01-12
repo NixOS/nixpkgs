@@ -4,7 +4,7 @@
   fetchurl,
   motif,
   libxpm,
-  libXt,
+  libxt,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     motif
     libxpm
-    libXt
+    libxt
   ];
 
   # the linux config works fine on darwin too!

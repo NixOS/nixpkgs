@@ -5,7 +5,7 @@
   imake,
   bison,
   flex,
-  xorg,
+  libxt,
   libxpm,
   libxmu,
   libxext,
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     libxext
     libxmu
     libxpm
-    xorg.libXt
+    libxt
   ];
 
   preConfigure = ''

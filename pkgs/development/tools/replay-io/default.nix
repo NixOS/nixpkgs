@@ -7,7 +7,7 @@
   makeWrapper,
   libcxx,
   libx11,
-  libXt,
+  libxt,
   libxdamage,
   glib,
   gtk3,
@@ -64,7 +64,7 @@ rec {
       gtk3
       libx11
       libxdamage
-      libXt
+      libxt
     ];
     installPhase = ''
       runHook preInstall

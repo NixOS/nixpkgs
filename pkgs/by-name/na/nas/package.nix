@@ -10,7 +10,7 @@
   libxaw,
   libxext,
   libxpm,
-  libXt,
+  libxt,
   xorgcffiles,
   xorgproto,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxaw
     libxext
     libxpm
-    libXt
+    libxt
     xorgproto
   ];
 

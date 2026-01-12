@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libXt,
+  libxt,
   libxaw,
   libxtst,
   libxi,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libXt
+    libxt
     libxaw
     libxtst
     xorgproto

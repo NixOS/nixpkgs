@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  libxt,
   libxinerama,
   libx11,
   imlib2Full,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    xorg.libXt
+    libxt
     libx11
     libxinerama
     imlib2Full

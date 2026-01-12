@@ -7,7 +7,7 @@
   libxpm,
   libice,
   libsm,
-  libXt,
+  libxt,
   libxau,
   libxdmcp,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libxpm
     libice
     libsm
-    libXt
+    libxt
     libxau
     libxdmcp
   ];

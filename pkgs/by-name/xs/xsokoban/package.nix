@@ -5,7 +5,7 @@
   libx11,
   xorgproto,
   libxpm,
-  libXt,
+  libxt,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libx11
     xorgproto
     libxpm
-    libXt
+    libxt
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${libxpm.dev}/include/X11 -Wno-error=implicit-int -Wno-error=implicit-function-declaration";

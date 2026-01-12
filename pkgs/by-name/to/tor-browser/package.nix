@@ -24,7 +24,7 @@
   libx11,
   libxext,
   libxrender,
-  libXt,
+  libxt,
   libxtst,
   libgbm,
   pango,
@@ -81,7 +81,7 @@ let
       libx11
       libxext
       libxrender
-      libXt
+      libxt
       libxtst
       libgbm
       pango

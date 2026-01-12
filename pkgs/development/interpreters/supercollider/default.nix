@@ -14,7 +14,7 @@
   curl,
   gcc,
   libsForQt5,
-  libXt,
+  libxt,
   qtbase,
   qttools,
   qtwebengine,
@@ -77,7 +77,7 @@ mkDerivation rec {
     libsndfile
     fftw
     curl
-    libXt
+    libxt
     qtbase
     qtwebsockets
     qtwayland

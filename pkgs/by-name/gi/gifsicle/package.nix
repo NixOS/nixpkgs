@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   xorgproto,
-  libXt,
+  libxt,
   libx11,
   gifview ? false,
   static ? stdenv.hostPlatform.isStatic,
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals gifview [
     xorgproto
-    libXt
+    libxt
     libx11
   ];
 

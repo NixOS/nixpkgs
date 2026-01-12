@@ -187,7 +187,7 @@ rec {
         at-spi2-atk
         libudev0-shim
 
-        xorg.libXt
+        libxt
         libxmu
         libxcb
         xorg.xcbutil

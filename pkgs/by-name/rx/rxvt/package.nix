@@ -5,7 +5,7 @@
   pkg-config,
   libtool,
   libx11,
-  libXt,
+  libxt,
   libxpm,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtool
     libx11
-    libXt
+    libxt
     libxpm
   ];
 

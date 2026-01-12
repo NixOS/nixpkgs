@@ -4,7 +4,7 @@
   fetchurl,
   libx11,
   imake,
-  libXt,
+  libxt,
   libxaw,
   libxpm,
   libxext,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libx11
-    libXt
+    libxt
     libxaw
     libxpm
     libxext

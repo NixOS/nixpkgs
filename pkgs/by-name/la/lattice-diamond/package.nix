@@ -10,7 +10,7 @@
   zlib,
   freetype,
   fontconfig,
-  xorg,
+  libxt,
   libxrender,
   libxext,
   libx11,
@@ -133,7 +133,7 @@ stdenv.mkDerivation {
     libxrender
     libxext
     libx11
-    xorg.libXt
+    libxt
     libusb-compat-0_1
   ];
 

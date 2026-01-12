@@ -23,7 +23,7 @@
   libxmu,
   libxrandr,
   libxrender,
-  libXt,
+  libxt,
   libXxf86vm,
   xorgproto,
   # optional
@@ -91,7 +91,7 @@ let
         libxmu
         libxrandr
         libxrender
-        libXt
+        libxt
         libXxf86vm
         xorgproto
       ]

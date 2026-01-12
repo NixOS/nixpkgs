@@ -11,7 +11,7 @@
 
   # buildInputs
   eigen,
-  libXt,
+  libxt,
   libpcap,
   libusb1,
   llvmPackages,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     eigen
-    libXt
+    libxt
     libpcap
     qt6.qtbase
     libusb1

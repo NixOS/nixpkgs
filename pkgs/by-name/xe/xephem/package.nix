@@ -9,7 +9,7 @@
   motif,
   openssl,
   groff,
-  xorg,
+  libxt,
   libxmu,
   libxext,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     openssl
     libxmu
     libxext
-    xorg.libXt
+    libxt
   ];
 
   patches = [

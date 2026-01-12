@@ -18,7 +18,7 @@
   withCaca ? false,
   libcaca,
   libx11 ? null,
-  libXt ? null,
+  libxt ? null,
   libxpm ? null,
   libxaw ? null,
   aquaterm ? false,
@@ -68,7 +68,7 @@ in
   ++ lib.optionals withX [
     libx11
     libxpm
-    libXt
+    libxt
     libxaw
   ]
   ++ lib.optionals withQt [

@@ -8,7 +8,7 @@
   fontconfig,
   tk,
   ncurses,
-  xorg,
+  libxt,
   libxext,
   libxaw,
   libx11,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ncurses
     fontconfig
     libx11.dev
-    xorg.libXt.dev
+    libxt.dev
     libxaw.dev
     libxext.dev
   ];

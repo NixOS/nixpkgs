@@ -7,7 +7,7 @@
   motif,
   ncurses,
   libx11,
-  libXt,
+  libxt,
   gdb,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     motif
     ncurses
     libx11
-    libXt
+    libxt
   ];
 
   # ioctl is not found without this flag. fixed in next release

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libx11,
   libxi,
-  libXt,
+  libxt,
   libxfixes,
   libxext,
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libx11
     libxi
-    libXt
+    libxt
     libxfixes
     libxext
   ];

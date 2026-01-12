@@ -8,7 +8,7 @@
   gawk,
   libx11,
   libxaw,
-  libXt,
+  libxt,
   libxmu, # for postscript and html output
   enableHtml ? false,
   psutils,
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     gawk
     libx11
     libxaw
-    libXt
+    libxt
     libxmu
   ]
   ++ lib.optionals enableHtml [

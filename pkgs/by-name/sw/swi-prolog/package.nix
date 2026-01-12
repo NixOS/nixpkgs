@@ -39,7 +39,7 @@
   libxft,
   libxinerama,
   libjpeg,
-  libXt,
+  libxt,
   libsm,
   freetype,
   fontconfig,
@@ -102,7 +102,7 @@ let
     ++ (lib.optional withPython python3)
     ++ (lib.optional withYaml libyaml)
     ++ (lib.optionals withGui' [
-      libXt
+      libxt
       libxext
       libxpm
       libxft

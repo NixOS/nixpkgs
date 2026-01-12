@@ -12,7 +12,7 @@
   libxtst,
   libxkbcommon,
   libxcb,
-  libXt,
+  libxt,
   libxinerama,
 }:
 
@@ -27,7 +27,7 @@ let
     libxtst
     libxkbcommon
     libxcb
-    libXt
+    libxt
     libxinerama
   ];
 in

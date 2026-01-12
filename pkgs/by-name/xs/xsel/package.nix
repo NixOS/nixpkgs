@@ -5,7 +5,7 @@
   pkg-config,
   autoreconfHook,
   libx11,
-  libXt,
+  libxt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     libx11
-    libXt
+    libxt
   ];
 
   meta = {

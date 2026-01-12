@@ -9,7 +9,7 @@
   openssl,
   libnsl,
   motif,
-  xorg,
+  libxt,
   libxft,
   libxaw,
   libx11,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libx11
     libxaw
     libxft
-    xorg.libXt
+    libxt
     libxcrypt
     motif
   ]
