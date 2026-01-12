@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "specfile";
   version = "0.38.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "packit";
     repo = "specfile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cqHQIzgxfWHSDIIx72RIwt0o3MEJHXRzMNSgQ0VCWms=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for parsing and manipulating RPM spec files";
     homepage = "https://github.com/packit/specfile";
-    changelog = "https://github.com/packit/specfile/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/packit/specfile/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
