@@ -38,7 +38,6 @@ let
             PATH=${lib.makeBinPath [ getopt ]}:$PATH ${stdenv.shell} $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
             rm -rf $out/.git
           '';
-          allowedRequisites = [ ];
         };
 
         archives = ./stable.nix;
