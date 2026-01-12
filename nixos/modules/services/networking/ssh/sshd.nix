@@ -847,7 +847,7 @@ in
       system.checks = [
         (pkgs.runCommand "check-sshd-config"
           {
-            nativeBuildInputs = [ validationPackage ];
+            nativeBuildInputs = [ validationPackage.out ];
           }
           ''
             ${lib.concatMapStringsSep "\n" (
