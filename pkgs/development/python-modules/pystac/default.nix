@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pystac";
-  version = "1.14.2";
+  version = "1.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac";
     tag = "v${version}";
-    hash = "sha256-lSwapIOoZfI9m7BRVQVD8DS7+N+zieOiuvgwflt/bZw=";
+    hash = "sha256-O17KG8DRr7KpFpZYsl7zHBKDs5Ad0vigaThBnNP17rs=";
   };
 
   build-system = [ setuptools ];
