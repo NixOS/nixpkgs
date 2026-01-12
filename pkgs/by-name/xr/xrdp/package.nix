@@ -18,6 +18,7 @@
   libopus,
   nasm,
   xorg,
+  xauth,
   lame,
   pixman,
   libjpeg_turbo,
@@ -115,7 +116,7 @@ let
     ];
 
     postPatch = ''
-      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xauth}/bin/xauth -q"
 
       substituteInPlace configure.ac --replace /usr/include/ ""
     '';

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  xauth,
   libxkbfile,
   libpciaccess,
   xkeyboard_config,
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
             xterm
             xorg.twm
             xorg.xsetroot
-            xorg.xauth
+            xauth
           ]
         }
     ''

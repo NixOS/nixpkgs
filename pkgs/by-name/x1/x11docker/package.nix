@@ -5,6 +5,7 @@
   makeWrapper,
   nx-libs,
   xorg,
+  xauth,
   libxcvt,
   getopt,
   gnugrep,
@@ -58,7 +59,7 @@ stdenv.mkDerivation {
           xclip
           xpra
           xorg.xrandr
-          xorg.xauth
+          xauth
           weston
           xwayland
         ]

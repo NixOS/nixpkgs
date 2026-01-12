@@ -7,6 +7,7 @@
   setuptools,
   setuptools-scm,
   xorg,
+  xauth,
   mock,
   pytestCheckHook,
   util-linux,
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     util-linux
-    xorg.xauth
+    xauth
     xorg.xvfb
   ];
 

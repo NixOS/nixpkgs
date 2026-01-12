@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  xauth,
   pixman,
   libxshmfence,
   libxkbfile,
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           which
           xorg.twm
-          xorg.xauth
+          xauth
           xterm
         ]
       }

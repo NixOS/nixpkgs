@@ -6,6 +6,7 @@
   patsh,
   coreutils,
   xorg,
+  xauth,
   nixosTests,
 }:
 
@@ -26,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildInputs = [
     coreutils # needed for cross
-    xorg.xauth
+    xauth
     xorg.xorgserver
   ];
 

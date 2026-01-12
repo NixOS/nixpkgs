@@ -5,7 +5,7 @@
   ninja,
   python3,
   weston,
-  xorg,
+  xauth,
   xwayland,
   withCage ? false,
   cage,
@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${
         lib.makeBinPath [
           xwayland
-          xorg.xauth
+          xauth
         ]
       }
     wrapProgram $out/bin/xwfb-run \
@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
           compositors
           ++ [
             xwayland
-            xorg.xauth
+            xauth
           ]
         )
       }

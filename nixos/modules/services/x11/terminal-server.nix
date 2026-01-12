@@ -33,7 +33,7 @@
         pkgs.gawk
         pkgs.which
         pkgs.openssl
-        pkgs.xorg.xauth
+        pkgs.xauth
         pkgs.net-tools
         pkgs.shadow
         pkgs.procps

@@ -6,6 +6,7 @@
   zlib,
   libjpeg,
   xorg,
+  xauth,
   coreutils,
   libvncserver,
   autoreconfHook,
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '"/bin/su"' '"/run/wrappers/bin/su"' \
         --replace-fail '"/bin/true"' '"${coreutils}/bin/true"'
 
-    sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xorg.xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' src/ssltools.h
+    sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' src/ssltools.h
 
     # Xdummy script is currently broken, so we avoid building it. This removes everything Xdummy-related from the affected Makefile
     sed -i '/if HAVE_X11/,/endif/d' misc/Makefile.am

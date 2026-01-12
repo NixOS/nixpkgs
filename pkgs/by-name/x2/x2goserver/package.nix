@@ -15,6 +15,7 @@
   gnugrep,
   findutils,
   xorg,
+  xauth,
   setxkbmap,
   net-tools,
   iproute2,
@@ -87,7 +88,7 @@ let
     pwgen
     openssh
     sshfs
-    xorg.xauth
+    xauth
     xorg.xinit
     xorg.xrandr
     xorg.xmodmap
