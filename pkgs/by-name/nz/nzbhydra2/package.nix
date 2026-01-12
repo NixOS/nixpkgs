@@ -6,6 +6,8 @@
   maven,
   fetchFromGitHub,
   jdk,
+  nix-update-script,
+  xmlstarlet,
 }:
 
 # Skip some plugins not required for NixOS packaging to reduce required dependencies.
@@ -23,53 +25,41 @@ let
       "tests"
     ]
   },!org.nzbhydra.tests:system";
+
+  timestampParameter = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
+
+  parameters = lib.concatStringsSep " " [
+    projectFilter
+    timestampParameter
+  ];
 in
 maven.buildMavenPackage rec {
   pname = "nzbhydra2";
-  version = "8.1.2";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "theotherp";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-BD9bvbPaVz3MJam78EHqfFc9jbh1SpkIxTe0UK8Lh0w=";
+    hash = "sha256-aUaPzfP4PPX08DZxbDhy7U/qH37ddR9jWtt+pt7BqCI=";
   };
 
-  patches = [
-    # Older lombok versions are incompatible with newer JDK versions.
-    ./lombok-compiler-annotation.patch
-  ];
+  mvnHash = "sha256-02Fj7Rv0kGmO7ysHWMjE7qlwFY3G+hQzjXvrvRG/2M8=";
 
-  buildOffline = true;
+  mvnFetchExtraArgs.preBuild = ''
+    mvn -nsu "${timestampParameter}" --projects org.nzbhydra:github-release-plugin "-Dmaven.repo.local=$out/.m2" clean install
+  '';
+
+  mvnFetchExtraArgs.postInstall = ''
+    ${lib.getExe xmlstarlet} ed -L -u "/metadata/versioning/lastUpdated" -v "0" $out/.m2/org/nzbhydra/github-release-plugin/maven-metadata-local.xml
+  '';
 
   mvnJdk = jdk;
 
-  mvnHash = "sha256-SXanl43Fpd7IdhuD1H2LpB5BwvzbbjRNyZYzBvV1XXY=";
-
-  manualMvnArtifacts = [
-    "org.springframework.boot:spring-boot-maven-plugin:4.0.0"
-
-    "org.apache.maven.plugins:maven-antrun-plugin:3.1.0"
-    "org.apache.maven.plugins:maven-dependency-plugin:3.7.0"
-    "org.apache.maven.plugins:maven-release-plugin:3.0.1"
-    "org.apache.maven.plugins:maven-plugin-plugin:3.7.1"
-    "org.apache.maven.plugins:maven-install-plugin:3.1.4"
-
-    # Dependencies for building and running tests are included below.
-    # The set of dependencies for successfully building and running the tests is different.
-    # For simplicity all dependencies are included here, independently of whether we're running the tests.
-    "org.apache.maven.plugins:maven-surefire-plugin:2.22.2"
-    "org.apache.maven.surefire:surefire-junit4:3.0.0-M2"
-    "org.apache.maven.surefire:surefire-junit-platform:2.22.2"
-    "org.apache.maven.surefire:surefire-junit-platform:3.0.0-M2"
-    "org.apache.maven.surefire:surefire-junit-platform:3.2.5"
-    "org.junit.platform:junit-platform-surefire-provider:1.3.2"
-  ];
-
   doCheck = true;
 
-  mvnDepsParameters = projectFilter;
-  mvnParameters = projectFilter;
+  mvnDepsParameters = parameters;
+  mvnParameters = parameters;
 
   nativeBuildInputs = [
     makeWrapper
@@ -90,8 +80,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) nzbhydra2;
+  passthru = {
+    tests = {
+      inherit (nixosTests) nzbhydra2;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
