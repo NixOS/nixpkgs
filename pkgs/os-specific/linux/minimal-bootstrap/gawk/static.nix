@@ -4,20 +4,26 @@
   hostPlatform,
   fetchurl,
   bash,
-  tinycc,
+  gcc,
+  musl,
+  binutils,
   gnumake,
   gnused,
   gnugrep,
+  gawk,
+  diffutils,
+  findutils,
+  gnutar,
+  gzip,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar";
-  # >= 1.13 is incompatible with mes-libc
-  version = "1.12";
+  pname = "gawk-static";
+  version = "5.3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.gz";
-    sha256 = "02m6gajm647n8l9a5bnld6fnbgdpyi4i3i83p7xcwv0kif47xhy6";
+    url = "mirror://gnu/gawk/gawk-${version}.tar.gz";
+    hash = "sha256-hjmhqI+0EaG+AmY3OdA+kCptMTtcb+Ak0L/rM0GhmhE=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -25,37 +31,43 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
-      tinycc.compiler
+      gcc
+      musl
+      binutils
       gnumake
       gnused
       gnugrep
+      gawk
+      diffutils
+      findutils
+      gnutar
+      gzip
     ];
 
     passthru.tests.get-version =
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/tar --version
+        ${result}/bin/awk --version
         mkdir $out
       '';
   }
   ''
     # Unpack
-    ungz --file ${src} --output tar.tar
-    untar --file tar.tar
-    rm tar.tar
-    cd tar-${version}
+    tar xf ${src}
+    cd gawk-${version}
 
     # Configure
-    export CC="tcc -B ${tinycc.libs}/lib"
     bash ./configure \
+      --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --disable-nls \
-      --prefix=$out
+      CC=musl-gcc \
+      CFLAGS=-static
 
     # Build
-    make AR="tcc -ar"
+    make -j $NIX_BUILD_CORES
 
     # Install
-    make install
+    make -j $NIX_BUILD_CORES install
+    rm $out/bin/gawkbug
   ''

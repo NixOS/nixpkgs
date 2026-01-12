@@ -4,21 +4,26 @@
   hostPlatform,
   fetchurl,
   bash,
-  tinycc,
+  gcc,
+  musl,
+  binutils,
   gnumake,
-  gnugrep,
   gnused,
+  gnugrep,
+  gawk,
+  diffutils,
+  findutils,
+  gnutarBoot,
+  gzip,
 }:
 let
-  # gnutar with musl preserves modify times, allowing make to not try
-  # rebuilding pregenerated files
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar-musl";
-  version = "1.12";
+  pname = "gnutar-static";
+  version = "1.35";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.gz";
-    hash = "sha256-xsN+iIsTbM76uQPFEUn0t71lnWnUrqISRfYQU6V6pgo=";
+    hash = "sha256-FNVeMgY+qVJuBX+/Nfyr1TN452l4fv95GcN1WwLStX4=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -26,10 +31,17 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
-      tinycc.compiler
+      gcc
+      musl
+      binutils
       gnumake
       gnused
       gnugrep
+      gawk
+      diffutils
+      findutils
+      gnutarBoot
+      gzip
     ];
 
     passthru.tests.get-version =
@@ -41,26 +53,20 @@ bash.runCommand "${pname}-${version}"
   }
   ''
     # Unpack
-    ungz --file ${src} --output tar.tar
-    untar --file tar.tar
-    rm tar.tar
+    tar xzf ${src}
     cd tar-${version}
 
     # Configure
-    export CC="tcc -B ${tinycc.libs}/lib"
-    export LD=tcc
-    export ac_cv_sizeof_unsigned_long=4
-    export ac_cv_sizeof_long_long=8
-    export ac_cv_header_netdb_h=no
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --disable-nls
+      CC=musl-gcc \
+      CFLAGS=-static
 
     # Build
-    make AR="tcc -ar"
+    make -j $NIX_BUILD_CORES
 
     # Install
-    make install
+    make -j $NIX_BUILD_CORES install
   ''

@@ -4,17 +4,21 @@
   hostPlatform,
   fetchurl,
   bash,
-  tinycc,
+  gcc,
+  musl,
+  binutils,
   gnumake,
-  gnugrep,
   gnused,
+  gnugrep,
   gawk,
+  diffutils,
+  findutils,
   gnutar,
   gzip,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "bootstrap-coreutils-musl";
+  pname = "coreutils-static";
   version = "9.4";
 
   src = fetchurl {
@@ -26,13 +30,11 @@ let
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
-    # musl 1.1.x doesn't use 64bit time_t
-    "--disable-year2038"
     # libstdbuf.so fails in static builds
-    "--enable-no-install-program=stdbuf,arch,coreutils,hostname"
-    # Disable PATH_MAX for better reproducibility
-    "gl_cv_func_getcwd_path_max=\"no, but it is partly working\""
-    "gl_cv_have_unlimited_file_name_length=no"
+    "--enable-no-install-program=stdbuf"
+    "--enable-single-binary=symlinks"
+    "CC=musl-gcc"
+    "CFLAGS=-static"
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -40,11 +42,15 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
-      tinycc.compiler
+      gcc
+      musl
+      binutils
       gnumake
       gnused
       gnugrep
       gawk
+      diffutils
+      findutils
       gnutar
       gzip
     ];
@@ -52,7 +58,7 @@ bash.runCommand "${pname}-${version}"
     passthru.tests.get-version =
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/cat --version
+        ${result}/bin/coreutils --version
         mkdir $out
       '';
   }
@@ -62,14 +68,11 @@ bash.runCommand "${pname}-${version}"
     cd coreutils-${version}
 
     # Configure
-    export CC="tcc -B ${tinycc.libs}/lib"
-    export LD=tcc
-    export LDFLAGS="-L ./lib"
     bash ./configure ${lib.concatStringsSep " " configureFlags}
 
     # Build
-    make -j $NIX_BUILD_CORES AR="tcc -ar" MAKEINFO="true"
+    make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install MAKEINFO="true"
+    make -j $NIX_BUILD_CORES install
   ''
