@@ -455,6 +455,10 @@ let
         expr = (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag;
         expected = 2;
       };
+      overridePythonAttrs-plain = {
+        expr = (package-stub.overridePythonAttrs { overridePythonAttrsFlag = 0; }).overridePythonAttrsFlag;
+        expected = 0;
+      };
       overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
         expr = {
           inherit (applyOverridePythonAttrs (overrideAttrsFooBar package-stub))
