@@ -64,6 +64,8 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-plugin-countdown = qt6Packages.callPackage ./obs-plugin-countdown.nix { };
+
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
 
   obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };

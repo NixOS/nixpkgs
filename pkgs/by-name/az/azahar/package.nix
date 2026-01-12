@@ -34,6 +34,8 @@
   xorg,
   enableQtTranslations ? true,
   qt6,
+  gtk3,
+  gsettings-desktop-schemas,
   enableCubeb ? true,
   cubeb,
   useDiscordRichPresence ? true,
@@ -151,6 +153,13 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
 
   passthru.updateScript = nix-update-script { };
 

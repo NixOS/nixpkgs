@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "jjui";
@@ -19,6 +20,10 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-jte0g+aUiGNARLi8DyfsX6wYYJnodHnILzmid6KvMiA=";
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=TestServerAskpass"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

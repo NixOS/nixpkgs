@@ -4587,7 +4587,7 @@ with pkgs;
     inherit (llvmPackages_20) llvm;
   };
 
-  gcc-arm-embedded = gcc-arm-embedded-14;
+  gcc-arm-embedded = gcc-arm-embedded-15;
 
   # Haskell and GHC
 
@@ -4967,6 +4967,7 @@ with pkgs;
   ocaml = ocamlPackages.ocaml;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
