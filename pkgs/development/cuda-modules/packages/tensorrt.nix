@@ -12,7 +12,7 @@
 let
   inherit (backendStdenv) cudaCapabilities hostRedistSystem;
   inherit (lib.lists) optionals;
-  inherit (lib.strings) concatStringsSep;
+  inherit (lib.strings) concatStringsSep optionalString;
 in
 buildRedist (
   finalAttrs:
@@ -133,7 +133,8 @@ buildRedist (
       moveToOutput data "''${!outputSamples:?}"
     ''
     # Remove the Windows library used for cross-compilation if it exists.
-    + ''
+    # NOTE: These are not removed for TensorRT 10.2 since the samples (and presumably others) try to load them.
+    + optionalString (lib.versions.majorMinor finalAttrs.version != "10.2") ''
       nixLog "removing any Windows libraries"
       for winLib in "''${!outputLib:?}/lib/"*_win*; do
         rm --verbose "$winLib"
