@@ -1,8 +1,8 @@
-{ lib, ... }:
+{ pkgs, ... }:
 
 {
   name = "pretalx";
-  meta.maintainers = lib.teams.c3d2.members;
+  meta.maintainers = pkgs.pretalx.meta.maintainers;
 
   nodes = {
     pretalx =
