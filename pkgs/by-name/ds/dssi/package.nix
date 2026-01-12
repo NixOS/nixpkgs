@@ -8,7 +8,7 @@
   alsa-lib,
   libX11,
   libsndfile,
-  libSM,
+  libsm,
   libsamplerate,
   libtool,
   autoconf,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libX11
     libsndfile
-    libSM
+    libsm
     libsamplerate
     libtool
     xorgproto

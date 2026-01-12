@@ -11,7 +11,7 @@
   libjpeg,
   openal,
   plib,
-  libSM,
+  libsm,
   libunwind,
   libX11,
   xorgproto,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     openal
     openscenegraph
     plib
-    libSM
+    libsm
     libunwind
     libX11
     xorgproto

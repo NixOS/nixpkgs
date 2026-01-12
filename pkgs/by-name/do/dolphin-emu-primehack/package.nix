@@ -16,7 +16,7 @@
   gettext,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXdmcp,
   libXext,
   libXinerama,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libGL
     libGLU
-    libSM
+    libsm
     libXdmcp
     libXext
     libXinerama

@@ -20,6 +20,7 @@
   upx,
   fontconfig,
   xorg,
+  libsm,
   gcc,
   atk,
   glib,
@@ -74,7 +75,7 @@ let
     libusb-compat-0_1
     pango
     udev
-    xorg.libSM
+    libsm
     xorg.libX11
     xorg.libXext
     xorg.libXft

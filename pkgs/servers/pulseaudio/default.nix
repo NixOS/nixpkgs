@@ -8,6 +8,7 @@
   makeWrapper,
   perlPackages,
   xorg,
+  libsm,
   libice,
   libcap,
   alsa-lib,
@@ -142,7 +143,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optionals x11Support [
       libice
-      xorg.libSM
+      libsm
       xorg.libX11
       xorg.libXi
       xorg.libXtst

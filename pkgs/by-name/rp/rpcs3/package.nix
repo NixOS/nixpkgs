@@ -13,7 +13,7 @@
   vulkan-headers,
   vulkan-loader,
   libpng,
-  libSM,
+  libsm,
   ffmpeg_7,
   libevdev,
   libusb1,
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     sdl3
     flatbuffers
     llvm_18
-    libSM
+    libsm
     opencv.cxxdev
     cubeb
     miniupnpc

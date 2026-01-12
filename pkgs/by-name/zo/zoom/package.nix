@@ -7,6 +7,7 @@
   fontconfig,
   freetype,
   xorg,
+  libsm,
   libice,
 }:
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     libice
-    xorg.libSM
+    libsm
     xorg.libX11
     xorg.libXext
     xorg.libXrender

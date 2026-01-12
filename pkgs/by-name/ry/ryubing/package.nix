@@ -18,7 +18,7 @@
   glew,
   libGL,
   libice,
-  libSM,
+  libsm,
   libXcursor,
   libXext,
   libXi,
@@ -71,7 +71,7 @@ buildDotnetModule rec {
     # Avalonia UI
     glew
     libice
-    libSM
+    libsm
     libXcursor
     libXext
     libXi

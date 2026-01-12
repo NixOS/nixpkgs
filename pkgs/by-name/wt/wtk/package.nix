@@ -4,6 +4,7 @@
   requireFile,
   unzip,
   xorg,
+  libsm,
   libice,
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     xorg.libXt
     xorg.libX11
     libice
-    xorg.libSM
+    libsm
     stdenv.cc.cc
   ];
 

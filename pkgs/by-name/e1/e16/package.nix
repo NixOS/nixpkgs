@@ -5,7 +5,7 @@
   pkg-config,
   freetype,
   imlib2,
-  libSM,
+  libsm,
   libXcomposite,
   libXdamage,
   libXext,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     imlib2
-    libSM
+    libsm
     libXcomposite
     libXdamage
     libXext

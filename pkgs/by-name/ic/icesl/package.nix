@@ -9,7 +9,7 @@
   libice,
   libGLU,
   libGL,
-  libSM,
+  libsm,
   libXext,
   glibc,
   lua,
@@ -28,7 +28,7 @@ let
     libice
     libGLU
     libGL
-    libSM
+    libsm
     libXext
     glibc
     lua

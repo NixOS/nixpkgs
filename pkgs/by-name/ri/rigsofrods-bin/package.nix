@@ -7,7 +7,7 @@
   unzip,
   libGL,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXrandr,
   zlib,
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libGL
     libice
-    libSM
+    libsm
     libX11
     libXrandr
     stdenv.cc.cc

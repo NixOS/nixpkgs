@@ -12,7 +12,7 @@
   fetchurl,
   unzip,
   glib,
-  libSM,
+  libsm,
   libice,
   gtk2,
   libXext,
@@ -40,7 +40,7 @@ let
 
   libPath = lib.makeLibraryPath [
     glib
-    libSM
+    libsm
     libice
     gtk2
     libXext

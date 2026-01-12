@@ -9,7 +9,7 @@
   glib,
   gtk2,
   alsa-lib,
-  libSM,
+  libsm,
   libX11,
   gdk-pixbuf,
   pango,
@@ -26,7 +26,7 @@ let
     glib
     gtk2
     alsa-lib
-    libSM
+    libsm
     libX11
     gdk-pixbuf
     pango

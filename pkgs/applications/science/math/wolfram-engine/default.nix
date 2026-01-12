@@ -17,6 +17,7 @@
   unixODBC,
   xkeyboard_config,
   xorg,
+  libsm,
   libice,
   libxcb,
   zlib,
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXrandr
     libice
-    xorg.libSM
+    libsm
   ];
 
   # some bundled libs are found through LD_LIBRARY_PATH

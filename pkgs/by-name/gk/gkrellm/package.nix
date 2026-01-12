@@ -7,7 +7,7 @@
   glib,
   gtk2,
   libX11,
-  libSM,
+  libsm,
   libice,
   which,
   copyDesktopItems,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk2
     libX11
-    libSM
+    libsm
     libice
   ];
 

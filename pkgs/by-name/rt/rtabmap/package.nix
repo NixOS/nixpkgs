@@ -15,6 +15,7 @@
   pcl,
   liblapack,
   xorg,
+  libsm,
   libice,
   libusb1,
   yaml-cpp,
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencv.cxxdev
     pcl'
     liblapack
-    xorg.libSM
+    libsm
     libice
     xorg.libXt
 

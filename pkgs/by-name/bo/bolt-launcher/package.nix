@@ -10,6 +10,7 @@
   cef-binary,
   luajit,
   xorg,
+  libsm,
   libxcb,
   libgbm,
   glib,
@@ -111,7 +112,7 @@ buildFHSEnv {
     pkgs:
     [ bolt ]
     ++ (with pkgs; [
-      xorg.libSM
+      libsm
       xorg.libXxf86vm
       xorg.libX11
       xorg.libXi

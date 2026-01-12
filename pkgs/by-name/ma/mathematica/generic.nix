@@ -46,6 +46,7 @@
   xcbutilkeysyms,
   xkeyboard_config,
   xorg,
+  libsm,
   libice,
   libxcb,
   zlib,
@@ -118,7 +119,7 @@ stdenv.mkDerivation {
     xcbutilkeysyms
     xkeyboard_config
     libice
-    xorg.libSM
+    libsm
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite

@@ -6,7 +6,7 @@
   libX11,
   libXpm,
   libice,
-  libSM,
+  libsm,
   libXt,
   libXau,
   libXdmcp,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libX11
     libXpm
     libice
-    libSM
+    libsm
     libXt
     libXau
     libXdmcp

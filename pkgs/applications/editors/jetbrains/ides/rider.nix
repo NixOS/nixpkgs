@@ -11,7 +11,7 @@
   lttng-ust_2_12,
   musl,
   libice,
-  libSM,
+  libsm,
   libX11,
   dotnetCorePackages,
   xorg,
@@ -74,7 +74,7 @@ in
   extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
     # Avalonia dependencies needed for dotMemory
     libice
-    libSM
+    libsm
     libX11
   ];
 

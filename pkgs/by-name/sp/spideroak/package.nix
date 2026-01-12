@@ -8,7 +8,7 @@
   freetype,
   glib,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXext,
   libXrender,
@@ -23,7 +23,7 @@ let
     freetype
     glib
     libice
-    libSM
+    libsm
     libX11
     libXext
     libXrender

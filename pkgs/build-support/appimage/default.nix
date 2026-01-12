@@ -166,7 +166,7 @@ rec {
         xorg.libXScrnSaver
         xorg.libXxf86vm
         xorg.libXi
-        xorg.libSM
+        libsm
         libice
         freetype
         curlWithGnuTls

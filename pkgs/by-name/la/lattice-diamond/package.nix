@@ -11,6 +11,7 @@
   freetype,
   fontconfig,
   xorg,
+  libsm,
   libice,
   libusb-compat-0_1,
   coreutils,
@@ -124,7 +125,7 @@ stdenv.mkDerivation {
     zlib
     freetype
     fontconfig
-    xorg.libSM
+    libsm
     libice
     xorg.libXrender
     xorg.libXext

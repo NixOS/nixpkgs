@@ -7,6 +7,7 @@
   nss,
   nspr,
   xorg,
+  libsm,
   libice,
   libxshmfence,
   libxcb,
@@ -78,7 +79,7 @@ let
     xorg.libX11
     xorg.libXt
     xorg.libXext
-    xorg.libSM
+    libsm
     libice
     libxcb
     libxkbcommon

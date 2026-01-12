@@ -3,6 +3,7 @@
   fetchurl,
   dpkg,
   xorg,
+  libsm,
   libice,
   libxcb,
   glib,
@@ -54,7 +55,7 @@ let
     dbus
     xorg.libX11
     xorg.libXi
-    xorg.libSM
+    libsm
     libice
     xorg.libXrender
     xorg.libXScrnSaver

@@ -18,6 +18,7 @@
   libGL,
   pango,
   xorg,
+  libsm,
   libice,
   libxkbfile,
   libxcb,
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXtst
     xorg.libXt
     libice
-    xorg.libSM
+    libsm
     xorg.libXrender
   ];
 

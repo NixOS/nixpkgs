@@ -13,7 +13,7 @@
   glib,
   gst_all_1,
   gtk3,
-  libSM,
+  libsm,
   libX11,
   libXtst,
   libpng12,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       alsa-lib
       libX11
       libXtst
-      libSM
+      libsm
       libpng12
       gstreamer
       gst-plugins-base

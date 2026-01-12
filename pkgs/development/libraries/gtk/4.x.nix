@@ -25,6 +25,7 @@
   fribidi,
   harfbuzz,
   xorg,
+  libsm,
   libice,
   libepoxy,
   libxkbcommon,
@@ -143,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     harfbuzz
     libice
-    xorg.libSM
+    libsm
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXi

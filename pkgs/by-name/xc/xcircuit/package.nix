@@ -11,6 +11,7 @@
   tcl,
   tk,
   xorg,
+  libsm,
   libice,
   zlib,
 }:
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
   buildInputs = [
     cairo
     ghostscript
-    xorg.libSM
+    libsm
     xorg.libXt
     libice
     xorg.libX11

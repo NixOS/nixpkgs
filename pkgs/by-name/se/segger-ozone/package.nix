@@ -7,7 +7,7 @@
   fontconfig,
   freetype,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXcursor,
   libXfixes,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libice
-    libSM
+    libsm
     libX11
     libXcursor
     libXfixes

@@ -6,7 +6,7 @@
   zlib,
   libX11,
   libXext,
-  libSM,
+  libsm,
   libice,
   libxkbcommon,
   libxshmfence,
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     libX11
     libXt
     libXext
-    libSM
+    libsm
     libice
     libxcb
     libxkbcommon

@@ -8,7 +8,7 @@
   zlib,
   libX11,
   libice,
-  libSM,
+  libsm,
   libpng,
   libjpeg,
   libtiff,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libX11
     libice
-    libSM
+    libsm
     libpng
     libjpeg
     libtiff

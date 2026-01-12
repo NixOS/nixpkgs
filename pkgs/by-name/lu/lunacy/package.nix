@@ -11,7 +11,7 @@
   lttng-ust,
   icu,
   libice,
-  libSM,
+  libsm,
   libXcursor,
   openssl,
   imagemagick,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Runtime deps
     libice
-    libSM
+    libsm
     libX11
     libXcursor
   ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   # will add to the RPATH of executable only
   runtimeDependencies = [
     libice
-    libSM
+    libsm
     libX11
     libXcursor
   ];

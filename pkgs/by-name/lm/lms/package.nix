@@ -13,7 +13,7 @@
   graphicsmagick,
   ffmpeg,
   zlib,
-  libSM,
+  libsm,
   libice,
   stb,
   openssl,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     graphicsmagick
     ffmpeg
     zlib
-    libSM
+    libsm
     libice
     stb
     openssl

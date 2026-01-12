@@ -4,6 +4,7 @@
   replaceVars,
   fontconfig,
   xorg,
+  libsm,
   xrdb,
   xmessage,
   lsof,
@@ -56,7 +57,7 @@ mkKdeDerivation {
     libqalculate
     pipewire
 
-    xorg.libSM
+    libsm
     xorg.libXcursor
     xorg.libXtst
     xorg.libXft

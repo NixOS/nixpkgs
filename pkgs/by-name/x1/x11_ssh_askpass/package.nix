@@ -6,6 +6,7 @@
   autoreconfHook,
   pkg-config,
   xorg,
+  libsm,
   libice,
 }:
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXt
     libice
-    xorg.libSM
+    libsm
   ];
 
   meta = {

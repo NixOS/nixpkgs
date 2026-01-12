@@ -6,7 +6,7 @@
   fetchurl,
   gcc-unwrapped,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXext,
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     gcc-unwrapped
     libice
-    libSM
+    libsm
     libX11
     libXext
   ];

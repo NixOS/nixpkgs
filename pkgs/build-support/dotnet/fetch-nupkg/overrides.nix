@@ -4,7 +4,7 @@
   fontconfig,
   lib,
   libice,
-  libSM,
+  libsm,
   libX11,
   stdenv,
   writeText,
@@ -57,7 +57,7 @@
         setupHook = writeText "setupHook.sh" ''
           prependToVar dotnetRuntimeDeps \
             "${lib.getLib libice}" \
-            "${lib.getLib libSM}" \
+            "${lib.getLib libsm}" \
             "${lib.getLib libX11}"
         '';
       }

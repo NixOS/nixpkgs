@@ -14,7 +14,7 @@
   libXmu,
   libXext,
   libXt,
-  libSM,
+  libsm,
   libice,
   libpng,
   pkg-config,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXmu
     libXext
     libXt
-    libSM
+    libsm
     libice
     libpng
     gettext

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   xorg,
+  libsm,
   autoreconfHook,
   pkg-config,
   util-macros,
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     xorg.libX11
     xorg.libXext
-    xorg.libSM
+    libsm
     xorg.libXmu
     xorg.libXaw
     xorg.libXt

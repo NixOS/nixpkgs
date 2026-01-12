@@ -6,6 +6,7 @@
   zlib,
   pcre,
   xorg,
+  libsm,
   libice,
   libjpeg,
   libtiff,
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     pcre
     xorg.libX11
     libice
-    xorg.libSM
+    libsm
     xorg.libXpm
     libjpeg
     libtiff

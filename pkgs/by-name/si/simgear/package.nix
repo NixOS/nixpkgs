@@ -9,7 +9,7 @@
   libXext,
   libXi,
   libice,
-  libSM,
+  libsm,
   libXt,
   libXmu,
   libGLU,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libXext
     libXi
     libice
-    libSM
+    libsm
     libXt
     libXmu
     libGLU

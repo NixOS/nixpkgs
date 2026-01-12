@@ -51,7 +51,7 @@ buildFHSEnv rec {
       # quartus requirements
       glib
       libice
-      xorg.libSM
+      libsm
       xorg.libXau
       xorg.libXdmcp
       xorg.libXScrnSaver

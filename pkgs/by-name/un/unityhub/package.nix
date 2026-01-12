@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
         # Unity Bug Reporter specific dependencies
         libice
-        xorg.libSM
+        libsm
 
         # Fonts used by built-in and third party editor tools
         corefonts

@@ -7,7 +7,7 @@
   wrapGAppsHook3,
   gtk3,
   imlib2,
-  libSM,
+  libsm,
   libstartup_notification,
   libxml2,
   openbox,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     imlib2
-    libSM
+    libsm
     libstartup_notification
     libxml2
     openbox

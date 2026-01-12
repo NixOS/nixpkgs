@@ -22,6 +22,7 @@
   fontconfig,
   freetype,
   xorg,
+  libsm,
   libice,
   makeWrapper,
   bash,
@@ -38,7 +39,7 @@ let
     name = "megaglest-lib-env";
     paths = [
       SDL2
-      xorg.libSM
+      libsm
       libice
       xorg.libX11
       xorg.libXext

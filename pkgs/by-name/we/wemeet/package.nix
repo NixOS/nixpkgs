@@ -7,6 +7,7 @@
   makeWrapper,
   nss,
   xorg,
+  libsm,
   libice,
   desktop-file-utils,
   libpulseaudio,
@@ -197,7 +198,7 @@ stdenv.mkDerivation {
   buildInputs = [
     nss
     xorg.libX11
-    xorg.libSM
+    libsm
     libice
     xorg.libXtst
     desktop-file-utils

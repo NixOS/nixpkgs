@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  libsm,
   xtrans,
   xorgproto,
   xauth,
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     perl
     libfontenc # for -DTVNC_SYSTEMX11=1
-    xorg.libSM
+    libsm
     xorg.libX11
     xorg.libXdamage # for -DTVNC_SYSTEMX11=1
     xorg.libXdmcp # for -DTVNC_SYSTEMX11=1

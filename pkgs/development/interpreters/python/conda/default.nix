@@ -11,7 +11,7 @@
       cups
       gcc-unwrapped
       libGL
-      xorg.libSM
+      libsm
       libice
       xorg.libX11
       xorg.libXau

@@ -6,7 +6,7 @@
   SDL,
   SDL_ttf,
   SDL_image,
-  libSM,
+  libsm,
   libice,
   libGLU,
   libGL,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     SDL_image
     lua5
     libpng
-    libSM
+    libsm
     libice
   ];
 

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  libsm,
   libice,
   xorgproto,
   luit,
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     xorg.libXt
     xorg.libXext
     xorg.libX11
-    xorg.libSM
+    libsm
     libice
     ncurses
     freetype

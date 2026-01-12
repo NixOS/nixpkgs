@@ -20,7 +20,7 @@
   glm,
   gtest,
   howard-hinnant-date,
-  libSM,
+  libsm,
   libcpr,
   libpng,
   onetbb,
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     gtest
     howard-hinnant-date
-    libSM
+    libsm
     libcpr
     libpng
     onetbb

@@ -9,7 +9,7 @@
   glew,
   libGL,
   libice,
-  libSM,
+  libsm,
   libXcursor,
   libXext,
   libXi,
@@ -51,7 +51,7 @@ buildDotnetModule (finalAttrs: {
     libGL
     glew
     libice
-    libSM
+    libsm
     libXcursor
     libXext
     libXi

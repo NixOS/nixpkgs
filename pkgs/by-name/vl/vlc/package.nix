@@ -21,7 +21,7 @@
   gnutls,
   harfbuzz,
   libGL,
-  libSM,
+  libsm,
   libXext,
   libXinerama,
   libXpm,
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     harfbuzz
     libGL
-    libSM
+    libsm
     libarchive
     libass
     libbluray-full

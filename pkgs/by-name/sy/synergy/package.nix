@@ -14,7 +14,7 @@
   gdk-pixbuf,
   libnotify,
   libice,
-  libSM,
+  libsm,
   libX11,
   libxkbfile,
   libXi,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     libselinux
     libsepol
     libice
-    libSM
+    libsm
     libX11
     libXi
     libXtst

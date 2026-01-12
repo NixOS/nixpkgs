@@ -7,7 +7,7 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXinerama,
   libXtst,
   libXxf86vm,
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
-    libSM
+    libsm
     libXinerama
     libXtst
     libXxf86vm

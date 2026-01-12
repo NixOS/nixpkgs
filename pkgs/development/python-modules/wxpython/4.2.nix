@@ -25,7 +25,7 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXinerama,
   libXtst,
   libXxf86vm,
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     gst_all_1.gstreamer
     libGL
     libGLU
-    libSM
+    libsm
     libXinerama
     libXtst
     libXxf86vm

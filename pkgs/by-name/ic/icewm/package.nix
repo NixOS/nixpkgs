@@ -15,7 +15,7 @@
   glib,
   imlib2,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXcomposite,
   libXdamage,
@@ -72,7 +72,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     glib
     imlib2
     libice
-    libSM
+    libsm
     libX11
     libXcomposite
     libXdamage

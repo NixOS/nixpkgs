@@ -17,7 +17,7 @@
   intltool,
   lib,
   libice,
-  libSM,
+  libsm,
   libXScrnSaver,
   libXext,
   libgcrypt,
@@ -75,7 +75,7 @@ let
         gst_all_1.gst-plugins-good
         gst_all_1.gstreamer
         libice
-        libSM
+        libsm
         libXScrnSaver
         libXext
         libgnt

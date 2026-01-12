@@ -58,7 +58,7 @@ let
       "libXext.so.6" = xorg.libXext;
       "libXrender.so.1" = xorg.libXrender;
       "libICE.so.6" = libice;
-      "libSM.so.6" = xorg.libSM;
+      "libSM.so.6" = libsm;
       "libGL.so.1" = libGL;
       "libgobject-2.0.so.0" = glib;
       "libgthread-2.0.so.0" = glib;

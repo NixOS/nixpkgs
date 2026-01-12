@@ -7,7 +7,7 @@
   wrapGAppsHook3,
   libxml2,
   gtk2,
-  libSM,
+  libsm,
   shared-mime-info,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libxml2
     gtk2
     shared-mime-info
-    libSM
+    libsm
   ];
   NIX_LDFLAGS = "-lm";
   NIX_CFLAGS_COMPILE = " -fpermissive";

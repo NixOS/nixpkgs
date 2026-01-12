@@ -9,7 +9,7 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   libXinerama,
   libXtst,
   libXxf86vm,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     curl
     gspell # wxTextCtrl spell checking
     gtk3
-    libSM
+    libsm
     libXinerama
     libXtst
     libXxf86vm

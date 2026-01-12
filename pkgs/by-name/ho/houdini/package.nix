@@ -43,7 +43,7 @@ buildFHSEnv {
       numactl # needed by hfs ocl backend
       zstd # needed from 20.0
       libice
-      xorg.libSM
+      libsm
       xorg.libXmu
       xorg.libXi
       xorg.libXt

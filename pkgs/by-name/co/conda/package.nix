@@ -9,6 +9,7 @@
   libarchive,
   libGL,
   xorg,
+  libsm,
   libice,
   zlib,
   # Conda installs its packages and environments under this directory
@@ -16,7 +17,7 @@
   # Conda manages most pkgs itself, but expects a few to be on the system.
   condaDeps ? [
     stdenv.cc
-    xorg.libSM
+    libsm
     libice
     xorg.libX11
     xorg.libXau

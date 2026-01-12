@@ -14,7 +14,7 @@
   libglvnd,
   libice,
   libkrb5,
-  libSM,
+  libsm,
   libX11,
   libxcb,
   libXi,
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     libglvnd
     libice
     libkrb5
-    libSM
+    libsm
     libX11
     libxcb
     libXi

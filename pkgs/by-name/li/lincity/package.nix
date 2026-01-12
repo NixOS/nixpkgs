@@ -8,7 +8,7 @@
   libXext,
   xorgproto,
   libice,
-  libSM,
+  libsm,
   libpng12,
   zlib,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libice
     libpng12
-    libSM
+    libsm
     libX11
     libXext
     xorgproto

@@ -21,6 +21,7 @@
   nss,
   wayland,
   xorg,
+  libsm,
   libice,
   libxcb,
   buildFHSEnv,
@@ -80,7 +81,7 @@ let
       nss
       wayland
       libice
-      xorg.libSM
+      libsm
       xorg.libX11
       xorg.libXScrnSaver
       xorg.libXcomposite

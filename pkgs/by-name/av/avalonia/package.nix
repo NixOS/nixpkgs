@@ -6,7 +6,7 @@
   fontconfig,
   lib,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXcursor,
   libXext,
@@ -80,7 +80,7 @@ stdenvNoCC.mkDerivation (
         substituteInPlace src/Avalonia.X11/ICELib.cs \
           --replace-fail '"libICE.so.6"' '"${lib.getLib libice}/lib/libICE.so.6"'
         substituteInPlace src/Avalonia.X11/SMLib.cs \
-          --replace-fail '"libSM.so.6"' '"${lib.getLib libSM}/lib/libSM.so.6"'
+          --replace-fail '"libSM.so.6"' '"${lib.getLib libsm}/lib/libSM.so.6"'
         substituteInPlace src/Avalonia.X11/XLib.cs \
           --replace-fail '"libX11.so.6"' '"${lib.getLib libX11}/lib/libX11.so.6"' \
           --replace-fail '"libXrandr.so.2"' '"${lib.getLib libXrandr}/lib/libXrandr.so.2"' \

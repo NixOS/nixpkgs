@@ -13,7 +13,7 @@
   gmp,
   libGL,
   libGLU,
-  libSM,
+  libsm,
   mpfr,
   proj,
   python3,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     libGL
     libGLU
-    libSM
+    libsm
     mpfr
     proj
     python

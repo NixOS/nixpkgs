@@ -14,6 +14,7 @@
   openssl,
   xinput,
   xorg,
+  libsm,
   libice,
 }:
 buildDotnetModule rec {
@@ -54,7 +55,7 @@ buildDotnetModule rec {
     openssl
     xinput
     libice
-    xorg.libSM
+    libsm
     xorg.libX11
     xorg.libXi
   ];

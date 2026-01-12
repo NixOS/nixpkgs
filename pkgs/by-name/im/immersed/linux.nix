@@ -39,7 +39,7 @@ appimageTools.wrapAppImage {
       zlib
       libp11
       xorg.libX11
-      xorg.libSM
+      libsm
     ];
 
   multiArch = true;

@@ -29,7 +29,7 @@ let
         xorgDeps =
           pkgs: with pkgs; [
             libpthread-stubs
-            xorg.libSM
+            libsm
             xorg.libX11
             xorg.libXaw
             libxcb

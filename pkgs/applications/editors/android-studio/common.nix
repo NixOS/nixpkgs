@@ -70,7 +70,7 @@
   runCommand,
   wayland,
   xkeyboard_config,
-  xorg,
+  libsm,
   libice,
   zlib,
   makeDesktopItem,
@@ -177,7 +177,7 @@ let
             xcbutilimage
             xcbutilcursor
             libice
-            xorg.libSM
+            libsm
             libxkbfile
             libXcomposite
             libXcursor

@@ -9,7 +9,7 @@
   avahi,
   curl,
   libice,
-  libSM,
+  libsm,
   libX11,
   libXdmcp,
   libXext,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libXdmcp
     libice
-    libSM
+    libsm
   ]
   ++ lib.optionals withLibei [
     libei

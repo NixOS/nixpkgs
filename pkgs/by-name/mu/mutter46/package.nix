@@ -47,7 +47,7 @@
   pipewire,
   libgudev,
   libwacom,
-  libSM,
+  libsm,
   xwayland,
   mesa-gl-headers,
   meson,
@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libstartup_notification
     libwacom
-    libSM
+    libsm
     colord
     lcms2
     pango

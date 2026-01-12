@@ -5,7 +5,7 @@
   fontconfig,
   gettext,
   groff,
-  libSM,
+  libsm,
   libX11,
   libXext,
   libXft,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libSM
+    libsm
     libX11
     libXext
     libXft

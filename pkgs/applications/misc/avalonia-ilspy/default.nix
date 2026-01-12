@@ -6,7 +6,7 @@
   dotnetCorePackages,
   libX11,
   libice,
-  libSM,
+  libsm,
   libXi,
   libXcursor,
   libXext,
@@ -61,7 +61,7 @@ buildDotnetModule rec {
     # Avalonia UI
     libX11
     libice
-    libSM
+    libsm
     libXi
     libXcursor
     libXext

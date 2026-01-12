@@ -36,7 +36,7 @@ let
       xorg.libXdmcp
       xorg.libXxf86vm
       xorg.libXinerama
-      xorg.libSM
+      libsm
       xorg.libXv
       xorg.libXaw
       xorg.libXi

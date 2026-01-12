@@ -51,7 +51,7 @@ deployAndroidPackage {
       xorg.libXrender
       xorg.libXtst
       libice
-      xorg.libSM
+      libsm
       libxkbfile
       libxshmfence
     ])

@@ -8,7 +8,7 @@
   curl,
   SDL2,
   SDL2_image,
-  libSM,
+  libsm,
   libXext,
   libpng,
   freetype,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     curl
     SDL2
     SDL2_image
-    libSM
+    libsm
     libXext
     libpng
     freetype

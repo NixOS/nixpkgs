@@ -7,7 +7,7 @@
   xtrans,
   dbus-glib,
   systemd,
-  libSM,
+  libsm,
   libXtst,
   glib,
   gtk3,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dbus-glib
     systemd
-    libSM
+    libsm
     libXtst
     gtk3
     mate-desktop

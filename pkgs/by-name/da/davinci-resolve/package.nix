@@ -10,6 +10,7 @@
   dbus,
   libGLU,
   xorg,
+  libsm,
   libice,
   libxcb,
   buildFHSEnv,
@@ -224,7 +225,7 @@ buildFHSEnv {
       udev
       xdg-utils # xdg-open needed to open URLs
       libice
-      xorg.libSM
+      libsm
       xorg.libX11
       xorg.libXcomposite
       xorg.libXcursor

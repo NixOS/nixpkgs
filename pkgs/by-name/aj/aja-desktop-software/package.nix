@@ -85,7 +85,7 @@ buildFHSEnv {
       xorg.xcbutilimage
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
-      xorg.libSM
+      libsm
       libice
       libxkbcommon
       dbus

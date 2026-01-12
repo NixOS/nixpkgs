@@ -7,7 +7,7 @@
   gettext,
   gtk2-x11,
   libice,
-  libSM,
+  libsm,
   libxcrypt,
   libXinerama,
   libXrandr,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf-xlib
     gtk2-x11
     libice
-    libSM
+    libsm
     libxcrypt
     libXinerama
     libXrandr

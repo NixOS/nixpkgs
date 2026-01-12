@@ -12,7 +12,7 @@
   libXext,
   libXrender,
   icu74,
-  libSM,
+  libsm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrender
     icu74
-    libSM
+    libsm
   ];
 
   meta = {

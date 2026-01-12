@@ -14,6 +14,7 @@
   sfml,
   udev,
   xorg,
+  libsm,
   libpthread-stubs,
   libxcb,
 }:
@@ -42,7 +43,7 @@ mkLibretroCore {
     pcre
     sfml
     udev
-    xorg.libSM
+    libsm
     xorg.libX11
     xorg.libXext
     xorg.libXi

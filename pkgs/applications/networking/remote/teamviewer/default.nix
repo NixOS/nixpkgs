@@ -14,7 +14,7 @@
   libXext,
   libXdamage,
   libXtst,
-  libSM,
+  libsm,
   libXfixes,
   coreutils,
   wrapQtAppsHook,
@@ -132,7 +132,7 @@ mkDerivation rec {
         libXext
         libXdamage
         libXtst
-        libSM
+        libsm
         libXfixes
         dbus
         icu63

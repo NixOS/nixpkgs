@@ -18,7 +18,7 @@
   ruby,
   libX11,
   libXext,
-  libSM,
+  libsm,
   libXpm,
   libXt,
   libXaw,
@@ -177,7 +177,7 @@ stdenv.mkDerivation {
   ]
   # All X related dependencies
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
-    libSM
+    libsm
     libice
     libX11
     libXext
