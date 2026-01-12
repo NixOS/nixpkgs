@@ -6,6 +6,7 @@
   nssmdns,
   pkg-config,
   xorg,
+  xinput,
 }:
 
 buildGoModule rec {
@@ -36,7 +37,7 @@ buildGoModule rec {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXxf86vm
-    xorg.xinput
+    xinput
   ];
 
   meta = {

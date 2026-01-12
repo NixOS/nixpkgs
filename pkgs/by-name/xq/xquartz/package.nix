@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xinput,
   xinit,
   xhost,
   xgamma,
@@ -166,7 +167,7 @@ let
     xfs
     xgamma
     xhost
-    xorg.xinput
+    xinput
     xorg.xkbcomp
     xorg.xkbevd
     xorg.xkbutils
