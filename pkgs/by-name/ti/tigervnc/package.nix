@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  xkbcomp,
   xauth,
   libxkbfile,
   libpciaccess,
@@ -90,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
           --enable-install-libxf86config \
           --prefix="$out" --disable-unit-tests \
           --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
-          --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
+          --with-xkb-bin-directory=${xkbcomp}/bin \
           --with-xkb-output=$out/share/X11/xkb/compiled
       make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES
       popd

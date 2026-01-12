@@ -9,6 +9,7 @@
   xkeyboard_config,
   libxml2,
   xorg,
+  xkbcomp,
   libxkbfile,
   docbook_xsl,
   glib,
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-xkb-base=${xkeyboard_config}/etc/X11/xkb"
-    "--with-xkb-bin-base=${xorg.xkbcomp}/bin"
+    "--with-xkb-bin-base=${xkbcomp}/bin"
     "--disable-xmodmap-support"
     "${if withDoc then "--enable-gtk-doc" else "--disable-gtk-doc"}"
   ];
