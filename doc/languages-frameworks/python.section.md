@@ -244,7 +244,8 @@ See the [general documentation on fixed-point arguments](#chap-build-helpers-fin
 ::: {.note}
 
 Some `buildPythonPackage`/`buildPythonApplication` arguments are passed down indirectly to `stdenv.mkDerivation` via `passthru`.
-Therefore the final states of these attributes can be accessed via `finalAttrs.passthru.${name}`, and they can be overridden via [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs) under the `passthru` attribute.
+Therefore the final state of these attributes can be accessed via `finalAttrs.passthru.${name}`.
+[`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs) can override them using the `passthru = prevAttrs.passthru // { foo = "bar"; }` pattern.
 Such arguments include:
 
 - `disabled`
