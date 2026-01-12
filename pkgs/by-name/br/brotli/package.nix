@@ -7,6 +7,7 @@
   python3Packages,
   staticOnly ? stdenv.hostPlatform.isStatic,
   testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,9 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    python = python3Packages.brotli;
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      python = python3Packages.brotli;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -73,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       https://datatracker.ietf.org/doc/html/rfc7932
     '';
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"

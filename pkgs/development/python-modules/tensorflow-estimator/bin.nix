@@ -14,7 +14,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "tensorflow_estimator";
-    inherit version format;
+    inherit version;
+    format = "wheel";
     hash = "sha256-rt8h7sf7LckRUPyRoc4SvETbtyJ4oItY55/4fJ4o8VM=";
   };
 

@@ -114,7 +114,8 @@ buildPythonPackage rec {
       };
     in
     fetchPypi {
-      inherit pname version format;
+      inherit pname version;
+      format = "wheel";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
