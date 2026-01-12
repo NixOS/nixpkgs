@@ -9,6 +9,7 @@
   upx,
   boehmgc,
   xorg,
+  xorgproto,
   binaryen,
 }:
 
@@ -79,7 +80,7 @@ stdenv.mkDerivation {
     xorg.libX11
     xorg.libXau
     xorg.libXdmcp
-    xorg.xorgproto
+    xorgproto
   ];
 
   makeFlags = [

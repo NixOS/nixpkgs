@@ -42,6 +42,7 @@
   xauth,
   xdg-utils,
   xorg,
+  xorgproto,
   libxkbfile,
   xf86-video-dummy,
   xorgserver,
@@ -139,7 +140,7 @@ effectiveBuildPythonApplication rec {
     xorg.libXrender
     xorg.libXres
     xorg.libXtst
-    xorg.xorgproto
+    xorgproto
   ]
   ++ (with gst_all_1; [
     gst-libav

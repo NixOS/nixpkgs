@@ -20,6 +20,7 @@
   gn,
   openbox,
   xorg,
+  xorgproto,
   libxcb,
   libglvnd,
   libepoxy,
@@ -125,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
               xorg.libXext
               xorg.libXfixes
               xorg.libXxf86vm
-              xorg.xorgproto
+              xorgproto
               zlib
             ]
             ++ lib.optionals (stdenv.hostPlatform.isDarwin) [

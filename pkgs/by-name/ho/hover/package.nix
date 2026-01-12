@@ -8,6 +8,7 @@
   fetchFromGitHub,
   roboto,
   xorg,
+  xorgproto,
   libglvnd,
   addDriverRunpath,
   makeWrapper,
@@ -31,7 +32,7 @@ let
     xorg.libXfixes.dev
     xorg.libXxf86vm
     libglvnd.dev
-    xorg.xorgproto
+    xorgproto
   ];
   hover = buildGoModule {
     inherit pname version;

@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   xorg,
+  xorgproto,
   mesa,
   meson,
   ninja,
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    xorg.xorgproto
+    xorgproto
     xorg.libXext
   ];
 

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xorg,
+  xorgproto,
   xkbcomp,
   xauth,
   libxkbfile,
@@ -139,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
       nettle
       pam
       perl
-      xorg.xorgproto
+      xorgproto
       xorg.utilmacros
       xorg.libXtst
       xorg.libXext

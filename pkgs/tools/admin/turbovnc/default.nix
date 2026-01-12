@@ -26,6 +26,7 @@
   xkbcomp,
   xkeyboard_config,
   xorg,
+  xorgproto,
   xauth,
   pixman,
   libxshmfence,
@@ -91,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXi
     mesa-gl-headers # for -DTVNC_SYSTEMX11=1
     pixman # for -DTVNC_SYSTEMX11=1
-    xorg.xorgproto
+    xorgproto
     xorg.xtrans # for -DTVNC_SYSTEMX11=1
   ];
 

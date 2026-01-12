@@ -4,6 +4,7 @@
   lib,
   pkg-config,
   xorg,
+  xorgproto,
   cairo,
   wayland,
   wayland-protocols,
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXt
-    xorg.xorgproto
+    xorgproto
     wayland
     wayland-protocols
     libconfig

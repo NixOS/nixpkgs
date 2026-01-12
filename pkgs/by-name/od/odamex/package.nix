@@ -33,6 +33,7 @@
   waylandpp,
   wxGTK32,
   xorg,
+  xorgproto,
   zstd,
 
   nix-update-script,
@@ -107,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withX11 [
     xorg.libX11
-    xorg.xorgproto
+    xorgproto
   ]
   ++ lib.optionals withWayland [
     libxkbcommon

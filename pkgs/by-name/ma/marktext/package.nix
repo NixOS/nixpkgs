@@ -9,6 +9,7 @@
   electron,
   python3,
   xorg,
+  xorgproto,
   libxkbfile,
   fontconfig,
   node-gyp-build,
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     libxkbfile
     fontconfig
-    xorg.xorgproto
+    xorgproto
   ];
 
   postPatch = ''

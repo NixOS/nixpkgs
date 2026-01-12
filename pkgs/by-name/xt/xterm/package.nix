@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   xorg,
+  xorgproto,
   luit,
   ncurses,
   freetype,
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorg.libXaw
-    xorg.xorgproto
+    xorgproto
     xorg.libXt
     xorg.libXext
     xorg.libX11

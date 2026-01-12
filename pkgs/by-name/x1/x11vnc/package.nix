@@ -6,6 +6,7 @@
   zlib,
   libjpeg,
   xorg,
+  xorgproto,
   xdpyinfo,
   xauth,
   coreutils,
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorg.libXfixes
-    xorg.xorgproto
+    xorgproto
     openssl
     xorg.libXdamage
     zlib

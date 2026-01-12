@@ -30,6 +30,7 @@
   SDL2,
   curl,
   xorg,
+  xorgproto,
 
   withFullDeps ? false,
   withFfmpeg ? withFullDeps,
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcaca
     xorg.libX11
     xorg.libXv
-    xorg.xorgproto
+    xorgproto
     mesa
     mesa_glu
     xvidcore

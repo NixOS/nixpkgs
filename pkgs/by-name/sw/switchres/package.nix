@@ -4,6 +4,7 @@
   pkg-config,
   fetchFromGitHub,
   xorg,
+  xorgproto,
   libdrm,
   SDL2,
 }:
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorg.libXrandr
-    xorg.xorgproto
+    xorgproto
     libdrm
     SDL2
   ];

@@ -39,6 +39,7 @@
   wayland,
   wayland-scanner,
   xorg,
+  xorgproto,
   xwayland,
   dbus,
   gobject-introspection,
@@ -143,7 +144,7 @@ stdenv.mkDerivation (
       wayland
       xorg.libX11
       xorg.libXcursor
-      xorg.xorgproto
+      xorgproto
       xwayland
     ]
     ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [

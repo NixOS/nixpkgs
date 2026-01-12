@@ -40,6 +40,7 @@
   wayland-scanner,
   xcbutilkeysyms,
   xorg,
+  xorgproto,
   libxshmfence,
   libxcb,
   zstd,
@@ -288,7 +289,7 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     xcbutilkeysyms
-    xorg.xorgproto
+    xorgproto
     zstd
   ]
   ++ lib.optionals withValgrind [

@@ -6,6 +6,7 @@
   pkg-config,
   libpng,
   xorg,
+  xorgproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     libpng
     xorg.libX11
     xorg.libXcursor
-    xorg.xorgproto
+    xorgproto
   ];
 
   meta = {

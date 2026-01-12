@@ -39,7 +39,7 @@ buildFHSEnv {
           libxcb
           xorg.libXrandr
           xorg.libXrender
-          xorg.xorgproto
+          xorgproto
           SDL2
           wayland
           mesa-gl-headers

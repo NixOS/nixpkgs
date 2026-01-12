@@ -24,6 +24,7 @@
   libGL,
   wayland,
   xorg,
+  xorgproto,
   libxcb,
   withQt ? true,
   qt6,
@@ -40,7 +41,7 @@ let
     libxcb
     xorg.libXrandr
     xorg.libXrender
-    xorg.xorgproto
+    xorgproto
   ];
 
   pkgsCross32 = pkgsCross.gnu32;
