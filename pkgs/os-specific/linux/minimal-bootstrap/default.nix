@@ -355,6 +355,12 @@ lib.makeScope
         gnutar = gnutar-musl;
       };
 
+      xz-static = callPackage ./xz/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       zlib = callPackage ./zlib {
         gcc = gcc-latest;
         gnumake = gnumake-musl;
