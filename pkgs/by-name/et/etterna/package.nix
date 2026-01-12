@@ -9,7 +9,7 @@
   pkg-config,
   openssl,
   libGLU,
-  xorg,
+  libxvmc,
   libxrandr,
   libxinerama,
   libxext,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libx11
     libxext # Needed for DPMS
-    xorg.libXvMC
+    libxvmc
   ];
 
   desktopItems = [

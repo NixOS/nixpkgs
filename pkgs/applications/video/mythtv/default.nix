@@ -22,7 +22,7 @@
   libx11,
   libXv,
   libxrandr,
-  libXvMC,
+  libxvmc,
   libxinerama,
   libXxf86vm,
   libxmu,
@@ -77,7 +77,7 @@ mkDerivation rec {
     libx11
     libXv
     libxrandr
-    libXvMC
+    libxvmc
     libxmu
     libxinerama
     libXxf86vm
