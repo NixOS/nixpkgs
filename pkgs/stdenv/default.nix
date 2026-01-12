@@ -43,7 +43,7 @@ in
 # Select the appropriate stages for the platform `system'.
 if crossSystem != localSystem || crossOverlays != [ ] then
   stagesCross
-else if config ? replaceStdenv then
+else if (config.replaceStdenv or null) != null then
   stagesCustom
 else if localSystem.isLinux then
   stagesLinux
