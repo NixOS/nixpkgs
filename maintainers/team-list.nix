@@ -56,16 +56,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  apm = {
-    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
-    shortName = "apm employees";
-    # Edits to this list should only be done by an already existing member.
-    members = [
-      DutchGerman
-      friedow
-    ];
-  };
-
   apparmor = {
     scope = "AppArmor-related modules, userspace tool packages and profiles";
     shortName = "apparmor";
