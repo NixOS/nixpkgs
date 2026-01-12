@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.1.9";
 
   src = fetchFromGitHub {
-    owner = "adamperkowski";
+    owner = "koibtw";
     repo = "nvrs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-6ATkebFYuOOvhzSO+gClPbtaz9/Zph4m8/cqkufRYFw=";
@@ -47,9 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Fast new version checker for software releases";
     homepage = "https://nvrs.adamperkowski.dev";
-    changelog = "https://github.com/adamperkowski/nvrs/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/koibtw/nvrs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adamperkowski ];
+    maintainers = with lib.maintainers; [ koi ];
     mainProgram = "nvrs";
     platforms = lib.platforms.linux;
   };
