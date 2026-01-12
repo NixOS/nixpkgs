@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  makedepend,
   luit,
   lndir,
   iceauth,
@@ -126,7 +127,7 @@ let
     xorg.libXpm
     lndir
     luit
-    xorg.makedepend
+    makedepend
     xorg.mkfontscale
     xorg.mkfontscale
     xorg.sessreg
