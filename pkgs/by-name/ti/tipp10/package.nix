@@ -3,31 +3,28 @@
   cmake,
   lib,
   fetchFromGitLab,
-  qtmultimedia,
-  qttools,
-  qtwayland,
-  wrapQtAppsHook,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tipp10";
   version = "3.3.4";
 
   src = fetchFromGitLab {
     owner = "tipp10";
     repo = "tipp10";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-q5D+8Z9dNpCXgRQtVC+0RBHK2szv7M+dwlmW4H7j2qg=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    qtmultimedia
-    qtwayland
+    qt6.qtmultimedia
+    qt6.qtwayland
   ];
 
   meta = {
@@ -38,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
-}
+})

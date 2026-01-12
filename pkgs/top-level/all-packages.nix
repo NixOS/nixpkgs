@@ -11928,8 +11928,6 @@ with pkgs;
     timeshift-minimal
     ;
 
-  tipp10 = qt6.callPackage ../applications/misc/tipp10 { };
-
   tlp = callPackage ../tools/misc/tlp {
     inherit (linuxPackages) x86_energy_perf_policy;
   };
