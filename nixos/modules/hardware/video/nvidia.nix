@@ -488,7 +488,7 @@ in
             lib.optional primeEnabled {
               name = igpuDriver;
               display = offloadCfg.enable;
-              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
+              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xf86-video-amdgpu;
               deviceSection = ''
                 BusID "${igpuBusId}"
               ''
