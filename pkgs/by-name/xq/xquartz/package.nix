@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  xdm,
   xcursorgen,
   xcmsdb,
   xclock,
@@ -149,7 +150,7 @@ let
     xclock
     xcmsdb
     xcursorgen
-    xorg.xdm
+    xdm
     xorg.xdpyinfo
     xorg.xdriinfo
     xorg.xev
