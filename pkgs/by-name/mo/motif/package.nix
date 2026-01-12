@@ -17,7 +17,7 @@
   libpng,
   libiconv,
   flex,
-  libXp,
+  libxp,
   libxau,
   demoSupport ? false,
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libXp
+    libxp
     libxau
   ];
 

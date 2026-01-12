@@ -8,7 +8,7 @@
   libxpm,
   libxmu,
   libxi,
-  libXp,
+  libxp,
   Xaw3d,
   libxaw,
   libxft,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libxpm
     libxmu
     libxi
-    libXp
+    libxp
     Xaw3d
     libxaw
     libxft

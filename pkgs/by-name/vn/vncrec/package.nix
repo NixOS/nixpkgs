@@ -13,7 +13,7 @@
   libsm,
   libice,
   libxpm,
-  libXp,
+  libxp,
 }:
 
 stdenv.mkDerivation {
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     libsm
     libice
     libxpm
-    libXp
+    libxp
   ];
 
   makeFlags = [
