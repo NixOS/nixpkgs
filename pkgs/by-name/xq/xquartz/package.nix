@@ -6,6 +6,7 @@
   gnused,
   writeScript,
   xorg,
+  font-bh-100dpi,
   xwud,
   xwininfo,
   xwd,
@@ -133,7 +134,7 @@ let
   ++ lib.optionals unfreeFonts [
     xorg.fontbhlucidatypewriter100dpi
     xorg.fontbhlucidatypewriter75dpi
-    xorg.fontbh100dpi
+    font-bh-100dpi
   ]
   ++ extraFontDirs;
   fontsConf = makeFontsConf {

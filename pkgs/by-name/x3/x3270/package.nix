@@ -13,7 +13,7 @@
   mkfontscale,
   font-adobe-100dpi,
   font-adobe-utopia-100dpi,
-  fontbh100dpi,
+  font-bh-100dpi,
   fontbhlucidatypewriter100dpi,
   fontbitstream100dpi,
   tcl,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkfontscale
     font-adobe-100dpi
     font-adobe-utopia-100dpi
-    fontbh100dpi
+    font-bh-100dpi
     fontbhlucidatypewriter100dpi
     fontbitstream100dpi
     tcl

@@ -2,6 +2,7 @@
   writeText,
   writeScriptBin,
   xorg,
+  font-bh-100dpi,
   font-adobe-75dpi,
   font-adobe-100dpi,
   xkeyboard_config,
@@ -38,7 +39,7 @@ let
     ${lib.optionalString unfreeFonts ''
       FontPath "${xorg.fontbhlucidatypewriter75dpi}/share/fonts/X11/75dpi"
       FontPath "${xorg.fontbhlucidatypewriter100dpi}/share/fonts/X11/100dpi"
-      FontPath "${xorg.fontbh100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-bh-100dpi}/share/fonts/X11/100dpi"
     ''}
     EndSection
 
