@@ -27,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Declarative secrets, every environment, any provider";
     homepage = "https://secretspec.dev";
     license = with lib.licenses; [ asl20 ];
-    teams = [ lib.teams.cachix ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      sandydoo
+    ];
     mainProgram = "secretspec";
   };
 })

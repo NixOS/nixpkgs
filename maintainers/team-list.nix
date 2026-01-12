@@ -154,16 +154,6 @@ with lib.maintainers;
     shortName = "c3d2";
   };
 
-  cachix = {
-    # Verify additions to this team with at least one existing member of the team.
-    members = [
-      domenkozar
-      sandydoo
-    ];
-    scope = "Group registration for packages maintained by Cachix.";
-    shortName = "Cachix employees";
-  };
-
   categorization = {
     github = "categorization";
   };
@@ -742,17 +732,20 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  # same as https://github.com/orgs/NixOS/teams/nix-team
+  # keep in-sync with ci/OWNERS
   nix = {
     members = [
-      eelco
-      mic92
-      tomberek
-      roberth
+      artturin
       ericson2314
+      lovesegfault
+      mic92
+      philiptaron
+      roberth
+      tomberek
+      xokdvium
     ];
-    scope = "Maintain the Nix package manager.";
-    shortName = "Nix/nix-cli ecosystem";
+    scope = "Maintain the packaging for the Nix package manager itself.";
+    shortName = "Nix packaging";
     enableFeatureFreezePing = true;
   };
 
@@ -890,15 +883,6 @@ with lib.maintainers;
   sdl = {
     github = "sdl";
     enableFeatureFreezePing = true;
-  };
-
-  secshell = {
-    members = [
-      felbinger
-      juli0604
-    ];
-    scope = "Maintain packages and modules created by members of Secure Shell Networks.";
-    shortName = "secshell";
   };
 
   stdenv = {

@@ -32,7 +32,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylance";
   version = "1.0.1";
   pyproject = true;
@@ -40,14 +40,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S/zVpsfoQG9NYnJyAJm+a0LllVE/lfaCua+NA9DGIsw=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -96,7 +96,7 @@ buildPythonPackage rec {
     pytestCheckHook
     tqdm
   ]
-  ++ optional-dependencies.torch;
+  ++ finalAttrs.passthru.optional-dependencies.torch;
 
   preCheck = ''
     cd python/tests
@@ -155,8 +155,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";
-    changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
+    changelog = "https://github.com/lancedb/lance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

@@ -120,11 +120,6 @@ let
       nixComponentsAttributeName
     ];
 
-  maintainers = [
-    lib.maintainers.artturin
-    lib.maintainers.philiptaron
-    lib.maintainers.lovesegfault
-  ];
   teams = [ lib.teams.nix ];
 
   # FIXME: https://github.com/NixOS/nixpkgs/issues/476794
@@ -150,7 +145,7 @@ lib.makeExtensible (
       nixComponents_2_30 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.30.3";
-          inherit maintainers teams;
+          inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
           src = fetchFromGitHub {
             owner = "NixOS";
@@ -175,7 +170,7 @@ lib.makeExtensible (
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.31.2";
-          inherit (self.nix_2_30.meta) maintainers teams;
+          inherit (self.nix_2_30.meta) teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
           src = fetchFromGitHub {
             owner = "NixOS";
@@ -206,7 +201,7 @@ lib.makeExtensible (
       nixComponents_2_32 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.32.5";
-          inherit (self.nix_2_31.meta) maintainers teams;
+          inherit (self.nix_2_31.meta) teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
           src = fetchFromGitHub {
             owner = "NixOS";
@@ -221,7 +216,7 @@ lib.makeExtensible (
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.34pre20251217_${lib.substring 0 8 src.rev}";
-        inherit maintainers teams;
+        inherit teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
