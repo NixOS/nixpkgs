@@ -8,7 +8,7 @@
   chromium,
   python3,
   undetected-chromedriver,
-  xorg,
+  xvfb,
 
   nixosTests,
 }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${python}/bin/python $out/bin/flaresolverr \
       --add-flags "$out/share/flaresolverr-${finalAttrs.version}/src/flaresolverr.py" \
-      --prefix PATH : "${lib.makeBinPath [ xorg.xvfb ]}"
+      --prefix PATH : "${lib.makeBinPath [ xvfb ]}"
   '';
 
   passthru = {

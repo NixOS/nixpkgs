@@ -4,7 +4,7 @@
   cffi,
   fetchPypi,
   pytestCheckHook,
-  xorg,
+  xvfb,
   xeyes,
   libxcb,
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     xeyes
-    xorg.xvfb
+    xvfb
   ];
 
   preCheck = ''

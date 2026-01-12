@@ -13,6 +13,7 @@
   zenity,
   curl,
   xorg,
+  xvfb,
   python3,
   libsysprof-capture,
   pcre2,
@@ -68,7 +69,7 @@ stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXdmcp
     xorg.libXtst
-    xorg.xvfb
+    xvfb
     libsysprof-capture
     pcre2
     util-linux

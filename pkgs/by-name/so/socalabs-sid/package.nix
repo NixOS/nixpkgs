@@ -8,6 +8,7 @@
   copyDesktopItems,
   makeDesktopItem,
   xorg,
+  xvfb,
   freetype,
   expat,
   libGL,
@@ -78,7 +79,7 @@ stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXtst
     xorg.libXdmcp
-    xorg.xvfb
+    xvfb
     libGL
     libjack2
     libsysprof-capture

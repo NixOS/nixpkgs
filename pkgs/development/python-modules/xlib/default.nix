@@ -7,6 +7,7 @@
   setuptools,
   setuptools-scm,
   xorg,
+  xvfb,
   xauth,
   mock,
   pytestCheckHook,
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     mock
     util-linux
     xauth
-    xorg.xvfb
+    xvfb
   ];
 
   disabledTestPaths = [

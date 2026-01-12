@@ -5,6 +5,7 @@
   fetchPypi,
   replaceVars,
   xorg,
+  xvfb,
   xmessage,
   xdpyinfo,
   xauth,
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     (vncdo.overridePythonAttrs { doCheck = false; })
     xorg.xorgserver
     xmessage
-    xorg.xvfb
+    xvfb
   ];
 
   pytestFlags = [ "-v" ];
