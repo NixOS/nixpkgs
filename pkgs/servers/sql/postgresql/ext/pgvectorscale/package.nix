@@ -68,6 +68,10 @@ buildPgrxExtension (finalAttrs: {
     # Upstream removed support for PostgreSQL 13 on 0.9.0: https://github.com/timescale/pgvectorscale/releases/tag/0.9.0
     broken = lib.versionOlder postgresql.version "14";
     homepage = "https://github.com/timescale/pgvectorscale";
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     description = "Complement to pgvector for high performance, cost efficient vector search on large workloads";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;

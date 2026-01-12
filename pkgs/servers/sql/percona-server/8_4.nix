@@ -219,6 +219,10 @@ stdenv.mkDerivation (finalAttrs: {
       Long-term support release.
     '';
     license = lib.licenses.gpl2Only;
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     platforms = lib.platforms.unix;
   };
 })

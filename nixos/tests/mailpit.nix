@@ -1,6 +1,10 @@
 { lib, ... }:
 {
   name = "mailpit";
+  meta.maintainers = [
+    lib.maintainers.leona
+    lib.maintainers.osnyx
+  ];
 
   nodes.machine =
     { pkgs, ... }:

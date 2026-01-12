@@ -24,7 +24,7 @@ buildPgrxExtension {
   passthru.tests = nixosTests.postgresql.anonymizer.passthru.override postgresql;
 
   meta = {
-    inherit (pg-dump-anon.meta) homepage license;
+    inherit (pg-dump-anon.meta) homepage maintainers license;
     description = "Extension to mask or replace personally identifiable information (PII) or commercially sensitive data from a PostgreSQL database";
   };
 }
