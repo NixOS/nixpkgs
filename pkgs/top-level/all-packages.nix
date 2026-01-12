@@ -4587,7 +4587,7 @@ with pkgs;
     inherit (llvmPackages_20) llvm;
   };
 
-  gcc-arm-embedded = gcc-arm-embedded-14;
+  gcc-arm-embedded = gcc-arm-embedded-15;
 
   # Haskell and GHC
 
