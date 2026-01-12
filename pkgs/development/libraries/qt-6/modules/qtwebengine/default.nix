@@ -144,6 +144,9 @@ qtModule {
     substituteInPlace cmake/Functions.cmake \
       --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
 
+    substituteInPlace cmake/QtConfigureHelpers.cmake \
+      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
+
     # Patch library paths in sources
     substituteInPlace src/core/web_engine_library_info.cpp \
       --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
