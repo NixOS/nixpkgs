@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  pythonAtLeast,
   pythonOlder,
   hatchling,
   hatch-vcs,
@@ -71,6 +72,11 @@ buildPythonPackage (finalAttrs: {
     pytest7CheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/nipy/nibabel/issues/1390
+    "test_deprecator_maker"
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
