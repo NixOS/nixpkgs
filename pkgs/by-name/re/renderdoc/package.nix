@@ -115,6 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
      )
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/renderdoc.thumbnailer \
+      --replace-fail "TryExec=/usr/bin/renderdoccmd" "TryExec=$out/bin/renderdoccmd" \
+      --replace-fail "Exec=/usr/bin/renderdoccmd" "Exec=$out/bin/renderdoccmd"
+  '';
+
   preFixup =
     let
       libPath = lib.makeLibraryPath [

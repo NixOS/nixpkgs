@@ -66,6 +66,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+
+    substituteInPlace $out/share/thumbnailers/com.system76.CosmicPlayer.thumbnailer \
+      --replace-fail "TryExec=cosmic-player" "TryExec=$out/bin/cosmic-player" \
+      --replace-fail "Exec=cosmic-player" "Exec=$out/bin/cosmic-player"
   '';
 
   passthru = {

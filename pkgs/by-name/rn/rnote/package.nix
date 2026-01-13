@@ -82,6 +82,12 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/rnote.thumbnailer \
+      --replace-fail "TryExec=rnote-cli" "TryExec=$out/bin/rnote-cli" \
+      --replace-fail "Exec=rnote-cli" "Exec=$out/bin/rnote-cli"
+  '';
+
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
   };

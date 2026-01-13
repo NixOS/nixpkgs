@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.20" ];
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/glslViewer.thumbnailer \
+      --replace-fail "TryExec=glslThumbnailer" "TryExec=$out/bin/glslThumbnailer" \
+      --replace-fail "Exec=glslThumbnailer" "Exec=$out/bin/glslThumbnailer"
+  '';
+
   meta = {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
