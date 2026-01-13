@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-wt";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "git-wt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-poAKWBKvTOCIuBrDMm9S1TaYqsK5HweybTNO+p0FBfk=";
+    hash = "sha256-513y6uB32ln1k3N4f8L2ph6sf2/1tLfLSO+4kEc4nB8=";
   };
 
   vendorHash = "sha256-K5geAvG+mvnKeixOyZt0C1T5ojSBFmx2K/Msol0HsSg=";
