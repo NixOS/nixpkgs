@@ -3,6 +3,7 @@
   major_version,
   patch_version,
   patches ? [ ],
+  doCheck ? true,
   ...
 }@args:
 let
@@ -83,6 +84,7 @@ let
 in
 
 stdenv.mkDerivation (
+  finalArgs:
   args
   // {
 
@@ -115,7 +117,9 @@ stdenv.mkDerivation (
         "-host ${stdenv.hostPlatform.config}"
         "-target ${stdenv.targetPlatform.config}"
       ]
-      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
+      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers")
+      ++ optional finalArgs.doCheck "--enable-ocamltest";
+
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
     env =
@@ -194,6 +198,9 @@ stdenv.mkDerivation (
     passthru = {
       nativeCompilers = useNativeCompilers;
     };
+
+    checkTarget = "tests";
+    inherit doCheck;
 
     meta = {
       homepage = "https://ocaml.org/";
