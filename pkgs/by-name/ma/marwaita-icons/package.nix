@@ -3,19 +3,19 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  breeze-icons,
   hicolor-icon-theme,
   pantheon,
+  kdePackages,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marwaita-icons";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-icons";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-UehujziT13kA9ltjyCvbSDTEpR8ISxoBpoLj22Zih8k=";
   };
 
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
     pantheon.elementary-icon-theme
   ];
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})
