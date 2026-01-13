@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blobfile";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "christopher-hesse";
     repo = "blobfile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/v48rLvlN4lsfWKJvXRNuIO6jdsCgRcSPlJzdOfl3xk=";
+    hash = "sha256-aTHEJ1P+v9IWXPg9LN+KG1TlEVJh0qTl8J41iWpoPWk=";
   };
 
   build-system = [ setuptools ];
