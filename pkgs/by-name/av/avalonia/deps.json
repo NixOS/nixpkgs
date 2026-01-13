@@ -45,6 +45,11 @@
     "hash": "sha256-pTyYP26uXXLe6ejCb/yVYpb23ad/Dkl2Ka8NWwQeiqk="
   },
   {
+    "pname": "CommunityToolkit.Mvvm",
+    "version": "8.4.0",
+    "hash": "sha256-a0D550q+ffreU9Z+kQPdzJYPNaj1UjgyPofLzUg02ZI="
+  },
+  {
     "pname": "dotnet-ilrepack",
     "version": "1.0.0",
     "hash": "sha256-fq6f/wNSJFNmpAoTVrBgXI5fkpghWa4qpzKoQiaMshE="
@@ -58,16 +63,6 @@
     "pname": "DotNetSeleniumExtras.PageObjects",
     "version": "3.11.0",
     "hash": "sha256-OLKoHGsBOlGDrwjbSHHITl2mWKbUXoRBbTjNMCkzDQg="
-  },
-  {
-    "pname": "DynamicData",
-    "version": "7.12.8",
-    "hash": "sha256-MIR66d5vWwpOo06b8f3UDJXMlwyiGl/9JsedtVAh6LA="
-  },
-  {
-    "pname": "DynamicData",
-    "version": "8.4.1",
-    "hash": "sha256-r+haH5VlmZFJTEJ3UedsYybw+oddn/CSvfm6x7PrrQ4="
   },
   {
     "pname": "GdkSharp",
@@ -1021,21 +1016,6 @@
     "hash": "sha256-DLkL5i3q+y2AOg68oe6ROxgcwkPaLg7ViI3pytJd80k="
   },
   {
-    "pname": "ReactiveUI",
-    "version": "18.4.1",
-    "hash": "sha256-IqaIu3xmShw3m/ko34SytnL9sIm/LQnTUZcda7CF7tA="
-  },
-  {
-    "pname": "ReactiveUI",
-    "version": "20.1.1",
-    "hash": "sha256-p9l2GMzBRchKb4gW9pQ3DIKhs2O9fX3t/V7jDDztBqE="
-  },
-  {
-    "pname": "ReactiveUI.Validation",
-    "version": "3.0.22",
-    "hash": "sha256-f/1yGwrQb/Nauj+0lqBV6xxbfp8qCQvJxbxUy2VhS8I="
-  },
-  {
     "pname": "runtime.any.System.Collections",
     "version": "4.0.11",
     "hash": "sha256-4L3fXzSgw8UaCTvdb3cEyihka3K8JHBz/Ujsx0JdhPQ="
@@ -1791,16 +1771,6 @@
     "hash": "sha256-kP5XM5GgwHGfNJfe4T2yO5NIZtiF71Ddp0pd1vG5V/4="
   },
   {
-    "pname": "Splat",
-    "version": "14.5.1",
-    "hash": "sha256-qv/N4VN3MtCW3t/OJ77NGUMfPON2kHIq5BtrMTQLRUQ="
-  },
-  {
-    "pname": "Splat",
-    "version": "15.1.1",
-    "hash": "sha256-WipAVaUx2HrYNQ9LcYm496LndmSpVbuzJxzP9FA6Ohg="
-  },
-  {
     "pname": "System.AppContext",
     "version": "4.1.0",
     "hash": "sha256-v6YfyfrKmhww+EYHUq6cwYUMj00MQ6SOfJtcGVRlYzs="
@@ -1921,11 +1891,6 @@
     "hash": "sha256-15yE2NoT9vmL9oGCaxHClQR1jLW1j1ef5hHMg55xRso="
   },
   {
-    "pname": "System.ComponentModel.Annotations",
-    "version": "5.0.0",
-    "hash": "sha256-0pST1UHgpeE6xJrYf5R+U7AwIlH3rVC3SpguilI/MAg="
-  },
-  {
     "pname": "System.ComponentModel.Primitives",
     "version": "4.3.0",
     "hash": "sha256-IOMJleuIBppmP4ECB3uftbdcgL7CCd56+oAD/Sqrbus="
@@ -1979,11 +1944,6 @@
     "pname": "System.Console",
     "version": "4.3.1",
     "hash": "sha256-6vgjSBp0rBpp5qcpCWHNVSUJBzRign1h8cdk4Q75lNw="
-  },
-  {
-    "pname": "System.Diagnostics.Contracts",
-    "version": "4.3.0",
-    "hash": "sha256-K74oyUn0Vriv3mwrbZwQFQ6EA0M7Hm9YlcWLRjLjqr8="
   },
   {
     "pname": "System.Diagnostics.Debug",
@@ -2439,11 +2399,6 @@
     "pname": "System.Reactive",
     "version": "5.0.0",
     "hash": "sha256-M5Z8pw8rVb8ilbnTdaOptzk5VFd5DlKa7zzCpuytTtE="
-  },
-  {
-    "pname": "System.Reactive",
-    "version": "6.0.0",
-    "hash": "sha256-hXB18OsiUHSCmRF3unAfdUEcbXVbG6/nZxcyz13oe9Y="
   },
   {
     "pname": "System.Reactive",
@@ -2931,11 +2886,6 @@
     "hash": "sha256-UemDHGFoQIG7ObQwRluhVf6AgtQikfHEoPLC6gbFyRo="
   },
   {
-    "pname": "System.Text.Encodings.Web",
-    "version": "8.0.0",
-    "hash": "sha256-IUQkQkV9po1LC0QsqrilqwNzPvnc+4eVvq+hCvq8fvE="
-  },
-  {
     "pname": "System.Text.Json",
     "version": "4.7.0",
     "hash": "sha256-ubmcBH9pNdILnROdpGfnfo90WijLE6bUbKUypn3u4zo="
@@ -2944,11 +2894,6 @@
     "pname": "System.Text.Json",
     "version": "6.0.0",
     "hash": "sha256-9AE/5ds4DqEfb0l+27fCBTSeYCdRWhxh2Bhg8IKvIuo="
-  },
-  {
-    "pname": "System.Text.Json",
-    "version": "8.0.3",
-    "hash": "sha256-ljBBGkResXv3MbrA14hR6QXo8SFLLV52GkpA+wxKdEo="
   },
   {
     "pname": "System.Text.RegularExpressions",
