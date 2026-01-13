@@ -117,7 +117,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_signbit=yes"
-    ];
+    ]
+    # src/libs/libgroff/getopt.c:125:14: error: conflicting types for 'getenv'; have 'char *(void)'
+    ++ lib.optional stdenv.hostPlatform.isCygwin "CFLAGS=-std=gnu17";
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
