@@ -1750,6 +1750,8 @@ self: super: with self; {
 
   badauth = callPackage ../development/python-modules/badauth { };
 
+  badges = callPackage ../development/python-modules/badges { };
+
   badldap = callPackage ../development/python-modules/badldap { };
 
   badsecrets = callPackage ../development/python-modules/badsecrets { };
