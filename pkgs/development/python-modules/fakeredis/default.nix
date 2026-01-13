@@ -7,7 +7,7 @@
   lupa,
   hatchling,
   pyprobables,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
   redis,
@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.32.0";
+  version = "2.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-esouWM32qe4iO5AcRC0HuUF+lwEDHnyXoknwqsZhr+o=";
+    hash = "sha256-uvbvrziVdoa/ip8MbZG8GcpN1FoINxUV+SDVRmg78Qs=";
   };
 
   build-system = [ hatchling ];
@@ -33,7 +33,6 @@ buildPythonPackage rec {
   dependencies = [
     redis
     sortedcontainers
-    valkey
   ];
 
   optional-dependencies = {
@@ -42,14 +41,16 @@ buildPythonPackage rec {
     bf = [ pyprobables ];
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
+    valkey = [ valkey ];
   };
 
   nativeCheckInputs = [
     hypothesis
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
     redisTestHook
+    valkey
   ];
 
   pythonImportsCheck = [ "fakeredis" ];
@@ -59,6 +60,13 @@ buildPythonPackage rec {
   disabledTests = [
     "test_init_args" # AttributeError: module 'fakeredis' has no attribute 'FakeValkey'
     "test_async_init_kwargs" # AttributeError: module 'fakeredis' has no attribute 'FakeAsyncValkey'"
+
+    # redis.exceptions.ResponseError: unknown command 'evalsha'
+    "test_async_lock"
+
+    # AssertionError: assert [0, b'1'] == [0, 1.0]
+    "test_zrank_redis7_2"
+    "test_zrevrank_redis7_2"
 
     # KeyError: 'tot-mem'
     "test_acl_log_auth_exist"
