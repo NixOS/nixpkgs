@@ -26280,6 +26280,12 @@
     githubId = 12666617;
     keys = [ { fingerprint = "7095 C20A 9224 3DB6 5177  07B0 968C D9D7 1C9F BB6C"; } ];
   };
+  theodoreehrenborg = {
+    name = "Theodore Ehrenborg";
+    email = "theodore.ehrenborg@gmail.com";
+    github = "TheodoreEhrenborg";
+    githubId = 46494248;
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";
