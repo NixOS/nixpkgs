@@ -176,12 +176,30 @@ stdenv.mkDerivation rec {
       src/source-build-reference-packages/src/referencePackages/Directory.Build.props
 
   ''
+  + lib.optionalString (lib.versionAtLeast version "10") ''
+    # Y2026 fix: FileVersion calculation overflow (dotnet/dotnet#4043)
+    mkdir -p src/source-build-reference-packages/src/externalPackages/patches/azure-activedirectory-identitymodel-extensions-for-dotnet
+    cp ${./fix-y2026-common-props.patch} \
+      src/source-build-reference-packages/src/externalPackages/patches/azure-activedirectory-identitymodel-extensions-for-dotnet/0002-Fix-assembly-version-calculation-in-2026.patch
+  ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
     xmlstarlet ed \
       --inplace \
       -u //_:Project/_:PropertyGroup/_:BuildNumber -v 0 \
       src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
+
+  ''
+  + lib.optionalString (lib.versionOlder version "9") ''
+    # Y2026 fix for dotnet 8: Add patch to patches directory (dotnet/dotnet#4043)
+    # Must be 0003 to apply after existing 0002-Remove-commit-SHA patch
+    cp ${./fix-y2026-updateassemblyinfo.patch} \
+      src/source-build-externals/patches/azure-activedirectory-identitymodel-extensions-for-dotnet/0003-Fix-assembly-version-calculation-in-2026.patch
+  ''
+  + lib.optionalString (lib.versionAtLeast version "9" && lib.versionOlder version "10") ''
+    # Y2026 fix for dotnet 9: patch build/common.props (dotnet/dotnet#4043)
+    patch -p1 -d src/source-build-externals/src/azure-activedirectory-identitymodel-extensions-for-dotnet \
+      < ${./fix-y2026-common-props.patch}
   ''
   + ''
 

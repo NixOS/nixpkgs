@@ -1,0 +1,40 @@
+From: mulatta <67085791+mulatta@users.noreply.github.com>
+Subject: [PATCH] Fix FileVersion calculation overflow in 2026
+
+The old formula Year(Now-2019)+MMdd overflows UInt16 max (65535) in 2026
+(7*10000 + 0112 = 70112 > 65535), causing CS7035 build errors.
+
+Backport of dotnet/dotnet#4043.
+---
+ build/common.props | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/build/common.props b/build/common.props
+--- a/build/common.props
++++ b/build/common.props
+@@ -42,7 +42,24 @@
+     <VersionSuffix Condition="'$(WilsonVersion)' == ''">$(PreviewVersionSuffix)</VersionSuffix>
+     <VersionPrefix Condition="'$(WilsonVersion)' == ''">$(WilsonCurrentVersion)</VersionPrefix>
+     <FileVersion Condition="'$(WilsonVersion)' != '' and '$(IsCustomPreview)' != 'true' ">$(WilsonVersion).$([System.DateTime]::Now.AddYears(-2019).Year)$([System.DateTime]::Now.ToString("MMdd"))</FileVersion>
+-    <FileVersion Condition="'$(WilsonVersion)' == ''">$(WilsonCurrentVersion).$([System.DateTime]::Now.AddYears(-2019).Year)$([System.DateTime]::Now.ToString("MMdd"))</FileVersion>
++    <!-- TODO: Makes sure that the revision is higher than what's in already shipped packages (> 61231).
++         This will overflow in 2029 though and needs a long term fix. -->
++    <FileVersion Condition="'$(WilsonVersion)' == ''">$(WilsonCurrentVersion).$([MSBuild]::Add(
++      61232,
++      $([MSBuild]::Add(
++        $([MSBuild]::Add(
++          $([MSBuild]::Multiply(
++            $([System.DateTime]::Now.AddYears(-2019).Year),
++            416
++          )),
++          $([MSBuild]::Multiply(
++            $([System.DateTime]::Now.ToString("MM")),
++            32
++          ))
++        )),
++        $([System.DateTime]::Now.ToString("dd"))
++      ))
++    ))</FileVersion>
+   </PropertyGroup>
+ 
+   <PropertyGroup>

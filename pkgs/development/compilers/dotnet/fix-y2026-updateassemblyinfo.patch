@@ -1,0 +1,41 @@
+From: mulatta <67085791+mulatta@users.noreply.github.com>
+Subject: [PATCH] Fix FileVersion calculation overflow in 2026
+
+The old formula Year(Now-2019)+MMdd overflows UInt16 max (65535) in 2026
+(7*10000 + 0112 = 70112 > 65535), causing CS7035 build errors.
+
+Backport of dotnet/dotnet#4043.
+---
+ updateAssemblyInfo.sh | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/updateAssemblyInfo.sh b/updateAssemblyInfo.sh
+--- a/updateAssemblyInfo.sh
++++ b/updateAssemblyInfo.sh
+@@ -5,6 +5,17 @@ scriptroot=$(cd -P "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+ 
+ packageType=${1:-preview}
+ 
++# Get current date components
++year=$(date '+%Y')
++year_offset=$((year - 2019))
++month=$(date '+%m')
++day=$(date '+%d')
++
++# Calculate revision using the new formula that prevents overflow
++# Base: 61232 (ensures revision is higher than already shipped packages)
++# This will overflow in 2029 and needs a long term fix
++revision=$((61232 + (year_offset * 416) + (10#$month * 32) + 10#$day))
++
+ date=$(date '+%y%m%d%H%M%S')
+ # Formats the date by replacing the 4-digit year with a 2-digit value and then subtract 19
+ dateTimeStamp=$(echo $((10#${date:0:2}-19)))${date:2}
+@@ -12,7 +23,7 @@ dateTimeStamp=$(echo $((10#${date:0:2}-19)))${date:2}
+ commitSha=$(git rev-parse HEAD)
+ 
+ assemblyVersion=$(sed -n 's/.*<assemblyVersion>\([^<]*\)<.*/\1/p' ${scriptroot}/buildConfiguration.xml)
+-assemblyFileVersion="$assemblyVersion.${dateTimeStamp::$((${#dateTimeStamp} - 6))}" # Trim minutes/seconds
++assemblyFileVersion="$assemblyVersion.$revision"
+ assemblyInformationalVersion="$assemblyVersion.$dateTimeStamp.$commitSha"
+ 
+ echo "assemblyVersion: $assemblyVersion"
