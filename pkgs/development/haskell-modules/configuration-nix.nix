@@ -936,13 +936,17 @@ builtins.intersectAttrs super {
     ];
   }) super.liquid-fixpoint;
 
-  # overrideCabal because the tests need to execute the built executable "liquid"
+  # overrideCabal because
+  # - tests need to execute the built executable "liquid"
+  # - LiquidHaskell needs an SMT solver. We use Z3.
+  # - LiquidHaskell clash with Haddock as of now, see https://github.com/ucsd-progsys/liquidhaskell/issues/2188
   liquidhaskell = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/liquid:$PATH
     ''
     + (drv.preCheck or "");
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
   }) super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
