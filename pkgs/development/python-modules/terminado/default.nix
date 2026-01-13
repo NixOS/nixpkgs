@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "terminado";
   version = "0.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "namespaced-openvpn";
   version = "0.6.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "slingamn";

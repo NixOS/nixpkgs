@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mockfs";
   version = "1.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mockfs";

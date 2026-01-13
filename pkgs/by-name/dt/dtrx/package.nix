@@ -24,7 +24,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
   version = "8.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dtrx-py";

@@ -40,7 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/riscv/riscv-config";
     changelog = "https://github.com/riscv-software-src/riscv-config/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     mainProgram = "riscv-config";
   };
 }

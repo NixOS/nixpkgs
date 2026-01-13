@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "statmake";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daltonmaag";

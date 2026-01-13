@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gh2md";
   version = "2.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

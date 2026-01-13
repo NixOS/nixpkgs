@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
   version = "8.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "clickable";

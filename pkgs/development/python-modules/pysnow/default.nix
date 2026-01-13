@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pysnow";
   version = "0.7.16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rbw";

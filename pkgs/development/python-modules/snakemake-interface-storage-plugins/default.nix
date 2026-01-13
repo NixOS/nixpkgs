@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "snakemake-interface-storage-plugins";
   version = "4.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

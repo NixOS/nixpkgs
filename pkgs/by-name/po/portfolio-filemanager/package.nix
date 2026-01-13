@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
   version = "1.0.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tchx84";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "pycairo";
   version = "1.28.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pygobject";

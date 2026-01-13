@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pyhepmc";
   version = "2.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";

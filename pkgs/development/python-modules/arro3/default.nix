@@ -99,7 +99,7 @@ let
     pname = "arro3-tests";
     version = arro3-core.version;
 
-    format = "other";
+    pyproject = false;
     dontBuild = true;
     dontInstall = true;
 

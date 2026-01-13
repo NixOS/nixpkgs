@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "jenkinsapi";
   version = "0.3.15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";

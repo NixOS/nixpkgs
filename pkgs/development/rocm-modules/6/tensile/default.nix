@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Using a specific commit which has compression support from after the 6.4 release
   # Without compression packages are too large for hydra
   version = "6.4-unstable-2025-06-12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";

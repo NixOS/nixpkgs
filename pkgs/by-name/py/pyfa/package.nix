@@ -16,7 +16,7 @@ in
 python3Packages.buildPythonApplication rec {
   inherit version;
   pname = "pyfa";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pyfa-org";

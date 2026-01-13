@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   pname = "tuhi";
   version = "0.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tuhiproject";

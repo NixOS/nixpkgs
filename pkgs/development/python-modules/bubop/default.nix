@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "bubop";
   version = "0.1.12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";

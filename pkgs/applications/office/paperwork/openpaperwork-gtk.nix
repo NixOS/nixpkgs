@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "openpaperwork-gtk";
   inherit (callPackage ./src.nix { }) version src;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/openpaperwork-gtk";
 

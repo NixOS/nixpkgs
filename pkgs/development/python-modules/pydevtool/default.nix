@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pydevtool";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

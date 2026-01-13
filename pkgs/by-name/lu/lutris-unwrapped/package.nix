@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     appstream-glib

@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "responder";
   version = "3.2.0.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lgandx";

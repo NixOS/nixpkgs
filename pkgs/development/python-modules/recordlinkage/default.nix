@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "recordlinkage";
   version = "0.16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

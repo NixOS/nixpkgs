@@ -33,7 +33,7 @@ let
   self = buildPythonPackage rec {
     pname = "pip";
     version = "25.0.1";
-    format = "pyproject";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pypa";

@@ -22,7 +22,7 @@ buildPythonApplication rec {
   pname = "kupfer";
   version = "329";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";

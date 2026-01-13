@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "starlette-wtf";
   version = "0.4.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "muicss";

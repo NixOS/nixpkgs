@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
   version = "2023.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";

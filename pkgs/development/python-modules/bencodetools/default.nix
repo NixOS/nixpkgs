@@ -6,7 +6,7 @@
 }:
 buildPythonPackage {
   inherit (bencodetools) pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ setuptools ];
 

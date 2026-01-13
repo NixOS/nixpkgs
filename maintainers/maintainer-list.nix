@@ -6997,13 +6997,6 @@
     githubId = 974130;
     name = "David Pätzel";
   };
-  dpausp = {
-    email = "dpausp@posteo.de";
-    github = "dpausp";
-    githubId = 1965950;
-    name = "Tobias Stenzel";
-    keys = [ { fingerprint = "4749 0887 CF3B 85A1 6355  C671 78C7 DD40 DF23 FB16"; } ];
-  };
   dpc = {
     email = "dpc@dpc.pw";
     github = "dpc";
@@ -9409,13 +9402,6 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
-  genericnerdyusername = {
-    name = "GenericNerdyUsername";
-    email = "genericnerdyusername@proton.me";
-    github = "GenericNerdyUsername";
-    githubId = 111183546;
-    keys = [ { fingerprint = "58CE D4BE 6B10 149E DA80  A990 2F48 6356 A4CB 30F3"; } ];
-  };
   genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";
@@ -9846,12 +9832,6 @@
     github = "graham33";
     githubId = 10908649;
     name = "Graham Bennett";
-  };
-  grahamc = {
-    email = "graham@grahamc.com";
-    github = "grahamc";
-    githubId = 76716;
-    name = "Graham Christensen";
   };
   grahamnorris = {
     email = "oss@grahamjnorris.com";
@@ -22698,12 +22678,6 @@
     github = "rodrgz";
     githubId = 53882428;
     name = "Erik Rodriguez";
-  };
-  roelvandijk = {
-    email = "roel@lambdacube.nl";
-    github = "roelvandijk";
-    githubId = 710906;
-    name = "Roel van Dijk";
   };
   rogarb = {
     email = "rogarb@rgarbage.fr";
