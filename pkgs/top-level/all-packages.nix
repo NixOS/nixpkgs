@@ -3283,10 +3283,6 @@ with pkgs;
     };
   });
 
-  netlify-cli = callPackage ../by-name/ne/netlify-cli/package.nix {
-    nodejs = nodejs_20;
-  };
-
   libnma-gtk4 = libnma.override { withGtk4 = true; };
 
   inherit (callPackages ../servers/nextcloud { })
