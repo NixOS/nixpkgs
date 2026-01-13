@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "juanparati";
     repo = "humanshell";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-RoH9tXgefL4woXmKrXCX19O4iVWQvgi23r4UsG6ysFc=";
   };
 
