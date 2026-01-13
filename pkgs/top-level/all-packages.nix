@@ -6625,11 +6625,6 @@ with pkgs;
 
   c-aresMinimal = callPackage ../by-name/c-/c-ares/package.nix { withCMake = false; };
 
-  inherit (callPackages ../development/libraries/c-blosc { })
-    c-blosc
-    c-blosc2
-    ;
-
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
   ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
