@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "humanshell";
   version = "1.0.3";
 
