@@ -50,6 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.gerritcodereview.com/index.md";
     license = lib.licenses.asl20;
     description = "Web based code review and repository management for the git version control system";
+    changelog = "https://www.gerritcodereview.com/${lib.versions.majorMinor finalAttrs.version}.html";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [
       flokli
