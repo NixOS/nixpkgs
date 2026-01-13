@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "djangocms-alias";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "djangocms-alias";
     tag = version;
-    hash = "sha256-70Gs+Ys26ypq5RXkPTxxMDFz/OCBvvAVnSIUQ3P1OV8=";
+    hash = "sha256-10QS2dAFRtM2W/BMkF5Pjr70ZpdLAIC/ZE3OUatu5u0=";
   };
 
   build-system = [ setuptools ];
