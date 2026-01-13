@@ -12378,6 +12378,8 @@ self: super: with self; {
 
   pocket = callPackage ../development/python-modules/pocket { };
 
+  pocket-tts = callPackage ../development/python-modules/pocket-tts { };
+
   pocketsphinx = callPackage ../development/python-modules/pocketsphinx {
     inherit (pkgs) pocketsphinx;
   };
