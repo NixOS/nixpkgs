@@ -3,18 +3,14 @@
   fetchFromGitHub,
   lib,
   makeBinaryWrapper,
-  nodejs_20,
-  pnpm_10,
+  nodejs,
+  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
 }:
-let
-  nodejs = nodejs_20;
-  buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
-  pnpm' = pnpm_10.override { inherit nodejs; };
-in
-buildNpmPackage' (finalAttrs: {
+
+buildNpmPackage (finalAttrs: {
   pname = "claude-code-router";
   version = "2.0.0";
 
@@ -32,15 +28,15 @@ buildNpmPackage' (finalAttrs: {
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
+    inherit pnpm;
     inherit (finalAttrs) pname src;
-    pnpm = pnpm';
     fetcherVersion = 3;
     hash = "sha256-8184F3ShoC6j7nov35CSZWz2dzPFQC7Bty1iTNs1qzc=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    pnpm'
+    pnpm
   ];
 
   npmConfigHook = pnpmConfigHook;
