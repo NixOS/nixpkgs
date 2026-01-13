@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
-    hash = "sha256-HcBRipJGSHPms2qL63vIVVmiq+k1mL8dJo5kW7W6ykE=";
+    hash = "sha256-wHwjcpcum3ByBGYUxJ38Qi0RliQUmAIBYmE7t3gEonI=";
   };
 
   vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
