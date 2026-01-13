@@ -194,6 +194,7 @@
     "LicenseRef-KDE-Accepted-GPL"
   ],
   "aurorae": [
+    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
     "MIT"
@@ -315,7 +316,9 @@
     "CC-BY-4.0",
     "CC-BY-SA-4.0",
     "CC0-1.0",
-    "GPL-3.0-or-later"
+    "GPL-2.0-or-later",
+    "GPL-3.0-or-later",
+    "LGPL-2.0-or-later"
   ],
   "calligra": [
     "BSD-2-Clause",
@@ -350,6 +353,7 @@
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
+    "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -435,9 +439,11 @@
     "GPL-3.0-or-later"
   ],
   "ffmpegthumbs": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
-    "GPL-2.0-or-later"
+    "GPL-2.0-or-later",
+    "LGPL-2.0-or-later"
   ],
   "filelight": [
     "CC0-1.0",
@@ -750,7 +756,8 @@
     "GPL-2.0-or-later",
     "GPL-3.0-or-later",
     "LGPL-2.0-or-later",
-    "LGPL-2.1-or-later"
+    "LGPL-2.1-or-later",
+    "MIT"
   ],
   "kcmutils": [
     "BSD-2-Clause",
@@ -943,6 +950,7 @@
     "LGPL-2.1-or-later"
   ],
   "kdegraphics-thumbnailers": [
+    "BSD-2-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
@@ -1030,10 +1038,12 @@
     "CC0-1.0"
   ],
   "kdesdk-thumbnailers": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-3.0-only",
+    "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL"
   ],
   "kdesu": [
@@ -1228,6 +1238,7 @@
   ],
   "kholidays": [
     "BSD-2-Clause",
+    "BSD-3-Clause",
     "Bison-exception-2.2",
     "CC0-1.0",
     "GPL-3.0-or-later",
@@ -1360,6 +1371,7 @@
   "kio-extras": [
     "BSD-2-Clause",
     "BSD-3-Clause",
+    "CC-BY-SA-4.0",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -1403,7 +1415,6 @@
   "kirigami-gallery": [
     "BSD-3-Clause",
     "CC0-1.0",
-    "LGPL-2.0",
     "LGPL-2.0-or-later"
   ],
   "kiriki": [
@@ -1544,7 +1555,9 @@
     "GPL-2.0-or-later"
   ],
   "kmime": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
+    "CC-BY-SA-4.0",
     "CC0-1.0",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later"
@@ -1628,6 +1641,7 @@
     "LGPL-2.0-only"
   ],
   "koko": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC-BY-4.0",
     "CC0-1.0",
@@ -1736,6 +1750,7 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
+    "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL"
   ],
@@ -1815,6 +1830,7 @@
   "kpkpass": [
     "BSD-3-Clause",
     "CC0-1.0",
+    "GPL-2.0-or-later",
     "LGPL-2.0-or-later",
     "MIT"
   ],
@@ -2728,7 +2744,18 @@
     "LGPL-2.1-only",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "LicenseRef-KDE-Accepted-LGPL",
+    "LicenseRef-Qt-Commercial"
+  ],
+  "plasma-login-manager": [
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-or-later",
+    "LicenseRef-KDE-Accepted-GPL"
   ],
   "plasma-mobile": [
     "Apache-2.0",
@@ -2786,6 +2813,17 @@
     "GPL-2.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later"
+  ],
+  "plasma-setup": [
+    "BSD-2-Clause",
+    "CC0-1.0",
+    "GPL-2.0-or-later",
+    "GPL-3.0-or-later",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "plasma-systemmonitor": [
     "BSD-3-Clause",
@@ -2959,6 +2997,7 @@
   ],
   "rocs": [
     "BSD-2-Clause",
+    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -3066,8 +3105,8 @@
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
-    "LGPL",
     "LGPL-2.0-or-later",
+    "LGPL-2.1-or-later",
     "MIT"
   ],
   "systemsettings": [
@@ -3110,6 +3149,7 @@
     "MIT"
   ],
   "umbrello": [
+    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -3117,7 +3157,8 @@
     "GPL-3.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
-    "LicenseRef-KDE-Accepted-GPL"
+    "LicenseRef-KDE-Accepted-GPL",
+    "MIT"
   ],
   "wacomtablet": [],
   "xdg-desktop-portal-kde": [
