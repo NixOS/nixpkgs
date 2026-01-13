@@ -134,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString withKeePassBrowser ''
       mkdir -p "$out/lib/mozilla/native-messaging-hosts"
       substituteAll "${./firefox-native-messaging-host.json}" "$out/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
+      mkdir -p "$out/share/tor-browser/TorBrowser/Data/Browser/.mozilla/native-messaging-hosts"
+      substituteAll "${./firefox-native-messaging-host.json}" "$out/share/tor-browser/TorBrowser/Data/Browser/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
     '')
   ];
 
