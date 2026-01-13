@@ -1,6 +1,8 @@
 import argparse
 import os
+import sys
 import time
+import warnings
 from pathlib import Path
 
 import ptpython.ipython
@@ -55,9 +57,15 @@ def writeable_dir(arg: str) -> Path:
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
-        "-K",
         "--keep-vm-state",
-        help="re-use a VM state coming from a previous run",
+        help=argparse.SUPPRESS,
+        dest="keep_machine_state",
+        action="store_true",
+    )
+    arg_parser.add_argument(
+        "-K",
+        "--keep-machine-state",
+        help="re-use a machine state coming from a previous run",
         action="store_true",
     )
     arg_parser.add_argument(
@@ -146,6 +154,12 @@ def main() -> None:
 
     args = arg_parser.parse_args()
 
+    if "--keep-vm-state" in sys.argv:
+        warnings.warn(
+            "The flag '--keep-vm-state' is deprecated. Use '--keep-machine-state' instead.",
+            DeprecationWarning,
+        )
+
     output_directory = args.output_directory.resolve()
     logger = CompositeLogger([TerminalLogger()])
 
@@ -155,8 +169,10 @@ def main() -> None:
     if args.junit_xml:
         logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
 
-    if not args.keep_vm_state:
-        logger.info("Machine state will be reset. To keep it, pass --keep-vm-state")
+    if not args.keep_machine_state:
+        logger.info(
+            "Machine state will be reset. To keep it, pass --keep-machine-state"
+        )
 
     debugger: DebugAbstract = DebugNop()
     if args.debug_hook_attach is not None:
@@ -180,7 +196,7 @@ def main() -> None:
         tests=args.testscript.read_text(),
         out_dir=output_directory,
         logger=logger,
-        keep_vm_state=args.keep_vm_state,
+        keep_machine_state=args.keep_machine_state,
         global_timeout=args.global_timeout,
         debug=debugger,
     ) as driver:
