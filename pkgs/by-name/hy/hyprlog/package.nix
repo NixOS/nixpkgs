@@ -11,7 +11,7 @@ let
     owner = "oxalica";
     repo = "rust-overlay";
     rev = "master";
-    hash = lib.fakeHash;
+    hash = "sha256-Tg/kL8eKMpZtceDvBDQYU8zowgpr7ucFRnpP/AtfuRM=";
   };
 
   rustOverlay = import rustOverlaySrc;
