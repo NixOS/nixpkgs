@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
   nix-update-script,
@@ -10,11 +11,11 @@
   withTranscoder ? true,
   eigen,
   ghc_filesystem,
-  tinygltf,
 }:
 
 let
   cmakeBool = b: if b then "ON" else "OFF";
+  tinygltf = callPackage ./tinygltf.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   version = "1.5.7";
