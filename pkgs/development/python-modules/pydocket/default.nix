@@ -9,7 +9,6 @@
 
   # dependencies
   cloudpickle,
-  exceptiongroup,
   fakeredis,
   opentelemetry-api,
   opentelemetry-exporter-prometheus,
@@ -25,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.16.3";
+  version = "0.16.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
     tag = finalAttrs.version;
-    hash = "sha256-DNq+PUbh6SfazxkM7tbjEOXbh1VSJPM3jEkgn64XQ5g=";
+    hash = "sha256-elndLtFcPpXPSOCsXdmvspbTJoRBEjkPegkkk0bw2xw=";
   };
 
   build-system = [
@@ -47,7 +46,6 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     cloudpickle
-    exceptiongroup
     fakeredis
     opentelemetry-api
     opentelemetry-exporter-prometheus
@@ -60,7 +58,9 @@ buildPythonPackage (finalAttrs: {
     typer
     typing-extensions
   ]
-  ++ py-key-value-aio.optional-dependencies.memory;
+  ++ fakeredis.optional-dependencies.lua
+  ++ py-key-value-aio.optional-dependencies.memory
+  ++ py-key-value-aio.optional-dependencies.redis;
 
   pythonImportsCheck = [ "docket" ];
 
