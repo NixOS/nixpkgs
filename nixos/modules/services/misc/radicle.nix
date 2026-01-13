@@ -132,7 +132,7 @@ in
     services.radicle = {
       enable = lib.mkEnableOption "Radicle Seed Node";
       package = lib.mkPackageOption pkgs "radicle-node" { };
-      privateKeyFile = utils.systemdUtils.types.mkCredentialOption {
+      privateKeyFile = utils.systemdUtils.lib.mkCredentialOption {
         defaultName = "radicle";
         bindPath = "${env.RAD_HOME}/keys/radicle";
         description = ''
