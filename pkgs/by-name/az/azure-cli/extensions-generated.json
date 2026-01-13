@@ -706,13 +706,6 @@
     "hash": "sha256-o8Grh7xfaLhlvW+T1WLkDR6kvcSFqs/gkAZz3j+rmGk=",
     "description": "Mixed Reality Azure CLI Extension"
   },
-  "mobile-network": {
-    "pname": "mobile-network",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mobile_network-1.0.0-py3-none-any.whl",
-    "hash": "sha256-LZVypO1wbfj2JsYgNq0i9GoVsRMnP4/5sGMTo4Cif1Y=",
-    "description": "Microsoft Azure Command-Line Tools MobileNetwork Extension"
-  },
   "mongo-db": {
     "pname": "mongo-db",
     "version": "1.0.0",
