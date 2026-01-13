@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2025.12.0";
+  version = "2026.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "s3fs";
     tag = version;
-    hash = "sha256-/r+2eXOXUcMQ7TxyrEofZ79S8n8sA3++pJxdH3eQrYw=";
+    hash = "sha256-nNrFNmuPZUqOSVShMl5eEUDs9QtZWd1RMVqZFrAfewo=";
   };
 
   build-system = [
