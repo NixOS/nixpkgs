@@ -21,8 +21,7 @@ buildPythonPackage (finalAttrs: {
 
   propagatedBuildInputs = [ pillow ];
 
-  # error: invalid command 'test'
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Fix impurity. TODO: Do the font lookup using fontconfig instead of this
   # manual method. Until that is fixed, we get this whenever we run aafigure:
