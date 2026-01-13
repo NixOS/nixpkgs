@@ -46,6 +46,7 @@
   withLinuxMemlock ? (stdenv.hostPlatform.isLinux && !withPAM),
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
+  gtk3,
 }:
 
 # libaudit support requires Linux
@@ -124,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     libedit
+    gtk3
   ]
   ++ [ (if linkOpenssl then openssl else libxcrypt) ]
   ++ lib.optional withFIDO libfido2
@@ -247,6 +249,9 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
     ''
   );
+  postBuild = ''
+    make -C contrib gnome-ssh-askpass3
+  '';
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
@@ -263,6 +268,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postInstall = ''
+    mkdir -p $out/libexec
+    cp -a contrib/gnome-ssh-askpass3 $out/libexec/gtk-ssh-askpass
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
