@@ -6759,6 +6759,8 @@ self: super: with self; {
 
   hassil = callPackage ../development/python-modules/hassil { };
 
+  hatasm = callPackage ../development/python-modules/hatasm { };
+
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hatch-autorun = callPackage ../development/python-modules/hatch-autorun { };
