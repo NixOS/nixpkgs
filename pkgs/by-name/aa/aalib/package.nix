@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
 
-  # The fuloong2f is not supported by aalib still
   preConfigure =
     # The configure script does the correct thing when 'system' is already set
     # Export it explicitly in case __structuredAttrs is true.
