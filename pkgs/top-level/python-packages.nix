@@ -774,8 +774,6 @@ self: super: with self; {
 
   ansicolors = callPackage ../development/python-modules/ansicolors { };
 
-  ansiconv = callPackage ../development/python-modules/ansiconv { };
-
   ansimarkup = callPackage ../development/python-modules/ansimarkup { };
 
   ansitable = callPackage ../development/python-modules/ansitable { };
