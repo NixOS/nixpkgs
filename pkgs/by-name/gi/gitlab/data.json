@@ -8,6 +8,7 @@
   "rev": "v18.6.3-ee",
   "passthru": {
     "GITALY_SERVER_VERSION": "18.6.3",
+    "GITLAB_KAS_VERSION": "18.6.3",
     "GITLAB_PAGES_VERSION": "18.6.3",
     "GITLAB_SHELL_VERSION": "14.45.3",
     "GITLAB_ELASTICSEARCH_INDEXER_VERSION": "5.10.1",
