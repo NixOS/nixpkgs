@@ -1,4 +1,4 @@
-To update discourse, do the following:
+To update Discourse, do the following:
 
 1. Switch to and work from the `master` branch and the directory this
    file is in.
@@ -16,7 +16,7 @@ To update discourse, do the following:
    step 4 and 5 again.
 7. Run `./update.py update-plugins`.
 8. Run `nix build -L -f ../../../../ discourseAllPlugins.tests` to
-   make sure the plugins build and discourse starts with them. Also
+   make sure the plugins build and Discourse starts with them. Also
    test manually, if possible.
 9. If the update works, commit it. If not, apply necessary fixes and
    commit. No manual fixes that would be overwritten by the

@@ -536,7 +536,7 @@ See [](#chap-pkgs-fetchers-caveats) for more details on how to work with the `ha
 Returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads an archive from a given URL and decompresses it.
 
 Despite its name, `fetchzip` is not limited to `.zip` files but can also be used with [various compressed tarball formats](#tar-files) by default.
-This can extended by specifying additional attributes, see [](#ex-fetchers-fetchzip-rar-archive) to understand how to do that.
+This can be extended by specifying additional attributes, see [](#ex-fetchers-fetchzip-rar-archive) to understand how to do that.
 
 ### Inputs {#sec-pkgs-fetchers-fetchzip-inputs}
 
@@ -765,7 +765,7 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 ## `fetchgit` {#fetchgit}
 
-Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
+Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be the full git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
 
 If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
 This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
@@ -799,7 +799,7 @@ Additionally, the following optional arguments can be given:
 
 *`deepClone`* (Boolean)
 
-: Clone the entire repository as opposing to just creating a shallow clone.
+: Clone the entire repository as opposed to just creating a shallow clone.
   This implies `leaveDotGit`.
 
 *`fetchTags`* (Boolean)

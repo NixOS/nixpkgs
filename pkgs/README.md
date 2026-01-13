@@ -20,7 +20,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 - [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
 - [`test`](./test): Tests not directly associated with any specific packages
 - [`by-name`](./by-name): Top-level packages organised by name ([docs](./by-name/README.md))
-- All other directories loosely categorise top-level packages definitions, see [category hierarchy][categories]
+- All other directories loosely categorise top-level package definitions, see [category hierarchy][categories]
 
 ## Quick Start to Adding a Package
 
@@ -148,7 +148,7 @@ To add a package to Nixpkgs:
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, can be found in the [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -437,7 +437,7 @@ Follow these guidelines:
   - It _must_ be a valid identifier in Nix.
 
   - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore.
-    Otherwise the attribute name _should not_ be prefixed with an underline.
+    Otherwise the attribute name _should not_ be prefixed with an underscore.
 
     Example: The corresponding attribute name for `0ad` should be `_0ad`.
 
@@ -460,7 +460,7 @@ Follow these guidelines:
 ## Versioning
 [versioning]: #versioning
 
-These are the guidelines the `version` attribute of a package:
+These are the guidelines for the `version` attribute of a package:
 
 - It _must_ start with a digit.
   This is required for backwards-compatibility with [how `nix-env` parses derivation names](https://nix.dev/manual/nix/latest/command-ref/nix-env#selectors).
@@ -487,7 +487,7 @@ See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/N
 
 ## Meta attributes
 
-The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
+The `meta` attribute set should always be placed last in the derivation and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.
@@ -655,7 +655,7 @@ The latter avoids link rot when the upstream abandons, squashes or rebases their
 { patches = [ ./0001-add-missing-include.patch ]; }
 ```
 
-If you do need to do create this sort of patch file, one way to do so is with git:
+If you do need to create this sort of patch file, one way to do so is with git:
 
 1. Move to the root directory of the source code you're patching.
 
@@ -730,7 +730,7 @@ We use jbidwatcher as an example for a discontinued project here.
 1. Create a pull request against Nixpkgs.
    Mention the package maintainer.
 
-This is how the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
+This is what the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
 
 ## Package tests
 
@@ -743,7 +743,7 @@ To run the main types of tests locally:
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
 
-The following types of tests exists:
+The following types of tests exist:
 
 * [NixOS **module tests**](https://nixos.org/manual/nixos/stable/#sec-nixos-tests), which spawn one or more NixOS VMs.
   They exercise both NixOS modules and the packaged programs used within them.
@@ -1137,7 +1137,7 @@ Sample template for a package update review is provided below.
 ### New packages
 
 New packages are a common type of pull requests.
-These pull requests consist in adding a new nix-expression for a package.
+These pull requests consist of adding a new nix-expression for a package.
 
 Review process:
 
@@ -1146,7 +1146,7 @@ Review process:
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the source is fetched from an official location, one of our [trusted mirrors](./build-support/fetchurl/mirrors.nix), or a mirror trusted by the authors.
-- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
+- Ensure that the meta fields [fit the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set.
@@ -1250,7 +1250,7 @@ Note that there can be an extra comment containing links to previously reported 
 #### Triaging and Fixing
 
 **Note**: An issue can be a "false positive" (i.e. automatically opened, but without the package it refers to being actually vulnerable).
-If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as the necessary to help maintainers double check.
+If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as necessary to help maintainers double check.
 
 If you are investigating a "true positive":
 

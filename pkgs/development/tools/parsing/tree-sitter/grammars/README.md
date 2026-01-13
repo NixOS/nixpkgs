@@ -1,6 +1,6 @@
 # Tree-sitter Grammars
 
-Use [grammar-sources.nix](grammar-sources.nix) to define tree-sitter grammars sources.
+Use [grammar-sources.nix](grammar-sources.nix) to define tree-sitter grammar sources.
 
 Tree-sitter grammars follow a common form for compatibility with the [`tree-sitter` CLI](https://tree-sitter.github.io/tree-sitter/cli/index.html).
 This uniformity enables consistent packaging through shared tooling.
@@ -44,7 +44,7 @@ Each entry is passed to [buildGrammar](../build-grammar.nix), which in turn popu
 
 Attempt to build the new grammar: `nix-build -A tree-sitter-grammars.tree-sitter-latex`.
 This will fail due to the invalid hash.
-Review the downloaded source then update the source definition with the printed source `hash`.
+Review the downloaded source, then update the source definition with the printed source `hash`.
 
 ## Pinning Grammar Sources
 

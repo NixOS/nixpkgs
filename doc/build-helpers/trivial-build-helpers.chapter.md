@@ -8,7 +8,7 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 The function `runCommandWith` returns a derivation built using the specified command(s), in a specified environment.
 
-It is the underlying base function of  all [`runCommand*` variants].
+It is the underlying base function of all [`runCommand*` variants].
 The general behavior is controlled via a single attribute set passed
 as the first argument, and allows specifying `stdenv` freely.
 
@@ -45,7 +45,7 @@ runCommandWith :: {
    :::
 
 `stdenv` (Derivation)
-:   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
+:   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`.
 
 `derivationArgs` (Attribute set)
 :   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
@@ -160,7 +160,7 @@ runCommandWith { inherit name derivationArgs; } buildCommand
 ## Writing text files {#trivial-builder-text-writing}
 
 Nixpkgs provides the following functions for producing derivations which write text files or executable scripts into the Nix store.
-They are useful for creating files from Nix expression, and are all implemented as convenience wrappers around `writeTextFile`.
+They are useful for creating files from Nix expressions, and are all implemented as convenience wrappers around `writeTextFile`.
 
 Each of these functions will cause a derivation to be produced.
 When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
@@ -682,7 +682,7 @@ writeTextFile {
 ## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
 
 These functions concatenate `files` to the Nix store in a single file. This is useful for configuration files structured in lines of text. `concatTextFile` takes an attribute set and expects two arguments, `name` and `files`. `name` corresponds to the name used in the Nix store path. `files` will be the files to be concatenated. You can also set `executable` to true to make this file have the executable bit set.
-`concatText` and`concatScript` are simple wrappers over `concatTextFile`.
+`concatText` and `concatScript` are simple wrappers over `concatTextFile`.
 
 Here are a few examples:
 ```nix

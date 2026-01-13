@@ -3,8 +3,8 @@
 catch_conflicts.py
 ==================
 
-The file catch_conflicts.py is in a subdirectory because, if it isn't, the
-/nix/store/ directory is added to sys.path causing a delay when building.
+The file `catch_conflicts.py` is in a subdirectory because, if it isn't, the
+`/nix/store/` directory is added to `sys.path`, causing a delay when building.
 
 Pointers:
 
