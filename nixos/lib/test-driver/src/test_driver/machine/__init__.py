@@ -621,10 +621,10 @@ class BaseMachine(ABC):
             "if you want to keep the machine state, pass --keep-machine-state"
         )
 
-    def copy_from_vm(self, source: str, target_dir: str = "") -> None:
-        """Copy a file from the VM (specified by an in-VM source path) to a path
+    def copy_from_machine(self, source: str, target_dir: str = "") -> None:
+        """Copy a file from the machine (specified by an in-machine source path) to a path
         relative to `$out`. The file is copied via the `shared_dir` shared among
-        all the VMs (using a temporary directory).
+        all the machines (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
         vm_src = Path(source)
@@ -633,16 +633,20 @@ class BaseMachine(ABC):
             vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
-            # Copy the file to the shared directory inside VM
+            # Copy the file to the shared directory inside machines
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
             self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
             abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
-            # Copy the file from the shared directory outside VM
+            # Copy the file from the shared directory outside machines
             if intermediate.is_dir():
                 shutil.copytree(intermediate, abs_target)
             else:
                 shutil.copy(intermediate, abs_target)
+
+    @warnings.deprecated("Use copy_from_machine() instead")
+    def copy_from_vm(self, source: str, target_dir: str = "") -> None:
+        self.copy_from_machine(source, target_dir)
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the
@@ -669,7 +673,7 @@ class BaseMachine(ABC):
         be written to.
 
         The file is copied via the `shared_dir` directory which is shared among
-        all the VMs (using a temporary directory).
+        all the machines (using a temporary directory).
         The access rights bits will mimic the ones from the host file and
         user:group will be root:root.
         """
@@ -833,7 +837,7 @@ class QemuMachine(BaseMachine):
         Takes an optional parameter `check_return` that defaults to `True`.
         Setting this parameter to `False` will not check for the return code
         and return -1 instead. This can be used for commands that shut down
-        the VM and would therefore break the pipe that would be used for
+        the machine and would therefore break the pipe that would be used for
         retrieving the return code.
 
         A timeout for the command can be specified (in seconds) using the optional
