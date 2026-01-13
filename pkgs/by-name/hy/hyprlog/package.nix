@@ -1,10 +1,35 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  fetchFromGitHub,
+  rustPlatform,
+  ...
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustOverlaySrc = fetchFromGitHub {
+    owner = "oxalica";
+    repo = "rust-overlay";
+    rev = "master";
+    hash = lib.fakeHash;
+  };
+
+  rustOverlay = import rustOverlaySrc;
+
+  pkgsWithRust = import <nixpkgs> {
+    system = stdenv.hostPlatform.system;
+    overlays = [ rustOverlay ];
+  };
+
+  toolchain = pkgsWithRust.rust-bin.stable."1.92.0".default;
+
+  rustPlatformPinned = pkgsWithRust.makeRustPlatform {
+    cargo = toolchain;
+    rustc = toolchain;
+  };
+in
+rustPlatformPinned.buildRustPackage rec {
   pname = "hyprlog";
   version = "0.1.0";
 
@@ -23,7 +48,6 @@ rustPlatform.buildRustPackage rec {
     description = "Hyprland focus/activity logger";
     homepage = "https://github.com/gusjengis/hyprlog";
     license = licenses.mit;
-    maintainers = [ maintainers.gusjengis ];
     mainProgram = "hyprlog";
     platforms = platforms.linux;
   };
