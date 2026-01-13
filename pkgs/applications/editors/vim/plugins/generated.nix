@@ -22598,19 +22598,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  vscode-diff-nvim = buildVimPlugin {
-    pname = "vscode-diff.nvim";
-    version = "2.8.0-unstable-2026-01-10";
-    src = fetchFromGitHub {
-      owner = "esmuellert";
-      repo = "codediff.nvim";
-      rev = "5c52cdd4d007e72062cb0fd2fb398197b6d51040";
-      hash = "sha256-pGDjzwjz3OOpMOAJGR5oHAv/LBlUlbMbYGenvB8SNiU=";
-    };
-    meta.homepage = "https://github.com/esmuellert/codediff.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   vscode-nvim = buildVimPlugin {
     pname = "vscode.nvim";
     version = "0-unstable-2025-12-03";
