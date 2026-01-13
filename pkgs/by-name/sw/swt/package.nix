@@ -144,6 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
       mpl20
     ];
     maintainers = [ ];
+    # The darwin src zip file holds simply a prebuilt swt.jar file
+    sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin [
+      lib.sourceTypes.binaryNativeCode
+    ];
     platforms = lib.attrNames finalAttrs.passthru.srcMetadataByPlatform;
     # Fails with: `java.nio.file.NoSuchFileException: ../swt.jar`
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
