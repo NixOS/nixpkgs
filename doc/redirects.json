@@ -3497,6 +3497,21 @@
   "javascript-pnpm-fetcherVersion-versionHistory": [
     "index.html#javascript-pnpm-fetcherVersion-versionHistory"
   ],
+  "javascript-bun": [
+    "index.html#javascript-bun"
+  ],
+  "javascript-bun-oscpu": [
+    "index.html#javascript-bun-oscpu"
+  ],
+  "javascript-bun-sourceRoot": [
+    "index.html#javascript-bun-sourceRoot"
+  ],
+  "javascript-bun-workspaces": [
+    "index.html#javascript-bun-workspaces"
+  ],
+  "javascript-bun-extraCommands": [
+    "index.html#javascript-bun-extraCommands"
+  ],
   "javascript-yarn": [
     "index.html#javascript-yarn"
   ],
