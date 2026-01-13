@@ -15,8 +15,6 @@ buildDunePackage {
   pname = "cohttp-lwt-jsoo";
   inherit (cohttp-lwt) version src;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     cohttp
     cohttp-lwt
