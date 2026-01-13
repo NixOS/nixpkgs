@@ -152,7 +152,7 @@ in
 
         They are assigned network addresses according to the `nixos/lib/testing/network.nix` module.
 
-        A few special options are available, that aren't in a plain NixOS configuration. See [Configuring the nodes](#sec-nixos-test-nodes)
+        A few special options are available, that aren't in a plain NixOS configuration. See [Configuring virtual machines](#ssec-nixos-test-qemu-vms)
       '';
     };
 
@@ -173,7 +173,7 @@ in
 
         They are assigned network addresses according to the `nixos/lib/testing/network.nix` module.
 
-        A few special options are available, that aren't in a plain NixOS configuration. See [Configuring the nodes](#sec-nixos-test-nodes)
+        A few special options are available, that aren't in a plain NixOS configuration. See [Configuring containers](#ssec-nixos-test-nspawn-containers)
       '';
     };
 
