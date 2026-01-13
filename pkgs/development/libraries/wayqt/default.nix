@@ -13,21 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayqt";
-  version = "0.3.0";
+  version = "0.3.0-unstable-2026-01-05";
 
   src = fetchFromGitLab {
     owner = "desktop-frameworks";
     repo = "wayqt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FPyHm96LYCTqMZlPrZoSPMeyocDjaCnaYJETH/nazBU=";
+    rev = "2750cd93a3110bff6345f9e2a1a3090a3e3f7203";
+    hash = "sha256-WGIZ3OgeGkQWEzc/m0/Moo9Qgr3vg4dFfQhba2vx0do=";
   };
-
-  patches = [
-    # qmake get qtbase's path, but wayqt need qtwayland
-    (replaceVars ./fix-qtwayland-header-path.diff {
-      qtWaylandPath = "${qtwayland}/include";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
