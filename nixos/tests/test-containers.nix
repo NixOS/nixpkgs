@@ -40,7 +40,7 @@
     c12.start()
 
     c1.succeed("echo hello > /hello.txt")
-    c1.copy_from_vm("/hello.txt")
+    c1.copy_from_machine("/hello.txt")
 
     c1.systemctl("start network-online.target")
     c2.systemctl("start network-online.target")
