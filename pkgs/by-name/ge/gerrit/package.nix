@@ -6,18 +6,18 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gerrit";
   version = "3.13.1";
 
   src = fetchurl {
-    url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
+    url = "https://gerrit-releases.storage.googleapis.com/gerrit-${finalAttrs.version}.war";
     hash = "sha256-4+Z1q1cHEM5IaG+SAS7JgiCypfjM8W2Zaa25/KGaoqw=";
   };
 
   buildCommand = ''
     mkdir -p "$out"/webapps/
-    ln -s ${src} "$out"/webapps/gerrit-${version}.war
+    ln -s ${finalAttrs.src} "$out"/webapps/gerrit-${finalAttrs.version}.war
   '';
 
   passthru = {
@@ -58,4 +58,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
