@@ -438,6 +438,8 @@ self: super: with self; {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopulsegrow = callPackage ../development/python-modules/aiopulsegrow { };
+
   aiopurpleair = callPackage ../development/python-modules/aiopurpleair { };
 
   aiopvapi = callPackage ../development/python-modules/aiopvapi { };
@@ -8989,6 +8991,8 @@ self: super: with self; {
   llm-jq = callPackage ../development/python-modules/llm-jq { };
 
   llm-llama-server = callPackage ../development/python-modules/llm-llama-server { };
+
+  llm-lmstudio = callPackage ../development/python-modules/llm-lmstudio { };
 
   llm-mistral = callPackage ../development/python-modules/llm-mistral { };
 

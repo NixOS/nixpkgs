@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "cmaes";
   version = "0.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";

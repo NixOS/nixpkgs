@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "hatch-nodejs-version";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agoose77";

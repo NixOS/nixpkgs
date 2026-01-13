@@ -29,7 +29,7 @@
 buildPythonPackage rec {
   pname = "paperwork-backend";
   inherit (callPackage ./src.nix { }) version src;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/paperwork-backend";
 

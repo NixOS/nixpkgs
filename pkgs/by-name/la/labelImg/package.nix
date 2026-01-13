@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "labelImg";
   version = "1.8.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HumanSignal";

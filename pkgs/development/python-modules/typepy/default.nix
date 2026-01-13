@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/typepy";
     changelog = "https://github.com/thombashi/typepy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

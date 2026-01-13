@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "2025.12.29.00";
+  version = "2026.01.05.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
     tag = "v${version}";
-    hash = "sha256-BBiVJx6LyR6LcIqla7PVnoiBIbwmEZONS/FP3a5OseU=";
+    hash = "sha256-QbpNbiRWKbJlA3qM7RBjmjQb3Jrlwcpakb+bSdl4jA4=";
   };
 
   cargoHash = "sha256-GeRXwE6QqWaPxRTMIIvcIGE1NdWVSSjfxy6wq3pKieM=";

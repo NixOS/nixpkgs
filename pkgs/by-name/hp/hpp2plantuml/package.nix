@@ -10,7 +10,8 @@ python3Packages.buildPythonApplication rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     hash = "sha256-9FggDDOxWr4z1DBbvYLyvgs3CCguFjq3I4E9ULwL0+Q=";
   };
 

@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     ./use-nix-paths.patch

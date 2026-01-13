@@ -53,7 +53,6 @@ in
     description = "Free Python IDE from JetBrains (built from source)";
     longDescription = "Python IDE with complete set of tools for productive development with Python programming language. In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine. It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing, powerful all-singing all-dancing Debugger and entire customization. PyCharm is developer driven IDE. It was developed with the aim of providing you almost everything you need for your comfortable and productive development!";
     maintainers = with lib.maintainers; [
-      genericnerdyusername
       tymscar
     ];
     license = lib.licenses.asl20;

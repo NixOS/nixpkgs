@@ -10,6 +10,7 @@
   gnugrep,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnutar";
   # >= 1.13 is incompatible with mes-libc
   version = "1.12";
@@ -21,7 +22,7 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -36,15 +37,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/tar --version
         mkdir $out
       '';
-
-    meta = {
-      description = "GNU implementation of the `tar' archiver";
-      homepage = "https://www.gnu.org/software/tar";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      mainProgram = "tar";
-      platforms = lib.platforms.unix;
-    };
   }
   ''
     # Unpack

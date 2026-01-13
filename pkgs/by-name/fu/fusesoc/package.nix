@@ -42,7 +42,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/olofk/fusesoc";
     description = "Package manager and build tools for HDL code";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     mainProgram = "fusesoc";
   };

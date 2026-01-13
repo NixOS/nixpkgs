@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "kml2geojson";
   version = "5.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrcagney";

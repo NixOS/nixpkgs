@@ -17602,6 +17602,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-colors-paramount = buildVimPlugin {
+    pname = "vim-colors-paramount";
+    version = "0-unstable-2018-10-02";
+    src = fetchFromGitHub {
+      owner = "owickstrom";
+      repo = "vim-colors-paramount";
+      rev = "a5601d36fb6932e8d1a6f8b37b179a99b1456798";
+      hash = "sha256-j9nMjKYK7bqrGHprYp0ddLEWs1CNMudxXD13sOROVmY=";
+    };
+    meta.homepage = "https://github.com/owickstrom/vim-colors-paramount/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-colors-solarized = buildVimPlugin {
     pname = "vim-colors-solarized";
     version = "0-unstable-2011-05-09";
@@ -22582,19 +22595,6 @@ final: prev: {
       hash = "sha256-NGAvPSyttf/PDFUBSJtJVAUX2bpS+hwPeskZ0mFZ87A=";
     };
     meta.homepage = "https://github.com/EthanJWright/vs-tasks.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  vscode-diff-nvim = buildVimPlugin {
-    pname = "vscode-diff.nvim";
-    version = "2.8.0-unstable-2026-01-10";
-    src = fetchFromGitHub {
-      owner = "esmuellert";
-      repo = "codediff.nvim";
-      rev = "5c52cdd4d007e72062cb0fd2fb398197b6d51040";
-      hash = "sha256-pGDjzwjz3OOpMOAJGR5oHAv/LBlUlbMbYGenvB8SNiU=";
-    };
-    meta.homepage = "https://github.com/esmuellert/codediff.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

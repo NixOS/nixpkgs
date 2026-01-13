@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pivy";
   version = "0.6.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "coin3d";

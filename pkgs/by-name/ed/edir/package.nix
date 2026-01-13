@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "edir";
   version = "2.32";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

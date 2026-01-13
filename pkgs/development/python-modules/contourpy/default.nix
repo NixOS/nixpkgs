@@ -31,7 +31,7 @@ let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
     version = "1.3.3";
-    format = "pyproject";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "contourpy";

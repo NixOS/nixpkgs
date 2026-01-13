@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "python-rtmidi";
   version = "1.5.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "python_rtmidi";

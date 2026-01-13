@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fulhax/ncpamixer";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.c3d2 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ncpamixer";
   };
 }

@@ -56,16 +56,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  apm = {
-    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
-    shortName = "apm employees";
-    # Edits to this list should only be done by an already existing member.
-    members = [
-      DutchGerman
-      friedow
-    ];
-  };
-
   apparmor = {
     scope = "AppArmor-related modules, userspace tool packages and profiles";
     shortName = "apparmor";
@@ -94,16 +84,6 @@ with lib.maintainers;
   beam = {
     github = "beam";
     enableFeatureFreezePing = true;
-  };
-
-  bitnomial = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      cdepillabout
-      wraithm
-    ];
-    scope = "Group registration for packages maintained by Bitnomial.";
-    shortName = "Bitnomial employees";
   };
 
   blockchains = {
@@ -143,17 +123,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  c3d2 = {
-    members = [
-      astro
-      SuperSandro2000
-      revol-xut
-      oxapentane
-    ];
-    scope = "Maintain packages used in the C3D2 hackspace";
-    shortName = "c3d2";
-  };
-
   categorization = {
     github = "categorization";
   };
@@ -170,12 +139,6 @@ with lib.maintainers;
     scope = "Maintain Cinnamon desktop environment and applications made by the Linux Mint team.";
     shortName = "Cinnamon";
     enableFeatureFreezePing = true;
-  };
-
-  clevercloud = {
-    members = [ floriansanderscc ];
-    scope = "Maintain Clever Cloud related packages.";
-    shortName = "CleverCloud";
   };
 
   cloudposse = {
@@ -266,16 +229,6 @@ with lib.maintainers;
     shortName = "D. E. Shaw employees";
   };
 
-  determinatesystems = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      cole-h
-      grahamc
-    ];
-    scope = "Group registration for packages maintained by Determinate Systems.";
-    shortName = "Determinate Systems employees";
-  };
-
   dhall = {
     members = [
       Gabriella439
@@ -349,19 +302,6 @@ with lib.maintainers;
     github = "flutter";
   };
 
-  flyingcircus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      theuni
-      dpausp
-      frlan
-      leona
-      osnyx
-    ];
-    scope = "Team for Flying Circus employees who collectively maintain packages.";
-    shortName = "Flying Circus employees";
-  };
-
   forgejo = {
     members = [
       adamcstephens
@@ -382,17 +322,6 @@ with lib.maintainers;
 
   freedesktop = {
     github = "freedesktop";
-  };
-
-  fslabs = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      lpostula
-      mockersf
-      NthTensor
-    ];
-    scope = "Group registration for packages maintained by Foresight Spatial Labs.";
-    shortName = "Foresight Spatial Labs employees";
   };
 
   gcc = {
@@ -600,16 +529,6 @@ with lib.maintainers;
   lua = {
     github = "lua";
     enableFeatureFreezePing = true;
-  };
-
-  lumiguide = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      roelvandijk
-      lucus16
-    ];
-    scope = "Group registration for LumiGuide employees who collectively maintain packages.";
-    shortName = "Lumiguide employees";
   };
 
   lumina = {

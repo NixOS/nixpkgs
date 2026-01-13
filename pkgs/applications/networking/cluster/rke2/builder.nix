@@ -10,6 +10,7 @@ lib:
   pauseVersion,
   ccmVersion,
   dockerizedVersion,
+  helmJobVersion,
   imagesVersions,
 }:
 
@@ -76,20 +77,27 @@ buildGoModule (finalAttrs: {
   # Passing boringcrypto to GOEXPERIMENT variable to build with goboring library
   GOEXPERIMENT = "boringcrypto";
 
-  # See: https://github.com/rancher/rke2/blob/e7f87c6dd56fdd76a7dab58900aeea8946b2c008/scripts/build-binary#L27-L38
-  ldflags = [
-    "-w"
-    "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 6 rke2Commit}"
-    "-X github.com/k3s-io/k3s/pkg/version.Program=${finalAttrs.pname}"
-    "-X github.com/k3s-io/k3s/pkg/version.Version=v${finalAttrs.version}"
-    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultRegistry=docker.io"
-    "-X github.com/rancher/rke2/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultKubernetesImage=rancher/hardened-kubernetes:${k8sImageTag}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultPauseImage=rancher/mirrored-pause:${pauseVersion}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultRuntimeImage=rancher/rke2-runtime:${dockerizedVersion}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultCloudControllerManagerImage=rancher/rke2-cloud-provider:${ccmVersion}"
-  ];
+  # https://github.com/rancher/rke2/blob/104ddbf3de65ab5490aedff36df2332d503d90fe/scripts/build-binary#L27-L39
+  ldflags =
+    let
+      K3S_PKG = "github.com/k3s-io/k3s";
+      HELMCTR_PKG = "github.com/k3s-io/helm-controller";
+      RKE2_PKG = "github.com/rancher/rke2";
+    in
+    [
+      "-w"
+      "-X ${K3S_PKG}/pkg/version.GitCommit=${lib.substring 0 6 rke2Commit}"
+      "-X ${K3S_PKG}/pkg/version.Program=${finalAttrs.pname}"
+      "-X ${K3S_PKG}/pkg/version.Version=v${finalAttrs.version}"
+      "-X ${K3S_PKG}/pkg/version.UpstreamGolang=go${go.version}"
+      "-X ${HELMCTR_PKG}/pkg/controllers/chart.DefaultJobImage=rancher/klipper-helm:${helmJobVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultRegistry=docker.io"
+      "-X ${RKE2_PKG}/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultKubernetesImage=rancher/hardened-kubernetes:${k8sImageTag}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultPauseImage=rancher/mirrored-pause:${pauseVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultRuntimeImage=rancher/rke2-runtime:${dockerizedVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultCloudControllerManagerImage=rancher/rke2-cloud-provider:${ccmVersion}"
+    ];
 
   tags = [
     "no_cri_dockerd"

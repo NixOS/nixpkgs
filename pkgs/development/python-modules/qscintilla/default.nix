@@ -24,7 +24,7 @@ pythonPackages.buildPythonPackage {
   pname = "qscintilla-qt${qtVersion}";
   version = qscintilla.version;
   src = qscintilla.src;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = !isPy3k;
 

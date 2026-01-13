@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "git-remote-codecommit";
   version = "1.17";
-  format = "pyproject";
+  pyproject = true;
   disabled = !python3Packages.isPy3k;
 
   # The check dependency awscli has some overrides

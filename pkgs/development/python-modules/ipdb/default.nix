@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "ipdb";
   version = "0.13.13";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPyPy; # setupterm: could not find terminfo database
 

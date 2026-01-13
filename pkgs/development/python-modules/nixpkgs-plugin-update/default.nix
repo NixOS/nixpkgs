@@ -11,7 +11,7 @@
 buildPythonPackage {
   pname = "nixpkgs-plugin-update";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = ./nixpkgs-plugin-update;
 

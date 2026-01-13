@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "resterm";
-  version = "0.15.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "unkn0wn-root";
     repo = "resterm";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-N1/q1i/J8T52DRrwJsBQZKoUXAgS+dETjtGWuP1N8+A=";
+    sha256 = "sha256-+lYbSOLY0TF8aVx5pyjwVpibVPxMnWRrs1vdloc+JOk=";
   };
 
   vendorHash = "sha256-E/Y4kW5xy7YamUP5bxFmDCAK6RqiqGN7DpEPG1MaCHc=";

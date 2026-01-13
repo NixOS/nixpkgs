@@ -2584,8 +2584,6 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
-  gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
-
   inherit (callPackages ../tools/filesystems/garage { })
     garage
     garage_1
@@ -4589,7 +4587,7 @@ with pkgs;
     inherit (llvmPackages_20) llvm;
   };
 
-  gcc-arm-embedded = gcc-arm-embedded-14;
+  gcc-arm-embedded = gcc-arm-embedded-15;
 
   # Haskell and GHC
 
@@ -4969,6 +4967,7 @@ with pkgs;
   ocaml = ocamlPackages.ocaml;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
+  ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 

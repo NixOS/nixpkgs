@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "rangehttpserver";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danvk";

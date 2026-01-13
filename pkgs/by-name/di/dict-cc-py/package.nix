@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonPackage {
   pname = "dict.cc.py";
   version = "3.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rbaron";

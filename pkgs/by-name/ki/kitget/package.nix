@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "adamperkowski";
+    owner = "koibtw";
     repo = "kitget";
     tag = "v${finalAttrs.version}";
     hash = "sha256-i26nu5SkcPhqwh+/bw1rz7h8K2u+hhSsOGiLj3sF1RQ=";
@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Display and customize cat images in your terminal";
-    homepage = "https://codeberg.org/adamperkowski/kitget";
+    homepage = "https://codeberg.org/koibtw/kitget";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adamperkowski ];
+    maintainers = with lib.maintainers; [ koi ];
     mainProgram = "kitget";
     platforms = lib.platforms.linux;
   };

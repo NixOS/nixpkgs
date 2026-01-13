@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gorilla-cli";
   version = "0.0.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gorilla-llm";

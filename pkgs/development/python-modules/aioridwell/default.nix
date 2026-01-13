@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "aioridwell";
   version = "2025.09.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";

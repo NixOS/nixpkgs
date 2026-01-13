@@ -95,6 +95,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/orfeotoolbox/pyotb";
     changelog = "https://github.com/orfeotoolbox/pyotb/releases/tag/${version}";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.geospatial ];
     maintainers = with lib.maintainers; [ daspk04 ];
   };
 }

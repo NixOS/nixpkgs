@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "adafruit-pureio";
   version = "1.1.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Adafruit_PureIO";

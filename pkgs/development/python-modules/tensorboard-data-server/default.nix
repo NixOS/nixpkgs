@@ -11,7 +11,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "tensorboard_data_server";
-    inherit version format;
+    inherit version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     hash = "sha256-fgYQ0gWIlYiYODbsBdwJjoD5e357v/fplOu3j1eNDds=";
