@@ -129,8 +129,8 @@ def main() -> None:
     arg_parser.add_argument(
         "-o",
         "--output_directory",
-        help="""The path to the directory where outputs copied from the VM will be placed.
-                By e.g. Machine.copy_from_vm or Machine.screenshot""",
+        help="""The path to the directory where outputs copied from the machine will be placed.
+                By e.g. NspawnMachine.copy_from_machine or QemuMachine.screenshot""",
         default=Path.cwd(),
         type=writeable_dir,
     )
