@@ -30,7 +30,7 @@ let
       xf86-video-intel
       xf86-video-mga
       xf86-video-neomagic
-      xf86_video_nested
+      xf86-video-nested
       xf86-video-nouveau
       xf86-video-nv
       xf86-video-omap
