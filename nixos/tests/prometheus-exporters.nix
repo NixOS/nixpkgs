@@ -1733,6 +1733,7 @@ let
               community = "public";
               version = 2;
             };
+            modules.test = { };
           };
         };
         exporterTest = ''
