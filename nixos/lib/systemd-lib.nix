@@ -983,6 +983,7 @@ rec {
       conditional ? false,
       description,
       nullable ? false,
+      example ? "/etc/credstore/${defaultName}",
     }:
     mkOption (
       optionalAttrs nullable {
@@ -1029,6 +1030,7 @@ rec {
           };
         })
       ]);
+      inherit example;
       description = ''
         ${description}
 
