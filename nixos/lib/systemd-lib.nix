@@ -931,45 +931,46 @@ rec {
   # Corresponds to GPT_LABEL_MAX from systemd's gpt.h.
   GPTMaxLabelLength = 36;
 
-  
   /**
-    Creates an option which configures credentials to be passed into systemd services.
+    Creates an option which configures credentials to be passed into systemd
+    services.
 
     The option produces a systemd service config fragment as output which will
     configure the service to load the credential.
 
     # Inputs
 
-    The `defaultName` argument can be passed to set the default name of the credential
-    to be loaded, and `readOnlyName` can be used if the service expects a credential
-    matching a well-known service-defined name.
+    The `defaultName` argument can be passed to set the default name of the
+    credential to be loaded, and `readOnlyName` can be used if the service expects a
+    credential matching a well-known service-defined name.
 
     The `bindPath` argument can be passed as a path for a bind mount local to the
-    service. This will produce the appropriate `BindPath` setting in the serviceConfig
-    fragment producedby the option.
+    service. This will produce the appropriate `BindPath` setting in the
+    serviceConfig fragment producedby the option.
 
     The `asserted` and `condition` arguments can be used to set up the appropriate
-    `AssertCredential` and `ConditionCredential` settings in the systemd service config.
+    `AssertCredential` and `ConditionCredential` settings in the systemd service
+    config.
 
     The given `description` argument will be enriched with information about how to
     configure secrets.
 
     # Option
 
-    The resulting option may be instantiated with a path or string, in which case it is
-    interpreted as a path to a file containing the secret. The secret is then loaded
-    into the service with `LoadCredential`.
+    The resulting option may be instantiated with a path or string, in which case it
+    is interpreted as a path to a file containing the secret. The secret is then
+    loaded into the service with `LoadCredential`.
 
-    The option may also be instantiated with an attribute set, in which case the `name`
-    may be given to override the default, and `encrypted` may be set to indicate that
-    the credential was encrypted with `systemd-creds`. 
-    
-    One of the following attributes may also be defined: `path` as a path to a file containing
-    the secret, which is then loaded into the service with `LoadCredential[Encrypted]`.
-    `data` containing the raw secret bytes, in which case the secret is loaded into the
-    service with `SetCredential[Encrypted]`. `reference` as the name of a secret to be
-    resolved by the systemd resolution mechanism, in which case the secret is loaded into
-    the service with `ImportCredential`.
+    The option may also be instantiated with an attribute set, in which case the
+    `name` may be given to override the default, and `encrypted` may be set to
+    indicate that the credential was encrypted with `systemd-creds`.
+
+    One of the following attributes may also be defined: `path` as a path to a file
+    containing the secret, which is then loaded into the service with
+    `LoadCredential[Encrypted]`; `data` as the raw secret bytes, in which case the
+    secret is loaded into the service with `SetCredential[Encrypted]`. `reference` as
+    the name of a secret to be resolved by the systemd resolution mechanism, in which
+    case the secret is loaded into the service with `ImportCredential`.
 
     :::
   */
