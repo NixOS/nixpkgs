@@ -11,6 +11,17 @@ $ ./result/bin/nixos-test-driver
 ```
 
 ::: {.note}
+Tests using `systemd-nspawn` container machines require root privileges to run interactively,
+since the driver calls `systemd-nspawn` directly to start the containers:
+
+```
+$ sudo ./result/bin/nixos-test-driver
+[...]
+>>>
+```
+:::
+
+::: {.note}
 By executing the test driver in this way,
 the VMs executed may gain network & Internet access via their backdoor control interface,
 typically recognized as `eth0`.
@@ -30,7 +41,7 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
-## Shell access in interactive mode {#sec-nixos-test-shell-access}
+## Shell access to VMs in interactive mode {#sec-nixos-test-shell-access}
 
 The function `<yourmachine>.shell_interact()` grants access to a shell running
 inside a virtual machine. To use it, replace `<yourmachine>` with the name of a
@@ -63,7 +74,7 @@ using:
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
 
-## SSH Access for test machines {#sec-nixos-test-ssh-access}
+## SSH Access for test VMs {#sec-nixos-test-ssh-access}
 
 An SSH-based backdoor to log into machines can be enabled with
 
@@ -149,10 +160,10 @@ must be configured to allow these connections.
 ## Reuse VM state {#sec-nixos-test-reuse-vm-state}
 
 You can re-use the VM states coming from a previous run by setting the
-`--keep-vm-state` flag.
+`--keep-machine-state` flag.
 
 ```ShellSession
-$ ./result/bin/nixos-test-driver --keep-vm-state
+$ ./result/bin/nixos-test-driver --keep-machine-state
 ```
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`
