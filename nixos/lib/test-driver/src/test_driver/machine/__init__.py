@@ -272,10 +272,24 @@ class BaseMachine(ABC):
     def is_up(self) -> bool: ...
 
     @abstractmethod
-    def start(self) -> None: ...
+    def start(self) -> None:
+        """
+        Start the machine. This method is asynchronous --- it does
+        not wait for the machine to finish booting.
+        """
+        ...
 
     @abstractmethod
-    def wait_for_shutdown(self) -> None: ...
+    def wait_for_shutdown(self) -> None:
+        """Wait for the machine to power off. This does *not* initiate a shutdown;
+        that's usually done via `shutdown()`.
+        """
+        ...
+
+    @abstractmethod
+    def shutdown(self) -> None:
+        """Shutdown the machine gracefully, waiting for it to exit."""
+        ...
 
     def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
         """
@@ -593,6 +607,38 @@ class BaseMachine(ABC):
         check_output: bool = True,
         timeout: int | None = 900,
     ) -> tuple[int, str]:
+        """
+        Execute a shell command, returning a list `(status, stdout)`.
+
+        Commands are run with `set -euo pipefail` set:
+
+        -   If several commands are separated by `;` and one fails, the
+            command as a whole will fail.
+
+        -   For pipelines, the last non-zero exit status will be returned
+            (if there is one; otherwise zero will be returned).
+
+        -   Dereferencing unset variables fails the command.
+
+        -   It will wait for stdout to be closed.
+
+        If the command detaches, it must close stdout, as `execute` will wait
+        for this to consume all output reliably. This can be achieved by
+        redirecting stdout to stderr `>&2`, to `/dev/console`, `/dev/null` or
+        a file. Examples of detaching commands are `sleep 365d &`, where the
+        shell forks a new process that can write to stdout and `xclip -i`, where
+        the `xclip` command itself forks without closing stdout.
+
+        Takes an optional parameter `check_return` that defaults to `True`.
+        Setting this parameter to `False` will not check for the return code
+        and return -1 instead. This can be used for commands that shut down
+        the machine and would therefore break the pipe that would be used for
+        retrieving the return code.
+
+        A timeout for the command can be specified (in seconds) using the optional
+        `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
+        `execute(cmd, timeout=None)`. The default is 900 seconds.
+        """
         self.run_callbacks()
         return self._execute(
             command=command,
@@ -812,38 +858,6 @@ class QemuMachine(BaseMachine):
         check_output: bool = True,
         timeout: int | None = 900,
     ) -> tuple[int, str]:
-        """
-        Execute a shell command, returning a list `(status, stdout)`.
-
-        Commands are run with `set -euo pipefail` set:
-
-        -   If several commands are separated by `;` and one fails, the
-            command as a whole will fail.
-
-        -   For pipelines, the last non-zero exit status will be returned
-            (if there is one; otherwise zero will be returned).
-
-        -   Dereferencing unset variables fails the command.
-
-        -   It will wait for stdout to be closed.
-
-        If the command detaches, it must close stdout, as `execute` will wait
-        for this to consume all output reliably. This can be achieved by
-        redirecting stdout to stderr `>&2`, to `/dev/console`, `/dev/null` or
-        a file. Examples of detaching commands are `sleep 365d &`, where the
-        shell forks a new process that can write to stdout and `xclip -i`, where
-        the `xclip` command itself forks without closing stdout.
-
-        Takes an optional parameter `check_return` that defaults to `True`.
-        Setting this parameter to `False` will not check for the return code
-        and return -1 instead. This can be used for commands that shut down
-        the machine and would therefore break the pipe that would be used for
-        retrieving the return code.
-
-        A timeout for the command can be specified (in seconds) using the optional
-        `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
-        `execute(cmd, timeout=None)`. The default is 900 seconds.
-        """
         self.connect()
 
         # Always run command with shell opts
@@ -1561,6 +1575,10 @@ class NspawnMachine(BaseMachine):
         return (cp.returncode, cp.stdout)
 
     def start(self) -> None:
+        """
+        Start the systemd-nspawn container. This method is asynchronous --- it does
+        not wait for the container to finish booting.
+        """
         if self.process is not None:
             return
 
@@ -1578,7 +1596,20 @@ class NspawnMachine(BaseMachine):
 
         self.log(f"systemd-nspawn running (pid {self.pid})")
 
+    def shutdown(self) -> None:
+        """
+        Shut down the container, waiting for it to exit.
+        """
+        if self.process is None:
+            return
+        self.systemctl("poweroff")
+        self.wait_for_shutdown()
+
     def wait_for_shutdown(self) -> None:
+        """
+        Wait for the container to power off. This does *not* initiate a shutdown;
+        that's usually done via `shutdown()`.
+        """
         if self.process is None:
             return
 

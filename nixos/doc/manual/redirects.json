@@ -76,8 +76,56 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "sec-nixos-test-vms-vs-containers": [
+    "index.html#sec-nixos-test-vms-vs-containers"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
+  ],
+  "sec-test-container-ssh-access": [
+    "index.html#sec-test-container-ssh-access"
+  ],
+  "sec-test-vm-ssh-access": [
+    "index.html#sec-test-vm-ssh-access"
+  ],
+  "ssec-all-machine-objects": [
+    "index.html#ssec-all-machine-objects"
+  ],
+  "ssec-nixos-test-machines": [
+    "index.html#ssec-nixos-test-machines"
+  ],
+  "ssec-nixos-test-nspawn-containers": [
+    "index.html#ssec-nixos-test-nspawn-containers"
+  ],
+  "ssec-nixos-test-qemu-vms": [
+    "index.html#ssec-nixos-test-qemu-vms"
+  ],
+  "ssec-nspawn-machine-objects": [
+    "index.html#ssec-nspawn-machine-objects"
+  ],
+  "ssec-qemu-machine-objects": [
+    "index.html#ssec-qemu-machine-objects"
+  ],
+  "ssec-test-script": [
+    "index.html#ssec-test-script"
+  ],
+  "ssec-test-script-checks": [
+    "index.html#ssec-test-script-checks"
+  ],
+  "ssec-testing-user-units": [
+    "index.html#ssec-testing-user-units"
+  ],
+  "test-opt-containerDefaults": [
+    "index.html#test-opt-containerDefaults"
+  ],
+  "test-opt-containers": [
+    "index.html#test-opt-containers"
+  ],
+  "test-opt-extraBaseModules": [
+    "index.html#test-opt-extraBaseModules"
+  ],
+  "test-opt-nodeDefaults": [
+    "index.html#test-opt-nodeDefaults"
   ],
   "test-opt-rawTestDerivationArg": [
     "index.html#test-opt-rawTestDerivationArg"
@@ -2022,7 +2070,8 @@
   "sec-call-nixos-test-outside-nixos": [
     "index.html#sec-call-nixos-test-outside-nixos"
   ],
-  "sec-nixos-test-nodes": [
+  "sec-nixos-test-machines-config": [
+    "index.html#sec-nixos-test-machines-config",
     "index.html#sec-nixos-test-nodes"
   ],
   "ssec-machine-objects": [
@@ -2055,8 +2104,8 @@
   "test-opt-enableOCR": [
     "index.html#test-opt-enableOCR"
   ],
-  "test-opt-extraBaseModules": [
-    "index.html#test-opt-extraBaseModules"
+  "test-opt-extraBaseNodeModules": [
+    "index.html#test-opt-extraBaseNodeModules"
   ],
   "test-opt-extraDriverArgs": [
     "index.html#test-opt-extraDriverArgs"
