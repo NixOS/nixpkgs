@@ -23754,6 +23754,12 @@
     name = "Otto Sabart";
     keys = [ { fingerprint = "0AF6 4C3B 1F12 14B3 8C8C  5786 1FA2 DBE6 7438 7CC3"; } ];
   };
+  sebimarkgraf = {
+    email = "sebastian-markgraf@t-online.de";
+    github = "sebimarkgraf";
+    githubId = 24530526;
+    name = "Sebastian Mossburger";
+  };
   sebrut = {
     email = "kontakt@sebastian-rutofski.de";
     github = "sebrut";
