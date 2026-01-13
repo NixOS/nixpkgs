@@ -1183,6 +1183,30 @@ in
     };
   };
 
+  tmux-powerkit = mkTmuxPlugin rec {
+    pluginName = "tmux-powerkit";
+    rtpFilePath = "tmux-powerkit.tmux";
+    version = "5.12.0";
+    src = fetchFromGitHub {
+      owner = "fabioluciano";
+      repo = "tmux-powerkit";
+      tag = "v${version}";
+      hash = "sha256-RIgU4200z8wJNXfxHKbkfrn5MuG1KpxNwlBvXrrtL5s=";
+    };
+    meta = {
+      homepage = "https://github.com/fabioluciano/tmux-powerkit";
+      description = "The Ultimate tmux Status Bar Framework";
+      longDescription = ''
+        A comprehensive status bar framework for tmux with 42 production-ready plugins,
+        37 themes with 61 variants, and 9 separator styles. Features smart caching
+        with Stale-While-Revalidate lazy loading.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ dokkodo ];
+    };
+  };
+
   tmux-toggle-popup = mkTmuxPlugin rec {
     pluginName = "tmux-toggle-popup";
     rtpFilePath = "toggle-popup.tmux";
