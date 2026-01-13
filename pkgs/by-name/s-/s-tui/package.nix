@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "s-tui";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "amanusk";
     repo = "s-tui";
     tag = "v${version}";
-    hash = "sha256-VdQSDRDdRO6jHSuscOQZXnVM6nWHaXRfR4sZ3x5lriI=";
+    hash = "sha256-B5KQz+/RG+IROJah0jq+2e94DtnILwY2aH9qulWzHns=";
   };
 
   propagatedBuildInputs = [
