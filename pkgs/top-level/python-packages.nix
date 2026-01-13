@@ -13045,6 +13045,8 @@ self: super: with self; {
 
   pybloom-live = callPackage ../development/python-modules/pybloom-live { };
 
+  pybloomfiltermap3 = callPackage ../development/python-modules/pybloomfiltermap3 { };
+
   pyblu = callPackage ../development/python-modules/pyblu { };
 
   pybluez = callPackage ../development/python-modules/pybluez { inherit (pkgs) bluez; };
