@@ -6903,6 +6903,12 @@
     githubId = 131907205;
     name = "David Thievon";
   };
+  dokkodo = {
+    email = "dokkodo1@proton.me";
+    github = "dokkodo1";
+    githubId = 89461793;
+    name = "Callum McDonald";
+  };
   dolphindalt = {
     email = "dolphindalt@gmail.com";
     github = "dolphindalt";
