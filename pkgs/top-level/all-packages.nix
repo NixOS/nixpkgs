@@ -6679,10 +6679,6 @@ with pkgs;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
   db62 = callPackage ../development/libraries/db/db-6.2.nix { };
 
-  dbus = callPackage ../development/libraries/dbus { };
-
-  makeDBusConf = callPackage ../development/libraries/dbus/make-dbus-conf.nix { };
-
   draco = callPackage ../development/libraries/draco {
     tinygltf = callPackage ../development/libraries/draco/tinygltf.nix { };
   };
