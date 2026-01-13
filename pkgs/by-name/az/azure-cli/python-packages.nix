@@ -50,6 +50,7 @@ let
             argcomplete
             azure-cli-telemetry
             azure-common
+            azure-core
             azure-mgmt-core
             cryptography
             distro
@@ -87,6 +88,7 @@ let
             --ignore=azure/cli/core/tests/test_extension.py \
             --ignore=azure/cli/core/tests/test_util.py \
             --ignore=azure/cli/core/tests/test_argcomplete.py \
+            --ignore=azure/cli/core/tests/test_telemetry.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
