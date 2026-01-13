@@ -310,6 +310,11 @@ in
               description = "The credential reference. If given, the credential will be consumed via `ImportCredential`";
               default = null;
             };
+            allowStorePath = mkOption {
+              type = bool;
+              description = "Set to true to opt into allowing store paths for secrets. This isn't generally safe as store paths are readable by anyone";
+              default = false;
+            };
           };
         })
       ]);
@@ -324,39 +329,55 @@ in
       '';
       apply =
         credential:
-        let
-          cred =
-            if strings.isStringLike credential then
-              {
-                name = defaultName;
-                encrypted = false;
-                path = credential;
-                data = null;
-                reference = null;
-              }
-            else
-              credential;
-          encrypted = optionalString cred.encrypted "Encrypted";
-        in
-        cred
-        // {
-          serviceConfig = {
-            BindPaths = if bindPath != null then [ "%d/${cred.name}:${bindPath}" ] else [ ];
-            AssertCredential = if asserted then [ cred.name ] else [ ];
-            ConditionCredential = if conditional then [ cred.name ] else [ ];
+        optionalAttrs (credential != null) (
+          let
+            cred =
+              if strings.isStringLike credential then
+                {
+                  name = defaultName;
+                  encrypted = false;
+                  path = credential;
+                  data = null;
+                  reference = null;
+                  allowStorePath = false;
+                }
+              else
+                credential;
+            encrypted = optionalString cred.encrypted "Encrypted";
+            assertStringPath =
+              value:
+              if !cred.allowStorePath && (strings.isStorePath value || builtins.isPath value) then
+                throw ''
+                  Credential '${cred.name}':
+                    ${toString value}
+                    is a path into the world-readable Nix store. This is not generally safe for secrets.
+
+                    This protection may be circumvented via the 'allowStorePath' option.
+                ''
+              else
+                value;
+          in
+          cred
+          // {
+            serviceConfig = {
+              BindPaths = if bindPath != null then [ "%d/${cred.name}:${bindPath}" ] else [ ];
+              AssertCredential = if asserted then [ cred.name ] else [ ];
+              ConditionCredential = if conditional then [ cred.name ] else [ ];
+            }
+            // (
+              if cred.data != null && cred.reference == null && cred.path == null then
+                { ImportCredential = "${cred.ref}:${cred.name}"; }
+              else if cred.data == null && cred.reference != null && cred.path == null then
+                { "SetCredential${encrypted}" = "${cred.name}:${cred.data}"; }
+              else if cred.data == null && cred.reference == null then
+                {
+                  "LoadCredential${encrypted}" =
+                    if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name;
+                }
+              else
+                throw "Credential must be given at most one data, path, or reference"
+            );
           }
-          // (
-            if cred.data != null && cred.reference == null && cred.path == null then
-              { ImportCredential = "${cred.ref}:${cred.name}"; }
-            else if cred.data == null && cred.reference != null && cred.path == null then
-              { "SetCredential${encrypted}" = "${cred.name}:${cred.data}"; }
-            else if cred.data == null && cred.reference == null then
-              {
-                "LoadCredential${encrypted}" = if cred.path != null then "${cred.name}:${cred.path}" else cred.name;
-              }
-            else
-              throw "Credential must be given at most one data, path, or reference"
-          );
-        };
+        );
     };
 }
