@@ -2,27 +2,32 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 buildNpmPackage rec {
   pname = "clasp";
-  version = "2.5.0";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "clasp";
     tag = "v${version}";
-    hash = "sha256-Wt9caSgYNSx6yVUm3eg86GNdrheqHM5IYY8QohclHkQ=";
+    hash = "sha256-Pxt3MaDDsk/qq3NSuwG3jOoPthwrL0QelaruoC37hfA=";
   };
 
-  npmDepsHash = "sha256-iRC2iLNe/4ZP2liUDjIgyMNtlmjcXAGdSmhx3qFBjsA=";
+  patches = [
+    # https://github.com/google/clasp/pull/1112
+    (fetchpatch {
+      url = "https://github.com/google/clasp/commit/b183d4b5fbdb51f7bc2e3edadf5fd3bbff28bad1.patch";
+      hash = "sha256-lnC7DfKsV4E5guxbjZ+WfkLj5wDLYwObPtH21dmFUcc=";
+    })
+  ];
+
+  npmDepsHash = "sha256-IyFcGcT3ceoaaf2sCPriEIoWPavg+YGsvkxr1MkLj5c=";
 
   # `npm run build` tries installing clasp globally
   npmBuildScript = [ "compile" ];
-  # Remove dangling symlink of a dependency
-  postInstall = ''
-    rm $out/lib/node_modules/@google/clasp/node_modules/.bin/sshpk-{verify,sign,conv}
-  '';
 
   meta = {
     description = "Develop Apps Script Projects locally";
