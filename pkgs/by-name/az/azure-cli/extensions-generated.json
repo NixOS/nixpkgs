@@ -855,9 +855,9 @@
   },
   "pscloud": {
     "pname": "pscloud",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/pscloud-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-aIobuwrf1z72gUzYZLLIzk1mRrsbIfWlxgpfJ+1n20U=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/pscloud-1.0.1-py3-none-any.whl",
+    "hash": "sha256-r2uk4grRbB6t5PiZFVUCtx+rbJcbvxv0f02K4MAQ48k=",
     "description": "Microsoft Azure Command-Line Tools Pscloud Extension"
   },
   "purview": {
