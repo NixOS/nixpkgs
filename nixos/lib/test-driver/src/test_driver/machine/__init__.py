@@ -14,6 +14,7 @@ import sys
 import tempfile
 import threading
 import time
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Generator
 from contextlib import _GeneratorContextManager, contextmanager, nullcontext
@@ -220,7 +221,7 @@ class BaseMachine(ABC):
     name: str
     callbacks: list[Callable]
     tmp_dir: Path
-    keep_vm_state: bool
+    keep_machine_state: bool
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} '{self.name}'>"
@@ -232,7 +233,7 @@ class BaseMachine(ABC):
         logger: AbstractLogger,
         tmp_dir: Path,
         callbacks: list[Callable] | None,
-        keep_vm_state: bool,
+        keep_machine_state: bool,
     ) -> None:
         self.out_dir = out_dir
         self.name = name
@@ -240,12 +241,10 @@ class BaseMachine(ABC):
         self.callbacks = callbacks if callbacks is not None else []
         self.tmp_dir = tmp_dir
 
-        # Note: "vm" is a bit of a misnomer here as we support both QEMU vms and nspawn containers.
-        # Consider renaming to something more generic ("machine"?)
-        self.keep_vm_state = keep_vm_state
+        self.keep_machine_state = keep_machine_state
 
         self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
-        if (not self.keep_vm_state) and self.state_dir.exists():
+        if (not self.keep_machine_state) and self.state_dir.exists():
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
@@ -617,8 +616,10 @@ class BaseMachine(ABC):
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
-        self.logger.log(f"deleting VM state directory {self.state_dir}")
-        self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
+        self.logger.log(f"deleting machine state directory {self.state_dir}")
+        self.logger.log(
+            "if you want to keep the machine state, pass --keep-machine-state"
+        )
 
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the VM (specified by an in-VM source path) to a path
@@ -725,7 +726,7 @@ class QemuMachine(BaseMachine):
         start_command: str,
         logger: AbstractLogger,
         name: str | None = None,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
         callbacks: list[Callable] | None = None,
     ) -> None:
         self.start_command = QemuStartCommand(start_command)
@@ -735,7 +736,7 @@ class QemuMachine(BaseMachine):
             logger=logger,
             callbacks=callbacks,
             tmp_dir=tmp_dir,
-            keep_vm_state=keep_vm_state,
+            keep_machine_state=keep_machine_state,
         )
 
         self.full_console_log = []
@@ -1436,7 +1437,7 @@ class NspawnMachine(BaseMachine):
         tmp_dir: Path,
         logger: AbstractLogger,
         callbacks: list[Callable] | None = None,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
     ):
         # TODO: don't compute `name` from `start_command` path, instead thread it down explicitly.
         # See analogous TODO in `QemuStartCommand::machine_name`.
@@ -1446,7 +1447,7 @@ class NspawnMachine(BaseMachine):
             logger=logger,
             callbacks=callbacks,
             tmp_dir=tmp_dir,
-            keep_vm_state=keep_vm_state,
+            keep_machine_state=keep_machine_state,
         )
 
         self.start_command = start_command

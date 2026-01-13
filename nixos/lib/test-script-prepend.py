@@ -34,7 +34,8 @@ class CreateMachineProtocol(Protocol):
         start_command: str | dict,
         *,
         name: Optional[str] = None,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
+        **kwargs: Any, # to allow usage of deprecated keep_vm_state
     ) -> BaseMachine:
         raise Exception("This is just type information for the Nix test driver")
 
