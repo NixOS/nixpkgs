@@ -21,7 +21,7 @@
   pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nibabel";
   version = "5.3.3";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nipy";
     repo = "nibabel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Kdz7kCY5QnA9OiV/FPW1RerjP1GGLn+YaTwFpA0dJAM=";
   };
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytest7CheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -78,9 +78,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://nipy.org/nibabel";
-    changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
+    changelog = "https://github.com/nipy/nibabel/blob/${finalAttrs.version}/Changelog";
     description = "Access a multitude of neuroimaging data formats";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ashgillman ];
   };
-}
+})
