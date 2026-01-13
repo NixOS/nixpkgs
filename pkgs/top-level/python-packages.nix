@@ -6079,6 +6079,8 @@ self: super: with self; {
 
   get-video-properties = callPackage ../development/python-modules/get-video-properties { };
 
+  getch = callPackage ../development/python-modules/getch { };
+
   getjump = callPackage ../development/python-modules/getjump { };
 
   getkey = callPackage ../development/python-modules/getkey { };
