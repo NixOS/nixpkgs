@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       httpx
-      httpx.optional-dependencies.socks
       packaging
       platformdirs
       prompt-toolkit
@@ -41,9 +40,7 @@ python3Packages.buildPythonApplication rec {
       typer
       typing-extensions
     ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ];
+    ++ httpx.optional-dependencies.socks;
 
   nativeCheckInputs = with python3Packages; [
     freezegun

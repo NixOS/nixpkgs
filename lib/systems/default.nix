@@ -102,13 +102,10 @@ let
             # assume compatible cpu have all the instructions included
             final.parsed.cpu == platform.parsed.cpu
             ->
-              # if both have gcc.arch defined, check whether final can execute the given platform
+              # if platform has gcc.arch, final must also have and can execute the gcc.arch of platform
               (
-                (final ? gcc.arch && platform ? gcc.arch)
-                -> architectures.canExecute final.gcc.arch platform.gcc.arch
+                platform ? gcc.arch -> final ? gcc.arch && architectures.canExecute final.gcc.arch platform.gcc.arch
               )
-              # if platform has gcc.arch defined but final doesn't, don't assume it can be executed
-              || (platform ? gcc.arch -> !(final ? gcc.arch))
           );
 
         isCompatible =
