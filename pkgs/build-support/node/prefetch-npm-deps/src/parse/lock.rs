@@ -20,18 +20,56 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
 
             to_new_packages(lockfile.dependencies.unwrap_or_default(), &initial_url)?
         }
-        2 | 3 => lockfile
-            .packages
-            .unwrap_or_default()
-            .into_iter()
-            .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-            .map(|(n, p)| Package {
-                // Use the package's own name if present (for aliases like string-width-cjs -> string-width),
-                // otherwise extract from the lockfile key
-                name: Some(p.name.unwrap_or(n)),
-                ..p
-            })
-            .collect(),
+        2 | 3 => {
+            let all_packages = lockfile.packages.unwrap_or_default();
+            let total_count = all_packages.iter().filter(|(n, _)| !n.is_empty()).count();
+
+            let (packages_with_resolved, packages_without_resolved): (Vec<_>, Vec<_>) = all_packages
+                .into_iter()
+                .filter(|(n, _)| !n.is_empty())
+                .partition(|(_, p)| matches!(p.resolved, Some(UrlOrString::Url(_))));
+
+            let missing_count = packages_without_resolved.len();
+
+            if missing_count > 0 {
+                let percentage = (missing_count as f64 / total_count as f64) * 100.0;
+                eprintln!(
+                    "warning: {} out of {} packages ({:.1}%) are missing 'resolved' URLs and will not be cached.",
+                    missing_count, total_count, percentage
+                );
+                if missing_count <= 10 {
+                    eprintln!("warning: Packages without 'resolved' URLs:");
+                } else {
+                    eprintln!("warning: First 10 packages without 'resolved' URLs:");
+                }
+                for (name, _) in packages_without_resolved.iter().take(10) {
+                    eprintln!("warning:   - {}", name.trim_start_matches("node_modules/"));
+                }
+                if missing_count > 10 {
+                    eprintln!("warning:   ... and {} more", missing_count - 10);
+                }
+                if percentage > 50.0 {
+                    eprintln!(
+                        "warning: More than 50% of packages are missing 'resolved' URLs. This may indicate an issue with the lockfile."
+                    );
+                    eprintln!(
+                        "warning: This is a known issue with some npm versions. See: https://github.com/npm/cli/issues/6301"
+                    );
+                    eprintln!(
+                        "warning: Consider regenerating upstream's lockfile with: npm install --package-lock-only (sending an upstream PR is best)"
+                    );
+                }
+            }
+            packages_with_resolved
+                .into_iter()
+                .map(|(n, p)| Package {
+                    // Use the package's own name if present (for aliases like string-width-cjs -> string-width),
+                    // otherwise extract from the lockfile key
+                    name: Some(p.name.unwrap_or(n)),
+                    ..p
+                })
+                .collect()
+        }
         _ => bail!(
             "We don't support lockfile version {}, please file an issue.",
             lockfile.version
