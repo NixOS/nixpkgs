@@ -51,7 +51,7 @@ in
   autoconf,
   cargo,
   dump_syms,
-  makeWrapper,
+  makeBinaryWrapper,
   mimalloc,
   nodejs,
   perl,
@@ -368,7 +368,7 @@ buildStdenv.mkDerivation {
     cargo
     gnum4
     llvmPackagesBuildBuild.bintools
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     perl
     python3
@@ -685,9 +685,6 @@ buildStdenv.mkDerivation {
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
-
-      # Needed to find Mozilla runtime
-      gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
 
       resourceDir=$out/lib/${binaryName}
     ''
