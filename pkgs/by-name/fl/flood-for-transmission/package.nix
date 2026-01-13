@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "flood-for-transmission";
-  version = "2025-07-19T10-51-22";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "johman10";
     repo = "flood-for-transmission";
-    tag = finalAttrs.version;
-    hash = "sha256-2oHEVvZZcxH9RBKreaiwFKp7Iu5ijYdpXdgVknCxwKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c1K7ldraw9lzVtABz39B9569jHEuo6N3Iy8aCCfBOXE=";
   };
 
-  npmDepsHash = "sha256-IUdsUGsm6yAbXqf4UGkz1VPa366TnWsTakkbywbLeTU=";
+  npmDepsHash = "sha256-yD9VwnAqE+k2/Z60YdJD6F1f4Cn3fcROCTopDq+DUWU=";
 
   strictDeps = true;
 
