@@ -5,27 +5,22 @@
   cmake,
   ninja,
   python3,
-  wrapQtAppsHook,
-  qtbase,
-  qtdeclarative,
-  qtwebchannel,
-  qtwebengine,
+  kdePackages,
   mpv-unwrapped,
-  mpvqt,
   libcec,
   SDL2,
   libXrandr,
   cacert,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jellyfin-desktop";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-desktop";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ITlYOrMS6COx9kDRSBi4wM6mzL/Q2G5X9GbABwDIOe4=";
     fetchSubmodules = true;
   };
@@ -36,15 +31,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin python3;
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtwebchannel
-    qtwebengine
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
+    kdePackages.qtwebchannel
+    kdePackages.qtwebengine
     mpv-unwrapped
 
     # input sources
@@ -55,7 +50,7 @@ stdenv.mkDerivation rec {
     libXrandr
     cacert
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) mpvqt;
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) kdePackages.mpvqt;
 
   cmakeFlags = [
     "-DCHECK_FOR_UPDATES=OFF"
@@ -98,4 +93,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "jellyfin-desktop";
   };
-}
+})
