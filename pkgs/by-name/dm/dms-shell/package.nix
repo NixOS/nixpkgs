@@ -26,18 +26,18 @@ buildGoModule (
   in
   {
     pname = "dms-shell";
-    version = "1.0.3";
+    version = "1.2.0";
 
     src = fetchFromGitHub {
       owner = "AvengeMedia";
       repo = "DankMaterialShell";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-IT21E2XX83IlO6/dW0YmUdY2JW//+ZBHLqpKPGd6tx8=";
+      hash = "sha256-LNKeqhYWpx688ytSW//H+kdaupWf0pStPhfFLxAFV8k=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/core";
 
-    vendorHash = "sha256-2PCqiW4frxME8IlmwWH5ktznhd/G1bah5Ae4dp0HPTQ=";
+    vendorHash = "sha256-9CnZFtjXXWYELRiBX2UbZvWopnl9Y1ILuK+xP6YQZ9U=";
 
     ldflags = [
       "-s"
