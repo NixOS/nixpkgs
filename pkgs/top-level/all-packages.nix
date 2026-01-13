@@ -6626,11 +6626,7 @@ with pkgs;
 
   botanEsdm = botan3.override { withEsdm = true; };
 
-  c-ares = callPackage ../development/libraries/c-ares { };
-
-  c-aresMinimal = callPackage ../development/libraries/c-ares {
-    withCMake = false;
-  };
+  c-aresMinimal = callPackage ../by-name/c-/c-ares/package.nix { withCMake = false; };
 
   inherit (callPackages ../development/libraries/c-blosc { })
     c-blosc
