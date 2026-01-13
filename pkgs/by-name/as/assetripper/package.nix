@@ -72,7 +72,10 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://github.com/AssetRipper/AssetRipper";
     license = lib.licenses.gpl3Only;
     mainProgram = "AssetRipper";
-    maintainers = with lib.maintainers; [ YoshiRulz ];
+    maintainers = with lib.maintainers; [
+      YoshiRulz
+      toasteruwu
+    ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
