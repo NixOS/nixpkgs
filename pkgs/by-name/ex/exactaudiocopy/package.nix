@@ -4,7 +4,7 @@
   fetchurl,
   makeDesktopItem,
   imagemagick,
-  p7zip,
+  _7zz,
   wine,
   writeShellScriptBin,
   symlinkJoin,
@@ -16,13 +16,19 @@ let
   version = "1.8.0";
 
   eac_exe = fetchurl {
-    url = "http://www.exactaudiocopy.de/eac-${lib.versions.majorMinor version}.exe";
-    sha256 = "205530cfbfdff82343858f38b0e709e586051fb8900ecd513d7992a3c1ef031b";
+    urls = [
+      "https://www.exactaudiocopy.de/eac-1.8.exe"
+      "https://web.archive.org/web/20251231130418/https://www.exactaudiocopy.de/eac-1.8.exe"
+    ];
+    hash = "sha256-IFUwz7/f+CNDhY84sOcJ5YYFH7iQDs1RPXmSo8HvAxs=";
   };
 
   cygwin = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.1-1-x86_64.tar.xz";
-    sha256 = "45d1c76a15426209c20a8d4df813e94fbd17bd5d85ad4d742515ff432400143e";
+    urls = [
+      "https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.6-1-x86_64.tar.xz"
+      "https://web.archive.org/web/20260113125803/https://mirrors.kernel.org/sourceware/cygwin/x86_64/release/cygwin/cygwin-3.6.6-1-x86_64.tar.xz"
+    ];
+    hash = "sha256-xcgYjfVB9dF0twGC1ww7r4NCPHT/+aEk1CMmS7ndJuA=";
   };
 
   patched_eac = stdenv.mkDerivation {
@@ -31,14 +37,14 @@ let
 
     nativeBuildInputs = [
       imagemagick
-      p7zip
+      _7zz
     ];
 
     buildCommand = ''
       mkdir -p $out
       _tmp=$(mktemp -d)
       cd $_tmp
-      7z x -aoa ${eac_exe}
+      7zz x -aoa ${eac_exe}
       chmod -R 755 .
       cp ${cygwin} cygwin1.tar.xz
       tar xf cygwin1.tar.xz
@@ -46,8 +52,8 @@ let
       rm -rf usr
       rm cygwin1.tar.xz
       cp -r * $out
-      7z x EAC.exe
-      convert .rsrc/1033/ICON/29.ico -thumbnail 128x128 -alpha on -background none -flatten "$out/eac.ico.128.png"
+      7zz x EAC.exe
+      magick .rsrc/1033/ICON/29.ico -thumbnail 128x128 -alpha on -background none -flatten "$out/eac.ico.128.png"
     '';
   };
 
