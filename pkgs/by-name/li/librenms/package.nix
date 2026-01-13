@@ -27,16 +27,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.12.0";
+  version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    hash = "sha256-d73izEdLWviOp0XcMbQ3goLWgLZupO4QtQv7WUxdfk8=";
+    hash = "sha256-UA1Ey3NH8YWXFUn9Q7uA35go16EkuMewisTPk0/ifSQ=";
   };
 
-  vendorHash = "sha256-34+srnXDto82xuITDSPEiNnbCgmZbijvpqpmwlszCEg=";
+  vendorHash = "sha256-UdGftpnnWgS5w80iCj3Y1Eyz0uU+mx/VxA091DZzkJw=";
 
   php = phpPackage;
 
