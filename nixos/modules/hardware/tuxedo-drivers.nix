@@ -94,16 +94,16 @@ in
     boot.extraModulePackages = [ tuxedo-drivers ];
     services.udev.packages = [
       tuxedo-drivers
-      lib.mkIf
-      (lib.any (v: v != null) cfg.settings)
-      (pkgs.writeTextDir "etc/udev/rules.d/90-tuxedo.rules" (
+    ]
+    ++ lib.optional (lib.any (v: v != null) (lib.attrValues cfg.settings)) (
+      pkgs.writeTextDir "etc/udev/rules.d/90-tuxedo.rules" (
         lib.concatLines (
           [ "# Custom rules for TUXEDO laptops" ]
           ++ (optUdevRule "charging_profile/charging_profile" cfg.settings.charging-profile)
           ++ (optUdevRule "charging_priority/charging_prio" cfg.settings.charging-priority)
           ++ (optUdevRule "fn_lock" cfg.settings.fn-lock)
         )
-      ))
-    ];
+      )
+    );
   };
 }
