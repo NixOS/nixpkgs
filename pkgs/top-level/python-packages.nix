@@ -2235,6 +2235,8 @@ self: super: with self; {
 
   brax = callPackage ../development/python-modules/brax { };
 
+  breame = callPackage ../development/python-modules/breame { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   breezy = callPackage ../development/python-modules/breezy { };
