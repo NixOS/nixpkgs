@@ -4,23 +4,19 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghost";
-  version = "8.0.0";
+  version = "8.0.0-unstable-2025-11-01";
   pyproject = true;
-
-  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "EntySec";
     repo = "Ghost";
-    rev = version;
-    sha256 = "13p3inw7v55na8438awr692v9vb7zgf5ggxpha9r3m8vfm3sb4iz";
+    rev = "bf38c7e62e510caa1229e797ca3276e426235b03";
+    hash = "sha256-c1mcx5mG45Rm/oJ+XFCo5uJqcqPQGgZnxRs7OcU8q+0=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     adb-shell
@@ -33,9 +29,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "Android post-exploitation framework";
-    mainProgram = "ghost";
     homepage = "https://github.com/EntySec/ghost";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ghost";
   };
-}
+})

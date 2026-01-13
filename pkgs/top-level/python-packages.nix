@@ -2994,6 +2994,8 @@ self: super: with self; {
 
   colormath2 = callPackage ../development/python-modules/colormath2 { };
 
+  colorscript = callPackage ../development/python-modules/colorscript { };
+
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
   colorthief = callPackage ../development/python-modules/colorthief { };
