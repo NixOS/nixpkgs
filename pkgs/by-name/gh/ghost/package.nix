@@ -20,6 +20,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3.pkgs; [
     adb-shell
+    badges
+    colorscript
+    pex-entysec
   ];
 
   # Project has no tests
