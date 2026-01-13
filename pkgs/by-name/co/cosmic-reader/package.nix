@@ -63,6 +63,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.VERGEN_GIT_SHA = finalAttrs.src.rev;
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/com.system76.CosmicReader.thumbnailer \
+      --replace-fail "TryExec=cosmic-reader" "TryExec=$out/bin/cosmic-reader" \
+      --replace-fail "Exec=cosmic-reader" "Exec=$out/bin/cosmic-reader"
+  '';
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version"

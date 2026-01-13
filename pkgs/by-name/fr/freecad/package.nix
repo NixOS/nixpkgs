@@ -144,6 +144,12 @@ freecad-utils.makeCustomizable (
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
       ];
 
+    postInstall = ''
+      substituteInPlace $out/share/thumbnailers/FreeCAD.thumbnailer \
+        --replace-fail "TryExec=freecad-thumbnailer" "TryExec=$out/bin/freecad-thumbnailer" \
+        --replace-fail "Exec=freecad-thumbnailer" "Exec=$out/bin/freecad-thumbnailer"
+    '';
+
     postFixup = ''
       mv $out/share/doc $out
       ln -s $out/doc $out/share/doc

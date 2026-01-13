@@ -98,6 +98,12 @@ stdenv.mkDerivation {
     gtk-mac-integration-gtk3
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/org.gnome.Dia.thumbnailer \
+      --replace-fail "TryExec=dia" "TryExec=$out/bin/dia" \
+      --replace-fail "Exec=dia" "Exec=$out/bin/dia"
+  '';
+
   meta = {
     description = "Gnome Diagram drawing software";
     mainProgram = "dia";
