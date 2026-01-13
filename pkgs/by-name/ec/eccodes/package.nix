@@ -1,7 +1,7 @@
 {
-  fetchurl,
   lib,
-  stdenv,
+  gccStdenv,
+  fetchurl,
   cmake,
   netcdf,
   openjpeg,
@@ -11,12 +11,11 @@
   perl,
   ctestCheckHook,
   enablePython ? false,
-  pythonPackages,
+  python3Packages ? null,
   enablePosixThreads ? false,
   enableOpenMPThreads ? false,
 }:
-
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "eccodes";
   version = "2.44.0";
 
@@ -54,8 +53,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = lib.optionals enablePython [
-    pythonPackages.python
-    pythonPackages.numpy
+    python3Packages.python
+    python3Packages.numpy
   ];
 
   cmakeFlags = [
