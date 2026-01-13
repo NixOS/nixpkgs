@@ -1,32 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
   ply,
   roman,
   uqbar,
-  pythonOlder,
-  pythonAtLeast,
   pytestCheckHook,
   lilypond,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "abjad";
-  version = "3.28";
-  format = "setuptools";
+  version = "3.31";
+  pyproject = true;
 
-  # see issue upstream indicating Python 3.12 support will come
-  # with version 3.20: https://github.com/Abjad/abjad/issues/1574
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-J4LPOSz34GvDRwpCG8yt4LAqt+dhDrfG/W451bZRpgk=";
+  src = fetchFromGitHub {
+    owner = "Abjad";
+    repo = "abjad";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2Nwq/NNQshGHvFkmLBYXgv97++h86kmoOCPKnYElnu4=";
   };
 
-  propagatedBuildInputs = [
+  # uses python 3.13 function generic syntax
+  disabled = pythonOlder "3.13";
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     ply
     roman
     uqbar
@@ -35,20 +38,19 @@ buildPythonPackage rec {
 
   buildInputs = [ lilypond ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   postPatch = ''
-    substituteInPlace abjad/io.py \
-      --replace-fail 'lilypond_path = self.get_lilypond_path()' \
-                'lilypond_path = "${lilypond}/bin/lilypond"'
-    # general invocations of binary for IO purposes
-
-    substituteInPlace abjad/configuration.py \
-      --replace-fail '["lilypond"' '["${lilypond}/bin/lilypond"'
-    # get_lilypond_version_string
+    substituteInPlace source/abjad/configuration.py \
+      --replace-fail '["lilypond"' '["${lib.getExe lilypond}"' \
+      --replace-fail '"default": "lilypond",' '"default": "${lib.getExe lilypond}",'
   '';
 
   pythonImportsCheck = [ "abjad" ];
+
+  preCheck = ''
+    rm -rf source # this causes some pycache issues
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "GNU LilyPond wrapper for Python";
@@ -66,4 +68,4 @@ buildPythonPackage rec {
     changelog = "https://abjad.github.io/appendices/changes.html";
     maintainers = [ lib.maintainers.davisrichard437 ];
   };
-}
+})
