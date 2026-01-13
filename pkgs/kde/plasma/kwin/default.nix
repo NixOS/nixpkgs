@@ -12,12 +12,12 @@
   libcanberra,
   libdisplay-info,
   libei,
+  libevdev,
   libgbm,
   lcms2,
   pipewire,
   krunner,
   python3,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kwin";
@@ -56,6 +56,7 @@ mkKdeDerivation {
     libcanberra
     libdisplay-info
     libei
+    libevdev
     libinput
     pipewire
 
