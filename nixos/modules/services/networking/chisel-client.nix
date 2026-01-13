@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.chisel-client;
-in {
+in
+{
   options.services.chisel-client = {
     enable = lib.mkEnableOption "Chisel tunnel client";
 
@@ -65,8 +67,11 @@ in {
 
     headers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
-      example = ["Foo: Bar" "Hello: World"];
+      default = [ ];
+      example = [
+        "Foo: Bar"
+        "Hello: World"
+      ];
       description = "Custom HTTP headers.";
     };
 
@@ -78,7 +83,7 @@ in {
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       description = "Additional raw command-line arguments.";
     };
   };
@@ -86,8 +91,8 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.chisel-client = {
       description = "Chisel Tunnel Client";
-      wantedBy = ["network-online.target"];
-      after = ["network-online.target"];
+      wantedBy = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       serviceConfig = {
         ExecStart =
@@ -98,9 +103,9 @@ in {
             ++ lib.optional (cfg.authfile != null) "--authfile ${cfg.authfile}"
             ++ lib.optional (cfg.keepalive != null) "--keepalive ${cfg.keepalive}"
             ++ lib.optional (cfg.proxy != null) "--proxy ${cfg.proxy}"
-            ++ lib.concatMap (h: ["--header ${h}"]) cfg.headers
+            ++ lib.concatMap (h: [ "--header ${h}" ]) cfg.headers
             ++ cfg.extraArgs
-            ++ [cfg.server]
+            ++ [ cfg.server ]
             ++ cfg.remotes
           );
 
@@ -137,5 +142,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [peritia];
+  meta.maintainers = with lib.maintainers; [ peritia ];
 }
