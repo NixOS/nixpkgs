@@ -10,6 +10,7 @@
   uv-dynamic-versioning,
 
   # dependencies
+  anthropic,
   authlib,
   cyclopts,
   exceptiongroup,
@@ -29,7 +30,6 @@
   websockets,
 
   # tests
-  anthropic,
   dirty-equals,
   email-validator,
   fastapi,
@@ -45,14 +45,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.14.2";
+  version = "2.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JqDsHmhuRom4CPmQd0sMaBtgypHDtwVJ4I3fnOLjnd8=";
+    hash = "sha256-vlwS4gpKMkmHh5Yr09ZMNFzpiEKjzJoJJNN3KxSBn3g=";
   };
 
   build-system = [
@@ -84,6 +84,7 @@ buildPythonPackage (finalAttrs: {
   ++ pydantic.optional-dependencies.email;
 
   optional-dependencies = {
+    anthropic = [ anthropic ];
     openai = [ openai ];
   };
 
@@ -94,7 +95,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    anthropic
     dirty-equals
     email-validator
     fastapi
