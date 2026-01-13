@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     # unistd required for read and close
     ./0002-zlib-missing-include.patch
     ./0003-incompatible-pointer-types.patch
+    # C23 requires stdbool for an actual proper boolean type instead of `char'
+    ./0004-fix-build-with-C23.patch
   ];
 
   nativeBuildInputs = [

@@ -12814,6 +12814,12 @@ self: super: with self; {
 
   py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
 
+  py-key-value-aio = callPackage ../development/python-modules/py-key-value-aio { };
+
+  py-key-value-shared = callPackage ../development/python-modules/py-key-value-shared { };
+
+  py-key-value-shared-test = callPackage ../development/python-modules/py-key-value-shared-test { };
+
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
@@ -13272,6 +13278,8 @@ self: super: with self; {
   pydmd = callPackage ../development/python-modules/pydmd { };
 
   pydo = callPackage ../development/python-modules/pydo { };
+
+  pydocket = callPackage ../development/python-modules/pydocket { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
@@ -16602,6 +16610,8 @@ self: super: with self; {
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot { };
 
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
+
+  rocksdict = callPackage ../development/python-modules/rocksdict { };
 
   roku = callPackage ../development/python-modules/roku { };
 
