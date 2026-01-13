@@ -5,6 +5,7 @@
   lib,
   nix-update-script,
   nodejs,
+  patchelf,
   pkg-config,
   vips,
 }:
@@ -32,7 +33,10 @@ buildNpmPackage rec {
   inherit nodejs;
 
   buildInputs = [ vips ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    patchelf
+    pkg-config
+  ];
 
   passthru = {
     tests.test = callPackage ./test.nix { };
