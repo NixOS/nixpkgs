@@ -9,7 +9,6 @@
 
   # dependencies
   cloudpickle,
-  exceptiongroup,
   fakeredis,
   opentelemetry-api,
   opentelemetry-exporter-prometheus,
@@ -47,7 +46,6 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     cloudpickle
-    exceptiongroup
     fakeredis
     opentelemetry-api
     opentelemetry-exporter-prometheus
@@ -60,7 +58,9 @@ buildPythonPackage (finalAttrs: {
     typer
     typing-extensions
   ]
-  ++ py-key-value-aio.optional-dependencies.memory;
+  ++ fakeredis.optional-dependencies.lua
+  ++ py-key-value-aio.optional-dependencies.memory
+  ++ py-key-value-aio.optional-dependencies.redis;
 
   pythonImportsCheck = [ "docket" ];
 
