@@ -87,7 +87,7 @@ class Driver:
         tests: str,
         out_dir: Path,
         logger: AbstractLogger,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
     ):
@@ -110,7 +110,7 @@ class Driver:
             QemuMachine(
                 name=name,
                 start_command=vm_start_script,
-                keep_vm_state=keep_vm_state,
+                keep_machine_state=keep_machine_state,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
@@ -130,7 +130,7 @@ class Driver:
                 start_command=container_start_script,
                 tmp_dir=tmp_dir,
                 logger=self.logger,
-                keep_vm_state=keep_vm_state,
+                keep_machine_state=keep_machine_state,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
             )
@@ -360,7 +360,7 @@ class Driver:
         start_command: str,
         *,
         name: str | None = None,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
     ) -> BaseMachine:
         """
         Create a `QemuMachine`. This currently only supports qemu "nodes", not containers.
@@ -372,7 +372,7 @@ class Driver:
             out_dir=self.out_dir,
             start_command=start_command,
             name=name,
-            keep_vm_state=keep_vm_state,
+            keep_machine_state=keep_machine_state,
             logger=self.logger,
         )
 

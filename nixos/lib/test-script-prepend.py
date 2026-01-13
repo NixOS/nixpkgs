@@ -1,6 +1,7 @@
 # This file contains type hints that can be prepended to Nix test scripts so they can be type
 # checked.
 
+import warnings
 from test_driver.debug import DebugAbstract
 from test_driver.driver import Driver
 from test_driver.vlan import VLan
@@ -34,7 +35,8 @@ class CreateMachineProtocol(Protocol):
         start_command: str | dict,
         *,
         name: Optional[str] = None,
-        keep_vm_state: bool = False,
+        keep_machine_state: bool = False,
+        **kwargs: Any, # to allow usage of deprecated keep_vm_state
     ) -> BaseMachine:
         raise Exception("This is just type information for the Nix test driver")
 
