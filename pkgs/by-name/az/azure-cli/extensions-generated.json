@@ -785,9 +785,9 @@
   },
   "notification-hub": {
     "pname": "notification-hub",
-    "version": "2.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/notification_hub-2.0.0b1-py3-none-any.whl",
-    "hash": "sha256-vjdwj26RG1HlatFfN/Jqh5BObSJQ1WmM8DWL5kbD3uo=",
+    "version": "2.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/notification_hub-2.0.0b2-py3-none-any.whl",
+    "hash": "sha256-8PxOPTS1YQGo5mdjAnDo5uU44DPiG//SfuEhWDS7yfQ=",
     "description": "Microsoft Azure Command-Line Tools Notification Hub Extension"
   },
   "nsp": {
