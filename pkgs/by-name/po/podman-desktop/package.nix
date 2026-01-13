@@ -5,6 +5,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   electron_41,
+  extraPackages ? [ ],
   nodejs_24,
   pnpm_10_29_2,
   fetchPnpmDeps,
@@ -19,7 +20,6 @@
   gnugrep,
   podman,
 }:
-
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10_29_2.override { inherit nodejs; };
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ podman ]}";
+      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath ([ podman ] ++ extraPackages)}";
     in
     (
       ''
