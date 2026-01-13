@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     mainProgram = "hs";
   };
-}
+})
