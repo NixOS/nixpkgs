@@ -29,8 +29,8 @@ perl.pkgs.toPerlModule (
       nix-store
       bzip2
       libsodium
-      perl
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isCygwin perl;
 
     env = lib.optionalAttrs stdenv.hostPlatform.isCygwin {
       NIX_CFLAGS_COMPILE = toString (
