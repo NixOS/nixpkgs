@@ -12061,6 +12061,8 @@ self: super: with self; {
 
   pex = callPackage ../development/python-modules/pex { };
 
+  pex-entysec = callPackage ../development/python-modules/pex-entysec { };
+
   pexif = callPackage ../development/python-modules/pexif { };
 
   pexpect = callPackage ../development/python-modules/pexpect { };
