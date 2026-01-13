@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "gusjengis";
     repo = "hyprlog";
     rev = "v${version}";
-    hash = "sha256-HvsJGBQd9TRSBJtvai4uHnRGtciN19BL2xnUMBqh5pg=";
+    hash = "sha256-bvsJGBQd9TRSBJtvai4uHnRGtciN19BL2xnUMBqh5pg=";
   };
 
   cargoLock = {
