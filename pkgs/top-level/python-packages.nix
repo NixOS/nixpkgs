@@ -17051,6 +17051,8 @@ self: super: with self; {
 
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
 
+  sembr = callPackage ../development/python-modules/sembr { };
+
   semchunk = callPackage ../development/python-modules/semchunk { };
 
   semgrep = callPackage ../development/python-modules/semgrep {
