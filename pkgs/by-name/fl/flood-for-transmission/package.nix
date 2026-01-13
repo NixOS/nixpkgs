@@ -35,6 +35,7 @@ buildNpmPackage (finalAttrs: {
     description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
     downloadPage = "https://github.com/johman10/flood-for-transmission/releases";
+    changelog = "https://github.com/johman10/flood-for-transmission/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ al3xtjames ];
     platforms = lib.platforms.all;
