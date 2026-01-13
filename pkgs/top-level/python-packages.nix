@@ -20222,6 +20222,8 @@ self: super: with self; {
 
   uvloop = callPackage ../development/python-modules/uvloop { };
 
+  uwotm8 = callPackage ../development/python-modules/uwotm8 { };
+
   uwsgi-chunked = callPackage ../development/python-modules/uwsgi-chunked { };
 
   uxsim = callPackage ../development/python-modules/uxsim { };
