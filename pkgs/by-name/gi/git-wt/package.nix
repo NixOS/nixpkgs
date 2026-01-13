@@ -5,14 +5,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-wt";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "git-wt";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-poAKWBKvTOCIuBrDMm9S1TaYqsK5HweybTNO+p0FBfk=";
   };
 
@@ -23,15 +23,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/k1LoW/git-wt/version.Version=v${version}"
+    "-X github.com/k1LoW/git-wt/version.Version=v${finalAttrs.version}"
   ];
 
   meta = {
     description = "Git subcommand that makes git worktree simple";
     homepage = "https://github.com/k1LoW/git-wt";
-    changelog = "https://github.com/k1LoW/git-wt/releases/tag/v${version}";
+    changelog = "https://github.com/k1LoW/git-wt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryoppippi ];
     mainProgram = "git-wt";
   };
-}
+})
