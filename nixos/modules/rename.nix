@@ -141,6 +141,10 @@ in
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
+      "charybdis"
+    ] "The charybdis module has been removed, the project was archived in 2021.")
+    (mkRemovedOptionModule [
+      "services"
       "chatgpt-retrieval-plugin"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
