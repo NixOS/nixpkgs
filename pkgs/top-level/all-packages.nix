@@ -6692,11 +6692,6 @@ with pkgs;
       ;
   };
 
-  eccodes = callPackage ../development/libraries/eccodes {
-    pythonPackages = python3Packages;
-    stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
-  };
-
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
