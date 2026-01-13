@@ -31,7 +31,7 @@ vimUtils.buildVimPlugin rec {
 
   meta = {
     description = "VSCode-style side-by-side diff rendering with two-tier highlighting (line + character level)";
-    homepage = "https://github.com/esmuellert/vscode-diff.nvim/";
+    homepage = "https://github.com/esmuellert/codediff.nvim/";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
