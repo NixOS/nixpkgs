@@ -28,7 +28,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sigstore-python";
+  pname = "sigstore";
   version = "4.0.0";
   pyproject = true;
 
