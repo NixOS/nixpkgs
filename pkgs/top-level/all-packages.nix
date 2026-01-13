@@ -6716,17 +6716,6 @@ with pkgs;
   factor-lang-0_101 = factorPackages-0_101.factor-lang;
   factor-lang = factor-lang-0_101;
 
-  farstream = callPackage ../development/libraries/farstream {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-libav
-      ;
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   inherit (callPackage ../development/libraries/ffmpeg { })
     ffmpeg_4
     ffmpeg_4-headless

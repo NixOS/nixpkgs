@@ -3,16 +3,12 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  buildPackages,
   libnice,
   pkg-config,
-  autoreconfHook,
-  gstreamer,
-  gst-plugins-base,
+  gst_all_1,
   gupnp-igd,
   gobject-introspection,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-libav,
   python3,
 }:
 
@@ -46,12 +42,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
+    buildPackages.autoreconfHook269
     gobject-introspection
     python3
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with gst_all_1; [
     gstreamer
     gst-plugins-base
     gst-plugins-good
