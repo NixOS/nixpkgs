@@ -7,17 +7,19 @@
   electron,
   imagemagick,
   makeDesktopItem,
+  copyDesktopItems,
   autoPatchelfHook,
 }:
 let
   inherit (stdenv.hostPlatform) system;
   pname = "twinejs";
   version = "2.11.1";
+  comment = "Tool for telling interactive, nonlinear stories";
   meta = {
-    description = "Twine, a tool for telling interactive, nonlinear stories";
+    description = comment;
     homepage = "https://twinery.org";
     downloadPage = "https://github.com/klembot/twinejs/releases/tag/2.11.1";
-    mainProgram = "obsidian";
+    mainProgram = "twinejs";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -48,11 +50,12 @@ let
     hash = "sha256-TwxXOX/ZbrH02ZzTpy0FB4nGhjLmjtkFrE7WEX7xHbw=";
   };
   desktopItem = makeDesktopItem {
+    inherit comment;
     name = "twinejs";
     desktopName = "Twine";
-    comment = "";
     icon = "twinejs";
     exec = "twinejs %u";
+    terminal = false;
   };
 
 in
@@ -70,20 +73,15 @@ stdenv.mkDerivation {
     makeWrapper
     imagemagick
     autoPatchelfHook
+    copyDesktopItems
   ];
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     makeWrapper ${electron}/bin/electron $out/bin/twinejs \
-      --add-flags $out/share/twinejs/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}"
+      --add-flags $out/share/twinejs/app.asar
     install -m 444 -D resources/app.asar $out/share/twinejs/app.asar
-    install -m 444 -D "${desktopItem}/share/applications/"* \
-      -t $out/share/applications/
-    for size in 16 24 32 48 64 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      magick -background none ${icon} -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/twinejs.png
-    done
+    install -m 444 -D ${icon} $out/share/icons/hicolor/scalable/apps/twinejs.svg
     runHook postInstall
   '';
 }
