@@ -24399,6 +24399,7 @@
   };
   snaki = {
     email = "ek@kyouma.net";
+    matrix = "@emily:woof.rip";
     name = "emily";
     github = "snaakey";
     githubId = 38018554;
