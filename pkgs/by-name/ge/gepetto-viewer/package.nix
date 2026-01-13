@@ -43,7 +43,6 @@ let
 
     buildInputs = [
       python3Packages.boost
-      python3Packages.python-qt
       libsForQt5.qtbase
     ];
 
