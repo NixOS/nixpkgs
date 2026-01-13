@@ -171,7 +171,7 @@ in
           a writeable configuration, such as quota tracking, enable
           this option.
         '';
-        default = lib.versionOlder config.system.stateVersion "25.11";
+        default = lib.versionOlder config.system.stateVersion "26.05";
       };
 
       settings = mkOption {
