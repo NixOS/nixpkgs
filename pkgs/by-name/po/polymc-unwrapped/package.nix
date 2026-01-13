@@ -69,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     tomlplusplus
     ghc_filesystem
   ]
-  ++ lib.optional (lib.versionAtLeast kdePackages.qtbase.version "6") kdePackages.qtwayland
+  ++ lib.optional (lib.versionAtLeast kdePackages.qtbase.version "6") [
+    kdePackages.qtwayland
+    kdePackages.qt5compat
+  ]
   ++ lib.optional gamemodeSupport gamemode;
 
   dontWrapQtApps = true;
