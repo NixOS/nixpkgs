@@ -4,7 +4,6 @@
   gmp,
   libmpc,
   mpfr,
-  kdoctools,
 }:
 mkKdeDerivation {
   pname = "kcalc";
@@ -14,7 +13,6 @@ mkKdeDerivation {
     gmp
     libmpc
     mpfr
-    kdoctools
   ];
   meta.mainProgram = "kcalc";
 }
