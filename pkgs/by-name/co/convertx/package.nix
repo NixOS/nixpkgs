@@ -1,44 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bun
-, nodejs
-, makeBinaryWrapper
-, cacert
-# Runtime dependencies (converters)
-, ffmpeg-full
-, imagemagick
-, graphicsmagick
-, libreoffice
-, pandoc
-, calibre
-, inkscape
-, ghostscript
-, poppler-utils
-, vips
-, libheif
-, potrace
-, resvg
-, assimp
-, vtracer
-, dasel
-, libjxl
-, mupdf
-# , dcraw  # Marked insecure - enable with permittedInsecurePackages if needed
-# , texliveFull  # Large (~4GB) - enable for LaTeX support
-# Python dependencies for markitdown
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bun,
+  nodejs,
+  makeBinaryWrapper,
+  cacert,
+  # Runtime dependencies (converters)
+  ffmpeg-full,
+  imagemagick,
+  graphicsmagick,
+  libreoffice,
+  pandoc,
+  calibre,
+  inkscape,
+  ghostscript,
+  poppler-utils,
+  vips,
+  libheif,
+  potrace,
+  resvg,
+  assimp,
+  vtracer,
+  dasel,
+  libjxl,
+  mupdf,
+  # , dcraw  # Marked insecure - enable with permittedInsecurePackages if needed
+  # , texliveFull  # Large (~4GB) - enable for LaTeX support
+  # Python dependencies for markitdown
+  python3,
 }:
 
 let
   version = "0.16.1";
 
   # Python environment with markitdown
-  pythonEnv = python3.withPackages (ps: with ps; [
-    # markitdown dependencies
-    numpy
-    tinycss2
-  ]);
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      # markitdown dependencies
+      numpy
+      tinycss2
+    ]
+  );
 
   # Source from GitHub
   src = fetchFromGitHub {
@@ -54,7 +57,10 @@ let
     pname = "convertx-node_modules";
     inherit version src;
 
-    nativeBuildInputs = [ bun cacert ];
+    nativeBuildInputs = [
+      bun
+      cacert
+    ];
     buildInputs = [ nodejs ];
 
     dontConfigure = true;
@@ -84,7 +90,8 @@ let
     outputHash = "sha256-JzKbMk6mvnd+zOhFqSmCzGE4v5vOuUbKQLDE7Nk5/es=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "convertx";
   inherit version src;
 
@@ -158,60 +165,62 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    mkdir -p $out/lib/convertx
-    mkdir -p $out/bin
+        mkdir -p $out/lib/convertx
+        mkdir -p $out/bin
 
-    # Copy built application
-    cp -R dist $out/lib/convertx/
-    cp -R public $out/lib/convertx/
-    cp -R node_modules $out/lib/convertx/
-    cp package.json $out/lib/convertx/
+        # Copy built application
+        cp -R dist $out/lib/convertx/
+        cp -R public $out/lib/convertx/
+        cp -R node_modules $out/lib/convertx/
+        cp package.json $out/lib/convertx/
 
-    # Create wrapper script with all converters in PATH
-    # Uses shell script to capture original cwd for DATA_DIR before chdir
-    cat > $out/bin/convertx << 'WRAPPER'
-#!/bin/sh
-# ConvertX wrapper - sets up environment and runs the server
-# DATA_DIR defaults to current directory's ./data if not set
-export DATA_DIR="''${DATA_DIR:-$(pwd)/data}"
-export NODE_ENV="''${NODE_ENV:-production}"
-export QTWEBENGINE_CHROMIUM_FLAGS="''${QTWEBENGINE_CHROMIUM_FLAGS:---no-sandbox}"
-WRAPPER
+        # Create wrapper script with all converters in PATH
+        # Uses shell script to capture original cwd for DATA_DIR before chdir
+        cat > $out/bin/convertx << 'WRAPPER'
+    #!/bin/sh
+    # ConvertX wrapper - sets up environment and runs the server
+    # DATA_DIR defaults to current directory's ./data if not set
+    export DATA_DIR="''${DATA_DIR:-$(pwd)/data}"
+    export NODE_ENV="''${NODE_ENV:-production}"
+    export QTWEBENGINE_CHROMIUM_FLAGS="''${QTWEBENGINE_CHROMIUM_FLAGS:---no-sandbox}"
+    WRAPPER
 
-    # Add PATH with all converters
-    echo "export PATH=\"${lib.makeBinPath [
-        ffmpeg-full
-        imagemagick
-        graphicsmagick
-        libreoffice
-        pandoc
-        calibre
-        inkscape
-        ghostscript
-        poppler-utils
-        vips
-        libheif
-        potrace
-        resvg
-        assimp
-        vtracer
-        dasel
-        libjxl
-        mupdf
-        pythonEnv
-      ]}:\$PATH\"" >> $out/bin/convertx
+        # Add PATH with all converters
+        echo "export PATH=\"${
+          lib.makeBinPath [
+            ffmpeg-full
+            imagemagick
+            graphicsmagick
+            libreoffice
+            pandoc
+            calibre
+            inkscape
+            ghostscript
+            poppler-utils
+            vips
+            libheif
+            potrace
+            resvg
+            assimp
+            vtracer
+            dasel
+            libjxl
+            mupdf
+            pythonEnv
+          ]
+        }:\$PATH\"" >> $out/bin/convertx
 
-    # Change to lib directory and run bun
-    cat >> $out/bin/convertx << WRAPPER
-cd $out/lib/convertx
-exec ${bun}/bin/bun run dist/src/index.js "\$@"
-WRAPPER
+        # Change to lib directory and run bun
+        cat >> $out/bin/convertx << WRAPPER
+    cd $out/lib/convertx
+    exec ${bun}/bin/bun run dist/src/index.js "\$@"
+    WRAPPER
 
-    chmod +x $out/bin/convertx
+        chmod +x $out/bin/convertx
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   meta = with lib; {
