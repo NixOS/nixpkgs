@@ -25,7 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-fvfwgUqVr74JdL3dteX0UXbALva3vWQWEpotk8QQAiI=";
   };
 
-  pythonRelaxDeps = [ "flask" ];
+  pythonRelaxDeps = [
+    "marshmallow"
+    "flask"
+  ];
 
   build-system = [ setuptools ];
 
