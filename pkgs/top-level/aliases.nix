@@ -587,6 +587,7 @@ mapAliases {
   EmptyEpsilon = throw "'EmptyEpsilon' has been renamed to/replaced by 'empty-epsilon'"; # Converted to throw 2025-10-27
   emulationstation = throw "emulationstation was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   emulationstation-de = throw "emulationstation-de was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
+  enchant2 = warnAlias "'enchant2' has been renamed to 'enchant_2'" enchant_2; # Added 2026-01-14
   enyo-doom = throw "'enyo-doom' has been renamed to/replaced by 'enyo-launcher'"; # Converted to throw 2025-10-27
   epapirus-icon-theme = throw "'epapirus-icon-theme' has been removed because 'papirus-icon-theme' no longer supports building with elementaryOS icon support"; # Added 2025-06-15
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01

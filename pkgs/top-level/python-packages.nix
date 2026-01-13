@@ -13377,7 +13377,7 @@ self: super: with self; {
 
   pyemvue = callPackage ../development/python-modules/pyemvue { };
 
-  pyenchant = callPackage ../development/python-modules/pyenchant { inherit (pkgs) enchant2; };
+  pyenchant = callPackage ../development/python-modules/pyenchant { inherit (pkgs) enchant_2; };
 
   pyenphase = callPackage ../development/python-modules/pyenphase { };
 
