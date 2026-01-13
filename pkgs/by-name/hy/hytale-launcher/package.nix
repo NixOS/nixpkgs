@@ -4,6 +4,7 @@
   fetchzip,
   buildFHSEnv,
   makeWrapper,
+  makeDesktopItem,
   writeScript,
   gtk3,
   nss,
@@ -22,6 +23,17 @@
 
 let
   version = "2026.01.13-b6c7e88";
+
+  # TODO: add icon once a stable versioned source is available
+  desktopItem = makeDesktopItem {
+    name = "hytale-launcher";
+    desktopName = "Hytale Launcher";
+    exec = "hytale-launcher";
+    comment = "Official launcher for Hytale";
+    categories = [ "Game" ];
+    terminal = false;
+    startupWMClass = "com.hypixel.HytaleLauncher";
+  };
 
   sources = {
     x86_64-linux = {
@@ -105,14 +117,7 @@ let
 
     extraInstallCommands = ''
       mkdir -p $out/share/applications
-      cat > $out/share/applications/hytale-launcher.desktop <<EOF
-      [Desktop Entry]
-      Name=Hytale Launcher
-      Exec=hytale-launcher
-      Type=Application
-      Categories=Game;
-      Terminal=false
-      EOF
+      cp ${desktopItem}/share/applications/*.desktop $out/share/applications/
     '';
 
     passthru.updateScript = writeScript "update-hytale-launcher" ''
@@ -149,6 +154,13 @@ let
 
     meta = {
       description = "Official launcher for Hytale";
+      longDescription = ''
+        Official launcher for Hytale, an upcoming block-based game from Hypixel Studios.
+
+        Note: The launcher's built-in auto-update mechanism will not work on NixOS
+        due to the immutable nature of the Nix store. Updates must be applied by
+        updating the nixpkgs package.
+      '';
       homepage = "https://hytale.com";
       license = lib.licenses.unfreeRedistributable;
       maintainers = with lib.maintainers; [ karol-broda ];
@@ -181,6 +193,13 @@ let
 
     meta = {
       description = "Official launcher for Hytale";
+      longDescription = ''
+        Official launcher for Hytale, an upcoming block-based game from Hypixel Studios.
+
+        Note: The launcher's built-in auto-update mechanism will not work on NixOS
+        due to the immutable nature of the Nix store. Updates must be applied by
+        updating the nixpkgs package.
+      '';
       homepage = "https://hytale.com";
       license = lib.licenses.unfreeRedistributable;
       maintainers = with lib.maintainers; [ karol-broda ];
