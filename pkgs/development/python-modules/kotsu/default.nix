@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "kotsu";
-  version = "0.3.3";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "datavaluepeople";
     repo = "kotsu";
     rev = "v${version}";
-    hash = "sha256-V5OkgiLUTRNbNt6m94+aYUZd9Nw+/60LfhrqqdFhiUw=";
+    hash = "sha256-7bRrHowRKq3xiBiAkfS4ZL9PXHIUmZc99q9pHex9BLg=";
   };
 
   propagatedBuildInputs = [
