@@ -14,7 +14,7 @@
   nocaselist,
   pbr,
   ply,
-  pytest,
+  pytestCheckHook,
   pytz,
   pyyaml,
   requests,
@@ -62,13 +62,18 @@ buildPythonPackage rec {
     httpretty
     libxml2
     lxml
-    pytest
+    pytestCheckHook
     pytz
     requests-mock
     testfixtures
   ];
 
   pythonImportsCheck = [ "pywbem" ];
+
+  disabledTestPaths = [
+    "tests/leaktest" # requires 'yagot'
+    "tests/end2endtest" # requires 'pytest_easy_server'
+  ];
 
   meta = {
     description = "Support for the WBEM standard for systems management";
