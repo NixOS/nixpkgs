@@ -10,7 +10,7 @@
   cacert,
   cairo,
   dconf,
-  enchant2,
+  enchant,
   file,
   fontconfig,
   freetype,
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     atk
     cairo
     dconf
-    enchant2
+    enchant
     fontconfig
     freetype
     fuse3'
