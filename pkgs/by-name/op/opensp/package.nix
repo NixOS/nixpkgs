@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "";
 
+  configureFlags =
+    # dcigettext.c:154:7: error: conflicting types for 'getcwd'; have 'char *(void)'
+    lib.optional stdenv.hostPlatform.isCygwin "CFLAGS=-std=gnu17";
+
   strictDeps = true;
 
   nativeBuildInputs = [
