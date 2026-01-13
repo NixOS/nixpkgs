@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch2,
   pythonOlder,
   hatchling,
@@ -26,9 +26,11 @@ buildPythonPackage rec {
   version = "5.3.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jSAGtw1yf9CnmKiK5f1kM5dB9Db8/IPW6jJWzbxRxbc=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nibabel";
+    tag = version;
+    hash = "sha256-Kdz7kCY5QnA9OiV/FPW1RerjP1GGLn+YaTwFpA0dJAM=";
   };
 
   patches = [
