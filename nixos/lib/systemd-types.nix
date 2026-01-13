@@ -45,19 +45,11 @@ let
     mkEnableOption
     mkIf
     mkOption
-    optionalString
-    strings
-    ;
-
-  inherit (lib.attrsets)
-    optionalAttrs
     ;
 
   inherit (lib.types)
     attrsOf
-    bool
     coercedTo
-    either
     enum
     lines
     listOf
@@ -66,7 +58,6 @@ let
     package
     path
     singleLineStr
-    str
     submodule
     ;
 
@@ -262,122 +253,4 @@ in
       }
     )
   );
-
-  mkCredentialOption =
-    {
-      defaultName,
-      readOnlyName ? false,
-      bindPath ? null,
-      asserted ? false,
-      conditional ? false,
-      description,
-      nullable ? false,
-    }:
-    mkOption (
-      optionalAttrs nullable {
-        default = null;
-      }
-    )
-    // {
-      type = (if nullable then nullOr else lib.id) (oneOf [
-        path
-        singleLineStr
-        (submodule {
-          options = {
-            name = mkOption {
-              type = singleLineStr;
-              description = "The name of the credential";
-              default = defaultName;
-              readOnly = readOnlyName;
-            };
-            encrypted = mkOption {
-              type = bool;
-              description = "Whether the credential is encrypted with systemd-creds";
-              default = false;
-            };
-            path = mkOption {
-              type = nullOr (either path singleLineStr);
-              description = "The path of the credential data. If given, the credential will be consumed via `LoadCredential[Encrypted]`";
-              default = null;
-            };
-            data = mkOption {
-              type = nullOr str;
-              description = "The credential data. If given, the credential will be consumed via `SetCredential[Encrypted]`";
-              default = null;
-            };
-            reference = mkOption {
-              type = nullOr str;
-              description = "The credential reference. If given, the credential will be consumed via `ImportCredential`";
-              default = null;
-            };
-            allowStorePath = mkOption {
-              type = bool;
-              description = "Set to true to opt into allowing store paths for secrets. This isn't generally safe as store paths are readable by anyone";
-              default = false;
-            };
-          };
-        })
-      ]);
-      description = ''
-        ${description}
-
-        The secret will be passed to the service via systemd-creds, as per the documentation here <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#Credentials>
-
-        The secret may be given as a string/path, in which case it is taken to
-        have the default name, to be unencrypted, and to be a path per the
-        systemd documentation for `LoadCredential`.
-      '';
-      apply =
-        credential:
-        optionalAttrs (credential != null) (
-          let
-            cred =
-              if strings.isStringLike credential then
-                {
-                  name = defaultName;
-                  encrypted = false;
-                  path = credential;
-                  data = null;
-                  reference = null;
-                  allowStorePath = false;
-                }
-              else
-                credential;
-            encrypted = optionalString cred.encrypted "Encrypted";
-            assertStringPath =
-              value:
-              if !cred.allowStorePath && (strings.isStorePath value || builtins.isPath value) then
-                throw ''
-                  Credential '${cred.name}':
-                    ${toString value}
-                    is a path into the world-readable Nix store. This is not generally safe for secrets.
-
-                    This protection may be circumvented via the 'allowStorePath' option.
-                ''
-              else
-                value;
-          in
-          cred
-          // {
-            serviceConfig = {
-              BindPaths = if bindPath != null then [ "%d/${cred.name}:${bindPath}" ] else [ ];
-              AssertCredential = if asserted then [ cred.name ] else [ ];
-              ConditionCredential = if conditional then [ cred.name ] else [ ];
-            }
-            // (
-              if cred.data != null && cred.reference == null && cred.path == null then
-                { ImportCredential = "${cred.ref}:${cred.name}"; }
-              else if cred.data == null && cred.reference != null && cred.path == null then
-                { "SetCredential${encrypted}" = "${cred.name}:${cred.data}"; }
-              else if cred.data == null && cred.reference == null then
-                {
-                  "LoadCredential${encrypted}" =
-                    if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name;
-                }
-              else
-                throw "Credential must be given at most one data, path, or reference"
-            );
-          }
-        );
-    };
 }
