@@ -400,9 +400,6 @@ stdenv.mkDerivation {
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
   ]
-  ++ lib.optionals (lib.versionAtLeast version "10") [
-    "--branding rtm"
-  ]
   ++ [
     "--"
     "-p:PortableBuild=true"
