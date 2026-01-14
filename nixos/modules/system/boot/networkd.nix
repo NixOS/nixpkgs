@@ -1060,6 +1060,7 @@ let
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
           "UseDNS"
+          "UseDNR"
           "RoutesToDNS"
           "UseNTP"
           "UseSIP"
@@ -1100,6 +1101,7 @@ let
           "UseCaptivePortal"
         ])
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertValueOneOf "UseSIP" boolValues)
@@ -1139,6 +1141,7 @@ let
         (assertOnlyFields [
           "UseAddress"
           "UseDNS"
+          "UseDNR"
           "UseNTP"
           "SendHostname"
           "UseHostname"
@@ -1165,6 +1168,7 @@ let
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
@@ -1204,6 +1208,7 @@ let
       sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
         (assertOnlyFields [
           "UseDNS"
+          "UseDNR"
           "UseDomains"
           "RouteTable"
           "UseAutonomousPrefix"
@@ -1227,6 +1232,7 @@ let
           "UseRedirect"
         ])
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
