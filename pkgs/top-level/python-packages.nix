@@ -5327,6 +5327,8 @@ self: super: with self; {
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
 
+  fasttransform = callPackage ../development/python-modules/fasttransform { };
+
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   fatrop = toPythonModule (
