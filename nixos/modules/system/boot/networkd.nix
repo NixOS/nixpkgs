@@ -1097,6 +1097,7 @@ let
           "Use6RD"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -1131,6 +1132,7 @@ let
           "infinity"
         ])
         (assertValueOneOf "Use6RD" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
@@ -1159,6 +1161,7 @@ let
           "SendRelease"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -1177,6 +1180,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
         (assertValueOneOf "SendRelease" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -1219,6 +1223,7 @@ let
           "UsePREF64"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
@@ -1230,6 +1235,7 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutePrefix" boolValues)
         (assertValueOneOf "UsePREF64" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
