@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kronosnet";
-  version = "1.32";
+  version = "1.33";
 
   src = fetchFromGitHub {
     owner = "kronosnet";
     repo = "kronosnet";
     rev = "v${version}";
-    sha256 = "sha256-g2AgVAFEmRlMaqH7uRabSNJP0ehUQ6Iws4LT2iB8kTA=";
+    sha256 = "sha256-Pl1RNTsWdjvGvB8rAKUCwZv31/O7JsJtK2yjhKyAZ/A=";
   };
 
   nativeBuildInputs = [
