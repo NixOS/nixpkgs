@@ -28,13 +28,13 @@ let
     }
   );
 in
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "klee-uclibc";
   version = "1.4";
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee-uclibc";
-    rev = "klee_uclibc_v${version}";
+    rev = "klee_uclibc_v${finalAttrs.version}";
     hash = "sha256-sogQK5Ed0k5tf4rrYwCKT4YRKyEovgT25p0BhGvJ1ok=";
   };
 
@@ -113,4 +113,4 @@ llvmPackages.stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ numinit ];
   };
-}
+})

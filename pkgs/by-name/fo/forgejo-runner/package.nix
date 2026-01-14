@@ -49,17 +49,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "12.5.0";
+  version = "12.5.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-WagacsKhYN+KodDZqXg39RGeJtEGrtqppf1JJpTSBsQ=";
+    hash = "sha256-aL79wMzoqt1rqaOQyV28HSeZwjL3k60AyQOhOT/+BRY=";
   };
 
-  vendorHash = "sha256-oCSAehLC5NiL0Ttp+FeHQyTQYNh/59I1i0UfbwWPeRE=";
+  vendorHash = "sha256-XNUhlGkW8bZ1cjODD6QIyRmmNdQ4Tq/hP2FToYfTq2k=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -102,7 +102,8 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      sqlite3 = nixosTests.forgejo.sqlite3;
+      latest = nixosTests.forgejo.sqlite3;
+      lts = nixosTests.forgejo-lts.sqlite3;
     };
   };
 
