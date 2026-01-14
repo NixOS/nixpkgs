@@ -21,11 +21,11 @@
 }:
 let
   pname = "gcc";
-  version = "13.2.0";
+  version = "15.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
+    hash = "sha256-Q4/ZloJrDIJIWinaA6ctcdbjVBqD7HAt9Ccfb+Al0k4=";
   };
 
   gmpVersion = "6.3.0";
@@ -34,10 +34,10 @@ let
     hash = "sha256-o8K4AgG4nmhhb0rTC8Zq7kknw85Q4zkpyoGdXENTiJg=";
   };
 
-  mpfrVersion = "4.2.1";
+  mpfrVersion = "4.2.2";
   mpfr = fetchurl {
     url = "mirror://gnu/mpfr/mpfr-${mpfrVersion}.tar.xz";
-    hash = "sha256-J3gHNTpnJpeJlpRa8T5Sgp46vXqaW3+yeTiU4Y8fy7I=";
+    hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 
   mpcVersion = "1.3.1";

@@ -71,12 +71,15 @@ bash.runCommand "${pname}-${version}"
     ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
     # Configure
+    #
+    # Use std=gnu17 to avoid issue GCC 15.2.0 incompatibility.
+    # There is no newer release of gnumake available right now.
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       CC=musl-gcc \
-      CFLAGS=-static
+      CFLAGS="-static -std=gnu17"
 
     # Build
     make -j $NIX_BUILD_CORES
