@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   attrs,
-  hypothesis,
   py,
   setuptools-scm,
   setuptools,
@@ -35,9 +34,9 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    hypothesis
     mock
   ];
+
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     attrs
