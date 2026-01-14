@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "stardust-xr-atmosphere";
-  version = "0-unstable-2024-08-22";
+  version = "0.50.0-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "atmosphere";
-    rev = "0c8bfb91e8ca32a4895f858067334ed265517309";
-    hash = "sha256-pk1+kkPV6fx+7Xz9hKFFVw402iztcvNC31zVCc3hfTY=";
+    rev = "8b160f3bf5b477a2e1a3721b239cdfaef75de35a";
+    hash = "sha256-DlxhHlNyNPK/oUcDnx4xyGiUMpPjHO4Zgc0/2yvgvXk=";
   };
 
-  cargoHash = "sha256-eQjRbavmUW2iw0OEC/DPk2FflTc4QCn0K/c4Og+sGW4=";
+  cargoHash = "sha256-zYz76cQ8M9nAlJ90THbf0Ap5G9RjNIpIMyLJmKJnnyE=";
 
   passthru = {
     tests.versionTest = testers.testVersion {
