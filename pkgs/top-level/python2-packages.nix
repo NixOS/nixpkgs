@@ -41,7 +41,7 @@ with super;
 
   pip = callPackage ../development/python2-modules/pip { };
 
-  pluggy = callPackage ../development/python2-modules/pluggy { };
+  pluggy = disabled super.pluggy;
 
   pycairo = disabled super.pycairo;
 
