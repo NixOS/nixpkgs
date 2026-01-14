@@ -1,34 +1,44 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fastprogress,
+  cloudpickle,
   fastcore,
   fastdownload,
-  torchvision,
+  fastprogress,
+  fasttransform,
+  fetchPypi,
   matplotlib,
+  pandas,
   pillow,
+  plum-dispatch,
+  requests,
   scikit-learn,
   scipy,
+  setuptools,
   spacy,
-  pandas,
-  requests,
+  torchvision,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastai";
   version = "2.8.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eZW96Upogr6qws6lD8eX2kywuBmTXsbG7vaQKLwx9y8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "pip" ];
+
+  dependencies = [
+    cloudpickle
     fastprogress
     fastcore
     fastdownload
+    fasttransform
     torchvision
     matplotlib
     pillow
@@ -36,6 +46,7 @@ buildPythonPackage rec {
     scipy
     spacy
     pandas
+    plum-dispatch
     requests
   ];
 
@@ -46,8 +57,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/fastai/fastai";
     description = "Fastai deep learning library";
     mainProgram = "configure_accelerate";
-    changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastai/fastai/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})
