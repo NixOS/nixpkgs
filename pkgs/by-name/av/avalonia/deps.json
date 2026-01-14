@@ -876,16 +876,6 @@
     "hash": "sha256-b3oKUKbr+3Udfl7RWzUY9BR/XWNsN+VmEkBxk6KiFo0="
   },
   {
-    "pname": "Microsoft.WindowsDesktop.App.Ref",
-    "version": "6.0.36",
-    "hash": "sha256-K8l2UQgrEOJt6w3Q4Jy7dJlXAI1gG6o+2NEBgmG8dG4="
-  },
-  {
-    "pname": "Microsoft.WindowsDesktop.App.Ref",
-    "version": "8.0.22",
-    "hash": "sha256-F8DQPfK1IiD8+H8A85QSBHhzJIo1fmAXwXaSge7EhBE="
-  },
-  {
     "pname": "Mono.Cecil",
     "version": "0.11.5",
     "hash": "sha256-nPFwbzW08gnCjadBdgi+16MHYhsPAXnFIliveLxGaNA="
@@ -3174,11 +3164,6 @@
     "pname": "Xunit.SkippableFact",
     "version": "1.4.13",
     "hash": "sha256-pLtx0/2oTKYO1Y1Vg3k/Eli2OWHT5uorGdBp2uXvFfw="
-  },
-  {
-    "pname": "Xunit.StaFact",
-    "version": "1.2.46-alpha",
-    "hash": "sha256-GkHy4fEg8nvT2K+N/8KDPpJAtwLgVCLERZa5kO08e2E="
   },
   {
     "pname": "YamlDotNet",
