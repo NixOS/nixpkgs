@@ -10,11 +10,13 @@
   pytestCheckHook,
   hypothesis,
   nix-update-script,
+  markdown2,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "15.0.4";
+  version = "16.0.0";
 
   pyproject = true;
 
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     tag = "v${version}";
-    hash = "sha256-l0aaQbjxAMcTZZwDN6g8A7bjSsl6yP2FoAnwTYkKYH8=";
+    hash = "sha256-9amp6CWYIcniVfdlmPKYuRFR7B5JJtuMlOoDxpfvvJA=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +33,8 @@ buildPythonPackage rec {
     jinja2
     pygments
     markupsafe
+    markdown2
+    pydantic
   ];
 
   nativeCheckInputs = [
