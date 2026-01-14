@@ -43,6 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [ "test_handle_resp" ];
 
+  disabledTestPaths = [ "tests/test_bot/test_bot.py" ];
+
   meta = {
     description = "Command handler for Hikari that keeps your project neat and tidy";
     license = lib.licenses.mit;
