@@ -6807,8 +6807,6 @@ with pkgs;
 
   graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
 
-  glew = callPackage ../development/libraries/glew { };
-  glew110 = callPackage ../development/libraries/glew/1.10.nix { };
   glfw = glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
 
