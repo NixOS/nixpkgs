@@ -311,8 +311,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.App.Internal.Assets",
-    "version": "10.0.1",
-    "hash": "sha256-uLFPj9khqw6mtxY1fpxaRFYKPo5GuDurtYk3eTa6IDw="
+    "version": "10.0.2",
+    "hash": "sha256-nh+JRXHTI01RUDFeEw4yep4iMxci5R7zKyRX2Tkd/mc="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.JwtBearer",
