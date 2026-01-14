@@ -3,7 +3,6 @@
   buildPythonPackage,
   bootstrapped-pip,
   fetchFromGitHub,
-  mock,
   scripttest,
   virtualenv,
   pretend,
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   pipInstallFlags = [ "--ignore-installed" ];
 
   nativeCheckInputs = [
-    mock
     scripttest
     virtualenv
     pretend
