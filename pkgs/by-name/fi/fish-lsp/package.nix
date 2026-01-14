@@ -53,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules
+    yarn install --frozen-lockfile --force --production=true --ignore-engines \
+      --ignore-platform --ignore-scripts --no-progress --non-interactive --offline
+
     mkdir -p $out/share/fish-lsp
     cp -r . $out/share/fish-lsp
 
