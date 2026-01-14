@@ -33,7 +33,7 @@ let
           c.plugins or cfg.plugins;
       plugins = unique plugins';
 
-      hasPython3 = filter (n: n == "python3") plugins != [ ];
+      hasPython3 = elem "python3" plugins;
       python = if hasPython3 then cfg.package.python3 else null;
 
       pythonEnv = python.withPackages (c.pythonPackages or (self: [ ]));
