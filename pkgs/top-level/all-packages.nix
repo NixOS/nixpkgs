@@ -6790,12 +6790,10 @@ with pkgs;
 
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
-  geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
+  geoipWithDatabase = makeOverridable (callPackage ../by-name/ge/geoip/package.nix) {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
   };
-
-  geoip = callPackage ../development/libraries/geoip { };
 
   gettext = callPackage ../development/libraries/gettext { };
 
