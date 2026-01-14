@@ -53,8 +53,6 @@ with super;
 
   pygobject2 = callPackage ../development/python2-modules/pygobject { };
 
-  pygtk = callPackage ../development/python2-modules/pygtk { };
-
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
   pytest = pytest_4;
