@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-nHTUa7UpdlsO4TUrQfGo82KlgXkG3RxC9iyfiDOmOyQ=";
   };
 
-  cargoHash = "sha256-nHTUa7UpdlsO4TUrQfGo82KlgXkG3RxC9iyfiDOmOyQ=";
+  cargoHash = "sha256-+YHTBBwc638GoGg/owYyw0cPvhb9sswBvh5Mkjma9jo=";
 
   meta = {
     description = "Hyprland focus/activity logger";
