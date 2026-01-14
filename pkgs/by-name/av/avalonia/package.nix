@@ -46,14 +46,14 @@ stdenvNoCC.mkDerivation (
     }
     rec {
       pname = "Avalonia";
-      version = "11.3.9";
+      version = "11.3.11";
 
       src = fetchFromGitHub {
         owner = "AvaloniaUI";
         repo = "Avalonia";
         tag = version;
         fetchSubmodules = true;
-        hash = "sha256-qvkQKlz9GQayAxCPITYJbCk+w4d9xJNo+P1I9J1SYho=";
+        hash = "sha256-lB0Td/YmQc8GtTpoinxDYHfxnDLQPTWXsp/X0ddslFM=";
       };
 
       patches = [
@@ -65,6 +65,9 @@ stdenvNoCC.mkDerivation (
         # Microsoft.Common.CurrentVersion.targets(5034,5): error MSB3021: Unable to copy file "[...]/JetBrains.Annotations.dll" to "bin/Debug/JetBrains.Annotations.dll". Access to the path '/build/source/nukebuild/bin/Debug/JetBrains.Annotations.dll' is denied. [/build/source/nukebuild/_build.csproj]
         # This happens because the source packages have symlinks due to linkNuGetPackagesAndSources.
         ./0003-disable-hard-links.patch
+        # Remove dependencies on Microsoft.WindowsDesktop.App.Ref, which sdk
+        # specific and currently not packaged in nixpkgs
+        ./0004-disable-windows-desktop.patch
       ];
 
       # this needs to be match the version being patched above
