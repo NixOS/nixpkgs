@@ -17,6 +17,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "voxinput";
+  # XXX: Ensure this matches the version in the documentation in nixos/modules/services/accessiblity/voxinput.nix
   version = "0.8.0";
 
   src = fetchFromGitHub {
