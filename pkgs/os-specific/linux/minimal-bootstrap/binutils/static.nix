@@ -20,11 +20,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "binutils-static";
-  version = "2.41";
+  version = "2.45.1";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-${version}.tar.xz";
-    hash = "sha256-rppXieI0WeWWBuZxRyPy0//DHAMXQZHvDQFb3wYAdFA=";
+    hash = "sha256-X+EB5v6dGP3slZYtge1nD97l834/SPC++Hvd+GJROqU=";
   };
 
   patches = [
