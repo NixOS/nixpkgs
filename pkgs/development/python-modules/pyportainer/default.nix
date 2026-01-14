@@ -13,7 +13,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
   version = "1.0.23";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bPVAqL25kJ5EsnM7bUA+sqn0Q5uTOuFuKzneviK6078=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/erwindouna/pyportainer/releases/tag/${src.tag}";
+    changelog = "https://github.com/erwindouna/pyportainer/releases/tag/${finalAttrs.src.tag}";
     description = "Asynchronous Python client for the Portainer API";
     homepage = "https://github.com/erwindouna/pyportainer";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
