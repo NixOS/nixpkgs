@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.0.57";
+  version = "0.0.59";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-BtNeTMDttAbozFHIe/hlOkEfIFPUFSDvWsJWY9+hKfk=";
+    hash = "sha256-6GaYFAN3Cz9VAvYaMQTAsXNolDuuVXfkrwqBqbr8Kfw=";
   };
 
-  cargoHash = "sha256-TvWoleEhjsV73Qfi/yTeje1CawhdETB/dFPlah6aDwY=";
+  cargoHash = "sha256-1j1XAcwbct9wJrEWYpJFFzVRmjHliUmNxgprUF43/ew=";
 
   cargoBuildFlags = [
     "--package=iwe"
