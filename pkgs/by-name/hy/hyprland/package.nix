@@ -116,7 +116,9 @@ customStdenv.mkDerivation (finalAttrs: {
   # variables used by CMake, and shown in `hyprctl version`
   env = {
     GIT_BRANCH = info.branch;
-    GIT_COMMITS = info.commit_hash;
+    # The amount of commits altogether. Not really worth getting that info from
+    # GitHub's API, so we set a dummy value.
+    GIT_COMMITS = "-1";
     GIT_COMMIT_DATE = info.date;
     GIT_DIRTY = "clean";
     GIT_COMMIT_HASH = info.commit_hash;
