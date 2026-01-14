@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "dsymbol": {
+      "version": "0.14.1",
+      "sha256": "0vh65w6v7am2krc8fhj2snsh7dzqjvfkccvwynsgfbwp9fdxcldq"
+    },
+    "emsi_containers": {
+      "version": "0.9.0",
+      "sha256": "1viz1fjh6jhfvl0d25bb1q7aclm1hrs0d7hhcx1d9c0gg5k6lcpm"
+    },
+    "libdparse": {
+      "version": "0.21.1",
+      "sha256": "0i1lsp9k45pqkksg47ivpj85wb4waz2cfz43hsip7a136pxzaqq0"
+    },
+    "msgpack-d": {
+      "version": "1.0.4",
+      "sha256": "1y2iihxsxpgbwns6r2b4xvw82szakgnv1i61y4d3i6qsakxm7yid"
+    },
+    "stdx-allocator": {
+      "version": "2.77.5",
+      "sha256": "1g8382wr49sjyar0jay8j7y2if7h1i87dhapkgxphnizp24d7kaj"
+    }
+  }
+}
