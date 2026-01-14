@@ -6784,10 +6784,6 @@ with pkgs;
 
   gamt = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
 
-  gcr = callPackage ../development/libraries/gcr { };
-
-  gcr_4 = callPackage ../development/libraries/gcr/4.nix { };
-
   gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
