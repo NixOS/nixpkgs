@@ -25,7 +25,7 @@ with super;
 
   filelock = disabled super.filelock;
 
-  hypothesis = callPackage ../development/python2-modules/hypothesis { };
+  hypothesis = disabled super.hypothesis;
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
@@ -53,12 +53,7 @@ with super;
 
   pytest = pytest_4;
 
-  pytest_4 = callPackage ../development/python2-modules/pytest {
-    # hypothesis tests require pytest that causes dependency cycle
-    hypothesis = self.hypothesis.override {
-      doCheck = false;
-    };
-  };
+  pytest_4 = callPackage ../development/python2-modules/pytest { };
 
   pytest-xdist = disabled super.pytest-xdist;
 
