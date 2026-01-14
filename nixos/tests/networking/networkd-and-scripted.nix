@@ -1053,6 +1053,7 @@ let
             }
           ];
           virtual = true;
+          virtualOwner = null;
           mtu = 1342;
           macAddress = "02:de:ad:be:ef:01";
         };
@@ -1070,13 +1071,14 @@ let
             }
           ];
           virtual = true;
+          virtualOwner = "root";
           mtu = 1343;
         };
       };
 
       testScript = ''
         targetList = """
-        tap0: tap persist user 0
+        tap0: tap persist
         tun0: tun persist user 0
         """.strip()
 
@@ -1101,6 +1103,10 @@ let
             machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
             machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
+        with subtest("Test virtualOwner are configured"):
+            for interface, expected_owner in [("tap0", "-1"), ("tun0", "0")]:
+                actual_owner = machine.succeed(f"cat /sys/class/net/{interface}/owner").strip()
+                assert expected_owner == actual_owner, f"{interface} owner: expect {expected_owner}, got {actual_owner}"
       '' # network-addresses-* only exist in scripted networking
       + lib.optionalString (!networkd) ''
         with subtest("Test interfaces' addresses clean up"):
