@@ -114,6 +114,9 @@ let
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+    ]
+    ++ lib.optionals (lib.versionAtLeast runtime.version "10") [
+      (mkPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${targetRid}" runtime.version)
     ];
   };
 
