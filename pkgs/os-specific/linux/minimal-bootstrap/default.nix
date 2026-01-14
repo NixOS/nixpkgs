@@ -150,7 +150,7 @@ lib.makeScope
         gawk = gawk-mes;
       };
 
-      gcc8 = callPackage ./gcc/8.nix {
+      gcc10 = callPackage ./gcc/10.nix {
         gcc = gcc46-cxx;
         gnumake = gnumake-musl;
         gnutar = gnutar-latest;
@@ -159,7 +159,7 @@ lib.makeScope
       };
 
       gcc-latest = callPackage ./gcc/latest.nix {
-        gcc = gcc8;
+        gcc = gcc10;
         gnumake = gnumake-musl;
         gnutar = gnutar-latest;
         # FIXME: not sure why new gawk doesn't work
@@ -391,7 +391,7 @@ lib.makeScope
         echo ${gawk-static.tests.get-version}
         echo ${gcc46.tests.get-version}
         echo ${gcc46-cxx.tests.hello-world}
-        echo ${gcc8.tests.hello-world}
+        echo ${gcc10.tests.hello-world}
         echo ${gcc-latest.tests.hello-world}
         echo ${gcc-glibc.tests.hello-world}
         echo ${glibc.tests.hello-world}
