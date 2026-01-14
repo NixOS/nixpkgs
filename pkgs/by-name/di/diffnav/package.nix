@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "diffnav";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uaEqnlA34EagOjmnK2U9+vOIIRupSDrSd4hrM1jaNlM=";
+    hash = "sha256-QDPH7vBoA4YCmC+CLmeBdspwOhFEV3iSiyBYX6lwOLA=";
   };
 
   vendorHash = "sha256-cDA5qstTRApt4DXcakNLR5nsyh9i7z2Qrvp6q/OoYhY=";
