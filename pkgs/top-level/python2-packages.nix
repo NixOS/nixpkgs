@@ -37,7 +37,7 @@ with super;
   # build tool in Python 3, but it does not yet support Python 2
   ninja = pkgs.buildPackages.ninja;
 
-  packaging = callPackage ../development/python2-modules/packaging { };
+  packaging = disabled super.packaging;
 
   pip = callPackage ../development/python2-modules/pip { };
 
