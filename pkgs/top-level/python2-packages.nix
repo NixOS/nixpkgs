@@ -33,7 +33,7 @@ with super;
 
   markupsafe = disabled super.markupsafe;
 
-  mock = callPackage ../development/python2-modules/mock { };
+  mock = disabled super.mock;
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
