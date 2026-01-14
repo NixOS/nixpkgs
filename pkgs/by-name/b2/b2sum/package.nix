@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  openmp ? null,
+  llvmPackages ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BLAKE2";
     repo = "BLAKE2";
-    rev = finalAttrs.version;
-    sha256 = "sha256-6BVl3Rh+CRPQq3QxcUlk5ArvjIj/IcPCA2/Ok0Zu7UI=";
+    tag = finalAttrs.version;
+    hash = "sha256-6BVl3Rh+CRPQq3QxcUlk5ArvjIj/IcPCA2/Ok0Zu7UI=";
   };
 
   # Use the generic C implementation rather than the SSE optimised version on non-x86 platforms
@@ -25,9 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/b2sum";
 
-  buildInputs = [ openmp ];
+  buildInputs = [ llvmPackages.openmp ];
 
-  buildFlags = [ (lib.optional (openmp == null) "NO_OPENMP=1") ];
+  buildFlags = [ (lib.optional (llvmPackages.openmp == null) "NO_OPENMP=1") ];
 
   # clang builds require at least C99 or the build fails with:
   # error: unknown type name 'inline'

@@ -2129,10 +2129,6 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  b2sum = callPackage ../tools/security/b2sum {
-    inherit (llvmPackages) openmp;
-  };
-
   beamerpresenter = beamerpresenter-mupdf;
 
   beamerpresenter-mupdf = qt6Packages.callPackage ../applications/office/beamerpresenter {
