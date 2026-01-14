@@ -4,10 +4,7 @@
   stdenv,
   cmake,
   sqlite,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
+  kdePackages,
   icoutils, # build and runtime deps.
   wget,
   fuseiso,
@@ -15,28 +12,28 @@
   which, # runtime deps.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "q4wine";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "brezerk";
     repo = "q4wine";
-    rev = "v${version}";
-    sha256 = "sha256-5rj+EDsOZib78gWT003a4IN23cZQftnhVggIdLN6f7I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5rj+EDsOZib78gWT003a4IN23cZQftnhVggIdLN6f7I=";
   };
 
   buildInputs = [
     sqlite
     icoutils
-    qtbase
-    qtsvg
-    qttools
+    kdePackages.qtbase
+    kdePackages.qtsvg
+    kdePackages.qttools
   ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   # Add runtime deps.
@@ -60,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rkitover ];
     platforms = lib.platforms.unix;
   };
-}
+})
