@@ -5,10 +5,12 @@
   cmake,
   ninja,
   go,
-  protobuf,
+  protobuf_21,
   openssl,
 }:
-
+let
+  protobuf = protobuf_21;
+in
 stdenv.mkDerivation rec {
   pname = "GameNetworkingSockets";
   version = "1.4.1";

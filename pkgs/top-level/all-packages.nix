@@ -6785,10 +6785,6 @@ with pkgs;
 
   makeFontsCache = callPackage ../development/libraries/fontconfig/make-fonts-cache.nix { };
 
-  gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets {
-    protobuf = protobuf_21;
-  };
-
   gamt = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
 
   gcr = callPackage ../development/libraries/gcr { };
