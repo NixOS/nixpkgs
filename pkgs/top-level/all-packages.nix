@@ -1826,8 +1826,6 @@ with pkgs;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
-  dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
-
   inherit (ocamlPackages) dot-merlin-reader;
 
   inherit (ocamlPackages) dune-release;
