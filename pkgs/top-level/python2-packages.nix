@@ -51,7 +51,7 @@ with super;
     inherit (pkgs.buildPackages) meson;
   };
 
-  pyparsing = callPackage ../development/python2-modules/pyparsing { };
+  pyparsing = disabled super.pyparsing;
 
   pytest = pytest_4;
 
