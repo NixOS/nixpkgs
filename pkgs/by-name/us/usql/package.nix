@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.20.5";
+  version = "0.20.8";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${version}";
-    hash = "sha256-rMjUT4YBSI16L7bxLIs8hs0A+yQwEX3ZWm1Yym5w2jE=";
+    hash = "sha256-oaimplnmNpr3nMGNmiXmE9L03SfifjfncI9ZPiJg6JI=";
   };
 
   buildInputs = [
