@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    zig.hook
+    zig
   ];
 
   buildInputs = [
