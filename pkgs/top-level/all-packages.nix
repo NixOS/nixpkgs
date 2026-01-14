@@ -7930,9 +7930,6 @@ with pkgs;
     protobuf_21
     ;
 
-  flatbuffers = callPackage ../development/libraries/flatbuffers { };
-  flatbuffers_23 = callPackage ../development/libraries/flatbuffers/23.nix { };
-
   nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enableMalloc = true; };
 
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
