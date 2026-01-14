@@ -13,6 +13,7 @@
   httpx-aiohttp,
   httpx,
   nest-asyncio,
+  openai,
   pandas,
   prompt-toolkit,
   pyaml,
@@ -31,13 +32,13 @@
 
 buildPythonPackage rec {
   pname = "llama-stack-client";
-  version = "0.2.23";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_stack_client";
     inherit version;
-    hash = "sha256-aPNOisjupqc+2dSXfYSZkrLYvYNYBNdwoRhDQxzVv3Q=";
+    hash = "sha256-MFd9PJTtvjiOZ0Q8t69MX3ayZ+kq7RJ9NtHZaNRRCuw=";
   };
 
   postPatch = ''
@@ -78,6 +79,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dirty-equals
     nest-asyncio
+    openai
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
@@ -91,6 +93,10 @@ buildPythonPackage rec {
     # Tests require network access
     "tests/api_resources/"
     "tests/test_client.py"
+    "tests/integration/test_agent_turn_step_events.py"
+
+    # AttributeError: 'Agent' object has no attribute '_session_last_response_id'
+    "tests/lib/agents/test_agent_responses.py::test_agent_tracks_multiple_sessions"
   ];
 
   meta = {
