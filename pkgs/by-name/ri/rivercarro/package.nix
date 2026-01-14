@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wayland-scanner
-    zig.hook
+    zig
   ];
 
   postPatch = ''

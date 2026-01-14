@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig_0_15.hook
+    zig_0_15
     installShellFiles
     pkg-config
   ];

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./0001-changes.patch ];
 
   nativeBuildInputs = [
-    zig_0_14.hook
+    zig_0_14
   ];
 
   zigBuildFlags = [ "--release=fast" ];

@@ -24,8 +24,7 @@
   wrapGAppsHook4,
   zig_0_14,
 
-  # Usually you would override `zig.hook` with this, but we do that internally
-  # since upstream recommends a non-default level
+  # Upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
 }:

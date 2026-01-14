@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig_0_13.hook
+    zig_0_13
   ];
 
   meta = {
