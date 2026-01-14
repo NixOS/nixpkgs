@@ -7016,10 +7016,6 @@ with pkgs;
 
   pangomm_2_42 = callPackage ../development/libraries/pangomm/2.42.nix { };
 
-  gdk-pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
-
-  gdk-pixbuf-xlib = callPackage ../development/libraries/gdk-pixbuf/xlib.nix { };
-
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix { };
 
   gtk2-x11 = gtk2.override {
