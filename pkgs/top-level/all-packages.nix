@@ -6765,9 +6765,6 @@ with pkgs;
 
   fmt = fmt_12;
 
-  fplll = callPackage ../development/libraries/fplll { };
-  fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
-
   freeipa = callPackage ../os-specific/linux/freeipa {
     # NOTE: freeipa and sssd need to be built with the same version of python
     kerberos = krb5.override {
