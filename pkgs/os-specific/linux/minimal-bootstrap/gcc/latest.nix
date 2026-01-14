@@ -135,6 +135,7 @@ bash.runCommand "${pname}-${version}"
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
       --disable-bootstrap \
+      --disable-dependency-tracking \
       --disable-libsanitizer \
       --disable-lto \
       --disable-multilib \

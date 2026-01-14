@@ -62,6 +62,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --without-bash-malloc \
+      --disable-dependency-tracking \
       --enable-static-link \
       CC=musl-gcc
 

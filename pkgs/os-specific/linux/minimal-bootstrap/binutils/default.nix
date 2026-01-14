@@ -42,6 +42,7 @@ let
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
     "--with-sysroot=/"
+    "--disable-dependency-tracking"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"

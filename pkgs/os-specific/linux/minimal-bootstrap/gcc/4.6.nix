@@ -121,6 +121,7 @@ bash.runCommand "${pname}-${version}"
       --with-build-sysroot=${tinycc.libs}/include \
       --disable-bootstrap \
       --disable-decimal-float \
+      --disable-dependency-tracking \
       --disable-libatomic \
       --disable-libcilkrts \
       --disable-libgomp \

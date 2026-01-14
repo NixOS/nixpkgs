@@ -55,7 +55,8 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
-      --host=${hostPlatform.config}
+      --host=${hostPlatform.config} \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES

@@ -109,6 +109,7 @@ bootBash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --without-bash-malloc
 
     # Build

@@ -26,6 +26,7 @@ let
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
+    "--disable-dependency-tracking"
     # musl 1.1.x doesn't use 64bit time_t
     "--disable-year2038"
     # libstdbuf.so fails in static builds

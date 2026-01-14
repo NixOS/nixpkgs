@@ -70,7 +70,8 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --disable-year2038
+      --disable-year2038 \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES
