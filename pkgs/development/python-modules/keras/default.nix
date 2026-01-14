@@ -35,16 +35,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.13.0";
+  version = "3.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    tag = "v${version}";
-    hash = "sha256-JsWmwJbIJIF3eEj7wYzNOSAiNHQkQ5LHKrE0lVQtU/U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oFlEgic6M6ZRqDl6RvAbQccW8RIHC4fEGWJyNPidDHM=";
   };
 
   build-system = [
@@ -157,8 +157,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
-    changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
+    changelog = "https://github.com/keras-team/keras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
