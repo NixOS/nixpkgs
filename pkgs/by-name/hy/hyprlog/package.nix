@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Hyprland focus/activity logger";
     homepage = "https://github.com/gusjengis/hyprlog";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gusjengis ];
     mainProgram = "hyprlog";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
