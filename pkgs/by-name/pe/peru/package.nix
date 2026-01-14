@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication rec {
   version = "1.3.4";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "buildinspace";
     repo = "peru";
