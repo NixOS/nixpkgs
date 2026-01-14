@@ -1,0 +1,51 @@
+diff --git a/Shoko.CLI/Shoko.CLI.csproj b/Shoko.CLI/Shoko.CLI.csproj
+index a4c34118b..a69fcd783 100644
+--- a/Shoko.CLI/Shoko.CLI.csproj
++++ b/Shoko.CLI/Shoko.CLI.csproj
+@@ -1,6 +1,6 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+   <PropertyGroup>
+-    <TargetFramework>net8.0</TargetFramework>
++    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+     <OutputType>exe</OutputType>
+     <Platforms>x64;AnyCPU</Platforms>
+diff --git a/Shoko.Server/Shoko.Server.csproj b/Shoko.Server/Shoko.Server.csproj
+index 807634fec..596ac347f 100644
+--- a/Shoko.Server/Shoko.Server.csproj
++++ b/Shoko.Server/Shoko.Server.csproj
+@@ -2,7 +2,7 @@
+   <PropertyGroup>
+     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+     <OutputType>Library</OutputType>
+-    <TargetFramework>net8.0</TargetFramework>
++    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+     <Platforms>x64;AnyCPU</Platforms>
+@@ -62,11 +62,13 @@
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+     </PackageReference>
+     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
++    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" Condition="'$(TargetFramework)' == 'net8.0'" />
++    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0" Condition="'$(TargetFramework)' == 'net9.0'" />
+     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+     <PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.2.0" />
+     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="8.0.3" />
++    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="8.0.3" Condition="'$(TargetFramework)' == 'net8.0'" />
++    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="9.0.0" Condition="'$(TargetFramework)' == 'net9.0'" />
+     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+       <PrivateAssets>all</PrivateAssets>
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+@@ -74,7 +76,8 @@
+     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
+     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.11" />
+-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
++    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" Condition="'$(TargetFramework)' == 'net8.0'" />
++    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" Condition="'$(TargetFramework)' == 'net9.0'" />
+     <PackageReference Include="MimeMapping" Version="3.0.1" />
+     <PackageReference Include="Mono.Posix.NETStandard" Version="5.20.1-preview" />
+     <PackageReference Include="MySqlBackup.NET.MySqlConnector" Version="2.3.8" />
