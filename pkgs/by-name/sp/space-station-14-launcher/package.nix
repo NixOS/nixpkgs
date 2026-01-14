@@ -66,7 +66,9 @@ buildDotnetModule rec {
     inherit version;
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0 // {
+    inherit (dotnetCorePackages.sdk_8_0) packages;
+  };
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetFlags = [
