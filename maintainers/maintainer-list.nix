@@ -25855,6 +25855,11 @@
     githubId = 156964;
     name = "Thomas Boerger";
   };
+  tbs1996 = {
+    github = "tbs1996";
+    githubId = 56874491;
+    name = "Tor Berge Sæbjørnsen";
+  };
   tbwanderer = {
     github = "tbwanderer";
     githubId = 125365236;
