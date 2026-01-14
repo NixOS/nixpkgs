@@ -31,7 +31,7 @@ with super;
 
   mock = disabled super.mock;
 
-  more-itertools = callPackage ../development/python2-modules/more-itertools { };
+  more-itertools = disabled super.more-itertools;
 
   # ninja python stub was created to help simplify python builds using PyPA's
   # build tool in Python 3, but it does not yet support Python 2
