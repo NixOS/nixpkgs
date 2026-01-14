@@ -9,10 +9,6 @@ with super;
 {
   attrs = callPackage ../development/python2-modules/attrs { };
 
-  backports-functools-lru-cache =
-    callPackage ../development/python2-modules/backports-functools-lru-cache
-      { };
-
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
   cffi = disabed super.cffi;
