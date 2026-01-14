@@ -74,8 +74,6 @@ with super;
 
   rpm = disabled super.rpm;
 
-  scandir = callPackage ../development/python2-modules/scandir { };
-
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
