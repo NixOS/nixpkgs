@@ -8005,8 +8005,6 @@ with pkgs;
 
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
-  python-qt = libsForQt5.callPackage ../development/libraries/python-qt { };
-
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
