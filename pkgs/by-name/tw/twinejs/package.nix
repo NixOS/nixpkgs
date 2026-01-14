@@ -34,7 +34,6 @@ let
         hash = "sha256-HcpVOcQ/lWTLeAgTF+1xPj41HO+wC4au8SEJGC0Nm1Q=";
       };
       "aarch64-linux" = {
-
         filename = "Linux-arm64";
         hash = "sha256-B6pIAnjznOvkyS7fNSZ+VbvOj77+pn3YPkxDcgfrw5Y=";
       };
