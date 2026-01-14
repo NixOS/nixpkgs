@@ -33,9 +33,7 @@ with super;
 
   more-itertools = disabled super.more-itertools;
 
-  # ninja python stub was created to help simplify python builds using PyPA's
-  # build tool in Python 3, but it does not yet support Python 2
-  ninja = pkgs.buildPackages.ninja;
+  ninja = disabled super.ninja;
 
   packaging = disabled super.packaging;
 
