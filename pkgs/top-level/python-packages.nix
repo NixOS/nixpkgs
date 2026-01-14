@@ -17201,6 +17201,8 @@ self: super: with self; {
 
   shaperglot = callPackage ../development/python-modules/shaperglot { };
 
+  shared = callPackage ../development/python-modules/shared { };
+
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
