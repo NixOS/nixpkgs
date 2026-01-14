@@ -23,6 +23,9 @@
       services.displayManager.defaultSession = lib.mkForce "dwl";
 
       programs.dwl.enable = true;
+
+      # Need to switch to a different GPU driver than the default one (-vga std) so that dwl works on aarch64-linux
+      virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
     };
 
   testScript = ''
