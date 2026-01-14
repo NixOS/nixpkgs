@@ -23,8 +23,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.21.1";
-  sha256 = "487d73fd4db00dc2420d659a8221b181a7937fbc5bc73f31c30b1680ad6ded6a";
+  version = "22.22.0";
+  sha256 = "4c138012bb5352f49822a8f3e6d1db71e00639d0c36d5b6756f91e4c6f30b683";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
