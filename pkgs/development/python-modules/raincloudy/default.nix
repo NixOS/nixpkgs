@@ -10,7 +10,6 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -25,7 +24,7 @@ buildPythonPackage rec {
   pypriject = true;
 
   # https://github.com/vanstinator/raincloudy/issues/65
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "vanstinator";

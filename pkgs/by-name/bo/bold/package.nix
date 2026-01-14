@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    zig.hook
+    zig
   ];
 
   doInstallCheck = true;
