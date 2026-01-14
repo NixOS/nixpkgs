@@ -1,12 +1,9 @@
 {
   buildPythonPackage,
-  typing-extensions,
   fetchPypi,
   lib,
   nix-update-script,
   hatch-vcs,
-  pythonOlder,
-  importlib-resources,
 }:
 
 buildPythonPackage rec {
@@ -21,10 +18,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ hatch-vcs ];
-
-  propagatedBuildInputs =
-    lib.optionals (pythonOlder "3.7") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   passthru.updateScript = nix-update-script { };
 
