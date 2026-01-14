@@ -6,7 +6,7 @@
   cmake,
   enableVTK ? true,
   vtk,
-  DarwinTools, # sw_vers
+  darwin, # sw_vers
   enablePython ? false,
   python ? null,
   swig,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.DarwinTools;
 
   buildInputs = [
     expat
