@@ -301,6 +301,11 @@ lib.makeScope
         gnumake = gnumake-musl;
       };
 
+      musl-static = callPackage ./musl/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+      };
+
       patchelf-static = callPackage ./patchelf/static.nix {
         gcc = gcc-latest;
         gnumake = gnumake-musl;
