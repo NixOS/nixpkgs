@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtappinstancemanager";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "oclero";
     repo = "qtappinstancemanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+YkvWv5ss4O1WLDmwpueuRY72tTdXTLZeg8pVL4R3Ag=";
+    hash = "sha256-jWOuI5pjKdDtvQMVAOrj/hWRAjsal/01H9Va2reEbos=";
   };
 
   nativeBuildInputs = [
