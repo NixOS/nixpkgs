@@ -9,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "immich-kiosk";
-  version = "0.30.1";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-EuCRYLpfAFstoADPyC0d7CHcJgzwTx2iiRcQdbjuUD8=";
+    hash = "sha256-q321eiHXzYfch3qod1w1EAk95AAvLiDZhhiKmyL2Ki4=";
   };
 
   # Delete vendor directory to regenerate it consistently across platforms
