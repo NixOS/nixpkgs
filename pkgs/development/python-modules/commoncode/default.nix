@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.4.0";
+  version = "32.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "commoncode";
     tag = "v${version}";
-    hash = "sha256-k9E/Yz6G3IHJPf3BlscZNSL4Qk9WyGU3vXA+U+GwWA0=";
+    hash = "sha256-A2FE+qhLQahuAtptP3hCnIUgh7j61Wf02avO6DM0b5E=";
   };
 
   dontConfigure = true;
