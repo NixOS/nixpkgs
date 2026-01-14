@@ -1232,6 +1232,7 @@ let
           "UseRedirect"
           "UseHopLimit"
           "UseReachableTime"
+          "UseRetransmissionTime"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
@@ -1248,6 +1249,7 @@ let
         (assertValueOneOf "UseRedirect" boolValues)
         (assertValueOneOf "UseHopLimit" boolValues)
         (assertValueOneOf "UseReachableTime" boolValues)
+        (assertValueOneOf "UseRetransmissionTime" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
