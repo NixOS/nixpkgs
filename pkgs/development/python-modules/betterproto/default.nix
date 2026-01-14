@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   lib,
   poetry-core,
   grpclib,
@@ -79,6 +80,14 @@ buildPythonPackage rec {
     "test_service_with_deprecated_method"
     # Test is flaky
     "test_binary_compatibility"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # Outdated access to metadata
+    # https://github.com/danielgtaylor/python-betterproto/issues/680
+    "tests/test_inputs.py::test_message_can_instantiated[namespace_builtin_types]"
+    "tests/test_inputs.py::test_message_equality[namespace_builtin_types]"
+    "tests/test_inputs.py::test_message_json[namespace_builtin_types]"
   ];
 
   meta = {
