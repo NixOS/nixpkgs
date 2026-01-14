@@ -384,7 +384,9 @@ stdenv.mkDerivation {
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString isLinux "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (
+    isLinux && glibcLocales != null
+  ) "${glibcLocales}/lib/locale/locale-archive";
 
   # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
   # caused by separateDebugInfo
