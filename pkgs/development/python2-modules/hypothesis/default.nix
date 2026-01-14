@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   attrs,
-  coverage,
   pexpect,
   doCheck ? true,
   pytest,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    coverage
     sortedcontainers
   ];
 

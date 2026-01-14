@@ -21,7 +21,7 @@ with super;
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
-  coverage = callPackage ../development/python2-modules/coverage { };
+  coverage = disabled super.coverage;
 
   filelock = disabled super.filelock;
 
