@@ -44,12 +44,6 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Disable some tests that always fail -- our postgresqlTestHook initializes the database with the default (ASCII) encoding.
-    substituteInPlace test/unit/test_stream_from.cxx \
-      --replace-fail "PQXX_REGISTER_TEST(test_stream_from_parses_awkward_strings);" ""
-    substituteInPlace test/unit/test_stream_query.cxx \
-      --replace-fail "PQXX_REGISTER_TEST(test_stream_parses_awkward_strings);" ""
-
     # Disable linting step for tests, it tries to install packages with pip.
     substituteInPlace Makefile.am \
       --replace-fail "TESTS = tools/lint" ""
