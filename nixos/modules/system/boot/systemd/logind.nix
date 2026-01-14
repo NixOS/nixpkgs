@@ -52,9 +52,6 @@
     ++ lib.optionals config.systemd.package.withMachined [
       "dbus-org.freedesktop.machine1.service"
     ]
-    ++ lib.optionals config.systemd.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-    ]
     ++ [
       "dbus-org.freedesktop.login1.service"
       "user@.service"
