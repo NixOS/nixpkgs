@@ -31,6 +31,6 @@ buildGoModule rec {
     mainProgram = "rke";
     changelog = "https://github.com/rancher/rke/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }
