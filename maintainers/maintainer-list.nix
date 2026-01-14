@@ -2332,6 +2332,12 @@
     githubId = 72159603;
     name = "Antoine Sauzeau";
   };
+  asandikci = {
+    email = "git@aliberksandikci.com.tr";
+    github = "asandikci";
+    githubId = 94538585;
+    name = "Aliberk Sandıkçı";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
