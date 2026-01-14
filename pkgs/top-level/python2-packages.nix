@@ -31,7 +31,7 @@ with super;
 
   jinja2 = disabled super.jinja2;
 
-  markupsafe = callPackage ../development/python2-modules/markupsafe { };
+  markupsafe = disabled super.markupsafe;
 
   mock = callPackage ../development/python2-modules/mock { };
 
