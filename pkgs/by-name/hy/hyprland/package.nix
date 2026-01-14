@@ -12,7 +12,6 @@
   binutils,
   cairo,
   epoll-shim,
-  git,
   glaze,
   hyprcursor,
   hyprgraphics,
@@ -152,7 +151,6 @@ customStdenv.mkDerivation (finalAttrs: {
       aquamarine
       cairo
       glaze
-      git
       hyprcursor.dev
       hyprgraphics
       hyprlang
