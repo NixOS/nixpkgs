@@ -6992,10 +6992,6 @@ with pkgs;
     }
   );
 
-  glibmm = callPackage ../development/libraries/glibmm { };
-
-  glibmm_2_68 = callPackage ../development/libraries/glibmm/2.68.nix { };
-
   glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
   # Not moved to aliases while we decide if we should split the package again.
