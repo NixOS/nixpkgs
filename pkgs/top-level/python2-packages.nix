@@ -15,7 +15,7 @@ with super;
 
   configparser = callPackage ../development/python2-modules/configparser { };
 
-  contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
+  contextlib2 = disabled super.contextlib2;
 
   coverage = disabled super.coverage;
 
