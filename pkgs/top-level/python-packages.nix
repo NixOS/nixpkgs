@@ -17573,6 +17573,8 @@ self: super: with self; {
 
   snitun = callPackage ../development/python-modules/snitun { };
 
+  snmpsim = callPackage ../development/python-modules/snmpsim { };
+
   snorkel = callPackage ../development/python-modules/snorkel { };
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
