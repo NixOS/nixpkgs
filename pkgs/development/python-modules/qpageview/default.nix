@@ -4,7 +4,6 @@
   buildPythonPackage,
   hatchling,
   pyqt6,
-  poppler-qt5,
   pycups,
 }:
 
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   dependencies = [
     pyqt6
-    poppler-qt5
     pycups
   ];
 
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qpageview" ];
 
   meta = {
-    description = "Page-based viewer widget for Qt5/PyQt5";
+    description = "Page-based viewer widget for Qt6/PyQt6";
     homepage = "https://github.com/frescobaldi/qpageview";
     changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;
