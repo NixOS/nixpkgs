@@ -3777,13 +3777,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.9.1";
+    version = "1.10.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
+      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
     };
   in
   {

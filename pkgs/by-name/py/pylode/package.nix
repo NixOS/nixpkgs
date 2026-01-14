@@ -4,45 +4,42 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pylode";
-  version = "2.13.3";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "pylode";
-    tag = version;
-    sha256 = "sha256-AtqkxnpEL+580S/iKCaRcsQO6LLYhkJxyNx6fi3atbE=";
+    tag = finalAttrs.version;
+    hash = "sha256-X12rcXvFvMB5tZ3WtfCE+yb8mhed9FnscjiTmMcSyV4=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  pythonRelaxDeps = [ "rdflib" ];
+
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
-    falcon
-    jinja2
+    dominate
+    html5lib
+    httpx
     markdown
-    python-dateutil
     rdflib
-    requests
   ];
-
-  pythonRelaxDeps = [ "rdflib" ];
 
   # Path issues with the tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylode"
-  ];
+  pythonImportsCheck = [ "pylode" ];
 
   meta = {
     description = "OWL ontology documentation tool using Python and templating, based on LODE";
     homepage = "https://github.com/RDFLib/pyLODE";
-    # Next release will move to BSD3
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/RDFLib/pyLODE/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ koslambrou ];
     mainProgram = "pylode";
   };
-}
+})

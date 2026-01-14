@@ -1750,6 +1750,8 @@ self: super: with self; {
 
   badauth = callPackage ../development/python-modules/badauth { };
 
+  badges = callPackage ../development/python-modules/badges { };
+
   badldap = callPackage ../development/python-modules/badldap { };
 
   badsecrets = callPackage ../development/python-modules/badsecrets { };
@@ -2993,6 +2995,8 @@ self: super: with self; {
   colormath = callPackage ../development/python-modules/colormath { };
 
   colormath2 = callPackage ../development/python-modules/colormath2 { };
+
+  colorscript = callPackage ../development/python-modules/colorscript { };
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
@@ -6077,6 +6081,8 @@ self: super: with self; {
 
   get-video-properties = callPackage ../development/python-modules/get-video-properties { };
 
+  getch = callPackage ../development/python-modules/getch { };
+
   getjump = callPackage ../development/python-modules/getjump { };
 
   getkey = callPackage ../development/python-modules/getkey { };
@@ -6752,6 +6758,8 @@ self: super: with self; {
   hass-splunk = callPackage ../development/python-modules/hass-splunk { };
 
   hassil = callPackage ../development/python-modules/hassil { };
+
+  hatasm = callPackage ../development/python-modules/hatasm { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
@@ -12052,6 +12060,8 @@ self: super: with self; {
   pettingzoo = callPackage ../development/python-modules/pettingzoo { };
 
   pex = callPackage ../development/python-modules/pex { };
+
+  pex-entysec = callPackage ../development/python-modules/pex-entysec { };
 
   pexif = callPackage ../development/python-modules/pexif { };
 
