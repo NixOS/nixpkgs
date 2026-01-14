@@ -33,7 +33,11 @@
       nodes.machine = {
         services.shoko = {
           enable = true;
-          plugins = [ pkgs.luarenamer ];
+          package = pkgs.shoko.override { withNet9 = true; };
+          plugins = with pkgs; [
+            luarenamer
+            shokofin
+          ];
         };
       };
 
