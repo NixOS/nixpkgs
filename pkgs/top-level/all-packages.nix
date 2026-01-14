@@ -2553,10 +2553,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  fox = callPackage ../development/libraries/fox { };
-
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
-
   fpm = callPackage ../tools/package-management/fpm { };
 
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
