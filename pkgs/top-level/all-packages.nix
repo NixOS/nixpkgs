@@ -6807,10 +6807,6 @@ with pkgs;
     useMinimalFeatures = true;
   };
 
-  gdcm = callPackage ../development/libraries/gdcm {
-    inherit (darwin) DarwinTools;
-  };
-
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
