@@ -18,11 +18,11 @@
 }:
 let
   pname = "gzip-static";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/gzip-${version}.tar.xz";
-    hash = "sha256-dFTraTXbF8ZlVXbC4bD6vv04tNCTbg+H9IzQYs6RoFc=";
+    hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
 in
 bash.runCommand "${pname}-${version}"
