@@ -29,7 +29,7 @@ with super;
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
-  jinja2 = callPackage ../development/python2-modules/jinja2 { };
+  jinja2 = disabled super.jinja2;
 
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
