@@ -1,0 +1,315 @@
+diff --git a/gcc/collect2.cc b/gcc/collect2.cc
+index 268ac378b9c..8a5c606075a 100644
+--- a/gcc/collect2.cc
++++ b/gcc/collect2.cc
+@@ -327,7 +327,7 @@ static void write_aix_file (FILE *, struct id *);
+ static char *resolve_lib_name (const char *);
+ #endif
+ static char *extract_string (const char **);
+-static void post_ld_pass (bool);
++static void post_ld_pass (bool, bool);
+ static void process_args (int *argcp, char **argv);
+ 
+ /* Enumerations describing which pass this is for scanning the
+@@ -513,12 +513,10 @@ is_ctor_dtor (const char *s)
+ 
+ static struct path_prefix cpath, path;
+ 
+-#ifdef CROSS_DIRECTORY_STRUCTURE
+ /* This is the name of the target machine.  We use it to form the name
+    of the files to execute.  */
+ 
+ static const char *const target_machine = TARGET_MACHINE;
+-#endif
+ 
+ /* Search for NAME using prefix list PPREFIX.  We only look for executable
+    files.
+@@ -577,7 +575,7 @@ add_lto_object (struct lto_object_list *list, const char *name)
+ 
+ static void
+ maybe_run_lto_and_relink (char **lto_ld_argv, char **object_lst,
+-			  const char **object, bool force)
++			  const char **object, bool force, bool is_cross_compiler)
+ {
+   const char **object_file = CONST_CAST2 (const char **, char **, object_lst);
+ 
+@@ -722,7 +720,7 @@ maybe_run_lto_and_relink (char **lto_ld_argv, char **object_lst,
+ 		    "ld_args");
+       /* We assume that temp files were created, and therefore we need to take
+          that into account (maybe run dsymutil).  */
+-      post_ld_pass (/*temp_file*/true);
++      post_ld_pass (/*temp_file*/true, is_cross_compiler);
+       free (lto_ld_argv);
+ 
+       maybe_unlink_list (lto_o_files);
+@@ -734,10 +732,10 @@ maybe_run_lto_and_relink (char **lto_ld_argv, char **object_lst,
+       fork_execute ("ld", lto_ld_argv, HAVE_GNU_LD && at_file_supplied,
+ 		    "ld_args");
+       /* No LTO objects were found, so no new temp file.  */
+-      post_ld_pass (/*temp_file*/false);
++      post_ld_pass (/*temp_file*/false, is_cross_compiler);
+     }
+   else
+-    post_ld_pass (false); /* No LTO objects were found, no temp file.  */
++    post_ld_pass (false, is_cross_compiler); /* No LTO objects were found, no temp file.  */
+ }
+ /* Entry point for linker invoation.  Called from main in collect2.cc.
+    LD_ARGV is an array of arguments for the linker.  */
+@@ -799,33 +797,14 @@ main (int argc, char **argv)
+   static const char *const gstrip_suffix = "gstrip";
+ 
+   const char *full_ld_suffixes[USE_LD_MAX];
+-#ifdef CROSS_DIRECTORY_STRUCTURE
+-  /* If we look for a program in the compiler directories, we just use
+-     the short name, since these directories are already system-specific.
+-     But it we look for a program in the system directories, we need to
+-     qualify the program name with the target machine.  */
+-
+-  const char *const full_nm_suffix =
+-    concat (target_machine, "-", nm_suffix, NULL);
+-  const char *const full_gnm_suffix =
+-    concat (target_machine, "-", gnm_suffix, NULL);
+-#ifdef LDD_SUFFIX
+-  const char *const full_ldd_suffix =
+-    concat (target_machine, "-", ldd_suffix, NULL);
+-#endif
+-  const char *const full_strip_suffix =
+-    concat (target_machine, "-", strip_suffix, NULL);
+-  const char *const full_gstrip_suffix =
+-    concat (target_machine, "-", gstrip_suffix, NULL);
+-#else
++  const char *full_nm_suffix;
++  const char *full_gnm_suffix;
++  const char *full_strip_suffix;
++  const char *full_gstrip_suffix;
++
+ #ifdef LDD_SUFFIX
+-  const char *const full_ldd_suffix	= ldd_suffix;
++  const char *full_ldd_suffix;
+ #endif
+-  const char *const full_nm_suffix	= nm_suffix;
+-  const char *const full_gnm_suffix	= gnm_suffix;
+-  const char *const full_strip_suffix	= strip_suffix;
+-  const char *const full_gstrip_suffix	= gstrip_suffix;
+-#endif /* CROSS_DIRECTORY_STRUCTURE */
+ 
+   const char *arg;
+   FILE *outf;
+@@ -840,6 +819,7 @@ main (int argc, char **argv)
+   const char **ld1;
+   bool use_plugin = false;
+   bool use_collect_ld = false;
++  bool is_cross_compiler = false;
+ 
+   /* The kinds of symbols we will have to consider when scanning the
+      outcome of a first pass link.  This is ALL to start with, then might
+@@ -864,17 +844,6 @@ main (int argc, char **argv)
+ #endif
+   int i;
+ 
+-  for (i = 0; i < USE_LD_MAX; i++)
+-#ifdef CROSS_DIRECTORY_STRUCTURE
+-    /* lld and mold are platform-agnostic and not prefixed with target
+-       triple.  */
+-    if (!(i == USE_LLD_LD || i == USE_MOLD_LD))
+-      full_ld_suffixes[i] = concat (target_machine, "-", ld_suffixes[i],
+-				    NULL);
+-    else
+-#endif
+-      full_ld_suffixes[i] = ld_suffixes[i];
+-
+   p = argv[0] + strlen (argv[0]);
+   while (p != argv[0] && !IS_DIR_SEPARATOR (p[-1]))
+     --p;
+@@ -1050,6 +1019,65 @@ main (int argc, char **argv)
+   prefix_from_env ("COMPILER_PATH", &cpath);
+   prefix_from_env ("PATH", &path);
+ 
++  /* Determine the full path name of the C compiler to use.  */
++  c_file_name = getenv ("COLLECT_GCC");
++  if (c_file_name == 0)
++    {
++      c_file_name = concat (target_machine, "-gcc", NULL);
++      p = find_a_file (&cpath, c_file_name, X_OK);
++      if (p == 0)
++        p = find_a_file (&path, c_file_name, X_OK);
++
++      if (p == 0) {
++        c_file_name = "gcc";
++        p = find_a_file (&cpath, c_file_name, X_OK);
++        if (p == 0)
++          p = find_a_file (&path, c_file_name, X_OK);
++      }
++    }
++  else
++    {
++      p = find_a_file (&cpath, c_file_name, X_OK);
++
++      /* Here it should be safe to use the system search path since we should have
++        already qualified the name of the compiler when it is needed.  */
++      if (p == 0)
++        p = find_a_file (&path, c_file_name, X_OK);
++    }
++
++  if (p)
++    c_file_name = p;
++
++  if (c_file_name) {
++    is_cross_compiler = strncmp(basename(c_file_name), target_machine, strlen(target_machine)) == 0;
++  }
++
++  for (i = 0; i < USE_LD_MAX; i++)
++    /* lld and mold are platform-agnostic and not prefixed with target
++       triple.  */
++    if (!(i == USE_LLD_LD || i == USE_MOLD_LD) && is_cross_compiler)
++      full_ld_suffixes[i] = concat (target_machine, "-", ld_suffixes[i],
++				    NULL);
++    else
++      full_ld_suffixes[i] = ld_suffixes[i];
++
++  full_nm_suffix =
++    is_cross_compiler ? concat (target_machine, "-", nm_suffix, NULL) : nm_suffix;
++
++  full_gnm_suffix =
++    is_cross_compiler ? concat (target_machine, "-", gnm_suffix, NULL) : gnm_suffix;
++
++  full_strip_suffix =
++    is_cross_compiler ? concat (target_machine, "-", strip_suffix, NULL) : strip_suffix;
++
++  full_gstrip_suffix =
++    is_cross_compiler ? concat (target_machine, "-", gstrip_suffix, NULL) : gstrip_suffix;
++
++#ifdef LDD_SUFFIX
++  full_ldd_suffix =
++    is_cross_compiler ? concat (target_machine, "-", ldd_suffix, NULL) : ldd_suffix;
++#endif
++
+   /* Try to discover a valid linker/nm/strip to use.  */
+ 
+   /* Maybe we know the right file to use (if not cross).  */
+@@ -1139,27 +1167,6 @@ main (int argc, char **argv)
+   if (strip_file_name == 0)
+     strip_file_name = find_a_file (&path, full_strip_suffix, X_OK);
+ 
+-  /* Determine the full path name of the C compiler to use.  */
+-  c_file_name = getenv ("COLLECT_GCC");
+-  if (c_file_name == 0)
+-    {
+-#ifdef CROSS_DIRECTORY_STRUCTURE
+-      c_file_name = concat (target_machine, "-gcc", NULL);
+-#else
+-      c_file_name = "gcc";
+-#endif
+-    }
+-
+-  p = find_a_file (&cpath, c_file_name, X_OK);
+-
+-  /* Here it should be safe to use the system search path since we should have
+-     already qualified the name of the compiler when it is needed.  */
+-  if (p == 0)
+-    p = find_a_file (&path, c_file_name, X_OK);
+-
+-  if (p)
+-    c_file_name = p;
+-
+   *ld1++ = *ld2++ = ld_file_name;
+ 
+   /* Make temp file names.  */
+@@ -1595,6 +1602,8 @@ main (int argc, char **argv)
+ 	       (c_file ? c_file : "not found"));
+       fprintf (stderr, "o_file              = %s\n",
+ 	       (o_file ? o_file : "not found"));
++      fprintf (stderr, "is_cross_compiler   = %s\n",
++          (is_cross_compiler ? "yes" : "no"));
+ 
+       ptr = getenv ("COLLECT_GCC_OPTIONS");
+       if (ptr)
+@@ -1644,9 +1653,9 @@ main (int argc, char **argv)
+ 	  maybe_unlink (export_file);
+ #endif
+ 	if (lto_mode != LTO_MODE_NONE)
+-	  maybe_run_lto_and_relink (ld1_argv, object_lst, object, false);
++	  maybe_run_lto_and_relink (ld1_argv, object_lst, object, false, is_cross_compiler);
+ 	else
+-	  post_ld_pass (/*temp_file*/false);
++	  post_ld_pass (/*temp_file*/false, is_cross_compiler);
+ 
+ 	return 0;
+       }
+@@ -1698,7 +1707,7 @@ main (int argc, char **argv)
+ 	do_link (ld1_argv, "ld1_args");
+ 
+       if (lto_mode)
+-        maybe_run_lto_and_relink (ld1_argv, object_lst, object, false);
++        maybe_run_lto_and_relink (ld1_argv, object_lst, object, false, is_cross_compiler);
+ 
+       /* Strip now if it was requested on the command line.  */
+       if (strip_flag)
+@@ -1716,7 +1725,7 @@ main (int argc, char **argv)
+ #ifdef COLLECT_EXPORT_LIST
+       maybe_unlink (export_file);
+ #endif
+-      post_ld_pass (/*temp_file*/false);
++      post_ld_pass (/*temp_file*/false, is_cross_compiler);
+       return 0;
+     }
+ 
+@@ -1799,15 +1808,15 @@ main (int argc, char **argv)
+   do_link (ld2_argv, "ld2_args");
+ 
+   if (lto_mode)
+-    maybe_run_lto_and_relink (ld2_argv, object_lst, object, false);
++    maybe_run_lto_and_relink (ld2_argv, object_lst, object, false, is_cross_compiler);
+ #else
+   /* Otherwise, simply call ld because link is already done.  */
+   if (lto_mode)
+-    maybe_run_lto_and_relink (ld2_argv, object_lst, object, true);
++    maybe_run_lto_and_relink (ld2_argv, object_lst, object, true, is_cross_compiler);
+   else
+     {
+       fork_execute ("ld", ld2_argv, HAVE_GNU_LD && at_file_supplied, "ld_args");
+-      post_ld_pass (/*temp_file*/false);
++      post_ld_pass (/*temp_file*/false, is_cross_compiler);
+     }
+ 
+   /* Let scan_prog_file do any final mods (OSF/rose needs this for
+@@ -3020,7 +3029,7 @@ process_args (int *argcp, char **argv) {
+ }
+ 
+ static void
+-do_dsymutil (const char *output_file) {
++do_dsymutil (const char *output_file, bool is_cross_compiler) {
+   const char *dsymutil = 0;
+   struct pex_obj *pex;
+   char **real_argv = XCNEWVEC (char *, verbose ? 4 : 3);
+@@ -3032,11 +3041,7 @@ do_dsymutil (const char *output_file) {
+    here is consistent with the way other installations work (and one can
+    always symlink a multitarget dsymutil with a target-specific name).  */
+   const char *dsname = "dsymutil";
+-#ifdef CROSS_DIRECTORY_STRUCTURE
+-  const char *qname = concat (target_machine, "-", dsname, NULL);
+-#else
+-  const char *qname = dsname;
+-#endif
++  const char *qname = is_cross_compiler ? concat (target_machine, "-", dsname, NULL) : dsname;
+ #ifdef DEFAULT_DSYMUTIL
+   /* Configured default takes priority.  */
+   if (dsymutil == 0 && access (DEFAULT_DSYMUTIL, X_OK) == 0)
+@@ -3071,14 +3076,14 @@ do_dsymutil (const char *output_file) {
+ }
+ 
+ static void
+-post_ld_pass (bool temp_file) {
++post_ld_pass (bool temp_file, bool is_cross_compiler) {
+   if (!(temp_file && flag_idsym) && !flag_dsym)
+     return;
+ 
+-  do_dsymutil (output_file);
++  do_dsymutil (output_file, is_cross_compiler);
+ }
+ #else
+ static void
+ process_args (int *argcp ATTRIBUTE_UNUSED, char **argv ATTRIBUTE_UNUSED) { }
+-static void post_ld_pass (bool temp_file ATTRIBUTE_UNUSED) { }
++static void post_ld_pass (bool temp_file ATTRIBUTE_UNUSED, bool is_cross_compiler ATTRIBUTE_UNUSED) { }
+ #endif

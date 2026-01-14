@@ -1,0 +1,14 @@
+diff --git a/src/binfile.in b/src/binfile.in
+index 0674567..1faba9c 100644
+--- a/src/binfile.in
++++ b/src/binfile.in
+@@ -5,7 +5,7 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+   exit 1
+ fi
+ 
+-export GI_TYPELIB_PATH="@typelibdir@"
+-export LD_LIBRARY_PATH="@pkglibdir@"
++export GI_TYPELIB_PATH="@typelibdir@${GI_TYPELIB_PATH:+:}$GI_TYPELIB_PATH"
++export LD_LIBRARY_PATH="@pkglibdir@${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+ 
+ exec @install_dir@/@target@ "$@"

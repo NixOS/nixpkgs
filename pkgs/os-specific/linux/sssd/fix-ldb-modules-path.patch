@@ -1,0 +1,13 @@
+diff --git a/src/confdb/confdb.c b/src/confdb/confdb.c
+index 8c19142..7865684 100644
+--- a/src/confdb/confdb.c
++++ b/src/confdb/confdb.c
+@@ -775,6 +775,8 @@ int confdb_init(TALLOC_CTX *mem_ctx,
+     int ret = EOK;
+     mode_t old_umask;
+ 
++    setenv("LDB_MODULES_PATH", "@out@/modules/ldb:@ldb@/modules/ldb", 1);
++
+     if (cdb_ctx == NULL) {
+         DEBUG(SSSDBG_FATAL_FAILURE, "Bad argument\n");
+         return EFAULT;

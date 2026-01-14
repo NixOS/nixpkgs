@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Thu, 17 Apr 2025 02:40:18 +0100
+Subject: [PATCH] nixpkgs: bump rules_rust to 0.60.0
+
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
+---
+ bazel/repository_locations.bzl | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/bazel/repository_locations.bzl b/bazel/repository_locations.bzl
+index 1293e432c815071ed55721760e583ac0e9f40108..664f8c8e2bf4641e7862e9321fd6f91d162c3c17 100644
+--- a/bazel/repository_locations.bzl
++++ b/bazel/repository_locations.bzl
+@@ -1528,8 +1528,8 @@ REPOSITORY_LOCATIONS_SPEC = dict(
+         project_name = "Bazel rust rules",
+         project_desc = "Bazel rust rules (used by Wasm)",
+         project_url = "https://github.com/bazelbuild/rules_rust",
+-        version = "0.56.0",
+-        sha256 = "f1306aac0b258b790df01ad9abc6abb0df0b65416c74b4ef27f4aab298780a64",
++        version = "0.60.0",
++        sha256 = "7825214ccad7c2482cb490ac91dbc1e88b30223062796ce328aca893b74ae342",
+         # Note: rules_rust should point to the releases, not archive to avoid the hassle of bootstrapping in crate_universe.
+         # This is described in https://bazelbuild.github.io/rules_rust/crate_universe.html#setup, otherwise bootstrap
+         # is required which in turn requires a system CC toolchains, not the bazel controlled ones.
+@@ -1540,7 +1540,7 @@ REPOSITORY_LOCATIONS_SPEC = dict(
+             "dataplane_ext",
+         ],
+         extensions = ["envoy.wasm.runtime.wasmtime"],
+-        release_date = "2024-12-16",
++        release_date = "2025-04-08",
+         cpe = "N/A",
+         license = "Apache-2.0",
+         license_url = "https://github.com/bazelbuild/rules_rust/blob/{version}/LICENSE.txt",

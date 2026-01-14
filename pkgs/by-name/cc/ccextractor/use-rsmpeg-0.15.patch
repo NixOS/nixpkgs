@@ -1,0 +1,42 @@
+diff --git a/src/rust/Cargo.lock b/src/rust/Cargo.lock
+index 5c49573775..3e855aa637 100644
+--- a/src/rust/Cargo.lock
++++ b/src/rust/Cargo.lock
+@@ -665,11 +665,10 @@
+ 
+ [[package]]
+ name = "rsmpeg"
+-version = "0.14.2+ffmpeg.6.1"
++version = "0.15.1+ffmpeg.7.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "927012cd6ae43519f519741f4a69602ce3a47cf84750784da124dffd03527cc0"
++checksum = "d3ffbead667d06e0c77c4363f83d49a3481cc3838bc9a61882aa07b01e3f63e1"
+ dependencies = [
+- "libc",
+  "paste",
+  "rusty_ffmpeg",
+  "thiserror",
+@@ -711,9 +710,9 @@
+ 
+ [[package]]
+ name = "rusty_ffmpeg"
+-version = "0.13.3+ffmpeg.6.1"
++version = "0.14.1+ffmpeg.7.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "716adffa5f909c8533611b1dab9ab5666bece35687845865b75ed6a990fc239c"
++checksum = "40f4db8e3e23d4a3044d53a41aba5324eae70d3e7fe82375ce833521533bc315"
+ dependencies = [
+  "bindgen 0.69.4",
+  "camino",
+diff --git a/src/rust/Cargo.toml b/src/rust/Cargo.toml
+index 4c1e73dcf0..68502915dc 100644
+--- a/src/rust/Cargo.toml
++++ b/src/rust/Cargo.toml
+@@ -15,7 +15,7 @@
+ env_logger = "0.8.4"
+ palette = "0.6.1"
+-rsmpeg = { version = "0.14.2", optional = true, features = [
++rsmpeg = { version = "0.15.1", optional = true, features = [
+     "link_system_ffmpeg",
+ ] }
+ tesseract-sys = { version = "0.5.15", optional = true, default-features = false }

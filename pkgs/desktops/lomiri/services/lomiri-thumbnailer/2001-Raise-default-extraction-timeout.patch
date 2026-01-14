@@ -1,0 +1,70 @@
+From d2f977692f931faaad0972f8d121252ddea27501 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 7 Feb 2025 19:13:13 +0100
+Subject: [PATCH] data/com.lomiri.Thumbnailer.gschema.xml: Raise
+ extraction-timeout
+
+---
+ data/com.lomiri.Thumbnailer.gschema.xml                       | 2 +-
+ .../liblomiri-thumbnailer-qt_test.cpp                         | 4 ++--
+ tests/settings/settings_test.cpp                              | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/data/com.lomiri.Thumbnailer.gschema.xml b/data/com.lomiri.Thumbnailer.gschema.xml
+index 094f850..9de4ab0 100644
+--- a/data/com.lomiri.Thumbnailer.gschema.xml
++++ b/data/com.lomiri.Thumbnailer.gschema.xml
+@@ -66,7 +66,7 @@
+     </key>
+ 
+     <key type="i" name="extraction-timeout">
+-      <default>10</default>
++      <default>20</default>
+       <summary>Maximum amount of time to wait for an image extraction or download (in seconds)</summary>
+       <description>
+         This parameter sets the amount of time (in seconds) to wait for a remote image download or a thumbnail extraction before giving up.
+diff --git a/tests/liblomiri-thumbnailer-qt/liblomiri-thumbnailer-qt_test.cpp b/tests/liblomiri-thumbnailer-qt/liblomiri-thumbnailer-qt_test.cpp
+index 8fc06cf..278ebbb 100644
+--- a/tests/liblomiri-thumbnailer-qt/liblomiri-thumbnailer-qt_test.cpp
++++ b/tests/liblomiri-thumbnailer-qt/liblomiri-thumbnailer-qt_test.cpp
+@@ -467,13 +467,13 @@ TEST_F(LibThumbnailerTest, request_timeout)
+     }
+ 
+     Thumbnailer thumbnailer(dbus_->connection());
+-    auto reply = thumbnailer.getArtistArt("sleep", "12", QSize(256, 256));
++    auto reply = thumbnailer.getArtistArt("sleep", "22", QSize(256, 256));
+ 
+     reply->waitForFinished();
+ 
+     EXPECT_TRUE(reply->isFinished());
+     EXPECT_EQ("Thumbnailer: RequestImpl::dbusCallFinished(): D-Bus error: Handler::createFinished(): "
+-              "could not get thumbnail for artist: sleep/12 (256,256): TIMEOUT",
++              "could not get thumbnail for artist: sleep/22 (256,256): TIMEOUT",
+               reply->errorMessage());
+     EXPECT_FALSE(reply->isValid());
+ }
+diff --git a/tests/settings/settings_test.cpp b/tests/settings/settings_test.cpp
+index cd5931e..8a9a839 100644
+--- a/tests/settings/settings_test.cpp
++++ b/tests/settings/settings_test.cpp
+@@ -46,7 +46,7 @@ TEST(Settings, defaults_from_schema)
+     EXPECT_EQ(7200, settings.retry_error_max_seconds());
+     EXPECT_EQ(8, settings.max_downloads());
+     EXPECT_EQ(0, settings.max_extractions());
+-    EXPECT_EQ(10, settings.extraction_timeout());
++    EXPECT_EQ(20, settings.extraction_timeout());
+     EXPECT_EQ(10, settings.max_backlog());
+     EXPECT_FALSE(settings.trace_client());
+     EXPECT_EQ(1, settings.log_level());
+@@ -69,7 +69,7 @@ TEST(Settings, missing_schema)
+     EXPECT_EQ(7200, settings.retry_error_max_seconds());
+     EXPECT_EQ(8, settings.max_downloads());
+     EXPECT_EQ(0, settings.max_extractions());
+-    EXPECT_EQ(10, settings.extraction_timeout());
++    EXPECT_EQ(20, settings.extraction_timeout());
+     EXPECT_EQ(10, settings.max_backlog());
+     EXPECT_FALSE(settings.trace_client());
+     EXPECT_EQ(1, settings.log_level());
+-- 
+2.47.1
+

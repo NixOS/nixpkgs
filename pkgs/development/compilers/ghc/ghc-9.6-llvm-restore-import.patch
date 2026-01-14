@@ -1,0 +1,12 @@
+diff --git a/compiler/GHC/CmmToLlvm.hs b/compiler/GHC/CmmToLlvm.hs
+index 7d48693765..6290779a44 100644
+--- a/compiler/GHC/CmmToLlvm.hs
++++ b/compiler/GHC/CmmToLlvm.hs
+@@ -28,6 +28,7 @@
+ 
+ import GHC.Utils.BufHandle
+ import GHC.Driver.Session
++import GHC.Platform ( platformArch, Arch(..) )
+ import GHC.Utils.Error
+ import GHC.Data.FastString
+ import GHC.Utils.Outputable

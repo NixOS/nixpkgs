@@ -1,0 +1,30 @@
+diff --git a/src/node/desktop/CMakeLists.txt b/src/node/desktop/CMakeLists.txt
+index bccf5b3..71e10a7 100644
+--- a/src/node/desktop/CMakeLists.txt
++++ b/src/node/desktop/CMakeLists.txt
+@@ -117,11 +117,7 @@ file(MAKE_DIRECTORY "${ELECTRON_BINARY_DIR}")
+ file(
+    COPY "${CMAKE_CURRENT_SOURCE_DIR}/"
+    DESTINATION "${ELECTRON_BINARY_DIR}/"
+-   REGEX "/.webpack$" EXCLUDE
+-   REGEX "/build$" EXCLUDE
+-   REGEX "/bin$" EXCLUDE
+-   REGEX "/out$" EXCLUDE
+-   REGEX "/node_modules$" EXCLUDE)
++)
+ 
+ configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main/build-info.ts.in
+diff --git a/src/node/desktop/package.json b/src/node/desktop/package.json
+index df92166..47ca4b4 100644
+--- a/src/node/desktop/package.json
++++ b/src/node/desktop/package.json
+@@ -10,7 +10,7 @@
+   "scripts": {
+     "clean": "ts-node scripts/clean.ts",
+     "lint": "eslint ./src ./test",
+-    "package": "npm ci && electron-forge package",
++    "package": "electron-forge package",
+     "start": "electron-forge start -- --no-sandbox",
+     "debug": "electron-forge start --inspect-electron",
+     "fullstart": "npm install && electron-forge start",

@@ -1,0 +1,58 @@
+From 750cfd9af2174e1fa8164e433be1379e3e367c78 Mon Sep 17 00:00:00 2001
+From: Silvan Mosberger <silvan.mosberger@moduscreate.com>
+Date: Tue, 7 Oct 2025 15:01:00 +0200
+Subject: [PATCH 1/2] Fail run-all on non-zero exit codes and summarise the
+ results
+
+Previously it was hard to determine whether the tests passed or not.
+With this change, run-all exiting with 0 means that no tests failed.
+
+This allows us to set up CI for our bash package in the NixOS distribution:
+https://github.com/NixOS/nixpkgs/pull/435033
+
+We hope that it will also be useful for other distributions to make sure
+their packaging is correct.
+
+Co-Authored-By: Silvan Mosberger <silvan.mosberger@tweag.io>
+Co-Authored-By: Aleksander Bantyev <alexander.bantyev@tweag.io>
+---
+ tests/run-all | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git tests/run-all tests/run-all
+index f9dfa604..c8f503a2 100644
+--- tests/run-all
++++ tests/run-all
+@@ -58,13 +58,28 @@ rm -f ${BASH_TSTOUT}
+ 
+ echo Any output from any test, unless otherwise noted, indicates a possible anomaly
+ 
++passed=0
++total=0
+ for x in run-*
+ do
+ 	case $x in
+ 	$0|run-minimal|run-gprof)	;;
+ 	*.orig|*~) ;;
+-	*)	echo $x ; sh $x ; rm -f ${BASH_TSTOUT} ;;
++	*)
++		echo $x
++		total=$(( total + 1 ))
++		if sh $x; then
++			passed=$(( passed + 1 ))
++		else
++			echo "$x EXITED NON-ZERO ($?) - possible anomaly unless otherwise noted"
++		fi
++		rm -f "${BASH_TSTOUT}"
++		;;
+ 	esac
+ done
+ 
++echo "$passed/$total tests had exit code zero"
++if [ "$passed" -ne "$total" ]; then
++	exit 1
++fi
+ exit 0
+-- 
+2.49.0
+

@@ -1,0 +1,25 @@
+diff --git a/source/Files.cpp b/source/Files.cpp
+index bb03ecf..6e37336 100644
+--- a/source/Files.cpp
++++ b/source/Files.cpp
+@@ -135,6 +135,7 @@ void Files::Init(const char * const *argv)
+ 		else if(IsParent(STANDARD_PATH, resources))
+ 			resources = STANDARD_PATH / RESOURCE_PATH;
+ #endif
++		resources = "%NIXPKGS_RESOURCES_PATH%";
+ 	}
+ 	// If the resources are not here, search in the directories containing this
+ 	// one. This allows, for example, a Mac app that does not actually have the
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 17f290163..169fef120 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -312,7 +312,7 @@ elseif(WIN32)
+ 	include(CPack)
+ elseif(UNIX)
+	# Install the binary.
+-	install(TARGETS EndlessSky CONFIGURATIONS Release RUNTIME DESTINATION games)
++	install(TARGETS EndlessSky CONFIGURATIONS Release RUNTIME DESTINATION bin)
+
+ 	# Install the desktop file.
+ 	install(FILES io.github.endless_sky.endless_sky.desktop DESTINATION share/applications)

@@ -1,0 +1,23 @@
+diff --git i/emscripten/CMakeLists.txt w/emscripten/CMakeLists.txt
+index 7c6ea6a0e..b53a4b6cc 100644
+--- i/emscripten/CMakeLists.txt
++++ w/emscripten/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4.1)
++cmake_minimum_required(VERSION 3.10)
+ project(LibreSprite C CXX)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ set(CMAKE_CXX_STANDARD 20)
+diff --git i/third_party/observable/CMakeLists.txt w/third_party/observable/CMakeLists.txt
+index 3ef458975..4d1f186dc 100644
+--- i/third_party/observable/CMakeLists.txt
++++ w/third_party/observable/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Observable Library
+ # Copyright (C) 2016-2021 David Capello
+ 
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(observable CXX)
+ option(OBSERVABLE_TESTS "Compile observable tests" ON)

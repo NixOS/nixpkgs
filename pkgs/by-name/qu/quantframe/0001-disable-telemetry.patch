@@ -1,0 +1,164 @@
+diff --git a/src-tauri/src/qf_client/modules/analytics.rs b/src-tauri/src/qf_client/modules/analytics.rs
+index f68e185..355723e 100644
+--- a/src-tauri/src/qf_client/modules/analytics.rs
++++ b/src-tauri/src/qf_client/modules/analytics.rs
+@@ -37,7 +37,7 @@ impl AnalyticsModule {
+             current_page: "home".to_string(),
+             component: "Analytics".to_string(),
+             is_init: false,
+-            send_metrics: true,
++            send_metrics: false,
+             last_user_activity: Arc::new(Mutex::new(Instant::now())),
+             metricAndLabelPairsScheduledToSend: vec![],
+         }
+@@ -77,90 +77,7 @@ impl AnalyticsModule {
+     }
+     pub fn init(&mut self) -> Result<(), AppError> {
+         let app = states::app_state()?;
+-        if self.is_init {
+-            return Ok(());
+-        }
+-        self.is_init = true;
+-        self.update_state();
+-
+-        let is_first_install = app.is_first_install.clone();
+-        tauri::async_runtime::spawn({
+-            async move {
+-                // Create a new instance of the QFClient and store it in the app state
+-                let qf = states::qf_client().expect("Failed to get qf client");
+-
+-                // Create Timer for sending metrics
+-                let mut last_metric_time = Instant::now();
+-
+-                if is_first_install {
+-                    qf.analytics()
+-                        .metricAndLabelPairsScheduledToSend
+-                        .push(HashMap::from([(
+-                            "First_Install".to_string(),
+-                            "true".to_string(),
+-                        )]));
+-                }
+-                loop {
+-                    let send_metrics = qf.analytics().send_metrics;
+-                    if !send_metrics {
+-                        tokio::time::sleep(std::time::Duration::from_secs(60)).await;
+-                        continue;
+-                    }
+-
+-                    if last_metric_time.elapsed() < Duration::from_secs(15)
+-                        || !qf.analytics().is_user_active()
+-                    {
+-                        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+-                        continue;
+-                    }
+-
+-                    if last_metric_time.elapsed() < Duration::from_secs(60)
+-                        && !qf.analytics().is_user_active()
+-                    {
+-                        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+-                        continue;
+-                    }
+-
+-                    last_metric_time = Instant::now();
+-                    // logger::info_con(
+-                    //     &qf.analytics().get_component("TrySendAnalytics"),
+-                    //     "Sending user activity",
+-                    // );
+-                    match qf
+-                        .analytics()
+-                        .try_send_analytics(
+-                            "users/metrics/periodic",
+-                            3,
+-                            json!(qf.analytics().metricAndLabelPairsScheduledToSend),
+-                        )
+-                        .await
+-                    {
+-                        Ok(_) => {
+-                            qf.analytics().clear_metrics();
+-                        }
+-                        Err(e) => {
+-                            if e.cause().contains("Unauthorized")
+-                                || e.cause().contains("Banned")
+-                                || e.cause().contains("WFMBanned")
+-                            {
+-                                error::create_log_file("analytics.log", &e);
+-                                break;
+-                            } else if e.cause().contains("429") {
+-                                logger::info(
+-                                    &qf.analytics().get_component("TrySendAnalytics"),
+-                                    "Rate limit reached, waiting for 60 seconds",
+-                                    LoggerOptions::default(),
+-                                );
+-                                tokio::time::sleep(std::time::Duration::from_secs(60)).await;
+-                                continue;
+-                            }
+-                            error::create_log_file("analytics.log", &e);
+-                        }
+-                    };
+-                }
+-                qf.analytics().is_init = false;
+-            }
+-        });
++        self.is_init = false;
+         Ok(())
+     }
+     pub fn set_send_metrics(&mut self, send_metrics: bool) {
+@@ -173,45 +90,6 @@ impl AnalyticsModule {
+         mut retry_count: i64,
+         data: Value,
+     ) -> Result<(), AppError> {
+-        let mut parameters: Vec<String> = vec![];
+-        if self.is_user_active() {
+-            parameters.push(format!("Active_Page={}", self.current_page));
+-        }
+-
+-        while retry_count >= 0 {
+-            let err = match self
+-                .client
+-                .post::<Value>(
+-                    format!("{}?{}", url, parameters.join("&")).as_str(),
+-                    data.clone(),
+-                )
+-                .await
+-            {
+-                Ok(ApiResult::Success(_, _)) => {
+-                    return Ok(());
+-                }
+-                Ok(ApiResult::Error(e, _headers)) => AppError::new_api(
+-                    &self.get_component("TrySendAnalytics"),
+-                    e,
+-                    eyre!("Failed to send analytics"),
+-                    LogLevel::Error,
+-                ),
+-                Err(e) => e,
+-            };
+-            if retry_count == 0 {
+-                return Err(err);
+-            }
+-            retry_count -= 1;
+-            logger::warning(
+-                &self.get_component("TrySendAnalytics"),
+-                &format!(
+-                    "Failed to send analytics, retrying in 5 seconds, retries left: {}",
+-                    retry_count
+-                ),
+-                LoggerOptions::default(),
+-            );
+-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+-        }
+         Ok(())
+     }
+ }
+diff --git a/src/contexts/app.context.tsx b/src/contexts/app.context.tsx
+index 7897db9..1945ab9 100644
+--- a/src/contexts/app.context.tsx
++++ b/src/contexts/app.context.tsx
+@@ -160,7 +160,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
+       const id = context.substring(start, end);
+ 
+       console.log("OpenTos", settings?.tos_uuid, id);
+-      if (id == settings?.tos_uuid) return;
++      if (true) return;
+       modals.open({
+         title: useTranslateModals("tos.title"),
+         size: "100%",

@@ -1,0 +1,18 @@
+diff -ru orig/t/SATest.pm new/t/SATest.pm
+--- orig/t/SATest.pm	2023-06-25 11:26:27.663204415 +0000
++++ new/t/SATest.pm	2023-06-25 11:34:08.902174669 +0000
+@@ -65,9 +65,12 @@
+ 
+   # Clean PATH so taint doesn't complain
+   if (!$RUNNING_ON_WINDOWS) {
+-    $ENV{'PATH'} = '/bin:/usr/bin:/usr/local/bin';
++    # untaint PATH
++    $ENV{'PATH'} =~ /^(.+)$/;
++    $ENV{'PATH'} = $1;
++    # $ENV{'PATH'} = '/bin:/usr/bin:/usr/local/bin';
+     # Remove tainted envs, at least ENV used in FreeBSD
+-    delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
++    # delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
+   } else {
+     # Windows might need non-system directories in PATH to run a Perl installation
+     # The best we can do is clean out obviously bad stuff such as relative paths or \..\
