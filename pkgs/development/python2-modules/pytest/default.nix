@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   attrs,
   hypothesis,
@@ -16,7 +15,6 @@
   atomicwrites,
   mock,
   writeText,
-  pathlib2,
   wcwidth,
   packaging,
   isPyPy,
@@ -52,8 +50,7 @@ buildPythonPackage rec {
     wcwidth
     packaging
   ]
-  ++ lib.optionals (!isPy3k) [ funcsigs ]
-  ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  ++ lib.optionals (!isPy3k) [ funcsigs ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
   checkPhase = ''
