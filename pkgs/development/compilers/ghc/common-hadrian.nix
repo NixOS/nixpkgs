@@ -262,8 +262,8 @@
         })
       ]
 
-      # Unreleased or still in-progress upstream
-      ++ [
+      # Unreleased or still in-progress upstream cross fixes
+      ++ lib.optionals (lib.versionAtLeast version "9.10.2") [
         # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
         (fetchpatch {
           name = "include-modern-utimbuf.patch";
@@ -273,7 +273,8 @@
 
         # https://gitlab.haskell.org/ghc/ghc/-/issues/26290 krank:ignore-line
         ./export-heap-methods.patch
-
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "9.10.3") [
         # https://gitlab.haskell.org/ghc/ghc/-/issues/26518 krank:ignore-line
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
