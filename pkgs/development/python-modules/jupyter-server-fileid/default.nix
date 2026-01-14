@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   jupyter-events,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "jupyter-server-fileid";
   version = "0.9.3";
   pyproject = true;
-
-  disables = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jupyter-server";

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_15.hook
+    zig_0_15
   ]
   ++ lib.optional withManpages scdoc;
 

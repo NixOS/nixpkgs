@@ -327,6 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
+      colinsane
       fpletz
       SchweGELBin
     ];

@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmateweather";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "libmateweather";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W0p4+OMr2sgkQP10DGjZLf2VTSGa2A+5ey+nYBr+HJQ=";
+    hash = "sha256-D9A9zHd0stCV5Lynyb0N9LuenBk1eJa4ZdQcZQf6UpU=";
   };
 
   patches = [
