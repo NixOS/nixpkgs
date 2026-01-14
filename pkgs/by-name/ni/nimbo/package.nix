@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  python3,
+  awscli,
   fetchFromGitHub,
   installShellFiles,
-  awscli,
+  python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nimbo";
   version = "0.3.0";
   format = "setuptools";
@@ -15,33 +15,40 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nimbo-sh";
     repo = "nimbo";
-    rev = "v${version}";
-    sha256 = "YC5T02Sw22Uczufbyts8l99oCQW4lPq0gPMRXCoKsvw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YC5T02Sw22Uczufbyts8l99oCQW4lPq0gPMRXCoKsvw=";
   };
 
-  # Rich + Colorama are added in `propagatedBuildInputs`
   postPatch = ''
+    # Wrong format specifier in awscli dependency
     substituteInPlace setup.py \
-      --replace "awscli>=1.19<2.0" "" \
-      --replace "colorama==0.4.3" "" \
-      --replace "rich>=10.1.0" ""
+      --replace-fail "awscli>=1.19<2.0" "awscli>=1.19,<2.0"
   '';
+
+  pythonRelaxDeps = [
+    "awscli"
+    "colorama"
+    "rich"
+  ];
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    setuptools
+  dependencies = with python3.pkgs; [
     boto3
-    requests
     click
-    pyyaml
-    pydantic
-    rich
     colorama
+    pydantic
+    pyyaml
+    requests
+    rich
+    setuptools
   ];
 
   # nimbo tests require an AWS instance
   doCheck = false;
+
   pythonImportsCheck = [ "nimbo" ];
 
   makeWrapperArgs = [
@@ -51,17 +58,10 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath [ awscli ])
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd nimbo \
-      --zsh <(_NIMBO_COMPLETE=source_zsh $out/bin/nimbo) \
-      --bash <(_NIMBO_COMPLETE=source_bash $out/bin/nimbo) \
-      --fish  <(_NIMBO_COMPLETE=source_fish $out/bin/nimbo)
-  '';
-
   meta = {
     description = "Run machine learning jobs on AWS with a single command";
     homepage = "https://github.com/nimbo-sh/nimbo";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ noreferences ];
   };
-}
+})

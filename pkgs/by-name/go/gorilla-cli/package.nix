@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gorilla-cli";
   version = "0.0.9";
   pyproject = true;
@@ -13,13 +13,11 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gorilla-llm";
     repo = "gorilla-cli";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-3h3QtBDKswTDL7zNM2C4VWiGCqknm/bxhP9sw4ieIcQ=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     requests
@@ -35,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "LLMs for your CLI";
     homepage = "https://github.com/gorilla-llm/gorilla-cli";
-    changelog = "https://github.com/gorilla-llm/gorilla-cli/releases/tag/${version}";
+    changelog = "https://github.com/gorilla-llm/gorilla-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "gorilla";
   };
-}
+})
