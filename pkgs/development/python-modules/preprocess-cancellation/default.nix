@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   shapely,
@@ -11,7 +10,6 @@
 buildPythonPackage rec {
   pname = "preprocess-cancellation";
   version = "0.2.1";
-  disabled = pythonOlder "3.6"; # >= 3.6
   pyproject = true;
 
   # No tests in PyPI
