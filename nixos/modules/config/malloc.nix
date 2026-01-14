@@ -68,6 +68,23 @@ let
         vulnerabilities.
       '';
     };
+
+    rpmalloc = {
+      libPath = "${pkgs.rpmalloc}/lib/librpmalloc.so";
+      description = ''
+        Public domain cross platform lock free thread caching 16-byte
+        aligned memory allocator implemented in C."
+      '';
+    };
+
+    tcmalloc = {
+      libPath = "${pkgs.gperftools}/lib/libtcmalloc.so";
+      description = ''
+        TCMalloc is Google's customized implementation of C's malloc() and
+        C++'s operator new used for memory allocation within [their] C and C++ code.
+        TCMalloc is a fast, multi-threaded malloc implementation.
+      '';
+    };
   };
 
   providerConf = providers.${cfg.provider};
