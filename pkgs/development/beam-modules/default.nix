@@ -48,6 +48,11 @@ let
       # BEAM-based languages.
       elixir = elixir_1_18;
 
+      elixir_1_20 = callPackage ../interpreters/elixir/1.20.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
+
       elixir_1_19 = callPackage ../interpreters/elixir/1.19.nix {
         inherit erlang;
         debugInfo = true;

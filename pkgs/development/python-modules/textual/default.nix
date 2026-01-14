@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "7.0.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-wXv3Q0/q5U75D/XE6oR8bsUKZhGbP+a8DhNrU6klYjA=";
+    hash = "sha256-/BVrglVfGW2InkC0IKHOKZTP33tfqxGuXYQXWJVHmxw=";
   };
 
   build-system = [ poetry-core ];

@@ -9018,8 +9018,6 @@ with pkgs;
     mullvad
     ;
 
-  mullvad-closest = with python3Packages; toPythonApplication mullvad-closest;
-
   napalm =
     with python3Packages;
     toPythonApplication (

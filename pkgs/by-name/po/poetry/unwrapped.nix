@@ -27,7 +27,6 @@
   virtualenv,
   xattr,
   tomli,
-  importlib-metadata,
   deepdiff,
   pytestCheckHook,
   httpretty,
@@ -87,9 +86,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ]
   ++ cachecontrol.optional-dependencies.filecache
   ++ pbs-installer.optional-dependencies.download
