@@ -49,14 +49,16 @@ let
     url = "https://github.com/klembot/twinejs/raw/refs/heads/develop/icons/logo.svg";
     hash = "sha256-TwxXOX/ZbrH02ZzTpy0FB4nGhjLmjtkFrE7WEX7xHbw=";
   };
-  desktopItem = makeDesktopItem {
-    inherit comment;
-    name = "twinejs";
-    desktopName = "Twine";
-    icon = "twinejs";
-    exec = "twinejs %u";
-    terminal = false;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      inherit comment;
+      name = "twinejs";
+      desktopName = "Twine";
+      icon = "twinejs";
+      exec = "twinejs %u";
+      terminal = false;
+    })
+  ];
 
 in
 stdenv.mkDerivation {
@@ -64,7 +66,7 @@ stdenv.mkDerivation {
     pname
     version
     src
-    desktopItem
+    desktopItems
     icon
     meta
     ;
@@ -79,7 +81,8 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     makeWrapper ${electron}/bin/electron $out/bin/twinejs \
-      --add-flags $out/share/twinejs/app.asar
+      --add-flags $out/share/twinejs/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}"
     install -m 444 -D resources/app.asar $out/share/twinejs/app.asar
     install -m 444 -D ${icon} $out/share/icons/hicolor/scalable/apps/twinejs.svg
     runHook postInstall
