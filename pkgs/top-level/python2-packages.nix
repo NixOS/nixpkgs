@@ -69,9 +69,7 @@ with super;
     doCheck = false; # circular dependency with pytest
   });
 
-  wcwidth = callPackage ../development/python2-modules/wcwidth {
-    inherit wcwidth;
-  };
+  wcwidth = disabled super.wcwitch;
 
   wheel = callPackage ../development/python2-modules/wheel { };
 
