@@ -15,6 +15,11 @@ let
       hash = "sha512-MeDkxsB9ir694B2z0nIG7ZZ6DISLmbU7aOwCusO6AadYjitxjv+e9TuY1Y0ijwuYNjxukBIj45nF/fCEg6CGHw==";
     })
     (fetchNupkg {
+      pname = "Microsoft.AspNetCore.App.Internal.Assets";
+      version = "10.0.2";
+      hash = "sha512-v9Au9ZSo3ZOe77StttCPCtOZkY7xSFXSyyWMR9Y0Kx3ZKegVp4zg7TJwz4osTgQp7EKyXlbDpvjUbgly51XbmA==";
+    })
+    (fetchNupkg {
       pname = "Microsoft.NETCore.DotNetAppHost";
       version = "10.0.2";
       hash = "sha512-dlgigLX+tCuYRg5TcnOTg+UyNlIK0queBF5EWmPw8jpX3J0iqXUs9Nb+4BriG57QoNRiZCXaEB81TDeKb56xxw==";
