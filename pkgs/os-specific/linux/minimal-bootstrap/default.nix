@@ -284,13 +284,13 @@ lib.makeScope
 
       mes-libc = callPackage ./mes/libc.nix { };
 
-      musl11-intermediate = callPackage ./musl/1.1.nix {
+      musl-tcc-intermediate = callPackage ./musl/tcc.nix {
         bash = bash_2_05;
         tinycc = tinycc-mes;
         gnused = gnused-mes;
       };
 
-      musl11 = callPackage ./musl/1.1.nix {
+      musl-tcc = callPackage ./musl/tcc.nix {
         bash = bash_2_05;
         tinycc = tinycc-musl-intermediate;
         gnused = gnused-mes;
@@ -329,7 +329,7 @@ lib.makeScope
       tinycc-musl-intermediate = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
-          musl = musl11-intermediate;
+          musl = musl-tcc-intermediate;
           tinycc = tinycc-mes;
         }
       );
@@ -337,7 +337,7 @@ lib.makeScope
       tinycc-musl = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
-          musl = musl11;
+          musl = musl-tcc;
           tinycc = tinycc-musl-intermediate;
         }
       );
