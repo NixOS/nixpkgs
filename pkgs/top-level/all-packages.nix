@@ -6808,7 +6808,6 @@ with pkgs;
   graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
 
   glfw = glfw3;
-  glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
 
   glfw3-minecraft = callPackage ../by-name/gl/glfw3/package.nix {
     withMinecraftPatch = true;
