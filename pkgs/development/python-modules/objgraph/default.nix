@@ -6,7 +6,6 @@
   graphvizPkgs,
   isPyPy,
   python,
-  pythonOlder,
   replaceVars,
   setuptools,
 }:
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "3.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
