@@ -46,7 +46,7 @@ buildDotnetModule (finalAttrs: {
       ];
     };
 
-    tests.shoko = nixosTests.shoko;
+    tests = { inherit (nixosTests) shoko; };
   };
 
   meta = {
