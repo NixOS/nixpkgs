@@ -151,6 +151,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/BerriAI/litellm";
     changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      yzx9
+    ];
   };
 }

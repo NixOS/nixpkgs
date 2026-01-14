@@ -178,5 +178,7 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [
+    yzx9
+  ];
 }
