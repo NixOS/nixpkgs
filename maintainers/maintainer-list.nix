@@ -10009,6 +10009,12 @@
     githubId = 28863828;
     name = "guserav";
   };
+  gusjengis = {
+    name = "Anthony Green";
+    email = "anthony.j.green@outlook.com";
+    github = "gusjengis";
+    githubId = 107908374;
+  };
   guttermonk = {
     github = "guttermonk";
     githubId = 4753752;
