@@ -20,11 +20,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bash";
-  version = "5.2.37";
+  version = "5.3";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    hash = "sha256-lZmyLs0dV4etfTt78MWfMSszltHigRdd0fikAU2mIf8=";
+    hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
   };
 
   patches = [
