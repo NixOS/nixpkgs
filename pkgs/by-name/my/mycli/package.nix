@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mycli";
-  version = "1.43.1";
+  version = "1.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${version}";
-    hash = "sha256-KybGpi9ZNkAiniZTnyzzjlUf+xISRk+k4kcIxU/iVSM=";
+    hash = "sha256-7G7Yy0jdULzBiQr4JACWuBG4XdXDYZ8IyfbzGQKF428=";
   };
 
   pythonRelaxDeps = [
