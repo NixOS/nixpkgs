@@ -18,11 +18,11 @@
 }:
 let
   pname = "gnugrep-static";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
+    hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 in
 bash.runCommand "${pname}-${version}"
