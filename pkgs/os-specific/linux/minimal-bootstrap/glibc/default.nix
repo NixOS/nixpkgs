@@ -101,7 +101,8 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --with-headers=${linux-headers}/include
+      --with-headers=${linux-headers}/include \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES

@@ -74,7 +74,8 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-shared \
-      --disable-assembler
+      --disable-assembler \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES

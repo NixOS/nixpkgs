@@ -138,6 +138,7 @@ bash.runCommand "${pname}-${version}"
       --with-build-sysroot=${musl} \
       --enable-languages=c,c++ \
       --disable-bootstrap \
+      --disable-dependency-tracking \
       --disable-libmudflap \
       --disable-libstdcxx-pch \
       --disable-lto \

@@ -69,6 +69,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-year2038 \
+      --disable-dependency-tracking \
       CC=musl-gcc \
       CFLAGS=-static
 
