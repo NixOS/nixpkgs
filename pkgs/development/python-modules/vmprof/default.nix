@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
   setuptools,
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   version = "0.4.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "vmprof";
