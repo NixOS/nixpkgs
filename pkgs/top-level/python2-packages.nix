@@ -13,7 +13,7 @@ with super;
 
   cffi = disabed super.cffi;
 
-  configparser = callPackage ../development/python2-modules/configparser { };
+  configparser = disabled super.configparser;
 
   contextlib2 = disabled super.contextlib2;
 
