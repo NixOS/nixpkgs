@@ -14,11 +14,11 @@
 }:
 let
   pname = "findutils";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
-    hash = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
+    hash = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -69,7 +69,8 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
-      --host=${hostPlatform.config}
+      --host=${hostPlatform.config} \
+      --disable-year2038
 
     # Build
     make -j $NIX_BUILD_CORES
