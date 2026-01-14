@@ -10,16 +10,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "1.3.3";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
-    tag = "v${version}";
-    hash = "sha256-nW7pRSyv+t/7yatx84PMgxsHRTfRqqpy6rz+dQfLluU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R+sh8xQpLDIKqQwE1JjguP4NwE2Jz7tuXNK1+EsHnrA=";
   };
 
   build-system = with python3Packages; [
@@ -51,6 +51,8 @@ python3Packages.buildPythonApplication rec {
     rich
     textual
     textual-speedups
+    tree-sitter
+    tree-sitter-grammars.tree-sitter-bash
     tomli-w
     watchfiles
   ];
@@ -67,7 +69,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   pytestFlags = [ "tests/cli/test_clipboard.py" ];
 
@@ -96,7 +97,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Minimal CLI coding agent by Mistral";
     homepage = "https://github.com/mistralai/mistral-vibe";
-    changelog = "https://github.com/mistralai/mistral-vibe/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mistralai/mistral-vibe/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -104,4 +105,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "vibe";
   };
-}
+})
