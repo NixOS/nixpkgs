@@ -7,7 +7,6 @@
   pexpect,
   doCheck ? true,
   pytest,
-  pytest-xdist,
   flaky,
   mock,
   sortedcontainers,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
-    pytest-xdist
     flaky
     mock
     pexpect

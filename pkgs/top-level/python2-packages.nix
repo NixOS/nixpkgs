@@ -60,7 +60,7 @@ with super;
     };
   };
 
-  pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
+  pytest-xdist = disabled super.pytest-xdist;
 
   recoll = disabled super.recoll;
 
