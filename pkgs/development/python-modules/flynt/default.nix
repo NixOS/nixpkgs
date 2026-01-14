@@ -1,29 +1,28 @@
 {
-  astor,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   lib,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "flynt";
-  version = "1.0.1";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikamensh";
     repo = "flynt";
     tag = version;
-    hash = "sha256-UHY4UDBHcP3ARikktIehSUD3Dx8A0xpOnfKWWrLCsOY=";
+    hash = "sha256-SkkCA4fEHplt9HkEn+QOq4k9lW5qJeZzLZEbNEtKBSo=";
   };
 
-  build-system = [ hatchling ];
-
-  propagatedBuildInputs = [ astor ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
