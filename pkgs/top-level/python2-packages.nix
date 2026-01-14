@@ -23,8 +23,6 @@ with super;
 
   coverage = callPackage ../development/python2-modules/coverage { };
 
-  enum = callPackage ../development/python2-modules/enum { };
-
   filelock = callPackage ../development/python2-modules/filelock { };
 
   futures = callPackage ../development/python2-modules/futures { };
