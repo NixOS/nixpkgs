@@ -41,10 +41,6 @@
     builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets
   ),
   config,
-  # The cudaSupport flag currently just sets this package to broken,
-  # as CUDA support is currently not implemented in this derivation.
-  # Upstream supports CUDA, so if a user of the derivation were to use this package
-  # with cudaSupport = true, they would not get the expected behavior.
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
   # TODO: Should there be a flag like config.levelZeroSupport?
@@ -311,7 +307,6 @@ stdenv.mkDerivation (finalAttrs: {
       llvm-exception
     ];
     maintainers = with lib.maintainers; [ blenderfreaky ];
-    broken = cudaSupport;
     platforms = [ "x86_64-linux" ];
   };
 

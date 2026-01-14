@@ -22,10 +22,10 @@
   rocmGpuTargets ? lib.optionalString (rocmPackages ? clr.gpuTargets) (
     builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets
   ),
+  cudaPackages ? { },
   intel-llvm-src,
   levelZeroSupport,
   openclSupport,
-  # Broken, see unwrapped.nix
   cudaSupport,
   rocmSupport,
   nativeCpuSupport,
@@ -38,6 +38,19 @@ let
       clr
       rocm-comgr
       hsakmt
+    ];
+  };
+
+  cudatoolkit_joined = symlinkJoin {
+    name = "cuda-merged";
+
+    paths = with cudaPackages; [
+      cuda_cudart
+      cuda_nvcc
+      cuda_nvml_dev.include
+      cuda_nvml_dev.stubs
+      cuda_cupti.include
+      cuda_cupti.lib
     ];
   };
 in
@@ -71,6 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals rocmSupport [
     rocmtoolkit_joined
   ]
+  ++ lib.optionals cudaSupport [
+    cudatoolkit_joined
+  ]
   ++ lib.optionals levelZeroSupport [
     level-zero
     intel-compute-runtime
@@ -95,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     # These tests don't run without setting UR_DPCXX,
     # however they aren't properly excluded, causing lit to fail.
     rm test/adapters/hip/lit.cfg.py
+    rm test/adapters/cuda/lit.cfg.py
 
     # Exclude tests that don't play well with the sandbox
     cat >> test/lit.cfg.py <<'EOF'
@@ -136,6 +153,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "UR_HIP_ROCM_DIR" "${rocmtoolkit_joined}")
     (lib.cmakeFeature "GPU_TARGETS" rocmGpuTargets)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDAToolkit_ROOT" "${cudatoolkit_joined}")
+    (lib.cmakeFeature "CUDAToolkit_CUPTI_INCLUDE_DIR" "${cudatoolkit_joined}/include")
+    (lib.cmakeFeature "CUDA_cupti_LIBRARY" "${cudatoolkit_joined}/lib/libcupti.so")
   ];
 
   passthru.backends =
@@ -160,7 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
       llvm-exception
     ];
     maintainers = with lib.maintainers; [ blenderfreaky ];
-    broken = cudaSupport;
     platforms = [ "x86_64-linux" ];
   };
 })
