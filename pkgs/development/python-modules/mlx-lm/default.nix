@@ -62,13 +62,11 @@ buildPythonPackage (finalAttrs: {
     # Requires network access to huggingface.co
     "tests/test_datsets.py"
     "tests/test_generate.py"
+    "tests/test_prompt_cache.py::TestPromptCache"
     "tests/test_server.py"
     "tests/test_tokenizers.py"
     "tests/test_utils.py::TestUtils::test_convert"
     "tests/test_utils.py::TestUtils::test_load"
-    "tests/test_prompt_cache.py::TestPromptCache::test_cache_to_quantized"
-    "tests/test_prompt_cache.py::TestPromptCache::test_cache_with_generate"
-    "tests/test_prompt_cache.py::TestPromptCache::test_trim_cache_with_generate"
 
     # RuntimeError: [metal_kernel] No GPU back-end.
     "tests/test_losses.py"
@@ -84,8 +82,5 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ml-explore/mlx-lm";
     changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    platforms = [
-      "aarch64-darwin"
-    ];
   };
 })
