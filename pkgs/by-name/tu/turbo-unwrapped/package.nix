@@ -83,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       dlip
       getchoo
+      hythera
     ];
     mainProgram = "turbo";
   };
