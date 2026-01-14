@@ -61,9 +61,7 @@ with super;
 
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
-  six = super.six.overridePythonAttrs (_: {
-    doCheck = false; # circular dependency with pytest
-  });
+  six = disabled super.six;
 
   wcwidth = disabled super.wcwitch;
 
