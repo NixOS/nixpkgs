@@ -12,7 +12,6 @@
   cryptography,
   doxygen,
   gettext,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,8 +25,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-SE9xqrloPXIRTJiiqUdRKFmb4c0OjmJK5CMn6VXMFmk=";
   };
-
-  disabled = pythonOlder "3.5.0";
 
   buildInputs = [
     python
