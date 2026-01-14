@@ -1230,6 +1230,7 @@ let
           "NFTSet"
           "UseCaptivePortal"
           "UseRedirect"
+          "UseHopLimit"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
@@ -1244,6 +1245,7 @@ let
         (assertValueOneOf "UsePREF64" boolValues)
         (assertValueOneOf "UseCaptivePortal" boolValues)
         (assertValueOneOf "UseRedirect" boolValues)
+        (assertValueOneOf "UseHopLimit" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
