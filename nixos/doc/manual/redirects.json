@@ -832,6 +832,9 @@
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
   ],
+  "module-services-suwayomi-migrating-data-directory": [
+    "index.html#module-services-suwayomi-migrating-data-directory"
+  ],
   "module-services-paisa": [
     "index.html#module-services-paisa"
   ],
