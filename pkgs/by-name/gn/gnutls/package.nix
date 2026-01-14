@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchurl,
   zlib,
   libtasn1,
@@ -8,7 +9,6 @@
   pkg-config,
   perl,
   gmp,
-  autoconf,
   automake,
   libidn2,
   libiconv,
@@ -16,7 +16,7 @@
   unbound,
   dns-root-data,
   gettext,
-  util-linux,
+  util-linuxMinimal,
   cxxBindings ? !stdenv.hostPlatform.isStatic, # tries to link libstdc++.so
   tpmSupport ? false,
   trousers,
@@ -55,6 +55,9 @@ let
     && stdenv.buildPlatform == stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
+
+  # break the cyclic dependency
+  util-linux = util-linuxMinimal;
 in
 
 stdenv.mkDerivation rec {
@@ -161,7 +164,7 @@ stdenv.mkDerivation rec {
     texinfo
   ]
   ++ [
-    autoconf
+    buildPackages.autoconf269
     automake
   ]
   ++ lib.optionals doCheck [
