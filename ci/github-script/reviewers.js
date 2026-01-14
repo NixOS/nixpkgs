@@ -1,3 +1,28 @@
+/**
+ * @typedef {import('@actions/github/lib/context').Context} GitHubContext
+ * @typedef {ReturnType<typeof import('@actions/github').getOctokit>} GitHubClient
+ */
+
+/**
+ * @typedef {Object} ReviewersContext
+ * @property {GitHubClient} github - GitHub API client (Octokit instance)
+ * @property {GitHubContext} context - GitHub Actions context
+ * @property {typeof import('@actions/core')} core - GitHub Actions core utilities
+ * @property {Function} log - Logging function
+ * @property {boolean} dry - Whether to run in dry-run mode
+ * @property {any} pull_request - Pull request object
+ * @property {any[]} reviews - Existing reviews
+ * @property {number[]} maintainers - Array of maintainer user IDs
+ * @property {string[]} owners - Array of owner handles (users or teams)
+ * @property {Function} getTeamMembers - Function to get team members
+ * @property {Function} getUser - Function to get user by ID
+ */
+
+/**
+ * Handle reviewer assignments for a pull request
+ * @param {ReviewersContext} params - Reviewers context parameters
+ * @returns {Promise<boolean>} Whether "needs: reviewers" label should be set
+ */
 async function handleReviewers({
   github,
   context,
@@ -60,7 +85,11 @@ async function handleReviewers({
   log('reviewers - teams', Array.from(teams).join(', '))
 
   const team_members = new Set(
-    (await Promise.all(Array.from(teams, getTeamMembers)))
+    (
+      await Promise.all(
+        Array.from(teams).map((team_slug) => getTeamMembers(team_slug)),
+      )
+    )
       .flat(1)
       .map(({ login }) => login.toLowerCase()),
   )
