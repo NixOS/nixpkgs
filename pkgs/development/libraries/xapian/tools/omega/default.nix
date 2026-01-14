@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-omega-${version}.tar.xz";
-    hash = "sha256-HRk7MoXsFQVXJXsEnuHYyUxAvN6QbOC6fxo4oamlpcE=";
+    hash = "sha256-hw0vLX+fC8ZzN6pQX9wT9n+EzOTZO35cgscxAibw0wo=";
   };
 
   buildInputs = [
