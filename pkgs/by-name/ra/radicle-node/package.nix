@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-/dWeG2jKCnfg7fwPP+BbRmEvM7rCppGYh2aeftcg3SY=";
+    hash = "sha256-j7GTtx9Dq3xZeEsgIlaRq1Vbc9aJfn22WCkNTGjvH1Q=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-4URBtN5lyzFPaLJUf/HPAL2ugRUa6sZhpDeiFR0W7cc=";
+  cargoHash = "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -86,6 +86,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asciidoctor -d manpage -b manpage $page
       installManPage ''${page::-5}
     done
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rad \
+      --bash <($out/bin/rad completion bash) \
+      --fish <($out/bin/rad completion fish) \
+      --zsh <($out/bin/rad completion zsh)
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
