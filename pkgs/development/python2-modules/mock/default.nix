@@ -7,7 +7,6 @@
   six,
   pbr,
   unittestCheckHook,
-  pytest,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-    pytest
   ];
 
   meta = {

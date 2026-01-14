@@ -51,9 +51,9 @@ with super;
 
   pyparsing = disabled super.pyparsing;
 
-  pytest = pytest_4;
+  pytest = disabled super.pytest;
 
-  pytest_4 = callPackage ../development/python2-modules/pytest { };
+  pytest_4 = disabled super.pytest;
 
   pytest-xdist = disabled super.pytest-xdist;
 

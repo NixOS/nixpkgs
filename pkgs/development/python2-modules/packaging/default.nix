@@ -4,7 +4,6 @@
   fetchPypi,
   pyparsing,
   six,
-  pytestCheckHook,
   pretend,
 }:
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pretend
   ];
 
