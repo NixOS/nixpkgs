@@ -33,13 +33,13 @@ lib.checkListOfEnum "${pname}: color variants"
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2023-05-13";
+    version = "0-unstable-2025-11-14";
 
     src = fetchFromGitHub {
       owner = "yeyushengfan258";
       repo = "reversal-icon-theme";
-      rev = "bdae2ea365731b25a869fc2c8c6a1fb849eaf5b2";
-      hash = "sha256-Cd+1ggyS+Y2Sk8w5zifc4IFOwbFrbjL6S6awES/W0EE=";
+      rev = "26b97f00640cd9eaeb8f196eda3a8d298158a08f";
+      hash = "sha256-ahnp25wTCTrOtJUbAIv7vvVC2am+idEokoRomRe5aKU=";
     };
 
     nativeBuildInputs = [

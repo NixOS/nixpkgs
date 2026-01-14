@@ -27,10 +27,10 @@ python3Packages.buildPythonApplication rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = "${pname} %U";
+      name = "pyfa";
+      exec = "pyfa %U";
       icon = "pyfa";
-      desktopName = pname;
+      desktopName = "pyfa";
       genericName = "Python fitting assistant for Eve Online";
       categories = [ "Game" ];
     })
@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     cat > setup.py <<EOF
       from setuptools import setup
       setup(
-        name = "${pname}",
+        name = "pyfa",
         version = "${version}",
         scripts = ["pyfa.py"],
         packages = setuptools.find_packages(),
@@ -115,7 +115,7 @@ python3Packages.buildPythonApplication rec {
 
     cp -r dist/pyfa $out/share/
     cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
-    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/${pname}.png
+    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/pyfa.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
 
     runHook postInstall

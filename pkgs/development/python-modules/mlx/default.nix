@@ -17,6 +17,8 @@
   nanobind,
   nlohmann_json,
   pybind11,
+  # linux-only
+  openblas,
 
   # tests
   numpy,
@@ -50,7 +52,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
   };
 
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-build-fixes.patch {
       sdkVersion = apple-sdk.version;
     })
@@ -104,6 +106,9 @@ buildPythonPackage (finalAttrs: {
     nanobind
     nlohmann_json
     pybind11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openblas
   ];
 
   pythonImportsCheck = [ "mlx" ];
@@ -117,6 +122,30 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [
     "python/tests/"
   ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # Segmentation fault
+    "test_lapack"
+    "test_multivariate_normal"
+    "test_orthogonal"
+    "test_vmap_inverse"
+    "test_vmap_svd"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # Segmentation fault
+    "python/tests/test_linalg.py"
+  ];
+
+  # patchelf is only available on Linux and no patching is needed on darwin.
+  # Otherwise mlx/core.cpython-313-x86_64-linux-gnu.so contains a reference to
+  # /build/source/build/temp.linux-x86_64-cpython-313/mlx.core/libmlx.so in its rpath.
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed \
+      libmlx.so \
+      $out/${python.sitePackages}/mlx/lib64/libmlx.so \
+      $out/${python.sitePackages}/mlx/core.cpython-*.so
+  '';
 
   # Additional testing by executing the example Python scripts supplied with mlx
   # using the version of the library we've built.
@@ -145,12 +174,15 @@ buildPythonPackage (finalAttrs: {
     description = "Array framework for Apple silicon";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    platforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [
       Gabriella439
       booxter
       cameronyule
       viraptor
+    ];
+    badPlatforms = [
+      # Building for x86_64 on macOS is not supported
+      "x86_64-darwin"
     ];
   };
 })
