@@ -9,6 +9,7 @@
   nodejs,
   nix-update-script,
   nixosTests,
+  versionCheckHook,
 }:
 let
   pname = "rqbit";
@@ -62,6 +63,11 @@ rustPlatform.buildRustPackage {
   '';
 
   doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru = {
     webui = rqbit-webui;
