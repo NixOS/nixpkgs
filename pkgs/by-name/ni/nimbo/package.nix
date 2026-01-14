@@ -11,7 +11,6 @@ python3.pkgs.buildPythonApplication rec {
   pname = "nimbo";
   version = "0.3.0";
   format = "setuptools";
-  disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nimbo-sh";

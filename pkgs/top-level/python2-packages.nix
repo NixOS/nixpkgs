@@ -23,11 +23,7 @@ with super;
 
   coverage = callPackage ../development/python2-modules/coverage { };
 
-  enum = callPackage ../development/python2-modules/enum { };
-
   filelock = callPackage ../development/python2-modules/filelock { };
-
-  futures = callPackage ../development/python2-modules/futures { };
 
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
@@ -78,13 +74,7 @@ with super;
 
   rpm = disabled super.rpm;
 
-  scandir = callPackage ../development/python2-modules/scandir { };
-
   setuptools = callPackage ../development/python2-modules/setuptools { };
-
-  setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
-
-  typing = callPackage ../development/python2-modules/typing { };
 
   six = super.six.overridePythonAttrs (_: {
     doCheck = false; # circular dependency with pytest
