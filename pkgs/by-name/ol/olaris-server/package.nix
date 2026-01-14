@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "olaris-server";
-  version = "unstable-2022-06-11";
+  version = "unstable-2025-12-12";
 
   src = fetchFromGitLab {
     owner = "olaris";
     repo = "olaris-server";
-    rev = "bdb2aeb1595c941210249164a97c12404c1ae0d8";
-    hash = "sha256-Uhnh6GC85ORKnfHeYNtbSA40osuscxXDF5/kXJrF2Cs=";
+    rev = "d4b240e775225cb96ca1634f60faba8e4960ce67";
+    hash = "sha256-S3Qmoyha9ab/nRJbuPz2Rf8orZF43UFC+PFsPUcNoUY=";
   };
 
   preBuild =
@@ -39,7 +39,7 @@ buildGoModule rec {
     "-X gitlab.com/olaris/olaris-server/helpers.Version=${version}"
   ];
 
-  vendorHash = "sha256-bw8zvDGFBci9bELsxAD0otpNocBnO8aAcgyohLZ3Mv0=";
+  vendorHash = "sha256-z97hvJCq7ocWpoViq8+ZHtYp0AUGIEZxq0FPRnEYKSw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -58,8 +58,6 @@ buildGoModule rec {
   '';
 
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Media manager and transcoding server";
     homepage = "https://gitlab.com/olaris/olaris-server";
     changelog = "https://gitlab.com/olaris/olaris-server/-/releases/v${version}";
