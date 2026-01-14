@@ -4,6 +4,7 @@
   buildVimPlugin,
   buildNeovimPlugin,
   fetchFromGitHub,
+  fetchFromGitea,
 }:
 
 final: prev: {
@@ -10500,6 +10501,20 @@ final: prev: {
       hash = "sha256-GhKa/Izh9T0RGf050l9D+dt36Q7cIW048a3EpnN0pRI=";
     };
     meta.homepage = "https://github.com/chr4/nginx.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nidhogg-nvim = buildVimPlugin {
+    pname = "nidhogg.nvim";
+    version = "0-unstable-2026-01-11";
+    src = fetchFromGitea {
+      domain = "codeberg.org";
+      owner = "koibtw";
+      repo = "nidhogg.nvim";
+      rev = "a8c72aa204f68d5bd79a2508fbbed7b0ad2290cf";
+      hash = "sha256-x8CryNcg3u5uCncCMTgK7yzCvk5MiomjKpdjNEoCQu4=";
+    };
+    meta.homepage = "https://codeberg.org/koibtw/nidhogg.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
