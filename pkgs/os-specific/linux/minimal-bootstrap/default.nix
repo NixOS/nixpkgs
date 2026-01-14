@@ -138,32 +138,24 @@ lib.makeScope
         tinycc = tinycc-musl;
         gnumake = gnumake-musl;
         gnutar = gnutar-musl;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
         gcc = gcc46;
         gnumake = gnumake-musl;
         gnutar = gnutar-musl;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc10 = callPackage ./gcc/10.nix {
         gcc = gcc46-cxx;
         gnumake = gnumake-musl;
         gnutar = gnutar-latest;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc-latest = callPackage ./gcc/latest.nix {
         gcc = gcc10;
         gnumake = gnumake-musl;
         gnutar = gnutar-latest;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc-glibc = callPackage ./gcc/glibc.nix {
