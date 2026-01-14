@@ -7,16 +7,16 @@
 buildNpmPackage (finalAttrs: {
   pname = "freifunk-meshviewer";
 
-  version = "12.8.0";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "freifunk";
     repo = "meshviewer";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-M0ZTGH6MW8admkHvbFTgCHbRIlpDkgvSzaIfv7rDiyA=";
+    sha256 = "sha256-KMI2pKzGSsSOB1XzAd8Jv1YLJWK/RUiZJv/kOs+Mpbo=";
   };
 
-  npmDepsHash = "sha256-zrXhdR2k8HHvPBid004WtyZYPDWuRggSIkKcLVdb8Lc=";
+  npmDepsHash = "sha256-EI0A4s86moYerWvZHPLnyy2O87ZskiP/tr8rAGO8MbE=";
 
   installPhase = ''
     mkdir -p $out/share/freifunk-meshviewer/
