@@ -6027,6 +6027,8 @@ self: super: with self; {
 
   geojson-client = callPackage ../development/python-modules/geojson-client { };
 
+  geomag = callPackage ../development/python-modules/geomag { };
+
   geomet = callPackage ../development/python-modules/geomet { };
 
   geometric = callPackage ../development/python-modules/geometric { };
