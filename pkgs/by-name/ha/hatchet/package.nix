@@ -17,8 +17,16 @@ buildGoModule (finalAttrs: {
     hash = "sha256-TdZ8yKDpphPQnjMHKVICV0vj8FSWlHsAAa6X1p1gqH0=";
   };
 
-  vendorHash = "sha256-NUGNvyXw07erw6MqJm/VbwCvW59WCeKdMJ1Dq0z5viI=";
+  # Otherwise checks fail with `panic: open /etc/protocols: operation not permitted` when sandboxing is enabled on Darwin
+  # https://github.com/NixOS/nixpkgs/pull/381645#issuecomment-2656211797
+  modPostBuild = ''
+    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
+      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
 
+  vendorHash = "sha256-2IF6XiZvNZt97NvJc4PdgIG3sc2mw6ezkuMvQb2M3LI=";
+
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"
