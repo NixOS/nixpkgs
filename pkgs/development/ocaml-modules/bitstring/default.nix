@@ -7,7 +7,7 @@
 
 buildDunePackage rec {
   pname = "bitstring";
-  version = "4.1.1";
+  version = "5.0.1";
 
   duneVersion = "3";
 
@@ -15,7 +15,7 @@ buildDunePackage rec {
     owner = "xguerin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eO7/S9PoMybZPnQQ+q9qbqKpYO4Foc9OjW4uiwwNds8=";
+    sha256 = "sha256-gnp0Ypjo45cD6OGs+U6cr1TfM4kFEmw9fFNEa0BIZ/I=";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];
