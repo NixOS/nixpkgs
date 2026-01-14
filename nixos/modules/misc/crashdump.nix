@@ -47,10 +47,7 @@ in
         };
         architectureOptions = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [
-            "--reset-vga"
-            "--console-vga"
-          ];
+          default = [ ];
           description = ''
             Architecture options that will be passed to kexec.
           '';
@@ -62,6 +59,15 @@ in
   ###### implementation
 
   config = lib.mkIf crashdump.enable {
+    boot.crashDump.architectureOptions = lib.mkDefault (
+      if pkgs.stdenv.isx86_64 && pkgs.stdenv.isLinux then
+        [
+          "--reset-vga"
+          "--console-vga"
+        ]
+      else
+        [ ]
+    );
     boot = {
       postBootCommands = ''
         echo "loading crashdump kernel...";
