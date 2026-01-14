@@ -102,6 +102,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       GaetanLepage
       shikanime
+      mana-byte
     ];
     mainProgram = "vibe";
   };
