@@ -17,8 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-3h3QtBDKswTDL7zNM2C4VWiGCqknm/bxhP9sw4ieIcQ=";
   };
 
-  disabled = python3.pythonOlder "3.6";
-
   build-system = with python3.pkgs; [
     setuptools
   ];

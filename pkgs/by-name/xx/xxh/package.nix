@@ -9,7 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   pname = "xxh";
   version = "0.8.14";
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "xxh";
