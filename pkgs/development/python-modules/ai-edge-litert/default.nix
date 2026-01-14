@@ -17,7 +17,7 @@
 
   # optional-dependencies
   lark,
-  ml-dtypes
+  ml-dtypes,
 }:
 
 let

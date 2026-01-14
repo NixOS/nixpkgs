@@ -89,6 +89,7 @@ python3Packages.buildPythonApplication rec {
       hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
     })
     ./ffmpeg.patch
+    ./ai-edge-litert.patch
   ];
 
   postPatch = ''
@@ -132,6 +133,7 @@ python3Packages.buildPythonApplication rec {
     # docker/main/requirements.txt
     scikit-build
     # docker/main/requirements-wheel.txt
+    ai-edge-litert
     aiofiles
     aiohttp
     appdirs
@@ -180,7 +182,6 @@ python3Packages.buildPythonApplication rec {
     slowapi
     starlette
     starlette-context
-    tensorflow-bin
     titlecase
     transformers
     tzlocal
