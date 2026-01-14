@@ -1715,7 +1715,7 @@ self: super: with self; {
   backoff = callPackage ../development/python-modules/backoff { };
 
   backports-asyncio-runner =
-    if pythonAtLeast "3.11" then
+    if pythonAtLeast "3.12" then
       null
     else
       callPackage ../development/python-modules/backports-asyncio-runner { };
@@ -1730,7 +1730,11 @@ self: super: with self; {
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
 
-  backports-strenum = callPackage ../development/python-modules/backports-strenum { };
+  backports-strenum =
+    if pythonAtLeast "3.11" then
+      null
+    else
+      callPackage ../development/python-modules/backports-strenum { };
 
   backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
 
