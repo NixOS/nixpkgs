@@ -866,6 +866,8 @@ self: super: with self; {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  apswutils = callPackage ../development/python-modules/apswutils { };
+
   apsystems-ez1 = callPackage ../development/python-modules/apsystems-ez1 { };
 
   apt-repo = callPackage ../development/python-modules/apt-repo { };
@@ -5292,11 +5294,15 @@ self: super: with self; {
 
   fastexcel = callPackage ../development/python-modules/fastexcel { };
 
+  fasthtml = callPackage ../development/python-modules/fasthtml { };
+
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjet = callPackage ../development/python-modules/fastjet { };
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
+
+  fastlite = callPackage ../development/python-modules/fastlite { };
 
   fastmcp = callPackage ../development/python-modules/fastmcp { };
 
