@@ -10,11 +10,11 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "fortran-fpm";
 
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://github.com/fortran-lang/fpm/releases/download/v${finalAttrs.version}/fpm-${finalAttrs.version}.F90";
-    hash = "sha256-mIozF+4kSO5yB9CilBDwinnIa92sMxSyoXWAGpz1jSc=";
+    hash = "sha256-YVZ6yBDY6o+PyR/bE3ANNLkb824ZOzXXRPxjUtIRRq0=";
   };
 
   dontUnpack = true;
