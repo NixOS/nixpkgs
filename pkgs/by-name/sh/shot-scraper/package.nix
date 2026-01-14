@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.8";
   pyproject = true;
 
-  disabled = python3.pkgs.pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "shot-scraper";
