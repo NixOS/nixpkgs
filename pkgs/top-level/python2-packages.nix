@@ -25,8 +25,6 @@ with super;
 
   filelock = callPackage ../development/python2-modules/filelock { };
 
-  futures = callPackage ../development/python2-modules/futures { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
