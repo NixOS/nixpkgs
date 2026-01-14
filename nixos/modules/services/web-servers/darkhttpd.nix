@@ -42,11 +42,11 @@ in
     };
 
     address = mkOption {
-      default = "127.0.0.1";
+      default = "::1";
       type = str;
       description = ''
         Address to listen on.
-        Pass `all` to listen on all interfaces.
+        Pass `::` to listen on all interfaces.
       '';
     };
 
