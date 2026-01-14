@@ -1,9 +1,6 @@
 {
-  lib,
   buildPythonPackage,
-  pythonOlder,
   remctl-c, # remctl from pkgs, not from pythonPackages
-  typing,
 }:
 
 buildPythonPackage {
@@ -17,6 +14,4 @@ buildPythonPackage {
   setSourceRoot = "sourceRoot=$(echo */python)";
 
   buildInputs = [ remctl-c ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.5") [ typing ];
 }
