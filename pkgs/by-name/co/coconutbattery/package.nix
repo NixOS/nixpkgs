@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coconutbattery";
-  version = "4.0.4,166";
+  version = "4.2.0,192";
 
   src = fetchzip {
     url = "https://coconut-flavour.com/downloads/coconutBattery_${
       lib.replaceStrings [ "." "," ] [ "" "_" ] finalAttrs.version
     }.zip";
-    hash = "sha256-ZbxO6pR752pjaBocA/wqyjPCZaUxV051MaHz1gqQjSg=";
+    hash = "sha256-pzfg+RAlCbEaBHiU/ZQcBf0Tg0BCfs0UHh62dFQVbz0=";
   };
 
   installPhase = ''
