@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  pytest,
-  pytest-flake8,
   more-itertools,
 }:
 
@@ -21,15 +19,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ more-itertools ];
-
-  nativeCheckInputs = [
-    pytest
-    pytest-flake8
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   # Prevent infinite recursion with pytest
   doCheck = false;

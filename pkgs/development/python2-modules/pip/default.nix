@@ -7,7 +7,6 @@
   scripttest,
   virtualenv,
   pretend,
-  pytest,
 }:
 
 buildPythonPackage rec {
@@ -34,8 +33,8 @@ buildPythonPackage rec {
     scripttest
     virtualenv
     pretend
-    pytest
   ];
+
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
 

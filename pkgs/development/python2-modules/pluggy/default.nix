@@ -16,10 +16,6 @@ buildPythonPackage rec {
     sha256 = "15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0";
   };
 
-  checkPhase = ''
-    py.test
-  '';
-
   # To prevent infinite recursion with pytest
   doCheck = false;
 
