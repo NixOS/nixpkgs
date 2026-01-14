@@ -8195,6 +8195,8 @@ self: super: with self; {
 
   kuzu = callPackage ../development/python-modules/kuzu { };
 
+  kvf = callPackage ../development/python-modules/kvf { };
+
   l18n = callPackage ../development/python-modules/l18n { };
 
   la-panic = callPackage ../development/python-modules/la-panic { };
