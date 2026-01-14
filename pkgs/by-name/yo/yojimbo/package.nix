@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yojimbo";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "mas-bandwidth";
     repo = "yojimbo";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-GMYkWQTwHm7fGRSTIt2phv01CjEcw0l4iPQD4uTQ5yM=";
+    sha256 = "sha256-aw+ijRpFOLV/EwW8PdEhSQQRddfcYjD54JC1F4nvREQ=";
   };
 
   nativeBuildInputs = [
