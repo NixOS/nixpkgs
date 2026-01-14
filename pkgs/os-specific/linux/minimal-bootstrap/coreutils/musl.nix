@@ -40,6 +40,7 @@ let
 
     # depends on linux/version.h, which is not present at this stage
     "gl_cv_func_copy_file_range=no"
+    "gl_cv_onwards_func_copy_file_range=no"
   ];
 in
 bash.runCommand "${pname}-${version}"
