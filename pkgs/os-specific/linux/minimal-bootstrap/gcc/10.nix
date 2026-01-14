@@ -21,11 +21,13 @@
 }:
 let
   pname = "gcc";
-  version = "8.5.0";
+  # Cannot use 10.5.0, see:
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?format=multiple&id=110716
+  version = "10.4.0";
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-0wiEGlEbuDCmEAOXsAQtskzhH2Qtq26m7kSELlMl7VA=";
+    hash = "sha256-ySl9W818tD89/C/tU4npSMkxL9li72pM5FXP+WPr5PE=";
   };
 
   # last version to compile with gcc 4.6
@@ -35,10 +37,10 @@ let
     hash = "sha256-/UgpkSzd0S+EGBw0Ucx1K+IkZD6H+sSXtp7d2txJtPI=";
   };
 
-  mpfrVersion = "4.2.1";
+  mpfrVersion = "4.2.2";
   mpfr = fetchurl {
     url = "mirror://gnu/mpfr/mpfr-${mpfrVersion}.tar.xz";
-    hash = "sha256-J3gHNTpnJpeJlpRa8T5Sgp46vXqaW3+yeTiU4Y8fy7I=";
+    hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 
   mpcVersion = "1.3.1";
