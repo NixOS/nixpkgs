@@ -20302,6 +20302,8 @@ self: super: with self; {
 
   verlib2 = callPackage ../development/python-modules/verlib2 { };
 
+  version-pioneer = callPackage ../development/python-modules/version-pioneer { };
+
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   versionfinder = callPackage ../development/python-modules/versionfinder { };

@@ -7194,6 +7194,12 @@
     name = "Louis Orleans";
     keys = [ { fingerprint = "llSOkL8Tn5+LOmWa4PDci+dQXZIRy11NSumDiFzNkAM"; } ];
   };
+  DuarteSJ = {
+    email = "ddduarte@sapo.pt";
+    github = "DuarteSJ";
+    githubId = 106409172;
+    name = "Duarte São José";
+  };
   dudymas = {
     email = "jeremy.white@cloudposse.com";
     github = "dudymas";
