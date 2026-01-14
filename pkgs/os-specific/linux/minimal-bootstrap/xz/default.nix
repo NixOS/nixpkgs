@@ -14,11 +14,14 @@
 }:
 let
   pname = "xz";
-  version = "5.4.3";
+
+  # At least versions 5.6.4 and 5.8.2 crash with spurious OoM when decompressing
+  # certain tarballs, when compiled with tcc.
+  version = "5.4.7";
 
   src = fetchurl {
     url = "https://tukaani.org/xz/xz-${version}.tar.gz";
-    hash = "sha256-HDguC8Lk4K9YOYqQPdYv/35RAXHS3keh6+BtFSjpt+k=";
+    hash = "sha256-jbZmTEjKB5CLkrrtz+fzuiP0nvJHaGRRirXbZyODbnE=";
   };
 in
 bash.runCommand "${pname}-${version}"
