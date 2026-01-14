@@ -1720,10 +1720,6 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  b2sum = callPackage ../tools/security/b2sum {
-    inherit (llvmPackages) openmp;
-  };
-
   beamerpresenter-mupdf = beamerpresenter;
   beamerpresenter-poppler = beamerpresenter.override {
     useMupdf = false;
