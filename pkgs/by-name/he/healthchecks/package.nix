@@ -6,12 +6,14 @@
   python3,
 }:
 let
-  py = python3.override {
+  py = python3.override (previous: {
     self = py;
-    packageOverrides = final: prev: {
-      django = prev.django_5;
-    };
-  };
+    packageOverrides = lib.composeExtensions (previous.packageOverrides or (_: _: { })) (
+      final: prev: {
+        django = prev.django_5;
+      }
+    );
+  });
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
