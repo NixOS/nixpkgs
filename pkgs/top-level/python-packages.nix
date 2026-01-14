@@ -156,6 +156,8 @@ self: super: with self; {
 
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
+  ai-edge-litert = callPackage ../development/python-modules/ai-edge-litert { };
+
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   ailment = callPackage ../development/python-modules/ailment { };
