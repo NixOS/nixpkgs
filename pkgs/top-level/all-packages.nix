@@ -6744,23 +6744,21 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  fltk13 = callPackage ../development/libraries/fltk { };
-  fltk14 = callPackage ../development/libraries/fltk/1.4.nix { };
-  fltk13-minimal = fltk13.override {
+  fltk_1_3-minimal = fltk_1_3.override {
     withGL = false;
     withCairo = false;
     withExamples = false;
     withDocs = false;
   };
-  fltk14-minimal = fltk14.override {
+  fltk_1_4-minimal = fltk_1_4.override {
     withGL = false;
     withCairo = false;
     withPango = false;
     withExamples = false;
     withDocs = false;
   };
-  fltk = fltk13;
-  fltk-minimal = fltk13-minimal;
+  fltk = fltk_1_3;
+  fltk-minimal = fltk_1_3-minimal;
 
   inherit (callPackages ../development/libraries/fmt { })
     fmt_9
@@ -11572,7 +11570,7 @@ with pkgs;
   };
 
   rakarrack = callPackage ../applications/audio/rakarrack {
-    fltk = fltk13;
+    fltk = fltk_1_3;
   };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
@@ -12017,7 +12015,7 @@ with pkgs;
   );
 
   virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
-    fltk = fltk13;
+    fltk = fltk_1_3;
   };
 
   virtualgl = callPackage ../tools/X11/virtualgl {
@@ -13852,7 +13850,7 @@ with pkgs;
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
   dillo = callPackage ../by-name/di/dillo/package.nix {
-    fltk = fltk13;
+    fltk = fltk_1_3;
   };
 
   libkazv = callPackage ../by-name/li/libkazv/package.nix {
