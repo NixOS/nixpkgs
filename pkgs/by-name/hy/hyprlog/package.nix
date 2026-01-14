@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  finalAttrs,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,15 +12,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "gusjengis";
     repo = "hyprlog";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nHTUa7UpdlsO4TUrQfGo82KlgXkG3RxC9iyfiDOmOyQ=";
   };
 
-  cargoLock = {
-    lockFile = "${src}/Cargo.lock";
-  };
+  cargoHash = "sha256-nHTUa7UpdlsO4TUrQfGo82KlgXkG3RxC9iyfiDOmOyQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Hyprland focus/activity logger";
     homepage = "https://github.com/gusjengis/hyprlog";
     license = licenses.mit;
