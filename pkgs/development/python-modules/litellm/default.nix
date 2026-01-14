@@ -146,7 +146,13 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
+    description = "Call 100+ LLMs in OpenAI format";
+    longDescription = ''
+      Python SDK, Proxy Server (AI Gateway) to call 100+ LLM APIs in
+      OpenAI (or native) format, with cost tracking, guardrails,
+      loadbalancing and logging. [Bedrock, Azure, OpenAI, VertexAI,
+      Cohere, Anthropic, Sagemaker, HuggingFace, VLLM, NVIDIA NIM]
+    '';
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
     changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
