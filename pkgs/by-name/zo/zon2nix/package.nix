@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig_0_14.hook
+    zig_0_14
   ];
 
   zigBuildFlags = [

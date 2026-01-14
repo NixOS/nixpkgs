@@ -27,13 +27,13 @@
     "vendorHash": null
   },
   "aiven_aiven": {
-    "hash": "sha256-cr/Z1sMm2TcO1GbOLTdMJ9JOly5kYrDxwbYgQVPFJ9M=",
+    "hash": "sha256-KOEXMx0QRvvxtKH1zjjfZH29lyAiukIGvk7POVs5KQo=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.48.0",
+    "rev": "v4.49.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-ki9PKr+1++mDQoclXSYOagMTzPJnXew1/TiciEjR3B4="
+    "vendorHash": "sha256-ctEZoEULhdsWahsRBXVv1QfSvQ17I5PYUB6++pTFJE8="
   },
   "akamai_akamai": {
     "hash": "sha256-HjrBPaLYeJ8/9gmdn+BGHtu5dmyT5MeTsIBgzS0X0gY=",
@@ -580,13 +580,13 @@
     "vendorHash": "sha256-6re5ARUiWmpkND7hfjSDm2aOX5vlESp7UrcPJDNIJ+s="
   },
   "hashicorp_google-beta": {
-    "hash": "sha256-rgN9FJGz5BxYkVqmDLQH+Sw4HRwOs+PbBB4hMmYmTTU=",
+    "hash": "sha256-LcCuSoOXHLoRwk4AxMSjQkSWieNDqmWzEPXu4BFISQw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v7.15.0",
+    "rev": "v7.16.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-FcKZHfUWzJj8unXxhCsuw3131uyWFYzJyALv1vSGCsQ="
+    "vendorHash": "sha256-DfvtZVbke4Rydp5PaD6QQr2bITHOaK1rNU773zDqdXQ="
   },
   "hashicorp_helm": {
     "hash": "sha256-S4Fe65f+gEWWxRMC+/i93dwwe7QigPccx4wiqNBpcL8=",

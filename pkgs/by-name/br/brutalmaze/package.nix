@@ -8,7 +8,6 @@ python312Packages.buildPythonApplication rec {
   pname = "brutalmaze";
   version = "1.1.1";
   pyproject = true;
-  disabled = python312Packages.pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
