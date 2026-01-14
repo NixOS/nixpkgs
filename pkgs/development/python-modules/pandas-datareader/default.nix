@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchPypi,
   setuptools,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   version = "0.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
