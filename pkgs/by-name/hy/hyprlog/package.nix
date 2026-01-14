@@ -2,10 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  finalAttrs,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprlog";
   version = "0.1.0";
 
@@ -26,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hyprlog";
     platforms = lib.platforms.linux;
   };
-}
+})
