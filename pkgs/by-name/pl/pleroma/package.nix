@@ -20,14 +20,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-mZcr+LlRQFDZVU5yAm0XkFdFHCDp4DZNLoVUlWxknMI=";
+    sha256 = "sha256-kW4AcOYHtm8lVXRroDCUM7jY7o39JHx/J/mfy2XfBgs=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -77,8 +77,8 @@ beamPackages.mixRelease rec {
           domain = "git.pleroma.social";
           owner = "pleroma/elixir-libraries";
           repo = "elixir-captcha";
-          rev = "90f6ce7672f70f56708792a98d98bd05176c9176";
-          sha256 = "sha256-s7EuAhmCsQA/4p2NJHJSWB/DZ5hA+7EelPsUOvKr2Po=";
+          rev = "e7b7cc34cc16b383461b966484c297e4ec9aeef6";
+          sha256 = "sha256-gcsZ8BzmKfSeX2QsWDxQd34nKxIM0eJKBAaxxYyFSlg=";
         };
         beamDeps = [ ];
       };
@@ -93,6 +93,18 @@ beamPackages.mixRelease rec {
           hash = "sha256-2PZP+YnwnHt69HtIAQvjMBqBbfdbkRSoMzb1AL2Zsyc=";
         };
         beamDeps = with final; [ prometheus ];
+      };
+      oban_plugins_lazarus = beamPackages.buildMix {
+        name = "oban_plugins_lazarus";
+        version = "0.1.0";
+        src = fetchFromGitLab {
+          domain = "git.pleroma.social";
+          owner = "pleroma/elixir-libraries";
+          repo = "oban_plugins_lazarus";
+          rev = "e49fc355baaf0e435208bf5f534d31e26e897711";
+          hash = "sha256-zSzPniRN7jQLAEGGOuwserDSLy2lSZ74NFMD/IOBsC8=";
+        };
+        beamDeps = with final; [ oban ];
       };
       remote_ip = beamPackages.buildMix {
         name = "remote_ip";
