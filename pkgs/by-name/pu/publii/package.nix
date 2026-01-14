@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      urandom
       sebtm
     ];
     platforms = [ "x86_64-linux" ];

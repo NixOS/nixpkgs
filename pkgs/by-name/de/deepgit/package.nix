@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.syntevo.com/deepgit";
     changelog = "https://www.syntevo.com/deepgit/changelog.txt";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "deepgit";
   };
