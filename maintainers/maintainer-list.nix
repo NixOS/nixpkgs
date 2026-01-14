@@ -25270,6 +25270,12 @@
     keys = [ { fingerprint = "4E2D9B26940E0DABF376B7AF76762421D45837DE"; } ];
     matrix = "@qe7ftcyrpg:matrix.org";
   };
+  stillinbeta = {
+    email = "web@stillinbeta.com";
+    github = "stillinbeta";
+    githubId = 523632;
+    name = "Liz Frost";
+  };
   stites = {
     email = "sam@stites.io";
     github = "stites";
