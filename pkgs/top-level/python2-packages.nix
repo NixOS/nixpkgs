@@ -23,7 +23,7 @@ with super;
 
   coverage = callPackage ../development/python2-modules/coverage { };
 
-  filelock = callPackage ../development/python2-modules/filelock { };
+  filelock = disabled super.filelock;
 
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
