@@ -99,6 +99,13 @@ let
             "sema-unused-def-let"
             # Keep this rule, because we have `lib.or`.
             "or-identifier"
+            # TODO: remove after outstanding prelude diagnostics issues are fixed:
+            # https://github.com/nix-community/nixd/issues/761
+            # https://github.com/nix-community/nixd/issues/762
+            "sema-primop-removed-prefix"
+            "sema-primop-overridden"
+            "sema-constant-overridden"
+            "sema-primop-unknown"
           ];
         };
         settings.formatter.nixf-diagnose = {
