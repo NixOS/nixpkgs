@@ -1224,6 +1224,7 @@ let
           "NetLabel"
           "NFTSet"
           "UseCaptivePortal"
+          "UseRedirect"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
@@ -1236,6 +1237,7 @@ let
         (assertValueOneOf "UseRoutePrefix" boolValues)
         (assertValueOneOf "UsePREF64" boolValues)
         (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UseRedirect" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
