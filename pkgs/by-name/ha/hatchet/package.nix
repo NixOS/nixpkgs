@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hatchet";
-  version = "0.8.8";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "simagix";
     repo = "hatchet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KoDiioIimktbA3SWHbLM+WAKdEb60cmkuqLw5WNgVRI=";
+    hash = "sha256-TdZ8yKDpphPQnjMHKVICV0vj8FSWlHsAAa6X1p1gqH0=";
   };
 
-  vendorHash = "sha256-qZH6+zXcyHg7+KkQjtsZWHpIr0n22R4gH9uzGuFU5CY=";
+  vendorHash = "sha256-NUGNvyXw07erw6MqJm/VbwCvW59WCeKdMJ1Dq0z5viI=";
 
   ldflags = [
     "-s"
