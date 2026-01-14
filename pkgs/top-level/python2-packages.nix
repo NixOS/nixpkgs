@@ -23,7 +23,7 @@ with super;
 
   hypothesis = disabled super.hypothesis;
 
-  importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
+  importlib-metadata = disabled super.importlib-metadata;
 
   jinja2 = disabled super.jinja2;
 
