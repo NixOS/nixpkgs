@@ -7194,6 +7194,12 @@
     name = "Louis Orleans";
     keys = [ { fingerprint = "llSOkL8Tn5+LOmWa4PDci+dQXZIRy11NSumDiFzNkAM"; } ];
   };
+  duckle29 = {
+    name = "Mikkel Jeppesen";
+    github = "Duckle29";
+    githubId = 2756925;
+    keys = [ { fingerprint = "C290 76FD 298D 46E8 7884  7292 2BCB CF8F 65FD ACB8"; } ];
+  };
   dudymas = {
     email = "jeremy.white@cloudposse.com";
     github = "dudymas";
