@@ -11643,10 +11643,6 @@ with pkgs;
     withXineBackend = true;
   };
 
-  qutebrowser-qt5 = qutebrowser.override {
-    qt6Packages = libsForQt5;
-  };
-
   rakarrack = callPackage ../applications/audio/rakarrack {
     fltk = fltk13;
   };
