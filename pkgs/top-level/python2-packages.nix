@@ -84,8 +84,6 @@ with super;
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
 
-  typing = callPackage ../development/python2-modules/typing { };
-
   six = super.six.overridePythonAttrs (_: {
     doCheck = false; # circular dependency with pytest
   });
