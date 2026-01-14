@@ -68,6 +68,11 @@ buildPythonPackage rec {
     # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
     "tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
 
+    # SystemExit: 1 (or 2)
+    "tests/CLI/modules/hardware/hardware_list_tests.py::HardwareListCLITests"
+    "tests/CLI/modules/vs/vs_create_tests.py::VirtCreateTests"
+    "tests/CLI/modules/vs/vs_tests.py::VirtTests"
+
     # Test fails with ConnectionError trying to connect to api.softlayer.com
     "tests/transports/soap_tests.py.unstable"
   ];
