@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.13.3";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "pylode";
