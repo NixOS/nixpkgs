@@ -1231,6 +1231,7 @@ let
           "UseCaptivePortal"
           "UseRedirect"
           "UseHopLimit"
+          "UseReachableTime"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
@@ -1246,6 +1247,7 @@ let
         (assertValueOneOf "UseCaptivePortal" boolValues)
         (assertValueOneOf "UseRedirect" boolValues)
         (assertValueOneOf "UseHopLimit" boolValues)
+        (assertValueOneOf "UseReachableTime" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
