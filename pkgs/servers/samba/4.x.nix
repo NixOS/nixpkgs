@@ -317,6 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   disallowedReferences = lib.optionals isCross [
     buildPackages.python3Packages.python
+    buildPackages.runtimeShellPackage
   ];
 
   passthru.tests = {
