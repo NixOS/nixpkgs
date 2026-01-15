@@ -3,7 +3,7 @@
 
 set -eou pipefail
 
-latestVersion=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases/latest | jq --raw-output .tag_name)
+latestVersion=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases | jq --raw-output 'map(select(.prerelease==false)) | .[].tag_name' | sort -V | tail -n1)
 currentVersion=$(nix eval --raw -f . vscode.version)
 
 echo "latest  version: $latestVersion"
