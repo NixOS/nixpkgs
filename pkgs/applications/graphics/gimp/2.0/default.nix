@@ -50,13 +50,8 @@
   openexr,
   desktopToDarwinBundle,
   gtk-mac-integration-gtk2,
-  withPython ? false,
-  python2,
 }:
 
-let
-  python = python2.withPackages (pp: [ pp.pygtk ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
   version = "2.10.38";
@@ -217,11 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libgudev
-  ]
-  ++ lib.optionals withPython [
-    python
-    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
-    python2.pkgs.pygtk
   ];
 
   # needed by gimp-2.0.pc
@@ -236,8 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
     # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
     "--libdir=\${exec_prefix}/lib"
-  ]
-  ++ lib.optionals (!withPython) [
     "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
   ];
 
@@ -279,8 +267,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
-
-    python2Support = withPython;
   };
 
   meta = {

@@ -2007,7 +2007,7 @@ with pkgs;
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
 
   mobilizon = callPackage ../servers/mobilizon {
-    beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = self.elixir_1_15; });
+    beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
     mobilizon-frontend = callPackage ../servers/mobilizon/frontend.nix { };
   };
 
@@ -3282,10 +3282,6 @@ with pkgs;
       mainProgram = "nc";
     };
   });
-
-  netlify-cli = callPackage ../by-name/ne/netlify-cli/package.nix {
-    nodejs = nodejs_20;
-  };
 
   libnma-gtk4 = libnma.override { withGtk4 = true; };
 
@@ -8002,8 +7998,6 @@ with pkgs;
   nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enableMalloc = true; };
 
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
-
-  python-qt = libsForQt5.callPackage ../development/libraries/python-qt { };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
 
