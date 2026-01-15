@@ -16,12 +16,12 @@
   rcodesign,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   version = "1.3.6";
   pname = "bun";
 
   src =
-    passthru.sources.${stdenvNoCC.hostPlatform.system}
+    finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   sourceRoot =
@@ -86,19 +86,19 @@ stdenvNoCC.mkDerivation rec {
   passthru = {
     sources = {
       "aarch64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
         hash = "sha256-KvHshDd1mrBbOw6kIf6eIubHBctMsHUcMmmCZC2s6Po=";
       };
       "aarch64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
         hash = "sha256-Wv0Ss2a6LYKXJFzCnAOUFjNN2HIVLB2wLlyKqMZulrE=";
       };
       "x86_64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-x64-baseline.zip";
         hash = "sha256-stiZTUz3BkE2bWm4dCC4BdHZhPTqfhajUt8VaUlHT6U=";
       };
       "x86_64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64.zip";
         hash = "sha256-m6mNITRVDWaQh1sjpPXEjnS3yyZ+jMG49SYFkhxsEe8=";
       };
     };
@@ -112,18 +112,18 @@ stdenvNoCC.mkDerivation rec {
         ]
       }"
       NEW_VERSION=$(curl --silent https://api.github.com/repos/oven-sh/bun/releases/latest | jq '.tag_name | ltrimstr("bun-v")' --raw-output)
-      if [[ "${version}" = "$NEW_VERSION" ]]; then
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
           echo "The new version same as the old version."
           exit 0
       fi
-      for platform in ${lib.escapeShellArgs meta.platforms}; do
+      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         update-source-version "bun" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
   meta = {
     homepage = "https://bun.sh";
-    changelog = "https://bun.sh/blog/bun-v${version}";
+    changelog = "https://bun.sh/blog/bun-v${finalAttrs.version}";
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     longDescription = ''
@@ -142,7 +142,7 @@ stdenvNoCC.mkDerivation rec {
       coffeeispower
       diogomdp
     ];
-    platforms = builtins.attrNames passthru.sources;
+    platforms = builtins.attrNames finalAttrs.passthru.sources;
     # Broken for Musl at 2024-01-13, tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/280716
     broken = stdenvNoCC.hostPlatform.isMusl;
@@ -150,4 +150,4 @@ stdenvNoCC.mkDerivation rec {
     # Hangs when run via Rosetta 2 on Apple Silicon
     hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
   };
-}
+})

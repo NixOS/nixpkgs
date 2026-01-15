@@ -6113,6 +6113,8 @@ self: super: with self; {
 
   gftools = callPackage ../development/python-modules/gftools { };
 
+  ggml-python = callPackage ../development/python-modules/ggml-python { };
+
   gguf = callPackage ../development/python-modules/gguf { };
 
   ghapi = callPackage ../development/python-modules/ghapi { };
@@ -15534,8 +15536,6 @@ self: super: with self; {
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
-
-  python-qt = toPythonModule (pkgs.python-qt.override { python3 = self.python; });
 
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
 

@@ -15,41 +15,21 @@
 
 let
   inherit (import ./common.nix { inherit lib; }) pname meta;
-  version = "1.1.24";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
-    hash = "sha256-E3DJqBKyzyp9koAlEMygBYzDfmanvt1wBR8KNAFQIqM=";
+    hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
   };
 
   # Thanks to the live-bootstrap project!
   # See https://github.com/fosslinux/live-bootstrap/blob/d98f97e21413efc32c770d0356f1feda66025686/sysa/musl-1.1.24/musl-1.1.24.sh
   liveBootstrap = "https://github.com/fosslinux/live-bootstrap/raw/d98f97e21413efc32c770d0356f1feda66025686/sysa/musl-1.1.24";
   patches = [
-    (fetchurl {
-      url = "${liveBootstrap}/patches/avoid_set_thread_area.patch";
-      hash = "sha256-TsbBZXk4/KMZG9EKi7cF+sullVXrxlizLNH0UHGXsPs=";
-    })
-    (fetchurl {
-      url = "${liveBootstrap}/patches/avoid_sys_clone.patch";
-      hash = "sha256-/ZmH64J57MmbxdfQ4RNjamAiBdkImMTlHsHdgV4gMj4=";
-    })
-    (fetchurl {
-      url = "${liveBootstrap}/patches/set_thread_area.patch";
-      hash = "sha256-RIZYqbbRSx4X/0iFUhriwwBRmoXVR295GNBUjf2UrM0=";
-    })
+    # tinycc doesn't implement backward-jumping jecxz, and it would be hard to implement
     (fetchurl {
       url = "${liveBootstrap}/patches/sigsetjmp.patch";
       hash = "sha256-wd2Aev1zPJXy3q933aiup5p1IMKzVJBquAyl3gbK4PU=";
-    })
-    # liveBootstrap/sysa/musl-1.1.24/patches/stdio_flush_on_exit.patch with forward declarations added
-    # to avoid `error: implicit declaration of function '__stdio_exit'`
-    # Required to fix buffered stdout being truncated on exit
-    ./stdio_flush_on_exit.patch
-    ./avoid_pthread_x86_64.patch
-    (fetchurl {
-      url = "${liveBootstrap}/patches/va_list.patch";
-      hash = "sha256-UmcMIl+YCi3wIeVvjbsCyqFlkyYsM4ECNwTfXP+s7vg=";
     })
   ];
 in
@@ -92,6 +72,12 @@ bash.runCommand "${pname}-${version}"
     # Calls do go through PLT regardless.
     sed -i 's|@PLT||' src/math/x86_64/expl.s
     sed -i 's|@PLT||' src/signal/x86_64/sigsetjmp.s
+
+    # TODO Implement the required asm constraints 'x' and 't' in tinycc.
+    # For now, we just remove code using those constraints. musl automatically
+    # polyfills with pure C implementations.
+    rm src/math/i386/*.c
+    rm src/math/x86_64/*.c
 
     # Configure
     bash ./configure \

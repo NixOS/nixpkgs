@@ -138,32 +138,24 @@ lib.makeScope
         tinycc = tinycc-musl;
         gnumake = gnumake-musl;
         gnutar = gnutar-musl;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
         gcc = gcc46;
         gnumake = gnumake-musl;
         gnutar = gnutar-musl;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
-      gcc8 = callPackage ./gcc/8.nix {
+      gcc10 = callPackage ./gcc/10.nix {
         gcc = gcc46-cxx;
         gnumake = gnumake-musl;
         gnutar = gnutar-latest;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc-latest = callPackage ./gcc/latest.nix {
-        gcc = gcc8;
+        gcc = gcc10;
         gnumake = gnumake-musl;
         gnutar = gnutar-latest;
-        # FIXME: not sure why new gawk doesn't work
-        gawk = gawk-mes;
       };
 
       gcc-glibc = callPackage ./gcc/glibc.nix {
@@ -292,13 +284,13 @@ lib.makeScope
 
       mes-libc = callPackage ./mes/libc.nix { };
 
-      musl11-intermediate = callPackage ./musl/1.1.nix {
+      musl-tcc-intermediate = callPackage ./musl/tcc.nix {
         bash = bash_2_05;
         tinycc = tinycc-mes;
         gnused = gnused-mes;
       };
 
-      musl11 = callPackage ./musl/1.1.nix {
+      musl-tcc = callPackage ./musl/tcc.nix {
         bash = bash_2_05;
         tinycc = tinycc-musl-intermediate;
         gnused = gnused-mes;
@@ -337,7 +329,7 @@ lib.makeScope
       tinycc-musl-intermediate = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
-          musl = musl11-intermediate;
+          musl = musl-tcc-intermediate;
           tinycc = tinycc-mes;
         }
       );
@@ -345,7 +337,7 @@ lib.makeScope
       tinycc-musl = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
-          musl = musl11;
+          musl = musl-tcc;
           tinycc = tinycc-musl-intermediate;
         }
       );
@@ -370,55 +362,61 @@ lib.makeScope
       };
 
       inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
-      test = kaem.runCommand "minimal-bootstrap-test" { } ''
-        echo ${bash.tests.get-version}
-        echo ${bash-static.tests.get-version}
-        echo ${bash_2_05.tests.get-version}
-        echo ${binutils.tests.get-version}
-        echo ${binutils-static.tests.get-version}
-        echo ${bison.tests.get-version}
-        echo ${busybox-static.tests.get-version}
-        echo ${bzip2.tests.get-version}
-        echo ${bzip2-static.tests.get-version}
-        echo ${coreutils-musl.tests.get-version}
-        echo ${coreutils-static.tests.get-version}
-        echo ${diffutils.tests.get-version}
-        echo ${diffutils-static.tests.get-version}
-        echo ${findutils.tests.get-version}
-        echo ${findutils-static.tests.get-version}
-        echo ${gawk.tests.get-version}
-        echo ${gawk-mes.tests.get-version}
-        echo ${gawk-static.tests.get-version}
-        echo ${gcc46.tests.get-version}
-        echo ${gcc46-cxx.tests.hello-world}
-        echo ${gcc8.tests.hello-world}
-        echo ${gcc-latest.tests.hello-world}
-        echo ${gcc-glibc.tests.hello-world}
-        echo ${glibc.tests.hello-world}
-        echo ${gnugrep.tests.get-version}
-        echo ${gnugrep-static.tests.get-version}
-        echo ${gnum4.tests.get-version}
-        echo ${gnumake-musl.tests.get-version}
-        echo ${gnumake-static.tests.get-version}
-        echo ${gnupatch-static.tests.get-version}
-        echo ${gnused.tests.get-version}
-        echo ${gnused-mes.tests.get-version}
-        echo ${gnused-static.tests.get-version}
-        echo ${gnutar.tests.get-version}
-        echo ${gnutar-latest.tests.get-version}
-        echo ${gnutar-musl.tests.get-version}
-        echo ${gnutar-static.tests.get-version}
-        echo ${gzip.tests.get-version}
-        echo ${gzip-static.tests.get-version}
-        echo ${heirloom.tests.get-version}
-        echo ${mes.compiler.tests.get-version}
-        echo ${musl.tests.hello-world}
-        echo ${patchelf-static.tests.get-version}
-        echo ${python.tests.get-version}
-        echo ${tinycc-mes.compiler.tests.chain}
-        echo ${tinycc-musl.compiler.tests.hello-world}
-        echo ${xz.tests.get-version}
-        mkdir ''${out}
-      '';
+      test = kaem.runCommand "minimal-bootstrap-test" { } (
+        ''
+          echo ${bash.tests.get-version}
+          echo ${bash-static.tests.get-version}
+          echo ${bash_2_05.tests.get-version}
+          echo ${binutils.tests.get-version}
+          echo ${binutils-static.tests.get-version}
+          echo ${bison.tests.get-version}
+          echo ${busybox-static.tests.get-version}
+          echo ${bzip2.tests.get-version}
+          echo ${bzip2-static.tests.get-version}
+          echo ${coreutils-musl.tests.get-version}
+          echo ${coreutils-static.tests.get-version}
+          echo ${diffutils.tests.get-version}
+          echo ${diffutils-static.tests.get-version}
+          echo ${findutils.tests.get-version}
+          echo ${findutils-static.tests.get-version}
+          echo ${gawk.tests.get-version}
+          echo ${gawk-mes.tests.get-version}
+          echo ${gawk-static.tests.get-version}
+          echo ${gcc46.tests.get-version}
+          echo ${gcc46-cxx.tests.hello-world}
+          echo ${gcc10.tests.hello-world}
+          echo ${gcc-latest.tests.hello-world}
+          echo ${gnugrep.tests.get-version}
+          echo ${gnugrep-static.tests.get-version}
+          echo ${gnum4.tests.get-version}
+          echo ${gnumake-musl.tests.get-version}
+          echo ${gnumake-static.tests.get-version}
+          echo ${gnupatch-static.tests.get-version}
+          echo ${gnused.tests.get-version}
+          echo ${gnused-mes.tests.get-version}
+          echo ${gnused-static.tests.get-version}
+          echo ${gnutar.tests.get-version}
+          echo ${gnutar-latest.tests.get-version}
+          echo ${gnutar-musl.tests.get-version}
+          echo ${gnutar-static.tests.get-version}
+          echo ${gzip.tests.get-version}
+          echo ${gzip-static.tests.get-version}
+          echo ${heirloom.tests.get-version}
+          echo ${mes.compiler.tests.get-version}
+          echo ${musl.tests.hello-world}
+          echo ${patchelf-static.tests.get-version}
+          echo ${python.tests.get-version}
+          echo ${tinycc-mes.compiler.tests.chain}
+          echo ${tinycc-musl.compiler.tests.hello-world}
+          echo ${xz.tests.get-version}
+        ''
+        + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
+          echo ${gcc-glibc.tests.hello-world}
+          echo ${glibc.tests.hello-world}
+        '')
+        + ''
+          mkdir ''${out}
+        ''
+      );
     }
   )
