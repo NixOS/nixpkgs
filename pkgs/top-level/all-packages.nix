@@ -6642,8 +6642,6 @@ with pkgs;
 
   astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
 
-  attr = callPackage ../development/libraries/attr { };
-
   # Not moved to aliases while we decide if we should split the package again.
   at-spi2-atk = at-spi2-core;
 
