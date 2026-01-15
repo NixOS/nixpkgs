@@ -18195,12 +18195,6 @@
     githubId = 61601147;
     name = "basti n00b0ss";
   };
-  n0emis = {
-    email = "nixpkgs@n0emis.network";
-    github = "n0emis";
-    githubId = 22817873;
-    name = "Ember Keske";
-  };
   n3oney = {
     name = "Michał Minarowski";
     email = "nixpkgs@neoney.dev";
@@ -29178,6 +29172,12 @@
     github = "Yureien";
     githubId = 17357089;
     name = "Soham Sen";
+  };
+  yureka-wdz = {
+    email = "yureka@wdz.de";
+    github = "yureka-wdz";
+    githubId = 255085068;
+    name = "Yureka (WDZ)";
   };
   yuriaisaka = {
     email = "yuri.aisaka+nix@gmail.com";

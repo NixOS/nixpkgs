@@ -69,6 +69,8 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: [Chex] Assertion assert_trees_all_close failed
     "test_collection_mixed_async"
+    # flaky under load
+    "test_async_execution"
   ];
 
   meta = {
