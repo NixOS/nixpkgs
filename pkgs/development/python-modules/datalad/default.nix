@@ -42,6 +42,7 @@
   importlib-metadata,
   typing-extensions,
   # tests
+  pytest-retry,
   pytest-xdist,
   pytestCheckHook,
   p7zip,
@@ -127,9 +128,13 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
     export DATALAD_TESTS_NONETWORK=1
+    export PATH="$PATH:$out/bin"
   '';
 
-  # tests depend on apps in $PATH which only will get installed after the test
+  disabledTestMarks = [
+    "flaky"
+  ];
+
   disabledTests = [
     # No such file or directory: 'datalad'
     "test_script_shims"
@@ -147,59 +152,17 @@ buildPythonPackage rec {
     # Tries to run `git` and fails
     "test_reckless"
     "test_create"
+    "test_subsuperdataset_save"
 
-    #  No such file or directory: 'git-annex-remote-[...]"
-    "test_ensure_datalad_remote_maybe_enable"
+    # Tries to spawn a subshell and fails
+    "test_shell_completion_source"
 
-    # "git-annex: unable to use external special remote git-annex-remote-datalad"
-    "test_ria_postclonecfg"
-    "test_ria_postclone_noannex"
-    "test_ria_push"
-    "test_basic_scenario"
-    "test_annex_get_from_subdir"
-    "test_ensure_datalad_remote_init_and_enable_needed"
-    "test_ensure_datalad_remote_maybe_enable[False]"
-    "test_ensure_datalad_remote_maybe_enable[True]"
-    "test_create_simple"
-    "test_create_alias"
-    "test_storage_only"
-    "test_initremote"
-    "test_read_access"
-    "test_ephemeral"
-    "test_initremote_basic_fileurl"
-    "test_initremote_basic_httpurl"
-    "test_remote_layout"
-    "test_version_check"
-    "test_gitannex_local"
-    "test_push_url"
-    "test_url_keys"
-    "test_obtain_permission_root"
-    "test_source_candidate_subdataset"
-    "test_update_fetch_all"
-    "test_add_archive_dirs"
-    "test_add_archive_content"
-    "test_add_archive_content_strip_leading"
-    "test_add_archive_content_zip"
-    "test_add_archive_content_absolute_path"
-    "test_add_archive_use_archive_dir"
-    "test_add_archive_single_file"
-    "test_add_delete"
-    "test_add_archive_leading_dir"
-    "test_add_delete_after_and_drop"
-    "test_add_delete_after_and_drop_subdir"
-    "test_override_existing_under_git"
-    "test_copy_file_datalad_specialremote"
-    "test_download_url_archive"
-    "test_download_url_archive_from_subdir"
-    "test_download_url_archive_trailing_separator"
-    "test_download_url_need_datalad_remote"
-    "test_datalad_credential_helper - assert False"
-
+    # Times out
+    "test_rerun_unrelated_nonrun_left_run_right"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # pbcopy not found
     "test_wtf"
-
-    # CommandError: 'git -c diff.ignoreSubmodules=none -c core.quotepath=false ls-files -z -m -d' failed with exitcode 128
-    "test_subsuperdataset_save"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # For all: https://github.com/datalad/datalad/issues/7781
@@ -215,6 +178,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     p7zip
+    pytest-retry
     pytest-xdist
     pytestCheckHook
     git-annex
