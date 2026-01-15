@@ -43,7 +43,10 @@ buildNpmPackage rec {
     description = "Fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library";
     homepage = "https://github.com/DavidAnson/markdownlint-cli2";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      natsukium
+    ];
     mainProgram = "markdownlint-cli2";
   };
 }
