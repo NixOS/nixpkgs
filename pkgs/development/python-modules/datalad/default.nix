@@ -190,6 +190,7 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       renesat
       malik
+      sarahec
     ];
   };
 })
