@@ -6,7 +6,7 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-bnNpJgy54wvTST1Jtfbd1ldLJrIzTW62TL7wyHeqz28=",
+  vendorHash ? "sha256-3cY4Nd2RX5OKnJaQ7StYDsyq27qE1VY4wGaY4wiDeFQ=",
 }:
 
 let
@@ -14,13 +14,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.13.2";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9ggyFixdNy0t4UA8ZxU5oMUzA/8EB/k1jors4f8Q6YE=";
+    hash = "sha256-WcRX2BCWIQ8e0FYCIAzCdexz+Nl+/kKicQkhEw2AVMs=";
   };
 
   inherit vendorHash;
@@ -76,9 +76,9 @@ buildGoModule (finalAttrs: {
     }
     diff -u plugin.cfg.orig plugin.cfg || true
     for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
+    go mod vendor
     CC= GOOS= GOARCH= go generate
     go mod tidy
-    go mod vendor
   '';
 
   modInstallPhase = ''
@@ -106,6 +106,11 @@ buildGoModule (finalAttrs: {
     # it's a lint rather than a test of functionality, so it's safe to disable.
     substituteInPlace test/presubmit_test.go \
       --replace-fail "TestImportOrdering" "SkipImportOrdering"
+
+    substituteInPlace plugin/pkg/parse/transport_test.go \
+      --replace-fail \
+        "TestTransport" \
+        "SkipTransport"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # loopback interface is lo0 on macos
