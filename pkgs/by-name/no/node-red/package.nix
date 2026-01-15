@@ -19,6 +19,8 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-8nwIEu/p5kVYoG3+jXBss352MciCnk/aGV9nbDGHDdA=";
 
+  nativeBuildInputs = [ jq ];
+
   postPatch =
     let
       packageDir = "packages/node_modules/node-red";
@@ -26,7 +28,7 @@ buildNpmPackage rec {
     ''
       ln -s ${./package-lock.json} package-lock.json
 
-      ${lib.getExe jq} '. += {"bin": {"node-red": "${packageDir}/red.js", "node-red-pi": "${packageDir}/bin/node-red-pi"}}' package.json > package.json.tmp
+      jq '. += {"bin": {"node-red": "${packageDir}/red.js", "node-red-pi": "${packageDir}/bin/node-red-pi"}}' package.json > package.json.tmp
       mv package.json.tmp package.json
     '';
 
