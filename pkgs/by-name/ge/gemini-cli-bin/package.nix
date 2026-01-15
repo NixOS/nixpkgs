@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   nodejs,
+  sysctl,
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
@@ -42,6 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (with stdenvNoCC.hostPlatform; isDarwin && isx86_64) [
+    sysctl
   ];
   # versionCheckHook cannot be used because the reported version might be incorrect (e.g., 0.6.1 returns 0.6.0).
   installCheckPhase = ''
