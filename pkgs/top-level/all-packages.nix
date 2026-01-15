@@ -12890,10 +12890,6 @@ with pkgs;
     cudaSupport = true;
   };
 
-  math-preview = callPackage ../by-name/ma/math-preview/package.nix {
-    nodejs = nodejs_20;
-  };
-
   p4est-sc-dbg = p4est-sc.override { debug = true; };
 
   p4est-dbg = p4est.override { debug = true; };
