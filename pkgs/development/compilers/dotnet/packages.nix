@@ -94,8 +94,10 @@ let
     (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
     (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
     (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
-    (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
   ]
+  ++ lib.optional vmr.hasILCompiler (
+    mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version
+  )
   ++ lib.optionals (lib.versionOlder runtime.version "9") [
     (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
     (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
