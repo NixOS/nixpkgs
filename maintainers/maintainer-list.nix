@@ -4767,6 +4767,13 @@
     githubId = 803961;
     name = "Hurshal Patel";
   };
+  chordtoll = {
+    email = "nix@chordtoll.com";
+    name = "chordtoll";
+    github = "chordtoll";
+    githubId = 542193;
+    keys = [ { fingerprint = "A58D E7C6 C8DA F1F8 922E  4D2A 6F33 950B 4475 5770"; } ];
+  };
   chpatrick = {
     email = "chpatrick@gmail.com";
     github = "chpatrick";
