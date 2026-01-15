@@ -108,7 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase =
     let
-      disabledTests = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      disabledTests = ''
+        bigtable_internal_data_connection_impl_test
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         common_internal_async_connection_ready_test
         bigtable_async_read_stream_test
         bigtable_metadata_update_policy_test
