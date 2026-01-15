@@ -50,7 +50,7 @@
   httpretty,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datalad";
   version = "1.2.3";
   pyproject = true;
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-C3e9k4RDFfDMaimZ/7TtAJNzdlfVrKoTHVl0zKL9EjI=";
   };
 
@@ -78,7 +78,9 @@ buildPythonPackage rec {
   ];
 
   dependencies =
-    optional-dependencies.core ++ optional-dependencies.downloaders ++ optional-dependencies.publish;
+    finalAttrs.passthru.optional-dependencies.core
+    ++ finalAttrs.passthru.optional-dependencies.downloaders
+    ++ finalAttrs.passthru.optional-dependencies.publish;
 
   optional-dependencies = {
     core = [
@@ -183,10 +185,11 @@ buildPythonPackage rec {
   meta = {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
+    changelog = "https://github.com/datalad/datalad/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       renesat
       malik
     ];
   };
-}
+})
