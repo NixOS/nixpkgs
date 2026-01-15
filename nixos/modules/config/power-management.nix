@@ -25,6 +25,9 @@ in
       resumeCommands = lib.mkOption {
         type = lib.types.lines;
         default = "";
+        example = lib.literalExpression ''
+          "''${pkgs.util-linux}/bin/rfkill unblock all"
+        '';
         description = "Commands executed after the system resumes from suspend-to-RAM.";
       };
 
@@ -32,7 +35,7 @@ in
         type = lib.types.lines;
         default = "";
         example = lib.literalExpression ''
-          "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
+          "''${pkgs.powertop}/bin/powertop --auto-tune"
         '';
         description = ''
           Commands executed when the machine powers up.  That is,
@@ -51,6 +54,18 @@ in
           Commands executed when the machine powers down.  That is,
           they're executed both when the system shuts down and when
           it goes to suspend or hibernation.
+        '';
+      };
+
+      bootCommands = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = lib.literalExpression ''
+          "''${pkgs.networkmanager}/bin/nmcli radio wifi on"
+        '';
+        description = ''
+          Commands executed only once after initial boot.
+          These commands are executed after `powerUpCommands`.
         '';
       };
 
@@ -109,6 +124,17 @@ in
         script = cfg.powerDownCommands;
         serviceConfig.Type = "oneshot";
         unitConfig.DefaultDependencies = false;
+      };
+
+      # Service executed after boot
+      post-boot = {
+        description = "Post-Boot Actions";
+        wantedBy = [ "multi-user.target" ];
+        script = ''
+          ${cfg.powerUpCommands}
+          ${cfg.bootCommands}
+        '';
+        serviceConfig.Type = "oneshot";
       };
     };
 
