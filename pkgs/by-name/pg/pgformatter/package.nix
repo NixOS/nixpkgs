@@ -6,13 +6,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.6";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    hash = "sha256-EJLAP1uBmWxWEsdLJYTuViMv4o0iEi2fqy79ixyRijU=";
+    hash = "sha256-G4Bbg8tNlwV8VCVKCamhlQ/pGf8hWCkABm6f8i5doos=";
   };
 
   outputs = [ "out" ];
@@ -37,7 +37,10 @@ perlPackages.buildPerlPackage rec {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
     changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      thunze
+      mfairley
+    ];
     license = [
       lib.licenses.postgresql
       lib.licenses.artistic2
