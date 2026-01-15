@@ -1,0 +1,67 @@
+diff --git a/cmake/shaderc.pc.in b/cmake/shaderc.pc.in
+index 6d217bf..bb37c29 100644
+--- a/cmake/shaderc.pc.in
++++ b/cmake/shaderc.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKG_CONFIG_LIBDIR@
++includedir=@PKG_CONFIG_INCLUDEDIR@
+ 
+ Name: shaderc
+ Description: Tools and libraries for Vulkan shader compilation
+diff --git a/cmake/shaderc_combined.pc.in b/cmake/shaderc_combined.pc.in
+index 6d217bf..bb37c29 100644
+--- a/cmake/shaderc_combined.pc.in
++++ b/cmake/shaderc_combined.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKG_CONFIG_LIBDIR@
++includedir=@PKG_CONFIG_INCLUDEDIR@
+ 
+ Name: shaderc
+ Description: Tools and libraries for Vulkan shader compilation
+diff --git a/cmake/shaderc_static.pc.in b/cmake/shaderc_static.pc.in
+index 6d217bf..bb37c29 100644
+--- a/cmake/shaderc_static.pc.in
++++ b/cmake/shaderc_static.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKG_CONFIG_LIBDIR@
++includedir=@PKG_CONFIG_INCLUDEDIR@
+ 
+ Name: shaderc
+ Description: Tools and libraries for Vulkan shader compilation
+diff --git a/cmake/write_pkg_config.cmake b/cmake/write_pkg_config.cmake
+index d367ce3..18502ee 100644
+--- a/cmake/write_pkg_config.cmake
++++ b/cmake/write_pkg_config.cmake
+@@ -16,16 +16,18 @@
+ file(STRINGS ${CHANGES_FILE} CHANGES_CONTENT)
+ string(
+ REGEX
+-  MATCH "v[0-9]+(.[0-9]+)?(-dev)? [0-9]+-[0-9]+-[0-9]+"
++  MATCH "v[0-9]+(.[0-9]+)?(-dev)?"
+   FIRST_VERSION_LINE
+   ${CHANGES_CONTENT})
+ string(
+ REGEX
+-  REPLACE "^v([^ ]+) .+$" "\\1"
++  REPLACE "^v([^ ]+)$" "\\1"
+   CURRENT_VERSION
+   "${FIRST_VERSION_LINE}")
+ # If this is a development version, replace "-dev" by ".0" as pkg-config nor
+ # CMake support "-dev" in the version.
+ # If it's not a "-dev" version then ensure it ends with ".1"
+ string(REGEX REPLACE "-dev.1" ".0" CURRENT_VERSION "${CURRENT_VERSION}.1")
++cmake_path(APPEND PKG_CONFIG_LIBDIR "\${exec_prefix}" "${CMAKE_INSTALL_LIBDIR}")
++cmake_path(APPEND PKG_CONFIG_INCLUDEDIR "\${prefix}" "${CMAKE_INSTALL_INCLUDEDIR}")
+ configure_file(${TEMPLATE_FILE} ${OUT_FILE} @ONLY)
