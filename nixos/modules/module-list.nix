@@ -796,6 +796,7 @@
   ./services/matrix/mautrix-signal.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
+  ./services/matrix/maunium-stickerpicker.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
   ./services/matrix/synapse-auto-compressor.nix
