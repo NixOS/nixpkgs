@@ -786,6 +786,10 @@ let
 
         happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
 
+        happy-eyeballs-miou-unix =
+          callPackage ../development/ocaml-modules/happy-eyeballs/miou-unix.nix
+            { };
+
         happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
