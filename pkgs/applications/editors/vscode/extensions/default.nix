@@ -2201,6 +2201,22 @@ let
         };
       };
 
+      hm.riscv-venus = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "riscv-venus";
+          publisher = "hm";
+          version = "1.9.1";
+          hash = "sha256-cFWPs7ub8gxb2JTVDSfP/odRV4lzvu9VDh5Bnj/8KuE=";
+        };
+        meta = {
+          description = "RISC-V Venus Simulator embedded in VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=hm.riscv-venus";
+          homepage = "https://github.com/hm-riscv/vscode-riscv-venus";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.qf0xb ];
+        };
+      };
+
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "beautify";
