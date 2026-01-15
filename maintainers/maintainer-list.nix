@@ -1989,12 +1989,6 @@
     githubId = 25783780;
     name = "aos";
   };
-  apeschar = {
-    email = "albert@peschar.net";
-    github = "apeschar";
-    githubId = 122977;
-    name = "Albert Peschar";
-  };
   apeyroux = {
     email = "alex@px.io";
     github = "apeyroux";
