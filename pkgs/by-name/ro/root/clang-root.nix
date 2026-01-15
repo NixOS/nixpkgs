@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/root-project/llvm-project";
-    rev = "refs/tags/ROOT-llvm${version}";
+    tag = "ROOT-llvm${version}";
     hash = "sha256-qEoQVv/Aw9gqKSNa8ZJGqPzwXvH1yXiSOkvrUWeXI+g=";
   };
 

@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-shell";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m96XaaFDFQaD2YPjw8D1sGJ5lex4Is4LQ5RhGzVPvH4=";
   };
 

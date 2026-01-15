@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kepano";
     repo = "defuddle-cli";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-28XmpFKzBKNhRkPOGaacJVw8hjQUZq2nwuR0vNo8aW0=";
   };
 

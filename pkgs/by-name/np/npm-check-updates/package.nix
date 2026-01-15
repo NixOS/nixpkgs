@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I9X98vqQgLgWt7q9Tr+0b+IlpTsPZDBQd+PVZlgpzyE=";
   };
 

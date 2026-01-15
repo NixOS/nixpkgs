@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "fipy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-usuAj+bIzbCSxYuKeUDxEESbjxPCwYwdD/opaBbgl1w=";
   };
 

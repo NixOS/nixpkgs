@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "simgear";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-1zbw/lIjTbVwhxHPvXRlxPmYJeWmKvPE/RDrTL0PXb4=";
   };
 
