@@ -5,17 +5,25 @@
   fetchpatch2,
   pythonAtLeast,
   pythonOlder,
-  hatchling,
+
+  # build-system
   hatch-vcs,
+  hatchling,
+
+  # dependencies
   numpy,
   packaging,
   importlib-resources,
   typing-extensions,
+
+  # optional-dependencies
   pydicom,
   pillow,
   h5py,
   scipy,
-  git,
+
+  addBinToPathHook,
+  gitMinimal,
   pytest-doctestplus,
   pytest-httpserver,
   pytest-xdist,
@@ -42,8 +50,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   build-system = [
-    hatchling
     hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -53,19 +61,20 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ]
   ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
-  optional-dependencies = rec {
-    all = dicom ++ dicomfs ++ minc2 ++ spm ++ zstd;
+  optional-dependencies = lib.fix (self: {
+    all = self.dicom ++ self.dicomfs ++ self.minc2 ++ self.spm ++ self.zstd;
     dicom = [ pydicom ];
-    dicomfs = [ pillow ] ++ dicom;
+    dicomfs = [ pillow ] ++ self.dicom;
     minc2 = [ h5py ];
     spm = [ scipy ];
     zstd = [
       # TODO: pyzstd
     ];
-  };
+  });
 
   nativeCheckInputs = [
-    git
+    addBinToPathHook
+    gitMinimal
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
@@ -77,10 +86,6 @@ buildPythonPackage (finalAttrs: {
     # https://github.com/nipy/nibabel/issues/1390
     "test_deprecator_maker"
   ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
 
   meta = {
     homepage = "https://nipy.org/nibabel";
