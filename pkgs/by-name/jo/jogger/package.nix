@@ -21,19 +21,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jogger";
-  version = "1.2.5";
+  version = "1.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "baarkerlounger";
     repo = "jogger";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-bju9XXMT6HRHG9QViO+FQCYQ+llrC+GP/AlIha0mxkM=";
+    hash = "sha256-EPk5uuloubCp/S81yYFCbt8E7XJOezk16pIvFI+QfUk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-k4nUtFdwCWa8flSkOEQe7UqorpYPCGrcXHTvVOqoAQI=";
+    hash = "sha256-hoZrc8d4/5HsyKkDfU0EQcQsj7Y6BDOM/KhFG5e2nAs=";
   };
 
   nativeBuildInputs = [
