@@ -127,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # fails otherwise because it tries to set up git hooks, not needed here
+    sed -i 's/"preinstall": ".*"/"preinstall": "echo skipped preinstall"/' packages/default-plugins/node_modules/joplin-plugin-freehand-drawing/package.json
+
     unset YARN_ENABLE_SCRIPTS
 
     for node_modules in packages/*/node_modules; do
