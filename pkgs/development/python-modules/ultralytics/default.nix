@@ -24,6 +24,7 @@
   torchvision,
   tqdm,
   ultralytics-thop,
+  opencv4Full,
 
   # tests
   aiohttp,
@@ -31,6 +32,12 @@
   onnxruntime,
   pytestCheckHook,
 }:
+
+let
+  opencv-python-gui = opencv-python.override {
+    opencv4 = opencv4Full;
+  };
+in
 
 buildPythonPackage rec {
   pname = "ultralytics";
@@ -53,7 +60,7 @@ buildPythonPackage rec {
   dependencies = [
     lap
     matplotlib
-    opencv-python
+    opencv-python-gui
     pandas
     pillow
     polars
