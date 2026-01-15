@@ -13,7 +13,7 @@
   fastapi,
   fastapi-sso,
   fastuuid,
-  fetchFromGitHub,
+  fetchPypi,
   google-cloud-iam,
   google-cloud-kms,
   gunicorn,
@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.80.0";
+  version = "1.80.16";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "BerriAI";
-    repo = "litellm";
-    tag = "v${version}-stable.1";
-    hash = "sha256-W1tckXXQ9PlqTW5S4ml0X5rcPXSCioubDaSkQxHQrMY=";
+  # litellm does not have a stable tag for each release, use the PyPI source instead
+  src = fetchPypi {
+    pname = "litellm";
+    inherit version;
+    hash = "sha256-+WIzZJ+Zqwl/fYo/+YmGgCB7nup9LiP0OAdKPbz1DMo=";
   };
 
   build-system = [ poetry-core ];
@@ -122,17 +122,12 @@ buildPythonPackage rec {
     "litellm_enterprise"
   ];
 
-  # Relax dependency check on openai, may not be needed in the future
-  pythonRelaxDeps = [ "openai" ];
-
   # access network
   doCheck = false;
 
+  # Copy litellm_enterprise to make it discoverable
   postFixup = ''
-    # Symlink litellm_enterprise to make it discoverable
-    pushd $out/lib/python${python.pythonVersion}/site-packages
-    ln -s enterprise/litellm_enterprise litellm_enterprise
-    popd
+    cp -r ./enterprise/litellm_enterprise $out/lib/python${python.pythonVersion}/site-packages/litellm_enterprise
   '';
 
   passthru = {
@@ -155,7 +150,7 @@ buildPythonPackage rec {
     '';
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    changelog = "https://docs.litellm.ai/release_notes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
