@@ -9,7 +9,6 @@
   shapelib,
   zlib,
   withGUI ? false,
-  withMapPreview ? (!stdenv.hostPlatform.isDarwin),
   withDoc ? false,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -73,8 +72,7 @@ stdenv.mkDerivation rec {
     shapelib
     zlib
   ]
-  ++ lib.optional withGUI libsForQt5.qtserialport
-  ++ lib.optional (withGUI && withMapPreview) libsForQt5.qtwebengine;
+  ++ lib.optional withGUI libsForQt5.qtserialport;
 
   nativeCheckInputs = [
     libxml2
@@ -90,8 +88,8 @@ stdenv.mkDerivation rec {
     "WITH_SHAPELIB=pkgconfig"
     "WITH_ZLIB=pkgconfig"
   ]
-  ++ lib.optionals (withGUI && !withMapPreview) [
-    "CONFIG+=disable-mappreview"
+  ++ lib.optionals withGUI [
+    "CONFIG+=disable-mappreview" # would require qt5 webengine
   ];
 
   makeFlags =
