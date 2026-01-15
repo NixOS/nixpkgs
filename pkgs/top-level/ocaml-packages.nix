@@ -2251,6 +2251,8 @@ let
 
         yaml-sexp = callPackage ../development/ocaml-modules/yaml/yaml-sexp.nix { };
 
+        yocaml = callPackage ../development/ocaml-modules/yocaml { };
+
         yojson = callPackage ../development/ocaml-modules/yojson { };
 
         yojson_2 = yojson.overrideAttrs (_: {
