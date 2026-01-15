@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "8.2.3";
+  version = "9.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-FoyCpDGDKNN2GMhE7gDpJLmWRWhbMCYlcVEaBTfXSEw=";
+    hash = "sha256-PgqjCeyHOhWtZjyzSZyvsPT0Q7yRyNDiW3x1fQq0K+8=";
   };
 
   build-system = [ flit-core ];
