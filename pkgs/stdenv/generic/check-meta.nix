@@ -393,6 +393,10 @@ let
       isIbusEngine = bool;
       isGutenprint = bool;
 
+      # Can be a list of values in `lib.packageTypes`
+      # Or can be a list of attrs, where each key is an SBOM format name
+      packageType = listOf (attrsOf str);
+
       # Used for the original location of the maintainer and team attributes to assist with pings.
       maintainersPosition = any;
       teamsPosition = any;
