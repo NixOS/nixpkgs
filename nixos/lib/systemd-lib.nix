@@ -979,9 +979,6 @@ rec {
     {
       defaultName,
       readOnlyName ? false,
-      bindPath ? null,
-      asserted ? false,
-      conditional ? false,
       description,
       nullable ? false,
       example ? "/etc/credstore/${defaultName}",
@@ -1073,25 +1070,31 @@ rec {
           in
           cred
           // {
-            serviceConfig = {
-              BindPaths = optionals (bindPath != null) [ "%d/${cred.name}:${bindPath}" ];
-              AssertCredential = optionals asserted [ cred.name ];
-              ConditionCredential = optionals conditional [ cred.name ];
-            }
-            // (
-              if cred.data != null && cred.reference == null && cred.path == null then
-                { ImportCredential = [ "${cred.ref}:${cred.name}" ]; }
-              else if cred.data == null && cred.reference != null && cred.path == null then
-                { "SetCredential${encrypted}" = [ "${cred.name}:${cred.data}" ]; }
-              else if cred.data == null && cred.reference == null then
-                {
-                  "LoadCredential${encrypted}" = [
-                    (if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name)
-                  ];
-                }
-              else
-                throw "Credential must be given at most one data, path, or reference"
-            );
+            serviceConfig =
+              {
+                bindPath ? null,
+                asserted ? false,
+                conditional ? false,
+              }:
+              {
+                BindPaths = optionals (bindPath != null) [ "%d/${cred.name}:${bindPath}" ];
+                AssertCredential = optionals asserted [ cred.name ];
+                ConditionCredential = optionals conditional [ cred.name ];
+              }
+              // (
+                if cred.data != null && cred.reference == null && cred.path == null then
+                  { ImportCredential = [ "${cred.ref}:${cred.name}" ]; }
+                else if cred.data == null && cred.reference != null && cred.path == null then
+                  { "SetCredential${encrypted}" = [ "${cred.name}:${cred.data}" ]; }
+                else if cred.data == null && cred.reference == null then
+                  {
+                    "LoadCredential${encrypted}" = [
+                      (if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name)
+                    ];
+                  }
+                else
+                  throw "Credential must be given at most one data, path, or reference"
+              );
           }
         );
     };
