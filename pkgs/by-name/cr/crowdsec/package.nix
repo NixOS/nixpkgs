@@ -80,7 +80,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jk
-      urandom
     ];
   };
 }

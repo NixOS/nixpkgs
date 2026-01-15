@@ -43,7 +43,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.jetify.com/devbox";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      urandom
       lagoja
       madeddie
     ];
