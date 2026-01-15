@@ -138,8 +138,8 @@ rec {
     sitePackages
     ;
   inherit sourceVersion;
-  pythonAtLeast = lib.versionAtLeast pythonVersion;
-  pythonOlder = lib.versionOlder pythonVersion;
+  pythonAtLeast = with sourceVersion; lib.versionAtLeast "${major}.${minor}.${patch}";
+  pythonOlder = with sourceVersion; lib.versionOlder "${major}.${minor}.${patch}";
   inherit hasDistutilsCxxPatch;
   inherit
     pythonOnBuildForBuild
