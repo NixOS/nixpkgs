@@ -13,8 +13,8 @@ let
   ]
   ++ lib.optionals (cfg.backend != null) [ "--backend ${cfg.backend}" ]
   ++ lib.optionals (cfg.device != null) [ "--device ${cfg.device}" ]
-  ++ lib.optionals (cfg.index != null) [ "--index ${builtins.toString cfg.index}" ]
-  ++ [ "--log-level ${builtins.toString cfg.log-level}" ];
+  ++ lib.optionals (cfg.index != null) [ "--index ${toString cfg.index}" ]
+  ++ [ "--log-level ${toString cfg.log-level}" ];
 in
 {
   options.services.rshim = {

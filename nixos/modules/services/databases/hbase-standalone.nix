@@ -15,7 +15,7 @@ let
       lib.mapAttrsToList (name: value: ''
         <property>
           <name>${name}</name>
-          <value>${builtins.toString value}</value>
+          <value>${toString value}</value>
         </property>
       '') configAttr
     ));

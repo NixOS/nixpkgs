@@ -56,7 +56,7 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${cfg.package}/bin/bitbox-bridge -p ${builtins.toString cfg.port}";
+        ExecStart = "${cfg.package}/bin/bitbox-bridge -p ${toString cfg.port}";
         User = "bitbox";
       };
     };

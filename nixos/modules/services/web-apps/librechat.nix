@@ -205,7 +205,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = builtins.baseNameOf cfg.dataDir;
+        StateDirectory = baseNameOf cfg.dataDir;
         WorkingDirectory = cfg.dataDir;
         LoadCredential = getLoadCredentialList;
         EnvironmentFile = cfg.credentialsFile;

@@ -28,18 +28,19 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sigstore-python";
-  version = "4.0.0";
+  pname = "sigstore";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
     tag = "v${version}";
-    hash = "sha256-KAHGg2o5t8qfbvLGTzaVoV7AcMkgi3rXxyOQgSASl7A=";
+    hash = "sha256-Wt9ZoMHTiMlbAab9p8/WF38/OiyCaqHPS5R7/fTAfxw=";
   };
 
   pythonRelaxDeps = [
+    "sigstore-models"
     "sigstore-rekor-types"
     "rfc3161-client"
     "cryptography"
