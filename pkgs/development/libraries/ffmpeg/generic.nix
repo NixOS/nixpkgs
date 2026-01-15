@@ -985,7 +985,8 @@ stdenv.mkDerivation (
       ];
     };
 
-    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;
 
     # Fails with SIGABRT otherwise FIXME: Why?
     checkPhase =
