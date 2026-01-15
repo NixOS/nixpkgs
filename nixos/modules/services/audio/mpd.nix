@@ -27,7 +27,7 @@ let
       )
     ) a;
   nonBlockSettings = lib.filterAttrs (n: v: !(builtins.isAttrs v || builtins.isList v)) cfg.settings;
-  pureBlockSettings = builtins.removeAttrs cfg.settings (builtins.attrNames nonBlockSettings);
+  pureBlockSettings = removeAttrs cfg.settings (builtins.attrNames nonBlockSettings);
   blocks =
     pureBlockSettings
     // lib.optionalAttrs cfg.fluidsynth {

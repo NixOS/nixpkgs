@@ -38,8 +38,8 @@ in
   testScript = ''
     with subtest("Test meshtasticd service"):
       machine.wait_for_unit("meshtasticd.service")
-      machine.wait_for_open_port(${builtins.toString mainPort})
-      machine.wait_for_open_port(${builtins.toString webPort})
-      machine.succeed("curl -fvvv -Ls http://localhost:${builtins.toString webPort} | grep -q 'Meshtastic Web Client'")
+      machine.wait_for_open_port(${toString mainPort})
+      machine.wait_for_open_port(${toString webPort})
+      machine.succeed("curl -fvvv -Ls http://localhost:${toString webPort} | grep -q 'Meshtastic Web Client'")
   '';
 }

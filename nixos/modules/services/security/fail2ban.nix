@@ -452,7 +452,7 @@ in
       # Block SSH if there are too many failing connection attempts.
       (lib.mkIf config.services.openssh.enable {
         sshd.settings.port = lib.mkDefault (
-          lib.concatMapStringsSep "," builtins.toString config.services.openssh.ports
+          lib.concatMapStringsSep "," toString config.services.openssh.ports
         );
       })
     ];

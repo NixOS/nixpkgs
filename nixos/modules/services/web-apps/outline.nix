@@ -696,12 +696,12 @@ in
 
             REDIS_URL = if cfg.redisUrl == "local" then localRedisUrl else cfg.redisUrl;
             URL = cfg.publicUrl;
-            PORT = builtins.toString cfg.port;
+            PORT = toString cfg.port;
 
             CDN_URL = cfg.cdnUrl;
-            FORCE_HTTPS = builtins.toString cfg.forceHttps;
-            ENABLE_UPDATES = builtins.toString cfg.enableUpdateCheck;
-            WEB_CONCURRENCY = builtins.toString cfg.concurrency;
+            FORCE_HTTPS = toString cfg.forceHttps;
+            ENABLE_UPDATES = toString cfg.enableUpdateCheck;
+            WEB_CONCURRENCY = toString cfg.concurrency;
             DEBUG = cfg.debugOutput;
             GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
             SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
@@ -709,13 +709,13 @@ in
             TEAM_LOGO = lib.optionalString (cfg.logo != null) cfg.logo;
             DEFAULT_LANGUAGE = cfg.defaultLanguage;
 
-            RATE_LIMITER_ENABLED = builtins.toString cfg.rateLimiter.enable;
-            RATE_LIMITER_REQUESTS = builtins.toString cfg.rateLimiter.requests;
-            RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
+            RATE_LIMITER_ENABLED = toString cfg.rateLimiter.enable;
+            RATE_LIMITER_REQUESTS = toString cfg.rateLimiter.requests;
+            RATE_LIMITER_DURATION_WINDOW = toString cfg.rateLimiter.durationWindow;
 
             FILE_STORAGE = cfg.storage.storageType;
-            FILE_STORAGE_IMPORT_MAX_SIZE = builtins.toString cfg.maximumImportSize;
-            FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
+            FILE_STORAGE_IMPORT_MAX_SIZE = toString cfg.maximumImportSize;
+            FILE_STORAGE_UPLOAD_MAX_SIZE = toString cfg.storage.uploadMaxSize;
             FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
           }
 
@@ -724,7 +724,7 @@ in
             AWS_REGION = cfg.storage.region;
             AWS_S3_UPLOAD_BUCKET_URL = cfg.storage.uploadBucketUrl;
             AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
-            AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
+            AWS_S3_FORCE_PATH_STYLE = toString cfg.storage.forcePathStyle;
             AWS_S3_ACL = cfg.storage.acl;
           })
 
@@ -757,7 +757,7 @@ in
 
           (lib.mkIf (cfg.slackIntegration != null) {
             SLACK_APP_ID = cfg.slackIntegration.appId;
-            SLACK_MESSAGE_ACTIONS = builtins.toString cfg.slackIntegration.messageActions;
+            SLACK_MESSAGE_ACTIONS = toString cfg.slackIntegration.messageActions;
           })
 
           (lib.mkIf (cfg.discordAuthentication != null) {
@@ -768,12 +768,12 @@ in
 
           (lib.mkIf (cfg.smtp != null) {
             SMTP_HOST = cfg.smtp.host;
-            SMTP_PORT = builtins.toString cfg.smtp.port;
+            SMTP_PORT = toString cfg.smtp.port;
             SMTP_USERNAME = cfg.smtp.username;
             SMTP_FROM_EMAIL = cfg.smtp.fromEmail;
             SMTP_REPLY_EMAIL = cfg.smtp.replyEmail;
             SMTP_TLS_CIPHERS = cfg.smtp.tlsCiphers;
-            SMTP_SECURE = builtins.toString cfg.smtp.secure;
+            SMTP_SECURE = toString cfg.smtp.secure;
           })
         ];
 

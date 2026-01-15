@@ -7,10 +7,10 @@
 let
   src = mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.1";
-    buildNumber = "253.29346.142";
+    version = "2025.3.1.1";
+    buildNumber = "253.29346.308";
     buildType = "pycharm";
-    ideaHash = "sha256-eAq/lgv6ZcN9SR2E1KYnnhDHe/rBQ3GqqbbF6GstDoU=";
+    ideaHash = "sha256-sx/yLkMsjOQWAMJztoI0T6xQ66pnjnQejgc85PGod2s=";
     androidHash = "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=";
     jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";

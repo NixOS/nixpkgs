@@ -84,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/yanyongyu/githubkit";
     changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

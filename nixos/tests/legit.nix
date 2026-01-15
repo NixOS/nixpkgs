@@ -26,7 +26,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      strPort = builtins.toString port;
+      strPort = toString port;
     in
     ''
       start_all()
