@@ -2253,6 +2253,8 @@ let
 
         yocaml = callPackage ../development/ocaml-modules/yocaml { };
 
+        yocaml_runtime = callPackage ../development/ocaml-modules/yocaml/runtime.nix { };
+
         yojson = callPackage ../development/ocaml-modules/yojson { };
 
         yojson_2 = yojson.overrideAttrs (_: {
