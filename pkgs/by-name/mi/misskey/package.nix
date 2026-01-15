@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nodejs,
   pnpm_9,
@@ -30,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./pnpm-lock.yaml.patch
+    (fetchpatch {
+      name = "CVE-2025-66402.patch";
+      url = "https://github.com/misskey-dev/misskey/commit/dc77d59f8712d3fe0b73cd4af2035133839cd57b.patch";
+      hash = "sha256-2hRXW2tzPi/3KUw27TRaBTmLKCDJqG26uN9lVrtg4To=";
+    })
   ];
 
   nativeBuildInputs = [
