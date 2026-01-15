@@ -1,7 +1,8 @@
-{ lib
-, emacs
-, emacsPackages
-, fetchgit
+{
+  lib,
+  emacs,
+  emacsPackages,
+  fetchgit,
 }:
 
 emacsPackages.melpaBuild (finalAttrs: {
@@ -13,7 +14,6 @@ emacsPackages.melpaBuild (finalAttrs: {
     rev = "dad7f2c418018b991701255b79cfb3be842fdb0a";
     sha256 = "sha256-+eJlOF4Fpm+dp5tqT6V7ktURF4BgEcKQkCkXChUiaPo=";
   };
-
 
   packageRequires = with emacsPackages; [
     magit
