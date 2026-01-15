@@ -314,8 +314,9 @@ let
       in
 
       (toVimPlugin (
-        stdenv.mkDerivation {
-          name = "nvim-treesitter-grammar-${name}";
+        stdenv.mkDerivation (finalAttrs: {
+          pname = "nvim-treesitter-grammar-${name}";
+          inherit (grammar) version;
 
           origGrammar = grammar;
           grammarName = name;
@@ -349,7 +350,7 @@ let
             platforms = lib.platforms.all;
           }
           // grammar.meta;
-        }
+        })
       ));
 
   /*
