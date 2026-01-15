@@ -21,6 +21,9 @@
   tqdm,
   ufonormalizer,
   ufoprocessor,
+
+  # passthru
+  afdko,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -139,7 +142,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.tests = {
-    fullTestsuite = finalAttrs.finalPackage.override { runAllTests = true; };
+    fullTestsuite = afdko.override { runAllTests = true; };
   };
 
   meta = {
