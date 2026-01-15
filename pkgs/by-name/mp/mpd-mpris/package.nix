@@ -11,8 +11,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "natsukagami";
     repo = "mpd-mpris";
-    rev = "v${version}";
-    sha256 = "sha256-w8OH34JW++OYLpNIHfQvc45dFyU/wVWVa+vEwWb8VqU=";
+    tag = "v${version}";
+    hash = "sha256-w8OH34JW++OYLpNIHfQvc45dFyU/wVWVa+vEwWb8VqU=";
   };
 
   vendorHash = "sha256-ugJEw02jSsfObljDaup31zoQlf2HvwDRUljD7lp7Ys4=";
