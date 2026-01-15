@@ -13247,8 +13247,6 @@ with pkgs;
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
 
-  autotiling = python3Packages.callPackage ../misc/autotiling { };
-
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
 
   foomatic-db-ppds-withNonfreeDb = callPackage ../by-name/fo/foomatic-db-ppds/package.nix {
