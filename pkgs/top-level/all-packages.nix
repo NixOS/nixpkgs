@@ -7912,6 +7912,7 @@ with pkgs;
         generateSplicesForMkScope
         lib
         stdenv
+        gcc14Stdenv
         fetchurl
         fetchpatch
         fetchgit
