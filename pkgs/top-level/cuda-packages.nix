@@ -11,9 +11,16 @@ let
       manifests = _cuda.lib.selectManifests manifestVersions;
     };
 
+  # NOTE:
+  # The manifests are largely the same except for TensorRT:
+  # - linux-x86_64 is generally the best supported and can use the latest release
+  # - linux-sbsa (post-Orin Jetson and ARM) comes in second; NVIDIA dropped support for CUDA 12 with 10.13.2 (there is no
+  #   10.13.1), so we use 10.13.0 for all CUDA 12 releases.
+  # - linux-aarch64 (pre-Thor Jetson) is historically least supported; we use the latest release available.
+
   cudaPackages_12_6 =
     let
-      inherit (cudaPackages_12_6.backendStdenv) hasJetsonCudaCapability;
+      inherit (cudaPackages_12_6.backendStdenv) hasJetsonCudaCapability hostPlatform;
     in
     mkCudaPackages {
       cublasmp = "0.6.0";
@@ -29,12 +36,18 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.14.1";
+      tensorrt =
+        if hasJetsonCudaCapability then
+          "10.7.0"
+        else if hostPlatform.isAarch64 then
+          "10.13.0"
+        else
+          "10.14.1";
     };
 
   cudaPackages_12_8 =
     let
-      inherit (cudaPackages_12_8.backendStdenv) hasJetsonCudaCapability;
+      inherit (cudaPackages_12_8.backendStdenv) hasJetsonCudaCapability hostPlatform;
     in
     mkCudaPackages {
       cublasmp = "0.6.0";
@@ -50,12 +63,18 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.14.1";
+      tensorrt =
+        if hasJetsonCudaCapability then
+          "10.7.0"
+        else if hostPlatform.isAarch64 then
+          "10.13.0"
+        else
+          "10.14.1";
     };
 
   cudaPackages_12_9 =
     let
-      inherit (cudaPackages_12_9.backendStdenv) hasJetsonCudaCapability;
+      inherit (cudaPackages_12_9.backendStdenv) hasJetsonCudaCapability hostPlatform;
     in
     mkCudaPackages {
       cublasmp = "0.6.0";
@@ -71,7 +90,13 @@ let
       nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       nvtiff = "0.5.1";
-      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.14.1";
+      tensorrt =
+        if hasJetsonCudaCapability then
+          "10.7.0"
+        else if hostPlatform.isAarch64 then
+          "10.13.0"
+        else
+          "10.14.1";
     };
 
   # NOTE: Thor is supported from CUDA 13.0, so our check needs to capture whether pre-Thor devices were selected.
