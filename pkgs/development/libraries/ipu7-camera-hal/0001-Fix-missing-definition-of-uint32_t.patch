@@ -1,0 +1,21 @@
+From f8ea16f7c4cc29201f39659b664ac40f6d1b0a49 Mon Sep 17 00:00:00 2001
+From: Hao Yao <hao.yao@intel.com>
+Date: Mon, 29 Sep 2025 16:55:12 +0800
+Subject: [PATCH] Fix missing definition of uint32_t
+
+Signed-off-by: Hao Yao <hao.yao@intel.com>
+---
+ src/platformdata/gc/HalStream.h                                 | 2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/src/platformdata/gc/HalStream.h b/src/platformdata/gc/HalStream.h
+index 1ef32a3..799a140 100644
+--- a/src/platformdata/gc/HalStream.h
++++ b/src/platformdata/gc/HalStream.h
+@@ -16,6 +16,8 @@
+ 
+ #pragma once
+ 
++#include <stdint.h>
++
+ namespace icamera {
