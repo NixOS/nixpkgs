@@ -6,16 +6,16 @@
 }:
 
 {
-  scim-for-keycloak = callPackage ./scim-for-keycloak { };
-  scim-keycloak-user-storage-spi = callPackage ./scim-keycloak-user-storage-spi { };
+  keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
   keycloak-discord = callPackage ./keycloak-discord { };
+  keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
   keycloak-magic-link = callPackage ./keycloak-magic-link { };
   keycloak-metrics-spi = callPackage ./keycloak-metrics-spi { };
-  keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
-  keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
-  keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
-  keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
   keycloak-orgs = callPackage ./keycloak-orgs { };
+  keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
+  keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
+  scim-for-keycloak = callPackage ./scim-for-keycloak { };
+  scim-keycloak-user-storage-spi = callPackage ./scim-keycloak-user-storage-spi { };
 
   # junixsocket provides Unix domain socket support for JDBC connections,
   # which is required for connecting to PostgreSQL via Unix socket.
