@@ -2253,6 +2253,8 @@ let
 
         yocaml = callPackage ../development/ocaml-modules/yocaml { };
 
+        yocaml_otoml = callPackage ../development/ocaml-modules/yocaml/otoml.nix { };
+
         yocaml_runtime = callPackage ../development/ocaml-modules/yocaml/runtime.nix { };
 
         yocaml_unix = callPackage ../development/ocaml-modules/yocaml/unix.nix { };
