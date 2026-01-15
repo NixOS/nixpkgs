@@ -27,7 +27,7 @@ buildGoModule rec {
     homepage = "https://github.com/shenwei356/rush";
     changelog = "https://github.com/shenwei356/rush/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "rush-parallel";
   };
 }
