@@ -9,7 +9,6 @@
   nixos-icons,
   buildPackages,
   customLogo ? "${nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png",
-  withChainloading ? false,
 }:
 
 let
@@ -52,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     imagemagick
-  ]
-  ++ lib.optionals withChainloading [
     rustPackages.rustc
     rustPackages.cargo
     rustPlatform.cargoSetupHook
@@ -70,9 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"
     "RELEASE=1"
+    "CHAINLOADING=1"
   ]
-  ++ lib.optional (customLogo != null) "LOGO=custom"
-  ++ lib.optional withChainloading "CHAINLOADING=1";
+  ++ lib.optional (customLogo != null) "LOGO=custom";
 
   enableParallelBuilding = true;
 

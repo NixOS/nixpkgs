@@ -123,6 +123,13 @@ buildPythonPackage rec {
     "test_stamping_headers_in_options"
     "test_stamping_with_replace"
 
+    # Celery tries to look up group ID (e.g. 30000)
+    # which does not reliably succeed in the sandbox on linux,
+    # so it throws a security error as if we were running as root.
+    # https://github.com/celery/celery/blob/0527296acb1f1790788301d4395ba6d5ce2a9704/celery/platforms.py#L807-L814
+    "test_regression_worker_startup_info"
+    "test_check_privileges"
+
     # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
     "test_check_privileges_without_c_force_root_and_no_group_entry"
   ]

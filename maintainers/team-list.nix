@@ -836,16 +836,6 @@ with lib.maintainers;
     shortName = "coqui-ai TTS";
   };
 
-  wdz = {
-    members = [
-      n0emis
-      johannwagner
-      yuka
-    ];
-    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
-    shortName = "WDZ GmbH";
-  };
-
   windows = {
     members = [
       RossSmyth
