@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-fsutil";
     tag = version;
-    hash = "sha256-hzPNj6hqNCnMx1iRK1c6Y70dUU/H4u6o+waEgOhyhuA=";
+    hash = "sha256-1XYyfBuaUED+xnVrILEtB+fUpc8sk4BDzGp8Hln/rlc=";
   };
 
   build-system = [ setuptools ];
