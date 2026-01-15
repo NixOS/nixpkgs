@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.29.3";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MmurmQ/z8ME7Y6lpEWGaf7sFRSYhwd8flM4f0GBbUIM=";
+    hash = "sha256-ZYAjbinVMT0iiqojRxcKwQbvDqYteoExm1Ocppka0Ps=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     fetcherVersion = 3;
-    hash = "sha256-LEdI9chVuOli4XiA0VRV9h8L3ho0IRbPsXtAyQM6Du8=";
+    hash = "sha256-ZCsG+Zjiy3hmROgBKnqxGlJjvIYqAeQMlfXUnNQIsiI=";
   };
   buildPhase = ''
     runHook preBuild
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
         # version
-        version = "0.27.1";
+        version = "0.29.1";
       };
     };
     updateScript = nix-update-script { };
