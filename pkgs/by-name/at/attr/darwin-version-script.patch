@@ -1,0 +1,8 @@
+--- a/libattr/Makemodule.am
++++ b/libattr/Makemodule.am
+@@ -26,5 +26,4 @@
+ endif
+ libattr_la_CFLAGS = -include libattr/libattr.h
+ libattr_la_LDFLAGS = \
+-	-Wl,--version-script,$(top_srcdir)/exports \
+ 	-version-info $(LTVERSION)

@@ -1,0 +1,306 @@
+--- a/libattr/attr_copy_fd.c
++++ b/libattr/attr_copy_fd.c
+@@ -51,6 +51,16 @@
+ # define my_free(ptr) free (ptr)
+ #endif
+ 
++#if defined(__APPLE__)
++#define fgetxattr4(fd, name, value, size) fgetxattr(fd, name, value, size, 0, 0)
++#define flistxattr3(fd, name, size) flistxattr(fd, name, size, 0)
++#define fsetxattr5(fd, name, value, size, flags) fsetxattr(fd, name, value, size, 0, flags)
++#else
++#define fgetxattr4 fgetxattr
++#define flistxattr3 flistxattr
++#define fsetxattr5 fsetxattr
++#endif
++
+ /* Copy extended attributes from src_path to dst_path. If the file
+    has an extended Access ACL (system.posix_acl_access) and that is
+    copied successfully, the file mode permission bits are copied as
+@@ -73,7 +83,7 @@
+ 	if (check == NULL)
+ 		check = attr_copy_check_permissions;
+ 
+-	size = flistxattr (src_fd, NULL, 0);
++	size = flistxattr3 (src_fd, NULL, 0);
+ 	if (size < 0) {
+ 		if (errno != ENOSYS && errno != ENOTSUP) {
+ 			const char *qpath = quote (ctx, src_path);
+@@ -89,7 +99,7 @@
+ 		ret = -1;
+ 		goto getout;
+ 	}
+-	size = flistxattr (src_fd, names, size);
++	size = flistxattr3 (src_fd, names, size);
+ 	if (size < 0) {
+ 		const char *qpath = quote (ctx, src_path);
+ 		error (ctx, _("listing attributes of %s"), qpath);
+@@ -108,7 +118,7 @@
+ 		if (!*name || !check(name, ctx))
+ 			continue;
+ 
+-		size = fgetxattr (src_fd, name, NULL, 0);
++		size = fgetxattr4 (src_fd, name, NULL, 0);
+ 		if (size < 0) {
+ 			const char *qpath = quote (ctx, src_path);
+ 			const char *qname = quote (ctx, name);
+@@ -125,7 +135,7 @@
+ 			error (ctx, "");
+ 			ret = -1;
+ 		}
+-		size = fgetxattr (src_fd, name, value, size);
++		size = fgetxattr4 (src_fd, name, value, size);
+ 		if (size < 0) {
+ 			const char *qpath = quote (ctx, src_path);
+ 			const char *qname = quote (ctx, name);
+@@ -136,7 +146,7 @@
+ 			ret = -1;
+ 			continue;
+ 		}
+-		if (fsetxattr (dst_fd, name, value, size, 0) != 0) {
++		if (fsetxattr5 (dst_fd, name, value, size, 0) != 0) {
+ 			if (errno == ENOTSUP)
+ 				setxattr_ENOTSUP++;
+ 			else {
+--- a/libattr/attr_copy_file.c
++++ b/libattr/attr_copy_file.c
+@@ -51,6 +51,12 @@
+ # define my_free(ptr) free (ptr)
+ #endif
+ 
++#if defined(__APPLE__)
++#define lgetxattr(path, name, value, size) getxattr(path, name, value, size, 0, XATTR_NOFOLLOW)
++#define llistxattr(path, name, size) listxattr(path, name, size, XATTR_NOFOLLOW)
++#define lsetxattr(path, name, value, size, flags) setxattr(path, name, value, size, 0, flags | XATTR_NOFOLLOW)
++#endif
++
+ /* Copy extended attributes from src_path to dst_path. If the file
+    has an extended Access ACL (system.posix_acl_access) and that is
+    copied successfully, the file mode permission bits are copied as
+--- a/libattr/libattr.c
++++ b/libattr/libattr.c
+@@ -39,6 +39,40 @@
+ #undef roundup
+ #define roundup(x,y) ((((x)+((y)-1))/(y))*(y))
+ 
++#if defined(__APPLE__)
++ssize_t getxattr4(const char *path, const char *name, void *value, size_t size) {
++	return getxattr(path, name, value, size, 0, 0);
++}
++ssize_t lgetxattr(const char *path, const char *name, void *value, size_t size) {
++	return getxattr(path, name, value, size, 0, XATTR_NOFOLLOW);
++}
++#define fgetxattr4(fd, name, value, size) fgetxattr(fd, name, value, size, 0, 0)
++
++#define listxattr3(path, name, size) listxattr(path, name, size, 0)
++#define llistxattr(path, name, size) listxattr(path, name, size, XATTR_NOFOLLOW)
++#define flistxattr3(fd, name, size) flistxattr(fd, name, size, 0)
++
++#define removexattr2(path, name) removexattr(path, name, 0)
++#define lremovexattr(path, name) removexattr(path, name, XATTR_NOFOLLOW)
++#define fremovexattr2(fd, name) fremovexattr(fd, name, 0)
++
++#define setxattr5(path, name, value, size, flags) setxattr(path, name, value, size, 0, flags)
++#define lsetxattr(path, name, value, size, flags) setxattr(path, name, value, size, 0, flags | XATTR_NOFOLLOW)
++#define fsetxattr5(fd, name, value, size, flags) fsetxattr(fd, name, value, size, 0, flags)
++#else
++#define getxattr4 getxattr
++#define fgetxattr4 fgetxattr
++
++#define listxattr3 listxattr
++#define flistxattr3 flistxattr
++
++#define removexattr2 removexattr
++#define fremovexattr2 fremovexattr
++
++#define setxattr5 setxattr
++#define fsetxattr5 fsetxattr
++#endif
++
+ static const char *user_name = "user.";
+ static const char *secure_name = "security.";
+ static const char *trusted_name = "trusted.";
+@@ -111,7 +145,7 @@
+ 	 int *valuelength, int flags)
+ {
+ 	ssize_t (*get)(const char *, const char *, void *, size_t) =
+-		flags & ATTR_DONTFOLLOW ? lgetxattr : getxattr;
++		flags & ATTR_DONTFOLLOW ? lgetxattr : getxattr4;
+ 	int c, compat;
+ 	char name[MAXNAMELEN+16];
+ 
+@@ -147,13 +181,13 @@
+ 	for (compat = 0; compat < 2; compat++) {
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+-		c = fgetxattr(fd, name, attrvalue, *valuelength);
++		c = fgetxattr4(fd, name, attrvalue, *valuelength);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+ 	}
+ 	if (c < 0 && errno == ERANGE) {
+-		int size = fgetxattr(fd, name, NULL, 0);
++		int size = fgetxattr4(fd, name, NULL, 0);
+ 		if (size >= 0) {
+ 			*valuelength = size;
+ 			errno = E2BIG;
+@@ -185,7 +219,7 @@
+ 		if (flags & ATTR_DONTFOLLOW)
+ 			c = lsetxattr(path, name, buffer, valuelength, lflags);
+ 		else
+-			c = setxattr(path, name, buffer, valuelength, lflags);
++			c = setxattr5(path, name, buffer, valuelength, lflags);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -209,7 +243,7 @@
+ 	for (compat = 0; compat < 2; compat++) {
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+-		c = fsetxattr(fd, name, buffer, valuelength, lflags);
++		c = fsetxattr5(fd, name, buffer, valuelength, lflags);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -229,7 +263,7 @@
+ 		if (flags & ATTR_DONTFOLLOW)
+ 			c = lremovexattr(path, name);
+ 		else
+-			c = removexattr(path, name);
++			c = removexattr2(path, name);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -246,7 +280,7 @@
+ 	for (compat = 0; compat < 2; compat++) {
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+-		c = fremovexattr(fd, name);
++		c = fremovexattr2(fd, name);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -303,7 +337,7 @@
+ 	if (flags & ATTR_DONTFOLLOW)
+ 		length = llistxattr(path, lbuf, sizeof(lbuf) - 1);
+ 	else
+-		length = listxattr(path, lbuf, sizeof(lbuf) - 1);
++		length = listxattr3(path, lbuf, sizeof(lbuf) - 1);
+ 	if (length <= 0)
+ 		return length;
+ 	lbuf[length] = 0;  /* not supposed to be necessary */
+@@ -317,7 +351,7 @@
+ 		if (flags & ATTR_DONTFOLLOW)
+ 			vlength = lgetxattr(path, l, NULL, 0);
+ 		else
+-			vlength =  getxattr(path, l, NULL, 0);
++			vlength =  getxattr4(path, l, NULL, 0);
+ 		if (vlength < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		if (count++ < cursor->opaque[0])
+@@ -351,7 +385,7 @@
+ 	}
+ 	memset(buffer, 0, sizeof(attrlist_t));
+ 
+-	length = flistxattr(fd, lbuf, sizeof(lbuf) - 1);
++	length = flistxattr3(fd, lbuf, sizeof(lbuf) - 1);
+ 	if (length < 0)
+ 		return length;
+ 	lbuf[length] = 0;  /* not supposed to be necessary */
+@@ -362,7 +396,7 @@
+ 	for (l = lbuf; l != lbuf + length; l = strchr(l, '\0') + 1) {
+ 		if (api_unconvert(name, l, flags))
+ 			continue;
+-		vlength = fgetxattr(fd, l, NULL, 0);
++		vlength = fgetxattr4(fd, l, NULL, 0);
+ 		if (vlength < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		if (count++ < cursor->opaque[0])
+--- a/tools/getfattr.c
++++ b/tools/getfattr.c
+@@ -35,6 +35,25 @@
+ #include "walk_tree.h"
+ #include "misc.h"
+ 
++#if defined(__APPLE__)
++ssize_t getxattr4(const char *path, const char *name, void *value, size_t size) {
++	return getxattr(path, name, value, size, 0, 0);
++}
++ssize_t lgetxattr(const char *path, const char *name, void *value, size_t size) {
++	return getxattr(path, name, value, size, 0, XATTR_NOFOLLOW);
++}
++
++ssize_t listxattr3(const char *path, char *name, size_t size) {
++	return listxattr(path, name, size, 0);
++}
++ssize_t llistxattr(const char *path, char *name, size_t size) {
++	return listxattr(path, name, size, XATTR_NOFOLLOW);
++}
++#else
++#define getxattr4 getxattr
++#define listxattr3 listxattr
++#endif
++
+ #define CMD_LINE_OPTIONS "n:de:m:hRLP"
+ #define CMD_LINE_SPEC "[-hRLP] [-n name|-d] [-e en] [-m pattern] path..."
+ 
+@@ -83,13 +102,13 @@
+ int do_getxattr(const char *path, const char *name, void *value, size_t size)
+ {
+ 	return ((walk_flags & WALK_TREE_DEREFERENCE) ?
+-		getxattr : lgetxattr)(path, name, value, size);
++		getxattr4 : lgetxattr)(path, name, value, size);
+ }
+ 
+ int do_listxattr(const char *path, char *list, size_t size)
+ {
+ 	return ((walk_flags & WALK_TREE_DEREFERENCE) ?
+-		listxattr : llistxattr)(path, list, size);
++		listxattr3 : llistxattr)(path, list, size);
+ }
+ 
+ const char *strerror_ea(int err)
+--- a/tools/setfattr.c
++++ b/tools/setfattr.c
+@@ -38,6 +38,25 @@
+ #define CMD_LINE_SPEC1 "{-n name} [-v value] [-h] file..."
+ #define CMD_LINE_SPEC2 "{-x name} [-h] file..."
+ 
++#if defined(__APPLE__)
++int removexattr2(const char *path, const char *name) {
++	return removexattr(path, name, 0);
++}
++int lremovexattr(const char *path, const char *name) {
++	return removexattr(path, name, XATTR_NOFOLLOW);
++}
++
++int setxattr5(const char *path, const char *name, const void *value, size_t size, int flags) {
++	return setxattr(path, name, value, size, 0, flags);
++}
++int lsetxattr(const char *path, const char *name, const void *value, size_t size, int flags) {
++	return setxattr(path, name, value, size, 0, flags | XATTR_NOFOLLOW);
++}
++#else
++#define removexattr2 removexattr
++#define setxattr5 setxattr
++#endif
++
+ static const struct option long_options[] = {
+ 	{ "name",		1, 0, 'n' }, 
+ 	{ "remove",		1, 0, 'x' },
+@@ -90,12 +109,12 @@
+ int do_setxattr(const char *path, const char *name,
+ 		const void *value, size_t size)
+ {
+-	return (opt_deref ? setxattr : lsetxattr)(path, name, value, size, 0);
++	return (opt_deref ? setxattr5 : lsetxattr)(path, name, value, size, 0);
+ }
+ 
+ int do_removexattr(const char *path, const char *name)
+ {
+-	return (opt_deref ? removexattr : lremovexattr)(path, name);
++	return (opt_deref ? removexattr2 : lremovexattr)(path, name);
+ }
+ 
+ int restore(const char *filename)

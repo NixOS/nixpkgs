@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
   gettext,
 }:
 
@@ -27,9 +28,19 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+  ];
 
-  patches = [ ./musl.patch ];
+  patches = [
+    ./musl.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin-libtool-revision.patch
+    ./darwin-version-script.patch
+    ./darwin-xattr.patch
+  ];
 
   postPatch = ''
     for script in install-sh include/install-sh; do
@@ -40,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; darwin ++ linux;
     badPlatforms = lib.platforms.microblaze;
     license = lib.licenses.gpl2Plus;
   };
