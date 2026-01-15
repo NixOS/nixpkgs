@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl.pkgs.ParseYapp
     perl.pkgs.JSON
     libxslt
+    libtasn1 # Needed also natively for `asn1Parser` program
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
@@ -266,6 +267,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.markdown
     tdb
   ];
+
+  strictDeps = true;
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
