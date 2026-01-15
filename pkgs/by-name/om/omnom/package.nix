@@ -13,17 +13,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-auujlRG3RKJYYTi/iptx0Y3Yzqmt6i9AlfjVcqn5YPc=";
+    hash = "sha256-Txqla3fivQdM8oQYGlyaYhSQhBLJRykWkftdmkHxlu8=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-0usbfvGz+9chLGyHHUUStUh7x91ZGfr/+gAXXVA5iNc=";
+  vendorHash = "sha256-meToyr93nmKLZ//h8Gc0rp2hc4vOV9ULU+FbBXmbDv8=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
       pname = "omnom-addons";
       inherit (finalAttrs) version src;
 
-      npmDepsHash = "sha256-sUn5IvcHWJ/yaqeGz9SGvGx9HHAlrcnS0lJxIxUVS6M=";
+      npmDepsHash = "sha256-CIzp6/mBTuSaEFv0lk3d/GZyq1VRDvCSoqrujz4AG/E=";
       sourceRoot = "${finalAttrs'.src.name}/ext";
       npmPackFlags = [ "--ignore-scripts" ];
 
