@@ -169,6 +169,11 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/paperless-ngx/paperless-ngx/commit/bf38ae98f1ac3bae2c6006888a8705e42fbb804f.patch";
       hash = "sha256-ATjtB7dmrXk/R+zjc0y2jJkmvVN7Gmqf0aWMRG9EN7I=";
     })
+    (fetchpatch {
+      name = "GHSA-28cf-xvcf-hw6m.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/7c457466b76d7a4abeca521043de69d3c1f4eb11.patch";
+      hash = "sha256-t2/3lnhj1eywGiX1zmo7aJ+aOEdTWr0xe7yaFj8NeMs=";
+    })
   ];
 
   postPatch = ''
