@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "szyszka";
   };
 }
