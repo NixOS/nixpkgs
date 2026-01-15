@@ -10026,6 +10026,8 @@ self: super: with self; {
     callPackage ../development/python-modules/mozjpeg_lossless_optimization
       { };
 
+  mozjpeg-lossless-optimization = callPackage ../development/python-modules/mozjpeg-lossless-optimization { };
+
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpegdash = callPackage ../development/python-modules/mpegdash { };
