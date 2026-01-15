@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "turtle";
-  version = "0.13.3";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "philippun1";
     repo = "turtle";
     tag = version;
-    hash = "sha256-bfoo2xWBr4jR5EX5H8hiXl6C6HSpNJ93icDg1gwWXqE=";
+    hash = "sha256-+XDDscw5xBUp39tbZLqZWK+wsRDi401mRDjx+VR6Cu0=";
   };
 
   postPatch = ''
