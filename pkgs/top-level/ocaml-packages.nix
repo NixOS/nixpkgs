@@ -2257,6 +2257,8 @@ let
 
         yocaml_runtime = callPackage ../development/ocaml-modules/yocaml/runtime.nix { };
 
+        yocaml_syndication = callPackage ../development/ocaml-modules/yocaml/syndication.nix { };
+
         yocaml_unix = callPackage ../development/ocaml-modules/yocaml/unix.nix { };
 
         yocaml_yaml = callPackage ../development/ocaml-modules/yocaml/yaml.nix { };
