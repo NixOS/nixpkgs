@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = lib.optional stdenv.hostPlatform.isCygwin gnulib.patches.memcpy-fix-backport-250512;
 
+  TEST = 123;
+
   # The GNU Hello `configure` script detects how to link libiconv but fails to actually make use of that.
   # Unfortunately, this cannot be a patch to `Makefile.am` because `autoreconfHook` causes a gettext
   # infrastructure mismatch error when trying to build `hello`.
