@@ -62,7 +62,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       kolloch
       cole-h
-      kranzes
     ];
   };
 }
