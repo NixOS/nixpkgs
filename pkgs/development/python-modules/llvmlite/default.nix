@@ -29,7 +29,7 @@ buildPythonPackage rec {
   version = "0.46.0";
   pyproject = true;
 
-  disabled = isPyPy || pythonAtLeast "3.14";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "numba";
