@@ -130,7 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     nlohmann_json
     openxr-loader
-    onnxruntime
     pipewire
     qt6.qtbase
     qt6.qtsvg
