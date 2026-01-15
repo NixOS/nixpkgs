@@ -1,33 +1,47 @@
 {
   buildDotnetModule,
   fetchFromGitHub,
-  dotnet-sdk_8,
-  dotnet-aspnetcore_8,
+  dotnetCorePackages,
   nixosTests,
   lib,
   mediainfo,
   rhash,
+  _experimental-update-script-combinators,
   nix-update-script,
+  writeShellScript,
+  path,
+
+  withNet9 ? false,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "shoko";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "ShokoAnime";
     repo = "ShokoServer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZO5S0zMwzr4giaO1bmQ4dLBIPrv6eZY7k9Os4GiO4C4=";
+    hash = "sha256-V8DwYLjxklKYmOnYNLp51GRJXgOXKnbgDD4DL4T4lVc=";
     fetchSubmodules = true;
   };
 
-  dotnet-sdk = dotnet-sdk_8;
-  dotnet-runtime = dotnet-aspnetcore_8;
+  patches = lib.optionals withNet9 [
+    ./net9deps.patch
+  ];
 
-  nugetDeps = ./deps.json;
+  dotnet-sdk = dotnetCorePackages.combinePackages (
+    [ dotnetCorePackages.sdk_8_0 ] ++ lib.optionals withNet9 [ dotnetCorePackages.sdk_9_0 ]
+  );
+  dotnet-runtime = dotnetCorePackages.combinePackages (
+    [ dotnetCorePackages.sdk_8_0.aspnetcore ]
+    ++ lib.optionals withNet9 [ dotnetCorePackages.sdk_9_0.aspnetcore ]
+  );
+
+  nugetDeps = if withNet9 then ./net9deps.json else ./deps.json;
   projectFile = "Shoko.CLI/Shoko.CLI.csproj";
   dotnetBuildFlags = "/p:InformationalVersion=\"channel=stable\"";
+  dotnetInstallFlags = lib.optionalString withNet9 "-f net9.0";
 
   executables = [ "Shoko.CLI" ];
   makeWrapperArgs = [
@@ -39,14 +53,23 @@ buildDotnetModule (finalAttrs: {
   runtimeDeps = [ rhash ];
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        ''v([0-9]+\.[0-9]+\.[0-9]+).*''
-      ];
-    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          ''v([0-9]+\.[0-9]+\.[0-9]+).*''
+        ];
+      })
+      [
+        (writeShellScript "update-shoko-withNet9" ''
+          NIXPKGS_PATH="$1"
+          $(nix-build -E 'with import '"$NIXPKGS_PATH"' { }; (shoko.override { withNet9 = true; }).fetch-deps')
+        '')
+        path
+      ]
+    ];
 
-    tests.shoko = nixosTests.shoko;
+    tests = { inherit (nixosTests.shoko) default withPlugins; };
   };
 
   meta = {
@@ -59,6 +82,6 @@ buildDotnetModule (finalAttrs: {
       diniamo
       nanoyaki
     ];
-    inherit (dotnet-sdk_8.meta) platforms;
+    inherit (finalAttrs.dotnet-sdk.meta) platforms;
   };
 })
