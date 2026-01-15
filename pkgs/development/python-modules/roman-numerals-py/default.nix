@@ -4,19 +4,18 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "roman-numerals-py";
-  version = "3.1.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AA-Turner";
     repo = "roman-numerals";
     tag = "v${version}";
-    hash = "sha256-YLF09jYwXq48iMvmqbj/cocYJPp7RsCXzbN0DV9gpis=";
+    hash = "sha256-v+aPIcsggjRJ3l6Xfw97b3zcqpyWNY4XWy2+5aWyitY=";
   };
 
   postPatch = ''
