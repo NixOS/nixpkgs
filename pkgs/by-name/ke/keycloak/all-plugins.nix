@@ -13,6 +13,7 @@
   keycloak-metrics-spi = callPackage ./keycloak-metrics-spi { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
+  keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
 
   # junixsocket provides Unix domain socket support for JDBC connections,
   # which is required for connecting to PostgreSQL via Unix socket.
