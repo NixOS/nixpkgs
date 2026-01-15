@@ -4,22 +4,25 @@
 # ```
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchzip,
-  procps,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  bubblewrap,
+  procps,
+  socat,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-M2ZLGnrvNki7B2jOh4Uq2SfSxkICh76uRIFogq+kKZ8=";
+    hash = "sha256-s/XPemwJYPUNFBgWo00VQ6W6eFIy44y9lFoRN0Duk9I=";
   };
 
-  npmDepsHash = "sha256-Y+4ZcfEJJg4/XYc3vNLw4R5OJz3FlYvgQpkB739jKAQ=";
+  npmDepsHash = "sha256-BW3mW3fRXrv+TgW3q+Rc43o0q3t1ra/XUqlUSiA0hTU=";
 
   strictDeps = true;
 
@@ -44,9 +47,17 @@ buildNpmPackage (finalAttrs: {
       --set DISABLE_AUTOUPDATER 1 \
       --unset DEV \
       --prefix PATH : ${
-        lib.makeBinPath [
-          procps # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
-        ]
+        lib.makeBinPath (
+          [
+            # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
+            procps
+          ]
+          # the following packages are required for the sandbox to work (Linux only)
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            bubblewrap
+            socat
+          ]
+        )
       }
   '';
 

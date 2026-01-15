@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch2,
+  pythonAtLeast,
   pythonOlder,
   hatchling,
   hatch-vcs,
@@ -21,14 +22,16 @@
   pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nibabel";
   version = "5.3.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jSAGtw1yf9CnmKiK5f1kM5dB9Db8/IPW6jJWzbxRxbc=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nibabel";
+    tag = finalAttrs.version;
+    hash = "sha256-Kdz7kCY5QnA9OiV/FPW1RerjP1GGLn+YaTwFpA0dJAM=";
   };
 
   patches = [
@@ -68,7 +71,12 @@ buildPythonPackage rec {
     pytest-xdist
     pytest7CheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/nipy/nibabel/issues/1390
+    "test_deprecator_maker"
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -76,9 +84,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://nipy.org/nibabel";
-    changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
+    changelog = "https://github.com/nipy/nibabel/blob/${finalAttrs.version}/Changelog";
     description = "Access a multitude of neuroimaging data formats";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ashgillman ];
   };
-}
+})

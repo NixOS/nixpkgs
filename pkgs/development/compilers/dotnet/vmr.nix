@@ -59,10 +59,11 @@ let
 
   _icu = if isDarwin then darwin.ICU else icu;
 
-in
-stdenv.mkDerivation rec {
-  pname = "${baseName}-vmr";
   version = release;
+in
+stdenv.mkDerivation {
+  pname = "${baseName}-vmr";
+  inherit version;
 
   # TODO: fix this in the binary sdk packages
   preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -398,9 +399,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "10") [
-    "--branding rtm"
   ]
   ++ [
     "--"

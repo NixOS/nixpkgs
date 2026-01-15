@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +24,5 @@ buildPythonPackage rec {
     mainProgram = "future-fstrings-show";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
-    broken = pythonOlder "3.6"; # dependency tokenize-rt not packaged
   };
 }

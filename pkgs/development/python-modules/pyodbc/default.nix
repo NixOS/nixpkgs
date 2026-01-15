@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  pythonOlder,
   unixODBC,
 }:
 
@@ -12,7 +11,7 @@ buildPythonPackage rec {
   version = "5.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || isPyPy; # use pypypdbc instead
+  disabled = isPyPy; # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;

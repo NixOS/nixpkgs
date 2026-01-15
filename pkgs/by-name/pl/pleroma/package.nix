@@ -126,6 +126,14 @@ beamPackages.mixRelease rec {
       syslog = prev.syslog.override { buildPlugins = with beamPackages; [ pc ]; };
 
       vix = prev.vix.override {
+        # TOREMOVE override when upstream bumps the dependency. See
+        # https://git.pleroma.social/pleroma/pleroma/-/issues/3393
+        src = fetchFromGitHub {
+          owner = "akash-akya";
+          repo = "vix";
+          tag = "v0.36.0";
+          hash = "sha256-14gqzu5TBbgrqCU4+qz0jWCK6Ar5JvmKKLcfgz5BHtw=";
+        };
         nativeBuildInputs = [ pkg-config ];
         buildInputs = [
           vips

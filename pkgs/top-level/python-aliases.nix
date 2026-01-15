@@ -276,6 +276,7 @@ mapAliases {
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
   mpris-server = throw "mpris-server was removed because it is unused"; # added 2025-10-31
   msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
+  mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29
@@ -391,6 +392,7 @@ mapAliases {
   python-jsonrpc-server = throw "python-jsonrpc-server has been removed because it was no longer used by anything"; # added 2025-11-11
   python-Levenshtein = throw "'python-Levenshtein' has been renamed to/replaced by 'levenshtein'"; # Converted to throw 2025-10-29
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2025-10-29
+  python-qt = throw "python-qt has been removed, because hard to maintain and not required by anything"; # Added 2025-01-14
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
   python-u2flib-server = throw "'python-u2flib-server' has been removed, since it was broken and archived upstream"; # added 2025-11-08

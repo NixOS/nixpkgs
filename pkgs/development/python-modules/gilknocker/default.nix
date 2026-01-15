@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pkg-config,
@@ -52,6 +54,24 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-benchmark
     pytest-rerunfailures
+  ];
+
+  enabledTestPaths = [
+    # skip the benchmarks as they can segfault
+    # https://github.com/milesgranger/gilknocker/issues/35
+    "tests"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # segfaults
+    # https://github.com/milesgranger/gilknocker/issues/35
+    "benchmarks"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # depends on an empirically-derived threshold that fails on fast and slow machines.
+    # https://github.com/milesgranger/gilknocker/issues/36
+    "test_knockknock_some_gil"
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

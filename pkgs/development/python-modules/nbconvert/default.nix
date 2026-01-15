@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   beautifulsoup4,
@@ -18,7 +17,6 @@
   pandocfilters,
   pygments,
   traitlets,
-  importlib-metadata,
   flaky,
   ipykernel,
   ipywidgets,
@@ -70,8 +68,7 @@ buildPythonPackage rec {
     pygments
     traitlets
   ]
-  ++ bleach.optional-dependencies.css
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ++ bleach.optional-dependencies.css;
 
   preCheck = ''
     export HOME=$(mktemp -d)
