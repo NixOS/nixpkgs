@@ -9988,10 +9988,6 @@ with pkgs;
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs (callPackages ../data/fonts/lohit-fonts { });
 
-  marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
-    inherit (kdePackages) breeze-icons;
-  };
-
   mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
   noto-fonts-cjk-serif-static = callPackage ../by-name/no/noto-fonts-cjk-serif/package.nix {
