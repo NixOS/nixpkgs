@@ -70,31 +70,46 @@ in
       unitConfig.StopWhenUnneeded = true;
     };
 
-    # Service executed before suspending/hibernating.
-    systemd.services.pre-sleep = {
-      description = "Pre-Sleep Actions";
-      wantedBy = [ "sleep.target" ];
-      before = [ "sleep.target" ];
-      script = ''
-        ${cfg.powerDownCommands}
-      '';
-      serviceConfig.Type = "oneshot";
-    };
+    systemd.services = {
+      # Service executed before suspending/hibernating.
+      pre-sleep = {
+        description = "Pre-Sleep Actions";
+        wantedBy = [ "sleep.target" ];
+        before = [ "sleep.target" ];
+        script = cfg.powerDownCommands;
+        serviceConfig.Type = "oneshot";
+      };
 
-    systemd.services.post-resume = {
-      description = "Post-Resume Actions";
-      after = [
-        "suspend.target"
-        "hibernate.target"
-        "hybrid-sleep.target"
-        "suspend-then-hibernate.target"
-      ];
-      script = ''
-        /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
-        ${cfg.resumeCommands}
-        ${cfg.powerUpCommands}
-      '';
-      serviceConfig.Type = "oneshot";
+      # Service executed after resuming from suspend/hibernate
+      post-resume = {
+        description = "Post-Resume Actions";
+        after = [
+          "suspend.target"
+          "hibernate.target"
+          "hybrid-sleep.target"
+          "suspend-then-hibernate.target"
+        ];
+        script = ''
+          /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
+          ${cfg.resumeCommands}
+          ${cfg.powerUpCommands}
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+
+      # Service executed before shutdown
+      pre-shutdown = {
+        description = "Pre-Shutdown Actions";
+        wantedBy = [
+          "shutdown.target"
+        ];
+        before = [
+          "shutdown.target"
+        ];
+        script = cfg.powerDownCommands;
+        serviceConfig.Type = "oneshot";
+        unitConfig.DefaultDependencies = false;
+      };
     };
 
   };
