@@ -3,14 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  aioresponses,
   azure-core,
   azure-identity,
   isodate,
   msrest,
-  responses,
-  pytestCheckHook,
+  aioresponses,
   pytest-asyncio,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -28,19 +28,19 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    aioresponses
     azure-core
     azure-identity
     isodate
     msrest
-    responses
   ];
 
   pythonImportsCheck = [ "pydo" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aioresponses
     pytest-asyncio
+    pytestCheckHook
+    responses
   ];
 
   # integration tests require hitting the live api with a
