@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kobzol/cargo-wizard";
     changelog = "https://github.com/kobzol/cargo-wizard/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "cargo-wizard";
   };
 }

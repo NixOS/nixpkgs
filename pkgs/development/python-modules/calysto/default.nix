@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Tools for Jupyter and Python";
     homepage = "https://github.com/Calysto/calysto";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

@@ -100,7 +100,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kranzes
       SuperSandro2000
     ];
     platforms = lib.platforms.linux;
