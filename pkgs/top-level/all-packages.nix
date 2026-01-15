@@ -1632,9 +1632,7 @@ with pkgs;
 
   asmrepl = callPackage ../development/interpreters/asmrepl { };
 
-  avahi = callPackage ../development/libraries/avahi { };
-
-  avahi-compat = callPackage ../development/libraries/avahi {
+  avahi-compat = callPackage ../by-name/av/avahi/package.nix {
     withLibdnssdCompat = true;
   };
 
@@ -1718,13 +1716,6 @@ with pkgs;
           --prefix PATH ":" "${git}/bin:${cabal-install}/bin"
       '';
     });
-
-  capstone = callPackage ../development/libraries/capstone { };
-  capstone_4 = callPackage ../development/libraries/capstone/4.nix { };
-
-  ceres-solver = callPackage ../development/libraries/ceres-solver {
-    gflags = null; # only required for examples/tests
-  };
 
   cedille = callPackage ../applications/science/logic/cedille {
     inherit (haskellPackages)
@@ -2561,10 +2552,6 @@ with pkgs;
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
-
-  fox = callPackage ../development/libraries/fox { };
-
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
 
   fpm = callPackage ../tools/package-management/fpm { };
 
@@ -3593,13 +3580,7 @@ with pkgs;
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
-  rtaudio = callPackage ../development/libraries/audio/rtaudio {
-    jack = libjack2;
-  };
-
-  rtmidi = callPackage ../development/libraries/audio/rtmidi {
-    jack = libjack2;
-  };
+  rtaudio = rtaudio_5;
 
   mpi = openmpi; # this attribute should used to build MPI applications
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica { });
@@ -6577,10 +6558,6 @@ with pkgs;
 
   acl = callPackage ../development/libraries/acl { };
 
-  agg = callPackage ../development/libraries/agg {
-    stdenv = gccStdenv;
-  };
-
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
@@ -6640,24 +6617,11 @@ with pkgs;
 
   botanEsdm = botan3.override { withEsdm = true; };
 
-  c-ares = callPackage ../development/libraries/c-ares { };
-
-  c-aresMinimal = callPackage ../development/libraries/c-ares {
-    withCMake = false;
-  };
-
-  inherit (callPackages ../development/libraries/c-blosc { })
-    c-blosc
-    c-blosc2
-    ;
+  c-aresMinimal = callPackage ../by-name/c-/c-ares/package.nix { withCMake = false; };
 
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
   ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
-
-  cctag = callPackage ../development/libraries/cctag {
-    stdenv = clangStdenv;
-  };
 
   ceedling = callPackage ../development/tools/ceedling { };
 
@@ -6677,9 +6641,7 @@ with pkgs;
     ]
   );
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
-
-  clucene_core = clucene_core_2;
+  clucene-core = clucene-core_2;
 
   codecserver = callPackage ../applications/audio/codecserver {
     protobuf = protobuf_21;
@@ -6711,14 +6673,6 @@ with pkgs;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
   db62 = callPackage ../development/libraries/db/db-6.2.nix { };
 
-  dbus = callPackage ../development/libraries/dbus { };
-
-  makeDBusConf = callPackage ../development/libraries/dbus/make-dbus-conf.nix { };
-
-  draco = callPackage ../development/libraries/draco {
-    tinygltf = callPackage ../development/libraries/draco/tinygltf.nix { };
-  };
-
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
@@ -6732,15 +6686,9 @@ with pkgs;
       ;
   };
 
-  eccodes = callPackage ../development/libraries/eccodes {
-    pythonPackages = python3Packages;
-    stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
-  };
-
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
-  enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
-  enchant = enchant2;
+  enchant = enchant_2;
 
   factorPackages-0_99 = callPackage ./factor-packages.nix {
     factor-unwrapped = callPackage ../development/compilers/factor-lang/0.99.nix { };
@@ -6761,17 +6709,6 @@ with pkgs;
   factor-lang-0_100 = factorPackages-0_100.factor-lang;
   factor-lang-0_101 = factorPackages-0_101.factor-lang;
   factor-lang = factor-lang-0_101;
-
-  farstream = callPackage ../development/libraries/farstream {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-libav
-      ;
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
 
   inherit (callPackage ../development/libraries/ffmpeg { })
     ffmpeg_4
@@ -6801,23 +6738,21 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  fltk13 = callPackage ../development/libraries/fltk { };
-  fltk14 = callPackage ../development/libraries/fltk/1.4.nix { };
-  fltk13-minimal = fltk13.override {
+  fltk_1_3-minimal = fltk_1_3.override {
     withGL = false;
     withCairo = false;
     withExamples = false;
     withDocs = false;
   };
-  fltk14-minimal = fltk14.override {
+  fltk_1_4-minimal = fltk_1_4.override {
     withGL = false;
     withCairo = false;
     withPango = false;
     withExamples = false;
     withDocs = false;
   };
-  fltk = fltk13;
-  fltk-minimal = fltk13-minimal;
+  fltk = fltk_1_3;
+  fltk-minimal = fltk_1_3-minimal;
 
   inherit (callPackages ../development/libraries/fmt { })
     fmt_9
@@ -6827,9 +6762,6 @@ with pkgs;
     ;
 
   fmt = fmt_12;
-
-  fplll = callPackage ../development/libraries/fplll { };
-  fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
 
   freeipa = callPackage ../os-specific/linux/freeipa {
     # NOTE: freeipa and sssd need to be built with the same version of python
@@ -6848,41 +6780,23 @@ with pkgs;
 
   makeFontsCache = callPackage ../development/libraries/fontconfig/make-fonts-cache.nix { };
 
-  gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets {
-    protobuf = protobuf_21;
-  };
-
   gamt = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
-
-  gcr = callPackage ../development/libraries/gcr { };
-
-  gcr_4 = callPackage ../development/libraries/gcr/4.nix { };
 
   gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
 
-  gegl = callPackage ../development/libraries/gegl {
-    openexr = openexr_2;
-  };
-
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
-  geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
+  geoipWithDatabase = makeOverridable (callPackage ../by-name/ge/geoip/package.nix) {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
   };
-
-  geoip = callPackage ../development/libraries/geoip { };
 
   gettext = callPackage ../development/libraries/gettext { };
 
   gdalMinimal = gdal.override {
     useMinimalFeatures = true;
-  };
-
-  gdcm = callPackage ../development/libraries/gdcm {
-    inherit (darwin) DarwinTools;
   };
 
   ghp-import = with python3Packages; toPythonApplication ghp-import;
@@ -6891,10 +6805,7 @@ with pkgs;
 
   graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
 
-  glew = callPackage ../development/libraries/glew { };
-  glew110 = callPackage ../development/libraries/glew/1.10.nix { };
   glfw = glfw3;
-  glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
 
   glfw3-minecraft = callPackage ../by-name/gl/glfw3/package.nix {
     withMinecraftPatch = true;
@@ -7059,11 +6970,6 @@ with pkgs;
 
   gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
 
-  gnutls = callPackage ../development/libraries/gnutls {
-    util-linux = util-linuxMinimal; # break the cyclic dependency
-    autoconf = buildPackages.autoconf269;
-  };
-
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
   glib = callPackage ../by-name/gl/glib/package.nix (
@@ -7079,32 +6985,16 @@ with pkgs;
     }
   );
 
-  glibmm = callPackage ../development/libraries/glibmm { };
-
-  glibmm_2_68 = callPackage ../development/libraries/glibmm/2.68.nix { };
-
   glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
   # Not moved to aliases while we decide if we should split the package again.
   atk = at-spi2-core;
-
-  atkmm = callPackage ../development/libraries/atkmm { };
-
-  atkmm_2_36 = callPackage ../development/libraries/atkmm/2.36.nix { };
-
-  cairomm = callPackage ../development/libraries/cairomm { };
-
-  cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
 
   pangomm = callPackage ../development/libraries/pangomm { };
 
   pangomm_2_48 = callPackage ../development/libraries/pangomm/2.48.nix { };
 
   pangomm_2_42 = callPackage ../development/libraries/pangomm/2.42.nix { };
-
-  gdk-pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
-
-  gdk-pixbuf-xlib = callPackage ../development/libraries/gdk-pixbuf/xlib.nix { };
 
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix { };
 
@@ -7992,9 +7882,6 @@ with pkgs;
     protobuf_21
     ;
 
-  flatbuffers = callPackage ../development/libraries/flatbuffers { };
-  flatbuffers_23 = callPackage ../development/libraries/flatbuffers/23.nix { };
-
   nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enableMalloc = true; };
 
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
@@ -8808,8 +8695,6 @@ with pkgs;
     python = python3;
   };
   cassandra = cassandra_4;
-
-  cassandra-cpp-driver = callPackage ../development/libraries/cassandra-cpp-driver/default.nix { };
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jre;
@@ -10087,10 +9972,6 @@ with pkgs;
   # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
   # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
   lohit-fonts = recurseIntoAttrs (callPackages ../data/fonts/lohit-fonts { });
-
-  marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
-    inherit (kdePackages) breeze-icons;
-  };
 
   mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
@@ -11626,7 +11507,7 @@ with pkgs;
   };
 
   rakarrack = callPackage ../applications/audio/rakarrack {
-    fltk = fltk13;
+    fltk = fltk_1_3;
   };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
@@ -12071,7 +11952,7 @@ with pkgs;
   );
 
   virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
-    fltk = fltk13;
+    fltk = fltk_1_3;
   };
 
   virtualgl = callPackage ../tools/X11/virtualgl {
@@ -13906,7 +13787,7 @@ with pkgs;
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
   dillo = callPackage ../by-name/di/dillo/package.nix {
-    fltk = fltk13;
+    fltk = fltk_1_3;
   };
 
   libkazv = callPackage ../by-name/li/libkazv/package.nix {

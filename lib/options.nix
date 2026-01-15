@@ -77,12 +77,12 @@ rec {
   isOption = lib.isType "option";
 
   /**
-    Creates an Option attribute set. `mkOption` accepts an attribute set with the following keys:
+    Creates an Option declaration for use with the module system.
 
     # Inputs
 
-    Structured attribute set
-    : Attribute set containing none or some of the following attributes.
+    Attribute set
+    : containing none or some of the following attributes.
 
       `default`
       : Optional default value used when no definition is given in the configuration.
@@ -122,16 +122,16 @@ rec {
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
 
-      `...` (any other attribute)
-      : Any other attribute is passed through to the resulting option attribute set.
-
     # Examples
     :::{.example}
     ## `lib.options.mkOption` usage example
 
     ```nix
-    mkOption { }  // => { _type = "option"; }
-    mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+    mkOption { }
+    # => Empty option; type = types.anything
+
+    mkOption { default = "foo"; }
+    # => Same as above, with a default value
     ```
 
     :::

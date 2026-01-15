@@ -2115,6 +2115,9 @@ rec {
     `feature`
     : The feature to be set
 
+    `feature`
+    : The feature to be set
+
     `value`
     : The desired value
 
