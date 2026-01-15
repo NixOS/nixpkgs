@@ -18,6 +18,7 @@ let
     concatMapStringsSep
     evalModules
     functionArgs
+    getBin
     hasSuffix
     isAttrs
     isDerivation
@@ -130,6 +131,7 @@ let
       in
       pkgs.runCommand "lazy-options.json"
         rec {
+          nativeBuildInputs = [ (getBin config.nix.package) ];
           # `lib` shares the `filteredModules` tree, so that `declarations` pointing
           # into it are stripped by the `extraSources` of `../../doc/manual`, just
           # like the ones pointing into `modules` and `nixos`.
@@ -152,7 +154,7 @@ let
           printf "%s" "$modules" > "$modulesPath"
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
-          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
+          nix-instantiate \
             --show-trace \
             --eval --json --strict \
             --argstr libPath "$libPath" \
