@@ -181,11 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
     (withFeatureAs true "auto-load-safe-path" (builtins.concatStringsSep ":" safePaths))
     (withFeature enableDebuginfod "debuginfod")
     (enableFeature (!stdenv.hostPlatform.isMusl) "nls")
-  ]
-  ++ optional (!hostCpuOnly) "--enable-targets=all"
-  ++ [
     (enableFeature (!stdenv.hostPlatform.isStatic) "inprocess-agent")
   ]
+  ++ optional (!hostCpuOnly) "--enable-targets=all"
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
   ++ optional (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
