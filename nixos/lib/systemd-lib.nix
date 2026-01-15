@@ -40,6 +40,7 @@ let
     mkIf
     mkOption
     optional
+    optionals
     optionalAttrs
     optionalString
     pipe
@@ -1073,19 +1074,20 @@ rec {
           cred
           // {
             serviceConfig = {
-              BindPaths = if bindPath != null then [ "%d/${cred.name}:${bindPath}" ] else [ ];
-              AssertCredential = if asserted then [ cred.name ] else [ ];
-              ConditionCredential = if conditional then [ cred.name ] else [ ];
+              BindPaths = optionals (bindPath != null) [ "%d/${cred.name}:${bindPath}" ];
+              AssertCredential = optionals asserted [ cred.name ];
+              ConditionCredential = optionals conditional [ cred.name ];
             }
             // (
               if cred.data != null && cred.reference == null && cred.path == null then
-                { ImportCredential = "${cred.ref}:${cred.name}"; }
+                { ImportCredential = [ "${cred.ref}:${cred.name}" ]; }
               else if cred.data == null && cred.reference != null && cred.path == null then
-                { "SetCredential${encrypted}" = "${cred.name}:${cred.data}"; }
+                { "SetCredential${encrypted}" = [ "${cred.name}:${cred.data}" ]; }
               else if cred.data == null && cred.reference == null then
                 {
-                  "LoadCredential${encrypted}" =
-                    if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name;
+                  "LoadCredential${encrypted}" = [
+                    (if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name)
+                  ];
                 }
               else
                 throw "Credential must be given at most one data, path, or reference"
