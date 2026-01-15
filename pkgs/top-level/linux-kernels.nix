@@ -484,7 +484,6 @@ in
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
         nvidia_dc_535 = nvidiaPackages.dc_535;
-        nvidia_dc_565 = nvidiaPackages.dc_565;
 
         # this is not a replacement for nvidia_x11*
         # only the opensource kernel driver exposed for hydra to build

@@ -127,18 +127,6 @@ rec {
     patches = [ rcu_patch ];
   };
 
-  # Drop after next nixos release
-  dc_565 = generic rec {
-    version = "565.57.01";
-    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
-    sha256_64bit = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
-    persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
-    fabricmanagerSha256 = "sha256-umhyehddbQ9+xhhoiKC7SOSVxscA5pcnqvkQOOLIdsM=";
-    useSettings = false;
-    usePersistenced = true;
-    useFabricmanager = true;
-  };
-
   dc_570 = generic rec {
     version = "570.172.08";
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
