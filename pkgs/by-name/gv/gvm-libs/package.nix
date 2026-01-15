@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.34.2";
+  version = "22.35.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
     tag = "v${version}";
-    hash = "sha256-naCk99ZxupBx590MRBorvsNxlYCuKC/B8fufGnZDH1A=";
+    hash = "sha256-3TWJyh9xzS/HLRjAc4hsBuu3P0SquHEZXjunWw1FqWU=";
   };
 
   postPatch = ''
