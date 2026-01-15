@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mpd-mpris";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "natsukagami";
     repo = "mpd-mpris";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w8OH34JW++OYLpNIHfQvc45dFyU/wVWVa+vEwWb8VqU=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "mpd-mpris";
   };
-}
+})
