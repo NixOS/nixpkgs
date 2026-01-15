@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Python scrapper to access ModDB mods, games and more as objects";
     homepage = "https://github.com/ClementJ18/moddb";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

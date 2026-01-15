@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "solaredge-web";
-  version = "0.0.1";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Solarlibs";
     repo = "solaredge-web";
     tag = "v${version}";
-    hash = "sha256-Vf/f5NDmjsKY8F5//8uAk+dJEaku94yjNaD2XyX7Vuk=";
+    hash = "sha256-kVjhXW+MPIh41IIaTHCKXz+SOfZ0w61fCBsutNszrAY=";
   };
 
   build-system = [ setuptools ];

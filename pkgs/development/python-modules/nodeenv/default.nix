@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.9.1";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ekalinin";
     repo = "nodeenv";
     tag = version;
-    hash = "sha256-nud8HSfx1ri0UZf25VPCy7swfaSM13u5+HzozK+ikeY=";
+    hash = "sha256-CosZOTWxXFGrc2ZvPPUwFcUv1blZhyl8MWPnoRCpBBo=";
   };
 
   build-system = [
