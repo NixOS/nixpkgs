@@ -274,7 +274,7 @@ let
       titleOcr = "r\"(${builtins.concatStringsSep "|" titles})\"";
     in
     builtins.listToAttrs (
-      builtins.map (
+      map (
         {
           name,
           left,

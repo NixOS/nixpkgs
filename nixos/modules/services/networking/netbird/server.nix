@@ -62,7 +62,7 @@ in
           TURNConfig.Turns = mkDefault [
             {
               Proto = "udp";
-              URI = "turn:${turnDomain}:${builtins.toString turnPort}";
+              URI = "turn:${turnDomain}:${toString turnPort}";
               Username = "netbird";
               Password =
                 if (cfg.coturn.password != null) then

@@ -14,7 +14,7 @@ let
 
   settings =
     if (cfg.settings != null) then
-      builtins.removeAttrs
+      removeAttrs
         (
           cfg.settings
           // {

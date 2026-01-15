@@ -1713,7 +1713,7 @@ in
                 fastcgi_pass unix:${fpm.socket};
                 fastcgi_intercept_errors on;
                 fastcgi_request_buffering ${if cfg.nginx.enableFastcgiRequestBuffering then "on" else "off"};
-                fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
+                fastcgi_read_timeout ${toString cfg.fastcgiTimeout}s;
               '';
             };
             "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
