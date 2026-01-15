@@ -21,6 +21,7 @@
   which,
   opencv,
   curl,
+  git,
 
   enable_upx ? true,
   upx,
@@ -85,6 +86,7 @@ let
   llama-cpp-rpc =
     (llama-cpp-grpc.overrideAttrs (prev: {
       name = "llama-cpp-rpc";
+      postPatch = "";
       cmakeFlags = prev.cmakeFlags ++ [
         (lib.cmakeBool "GGML_AVX" false)
         (lib.cmakeBool "GGML_AVX2" false)
@@ -108,21 +110,36 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "d6d2c2ab8c8865784ba9fef37f2b2de3f2134d33";
-          hash = "sha256-b9B5I3EbBFrkWc6RLXMWcCRKayyWjlGuQrogUcrISrc=";
+          rev = "516a4ca9b5f2fa72c2a71f412929a67cf76a6213";
+          hash = "sha256-oestuqPbrSSOa+GKQrtIuqqIAaweMxqkBcfpY1GUDpo=";
           fetchSubmodules = true;
         };
         postPatch = ''
           cd examples
-          cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
-          cp llava/clip* llava/llava.* grpc-server
-          printf "\nadd_subdirectory(grpc-server)" >> CMakeLists.txt
-
+          if [ -d ${src}/backend/cpp/llama-cpp ]; then
+            cp -r --no-preserve=mode ${src}/backend/cpp/llama-cpp grpc-server
+          else
+            cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
+          fi
+          if [ -d llava ]; then
+            cp llava/clip* llava/llava.* grpc-server
+          fi
+          cp ../tools/server/server-*.cpp grpc-server/
+          cp ../tools/server/server-*.h grpc-server/
+          cp ../vendor/nlohmann/json.hpp grpc-server/json.hpp
+          cp ../vendor/cpp-httplib/httplib.h grpc-server/httplib.h
           cp ${src}/backend/backend.proto grpc-server
+          substituteInPlace grpc-server/grpc-server.cpp \
+            --replace-warn "params.fit_params_target = 1024 * 1024 * 1024;" \
+              "params.fit_params_target.assign(params.fit_params_target.size(), 1024ull * 1024 * 1024);"
+          substituteInPlace grpc-server/grpc-server.cpp \
+            --replace-warn "params.fit_params_target = static_cast<size_t>(std::stoi(optval_str)) * 1024 * 1024;" \
+              "params.fit_params_target.assign(params.fit_params_target.size(), static_cast<size_t>(std::stoi(optval_str)) * 1024 * 1024);"
           sed -i grpc-server/CMakeLists.txt \
             -e '/get_filename_component/ s;[.\/]*backend/;;' \
             -e '$a\install(TARGETS ''${TARGET} RUNTIME)'
           cd ..
+          printf "\nadd_subdirectory(examples/grpc-server)" >> CMakeLists.txt
         '';
         cmakeFlags = prev.cmakeFlags ++ [
           (lib.cmakeBool "BUILD_SHARED_LIBS" false)
@@ -138,6 +155,17 @@ let
           openssl
           curl
         ];
+        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ git ];
+        postInstall = ''
+          if [ -e $out/bin/llama-cli ]; then
+            ln -sf $out/bin/llama-cli $out/bin/llama
+          fi
+          mkdir -p $out/include
+          cp $src/include/llama.h $out/include/
+          if [ -e bin/rpc-server ]; then
+            cp bin/rpc-server $out/bin/llama-rpc-server
+          fi
+        '';
       }
     )).override
       {
@@ -187,20 +215,46 @@ let
     passthru.espeak-ng = espeak-ng';
   };
 
-  piper-tts' = piper-tts.overrideAttrs (self: {
+  piper-tts' = stdenv.mkDerivation {
     name = "piper-tts'";
     inherit (go-piper) src;
     sourceRoot = "${go-piper.src.name}/piper";
-    installPhase = null;
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+    buildInputs = [
+      espeak-ng'
+      piper-phonemize
+      fmt
+      spdlog
+      onnxruntime
+    ];
+    cmakeFlags = [
+      (lib.cmakeFeature "FMT_DIR" "${fmt}")
+      (lib.cmakeFeature "SPDLOG_DIR" "${spdlog}")
+      (lib.cmakeFeature "PIPER_PHONEMIZE_DIR" "${piper-phonemize}")
+    ];
     postInstall = ''
-      cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
+      if [ -f CMakeFiles/piper.dir/src/cpp/piper.cpp.o ]; then
+        cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
+      elif [ -f build/CMakeFiles/piper.dir/src/cpp/piper.cpp.o ]; then
+        cp build/CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
+      else
+        echo "piper.cpp.o not found in expected build directories" >&2
+        exit 1
+      fi
       cd $out
-      mkdir bin lib
-      mv lib*so* lib/
-      mv piper piper_phonemize bin/
+      mkdir -p bin lib
+      if ls lib*so* >/dev/null 2>&1; then
+        mv lib*so* lib/
+      fi
+      if [ -e piper ]; then
+        mv piper bin/piper_phonemize
+      fi
       rm -rf cmake pkgconfig espeak-ng-data *.ort
     '';
-  });
+  };
 
   go-piper = stdenv.mkDerivation {
     name = "go-piper";
@@ -242,8 +296,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "6266a9f9e56a5b925e9892acf650f3eb1245814d";
-      hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
+      rev = "v1.8.2";
+      hash = "sha256-OU5mDnLZHmtdSEN5u0syJcU91L+NCO45f9eG6OsgFfU=";
     };
 
     nativeBuildInputs = [
@@ -298,6 +352,9 @@ let
         | tar cf - --null --files-from - \
         | tar xf - -C $out/build
     '';
+    cmakeFlags = [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    ];
     nativeBuildInputs = [ cmake ];
   };
 
@@ -335,12 +392,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.28.0";
+  version = "3.9.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     tag = "v${version}";
-    hash = "sha256-Hpz0dGkgasSY/FGO7mDzqsLjXut0LdQ9PUXGaURUOlY=";
+    hash = "sha256-oYKO50xvat5128JuEyH/tTQO4eH2EcSblglEtL1QSNI=";
   };
 
   prepare-sources =
@@ -359,7 +416,7 @@ let
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-1OY/y1AeL0K+vOU4Jk/cj7rToVLC9EkkNhgifB+icDM=";
+    vendorHash = "sha256-yC6e+BbwrK9qYHWmnnsOWUvCpQxUGY7Y6+WPezHwxWA=";
 
     env.NIX_CFLAGS_COMPILE = " -isystem ${opencv}/include/opencv4";
 
@@ -371,8 +428,17 @@ let
         -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
         -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/silero-vad/ d' \
 
-      sed -i backend/go/image/stablediffusion-ggml/Makefile \
-        -e '/^libsd/ s,$, $(COMBINED_LIB),'
+      if [ -f backend/go/image/stablediffusion-ggml/Makefile ]; then
+        sed -i backend/go/image/stablediffusion-ggml/Makefile \
+          -e '/^libsd/ s,$, $(COMBINED_LIB),'
+      fi
+
+      substituteInPlace backend/cpp/llama-cpp/grpc-server.cpp \
+        --replace-warn "params.fit_params_target = 1024 * 1024 * 1024;" \
+          "params.fit_params_target.assign(params.fit_params_target.size(), 1024ull * 1024 * 1024);"
+      substituteInPlace backend/cpp/llama-cpp/grpc-server.cpp \
+        --replace-warn "params.fit_params_target = static_cast<size_t>(std::stoi(optval_str)) * 1024 * 1024;" \
+          "params.fit_params_target.assign(params.fit_params_target.size(), static_cast<size_t>(std::stoi(optval_str)) * 1024 * 1024);"
 
     ''
     + lib.optionalString with_cublas ''
@@ -384,13 +450,14 @@ let
       shopt -s extglob
       mkdir -p backend-assets/grpc
       cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-fallback
-      cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
+      cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
 
       mkdir -p backend/cpp/llama/llama.cpp
 
       mkdir -p backend-assets/util
       cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
 
+      mkdir -p backend/go/image/stablediffusion-ggml
       cp -r --no-preserve=mode,ownership ${stable-diffusion}/build backend/go/image/stablediffusion-ggml/build
 
       # avoid rebuild of prebuilt make targets
@@ -427,7 +494,15 @@ let
     enableParallelBuilding = false;
 
     modBuildPhase = prepare-sources + ''
-      make protogen-go
+      mkdir -p pkg/grpc/proto
+      protoc \
+        --experimental_allow_proto3_optional \
+        -Ibackend/ \
+        --go_out=pkg/grpc/proto/ \
+        --go_opt=paths=source_relative \
+        --go-grpc_out=pkg/grpc/proto/ \
+        --go-grpc_opt=paths=source_relative \
+        backend/backend.proto
       go mod tidy -v
     '';
 
@@ -436,6 +511,7 @@ let
     # should be passed as makeFlags, but build system failes with strings
     # containing spaces
     env.GO_TAGS = builtins.concatStringsSep " " GO_TAGS;
+    env.LD_FLAGS = "-s -w -X github.com/mudler/LocalAI/internal.Version=v${version} -X github.com/mudler/LocalAI/internal.Commit=unknown";
 
     makeFlags = [
       "VERSION=v${version}"
@@ -447,18 +523,23 @@ let
     buildPhase = ''
       runHook preBuild
 
-      local flagsArray=(
-        ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
-        SHELL=$SHELL
-      )
+      if [ -f backend/go/image/stablediffusion-ggml/Makefile ]; then
+        # copy from Makefile:258
+        make -C backend/go/image/stablediffusion-ggml libsd.a
+      fi
 
-      # copy from Makefile:258
-      make -C backend/go/image/stablediffusion-ggml libsd.a
+      mkdir -p pkg/grpc/proto
+      protoc \
+        --experimental_allow_proto3_optional \
+        -Ibackend/ \
+        --go_out=pkg/grpc/proto/ \
+        --go_opt=paths=source_relative \
+        --go-grpc_out=pkg/grpc/proto/ \
+        --go-grpc_opt=paths=source_relative \
+        backend/backend.proto
 
-      concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
-      echoCmd 'build flags' "''${flagsArray[@]}"
-      make build "''${flagsArray[@]}"
-      unset flagsArray
+      CGO_LDFLAGS="$CGO_LDFLAGS" \
+        go build -ldflags "$LD_FLAGS" -tags "$GO_TAGS" -o ${pname} ./cmd/local-ai
 
       runHook postBuild
     '';
@@ -498,7 +579,8 @@ let
       ''
         wrapProgram $out/bin/${pname} \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath LD_LIBRARY_PATH}" \
-        --prefix PATH : "${ffmpeg}/bin"
+        --prefix PATH : "${ffmpeg}/bin" \
+        --set PCIDB_ENABLE_NETWORK_FETCH "1"
       '';
 
     passthru.local-packages = {
@@ -538,9 +620,6 @@ let
         ck3d
       ];
       platforms = lib.platforms.linux;
-      # Doesn't build with >buildGo123Module.
-      # 'cp: cannot stat 'bin/rpc-server': No such file or directory'
-      broken = true;
     };
   };
 in
