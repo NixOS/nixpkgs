@@ -29173,6 +29173,12 @@
     githubId = 17357089;
     name = "Soham Sen";
   };
+  yureka-wdz = {
+    email = "yureka@wdz.de";
+    github = "yureka-wdz";
+    githubId = 255085068;
+    name = "Yureka (WDZ)";
+  };
   yuriaisaka = {
     email = "yuri.aisaka+nix@gmail.com";
     github = "yuriaisaka";
