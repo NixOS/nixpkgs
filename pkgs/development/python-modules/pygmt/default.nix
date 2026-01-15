@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygmt";
   version = "0.18.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yWB/IRu5B6hnu8e1TvpAaLehr1TMqvnDc5sRgyMw2mM=";
   };
 
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = lib.licenses.bsd3;
-    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${src.tag}";
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${finalAttrs.src.tag}";
     teams = [ lib.teams.geospatial ];
   };
-}
+})
