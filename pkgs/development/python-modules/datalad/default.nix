@@ -152,6 +152,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # pbcopy not found
     "test_wtf"
+    # hangs
+    "test_keyring"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # For all: https://github.com/datalad/datalad/issues/7781
@@ -179,6 +181,9 @@ buildPythonPackage (finalAttrs: {
     # Deprecated in 3.13. Use exc_type_str instead.
     "-Wignore::DeprecationWarning"
   ];
+
+  # Tests use ports on localhost
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "datalad" ];
 
