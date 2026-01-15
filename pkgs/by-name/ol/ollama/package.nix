@@ -222,6 +222,7 @@ goBuild (finalAttrs: {
       cmake -B build \
         -DCMAKE_SKIP_BUILD_RPATH=ON \
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+        $cmakeFlags \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
 
@@ -301,5 +302,7 @@ goBuild (finalAttrs: {
       dit7ya
       prusnak
     ];
+    # CMakeLists.txt:62 (install): install TARGETS RUNTIME_DEPENDENCIES is not supported when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
