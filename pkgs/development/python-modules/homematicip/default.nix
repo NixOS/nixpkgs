@@ -14,7 +14,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "homematicip";
   version = "2.5.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UdVOYJyWLtqJaZgiRa3M9JL+gPzZeecZwElBXqrAdFM=";
   };
 
@@ -79,8 +79,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
-    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
