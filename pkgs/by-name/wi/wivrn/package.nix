@@ -157,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
     (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
     (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
-    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
     (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
