@@ -93,7 +93,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [
       jojosch
-      kranzes
       paumr
     ];
     mainProgram = "jellyfin-desktop";
