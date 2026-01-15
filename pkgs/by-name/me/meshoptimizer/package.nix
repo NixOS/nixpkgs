@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  libwebp,
   nix-update-script,
 }:
 
@@ -10,8 +11,8 @@ let
   basis_universal = fetchFromGitHub {
     owner = "zeux";
     repo = "basis_universal";
-    rev = "8903f6d69849fd782b72a551a4dd04a264434e20";
-    hash = "sha256-o3dCxAAkpMoNkvkM7qD75cPn/obDc/fJ8u7KLPm1G6g=";
+    rev = "88e813c46b3ff42e56ef947b3fa11eeee7a504b0";
+    hash = "sha256-8SQhORPPLBeynlRWjpkXxleo5pgkNmEIjcXbptuo8es=";
   };
 in
 stdenv.mkDerivation rec {
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DMESHOPT_BUILD_GLTFPACK=ON"
-    "-DMESHOPT_BASISU_PATH=${basis_universal}"
+    "-DMESHOPT_GLTFPACK_BASISU_PATH=${basis_universal}"
+    "-DMESHOPT_GLTFPACK_LIBWEBP_PATH=${libwebp.src}"
   ]
   ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
 
