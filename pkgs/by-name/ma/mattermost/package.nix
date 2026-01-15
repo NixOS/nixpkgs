@@ -262,7 +262,6 @@ buildMattermost rec {
     maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
     ];
     platforms = lib.platforms.linux;
