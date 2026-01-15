@@ -1,0 +1,50 @@
+From 0fbeb87f65ad9e9e6cead10d778291db71489f34 Mon Sep 17 00:00:00 2001
+From: iucoen <68678186+iucoen@users.noreply.github.com>
+Date: Thu, 5 Jun 2025 20:08:43 -0700
+Subject: [PATCH] Fix IPv6 link-local nameservers in /etc/resolv.conf (#997)
+
+There are two issues that broke link-local nameservers in resolv.conf
+1. channel->sock_funcs needs to be initialized before
+ares_init_by_sysconfig()
+2. The aif_nametoindex and aif_indextoname function pointers were not
+initlized at all.
+---
+ src/lib/ares_init.c                 | 4 ++--
+ src/lib/ares_set_socket_functions.c | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/ares_init.c b/src/lib/ares_init.c
+index ae78262a11..ce6181833c 100644
+--- a/src/lib/ares_init.c
++++ b/src/lib/ares_init.c
+@@ -271,6 +271,8 @@ int ares_init_options(ares_channel_t           **channelptr,
+     goto done;
+   }
+ 
++  ares_set_socket_functions_def(channel);
++
+   /* Initialize Server List */
+   channel->servers =
+     ares_slist_create(channel->rand_state, server_sort_cb, server_destroy_cb);
+@@ -346,8 +348,6 @@ int ares_init_options(ares_channel_t           **channelptr,
+     goto done;
+   }
+ 
+-  ares_set_socket_functions_def(channel);
+-
+   /* Initialize the event thread */
+   if (channel->optmask & ARES_OPT_EVENT_THREAD) {
+     ares_event_thread_t *e = NULL;
+diff --git a/src/lib/ares_set_socket_functions.c b/src/lib/ares_set_socket_functions.c
+index cfe434327d..9994e81df5 100644
+--- a/src/lib/ares_set_socket_functions.c
++++ b/src/lib/ares_set_socket_functions.c
+@@ -127,6 +127,8 @@ ares_status_t
+     channel->sock_funcs.asendto      = funcs->asendto;
+     channel->sock_funcs.agetsockname = funcs->agetsockname;
+     channel->sock_funcs.abind        = funcs->abind;
++    channel->sock_funcs.aif_nametoindex = funcs->aif_nametoindex;
++    channel->sock_funcs.aif_indextoname = funcs->aif_indextoname;
+   }
+ 
+   /* Implement newer versions here ...*/

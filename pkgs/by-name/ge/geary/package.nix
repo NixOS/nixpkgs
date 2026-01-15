@@ -5,7 +5,7 @@
   pkg-config,
   gtk3,
   vala,
-  enchant2,
+  enchant,
   wrapGAppsHook3,
   meson,
   ninja,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     adwaita-icon-theme
-    enchant2
+    enchant
     folks
     gcr
     glib-networking

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   pkg-config,
 }:
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
   ];
 
   configureFlags = [
-    "FLTK_CONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
+    "FLTK_CONFIG=${lib.getExe' (lib.getDev fltk_1_3) "fltk-config"}"
   ];
 
   meta = {

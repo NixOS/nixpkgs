@@ -760,7 +760,7 @@ builtins.intersectAttrs super {
   fltkhs = overrideCabal (drv: {
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.autoconf ];
     librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [
-      pkgs.fltk13
+      pkgs.fltk_1_3
       pkgs.libGL
       pkgs.libjpeg
     ];

@@ -353,7 +353,7 @@ let
                 pkgs.pkg-config
               ];
 
-              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant_2 ];
 
               postBuild = ''
                 NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"

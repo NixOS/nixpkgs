@@ -154,7 +154,7 @@ in
 
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
 
-    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant2 ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant_2 ];
 
     postBuild =
       old.postBuild or ""
