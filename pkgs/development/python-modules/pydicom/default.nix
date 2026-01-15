@@ -108,13 +108,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/pydicom/pydicom/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # > 200 tests are failing with errors like:
-      # AttributeError: 'FileDataset' object has no attribute 'BitsStored'
-      # AttributeError: 'FileDataset' object has no attribute 'Rows'
-      # AttributeError: The dataset has no 'Pixel Data', 'Float Pixel Data' or 'Double Float Pixel Data' element, no pixel data to decode
-      # pydicom.errors.InvalidDicomError: File is missing DICOM File Meta Information header or the 'DICM' prefix is missing from the header.
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 })
