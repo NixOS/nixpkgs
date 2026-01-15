@@ -25,9 +25,12 @@ let
                     value = null;
                   }) value.outputs
                 );
-                ${if value ? "pname" then "pname" else null} = value.pname;
                 ${if value ? "system" then "system" else null} = value.system;
-                ${if value ? "version" then "version" else null} = value.version;
+                # TODO: Remove the following two fallbacks when all packages have been fixed.
+                # Note: pname and version are *required* by repology, so do not change to
+                # the optional pattern from above.
+                pname = value.pname or value.name;
+                version = value.version or "";
               };
             }
           ]
