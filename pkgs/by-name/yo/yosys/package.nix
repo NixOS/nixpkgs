@@ -62,9 +62,13 @@ let
     plugins:
     let
       paths = lib.closePropagation plugins;
+      libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+      pluginPath = "$out/share/yosys/plugins";
       module_flags =
         with builtins;
-        concatStringsSep " " (map (n: "--add-flags -m --add-flags ${n.plugin}") plugins);
+        concatStringsSep " " (
+          map (n: "--add-flags -m --add-flags ${pluginPath}/${n.plugin}${libExt}") plugins
+        );
     in
     lib.appendToName "with-plugins" (symlinkJoin {
       inherit (yosys) name;
@@ -72,7 +76,7 @@ let
       nativeBuildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/yosys \
-          --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
+          --set YOSYS_PATH $out/share/yosys \
           ${module_flags}
       '';
       meta.mainProgram = "yosys";
