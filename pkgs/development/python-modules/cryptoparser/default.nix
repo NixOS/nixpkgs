@@ -62,7 +62,7 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/coroner/cryptoparser";
     changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
 }
