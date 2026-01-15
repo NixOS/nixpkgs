@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       devhell
       mattkang
+      nicknb
     ];
   };
 })
