@@ -11059,12 +11059,6 @@
     githubId = 16514431;
     name = "Ilham AM";
   };
-  ilian = {
-    email = "nixos@ilian.dev";
-    github = "ilian";
-    githubId = 25505957;
-    name = "ilian";
-  };
   iliayar = {
     email = "iliayar3@gmail.com";
     github = "iliayar";

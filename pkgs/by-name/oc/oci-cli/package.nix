@@ -108,7 +108,6 @@ py.pkgs.buildPythonApplication rec {
       upl
     ];
     maintainers = with lib.maintainers; [
-      ilian
       FKouhai
     ];
   };

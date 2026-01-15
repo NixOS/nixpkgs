@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Live shader coding tool and Shader Showdown workhorse";
     homepage = "https://github.com/gargaj/bonzomatic";
     license = lib.licenses.unlicense;
-    maintainers = [ lib.maintainers.ilian ];
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

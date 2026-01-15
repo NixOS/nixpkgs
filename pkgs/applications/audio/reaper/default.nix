@@ -149,7 +149,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [
       atinba
-      ilian
       viraptor
     ];
   };
