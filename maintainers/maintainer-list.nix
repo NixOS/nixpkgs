@@ -222,6 +222,11 @@
     github = "3JlOy-PYCCKUi";
     githubId = 46464602;
   };
+  _3mdistal = {
+    name = "Alice Alexandra Moore";
+    github = "3mdistal";
+    githubId = 86723305;
+  };
   _3noch = {
     email = "eacameron@gmail.com";
     github = "3noch";
