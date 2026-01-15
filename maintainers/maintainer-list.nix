@@ -12071,6 +12071,12 @@
     githubId = 1198065;
     name = "Jeffrey David Johnson";
   };
+  jeffdess = {
+    email = "jfdess@gmail.com";
+    github = "JeffDess";
+    githubId = 6100619;
+    name = "Jean-François Dessureault";
+  };
   jefflabonte = {
     email = "jean-francois.labonte@brightonlabs.ai";
     github = "JeffLabonte";
