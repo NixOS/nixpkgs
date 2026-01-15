@@ -16,16 +16,18 @@ let
             {
               name = lib.showAttrPath path;
               value = {
-                ${if value ? "meta" then "meta" else null} = value.meta;
-                ${if value ? "name" then "name" else null} = value.name;
-                ${if value ? "outputName" then "outputName" else null} = value.outputName;
+                inherit (value)
+                  meta
+                  name
+                  outputName
+                  system
+                  ;
                 ${if value ? "outputs" then "outputs" else null} = lib.listToAttrs (
                   lib.map (x: {
                     name = x;
                     value = null;
                   }) value.outputs
                 );
-                ${if value ? "system" then "system" else null} = value.system;
                 # TODO: Remove the following two fallbacks when all packages have been fixed.
                 # Note: pname and version are *required* by repology, so do not change to
                 # the optional pattern from above.
