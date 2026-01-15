@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
-  tracy,
+  tracy_0_11,
 
   # nativeBuildInputs
   cmake,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     # These tests aren't built by 'all', but ctest still tries to run them.
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "-E;'test_mln_core|test_mln_widgets'")
     (lib.cmakeFeature "STB_INCLUDE_DIR" "${stb}/include/stb")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TRACY" "${tracy.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TRACY" "${tracy_0_11.src}")
   ];
 
   nativeBuildInputs = [
