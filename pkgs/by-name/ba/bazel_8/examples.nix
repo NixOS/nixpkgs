@@ -108,10 +108,10 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-0QtaPtcBljyhiJGwA8ctSpi+UQp/9q/ZoHUHORizmlY=";
-          aarch64-linux = "sha256-zpiwQ8OB8KhY+kxSXlSOd/zmoH1VGYDGgojf4Or04pQ=";
-          x86_64-darwin = "sha256-+tCDSuYkon1DEARwWTYABJbmysSNAK9vy0tCm8YsGjQ=";
-          x86_64-linux = "sha256-wCWSRc20Yr/hdXn8szbhLAX7Oy3G5keyHTTdO0msnks=";
+          aarch64-darwin = "sha256-mEH4QwsISt8OhBJ+OJt2jMb75OTNzyvK/6YymATf4KQ=";
+          aarch64-linux = "sha256-2ontSBhkG8NiIcyAopSPRogUK2TtXyh+0N1CN4BuZcQ=";
+          x86_64-darwin = "sha256-a1cNDUVxBI8WD2P9bXY0cEj8EJKSRNGMzLmksz+NBSw=";
+          x86_64-linux = "sha256-W9cG+JzU0NVZNpcQaik/sQZPJMAZGQ3/Wl0+5qWodRk=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
