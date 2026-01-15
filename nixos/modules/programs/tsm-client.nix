@@ -286,7 +286,7 @@ let
               ""
             # just output key if value is `true`
             else if isInt value then
-              "  ${builtins.toString value}"
+              "  ${toString value}"
             else if path.check value then
               "  \"${value}\""
             # enclose path in ".."

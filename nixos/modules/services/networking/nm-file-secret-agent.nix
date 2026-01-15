@@ -11,7 +11,7 @@ let
   enabled = (lib.length cfg.ensureProfiles.secrets.entries) > 0;
 
   nmFileSecretAgentConfig = {
-    entry = builtins.map (
+    entry = map (
       i:
       {
         key = i.key;

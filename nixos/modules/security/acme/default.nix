@@ -302,7 +302,7 @@ let
       # We need to collect all the ACME webroots to grant them write
       # access in the systemd service.
       webroots = lib.remove null (
-        lib.unique (builtins.map (certAttrs: certAttrs.webroot) (lib.attrValues config.security.acme.certs))
+        lib.unique (map (certAttrs: certAttrs.webroot) (lib.attrValues config.security.acme.certs))
       );
 
       certificateKey = if data.csrKey != null then "${data.csrKey}" else "certificates/${keyName}.key";
