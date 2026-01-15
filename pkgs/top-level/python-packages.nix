@@ -14339,8 +14339,6 @@ self: super: with self; {
     inherit (pkgs) mesa;
   };
 
-  pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
-
   # `pyqt5-webkit` should not be used by python libraries in
   # pkgs/development/python-modules/*. Putting this attribute in
   # `propagatedBuildInputs` may cause collisions.
