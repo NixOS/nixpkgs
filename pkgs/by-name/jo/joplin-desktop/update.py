@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p 'python3.withPackages(ps: [ps.requests ps.plumbum])' nix-prefetch nix-prefetch-git yarn-berry_4 yarn-berry_4.yarn-berry-fetcher prefetch-npm-deps
+#!nix-shell -i python3 -p 'python3.withPackages(ps: [ps.requests ps.plumbum])' nurl nix-prefetch-git yarn-berry_4 yarn-berry_4.yarn-berry-fetcher prefetch-npm-deps
 import json
 import requests
 import tempfile
@@ -7,9 +7,10 @@ import shutil
 
 from pathlib import Path
 
-from plumbum.cmd import nix_prefetch, nix_build, yarn, chmod, yarn_berry_fetcher, prefetch_npm_deps, diff
+from plumbum.cmd import nurl, nix_build, yarn, chmod, yarn_berry_fetcher, prefetch_npm_deps, diff, git
 
 HERE = Path(__file__).parent
+NIXPKGS_ROOT = git.with_cwd(HERE)["rev-parse", "--show-toplevel"]().strip()
 
 def write_release(release):
     with HERE.joinpath("release-data.json").open("w") as fd:
@@ -43,16 +44,9 @@ print(version)
 
 print("prefetching source...")
 
-release["hash"] = nix_prefetch[
-    "--option",
-    "extra-experimental-features",
-    "flakes",
-    "--tag",
-    f"v{version}",
-    "--rev",
-    "--expr",
-    "null",
-    package
+release["hash"] = nurl[
+    "-e",
+    f'(import {NIXPKGS_ROOT}/. {{}}).joplin-desktop.src.overrideAttrs(_:{{tag="{tag}";}})'
 ]().strip()
 
 print(release["hash"])
@@ -63,7 +57,7 @@ write_release(release)
 src_dir = nix_build[
     "--no-out-link",
     "-E",
-    f"((import <nixpkgs> {{}}).callPackage {package} {{}}).src"
+    f"(import {NIXPKGS_ROOT}/. {{}}).joplin-desktop.src"
 ]().strip()
 
 print(src_dir)
@@ -75,6 +69,9 @@ default_plugins_dir = Path(src_dir).joinpath("packages/default-plugins")
 
 with default_plugins_dir.joinpath("pluginRepositories.json").open() as fd:
     plugin_repositories = json.load(fd)
+
+with default_plugins_dir.joinpath("package.json").open() as fd:
+    plugins_packagejson = json.load(fd)
 
 release["plugins"] = dict()
 
@@ -90,19 +87,25 @@ for key, value in plugin_repositories.items():
 
     plugin["name"] = value["cloneUrl"].split("/")[-1].removesuffix(".git")
 
-    plugin["url"] = f"{value["cloneUrl"].removesuffix('.git')}/archive/{value["commit"]}.tar.gz"
+    if "package" in value:
+        ref = "refs/tags/v" + plugins_packagejson["devDependencies"][value["package"]]
+    else:
+        ref = value["commit"]
 
-    plugin["hash"] = nix_prefetch.with_cwd(HERE)[
-        "--option",
-        "extra-experimental-features",
-        "flakes",
-        f"((import <nixpkgs> {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src"
+    plugin["url"] = f"{value["cloneUrl"].removesuffix('.git')}/archive/{ref}.tar.gz"
+
+    plugin_src = lambda plugin : f"((import {NIXPKGS_ROOT}/. {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src"
+
+    plugin["hash"] = nurl.with_cwd(HERE)[
+        "-e",
+        plugin_src(plugin)
     ]().strip()
+    print(plugin["hash"])
 
     plugin_src = nix_build.with_cwd(HERE)[
         "--no-out-link",
         "-E",
-        f"((import <nixpkgs> {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src"
+        plugin_src(plugin)
     ]().strip()
     plugin["npmDepsHash"] = prefetch_npm_deps(Path(plugin_src).joinpath("package-lock.json")).strip()
 
