@@ -296,7 +296,7 @@ stdenv.mkDerivation (
         configureScript="`pwd`/../configure"
       ''
       + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-        sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
+        sed -i s/-lgcc_eh//g ../Makeconfig
 
         cat > config.cache << "EOF"
         libc_cv_forced_unwind=yes

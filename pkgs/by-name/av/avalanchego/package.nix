@@ -44,7 +44,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/ava-labs/avalanchego/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      urandom
       qjoly
     ];
     mainProgram = "avalanchego";

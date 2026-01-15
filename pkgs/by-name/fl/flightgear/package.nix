@@ -25,7 +25,7 @@
   cmake,
   libpng,
   udev,
-  fltk13,
+  fltk_1_3,
   apr,
   qt5,
   glew,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     boost
     libpng
     udev
-    fltk13
+    fltk_1_3
     apr
     qt5.qtbase
     qt5.qtquickcontrols2

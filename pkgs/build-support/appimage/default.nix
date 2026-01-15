@@ -200,7 +200,7 @@ rec {
         libogg
         libvorbis
         SDL2_image
-        glew110
+        glew_1_10
         openssl
         libidn
         onetbb

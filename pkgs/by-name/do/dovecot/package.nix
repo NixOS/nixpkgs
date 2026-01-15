@@ -17,7 +17,7 @@
   pam,
   libcap,
   coreutils,
-  clucene_core_2,
+  clucene-core_2,
   icu75,
   libexttextcat,
   libsodium,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     xz
-    clucene_core_2
+    clucene-core_2
     icu75
     libexttextcat
     libsodium
