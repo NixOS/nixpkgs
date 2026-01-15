@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pygmt";
   version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
