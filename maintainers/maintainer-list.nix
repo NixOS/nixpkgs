@@ -27537,6 +27537,12 @@
     githubId = 27813;
     name = "Vincent Breitmoser";
   };
+  valyntyler = {
+    email = "git@valyntyler.com";
+    github = "valyntyler";
+    githubId = 115489989;
+    name = "Valyn Tyler";
+  };
   vamega = {
     email = "github@madiathv.com";
     github = "vamega";
