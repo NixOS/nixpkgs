@@ -298,7 +298,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       mic92
       equirosa
-      urandom
       bkchr
       emily
       Gliczy
