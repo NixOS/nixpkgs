@@ -12455,8 +12455,6 @@ with pkgs;
 
   freeciv_gtk = freeciv;
 
-  gscrabble = python3Packages.callPackage ../games/gscrabble { };
-
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
   # used as base package for iortcw forks

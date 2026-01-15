@@ -1,26 +1,24 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  gtk3,
+  gtk4,
   wrapGAppsHook3,
   gst_all_1,
   gobject-introspection,
-  gst-python,
-  pygobject3,
   adwaita-icon-theme,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "gscrabble";
-  version = "unstable-2020-04-21";
-  format = "setuptools";
+  version = "1.6";
+  format = "other";
 
   src = fetchFromGitHub {
-    owner = "RaaH";
+    owner = "ThierryHFR";
     repo = "gscrabble";
-    rev = "aba37f062a6b183dcc084c453f395af1dc437ec8";
-    sha256 = "sha256-rYpPHgOlPRnlA+Nkvo/J+/8/vl24/Ssk55fTq9oNCz4=";
+    tag = "1.6+ordissimo1";
+    hash = "sha256-4xFwpmWFamMUbzesp0wLTw/jh4h201wI/a7TWqfao+k=";
   };
 
   doCheck = false;
@@ -36,13 +34,25 @@ buildPythonApplication {
     gst-plugins-ugly
     gst-plugins-bad
     adwaita-icon-theme
-    gtk3
+    gtk4
   ];
 
-  propagatedBuildInputs = [
-    gst-python
-    pygobject3
+  dependencies = [
+    python3Packages.gst-python
+    python3Packages.pygobject3
   ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/GScrabble
+    cp -r * $out/share/GScrabble/
+
+    mkdir -p $out/bin
+    install -m755 gscrabble $out/bin/gscrabble
+
+    runHook postInstall
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -51,12 +61,8 @@ buildPythonApplication {
   '';
 
   meta = {
-    # Fails to build, probably incompatible with latest Python
-    # error: Multiple top-level packages discovered in a flat-layout
-    # https://github.com/RaaH/gscrabble/issues/13
-    broken = true;
     description = "Golden Scrabble crossword puzzle game";
-    homepage = "https://github.com/RaaH/gscrabble/";
+    homepage = "https://github.com/ThierryHFR/gscrabble/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
