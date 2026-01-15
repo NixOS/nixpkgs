@@ -23,7 +23,7 @@ emacsPackages.melpaBuild (finalAttrs: {
     plz-event-source
   ];
 
-  meta =  {
+  meta = {
     description = "Emacs integration for OpenCode AI tooling";
     maintainers = with lib.maintainers; [ zstg ];
     license = lib.licenses.gpl3;
