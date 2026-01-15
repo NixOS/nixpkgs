@@ -8072,6 +8072,8 @@ self: super: with self; {
 
   keke = callPackage ../development/python-modules/keke { };
 
+  kenlm = callPackage ../development/python-modules/kenlm { };
+
   keras = callPackage ../development/python-modules/keras { };
 
   kerbad = callPackage ../development/python-modules/kerbad { };
@@ -13203,6 +13205,8 @@ self: super: with self; {
 
   pyct = callPackage ../development/python-modules/pyct { };
 
+  pyctcdecode = callPackage ../development/python-modules/pyctcdecode { };
+
   pyctr = callPackage ../development/python-modules/pyctr { };
 
   pycuda = callPackage ../development/python-modules/pycuda { inherit (pkgs.stdenv) mkDerivation; };
@@ -15838,6 +15842,8 @@ self: super: with self; {
   pyvicare = callPackage ../development/python-modules/pyvicare { };
 
   pyvips = callPackage ../development/python-modules/pyvips { inherit (pkgs) vips glib; };
+
+  pyvirtualcam = callPackage ../development/python-modules/pyvirtualcam { };
 
   pyvirtualdisplay = callPackage ../development/python-modules/pyvirtualdisplay { };
 
