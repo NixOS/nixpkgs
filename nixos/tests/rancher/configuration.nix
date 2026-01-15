@@ -1,4 +1,5 @@
-# A test that sets extra kubelet configuration and enables graceful node shutdown
+# Tests that containerd configuration, kubelet configuration, and graceful node shutdown are
+# configured correctly
 {
   pkgs,
   lib,
@@ -19,9 +20,9 @@ let
   containerLogMaxSize = "5Mi";
 in
 {
-  name = "${rancherPackage.name}-kubelet-config";
+  name = "${rancherPackage.name}-configuration";
   nodes.machine =
-    { pkgs, ... }:
+    { ... }:
     {
       environment.systemPackages = with pkgs; [
         kubectl
@@ -37,6 +38,12 @@ in
         disable = disabledComponents;
         images = coreImages;
         inherit nodeName;
+        containerdConfigTemplate = ''
+          # Base ${rancherDistro} config
+          {{ template "base" . }}
+
+          # MAGIC COMMENT
+        '';
         gracefulNodeShutdown = {
           enable = true;
           inherit shutdownGracePeriod shutdownGracePeriodCriticalPods;
@@ -51,19 +58,26 @@ in
     ''
       import json
 
-      start_all()
       machine.wait_for_unit("${serviceName}")
       # wait until the node is ready
       machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
-      # test whether the kubelet registered an inhibitor lock
-      machine.succeed("systemd-inhibit --list --no-legend | grep \"^kubelet.*shutdown\"")
+
+      with subtest("Inhibitor lock is registered"):
+        machine.succeed("systemd-inhibit --list --no-legend | grep \"^kubelet.*shutdown\"")
+
+      with subtest("Containerd config contains magic comment"):
+        out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml.tmpl")
+        t.assertIn("MAGIC COMMENT", out, "the containerd config template does not contain the magic comment")
+        # config file contains the magic comment
+        out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
+        t.assertIn("MAGIC COMMENT", out, "the containerd config does not contain the magic comment")
+
       # run kubectl proxy in the background, close stdout through redirection to not wait for the command to finish
       machine.execute("kubectl proxy --address 127.0.0.1 --port=8001 >&2 &")
       machine.wait_until_succeeds("nc -z 127.0.0.1 8001")
-      # get the kubeletconfig
-      kubelet_config=json.loads(machine.succeed("curl http://127.0.0.1:8001/api/v1/nodes/${nodeName}/proxy/configz | jq '.kubeletconfig'"))
 
       with subtest("Kubelet config values are set correctly"):
+        kubelet_config=json.loads(machine.succeed("curl http://127.0.0.1:8001/api/v1/nodes/${nodeName}/proxy/configz | jq '.kubeletconfig'"))
         t.assertEqual(kubelet_config["shutdownGracePeriod"], "${shutdownGracePeriod}")
         t.assertEqual(kubelet_config["shutdownGracePeriodCriticalPods"], "${shutdownGracePeriodCriticalPods}")
         t.assertEqual(kubelet_config["podsPerCore"], ${toString podsPerCore})
