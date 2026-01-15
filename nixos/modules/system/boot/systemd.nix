@@ -254,6 +254,25 @@ in
 
           The Go implementation is experimental. By keeping this disabled,
           you help test it automatically while using the stable bash version.
+          
+          Note: This option is mutually exclusive with useRustImpl.
+        '';
+      };
+
+      useRustImpl = mkEnableOption "" // {
+        default = false;
+        description = ''
+          Whether to use the Rust-based systemd unit generator
+          for the final output instead of the bash implementation.
+
+          When enabled (true):
+          - Use the Rust implementation for the final output (comparable speed to Go)
+          - Does not build the bash implementation anymore
+
+          The Rust implementation maintains feature parity with the Go version
+          and is aligned with the systemd team's language preferences.
+          
+          Note: This option is mutually exclusive with useGoImpl.
         '';
       };
 
@@ -557,7 +576,12 @@ in
       ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
       ++ (mkNetOnlineWarns "slice" cfg.slices);
 
-    assertions = concatLists (
+    assertions = [
+      {
+        assertion = !(cfg.unitGenerator.useGoImpl && cfg.unitGenerator.useRustImpl);
+        message = "systemd.unitGenerator.useGoImpl and systemd.unitGenerator.useRustImpl are mutually exclusive. Please enable only one.";
+      }
+    ] ++ concatLists (
       mapAttrsToList (
         name: service:
         map
