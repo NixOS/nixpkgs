@@ -27411,14 +27411,6 @@
     githubId = 619015;
     name = "Svintsov Dmitry";
   };
-  urandom = {
-    email = "colin@urandom.co.uk";
-    matrix = "@urandom0:matrix.org";
-    github = "urandom2";
-    githubId = 2526260;
-    keys = [ { fingerprint = "04A3 A2C6 0042 784A AEA7  D051 0447 A663 F7F3 E236"; } ];
-    name = "Colin Arnott";
-  };
   urbas = {
     email = "matej.urbas@gmail.com";
     github = "urbas";
