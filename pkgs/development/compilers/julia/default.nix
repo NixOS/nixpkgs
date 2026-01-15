@@ -1,4 +1,9 @@
-{ callPackage, fetchpatch2 }:
+{
+  callPackage,
+  fetchpatch2,
+  lib,
+  stdenv,
+}:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -60,6 +65,19 @@ in
           revert = true;
           hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
         })
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        ./patches/1.10/0003-fix-zlib-clang-17.patch
+        ./patches/1.10/0004-fix-lbt-trampolines-clang-17.patch
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        ./patches/1.10/0005-lbt-blas-detection.patch
+
+        (fetchpatch2 {
+          name = "fix-libcurl-rpath.patch";
+          url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+          hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+        })
       ];
     }) { }
   );
@@ -67,12 +85,29 @@ in
     callPackage (import ./generic.nix {
       version = "1.11.7";
       hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
+      patches =
+        lib.optionals stdenv.cc.isClang [
+          ./patches/1.11/0003-fix-zlib-clang-17.patch
+          ./patches/1.11/0004-fix-lbt-trampolines-clang-17.patch
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          ./patches/1.11/0005-lbt-blas-detection.patch
+
+          (fetchpatch2 {
+            name = "fix-libcurl-rpath.patch";
+            url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+            hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+          })
+        ];
     }) { }
   );
   julia_112 = wrapJulia (
     callPackage (import ./generic.nix {
       version = "1.12.1";
       hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
+      patches = lib.optionals stdenv.hostPlatform.isDarwin [
+        ./patches/1.12/0002-lbt-blas-detection.patch
+      ];
     }) { }
   );
 }
