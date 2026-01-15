@@ -76,6 +76,7 @@ let
     }
     .${stdenv.hostPlatform.system}
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
+  isCross = !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
@@ -129,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     buildPackages.stdenv.cc
   ]
-  ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+  ++ optional isCross samba # asn1_compile/compile_et
   ++ optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
@@ -193,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./buildtools/bin
   ''
-  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  + lib.optionalString isCross ''
     substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
   '';
 
@@ -314,9 +315,9 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  disallowedReferences = lib.optionals (
-    buildPackages.python3Packages.python != python3Packages.python
-  ) [ buildPackages.python3Packages.python ];
+  disallowedReferences = lib.optionals isCross [
+    buildPackages.python3Packages.python
+  ];
 
   passthru.tests = {
     samba = nixosTests.samba;
