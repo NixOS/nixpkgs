@@ -10554,12 +10554,6 @@ with pkgs;
     pname = "floorp-bin";
   };
 
-  formiko =
-    with python3Packages;
-    callPackage ../applications/editors/formiko {
-      inherit buildPythonApplication;
-    };
-
   freedv = callPackage ../by-name/fr/freedv/package.nix {
     codec2 = codec2.override {
       freedvSupport = true;
