@@ -58,6 +58,37 @@ in
     boot.initrd.availableKernelModules = [ "mptspi" ];
     boot.initrd.kernelModules = optionals pkgs.stdenv.hostPlatform.isx86 [ "vmw_pvscsi" ];
 
+    # See https://wiki.archlinux.org/title/VMware/Install_Arch_Linux_as_a_guest
+    system.requiredKernelConfig =
+      with config.lib.kernelConfig;
+      [
+        # Required to detect hypervisor presence
+        (isEnabled "HYPERVISOR_GUEST")
+
+        # Allows high-speed communication between host and guest
+        (isEnabled "VMWARE_VMCI")
+
+        # VMCI transport for virtual sockets on guests
+        (isEnabled "VMWARE_VMCI_VSOCKETS")
+
+        # Virtual Ethernet NIC
+        (isEnabled "VMXNET3")
+
+        # VMWare Paravirtual RDMA adapter
+        (isEnabled "INFINIBAND_VMWARE_PVRDMA")
+      ]
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isx86 [
+        # Allows host to claim and reclaim memory from the VM
+        (isEnabled "VMWARE_BALLOON")
+      ]
+      ++ lib.optionals (!cfg.headless) [
+        # Used by drag-and-drop and copy-and-paste
+        (isEnabled "FUSE_FS")
+
+        # DRM Driver
+        (isEnabled "VMWGFX")
+      ];
+
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.vmware = {
