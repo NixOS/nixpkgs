@@ -41,7 +41,7 @@ let
     src = fetchFromGitLab {
       owner = "flightgear";
       repo = "fgdata";
-      tag = "${version}";
+      tag = version;
       hash = "sha256-LNHO/W8p4b8fYcehdfVecldKQ9uJp1zlg60xdgDC45c=";
     };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-m4bbWwMXwKJrMkb6svGrIZhcsPghrTMgFs8JCx3Wn/A=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
-    tag = "${version}";
+    tag = version;
     sha256 = "sha256-P5qfMsn3DGHjeF7zsZWeG9j38C6j5UEwUqGyjaEVO1E=";
     leaveDotGit = true;
   };

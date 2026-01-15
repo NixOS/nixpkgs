@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-mediaplayer-app";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-A1tAXQXDwVZ3ILFcJKCtbOm1iNxPFOXQIS6p7fPbqwM=";
   };
 
