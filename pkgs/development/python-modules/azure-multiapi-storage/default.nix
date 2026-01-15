@@ -6,7 +6,6 @@
   cryptography,
   fetchPypi,
   msrest,
-  pythonOlder,
   requests,
   setuptools,
   python-dateutil,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "azure-multiapi-storage";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_multiapi_storage";

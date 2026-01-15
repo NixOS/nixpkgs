@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   urllib3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "downloader-cli";
   version = "0.3.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";

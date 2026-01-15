@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aioskybell";
   version = "23.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tkdrob";

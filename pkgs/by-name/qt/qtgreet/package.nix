@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "dynpath" "${placeholder "out"}/var/lib/qtgreet")
   ];
 
+  NIX_LDFLAGS = "-lwayqt-utils-qt6";
+
   meta = {
     description = "Qt based greeter for greetd, to be run under wayfire or similar wlr-based compositors";
     homepage = "https://gitlab.com/marcusbritanicus/QtGreet";

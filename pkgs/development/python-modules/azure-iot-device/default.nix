@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   setuptools,
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "azure-iot-device";
   version = "2.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

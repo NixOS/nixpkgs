@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.13";
+  version = "0.3.14";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-XLWvxSChYN5wyhr8R8/3Pfykw61k451XmvgoM45zkEk=";
+    hash = "sha256-UhWA7jmBDhktHqHds06C0GY+xzlQZZezYopsLmIAGgI=";
     tag = "v${finalAttrs.version}";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_15.hook
+    zig_0_15
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
+    install -Dm755 example/init -t $out/example/
   '';
 
   doInstallCheck = true;
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       the river 0.4.0 release.
     '';
     changelog = "https://codeberg.org/river/river-classic/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       adamcstephens
       moni

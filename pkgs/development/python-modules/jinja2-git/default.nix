@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   jinja2,
   poetry-core,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "jinja2-git";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wemake-services";

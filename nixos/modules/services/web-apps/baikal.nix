@@ -83,11 +83,11 @@ in
             rewrite ^/.well-known/caldav  /dav.php redirect;
             rewrite ^/.well-known/carddav /dav.php redirect;
           '';
-          "~ /(\.ht|Core|Specific|config)".extraConfig = ''
+          "~ /(\\.ht|Core|Specific|config)".extraConfig = ''
             deny all;
             return 404;
           '';
-          "~ ^(.+\.php)(.*)$".extraConfig = ''
+          "~ ^(.+\\.php)(.*)$".extraConfig = ''
             try_files $fastcgi_script_name =404;
             include                   ${config.services.nginx.package}/conf/fastcgi.conf;
             fastcgi_split_path_info   ^(.+\.php)(.*)$;

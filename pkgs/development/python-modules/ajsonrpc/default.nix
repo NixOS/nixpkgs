@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ajsonrpc";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

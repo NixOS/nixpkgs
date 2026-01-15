@@ -14,7 +14,6 @@
   opencv4,
   pillow,
   prettytable,
-  pythonOlder,
   requests,
   setuptools,
   scipy,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "insightface";
   version = "0.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.27.0";
+  version = "0.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-r9lHK2fK1q2pHhpdW+Q83Kk+OZhAOwx8k3GgxHHlj/4=";
+    hash = "sha256-p4oyPlrz+fsAj3PXQnt3HOG48bkWbbG4BVU8pm2P2aU=";
   };
 
   build-system = [

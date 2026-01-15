@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyarrow,
   cython,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "geoarrow-c";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-c";

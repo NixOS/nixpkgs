@@ -6,15 +6,12 @@
   pandas,
   py4j,
   pyarrow,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyspark";
   version = "3.5.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

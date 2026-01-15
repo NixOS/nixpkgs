@@ -89,10 +89,6 @@ in
     nativeBuildInputs = old.nativeBuildInputs ++ [
       installShellFiles
     ];
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace-fail "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0-1',"
-    '';
     postInstall = ''
       installShellCompletion --cmd busted \
         --zsh completions/zsh/_busted \
@@ -589,7 +585,7 @@ in
     '';
   });
 
-  luaossl = prev.luaossl.overrideAttrs (_: {
+  luaossl = prev.luaossl.overrideAttrs (old: {
     externalDeps = [
       {
         name = "CRYPTO";
@@ -600,6 +596,10 @@ in
         dep = openssl;
       }
     ];
+
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
+    };
   });
 
   luaposix = prev.luaposix.overrideAttrs (_: {
@@ -643,7 +643,6 @@ in
     dontUseCmakeConfigure = true;
 
     doInstallCheck = true;
-    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip

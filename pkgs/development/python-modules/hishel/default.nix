@@ -10,7 +10,6 @@
   moto,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   trio,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "hishel";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";

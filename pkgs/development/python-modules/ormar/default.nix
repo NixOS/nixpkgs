@@ -28,9 +28,7 @@
 buildPythonPackage rec {
   pname = "ormar";
   version = "0.20.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collerek";

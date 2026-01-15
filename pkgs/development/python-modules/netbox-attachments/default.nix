@@ -42,6 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kani999/netbox-attachments/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ secshell ];
+    maintainers = with lib.maintainers; [ felbinger ];
   };
 }

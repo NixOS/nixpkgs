@@ -25,7 +25,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "sha256-ByECaQ6NW1Su+k/j/bcKJqFf7bStdWZxOZn95GJEqBg=";
   };
 
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs =
     with python.pkgs;
@@ -91,7 +91,7 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     description = "BGP sessions management tool";
     mainProgram = "peering-manager";
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ yureka-wdz ];
     platforms = lib.platforms.linux;
   };
 }

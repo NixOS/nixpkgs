@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
   version = "5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "siemens";

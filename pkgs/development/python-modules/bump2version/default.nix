@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testfixtures,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "bump2version";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "c4urself";

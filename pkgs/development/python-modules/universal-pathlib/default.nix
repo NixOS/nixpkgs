@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "universal-pathlib";
   version = "0.2.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "universal_pathlib";

@@ -14,7 +14,6 @@
   pytest-datadir,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   tomli,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "diff-cover";
   version = "9.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "diff_cover";

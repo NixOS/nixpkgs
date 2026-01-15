@@ -70,8 +70,6 @@ python3Packages.buildPythonApplication rec {
       writableTmpDirAsHomeHook
     ];
 
-  versionCheckProgramArg = "--version";
-
   disabledTests = [
     # Tests requires network access
     "test_attr"

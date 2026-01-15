@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   requests,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pycsspeechtts";
   version = "1.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

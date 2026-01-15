@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lainsce/emulsion";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
 }

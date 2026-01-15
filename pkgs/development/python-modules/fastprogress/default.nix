@@ -3,18 +3,16 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastprogress";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ehfStDiJD4OMBI7vzjLE3tRxl+zI6gQs7MM9PeuAIvU=";
+    hash = "sha256-WMoWqYHwKSgE2QXy4AQq1gjXiL9svmq5a3HsSyBFOu8=";
   };
 
   propagatedBuildInputs = [ numpy ];

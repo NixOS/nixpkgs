@@ -40,6 +40,6 @@ buildGoModule rec {
     mainProgram = "auth";
     changelog = "https://github.com/supabase/auth/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

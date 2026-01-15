@@ -4,7 +4,6 @@
   fetchFromGitHub,
   geojson,
   pysocks,
-  pythonOlder,
   requests,
   setuptools,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyowm";
   version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csparpa";

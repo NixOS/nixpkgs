@@ -12,7 +12,6 @@
   more-itertools,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   typing-extensions,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";

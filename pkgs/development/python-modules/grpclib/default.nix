@@ -1,41 +1,29 @@
 {
   lib,
+  async-timeout,
   buildPythonPackage,
   certifi,
   faker,
   fetchFromGitHub,
-  fetchpatch,
   googleapis-common-protos,
   h2,
   multidict,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "grpclib";
-  version = "0.4.8";
+  version = "0.4.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vmagamedov";
     repo = "grpclib";
     tag = "v${version}";
-    hash = "sha256-Z+DMwGMUxNTQ7ABd4q/FgMHEZ/NCOtst+6QfQJm3jVU=";
+    hash = "sha256-9ElCIL084B+KihV1AXYJejBletj8y6LnoWRGEj4E1tQ=";
   };
-
-  patches = [
-    # https://github.com/vmagamedov/grpclib/pull/209
-    (fetchpatch {
-      name = "replace-async-timeout-with-asyncio-timeout-patch";
-      url = "https://github.com/vmagamedov/grpclib/commit/36b23ce3ca3f1742e39b50f939d13cd08b4f28ac.patch";
-      hash = "sha256-3ztLBOFpTK8CFIp8a6suhWXY5kIBCBRWBX/oAyYU4yI=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -46,11 +34,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio_0
+    pytest-asyncio
+    async-timeout
     faker
     googleapis-common-protos
     certifi
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "grpclib" ];
 

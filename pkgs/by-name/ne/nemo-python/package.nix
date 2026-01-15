@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       --replace "get_option('prefix'), get_option('libdir')" "'${python3}/lib'"
   '';
 
-  PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
+  env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
 
   passthru.nemoPythonExtensionDeps = [ python3.pkgs.pygobject3 ];
 

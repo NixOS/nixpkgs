@@ -8,7 +8,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  nodejs,
+  nodejs_22,
   vips,
   pkg-config,
   nixosTests,
@@ -18,6 +18,9 @@
 }:
 
 let
+  # build failure against better-sqlite3, so we use nodejs_22; upstream
+  # bluesky-pds uses 20
+  nodejs = nodejs_22;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
 in

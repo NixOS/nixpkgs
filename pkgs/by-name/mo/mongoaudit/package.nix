@@ -4,23 +4,19 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mongoaudit";
   version = "0.1.1";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "stampery";
     repo = "mongoaudit";
-    rev = version;
-    sha256 = "17k4vw5d3kr961axl49ywid4cf3n7zxvm885c4lv15w7s2al1425";
+    tag = finalAttrs.version;
+    hash = "sha256-RZBAldCHl7ApYQWhuvs/djhGWuQ+EdpVMCnP0QrfZJ4=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     pymongo
@@ -28,19 +24,16 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mongoaudit"
-  ];
+  pythonImportsCheck = [ "mongoaudit" ];
 
   meta = {
     description = "MongoDB auditing and pentesting tool";
     homepage = "https://github.com/stampery/mongoaudit";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/stampery/mongoaudit/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mongoaudit";
   };
-}
+})

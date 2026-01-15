@@ -8,7 +8,6 @@
   mock,
   py-vapid,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pywebpush";
   version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

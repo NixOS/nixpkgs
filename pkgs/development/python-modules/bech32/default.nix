@@ -2,14 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "bech32";
   version = "1.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

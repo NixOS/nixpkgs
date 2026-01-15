@@ -8,15 +8,15 @@
 }:
 stdenv.mkDerivation (final: {
   pname = "ykushcmd";
-  version = "1.2.5";
+  version = "1.4.0";
 
   buildInputs = [ libusb1 ];
 
   src = fetchFromGitHub {
     owner = "yepkit";
     repo = "ykush";
-    tag = "${final.version}";
-    hash = "sha256-FbqlXh8A5hzpthBE3jZ1LLOMs4WcEGke3sOZi9vmZF8=";
+    tag = "v${final.version}";
+    hash = "sha256-+ssr1QHKjEdK8pFkmyHYwG9tY7YHaYcIIJUqaEXixOg=";
   };
 
   installPhase = ''

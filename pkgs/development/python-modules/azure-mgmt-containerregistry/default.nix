@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-common,
   azure-mgmt-core,
   isodate,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-containerregistry";
   version = "14.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_containerregistry";

@@ -11,15 +11,12 @@
   pygments,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
   version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "mkdocs_jupyter";

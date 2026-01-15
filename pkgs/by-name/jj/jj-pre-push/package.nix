@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "jj-pre-push";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acarapetis";
     repo = "jj-pre-push";
     tag = "v${version}";
-    hash = "sha256-/fh06T7kTlyyzj+ez9JkbU5h80Ez9B0nwZ/znjwTUJg=";
+    hash = "sha256-dZrZjzygT6Q7jIPkasYgJ2uN3eyPQXsg0opksookLYI=";
   };
 
   build-system = [

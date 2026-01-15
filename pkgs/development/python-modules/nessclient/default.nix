@@ -5,7 +5,6 @@
   fetchFromGitHub,
   justbackoff,
   pyserial-asyncio-fast,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "nessclient";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nickw444";

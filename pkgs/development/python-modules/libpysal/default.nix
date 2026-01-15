@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   beautifulsoup4,
   fiona,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "libpysal";
   version = "4.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pysal";

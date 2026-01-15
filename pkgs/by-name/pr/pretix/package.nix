@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   nodejs,
-  python3,
+  python312,
   gettext,
   nixosTests,
   pretix,
@@ -12,7 +12,7 @@
 }:
 
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       django = super.django_4;
@@ -266,18 +266,6 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
-
-    # outdated translation files
-    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
-    "test_different_dates_spanish"
-    "test_same_day_spanish"
-    "test_same_month_spanish"
-    "test_same_year_spanish"
-
-    # broken with fakeredis>=2.27.0
-    "test_waitinglist_cache_separation"
-    "test_waitinglist_item_active"
-    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''

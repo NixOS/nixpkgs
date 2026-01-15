@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pferd";
   version = "3.8.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Garmelon";

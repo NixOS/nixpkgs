@@ -7,25 +7,6 @@
 let
   cfg = config.services.xserver.desktopManager.phosh;
 
-  # Based on https://source.puri.sm/Librem5/librem5-base/-/blob/4596c1056dd75ac7f043aede07887990fd46f572/default/sm.puri.OSK0.desktop
-  oskItem = pkgs.makeDesktopItem {
-    name = "sm.puri.OSK0";
-    desktopName = "On-screen keyboard";
-    exec = "${pkgs.squeekboard}/bin/squeekboard";
-    categories = [
-      "GNOME"
-      "Core"
-    ];
-    onlyShowIn = [ "GNOME" ];
-    noDisplay = true;
-    extraConfig = {
-      X-GNOME-Autostart-Phase = "Panel";
-      X-GNOME-Provides = "inputmethod";
-      X-GNOME-Autostart-Notify = "true";
-      X-GNOME-AutoRestart = "true";
-    };
-  };
-
   phocConfigType = lib.types.submodule {
     options = {
       xwayland = lib.mkOption {
@@ -245,8 +226,7 @@ in
     environment.systemPackages = [
       pkgs.phoc
       cfg.package
-      pkgs.squeekboard
-      oskItem
+      pkgs.stevia
     ];
 
     systemd.packages = [ cfg.package ];

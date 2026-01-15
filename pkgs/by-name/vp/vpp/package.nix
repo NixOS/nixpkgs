@@ -134,6 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     mainProgram = "vpp";
-    maintainers = with lib.maintainers; [ azey7f ];
+    maintainers = with lib.maintainers; [ maevii ];
   };
 })

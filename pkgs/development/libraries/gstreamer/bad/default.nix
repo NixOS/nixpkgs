@@ -322,6 +322,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "directfb" false)
     (lib.mesonEnable "lcevcdecoder" lcevcdecSupport)
+    (lib.mesonEnable "ldac" ldacbtSupport)
+    (lib.mesonEnable "webrtcdsp" webrtcAudioProcessingSupport)
+    (lib.mesonEnable "isac" webrtcAudioProcessingSupport)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only

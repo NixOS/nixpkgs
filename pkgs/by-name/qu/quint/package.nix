@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   nodejs,
-  nodejs_20,
   makeWrapper,
   jre,
   fetchzip,
@@ -40,9 +39,7 @@ let
   # Build the Quint CLI from source
   quint-cli = buildNpmPackage {
     pname = "quint-cli";
-    inherit version src;
-
-    nativeBuildInputs = [ nodejs_20 ];
+    inherit version src nodejs;
 
     sourceRoot = "${src.name}/quint";
 

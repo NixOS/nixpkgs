@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchDebianPatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +13,16 @@ stdenv.mkDerivation rec {
     url = "https://download.osgeo.org/shapelib/shapelib-${version}.tar.gz";
     hash = "sha256-S3SjbO2U6ae+pAEVfmZK3cxb4lHn33+I1GdDYdoBLCE=";
   };
+
+  patches = [
+    # Fix build with gcc 15
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "1";
+      patch = "gcc-15.patch";
+      hash = "sha256-ubd8L2hxSAxTDiOSToVHGLHkpGOap5bnozdVdv9VgCQ=";
+    })
+  ];
 
   doCheck = true;
   preCheck = ''

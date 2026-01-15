@@ -18,15 +18,15 @@
   mate-screensaver,
   wrapGAppsHook3,
   fetchpatch,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-session-manager";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-session-manager-${finalAttrs.version}.tar.xz";
     sha256 = "0yzkWVuh2mUpB3cgPyvIK9lzshSjoECAoe9caJkKLXs=";
   };
 
@@ -69,7 +69,11 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "mate" ];
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-session-manager";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "MATE Desktop session manager";
@@ -81,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

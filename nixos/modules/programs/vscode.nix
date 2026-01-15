@@ -65,11 +65,7 @@ in
       cfg.finalPackage
     ];
 
-    environment.etc."vscode/policy.json" = lib.mkIf (cfg.policies != { }) {
-      source = format.generate "policy.json" cfg.policies;
-    };
-
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (
+    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (
       lib.mkOverride 900 cfg.finalPackage.meta.mainProgram
     );
 

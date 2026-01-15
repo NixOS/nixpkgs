@@ -7,7 +7,6 @@
   libarchive-c,
   mfusepy,
   python-xz,
-  pythonOlder,
   rapidgzip,
   rarfile,
   ratarmountcore,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "ratarmount";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

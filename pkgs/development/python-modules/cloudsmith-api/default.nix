@@ -4,7 +4,6 @@
   certifi,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   six,
   urllib3,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cloudsmith-api";
   version = "2.0.22";
   format = "wheel";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "cloudsmith_api";

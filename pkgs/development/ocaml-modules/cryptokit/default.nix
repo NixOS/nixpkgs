@@ -1,23 +1,28 @@
 {
   lib,
   buildDunePackage,
+  ocaml,
   fetchFromGitHub,
   zlib,
   dune-configurator,
   zarith,
+  version ? if lib.versionAtLeast ocaml.version "4.13" then "1.21.1" else "1.20.1",
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cryptokit";
-  version = "1.20.1";
-
-  minimalOCamlVersion = "4.08";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "cryptokit";
-    rev = "release${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-VFY10jGctQfIUVv7dK06KP8zLZHLXTxvLyTCObS+W+E=";
+    tag = "release${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
+    hash =
+      {
+        "1.21.1" = "sha256-9JU9grZpTTrYYO9gai2UPq119HfenI1JAY+EyoR6x7Q=";
+        "1.20.1" = "sha256-VFY10jGctQfIUVv7dK06KP8zLZHLXTxvLyTCObS+W+E=";
+      }
+      ."${finalAttrs.version}";
   };
 
   # dont do autotools configuration, but do trigger findlib's preConfigure hook
@@ -39,4 +44,4 @@ buildDunePackage rec {
     description = "Library of cryptographic primitives for OCaml";
     license = lib.licenses.lgpl2Only;
   };
-}
+})

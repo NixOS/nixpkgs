@@ -13,7 +13,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   tiered-debug,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "es-client";
   version = "8.18.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "untergeek";

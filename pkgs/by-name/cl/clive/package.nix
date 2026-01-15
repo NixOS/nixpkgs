@@ -43,7 +43,6 @@ buildGoModule rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doinstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

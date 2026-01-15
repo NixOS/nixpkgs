@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   requests,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "herepy";
   version = "3.6.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "abdullahselek";

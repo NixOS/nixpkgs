@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     ./CVE-2016-8605.patch
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
   '';

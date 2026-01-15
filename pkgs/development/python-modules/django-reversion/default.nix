@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "django-reversion";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_reversion";

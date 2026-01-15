@@ -39,10 +39,13 @@ buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
+  propagatedBuildInputs = [
+    xrandr
+  ];
+
   buildInputs = [
     gsettings-desktop-schemas
     gtk3
-    xrandr
   ];
 
   build-system = [ setuptools ];

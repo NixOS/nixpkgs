@@ -1,12 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
   pytest-httpbin,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   six,
+  urllib3,
   yarl,
   wrapt,
 }:
@@ -14,20 +16,31 @@
 buildPythonPackage rec {
   pname = "vcrpy";
   version = "7.0.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F2ORrQQl7d4WgMWyBzjqPcf7lCUgpI0pk0SAUJhrOlA=";
+  src = fetchFromGitHub {
+    owner = "kevin1024";
+    repo = "vcrpy";
+    tag = "v${version}";
+    hash = "sha256-uKVPU1DU0GcpRqPzPMSNTLLVetZeQjUMC9vcaGwy0Yk=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      # python 3.14 compat
+      url = "https://github.com/kevin1024/vcrpy/commit/558c7fc625e66775da11ee406001f300e6188fb2.patch";
+      hash = "sha256-keShvz8zwqkenEtQ+NAnGKwSLYGbtXfpfMP8Zje2p+o=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
     six
-    yarl
+    urllib3
     wrapt
+    yarl
   ];
 
   nativeCheckInputs = [

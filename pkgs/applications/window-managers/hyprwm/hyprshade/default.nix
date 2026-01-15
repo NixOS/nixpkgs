@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "hyprshade";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "loqusion";

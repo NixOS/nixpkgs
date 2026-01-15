@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   ipywidgets,
   numpy,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ipycanvas";
   version = "0.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

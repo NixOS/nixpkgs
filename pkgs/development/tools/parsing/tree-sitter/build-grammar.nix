@@ -10,6 +10,7 @@
   language,
   version,
   src,
+  meta ? { },
   generate ? false,
   ...
 }@args:
@@ -105,6 +106,15 @@ stdenv.mkDerivation (
       fi
       runHook postInstall
     '';
+
+    # Merge default meta attrs with any explicitly defined on the source.
+    meta = {
+      description = "Tree-sitter grammar for ${language}";
+    }
+    // (lib.optionalAttrs (src ? meta.homepage) {
+      homepage = src.meta.homepage;
+    })
+    // meta;
   }
   # FIXME: neovim and nvim-treesitter currently rely on passing location rather
   # than a src attribute with a correctly positioned root (e.g. for grammars in
@@ -114,5 +124,6 @@ stdenv.mkDerivation (
   })
   // removeAttrs args [
     "generate"
+    "meta"
   ]
 )

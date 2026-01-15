@@ -10,15 +10,12 @@
   testscenarios,
   testtools,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-daemon";
   version = "3.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "python_daemon";

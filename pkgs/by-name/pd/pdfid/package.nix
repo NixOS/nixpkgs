@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pdfid";
   version = "0.2.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdfid_v${

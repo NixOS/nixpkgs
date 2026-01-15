@@ -16,14 +16,14 @@
 
 rustPlatform.buildRustPackage {
   pname = "htb-toolkit";
-  version = "0-unstable-2025-08-12";
+  version = "0-unstable-2025-12-19";
 
   src = fetchFromGitHub {
     owner = "D3vil0p3r";
     repo = "htb-toolkit";
     # https://github.com/D3vil0p3r/htb-toolkit/issues/3
-    rev = "60996a88fbd5e8aeab78005e754ef37d95ffdba4";
-    hash = "sha256-u+IigAs/W0lzp9kCW43TkjHTIrPCkGdmva6tesQq/Pk=";
+    rev = "4f1c6bded11d8c907c951fcbe63f1fc44568a9f9";
+    hash = "sha256-pkZ5KVSgtrWfXhJ3knmyOIArIjyAjMmm5WcrrB2pCKY=";
   };
 
   cargoHash = "sha256-ReEe8pyW66GXIPwAy6IKsFEAUjxHmzw5mj21i/h4quQ=";

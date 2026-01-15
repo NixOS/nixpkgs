@@ -16,12 +16,17 @@ let
     hash = "sha256-TQrmA65CzXar++79DLRWINaMsjoqNFdvNlwDzAcqOjM=";
   };
 
-  patchedPackageJSON = runCommand "package.json" { } ''
-    ${jq}/bin/jq '
-      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
-      | .scripts =  {  }
-      ' ${src}/package.json > $out
-  '';
+  patchedPackageJSON =
+    runCommand "package.json"
+      {
+        nativeBuildInputs = [ jq ];
+      }
+      ''
+        jq '
+          .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
+          | .scripts =  {  }
+          ' ${src}/package.json > $out
+      '';
 
   pyright-root = buildNpmPackage {
     pname = "pyright-root";

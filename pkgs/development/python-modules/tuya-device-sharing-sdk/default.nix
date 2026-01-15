@@ -1,44 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  paho-mqtt,
   cryptography,
+  fetchFromGitHub,
+  paho-mqtt,
+  requests,
+  setuptools,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.6";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "0.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuya";
     repo = "tuya-device-sharing-sdk";
-    # no tags on GitHub: https://github.com/tuya/tuya-device-sharing-sdk/issues/2
-    # no sdist on PyPI: https://github.com/tuya/tuya-device-sharing-sdk/issues/41
-    # check the dev branch for new changes
-    rev = "86c0510e7229b9cf41b2bae57f3557a4d83c1928";
-    hash = "sha256-nL7lr6HC+YpvmAdTnR6hzzn+9MEgzHkyzZuwjzsFHV0=";
+    tag = finalAttrs.version;
+    hash = "sha256-uD2Lzs08i/01iEksXpYRGB2lU7I15sQrJLfJZ93+oeY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    requests
-    paho-mqtt
     cryptography
+    paho-mqtt
+    requests
   ];
 
   doCheck = false; # no tests
 
+  pythonImportsCheck = [ "tuya_sharing" ];
+
   meta = {
     description = "Tuya Device Sharing SDK";
     homepage = "https://github.com/tuya/tuya-device-sharing-sdk";
+    changelog = "https://github.com/tuya/tuya-device-sharing-sdk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})

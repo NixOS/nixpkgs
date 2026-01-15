@@ -182,6 +182,7 @@ stdenv.mkDerivation (self: {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    mainProgram = "godot3";
     maintainers = with lib.maintainers; [
       rotaerk
       twey

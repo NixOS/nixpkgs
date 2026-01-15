@@ -11,19 +11,16 @@
   execnb,
   ghapi,
   pyyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.4.6";
+  version = "2.4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nr5bHyhyJDFOilNOCW3DH67Q+J2n+jDvXhqPiXchUyQ=";
+    hash = "sha256-SonqSaW/xmM91Cy0aLAkVUrXuNnkjg+ZphZF3I5ZGvQ=";
   };
 
   pythonRelaxDeps = [ "ipywidgets" ];

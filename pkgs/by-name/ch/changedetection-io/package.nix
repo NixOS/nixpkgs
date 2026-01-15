@@ -57,13 +57,14 @@ python3.pkgs.buildPythonApplication rec {
       openpyxl
       paho-mqtt
       panzi-json-logic
+      playwright
       pluggy
       price-parser
       psutil
+      puremagic
       pyppeteer-ng
       # pyppeteerstealth
       python-engineio
-      python-magic
       python-socketio
       pytz
       referencing

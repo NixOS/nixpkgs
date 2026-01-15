@@ -2,11 +2,18 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
+  withShell ? true,
+  shellcheck,
+  withPython ? true,
+  ruff,
+  withRuby ? true,
+  rubocop,
   nix-update-script,
 }:
 
 let
-  version = "0.3.0";
+  version = "0.4.1";
 in
 rustPlatform.buildRustPackage {
   pname = "masklint";
@@ -16,10 +23,34 @@ rustPlatform.buildRustPackage {
     owner = "brumhard";
     repo = "masklint";
     rev = "v${version}";
-    hash = "sha256-Dku2pDUCblopHtoj6viUqHVpVH5GDApp+QLjor38j7g=";
+    hash = "sha256-PhhSJwzLTMFmisrdmsRjxWDBkBr+NjIkENHjdkTeviM=";
   };
 
-  cargoHash = "sha256-TDk7hEZ628iUnKI0LMBtsSAVNF6BGukHwB8kh70eo4U=";
+  cargoHash = "sha256-WZwl7fdy1HNKQU1zCwifoOvmFRr/fnsvmIG2wf6ILPY=";
+
+  nativeCheckInputs = [
+    shellcheck # shells
+    ruff # python
+    rubocop # ruby
+  ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = (
+    if (withShell || withPython || withRuby) then
+      ''
+        wrapProgram $out/bin/masklint \
+          --prefix PATH : ${
+            lib.makeBinPath (
+              (lib.optional withShell shellcheck)
+              ++ (lib.optional withPython ruff)
+              ++ (lib.optional withRuby rubocop)
+            )
+          }
+      ''
+    else
+      ""
+  );
 
   passthru.updateScript = nix-update-script { };
 

@@ -8,7 +8,6 @@
   pysmi,
   pysnmp,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "1.6.2";
   pname = "pysmi";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lextudio";

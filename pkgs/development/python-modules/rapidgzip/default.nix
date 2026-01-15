@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchPypi,
-  pythonOlder,
   setuptools,
   nasm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "rapidgzip";
   version = "0.14.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

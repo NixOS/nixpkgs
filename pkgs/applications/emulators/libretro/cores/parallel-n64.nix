@@ -18,6 +18,14 @@ mkLibretroCore {
     hash = "sha256-Th8VqENewfTeRTH+lONN7ZTMLQ0G6901q6ZBNMgepL4=";
   };
 
+  patches = [
+    # Fix build with gcc15
+    # Upstream considers this core legacy (for "potato PC") and won't fix.
+    # See: https://github.com/libretro/parallel-n64/issues/797
+    #   /nix/store/...-glibc-2.40-66-dev/include/bits/mathcalls-narrow.h:36:20: error: conflicting types for 'fsqrt'; have 'float(double)'
+    ./patches/parallel-n64-gcc15.patch
+  ];
+
   extraBuildInputs = [
     libGLU
     libGL

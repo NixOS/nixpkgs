@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
   version = "2.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codespell-project";

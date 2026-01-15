@@ -205,8 +205,10 @@
         (
           if lib.versionOlder version "9.10" then
             ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-          else
+          else if lib.versionOlder version "9.14" then
             ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch
+          else
+            ./Cabal-3.16-paths-fix-cycle-aarch64-darwin.patch
         )
       ]
       ++ lib.optionals stdenv.targetPlatform.isWindows [

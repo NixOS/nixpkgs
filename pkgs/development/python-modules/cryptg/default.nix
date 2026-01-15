@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cargo,
   rustPlatform,
   rustc,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "cryptg";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cher-nov";

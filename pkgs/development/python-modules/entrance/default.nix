@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   routerFeatures,
   setuptools,
   janus,
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   };
 
   # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
-  disabled = pythonOlder "3.6";
 
   # No useful tests
   doCheck = false;

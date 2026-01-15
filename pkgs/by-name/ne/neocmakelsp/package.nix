@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "neocmakelsp";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "neocmakelsp";
     rev = "v${version}";
-    hash = "sha256-TFan3gJ5j2sCfM3p8a2bqPwqzn1hFN8ZyCAwAdHRZBU=";
+    hash = "sha256-4KgkI3wHBee4CAC5rQUV2YTckXfNz6nEZW9PvRygPKM=";
   };
 
-  cargoHash = "sha256-lqD6o+QXapd6JWMEYUWpAmZK4EWkIlqc5ZN/fMmySTs=";
+  cargoHash = "sha256-cVl/UqD/8LhTCiy7ttIDcxfJQrKxGhzdLfh/disX+4c=";
 
   nativeBuildInputs = [
     installShellFiles

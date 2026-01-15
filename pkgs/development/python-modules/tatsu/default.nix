@@ -4,7 +4,6 @@
   colorama,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "tatsu";
   version = "5.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";

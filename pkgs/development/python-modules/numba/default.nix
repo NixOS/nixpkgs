@@ -33,7 +33,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.62.0";
+  version = "0.63.1";
   pname = "numba";
   pyproject = true;
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-y/mvmzMwTHc/tWg4WFqFJOThbFiIF71OHLvtztkT+hE=";
+    hash = "sha256-M7Hdc1Qakclz7i/HujBUqVEWFsHj9ZGQDzb8Ze9AztA=";
   };
 
   postPatch = ''

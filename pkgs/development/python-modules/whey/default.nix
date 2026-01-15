@@ -76,6 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Python wheel builder for simple projects";
     homepage = "https://github.com/repo-helper/whey";
+    changelog = "https://github.com/repo-helper/whey/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };

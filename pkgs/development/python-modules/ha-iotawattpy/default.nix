@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   httpx,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ha-iotawattpy";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

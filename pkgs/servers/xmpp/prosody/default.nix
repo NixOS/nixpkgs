@@ -37,11 +37,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prosody";
-  version = "13.0.2"; # also update communityModules
+  version = "13.0.3"; # also update communityModules
 
   src = fetchurl {
     url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PmG9OW83ylJF3r/WvkmkemGRMy8Pqi1O5fAPuwQK3bA=";
+    hash = "sha256-pR7T6+VMGazWOO5fVAFKs2lsEvmf/HWsKT1p8vD/3As=";
   };
 
   # The following community modules are necessary for the nixos module
@@ -56,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "a4d7fefa4a8b";
-    hash = "sha256-lPxKZlIVyAt1Nx+PQ0ru0qihJ1ecBbvO0fMk+5D+NzE=";
+    rev = "83355cfcad1d";
+    hash = "sha256-v8o2FMUY2dQEQ+G81Ec4RJ7J5Mz5CkXc4iabAAb13L4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -114,13 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = lib.licenses.mit;
+    changelog = "https://prosody.im/doc/release/${finalAttrs.version}";
     homepage = "https://prosody.im";
     platforms = lib.platforms.linux;
     mainProgram = "prosody";
     maintainers = with lib.maintainers; [
       toastal
       mirror230469
+      SuperSandro2000
     ];
-    teams = with lib.teams; [ c3d2 ];
   };
 })

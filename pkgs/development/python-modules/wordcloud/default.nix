@@ -8,14 +8,13 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "1.9.4";
+  version = "1.9.5";
 
   pyproject = true;
 
@@ -24,11 +23,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-snPYpd7ZfT6tkEBGtJRk3LcRGe5534dQcqTBBcrdNHo=";
+    hash = "sha256-asfBN48ohtfoSWAKMG/r1B0NRrFc6HbWZaPlSfVAOws=";
   };
 
   nativeBuildInputs = [ cython ];

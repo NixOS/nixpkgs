@@ -5,7 +5,6 @@
   ifaddr,
   jsonschema,
   pyee,
-  pythonOlder,
   tornado,
   zeroconf,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "webthing";
   version = "0.15.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "WebThingsIO";

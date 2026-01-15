@@ -7,7 +7,6 @@
   libsodium,
   pytestCheckHook,
   pytest-xdist,
-  pythonOlder,
   setuptools,
   sphinxHook,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
     "doc"
   ];
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyca";

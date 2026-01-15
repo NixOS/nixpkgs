@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/jonaslu/ain";
     changelog = "https://github.com/jonaslu/ain/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "ain";
   };
 })

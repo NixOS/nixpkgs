@@ -53,7 +53,7 @@ buildPythonPackage {
     postPatch
     ;
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = dotnetCorePackages.sdk_8_0.packages ++ dotnet-build.nugetDeps;
 

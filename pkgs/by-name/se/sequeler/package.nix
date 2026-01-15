@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   vala,
   meson,
   ninja,
@@ -10,13 +10,12 @@
   pantheon,
   gettext,
   wrapGAppsHook3,
-  python3,
   desktop-file-utils,
   gtk3,
   glib,
   libgee,
   libgda5,
-  gtksourceview,
+  gtksourceview4,
   libxml2,
   libsecret,
   libssh2,
@@ -31,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "Alecaddd";
+    owner = "ellie-commons";
     repo = "sequeler";
-    rev = "v${version}";
-    sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
+    tag = "v${version}";
+    hash = "sha256-dFmR5SfzT/1UVwcnB3Y3kB1h0DapwN/2/KQAHiMpk/8=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
     vala
     gettext
     wrapGAppsHook3
-    python3
     desktop-file-utils
   ];
 
@@ -57,19 +55,18 @@ stdenv.mkDerivation rec {
     pantheon.granite
     libgee
     sqlGda
-    gtksourceview
+    gtksourceview4
     libxml2
     libsecret
     libssh2
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson_post_install.py
-    patchShebangs build-aux/meson_post_install.py
-  '';
-
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      # Upstream frequently tags these to fix flatpak builds, which are mostly irrelevant to us.
+      ignoredVersions = "-";
+      rev-prefix = "v";
+    };
   };
 
   meta = {
@@ -80,10 +77,10 @@ stdenv.mkDerivation rec {
       editor with language recognition, and visualize SELECT results in a
       Gtk.Grid Widget.
     '';
-    homepage = "https://github.com/Alecaddd/sequeler";
-    license = lib.licenses.gpl3;
+    homepage = "https://github.com/ellie-commons/sequeler";
+    license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
-    mainProgram = "com.github.alecaddd.sequeler";
+    mainProgram = "io.github.ellie_commons.sequeler";
   };
 }

@@ -172,7 +172,8 @@ let
 
           mkdir -p $out/share
           # move files in $out like LICENSE.txt
-          find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
+          # NOTE: The `release` file must be located at $JAVA_HOME/release
+          find $out/ -maxdepth 1 -type f ! -name release -exec mv {} $out/share \;
           # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
           rm -f $out/LICENSE_NATIVEIMAGE.txt
 

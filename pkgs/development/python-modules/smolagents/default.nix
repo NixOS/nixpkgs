@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -46,19 +47,20 @@
   # tests
   ipython,
   pytest-datadir,
+  pytest-timeout,
   pytestCheckHook,
   wikipedia-api,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smolagents";
-  version = "1.21.3";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
   };
 
@@ -76,6 +78,10 @@ buildPythonPackage rec {
   optional-dependencies = lib.fix (self: {
     audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
+    # blaxel = [
+    #   blaxel
+    #   websocket-client
+    # ];
     docker = [
       docker
       websocket-client
@@ -90,6 +96,10 @@ buildPythonPackage rec {
       mcp
       mcpadapt
     ];
+    # modal = [
+    #   modal
+    #   websocket-client
+    # ];
     # mlx-lm = [ mlx-lm ];
     openai = [ openai ];
     # telemetry = [
@@ -128,7 +138,8 @@ buildPythonPackage rec {
     pytestCheckHook
     wikipedia-api
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ pytest-timeout ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
 
@@ -157,6 +168,10 @@ buildPythonPackage rec {
     "test_visit_webpage"
     "test_wikipedia_search"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Missing dependencies
     "test_get_mlx"
@@ -168,6 +183,16 @@ buildPythonPackage rec {
     "test_init_agent_with_different_toolsets"
     "test_multiagents_save"
     "test_new_instance"
+
+    # Requires optional "blaxel" dependencies
+    "test_blaxel_executor_instantiation_with_blaxel_sdk"
+    "test_blaxel_executor_custom_parameters"
+    "test_blaxel_executor_cleanup"
+    # Requires optional "modal" dependencies
+    "test_sandbox_lifecycle"
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
+
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -175,8 +200,8 @@ buildPythonPackage rec {
   meta = {
     description = "Barebones library for agents";
     homepage = "https://github.com/huggingface/smolagents";
-    changelog = "https://github.com/huggingface/smolagents/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/smolagents/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CANToolz";

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   fuse,
@@ -17,9 +16,7 @@ buildPythonPackage rec {
   pname = "llfuse";
   version = "1.5.1";
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-llfuse";

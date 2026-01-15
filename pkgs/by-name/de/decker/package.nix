@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "decker";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
 }

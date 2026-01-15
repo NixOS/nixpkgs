@@ -10,7 +10,6 @@
   protobuf,
   pyarrow,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
   version = "2.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_storage";

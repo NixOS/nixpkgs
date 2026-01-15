@@ -10,7 +10,6 @@
   pkgs,
   process-tests,
   pytestCheckHook,
-  pythonOlder,
   redis,
   django-redis,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   version = "4.0.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

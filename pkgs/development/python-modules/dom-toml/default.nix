@@ -1,35 +1,51 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
-  flit-core,
-  setuptools,
+  attrs,
+  buildPythonPackage,
   domdf-python-tools,
-  tomli,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  setuptools,
+  tomli-w,
 }:
+
 buildPythonPackage rec {
   pname = "dom-toml";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "dom_toml";
-    hash = "sha256-XMDdEM4lZtNbwdlKbvFsBilx/wMYxvNwWADWHSB1raw=";
+  src = fetchFromGitHub {
+    owner = "domdfcoding";
+    repo = "dom_toml";
+    tag = "v${version}";
+    hash = "sha256-2kO/6spc+y/ltHf493JkSKI0vGuJu2a29fqsW/EDFxE=";
   };
 
   build-system = [ flit-core ];
 
-  nativeBuildInputs = [ setuptools ];
+  dependencies = [ domdf-python-tools ];
 
-  dependencies = [
-    domdf-python-tools
-    tomli
-  ];
+  optional-dependencies = {
+    all = [
+      attrs
+      tomli-w
+    ];
+    config = [
+      attrs
+      tomli-w
+    ];
+  };
+
+  # Circular dependency whey -> domdf-python-tools -> coincidence
+  doCheck = false;
+
+  pythonImportsCheck = [ "dom_toml" ];
 
   meta = {
     description = "Dom's tools for Tom's Obvious, Minimal Language";
     homepage = "https://github.com/domdfcoding/dom_toml";
+    changelog = "https://github.com/domdfcoding/dom_toml/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };

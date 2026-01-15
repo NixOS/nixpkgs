@@ -10,7 +10,7 @@
   materialyoucolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kde-material-you-colors";
   version = "1.10.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qiaFHu4eyX73cAbMdoP46SiiFjNWx2vXWVzEbCsTNBI=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "kde-material-you-colors";
   };
-}
+})

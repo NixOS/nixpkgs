@@ -7,7 +7,6 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scientific-python";

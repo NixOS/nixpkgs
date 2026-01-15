@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.34.0";
+  version = "0.34.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,10 +22,14 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-xL/6obdpAH2+OsuapUnqqfDLrSoDRuDut0+7Ex7SgZU=";
+    hash = "sha256-iIh6nowT/lScQfYleKYEj40loKkBsFZTOvUsvTF0RPo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gql"
+  ];
 
   dependencies = [
     aiohttp

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -49,6 +50,12 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
   };
+
+  # https://github.com/dask/dask/issues/12043
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace dask/dataframe/dask_expr/tests/_util.py \
+      --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
+  '';
 
   build-system = [
     setuptools
@@ -102,7 +109,6 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.array
   ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = "--version";
 
   pytestFlags = [
     # Rerun failed tests up to three times
@@ -112,6 +118,11 @@ buildPythonPackage rec {
   disabledTestMarks = [
     # Don't run tests that require network access
     "network"
+  ];
+
+  # https://github.com/dask/dask/issues/12042
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_multiple_repartition_partition_size"
   ];
 
   __darwinAllowLocalNetworking = true;

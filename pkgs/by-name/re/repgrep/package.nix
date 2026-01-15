@@ -9,14 +9,14 @@
   ripgrep,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "repgrep";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "acheronfail";
     repo = "repgrep";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-hLRl8mKRaufneJNBQqPsH+48ZQGxFBNgulXcaK4/6s4=";
   };
 
@@ -47,13 +47,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Interactive replacer for ripgrep that makes it easy to find and replace across files on the command line";
     homepage = "https://github.com/acheronfail/repgrep";
-    changelog = "https://github.com/acheronfail/repgrep/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/acheronfail/repgrep/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
       unlicense
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "rgr";
   };
-}
+})

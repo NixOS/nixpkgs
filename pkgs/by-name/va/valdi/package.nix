@@ -19,11 +19,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-LGgyMdhDQ4UwdtENZT/89yiQawn8SxKdth/p7evDAgk=";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform UI framework CLI by Snapchat";
     homepage = "https://github.com/Snapchat/Valdi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonasfranke ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jonasfranke ];
     mainProgram = "valdi";
   };
 }

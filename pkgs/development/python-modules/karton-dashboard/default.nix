@@ -7,15 +7,12 @@
   mistune,
   networkx,
   prometheus-client,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-dashboard";
   version = "1.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

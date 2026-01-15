@@ -57,7 +57,7 @@ let
     mpi-pytest = self.callPackage mpi-pytest.override { };
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake";
   version = "2025.10.2";
   pyproject = true;
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A0dr9A1fm74IzpYiVxzdo4jtELYH7JBeRMOD9uYJODQ=";
   };
 
@@ -183,4 +183,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

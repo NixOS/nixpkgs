@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-identity_1.13.2";
     hash = "sha256-864fU7BkVWXE0vVEYniXQUbrNRvLhhv6aR3wwdnjbQo=";
   };
-  sourceRoot = "source/sdk/identity/azure-identity";
+  sourceRoot = "${finalAttrs.src.name}/sdk/identity/azure-identity";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

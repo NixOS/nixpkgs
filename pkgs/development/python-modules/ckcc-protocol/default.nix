@@ -6,15 +6,12 @@
   hidapi,
   fetchPypi,
   pyaes,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ckcc-protocol";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

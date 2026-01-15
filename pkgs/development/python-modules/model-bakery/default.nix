@@ -5,22 +5,19 @@
   hatchling,
   django,
   pytestCheckHook,
-  pythonOlder,
   pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "model-bakery";
-  version = "1.20.5";
+  version = "1.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
     tag = version;
-    hash = "sha256-Rf1QpIjo94h3lfZCBJfzaOMggPqy37NUOFWUbLROcec=";
+    hash = "sha256-BB/CaVDkqL51WvFC+GRWV3z3jHUQrW1KtIuHUn4acHw=";
   };
 
   build-system = [ hatchling ];

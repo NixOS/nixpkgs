@@ -4,6 +4,8 @@
   fetchFromGitHub,
   testers,
   svu,
+  installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -29,6 +31,14 @@ buildGoModule rec {
   # test assumes source directory to be a git repository
   postPatch = ''
     rm internal/git/git_test.go
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd svu \
+      --bash <($out/bin/svu completion bash) \
+      --fish <($out/bin/svu completion fish) \
+      --zsh <($out/bin/svu completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion { package = svu; };

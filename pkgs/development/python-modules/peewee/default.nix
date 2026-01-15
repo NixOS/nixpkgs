@@ -11,7 +11,6 @@
   mysql-connector,
   withPostgres ? false,
   psycopg2,
-  pythonOlder,
   setuptools,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "peewee";
   version = "3.18.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";

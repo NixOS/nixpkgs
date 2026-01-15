@@ -20,7 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ayatana-webmail";
   version = "24.5.17";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";

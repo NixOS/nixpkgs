@@ -106,7 +106,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       PerchunPak
-      foo-dogsquared
       johnrtitor
     ];
     mainProgram = "ags";

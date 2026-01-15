@@ -84,6 +84,8 @@ let
       "arm64"
     else if stdenv.hostPlatform.isx86_32 then
       "x86"
+    else if (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian) then
+      "ppc64le"
     else
       stdenv.hostPlatform.parsed.cpu.name;
 
@@ -97,7 +99,10 @@ let
       stdenv.hostPlatform.parsed.kernel.name;
 
   isGeneric =
-    (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
+    (
+      stdenv.hostPlatform.isPower
+      && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)
+    )
     || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
     || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV;

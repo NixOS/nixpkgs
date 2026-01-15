@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   netifaces,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aiozeroconf";
   version = "0.1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

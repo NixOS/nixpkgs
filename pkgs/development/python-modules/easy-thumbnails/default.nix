@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pillow,
-  pythonOlder,
   reportlab,
   svglib,
   pytestCheckHook,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "easy-thumbnails";
   version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SmileyChris";

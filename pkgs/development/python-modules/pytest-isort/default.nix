@@ -13,9 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-isort";
   version = "4.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stephrdev";

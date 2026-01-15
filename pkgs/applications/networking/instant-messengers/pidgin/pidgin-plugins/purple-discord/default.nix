@@ -28,8 +28,10 @@ stdenv.mkDerivation {
     json-glib
   ];
 
-  PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
-  PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
+  env = {
+    PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
+    PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
+  };
 
   meta = {
     homepage = "https://github.com/EionRobb/purple-discord";

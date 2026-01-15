@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   setuptools-scm,
   tempora,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "portend";
   version = "3.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -55,13 +55,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_DISCORD_RPC" withDiscordRpc)
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "woof_(.*)"
+    ];
+  };
 
   meta = {
     description = "Doom source port based on Boom/MBF";
     homepage = "https://github.com/fabiangreffrath/woof";
     changelog = "https://github.com/fabiangreffrath/woof/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "woof";
     platforms = lib.platforms.unix;

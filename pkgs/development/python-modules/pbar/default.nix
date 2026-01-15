@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pbar";
   version = "2.2.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darvil82";
     repo = "PBar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FsEjfusk8isOD52xkjndGQdVC8Vc7N3spLLWQTi3Svc=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     homepage = "https://darvil82.github.io/PBar";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

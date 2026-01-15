@@ -7,15 +7,12 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "debuglater";
   version = "1.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ploomber";

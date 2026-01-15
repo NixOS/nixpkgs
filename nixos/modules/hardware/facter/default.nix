@@ -19,6 +19,7 @@
     ./virtualisation.nix
   ];
 
+  meta.doc = ./facter.md;
   meta.maintainers = with lib.maintainers; [ mic92 ];
 
   options.hardware.facter = with lib; {

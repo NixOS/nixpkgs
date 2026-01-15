@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   gettext,
   makeWrapper,
@@ -25,6 +26,12 @@ stdenv.mkDerivation rec {
   patches = [
     # expose error function used by dependents
     ./expose-error.patch
+
+    # Fix build with GCC 15
+    (fetchpatch {
+      url = "https://github.com/pure-data/pure-data/commit/95e4105bc1044cbbcbbbcc369480a77c298d7475.patch";
+      hash = "sha256-zFB9m8Nw80X9+a64Uft4tNRA4BHsVr8zxLqAof0jJEI=";
+    })
   ];
 
   nativeBuildInputs = [

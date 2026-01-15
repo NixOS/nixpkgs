@@ -9,7 +9,6 @@
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   shortuuid,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dvc-task";
   version = "0.40.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";

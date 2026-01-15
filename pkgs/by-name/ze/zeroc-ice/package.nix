@@ -6,6 +6,7 @@
   expat,
   libedit,
   lmdb,
+  mcpp,
   openssl,
   libxcrypt,
   python3, # for tests only
@@ -13,21 +14,26 @@
 }:
 
 let
-  zeroc_mcpp = stdenv.mkDerivation rec {
-    pname = "zeroc-mcpp";
-    version = "2.7.2.14";
+  mcpp' = mcpp.overrideAttrs (prevAttrs: rec {
+    pname = "mcpp-zeroc-ice";
+    version = "2.7.3";
 
     src = fetchFromGitHub {
       owner = "zeroc-ice";
       repo = "mcpp";
       rev = "v${version}";
-      sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
+      hash = "sha256-hZGU5mqMRTTHV2bR9uzM6ALj1sypjPxO5Ajg8aKzLxc=";
     };
 
-    configureFlags = [ "--enable-mcpplib" ];
-    installFlags = [ "PREFIX=$(out)" ];
-  };
+    # zeroc-ice's fork diverges quite a bit from upstream mcpp, so prevAttrs.patches is not used here
+    patches = [
+      # See https://github.com/zeroc-ice/mcpp/pull/12
+      ./fix-mb_init.patch
+      ./fix-reserved-keywords.patch
+    ];
 
+    installFlags = prevAttrs.installFlags or [ ] ++ [ "PREFIX=$(out)" ];
+  });
 in
 stdenv.mkDerivation rec {
   pname = "zeroc-ice";
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    zeroc_mcpp
+    mcpp'
     bzip2
     expat
     libedit

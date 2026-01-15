@@ -9,7 +9,7 @@
   rustPlatform,
   cargo,
   rustc,
-  setuptoolsRustBuildHook,
+  setuptools-rust,
   openssl,
   Security ? null,
   isPyPy,
@@ -34,7 +34,6 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "40.0.1"; # Also update the hash in vectors.nix
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -74,9 +73,12 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
+  build-system = [
+    setuptools-rust
+  ];
+
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptoolsRustBuildHook
     cargo
     rustc
     pkg-config

@@ -7,7 +7,6 @@
   jinja2,
   mako,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlalchemy,
   virtualenv,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pecan";
   version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

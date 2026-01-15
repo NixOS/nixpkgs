@@ -6,7 +6,6 @@
   http-sfv,
   requests,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "requests-http-signature";
   version = "0.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyauth";

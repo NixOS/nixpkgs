@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stereotool";
-  version = "10.51";
+  version = "10.71";
 
   srcs =
     let
@@ -37,19 +37,19 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_64_${versionNoPoint}";
-            hash = "sha256-sMgqbfJhIBuYf6nvxs4R/XmiOBHnVOp2ORcU5+CNtLM=";
+            hash = "sha256-YDrB7MX2EbG9Eknx5XlOAaW/2sPTZzPIGXzFcwKGqK8=";
           })
           # Jack version for 64bits.
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_64_${versionNoPoint}";
-            hash = "sha256-sMgqbfJhIBuYf6nvxs4R/XmiOBHnVOp2ORcU5+CNtLM=";
+            hash = "sha256-YDrB7MX2EbG9Eknx5XlOAaW/2sPTZzPIGXzFcwKGqK8=";
           })
           # Cmd version for 64bits
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_64_${versionNoPoint}";
-            hash = "sha256-x+2JwIy2uLx+QfjayOhY+MYYEQYvAt5O7y+KWn3jcVU=";
+            hash = "sha256-+hm8G5jwgFqDzy7BsYSfJh3x9asx7voc4NdIqkBDGmE=";
           })
         ];
         # Sources if the system is aarch64-linux
@@ -57,17 +57,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_64_${versionNoPoint}";
-            hash = "sha256-Gb0YPgEsd7xvvcCL+MC9ZFAsh0ciJOsmJn1ZIdkZw7Q=";
+            hash = "sha256-nr3VlRpWELe4vlaKenPa3ZtOHjD66BXbGDd2WjTI70E=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_64_${versionNoPoint}";
-            hash = "sha256-Gb0YPgEsd7xvvcCL+MC9ZFAsh0ciJOsmJn1ZIdkZw7Q=";
+            hash = "sha256-nr3VlRpWELe4vlaKenPa3ZtOHjD66BXbGDd2WjTI70E=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_64_${versionNoPoint}";
-            hash = "sha256-KA69G6Vknx8Sle8f2O+OjO88ZYGSv4khYrWIsoHVAoc=";
+            hash = "sha256-QyJ/BulqWEIpGfbd6qGT4ejOtdVJ0/M2pEvJasRZUNE=";
           })
         ];
         # Sources if the system is aarch32-linux
@@ -75,17 +75,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_${versionNoPoint}";
-            hash = "sha256-vjZ/nB4tZ7YVYmclX0Uukgx/JwTv6jjdAfYjloo7a8E=";
+            hash = "sha256-ryw4m08Ru2GI/Wq0UZwjmect7OAHaftfy+0J1S1bYh8=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_${versionNoPoint}";
-            hash = "sha256-vjZ/nB4tZ7YVYmclX0Uukgx/JwTv6jjdAfYjloo7a8E=";
+            hash = "sha256-ryw4m08Ru2GI/Wq0UZwjmect7OAHaftfy+0J1S1bYh8=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_${versionNoPoint}";
-            hash = "sha256-YUCpCzv3GrQEoeyZFwOTcoHu9msciqmViboVu1LBG3g=";
+            hash = "sha256-l9VWraDHJXfNJVb8/VvHENvdknT6ccPBmt/mGlwND00=";
           })
         ];
         # Sources if the system is 32bits i686
@@ -94,17 +94,17 @@ stdenv.mkDerivation rec {
             # The name is the name of this source in the build directory
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_${versionNoPoint}";
-            hash = "sha256-/l/2sx3v14R83Vqvmc5AqMQzmovww7hk4kTqN2U2Mqs=";
+            hash = "sha256-OnGn/OUkXFZ4SnmibpF/0kxeq8YZIWMMVafy6i96GeA=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_${versionNoPoint}";
-            hash = "sha256-/l/2sx3v14R83Vqvmc5AqMQzmovww7hk4kTqN2U2Mqs=";
+            hash = "sha256-OnGn/OUkXFZ4SnmibpF/0kxeq8YZIWMMVafy6i96GeA=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_${versionNoPoint}";
-            hash = "sha256-lPNg58u163DcWk11jbg8l77OdqX+6rVQalGmEXD674s=";
+            hash = "sha256-GDpfSeL14XkvroIF6pm5CzNYiEz/v5uzfyjw+7K1idE=";
           })
         ];
       }

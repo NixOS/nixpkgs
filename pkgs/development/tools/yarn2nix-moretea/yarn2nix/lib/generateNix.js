@@ -39,9 +39,9 @@ function prefetchgit(url, rev) {
       ["--rev", rev, url, "--fetch-submodules"],
       {
         stdio: ["ignore", "pipe", "ignore"],
-        timeout: 60000
-      }
-    )
+        timeout: 60000,
+      },
+    ),
   ).sha256;
 }
 
@@ -90,18 +90,18 @@ function parseIntegrity(maybeIntegrity, fallbackHash) {
     }
   }
 
-  algo = integrities.pickAlgorithm();
-  hash = integrities[algo][0].digest;
+  const algo = integrities.pickAlgorithm();
+  const hash = integrities[algo][0].digest;
   return { algo, hash };
 }
 
 function fetchLockedDep(builtinFetchGit) {
-  return function(pkg) {
+  return function (pkg) {
     const { integrity, nameWithVersion, resolved } = pkg;
 
     if (!resolved) {
       console.error(
-        `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`
+        `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`,
       );
       return "";
     }
@@ -122,7 +122,7 @@ function fetchLockedDep(builtinFetchGit) {
         githubUrl,
         githubRev,
         branch || "master",
-        builtinFetchGit
+        builtinFetchGit,
       );
     }
 
@@ -138,7 +138,7 @@ function fetchLockedDep(builtinFetchGit) {
         urlForGit,
         rev,
         branch || "master",
-        builtinFetchGit
+        builtinFetchGit,
       );
     }
 
@@ -165,12 +165,12 @@ const HEAD = `
 function generateNix(pkgs, builtinFetchGit) {
   const nameWithVersionAndPackageNix = R.map(
     fetchLockedDep(builtinFetchGit),
-    pkgs
+    pkgs,
   );
 
   const packagesDefinition = R.join(
     "\n",
-    R.values(nameWithVersionAndPackageNix)
+    R.values(nameWithVersionAndPackageNix),
   );
 
   return R.join("\n", [HEAD, packagesDefinition, "  ];", "}"]);

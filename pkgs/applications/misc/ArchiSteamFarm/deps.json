@@ -581,8 +581,8 @@
   },
   {
     "pname": "Scalar.AspNetCore",
-    "version": "2.11.6",
-    "hash": "sha256-Zvif7bb67psL8YRMTa04MjeFI8hcWpi/gwtEjp+/xO8="
+    "version": "2.11.10",
+    "hash": "sha256-zSBsHjGTdwgia+v95wAdhNL7X1OuQKUd+CbkKKf/T90="
   },
   {
     "pname": "SteamKit2",
@@ -631,8 +631,8 @@
   },
   {
     "pname": "Tmds.DBus.Protocol",
-    "version": "0.21.2",
-    "hash": "sha256-gaK/5aAummyin6ptnhaJbnA0ih4+2xADrtrLfFbHwYI="
+    "version": "0.22.0",
+    "hash": "sha256-W6ZKFN16KCEM5H8QTVFeQ/UmB55OPdgbSrntuX/X7Rk="
   },
   {
     "pname": "ZstdSharp.Port",

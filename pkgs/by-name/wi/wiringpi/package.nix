@@ -25,6 +25,10 @@ let
       inherit version src;
       sourceRoot = "${src.name}/${subprj}";
       inherit buildInputs;
+
+      # Fix build with gcc 15
+      env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
       # Remove (meant for other OSs) lines from Makefiles
       preInstall = ''
         sed -i "/chown root/d" Makefile

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoconf,
   bison,
   boost,
@@ -68,6 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGputils [
     gputils
+  ];
+
+  patches = [
+    # Fix build with gcc15
+    # https://sourceforge.net/p/sdcc/bugs/3846/
+    (fetchpatch {
+      name = "sdcc-fix-aslink-elf-signature.patch";
+      url = "https://src.fedoraproject.org/rpms/sdcc/raw/4a7c2a7e32369461eb451fc6f4d678a010135afc/f/sdcc-4.4.0-aslink.patch";
+      hash = "sha256-xGilNetecPBj2VV3ebmln5BKqs3OoWFf6y2S3TBTHMQ=";
+    })
   ];
 
   # sdcc 4.5.0 massively rewrote sim/ucsim/Makefile.in, and lost the `.PHONY`

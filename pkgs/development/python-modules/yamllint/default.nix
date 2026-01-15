@@ -6,7 +6,6 @@
   setuptools,
   pathspec,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "yamllint";
   version = "1.37.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "adrienverge";

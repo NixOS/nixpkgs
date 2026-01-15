@@ -6,8 +6,8 @@
   libxslt,
   docbook-xsl,
   docbook_xml_dtd_44,
-  perlPackages,
   makeWrapper,
+  parallel, # for its priority
   perl, # for pod2man
   cctools,
   gitUpdater,
@@ -64,5 +64,9 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
+
+    # If somebody explicitly installs GNU parallel, they probably want
+    # its parallel executable instead of moreutils'.
+    priority = (parallel.meta.priority or lib.meta.defaultPriority) + 1;
   };
 }

@@ -16,61 +16,61 @@
 
 let
   perlModules = with perlPackages; [
-    ImageMagick
     Cairo
+    CairoGObject
+    CarpAlways
+    commonsense
+    EncodeLocale
     FileBaseDir
-    FileWhich
     FileCopyRecursive
-    XMLSimple
-    XMLTwig
-    XMLParser
-    SortNaturally
-    LocaleGettext
-    ProcProcessTable
-    X11Protocol
-    ProcSimple
-    ImageExifTool
-    JSON
-    JSONMaybeXS
-    NetOAuth
-    PathClass
-    LWP
-    LWPProtocolHttps
-    NetDBus
-    TryTiny
-    WWWMechanize
-    HTTPMessage
-    HTTPDate
+    FileWhich
+    Glib
+    GlibObjectIntrospection
+    GooCanvas2
+    GooCanvas2CairoTypes
+    Gtk3
+    Gtk3ImageView
     HTMLForm
     HTMLParser
     HTMLTagset
     HTTPCookies
-    EncodeLocale
-    URI
-    CarpAlways
-    GlibObjectIntrospection
+    HTTPDate
+    HTTPMessage
+    ImageExifTool
+    ImageMagick
+    JSON
+    JSONMaybeXS
+    LocaleGettext
+    LWP
+    LWPProtocolHttps
+    Moo
+    NetDBus
     NumberBytesHuman
-    CairoGObject
-    Readonly
-    Gtk3ImageView
-    Gtk3
-    Glib
     Pango
-    GooCanvas2
-    GooCanvas2CairoTypes
-    commonsense
+    PathClass
+    ProcProcessTable
+    ProcSimple
+    Readonly
+    SortNaturally
+    SubQuote
+    TryTiny
     TypesSerialiser
+    URI
+    X11Protocol
+    XMLParser
+    XMLSimple
+    XMLTwig
   ];
 in
 stdenv.mkDerivation rec {
   pname = "shutter";
-  version = "0.99.2";
+  version = "0.99.6";
 
   src = fetchFromGitHub {
     owner = "shutter-project";
     repo = "shutter";
     rev = "v${version}";
-    sha256 = "sha256-o95skSr6rszh0wsHQTpu1GjqCDmde7aygIP+i4XQW9A=";
+    sha256 = "sha256-2wRPmTpFfgU8xW9Fyn1+TMowcKm3pukT1ck06IWPiGo=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];

@@ -10,12 +10,9 @@
 
 stdenv.mkDerivation rec {
   pname = "mstflint_access";
-  inherit (mstflint) version;
+  inherit (mstflint) version src;
 
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/kernel-mstflint-${version}.tar.gz";
-    hash = "sha256-VO4nXGlqp955xmNyAD/TdOfLEA2CKouOJmLnRCvjnaw=";
-  };
+  sourceRoot = "source/kernel";
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 

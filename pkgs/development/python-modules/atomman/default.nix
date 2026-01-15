@@ -11,7 +11,6 @@
   phonopy,
   potentials,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scipy,
   setuptools,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "atomman";
   version = "1.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";

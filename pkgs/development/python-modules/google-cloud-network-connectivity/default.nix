@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   google-api-core,
   grpc-google-iam-v1,
   mock,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "google-cloud-network-connectivity";
   version = "2.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

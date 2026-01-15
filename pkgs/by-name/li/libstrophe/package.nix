@@ -22,10 +22,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-53O8hHyw9y0Bzs+BpGouAxuSGJxh6NSNNWZqi7RHAsY=";
   };
 
+  patches = [
+    # Newer GCC rejects implicitly weak-typed pointer casting.
+    # Upstream PR: https://github.com/strophe/libstrophe/pull/267
+    ./pointer-cast.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
     openssl
     expat

@@ -95,6 +95,16 @@ let
         ];
       });
 
+      google-genai = super.google-genai.overridePythonAttrs rec {
+        version = "1.38.0";
+        src = fetchFromGitHub {
+          owner = "googleapis";
+          repo = "python-genai";
+          tag = "v${version}";
+          hash = "sha256-gJaLEpNKHl6n1MvQDIUW7ynsHYH2eEPGsYso5jSysNg=";
+        };
+      };
+
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
@@ -121,6 +131,7 @@ let
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
+        pyproject = null;
 
         src = fetchFromGitHub {
           owner = "engrbm87";
@@ -218,15 +229,6 @@ let
         ];
       });
 
-      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -291,7 +293,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.12.4";
+  hassVersion = "2026.1.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -312,13 +314,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-VT9JdpzPKdOJ8Q//SUDMUgTa46k6v7Mi74Yl9mEPF/I=";
+    hash = "sha256-l2/mi/WfZ3PbuB7LEhpWkubsY1xMyUjeolxPDHYEXWU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-wVe5/syj878B3o7QWgQ2wOEsbdyvFWD/VMgpok1SwOQ=";
+    hash = "sha256-Ll1wwcdkH/A2N8M1ZuE1RvjNFRu6ipEyuy4Th34s/Uo=";
   };
 
   build-system = with python.pkgs; [

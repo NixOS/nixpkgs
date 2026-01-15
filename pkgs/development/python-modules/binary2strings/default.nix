@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "binary2strings";
   version = "0.1.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "glmcdona";

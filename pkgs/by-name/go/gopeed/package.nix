@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-KezASQIqyu4GsKaGAhge7gEYMe57GMgzjXlAbmyDI3Y=";
+    hash = "sha256-ze0hoTR3e3Wrgtv2FlM81faXmij61NEcPLzO4WDXIak=";
   };
 
   metaCommon = {
@@ -29,7 +29,14 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-x9M9zwS5FhsIyGGBi0szWHMfLXCFVgqv8bfSxhHZT2Y=";
+    vendorHash = "sha256-rIj4T+NEqWla6/+ofosTwagL4/VMovDp1NEYMuzbOrQ=";
+
+    # Fix C23 compat
+    preBuild = ''
+      chmod +w vendor/github.com/anacrolix/go-libutp/utp_types.h
+      substituteInPlace vendor/github.com/anacrolix/go-libutp/utp_types.h \
+        --replace-fail "typedef uint8 bool;" ""
+    '';
 
     buildPhase = ''
       runHook preBuild

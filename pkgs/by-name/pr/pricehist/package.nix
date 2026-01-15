@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pricehist";
   version = "1.4.14";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "chrisberkhout";

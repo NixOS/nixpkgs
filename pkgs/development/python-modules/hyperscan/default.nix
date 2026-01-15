@@ -62,6 +62,6 @@ buildPythonPackage rec {
       "x86_64-darwin"
     ];
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

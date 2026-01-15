@@ -7,7 +7,6 @@
   pydantic,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests-oauthlib,
   responses,
   typing-extensions,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "withings-api";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vangorra";

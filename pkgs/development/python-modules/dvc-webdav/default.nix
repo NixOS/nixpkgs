@@ -3,7 +3,6 @@
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   webdav4,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dvc-webdav";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

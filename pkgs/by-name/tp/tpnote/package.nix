@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpnote";
-  version = "1.25.16";
+  version = "1.25.17";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gltzK1C+4qddJ49vv+OZ8AVuMeBWArwOZkL+v7cxFzw=";
+    hash = "sha256-XOoqPhWS50kj2n48A0SyOuUZHsoP7YxMrWpzgpTr/DY=";
   };
 
-  cargoHash = "sha256-OH3aSQdcAGNRJWGmgQ4LNnD89hqCIEh+ieHosjFhAbk=";
+  cargoHash = "sha256-4e06W8Q+pJTcUgfDSHU1ZTMG/55mYvJ6DAX3QeAa9TI=";
 
   nativeBuildInputs = [
     cmake
@@ -33,6 +33,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     oniguruma
   ];
+
+  postPatch = ''
+    # In these `Cargo.toml`s, local dependencies should be specified by path,
+    # otherwise they will be looked up in vendored dependencies.
+    substituteInPlace tpnote/Cargo.toml \
+      --replace-fail 'tpnote-lib = { version =' 'tpnote-lib = { path = "../tpnote-lib", version ='
+
+    substituteInPlace tpnote-lib/Cargo.toml \
+      --replace-fail 'tpnote-html2md = { version =' 'tpnote-html2md = { path = "../tpnote-html2md", version ='
+  '';
 
   postInstall = ''
     installManPage docs/build/man/man1/tpnote.1
@@ -48,7 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -61,6 +70,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://blog.getreu.net/projects/tp-note/";
     license = lib.licenses.mit;
     mainProgram = "tpnote";
-    maintainers = with lib.maintainers; [ getreu ];
+    maintainers = with lib.maintainers; [
+      getreu
+      starryreverie
+    ];
   };
 })

@@ -8,15 +8,12 @@
   poetry-core,
   python-engineio-v3,
   python-socketio-v4,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sisyphus-control";
   version = "3.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jkeljo";

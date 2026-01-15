@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-core,
   cryptography,
   msal,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "azure-identity";
   version = "1.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_identity";

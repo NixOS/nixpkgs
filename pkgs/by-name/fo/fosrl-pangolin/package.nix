@@ -168,6 +168,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       jackr
       sigmasquadron
+      water-sucks
     ];
     platforms = lib.platforms.linux;
     mainProgram = "pangolin";

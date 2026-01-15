@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gokrazy";
-  version = "0-unstable-2024-09-27";
+  version = "0-unstable-2026-01-09";
 
   src = fetchFromGitHub {
     owner = "gokrazy";
     repo = "tools";
-    rev = "6bec690fe5cdabca7aeec52257118d4ff7d7b060";
-    hash = "sha256-EJ0qEsXhBssWUrzyhtL0So0Yaxzr843QNwoE0tppeuk=";
+    rev = "8ed49b4fafc72841e5a087362d719eb8a648db9b";
+    hash = "sha256-VxRX94vmzVGt4KwC+0T/I8XCKdmftoDTLeYMISLsHoA=";
   };
 
-  vendorHash = "sha256-B/46VGCbLE/6LgW2wfKoHI9cyveE6hE/AfAZzIG5J+g=";
+  vendorHash = "sha256-Khvk7Q0HVyhCg4jMvjVQdSXHRq2uuv2wHszcDTTV3qk=";
 
   ldflags = [
     "-s"

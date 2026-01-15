@@ -51,7 +51,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/idoavrah/terraform-tui";
     changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.bitnomial ];
+    maintainers = with lib.maintainers; [
+      cdepillabout
+      wraithm
+    ];
     mainProgram = "tftui";
   };
 }

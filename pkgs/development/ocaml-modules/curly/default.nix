@@ -41,6 +41,9 @@ buildDunePackage rec {
   postPatch = ''
     substituteInPlace src/curly.ml \
       --replace "exe=\"curl\"" "exe=\"${curl}/bin/curl\""
+    substituteInPlace test/test_curly.ml \
+      --replace-fail "let body_header b = [\"content-length\", string_of_int (String.length b)]" \
+                     "let body_header b = [\"connection\", \"keep-alive\"; \"content-length\", string_of_int (String.length b)]"
   '';
 
   meta = {

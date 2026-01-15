@@ -2,10 +2,20 @@
   lib,
   fetchFromGitHub,
   gitMinimal,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      pytest-randomly = super.pytest-randomly.overridePythonAttrs {
+        doCheck = false;
+      };
+      sqlalchemy = self.sqlalchemy_1_4;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "quark-engine";
   version = "25.6.1";
   pyproject = true;
@@ -17,9 +27,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-DAD37fzswY3c0d+ubOCYImxs4qyD4fhC3m2l0iD977A=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with pythonPackages; [
     androguard
     click
     colorama

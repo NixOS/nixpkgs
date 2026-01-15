@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "chess";
   version = "1.11.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "niklasf";

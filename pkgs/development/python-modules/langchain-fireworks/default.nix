@@ -60,6 +60,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+  ];
+
   pythonImportsCheck = [ "langchain_fireworks" ];
 
   passthru = {

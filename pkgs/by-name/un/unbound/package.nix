@@ -52,17 +52,18 @@
   nix-update-script,
   # for passthru.tests
   gnutls,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-meWgu1UGhR9d8wVb8guqbnGE3UHs6uJHR20iDFnIThQ=";
+    hash = "sha256-kyTcDmNGKJuOMZ7cxIWh6o7aasRUoAB4M0tIG81BQsE=";
   };
 
   outputs = [
@@ -202,6 +203,12 @@ stdenv.mkDerivation (finalAttrs: {
       ) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'"
     ) (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
@@ -219,7 +226,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
+    changelog = "https://github.com/NLnetLabs/unbound/releases/tag/release-${finalAttrs.version}";
     maintainers = with lib.maintainers; [ Scrumplex ];
+    mainProgram = "unbound";
     platforms = with lib.platforms; unix ++ windows;
   };
 })

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
   version = "4.3.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arsenetar";

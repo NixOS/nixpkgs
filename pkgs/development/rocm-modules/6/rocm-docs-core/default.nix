@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   pname = "rocm-docs-core";
   version = "1.23.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";

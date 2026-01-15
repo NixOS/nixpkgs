@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  fetchDebianPatch,
   libmysqlclient,
   # Excerpt from glpk's INSTALL file:
   # This feature allows the exact simplex solver to use the GNU MP
@@ -50,6 +51,14 @@ stdenv.mkDerivation rec {
       name = "error_recovery.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/d3c1f607e32f964bf0cab877a63767c86fd00266/build/pkgs/glpk/patches/error_recovery.patch";
       sha256 = "sha256-2hNtUEoGTFt3JgUvLH3tPWnz+DZcXNhjXzS+/V89toA=";
+    })
+
+    # Fix build with gcc15
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "2";
+      patch = "gcc-15.patch";
+      hash = "sha256-wuWPYqJKIKJAJaeJXW7lhvapu8Fd3zHjLAv7Ve7q8Qw=";
     })
   ];
 

@@ -4,7 +4,6 @@
   elasticsearch,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "elasticsearch-dsl";
   version = "8.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "elasticsearch_dsl";

@@ -846,7 +846,6 @@ in
         RuntimeDirectory = map (p: "discourse/" + p) [
           "config"
           "home"
-          "assets/javascripts/plugins"
           "public"
           "sockets"
           "assets-generated"

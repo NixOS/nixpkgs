@@ -15,7 +15,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.144.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";

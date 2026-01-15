@@ -6,11 +6,11 @@
 
 let
   pname = "zoho-mail-desktop";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "https://downloads.zohocdn.com/zmail-desktop/linux/zoho-mail-desktop-lite-x64-v${version}.AppImage";
-    hash = "sha256-hoWOujwfm5/DS/0Kh69gqIKmc1dnVSOYJP/zypvcy8I=";
+    hash = "sha256-uGz2sksBMbw/17ia/RU/9kJhf4EMeSFrMX27D9XplrI=";
   };
 
   appimageContents = appimageTools.extract {

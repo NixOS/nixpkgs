@@ -5,7 +5,6 @@
   mock,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   which,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "nodeenv";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ekalinin";

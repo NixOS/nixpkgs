@@ -4,7 +4,6 @@
   fetchPypi,
   aiohttp,
   prometheus-client,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiohttp-openmetrics";
   version = "0.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

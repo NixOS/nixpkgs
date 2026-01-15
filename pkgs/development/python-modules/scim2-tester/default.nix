@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   scim2-client,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   version = "0.1.14";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit version;

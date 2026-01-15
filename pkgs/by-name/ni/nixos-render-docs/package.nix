@@ -21,7 +21,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "nixos-render-docs";
   version = "0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = lib.cleanSourceWith {
     filter =

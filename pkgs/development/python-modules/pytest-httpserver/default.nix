@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   toml,
   werkzeug,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-httpserver";
   version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csernazs";

@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       ethancedwards8
-      foo-dogsquared
     ];
     platforms = guile.meta.platforms;
   };

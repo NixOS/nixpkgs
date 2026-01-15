@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pytest-rerunfailures,
-  pythonOlder,
   vine,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "amqp";
   version = "5.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

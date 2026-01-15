@@ -13,7 +13,6 @@
   # Python deps
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   python,
   # Python libraries
   numpy,
@@ -132,7 +131,7 @@ let
     }
   ];
 
-  withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
+  withTensorboard = tensorboardSupport;
 
   cudaComponents = with cudaPackages; [
     (cuda_nvcc.__spliced.buildHost or cuda_nvcc)
@@ -330,8 +329,10 @@ let
       jsoncpp
       libjpeg_turbo
       libpng
-      (pybind11.overridePythonAttrs (_: {
-        inherit stdenv;
+      (pybind11.override (prev: {
+        buildPythonPackage = prev.buildPythonPackage.override {
+          inherit stdenv;
+        };
       }))
       snappy-cpp
       sqlite

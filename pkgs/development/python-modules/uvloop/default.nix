@@ -2,9 +2,9 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   cython,
@@ -79,6 +79,10 @@ buildPythonPackage rec {
     "tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonAtLeast "3.14") [
+    # https://github.com/MagicStack/uvloop/issues/709
+    "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
   ];
 
   preCheck = ''

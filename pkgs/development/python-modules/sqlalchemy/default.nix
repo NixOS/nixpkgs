@@ -1,7 +1,6 @@
 {
   lib,
   isPyPy,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   nix-update-script,
@@ -44,16 +43,14 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.44";
+  version = "2.0.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-XjmSMgFOMYzJ5IR7tDImj37mM7qhiesKsaBerfzxL4g=";
+    hash = "sha256-ZAiRR456KkSdXkCiy+TXjdeOJwrLlmVxJfl1x8/XHIs=";
   };
 
   postPatch = ''

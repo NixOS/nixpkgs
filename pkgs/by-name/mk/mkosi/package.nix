@@ -59,7 +59,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "mkosi";
   version = "26";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"

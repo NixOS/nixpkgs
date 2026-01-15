@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goverlay";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = "goverlay";
     tag = finalAttrs.version;
-    hash = "sha256-FlYllC9nwWE+BWOLMAnzDcl2I2qIMU8K7Uan+juEkj0=";
+    hash = "sha256-xfc+ht1piVnjXK+hxHKbhdpp63p/DMLPSzvJq+mYhFs=";
   };
 
   outputs = [

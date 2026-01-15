@@ -4,7 +4,6 @@
   dvc,
   fetchFromGitHub,
   pydrive2,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dvc-gdrive";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";

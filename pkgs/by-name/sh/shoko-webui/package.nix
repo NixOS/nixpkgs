@@ -49,7 +49,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateSript = nix-update-script { };
+  passthru.updateSript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      ''v([0-9]+\.[0-9]+\.[0-9]+).*''
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/ShokoAnime/Shoko-WebUI";

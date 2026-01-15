@@ -3,7 +3,6 @@
   buildPythonPackage,
   colorlog,
   fetchPypi,
-  pythonOlder,
   pyserial,
 }:
 
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pypca";
   version = "0.0.13";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

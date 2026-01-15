@@ -27,7 +27,6 @@
   libkrb5,
   libxml2,
   libxslt,
-  python2,
   stdenv,
   which,
   libiconv,

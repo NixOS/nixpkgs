@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
   version = "0.1.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "janten";

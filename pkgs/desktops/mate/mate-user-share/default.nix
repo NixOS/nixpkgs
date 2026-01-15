@@ -15,18 +15,18 @@
   hicolor-icon-theme,
   mate,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
 let
   inherit (apacheHttpdPackages) apacheHttpd mod_dnssd;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-user-share";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-user-share-${finalAttrs.version}.tar.xz";
     sha256 = "iYVgmZkXllE0jkl+8I81C4YIG5expKcwQHfurlc5rjg=";
   };
 
@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-user-share";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "User level public file sharing for the MATE desktop";
@@ -75,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

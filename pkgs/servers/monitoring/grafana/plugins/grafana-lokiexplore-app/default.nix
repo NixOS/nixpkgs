@@ -7,7 +7,7 @@ grafanaPlugin {
   meta = {
     description = "Browse Loki logs without the need for writing complex queries";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.fslabs ];
+    maintainers = with lib.maintainers; [ lpostula ];
     platforms = lib.platforms.unix;
   };
 }

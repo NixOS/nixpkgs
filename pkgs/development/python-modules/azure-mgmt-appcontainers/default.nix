@@ -16,8 +16,6 @@ buildPythonPackage rec {
   format = "setuptools";
   pyroject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "azure_mgmt_appcontainers";
     inherit version;

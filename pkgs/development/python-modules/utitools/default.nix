@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "utitools";
   version = "0.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "utitools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oI+a+sc9+qi7aFP0dLINAQekib/9pZm10A5jhVIHWvo=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utilities for working with Uniform Type Identifiers";
     homepage = "https://github.com/RhetTbull/utitools";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/osxphotos/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

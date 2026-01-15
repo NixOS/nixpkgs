@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   isPyPy,
 
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "mako";
   version = "1.3.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";

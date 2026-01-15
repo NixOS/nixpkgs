@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
       url = "https://git.kraxel.org/cgit/fbida/patch/?id=1bb8a8aa29845378903f3c690e17c0867c820da2";
       sha256 = "0n5vqbp8wd87q60zfwdf22jirggzngypc02ha34gsj1rd6pvwahi";
     })
+    # Prevents using function declaration without explicit parameters.
+    ./function-parameters.patch
   ];
 
   nativeBuildInputs = [

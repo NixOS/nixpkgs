@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # dependencies
   blessed,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "enlighten";
   version = "1.14.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

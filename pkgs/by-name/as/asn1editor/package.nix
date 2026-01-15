@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "asn1editor";
   version = "0.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Futsch1";

@@ -6,7 +6,6 @@
   pylint,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   toml,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-pylint";
   version = "0.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

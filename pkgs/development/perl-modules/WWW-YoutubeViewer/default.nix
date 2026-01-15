@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   buildPerlPackage,
-  shortenPerlShebang,
   LWP,
   LWPProtocolHttps,
   DataDump,
@@ -22,16 +21,12 @@ buildPerlPackage rec {
     sha256 = "9Z4fv2B0AnwtYsp7h9phnRMmHtBOMObIJvK8DmKQRxs=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
   propagatedBuildInputs = [
     LWP
     LWPProtocolHttps
     DataDump
     JSON
   ];
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/youtube-viewer
-  '';
 
   passthru.updateScript = gitUpdater { };
 

@@ -29,9 +29,6 @@
   sqlalchemy,
   tornado,
   traitlets,
-  pythonOlder,
-  async-generator,
-  importlib-metadata,
 
   # tests
   addBinToPathHook,
@@ -104,10 +101,6 @@ buildPythonPackage rec {
     sqlalchemy
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    async-generator
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "jupyterhub" ];
@@ -138,7 +131,6 @@ buildPythonPackage rec {
     versionCheckHook
     virtualenv
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tries to install older versions through pip

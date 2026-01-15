@@ -11,7 +11,7 @@
   bzip2,
   curl,
   cyrus_sasl,
-  enchant2,
+  enchant,
   freetds,
   gd,
   gettext,
@@ -447,20 +447,10 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--enable-dom"
               ];
-              patches = lib.optionals (lib.versionOlder php.version "8.3") [
-                # Fix gh10234 test with libxml 2.15.0
-                (fetchpatch {
-                  url = "https://github.com/php/php-src/commit/d6e70e705323a50b616ffee9402245ab97de3e4e.patch";
-                  hash = "sha256-Axu09l3uQ83qe30aDsR+Bt29cJiF4mLknwDyQf94vic=";
-                  includes = [
-                    "ext/dom/tests/gh10234.phpt"
-                  ];
-                })
-              ];
             }
             {
               name = "enchant";
-              buildInputs = [ enchant2 ];
+              buildInputs = [ enchant ];
               configureFlags = [ "--with-enchant" ];
               doCheck = false;
             }

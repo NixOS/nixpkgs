@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.6.1";
 
   # kord depends on nightly features
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   src = fetchFromGitHub {
     owner = "twitchax";

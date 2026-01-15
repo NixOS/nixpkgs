@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Required for build with gcc-14
-  env.NIX_CFLAGS_COMPILE = "-std=c++14";
+  env.NIX_CFLAGS_COMPILE = "-std=c++14 -Wno-template-body";
 
   cmakeFlags = [
     "-DENABLE_OPENMP=ON"

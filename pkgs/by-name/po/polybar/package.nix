@@ -3,6 +3,7 @@
   cairo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   libuv,
   libXdmcp,
   libpthreadstubs,
@@ -88,7 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
     i3
   ];
 
-  patches = [ ./remove-hardcoded-etc.diff ];
+  patches = [
+    # FIXME: remove after version update
+    (fetchpatch {
+      name = "gcc15-cstdint-fix.patch";
+      url = "https://github.com/polybar/polybar/commit/f99e0b1c7a5b094f5a04b14101899d0cb4ece69d.patch";
+      sha256 = "sha256-Mf9R4u1Kq4yqLqTFD5ZoLjrK+GmlvtSsEyRFRCiQ72U=";
+    })
+
+    ./remove-hardcoded-etc.diff
+  ];
 
   # Replace hardcoded /etc when copying and reading the default config.
   postPatch = ''

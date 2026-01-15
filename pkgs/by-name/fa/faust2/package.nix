@@ -6,7 +6,7 @@
   makeWrapper,
   pkg-config,
   cmake,
-  llvm_18, # does not build with 19+ due to API changes
+  llvm,
   emscripten,
   openssl,
   libsndfile,
@@ -24,13 +24,13 @@
 
 let
 
-  version = "2.81.10";
+  version = "2.83.1";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
-    hash = "sha256-xmaZY1jFIZQjWlQkJ+uHC4tY4pFPLJ+fKSbktIZkBFI=";
+    hash = "sha256-DojqKLoGb6aGpqpeTAXyLFsbWs/UgYr9nA+JMGa712A=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +65,7 @@ let
         which
       ];
       buildInputs = [
-        llvm_18
+        llvm
         emscripten
         openssl
         libsndfile
@@ -81,7 +81,7 @@ let
 
       preConfigure = ''
         # include llvm-config in path
-        export PATH="${lib.getDev llvm_18}/bin:$PATH"
+        export PATH="${lib.getDev llvm}/bin:$PATH"
         cd build
 
       ''

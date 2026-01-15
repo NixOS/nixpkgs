@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "smtpdfix";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -46,6 +46,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/bebleo/smtpdfix";
     changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
   };
 }

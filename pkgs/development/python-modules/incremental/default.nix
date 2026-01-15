@@ -1,10 +1,10 @@
 {
   buildPythonPackage,
-  click,
   fetchFromGitHub,
+  hatchling,
   lib,
+  packaging,
   pythonOlder,
-  setuptools,
   tomli,
   twisted,
 }:
@@ -12,25 +12,19 @@
 let
   incremental = buildPythonPackage rec {
     pname = "incremental";
-    version = "24.7.2";
+    version = "24.11.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "incremental";
       tag = "incremental-${version}";
-      hash = "sha256-5MlIKUaBUwLTet23Rjd2Opf5e54LcHuZDowcGon0lOE=";
+      hash = "sha256-GkTCQYGrgCUzizSgKhWeqJ25pfaYA7eUJIHt0q/iO0E=";
     };
 
-    # From upstream's pyproject.toml:
-    # "Keep this aligned with the project dependencies."
-    build-system = dependencies;
+    build-system = [ hatchling ];
 
-    dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-
-    optional-dependencies = {
-      scripts = [ click ];
-    };
+    dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
     # escape infinite recursion with twisted
     doCheck = false;
@@ -50,10 +44,11 @@ let
     pythonImportsCheck = [ "incremental" ];
 
     meta = {
-      changelog = "https://github.com/twisted/incremental/blob/${src.rev}/NEWS.rst";
+      changelog = "https://github.com/twisted/incremental/blob/${src.tag}/NEWS.rst";
       homepage = "https://github.com/twisted/incremental";
       description = "Small library that versions your Python projects";
       license = lib.licenses.mit;
+      mainProgram = "incremental";
       maintainers = with lib.maintainers; [ dotlambda ];
     };
   };

@@ -4,7 +4,6 @@
   fetchPypi,
   buildPythonPackage,
   isPyPy,
-  pythonOlder,
 
   # build-system
   certifi,
@@ -38,9 +37,6 @@
   pillow,
   pyparsing,
   python-dateutil,
-
-  # optional
-  importlib-resources,
 
   # GTK3
   enableGtk3 ? false,
@@ -83,8 +79,6 @@ buildPythonPackage rec {
   version = "3.10.5";
   pname = "matplotlib";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -147,7 +141,6 @@ buildPythonPackage rec {
     pyparsing
     python-dateutil
   ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
   ++ lib.optionals enableGtk3 [
     pycairo
     pygobject3

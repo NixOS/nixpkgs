@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "hhatto";
     repo = "autopep8";

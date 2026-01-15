@@ -4,15 +4,12 @@
   fetchPypi,
   packaging,
   python-socketio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "uptime-kuma-api";
   version = "1.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "uptime_kuma_api";

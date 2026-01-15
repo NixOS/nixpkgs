@@ -9,7 +9,6 @@
   mock,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   requests,
   six,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "oss2";
   version = "2.18.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aliyun";

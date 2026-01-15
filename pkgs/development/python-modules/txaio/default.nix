@@ -5,7 +5,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   twisted,
   zope-interface,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "txaio";
   version = "25.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

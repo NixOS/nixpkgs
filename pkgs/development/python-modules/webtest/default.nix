@@ -7,7 +7,6 @@
   pastedeploy,
   pyquery,
   pytestCheckHook,
-  pythonOlder,
   six,
   waitress,
   webob,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "webtest";
   version = "3.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

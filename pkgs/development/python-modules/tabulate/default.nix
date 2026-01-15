@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   wcwidth,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   version = "0.9.0";
   pname = "tabulate";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -34,6 +31,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  # Tests against stdlib behavior which changed in https://github.com/python/cpython/pull/139070
+  disabledTests = [
+    "test_wrap_multiword_non_wide"
+  ];
 
   meta = {
     description = "Pretty-print tabular data";

@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   redis,
   redisTestHook,
   setuptools,
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "walrus";
-  version = "0.9.5";
+  version = "0.9.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "walrus";
-    tag = version;
-    hash = "sha256-iZe0jqIzbGKjkhlVwJQXPz9UTBzLcnnO2IuKa3sHaMw=";
+    tag = finalAttrs.version;
+    hash = "sha256-CXy6jjGIG8nuqnF39DqDLvYDGq7N1VL2yitVQrNMEzI=";
   };
 
   build-system = [ setuptools ];
@@ -39,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight Python utilities for working with Redis";
     homepage = "https://github.com/coleifer/walrus";
-    changelog = "https://github.com/coleifer/walrus/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/coleifer/walrus/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
-}
+})

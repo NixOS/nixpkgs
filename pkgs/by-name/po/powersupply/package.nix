@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "powersupply";
   version = "0.10.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";

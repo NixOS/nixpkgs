@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "wazeroutecalculator";
   version = "0.15";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "WazeRouteCalculator";

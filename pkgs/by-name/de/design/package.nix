@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "design";
-  version = "46-alpha1";
+  version = "48-alpha1";
 
   src = fetchFromGitHub {
     owner = "dubstar-04";
     repo = "Design";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Q4R/Ztu4w8IRvq15xNXN/iP/6hIHe/W+me1jROGpYc8=";
+    hash = "sha256-xLARmvqJUxVjHHeak/BrpfIe18KCy9++8HRjOFjwE7I=";
   };
 
   nativeBuildInputs = [

@@ -5,15 +5,12 @@
   setuptools,
   flake8,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pep8-naming";
   version = "0.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";

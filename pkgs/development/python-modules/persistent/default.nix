@@ -11,15 +11,12 @@
   cffi,
   zope-deferredimport,
   zope-interface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persistent";
   version = "6.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

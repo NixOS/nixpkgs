@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "loqedapi";
   version = "2.1.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cpolhout";

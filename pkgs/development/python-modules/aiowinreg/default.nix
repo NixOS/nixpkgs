@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   prompt-toolkit,
-  pythonOlder,
   setuptools,
   winacl,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiowinreg";
   version = "0.0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "skelsec";

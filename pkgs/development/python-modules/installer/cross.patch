@@ -1,0 +1,67 @@
+diff --git a/src/installer/__main__.py b/src/installer/__main__.py
+index 51014b9..45682d0 100644
+--- a/src/installer/__main__.py
++++ b/src/installer/__main__.py
+@@ -30,6 +30,13 @@ def _get_main_parser() -> argparse.ArgumentParser:
+         type=str,
+         help="override prefix to install packages to",
+     )
++    parser.add_argument(
++        "--executable",
++        metavar="path",
++        default=sys.executable,
++        type=str,
++        help="#! executable to install scripts with (default=sys.executable)",
++    )
+     parser.add_argument(
+         "--compile-bytecode",
+         action="append",
+@@ -86,7 +93,7 @@ def _main(cli_args: Sequence[str], program: Optional[str] = None) -> None:
+     with WheelFile.open(args.wheel) as source:
+         destination = SchemeDictionaryDestination(
+             scheme_dict=_get_scheme_dict(source.distribution, prefix=args.prefix),
+-            interpreter=sys.executable,
++            interpreter=args.executable,
+             script_kind=get_launcher_kind(),
+             bytecode_optimization_levels=bytecode_levels,
+             destdir=args.destdir,
+@@ -94,5 +101,6 @@ def _main(cli_args: Sequence[str], program: Optional[str] = None) -> None:
+         installer.install(source, destination, {})
+ 
+ 
++
+ if __name__ == "__main__":  # pragma: no cover
+     _main(sys.argv[1:], "python -m installer")
+diff --git a/tests/test_main.py b/tests/test_main.py
+index 391a13d..d7b4192 100644
+--- a/tests/test_main.py
++++ b/tests/test_main.py
+@@ -53,6 +53,28 @@ def test_main_prefix(fancy_wheel, tmp_path):
+     }
+ 
+ 
++def test_main_executable(fancy_wheel, tmp_path):
++    destdir = tmp_path / "dest"
++
++    main(
++        [
++            str(fancy_wheel),
++            "-d",
++            str(destdir),
++            "--executable",
++            "/monty/python3.x",
++        ],
++        "python -m installer",
++    )
++
++    installed_scripts = destdir.rglob("bin/*")
++
++    for f in installed_scripts:
++        with f.open("rb") as fp:
++            shebang = fp.readline()
++            assert shebang == b"#!/monty/python3.x\n"
++
++
+ def test_main_no_pyc(fancy_wheel, tmp_path):
+     destdir = tmp_path / "dest"
+ 

@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3+6g4KbybWckxK8B2pp7iEh62y2Bunxy/K9S21IsmtQ=";
   };
 
+  postPatch = ''
+    sed -e '1i#include <cstdint>' -i src/cli/cli.h
+  '';
+
   nativeBuildInputs = [
     python3
     docutils

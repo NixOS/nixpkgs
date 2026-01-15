@@ -44,7 +44,7 @@ php.buildComposerProject2 (finalAttrs: {
     description = "Federated image sharing platform";
     license = lib.licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
-    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
     platforms = php.meta.platforms;
   };
 })

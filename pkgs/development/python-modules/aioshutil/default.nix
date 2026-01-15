@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "aioshutil";
   version = "1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "kumaraditya303";

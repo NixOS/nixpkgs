@@ -9,7 +9,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
   version = "3.19.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_datatransfer";

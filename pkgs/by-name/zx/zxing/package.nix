@@ -18,7 +18,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-D+ZKfDa406RIaTRhH9yXxgP8EpGe0iQU9CqkOMC4UdE=";
   };
 
-  mvnHash = "sha256-wVkWbhi5b/rZ0EF5zlQr2BMVOm5nZ1DhI6SGksZO5Vg=";
+  mvnHash = "sha256-G21YIzAuc4LZhVqPmd2i/N42anUzmfqyciYR5XclzKk=";
 
   sourceRoot = "${src.name}/javase";
 

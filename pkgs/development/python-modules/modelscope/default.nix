@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.31.0";
+  version = "1.33.0";
 in
 buildPythonPackage {
   pname = "modelscope";
@@ -20,14 +20,8 @@ buildPythonPackage {
     owner = "modelscope";
     repo = "modelscope";
     tag = "v${version}";
-    hash = "sha256-3o3iI4LGDSsF36jnrUTN3bBaM8XGCw+msIPS3WauMNQ=";
+    hash = "sha256-CEaeO6oD1enGKT87anc3qSynDaN8pTC4utNoMBTvL84=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "exec(compile(f.read(), version_file, 'exec'))" "ns = {}; exec(compile(f.read(), version_file, 'exec'), ns)" \
-      --replace-fail "return locals()['__version__']" "return ns['__version__']"
-  '';
 
   build-system = [ setuptools ];
 
@@ -47,6 +41,9 @@ buildPythonPackage {
     homepage = "https://github.com/modelscope/modelscope";
     license = lib.licenses.asl20;
     mainProgram = "modelscope";
-    maintainers = with lib.maintainers; [ kyehn ];
+    maintainers = with lib.maintainers; [
+      kyehn
+      doronbehar
+    ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cffi,
   # overridden as pkgs.brotli
   brotli,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "brotlicffi";
   version = "1.1.0.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-hyper";

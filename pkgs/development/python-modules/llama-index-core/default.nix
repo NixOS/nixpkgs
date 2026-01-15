@@ -25,7 +25,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyvis,
   pyyaml,
   requests,
@@ -39,16 +38,14 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.14.8";
+  version = "0.14.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-wjw2XTRK1qjfNzndC7q197rU8PVtD8SI7FR4Skary+E=";
+    hash = "sha256-grF9IToAMc3x5/40+u3lHU9RyjROWu1e3M6N1owq0f4=";
   };
 
   sourceRoot = "${src.name}/${pname}";

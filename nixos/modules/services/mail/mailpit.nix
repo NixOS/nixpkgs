@@ -102,5 +102,8 @@ in
     ) instances;
   };
 
-  meta.maintainers = lib.teams.flyingcircus.members;
+  meta.maintainers = [
+    lib.maintainers.leona
+    lib.maintainers.osnyx
+  ];
 }

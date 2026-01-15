@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/datasig-ac-uk/esig";
     changelog = "https://github.com/datasig-ac-uk/esig/blob/release/CHANGELOG";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ qt5.qtx11extras ];
 
+  # Fix build with GCC 14+: Scintilla needs cstdint for intptr_t/uintptr_t types
+  # https://github.com/dail8859/NotepadNext/issues/752
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/scintilla/include/ScintillaTypes.h
+  '';
+
   qmakeFlags = [
     "PREFIX=${placeholder "out"}"
     "src/NotepadNext.pro"

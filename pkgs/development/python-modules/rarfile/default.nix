@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   libarchive,
-  pythonOlder,
   setuptools,
   # unrar is non-free software
   useUnrar ? false,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "rarfile";
   version = "4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "markokr";

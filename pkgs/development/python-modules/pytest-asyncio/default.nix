@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "1.2.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  version = "1.3.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
     tag = "v${version}";
-    hash = "sha256-27FCV7zgFGe/Q0fkYyh5Z05foVGhbKBRPTH4UK/tW5A=";
+    hash = "sha256-MWKMJkvxdvuOyxE8rNlf15j7C+MwJibnNsbfS0biKwo=";
   };
 
   outputs = [
@@ -31,12 +31,13 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  dependencies = [
-    backports-asyncio-runner
-  ]
-  ++ lib.optionals (pythonOlder "3.13") [
-    typing-extensions
-  ];
+  dependencies =
+    lib.optionals (pythonOlder "3.11") [
+      backports-asyncio-runner
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      typing-extensions
+    ];
 
   postInstall = ''
     mkdir $testout

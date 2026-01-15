@@ -9,22 +9,19 @@
   poetry-core,
   pontos,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-gvm";
-  version = "26.6.0";
+  version = "26.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "python-gvm";
-    tag = "v${version}";
-    hash = "sha256-n/FYPCJ0Fw2WBLA6dAYUzgwDlol1DRgbCywsvMARTWE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9aqX6/Xb0E4+Ar95NwaCXxPTF0m9zLgzQSSacQqaPyc=";
   };
 
   build-system = [ poetry-core ];
@@ -55,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
-    changelog = "https://github.com/greenbone/python-gvm/releases/tag/${src.tag}";
-    license = with lib.licenses; [ gpl3Plus ];
+    changelog = "https://github.com/greenbone/python-gvm/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

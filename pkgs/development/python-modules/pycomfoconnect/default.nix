@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pycomfoconnect";
   version = "0.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "michaelarnauts";

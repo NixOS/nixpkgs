@@ -119,7 +119,6 @@ python3Packages.buildPythonApplication rec {
       dezgeg
       dotlambda
     ];
-    teams = [ lib.teams.lumiguide ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "esptool";
   };

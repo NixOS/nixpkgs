@@ -14,6 +14,7 @@
   readline,
   withPcsclite ? !stdenv.hostPlatform.isStatic,
   pcsclite,
+  unprivileged ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +34,6 @@ stdenv.mkDerivation rec {
       hash = "sha256-X6mBbj7BkW66aYeSCiI3JKBJv10etLQxaTRfRgwsFmM=";
       revert = true;
     })
-    ./unsurprising-ext-password.patch
-    ./multiple-configs.patch
     (fetchpatch {
       name = "suppress-ctrl-event-signal-change.patch";
       url = "https://w1.fi/cgit/hostap/patch/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a";
@@ -45,7 +44,10 @@ stdenv.mkDerivation rec {
       url = "https://git.w1.fi/cgit/hostap/patch/?id=1ce37105da371c8b9cf3f349f78f5aac77d40836";
       hash = "sha256-leCk0oexNBZyVK5Q5gR4ZcgWxa0/xt/aU+DssTa0UwE=";
     })
-  ];
+    ./unsurprising-ext-password.patch
+    ./multiple-configs.patch
+  ]
+  ++ lib.optional unprivileged ./unprivileged-daemon.patch;
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS

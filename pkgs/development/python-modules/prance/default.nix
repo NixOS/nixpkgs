@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   chardet,
   click,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "prance";
   version = "25.04.08.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RonnyPfannschmidt";

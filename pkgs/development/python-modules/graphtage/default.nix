@@ -8,7 +8,6 @@
   intervaltree,
   json5,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   scipy,
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "graphtage";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "trailofbits";

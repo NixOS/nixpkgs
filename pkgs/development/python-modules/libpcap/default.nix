@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   dbus,
   pkgsLibpcap,
   pkg-about,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "libpcap";
   version = "1.11.0b25";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

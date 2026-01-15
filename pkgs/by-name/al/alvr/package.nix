@@ -78,18 +78,19 @@ rustPlatform.buildRustPackage rec {
       "-lpng"
       "-lssl"
     ];
+    RUSTFLAGS = toString (
+      map (a: "-C link-arg=${a}") [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lwayland-client"
+        "-lxkbcommon"
+        "-Wl,--pop-state"
+      ]
+    );
   };
 
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-lxkbcommon"
-    "-Wl,--pop-state"
-  ];
-
   cargoBuildFlags = [
-    "--exclude alvr_xtask"
+    "--exclude=alvr_xtask"
     "--workspace"
   ];
 

@@ -8,7 +8,6 @@
   poetry-core,
   pytest,
   pytest7CheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pytest-bdd";
   version = "7.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

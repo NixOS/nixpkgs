@@ -59,6 +59,13 @@ in
       ];
     };
 
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      visible = false;
+      readOnly = true;
+      description = "Resulting customized Firefox package.";
+    };
+
     wrapperConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -276,14 +283,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      (cfg.package.override (old: {
-        extraPrefsFiles =
-          (old.extraPrefsFiles or [ ])
-          ++ cfg.autoConfigFiles
-          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-        nativeMessagingHosts = (old.nativeMessagingHosts or [ ]) ++ cfg.nativeMessagingHosts.packages;
-        cfg = (old.cfg or { }) // cfg.wrapperConfig;
-      }))
+      cfg.finalPackage
     ];
 
     environment.etc =
@@ -295,23 +295,34 @@ in
       };
 
     # Preferences are converted into a policy
-    programs.firefox.policies = {
-      DisableAppUpdate = true;
-      Preferences = (
-        builtins.mapAttrs (_: value: {
-          Value = value;
-          Status = cfg.preferencesStatus;
-        }) cfg.preferences
-      );
-      ExtensionSettings = builtins.listToAttrs (
-        builtins.map (
-          lang:
-          lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-            installation_mode = "normal_installed";
-            install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-          }
-        ) cfg.languagePacks
-      );
+    programs.firefox = {
+      policies = {
+        DisableAppUpdate = true;
+        Preferences = (
+          builtins.mapAttrs (_: value: {
+            Value = value;
+            Status = cfg.preferencesStatus;
+          }) cfg.preferences
+        );
+        ExtensionSettings = builtins.listToAttrs (
+          builtins.map (
+            lang:
+            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
+              installation_mode = "normal_installed";
+              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+            }
+          ) cfg.languagePacks
+        );
+      };
+
+      finalPackage = cfg.package.override (old: {
+        extraPrefsFiles =
+          (old.extraPrefsFiles or [ ])
+          ++ cfg.autoConfigFiles
+          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+        nativeMessagingHosts = (old.nativeMessagingHosts or [ ]) ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or { }) // cfg.wrapperConfig;
+      });
     };
   };
 

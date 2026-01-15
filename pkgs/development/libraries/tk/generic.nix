@@ -89,6 +89,10 @@ tcl.mkTclDerivation {
 
   inherit tcl;
 
+  env = lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   passthru = rec {
     inherit (tcl) release version;
     libPrefix = "tk${tcl.release}";

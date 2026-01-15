@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   hatchling,
   hatch-vcs,
   toolz,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "in-n-out";
   version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "in_n_out";

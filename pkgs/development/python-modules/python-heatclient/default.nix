@@ -14,7 +14,6 @@
   prettytable,
   python-openstackclient,
   python-swiftclient,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "python-heatclient";
   version = "4.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "python_heatclient";

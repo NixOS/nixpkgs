@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   packaging,
   pdm-backend,
   httpx,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "unearth";
   version = "0.17.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "zircolite";
   version = "2.40.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "wagga40";

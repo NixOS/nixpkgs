@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     gtk2
     libexif
   ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    # gcc15 build failure
+    "-std=gnu17"
+  ];
   postPatch = ''
     substituteInPlace config.mk \
       --replace /usr/local $out

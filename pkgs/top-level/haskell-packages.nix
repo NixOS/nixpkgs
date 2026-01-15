@@ -14,6 +14,7 @@ let
     "native-bignum"
     # Binary GHCs
     "ghc902Binary"
+    "ghc966DebianBinary"
     "ghc984Binary"
   ];
 
@@ -86,6 +87,8 @@ in
         inherit llvmPackages;
       };
 
+      ghc966DebianBinary = callPackage ../development/compilers/ghc/9.6.6-debian-binary.nix { };
+
       ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix { };
 
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
@@ -99,33 +102,83 @@ in
       };
       ghc94 = compiler.ghc948;
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs = bb.packages.ghc948;
+        bootPkgs =
+          if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else
+            bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc96 = compiler.ghc967;
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
-        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc948 else bb.packages.ghc984Binary;
+        bootPkgs =
+          if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isi686 then
+            bb.packages.ghc948
+          else
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc98 = compiler.ghc984;
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
-        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary;
+        bootPkgs =
+          if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isi686 then
+            bb.packages.ghc967
+          else
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
-        bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary;
+        bootPkgs =
+          if
+            stdenv.buildPlatform.isPower64
+            && stdenv.buildPlatform.isBigEndian
+            && pkgs.stdenv.hostPlatform.isAbiElfv1
+          then
+            # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isi686 then
+            bb.packages.ghc967
+          else
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc910 = compiler.ghc9103;
       ghc9122 = callPackage ../development/compilers/ghc/9.12.2.nix {
+        bootPkgs =
+          # No suitable bindist packaged yet
+          bb.packages.ghc9103;
+        inherit (buildPackages.python3Packages) sphinx;
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        inherit buildTargetLlvmPackages llvmPackages;
+      };
+      ghc9123 = callPackage ../development/compilers/ghc/9.12.3.nix {
         bootPkgs =
           # No suitable bindist packaged yet
           bb.packages.ghc9103;
@@ -144,7 +197,9 @@ in
       };
       ghc914 = compiler.ghc9141;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-        bootPkgs = bb.packages.ghc984Binary;
+        bootPkgs =
+          # No suitable bindist packaged yet
+          bb.packages.ghc910;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
@@ -189,6 +244,12 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
+      ghc966DebianBinary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc966DebianBinary;
+        ghc = bh.compiler.ghc966DebianBinary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
       ghc984Binary = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc984Binary;
         ghc = bh.compiler.ghc984Binary;
@@ -227,6 +288,11 @@ in
       ghc9122 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9122;
         ghc = bh.compiler.ghc9122;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
+      };
+      ghc9123 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc9123;
+        ghc = bh.compiler.ghc9123;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
       };
       ghc912 = packages.ghc9122;

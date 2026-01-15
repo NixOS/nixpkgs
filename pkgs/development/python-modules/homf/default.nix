@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   # pytestCheckHook,
-  pythonOlder,
   versionCheckHook,
 
   hatchling,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "homf";
   version = "1.1.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "duckinator";

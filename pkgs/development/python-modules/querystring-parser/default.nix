@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "querystring-parser";
   version = "1.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "querystring_parser";

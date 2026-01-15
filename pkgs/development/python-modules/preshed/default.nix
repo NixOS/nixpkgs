@@ -6,19 +6,16 @@
   fetchPypi,
   murmurhash,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "preshed";
-  version = "3.0.10";
+  version = "3.0.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WlyOaF6UH0/+yX8fvzJpS4EHhYiRpLw0EH+smB2Clv8=";
+    hash = "sha256-tz+ai1TuHURSnMYBg1aJbP+T1I91XynBNHNNk3HA1oU=";
   };
 
   nativeBuildInputs = [ cython ];

@@ -8,7 +8,6 @@
   ipywidgets,
   nbconvert,
   nbformat,
-  pythonOlder,
   sphinx,
   pytestCheckHook,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "jupyter-sphinx";
   version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyter";

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Full color painting software for illustration drawing";
     homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "azpainter";
   };

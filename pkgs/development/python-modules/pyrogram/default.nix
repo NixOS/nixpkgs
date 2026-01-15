@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pyaes,
   pysocks,
@@ -12,8 +11,6 @@
 buildPythonPackage rec {
   pname = "pyrogram";
   version = "2.0.106";
-
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 

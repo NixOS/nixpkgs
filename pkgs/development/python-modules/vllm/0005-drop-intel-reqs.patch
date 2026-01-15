@@ -1,14 +1,13 @@
 diff --git a/requirements/cpu.txt b/requirements/cpu.txt
-index d11787df4..71575d707 100644
+index 21571be47..e91b378e2 100644
 --- a/requirements/cpu.txt
 +++ b/requirements/cpu.txt
-@@ -20,9 +20,6 @@ torchvision; platform_machine != "ppc64le" and platform_machine != "s390x"
- torchvision==0.23.0; platform_machine == "ppc64le"
- datasets # for benchmark scripts
+@@ -14,8 +14,5 @@ torchaudio; platform_machine != "s390x"
+ # required for the image processor of phi3v, this must be updated alongside torch
+ torchvision; platform_machine != "s390x"
  
 -# Intel Extension for PyTorch, only for x86_64 CPUs
 -intel-openmp==2024.2.1; platform_machine == "x86_64"
--intel_extension_for_pytorch==2.8.0; platform_machine == "x86_64"
- triton==3.2.0; platform_machine == "x86_64" # Triton is required for torch 2.6+cpu, as it is imported in torch.compile.
- 
+-
  # Use this to gather CPU info and optimize based on ARM Neoverse cores
+ py-cpuinfo; platform_machine == "aarch64"

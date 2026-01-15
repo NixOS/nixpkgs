@@ -6,15 +6,12 @@
   oauthlib,
   python-dateutil,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "discogs-client";
   version = "2.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joalla";

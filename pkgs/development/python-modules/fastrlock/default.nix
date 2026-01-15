@@ -4,15 +4,12 @@
   cython,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastrlock";
   version = "0.8.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scoder";
@@ -34,6 +31,6 @@ buildPythonPackage rec {
     description = "RLock implementation for CPython";
     homepage = "https://github.com/scoder/fastrlock";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hyphon81 ];
+    maintainers = [ ];
   };
 }

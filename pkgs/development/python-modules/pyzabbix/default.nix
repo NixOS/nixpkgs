@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyzabbix";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lukecyca";

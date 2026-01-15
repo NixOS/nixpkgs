@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-auto-recovery";

@@ -10,7 +10,8 @@ buildPythonPackage rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     sha256 = "sha256-/z5P91bCTXK58/LzBODtqv0PWK2w5vS5DZMEQM2osgc=";
     dist = "py3";
     python = "py3";

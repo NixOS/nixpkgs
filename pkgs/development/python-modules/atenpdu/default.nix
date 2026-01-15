@@ -4,7 +4,6 @@
   fetchPypi,
   async-timeout,
   pysnmp,
-  pythonOlder,
   poetry-core,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "atenpdu";
   version = "0.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

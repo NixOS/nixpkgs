@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   dataclasses-json,
   deprecated,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "pygltflib";
   version = "1.16.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitLab {
     owner = "dodgyville";

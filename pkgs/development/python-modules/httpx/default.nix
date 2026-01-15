@@ -18,7 +18,6 @@
   multipart,
   pygments,
   python,
-  pythonOlder,
   rich,
   socksio,
   pytestCheckHook,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "httpx";
   version = "0.28.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";

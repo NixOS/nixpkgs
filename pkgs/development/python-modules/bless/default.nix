@@ -8,31 +8,28 @@
   numpy,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bless";
-  version = "0.2.6";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kevincar";
     repo = "bless";
     tag = "v${version}";
-    hash = "sha256-dAdA+d75iE6v6t4mfgvwhRsIARLW+IqCGmaMABaDlZg=";
+    hash = "sha256-Ks7+OYSrPjXgpCrEEJayxp5Gn84SZbdbyc5c3ZMBEwI=";
   };
 
   postPatch = ''
-    sed -i "/pysetupdi/d" setup.py
+    sed -i -e '22,25d' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     dbus-next
   ];
@@ -47,10 +44,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bless" ];
 
   meta = {
-    broken = true; # not compatible with bleak>=1.0 and no maintenance since 2024-03
     description = "Library for creating a BLE Generic Attribute Profile (GATT) server";
     homepage = "https://github.com/kevincar/bless";
-    changelog = "https://github.com/kevincar/bless/releases/tag/v${version}";
+    changelog = "https://github.com/kevincar/bless/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "csv2odf";
   version = "2.09";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";

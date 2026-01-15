@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -73,6 +74,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Exception: DataFusion error (requires internet access)
     "test_register_http_csv"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: Failed: Query was not interrupted; got error: None
+    "test_collect_interrupted"
   ];
 
   meta = {

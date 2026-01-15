@@ -30,17 +30,14 @@ let
 
   optionalPackages =
     optionals cfg.enableSystemMonitoring [ pkgs.dgop ]
-    ++ optionals cfg.enableClipboard [
-      pkgs.cliphist
-      pkgs.wl-clipboard
-    ]
     ++ optionals cfg.enableVPN [
       pkgs.glib
       pkgs.networkmanager
     ]
     ++ optional cfg.enableDynamicTheming pkgs.matugen
     ++ optional cfg.enableAudioWavelength pkgs.cava
-    ++ optional cfg.enableCalendarEvents pkgs.khal;
+    ++ optional cfg.enableCalendarEvents pkgs.khal
+    ++ optional cfg.enableClipboardPaste pkgs.wtype;
 in
 {
   imports = [
@@ -49,6 +46,7 @@ in
     (lib.mkRemovedOptionModule (
       path ++ [ "enableSystemSound" ]
     ) "qtmultimedia is now included on dms-shell package.")
+    (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
   ];
 
   options.programs.dms-shell = {
@@ -99,17 +97,6 @@ in
       '';
     };
 
-    enableClipboard = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for clipboard management widgets.
-        This enables clipboard history and clipboard manager functionality.
-
-        Requires: cliphist, wl-clipboard
-      '';
-    };
-
     enableVPN = mkOption {
       type = types.bool;
       default = true;
@@ -151,6 +138,17 @@ in
         This enables calendar widgets that display events and reminders via khal.
 
         Requires: khal
+      '';
+    };
+
+    enableClipboardPaste = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to install dependencies required for pasting directly from the clipboard history support.
+        This enables pressing Shift+Return for pasting entries from the clipboard history.
+
+        Requires: wtype
       '';
     };
 

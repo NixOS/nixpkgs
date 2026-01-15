@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "jupyter-server-mathjax";
   version = "0.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

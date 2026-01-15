@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   mako,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "dogpile-cache";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "dogpile_cache";

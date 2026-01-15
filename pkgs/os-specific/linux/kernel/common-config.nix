@@ -111,7 +111,9 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
-      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) (
+        whenAtLeast "6.15" yes
+      );
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -564,7 +566,7 @@ let
 
         # Required for Nova
         # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
-        RUST_FW_LOADER_ABSTRACTIONS = whenAtLeast "6.12" yes;
+        RUST_FW_LOADER_ABSTRACTIONS = lib.mkIf withRust (whenAtLeast "6.12" yes);
       }
       //
         lib.optionalAttrs
@@ -682,6 +684,8 @@ let
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
       FS_ENCRYPTION = yes;
+      FS_VERITY = yes;
+      FS_VERITY_BUILTIN_SIGNATURES = yes;
 
       EXT2_FS_XATTR = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -793,6 +797,12 @@ let
       # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
       # This does not have any effect if a program does not support it
       SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
+
+      # IPE (Integrity Policy Enforcement) - LSM that can enforce file integrity based on
+      # fs-verity measurements or dm-verity. Useful for verified boot and immutable /nix/store.
+      SECURITY_IPE = whenAtLeast "6.12" yes;
+      IPE_PROP_FS_VERITY = whenAtLeast "6.12" yes;
+      IPE_PROP_FS_VERITY_BUILTIN_SIG = whenAtLeast "6.12" yes;
 
       DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
 
@@ -954,7 +964,7 @@ let
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We need 64 GB (PAE) support for Xen guest support
-      HIGHMEM64G = {
+      HIGHMEM64G = whenOlder "6.15" {
         optional = true;
         tristate = lib.mkIf (!stdenv.hostPlatform.is64bit) "y";
       };
@@ -987,6 +997,10 @@ let
       # passthrough.
       VFIO_DEVICE_CDEV = whenAtLeast "6.6" yes;
       VFIO_NOIOMMU = whenAtLeast "6.6" yes;
+
+      # Loongson Binary Translation extension, required for running
+      # x86 and x86_64 binaries via LATX or similar emulators
+      CPU_HAS_LBT = lib.mkIf stdenv.hostPlatform.isLoongArch64 (option yes);
     };
 
     media = {
@@ -1326,6 +1340,14 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+        # Enable all available thermal governors
+        THERMAL_GOV_BANG_BANG = yes;
+        THERMAL_GOV_FAIR_SHARE = yes;
+        THERMAL_GOV_POWER_ALLOCATOR = yes;
+        THERMAL_GOV_STEP_WISE = yes;
+        THERMAL_GOV_USER_SPACE = yes;
+        DEVFREQ_THERMAL = yes;
+
         # Enable AMD's ROCm GPU compute stack
         HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
         ZONE_DEVICE = lib.mkIf (
@@ -1352,6 +1374,8 @@ let
         X86_AMD_PLATFORM_DEVICE = lib.mkIf stdenv.hostPlatform.isx86 yes;
         X86_PLATFORM_DRIVERS_DELL = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" yes);
         X86_PLATFORM_DRIVERS_HP = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "6.1" yes);
+
+        ARM64_PMEM = lib.mkIf stdenv.hostPlatform.isAarch64 yes;
 
         LIRC = yes;
 

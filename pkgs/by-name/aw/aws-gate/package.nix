@@ -20,6 +20,9 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     ./disable-bootstrap.patch
+    # default and missing parameters, which were replaced by dump_default and load_default
+    # https://github.com/xen0l/aws-gate/pull/1770
+    ./fix-compatibility-with-marshmallow-4.x.patch
   ];
 
   postPatch = ''

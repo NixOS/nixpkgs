@@ -12,7 +12,7 @@
   pyobjc-framework-Cocoa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywinbox";
   version = "0.7";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyWinBox";
-    rev = "refs/tags/v${version}";
+    tag = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-Z/gedrIFNpQvzRWqGxMEl5MoEIo9znZz/FZLMVl0Eb4=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     description = "Cross-Platform and multi-monitor toolkit to handle rectangular areas and windows box";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytz,
   zope-interface,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "datetime";
   version = "6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zopefoundation";

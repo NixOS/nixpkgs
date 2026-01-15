@@ -100,7 +100,7 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  format = "other";
+  pyproject = false;
   inherit pname version;
 
   outputs = [

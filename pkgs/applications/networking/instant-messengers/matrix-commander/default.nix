@@ -27,7 +27,7 @@ buildPythonApplication rec {
     hash = "sha256-eNgnjErPi5q9yA/2iEg3+CoN2xbopmFOpbgU/7GhoAQ=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   postPatch = ''
     # Dependencies already bundled with Python

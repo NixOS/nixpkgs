@@ -4,7 +4,6 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  pythonOlder,
   mysql80,
   openssl,
   pkgs,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "mysql-connector";
   version = "8.0.33";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   setupPyBuildFlags = [
     "--with-mysql-capi=${mysql80}"

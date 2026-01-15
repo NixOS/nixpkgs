@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "hyp-server";
   version = "1.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

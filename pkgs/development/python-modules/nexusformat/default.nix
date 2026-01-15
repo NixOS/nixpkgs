@@ -6,7 +6,6 @@
   hdf5plugin,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "nexusformat";
   version = "1.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

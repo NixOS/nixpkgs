@@ -51,7 +51,7 @@ in
   autoconf,
   cargo,
   dump_syms,
-  makeWrapper,
+  makeBinaryWrapper,
   mimalloc,
   nodejs,
   perl,
@@ -59,7 +59,9 @@ in
   pkgsCross, # wasm32 rlbox
   python3,
   runCommand,
+  rustc,
   rust-cbindgen,
+  rustPlatform,
   unzip,
   which,
   wrapGAppsHook3,
@@ -74,8 +76,8 @@ in
   glib,
   gnum4,
   gtk3,
-  icu73,
   icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
+  icu78,
   libGL,
   libGLU,
   libevent,
@@ -201,25 +203,9 @@ assert elfhackSupport -> isElfhackPlatform stdenv;
 let
   inherit (lib) enableFeature;
 
-  rustPackages =
-    pkgs:
-    (pkgs.rust.override (
-      # aarch64-darwin firefox crashes on loading favicons due to a llvm 21 bug:
-      # https://github.com/NixOS/nixpkgs/issues/453372
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
-      lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
-        llvmPackages = pkgs.llvmPackages_20;
-      }
-    )).packages.stable;
-
-  toRustC = pkgs: (rustPackages pkgs).rustc;
-
-  rustc = toRustC pkgs;
-  inherit (rustPackages pkgs) rustPlatform;
-
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
-  llvmPackagesBuildBuild0 = (toRustC pkgsBuildBuild).llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -234,7 +220,7 @@ let
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (
     llvmPackages.stdenv.cc.override {
-      bintools = if ltoSupport then (toRustC buildPackages).llvmPackages.bintools else stdenv.cc.bintools;
+      bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
     }
   );
 
@@ -368,7 +354,7 @@ buildStdenv.mkDerivation {
     cargo
     gnum4
     llvmPackagesBuildBuild.bintools
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     perl
     python3
@@ -595,7 +581,7 @@ buildStdenv.mkDerivation {
       libdrm
     ]
   ))
-  ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
+  ++ [ (if (lib.versionAtLeast version "147") then icu78 else icu77) ]
   ++ lib.optional gssSupport libkrb5
   ++ lib.optional jemallocSupport jemalloc
   ++ extraBuildInputs;
@@ -671,9 +657,6 @@ buildStdenv.mkDerivation {
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
-
-      # Needed to find Mozilla runtime
-      gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
 
       resourceDir=$out/lib/${binaryName}
     ''

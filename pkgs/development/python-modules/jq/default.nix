@@ -6,15 +6,12 @@
   jq,
   oniguruma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jq";
   version = "1.10.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";

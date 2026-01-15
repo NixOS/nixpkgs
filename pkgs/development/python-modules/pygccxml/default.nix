@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   llvmPackages,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pygccxml";
   version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gccxml";

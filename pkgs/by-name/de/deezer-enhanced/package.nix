@@ -28,11 +28,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "deezer-enhanced";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/duzda/deezer-enhanced/releases/download/v${version}/deezer-enhanced_${version}_amd64.deb";
-    hash = "sha256-n7/yEzr40ApBzE+kLWehgMHwkoom4QT9fYLSuFqVA7s=";
+    hash = "sha256-PRq5R0AXCsW+cEuf1EU+o7g6oa8K5jGAphoNC8cSNFw=";
   };
 
   nativeBuildInputs = [

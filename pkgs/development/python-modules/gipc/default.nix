@@ -4,28 +4,20 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.6.0";
+  version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jgehrcke";
     repo = "gipc";
     tag = version;
-    hash = "sha256-eYE7A1VDJ0NSshvdJKxPwGyVdW6BnyWoRSR1i1iTr8Y=";
+    hash = "sha256-P3soMA/EBMuhkXQsiLv9gnDBfo9XGosKnSMi+EZ0gaM=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "gevent>=1.5,<=23.9.1" "gevent>=1.5"
-  '';
 
   build-system = [ setuptools ];
 

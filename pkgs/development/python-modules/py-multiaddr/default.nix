@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   varint,
   base58,
   netaddr,
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "py-multiaddr";
   version = "0.0.10";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "multiformats";

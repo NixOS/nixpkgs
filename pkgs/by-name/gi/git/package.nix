@@ -51,6 +51,9 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
+  rustSupport ? false,
+  cargo,
+  rustc,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
@@ -58,7 +61,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.51.2";
+  version = "2.52.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -100,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-Iz1xQ6LVjmB1Xu6bdvVZ7HPqKzwpf1tQMWKs6VlmtOM=";
+    hash = "sha256-PNj+6G9pqUnLYQ/ujNkmTmhz0H+lhBH2Bgs9YnKe18U=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -120,6 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
+    # Address test failure (new in 2.52.0) caused by `git-gui--askyesno` being
+    # installed by `make install`.
+    (fetchurl {
+      name = "expect-gui--askyesno-failure-in-t1517.patch";
+      url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
+      hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
+    })
+
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -160,6 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     docbook_xml_dtd_45
     libxslt
+  ]
+  ++ lib.optionals rustSupport [
+    cargo
+    rustc
   ];
   buildInputs = [
     curl
@@ -226,7 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
+  # Starting with future Git version 3.0.0, rust will be mandatory. For now, it's optional.
+  ++ lib.optional rustSupport "WITH_RUST=YesPlease";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
@@ -341,7 +358,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Also put git-http-backend into $PATH, so that we can use smart
     # HTTP(s) transports for pushing
-    ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+    ln -s $out/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $out/bin/git-http-backend
     ln -s $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump
   ''
   + lib.optionalString perlSupport ''
@@ -575,6 +592,7 @@ stdenv.mkDerivation (finalAttrs: {
       kashw2
       me-and
       philiptaron
+      zivarah
     ];
     mainProgram = "git";
   };

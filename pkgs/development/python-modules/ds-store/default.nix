@@ -4,16 +4,13 @@
   fetchFromGitHub,
   mac-alias,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ds-store";
   version = "1.3.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "al45tair";

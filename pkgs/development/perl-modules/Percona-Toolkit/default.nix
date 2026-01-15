@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPerlPackage,
-  shortenPerlShebang,
   DBDmysql,
   DBI,
   IOSocketSSL,
@@ -42,7 +41,6 @@ buildPerlPackage {
 
   nativeBuildInputs = [
     git
-    shortenPerlShebang
   ];
 
   buildInputs = [
@@ -62,10 +60,6 @@ buildPerlPackage {
 
   preBuild = ''
     export HOME=$TMPDIR
-  '';
-
-  postInstall = ''
-    shortenPerlShebang $(grep -l "/bin/env perl" $out/bin/*)
   '';
 
   meta = {

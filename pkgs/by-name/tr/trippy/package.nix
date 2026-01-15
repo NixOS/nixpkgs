@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://trippy.cli.rs";
     changelog = "https://github.com/fujiapple852/trippy/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "trip";
   };
 }

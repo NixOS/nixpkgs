@@ -82,8 +82,10 @@ stdenv.mkDerivation rec {
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output
-  PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
-  PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
+  env = {
+    PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
+    PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
+  };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

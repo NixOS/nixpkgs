@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "flask-login";
   version = "0.7.0dev0-2024-06-18";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "maxcountryman";

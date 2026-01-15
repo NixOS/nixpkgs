@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   hatchling,
   hatch-vcs,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "templateflow";
   version = "25.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "templateflow";

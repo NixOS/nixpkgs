@@ -3,7 +3,6 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   babel,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "jinja2";
   version = "3.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

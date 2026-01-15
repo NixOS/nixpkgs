@@ -14,6 +14,7 @@
   gzip,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnumake-musl";
   version = "4.4.1";
 
@@ -33,7 +34,7 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -52,15 +53,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/make --version
         mkdir $out
       '';
-
-    meta = {
-      description = "Tool to control the generation of non-source files from sources";
-      homepage = "https://www.gnu.org/software/make";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      mainProgram = "make";
-      platforms = lib.platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -76,7 +68,8 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
-      --host=${hostPlatform.config}
+      --host=${hostPlatform.config} \
+      --disable-dependency-tracking
 
     # Build
     make AR="tcc -ar"

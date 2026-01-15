@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
+    # https://patchwork.sourceware.org/project/elfutils/patch/20251205145241.1165646-1-arnout@bzzt.net/
+    ./test-run-sysroot-reliability.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 

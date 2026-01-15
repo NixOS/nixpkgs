@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "zipfile2";
   version = "0.0.12-unstable-2024-09-28";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cournape";
@@ -38,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cournape/zipfile2";
     changelog = "https://github.com/itziakos/zipfile2/releases/tag/v${version}";
     license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

@@ -6,7 +6,6 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miniconfig";

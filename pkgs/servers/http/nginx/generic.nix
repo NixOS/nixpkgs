@@ -306,21 +306,19 @@ stdenv.mkDerivation {
     if meta != null then
       meta
     else
-      with lib;
       {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
         homepage = "http://nginx.org";
-        license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
+        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
-        platforms = platforms.all;
-        maintainers = with maintainers; [
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [
           fpletz
           raitobezarius
         ];
-        teams = with teams; [
+        teams = with lib.teams; [
           helsinki-systems
-          stridtech
         ];
       };
 }

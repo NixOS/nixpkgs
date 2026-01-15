@@ -13,7 +13,6 @@
   pyyaml,
   pmdsky-debug-py,
   range-typed-integers,
-  pythonOlder,
   # optional dependencies for SpriteCollab
   aiohttp,
   lru-dict,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "skytemple-files";
   version = "1.8.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

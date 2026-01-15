@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   marshmallow,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,
@@ -15,13 +14,16 @@ buildPythonPackage rec {
   version = "9.17.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
     hash = "sha256-bzDGsKCEH3oszuz4OKnOg7WTMQTnJAGh7POmGhRCyzc=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'marshmallow>=3.21.3,<4.0.0' 'marshmallow>=3.21.3'
+  '';
 
   build-system = [ setuptools ];
 

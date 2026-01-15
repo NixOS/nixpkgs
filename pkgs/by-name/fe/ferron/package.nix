@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferron";
-  version = "2.2.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "ferronweb";
     repo = "ferron";
     tag = finalAttrs.version;
-    hash = "sha256-+Esbsr+pqRSRd3M7mFhNl+KVcz3wO5YlZrna8mYsV80=";
+    hash = "sha256-va9OUI2jQiJ3K/Cq3Wrh7RmMST3dBJLB5REcqp7WRP0=";
   };
 
   # ../../ is cargoDepsCopy, and obviously does not contain monoio's README.md
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '#![doc = include_str!("../../README.md")]' ""
   '';
 
-  cargoHash = "sha256-/F1CqzOKscT/rOsJaY+PwZPMBDxSEoI+zN/GsH5P37k=";
+  cargoHash = "sha256-cOkZ8WVcgfIrwEBAGN/U3qp9VZl5S78Bmrpe4nxn994=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,7 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -22,7 +22,6 @@
   pyopenssl,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   queuelib,
   service-identity,
   setuptools,
@@ -39,8 +38,6 @@ buildPythonPackage rec {
   pname = "scrapy";
   version = "2.13.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scrapy";

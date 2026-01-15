@@ -10,7 +10,6 @@
   pyaml,
   pyclipper,
   python-bidi,
-  pythonOlder,
   scikit-image,
   scipy,
   shapely,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "easyocr";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JaidedAI";

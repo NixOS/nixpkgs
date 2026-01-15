@@ -2,36 +2,44 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
   hatchling,
-  ipython,
-  ipywidgets,
+
+  # dependencies
   jinja2,
   jsonschema,
   narwhals,
   numpy,
   packaging,
   pandas,
+  toolz,
+  typing-extensions,
+
+  # tests
+  anywidget,
+  ipython,
+  ipywidgets,
+  mistune,
   polars,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  toolz,
-  typing-extensions,
   vega-datasets,
+  vl-convert-python,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "altair";
-  version = "5.5.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
-    tag = "v${version}";
-    hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Qc51L4tL1pRDpWwadxPpTE4tDH3FTO/wH67FtXMN7k=";
   };
 
   build-system = [ hatchling ];
@@ -45,38 +53,62 @@ buildPythonPackage rec {
     pandas
     toolz
   ]
-  ++ lib.optional (pythonOlder "3.14") typing-extensions;
+  ++ lib.optionals (pythonOlder "3.14") [
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
+    anywidget
     ipython
     ipywidgets
+    mistune
     polars
     pytest-xdist
     pytestCheckHook
     vega-datasets
+    vl-convert-python
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "altair" ];
 
+  enabledTestPaths = [
+    "tests/"
+  ];
+
   disabledTests = [
     # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
     "test_renderer_with_none_embed_options"
+
     # Sometimes conflict due to parallelism
     "test_dataframe_to_csv[polars]"
     "test_dataframe_to_csv[pandas]"
+
     # Network access
+    "test_chart_validation_errors"
+    "test_data_consistency"
+    "test_load_call"
+    "test_loader_call"
+    "test_multiple_field_strings_in_condition"
+    "test_no_remote_connection"
+    "test_pandas_date_parse"
+    "test_pandas_date_parse"
+    "test_polars_date_read_json_roundtrip"
+    "test_polars_date_read_json_roundtrip"
+    "test_polars_date_read_json_roundtrip"
+    "test_polars_date_read_json_roundtrip"
+    "test_reader_cache"
     "test_theme_remote_lambda"
+    "test_tsv"
   ];
 
   disabledTestPaths = [
-    # Disabled because it requires internet connectivity
+    # Network access
+    "altair/datasets/_data.py"
     "tests/test_examples.py"
-    # TODO: Disabled because of missing altair_viewer package
-    "tests/vegalite/v5/test_api.py"
+
     # avoid updating files and dependency on black
     "tests/test_toplevel.py"
-    # require vl-convert package
-    "tests/utils/test_compiler.py"
   ];
 
   meta = {
@@ -90,4 +122,4 @@ buildPythonPackage rec {
       vinetos
     ];
   };
-}
+})

@@ -8,7 +8,6 @@
   coreapi,
   pytest-mypy-plugins,
   pytestCheckHook,
-  pythonOlder,
   requests,
   types-pyyaml,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "djangorestframework-stubs";
   version = "3.16.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "typeddjango";

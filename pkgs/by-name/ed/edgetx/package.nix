@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    cmakeCommonFlags="$''\{cmakeFlags[@]}"
+    cmakeCommonFlags="''${cmakeFlags[@]}"
     # This is the most sensible way to convert target name -> cmake options
     # aside from manually extracting bash variables from upstream's CI scripts
     # and converting that to nix expressions. Let's hope upstream doesn't break

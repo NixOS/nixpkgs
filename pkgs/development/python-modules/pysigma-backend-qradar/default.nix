@@ -6,15 +6,12 @@
   pysigma,
   pysigma-pipeline-sysmon,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-qradar";
   version = "0.3.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nNipsx-Sec";
@@ -25,11 +22,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "pysigma" ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pysigma ];
+  dependencies = [ pysigma ];
 
   nativeCheckInputs = [
     pysigma-pipeline-sysmon
@@ -41,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support Qradar for pySigma";
     homepage = "https://github.com/nNipsx-Sec/pySigma-backend-qradar";
-    changelog = "https://github.com/nNipsx-Sec/pySigma-backend-qradar/releases/tag/v${version}";
-    license = with lib.licenses; [ lgpl21Only ];
+    changelog = "https://github.com/nNipsx-Sec/pySigma-backend-qradar/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

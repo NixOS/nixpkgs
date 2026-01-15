@@ -10,7 +10,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "google-resumable-media";
   version = "2.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_resumable_media";

@@ -51,7 +51,7 @@
 buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchPypi {
     inherit pname version;

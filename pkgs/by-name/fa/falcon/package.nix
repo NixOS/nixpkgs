@@ -20,6 +20,11 @@ stdenv.mkDerivation {
     hash = "sha256-0yLhwDVFNbfiW23hNxrvItCCkyaOvEbFSg1ZQuJvhIs=";
   };
 
+  patches = [
+    # https://github.com/falconpl/falcon/pull/11
+    ./bump-minimum-cmake-required-version.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

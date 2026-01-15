@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "dnslookup";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "ameshkov";
     repo = "dnslookup";
     tag = "v${version}";
-    hash = "sha256-zgEW4ANIlwF0f6YqTQicGhGgLc9RaL7Xy0wg/ICzOK4=";
+    hash = "sha256-jN1JBqCZPoLbdododPRRRGfZugyesWb1Xt+np/xXK6U=";
   };
 
-  vendorHash = "sha256-pdnKYsXBw/IjakUyQym4thnO3gXgvwNm80Ha8AUVt54=";
+  vendorHash = "sha256-FFVxqnFwYsoPt2wCmMpxxe+YkSg6ry71XbFd463uXn4=";
 
   meta = {
     changelog = "https://github.com/ameshkov/dnslookup/releases/tag/v${version}";

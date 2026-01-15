@@ -7,11 +7,11 @@
 }:
 
 let
-  # Urgh, DocBook 4.1.2 doesn't come with an XML catalog.  Use the one
+  # Urgh, DocBook 4.1.2 doesn't come with an XML catalog. Use the one
   # from 4.2.
   docbook42catalog = fetchurl {
-    url = "https://docbook.org/xml/4.2/catalog.xml";
-    sha256 = "18lhp6q2l0753s855r638shkbdwq9blm6akdjsc9nrik24k38j17";
+    url = "https://www.oasis-open.org/docbook/xml/4.2/catalog.xml";
+    hash = "sha256-J0g0JhEzZpuYlm0qU+lKmLc1oUbD5FKQHuUAKrC5kKI=";
   };
 in
 
@@ -19,14 +19,13 @@ import ./generic.nix {
   inherit
     lib
     stdenv
+    fetchurl
     unzip
     findXMLCatalogs
     ;
   version = "4.1.2";
-  src = fetchurl {
-    url = "https://docbook.org/xml/4.1.2/docbkx412.zip";
-    sha256 = "0wkp5rvnqj0ghxia0558mnn4c7s3n501j99q2isp3sp0ci069w1h";
-  };
+  url = "https://www.oasis-open.org/docbook/xml/4.1.2/docbkx412.zip";
+  hash = "sha256-MPBkQGTg6nF1FDglGUCxQx9GrK2oFKBihw9IbHcud3I=";
   postInstall = "
     sed 's|V4.2|V4.1.2|g' < ${docbook42catalog} > catalog.xml
   ";

@@ -23,7 +23,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
   version = "1.0.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -91,7 +91,7 @@ python3Packages.buildPythonApplication rec {
     # being incorrectly identified as unfree software.
     license = lib.licenses.mit;
     mainProgram = "eartag";
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
   };
 }

@@ -50,6 +50,7 @@
     "asahi" # Apple AGX
     "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
+    "ethosu" # ARM Ethos NPU
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "i915" # Intel extra legacy
@@ -61,6 +62,7 @@
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
+    "rocket" # Rockchip NPU
     "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "tegra" # Nvidia Tegra SoCs
@@ -68,10 +70,6 @@
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ]
-  ++ lib.optionals stdenv.hostPlatform.is64bit [
-    "ethosu" # ARM Ethos NPU, does not build on 32-bit
-    "rocket" # Rockchip NPU, probably horribly broken on 32-bit
   ],
   vulkanDrivers ? [
     "amd" # AMD (aka RADV)

@@ -33,7 +33,7 @@
   pango,
   perl,
   pixman,
-  vips,
+  vips_8_17, # thumbnail generation fails with vips 8.18
   buildPackages,
 }:
 let
@@ -109,7 +109,7 @@ let
 
   # Without this thumbnail generation for raw photos fails with
   #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
-  vips' = vips.overrideAttrs (prev: {
+  vips' = vips_8_17.overrideAttrs (prev: {
     mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
   });
 in

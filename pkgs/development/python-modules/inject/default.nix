@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inject";
   version = "5.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ivankorobkov";
     repo = "python-inject";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c/OpEsT9KF7285xfD+VRorrNHn3r9IPp/ts9JHyGK9s=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python dependency injection framework";
     homepage = "https://github.com/ivankorobkov/python-inject";
-    changelog = "https://github.com/ivankorobkov/python-inject/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/ivankorobkov/python-inject/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

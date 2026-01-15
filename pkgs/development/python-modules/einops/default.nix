@@ -10,7 +10,6 @@
   pillow,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  pythonOlder,
   torch,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "einops";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";

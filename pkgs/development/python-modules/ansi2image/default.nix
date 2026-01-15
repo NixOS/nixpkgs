@@ -5,15 +5,12 @@
   fetchFromGitHub,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ansi2image";
   version = "0.1.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "helviojunior";

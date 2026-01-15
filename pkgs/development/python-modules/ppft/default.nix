@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   six,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ppft";
   version = "1.7.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

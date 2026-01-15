@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   flit-core,
   py-cid,
   pytestCheckHook,
@@ -12,8 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-cid";
   version = "1.1.2";
-  format = "pyproject";
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ntninja";

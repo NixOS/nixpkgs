@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-pw";
   version = "2.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   PBR_VERSION = version;
 

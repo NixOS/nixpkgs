@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "8.9.20250723145140";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "rospkg";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ros-infrastructure";
     repo = "rospkg";
     tag = version;
-    hash = "sha256-6nfdY+p3P3iGuj+7Lo7ybsZ+1x104m7WzGgxr8dDDuw=";
+    hash = "sha256-YRBmL+aXQ/0rxivERja9ng+GqL8NQGmNYhKjMY7+6nc=";
   };
 
   build-system = [ setuptools ];

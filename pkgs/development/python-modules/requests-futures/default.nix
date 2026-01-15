@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   greenlet,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "requests-futures";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ross";

@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   pname = "sabnzbd_exporter";
   version = "0.1.80";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "msroest";

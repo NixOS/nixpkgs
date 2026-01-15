@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs_22,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 let
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_22;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yarnConfigHook
     yarnBuildHook
-    nodejs
+    nodejs_22
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv ./lib ./version.txt ./node_modules ./package.json $out/lib/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs} $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs_22} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
       --add-flags "$out/lib/node_modules/draupnir/lib/index.js"
 

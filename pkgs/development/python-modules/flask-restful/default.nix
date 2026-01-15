@@ -8,7 +8,6 @@
   fetchpatch2,
   mock,
   pytest8_3CheckHook,
-  pythonOlder,
   pytz,
   six,
   werkzeug,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "flask-restful";
   version = "0.3.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-RESTful";

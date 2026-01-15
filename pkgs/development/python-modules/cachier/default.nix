@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   click,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "cachier";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-cachier";

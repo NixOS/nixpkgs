@@ -36,8 +36,6 @@ buildGo125Module (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru.withPlugins =
     plugins:
     let

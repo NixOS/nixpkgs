@@ -1042,6 +1042,7 @@ def check_results(
             if redirect is not None:
                 redirects.update({pdesc: redirect})
                 new_pdesc = PluginDesc(redirect, pdesc.branch, pdesc.alias)
+                result.name = new_pdesc.name
             plugins.append((new_pdesc, result))
 
     if len(failures) == 0:

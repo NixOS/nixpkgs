@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.6.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "dparse";

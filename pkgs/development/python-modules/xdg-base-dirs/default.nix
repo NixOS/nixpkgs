@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
@@ -10,9 +9,7 @@
 buildPythonPackage rec {
   pname = "xdg-base-dirs";
   version = "6.0.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "srstevenson";

@@ -4,10 +4,12 @@
   async-timeout,
   bluez,
   buildPythonPackage,
+  bumble,
   dbus-fast,
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   typing-extensions,
@@ -18,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "1.1.1";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-z0Mxr1pUQWNEK01PKMV/CzpW+GeCRcv/+9BADts1FuU=";
+    hash = "sha256-UrKJoEyLa75HMCOgxmOqJi1z+32buMra+dwVe5qbBds=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -56,7 +56,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    bumble
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

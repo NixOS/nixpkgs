@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "configobj";
   version = "5.0.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DiffSK";

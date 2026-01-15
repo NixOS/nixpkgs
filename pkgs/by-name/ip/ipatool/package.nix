@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://github.com/majd/ipatool";
     changelog = "https://github.com/majd/ipatool/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "ipatool";
   };
 }

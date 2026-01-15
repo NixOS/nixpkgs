@@ -95,11 +95,10 @@ let
     "aarch64"
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
-  nonPackageJobs = rec {
+  nonPackageJobs = {
     tarball = import ./make-tarball.nix {
       inherit
         pkgs
-        lib-tests
         nixpkgs
         officialRelease
         ;
@@ -111,7 +110,6 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
     darwin-tested =
       if supportDarwin.x86_64 || supportDarwin.aarch64 then
@@ -220,7 +218,7 @@ let
         jobs.release-checks
         jobs.metrics
         jobs.manual
-        jobs.lib-tests
+        jobs.tests.lib-tests.x86_64-linux
         jobs.tests.pkgs-lib.formats-tests.x86_64-linux
         jobs.stdenv.x86_64-linux
         jobs.cargo.x86_64-linux

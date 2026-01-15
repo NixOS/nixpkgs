@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-YZ2c6W6CCqgyN+6i7Vh5fWLKw8L4pUqvq/tDO/Q/kf0=";
 
   # Use rust nightly features
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
     cmake

@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "4.6.1";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
     rev = version;
-    hash = "sha256-+T89KxGTGycN1pnXBxJY15ViRvwJbM2adZVUTTSG3VQ=";
+    hash = "sha256-lVJFNOiayAai/Lg4tl8lNaK5fdTlZ0ptzstUzciH1mA=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    # FIXME: `MathJax.js` is only available in MathJax 2.7.x.
     "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]

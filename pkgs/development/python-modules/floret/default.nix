@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pybind11,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "floret";
   version = "0.10.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "explosion";

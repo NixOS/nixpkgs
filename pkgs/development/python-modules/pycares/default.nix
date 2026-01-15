@@ -6,7 +6,6 @@
   cffi,
   fetchPypi,
   idna,
-  pythonOlder,
   setuptools,
   tornado,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pycares";
   version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

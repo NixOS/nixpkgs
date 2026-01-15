@@ -6,7 +6,6 @@
   fetchpatch,
   ffmpeg-full,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   replaceVars,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pydub";
   version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jiaaro";

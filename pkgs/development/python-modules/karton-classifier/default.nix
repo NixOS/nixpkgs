@@ -8,15 +8,12 @@
   pytestCheckHook,
   python-magic,
   yara-python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-classifier";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

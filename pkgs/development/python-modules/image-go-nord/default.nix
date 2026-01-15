@@ -7,7 +7,6 @@
   pillow,
   pypaInstallHook,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptoolsBuildHook,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "image-go-nord";
   version = "1.2.0";
   pyproject = false;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Schrodinger-Hat";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   jupyter-client,
   nbformat,
@@ -19,8 +18,6 @@ in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jsvine";

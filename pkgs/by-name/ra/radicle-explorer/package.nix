@@ -75,7 +75,7 @@ lib.fix (
       # radicle-httpd using a more limited sparse checkout we need to carry a
       # separate hash.
       src = radicle-httpd.src.override {
-        hash = "sha256-1OhZ0x21NlZIiTPCRpvdUsx5UmeLecTjVzH8DWllPr8=";
+        hash = "sha256-PzokSJkcyFDAaih5gekp4GCQMm0sfF7fAK7iZbX1/S4=";
         sparseCheckout = [ ];
       };
 
@@ -114,6 +114,7 @@ lib.fix (
         maintainers = with lib.maintainers; [
           tazjin
           lorenzleutgeb
+          defelo
         ];
       };
     }

@@ -40,6 +40,8 @@ in
         path = with pkgs; [
           bash
           coreutils
+          # Battery thresholds control executes lsmod
+          kmod
         ];
 
         serviceConfig.WorkingDirectory = "";

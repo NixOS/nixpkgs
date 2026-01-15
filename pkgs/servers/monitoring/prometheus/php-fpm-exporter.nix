@@ -57,7 +57,7 @@ buildGoModule rec {
     homepage = "https://github.com/hipages/php-fpm_exporter";
     description = "Prometheus exporter for PHP-FPM";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "php-fpm_exporter";
   };
 }

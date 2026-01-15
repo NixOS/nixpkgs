@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
 
     # fix cmake compatibility. vendored from https://github.com/The-OpenROAD-Project/lemon-graph/pull/2
     ./cmake_version.patch
+
+    # fix C++20 compatibility. vendored from https://github.com/The-OpenROAD-Project/lemon-graph/commit/f871b10396270cfd09ffddc4b6ead07722e9c232
+    ./update_cxx20.patch
   ];
 
   meta = {

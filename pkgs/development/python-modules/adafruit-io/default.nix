@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paho-mqtt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "adafruit-io";
   version = "2.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adafruit";

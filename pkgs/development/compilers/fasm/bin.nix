@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://flatassembler.net/download.php";
     license = lib.licenses.bsd2;
     mainProgram = "fasm";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.iamanaws ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

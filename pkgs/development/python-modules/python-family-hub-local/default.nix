@@ -5,15 +5,12 @@
   async-timeout,
   pillow,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-family-hub-local";
   version = "0.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

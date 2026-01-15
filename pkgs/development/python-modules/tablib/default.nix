@@ -8,7 +8,6 @@
   pandas,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   pyyaml,
   setuptools-scm,
   tabulate,
@@ -20,9 +19,7 @@
 buildPythonPackage rec {
   pname = "tablib";
   version = "3.8.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

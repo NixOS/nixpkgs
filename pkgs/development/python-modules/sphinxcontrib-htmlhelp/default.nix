@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "sphinxcontrib_htmlhelp";

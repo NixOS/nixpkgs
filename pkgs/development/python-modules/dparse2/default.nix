@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   toml,
   pyyaml,
   packvers,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dparse2";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nexB";

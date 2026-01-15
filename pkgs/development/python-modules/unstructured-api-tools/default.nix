@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # propagated build inputs
   click,
   fastapi,
@@ -35,8 +34,6 @@ buildPythonPackage {
   pname = "unstructured-api-tools";
   inherit version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";

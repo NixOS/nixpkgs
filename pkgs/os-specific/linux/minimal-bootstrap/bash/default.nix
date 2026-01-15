@@ -18,12 +18,13 @@
   coreutils,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bash";
-  version = "5.2.37";
+  version = "5.3";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    hash = "sha256-lZmyLs0dV4etfTt78MWfMSszltHigRdd0fikAU2mIf8=";
+    hash = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
   };
 
   patches = [
@@ -33,7 +34,7 @@ let
 in
 bootBash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       coreutils
@@ -85,24 +86,15 @@ bootBash.runCommand "${pname}-${version}"
         }
         // (removeAttrs env [ "nativeBuildInputs" ])
       );
-
     passthru.tests.get-version =
       result:
       bootBash.runCommand "${pname}-get-version-${version}" { } ''
         ${result}/bin/bash --version
         mkdir $out
       '';
-
-    meta = {
-      description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
-      homepage = "https://www.gnu.org/software/bash";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      platforms = lib.platforms.unix;
-    };
   }
   ''
-    # Unpack
+    # unpack
     tar xzf ${src}
     cd bash-${version}
 
@@ -117,6 +109,7 @@ bootBash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --without-bash-malloc
 
     # Build

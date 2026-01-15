@@ -9,7 +9,6 @@
   dssi,
   fluidsynth,
   ladspaH,
-  lash,
   libinstpatch,
   libjack2,
   liblo,
@@ -51,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     dssi
     fluidsynth
     ladspaH
-    lash
     libinstpatch
     libjack2
     liblo

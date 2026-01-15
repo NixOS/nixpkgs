@@ -4,7 +4,6 @@
   fetchPypi,
   pycryptodomex,
   pyotp,
-  pythonOlder,
   requests,
   roadlib,
   selenium,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "roadtx";
   version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

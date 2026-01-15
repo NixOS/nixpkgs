@@ -8,12 +8,9 @@
   hatch-fancy-pypi-readme,
   h11,
   h2,
-  pproxy,
-  pytest-asyncio,
   pytest-httpbin,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   socksio,
   trio,
   # for passthru.tests
@@ -26,8 +23,6 @@ buildPythonPackage rec {
   pname = "httpcore";
   version = "1.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
@@ -54,8 +49,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pproxy
-    pytest-asyncio
     pytest-httpbin
     pytest-trio
     pytestCheckHook

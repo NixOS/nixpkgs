@@ -3,14 +3,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   humanfriendly,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "capturer";
   version = "3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -19,7 +21,18 @@ buildPythonPackage rec {
     sha256 = "0fwrxa049gzin5dck7fvwhdp1856jrn0d7mcjcjsd7ndqvhgvjj1";
   };
 
-  propagatedBuildInputs = [ humanfriendly ];
+  patches = [
+    # https://github.com/xolox/python-capturer/pull/16
+    (fetchpatch {
+      name = "python314-compat.patch";
+      url = "https://github.com/xolox/python-capturer/commit/3d0a9a040ecaa78ce2d39ec76ff5084ee7be6653.patch";
+      hash = "sha256-NW+X6wdXMHSLswO7M7/YeIyHu+EDYTLJE/mBkqyhKUM=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ humanfriendly ];
 
   # hangs on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

@@ -9,7 +9,6 @@
   pyee,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   syncer,
   tqdm,
   urllib3,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pyppeteer";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyppeteer";

@@ -6,7 +6,6 @@
   pytest-cov-stub,
   pytest-doctestplus,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

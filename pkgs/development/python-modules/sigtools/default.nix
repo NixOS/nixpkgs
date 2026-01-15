@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "sigtools";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

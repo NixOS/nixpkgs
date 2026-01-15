@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -25,6 +26,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-YapujmwTlmUfTQwHsuh01V+jqsBbTd0Q9adGNiE8Go0=";
   };
+
+  patches = [
+    (fetchpatch {
+      # python 3.14 compat
+      url = "https://github.com/lmfit/uncertainties/commit/633da70494ae6570cc69a910e1f6231538acf374.patch";
+      hash = "sha256-P1LiIqA2p58bjupJaf18A6YxBeu+PNpueHACry24OwQ=";
+    })
+  ];
 
   build-system = [
     setuptools

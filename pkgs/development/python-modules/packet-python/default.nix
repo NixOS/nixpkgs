@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   requests,
   requests-mock,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "packet-python";
   version = "1.44.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

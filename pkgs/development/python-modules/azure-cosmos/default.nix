@@ -3,7 +3,6 @@
   azure-core,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "azure-cosmos";
   version = "4.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_cosmos";

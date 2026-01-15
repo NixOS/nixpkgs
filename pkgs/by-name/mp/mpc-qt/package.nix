@@ -39,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMPCQT_VERSION=${finalAttrs.version}"
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "master";
+  };
 
   meta = {
     description = "Media Player Classic Qute Theater";

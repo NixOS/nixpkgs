@@ -68,7 +68,6 @@ python3Packages.buildPythonApplication rec {
       versionCheckHook
       writableTmpDirAsHomeHook
     ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = import ./failing_tests.nix;
 

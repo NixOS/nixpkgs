@@ -14,7 +14,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   tenacity,
   respx,
   retrying,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "qcs-api-client";
   version = "0.26.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";

@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    install -Dm644 ltspice.png $out/share/pixmaps/ltspice.png
+    install -Dm644 ltspice.png $out/share/icons/hicolor/256x256/apps/ltspice.png
 
     install -m755 -d $out/libexec/ltspice
     install -m755 *.exe $out/libexec/ltspice

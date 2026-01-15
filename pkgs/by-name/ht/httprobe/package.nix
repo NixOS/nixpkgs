@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Take a list of domains and probe for working HTTP and HTTPS servers";
     homepage = "https://github.com/tomnomnom/httprobe";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "httprobe";
   };
 }

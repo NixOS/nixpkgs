@@ -9,15 +9,12 @@
   toml,
   pytestCheckHook,
   pyyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-variables";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

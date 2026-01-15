@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyserial,
   sockio,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "serialio";
   version = "2.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";

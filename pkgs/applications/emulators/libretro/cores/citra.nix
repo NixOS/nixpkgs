@@ -19,6 +19,11 @@ mkLibretroCore {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix build with GCC 15. See https://github.com/KhronosGroup/glslang/pull/3684.
+    ./patches/citra-gcc-15.patch
+  ];
+
   makefile = "Makefile";
 
   extraBuildInputs = [

@@ -10,16 +10,13 @@
   pretend,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   twisted,
 }:
 
 buildPythonPackage rec {
   pname = "pem";
   version = "23.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";

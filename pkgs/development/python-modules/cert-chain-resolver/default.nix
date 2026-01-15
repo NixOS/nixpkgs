@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   six,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cert-chain-resolver";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rkoopmans";

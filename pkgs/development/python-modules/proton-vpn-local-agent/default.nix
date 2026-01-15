@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
-    repo = "python-proton-vpn-local-agent";
+    repo = "local-agent-rs";
     rev = version;
     hash = "sha256-rk3wi6q0UDuwh5yhLBqdLYsJxVqhlI+Yc7HZsiAU1Y8=";
   };
@@ -65,10 +65,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "Proton VPN local agent written in Rust with Python bindings";
-    homepage = "https://github.com/ProtonVPN/python-proton-vpn-local-agent";
+    homepage = "https://github.com/ProtonVPN/local-agent-rs";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      anthonyroussel
       sebtm
       rapiteanu
     ];

@@ -1,6 +1,6 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   fetchpatch,
   installShellFiles,
@@ -11,6 +11,23 @@
   udevCheckHook,
 }:
 
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      marshmallow = super.marshmallow.overridePythonAttrs (oldAttrs: rec {
+        version = "3.26.1";
+        src = fetchFromGitHub {
+          owner = "marshmallow-code";
+          repo = "marshmallow";
+          tag = version;
+          hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
+        };
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";

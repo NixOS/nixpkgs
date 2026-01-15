@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pegen";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "we-like-parsers";

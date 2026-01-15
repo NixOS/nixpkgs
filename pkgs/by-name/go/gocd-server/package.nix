@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     maintainers = with lib.maintainers; [
-      grahamc
       swarren83
     ];
   };

@@ -6,20 +6,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mcp-nixos";
-  version = "1.0.3";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${version}";
-    hash = "sha256-UCsJ8eDuHL14u2GFIYEY/drtZ6jht5zN/G/6QNlEy2g=";
+    hash = "sha256-rnpIDY/sy/uV+1dsW+MrFwAFE/RHg5K/6aa5k7Yt1Dc=";
   };
-
-  patches = [
-    # This patch mocks nix channel listing network calls in tests
-    ./tests-mock-nix-channels.patch
-  ];
 
   build-system = [ python3Packages.hatchling ];
 
@@ -30,8 +25,6 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  pythonRelaxDeps = [ "fastmcp" ];
-
   nativeCheckInputs = with python3Packages; [
     anthropic
     pytestCheckHook
@@ -39,18 +32,14 @@ python3Packages.buildPythonApplication rec {
     python-dotenv
   ];
 
-  disabledTestMarks = [
-    # Require network access
-    "integration"
+  disabledTestPaths = [
+    # Requires network access
+    "tests/test_integration.py"
   ];
 
-  disabledTestPaths = [
-    # Require network access
-    "tests/test_nixhub.py"
-    "tests/test_mcp_behavior.py"
-    "tests/test_options.py"
-    # Requires configured channels
-    "tests/test_channels.py"
+  disabledTests = [
+    # Requires network access
+    "test_valid_channel"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];

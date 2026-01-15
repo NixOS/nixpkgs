@@ -24,6 +24,7 @@
   enableOVHCloud ? true,
   enablePuppetDB ? true,
   enableScaleway ? true,
+  enableSTACKIT ? true,
   enableTriton ? true,
   enableUyuni ? true,
   enableVultr ? true,
@@ -127,6 +128,7 @@ buildGoModule (finalAttrs: {
     ${lib.optionalString enableOVHCloud "echo - github.com/prometheus/prometheus/discovery/ovhcloud"}
     ${lib.optionalString enablePuppetDB "echo - github.com/prometheus/prometheus/discovery/puppetdb"}
     ${lib.optionalString enableScaleway "echo - github.com/prometheus/prometheus/discovery/scaleway"}
+    ${lib.optionalString enableSTACKIT "echo - github.com/prometheus/prometheus/discovery/stackit"}
     ${lib.optionalString enableTriton "echo - github.com/prometheus/prometheus/discovery/triton"}
     ${lib.optionalString enableUyuni "echo - github.com/prometheus/prometheus/discovery/uyuni"}
     ${lib.optionalString enableVultr "echo - github.com/prometheus/prometheus/discovery/vultr"}

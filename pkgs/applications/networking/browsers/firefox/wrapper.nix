@@ -89,7 +89,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      allNativeMessagingHosts = map lib.getBin nativeMessagingHosts;
+      allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
       libs =
         lib.optionals stdenv.hostPlatform.isLinux (

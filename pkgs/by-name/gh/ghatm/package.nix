@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ghatm";
-  version = "0.3.7";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "ghatm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8DjUHsbU1ovBaB2bINEG7gpm1MFQCnoanunfrrTKWU=";
+    hash = "sha256-MX1VilyfxJ9GKIkDSGeAE007DyjPkWL5W4b08EqAyC4=";
   };
 
-  vendorHash = "sha256-M0FOwsyXgNr05uofTZN6XcoWU/xaGVPE4ncyzddTKEI=";
+  vendorHash = "sha256-CQ2HAyBuULKbmGdJ9RmPYFr2nZYxDePoJu+k8cjKxpk=";
 
   ldflags = [
     "-s"

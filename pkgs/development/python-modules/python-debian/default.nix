@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitLab,
   setuptools,
   setuptools-scm,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-debian";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";

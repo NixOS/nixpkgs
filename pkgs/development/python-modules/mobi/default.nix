@@ -4,7 +4,6 @@
   fetchFromGitHub,
   loguru,
   poetry-core,
-  pythonOlder,
   setuptools,
   standard-imghdr,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "mobi";
   version = "0.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iscc";

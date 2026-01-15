@@ -28,7 +28,7 @@ buildDunePackage rec {
     thread-table
   ];
 
-  doCheck = lib.versionAtLeast ocaml.version "5.0";
+  doCheck = lib.versionAtLeast ocaml.version "5.1";
   nativeCheckInputs = [ mdx.bin ];
   checkInputs = [
     alcotest

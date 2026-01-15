@@ -7,7 +7,6 @@
   fetchFromGitHub,
   gssapi,
   packaging,
-  pythonOlder,
   setuptools,
   typing-extensions,
   zlib,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiokafka";
   version = "0.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";

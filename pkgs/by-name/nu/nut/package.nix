@@ -49,11 +49,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nut";
-  version = "2.8.3";
+  version = "2.8.4";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1soX8LOQA7rHZJ6xerSnE+TV/KqP0a7cooNX1Z3wle0=";
+    sha256 = "sha256-ATC6gup58Euk80xSSahZQ5d+/ZhO199q7BpRjVo1lPg=";
   };
 
   patches = [
@@ -98,9 +98,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   configureFlags = [
+    "--enable-docs-changelog=no" # TODO: add required build deps
     "--with-all"
     "--with-ssl"
     "--without-powerman" # Until we have it ...
+    "--with-pynut=app" # avoid attempts to install python modules to python store path
     "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"

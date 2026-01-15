@@ -9,18 +9,18 @@
 # Updating this package will force an update for prisma. The
 # version of prisma-engines and prisma must be the same for them to
 # function correctly.
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prisma-engines_7";
-  version = "7.0.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
-    tag = version;
-    hash = "sha256-+8k+M2+WySR2CeywYlhU/jd3av/4UeUoEOlO/qHUk5o=";
+    tag = finalAttrs.version;
+    hash = "sha256-1CwpUtNuqxGNjBmmmo/Aet8XrmnCQfDToI7vZaNupDI=";
   };
 
-  cargoHash = "sha256-n83hJfSlvuaoBb3w9Rk8+q2emjGCoPDHhFdoVzhf4sM=";
+  cargoHash = "sha256-U5d/HkuWnD/XSrAJr5AYh+WPVGDOcK/e4sC0udPZoyU=";
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
@@ -49,17 +49,17 @@ rustPlatform.buildRustPackage rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "prisma";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aqrln
     ];
   };
-}
+})
 
 ### Troubleshooting
 # Here's an example application using Prisma with Nix: https://github.com/pimeys/nix-prisma-example

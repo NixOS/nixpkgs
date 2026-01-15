@@ -7,15 +7,12 @@
   requests,
   httpretty,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
   version = "1.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jdepoix";

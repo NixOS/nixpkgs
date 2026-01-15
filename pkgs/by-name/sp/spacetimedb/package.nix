@@ -59,7 +59,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/spacetime";
-  versionCheckProgramArg = "--version";
 
   postInstall = ''
     mv $out/bin/spacetimedb-cli $out/bin/spacetime

@@ -9,15 +9,12 @@
   pytestCheckHook,
   python-slugify,
   python-status,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "simple-rest-client";
   version = "1.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "allisson";

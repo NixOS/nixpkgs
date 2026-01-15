@@ -11,7 +11,6 @@
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "wasm";
   repo = "WasmCert-Coq";
@@ -28,11 +27,10 @@ mkCoqDerivation {
         inherit out;
       };
     in
-    with lib.versions;
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (range "8.20" "9.0") (isGe "2.4") "2.2.0")
+        (case (lib.versions.range "8.20" "9.0") (lib.versions.isGe "2.4") "2.2.0")
       ]
       null;
 
@@ -62,7 +60,7 @@ mkCoqDerivation {
 
   meta = {
     description = "Wasm mechanisation in Coq/Rocq";
-    maintainers = with maintainers; [ womeier ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ womeier ];
+    license = lib.licenses.mit;
   };
 }

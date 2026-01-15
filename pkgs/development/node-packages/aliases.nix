@@ -73,6 +73,7 @@ mapAliases {
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
+  aws-cdk = pkgs.aws-cdk-cli; # Added 2025-12-23
   awesome-lint = throw "'awesome-lint' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   inherit (pkgs) bash-language-server; # added 2024-06-07
@@ -157,6 +158,7 @@ mapAliases {
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
+  elasticdump = throw "'elasticdump' has been removed because it was unmaintained in nixpkgs"; # Added 2025-12-26
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
   elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
@@ -191,6 +193,7 @@ mapAliases {
   inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
+  inherit (pkgs) grunt-cli; # added 2025-12-29
   gtop = pkgs.gtop; # added 2023-07-31
   gulp = self.gulp-cli; # Added 2025-11-04
   he = throw "'he' has been removed because it was unmaintained upstream"; # Added 2025-11-14
@@ -226,6 +229,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   inherit (pkgs) katex; # Added 2025-11-08
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
+  lcov-result-merger = throw "'lcov-result-merger' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-25
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
@@ -282,6 +286,7 @@ mapAliases {
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
   poor-mans-t-sql-formatter-cli = throw "'poor-mans-t-sql-formatter-cli' has been removed because it was unmaintained upstream"; # Added 2025-11-14
+  inherit (pkgs) postcss; # Added 2025-12-24
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
   prebuild-install = throw "prebuild-install was removed because it appeared to be unmaintained upstream. See upstream's recommendations for alternatives here: https://github.com/prebuild/prebuild-install#note"; # Added 2025-12-14
   inherit (pkgs) prettier; # added 2025-05-31

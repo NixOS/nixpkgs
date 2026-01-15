@@ -9,7 +9,6 @@
   mkdocs,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validator-collection,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
   version = "1.17.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Guts";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   oauthlib,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ondilo";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "JeromeHXP";

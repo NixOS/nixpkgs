@@ -4,8 +4,8 @@
   buildMozillaMach,
   callPackage,
   fetchurl,
-  icu73,
   icu77,
+  icu78,
   fetchpatch2,
   config,
 }:
@@ -25,8 +25,8 @@ let
         })
       ];
     });
-  icu73' = patchICU icu73;
   icu77' = patchICU icu77;
+  icu78' = patchICU icu78;
 
   common =
     {
@@ -49,8 +49,8 @@ let
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
       ];
       extraPassthru = {
-        icu73 = icu73';
         icu77 = icu77';
+        icu78 = icu78';
       };
 
       meta = {
@@ -77,8 +77,8 @@ let
 
         pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
-        icu73 = icu73';
         icu77 = icu77';
+        icu78 = icu78';
       };
 
 in

@@ -1,45 +1,46 @@
 {
   lib,
-  buildGo125Module,
-  buildNpmPackage,
+  buildGoModule,
   fetchFromGitHub,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
   versionCheckHook,
   nixosTests,
   nix-update-script,
-  go_1_25,
 }:
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "sshwifty";
-  version = "0.4.1-beta-release";
+  version = "0.4.2-beta-release";
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
-    hash = "sha256-Kg5aE4lkzSedo+VJgdsfO5XTKupsPU2DhZNdNhEQ/Q4=";
+    hash = "sha256-nx485HB0JqexcSdwhgbhoAwpK3Cg7tkgDrV3NM93pXk=";
   };
 
-  sshwifty-ui = buildNpmPackage {
-    pname = "sshwifty-ui";
-    inherit (finalAttrs) version src;
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
 
-    npmDepsHash = "sha256-vX3CtjwjzcxxIPYG6QXsPybyBRow1YdS9pHr961P1HA=";
-
-    npmBuildScript = "generate";
-
-    postInstall = ''
-      cp -r application/controller/{static_pages,static_pages.go} \
-        $out/lib/node_modules/sshwifty-ui/application/controller
-    '';
-
-    nativeBuildInputs = [ go_1_25 ];
+  overrideModAttrs = oldAttrs: {
+    nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
+    preBuild = null;
   };
 
-  postPatch = ''
-    cp -r ${finalAttrs.sshwifty-ui}/lib/node_modules/sshwifty-ui/* .
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-5Y6hTsHSFOPhgLwEhMNOOCyLYNjp1Q5n8My3Q6lr7hQ=";
+  };
+
+  vendorHash = "sha256-4K0fxBBcv+ZSV0ocsoagjFAXRphA27xGO40pnewaKSU=";
+
+  preBuild = ''
+    # Generate static pages
+    npm run generate
   '';
-
-  vendorHash = "sha256-/SLUC0xM195QfKgX9te8UP1bbzRbKF+Npyugi19JijY=";
 
   ldflags = [
     "-s"
@@ -59,8 +60,6 @@ buildGo125Module (finalAttrs: {
       extraArgs = [
         "--version=unstable"
         "--version-regex=^([0-9.]+(?!.+-prebuild).+$)"
-        "--subpackage"
-        "sshwifty-ui"
       ];
     };
   };

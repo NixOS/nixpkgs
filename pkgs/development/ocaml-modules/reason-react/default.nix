@@ -5,7 +5,7 @@
   reason-react-ppx,
 }:
 
-buildDunePackage {
+buildDunePackage (finalAttrs: {
   pname = "reason-react";
   inherit (reason-react-ppx) version src;
   nativeBuildInputs = [
@@ -25,4 +25,4 @@ buildDunePackage {
   meta = reason-react-ppx.meta // {
     description = "Reason bindings for React.js";
   };
-}
+})

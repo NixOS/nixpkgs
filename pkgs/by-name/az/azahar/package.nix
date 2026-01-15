@@ -34,6 +34,8 @@
   xorg,
   enableQtTranslations ? true,
   qt6,
+  gtk3,
+  gsettings-desktop-schemas,
   enableCubeb ? true,
   cubeb,
   useDiscordRichPresence ? true,
@@ -54,11 +56,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2123.3";
+  version = "2123.4.1";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iFYA4qbeMHIV5nPlRc0OSnb4D5y6WacPIXvt/1ZwnTA=";
+    hash = "sha256-86i6GMnonQ8SeeDiOH1XSl3rHamnMTgPnkaeJOlAIuI=";
   };
 
   patches = [
@@ -151,6 +153,13 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
 
   passthru.updateScript = nix-update-script { };
 

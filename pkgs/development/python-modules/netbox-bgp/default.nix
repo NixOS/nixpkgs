@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/netbox-community/netbox-bgp";
     changelog = "https://github.com/netbox-community/netbox-bgp/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    teams = with lib.teams; [ secshell ];
+    maintainers = with lib.maintainers; [ felbinger ];
   };
 }

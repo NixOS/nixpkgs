@@ -46,7 +46,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shiny";
   version = "1.5.0";
   pyproject = true;
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zRKfSY0rE+jzwYUcrRTIFW3OVmavhMDbAQEpry46zCI=";
   };
 
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     # ERROR: 'fixture' is not a valid asyncio_default_fixture_loop_scope.
@@ -134,8 +134,8 @@ buildPythonPackage rec {
   meta = {
     description = "Build fast, beautiful web applications in Python";
     homepage = "https://shiny.posit.co/py";
-    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/py-shiny/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

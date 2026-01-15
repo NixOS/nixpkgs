@@ -10,7 +10,6 @@
   pytestCheckHook,
   pytest-mock,
   pytest-test-utils,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dvc-render";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";

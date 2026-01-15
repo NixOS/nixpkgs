@@ -22,13 +22,13 @@
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.17.1";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xKEfWYf3gJ5wEYd8krT5w70rr0QYEu+7rqJ/IZmCHeQ=";
+    hash = "sha256-TU8MKOBYgTvYIFI8Col3ePeGntOlux3yYqmbSi7FG70=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -108,7 +108,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      dawnofmidnight
+      whispersofthedawn
       zstg
     ];
     platforms = lib.platforms.linux;

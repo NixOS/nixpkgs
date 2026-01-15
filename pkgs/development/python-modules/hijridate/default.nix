@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hijridate";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dralshehri";
     repo = "hijridate";
     tag = "v${version}";
-    hash = "sha256-IT5OnFDuNQ9tMfuZ5pFqnAPd7nspIfAmeN6Pqtn0OwA=";
+    hash = "sha256-xnFF81l1ZqtH91NzYvjzXpXpN/zeHdARJYx6L5VNBSo=";
   };
 
   build-system = [

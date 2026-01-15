@@ -13,7 +13,6 @@
   numpy,
   oldest-supported-numpy,
   packaging,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -21,14 +20,12 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.15.2";
+  version = "0.16.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1S0QwGl/SJkFVc6iorrT+fWncjkYVv2jZOpLvGn9B1w=";
+    hash = "sha256-uTwyyF0IwGro9eMXf5z9bEleF0XyEgt3eDCt7l2cNkg=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [

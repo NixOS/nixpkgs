@@ -41,8 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     fetchGitHashesScript = ./fetch-git-hashes.py;
     updateScript = ./update.sh;
@@ -81,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dart.dev";
-    maintainers = with lib.maintainers; [ grburst ];
+    maintainers = [ ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
@@ -97,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    teams = [ lib.teams.flutter ];
   };
 })

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
   requests,
   typing-extensions,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "resend";
   version = "2.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "resend";

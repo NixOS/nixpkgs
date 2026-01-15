@@ -6,13 +6,13 @@
 buildKodiAddon rec {
   pname = "bluetooth-manager";
   namespace = "script.bluetooth.man";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "wastis";
     repo = "BluetoothManager";
     tag = "v${version}";
-    hash = "sha256-KKaR7rIkflMYU6EDBEcorHQ3t7jsB4Qe6Ikg+eBblkA=";
+    hash = "sha256-hWNi2hm5FmkRPamxMSHF3WfQ+2V+qQzkkTJWuqazbAc=";
   };
 
   meta = {

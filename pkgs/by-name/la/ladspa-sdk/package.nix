@@ -2,15 +2,18 @@
   lib,
   stdenv,
   fetchurl,
+  libsndfile,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladspa-sdk";
-  version = "1.15";
+  version = "1.17";
   src = fetchurl {
     url = "https://www.ladspa.org/download/ladspa_sdk_${finalAttrs.version}.tgz";
-    sha256 = "1vgx54cgsnc3ncl9qbgjbmq12c444xjafjkgr348h36j16draaa2";
+    hash = "sha256-J9JPJ55Lgb0X7L3MOOTEKZG7OIgmwLIABnzg61nT2ls=";
   };
+
+  buildInputs = [ libsndfile ];
 
   sourceRoot = "ladspa_sdk_${finalAttrs.version}/src";
 
@@ -41,10 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
       The LADSPA SDK, including the ladspa.h API header file,
       ten example LADSPA plugins and
       three example programs (applyplugin, analyseplugin and listplugins).
+      For just ladspa.h, use the ladspaH package.
     '';
     homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
     license = lib.licenses.lgpl2;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
   };
 })

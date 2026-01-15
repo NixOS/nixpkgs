@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "bento";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "warpstreamlabs";
     repo = "bento";
     tag = "v${version}";
-    hash = "sha256-5UzicbR+JzLgPLilPHO9HKteC632cJc5EQanPPc0lj8=";
+    hash = "sha256-60hWz6DgJk5PJR/W19lFVxIubZBPLZ3SENc/3bpA9hs=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-wZPhjzDD2T7CYz0Y0QkFarnTOsJzm5snlp9KnBuOc3U=";
+  vendorHash = "sha256-G9slXTly5cJT93wQrD8eITsF0rVdrpRW4r/YTYqW/Mc=";
 
   subPackages = [
     "cmd/bento"
@@ -33,7 +33,6 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

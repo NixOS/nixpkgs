@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "5.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pyasn1,
-  pythonOlder,
   tqdm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysmb";
   version = "1.2.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miketeo";

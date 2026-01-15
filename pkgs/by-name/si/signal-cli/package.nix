@@ -63,7 +63,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = stdenvNoCC.hostPlatform.isLinux;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://github.com/AsamK/signal-cli";

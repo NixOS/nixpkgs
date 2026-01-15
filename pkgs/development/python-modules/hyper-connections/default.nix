@@ -8,16 +8,16 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyper-connections";
-  version = "0.2.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "hyper-connections";
-    tag = version;
-    hash = "sha256-9dMiyxzrZBlDxKeehXjoIjbzAkGSkAFxQZZX3LJJAig=";
+    tag = finalAttrs.version;
+    hash = "sha256-nMNAuHOLOgrWNrMFko5ARBOyp9TyUhJfldPihV012K4=";
   };
 
   build-system = [ hatchling ];
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to make multiple residual streams";
     homepage = "https://github.com/lucidrains/hyper-connections";
-    changelog = "https://github.com/lucidrains/hyper-connections/releases/tag/${src.tag}";
+    changelog = "https://github.com/lucidrains/hyper-connections/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

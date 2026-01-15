@@ -5,7 +5,6 @@
   azure-common,
   azure-core,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
   version = "4.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_keyvault_certificates";

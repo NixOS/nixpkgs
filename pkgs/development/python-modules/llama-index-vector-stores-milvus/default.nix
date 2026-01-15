@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-milvus";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_milvus";
     inherit version;
-    hash = "sha256-Zf+/xk3bqN/ARvwzDiN4/g7Neo6l9x5wTcTSvzto//A=";
+    hash = "sha256-c44M+k0OL2cKAlI4OZI5f/sf/kF0Cg8o2CxoBUbZMdg=";
   };
 
   build-system = [ hatchling ];

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   colorama,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "simber";
   version = "0.2.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";

@@ -191,6 +191,8 @@ in
 
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix { };
 
+  vmTools = callPackage ../build-support/vm/test.nix { };
+
   writers = callPackage ../build-support/writers/test.nix { };
 
   testers = callPackage ../build-support/testers/test/default.nix { };
@@ -219,6 +221,8 @@ in
     };
   };
 
+  lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+
   pkgs-lib = recurseIntoAttrs (callPackage ../pkgs-lib/tests { });
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
@@ -246,4 +250,8 @@ in
   build-environment-info = callPackage ./build-environment-info { };
 
   rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
+
+  prefer-remote-fetch = recurseIntoAttrs (
+    callPackages ../build-support/prefer-remote-fetch/tests.nix { }
+  );
 }

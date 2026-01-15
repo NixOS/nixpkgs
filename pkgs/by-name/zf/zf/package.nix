@@ -8,12 +8,6 @@
   callPackage,
 }:
 
-let
-  zig = zig_0_15;
-  zig_hook = zig.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseFast --color off";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
   upstreamVersion = "0.10.3";
@@ -29,16 +23,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    zig_hook
+    zig_0_15
   ];
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
   };
 
+  dontSetZigDefaultFlags = true;
+
   zigBuildFlags = [
     "--system"
     "${finalAttrs.deps}"
+    "-Dcpu=baseline"
+    "-Doptimize=ReleaseFast"
   ];
 
   postInstall = ''

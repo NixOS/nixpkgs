@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer-ng";
-  version = "2.0.0rc10";
+  version = "2.0.0rc11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
     tag = version;
-    hash = "sha256-NpxjKsh12pr/MCZ4gfoaa+3jTYyvQzHgSno1+rw2Wk0=";
+    hash = "sha256-vhsqz/2wNLqjtwVdLyLyO+JX7g2sz5MEMoHOnsDl/KQ=";
   };
 
   postPatch = ''

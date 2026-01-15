@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-console-scripts";
   version = "1.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

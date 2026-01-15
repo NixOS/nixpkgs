@@ -8,7 +8,6 @@
   fetchFromGitHub,
   phonenumbers,
   pydantic,
-  pythonOlder,
   qrcode,
   setuptools-scm,
   twilio,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "django-two-factor-auth";
   version = "1.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jazzband";

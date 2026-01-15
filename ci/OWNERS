@@ -83,8 +83,9 @@
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
 # pertaining to the Nix package manager.
 # i.e. no authority over those files.
-pkgs/tools/package-management/nix/                    @NixOS/nix-team @raitobezarius
-nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobezarius
+# Otherwise keep in-sync with lib.teams.nix.
+pkgs/tools/package-management/nix/                    @Artturin @Ericson2314 @lovesegfault @Mic92 @philiptaron @roberth @tomberek @xokdvium @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lovesegfault @Mic92 @philiptaron @roberth @tomberek @xokdvium @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -200,6 +201,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
 /pkgs/development/compilers/ghc               @sternenseemann @maralorn @wolfgangwalther
+/pkgs/development/compilers/ghc/9.6.6-debian-binary.nix  @sternenseemann @maralorn @wolfgangwalther @OPNA2608
 /pkgs/development/haskell-modules             @sternenseemann @maralorn @wolfgangwalther
 /pkgs/test/haskell                            @sternenseemann @maralorn @wolfgangwalther
 /pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @wolfgangwalther
@@ -245,7 +247,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/applications/networking/browsers/firefox/update.nix
 /pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
 /pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
-/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
+/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 
@@ -371,10 +373,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # LuaPackages
 /pkgs/development/lua-modules         @NixOS/lua
-
-# mpvScripts
-/pkgs/applications/video/mpv/scripts            @uninsane
-/pkgs/applications/video/mpv/scripts.nix        @uninsane
 
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim

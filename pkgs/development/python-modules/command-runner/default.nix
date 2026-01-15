@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   psutil,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "command-runner";
   version = "1.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "netinvent";
@@ -39,6 +36,5 @@ buildPythonPackage rec {
     '';
     changelog = "https://github.com/netinvent/command_runner/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.wdz ];
   };
 }

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Library with the aim of simplifying DNS programming in C";
     homepage = "https://www.nlnetlabs.nl/projects/ldns/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "drill";
     platforms = lib.platforms.unix;
   };

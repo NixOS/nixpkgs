@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs = with python3Packages; [
     dbus-next

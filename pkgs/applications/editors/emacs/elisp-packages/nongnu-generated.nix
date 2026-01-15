@@ -622,10 +622,10 @@
     elpaBuild {
       pname = "clojure-ts-mode";
       ename = "clojure-ts-mode";
-      version = "0.5.1";
+      version = "0.6.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/clojure-ts-mode-0.5.1.tar";
-        sha256 = "1l1j7798vkzzlysaq6k87v6hw7v7hckysmjslyd0cb2vzbl3vizp";
+        url = "https://elpa.nongnu.org/nongnu/clojure-ts-mode-0.6.0.tar";
+        sha256 = "0jvza581i0npj22jpzd1x08dsssdsw53xmfnq61widi6bs24bi92";
       };
       packageRequires = [ ];
       meta = {
@@ -1217,6 +1217,32 @@
       packageRequires = [ ];
       meta = {
         homepage = "https://elpa.nongnu.org/nongnu/eldoc-diffstat.html";
+        license = lib.licenses.free;
+      };
+    }
+  ) { };
+  eldoc-mouse = callPackage (
+    {
+      eglot,
+      elpaBuild,
+      fetchurl,
+      lib,
+      posframe,
+    }:
+    elpaBuild {
+      pname = "eldoc-mouse";
+      ename = "eldoc-mouse";
+      version = "3.0";
+      src = fetchurl {
+        url = "https://elpa.nongnu.org/nongnu/eldoc-mouse-3.0.tar";
+        sha256 = "16v5v15505q1whsrxz4w4x1ba62w5f4i4g5sdgwrwyahzq2a9kcp";
+      };
+      packageRequires = [
+        eglot
+        posframe
+      ];
+      meta = {
+        homepage = "https://elpa.nongnu.org/nongnu/eldoc-mouse.html";
         license = lib.licenses.free;
       };
     }
@@ -2900,10 +2926,10 @@
     elpaBuild {
       pname = "idle-highlight-mode";
       ename = "idle-highlight-mode";
-      version = "1.1.4";
+      version = "1.1.5";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/idle-highlight-mode-1.1.4.tar";
-        sha256 = "0vp45ww8bxacrwzv0jqzs782symxysmpvawd29pa1yci1qp2pvm5";
+        url = "https://elpa.nongnu.org/nongnu/idle-highlight-mode-1.1.5.tar";
+        sha256 = "0wr7xakvvdykj4gwmi88w6jbwgiyj85fq1y7k0f50i0631xbwvpq";
       };
       packageRequires = [ ];
       meta = {
@@ -3495,10 +3521,10 @@
     elpaBuild {
       pname = "mastodon";
       ename = "mastodon";
-      version = "2.0.7";
+      version = "2.0.8";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/mastodon-2.0.7.tar";
-        sha256 = "1sk58jd9s623n86wb0gsl80dprfjll5c0rqc41naprrbcjfqfgzn";
+        url = "https://elpa.nongnu.org/nongnu/mastodon-2.0.8.tar";
+        sha256 = "1k5kvwldngcmj7av8h6li175x0fp9mi9sgnv1vz5q4vmacv6ymfl";
       };
       packageRequires = [
         persist
@@ -4441,10 +4467,10 @@
     elpaBuild {
       pname = "racket-mode";
       ename = "racket-mode";
-      version = "1.0.20251106.215641";
+      version = "1.0.20251220.93632";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/racket-mode-1.0.20251106.215641.tar";
-        sha256 = "0jrz8c3ni81cczai01j1359m8j3pp620lirx1j534jn52b7xqy0q";
+        url = "https://elpa.nongnu.org/nongnu/racket-mode-1.0.20251220.93632.tar";
+        sha256 = "1ldf75h7wdk6a27bqg7bgrdylsy5dydx0lg8fzqcmz1s40cb01qi";
       };
       packageRequires = [ compat ];
       meta = {
@@ -4758,10 +4784,10 @@
     elpaBuild {
       pname = "scroll-on-jump";
       ename = "scroll-on-jump";
-      version = "0.2";
+      version = "0.3";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/scroll-on-jump-0.2.tar";
-        sha256 = "1gg5lpr21v9bjzjy33j8ziyhh5a1sad509c7rjkdlqda2z3xfrhr";
+        url = "https://elpa.nongnu.org/nongnu/scroll-on-jump-0.3.tar";
+        sha256 = "02vksmab2bmasv1n8hawapzhnyfk3w0b0gbxbznp5zj6kzb8yr1q";
       };
       packageRequires = [ ];
       meta = {
@@ -4822,10 +4848,10 @@
     elpaBuild {
       pname = "slime";
       ename = "slime";
-      version = "2.31";
+      version = "2.32";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/slime-2.31.tar";
-        sha256 = "1s77j55nwz1s1c6763v0agsip5vrzd6f157q7i5z1jdmj3y0psck";
+        url = "https://elpa.nongnu.org/nongnu/slime-2.32.tar";
+        sha256 = "0j2f98l5pmzn2k947alsb2h0idywxwdg02gl6rinrrabyazhjnim";
       };
       packageRequires = [ macrostep ];
       meta = {
@@ -5814,10 +5840,10 @@
     elpaBuild {
       pname = "xah-fly-keys";
       ename = "xah-fly-keys";
-      version = "28.11.20251125073911";
+      version = "28.11.20251212190757";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-28.11.20251125073911.tar";
-        sha256 = "0qkgbi1637nxvkx7cpycx80lywcwnld3x4y77mksx9z1v6pyhrd7";
+        url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-28.11.20251212190757.tar";
+        sha256 = "1v8bv4lzbj0qnnpkj54sk1h33ycbxb9xr3slbg78m5llncch7x7b";
       };
       packageRequires = [ ];
       meta = {

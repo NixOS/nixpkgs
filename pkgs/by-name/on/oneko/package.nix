@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "-Wno-implicit-function-declaration"
     "-Wno-endif-labels"
     "-Wno-implicit-int"
+    "-Wno-incompatible-pointer-types"
   ];
 
   installTargets = [

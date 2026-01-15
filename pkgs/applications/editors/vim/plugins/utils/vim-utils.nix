@@ -216,6 +216,14 @@ let
             ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3
           '';
         in
+
+        assert
+          (
+            builtins.elem vimPlugins.nvim-treesitter (opt ++ allPlugins)
+            && builtins.elem vimPlugins.nvim-treesitter-legacy (opt ++ allPlugins)
+          )
+          -> throw "You cannot include two different versions of nvim-treesitter, perhaps you included a legacy plugin together with a new one?";
+
         [
           packdirStart
           packdirOpt
@@ -486,8 +494,11 @@ rec {
 
   toVimPlugin =
     drv:
+    let
+      drv-name = drv.name or "${drv.pname}-${drv.version}";
+    in
     drv.overrideAttrs (oldAttrs: {
-      name = "vimplugin-${oldAttrs.name}";
+      name = "vimplugin-${drv-name}";
       # dont move the "doc" folder since vim expects it
       forceShare = [
         "man"

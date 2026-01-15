@@ -371,7 +371,6 @@ in
                         --hostname-override=${cfg.hostname} \
                         --kubeconfig=${kubeconfig} \
                         ${optionalString (cfg.nodeIp != null) "--node-ip=${cfg.nodeIp}"} \
-                        --pod-infra-container-image=pause \
                         ${optionalString (cfg.manifests != { }) "--pod-manifest-path=/etc/${manifestPath}"} \
                         ${optionalString (taints != "") "--register-with-taints=${taints}"} \
                         --root-dir=${top.dataDir} \

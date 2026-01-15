@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "dict2xml";
   version = "1.7.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "delfick";

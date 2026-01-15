@@ -30,7 +30,6 @@ buildGoModule rec {
   tags = lib.optional withGoolm "goolm";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   ldflags = [

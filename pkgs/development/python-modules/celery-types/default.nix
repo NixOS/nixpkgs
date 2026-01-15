@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "celery-types";
   version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "celery_types";

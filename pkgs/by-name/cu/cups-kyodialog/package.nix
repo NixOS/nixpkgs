@@ -24,8 +24,8 @@
 assert region == "Global" || region == "EU";
 
 let
-  kyodialog_version = "9.3";
-  date = "20230720";
+  kyodialog_version = "9.4";
+  date = "20240521";
 in
 stdenv.mkDerivation rec {
   pname = "cups-kyodialog";
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
     urls = [
       "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
-      "https://web.archive.org/web/20231021143259/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
+      "https://web.archive.org/web/20260107200228/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
     ];
-    hash = "sha256-3h2acOmaQIiqe2Fd9QiqEfre5TrxzRrll6UlUruwj1o=";
+    hash = "sha256-H9n4KpaLGNk5du4+BAmMjRyLmXaHap8HdNZlX/Kia4E=";
     extension = "tar.gz";
     stripRoot = false;
     postFetch = ''

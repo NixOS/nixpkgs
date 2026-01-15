@@ -4,7 +4,6 @@
   fetchFromGitHub,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   scapy,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "boiboite-opener-framework";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";

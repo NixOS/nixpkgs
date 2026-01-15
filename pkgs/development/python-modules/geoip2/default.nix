@@ -7,7 +7,6 @@
   maxminddb,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests-mock,
   pytest-httpserver,
   requests,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "geoip2";
   version = "5.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

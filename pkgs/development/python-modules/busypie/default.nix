@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "busypie";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rockem";

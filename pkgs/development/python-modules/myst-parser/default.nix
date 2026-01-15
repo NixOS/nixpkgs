@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   defusedxml,
   docutils,
   jinja2,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "myst-parser";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

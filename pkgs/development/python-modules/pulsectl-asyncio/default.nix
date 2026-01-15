@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pulsectl,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pulsectl-asyncio";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mhthies";
