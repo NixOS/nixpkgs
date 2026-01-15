@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   libjack2,
   alsa-lib,
@@ -12,18 +12,25 @@
   libopus,
   libvorbis,
   libsamplerate,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "darkice";
-  version = "1.5";
+  version = "1.6";
 
-  src = fetchurl {
-    url = "https://github.com/rafael2k/darkice/releases/download/v${version}/darkice-${version}.tar.gz";
-    sha256 = "sha256-GLTEVzp8z+CcEJTrV5gVniqYkhBupi11OTP28qdGBY4=";
+  src = fetchFromGitHub {
+    owner = "rafael2k";
+    repo = "darkice";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-THsw7N80hkcKQmU3spUhTEuCHbGw+pkh3MPp5Isnk7c=";
   };
+  sourceRoot = "source/darkice/trunk";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [
     libopus
     libvorbis
@@ -35,14 +42,10 @@ stdenv.mkDerivation rec {
     lame
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
-
   configureFlags = [
     "--with-faac-prefix=${faac}"
     "--with-lame-prefix=${lame.lib}"
   ];
-
-  patches = [ ./fix-undeclared-memmove.patch ];
 
   enableParallelBuilding = true;
 
@@ -52,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ikervagyok ];
   };
-}
+})
