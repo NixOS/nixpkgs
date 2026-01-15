@@ -2255,6 +2255,8 @@ let
 
         yocaml_cmarkit = callPackage ../development/ocaml-modules/yocaml/cmarkit.nix { };
 
+        yocaml_jingoo = callPackage ../development/ocaml-modules/yocaml/jingoo.nix { };
+
         yocaml_otoml = callPackage ../development/ocaml-modules/yocaml/otoml.nix { };
 
         yocaml_runtime = callPackage ../development/ocaml-modules/yocaml/runtime.nix { };
