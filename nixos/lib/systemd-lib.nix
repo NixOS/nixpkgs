@@ -1072,6 +1072,7 @@ rec {
           in
           cred
           // {
+            credentialConfig = cred;
             serviceConfig =
               {
                 bindPath ? null,
