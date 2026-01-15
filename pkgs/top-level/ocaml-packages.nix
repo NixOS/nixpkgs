@@ -2259,6 +2259,8 @@ let
 
         yocaml_unix = callPackage ../development/ocaml-modules/yocaml/unix.nix { };
 
+        yocaml_yaml = callPackage ../development/ocaml-modules/yocaml/yaml.nix { };
+
         yojson = callPackage ../development/ocaml-modules/yojson { };
 
         yojson_2 = yojson.overrideAttrs (_: {
