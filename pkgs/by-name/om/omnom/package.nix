@@ -85,7 +85,9 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Webpage bookmarking and snapshotting service";
-    homepage = "https://github.com/asciimoo/omnom";
+    homepage = "https://omnom.zone/";
+    downloadPage = "https://github.com/asciimoo/omnom";
+    changelog = "https://github.com/asciimoo/omnom/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     teams = [ lib.teams.ngi ];
     mainProgram = "omnom";
