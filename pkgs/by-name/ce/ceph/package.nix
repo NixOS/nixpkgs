@@ -153,7 +153,7 @@ let
     src = fetchFromGitHub {
       owner = "facebook";
       repo = "rocksdb";
-      rev = "refs/tags/v7.9.2";
+      tag = "v7.9.2";
       hash = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
     };
   };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "jhyub";
     repo = "supergfxctl-plasmoid";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Un2uVTde18qloZoWk6bbscyvsBTIAdK1CfxYAZg1+F4=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "WillDaSilva";
     repo = "flit_scm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2nx9kWq/2TzauOW+c67g9a3JZ2dhBM4QzKyK/sqWOPo=";
   };
 

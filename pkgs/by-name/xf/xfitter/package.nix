@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "fitters";
     repo = "xfitter";
-    rev = "refs/tags/2.2.0_Future_Freeze";
+    tag = "2.2.0_Future_Freeze";
     domain = "gitlab.cern.ch";
     hash = "sha256-wanxgldvBEuAEOeVok3XgRVStcn9APd+Nj7vpRZUtGs=";
   };
