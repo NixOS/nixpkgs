@@ -3,14 +3,15 @@
   cairo,
   cmake,
   cups,
-  fetchurl,
   fetchpatch,
+  fetchurl,
   fontconfig,
   freetype,
   graphicsmagick,
   harfbuzzFull,
   hunspell,
   lcms2,
+  lib,
   libcdr,
   libfreehand,
   libjpeg,
@@ -31,17 +32,9 @@
   poppler,
   poppler_data,
   python3,
-  lib,
-  stdenv,
   qt6,
+  stdenv,
 }:
-
-let
-  pythonEnv = python3.withPackages (ps: [
-    ps.pillow
-    ps.tkinter
-  ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
@@ -85,7 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     podofo_0_10
     poppler
     poppler_data
-    pythonEnv
+    (python3.withPackages (
+      ps: with ps; [
+        pillow
+        tkinter
+      ]
+    ))
     qt6.qt5compat
     qt6.qtbase
     qt6.qtdeclarative
