@@ -7,14 +7,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-llms-openai";
   version = "0.6.13";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_llms_openai";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-47dCK8ciduAKmA2CZHfQsU1b90O6acSk8L3uD1Il1FA=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
