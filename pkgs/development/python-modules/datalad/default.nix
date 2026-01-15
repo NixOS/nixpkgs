@@ -126,6 +126,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+    export DATALAD_TESTS_NONETWORK=1
   '';
 
   # tests depend on apps in $PATH which only will get installed after the test
@@ -143,8 +144,11 @@ buildPythonPackage rec {
     "test_status_custom_summary_no_repeats"
     "test_quoting"
 
-    #  No such file or directory: 'git-annex-remote-[...]"
+    # Tries to run `git` and fails
+    "test_reckless"
     "test_create"
+
+    #  No such file or directory: 'git-annex-remote-[...]"
     "test_ensure_datalad_remote_maybe_enable"
 
     # "git-annex: unable to use external special remote git-annex-remote-datalad"
@@ -190,28 +194,6 @@ buildPythonPackage rec {
     "test_download_url_archive_trailing_separator"
     "test_download_url_need_datalad_remote"
     "test_datalad_credential_helper - assert False"
-
-    # need internet access
-    "test_clone_crcns"
-    "test_clone_datasets_root"
-    "test_reckless"
-    "test_autoenabled_remote_msg"
-    "test_ria_http_storedataladorg"
-    "test_gin_cloning"
-    "test_nonuniform_adjusted_subdataset"
-    "test_install_datasets_root"
-    "test_install_simple_local"
-    "test_install_dataset_from_just_source"
-    "test_install_dataset_from_just_source_via_path"
-    "test_datasets_datalad_org"
-    "test_get_cached_dataset"
-    "test_cached_dataset"
-    "test_cached_url"
-    "test_anonymous_s3"
-    "test_protocols"
-    "test_get_versioned_url_anon"
-    "test_install_recursive_github"
-    "test_failed_install_multiple"
 
     # pbcopy not found
     "test_wtf"
