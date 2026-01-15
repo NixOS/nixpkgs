@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs_20,
+  nix-update-script,
   nixosTests,
 }:
 buildNpmPackage rec {
@@ -42,8 +43,11 @@ buildNpmPackage rec {
       --set "NODE_ENV" "production"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) send;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) send;
+    };
   };
 
   meta = {
