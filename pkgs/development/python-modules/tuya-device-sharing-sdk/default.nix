@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.8";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuya";
     repo = "tuya-device-sharing-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-uD2Lzs08i/01iEksXpYRGB2lU7I15sQrJLfJZ93+oeY=";
+    hash = "sha256-kNWg+AXISThwK14ByObUr+/4GMntrZgtEEMNpw/HjLw=";
   };
 
   build-system = [ setuptools ];
