@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   node-gyp,
   nodejs_20,
   nixosTests,
@@ -156,6 +157,14 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   inherit version src;
+
+  patches = [
+    (fetchpatch {
+      name = "GHSA-24x5-wp64-9fcc.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/9bdbfd362f4a15f8de109ca959f04e3a7d8a39d0.patch";
+      hash = "sha256-1iiOeWKvBoHFLa1QySkXYTbX5CVF3VQDWno6A/SinCs=";
+    })
+  ];
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
