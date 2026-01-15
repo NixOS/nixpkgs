@@ -4,44 +4,43 @@
   stdenv,
   pname ? "telegram-desktop",
   unwrapped ? callPackage ./unwrapped.nix { inherit stdenv; },
-  qtbase,
-  qtimageformats,
-  qtsvg,
-  qtwayland,
-  kimageformats,
+  kdePackages,
   libavif,
   libheif,
   libjxl,
   wrapGAppsHook3,
-  wrapQtAppsHook,
   geoclue2,
   glib-networking,
   webkitgtk_4_1,
   withWebkit ? true,
+  llvmPackages_19,
 }:
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   inherit pname;
   inherit (finalAttrs.unwrapped) version meta passthru;
 
   inherit unwrapped;
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optionals withWebkit [
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    qtbase
-    qtimageformats
-    qtsvg
+    kdePackages.qtbase
+    kdePackages.qtimageformats
+    kdePackages.qtsvg
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    kimageformats
-    qtwayland
+  ++ lib.optionals stdenv'.hostPlatform.isLinux [
+    kdePackages.kimageformats
+    kdePackages.qtwayland
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv'.hostPlatform.isDarwin [
     libavif
     libheif
     libjxl
@@ -50,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
   ];
 
-  qtWrapperArgs = lib.optionals (stdenv.hostPlatform.isLinux && withWebkit) [
+  qtWrapperArgs = lib.optionals (stdenv'.hostPlatform.isLinux && withWebkit) [
     "--prefix"
     "LD_LIBRARY_PATH"
     ":"
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
   dontWrapGApps = true;
-  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+  dontWrapQtApps = stdenv'.hostPlatform.isDarwin;
 
   installPhase = ''
     runHook preInstall
@@ -70,15 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withWebkit) ''
+  preFixup = lib.optionalString (stdenv'.hostPlatform.isLinux && withWebkit) ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   postFixup =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
+    lib.optionalString stdenv'.hostPlatform.isDarwin ''
       wrapQtApp "$out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}"
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString stdenv'.hostPlatform.isLinux ''
       substituteInPlace $out/share/dbus-1/services/* \
         --replace-fail "$unwrapped" "$out"
     '';

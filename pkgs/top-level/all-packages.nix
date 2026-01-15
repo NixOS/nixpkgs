@@ -11731,12 +11731,6 @@ with pkgs;
 
   tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho { };
 
-  telegram-desktop =
-    kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop
-      {
-        stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
-      };
-
   termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;

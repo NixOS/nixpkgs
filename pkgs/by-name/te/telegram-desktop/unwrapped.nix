@@ -10,10 +10,7 @@
   python3,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
-  qtbase,
-  qtsvg,
-  qtwayland,
-  kcoreaddons,
+  kdePackages,
   lz4,
   xxHash,
   ffmpeg_6,
@@ -47,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-jmUj0kTyok5CsOe/to6bTN3jH/RMF7jE+AnFJi2nW90=";
   };
@@ -65,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
+    kdePackages.qtbase
+    kdePackages.qtsvg
     lz4
     xxHash
     ffmpeg_6
@@ -83,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf
-    qtwayland
-    kcoreaddons
+    kdePackages.qtwayland
+    kdePackages.kcoreaddons
     hunspell
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
