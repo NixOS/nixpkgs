@@ -2257,6 +2257,8 @@ let
 
         yocaml_jingoo = callPackage ../development/ocaml-modules/yocaml/jingoo.nix { };
 
+        yocaml_mustache = callPackage ../development/ocaml-modules/yocaml/mustache.nix { };
+
         yocaml_otoml = callPackage ../development/ocaml-modules/yocaml/otoml.nix { };
 
         yocaml_runtime = callPackage ../development/ocaml-modules/yocaml/runtime.nix { };
