@@ -5263,12 +5263,6 @@
     githubId = 244239;
     name = "Mauricio Collares";
   };
-  coloquinte = {
-    email = "gabriel.gouvine_nix@m4x.org";
-    github = "Coloquinte";
-    githubId = 4102525;
-    name = "Gabriel Gouvine";
-  };
   commandodev = {
     email = "ben@perurbis.com";
     github = "commandodev";
