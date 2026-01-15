@@ -269,7 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [
-      kranzes
       k900
     ];
     pkgConfigModules = [
