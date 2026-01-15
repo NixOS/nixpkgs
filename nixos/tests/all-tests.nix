@@ -1174,7 +1174,7 @@ in
   opentelemetry-collector = runTest ./opentelemetry-collector.nix;
   openvscode-server = runTest ./openvscode-server.nix;
   openvswitch = runTest ./openvswitch.nix;
-  optee = handleTestOn [ "aarch64-linux" ] ./optee.nix { };
+  optee = runTestOn [ "aarch64-linux" ] ./optee.nix;
   orangefs = runTest ./orangefs.nix;
   orthanc = runTest ./orthanc.nix;
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
