@@ -136,19 +136,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # No such file or directory: 'datalad'
-    "test_script_shims"
-    "test_cfg_override"
-    "test_completion"
-    "test_nested_pushclone_cycle_allplatforms"
-    "test_create_sub_gh3463"
-    "test_create_sub_dataset_dot_no_path"
-    "test_cfg_passthrough"
-    "test_addurls_stdin_input_command_line"
-    "test_run_datalad_help"
-    "test_status_custom_summary_no_repeats"
-    "test_quoting"
-
     # Tries to run `git` and fails
     "test_reckless"
     "test_create"
