@@ -1143,6 +1143,7 @@ let
           "UseDNS"
           "UseDNR"
           "UseNTP"
+          "UseSIP"
           "SendHostname"
           "UseHostname"
           "Hostname"
@@ -1170,6 +1171,7 @@ let
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "UseSIP" boolValues)
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
