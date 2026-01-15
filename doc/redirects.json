@@ -161,6 +161,48 @@
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
   ],
+  "lib.packageTypes.application": [
+    "index.html#lib.packageTypes.application"
+  ],
+  "lib.packageTypes.container": [
+    "index.html#lib.packageTypes.container"
+  ],
+  "lib.packageTypes.data": [
+    "index.html#lib.packageTypes.data"
+  ],
+  "lib.packageTypes.device-driver": [
+    "index.html#lib.packageTypes.device-driver"
+  ],
+  "lib.packageTypes.documentation": [
+    "index.html#lib.packageTypes.documentation"
+  ],
+  "lib.packageTypes.executable": [
+    "index.html#lib.packageTypes.executable"
+  ],
+  "lib.packageTypes.file": [
+    "index.html#lib.packageTypes.file"
+  ],
+  "lib.packageTypes.filesystem-image": [
+    "index.html#lib.packageTypes.filesystem-image"
+  ],
+  "lib.packageTypes.firmware": [
+    "index.html#lib.packageTypes.firmware"
+  ],
+  "lib.packageTypes.framework": [
+    "index.html#lib.packageTypes.framework"
+  ],
+  "lib.packageTypes.library": [
+    "index.html#lib.packageTypes.library"
+  ],
+  "lib.packageTypes.operating-system": [
+    "index.html#lib.packageTypes.operating-system"
+  ],
+  "lib.packageTypes.patch": [
+    "index.html#lib.packageTypes.patch"
+  ],
+  "lib.packageTypes.runtime": [
+    "index.html#lib.packageTypes.runtime"
+  ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],
@@ -276,6 +318,9 @@
   ],
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
+  ],
+  "sec-meta-package-type": [
+    "index.html#sec-meta-package-type"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
