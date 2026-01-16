@@ -131,19 +131,24 @@ in
           default = { };
           example = literalExpression ''
             {
-              scale = 0.5;
-              bitrate = 100000000;
-              encoders = [
+              # upstream recommends not specifying an encoder unless you have a good reason.
+
+              # left eye, hardware; right eye, software; transparency, hardware
+              encoder = [
                 {
-                  encoder = "nvenc";
+                  encoder = "vulkan";
+                  codec = "h265";
+                }
+                {
+                  encoder = "x264";
                   codec = "h264";
-                  width = 1.0;
-                  height = 1.0;
-                  offset_x = 0.0;
-                  offset_y = 0.0;
+                }
+                {
+                  encoder = "vulkan";
+                  codec = "h265";
                 }
               ];
-              application = [ pkgs.wlx-overlay-s ];
+              application = [ pkgs.wayvr ];
             }
           '';
         };
