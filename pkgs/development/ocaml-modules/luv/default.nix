@@ -11,13 +11,13 @@
 
 buildDunePackage rec {
   pname = "luv";
-  version = "0.5.12";
+  version = "0.5.14";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
-    sha256 = "sha256-dp9qCIYqSdROIAQ+Jw73F3vMe7hnkDe8BgZWImNMVsA=";
+    sha256 = "sha256-jgG0pQyIds3ZjY4kXAaHxNxNiDrtFhrZxazh+x/arpk=";
   };
 
   patches = [
