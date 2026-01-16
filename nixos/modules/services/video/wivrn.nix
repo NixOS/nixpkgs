@@ -147,6 +147,14 @@ in
             }
           '';
         };
+        file = lib.mkOption {
+          type = lib.types.path;
+          default = configFile;
+          defaultText = lib.literalExpression "configFile";
+          description = ''
+            Overridable config file to use for WiVRn. By default, uses a generated file through `config.json`.
+          '';
+        };
       };
     };
   };
