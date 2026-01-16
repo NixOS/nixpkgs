@@ -7405,8 +7405,6 @@ with pkgs;
   libpeas = callPackage ../development/libraries/libpeas { };
   libpeas2 = callPackage ../development/libraries/libpeas/2.x.nix { };
 
-  libpng12 = callPackage ../development/libraries/libpng/12.nix { };
-
   inherit
     (callPackages ../development/libraries/prometheus-client-c {
       stdenv = gccStdenv; # Required for darwin
