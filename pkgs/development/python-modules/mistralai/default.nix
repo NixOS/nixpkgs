@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   eval-type-backport,
@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "mistralai";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${version}";
-    hash = "sha256-B7ZJTwykFnOibTJL5AP3eKT15rLgAJ1hc53BL9TR0CM=";
+    hash = "sha256-y1et8Ez5TAge0kk/a9fA1zcgPStYf+6aO19OLhMGk/8=";
   };
 
   preBuild = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   pythonRelaxDeps = [
