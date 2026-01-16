@@ -58,7 +58,10 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   postFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]})
+    makeWrapperArgs+=(
+      ''${gappsWrapperArgs[@]}
+      --prefix PATH : ${lib.makeBinPath [ meld ]}
+    )
     wrapPythonPrograms
   ''
   # Dialogs are not imported, but executed. The same does
