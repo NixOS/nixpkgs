@@ -91,6 +91,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/mistralai/client-python";
     changelog = "https://github.com/mistralai/client-python/blob/${src.tag}/RELEASES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mana-byte
+    ];
   };
 }
