@@ -5944,10 +5944,6 @@ with pkgs;
 
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
-  buck = callPackage ../development/tools/build-managers/buck {
-    python3 = python311;
-  };
-
   build2 = callPackage ../development/tools/build-managers/build2 {
     # Break cycle by using self-contained toolchain for bootstrapping
     build2 = buildPackages.callPackage ../development/tools/build-managers/build2/bootstrap.nix { };
