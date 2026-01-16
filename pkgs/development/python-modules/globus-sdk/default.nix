@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.63.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
     tag = version;
-    hash = "sha256-ucVDjOV1NmHguwXSWbomNz9gjrxpeGmoZqF/Je6BL/4=";
+    hash = "sha256-q3fYU8/r6IfoC55iN83jAGdFrhnXx7bTtvuf0R4RBv4=";
   };
 
   build-system = [ setuptools ];
