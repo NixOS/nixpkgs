@@ -344,6 +344,9 @@ let
 
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
+        curl = callPackage ../development/ocaml-modules/curl { inherit (pkgs) curl; };
+        curl_lwt = callPackage ../development/ocaml-modules/curl/lwt.nix { };
+
         curly = callPackage ../development/ocaml-modules/curly {
           inherit (pkgs) curl;
         };
@@ -1543,7 +1546,7 @@ let
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
-        ocurl = callPackage ../development/ocaml-modules/ocurl { };
+        ocurl = callPackage ../development/ocaml-modules/ocurl { inherit (pkgs) curl; };
 
         odate = callPackage ../development/ocaml-modules/odate { };
 
