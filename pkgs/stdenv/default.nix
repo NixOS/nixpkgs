@@ -43,6 +43,7 @@ in
 # Select the appropriate stages for the platform `system'.
 if crossSystem != localSystem || crossOverlays != [ ] then
   stagesCross
+# The `or null` fallback is needed for contexts that don't use the module system (e.g. tarball builds).
 else if (config.replaceStdenv or null) != null then
   stagesCustom
 else if localSystem.isLinux then
