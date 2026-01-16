@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
     tag = "v${version}";
-    hash = "sha256-qiLynV/nJkejUVyS3p12bcAR3+Oj+XKp7Z/zVpxb84I=";
+    hash = "sha256-Q+8EZHZqbv5IEqhwCKhRPgr1Cfs/zVhLiwFgCZnNcW4=";
   };
 
   build-system = [ poetry-core ];
