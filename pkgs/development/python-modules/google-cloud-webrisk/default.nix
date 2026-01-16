@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-webrisk";
-  version = "1.19.0";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_webrisk";
     inherit version;
-    hash = "sha256-TuWU+3pfwFt8E06zUDAY8+JJb+2j4l/eHP7Y0dgE0gs=";
+    hash = "sha256-XjzgGju4J1oUnYPoX1DiW16Z1/4WCQh/cMqxRKhNpZ8=";
   };
 
   build-system = [ setuptools ];
