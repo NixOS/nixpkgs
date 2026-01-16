@@ -9,11 +9,13 @@
   setuptools-scm,
 
   # dependencies
-  arviz,
+  arviz-plots,
   formulae,
   graphviz,
+  matplotlib,
   pandas,
   pymc,
+  sparse,
 
   # tests
   blackjax,
@@ -22,16 +24,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.16.0";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
-    tag = version;
-    hash = "sha256-EKcURfC4IpLGzr5ibzVlUnRHIhwPP+kYYusW9Mk8R/s=";
+    tag = finalAttrs.version;
+    hash = "sha256-Vjv62cYDIuTLE7MxRt4Havy7DMOiMTyIixbs4LGFGGs=";
   };
 
   build-system = [
@@ -40,11 +42,13 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    arviz
+    arviz-plots
     formulae
     graphviz
+    matplotlib
     pandas
     pymc
+    sparse
   ];
 
   optional-dependencies = {
@@ -124,8 +128,8 @@ buildPythonPackage rec {
   meta = {
     description = "High-level Bayesian model-building interface";
     homepage = "https://bambinos.github.io/bambi";
-    changelog = "https://github.com/bambinos/bambi/releases/tag/${src.tag}";
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
