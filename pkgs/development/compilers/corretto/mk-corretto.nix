@@ -48,9 +48,22 @@ jdk.overrideAttrs (
       (oldAttrs.postPatch or "")
       + ''
         # The rpm/deb task definitions require a Gradle plugin which we don't
-        # have and so the build fails. We'll simply remove them here because
-        # they are not needed anyways.
-        rm -rf installers/linux/universal/{rpm,deb}
+        # have and so the build fails. We'll simply empty them here because
+        # they are not needed anyways. The directories are kept because Gradle
+        # still expects them.
+        rm -rf installers/linux/universal/{rpm,deb}/{*,.*}
+
+        # These fixes are necessary as long as we use Gradle 9 to build
+        # Corretto but upstream is not yet using it. I.e. as long as upstream
+        # hasn't fixed compatibility with Gradle 9 issues.
+        find /build/source/installers -type d -exec cp /build/source/version.txt {}/version.txt \;
+        find /build/source/installers -name 'build.gradle' -exec sed -i '/fileMode =/d' {} \;
+        for d in source pre-build; do
+          # These subprojects (see settings.gradle) don't exist. Create them
+          # here so that Gradle doesn't complain.
+          mkdir /build/source/$d
+          cp /build/source/version.txt /build/source/$d/version.txt
+        done
 
         # `/usr/bin/rsync` is invoked to copy the source tree. We don't have that.
         for file in $(find installers -name "build.gradle"); do
@@ -79,6 +92,7 @@ jdk.overrideAttrs (
       file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
       tar -xzf $file -C $dir
       mv $dir/amazon-corretto-* $dir/jdk
+      chmod +x $dir/jdk/bin/*
     ''
     + oldAttrs.postBuild or "";
 
