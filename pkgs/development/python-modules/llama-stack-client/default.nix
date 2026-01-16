@@ -30,14 +30,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-stack-client";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_stack_client";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-MFd9PJTtvjiOZ0Q8t69MX3ayZ+kq7RJ9NtHZaNRRCuw=";
   };
 
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "llama_stack_client" ];
 
@@ -102,8 +102,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the llama-stack-client API";
     homepage = "https://github.com/llamastack/llama-stack-client-python";
-    changelog = "https://github.com/llamastack/llama-stack-client-python/releases/tag/v${version}";
+    changelog = "https://github.com/llamastack/llama-stack-client-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
