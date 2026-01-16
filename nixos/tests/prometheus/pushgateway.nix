@@ -13,14 +13,17 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
 
-          scrapeConfigs = [
-            {
-              job_name = "pushgateway";
-              static_configs = [ { targets = [ "pushgateway:9091" ]; } ];
-            }
-          ];
+          settings = {
+            global.scrape_interval = "2s";
+
+            scrape_configs = [
+              {
+                job_name = "pushgateway";
+                static_configs = [ { targets = [ "pushgateway:9091" ]; } ];
+              }
+            ];
+          };
         };
       };
 

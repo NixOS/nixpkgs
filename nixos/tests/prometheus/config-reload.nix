@@ -12,13 +12,15 @@
         services.prometheus = {
           enable = true;
           enableReload = true;
-          globalConfig.scrape_interval = "2s";
-          scrapeConfigs = [
-            {
-              job_name = "prometheus";
-              static_configs = [ { targets = [ "prometheus:${toString config.services.prometheus.port}" ]; } ];
-            }
-          ];
+          settings = {
+            global.scrape_interval = "2s";
+            scrape_configs = [
+              {
+                job_name = "prometheus";
+                static_configs = [ { targets = [ "prometheus:${toString config.services.prometheus.port}" ]; } ];
+              }
+            ];
+          };
         };
 
         specialisation = {
@@ -29,7 +31,7 @@
               # This configuration just adds a new prometheus job
               # to scrape the node_exporter metrics of the s3 machine.
               services.prometheus = {
-                scrapeConfigs = [
+                settings.scrape_configs = [
                   {
                     job_name = "node";
                     static_configs = [
