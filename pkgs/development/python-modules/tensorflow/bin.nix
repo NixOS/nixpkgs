@@ -234,6 +234,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     badPlatforms = [ "x86_64-darwin" ];
     # unsupported combination
-    broken = stdenv.hostPlatform.isDarwin && cudaSupport;
+    broken = stdenv.hostPlatform.isDarwin && cudaSupport || !stdenv.hostPlatform.avx2Support;
   };
 }
