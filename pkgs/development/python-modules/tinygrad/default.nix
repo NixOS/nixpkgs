@@ -272,9 +272,21 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    withCuda = tinygrad.override { cudaSupport = true; };
-    withRocm = tinygrad.override { rocmSupport = true; };
+  passthru = {
+    tests = {
+      withCuda = tinygrad.override { cudaSupport = true; };
+      withRocm = tinygrad.override { rocmSupport = true; };
+    };
+
+    gpuCheck = tinygrad.overridePythonAttrs (old: {
+      requiredSystemFeatures = [ "cuda" ];
+
+      pytestFlags = (old.pytestFlags or [ ]) ++ [
+        # When running in parallel, with GPU support, some tests become flaky:
+        # RuntimeError: Wait timeout: 30000 ms! (the signal is not set to 153, but 151)
+        "--maxprocesses=1"
+      ];
+    });
   };
 
   meta = {
