@@ -996,28 +996,44 @@ rec {
           options = {
             name = mkOption {
               type = singleLineStr;
-              description = "The name of the credential";
+              description = "The name of the credential to load from the service manager.";
               default = defaultName;
               readOnly = readOnlyName;
             };
             encrypted = mkOption {
               type = bool;
-              description = "Whether the credential is encrypted with systemd-creds";
+              description = ''
+                  Whether the credential is encrypted with systemd-creds.
+
+                  This setting is only meaninful alongside `path` or `value`.
+                .'';
               default = false;
             };
             path = mkOption {
               type = nullOr (either path singleLineStr);
-              description = "The path of the credential data. If given, the credential will be consumed via `LoadCredential[Encrypted]`";
+              description = ''
+                The path of the credential data to load. If configured, the credential will be consumed via `LoadCredential[Encrypted]`
+
+                At most one of `path`, `value`, or `rename` should be configured.
+              '';
               default = null;
             };
-            data = mkOption {
+            value = mkOption {
               type = nullOr str;
-              description = "The credential data. If given, the credential will be consumed via `SetCredential[Encrypted]`";
+              description = ''
+                The literal credential data to set. If configured, the credential will be consumed via `SetCredential[Encrypted]`
+
+                At most one of `path`, `value`, or `rename` should be configured.
+              '';
               default = null;
             };
-            reference = mkOption {
+            rename = mkOption {
               type = nullOr str;
-              description = "The credential reference. If given, the credential will be consumed via `ImportCredential`";
+              description = ''
+                The name to surface the credential as to the service. If configured, the credential will be consumed via `ImportCredential` according to the configured `name`
+
+                At most one of `path`, `value`, or `rename` should be configured.
+              '';
               default = null;
             };
             allowStorePath = mkOption {
@@ -1048,8 +1064,8 @@ rec {
                   name = defaultName;
                   encrypted = false;
                   path = credential;
-                  data = null;
-                  reference = null;
+                  value = null;
+                  rename = null;
                   allowStorePath = false;
                 }
               else
@@ -1057,7 +1073,9 @@ rec {
             encrypted = optionalString cred.encrypted "Encrypted";
             assertStringPath =
               value:
-              if !cred.allowStorePath && (strings.isStorePath value || builtins.isPath value) then
+              if
+                !cred.allowStorePath && !cred.encrypted && (strings.isStorePath value || builtins.isPath value)
+              then
                 throw ''
                   Credential '${cred.name}':
                     ${toString value}
@@ -1078,23 +1096,25 @@ rec {
                 conditional ? false,
               }:
               {
-                BindPaths = optionals (bindPath != null) [ "%d/${cred.name}:${bindPath}" ];
+                BindReadOnlyPaths = optionals (bindPath != null) [ "%d/${cred.name}:${bindPath}" ];
                 AssertCredential = optionals asserted [ cred.name ];
                 ConditionCredential = optionals conditional [ cred.name ];
               }
               // (
-                if cred.data != null && cred.reference == null && cred.path == null then
-                  { ImportCredential = [ "${cred.ref}:${cred.name}" ]; }
-                else if cred.data == null && cred.reference != null && cred.path == null then
-                  { "SetCredential${encrypted}" = [ "${cred.name}:${cred.data}" ]; }
-                else if cred.data == null && cred.reference == null then
+                if cred.path != null && cred.value == null && cred.rename == null then
                   {
-                    "LoadCredential${encrypted}" = [
-                      (if cred.path != null then "${cred.name}:${assertStringPath cred.path}" else cred.name)
+                    "LoadCredential${encrypted}" = [ "${cred.name}:${assertStringPath cred.path}" ];
+                  }
+                else if cred.path == null && cred.value != null && cred.rename == null then
+                  { "SetCredential${encrypted}" = [ "${cred.name}:${cred.value}" ]; }
+                else if cred.path == null && cred.value == null then
+                  {
+                    ImportCredential = [
+                      (if cred.rename != null then "${cred.name}:${cred.rename}" else cred.name)
                     ];
                   }
                 else
-                  throw "Credential must be given at most one data, path, or reference"
+                  throw "At most one of `path`, `value`, or `rename` should be configured."
               );
           }
         );
