@@ -31,10 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-4yRBgFrH4RBpuvChTED+ynx+PyFumoT2Z+R1gXxF4Xc=";
 
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2026-01-14";
-    VERGEN_GIT_SHA = finalAttrs.src.tag;
-  };
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   cargoBuildFlags = [ "--all" ];
 
