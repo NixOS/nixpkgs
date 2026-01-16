@@ -14,7 +14,7 @@
   glib,
   webkitgtk_4_1,
   xdg-utils,
-  jdk25,
+  temurin-bin-25,
   libGL,
   xorg,
   alsa-lib,
@@ -86,8 +86,8 @@ let
       pkgs.glib
       pkgs.webkitgtk_4_1
       pkgs.xdg-utils
-      # java runtime for the game
-      pkgs.jdk25
+      # java runtime for the game (temurin 25 recommended by official docs)
+      pkgs.temurin-bin-25
       # graphics
       pkgs.libGL
       # audio
@@ -110,9 +110,10 @@ let
     extraBwrapArgs = [
       "--setenv __NV_DISABLE_EXPLICIT_SYNC 1"
       "--setenv WEBKIT_DISABLE_DMABUF_RENDERER 1"
+      # taken from the flatpak at https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-latest.flatpak
       "--setenv WEBKIT_DISABLE_COMPOSITING_MODE 1"
       "--setenv DESKTOP_STARTUP_ID com.hypixel.HytaleLauncher"
-      "--setenv JAVA_HOME ${jdk25}"
+      "--setenv JAVA_HOME ${temurin-bin-25}"
     ];
 
     extraInstallCommands = ''
@@ -120,37 +121,66 @@ let
       cp ${desktopItem}/share/applications/*.desktop $out/share/applications/
     '';
 
-    passthru.updateScript = writeScript "update-hytale-launcher" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell --pure -i bash -p bash curl cacert jq nix common-updater-scripts
+    passthru = {
+      inherit unwrapped;
 
-      set -euo pipefail
+      updateScript = writeScript "update-hytale-launcher" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell --pure -i bash -p bash curl cacert jq nix common-updater-scripts coreutils
 
-      launcherJson=$(curl -s https://launcher.hytale.com/version/release/launcher.json)
+        set -euo pipefail
 
-      launcherJq() {
-        echo "$launcherJson" | jq --raw-output "$1"
-      }
+        launcherJson=$(curl -s https://launcher.hytale.com/version/release/launcher.json)
 
-      latestVersion="$(launcherJq '.version')"
-      currentVersion="$(NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw -f . hytale-launcher.version)"
+        launcherJq() {
+          echo "$launcherJson" | jq --raw-output "$1"
+        }
 
-      if [[ "$latestVersion" == "$currentVersion" ]]; then
-        echo "package is up-to-date"
-        exit 0
-      fi
+        latestVersion="$(launcherJq '.version')"
+        currentVersion="$(NIXPKGS_ALLOW_UNFREE=1 nix eval --impure --raw -f . hytale-launcher.version)"
 
-      update() {
-        system="$1"
-        url="$2"
-        prefetched="$(nix-prefetch-url --unpack "$url")"
-        hash="$(nix-hash --type sha256 --to-sri "$prefetched")"
-        update-source-version --system="$system" --ignore-same-version hytale-launcher "$latestVersion" "$hash"
-      }
+        if [[ "$latestVersion" == "$currentVersion" ]]; then
+          echo "package is up-to-date"
+          exit 0
+        fi
 
-      update "x86_64-linux" "$(launcherJq ".download_url.linux.amd64.url")"
-      update "aarch64-darwin" "$(launcherJq ".download_url.darwin.arm64.url")"
-    '';
+        update() {
+          system="$1"
+          upstreamHexHash="$2"
+          url="$3"
+
+          echo "updating $system..."
+
+          # download zip and verify against upstream hash
+          zipBase32="$(nix-prefetch-url "$url" 2>/dev/null)"
+          zipSri="$(nix hash convert --to sri "sha256:$zipBase32")"
+          upstreamSri="$(nix hash convert --hash-algo sha256 --to sri "$upstreamHexHash")"
+
+          if [[ "$zipSri" != "$upstreamSri" ]]; then
+            echo "error: zip hash mismatch for $system"
+            echo "  expected: $upstreamSri"
+            echo "  got:      $zipSri"
+            exit 1
+          fi
+          echo "  zip hash verified: $upstreamSri"
+
+          # get the unpacked hash for fetchzip
+          unpackedBase32="$(nix-prefetch-url --unpack "$url" 2>/dev/null)"
+          sriHash="$(nix hash convert --to sri "sha256:$unpackedBase32")"
+          echo "  fetchzip hash: $sriHash"
+
+          update-source-version --system="$system" --ignore-same-version hytale-launcher "$latestVersion" "$sriHash"
+        }
+
+        update "x86_64-linux" \
+          "$(launcherJq '.download_url.linux.amd64.sha256')" \
+          "$(launcherJq '.download_url.linux.amd64.url')"
+
+        update "aarch64-darwin" \
+          "$(launcherJq '.download_url.darwin.arm64.sha256')" \
+          "$(launcherJq '.download_url.darwin.arm64.url')"
+      '';
+    };
 
     meta = {
       description = "Official launcher for Hytale";
@@ -158,8 +188,10 @@ let
         Official launcher for Hytale, an upcoming block-based game from Hypixel Studios.
 
         Note: The launcher's built-in auto-update mechanism will not work on NixOS
-        due to the immutable nature of the Nix store. Updates must be applied by
-        updating the nixpkgs package.
+        due to the immutable nature of the Nix store. You may see an error message
+        about "failed to remove existing executable: read-only file system", this
+        is expected and the launcher will continue to work. Updates must be applied
+        by updating the nixpkgs package.
       '';
       homepage = "https://hytale.com";
       license = lib.licenses.unfreeRedistributable;
@@ -189,16 +221,19 @@ let
       runHook postInstall
     '';
 
-    passthru.updateScript = fhsEnv.passthru.updateScript;
+    passthru = {
+      inherit unwrapped;
+      updateScript = fhsEnv.passthru.updateScript;
+    };
 
     meta = {
       description = "Official launcher for Hytale";
       longDescription = ''
         Official launcher for Hytale, an upcoming block-based game from Hypixel Studios.
 
-        Note: The launcher's built-in auto-update mechanism will not work on NixOS
-        due to the immutable nature of the Nix store. Updates must be applied by
-        updating the nixpkgs package.
+        Note: The launcher's built-in auto-update mechanism will not work due to
+        the immutable nature of the Nix store. Updates must be applied by updating
+        the nixpkgs package.
       '';
       homepage = "https://hytale.com";
       license = lib.licenses.unfreeRedistributable;
