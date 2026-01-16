@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # See nixos/tests/attr.nix
+  doCheck = false;
+
   meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
