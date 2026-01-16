@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.52.2";
+  version = "1.53.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZKTdqLxc3Te/1JDpO7U9o1qu+Ub8/Cg6eYDazfFlEIs=";
+    hash = "sha256-ARQRbTRYny5lK/Ssc1o6ymmAfmWfkvmcmOe2INAAg48=";
   };
 
   build-system = [
