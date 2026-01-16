@@ -30,6 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-3vTEfXeFqouPswRKST/9U7yg9ah7J9m2KAMoxaBZNR0=";
   };
 
+  # https://github.com/Sendspin/aiosendspin/blob/1.2.0/pyproject.toml#L7
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = [
     setuptools
   ];
