@@ -808,6 +808,7 @@ mapAliases {
   jami-client = throw "'jami-client' has been renamed to/replaced by 'jami'"; # Converted to throw 2025-10-27
   jami-client-qt = throw "'jami-client-qt' has been renamed to/replaced by 'jami-client'"; # Converted to throw 2025-10-27
   jami-daemon = throw "'jami-daemon' has been renamed to/replaced by 'jami.daemon'"; # Converted to throw 2025-10-27
+  jarowinkler-cpp = throw "'jarowinkler-cpp' has been removed because it was deprecated and archived upstream. Consider using 'rapidfuzz-cpp' instead"; # Added 2026-01-15
   jdk23 = throw "OpenJDK 23 was removed as it has reached its end of life"; # Added 2025-11-04
   jdk23_headless = throw "OpenJDK 23 was removed as it has reached its end of life"; # Added 2025-11-04
   jdk24 = throw "OpenJDK 24 was removed as it has reached its end of life"; # Added 2025-10-04
