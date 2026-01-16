@@ -18,6 +18,10 @@ buildDunePackage rec {
     hash = "sha256-WPtmj9EEs7P72OXWJg1syIrbLuh7u4V4W4nyozXmSa0=";
   };
 
+  patches = [
+    ./remove-stdcompat.patch
+  ];
+
   buildInputs = [
     utop
   ];
