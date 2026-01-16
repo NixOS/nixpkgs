@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-webrisk";
   version = "1.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_webrisk";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-XjzgGju4J1oUnYPoX1DiW16Z1/4WCQh/cMqxRKhNpZ8=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for Web Risk";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-webrisk";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-webrisk-v${version}/packages/google-cloud-webrisk/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-webrisk-v${finalAttrs.version}/packages/google-cloud-webrisk/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
