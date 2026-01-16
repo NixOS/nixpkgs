@@ -73,6 +73,7 @@ let
         maintainers = with lib.maintainers; [
           tricktron
           pentane
+          jeffdess
         ];
         platforms = lib.platforms.unix;
         mainProgram = "openconnect";
