@@ -62,6 +62,9 @@ stdenvNoCC.mkDerivation (
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: System.IO.IOException: The process cannot access the file '/build/source/src/tools/DevAnalyzers/bin/Release/netstandard2.0/DevAnalyzers.deps.json' because it is being used by another process. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         ./0002-disable-parallel-compile.patch
+        # Remove dependencies on Microsoft.WindowsDesktop.App.Ref, which sdk
+        # specific and currently not packaged in nixpkgs
+        ./0004-disable-windows-desktop.patch
       ];
 
       # this needs to be match the version being patched above
