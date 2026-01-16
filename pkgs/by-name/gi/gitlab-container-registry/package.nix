@@ -37,10 +37,8 @@ buildGo124Module rec {
   meta = {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
     license = lib.licenses.asl20;
-    teams = with lib.teams; [
-      gitlab
-      cyberus
-    ];
+    maintainers = with lib.maintainers; [ e1mo ];
+    teams = with lib.teams; [ gitlab ];
     platforms = lib.platforms.unix;
     mainProgram = "registry";
   };
