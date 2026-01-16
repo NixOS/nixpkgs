@@ -10169,10 +10169,6 @@ with pkgs;
 
   bitwig-studio = bitwig-studio5;
 
-  blackbox = callPackage ../applications/version-management/blackbox {
-    pinentry = pinentry-curses;
-  };
-
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
   };
