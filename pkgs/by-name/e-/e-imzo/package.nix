@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           pcsclite
         ]
       }" \
-      --add-flags "-Dsun.security.smartcardio.library=${pcsclite.lib}/lib/libpcsclite.${stdenvNoCC.hostPlatform.extensions.sharedLibrary}" \
+      --add-flags "-Dsun.security.smartcardio.library=${pcsclite.lib}/lib/libpcsclite${stdenvNoCC.hostPlatform.extensions.sharedLibrary}" \
       --add-flags "-jar $out/lib/e-imzo/E-IMZO.jar"
 
     runHook postInstall
