@@ -12,19 +12,19 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
   version = "1.1.21";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8ykONBWMiq9EACHOsdx1AFPoj53Tsxi3EbUDVciH5Ok=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -70,14 +70,6 @@ let
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
 
   nativeBuildInputs = [
     bun
@@ -97,7 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/. .
+    cp -R ${finalAttrs.node_modules}/. .
 
     runHook postConfigure
   '';

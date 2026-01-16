@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marqo-ai";
     repo = "py-marqo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-phO7aR7kQJHw5qxrpMI5DtOaXlaHMsKfaC3UquyD/Rw=";
   };
 

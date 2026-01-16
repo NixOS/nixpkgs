@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Eyescale";
     repo = "vmmlib";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-QEfeQcE66XbsFTN/Fojgldem5C+RhbOBmRyBX3sfUrg=";
 
     fetchSubmodules = true;

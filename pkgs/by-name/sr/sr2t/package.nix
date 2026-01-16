@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "0bs1d1an";
     repo = "sr2t";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BPsYnKBTxt5WUd2+WumMdVi8p6iryOWG2MjI97qbaCw=";
   };
 

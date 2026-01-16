@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "pcmanfm";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-4kJDCnld//Vbe2KbrLoYZJ/dutagY/GImoOnbpQIdDY=";
   };
 

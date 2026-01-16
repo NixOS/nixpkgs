@@ -13,7 +13,7 @@ postgresqlBuildExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "RhodiumToad";
     repo = "ip4r";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-3chAD4f4A6VlXVSI0kfC/ANcnFy4vBp4FZpT6QRAueQ=";
   };
 

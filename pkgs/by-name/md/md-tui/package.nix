@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "md-tui";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "henriklovhaug";
     repo = "md-tui";
-    tag = "v${version}";
-    hash = "sha256-pOo+gifWomZh3hTfqaIRMPEPR5TPinzl8NgYcCit7t4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LBt15MCv+QbjutwRfYI9zX5UAiYF2Y70EQ3DATRLaY8=";
   };
 
-  cargoHash = "sha256-07U69UdiAqdIv5JVfvbLNfQD/SfPfaiYZsMr6y/r8UY=";
+  cargoHash = "sha256-2Qr+6y/DOQJYP5EMMI/OdqIMrHBX4tNH29fK+QCsrnQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Markdown renderer in the terminal";
     homepage = "https://github.com/henriklovhaug/md-tui";
-    changelog = "https://github.com/henriklovhaug/md-tui/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/henriklovhaug/md-tui/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "mdt";
   };
-}
+})

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cournape";
     repo = "zipfile2";
-    #rev = "refs/tags/v${version}";
+    #tag = "v${version}";
     rev = "8823f7253772e5c5811343306a591c00c764c6d0";
     hash = "sha256-jDOyIj0sQS1dIsar4nyk5V2mme3Zc6VTms49/4n93ho=";
   };
