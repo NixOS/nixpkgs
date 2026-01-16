@@ -38,11 +38,6 @@ let
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
       });
-      onnxruntime = super.onnxruntime.override (old: {
-        onnxruntime = old.onnxruntime.override (old: {
-          withFullProtobuf = true;
-        });
-      });
     };
   };
   python3Packages = python.pkgs;
