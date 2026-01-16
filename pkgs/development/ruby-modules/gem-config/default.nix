@@ -661,6 +661,7 @@ in
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   idn-ruby = attrs: {
