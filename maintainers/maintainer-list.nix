@@ -6785,6 +6785,12 @@
     githubId = 4218822;
     name = "djds";
   };
+  djedlajn = {
+    email = "hi@uros.dev";
+    github = "djedlajn";
+    githubId = 9012882;
+    name = "Uros Karic";
+  };
   Dje4321 = {
     email = "dje4321@gmail.com";
     github = "dje4321";
