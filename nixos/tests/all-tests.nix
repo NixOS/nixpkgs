@@ -1332,6 +1332,7 @@ in
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile/default.nix;
   qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras/default.nix;
   quake3 = runTest ./quake3.nix;
+  qui = runTest ./qui.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
   rabbitmq = runTest ./rabbitmq.nix;
