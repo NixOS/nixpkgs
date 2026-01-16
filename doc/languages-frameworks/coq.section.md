@@ -10,6 +10,25 @@ The Coq derivation is overridable through the `coq.override overrides`, where ov
 
 The associated package set can be obtained using `mkCoqPackages coq`, where `coq` is the derivation to use.
 
+## Creating custom Coq environments with `coq.withPackages` {#coq-withPackages}
+
+The `coq.withPackages` function provides a convenient way to create a Coq environment that includes additional Coq packages. This is similar to how `python.withPackages` works for Python environments.
+
+The function takes a function that receives the Coq package set and returns a list of packages. It returns a wrapped Coq environment where all Coq binaries (`coqtop`, `coqc`, `coqdep`, `coqchk`, `coqide`, etc.) are configured with the appropriate environment variables to find the packages.
+
+### Usage {#coq-withPackages-usage}
+
+Here is an example of creating a Coq environment with specific packages.
+
+```nix
+coq.withPackages (
+  ps: with ps; [
+    mathcomp
+    bignums
+  ]
+)
+```
+
 ## Coq packages attribute sets: `coqPackages` {#coq-packages-attribute-sets-coqpackages}
 
 The recommended way of defining a derivation for a Coq library, is to use the `coqPackages.mkCoqDerivation` function, which is essentially a specialization of `mkDerivation` taking into account most of the specifics of Coq libraries. The following attributes are supported:
