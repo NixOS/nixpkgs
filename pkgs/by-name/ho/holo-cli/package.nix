@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "holo-cli";
-  version = "0.5.0-unstable-2025-09-22";
+  version = "0.5.0-unstable-2026-01-16";
 
   src = fetchFromGitHub {
     owner = "holo-routing";
     repo = "holo-cli";
-    rev = "7d99e7de5eb5226728ee57153c03362c90eb65b2";
-    hash = "sha256-O509LNSpak+MJPQheYLPtJQcNGPyZLMHMasKScoVnls=";
+    rev = "4e76a41f00ff02dd647b3970377ef5f34fce70f4";
+    hash = "sha256-VqSYNhd/A/9N2L9p0h9uV8V+BysHr4IkGwdwYyjw7bw=";
   };
 
-  cargoHash = "sha256-bsoxWjOMzRRtFGEaaqK0/adhGpDcejCIY0Pzw1HjQ5U=";
+  cargoHash = "sha256-7/OtT2TdLhFVZeuQOg6xQJFnGJNz/G9mna8vIeh86/k=";
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   # Use rust nightly features
