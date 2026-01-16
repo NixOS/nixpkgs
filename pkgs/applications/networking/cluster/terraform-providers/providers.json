@@ -778,13 +778,13 @@
     "vendorHash": "sha256-mnKXYT0GfIS+ODzBCS9l4rLF1ugadesmpgdOgj74nLg="
   },
   "jianyuan_sentry": {
-    "hash": "sha256-/OzoGlUaL7o4O5DejTdEeAJctB85udOCy4BntSTYJLo=",
+    "hash": "sha256-AH7Ef3G1C0jQX4Wprc8J9rP34u+xifzhclqtmVCQmAI=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.14.7",
+    "rev": "v0.14.8",
     "spdx": "MIT",
-    "vendorHash": "sha256-wbU9RTNvUVJbLkoTGMeGxh9ilZQMKc9tpBkldMdfReA="
+    "vendorHash": "sha256-owQrunW0X87DVdA/A/Pl5MWsVfx8kPL1L/xJYWS5ptI="
   },
   "joneshf_openwrt": {
     "hash": "sha256-z78IceF2VJtiQpVqC+rTUDsph73LZawIK+az3rEhljA=",
