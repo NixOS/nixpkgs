@@ -6,22 +6,25 @@
   fetchPypi,
   jsonpickle,
   requests,
+  setuptools,
   tabulate,
   xmltodict,
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvizio";
-  version = "0.1.61";
-  format = "setuptools";
+  version = "0.1.63";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AtqMWe2zgRqOp5S9oKq7keHNHM8pnTmV1mfGiVzygTc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-bRdxIqU3euzrtMvD00nPxOD69VWP2vkGZHxUe3O/YP8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     click
     jsonpickle
@@ -33,13 +36,15 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "pyvizio" ];
 
   meta = {
     description = "Python client for Vizio SmartCast";
-    mainProgram = "pyvizio";
     homepage = "https://github.com/vkorn/pyvizio";
-    license = with lib.licenses; [ gpl3Only ];
+    changelog = "https://github.com/raman325/pyvizio/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pyvizio";
   };
-}
+})

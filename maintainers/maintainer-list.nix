@@ -1350,6 +1350,12 @@
     githubId = 8614547;
     name = "Ali Caglayan";
   };
+  aljazerzen = {
+    email = "aljaz@erzen.si";
+    github = "aljazerzen";
+    githubId = 11072061;
+    name = "Aljaž Mur Eržen";
+  };
   alkasm = {
     email = "alexreynolds00@gmail.com";
     github = "alkasm";
@@ -14464,7 +14470,6 @@
   };
   l3af = {
     email = "L3afMeAlon3@gmail.com";
-    matrix = "@L3afMe:matrix.org";
     github = "L3afMe";
     githubId = 72546287;
     name = "L3af";
@@ -18189,12 +18194,6 @@
     github = "n00b0ss";
     githubId = 61601147;
     name = "basti n00b0ss";
-  };
-  n0emis = {
-    email = "nixpkgs@n0emis.network";
-    github = "n0emis";
-    githubId = 22817873;
-    name = "Ember Keske";
   };
   n3oney = {
     name = "Michał Minarowski";
@@ -24709,7 +24708,7 @@
   };
   snaki = {
     email = "ek@kyouma.net";
-    matrix = "@snaki:kescher.at";
+    matrix = "@emily:woof.rip";
     name = "emily";
     github = "snaakey";
     githubId = 38018554;
@@ -27406,14 +27405,6 @@
     githubId = 619015;
     name = "Svintsov Dmitry";
   };
-  urandom = {
-    email = "colin@urandom.co.uk";
-    matrix = "@urandom0:matrix.org";
-    github = "urandom2";
-    githubId = 2526260;
-    keys = [ { fingerprint = "04A3 A2C6 0042 784A AEA7  D051 0447 A663 F7F3 E236"; } ];
-    name = "Colin Arnott";
-  };
   urbas = {
     email = "matej.urbas@gmail.com";
     github = "urbas";
@@ -29181,6 +29172,12 @@
     github = "Yureien";
     githubId = 17357089;
     name = "Soham Sen";
+  };
+  yureka-wdz = {
+    email = "yureka@wdz.de";
+    github = "yureka-wdz";
+    githubId = 255085068;
+    name = "Yureka (WDZ)";
   };
   yuriaisaka = {
     email = "yuri.aisaka+nix@gmail.com";

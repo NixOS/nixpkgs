@@ -4,33 +4,54 @@
   click,
   distro,
   fetchFromGitHub,
+  fetchpatch,
+  freezegun,
   gevent,
-  importlib-metadata,
+  hatchling,
   jinja2,
   packaging,
   paramiko,
+  pydantic,
+  pyinfra-testgen,
+  pytest-testinfra,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pywinrm,
-  setuptools,
   typeguard,
   typing-extensions,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.4.1";
+  version = "3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
     tag = "v${version}";
-    hash = "sha256-7bNkDm5SyIgVkrGQ95/q7AiY/JnxtWx+jkDO/rJQ2WQ=";
+    hash = "sha256-CTeGn9aN5voyCUL5LuTErLgTgC1Z/qTS7SB9TNfq7mc=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    # paramiko v4 compat
+    # https://github.com/pyinfra-dev/pyinfra/pull/1525
+    (fetchpatch {
+      name = "remove-DSSKey.patch";
+      url = "https://github.com/pyinfra-dev/pyinfra/commit/a655bdf425884055145cfd0011c3b444c9a3ada2.patch";
+      hash = "sha256-puHcA4+KigltCL2tUYRMc9OT3kxvTeW77bbFbxgkcTs=";
+    })
+  ];
+
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
+
+  pythonRelaxDeps = [
+    "paramiko"
+  ];
 
   dependencies = [
     click
@@ -39,15 +60,18 @@ buildPythonPackage rec {
     jinja2
     packaging
     paramiko
+    pydantic
     python-dateutil
-    pywinrm
-    setuptools
     typeguard
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pyinfra-testgen
+    pytest-testinfra
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pyinfra" ];
 

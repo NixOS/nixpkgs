@@ -56,7 +56,8 @@ let
         maintainers ? [ ],
       }:
       buildRPackage {
-        name = "${name}-${version}";
+        pname = name;
+        inherit version;
         src = fetchurl {
           inherit sha256;
           urls = mkUrls (args // { inherit name version; });

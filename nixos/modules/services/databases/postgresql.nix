@@ -52,7 +52,7 @@ let
     else if isString value then
       "'${lib.replaceStrings [ "'" ] [ "''" ] value}'"
     else
-      builtins.toString value;
+      toString value;
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeTextDir "postgresql.conf" (
@@ -83,7 +83,7 @@ let
       else if builtins.isString v then
         "${directive} '${v}'"
       else
-        "${directive} ${builtins.toString v}"
+        "${directive} ${toString v}"
     ) user.ensureClauses;
 
   generateAlterRoleSQL =
@@ -882,7 +882,7 @@ in
       };
 
       path = [ cfg.finalPackage ];
-      environment.PGPORT = builtins.toString cfg.settings.port;
+      environment.PGPORT = toString cfg.settings.port;
 
       # Wait for PostgreSQL to be ready to accept connections.
       script = ''

@@ -494,8 +494,11 @@ rec {
 
   toVimPlugin =
     drv:
+    let
+      drv-name = drv.name or "${drv.pname}-${drv.version}";
+    in
     drv.overrideAttrs (oldAttrs: {
-      name = "vimplugin-${oldAttrs.name}";
+      name = "vimplugin-${drv-name}";
       # dont move the "doc" folder since vim expects it
       forceShare = [
         "man"

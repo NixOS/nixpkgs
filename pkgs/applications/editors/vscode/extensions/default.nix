@@ -3407,6 +3407,8 @@ let
 
       ms-vscode.vscode-js-profile-table = callPackage ./ms-vscode.vscode-js-profile-table { };
 
+      ms-vscode.vscode-speech = callPackage ./ms-vscode.vscode-speech { };
+
       ms-vscode-remote.remote-containers = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "remote-containers";

@@ -38,6 +38,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/peering-manager/pyixapi/";
     changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.wdz ];
   };
 }

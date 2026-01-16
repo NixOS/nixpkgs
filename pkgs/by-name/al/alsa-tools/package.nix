@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   alsa-lib,
-  fltk13,
+  fltk_1_3,
   gtk2,
   gtk3,
   makeWrapper,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    fltk13
+    fltk_1_3
     gtk2
     gtk3
     psmisc

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   node-gyp,
-  nodejs_20,
+  nodejs,
   nixosTests,
   gettext,
   python3,
@@ -19,7 +19,7 @@
   unpaper,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm,
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -30,13 +30,13 @@
   xorg,
 }:
 let
-  version = "2.20.3";
+  version = "2.20.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-aAcE0AUkB5SS4jwFOKCM7+iqc7EqGJv0qjqz0mnj2Wo=";
+    hash = "sha256-xWyYisSJ5FKU+ZFrCtjo94TjqXCzHDVdPAISMTX0Tt8=";
   };
 
   python = python3.override {
@@ -61,8 +61,6 @@ let
     };
   };
 
-  pnpm' = pnpm_10.override { nodejs = nodejs_20; };
-
   path = lib.makeBinPath [
     ghostscript_headless
     (imagemagickBig.override { ghostscript = ghostscript_headless; })
@@ -82,18 +80,18 @@ let
     src = src + "/src-ui";
 
     pnpmDeps = fetchPnpmDeps {
+      inherit pnpm;
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm';
       fetcherVersion = 2;
       hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
     };
 
     nativeBuildInputs = [
       node-gyp
-      nodejs_20
+      nodejs
       pkg-config
       pnpmConfigHook
-      pnpm'
+      pnpm
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

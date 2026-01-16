@@ -65,13 +65,12 @@ let
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
-  hasPrefixInList =
-    list: newPath: any (path: hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  hasPrefixInList = list: newPath: any (path: hasPrefix (toString path) (toString newPath)) list;
   mergePaths = foldl' (
     merged: newPath:
     let
       # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      filteredPaths = filter (p: !hasPrefix (toString newPath) (toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
       filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
     in

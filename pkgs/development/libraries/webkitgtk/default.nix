@@ -21,7 +21,7 @@
   wayland-protocols,
   wayland-scanner,
   libwebp,
-  enchant2,
+  enchant,
   xorg,
   libxkbcommon,
   libavif,
@@ -141,7 +141,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     cairo # required even when using skia
-    enchant2
+    enchant
     flite
     libavif
     libepoxy
