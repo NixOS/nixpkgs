@@ -131,7 +131,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.console.enable {
+  config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
