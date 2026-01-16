@@ -214,6 +214,20 @@ lib.makeExtensible (
 
       nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
 
+      nixComponents_2_33 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.33.1";
+        inherit (self.nix_2_32.meta) teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_33";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-TVKn52SoKq8mMyW/x3NPPskGVurFdnGGV0DGvnL0gak=";
+        };
+      };
+
+      nix_2_33 = addTests "nix_2_33" self.nixComponents_2_33.nix-everything;
+
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.34pre20251217_${lib.substring 0 8 src.rev}";
         inherit teams;
@@ -228,7 +242,7 @@ lib.makeExtensible (
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_32;
+      latest = self.nix_2_33;
 
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_31;
