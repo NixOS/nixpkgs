@@ -424,8 +424,6 @@ stdenv.mkDerivation (
       LDFLAGS = "-Wl,--build-id=sha1";
     };
 
-    cmakeBuildType = "Release";
-
     cmakeFlags =
       let
         # These flags influence llvm-config's BuildVariables.inc in addition to the
@@ -528,7 +526,9 @@ stdenv.mkDerivation (
       mkdir -p $python/share
       mv $out/share/opt-viewer $python/share/opt-viewer
       moveToOutput "bin/llvm-config*" "$dev"
-      substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
+      substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${
+        lib.toLower finalAttrs.finalPackage.cmakeBuildType or "release"
+      }.cmake" \
         --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
       substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
         --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'

@@ -83,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DHIP_CLANG_NUM_PARALLEL_JOBS=4"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838

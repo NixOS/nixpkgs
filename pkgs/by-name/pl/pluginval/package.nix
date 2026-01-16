@@ -16,6 +16,7 @@
   libXrandr,
   libXtst,
   ladspaH,
+  debug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,9 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     ladspaH
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Debug")
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   installPhase = ''
     runHook preInstall

@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     runHook preConfigure
 
-    cmake RetroFE/Source -BRetroFE/Build -DCMAKE_BUILD_TYPE=Release \
+    cmake RetroFE/Source -BRetroFE/Build \
       -DVERSION_MAJOR=0 -DVERSION_MINOR=0 -DVERSION_BUILD=0 \
 
     runHook postConfigure

@@ -142,7 +142,7 @@ buildDotnetModule rec {
       fi
 
       SOURCE="${src}/src/Infrastructure/src/Emulator/Cores"
-      CMAKE_CONF_FLAGS="-DTARGET_ARCH=$CORE -DTARGET_WORD_SIZE=$BITS -DCMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$out/lib"
+      CMAKE_CONF_FLAGS="-DTARGET_ARCH=$CORE -DTARGET_WORD_SIZE=$BITS -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$out/lib"
       CORE_DIR=build/$CORE/$ENDIAN
       mkdir -p $CORE_DIR
       pushd $CORE_DIR

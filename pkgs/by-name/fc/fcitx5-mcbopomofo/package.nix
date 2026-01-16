@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-mcbopomofo";
   version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "openvanilla";
     repo = "fcitx5-mcbopomofo";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-efpVvWchJywKyGu7I6pNRVKJhIv01iKAXFCJ+7kcMwc=";
   };
 
@@ -40,10 +40,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -53,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ shiphan ];
     platforms = lib.platforms.linux;
   };
-}
+})

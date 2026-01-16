@@ -87,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DHIP_CLANG_NUM_PARALLEL_JOBS=4"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DROCM_PATH=${clr}"
     "-DHIP_COMPILER=${clr}/bin/amdclang++"
     "-DCMAKE_CXX_COMPILER=${clr}/bin/amdclang++"

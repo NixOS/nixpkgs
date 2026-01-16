@@ -152,8 +152,6 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "RACK_SDK_DIR" "${vcvRackSdk}")
   ];
 
-  cmakeBuildType = "Release";
-
   patches = [
     ./juce-clap-juce-extensions-src-juce-cmakelists.patch
   ];

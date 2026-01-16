@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     qt6.wrapQtAppsHook
   ];
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "\"Release\"")
-  ];
 
   dontWrapGApps = true;
 
