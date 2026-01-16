@@ -9908,6 +9908,12 @@
     github = "grindhold";
     githubId = 2592640;
   };
+  grishy = {
+    name = "Sergei G.";
+    email = "mailgrishy@gmail.com";
+    github = "grishy";
+    githubId = 13949080;
+  };
   grnnja = {
     email = "grnnja@gmail.com";
     github = "grnnja";
