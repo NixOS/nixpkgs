@@ -1,5 +1,5 @@
 {
-  "version": "3.38.6",
+  "version": "3.38.7",
   "engineVersion": "78fc3012e45889657f72359b005af7beac47ba3d",
   "engineSwiftShaderHash": "sha256-ATVcuxqPHqHOWYyO7DoX9LdgUiO3INUi7m9Mc6ccc1M=",
   "engineSwiftShaderRev": "d040a5bab638bf7c226235c95787ba6288bb6416",
@@ -21,7 +21,7 @@
     "x86_64-darwin": "sha256-L5zxNiNlUmv0jlehqWbKiIU2ckpcUR9lzby36L15VHU=",
     "aarch64-darwin": "sha256-HdZWlVSDaohuTUnzN+H8q2kPssj7omxt6sWch/kkL+o="
   },
-  "flutterHash": "sha256-Lwr+Kn5V+Urz964YTwlV8E4WeJBHkOuHuRZz/eXOmIk=",
+  "flutterHash": "sha256-rxAvZ1UdrP17nURjdm3ixkDwqLuCa0uAQKs/X/fcgpg=",
   "artifactHashes": {
     "android": {
       "aarch64-darwin": "sha256-KzBx+xKhW6emToEmxbQjuOlSTK1NMYpcL7Uuuc4gvik=",
