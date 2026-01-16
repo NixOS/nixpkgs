@@ -211,7 +211,10 @@ let
   # Including it then would cause needless mass rebuilds.
   #
   # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
-  useDefaultConfigurePlatforms = hostPlatform != buildPlatform || config.configurePlatformsByDefault;
+  useDefaultConfigurePlatforms =
+    !lib.systems.equals hostPlatform buildPlatform
+    || !buildPlatform.canExecute hostPlatform
+    || config.configurePlatformsByDefault;
   defaultConfigurePlatforms = optionals useDefaultConfigurePlatforms [
     "build"
     "host"
