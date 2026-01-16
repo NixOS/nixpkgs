@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.25.0";
+  version = "1.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
     tag = version;
-    hash = "sha256-VkpwTHPpM1cS5HT5zE3gB25zWOTIVaZdPKNgQFJHO/Q=";
+    hash = "sha256-/K9mCwYOnz1oas9Qhf2UoYTeoJjGNKQ4JCx6rWy2EdE=";
   };
 
   postPatch = ''
@@ -64,7 +64,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Fail because of missing faraday
     "test_detect_report"
-    "test_process_report_summary"
+    "test_process_report"
+    "TestNuclei3x"
     # JSON parsing issue
     "test_process_report_ignore_info"
     "test_process_report_tags"
