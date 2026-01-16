@@ -1,0 +1,13 @@
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 85eb2976807..36d92b32d1c 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -4620,7 +4620,7 @@ NTSTATUS WINAPI LdrAddDllDirectory( const UNICODE_STRING *dir, void **cookie )
+     struct dll_dir_entry *ptr;
+     DOS_PATHNAME_TYPE type = RtlDetermineDosPathNameType_U( dir->Buffer );
+
+-    if (type != ABSOLUTE_PATH && type != ABSOLUTE_DRIVE_PATH && type != UNC_PATH)
++    if (type != ABSOLUTE_PATH && type != ABSOLUTE_DRIVE_PATH && type != UNC_PATH && type != DEVICE_PATH)
+         return STATUS_INVALID_PARAMETER;
+
+     status = RtlDosPathNameToNtPathName_U_WithStatus( dir->Buffer, &nt_name, NULL, NULL );
