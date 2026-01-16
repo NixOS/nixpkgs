@@ -1,0 +1,33 @@
+From 7bc56c886c8b9fa27842a14bbb964ffe8e576a9e Mon Sep 17 00:00:00 2001
+From: Jaeyoon Jung <jaeyoon.jung@lge.com>
+Date: Tue, 12 Aug 2025 10:55:52 +0900
+Subject: [PATCH] Fix build with musl
+
+Added __GLIBC__ macro for 'execinfo.h' and related functions as they are
+GLIBC specific and not available in other libc implementation like musl.
+---
+ onnxruntime/core/platform/posix/stacktrace.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/onnxruntime/core/platform/posix/stacktrace.cc b/onnxruntime/core/platform/posix/stacktrace.cc
+index a34f6fd82ddd1..ab00f5fbb233e 100644
+--- a/onnxruntime/core/platform/posix/stacktrace.cc
++++ b/onnxruntime/core/platform/posix/stacktrace.cc
+@@ -3,7 +3,7 @@
+ 
+ #include "core/common/common.h"
+ 
+-#if !defined(__ANDROID__) && !defined(__wasm__) && !defined(_OPSCHEMA_LIB_) && !defined(_AIX)
++#if !defined(__ANDROID__) && !defined(__wasm__) && !defined(_OPSCHEMA_LIB_) && !defined(_AIX) && defined(__GLIBC__)
+ #include <execinfo.h>
+ #endif
+ #include <vector>
+@@ -13,7 +13,7 @@ namespace onnxruntime {
+ std::vector<std::string> GetStackTrace() {
+   std::vector<std::string> stack;
+ 
+-#if !defined(NDEBUG) && !defined(__ANDROID__) && !defined(__wasm__) && !defined(_OPSCHEMA_LIB_)
++#if !defined(NDEBUG) && !defined(__ANDROID__) && !defined(__wasm__) && !defined(_OPSCHEMA_LIB_) && defined(__GLIBC__)
+   constexpr int kCallstackLimit = 64;  // Maximum depth of callstack
+ 
+   void* array[kCallstackLimit];
