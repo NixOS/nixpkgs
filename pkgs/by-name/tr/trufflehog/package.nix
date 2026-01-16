@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "trufflehog";
   version = "3.92.5";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
     repo = "trufflehog";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9nzcFw+7dpkSNAYy6Rh+qhhneO44tYCHEPPM2KDzs/4=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/trufflesecurity/trufflehog/v3/pkg/version.BuildVersion=${version}"
+    "-X=github.com/trufflesecurity/trufflehog/v3/pkg/version.BuildVersion=${finalAttrs.version}"
   ];
 
   # Test cases run git clone and require network access
@@ -45,7 +45,7 @@ buildGoModule rec {
   meta = {
     description = "Find credentials all over the place";
     homepage = "https://github.com/trufflesecurity/trufflehog";
-    changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/v${version}";
+    changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ agpl3Only ];
     maintainers = with lib.maintainers; [
       fab
@@ -53,4 +53,4 @@ buildGoModule rec {
     ];
     mainProgram = "trufflehog";
   };
-}
+})
