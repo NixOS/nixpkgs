@@ -7,7 +7,7 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flynt";
   version = "1.0.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikamensh";
     repo = "flynt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SkkCA4fEHplt9HkEn+QOq4k9lW5qJeZzLZEbNEtKBSo=";
   };
 
@@ -37,9 +37,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to automatically convert old string literal formatting to f-strings";
     homepage = "https://github.com/ikamensh/flynt";
-    changelog = "https://github.com/ikamensh/flynt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ikamensh/flynt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "flynt";
   };
-}
+})
