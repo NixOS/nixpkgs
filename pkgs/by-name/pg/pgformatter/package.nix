@@ -11,7 +11,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-G4Bbg8tNlwV8VCVKCamhlQ/pGf8hWCkABm6f8i5doos=";
   };
 
@@ -23,12 +23,17 @@ perlPackages.buildPerlPackage rec {
   installTargets = [ "pure_install" ];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pg_format \
-      --replace "#!/usr/bin/env perl" "#!/usr/bin/perl"
+      --replace-fail "#!/usr/bin/env perl" "#!/usr/bin/perl"
+
     substituteInPlace Makefile.PL \
-      --replace "'DESTDIR'      => \$DESTDIR," "'DESTDIR'      => '$out/'," \
-      --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
+      --replace-fail \
+        "'DESTDIR'      => \$DESTDIR," \
+        "'DESTDIR'      => '$out/'," \
+      --replace-fail \
+        "'INSTALLDIRS'  => \$INSTALLDIRS," \
+        "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
   '';
 
   doCheck = false;
@@ -36,7 +41,7 @@ perlPackages.buildPerlPackage rec {
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
-    changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
+    changelog = "https://github.com/darold/pgFormatter/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [
       thunze
       mfairley
