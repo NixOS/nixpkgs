@@ -1,0 +1,30 @@
+diff --git a/pkgs/development/compilers/dotnet/vmr.nix b/pkgs/development/compilers/dotnet/vmr.nix
+index 0000000..1111111 100644
+--- a/pkgs/development/compilers/dotnet/vmr.nix
++++ b/pkgs/development/compilers/dotnet/vmr.nix
+@@ -184,6 +184,16 @@ stdenv.mkDerivation rec {
+       src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
+   ''
+   + lib.optionalString (lib.versionAtLeast version "9") ''
++    # Fix CS7035 error in azure-activedirectory-identitymodel-extensions-for-dotnet
++    # The version string '8.0.0.70116' doesn't conform to the recommended format
++    mkdir -p src/source-build-externals/src/azure-activedirectory-identitymodel-extensions-for-dotnet/src/
++    cat > src/source-build-externals/src/azure-activedirectory-identitymodel-extensions-for-dotnet/src/Directory.Build.props << EOF
++<Project>
++  <PropertyGroup>
++    <NoWarn>\$(NoWarn);CS7035</NoWarn>
++  </PropertyGroup>
++</Project>
++EOF
++  ''
++  + ''
+
+     # this fixes compile errors with clang 15 (e.g. darwin)
+     substituteInPlace \
+@@ -397,6 +407,7 @@ stdenv.mkDerivation rec {
+     releaseManifestFile
+   ]
+   ++ lib.optionals (lib.versionAtLeast version "9") [
++    "-p:NoWarn=CS7035"
+     "--source-build"
+   ]
