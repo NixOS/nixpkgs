@@ -71,7 +71,7 @@ let
   airflow-src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;

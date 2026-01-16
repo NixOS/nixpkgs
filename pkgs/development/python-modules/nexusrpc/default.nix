@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexus-rpc";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-i2FfJ3aCncbqLY2oBG8zAPTbgxzH30MSmZxhDltN4JA=";
     fetchSubmodules = true;
   };
