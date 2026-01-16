@@ -19,7 +19,7 @@
   libXxf86vm,
   openscenegraph,
   expat,
-  libpng,
+  libpng12,
   zlib,
   bash,
   SDL2,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
         libXxf86vm
         openscenegraph
         expat
-        libpng
+        libpng12
         zlib
         SDL2
         SDL2_mixer
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libpng
+    libpng12
     libGLU
     libGL
     libglut
