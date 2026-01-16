@@ -1,0 +1,210 @@
+diff --git a/communicate.c b/communicate.c
+index 292699d37ab0f99591d0ab0ad46abb8471f3643f..2eb0919158d584cdd3c5b805fc89ab0d5e3c4527 100644
+--- a/communicate.c
++++ b/communicate.c
+@@ -44,9 +44,6 @@
+ # include <netinet/tcp.h>
+ # include <netdb.h>
+ # include <pthread.h>
+-# ifdef HAVE_ENDIAN_H
+-#  include <endian.h>
+-# endif
+ #endif /* FAKEROOT_FAKENET */
+ #include <fcntl.h>
+ #include <unistd.h>
+@@ -482,7 +479,7 @@ static void open_comm_sd(void)
+     fail("fcntl(F_SETFD, FD_CLOEXEC)");
+ 
+   int val = 1;
+-  if (setsockopt(comm_sd, SOL_TCP, TCP_NODELAY, &val, sizeof (val)) < 0)
++  if (setsockopt(comm_sd, IPPROTO_TCP, TCP_NODELAY, &val, sizeof (val)) < 0)
+       fail("setsockopt(TCP_NODELAY)");
+ 
+   while (1) {
+@@ -516,9 +513,9 @@ void send_fakem(const struct fake_msg *buf)
+   if(init_get_msg()!=-1){
+     memcpy(&fm.msg, buf, sizeof(*buf));
+     fm.mtype=1;
+-#if __BYTE_ORDER == __BIG_ENDIAN
++#if BYTE_ORDER == BIG_ENDIAN
+     ((struct fake_msg*)&fm.msg)->magic=FAKEROOT_MAGIC_BE;
+-#elif __BYTE_ORDER == __LITTLE_ENDIAN
++#elif BYTE_ORDER == LITTLE_ENDIAN
+     ((struct fake_msg*)&fm.msg)->magic=FAKEROOT_MAGIC_LE;
+ #endif
+     do
+@@ -595,9 +592,9 @@ void send_get_fakem(struct fake_msg *buf)
+         Use swapX here instead of ntoh/hton
+         that do nothing on big-endian machines
+       */
+-#if __BYTE_ORDER == __LITTLE_ENDIAN
++#if BYTE_ORDER == LITTLE_ENDIAN
+       if (magic_candidate == FAKEROOT_MAGIC_BE) {
+-#elif __BYTE_ORDER == __BIG_ENDIAN
++#elif BYTE_ORDER == BIG_ENDIAN
+       if (magic_candidate == FAKEROOT_MAGIC_LE) {
+ #endif
+          buf->id = bswapl(buf->id);
+diff --git a/communicate.h b/communicate.h
+index a5861082dfeceab7ee3ca227c39724c0ceb586d9..cb3ea44f5c0633d6fd96a4c6b55d986d3a06cb57 100644
+--- a/communicate.h
++++ b/communicate.h
+@@ -51,10 +51,10 @@
+ 
+ #ifdef __APPLE__
+ # include <AvailabilityMacros.h>
+-# ifndef MAC_OS_X_VERSION_10_5 1050
++# ifndef MAC_OS_X_VERSION_10_5
+ #  define MAC_OS_X_VERSION_10_5 1050
+ # endif
+-# ifndef MAC_OS_X_VERSION_10_6 1060
++# ifndef MAC_OS_X_VERSION_10_6
+ #  define MAC_OS_X_VERSION_10_6 1060
+ # endif
+ # if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+diff --git a/configure.ac b/configure.ac
+index be7fe6054829dd31740417d6dec2e1859a50252d..8b9c39f8cad65aed81f29fb7545e5cf01bdd9445 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -107,7 +107,7 @@ AC_SUBST(signal)
+ 
+ dnl Checks for header files.
+ AC_HEADER_DIRENT
+-AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h stdint.h inttypes.h grp.h endian.h sys/sysmacros.h sys/socket.h sys/acl.h sys/capability.h sys/xattr.h fts.h)
++AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h stdint.h inttypes.h grp.h endian.h machine/endian.h sys/sysmacros.h sys/socket.h sys/acl.h sys/capability.h sys/xattr.h fts.h)
+ 
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_C_CONST
+diff --git a/faked.c b/faked.c
+index d6e1b501917a0baa2f7c117800078fe54d17dd14..e1548e95d72873c980861e6f1e0a9dc11faab1dd 100644
+--- a/faked.c
++++ b/faked.c
+@@ -139,10 +139,6 @@
+ # define FAKE_KEY port
+ #endif /* FAKEROOT_FAKENET */
+ 
+-#ifndef SOL_TCP
+-# define SOL_TCP 6 /* this should probably be done with getprotoent */
+-#endif
+-
+ #define fakestat_equal(a, b)  ((a)->dev == (b)->dev && (a)->ino == (b)->ino)
+ 
+ #ifndef FAKEROOT_FAKENET
+@@ -794,7 +790,7 @@ void process_chmod(struct fake_msg *buf){
+     */
+ 
+     if ((buf->st.mode&S_IFMT) != (st->mode&S_IFMT) &&
+-        ((buf->st.mode&S_IFMT) != S_IFREG || (!st->mode&(S_IFBLK|S_IFCHR)))) {
++        ((buf->st.mode&S_IFMT) != S_IFREG || (!(st->mode&(S_IFBLK|S_IFCHR))))) {
+       fprintf(stderr,"FAKEROOT: chmod mode=%lo incompatible with "
+               "existing mode=%lo\n", (unsigned long)buf->st.mode, (unsigned long)st->mode);
+       st->mode = buf->st.mode;
+@@ -1483,7 +1479,7 @@ int main(int argc, char **argv){
+     fail("setsockopt(SO_REUSEADDR)");
+ 
+   val = 1;
+-  if (setsockopt(sd, SOL_TCP, TCP_NODELAY, &val, sizeof (val)) < 0)
++  if (setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, &val, sizeof (val)) < 0)
+     fail("setsockopt(TCP_NODELAY)");
+ 
+   if (port > 0) {
+diff --git a/libfakeroot_inode64.c b/libfakeroot_inode64.c
+index d4a1d1944443e770f234b5c347a9116ace745c25..117d7945b6337b9a6c5abf3325afb2121cf21283 100644
+--- a/libfakeroot_inode64.c
++++ b/libfakeroot_inode64.c
+@@ -20,6 +20,8 @@
+ 
+    In this file, 'struct stat' is an alias for 'struct stat64'.
+ */
++#include <sys/types.h>
++#if !__DARWIN_ONLY_64_BIT_INO_T
+ #define _DARWIN_USE_64_BIT_INODE
+ 
+ #include "config.h"
+@@ -141,6 +143,7 @@ FTSENT *fts_children$INODE64(FTS *ftsp,
+ 
+   return first;
+ }
+-#endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
+ #endif /* HAVE_FTS_READ */
++#endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
++#endif /* !__DARWIN_ONLY_64_BIT_INO_T */
+ #endif /* ifdef __APPLE__ */
+diff --git a/message.h b/message.h
+index 5c8406e67d1f30b814c0e09a1fe4bcda05169255..c19d0443be257145ced810a69da4b12e35825dda 100644
+--- a/message.h
++++ b/message.h
+@@ -26,16 +26,24 @@
+ # endif
+ #endif
+ 
+-/* On Solaris, use the native htonll(n)/ntohll(n) */
+-#if !defined(sun) && !defined(_NETINET_IN_H)
+-#if __BYTE_ORDER == __BIG_ENDIAN
++#ifdef HAVE_ENDIAN_H
++# include <endian.h>
++#elif defined(HAVE_MACHINE_ENDIAN_H)
++# include <machine/endian.h>
++#else
++# error No endian header
++#endif
++
++/* On Solaris and macOS, use the native htonll(n)/ntohll(n) */
++#if !defined(sun) && !defined(__APPLE__) && !defined(_NETINET_IN_H)
++#if BYTE_ORDER == BIG_ENDIAN
+ # define htonll(n)  (n)
+ # define ntohll(n)  (n)
+-#elif __BYTE_ORDER == __LITTLE_ENDIAN
++#elif BYTE_ORDER == LITTLE_ENDIAN
+ # define htonll(n)  ((((uint64_t) htonl(n)) << 32LL) | htonl((n) >> 32LL))
+ # define ntohll(n)  ((((uint64_t) ntohl(n)) << 32LL) | ntohl((n) >> 32LL))
+ #endif
+-#endif /* !defined(sun) && !defined(_NETINET_IN_H) */
++#endif /* !defined(sun) && !defined(__APPLE__) && !defined(_NETINET_IN_H) */
+ 
+ /* Endianness-agnostic swappers from byteswap.h */
+ #define bswaps(x) \
+diff --git a/wrapfunc.inp b/wrapfunc.inp
+index d2a6ed3eae72663fa4ad4b5d3eebbc7225b6f056..b135647d4bdff62a405a82f85ed7a2ffd7a80791 100644
+--- a/wrapfunc.inp
++++ b/wrapfunc.inp
+@@ -36,6 +36,7 @@ WRAP_FSTATAT64;int;FSTATAT64_ARG(int ver, int dir_fd, const char *path, struct s
+ 
+ #ifdef __APPLE__
+ #ifdef __LP64__
++#include <sys/types.h>
+ getattrlist;int;(const char *path, void *attrList, void *attrBuf, size_t attrBufSize, unsigned int options);(path, attrList, attrBuf, attrBufSize, options)
+ #ifdef HAVE_FGETATTRLIST
+ fgetattrlist;int;(int fd, void *attrList, void *attrBuf, size_t attrBufSize, unsigned int options);(fd, attrList, attrBuf, attrBufSize, options)
+@@ -51,9 +52,11 @@ getattrlist$UNIX2003;int;(const char *path, void *attrList, void *attrBuf, size_
+ #endif
+ #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+ #include <spawn.h>
++#if !__DARWIN_ONLY_64_BIT_INO_T
+ lstat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
+ stat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
+ fstat$INODE64;int;(int fd, struct stat *buf);(fd, buf)
++#endif /* !__DARWIN_ONLY_64_BIT_INO_T */
+ posix_spawn;int;(pid_t * __restrict pid, const char * __restrict path, const posix_spawn_file_actions_t *file_actions, const posix_spawnattr_t * __restrict attrp, char *const argv[ __restrict], char *const envp[ __restrict]);(pid, path, file_actions, attrp, argv, envp)
+ posix_spawnp;int;(pid_t * __restrict pid, const char * __restrict path, const posix_spawn_file_actions_t *file_actions, const posix_spawnattr_t * __restrict attrp, char *const argv[ __restrict], char *const envp[ __restrict]);(pid, path, file_actions, attrp, argv, envp)
+ #endif
+@@ -236,7 +239,9 @@ facl;int;(int fd, int cmd, int cnt, void *buf);(fd, cmd, cnt, buf)
+ fts_read;FTSENT *;(FTS *ftsp);(ftsp)
+ #ifdef __APPLE__
+ #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
++#if !__DARWIN_ONLY_64_BIT_INO_T
+ fts_read$INODE64;FTSENT *;(FTS *ftsp);(ftsp)
++#endif /* !__DARWIN_ONLY_64_BIT_INO_T */
+ #endif
+ #endif /* ifdef __APPLE__ */
+ #endif /* HAVE_FTS_READ */
+@@ -244,7 +249,9 @@ fts_read$INODE64;FTSENT *;(FTS *ftsp);(ftsp)
+ fts_children;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
+ #ifdef __APPLE__
+ #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
++#if !__DARWIN_ONLY_64_BIT_INO_T
+ fts_children$INODE64;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
++#endif /* !__DARWIN_ONLY_64_BIT_INO_T */
+ #endif
+ #endif /* ifdef __APPLE__ */
+ #endif /* HAVE_FTS_CHILDREN */

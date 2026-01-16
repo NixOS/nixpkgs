@@ -40,11 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # patch needed to fix execution on macos
       # TODO: remove when the next release comes out: https://salsa.debian.org/clint/fakeroot/-/merge_requests/34
-      (fetchpatch {
-        name = "fakeroot-fix-macos.patch";
-        url = "https://salsa.debian.org/clint/fakeroot/-/merge_requests/34.diff";
-        hash = "sha256-D5f1bXUaN2YMD/NTx/WIrqDBx/qNHpfLRcPhbdHYLl8=";
-      })
+      ./fakeroot-fix-macos.patch
     ];
 
   nativeBuildInputs = [
