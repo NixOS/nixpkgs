@@ -34,9 +34,9 @@ perlPackages.buildPerlPackage rec {
       --replace-fail \
         "'INSTALLDIRS'  => \$INSTALLDIRS," \
         "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
-  '';
 
-  doCheck = false;
+    patchShebangs .
+  '';
 
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
