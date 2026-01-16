@@ -11748,6 +11748,12 @@
     github = "james-atkins";
     githubId = 9221409;
   };
+  jamesbrink = {
+    name = "James Brink";
+    email = "brink.james@gmail.com";
+    github = "jamesbrink";
+    githubId = 646361;
+  };
   jamesward = {
     email = "james@jamesward.com";
     name = "James Ward";
