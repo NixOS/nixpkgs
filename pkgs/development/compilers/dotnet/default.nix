@@ -167,7 +167,6 @@ pkgs
     if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
   # source-built SDK only exists for _1xx feature band
   # https://github.com/dotnet/source-build/issues/3667
-  sdk_8_0_3xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_3xx-bin;
   sdk_8_0_4xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_4xx-bin;
   sdk_9_0_3xx = combineSdk sdk_9_0_1xx pkgs.sdk_9_0_3xx-bin;
   sdk_8_0 = sdk_8_0_4xx;
