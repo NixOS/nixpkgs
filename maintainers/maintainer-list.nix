@@ -27034,6 +27034,11 @@
     githubId = 5356506;
     name = "Tricia Tan";
   };
+  triton = {
+    github = "Triton171";
+    githubId = 16193831;
+    name = "Daniel Ebert";
+  };
   trobert = {
     email = "thibaut.robert@gmail.com";
     github = "trobert";

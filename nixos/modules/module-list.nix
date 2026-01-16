@@ -1682,6 +1682,7 @@
   ./services/web-apps/moodle.nix
   ./services/web-apps/movim.nix
   ./services/web-apps/netbox.nix
+  ./services/web-apps/nextcloud-backup/default.nix
   ./services/web-apps/nextcloud-notify_push.nix
   ./services/web-apps/nextcloud-whiteboard-server.nix
   ./services/web-apps/nextcloud.nix

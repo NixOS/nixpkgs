@@ -71,6 +71,15 @@
   "module-services-tandoor-recipes-migrating-media-option-2": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-2"
   ],
+  "module-services-nextcloudBackup": [
+    "index.html#module-services-nextcloudBackup"
+  ],
+  "module-services-nextcloudBackup-backup": [
+    "index.html#module-services-nextcloudBackup-backup"
+  ],
+  "module-services-nextcloudBackup-restore": [
+    "index.html#module-services-nextcloudBackup-restore"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
