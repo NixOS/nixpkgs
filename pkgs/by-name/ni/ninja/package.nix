@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash =
       {
         # TODO: Remove Ninja 1.11 as soon as possible.
