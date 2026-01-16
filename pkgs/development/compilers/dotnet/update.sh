@@ -128,6 +128,12 @@ aspnetcore_packages () {
         Microsoft.AspNetCore.App.Ref
     )
 
+    if versionAtLeast "$version" 10; then
+        pkgs+=(
+            Microsoft.AspNetCore.App.Internal.Assets
+        )
+    fi
+
     generate_package_list "$version" '    ' "${pkgs[@]}"
 }
 
