@@ -27,6 +27,7 @@
   autoreconfHook,
   nixosTests,
   knot-resolver_5,
+  knot-resolver-manager_6,
   knot-dns,
   runCommandLocal,
 }:
@@ -116,6 +117,7 @@ stdenv.mkDerivation rec {
     inherit knot-resolver_5;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit knot-resolver-manager_6; # not very reliable on non-Linux yet
     inherit (nixosTests) knot kea;
     prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped
