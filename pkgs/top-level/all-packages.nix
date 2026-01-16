@@ -4151,6 +4151,7 @@ with pkgs;
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
   corretto21 = javaPackages.compiler.corretto21;
+  corretto25 = javaPackages.compiler.corretto25;
 
   inherit (callPackage ../development/compilers/crystal { })
     crystal_1_14
