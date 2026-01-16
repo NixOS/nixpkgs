@@ -1039,6 +1039,452 @@ let
         merge = mergeEqualOption;
       };
 
+      rawRon = mkOptionType {
+        name = "rawRon";
+        description = "raw RON value";
+        descriptionClass = "noun";
+        check = x: isType "ron-raw" x && isString x.value;
+        merge = mergeEqualOption;
+      };
+
+      ronChar = mkOptionType {
+        name = "ronChar";
+        description = "RON character";
+        descriptionClass = "noun";
+        check = x: isType "ron-char" x && isString x.value && builtins.stringLength x.value == 1;
+        merge = mergeEqualOption;
+      };
+
+      ronEnum =
+        variants:
+        let
+          inherit (lib.lists) unique;
+          show = v: ''"${v}"'';
+        in
+        mkOptionType rec {
+          name = "ronEnum";
+          description =
+            if variants == [ ] then
+              "impossible (empty RON enum)"
+            else if builtins.length variants == 1 then
+              "RON enum variant ${show (builtins.head variants)} (singular enum)"
+            else
+              "RON enum, one of ${concatMapStringsSep ", " show variants}";
+          descriptionClass = if builtins.length variants < 2 then "noun" else "conjunction";
+          check = x: isType "ron-enum" x && isString x.variant && !(x ? values) && elem x.variant variants;
+          merge = mergeEqualOption;
+          functor = defaultFunctor name // {
+            payload = { inherit variants; };
+            type = payload: types.ronEnum payload.variants;
+            binOp = a: b: { variants = unique (a.variants ++ b.variants); };
+          };
+        };
+
+      ronMapOf =
+        keyType: valueType:
+        mkOptionType rec {
+          name = "ronMapOf";
+          description = "RON map of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") keyType
+          } to ${optionDescriptionPhrase (class: class == "noun" || class == "composite") valueType}";
+          descriptionClass = "composite";
+          check =
+            x:
+            isType "ron-map" x
+            && isList x.attrs
+            && builtins.all (pair: isAttrs pair && pair ? key && pair ? value) x.attrs;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+              in
+              if headError != null then
+                {
+                  inherit headError;
+                  value = null;
+                  valueMeta = { };
+                }
+              else
+                let
+                  # Merge each key-value pair
+                  allPairs = concatLists (map (def: def.value.attrs) defs);
+                  # Merge keys
+                  keyEvals = filter (x: x.optionalValue ? value) (
+                    imap1 (
+                      idx: pair:
+                      mergeDefinitions (loc ++ [ "[pair ${toString idx}].key" ]) keyType [
+                        {
+                          file = "<generated>";
+                          value = pair.key;
+                        }
+                      ]
+                    ) allPairs
+                  );
+                  # Merge values
+                  valueEvals = filter (x: x.optionalValue ? value) (
+                    imap1 (
+                      idx: pair:
+                      mergeDefinitions (loc ++ [ "[pair ${toString idx}].value" ]) valueType [
+                        {
+                          file = "<generated>";
+                          value = pair.value;
+                        }
+                      ]
+                    ) allPairs
+                  );
+                  mergedPairs = lib.lists.zipListsWith (keyEval: valueEval: {
+                    key = keyEval.optionalValue.value or keyEval.mergedValue;
+                    value = valueEval.optionalValue.value or valueEval.mergedValue;
+                  }) keyEvals valueEvals;
+                in
+                {
+                  headError = null;
+                  value = {
+                    _type = "ron-map";
+                    attrs = mergedPairs;
+                  };
+                  valueMeta.pairs = lib.lists.zipListsWith (keyEval: valueEval: {
+                    key = keyEval.checkedAndMerged.valueMeta;
+                    value = valueEval.checkedAndMerged.valueMeta;
+                  }) keyEvals valueEvals;
+                };
+          };
+          functor = defaultFunctor name // {
+            payload = {
+              inherit keyType valueType;
+            };
+            type = payload: types.ronMapOf payload.keyType payload.valueType;
+            binOp =
+              a: b:
+              let
+                mergedKeyType = a.keyType.typeMerge b.keyType.functor;
+                mergedValueType = a.valueType.typeMerge b.valueType.functor;
+              in
+              if mergedKeyType != null && mergedValueType != null then
+                {
+                  keyType = mergedKeyType;
+                  valueType = mergedValueType;
+                }
+              else
+                null;
+          };
+          nestedTypes.keyType = keyType;
+          nestedTypes.valueType = valueType;
+        };
+
+      ronNamedStructOf =
+        elemType:
+        let
+          # Push down position info from the value attribute set
+          pushPositions = map (
+            def:
+            mapAttrs (n: v: {
+              inherit (def) file;
+              value = v;
+            }) def.value.value
+          );
+        in
+        mkOptionType rec {
+          name = "ronNamedStructOf";
+          description = "RON named struct of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          descriptionClass = "composite";
+          check = x: isType "ron-named-struct" x && isString x.name && isAttrs x.value;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+              in
+              if headError != null then
+                {
+                  inherit headError;
+                  value = null;
+                  valueMeta = { };
+                }
+              else
+                let
+                  # Check that all names are equal
+                  firstName = (builtins.head defs).value.name;
+                  allNamesEqual = builtins.all (def: def.value.name == firstName) defs;
+                in
+                if !allNamesEqual then
+                  {
+                    headError = {
+                      message = "The option `${showOption loc}` has conflicting struct names in ${showFiles (getFiles defs)}.";
+                    };
+                    value = null;
+                    valueMeta = { };
+                  }
+                else
+                  let
+                    # Merge the inner attribute sets
+                    evals = filterAttrs (n: v: v.optionalValue ? value) (
+                      zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                    );
+                    mergedAttrs = mapAttrs (n: v: v.optionalValue.value) evals;
+                  in
+                  {
+                    headError = null;
+                    value = {
+                      _type = "ron-named-struct";
+                      name = firstName;
+                      value = mergedAttrs;
+                    };
+                    valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
+                  };
+          };
+          getSubOptions =
+            prefix:
+            elemType.getSubOptions (
+              prefix
+              ++ [
+                "value"
+                "<name>"
+              ]
+            );
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronNamedStructOf (elemType.substSubModules m);
+          functor = elemTypeFunctor name { inherit elemType; } // {
+            type = payload: types.ronNamedStructOf payload.elemType;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
+      ronOptionalOf =
+        elemType:
+        mkOptionType rec {
+          name = "ronOptionalOf";
+          description = "RON optional of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "conjunction") elemType
+          }";
+          descriptionClass = "conjunction";
+          check = x: isType "ron-optional" x && (x.value == null || elemType.check x.value);
+          merge =
+            loc: defs:
+            let
+              nrNones = count (def: def.value.value == null) defs;
+            in
+            if nrNones == length defs then
+              {
+                _type = "ron-optional";
+                value = null;
+              }
+            else if nrNones != 0 then
+              throw "The option `${showOption loc}` is defined both None and Some, in ${showFiles (getFiles defs)}."
+            else
+              let
+                # Extract the inner values and merge them
+                innerDefs = map (def: def // { value = def.value.value; }) defs;
+                mergedValue = elemType.merge loc innerDefs;
+              in
+              {
+                _type = "ron-optional";
+                value = mergedValue;
+              };
+          emptyValue = {
+            value = {
+              _type = "ron-optional";
+              value = null;
+            };
+          };
+          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "value" ]);
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronOptionalOf (elemType.substSubModules m);
+          functor = elemTypeFunctor name { inherit elemType; } // {
+            type = payload: types.ronOptionalOf payload.elemType;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
+      ronTupleEnumOf =
+        elemType: variants: size:
+        let
+          inherit (lib.lists) unique;
+          show = v: ''"${v}"'';
+        in
+        mkOptionType rec {
+          name = "ronTupleEnumOf";
+          description =
+            if variants == [ ] then
+              "impossible (empty RON tuple enum with ${toString size} ${
+                optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+              } values)"
+            else if builtins.length variants == 1 then
+              "RON tuple enum variant ${show (builtins.head variants)} with ${toString size} ${
+                optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+              } values (singular enum)"
+            else
+              "RON tuple enum with ${toString size} ${
+                optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+              } values, one of ${concatMapStringsSep ", " show variants}";
+          descriptionClass = if builtins.length variants < 2 then "noun" else "conjunction";
+          check =
+            x:
+            isType "ron-enum" x
+            && isString x.variant
+            && x ? values
+            && isList x.values
+            && builtins.length x.values == size
+            && elem x.variant variants;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+                # Merge each value in the tuple through elemType
+                evals = filter (x: x.optionalValue ? value) (
+                  concatLists (
+                    imap1 (
+                      n: def:
+                      imap1 (
+                        m: def':
+                        mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                          {
+                            inherit (def) file;
+                            value = def';
+                          }
+                        ]
+                      ) def.value.values
+                    ) defs
+                  )
+                );
+                # Reconstruct the enum value with merged values
+                mergedValues = map (x: x.optionalValue.value or x.mergedValue) evals;
+                firstDef = builtins.head defs;
+              in
+              {
+                inherit headError;
+                value = {
+                  _type = "ron-enum";
+                  variant = firstDef.value.variant;
+                  values = mergedValues;
+                };
+                valueMeta.values = map (v: v.checkedAndMerged.valueMeta) evals;
+              };
+          };
+          getSubOptions =
+            prefix:
+            elemType.getSubOptions (
+              prefix
+              ++ [
+                "values"
+                "*"
+              ]
+            );
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronTupleEnumOf (elemType.substSubModules m) variants size;
+          functor = defaultFunctor name // {
+            payload = {
+              inherit elemType variants size;
+            };
+            type = payload: types.ronTupleEnumOf payload.elemType payload.variants payload.size;
+            binOp =
+              a: b:
+              let
+                mergedElemType = a.elemType.typeMerge b.elemType.functor;
+              in
+              if a.size == b.size && mergedElemType != null then
+                {
+                  elemType = mergedElemType;
+                  variants = unique (a.variants ++ b.variants);
+                  inherit (a) size;
+                }
+              else
+                null;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
+      ronTupleOf =
+        elemType: size:
+        mkOptionType rec {
+          name = "ronTupleOf";
+          description = "RON tuple of ${toString size} ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          descriptionClass = "composite";
+          check = x: isType "ron-tuple" x && isList x.values && builtins.length x.values == size;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+                # Merge each value in the tuple through elemType
+                evals = filter (x: x.optionalValue ? value) (
+                  concatLists (
+                    imap1 (
+                      n: def:
+                      imap1 (
+                        m: def':
+                        mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                          {
+                            inherit (def) file;
+                            value = def';
+                          }
+                        ]
+                      ) def.value.values
+                    ) defs
+                  )
+                );
+                # Reconstruct the tuple with merged values
+                mergedValues = map (x: x.optionalValue.value or x.mergedValue) evals;
+              in
+              {
+                inherit headError;
+                value = {
+                  _type = "ron-tuple";
+                  values = mergedValues;
+                };
+                valueMeta.values = map (v: v.checkedAndMerged.valueMeta) evals;
+              };
+          };
+          getSubOptions =
+            prefix:
+            elemType.getSubOptions (
+              prefix
+              ++ [
+                "values"
+                "*"
+              ]
+            );
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronTupleOf (elemType.substSubModules m) size;
+          functor = defaultFunctor name // {
+            payload = {
+              inherit elemType size;
+            };
+            type = payload: types.ronTupleOf payload.elemType payload.size;
+            binOp =
+              a: b:
+              let
+                mergedElemType = a.elemType.typeMerge b.elemType.functor;
+              in
+              if a.size == b.size && mergedElemType != null then
+                {
+                  elemType = mergedElemType;
+                  inherit (a) size;
+                }
+              else
+                null;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
       uniq = unique { message = ""; };
 
       unique =
