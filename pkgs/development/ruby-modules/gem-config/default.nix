@@ -1010,6 +1010,7 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   ruby-terminfo = attrs: {
