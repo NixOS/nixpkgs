@@ -11,14 +11,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-workflows";
   version = "1.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_workflows";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-aicI4O1m3L3gtnZ3eslGSKsFKyVTnWyr0SjNJdWxcfQ=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for Cloud Workflows";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-workflows";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workflows-v${version}/packages/google-cloud-workflows/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workflows-v${finalAttrs.version}/packages/google-cloud-workflows/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
