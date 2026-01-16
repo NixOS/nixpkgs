@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible/pylibssh";
     changelog = "https://github.com/ansible/pylibssh/releases/tag/v${version}";
     license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ wfdewith ];
   };
 }
