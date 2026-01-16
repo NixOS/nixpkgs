@@ -94,8 +94,10 @@ let
     (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
     (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
     (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
-    (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
   ]
+  ++ lib.optional vmr.hasILCompiler (
+    mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version
+  )
   ++ lib.optionals (lib.versionOlder runtime.version "9") [
     (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
     (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
@@ -114,6 +116,9 @@ let
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+    ]
+    ++ lib.optionals (lib.versionAtLeast runtime.version "10") [
+      (mkPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${targetRid}" runtime.version)
     ];
   };
 
