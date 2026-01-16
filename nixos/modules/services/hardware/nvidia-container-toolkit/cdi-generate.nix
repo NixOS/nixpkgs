@@ -3,6 +3,8 @@
   device-name-strategy,
   discovery-mode,
   mounts,
+  disable-hooks,
+  enable-hooks,
   glibc,
   jq,
   lib,
@@ -37,7 +39,8 @@ writeScriptBin "nvidia-cdi-generator" ''
       }
       --discovery-mode ${discovery-mode} \
       --device-name-strategy ${device-name-strategy} \
-      --disable-hook create-symlinks \
+      ${lib.concatMapStringsSep " \\\n" (hook: "--disable-hook ${hook}") disable-hooks} \
+      ${lib.concatMapStringsSep " \\\n" (hook: "--enable-hook ${hook}") enable-hooks} \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
       --nvidia-cdi-hook-path ${lib.getOutput "tools" nvidia-container-toolkit}/bin/nvidia-cdi-hook \
