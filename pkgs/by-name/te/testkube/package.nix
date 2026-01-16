@@ -5,7 +5,7 @@
 }:
 buildGoModule rec {
   pname = "testkube";
-  version = "2.5.4";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "kubeshop";
