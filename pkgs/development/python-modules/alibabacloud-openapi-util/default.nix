@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-openapi-util";
   version = "0.2.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "alibabacloud_openapi_util";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hwIrnct1k6YB96QMppgiesPMt3a1jLewa43H9RCZXDQ=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
