@@ -1,51 +1,48 @@
 {
   lib,
-  wrapQtAppsHook,
   fetchFromGitHub,
   replaceVars,
   udev,
   stdenv,
   pkg-config,
-  qtbase,
+  qt6,
+  qt6Packages,
   cmake,
   zlib,
   kmod,
   libXdmcp,
-  qttools,
-  qtx11extras,
-  libdbusmenu,
   gnused,
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  quazip,
   udevCheckHook,
+  wayland-protocols,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.6.2";
+stdenv.mkDerivation {
+  version = "0.6.2-unstable-2025-09-25";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
-    rev = "v${version}";
-    hash = "sha256-lA1FpUee2SpUQwJotbYhG0QX7LT5l2PP9lJ9F3uNtdU=";
+    rev = "4bf942dba5e73c2778ef797b6b8dd6b0239aca9a";
+    hash = "sha256-sKgA1LZXZ64OixhbBWYUyCN4y29DRG0O0b/bAMd1I8M=";
   };
 
   buildInputs = [
     udev
-    qtbase
+    qt6.qtbase
     zlib
     libXdmcp
-    qttools
-    qtx11extras
-    libdbusmenu
-    quazip
+    qt6.qttools
+    qt6Packages.quazip
+    qt6.qtwayland
+    wayland-protocols
   ]
   ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
     cmake
     udevCheckHook

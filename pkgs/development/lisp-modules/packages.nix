@@ -479,7 +479,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "fukamachi";
           repo = "qlot";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
         };
 

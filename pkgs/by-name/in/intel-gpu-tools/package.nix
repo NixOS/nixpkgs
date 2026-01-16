@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Lt/mqx13nHyD5QiDl8oWGiYIiK006uQvbbzHH44LB/0=";
   };
 

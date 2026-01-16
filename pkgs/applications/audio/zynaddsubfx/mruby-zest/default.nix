@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "${pname}-build";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     sha256 = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
   };

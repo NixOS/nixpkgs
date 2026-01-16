@@ -18,7 +18,7 @@ let
   asio = fetchFromGitHub {
     owner = "chriskohlhoff";
     repo = "asio";
-    rev = "refs/tags/asio-1-28-2";
+    tag = "asio-1-28-2";
     hash = "sha256-8Sw0LuAqZFw+dxlsTstlwz5oaz3+ZnKBuvSdLW6/DKQ=";
   };
 
@@ -26,7 +26,7 @@ let
   bitsery = fetchFromGitHub {
     owner = "fraillt";
     repo = "bitsery";
-    rev = "refs/tags/v5.2.3";
+    tag = "v5.2.3";
     hash = "sha256-rmfcIYCrANycFuLtibQ5wOPwpMVhpTMpdGsUfpR3YsM=";
   };
 
@@ -34,7 +34,7 @@ let
   clap = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
-    rev = "refs/tags/1.1.9";
+    tag = "1.1.9";
     hash = "sha256-z2P0U2NkDK1/5oDV35jn/pTXCcspuM1y2RgZyYVVO3w=";
   };
 
@@ -42,7 +42,7 @@ let
   function2 = fetchFromGitHub {
     owner = "Naios";
     repo = "function2";
-    rev = "refs/tags/4.2.3";
+    tag = "4.2.3";
     hash = "sha256-+fzntJn1fRifOgJhh5yiv+sWR9pyaeeEi2c1+lqX3X8=";
   };
 
@@ -50,7 +50,7 @@ let
   ghc_filesystem = fetchFromGitHub {
     owner = "gulrak";
     repo = "filesystem";
-    rev = "refs/tags/v1.5.14";
+    tag = "v1.5.14";
     hash = "sha256-XZ0IxyNIAs2tegktOGQevkLPbWHam/AOFT+M6wAWPFg=";
   };
 
@@ -58,7 +58,7 @@ let
   tomlplusplus = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "refs/tags/v3.4.0";
+    tag = "v3.4.0";
     hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
@@ -66,7 +66,7 @@ let
   vst3 = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "vst3sdk";
-    rev = "refs/tags/v3.7.7_build_19-patched";
+    tag = "v3.7.7_build_19-patched";
     fetchSubmodules = true;
     hash = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
   };
@@ -79,7 +79,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "yabridge";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-4eA3vQFklIWkhtbd3Nw39bnJT6gPcni79ZyQVqU4+GQ=";
   };
 

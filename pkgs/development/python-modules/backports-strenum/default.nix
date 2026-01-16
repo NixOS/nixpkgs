@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clbarnes";
     repo = "backports.strenum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j5tALFrLeZ8k+GwAaq0ocmcQWvdWkRUHbOVq5Du4mu0=";
   };
 

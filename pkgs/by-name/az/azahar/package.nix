@@ -44,7 +44,6 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
-  fetchpatch2,
 }:
 let
   inherit (lib)
@@ -56,23 +55,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2123.4.1";
+  version = "2124";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-86i6GMnonQ8SeeDiOH1XSl3rHamnMTgPnkaeJOlAIuI=";
+    hash = "sha256-k/Rz7hiYtX0tVW2lrrEwiB8LanvAuhXHxPC79Dy4aUI=";
   };
-
-  patches = [
-    # https://github.com/azahar-emu/azahar/pull/1305
-    ./fix-zstd-seekable-include.patch
-
-    # TODO: Remove in next release
-    (fetchpatch2 {
-      url = "https://github.com/azahar-emu/azahar/commit/1f483e1d335374482845d0325ac8b13af3162c53.patch?full_index=1";
-      hash = "sha256-9rmRbv7VFMhHly5qTGaeBLpvtWMu6HkCGUUM+t78Meg=";
-    })
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -111,8 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     xbyak
 
-    # https://github.com/azahar-emu/azahar/pull/1281
+    # https://github.com/azahar-emu/azahar/issues/1283
     # spirv-tools
+    # spirv-headers
 
     # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
     # zstd

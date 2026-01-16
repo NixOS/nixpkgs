@@ -207,8 +207,8 @@ in
       "sha256-Yj+PL5SHeMuiC3kougQa6zahznlD32+1NQWqoD8xdEg=";
 
   mypy-boto3-cleanrooms =
-    buildMypyBoto3Package "cleanrooms" "1.42.20"
-      "sha256-Psj4WK99bI+zQBUCmUgiL1zl7i/f76Ieu0QxIfGUfvA=";
+    buildMypyBoto3Package "cleanrooms" "1.42.29"
+      "sha256-UaGUvnJYw/bCJzIU9exO/eW2cvnUuiDGheFO6Zj3Uoo=";
 
   mypy-boto3-cloud9 =
     buildMypyBoto3Package "cloud9" "1.42.3"
@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.15"
-      "sha256-ZntIoM7u7EpnFzJMsezVzy7XwsX3i6Z+FwhaVAxR0no=";
+    buildMypyBoto3Package "ec2" "1.42.29"
+      "sha256-o7pABpOci5Z0fblGTcpep7FnFTW37OQWTnxbIk8CZJo=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -459,8 +459,8 @@ in
       "sha256-syjw4M02YXRXsJpM3e7OikE3sSTl/hIIJ3857PP2BII=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.42.13"
-      "sha256-qINV3eKoz/lYLNIunllwb6u7RC19cHVbs1LInPevkjo=";
+    buildMypyBoto3Package "ecs" "1.42.29"
+      "sha256-hXpGVFL8ZLXWs7GNz8Ij3xXzKBd6HMi7/deFq4s5RrM=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.42.3"
@@ -762,8 +762,8 @@ in
       "sha256-UfEbkTcu9ecQoqoXbM6uWxNAh5B/Z6Wj26WHSaLiEj8=";
 
   mypy-boto3-lakeformation =
-    buildMypyBoto3Package "lakeformation" "1.42.3"
-      "sha256-6fTkAXpFQ0Io8akKnTdSGENyKmsTu6VtkzVXRsskKZE=";
+    buildMypyBoto3Package "lakeformation" "1.42.29"
+      "sha256-Yb24aPwMfxgh4ftE8k6mCvvJCTuUCxD5J+GElQBMD+U=";
 
   mypy-boto3-lambda =
     buildMypyBoto3Package "lambda" "1.42.8"
@@ -970,8 +970,8 @@ in
       "sha256-NVhi7X3TpxHLoalx2LTleKBXUiWElWdr4NGdOlnuoXk=";
 
   mypy-boto3-opensearchserverless =
-    buildMypyBoto3Package "opensearchserverless" "1.42.3"
-      "sha256-Yz43bH+alilEKIqvD41ueohgC4eu2sUy5Z2qfIX82co=";
+    buildMypyBoto3Package "opensearchserverless" "1.42.29"
+      "sha256-fC4SP/yP31qx5O5a2rStUATsq+Cs5zWpwGf1XsBWFQI=";
 
   mypy-boto3-opsworks =
     buildMypyBoto3Package "opsworks" "1.40.0"
