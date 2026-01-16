@@ -11,13 +11,13 @@
   pytest-mpl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hist";
   version = "2.9.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Z7+A4Vuxq5n4nM9liO+jV9FoJtaRBDtyYWXHgzSpBns=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
     description = "Histogramming for analysis powered by boost-histogram";
     mainProgram = "hist";
     homepage = "https://hist.readthedocs.io/";
-    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})
