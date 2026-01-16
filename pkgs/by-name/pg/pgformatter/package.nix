@@ -2,6 +2,7 @@
   lib,
   perlPackages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -37,6 +38,10 @@ perlPackages.buildPerlPackage rec {
 
     patchShebangs .
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
