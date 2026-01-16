@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   webkitgtk_4_1,
   copyDesktopItems,
@@ -22,7 +22,7 @@ let
     hash = "sha256-hqpWkYXWM/kZU2kVAP2ak2TDZt3m4j4809rGhX68dek=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "venera";
   inherit version src;
 
