@@ -181,17 +181,6 @@ with lib.maintainers;
     github = "cuda-maintainers";
   };
 
-  cyberus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      xanderio
-      snu
-      e1mo
-    ];
-    scope = "Team for Cyberus Technology employees who collectively maintain packages.";
-    shortName = "Cyberus Technology employees";
-  };
-
   danklinux = {
     members = [
       luckshiba
