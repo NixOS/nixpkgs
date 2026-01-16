@@ -174,9 +174,9 @@ in
     # hostname and FQDN correctly:
     networking.hosts =
       let
-        hostnames = # Note: The FQDN (canonical hostname) has to come first:
-          lib.optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
-          ++ lib.optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
+        hostnames = # If hostName isn't an FQDN (canonical hostname), that has to come first:
+          lib.optional (cfg.fqdnOrHostName != cfg.hostName) cfg.fqdn
+          ++ lib.optional (cfg.hostName != "") cfg.hostName;
       in
       {
         "127.0.0.2" = hostnames;
