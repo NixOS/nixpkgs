@@ -24,8 +24,8 @@ let
     sha256Hash = "sha256-KHvWVIxNzwdgl9kdqXD5Cpvz58r8pWs2VRyPV3VrJH0=";
   };
   latestVersion = {
-    version = "2025.3.1.2"; # "Android Studio Panda 1 | 2025.3.1 Canary 2"
-    sha256Hash = "sha256-kgYPwMF/CypkCq4w/y+HnraNdPNHf53198x35S0i7OA=";
+    version = "2025.3.1.4"; # "Android Studio Panda 1 | 2025.3.1 Canary 4"
+    sha256Hash = "sha256-5ymB/HKSmi32AWV39+HYmfY11frkNxf2dq8Ld4f9qfA=";
   };
 in
 {
