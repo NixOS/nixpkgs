@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   fetchFromGitLab,
-  runCommand,
   cargo,
   meson,
   ninja,
@@ -25,19 +23,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.17.5";
+  version = "0.18.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-mmw1g1MG1oNGYmQOsnLZgdMFuZSiWehZ7ltPrQxQLys=";
+    hash = "sha256-YXUXUaFAsqeFtnvAxkSeBGAq8Oll/dMJlb3A0yKus94=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-m1IlDGCelklgXNCm0nsDczuUUMM+A6TyWkQiOo/JVVU=";
+    hash = "sha256-3n1UyrlfGlJxe6TE5rex0XXA/P7ItycuZWIrKH14t3A=";
   };
 
   nativeBuildInputs = [

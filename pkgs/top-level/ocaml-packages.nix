@@ -2090,6 +2090,8 @@ let
 
         tls-lwt = callPackage ../development/ocaml-modules/tls/lwt.nix { };
 
+        tls-miou-unix = callPackage ../development/ocaml-modules/tls/miou-unix.nix { };
+
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
