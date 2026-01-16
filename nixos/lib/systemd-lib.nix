@@ -980,17 +980,13 @@ rec {
   mkCredentialOption =
     {
       defaultName,
-      readOnlyName ? false,
+      fixedName ? false,
       description,
       nullable ? false,
       example ? "/etc/credstore/${defaultName}",
     }:
-    mkOption (
-      optionalAttrs nullable {
-        default = null;
-      }
-    )
-    // {
+    mkOption {
+      default = if nullable then null else { };
       type = (if nullable then nullOr else lib.id) (oneOf [
         path
         singleLineStr
@@ -1000,7 +996,6 @@ rec {
               type = singleLineStr;
               description = "The name of the credential to load from the service manager.";
               default = defaultName;
-              readOnly = readOnlyName;
             };
             encrypted = mkOption {
               type = bool;
@@ -1032,7 +1027,7 @@ rec {
             rename = mkOption {
               type = nullOr str;
               description = ''
-                The name to surface the credential as to the service. If configured, the credential will be consumed via `ImportCredential` according to the configured `name`
+                The name of the credential to import from the service manager. If configured, the credential will be consumed via `ImportCredential`
 
                 At most one of `path`, `value`, or `rename` should be configured.
               '';
@@ -1073,7 +1068,7 @@ rec {
               else
                 credential;
             encrypted = optionalString cred.encrypted "Encrypted";
-            assertStringPath =
+            assertSafePath =
               value:
               if
                 !cred.allowStorePath && !cred.encrypted && (strings.isStorePath value || builtins.isPath value)
@@ -1085,6 +1080,18 @@ rec {
 
                     This protection may be circumvented via the 'allowStorePath' option.
                 ''
+              else
+                value;
+            assertSafeName =
+              name:
+              if fixedName && name != defaultName then
+                throw "The name of the credential must be `${defaultName}`, not `${name}`"
+              else
+                name;
+            assertSafeImport =
+              value:
+              if cred.encrypted then
+                throw "Cannot enforce that the credential is encrypted without configuring `path` or `value`"
               else
                 value;
           in
@@ -1105,14 +1112,19 @@ rec {
               // (
                 if cred.path != null && cred.value == null && cred.rename == null then
                   {
-                    "LoadCredential${encrypted}" = [ "${cred.name}:${assertStringPath cred.path}" ];
+                    "LoadCredential${encrypted}" = [ "${assertSafeName cred.name}:${assertSafePath cred.path}" ];
                   }
                 else if cred.path == null && cred.value != null && cred.rename == null then
-                  { "SetCredential${encrypted}" = [ "${cred.name}:${cred.value}" ]; }
+                  { "SetCredential${encrypted}" = [ "${assertSafeName cred.name}:${cred.value}" ]; }
                 else if cred.path == null && cred.value == null then
-                  {
+                  assertSafeImport {
                     ImportCredential = [
-                      (if cred.rename != null then "${cred.name}:${cred.rename}" else cred.name)
+                      (
+                        if cred.rename != null then
+                          "${cred.name}:${assertSafeName cred.rename}"
+                        else
+                          assertSafeName cred.name
+                      )
                     ];
                   }
                 else
