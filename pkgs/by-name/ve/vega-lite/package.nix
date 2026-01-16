@@ -11,16 +11,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vega-lite";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vega-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X6O7ZehY3tS7dFBaKnBuDokCfG+zWmSDHl1d+ifyc/o=";
+    hash = "sha256-UQEgZk9SZTSKiAfOvBxnpkyiih9QcSv08O8vt4ooeYQ=";
   };
 
-  npmDepsHash = "sha256-YjZdh5R7hawgf8EAGlKEAkqchcFuN1j2yMJo9Ptnjyk=";
+  npmDepsHash = "sha256-EOJGMmIObN4XCC4ZbZQQ89X12+STKejt6vugyIb7v0A=";
 
   nativeBuildInputs = [
     pkg-config
