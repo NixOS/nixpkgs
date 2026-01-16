@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nvdlfw-inspect";
-  version = "0.2.2";
+  version = "0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
