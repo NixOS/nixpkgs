@@ -962,6 +962,8 @@ self: super: with self; {
 
   arviz = callPackage ../development/python-modules/arviz { };
 
+  arviz-base = callPackage ../development/python-modules/arviz-base { };
+
   arxiv = callPackage ../development/python-modules/arxiv { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
