@@ -650,6 +650,10 @@ in
       # Fix incompatible function pointer conversion errors with clang 16
       ./hpricot-fix-incompatible-function-pointer-conversion.patch
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   iconv = attrs: {
