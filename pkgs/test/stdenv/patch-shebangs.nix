@@ -117,9 +117,13 @@ let
       (derivation {
         name = "read-only-script";
         system = stdenv.buildPlatform.system;
-        builder = "${earlyBash}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
+          earlyBash
           earlyCoreutils
+          earlyDiffutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -135,7 +139,7 @@ let
             patchShebangs $out/bin/test
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -145,9 +149,12 @@ let
       (derivation {
         name = "preserves-read-only";
         system = stdenv.buildPlatform.system;
-        builder = "${earlyBash}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
+          earlyBash
           earlyCoreutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -169,7 +176,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -180,9 +187,13 @@ let
       (derivation {
         name = "preserves-timestamp";
         system = stdenv.buildPlatform.system;
-        builder = "${earlyBash}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
+          earlyBash
           earlyCoreutils
+          earlyDiffutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -206,7 +217,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -216,8 +227,9 @@ let
       (derivation {
         name = "preserves-binary-data";
         system = stdenv.buildPlatform.system;
-        builder = "${earlyBash}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
+          earlyBash
           earlyCoreutils
           earlyDiffutils
           earlyFindutils
@@ -247,7 +259,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
