@@ -87,6 +87,6 @@ buildPythonPackage rec {
 
     # The package requires either CUDA or ROCm.
     # It doesn't work without either, nor with both.
-    broken = cudaSupport != rocmSupport;
+    broken = cudaSupport == rocmSupport;
   };
 }
