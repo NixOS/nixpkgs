@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-network-connectivity";
-  version = "2.11.0";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "google_cloud_network_connectivity";
-    hash = "sha256-PBqFMVGTn7si4UgAc4zk/97M9mWSnVJMX9gZk0eXpSY=";
+    hash = "sha256-4CF79YGR8Ean5PoGLjhWAME+0VYSS3YOPVp9uGeUjaY=";
   };
 
   build-system = [ setuptools ];
