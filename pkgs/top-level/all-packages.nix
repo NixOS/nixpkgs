@@ -7703,6 +7703,10 @@ with pkgs;
     ogre_14
     ;
 
+  inherit (callPackages ../development/libraries/ogre-next { })
+    ogre-next_3
+    ;
+
   ogre = ogre_14;
 
   openal = openalSoft;
