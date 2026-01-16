@@ -154,7 +154,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [ ];
     mainProgram = "speed-dreams";
   };
 }
