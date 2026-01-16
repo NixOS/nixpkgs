@@ -8,11 +8,19 @@ with haskellLib;
 
 (self: super: {
   # cabal2nix doesn't properly add dependencies conditional on os(windows)
-  network =
-    if pkgs.stdenv.hostPlatform.isWindows then
-      addBuildDepends [ self.temporary ] super.network
-    else
-      super.network;
+  http-client = addBuildDepends [ self.safe ] super.http-client;
+  unix-time = addBuildDepends [ pkgs.windows.pthreads ] super.unix-time;
+
+  network = lib.pipe super.network [
+    (addBuildDepends [ self.temporary ])
+
+    # https://github.com/haskell/network/pull/605
+    (appendPatch (fetchpatch {
+      name = "dont-frag-wine.patch";
+      url = "https://github.com/haskell/network/commit/ecd94408696117d34d4c13031c30d18033504827.patch";
+      sha256 = "sha256-8LtAkBmgMMMIW6gPYDVuwYck/4fcOf08Hp2zLmsRW2w=";
+    }))
+  ];
 
   # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
   # See configuration-nix.nix, where iserv-proxy and network are handled.
