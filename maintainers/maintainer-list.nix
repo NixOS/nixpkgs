@@ -6785,17 +6785,17 @@
     githubId = 4218822;
     name = "djds";
   };
-  djedlajn = {
-    email = "hi@uros.dev";
-    github = "djedlajn";
-    githubId = 9012882;
-    name = "Uros Karic";
-  };
   Dje4321 = {
     email = "dje4321@gmail.com";
     github = "dje4321";
     githubId = 10913120;
     name = "Dje4321";
+  };
+  djedlajn = {
+    email = "hi@uros.dev";
+    github = "djedlajn";
+    githubId = 9012882;
+    name = "Uros Karic";
   };
   djwf = {
     email = "dave@weller-fahy.com";
