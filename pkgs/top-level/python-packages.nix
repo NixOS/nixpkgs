@@ -8834,6 +8834,8 @@ self: super: with self; {
 
   litex = callPackage ../development/python-modules/litex { };
 
+  litex-boards = callPackage ../development/python-modules/litex-boards { };
+
   littleutils = callPackage ../development/python-modules/littleutils { };
 
   livekit-api = callPackage ../development/python-modules/livekit-api { };
