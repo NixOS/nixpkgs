@@ -19,8 +19,8 @@ let
   lens-profiles = fetchFromGitHub {
     owner = "gyroflow";
     repo = "lens_profiles";
-    tag = "v19";
-    hash = "sha256-8R2mMqKxzoa5Sfqxs8pcfwUfo1PQKSrnM+60Ri3wiXY=";
+    tag = "v36";
+    hash = "sha256-JjH7cGT9hzB9pv0W6FUPaejkiUj357IM2siJNrSHiYY=";
   };
 in
 rustPlatform.buildRustPackage rec {
@@ -147,7 +147,7 @@ rustPlatform.buildRustPackage rec {
       gpl3Plus
       cc0
     ];
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

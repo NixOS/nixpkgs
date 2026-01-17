@@ -42,6 +42,7 @@
   pdfslicer,
   scribus,
   vips,
+  testers,
 }:
 
 let
@@ -172,6 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
         ;
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -187,5 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ttuegel ];
     teams = [ lib.teams.freedesktop ];
+    pkgConfigModules = [
+      "poppler"
+    ]
+    ++ lib.optionals (!minimal) [ "poppler-cpp" ]
+    ++ lib.optionals introspectionSupport [ "poppler-glib" ];
   };
 })

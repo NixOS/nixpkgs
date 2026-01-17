@@ -20,6 +20,7 @@
   rustPlatform,
   llvmPackages_19,
   gitMinimal,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
+    writableTmpDirAsHomeHook
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.
@@ -89,9 +91,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wucke13
       matthiasbeyer
       CobaltCause
+      chrjabs
     ];
 
-    # The profiler runtime is (currently) disabled on non-Linux platforms
-    broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
+    broken = stdenv.targetPlatform.isRedox;
   };
 })

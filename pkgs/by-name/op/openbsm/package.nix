@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of Sun's Basic Security Module (BSM) security audit API and file format";
     homepage = "http://www.openbsm.org/";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
   };
 }

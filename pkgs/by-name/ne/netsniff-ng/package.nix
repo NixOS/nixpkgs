@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   bison,
   flex,
@@ -29,6 +30,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
   };
+
+  patches = [
+    # GCC 15 compatibility
+    (fetchpatch {
+      url = "https://github.com/netsniff-ng/netsniff-ng/commit/1af7ae33e3e8178ab5c649c3a52838d4375c4228.patch";
+      sha256 = "sha256-aNV1Srnr396HsyAKVQoCeGBo/oduxLrUidlZLuI5Rlk=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -84,7 +93,7 @@ stdenv.mkDerivation rec {
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance
@@ -94,7 +103,7 @@ stdenv.mkDerivation rec {
       development and analysis, debugging, auditing or network reconnaissance.
     '';
     homepage = "http://netsniff-ng.org/";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.linux;
   };
 }

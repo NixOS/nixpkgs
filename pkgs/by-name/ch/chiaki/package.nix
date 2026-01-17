@@ -4,7 +4,7 @@
   fetchgit,
   cmake,
   pkg-config,
-  ffmpeg,
+  ffmpeg_7,
   libopus,
   SDL2,
   libevdev,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7 # needs avcodec_close which was removed in ffmpeg 8
     libopus
     libsForQt5.qtbase
     libsForQt5.qtmultimedia

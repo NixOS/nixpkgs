@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
@@ -16,16 +17,31 @@
 }:
 
 let
-  version = "1.10";
+  version = "1.11.2";
   devenvNixVersion = "2.30.4";
 
   devenv_nix =
-    (nixVersions.git.overrideSource (fetchFromGitHub {
-      owner = "cachix";
-      repo = "nix";
-      rev = "devenv-${devenvNixVersion}";
-      hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-    })).overrideAttrs
+    let
+      components =
+        (nixVersions.nixComponents_git.override { version = devenvNixVersion; }).overrideSource
+          (fetchFromGitHub {
+            owner = "cachix";
+            repo = "nix";
+            rev = "devenv-${devenvNixVersion}";
+            hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+          });
+    in
+    (
+      # Support for mdbook >= 0.5, https://github.com/NixOS/nix/issues/14628
+      components.appendPatches [
+        (fetchpatch2 {
+          name = "nix-2.30-14695-mdbook-0.5-support.patch";
+          url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
+          excludes = [ "doc/manual/package.nix" ];
+          hash = "sha256-GYaTOG9wZT9UI4G6za535PkLyjHKSxwBjJsXbjmI26g=";
+        })
+      ]
+    ).nix-everything.overrideAttrs
       (old: {
         pname = "devenv-nix";
         version = devenvNixVersion;
@@ -43,10 +59,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-rsb+6Wca43guzLL4Czoc89L394ZW9JZF2MShxaz2Sx4=";
+    hash = "sha256-8Ivbm9ltg0hUGQYMuRDOI8hbHUzqB9xKZ9ubKAzzwE8=";
   };
 
-  cargoHash = "sha256-Wt47YdBEtFXQACk1ByDwQyXzHU4/nGVQKY7gaZeQrQ4=";
+  cargoHash = "sha256-mMmobDZeNqrByowwrDXojVnHeUyC/YbhERpF8iOCZ0s=";
 
   buildAndTestSubdir = "devenv";
 
@@ -112,6 +128,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    teams = [ lib.teams.cachix ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      sandydoo
+    ];
   };
 }

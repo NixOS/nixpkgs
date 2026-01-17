@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pytestCheckHook,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sentinels";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sentinels" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vmalloc/sentinels/";
     description = "Various objects to denote special meanings in python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

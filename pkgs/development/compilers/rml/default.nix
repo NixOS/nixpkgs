@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  meta = with lib; {
+  meta = {
     description = "ReactiveML: a programming language for implementing interactive systems";
     homepage = "https://rml.lri.fr";
-    license = with licenses; [
+    license = with lib.licenses; [
       qpl
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

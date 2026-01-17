@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   pyyaml,
@@ -15,8 +14,6 @@ buildPythonPackage {
   pname = "tap.py";
   inherit version;
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "tap_py";

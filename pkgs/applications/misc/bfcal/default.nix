@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly display a calendar";
     mainProgram = "bfcal";
     homepage = "https://git.sr.ht/~bitfehler/bfcal";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = qtbase.meta.platforms;
-    maintainers = with maintainers; [ laalsaas ];
+    maintainers = with lib.maintainers; [ laalsaas ];
   };
 }

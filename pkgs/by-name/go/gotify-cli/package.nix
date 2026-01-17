@@ -27,8 +27,8 @@ buildGoModule rec {
     "-X main.BuildDate=1970-01-01"
   ];
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://github.com/gotify/cli";
     description = "Command line interface for pushing messages to gotify/server";
     maintainers = [ ];

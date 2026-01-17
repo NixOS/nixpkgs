@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage rec {
   # many tests are failing
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Intuitive, config-driven terminal multiplexer designed for software & systems engineers";
     homepage = "https://github.com/austinjones/tab-rs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tab";
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # Added 2023-11-13

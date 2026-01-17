@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   hypothesis,
   numpy,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "cmaes";
   version = "0.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
     "test_cma_tell"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for CMA evolution strategy";
     homepage = "https://github.com/CyberAgentAILab/cmaes";
     changelog = "https://github.com/CyberAgentAILab/cmaes/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

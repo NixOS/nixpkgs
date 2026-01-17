@@ -43,9 +43,9 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "S-expressions for Numpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mapbox/snuggs";
     maintainers = [ ];
   };

@@ -15,10 +15,10 @@ buildGoModule rec {
     hash = "sha256-28NCAtx3MHlwm44IUlI0DzUaycH9cPN8ZdEhhQtdciU=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple CRUD interface for dealing with per-dataset markers on honeycomb.io";
     homepage = "https://honeycomb.io/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.iand675 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.iand675 ];
   };
 }

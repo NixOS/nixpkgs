@@ -7,27 +7,24 @@
   lib,
   makeBinaryWrapper,
   man-db,
-  nixos,
   nixosTests,
   openssh,
-  radicle-node,
   runCommand,
   rustPlatform,
   stdenv,
-  testers,
   xdg-utils,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-/dWeG2jKCnfg7fwPP+BbRmEvM7rCppGYh2aeftcg3SY=";
+    hash = "sha256-j7GTtx9Dq3xZeEsgIlaRq1Vbc9aJfn22WCkNTGjvH1Q=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -36,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-4URBtN5lyzFPaLJUf/HPAL2ugRUa6sZhpDeiFR0W7cc=";
+  cargoHash = "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -67,6 +64,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
     # Tests want to open many files.
     ulimit -n 4096
+    # Cap test threads to avoid timing issues on loaded builders (sync timeout is 5s)
+    max_threads=4
+    if [[ -n "$NIX_BUILD_CORES" && "$NIX_BUILD_CORES" -lt "$max_threads" ]]; then
+      max_threads=$NIX_BUILD_CORES
+    fi
+    export RUST_TEST_THREADS=$max_threads
   '';
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
@@ -83,10 +86,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asciidoctor -d manpage -b manpage $page
       installManPage ''${page::-5}
     done
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rad \
+      --bash <($out/bin/rad completion bash) \
+      --fish <($out/bin/rad completion fish) \
+      --zsh <($out/bin/rad completion zsh)
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postFixup = ''
@@ -105,53 +113,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
-  passthru.tests =
-    let
-      package = radicle-node;
-    in
-    {
-      basic =
-        runCommand "${package.name}-basic-test"
-          {
-            nativeBuildInputs = [
-              jq
-              openssh
-              radicle-node
-            ];
-          }
-          ''
-            set -e
-            export RAD_HOME="$PWD/.radicle"
-            mkdir -p "$RAD_HOME/keys"
-            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+  passthru.tests = {
+    basic =
+      runCommand "radicle-node-basic-test"
+        {
+          nativeBuildInputs = [
+            jq
+            openssh
+            finalAttrs.finalPackage
+          ];
+        }
+        ''
+          set -e
+          export RAD_HOME="$PWD/.radicle"
+          mkdir -p "$RAD_HOME/keys"
+          ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+          jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-            rad config > /dev/null
-            rad debug | jq -e '
-                (.sshVersion | contains("${openssh.version}"))
-              and
-                (.gitVersion | contains("${gitMinimal.version}"))
-            '
+          rad config > /dev/null
+          rad debug | jq -e '
+              (.sshVersion | contains("${openssh.version}"))
+            and
+              (.gitVersion | contains("${gitMinimal.version}"))
+          '
 
-            touch $out
-          '';
-      nixos-build = lib.recurseIntoAttrs {
-        checkConfig-success =
-          (nixos {
-            services.radicle.settings = {
-              node.alias = "foo";
-            };
-          }).config.services.radicle.configFile;
-        checkConfig-failure =
-          testers.testBuildFailure
-            (nixos {
-              services.radicle.settings = {
-                node.alias = null;
-              };
-            }).config.services.radicle.configFile;
-      };
-      nixos-run = nixosTests.radicle;
-    };
+          touch $out
+        '';
+    nixos-run = nixosTests.radicle;
+  };
 
   meta = {
     description = "Radicle node and CLI for decentralized code collaboration";

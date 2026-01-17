@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   nodejs,
-  python3,
+  python312,
   gettext,
   nixosTests,
   pretix,
@@ -12,7 +12,7 @@
 }:
 
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       django = super.django_4;
@@ -21,7 +21,7 @@ let
         version = "2.3.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
       });
@@ -42,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.9.0";
+  version = "2025.10.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-d0RunBCUUvS4tosbXWkEp7mvUKEOa5KgvIZK4XydN7I=";
+    tag = "v${version}";
+    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-0FQldyGJXFhXFv7L7ozAoWEfpUTo+d2pibWyhnJ4F7A=";
+    npmDepsHash = "sha256-GaUPVSHRZg5Aihk4WAjmF8M6zIL99DU9Z3F3dym78bs=";
 
     dontBuild = true;
 
@@ -82,9 +82,11 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "bleach"
     "celery"
     "css-inline"
     "django-bootstrap3"
+    "django-compressor"
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
@@ -255,7 +257,7 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [
     "--reruns=3"
@@ -264,18 +266,6 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
-
-    # outdated translation files
-    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
-    "test_different_dates_spanish"
-    "test_same_day_spanish"
-    "test_same_month_spanish"
-    "test_same_year_spanish"
-
-    # broken with fakeredis>=2.27.0
-    "test_waitinglist_cache_separation"
-    "test_waitinglist_item_active"
-    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''
@@ -299,10 +289,10 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       # 3rd party components below src/pretix/static
       bsd2
@@ -313,8 +303,8 @@ python.pkgs.buildPythonApplication rec {
       # all other files below src/pretix/static and src/pretix/locale and aux scripts
       asl20
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

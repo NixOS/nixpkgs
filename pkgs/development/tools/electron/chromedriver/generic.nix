@@ -14,7 +14,7 @@ version: hashes:
 let
   pname = "electron-chromedriver";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.electronjs.org/";
     description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
@@ -25,12 +25,12 @@ let
       an unofficial build of ChromeDriver compiled by the Electronjs
       project.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       liammurphy14
     ];
-    teams = [ teams.electron ];
+    teams = [ lib.teams.electron ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

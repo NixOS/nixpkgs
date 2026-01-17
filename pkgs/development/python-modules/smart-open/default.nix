@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   awscli,
   azure-common,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "smart-open";
   version = "7.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
@@ -70,7 +67,7 @@ buildPythonPackage rec {
     responses
   ]
   ++ moto.optional-dependencies.server
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 
@@ -82,10 +79,10 @@ buildPythonPackage rec {
     "test_seek_from_start"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/piskvorky/smart_open";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

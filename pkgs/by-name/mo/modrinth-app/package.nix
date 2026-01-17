@@ -7,6 +7,7 @@
   glib,
   glib-networking,
   gsettings-desktop-schemas,
+  jdk25,
   jdk17,
   jdk21,
   jdk8,
@@ -14,6 +15,7 @@
     jdk8
     jdk17
     jdk21
+    jdk25
   ],
   libGL,
   libjack2,
@@ -22,7 +24,7 @@
   pipewire,
   symlinkJoin,
   udev,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   xorg,
 }:
 
@@ -36,7 +38,7 @@ symlinkJoin {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook4
+    wrapGAppsHook3
   ];
 
   buildInputs = [

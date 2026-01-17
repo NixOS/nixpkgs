@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "8.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
@@ -46,11 +44,11 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
     ];
   };

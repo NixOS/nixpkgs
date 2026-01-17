@@ -31,8 +31,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   pythonImportsCheck = [ "scspell" ];
 
   meta = {

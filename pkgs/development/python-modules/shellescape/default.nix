@@ -20,13 +20,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "shellescape" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shell escape a string to safely use it as a token in a shell command (backport of Python shlex.quote)";
     homepage = "https://github.com/chrissimpkins/shellescape";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       psfl
     ];
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Model evaluation for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/mindsdb_evaluator";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

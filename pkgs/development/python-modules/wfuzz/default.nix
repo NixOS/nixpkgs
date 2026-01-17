@@ -10,11 +10,9 @@
   pycurl,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   fetchpatch2,
-  pythonAtLeast,
   legacy-cgi,
 }:
 
@@ -22,8 +20,6 @@ buildPythonPackage rec {
   pname = "wfuzz";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xmendez";
@@ -51,13 +47,13 @@ buildPythonPackage rec {
   dependencies = [
     chardet
     distutils # src/wfuzz/plugin_api/base.py
+    legacy-cgi
     pycurl
     six
     setuptools
     pyparsing
   ]
-  ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
 
   nativeCheckInputs = [
     netaddr
@@ -83,7 +79,7 @@ buildPythonPackage rec {
     cp -R -T "wordlist" "$out/share/wordlists/wfuzz"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/xmendez/wfuzz/releases/tag/v${version}";
     description = "Web content fuzzer to facilitate web applications assessments";
     longDescription = ''
@@ -92,7 +88,7 @@ buildPythonPackage rec {
       web application vulnerabilities.
     '';
     homepage = "https://wfuzz.readthedocs.io";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ pamplemousse ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

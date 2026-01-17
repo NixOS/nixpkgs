@@ -30,7 +30,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [
     "arsenal"

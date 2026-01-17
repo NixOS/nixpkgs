@@ -10,7 +10,6 @@
   mnemonic,
   pyaes,
   pyserial,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "hwi";
   version = "3.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hwilib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
     changelog = "https://github.com/bitcoin-core/HWI/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

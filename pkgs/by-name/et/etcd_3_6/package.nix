@@ -11,11 +11,11 @@
 }:
 
 let
-  version = "3.6.5";
-  etcdSrcHash = "sha256-d0Ujg9ynnnSW0PYYYrNEmPtLnYW2HcCl+zcVo8ACiS0=";
-  etcdCtlVendorHash = "sha256-5r3Q+AfWp23tzbYQoD1hXEzRttJrUUKQSpcEV3GIlOE=";
-  etcdUtlVendorHash = "sha256-funO7EEJs28w4sk4sHVA/KR1TiHumVKNs0Gn/xFl4ig=";
-  etcdServerVendorHash = "sha256-OtWpX5A+kyQej2bueTqmNf62oKmXGQzjexzXlK/XJms=";
+  version = "3.6.7";
+  etcdSrcHash = "sha256-i8VZlK76OQQeojKHo9sdkyNR0Hdiofx0TLUDWKiXOTU=";
+  etcdCtlVendorHash = "sha256-jN+oNoIxNYM2Wm3s+/zDyacyXxVWaHl9t7sot8PL9xk=";
+  etcdUtlVendorHash = "sha256-A2rYstzlBlS3ta5yJVP/RTjgBz+9Y0I79ITr77GrqOo=";
+  etcdServerVendorHash = "sha256-hUFUcoXaOKTkoJ7YUwljpg7EZRhXi5tXcE2bteVRBE0=";
 
   src = applyPatches {
     src = fetchFromGitHub {

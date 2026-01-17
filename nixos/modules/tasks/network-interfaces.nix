@@ -348,9 +348,10 @@ let
 
         virtualOwner = mkOption {
           default = "root";
-          type = types.str;
+          type = types.nullOr types.str;
           description = ''
             In case of a virtual device, the user who owns it.
+            `null` will not set owner, allowing access to any user.
           '';
         };
 
@@ -1926,7 +1927,7 @@ in
               # Udev attributes for systemd to name the device and to create a .device target.
               systemdAttrs =
                 n:
-                ''NAME:="${n}", ENV{INTERFACE}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+                ''NAME:="${n}", ENV{ID_NET_NAME}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
             in
             flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (
               device:

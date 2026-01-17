@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exaile";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "exaile";
     repo = "exaile";
     rev = version;
-    sha256 = "sha256-33lUlJ7H7lmty46GLzGkIUpgbWIv2EqEcPIzKt87dis=";
+    sha256 = "sha256-eH7JhoGd5jiaye8ZLx836tgEXsRpEd3D3z6gvnVrbIs=";
   };
 
   nativeBuildInputs = [
@@ -112,12 +112,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.exaile.org/";
     description = "Music player with a simple interface and powerful music management capabilities";
     mainProgram = "exaile";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ryneeverett ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ryneeverett ];
+    platforms = lib.platforms.all;
   };
 }

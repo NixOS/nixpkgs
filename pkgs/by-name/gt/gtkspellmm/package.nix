@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     gtkmm3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ binding for the gtkspell library";
     homepage = "https://gtkspell.sourceforge.net/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

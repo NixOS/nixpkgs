@@ -9,6 +9,7 @@
   boost,
   cmake,
   cmake-extras,
+  ctestCheckHook,
   doxygen,
   gst_all_1,
   gdk-pixbuf,
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.5";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-TfBGcHg9y9G2Rxs/OpZ8CcQrhK05gijZjVxOYSTkJJ8=";
+    hash = "sha256-lXvXK7UCLX5aoGID8sOoeHBEMhdle7RUMACLHiWpcEo=";
   };
 
   outputs = [
@@ -60,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
       --replace-fail '/usr/bin/test' 'test'
 
-    substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+    substituteInPlace plugins/Lomiri/Thumbnailer*/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
@@ -115,13 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-    # Something seems borked with bad's h264 decoder, add libav as a workaround
-    # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
-    gst-libav
     # maybe add ugly to cover all kinds of formats?
   ]);
 
   nativeCheckInputs = [
+    ctestCheckHook
     shared-mime-info
     xvfb-run
   ];
@@ -138,16 +137,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # QSignalSpy tests in QML suite always fail, pass when running interactively
-        "-E"
-        "^qml"
-      ]
-    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = [
+    # QSignalSpy tests in QML suite always fail, pass when running interactively
+    "qml"
+  ];
 
   enableParallelChecking = false;
 
@@ -183,7 +180,10 @@ stdenv.mkDerivation (finalAttrs: {
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
 
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
     updateScript = gitUpdater { };
   };

@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    cmake
     gobject-introspection
     meson
     ninja
@@ -46,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
-    cmake
     eigen
     glm
     gtkmm4

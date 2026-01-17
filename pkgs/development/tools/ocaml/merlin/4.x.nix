@@ -3,7 +3,7 @@
   replaceVars,
   fetchurl,
   ocaml,
-  dune_3,
+  dune,
   buildDunePackage,
   yojson,
   csexp,
@@ -13,6 +13,7 @@
   menhir,
   menhirLib,
   menhirSdk,
+  seq,
   # Each releases of Merlin support a limited range of versions of OCaml.
   version ?
     {
@@ -69,7 +70,7 @@ buildDunePackage {
     [
       (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
         dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-        dune = "${dune_3}/bin/dune";
+        dune = "${dune}/bin/dune";
       })
     ];
 
@@ -85,7 +86,8 @@ buildDunePackage {
     (if lib.versionAtLeast version "4.7-414" then merlin-lib else csexp)
     menhirSdk
     menhirLib
-  ];
+  ]
+  ++ lib.optional (!lib.versionAtLeast version "4.7-414") seq;
 
   doCheck = false;
   checkPhase = ''
@@ -95,14 +97,14 @@ buildDunePackage {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ocamlmerlin";
     maintainers = [
-      maintainers.vbgl
-      maintainers.sternenseemann
+      lib.maintainers.vbgl
+      lib.maintainers.sternenseemann
     ];
   };
 }

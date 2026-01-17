@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
 
   # nativeBuildInputs
   bison,
@@ -76,6 +75,7 @@ let
           --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
           ${module_flags}
       '';
+      meta.mainProgram = "yosys";
     });
 
   allPlugins = {
@@ -87,13 +87,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.55";
+  version = "0.60";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GddNbAtH5SPm7KTa5kCm/vGq4xOczx+jCnOSQl55gUI=";
+    hash = "sha256-BVrSq9nWbdu/PIXfwLW7ZkHTz6SrmsqJMSkVa6CsBm8=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -125,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (
       pp: with pp; [
         click
+        cxxheaderparser
+        pybind11
       ]
     ))
   ]
@@ -133,19 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
-
-  patches = [
-    # Backport fix amaranth code compilation
-    # TODO remove when updating to 0.56
-    # https://github.com/YosysHQ/yosys/pull/5182
-    (fetchpatch2 {
-      name = "treat-zero-width-constant-as-zero.patch";
-      url = "https://github.com/YosysHQ/yosys/commit/478b6a2b3fbab0fd4097b841914cbe8bb9f67268.patch";
-      hash = "sha256-KeLoZfkXMk2KIPN9XBQdqWqohywQONlWUIvrGwgphKs=";
-    })
-    ./plugin-search-dirs.patch
-    ./fix-clang-build.patch
-  ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
@@ -164,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   ''
   + lib.optionalString enablePython ''
+    echo "PYOSYS_USE_UV := 0" >> Makefile.conf
     echo "ENABLE_PYOSYS := 1" >> Makefile.conf
     echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
     echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
@@ -196,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/YosysHQ/yosys/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
+    mainProgram = "yosys";
     maintainers = with lib.maintainers; [
       shell
       thoughtpolice

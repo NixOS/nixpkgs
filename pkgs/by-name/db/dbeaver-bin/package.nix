@@ -1,3 +1,4 @@
+# dbeaver doesn't seem feasible to package from source, see https://github.com/NixOS/nixpkgs/pull/311888
 {
   lib,
   stdenvNoCC,
@@ -18,23 +19,23 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.2.4";
+  version = "25.3.2";
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
-        x86_64-linux = "linux.gtk.x86_64-nojdk.tar.gz";
-        aarch64-linux = "linux.gtk.aarch64-nojdk.tar.gz";
+        x86_64-linux = "linux.gtk.x86_64.tar.gz";
+        aarch64-linux = "linux.gtk.aarch64.tar.gz";
         x86_64-darwin = "macos-x86_64.dmg";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-5mBk3HO5BqcydxDhancQ8YzfNjZ0bMAuNM9lf8fm4ks=";
-        aarch64-linux = "sha256-i9hQJ01G+Jy18bkYD9e6wAhufH87r/9qwxzzVd0K8LU=";
-        x86_64-darwin = "sha256-zSLLNOP+miG71/LCjNHanDbeRr986wwdb7x5q3gDUZs=";
-        aarch64-darwin = "sha256-njKjBXxv5tpaStiLHfL3Cs4FwtKBsLOCA4ASPggVhnY=";
+        x86_64-linux = "sha256-kOlQLHrE5QmrmtzyX9fDJ0tCZ21YPAO+jnR0B+kXSrA=";
+        aarch64-linux = "sha256-+GegQSZIUMqWsQJBVoC1xqEN9rQAXPh0ApKl2lDPpUA=";
+        x86_64-darwin = "sha256-eimRS96Mpej3BUU5O1XPS/oze0mGw3+4QV2DrRQy68U=";
+        aarch64-darwin = "sha256-S7sdXGfL16Q5hIXmkM22dbmfZeSHKEv3MthoQOYO6n0=";
       };
     in
     fetchurl {
@@ -76,10 +77,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
     rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
     popd
-  ''
-  # remove the bundled JRE on Darwin
-  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-    rm -r Contents/Eclipse/jre/
+
+    # remove the bundled JRE
+    rm -r ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}jre/
   '';
 
   installPhase =

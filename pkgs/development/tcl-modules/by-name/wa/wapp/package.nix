@@ -27,10 +27,10 @@ mkTclDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wapp.tcl-lang.org/home/doc/trunk/README.md";
     description = "Framework for writing web applications in Tcl";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nat-418 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nat-418 ];
   };
 }

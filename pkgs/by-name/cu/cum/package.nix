@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "cum";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -38,12 +38,12 @@ python3Packages.buildPythonApplication rec {
     rm -rf $out/tests $out/LICENSE
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comic updater, mangafied";
     mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

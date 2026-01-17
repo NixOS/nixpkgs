@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   cachelib,
   flask,
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "flask-caching";
   version = "2.3.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "flask_caching";
@@ -54,11 +52,11 @@ buildPythonPackage rec {
     "test_cached_view_class"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

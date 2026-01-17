@@ -10,7 +10,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   tabulate,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "roombapy";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
@@ -63,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roombapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     mainProgram = "roombapy";
     homepage = "https://github.com/pschmitt/roombapy";
     changelog = "https://github.com/pschmitt/roombapy/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

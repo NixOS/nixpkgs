@@ -5,11 +5,12 @@
   fetchFromGitHub,
   maven,
   makeWrapper,
+  nix-update-script,
 }:
 
 let
   jre = jre_headless;
-  version = "7.16.0";
+  version = "7.18.0";
   mainProgram = "openapi-generator-cli";
   this = maven.buildMavenPackage {
     inherit version;
@@ -20,10 +21,10 @@ let
       owner = "OpenAPITools";
       repo = "openapi-generator";
       tag = "v${version}";
-      hash = "sha256-CoztWf2H2rXcx4d8Av8cBXzMqIZsrSCgx21i3+o2ufo=";
+      hash = "sha256-D7F4fbgXqUMH0ZOsnGtB3gVWmans0MPdD7ix6ImXsfA=";
     };
 
-    mvnHash = "sha256-5Kzv9h3X5s/1D0Gd1XQRvNGVAyf44QcriJFvS07wdZo=";
+    mvnHash = "sha256-17siKb+TIYAuY1p7+1mcc3QY+Rfnsoy+CJiWT5LFM0w=";
     mvnParameters = "-Duser.home=$TMPDIR";
     doCheck = false;
 
@@ -47,8 +48,11 @@ let
       runHook postInstall
     '';
 
-    passthru.tests.example = callPackage ./example.nix {
-      openapi-generator-cli = this;
+    passthru = {
+      updateScript = nix-update-script { };
+      tests.example = callPackage ./example.nix {
+        openapi-generator-cli = this;
+      };
     };
 
     meta = {

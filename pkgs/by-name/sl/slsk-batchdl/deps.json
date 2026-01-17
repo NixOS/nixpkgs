@@ -1,8 +1,8 @@
 [
   {
     "pname": "AngleSharp",
-    "version": "1.2.0",
-    "hash": "sha256-l8+Var9o773VL6Ybih3boaFf9sYjS7eqtLGd8DCIPsk="
+    "version": "1.3.0",
+    "hash": "sha256-xq+G2f9FCqS6PjIgfDdZjVRoaxVMiSyOXC7KtMzMpPU="
   },
   {
     "pname": "EmbedIO",
@@ -10,9 +10,9 @@
     "hash": "sha256-e6GfVHXxYeUw3ntCrHokNoAS6mXArO7+vdMeUFnsSo8="
   },
   {
-    "pname": "Goblinfactory.ProgressBar",
-    "version": "1.0.0",
-    "hash": "sha256-tV3Fw792zfYhB2dN97VKXBwS5eypqKExgAJy+bcDo8I="
+    "pname": "Goblinfactory.Konsole",
+    "version": "7.0.0.7-alpha",
+    "hash": "sha256-aYLrKllcIRUnyT21irV499b/myd2cbeMPtkoXVt/BTQ="
   },
   {
     "pname": "Google.Apis",
@@ -56,13 +56,13 @@
   },
   {
     "pname": "SmallestCSVParser",
-    "version": "1.1.1",
-    "hash": "sha256-64E87w+4FcQtYsFIOMGGmYmjXVGBwsBqgLVb7p0wc04="
+    "version": "1.2.0",
+    "hash": "sha256-LP6KPKruAKNW022CsMp0yFPmqo8QYzFu6BLWNoV5EdA="
   },
   {
     "pname": "Soulseek",
-    "version": "7.1.2",
-    "hash": "sha256-yel9mxRf1idEQssM7n4SIVQPMQDMDmyvfL5owllqgf0="
+    "version": "8.5.0",
+    "hash": "sha256-iiGwCgBsvkqyaOFqQLT55Smog15hekV+ZslpBGlO7Mc="
   },
   {
     "pname": "SpotifyAPI.Web",
@@ -126,7 +126,7 @@
   },
   {
     "pname": "YoutubeExplode",
-    "version": "6.5.4",
-    "hash": "sha256-5sexIiBj5XP9rP5DA0NQ+vHJ9lpjwp00EvVux901WLc="
+    "version": "6.5.6",
+    "hash": "sha256-DoVqgSU7KC7poikpAvhWYmLwPiZD95AADD3pePSA0ZI="
   }
 ]

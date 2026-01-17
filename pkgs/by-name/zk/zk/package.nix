@@ -33,9 +33,9 @@ buildGoModule rec {
 
   tags = [ "fts5" ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ pinpox ];
-    license = licenses.gpl3;
+  meta = {
+    maintainers = with lib.maintainers; [ pinpox ];
+    license = lib.licenses.gpl3;
     description = "Zettelkasten plain text note-taking assistant";
     homepage = "https://github.com/mickael-menu/zk";
     mainProgram = "zk";

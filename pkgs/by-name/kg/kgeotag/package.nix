@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     qt6.qtwebengine
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kgeotag.kde.org/";
     description = "Stand-alone photo geotagging program";
     changelog = "https://invent.kde.org/graphics/kgeotag/-/blob/master/CHANGELOG.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cimm ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ cimm ];
     mainProgram = "kgeotag";
   };
 }

@@ -8,7 +8,6 @@
   pysmi,
   pysnmp,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "1.6.2";
   pname = "pysmi";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lextudio";
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   passthru.tests.pytest = pysmi.overridePythonAttrs { doCheck = true; };
 
-  meta = with lib; {
+  meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
     changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

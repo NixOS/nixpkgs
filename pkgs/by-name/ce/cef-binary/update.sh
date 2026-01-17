@@ -1,9 +1,9 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq common-updater-scripts
+#!nix-shell -i bash -p curl gnused jq nix-update
 
 set -euo pipefail
 
-current_version=$(nix-instantiate --eval -E "with import ./. {}; cef-binary or (lib.getVersion cef-binary)" | tr -d '"')
+current_version=$(nix-instantiate --eval -E "with import ./. {}; cef-binary.version or (lib.getVersion cef-binary)" | tr -d '"')
 
 ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
@@ -30,14 +30,5 @@ update_nix_value version "$cef_version"
 update_nix_value gitRevision "$git_revision"
 update_nix_value chromiumVersion "$chromium_version"
 
-declare -a platforms=(
-    "x86_64-linux 64"
-    "aarch64-linux arm64"
-)
-
-for platform in "${platforms[@]}"; do
-    read -r system arch <<< "$platform"
-    url="https://cef-builds.spotifycdn.com/cef_binary_${cef_version}+g${git_revision}+chromium-${chromium_version}_linux${arch}_minimal.tar.bz2"
-    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")
-    update-source-version cef-binary "$cef_version" "$hash" --system="$system" --ignore-same-version
-done
+nix-update pkgsCross.gnu64.cef-binary --version skip
+nix-update pkgsCross.aarch64-multiplatform.cef-binary --version skip

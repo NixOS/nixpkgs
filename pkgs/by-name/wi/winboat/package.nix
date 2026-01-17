@@ -8,6 +8,7 @@
   usbutils,
   freerdp,
   docker-compose,
+  podman-compose,
   pkgsCross,
   buildNpmPackage,
   fetchFromGitHub,
@@ -15,15 +16,16 @@
   copyDesktopItems,
   nix-update-script,
 }:
+
 buildNpmPackage (final: {
   pname = "winboat";
-  version = "0.8.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "TibixDev";
     repo = "winboat";
     tag = "v${final.version}";
-    hash = "sha256-30WzvdY8Zn4CAj76bbC0bevuTeOSfDo40FPWof/39Es=";
+    hash = "sha256-DgH6CAZf+XIgBav2xd2FF2MGRgGIyOs/98vqWHA3XYw=";
   };
 
   postPatch = ''
@@ -40,7 +42,7 @@ buildNpmPackage (final: {
   buildInputs = [ udev ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  npmDepsHash = "sha256-nW+cGX4Y0Ndn1ubo4U3n8ZrjM5NkxIt4epB0AghPrNQ=";
+  npmDepsHash = "sha256-DLkI9a030uM2X1et94e4nd/HEyw5ugtK8NEAn/J8p9U=";
   nodejs = nodejs_24;
   makeCacheWritable = true;
 
@@ -60,8 +62,7 @@ buildNpmPackage (final: {
     npm exec electron-builder --linux -- \
       --dir \
       -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version} \
-      -c.npmRebuild=false
+      -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
@@ -72,7 +73,7 @@ buildNpmPackage (final: {
     cp -r dist/linux-unpacked/resources $out/share/winboat/resources
 
     # install winboat icon
-    install -Dm444 icons/icon.png $out/share/icons/hicolor/256x256/apps/winboat.png
+    install -Dm444 icons/winboat_logo.svg $out/share/icons/hicolor/256x256/apps/winboat.svg
 
     # copy the the winboat-guest-server executable and generate the zip
     cp ${lib.getExe final.guest-server} $out/share/winboat/resources/guest_server/winboat_guest_server.exe
@@ -89,6 +90,7 @@ buildNpmPackage (final: {
         lib.makeBinPath [
           usbutils
           docker-compose
+          podman-compose
           freerdp
         ]
       }

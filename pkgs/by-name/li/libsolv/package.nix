@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withRpm rpm;
 
-  meta = with lib; {
+  meta = {
     description = "Free package dependency solver";
     homepage = "https://github.com/openSUSE/libsolv";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
 }

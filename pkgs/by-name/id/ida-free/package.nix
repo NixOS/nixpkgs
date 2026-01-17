@@ -118,14 +118,14 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
     changelog = "https://hex-rays.com/products/ida/news/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "ida";
-    maintainers = with maintainers; [ msanft ];
+    maintainers = with lib.maintainers; [ msanft ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

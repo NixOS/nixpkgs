@@ -7,7 +7,6 @@
   fastapi,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "inscriptis";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "weblyzard";
@@ -40,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inscriptis" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML to text converter";
     mainProgram = "inscript.py";
     homepage = "https://github.com/weblyzard/inscriptis";
     changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

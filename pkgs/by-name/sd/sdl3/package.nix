@@ -3,7 +3,6 @@
   stdenv,
   config,
   alsa-lib,
-  apple-sdk_11,
   cmake,
   darwinMinVersionHook,
   dbus,
@@ -62,7 +61,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.24";
+  version = "3.2.28";
 
   outputs = [
     "lib"
@@ -75,18 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-LUkj9Rrf+zOW0IdV7aGccb/5bKh3TWf1IGtQkCDHd4k=";
+    hash = "sha256-nfnvzog1bON2IaBOeWociV82lmRY+qXgdeXBe6GYlww=";
   };
 
   postPatch =
     # Tests timeout on Darwin
-    # `testtray` loads assets from a relative path, which we are patching to be absolute
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
-
-      substituteInPlace test/testtray.c \
-        --replace-warn '../test/' '${placeholder "installedTests"}/share/assets/'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
@@ -144,12 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
     ++ lib.optional x11Support xorg.libX11
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
     ++ lib.optionals ibusSupport [
       # sdl3 only uses some constants of the ibus headers
       # it never actually loads the library
@@ -178,6 +167,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
     (lib.cmakeBool "SDL_DEPS_SHARED" false)
+
+    # Only ppc64le baseline guarantees AltiVec
+    (lib.cmakeBool "SDL_ALTIVEC" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
   ]
   ++
     lib.optionals

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
-    sha256 = "sha256-tZagXwk2ThmXtkQVJoOvEv71iUTzrPq994Bx9aSQ65g=";
+    sha256 = "sha256-o/1iAgfVxA2myniblef4I8VOhUt/ref2E+kQlqNwbXU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,17 +33,17 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Anti-bikeshedding Kotlin linter with built-in formatter";
     homepage = "https://ktlint.github.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = jre_headless.meta.platforms;
     changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tadfisher
       SubhrajyotiSen
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "ktlint";
   };
 }

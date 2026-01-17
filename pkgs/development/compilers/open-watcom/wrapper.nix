@@ -151,15 +151,15 @@ let
 
                   echo "Test file format"
                   file ./linux
-                  file ./linux | grep "32-bit" | grep -q "Linux"
+                  file ./linux | grep "ELF 32-bit" | grep -q "Linux"
                   file ./nt.exe
-                  file ./nt.exe | grep "PE32" | grep -q "Windows"
+                  file ./nt.exe | grep "PE32 executable" | grep -q "Windows"
                   file ./dos4g.exe
-                  file ./dos4g.exe | grep "MS-DOS" | grep -q "executable, LE"
+                  file ./dos4g.exe | grep "MS-DOS executable" | grep -q "LE executable"
                   file ./windows.exe
-                  file ./windows.exe | grep "MS-DOS" | grep -q "Windows 3.00"
+                  file ./windows.exe | grep "MS-DOS executable" | grep -q "NE for MS Windows 3."
                   file ./dos.exe
-                  file ./dos.exe | grep "MS-DOS" | grep -v "LE" | grep -qv "Windows 3."
+                  file ./dos.exe | grep "MS-DOS executable" | grep -q "MZ for MS-DOS"
                   touch $out
                 '';
           };

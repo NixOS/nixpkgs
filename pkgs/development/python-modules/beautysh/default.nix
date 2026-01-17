@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "beautysh";
-  version = "6.4.1";
+  version = "6.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lovesegfault";
     repo = "beautysh";
     tag = "v${version}";
-    hash = "sha256-B+1qwivb9MZ+W0u7hccDt3aTjDOcbEQ89Alc8mWd2Sg=";
+    hash = "sha256-wLqysNhkagZ+sphqMC78cLoKvsMJpJCJr16lgvU37JI=";
   };
 
   build-system = [ hatchling ];
@@ -39,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beautysh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for beautifying Bash scripts";
     homepage = "https://github.com/lovesegfault/beautysh";
     changelog = "https://github.com/lovesegfault/beautysh/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "beautysh";
   };
 }

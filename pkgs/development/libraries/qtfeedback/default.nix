@@ -42,14 +42,14 @@ mkDerivation {
       -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt Tactile Feedback";
     homepage = "https://github.com/qt/qtfeedback";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only # or
       gpl2Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
       OPNA2608
     ];

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 -t "$out/etc/triggerhappy/triggers.d" "triggerhappy.conf.examples"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight hotkey daemon";
     longDescription = ''
       Triggerhappy is a hotkey daemon developed with small and embedded systems in
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       configuration.
     '';
     homepage = "https://github.com/wertarbyte/triggerhappy/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ taha ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ taha ];
   };
 }

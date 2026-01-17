@@ -5,7 +5,6 @@
   fetchFromGitHub,
   humanize,
   matrix-synapse-unwrapped,
-  pythonOlder,
   tqdm,
   twisted,
   psycopg2,
@@ -16,12 +15,10 @@ buildPythonPackage rec {
   version = "1.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse-s3-storage-provider";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aeacw6Fpv4zFhZI4LdsJiV2pcOAMv3aV5CicnwYRxw8=";
   };
 

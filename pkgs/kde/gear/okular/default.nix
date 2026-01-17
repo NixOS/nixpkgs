@@ -10,6 +10,7 @@
   libzip,
   djvulibre,
   ebook_tools,
+  fetchpatch,
   discount,
 }:
 mkKdeDerivation {
@@ -30,5 +31,6 @@ mkKdeDerivation {
     ebook_tools
     discount
   ];
+
   meta.mainProgram = "okular";
 }

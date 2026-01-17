@@ -231,6 +231,8 @@ in
       allowedUDPPorts = [ 9757 ];
     };
 
+    services.firewalld.packages = [ cfg.package ];
+
     environment = {
       systemPackages = [
         cfg.package

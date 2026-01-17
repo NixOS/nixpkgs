@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytest,
-  pythonOlder,
   xclip,
   xvfb-run,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyclip";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyoungtech";

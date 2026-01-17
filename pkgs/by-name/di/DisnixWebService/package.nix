@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/svanderburg/DisnixWebService";
     changelog = "https://github.com/svanderburg/DisnixWebService/blob/${finalAttrs.src.rev}/NEWS.txt";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
   };
 })

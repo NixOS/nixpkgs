@@ -31,7 +31,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ao";
+  pname = "torchao";
   version = "0.14.1";
   pyproject = true;
 
@@ -168,7 +168,7 @@ buildPythonPackage rec {
     "test_save_load_int8woqtensors_0_cpu"
     "test_save_load_int8woqtensors_1_cpu"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Scalars are not equal!
     "test_comm"
     "test_fsdp2"
@@ -176,8 +176,7 @@ buildPythonPackage rec {
     "test_precompute_bitnet_scale"
     "test_qlora_fsdp2"
     "test_uneven_shard"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+
     # RuntimeError: No packed_weights_format was selected
     "TestIntxOpaqueTensor"
     "test_accuracy_kleidiai"
@@ -185,15 +184,31 @@ buildPythonPackage rec {
     # RuntimeError: quantized engine NoQEngine is not supported
     "test_smooth_linear_cpu"
     "test_smooth_linear_edge_cases"
+
+    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test_subclass_slice_subclass2_shape0_device_mps"
+    "test_subclass_slice_subclass2_shape1_device_mps"
+    # torch._inductor.exc.InductorError: KeyError: torch.float8_e4m3fn
+    "test_optim_default_dtype_bf16_optim_name_AdamFp8_device_mps"
+    "test_optim_smoke_optim_name_AdamWFp8_bfloat16_device_mps"
+    "test_optim_smoke_optim_name_AdamWFp8_float32_device_mps"
+    "test_param_groups_optim_name_AdamFp8_device_mps"
+    "test_subclass_slice_subclass0_shape0_device_mps"
+    "test_optim_smoke_optim_name_AdamFp8_bfloat16_device_mps"
+    "test_optim_smoke_optim_name_AdamFp8_float32_device_mps"
+    "test_subclass_slice_subclass0_shape1_device_mps"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt
     "test_int8_weight_only_quant_with_freeze_0_cpu"
     "test_int8_weight_only_quant_with_freeze_1_cpu"
     "test_int8_weight_only_quant_with_freeze_2_cpu"
+
+    # Illegal instruction in subclass_4bit.py::dequantize
+    "test_subclass_slice"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Require unpackaged 'coremltools'
     "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
 
@@ -208,6 +223,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytorch/ao";
     changelog = "https://github.com/pytorch/ao/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 }

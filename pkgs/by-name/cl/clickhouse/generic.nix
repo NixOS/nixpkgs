@@ -125,7 +125,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
       # Disable building WASM lexer
       url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
+      hash = "sha256-7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
     })
     ++
 
@@ -133,8 +133,13 @@ llvmStdenv.mkDerivation (finalAttrs: {
         (fetchpatch {
           # Do not intercept memalign on darwin
           url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
-          sha256 = "1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
-        });
+          hash = "sha256-1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
+        })
+    ++ lib.optional (!lib.versionAtLeast version "25.11" && stdenv.hostPlatform.isDarwin) (fetchpatch {
+      # Remove flaky macOS SDK version detection
+      url = "https://github.com/ClickHouse/ClickHouse/commit/11e172a37bd0507d595d27007170090127273b33.patch";
+      hash = "sha256-oI7MrjMgJpIPTsci2IqEOs05dUGEMnjI/WqGp2N+rps=";
+    });
 
   postPatch = ''
     patchShebangs src/ utils/
@@ -246,19 +251,21 @@ llvmStdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     changelog = "https://github.com/ClickHouse/ClickHouse/blob/v${version}/CHANGELOG.md";
 
     mainProgram = "clickhouse";
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
-    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (
+      lib.platforms.linux ++ lib.platforms.darwin
+    );
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thevar1able
     ];
   };

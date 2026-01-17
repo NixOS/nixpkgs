@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pymongo,
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "pymongo-inmemory";
   version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kaizendorks";

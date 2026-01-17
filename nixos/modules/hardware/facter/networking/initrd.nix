@@ -14,7 +14,7 @@ in
     '';
   };
 
-  config = lib.mkIf config.boot.initrd.network.enable {
+  config = lib.mkIf (config.hardware.facter.reportPath != null && config.boot.initrd.network.enable) {
     boot.initrd.kernelModules = config.hardware.facter.detected.boot.initrd.networking.kernelModules;
   };
 }

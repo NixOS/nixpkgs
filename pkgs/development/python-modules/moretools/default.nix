@@ -31,12 +31,12 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [ decorator ];
 
-  meta = with lib; {
+  meta = {
     description = ''
       Many more basic tools for python 2/3 extending itertools, functools, operator and collections
     '';
     homepage = "https://bitbucket.org/userzimmermann/python-moretools";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

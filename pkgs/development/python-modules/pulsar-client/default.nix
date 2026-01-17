@@ -67,7 +67,7 @@ buildPythonPackage rec {
       ratelimit
     ];
     avro = [ fastavro ];
-    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [
@@ -89,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-python/";
     changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
   };
 }

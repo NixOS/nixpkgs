@@ -3,14 +3,12 @@
   requests,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fordpass";
   version = "0.0.4";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "clarkd";
@@ -26,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fordpass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the FordPass API";
     mainProgram = "demo.py";
     homepage = "https://github.com/clarkd/fordpass-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rv ./* $out/share/dcw-gmt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GenericMappingTools/dcw-gmt";
     description = "Vector basemap of the world, for use with GMT";
     longDescription = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       - It contains more state boundaries (the largest 8 countries, Great Britain and Norway are now represented).
       - The data have been reformatted to save space and are distributed as a single deflated netCDF-4 file.
     '';
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tviti ];
     teams = [ lib.teams.geospatial ];
   };

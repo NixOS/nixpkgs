@@ -16,6 +16,8 @@
         ...
       }:
       {
+        virtualisation.memorySize = 1024 * 2;
+
         environment.systemPackages =
           let
             clickhouseSeleniumScript =

@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HlAsTt+s8gspKEcWxy5d21GklaI2XXsD55YElMSgyQI=";
   };
 
+  # Until upstream updates their code to work with GCC 15.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   outputs = [
     "out"
     "info"
@@ -33,11 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableCurrenciesUpdater [
     pythonEnv
   ];
-
-  prePatch = lib.optionalString enableCurrenciesUpdater ''
-    substituteInPlace units_cur \
-      --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
-  '';
 
   postInstall = lib.optionalString enableCurrenciesUpdater ''
     cp units_cur ${placeholder "out"}/bin/
@@ -71,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "units";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ galen ];
     platforms = lib.platforms.all;
   };
 })

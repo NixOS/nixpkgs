@@ -9,15 +9,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "MelMatchEQ.lv2";
-  version = "0.1";
+  version = "0.1-unstable-2025-01-30";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "MelMatchEQ.lv2";
-    rev = "v${version}";
-    sha256 = "1s805jgb9msxfq9047s7pxrngizb00w8sm4z94iii80ba65rd20x";
+    rev = "bee24593209d5c53fdafa62cb43aeeab6c5e880f";
+    hash = "sha256-eceY79s1X0gv0SsC4jJsFh7tq3VxQhcY9/bfJqYUxmk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brummer10/MelMatchEQ.lv2";
     description = "Profiling EQ using a 26 step Mel Frequency Band";
-    maintainers = with maintainers; [ magnetophon ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

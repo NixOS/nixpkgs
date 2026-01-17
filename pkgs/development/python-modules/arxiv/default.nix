@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "arxiv";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasschwab";
     repo = "arxiv.py";
     tag = version;
-    hash = "sha256-E1Slg7EWSULY68BrevmJO82L47UVFZBreKLVIDko1x0=";
+    hash = "sha256-7TGepKZ6Y/WTgJK70oOGR2TlXRwK0YgzslXAnklRSCA=";
   };
 
   build-system = [ setuptools ];

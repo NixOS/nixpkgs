@@ -9,13 +9,13 @@
   cmdliner,
   dolmen_model,
   dolmen_type,
+  dune-build-info,
   fpath,
   hc,
   menhirLib,
   mtime,
   # fix eval on legacy ocaml versions
   ocaml_intrinsics ? null,
-  patricia-tree,
   prelude,
   scfg,
   yojson,
@@ -27,17 +27,23 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.13.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8AAS7C/X9YnkgZORRauKqPgXPyFXOhPvd7/VS693e8Q=";
+    hash = "sha256-s72m7N9Ovd2Vl4F+hb2MsNmnF1hFQGkf2s7TrJ9IWI8=";
   };
+
+  minimalOCamlVersion = "4.14";
 
   nativeBuildInputs = [
     menhir
+  ];
+
+  buildInputs = [
+    dune-build-info
   ];
 
   propagatedBuildInputs = [
@@ -50,7 +56,6 @@ buildDunePackage (finalAttrs: {
     menhirLib
     mtime
     ocaml_intrinsics
-    patricia-tree
     prelude
     scfg
     yojson
@@ -80,6 +85,9 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://github.com/formalsec/smtml";
     changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      redianthus
+    ];
   };
 })

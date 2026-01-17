@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/amdsmi/commit/49aa2af045a4bc688e6f3ee0545f12afc45c1efe.patch";
       hash = "sha256-5dH9N4m+2mJIGVEB86SvdK3uAYyGFTfbCBJ8e09iQ3w=";
     })
+    (fetchpatch {
+      name = "fix-build-with-gcc15.patch";
+      url = "https://github.com/ROCm/amdsmi/commit/902667db3cafe72e2009287cb96b160854ab9d81.patch";
+      hash = "sha256-MoOY5q6tQ7Q+bgm/600Etz+cxRk4L2ujkarnBjnfANw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -82,12 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm_smi_lib";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "amd-smi";
   };

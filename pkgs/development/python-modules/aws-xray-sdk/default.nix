@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "2.14.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-xray-sdk-python";
@@ -70,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_xray_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS X-Ray SDK for the Python programming language";
     homepage = "https://github.com/aws/aws-xray-sdk-python";
     changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

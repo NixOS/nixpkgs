@@ -7,7 +7,6 @@
   grapheme,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "alive-progress";
   version = "3.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rsalmei";
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "alive_progress" ];
 
-  meta = with lib; {
+  meta = {
     description = "New kind of Progress Bar, with real-time throughput, ETA, and very cool animations";
     homepage = "https://github.com/rsalmei/alive-progress";
     changelog = "https://github.com/rsalmei/alive-progress/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
   };
 }

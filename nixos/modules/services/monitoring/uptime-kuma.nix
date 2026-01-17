@@ -25,6 +25,11 @@ in
         example = {
           PORT = "4000";
           NODE_EXTRA_CA_CERTS = lib.literalExpression "config.security.pki.caBundle";
+          UPTIME_KUMA_DB_TYPE = "mariadb";
+          UPTIME_KUMA_DB_HOSTNAME = "localhost";
+          UPTIME_KUMA_DB_NAME = "uptime-kuma";
+          UPTIME_KUMA_DB_USERNAME = "uptime-kuma";
+          UPTIME_KUMA_DB_PASSWORD = "uptime-kuma";
         };
         description = ''
           Additional configuration for Uptime Kuma, see
@@ -42,6 +47,7 @@ in
       NODE_ENV = lib.mkDefault "production";
       HOST = lib.mkDefault "127.0.0.1";
       PORT = lib.mkDefault "3001";
+      UPTIME_KUMA_DB_TYPE = lib.mkDefault "sqlite";
     };
 
     systemd.services.uptime-kuma = {

@@ -15,7 +15,6 @@
   pytestCheckHook,
   pytest-rerunfailures,
   pytest-xdist,
-  pythonOlder,
   pyyaml,
   redis,
   requests,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "requests-cache";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "requests-cache";
@@ -102,11 +99,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_cache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
     changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

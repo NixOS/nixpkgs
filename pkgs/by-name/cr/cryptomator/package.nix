@@ -17,18 +17,18 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-2iWeF2su55yQjiFe8nyqTgqNDZuj2+JpzAx5tQJE1Z0=";
+    hash = "sha256-UWe9iBgb6eBasHnqfBtOFnZlLF1XCIF0y+ebphYQkQw=";
   };
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-lbyNCuZOYIoznOV+DHuhNFk9ALNQbMMXBrF7y246ktE=";
+  mvnHash = "sha256-dOpvojr6gVtDFE52eghOVZWGspRLQrTDotOMkVGaG9k=";
 
   preBuild = ''
     VERSION=${version}
@@ -44,7 +44,7 @@ maven.buildMavenPackage rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
       --add-flags "--enable-preview" \
       --add-flags "--enable-native-access=org.cryptomator.jfuse.linux.amd64,org.purejava.appindicator" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \

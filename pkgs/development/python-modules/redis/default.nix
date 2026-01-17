@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "redis";
   version = "6.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -65,10 +62,10 @@ buildPythonPackage rec {
   # Tests require a running redis
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/redis/redis-py";
     changelog = "https://github.com/redis/redis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
   };
 }

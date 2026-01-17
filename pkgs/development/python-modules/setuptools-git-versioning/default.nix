@@ -70,12 +70,11 @@ buildPythonPackage rec {
     "test_config_not_used"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Use git repo data (latest tag, current commit hash, etc) for building a version number according PEP-440";
     mainProgram = "setuptools-git-versioning";
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
     changelog = "https://github.com/dolfinus/setuptools-git-versioning/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.mit;
   };
 }

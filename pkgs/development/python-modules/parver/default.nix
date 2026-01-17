@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "parver";
   version = "0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -36,10 +36,10 @@ buildPythonPackage rec {
     pretend
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows parsing and manipulation of PEP 440 version numbers";
     homepage = "https://github.com/RazerM/parver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

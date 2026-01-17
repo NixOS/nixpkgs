@@ -27,7 +27,6 @@
   libkrb5,
   libxml2,
   libxslt,
-  python2,
   stdenv,
   which,
   libiconv,
@@ -651,6 +650,10 @@ in
       # Fix incompatible function pointer conversion errors with clang 16
       ./hpricot-fix-incompatible-function-pointer-conversion.patch
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   iconv = attrs: {
@@ -658,6 +661,7 @@ in
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   idn-ruby = attrs: {
@@ -1006,6 +1010,7 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   ruby-terminfo = attrs: {
@@ -1028,6 +1033,9 @@ in
       cd "$(cat $out/nix-support/gem-meta/install-path)"
 
       substituteInPlace lib/vips.rb \
+        --replace 'FFI.library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'FFI.library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'FFI.library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
         --replace 'library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
         --replace 'library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
         --replace 'library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"'

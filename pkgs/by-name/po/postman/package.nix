@@ -8,7 +8,7 @@
 
 let
   pname = "postman";
-  version = "11.67.0";
+  version = "11.72.9";
 
   src =
     let
@@ -27,10 +27,10 @@ let
       name = "postman-${version}.${if stdenvNoCC.hostPlatform.isLinux then "tar.gz" else "zip"}";
       url = "https://dl.pstmn.io/download/version/${version}/${system}";
       hash = selectSystem {
-        aarch64-darwin = "sha256-WDXYSHhwvNo4IifeuYOZmF7KX/5ZArPXtoBe30bmGIg=";
-        aarch64-linux = "sha256-7rtKBx5axftXEXmps1mUPIKPypFUVwhSGA/yJstVU2I=";
-        x86_64-darwin = "sha256-7cm9u0zdvEBfjId6Xp0i4X2E/dtAZ0HeI3y0guzyMp4=";
-        x86_64-linux = "sha256-xg9d1E3S6yR3BOMLb5OXmMfZj5e+GmW9p1FFMBj/5mI=";
+        aarch64-darwin = "sha256-/WCdoDyDA3wuCeO/CMxGQ0lhKJNIoDW8sxLGYn/QH2E=";
+        aarch64-linux = "sha256-m3a0xNjGLURhybcpz+pHPfENBwiIg5wEIU3Iu3zkA7s=";
+        x86_64-darwin = "sha256-uUQT5qUQ5iIC874Y56PGpiVuQhQgH4xIdyN6UPTrnDY=";
+        x86_64-linux = "sha256-jwGT1vc5UeQ5WmtgHygVZY0nGZ+NnHy45LsNl4xsBEk=";
       };
     };
 
@@ -43,9 +43,9 @@ let
       exit 0
     fi
     update-source-version postman $latestVersion
-    systems=$(nix eval --json -f . postman.meta.platforms | jq --raw-output '.[]')
+    systems=$(nix --extra-experimental-features nix-command eval --json -f . postman.meta.platforms | jq --raw-output '.[]')
     for system in $systems; do
-      hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . postman.src.url --system "$system")))
+      hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix --extra-experimental-features nix-command eval --raw -f . postman.src.url --system "$system")))
       update-source-version postman $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
     done
   '';
@@ -70,6 +70,7 @@ let
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "postman";
   };
 in
 

@@ -47,16 +47,16 @@ stdenv.mkDerivation {
   installCheckPhase = "$out/bin/toxvpn -h";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage = "https://github.com/cleverca22/toxvpn";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       cleverca22
       craigem
       obadz
       toonn
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

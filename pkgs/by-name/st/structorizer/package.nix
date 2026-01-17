@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-33";
+  version = "3.32-34";
 
   src = fetchFromGitHub {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-7cvh1h4IFYD/5UMs6g76LmjJoDpkLLdvX2ED5oLtD5o=";
+    hash = "sha256-oTh45xoJYrJL0BbV5hdPfvv7wz49gExpvN3G5AOk3R0=";
   };
 
   patches = [
@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Create Nassi-Shneiderman diagrams (NSD)";
     homepage = "https://structorizer.fisch.lu";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "structorizer";
   };
 }

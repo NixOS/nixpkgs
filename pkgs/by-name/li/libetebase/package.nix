@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.pkgs-config = testers.testMetaPkgConfig libetebase;
 
-  meta = with lib; {
+  meta = {
     description = "C library for Etebase";
     homepage = "https://www.etebase.com/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ laalsaas ];
+    maintainers = with lib.maintainers; [ laalsaas ];
     pkgConfigModules = [ "etebase" ];
   };
 }

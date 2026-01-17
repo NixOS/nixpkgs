@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   scrapy,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage {
   pname = "scrapy-fake-useragent";
   version = "1.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   # PyPi tarball is corrupted
   src = fetchFromGitHub {
@@ -53,11 +50,11 @@ buildPythonPackage {
     "test_random_ua_set_on_exception"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Random User-Agent middleware based on fake-useragent";
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
     changelog = "https://github.com/alecxe/scrapy-fake-useragent/blob/master/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -43,10 +43,9 @@ buildPythonPackage rec {
     "test_cbwr_branch"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python hooks for Intel(R) Math Kernel Library runtime control settings";
     homepage = "https://github.com/IntelPython/mkl-service";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.bsd3;
   };
 }

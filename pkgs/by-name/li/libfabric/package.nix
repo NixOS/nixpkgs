@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfabric";
-  version = "2.3.0";
+  version = "2.3.1";
 
   enableParallelBuilding = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "ofiwg";
     repo = "libfabric";
     rev = "v${version}";
-    sha256 = "sha256-pxSv6mg51It4+P1nAgXdWizTGpI31rn5+n3f4vD6ooY=";
+    sha256 = "sha256-Zaf7iGr2/HWiMcH7zERz5Y9YzJ0QpHCCs+bU+qmoQTI=";
   };
 
   outputs = [
@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     (if enableOpx then "--enable-opx" else "--disable-opx")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ofiwg.github.io/libfabric/";
     description = "Open Fabric Interfaces";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       bsd2
     ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.bzizou ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bzizou ];
   };
 }

@@ -29,7 +29,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "solfege";
   version = "3.23.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://alpha.gnu.org/gnu/solfege/solfege-${version}.tar.gz";
@@ -102,14 +102,13 @@ python3Packages.buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ear training program";
     homepage = "https://www.gnu.org/software/solfege/";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       bjornfor
-      orivej
       anthonyroussel
     ];
     mainProgram = "solfege";

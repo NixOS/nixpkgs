@@ -81,14 +81,18 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.44.4";
+  version = "3.44.6";
   pname = "qgis-unwrapped";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-G9atxBBANlUDGl39bkwTo6L04/+0o5A5ake4KvIY70E=";
+    hash = "sha256-gC7luJpGSrKHRmgOetrLDE8zegbE/4QjM+aHaew5pGM=";
   };
 
   passthru = {
@@ -181,7 +185,7 @@ mkDerivation rec {
   dontWrapGApps = true; # wrapper params passed below
 
   postFixup = lib.optionalString withGrass ''
-    # GRASS has to be availble on the command line even though we baked in
+    # GRASS has to be available on the command line even though we baked in
     # the path at build time using GRASS_PREFIX.
     # Using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS.
@@ -195,12 +199,11 @@ mkDerivation rec {
   # >9k objects, >3h build time on a normal build slot
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lsix ];
-    teams = [ teams.geospatial ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; linux;
   };
 }

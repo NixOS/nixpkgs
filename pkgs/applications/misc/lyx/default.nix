@@ -52,11 +52,11 @@ mkDerivation rec {
   # python is run during runtime to do various tasks
   qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "https://www.lyx.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vcunat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.vcunat ];
+    platforms = lib.platforms.linux;
   };
 }

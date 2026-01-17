@@ -11,6 +11,7 @@
   # dependencies
   anyio,
   distro,
+  docstring-parser,
   httpx,
   jiter,
   pydantic,
@@ -23,6 +24,7 @@
 
   # test
   dirty-equals,
+  inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
   pytest-xdist,
@@ -32,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.62.0";
+  version = "0.75.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-EVLSC6ClHnmGqMoefMXj3M4dh812ZN5t9nF3gfCLyCo=";
+    hash = "sha256-wwaH9/o7qr8eXKvmKpj+/ubOdDydcXId/qiA6dXpd2I=";
   };
 
   postPatch = ''
@@ -55,6 +57,7 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     distro
+    docstring-parser
     httpx
     jiter
     pydantic
@@ -69,6 +72,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dirty-equals
+    inline-snapshot
     nest-asyncio
     pytest-asyncio
     pytest-xdist

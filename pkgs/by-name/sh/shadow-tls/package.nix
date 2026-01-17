@@ -17,17 +17,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-1oJCdqBa1pWpQ7QvZ0vZaOd73R+SzR9OPf+yoI+RwCY=";
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   # network required
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ihciah/shadow-tls";
     description = "Proxy to expose real tls handshake to the firewall";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "shadow-tls";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -18,10 +18,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ seq ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight reactive documents";
-    license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";
   };
 }

@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     tkinter
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for passing relevant events from MTG Arena logs to the 17Lands REST endpoint, also known as mtga-log-client";
     homepage = "https://www.17lands.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sephi ];
     mainProgram = "seventeenlands";
   };
 }

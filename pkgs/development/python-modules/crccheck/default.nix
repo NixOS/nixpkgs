@@ -7,12 +7,9 @@
   setuptools-scm,
 }:
 
-let
+buildPythonPackage rec {
   pname = "crccheck";
   version = "1.3.1";
-in
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,11 +26,14 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "crccheck" ];
+
+  meta = {
     description = "Python library for CRCs and checksums";
     homepage = "https://github.com/MartinScharrer/crccheck";
-    license = licenses.mit;
+    changelog = "https://github.com/MartinScharrer/crccheck/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

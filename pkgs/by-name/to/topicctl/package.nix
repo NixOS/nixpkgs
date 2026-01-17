@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "topicctl";
-  version = "1.22.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = "topicctl";
     rev = "v${version}";
-    sha256 = "sha256-+PkqIO3xsShSTyi5yBa9a3zLU8BIwERlBv84nuk8rHI=";
+    sha256 = "sha256-i7Gu7bk7J8+kG6gWpB+8hyIQs7B3TNQmYvLyQQ0ZGtc=";
   };
 
-  vendorHash = "sha256-JGVieAp5pg+Vhqx/Ge6xkR3sm/e+qYjMYrkYcPZjpiA=";
+  vendorHash = "sha256-aoFMYgyZnXmPg3fjwydGm85WKcT+Jez07a4JX1o3Mmo=";
 
   ldflags = [
     "-X main.BuildVersion=${version}"
@@ -26,11 +26,11 @@ buildGoModule rec {
   # needs a kafka server
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for easy, declarative management of Kafka topics";
     inherit (src.meta) homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       eskytthe
       srhb
     ];

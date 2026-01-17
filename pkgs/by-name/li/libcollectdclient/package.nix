@@ -18,9 +18,6 @@ collectd.overrideAttrs (prevAttrs: {
     homepage = "https://collectd.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      sheenobu
-      bjornfor
-    ];
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 })

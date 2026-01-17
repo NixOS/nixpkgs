@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "25.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7vFtKfgxrVers64yoFZXOYZiGfHr+90pfTKJTrmUDrE=";
@@ -50,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "towncrier" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to produce useful, summarised news files";
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "towncrier";
   };

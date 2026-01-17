@@ -4,7 +4,6 @@
   fetchPypi,
   async-timeout,
   pysnmp,
-  pythonOlder,
   poetry-core,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "atenpdu";
   version = "0.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,13 +29,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atenpdu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to control ATEN PE PDUs";
     homepage = "https://github.com/mtdcr/pductl";
     changelog = "https://github.com/mtdcr/pductl/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pductl";
-    broken = versionAtLeast pysnmp.version "7";
+    broken = lib.versionAtLeast pysnmp.version "7";
   };
 }

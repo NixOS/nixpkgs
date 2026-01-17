@@ -27,10 +27,10 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "notmuch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around notmuch";
     homepage = "https://notmuchmail.org/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

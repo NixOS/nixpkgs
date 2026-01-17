@@ -39,6 +39,8 @@ stdenv.mkDerivation {
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
+  # $output/lib/systemd/user is already a symlink
+  dontMoveSystemdUserUnits = true;
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -52,10 +54,10 @@ stdenv.mkDerivation {
     rm -r $out/lib/gnome-panel/modules
     ${xorg.lndir}/bin/lndir -silent ${panelModulesEnv} $out
 
-    rm $out/share/applications/gnome-panel.desktop
-
-    ln -s ${gnome-panel}/share/applications/gnome-panel.desktop \
-      $out/share/applications/gnome-panel.desktop
+    rm $out/share/systemd/user/gnome-panel.service
+    substitute ${gnome-panel}/share/systemd/user/gnome-panel.service \
+      $out/share/systemd/user/gnome-panel.service \
+      --replace-fail "ExecStart=${gnome-panel}/bin/gnome-panel" "ExecStart=$out/bin/gnome-panel"
 
     runHook postInstall
   '';

@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "jenkinsapi";
   version = "0.3.15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";
@@ -52,11 +52,11 @@ buildPythonPackage rec {
     "jenkinsapi.utils.jenkins_launcher"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for accessing resources on a Jenkins continuous-integration server";
     homepage = "https://github.com/salimfadhley/jenkinsapi";
-    maintainers = with maintainers; [ drets ];
-    teams = [ teams.deshaw ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ drets ];
+    teams = [ lib.teams.deshaw ];
+    license = lib.licenses.mit;
   };
 }

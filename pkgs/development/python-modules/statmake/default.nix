@@ -20,9 +20,7 @@
 buildPythonPackage rec {
   pname = "statmake";
   version = "1.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daltonmaag";
@@ -62,12 +60,12 @@ buildPythonPackage rec {
     "test_load_stylespace_broken_range"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Applies STAT information from a Stylespace to a variable font";
     mainProgram = "statmake";
     homepage = "https://github.com/daltonmaag/statmake";
     changelog = "https://github.com/daltonmaag/statmake/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

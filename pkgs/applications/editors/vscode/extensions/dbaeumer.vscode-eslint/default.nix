@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-eslint";
     publisher = "dbaeumer";
-    version = "3.0.16";
-    hash = "sha256-UxD07bouMK8nuysh5TAV7ZVhkLiOV6R1qfvVZcXB2Hc=";
+    version = "3.0.20";
+    hash = "sha256-X/HqQM1CDUvIi8p8i++6/aZl2hQWbeKIwgmDx/cb5UQ=";
   };
 
   meta = {

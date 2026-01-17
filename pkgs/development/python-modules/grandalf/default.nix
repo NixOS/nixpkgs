@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "grandalf";
   version = "0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdcht";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grandalf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for experimentations with graphs and drawing algorithms";
     homepage = "https://github.com/bdcht/grandalf";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

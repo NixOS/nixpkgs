@@ -41,11 +41,11 @@ buildPythonPackage rec {
     starlette
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Consume Server-Sent Event (SSE) messages with HTTPX";
     homepage = "https://github.com/florimondmanca/httpx-sse";
     changelog = "https://github.com/florimondmanca/httpx-sse/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

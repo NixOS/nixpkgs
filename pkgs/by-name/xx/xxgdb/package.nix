@@ -56,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D xxgdb.1 $out/share/man/man1/xxgdb.1
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Simple but powerful graphical interface to gdb";
     mainProgram = "xxgdb";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.all;
   };
 })

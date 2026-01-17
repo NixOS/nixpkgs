@@ -46,7 +46,7 @@ module.exports = async ({ github, context, core, dry }) => {
           name: 'maintainers',
         })
       ).data.artifacts[0]
-      if (!artifact) continue
+      if (!artifact || artifact.expired) continue
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
@@ -145,12 +145,26 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // This API request is important for the merge-conflict label, because it triggers the
     // creation of a new test merge commit. This is needed to actually determine the state of a PR.
+    //
+    // NOTE (2025-12-15): Temporarily skipping mergeability checks here
+    // on GitHub’s request to measure the impact of the resulting ref
+    // writes on their internal metrics; merge conflicts resulting from
+    // changes to target branches will not have labels applied for the
+    // duration. The label should still be updated on pushes.
+    //
+    // TODO: Restore mergeability checks in some form after a few days
+    // or when we hear back from GitHub.
     const pull_request = (
       await github.rest.pulls.get({
         ...context.repo,
         pull_number,
+        // Undocumented parameter (as of 2025-12-15), added by GitHub
+        // for us; stability unclear.
+        skip_mergeability_checks: true,
       })
     ).data
+
+    log('author', pull_request.user?.login)
 
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
@@ -166,49 +180,6 @@ module.exports = async ({ github, context, core, dry }) => {
       getTeamMembers,
       getUser,
     })
-
-    // When the same change has already been merged to the target branch, a PR will still be
-    // open and display the same changes - but will not actually have any effect. This causes
-    // strange CI behavior, because the diff of the merge-commit is empty, no rebuilds will
-    // be detected, no maintainers pinged.
-    // We can just check the temporary merge commit, and if it's empty the PR can safely be
-    // closed - there are no further changes.
-    // We only do this for PRs, which are non-empty to start with. This avoids closing PRs
-    // which have been created with an empty commit for notification purposes, for example
-    // the yearly election notification for voters.
-    if (pull_request.merge_commit_sha && pull_request.changed_files > 0) {
-      const commit = (
-        await github.rest.repos.getCommit({
-          ...context.repo,
-          ref: pull_request.merge_commit_sha,
-        })
-      ).data
-
-      if (commit.files.length === 0) {
-        const body = [
-          `The diff for the temporary merge commit ${pull_request.merge_commit_sha} is empty.`,
-          'The changes in this PR have almost certainly already been merged to the target branch.',
-        ].join('\n')
-
-        core.info(`PR #${item.number}: closed`)
-
-        if (!dry) {
-          await github.rest.issues.createComment({
-            ...context.repo,
-            issue_number: pull_number,
-            body,
-          })
-
-          await github.rest.pulls.update({
-            ...context.repo,
-            pull_number,
-            state: 'closed',
-          })
-        }
-
-        return {}
-      }
-    }
 
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
     // Accounts could be deleted as well, so don't count them.
@@ -481,22 +452,6 @@ module.exports = async ({ github, context, core, dry }) => {
         },
       )
 
-      if (item.pull_request || context.payload.pull_request) {
-        stats.prs++
-        Object.assign(
-          itemLabels,
-          await handlePullRequest({ item, stats, events }),
-        )
-      } else {
-        stats.issues++
-        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
-          // If this returns true, the issue was closed. In this case we return, to not
-          // label the issue anymore. Most importantly this avoids unlabeling stale issues
-          // which are closed via auto-close.
-          if (await handleAutoClose(item)) return
-        }
-      }
-
       const latest_event_at = new Date(
         events
           .filter(({ event }) =>
@@ -537,6 +492,29 @@ module.exports = async ({ github, context, core, dry }) => {
       log('latest_event_at', latest_event_at.toISOString())
 
       const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
+      const is_stale = latest_event_at < stale_at
+
+      if (item.pull_request || context.payload.pull_request) {
+        // No need to compute merge commits for stale PRs over and over again.
+        // This increases the repo size on GitHub's side unnecessarily and wastes
+        // a lot of API requests, too. Any relevant change will result in the
+        // stale status to change and thus pick up the PR again for labeling.
+        if (!is_stale) {
+          stats.prs++
+          Object.assign(
+            itemLabels,
+            await handlePullRequest({ item, stats, events }),
+          )
+        }
+      } else {
+        stats.issues++
+        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+          // If this returns true, the issue was closed. In this case we return, to not
+          // label the issue anymore. Most importantly this avoids unlabeling stale issues
+          // which are closed via auto-close.
+          if (await handleAutoClose(item)) return
+        }
+      }
 
       // Create a map (Label -> Boolean) of all currently set labels.
       // Each label is set to True and can be disabled later.
@@ -550,8 +528,7 @@ module.exports = async ({ github, context, core, dry }) => {
       )
 
       Object.assign(itemLabels, {
-        '2.status: stale':
-          !before['1.severity: security'] && latest_event_at < stale_at,
+        '2.status: stale': !before['1.severity: security'] && is_stale,
       })
 
       const after = Object.assign({}, before, itemLabels)
@@ -644,7 +621,7 @@ module.exports = async ({ github, context, core, dry }) => {
         ).data.artifacts[0]
 
         // If the artifact is not available, the next iteration starts at the beginning.
-        if (artifact) {
+        if (artifact && !artifact.expired) {
           stats.artifacts++
 
           const { downloadPath } = await artifactClient.downloadArtifact(

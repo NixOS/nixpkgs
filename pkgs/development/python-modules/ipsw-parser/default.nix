@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ipsw-parser";
-  version = "1.4.4";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "ipsw_parser";
     tag = "v${version}";
-    hash = "sha256-B9T7c2xzUrzh5BxS7b3rpmPcUDT8Qmb4/5XTMfrOcR8=";
+    hash = "sha256-+lhrRlIuchWIezzxkpTv4gdxXbOpNPWOJrdOU/g1i68=";
   };
 
   build-system = [

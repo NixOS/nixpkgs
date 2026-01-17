@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "blink1";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "todbot";
     repo = "blink1-tool";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-xuCjPSQUQ/KOcdsie/ndecUiEt+t46m4eI33PXJoAAY=";
+    hash = "sha256-9kbWZ0vq+A3y8IeqvK1HnWWgxXaieu1eU8l+om5F2/w=";
   };
 
   postPatch = ''
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for the blink(1) notification light";
     homepage = "https://blink1.thingm.com/";
-    license = with licenses; [ cc-by-sa-40 ];
-    maintainers = with maintainers; [ cransom ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ cc-by-sa-40 ];
+    maintainers = with lib.maintainers; [ cransom ];
+    platforms = lib.platforms.linux;
     mainProgram = "blink1-tool";
   };
 }

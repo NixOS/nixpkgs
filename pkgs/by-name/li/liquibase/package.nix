@@ -86,14 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Version Control for your database";
     mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jsoo1 ];
-    platforms = with platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jsoo1 ];
+    platforms = with lib.platforms; unix;
   };
 })

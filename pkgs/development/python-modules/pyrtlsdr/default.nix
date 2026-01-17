@@ -4,15 +4,12 @@
   fetchPypi,
   rtl-sdr,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
   version = "0.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,12 +25,12 @@ buildPythonPackage rec {
   # No tests that can be used.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR's)";
     homepage = "https://github.com/roger-/pyrtlsdr";
     changelog = "https://github.com/pyrtlsdr/pyrtlsdr/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

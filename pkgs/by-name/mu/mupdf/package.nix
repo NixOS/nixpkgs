@@ -38,17 +38,13 @@
   xcbuild,
   gitUpdater,
   enableBarcode ? false,
-
   # for passthru.tests
   cups-filters,
   zathura,
   mupdf,
 }:
-
 assert enablePython -> enableCxx;
-
 let
-
   freeglut-mupdf = freeglut.overrideAttrs (old: rec {
     pname = "freeglut-mupdf";
     version = "3.0.0-r${src.rev}";
@@ -59,7 +55,15 @@ let
       hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
     };
 
-    patches = [ ];
+    patches = [
+      # Fix build with gcc15
+      # https://github.com/freeglut/freeglut/pull/187
+      (fetchpatch {
+        name = "freeglut-fix-fgPlatformDestroyContext-prototype-for-C23.patch";
+        url = "https://github.com/freeglut/freeglut/commit/800772e993a3ceffa01ccf3fca449d3279cde338.patch";
+        hash = "sha256-agXw3JHq81tx5514kkorvuU5mX4E3AV930hy1OJl4L0=";
+      })
+    ];
 
     # cmake 4 compatibility, upstream is dead
     postPatch = ''
@@ -67,16 +71,14 @@ let
         --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
     '';
   });
-
 in
-
 stdenv.mkDerivation rec {
-  version = "1.26.8";
+  version = "1.26.10";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-6NJIpmbSOG9KIBTWgLbojeXOn9jIR7DidMvswSTzPMc=";
+    hash = "sha256-FlPzW9j72XDwVSPv3H+G5B6XKOJWSjKVKW4Dz1mlFDc=";
   };
 
   patches = [

@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lX11";
 
-  meta = with lib; {
+  meta = {
     description = "X virtual keyboard library";
     homepage = "https://www.yoctoproject.org/tools-resources/projects/matchbox";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

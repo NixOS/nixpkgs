@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.25.9";
+  version = "0.25.10";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = "p11-kit";
     tag = version;
-    hash = "sha256-lvm//lsG5xSz1dBuvp4bJvNS+zCYTuAqXC22Po95JJg=";
+    hash = "sha256-srZyY14PqPoPMcEj/3WWEPrBuCcAGibvziKgZV1vxO8=";
     fetchSubmodules = true;
   };
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
       Provides a way to load and enumerate PKCS#11 modules.
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
       "https://github.com/p11-glue/p11-kit/raw/${version}/NEWS"
       "https://github.com/p11-glue/p11-kit/releases/tag/${version}"
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     badPlatforms = [
       # https://github.com/p11-glue/p11-kit/issues/355#issuecomment-778777141
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "p11-kit";
   };
 }

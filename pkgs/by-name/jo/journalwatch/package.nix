@@ -24,17 +24,17 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [ systemd ];
+  dependencies = with python3Packages; [ systemd-python ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "journalwatch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find error messages in the systemd journal";
     homepage = "https://github.com/The-Compiler/journalwatch";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ florianjacob ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ florianjacob ];
     mainProgram = "journalwatch";
   };
 }

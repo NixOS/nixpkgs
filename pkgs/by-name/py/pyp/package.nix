@@ -38,7 +38,6 @@ let
         jq
         versionCheckHook
       ];
-    versionCheckProgramArg = "--version";
 
     pythonImportsCheck = [
       "pyp"

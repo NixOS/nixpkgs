@@ -55,11 +55,11 @@ in
 
     makeFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
 
@@ -80,11 +80,11 @@ in
       sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
     };
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "VDR plugin to handle KODI clients";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
 
@@ -120,11 +120,11 @@ in
 
     dontInstall = true;
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };
@@ -149,11 +149,11 @@ in
 
     installFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "Plugin for VDR to access AVMs Fritz Box routers";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };

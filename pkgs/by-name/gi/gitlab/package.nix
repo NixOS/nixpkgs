@@ -78,12 +78,12 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
-              cp -R ext/glfm_markdown $out
+              cp -R ext/gitlab_glfm_markdown $out
               rm $out/Cargo.lock
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-IPVpUj0ixYKQg8ZUKLGcS9RcR2zOWCrqkwJFUF1cmdI=";
+          hash = "sha256-x97e5fg11IU63VZd1n3CHduVC7GQagI8MFiFwR+p0wk=";
         };
 
         dontBuild = false;
@@ -104,7 +104,6 @@ let
         '';
 
         postInstall = ''
-          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
           find $out -type f -name .rustc_info.json -delete
         '';
       };
@@ -147,7 +146,7 @@ let
       sha256 = data.yarn_hash;
     };
     frontendIslandsYarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/ee/frontend_islands/apps/duo_next/yarn.lock";
+      yarnLock = src + "/ee/frontend_islands/yarn.lock";
       sha256 = data.frontend_islands_yarn_hash;
     };
 
@@ -194,7 +193,7 @@ let
     + lib.optionalString gitlabEnterprise ''
       # Get node modules for frontend islands
       export HOME=$(mktemp -d)
-      pushd ee/frontend_islands/apps/duo_next
+      pushd ee/frontend_islands
       yarn config --offline set yarn-offline-mirror "$frontendIslandsYarnOfflineCache"
       fixup-yarn-lock yarn.lock
       yarn install \
@@ -321,21 +320,21 @@ stdenv.mkDerivation {
   };
 
   meta =
-    with lib;
+
     {
       homepage = "http://www.gitlab.com/";
-      platforms = platforms.linux;
-      teams = [ teams.gitlab ];
+      platforms = lib.platforms.linux;
+      teams = [ lib.teams.gitlab ];
     }
     // (
       if gitlabEnterprise then
         {
-          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+          license = lib.licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
           description = "GitLab Enterprise Edition";
         }
       else
         {
-          license = licenses.mit;
+          license = lib.licenses.mit;
           description = "GitLab Community Edition";
           longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
         }

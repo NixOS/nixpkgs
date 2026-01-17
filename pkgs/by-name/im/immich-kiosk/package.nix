@@ -4,35 +4,37 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-
 buildGoModule rec {
   pname = "immich-kiosk";
-  version = "0.25.0";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-p/DP0rTO+1CVtREAIcP43mTd5zeeQaYRM2BlfqCfUm4=";
+    hash = "sha256-q321eiHXzYfch3qod1w1EAk95AAvLiDZhhiKmyL2Ki4=";
   };
 
-  # Remove pnpm-workspace.yaml as it causes monorepo detection issues
   # Delete vendor directory to regenerate it consistently across platforms
   postPatch = ''
-    rm -f frontend/pnpm-workspace.yaml
     rm -rf vendor
   '';
-  vendorHash = "sha256-kVyAGBOTgfvddsGlT4/wCnK9YYuks0OplUE3Z124z1k=";
+  vendorHash = "sha256-XZ49wYC+oUqEL0HXeqdRQAI2Y4zJAMgfqL/+6RrBWos=";
+  proxyVendor = true;
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-Gqd63bsipy/zpY75krSsQeaMsTpbNg8w0VIu7JYyv/k=";
+    hash = "sha256-ELIbM+tWOGntv8XmNvRZ/Q2iSRq0g9Kv5LnkwLPisPM=";
     fetcherVersion = 2;
-    postPatch = ''
-      rm -f pnpm-workspace.yaml
-    '';
   };
 
   # Frontend is in a subdirectory
@@ -40,13 +42,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   # Generate templ templates during vendor hash calculation
-  # Don't run pnpm in this phase - filter out pnpm.configHook
+  # Don't run pnpm in this phase - filter out pnpmConfigHook
   overrideModAttrs = oldAttrs: {
-    nativeBuildInputs = builtins.filter (drv: drv != pnpm_9.configHook) (
+    nativeBuildInputs = builtins.filter (drv: drv != pnpmConfigHook) (
       oldAttrs.nativeBuildInputs or [ ]
     );
     preBuild = ''

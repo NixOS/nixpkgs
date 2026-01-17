@@ -8,7 +8,6 @@
   iana-etc,
   libredirect,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ipwhois";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "secynic";
@@ -62,11 +59,11 @@ buildPythonPackage rec {
     "test_get_http_json"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to retrieve and parse whois data";
     homepage = "https://github.com/secynic/ipwhois";
     changelog = "https://github.com/secynic/ipwhois/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

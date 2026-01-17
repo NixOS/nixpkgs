@@ -1103,6 +1103,12 @@
     "project_path": "edu/gcompris-data",
     "repo_path": "education/gcompris-data"
   },
+  "gcompris-teachers-handbook": {
+    "description": "Official documentation for the GCompris-teachers tool",
+    "name": "gcompris-teachers-handbook",
+    "project_path": "documentation/gcompris-teachers-handbook",
+    "repo_path": "documentation/gcompris-teachers-handbook"
+  },
   "geonames-data": {
     "description": "Cache of geo name exports from geonames.org",
     "name": "geonames-data",
@@ -2873,12 +2879,6 @@
     "project_path": "base/kirogi",
     "repo_path": "utilities/kirogi"
   },
-  "kiss": {
-    "description": "KDE Initial System Setup",
-    "name": "kiss",
-    "project_path": "plasma/kiss",
-    "repo_path": "plasma/kiss"
-  },
   "kitemmodels": {
     "description": "KItemModels",
     "name": "kitemmodels",
@@ -3335,12 +3335,6 @@
     "project_path": "pim/kontactinterface",
     "repo_path": "pim/kontactinterface"
   },
-  "kontainer": {
-    "description": "Qt DistroBox GUI",
-    "name": "kontainer",
-    "project_path": "sysadmin/kontainer",
-    "repo_path": "system/kontainer"
-  },
   "kontaminuti": {
     "description": "Kontaminuti is a simple helper utility to time your activities according to the Pomodoro Technique.",
     "name": "kontaminuti",
@@ -3758,8 +3752,8 @@
   "krita-marketing": {
     "description": "Working together to creating marketing and introduction documents for Krita",
     "name": "krita-marketing",
-    "project_path": "others/krita-marketing",
-    "repo_path": "unmaintained/krita-marketing"
+    "project_path": "graphics/krita-marketing",
+    "repo_path": "graphics/krita-marketing"
   },
   "krita-pyramidalsharpening": {
     "description": "Use a pyramid to reconstruct a sharper image.",
@@ -4451,6 +4445,12 @@
     "project_path": "graphics/kxstitch",
     "repo_path": "graphics/kxstitch"
   },
+  "l10n-templates": {
+    "description": "Templates for localization of KDE software",
+    "name": "l10n-templates",
+    "project_path": "localization/l10n-templates",
+    "repo_path": "localization/l10n-templates"
+  },
   "labplot": {
     "description": "LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.",
     "name": "labplot",
@@ -4823,6 +4823,12 @@
     "project_path": "base/mark",
     "repo_path": "education/mark"
   },
+  "markdown-gettext": {
+    "description": "Command Line program to do i18n and l10n for individual Markdown files.",
+    "name": "markdown-gettext",
+    "project_path": "sdk/markdown-gettext",
+    "repo_path": "sdk/markdown-gettext"
+  },
   "markdownpart": {
     "description": "KPart for rendering Markdown content",
     "name": "markdownpart",
@@ -5008,6 +5014,18 @@
     "name": "md4qt",
     "project_path": "libs/md4qt",
     "repo_path": "libraries/md4qt"
+  },
+  "mdit-py-hugo": {
+    "description": "mdit-py-hugo",
+    "name": "mdit-py-hugo",
+    "project_path": "sdk/mdit-py-hugo",
+    "repo_path": "sdk/mdit-py-hugo"
+  },
+  "mdit-py-i18n": {
+    "description": "Markdown i18n and l10n using markdown-it-py",
+    "name": "mdit-py-i18n",
+    "project_path": "sdk/mdit-py-i18n",
+    "repo_path": "sdk/mdit-py-i18n"
   },
   "melon": {
     "description": "Desktop QML file manager",
@@ -5789,6 +5807,12 @@
     "project_path": "base/plasma-settings",
     "repo_path": "plasma-mobile/plasma-settings"
   },
+  "plasma-setup": {
+    "description": "Plasma first run setup tool",
+    "name": "plasma-setup",
+    "project_path": "workspace/plasma-setup",
+    "repo_path": "plasma/plasma-setup"
+  },
   "plasma-simplemenu": {
     "description": "Simplified menu for your Plasma Desktop",
     "name": "plasma-simplemenu",
@@ -6452,7 +6476,7 @@
   "spectacle": {
     "description": "Screenshot capture utility",
     "name": "spectacle",
-    "project_path": "kdeworkspace/spectacle",
+    "project_path": "workspace/spectacle",
     "repo_path": "plasma/spectacle"
   },
   "sprinter": {
@@ -7380,7 +7404,7 @@
     "repo_path": "websites/dot-kde-org"
   },
   "websites-download-kde-org": {
-    "description": "MirrorBrain configuration, templates, etc. - download.kde.org",
+    "description": "MirrorBits templates, etc. for download.kde.org",
     "name": "websites-download-kde-org",
     "project_path": "websites/download-kde-org",
     "repo_path": "websites/download-kde-org"
@@ -7516,6 +7540,12 @@
     "name": "websites-hugo-bootstrap",
     "project_path": "websites/hugo-bootstrap",
     "repo_path": "websites/hugo-bootstrap"
+  },
+  "websites-hugo-gettext": {
+    "description": "Hugo integration with Gettext",
+    "name": "websites-hugo-gettext",
+    "project_path": "websites/hugo-gettext",
+    "repo_path": "websites/hugo-gettext"
   },
   "websites-hugo-i18n": {
     "description": "Tooling to help translate Hugo generated websites with gettext",
@@ -7786,6 +7816,120 @@
     "name": "websites-lakademy-kde-org",
     "project_path": "websites/lakademy-kde-org",
     "repo_path": "websites/lakademy-kde-org"
+  },
+  "websites-libregraphicsmeeting-org-2006": {
+    "description": "Website for Libre Graphics Meeting 2006",
+    "name": "websites-libregraphicsmeeting-org-2006",
+    "project_path": "websites/libregraphicsmeeting-org-2006",
+    "repo_path": "websites/libregraphicsmeeting-org-2006"
+  },
+  "websites-libregraphicsmeeting-org-2007": {
+    "description": "Website for Libre Graphics Meeting 2007",
+    "name": "websites-libregraphicsmeeting-org-2007",
+    "project_path": "websites/libregraphicsmeeting-org-2007",
+    "repo_path": "websites/libregraphicsmeeting-org-2007"
+  },
+  "websites-libregraphicsmeeting-org-2008": {
+    "description": "Website for Libre Graphics Meeting 2008",
+    "name": "websites-libregraphicsmeeting-org-2008",
+    "project_path": "websites/libregraphicsmeeting-org-2008",
+    "repo_path": "websites/libregraphicsmeeting-org-2008"
+  },
+  "websites-libregraphicsmeeting-org-2009": {
+    "description": "Website for Libre Graphics Meeting 2009",
+    "name": "websites-libregraphicsmeeting-org-2009",
+    "project_path": "websites/libregraphicsmeeting-org-2009",
+    "repo_path": "websites/libregraphicsmeeting-org-2009"
+  },
+  "websites-libregraphicsmeeting-org-2010": {
+    "description": "Website for Libre Graphics Meeting 2010",
+    "name": "websites-libregraphicsmeeting-org-2010",
+    "project_path": "websites/libregraphicsmeeting-org-2010",
+    "repo_path": "websites/libregraphicsmeeting-org-2010"
+  },
+  "websites-libregraphicsmeeting-org-2011": {
+    "description": "Website for Libre Graphics Meeting 2011",
+    "name": "websites-libregraphicsmeeting-org-2011",
+    "project_path": "websites/libregraphicsmeeting-org-2011",
+    "repo_path": "websites/libregraphicsmeeting-org-2011"
+  },
+  "websites-libregraphicsmeeting-org-2012": {
+    "description": "Website for Libre Graphics Meeting 2012",
+    "name": "websites-libregraphicsmeeting-org-2012",
+    "project_path": "websites/libregraphicsmeeting-org-2012",
+    "repo_path": "websites/libregraphicsmeeting-org-2012"
+  },
+  "websites-libregraphicsmeeting-org-2013": {
+    "description": "Website for Libre Graphics Meeting 2013",
+    "name": "websites-libregraphicsmeeting-org-2013",
+    "project_path": "websites/libregraphicsmeeting-org-2013",
+    "repo_path": "websites/libregraphicsmeeting-org-2013"
+  },
+  "websites-libregraphicsmeeting-org-2014": {
+    "description": "Website for Libre Graphics Meeting 2014",
+    "name": "websites-libregraphicsmeeting-org-2014",
+    "project_path": "websites/libregraphicsmeeting-org-2014",
+    "repo_path": "websites/libregraphicsmeeting-org-2014"
+  },
+  "websites-libregraphicsmeeting-org-2015": {
+    "description": "Website for Libre Graphics Meeting 2015",
+    "name": "websites-libregraphicsmeeting-org-2015",
+    "project_path": "websites/libregraphicsmeeting-org-2015",
+    "repo_path": "websites/libregraphicsmeeting-org-2015"
+  },
+  "websites-libregraphicsmeeting-org-2016": {
+    "description": "Website for Libre Graphics Meeting 2016",
+    "name": "websites-libregraphicsmeeting-org-2016",
+    "project_path": "websites/libregraphicsmeeting-org-2016",
+    "repo_path": "websites/libregraphicsmeeting-org-2016"
+  },
+  "websites-libregraphicsmeeting-org-2017": {
+    "description": "Website for Libre Graphics Meeting 2017",
+    "name": "websites-libregraphicsmeeting-org-2017",
+    "project_path": "websites/libregraphicsmeeting-org-2017",
+    "repo_path": "websites/libregraphicsmeeting-org-2017"
+  },
+  "websites-libregraphicsmeeting-org-2018": {
+    "description": "Website for Libre Graphics Meeting 2018",
+    "name": "websites-libregraphicsmeeting-org-2018",
+    "project_path": "websites/libregraphicsmeeting-org-2018",
+    "repo_path": "websites/libregraphicsmeeting-org-2018"
+  },
+  "websites-libregraphicsmeeting-org-2019": {
+    "description": "Website for Libre Graphics Meeting 2019",
+    "name": "websites-libregraphicsmeeting-org-2019",
+    "project_path": "websites/libregraphicsmeeting-org-2019",
+    "repo_path": "websites/libregraphicsmeeting-org-2019"
+  },
+  "websites-libregraphicsmeeting-org-2020": {
+    "description": "Website for Libre Graphics Meeting 2020",
+    "name": "websites-libregraphicsmeeting-org-2020",
+    "project_path": "websites/libregraphicsmeeting-org-2020",
+    "repo_path": "websites/libregraphicsmeeting-org-2020"
+  },
+  "websites-libregraphicsmeeting-org-2021": {
+    "description": "Website for Libre Graphics Meeting 2021",
+    "name": "websites-libregraphicsmeeting-org-2021",
+    "project_path": "websites/libregraphicsmeeting-org-2021",
+    "repo_path": "websites/libregraphicsmeeting-org-2021"
+  },
+  "websites-libregraphicsmeeting-org-2024": {
+    "description": "Website for Libre Graphics Meeting 2024",
+    "name": "websites-libregraphicsmeeting-org-2024",
+    "project_path": "websites/libregraphicsmeeting-org-2024",
+    "repo_path": "websites/libregraphicsmeeting-org-2024"
+  },
+  "websites-libregraphicsmeeting-org-2025": {
+    "description": "Website for Libre Graphics Meeting 2025",
+    "name": "websites-libregraphicsmeeting-org-2025",
+    "project_path": "websites/libregraphicsmeeting-org-2025",
+    "repo_path": "websites/libregraphicsmeeting-org-2025"
+  },
+  "websites-libregraphicsmeeting-org-2026": {
+    "description": "Website for Libre Graphics Meeting 2026",
+    "name": "websites-libregraphicsmeeting-org-2026",
+    "project_path": "websites/libregraphicsmeeting-org-2026",
+    "repo_path": "websites/libregraphicsmeeting-org-2026"
   },
   "websites-lists-kde-org": {
     "description": "Necessary code to redirect from lists.kde.org to appropriate mail archives",

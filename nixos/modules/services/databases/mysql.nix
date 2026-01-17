@@ -111,6 +111,9 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.path;
+        default = (
+          if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
+        );
         example = "/var/lib/mysql";
         description = ''
           The data directory for MySQL.
@@ -429,10 +432,6 @@ in
         message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
       }
     ];
-
-    services.mysql.dataDir = lib.mkDefault (
-      if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
-    );
 
     services.mysql.settings.mysqld = lib.mkMerge [
       {

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "biosppy";
-  version = "2.2.3";
+  version = "2.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scientisst";
     repo = "BioSPPy";
     tag = "v${version}";
-    hash = "sha256-R+3K8r+nzrCiZegxur/rf3/gDGhN9bVNMhlK94SHer0=";
+    hash = "sha256-ED25/4WmLbXfEfa4KuUJMN+Fc9hd/AdUqgw8mwQes8Y=";
   };
 
   build-system = [ setuptools ];

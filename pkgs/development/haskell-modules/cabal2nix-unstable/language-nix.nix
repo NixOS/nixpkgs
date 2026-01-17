@@ -9,14 +9,15 @@
   lib,
   parsec-class,
   pretty,
+  process,
   QuickCheck,
 }:
 mkDerivation {
   pname = "language-nix";
-  version = "2.3.0-unstable-2025-09-17";
+  version = "2.3.0-unstable-2025-11-20";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/3cc36a5df16a10bac9a858208845e3d05b79845d.tar.gz";
-    sha256 = "1z1knv2ggm9ddyl0v120nhcnjmq50z7q1m88qj7rfz51gx1ifnim";
+    url = "https://github.com/NixOS/cabal2nix/archive/459859839cfe4fb352a29c1a72a1c4f0f537a1b8.tar.gz";
+    sha256 = "1443hlbz29y2dn22kf91zx7g284zp3l2vgw6jg4wgx66v2sxrqii";
   };
   postUnpack = "sourceRoot+=/language-nix; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
@@ -33,6 +34,7 @@ mkDerivation {
     lens
     parsec-class
     pretty
+    process
     QuickCheck
   ];
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/language-nix#readme";

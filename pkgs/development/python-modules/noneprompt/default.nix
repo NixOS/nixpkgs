@@ -4,15 +4,12 @@
   lib,
   poetry-core,
   prompt-toolkit,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "noneprompt";
   version = "0.1.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -19,8 +19,10 @@ on:
         default: false
         type: boolean
     secrets:
-      CACHIX_AUTH_TOKEN:
-        required: true
+      # Should only be provided in the merge queue, not in pull requests,
+      # where we're evaluating untrusted code.
+      CACHIX_AUTH_TOKEN_GHA:
+        required: false
 
 permissions: {}
 
@@ -31,11 +33,11 @@ defaults:
 jobs:
   versions:
     if: inputs.testVersions
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       versions: ${{ steps.versions.outputs.versions }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           path: trusted
@@ -43,7 +45,7 @@ jobs:
             ci/supportedVersions.nix
 
       - name: Check out the PR at the test merge commit
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           ref: ${{ inputs.mergedSha }}
@@ -52,7 +54,7 @@ jobs:
             ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
 
       - name: Load supported versions
         id: versions
@@ -87,7 +89,7 @@ jobs:
           sudo mkswap /swap
           sudo swapon /swap
 
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -98,14 +100,15 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        continue-on-error: true
         with:
-          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
-          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
-          extraPullNames: nixpkgs-ci
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-gha' }}
+          extraPullNames: nixpkgs-gha
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
           pushFilter: '(-source|-single-chunk)$'
 
       - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
@@ -155,7 +158,7 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
@@ -168,7 +171,7 @@ jobs:
       statuses: write
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -179,14 +182,14 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           pattern: ${{ inputs.artifact-prefix }}diff-*
           path: diff
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
 
       - name: Combine all output paths and eval stats
         run: |
@@ -195,7 +198,7 @@ jobs:
             --out-link combined
 
       - name: Upload the maintainer list
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}maintainers
           path: combined/maintainers.json
@@ -216,7 +219,7 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the comparison results
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}comparison
           path: comparison/*
@@ -254,11 +257,11 @@ jobs:
 
   # Creates a matrix of Eval performance for various versions and systems.
   report:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     needs: [versions, eval]
     steps:
       - name: Download output paths and eval stats for all versions
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           pattern: "*-diff-*"
           path: versions
@@ -339,7 +342,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -349,7 +352,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@456688f15bc354bef6d396e4a35f4f89d40bf2b7 # v31
+        uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
 
       - name: Run misc eval tasks in parallel
         run: |

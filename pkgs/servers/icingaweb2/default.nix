@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.12.5";
+  version = "2.12.6";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    hash = "sha256-g55TR7rgWnxNa1OQXOaLAPg3ijtx1u3mqxAxcMLhcB4=";
+    hash = "sha256-iKxvrZcwzUoh+TVsmx8jVjwHeklT1+dqzhY4kBbOB8Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,16 +30,16 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };
 
-  meta = with lib; {
+  meta = {
     description = "Webinterface for Icinga 2";
     longDescription = ''
       A lightweight and extensible web interface to keep an eye on your environment.
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
-    license = licenses.gpl2Plus;
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.helsinki-systems ];
     mainProgram = "icingacli";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

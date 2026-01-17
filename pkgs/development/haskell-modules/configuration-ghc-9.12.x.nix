@@ -66,12 +66,13 @@ with haskellLib;
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
 
   #
   # Hand pick versions that are compatible with ghc 9.12 and base 4.21
   #
 
-  extensions = doDistribute self.extensions_0_1_0_3;
+  extensions = doDistribute self.extensions_0_1_1_0;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
 
   #
@@ -125,7 +126,5 @@ with haskellLib;
   # Test failure because of GHC bug:
   #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
   #   https://github.com/sol/interpolate/issues/20
-  interpolate =
-    assert super.ghc.version == "9.12.2";
-    dontCheck super.interpolate;
+  interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
 }

@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
   # skip test due FHS dependency
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "App source + Nix packages + Docker = Image Resources";
     homepage = "https://github.com/railwayapp/nixpacks";
-    license = licenses.mit;
-    maintainers = [ maintainers.zoedsoupe ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zoedsoupe ];
     mainProgram = "nixpacks";
   };
 }

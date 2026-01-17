@@ -38,8 +38,9 @@ stdenv.mkDerivation {
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
+  # - when building on Darwin (cross-compilation): test-nl_langinfo-mt fails
   postPatch =
-    if stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+    if stdenv.hostPlatform.isMusl || stdenv.buildPlatform.isDarwin then
       ''
         sed -i 's:gnulib-tests::g' Makefile.in
       ''
@@ -92,11 +93,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/grep/";
     description = "GNU implementation of the Unix grep command";
 
@@ -106,13 +107,13 @@ stdenv.mkDerivation {
       prints the matching lines.
     '';
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [
-      maintainers.das_j
-      maintainers.m00wl
+      lib.maintainers.das_j
+      lib.maintainers.m00wl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "grep";
   };
 

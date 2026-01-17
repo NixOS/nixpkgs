@@ -15,6 +15,8 @@
   pkg-config,
   yq-go,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
@@ -52,8 +54,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-9zH0Coiyoz6NK2go2XVL5xYaCrXzrOMKaK+3pDXqrGs=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-SO/9GkjNP+7IEeULCyWAp32RYIxyzgmbc8YZiTCTjF8=";
   };
@@ -72,7 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     cargo-tauri.hook
     nodejs
     pkg-config

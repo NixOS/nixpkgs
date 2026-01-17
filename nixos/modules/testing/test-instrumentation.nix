@@ -1,5 +1,5 @@
 # This module allows the test driver to connect to the virtual machine
-# via a root shell attached to port 514.
+# via a root shell attached to a virtio console.
 
 {
   options,
@@ -14,7 +14,7 @@ with lib;
 let
   cfg = config.testing;
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   backdoorService = {
     requires = [

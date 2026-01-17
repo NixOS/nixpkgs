@@ -5,22 +5,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "awsiotsdk";
-  version = "1.26.0";
+  version = "1.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python-v2";
     tag = "v${version}";
-    hash = "sha256-FK/Sy2zxWqrLmBiJO80PdBp/NJWV9OujFffCk7CG7jk=";
+    hash = "sha256-CafecTMRNIKQ2FB13SLJwtYwysNMG5DYl2xfHnejApU=";
   };
 
   postPatch = ''

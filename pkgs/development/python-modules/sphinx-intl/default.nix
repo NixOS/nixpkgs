@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_intl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx utility that make it easy to translate and to apply translation";
     homepage = "https://github.com/sphinx-doc/sphinx-intl";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

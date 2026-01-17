@@ -8,7 +8,7 @@
   docbook-xsl-nons,
   dvdauthor,
   dvdplusrwtools,
-  ffmpeg,
+  ffmpeg_7,
   flex,
   fontconfig,
   gettext,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     cdrtools
     dvdauthor
     dvdplusrwtools
-    ffmpeg
+    ffmpeg_7
     fontconfig
     glib
     libexif
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       )
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.dvdstyler.org/";
     description = "DVD authoring software";
     longDescription = ''
@@ -126,9 +126,9 @@ stdenv.mkDerivation rec {
       - copy any menu object or whole menu
       - customize navigation using DVD scripting
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "dvdstyler";
   };
 }

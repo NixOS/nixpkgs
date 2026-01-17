@@ -6,24 +6,26 @@ Subject: [PATCH] path-util.h: add placeholder for DEFAULT_PATH_NORMAL
 This will be the $PATH used to lookup ExecStart= etc. options, which
 systemd itself uses extensively.
 ---
- src/basic/path-util.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ src/basic/path-util.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/src/basic/path-util.h b/src/basic/path-util.h
-index 45518c07e5..94bef2f4b4 100644
+index a3a82574dd..b836dba7f1 100644
 --- a/src/basic/path-util.h
 +++ b/src/basic/path-util.h
-@@ -9,10 +9,10 @@
+@@ -9,11 +9,11 @@
  #define PATH_MERGED_BIN(x) x "bin"
  #define PATH_MERGED_BIN_NULSTR(x) x "bin\0"
  
--#define DEFAULT_PATH_WITH_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/")
+-#define DEFAULT_PATH_WITH_FULL_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/")
+-#define DEFAULT_PATH_WITH_LOCAL_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_MERGED_BIN("/usr/")
 -#define DEFAULT_PATH_WITHOUT_SBIN PATH_MERGED_BIN("/usr/local/") ":" PATH_MERGED_BIN("/usr/")
-+#define DEFAULT_PATH_WITH_SBIN "@defaultPathNormal@"
-+#define DEFAULT_PATH_WITHOUT_SBIN DEFAULT_PATH_WITH_SBIN
++#define DEFAULT_PATH_WITH_FULL_SBIN "@defaultPathNormal@"
++#define DEFAULT_PATH_WITH_LOCAL_SBIN DEFAULT_PATH_WITH_FULL_SBIN
++#define DEFAULT_PATH_WITHOUT_SBIN DEFAULT_PATH_WITH_FULL_SBIN
  
--#define DEFAULT_PATH_COMPAT PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/") ":" PATH_SPLIT_BIN("/")
-+#define DEFAULT_PATH_COMPAT DEFAULT_PATH_WITH_SBIN
+-#define DEFAULT_PATH_COMPAT DEFAULT_PATH_WITH_FULL_SBIN ":" PATH_SPLIT_BIN("/")
++#define DEFAULT_PATH_COMPAT DEFAULT_PATH_WITH_FULL_SBIN
  
  const char* default_PATH(void);
  

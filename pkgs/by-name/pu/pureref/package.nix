@@ -43,11 +43,11 @@ appimageTools.wrapType1 {
     wrapProgram $out/bin/PureRef --set QT_QPA_PLATFORM xcb
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reference Image Viewer";
     homepage = "https://www.pureref.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       elnudev
       husjon
     ];

@@ -4,8 +4,8 @@
   buildMozillaMach,
   callPackage,
   fetchurl,
-  icu73,
   icu77,
+  icu78,
   fetchpatch2,
   config,
 }:
@@ -25,8 +25,8 @@ let
         })
       ];
     });
-  icu73' = patchICU icu73;
   icu77' = patchICU icu77;
+  icu78' = patchICU icu78;
 
   common =
     {
@@ -49,8 +49,8 @@ let
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
       ];
       extraPassthru = {
-        icu73 = icu73';
         icu77 = icu77';
+        icu78 = icu78';
       };
 
       meta = {
@@ -77,8 +77,8 @@ let
 
         pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
-        icu73 = icu73';
         icu77 = icu77';
+        icu78 = icu78';
       };
 
 in
@@ -86,8 +86,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "144.0.1";
-    sha512 = "e1859ecd247260c9303a335d14f51d2b80bca7fe0125c41cf6f6bdf1331072dcef490d75fba588b37db5410ce2e7084bbe1c8f568d40c46303891ae2bfbe431c";
+    version = "146.0.1";
+    sha512 = "8a3b2de246c7c597574fce596836c7ef7b24bd21573feb15c308003f34b82335ad865aa0f81b24d1669c8023c0448c0e273a63019aab13356b023c2e8adc2c47";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -100,8 +100,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.4.0esr";
-    sha512 = "23a7c99f51a346f9df6e0da257040a78da0b9afd70966a0fd5c0f5a4dcd4806520f8d510a382cf5d76a099aa889219a5eec185b774a6a9b65c4ccdcb75662554";
+    version = "140.6.0esr";
+    sha512 = "817a807381fa0b5e5e2c3f961931855788649ed596b1c6773ec5b0d6715e90df137ab0f755408a9137b5573169c2e2040bf6a01c4ecdb9a8b010e6c43dbb6381";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

@@ -17,9 +17,7 @@
 buildPythonPackage rec {
   pname = "flask-mongoengine";
   version = "1.0.0-unstable-2022-08-16";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
@@ -60,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_mongoengine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

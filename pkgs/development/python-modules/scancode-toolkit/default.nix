@@ -65,8 +65,6 @@ buildPythonPackage rec {
   version = "32.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-qZUILeB1lGv0V9Uq81/aOI9pJTtayfZH/O5kwNnpf28=";
@@ -147,11 +145,11 @@ buildPythonPackage rec {
   # Takes a long time and doesn't appear to do anything
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       cc-by-40
     ];

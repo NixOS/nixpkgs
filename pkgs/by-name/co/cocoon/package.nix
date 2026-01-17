@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "cocoon";
-  version = "0.5.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "haileyok";
     repo = "cocoon";
-    tag = finalAttrs.version;
-    hash = "sha256-2zvbPhvYoKlQTZDjpo6LRr9DLKzSmcH0qnU1oJ+7k04=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ztP/Nvv9kRr4bFI8oveJ6pk3LOZ9H4pqhVnBMt1kbew=";
   };
 
   ldflags = [
@@ -21,13 +21,13 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-5WnME+AVrXfvHX2yPbFoL6QgZoCMAJmBj47OM7miOfc=";
+  vendorHash = "sha256-cNL9H8cXFEiBKwyZcg1AwFUDXzMINi+vjYecyP8KNP0=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "ATProtocol Personal Data Server written in Go with a SQLite block and blob store";
-    changelog = "https://github.com/haileyok/cocoon/releases/${finalAttrs.version}";
+    changelog = "https://github.com/haileyok/cocoon/releases/v${finalAttrs.version}";
     homepage = "https://github.com/haileyok/cocoon";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];

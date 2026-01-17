@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   clikit,
   poetry-core,
 }:
@@ -10,8 +9,7 @@
 buildPythonPackage rec {
   version = "6.0.0";
   pname = "xdg";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   # the github source uses `xdg_base_dirs`, but pypi's sdist maintains `xdg` for compatibility.
   # there are actually breaking changes in xdg_base_dirs,
@@ -30,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdg" ];
 
-  meta = with lib; {
+  meta = {
     description = "XDG Base Directory Specification for Python";
     homepage = "https://github.com/srstevenson/xdg";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

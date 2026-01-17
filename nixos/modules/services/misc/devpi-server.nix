@@ -94,7 +94,7 @@ in
               "--request-timeout=5"
               "--serverdir=${serverDir}"
               "--host=${cfg.host}"
-              "--port=${builtins.toString cfg.port}"
+              "--port=${toString cfg.port}"
             ]
             ++ lib.optionals (!isNull cfg.secretFile) [
               "--secretfile=${runtimeDir}/${secretsFileName}"

@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   # See https://trac.macports.org/ticket/60656
   LDFLAGS = if stdenv.hostPlatform.isDarwin then "-Wl,-w" else null;
 
-  meta = with lib; {
+  meta = {
     description = "Color management engine";
     homepage = "http://www.littlecms.com/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

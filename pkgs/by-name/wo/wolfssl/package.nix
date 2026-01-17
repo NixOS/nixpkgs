@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.8.2";
+  version = "5.8.4";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     tag = "v${finalAttrs.version}-stable";
-    hash = "sha256-rWBfpI6tdpKvQA/XdazBvU5hzyai5PtKRBpM4iplZDU=";
+    hash = "sha256-vfJKmDdM0r591t5GnuSS7NyiUYXCQOTKbWLVydB3N9s=";
   };
 
   postPatch = ''
@@ -108,14 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast, portable implementation of TLS/SSL for embedded devices";
     mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       fab
       vifino
     ];

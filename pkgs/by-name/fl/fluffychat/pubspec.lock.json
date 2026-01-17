@@ -314,11 +314,11 @@
       "dependency": "direct main",
       "description": {
         "name": "cross_file",
-        "sha256": "7caf6a750a0c04effbb52a676dce9a4a592e10ad35c34d6d2d0e4811160d5670",
+        "sha256": "942a4791cd385a68ccb3b32c71c427aba508a1bb949b86dff2adbe4049f16239",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.3.4+2"
+      "version": "0.3.5"
     },
     "crypto": {
       "dependency": "transitive",
@@ -410,6 +410,16 @@
       "source": "hosted",
       "version": "0.6.3"
     },
+    "desktop_webview_window": {
+      "dependency": "transitive",
+      "description": {
+        "name": "desktop_webview_window",
+        "sha256": "57cf20d81689d5cbb1adfd0017e96b669398a669d927906073b0e42fc64111c0",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.3"
+    },
     "device_info_plus": {
       "dependency": "direct main",
       "description": {
@@ -494,11 +504,11 @@
       "dependency": "direct main",
       "description": {
         "name": "file_picker",
-        "sha256": "f2d9f173c2c14635cc0e9b14c143c49ef30b4934e8d1d274d6206fcb0086a06f",
+        "sha256": "f8f4ea435f791ab1f817b4e338ed958cb3d04ba43d6736ffc39958d950754967",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.3.3"
+      "version": "10.3.6"
     },
     "file_selector": {
       "dependency": "direct main",
@@ -749,15 +759,14 @@
       "version": "9.2.4"
     },
     "flutter_secure_storage_linux": {
-      "dependency": "direct overridden",
+      "dependency": "transitive",
       "description": {
-        "path": "flutter_secure_storage_linux",
-        "ref": "patch-2",
-        "resolved-ref": "f076cbb65b075afd6e3b648122987a67306dc298",
-        "url": "https://github.com/m-berto/flutter_secure_storage.git"
+        "name": "flutter_secure_storage_linux",
+        "sha256": "be76c1d24a97d0b98f8b54bce6b481a380a6590df992d0098f868ad54dc8f688",
+        "url": "https://pub.dev"
       },
-      "source": "git",
-      "version": "2.0.1"
+      "source": "hosted",
+      "version": "1.2.3"
     },
     "flutter_secure_storage_macos": {
       "dependency": "transitive",
@@ -770,14 +779,14 @@
       "version": "3.1.3"
     },
     "flutter_secure_storage_platform_interface": {
-      "dependency": "direct overridden",
+      "dependency": "transitive",
       "description": {
         "name": "flutter_secure_storage_platform_interface",
-        "sha256": "b8337d3d52e429e6c0a7710e38cf9742a3bb05844bd927450eb94f80c11ef85d",
+        "sha256": "cf91ad32ce5adef6fba4d736a542baca9daf3beac4db2d04be350b87f69ac4a8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "1.1.2"
     },
     "flutter_secure_storage_web": {
       "dependency": "transitive",
@@ -819,32 +828,31 @@
       "dependency": "direct main",
       "description": {
         "name": "flutter_vodozemac",
-        "sha256": "54cd3790b6dfdc1afce928f8c46f7eeea9e4f8326f077400894935926f202057",
+        "sha256": "16d4b44dd338689441fe42a80d0184e5c864e9563823de9e7e6371620d2c0590",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.3.0"
+      "version": "0.4.1"
     },
     "flutter_web_auth_2": {
       "dependency": "direct main",
       "description": {
-        "path": "flutter_web_auth_2",
-        "ref": "3.x-without-v1",
-        "resolved-ref": "48682f19576001e50104a602d891343850adb67f",
-        "url": "https://github.com/ThexXTURBOXx/flutter_web_auth_2.git"
+        "name": "flutter_web_auth_2",
+        "sha256": "3c14babeaa066c371f3a743f204dd0d348b7d42ffa6fae7a9847a521aff33696",
+        "url": "https://pub.dev"
       },
-      "source": "git",
-      "version": "3.1.2-without-v1"
+      "source": "hosted",
+      "version": "4.1.0"
     },
     "flutter_web_auth_2_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "flutter_web_auth_2_platform_interface",
-        "sha256": "e8669e262005a8354389ba2971f0fc1c36188481234ff50d013aaf993f30f739",
+        "sha256": "c63a472c8070998e4e422f6b34a17070e60782ac442107c70000dd1bed645f4d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.1.0"
+      "version": "4.1.0"
     },
     "flutter_web_plugins": {
       "dependency": "transitive",
@@ -982,11 +990,11 @@
       "dependency": "direct main",
       "description": {
         "name": "go_router",
-        "sha256": "d8f590a69729f719177ea68eb1e598295e8dbc41bbc247fed78b2c8a25660d7c",
+        "sha256": "c92d18e1fe994cb06d48aa786c46b142a5633067e8297cff6b5a3ac742620104",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "16.3.0"
+      "version": "17.0.0"
     },
     "gsettings": {
       "dependency": "transitive",
@@ -1052,11 +1060,11 @@
       "dependency": "direct main",
       "description": {
         "name": "http",
-        "sha256": "bb2ce4590bc2667c96f318d68cac1b5a7987ec819351d32b1c987239a815e007",
+        "sha256": "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.0"
+      "version": "1.6.0"
     },
     "http_multi_server": {
       "dependency": "transitive",
@@ -1092,11 +1100,11 @@
       "dependency": "direct main",
       "description": {
         "name": "image_picker",
-        "sha256": "736eb56a911cf24d1859315ad09ddec0b66104bc41a7f8c5b96b4e2620cf5041",
+        "sha256": "784210112be18ea55f69d7076e2c656a4e24949fa9e76429fe53af0c0f4fa320",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.2.0"
+      "version": "1.2.1"
     },
     "image_picker_android": {
       "dependency": "transitive",
@@ -1388,11 +1396,11 @@
       "dependency": "direct main",
       "description": {
         "name": "matrix",
-        "sha256": "84354dd61f47b297631a3fe5eeebb5c1e0725f872b8fae75851a49cd5689c4f1",
+        "sha256": "0660c8f662f53b56eb2c0d7a7019517b735f20218ce35bc20f44de43bc3a9466",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.1"
+      "version": "4.0.0"
     },
     "meta": {
       "dependency": "transitive",
@@ -1778,11 +1786,11 @@
       "dependency": "direct main",
       "description": {
         "name": "qr_code_scanner_plus",
-        "sha256": "41f4a834a48d670d25e3917cb9f1dbb4742298a0b4ab60d82416b295b73931e1",
+        "sha256": "b764e5004251c58d9dee0c295e6006e05bd8d249e78ac3383abdb5afe0a996cd",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.13"
+      "version": "2.0.14"
     },
     "qr_image": {
       "dependency": "direct main",
@@ -2614,11 +2622,11 @@
       "dependency": "direct main",
       "description": {
         "name": "video_player",
-        "sha256": "0d55b1f1a31e5ad4c4967bfaa8ade0240b07d20ee4af1dfef5f531056512961a",
+        "sha256": "096bc28ce10d131be80dfb00c223024eb0fba301315a406728ab43dd99c45bdf",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.10.0"
+      "version": "2.10.1"
     },
     "video_player_android": {
       "dependency": "transitive",
@@ -2674,11 +2682,11 @@
       "dependency": "transitive",
       "description": {
         "name": "vodozemac",
-        "sha256": "95cac62ffab94db99e134c8f9aac198f8131a4eed0bed76a6cfc9c72add229b9",
+        "sha256": "39144e20740807731871c9248d811ed5a037b21d0aa9ffcfa630954de74139d9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     "wakelock_plus": {
       "dependency": "direct main",

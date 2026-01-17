@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
-  pythonOlder,
   rfc3987,
   ruamel-yaml,
   setuptools-scm,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "dtschema";
   version = "2025.08";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devicetree-org";
@@ -39,15 +36,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dtschema" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2 # or
       gpl2Only
     ];
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with lib.maintainers; [ sorki ];
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib
@@ -55,7 +52,7 @@ buildPythonPackage rec {
       ||
 
         # see https://github.com/devicetree-org/dt-schema/issues/108
-        versionAtLeast jsonschema.version "4.18"
+        lib.versionAtLeast jsonschema.version "4.18"
     );
   };
 }

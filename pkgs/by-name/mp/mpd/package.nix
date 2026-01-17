@@ -232,8 +232,8 @@ stdenv.mkDerivation (finalAttrs: {
       (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
       ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
-          --replace kAudioObjectPropertyElement{Main,Master} \
-          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+          --replace-fail kAudioObjectPropertyElement{Main,Master} \
+          --replace-fail kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
       ''
     +
       lib.optionalString
@@ -262,17 +262,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dtest=true"
-    "-Dmanpages=true"
-    "-Dhtml_manual=true"
+    (lib.mesonBool "test" true)
+    (lib.mesonBool "manpages" true)
+    (lib.mesonBool "html_manual" true)
   ]
-  ++ map (x: "-D${x}=enabled") features_
-  ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
+  ++ map (x: lib.mesonEnable x true) features_
+  ++ map (x: lib.mesonEnable x false) (lib.subtractLists features_ knownFeatures)
   ++ lib.optional (builtins.elem "zeroconf" features_) (
-    "-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
+    lib.mesonOption "zeroconf" (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
   )
-  ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
-  ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
+  ++ lib.optional (builtins.elem "systemd" features_) (
+    lib.mesonOption "systemd_system_unit_dir" "etc/systemd/system"
+  )
+  ++ lib.optional (builtins.elem "qobuz" features_) (lib.mesonEnable "nlohmann_json" true);
 
   passthru.tests.nixos = nixosTests.mpd;
 
@@ -282,6 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       tobim
+      doronbehar
     ];
     platforms = lib.platforms.unix;
     mainProgram = "mpd";

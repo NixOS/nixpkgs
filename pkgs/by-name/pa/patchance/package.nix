@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-wlkEKkPH2C/y7TQicIVycWbtLUdX2hICcUWi7nFN51w=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     description = "JACK Patchbay GUI";
     mainProgram = "patchance";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

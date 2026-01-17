@@ -7,22 +7,24 @@
   perl,
   webkitgtk_4_1,
   stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gpauth";
-  version = "2.4.6";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
-    rev = "v${version}";
-    hash = "sha256-AxerhMQBgEgeecKAhedokMdpra1C9iqhutPrdAQng6Q=";
+    tag = "v${version}";
+    hash = "sha256-dxRqf5iOlgJegeAqtTwoVqNHXU3eOse5eMYFknhAh2M=";
+    fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "apps/gpauth";
 
-  cargoHash = "sha256-oPnBpwE8bdYgve1Dh64WNjWXClSRoHL5PVwrB1ovU6Y=";
+  cargoHash = "sha256-VkDq98Y6uBSal7m4V9vjW1XermOPOWulo3Jo34QFRsA=";
 
   nativeBuildInputs = [
     perl
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
@@ -49,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       binary-eater
+      booxter
       m1dugh
     ];
     platforms = with lib.platforms; linux ++ darwin;

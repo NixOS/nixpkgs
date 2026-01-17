@@ -25,6 +25,9 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace {,examples/}CMakeLists.txt \
       --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+
   '';
 
   propagatedBuildInputs = [
@@ -37,10 +40,10 @@ stdenv.mkDerivation {
   CLIPPER_PATH = "${clipper.out}";
   cmakeFlags = [ "-DLIBNEST2D_HEADER_ONLY=OFF" ];
 
-  meta = with lib; {
+  meta = {
     description = "2D irregular bin packaging and nesting library written in modern C++";
     homepage = "https://github.com/Ultimaker/libnest2d";
-    license = licenses.lgpl3;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
   };
 }

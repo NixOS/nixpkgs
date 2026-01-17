@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
-  version = "15.2";
+  version = "15.3.1";
 
   buildInputs = [
     autoPatchelfHook
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-OCpzKmwa4HbKTGSeVxBlYXB6TNe5uqLhtowLwAQjIJQ=";
+        outputHash = "sha256-4Y7bmN08fZ9hRsyFKP4cfGb4fggLY9bdm32+UTIGiTs=";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -131,11 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
   # need to tell the DesktopVideoHelper where to find its own library
   appendRunpaths = [ "${placeholder "out"}/lib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
-    maintainers = [ maintainers.naxdy ];
-    license = licenses.unfree;
+    maintainers = [ lib.maintainers.naxdy ];
+    license = lib.licenses.unfree;
     description = "Supporting applications for Blackmagic Decklink. Doesn't include the desktop applications, only the helper required to make the driver work";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

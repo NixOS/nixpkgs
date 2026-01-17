@@ -6,15 +6,12 @@
   fetchPypi,
   yt-dlp,
   docopt,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tubeup";
   version = "2025.5.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,12 +33,12 @@ buildPythonPackage rec {
   # Tests failing upstream
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Youtube (and other video site) to Internet Archive Uploader";
     mainProgram = "tubeup";
     homepage = "https://github.com/bibanon/tubeup";
     changelog = "https://github.com/bibanon/tubeup/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

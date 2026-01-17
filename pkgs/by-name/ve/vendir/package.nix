@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "vendir";
-  version = "0.44.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-vendir";
     rev = "v${version}";
-    sha256 = "sha256-J+i0AdNw35Ccb/QtvKk4U5eA9uAZUv47GrqJMii/cTg=";
+    sha256 = "sha256-UURZta+iEMlHf2vnosGrmuic5WrIZ4kf0qFILPwkH2Q=";
   };
 
   vendorHash = null;
@@ -23,11 +23,11 @@ buildGoModule rec {
     "-X carvel.dev/vendir/pkg/vendir/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to vendor portions of git repos, github releases, helm charts, docker image contents, etc. declaratively";
     mainProgram = "vendir";
     homepage = "https://carvel.dev/vendir/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ russell ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ russell ];
   };
 }

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   version = "3.6.3";
-  format = "pyproject";
+  pyproject = true;
   pname = "rpy2-rinterface";
 
   disabled = isPyPy;

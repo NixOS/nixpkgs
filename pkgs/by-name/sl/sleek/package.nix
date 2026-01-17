@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0AB2Z++WnOQ06CkKIHBydgV4VlLGqhlKGAQ0blPOFPo=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for formatting SQL";
     homepage = "https://github.com/nrempel/sleek";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xrelkd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "sleek";
   };
 }

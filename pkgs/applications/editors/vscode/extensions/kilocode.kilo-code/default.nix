@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   vscode-utils,
   nix-update-script,
@@ -12,24 +14,24 @@ let
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "kilo-code-${finalAttrs.version}.vsix";
     pname = "kilo-code-vsix";
-    version = "4.91.0";
+    version = "4.124.0";
 
     src = fetchFromGitHub {
       owner = "Kilo-Org";
       repo = "kilocode";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-dUVPCTxfLcsVfy2FqdZMN8grysALUOTiTl4TXM1BcDs=";
+      hash = "sha256-Dy0dd07pWsSbrO6BX7GEYf7CunXD0itaeIFRv9mQJks=";
     };
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-4LB2KY+Ksr8BQYoHrz3VNr81++zcrWN+USg3bBfr/FU=";
+      hash = "sha256-hxgzmJD+Sl7E+ape1M1/Xl8XLtAhtht3AE45zHFctsQ=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
       pnpm
     ];
 
@@ -59,14 +61,6 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
   vscodeExtUniqueId = "${finalAttrs.vscodeExtPublisher}.${finalAttrs.vscodeExtName}";
 
   src = vsix;
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    unzip $src
-
-    runHook postUnpack
-  '';
 
   passthru = {
     vsix = finalAttrs.src;

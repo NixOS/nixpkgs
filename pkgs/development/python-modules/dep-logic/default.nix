@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   packaging,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dep-logic";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdm-project";

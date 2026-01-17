@@ -12,11 +12,12 @@
   libgudev,
   python3,
   valgrind,
+  libwacom-surface,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
-  version = "2.16.1";
+  version = "2.17.0";
 
   outputs = [
     "out"
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${finalAttrs.version}";
-    hash = "sha256-YP6z+2HyIRmIAJIdJMbVTQA0rf3EXBZvlCdM4jrmHXM=";
+    hash = "sha256-2JbO3B/PqsLKnaCeQcn1x9Z2pQL4kScuS39F1JlpDpc=";
   };
 
   postPatch = ''
@@ -72,7 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
-  passthru = {
+  passthru.tests = {
+    inherit libwacom-surface;
     tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 

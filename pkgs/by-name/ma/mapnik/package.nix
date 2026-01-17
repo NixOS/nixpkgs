@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
-  version = "4.1.4";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WwxQNMTDaImlDqBYo4p1aNvIzAc3egza6LkXH7gEqOA=";
+    hash = "sha256-hlPH0gvEURidPeEnDgpDfp89haMSBoZahoW/xNNZ5XA=";
     fetchSubmodules = true;
   };
 
@@ -128,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mapnik.org";
     changelog = "https://github.com/mapnik/mapnik/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      hrdinka
       hummeltech
     ];
     teams = [ lib.teams.geospatial ];

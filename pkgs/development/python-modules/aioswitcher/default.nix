@@ -12,7 +12,6 @@
   pytest-resource-path,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   time-machine,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "aioswitcher";
   version = "6.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
@@ -72,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioswitcher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with Switcher water heater";
     homepage = "https://github.com/TomerFi/aioswitcher";
     changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

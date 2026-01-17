@@ -31,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: [ ps.setuptools ]))
+    (python3.withPackages (ps: [
+      ps.setuptools
+      ps.distutils
+    ]))
     wrapGAppsHook3
   ];
 

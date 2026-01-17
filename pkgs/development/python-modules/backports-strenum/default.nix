@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clbarnes";
     repo = "backports.strenum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j5tALFrLeZ8k+GwAaq0ocmcQWvdWkRUHbOVq5Du4mu0=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backports.strenum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Base class for creating enumerated constants that are also subclasses of str";
     homepage = "https://github.com/clbarnes/backports.strenum";
-    license = with licenses; [ psfl ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ psfl ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

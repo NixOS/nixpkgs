@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for making call graphs of C programmes";
     mainProgram = "egypt";
     longDescription = ''
@@ -31,10 +31,10 @@ perlPackages.buildPerlPackage rec {
       together.
     '';
     homepage = "http://www.gson.org/egypt/";
-    license = with licenses; [
+    license = with lib.licenses; [
       artistic1
       gpl1Plus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

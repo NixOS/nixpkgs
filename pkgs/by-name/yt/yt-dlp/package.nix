@@ -1,14 +1,16 @@
 {
   lib,
   python3Packages,
+  atomicparsley,
+  deno,
   fetchFromGitHub,
   ffmpeg-headless,
-  rtmpdump,
-  atomicparsley,
-  pandoc,
   installShellFiles,
+  pandoc,
+  rtmpdump,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
+  javascriptSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   nix-update-script,
@@ -19,19 +21,30 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.10.22";
+  version = "2025.12.08";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-jQaENEflaF9HzY/EiMXIHgUehAJ3nnDT9IbaN6bDcac=";
+    hash = "sha256-y06MDP+CrlHGrell9hcLOGlHp/gU2OOxs7can4hbj+g=";
   };
 
   postPatch = ''
     substituteInPlace yt_dlp/version.py \
       --replace-fail "UPDATE_HINT = None" 'UPDATE_HINT = "Nixpkgs/NixOS likely already contain an updated version.\n       To get it run nix-channel --update or nix flake update in your config directory."'
+    # Until yt-dlp supports curl-cffi 0.14.x, this patch is needed:
+    substituteInPlace yt_dlp/networking/_curlcffi.py \
+      --replace-fail "if curl_cffi_version != (0, 5, 10) and not (0, 10) <= curl_cffi_version < (0, 14)" \
+      "if curl_cffi_version != (0, 5, 10) and not (0, 10) <= curl_cffi_version"
+    ${lib.optionalString javascriptSupport ''
+      # deno is required for full YouTube support (since 2025.11.12).
+      # This makes yt-dlp find deno even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
+      # Crafted so people can replace deno with one of the other JS runtimes.
+      substituteInPlace yt_dlp/utils/_jsruntime.py \
+        --replace-fail "path = _determine_runtime_path(self._path, '${deno.meta.mainProgram}')" "path = '${lib.getExe deno}'"
+    ''}
   '';
 
   build-system = with python3Packages; [ hatchling ];
@@ -42,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # expose optional-dependencies, but provide all features
-  dependencies = lib.flatten (lib.attrValues optional-dependencies);
+  dependencies = lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     default = with python3Packages; [
@@ -53,6 +66,7 @@ python3Packages.buildPythonApplication rec {
       requests
       urllib3
       websockets
+      yt-dlp-ejs # keep pinned version in sync!
     ];
     curl-cffi = [ python3Packages.curl-cffi ];
     secretstorage = with python3Packages; [
@@ -85,8 +99,7 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs =
     let
       packagesToBinPath =
-        [ ]
-        ++ lib.optional atomicparsleySupport atomicparsley
+        lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg-headless
         ++ lib.optional rtmpSupport rtmpdump;
     in
@@ -94,8 +107,14 @@ python3Packages.buildPythonApplication rec {
       ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
     ];
 
-  # Requires network
-  doCheck = false;
+  checkPhase = ''
+    # Check for "unsupported" string in yt-dlp -v output.
+    output=$($out/bin/yt-dlp -v 2>&1 || true)
+    if echo $output | grep -q "unsupported"; then
+      echo "ERROR: Found \"unsupported\" string in yt-dlp -v output."
+      exit 1
+    fi
+  '';
 
   postInstall = ''
     installManPage yt-dlp.1
@@ -111,11 +130,13 @@ python3Packages.buildPythonApplication rec {
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
-    description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    description = "Feature-rich command-line audio/video downloader";
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     license = lib.licenses.unlicense;
     longDescription = ''

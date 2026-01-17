@@ -1,0 +1,42 @@
+diff --git a/cmd/ui/package.json b/cmd/ui/package.json
+index e061ece8e3..e80f144399 100644
+--- a/cmd/ui/package.json
++++ b/cmd/ui/package.json
+@@ -34,7 +34,7 @@
+         "@react-sigma/core": "^3.4.1",
+         "@reduxjs/toolkit": "^1.8.5",
+         "bh-shared-ui": "workspace:*",
+-        "dagrejs": "git@github.com:BloodHoundAD/dagre.git",
++        "dagrejs": "https://github.com/BloodHoundAD/dagre/archive/3e217cedd8c540c10f9282c2f87d9d4f88dd8185.tar.gz",
+         "downshift": "^6.1.7",
+         "graphology": "^0.25.1",
+         "graphology-layout": "^0.6.1",
+diff --git a/yarn.lock b/yarn.lock
+index d1da73ceb6..f9efa7a893 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -4884,7 +4884,7 @@
+     "@vitest/coverage-v8": ^2.1.9
+     autoprefixer: ^10.4.20
+     bh-shared-ui: "workspace:*"
+-    dagrejs: "git@github.com:BloodHoundAD/dagre.git"
++    dagrejs: "https://github.com/BloodHoundAD/dagre/archive/3e217cedd8c540c10f9282c2f87d9d4f88dd8185.tar.gz"
+     downshift: ^6.1.7
+     eslint: ^8.57.0
+     eslint-config-prettier: ^9.1.0
+@@ -5572,12 +5572,12 @@
+   languageName: node
+   linkType: hard
+ 
+-"dagrejs@git@github.com:BloodHoundAD/dagre.git":
++"dagrejs@https://github.com/BloodHoundAD/dagre/archive/3e217cedd8c540c10f9282c2f87d9d4f88dd8185.tar.gz":
+   version: 1.0.1-pre
+-  resolution: "dagrejs@git@github.com:BloodHoundAD/dagre.git#commit=3e217cedd8c540c10f9282c2f87d9d4f88dd8185"
++  resolution: "dagrejs@https://github.com/BloodHoundAD/dagre/archive/3e217cedd8c540c10f9282c2f87d9d4f88dd8185.tar.gz"
+   dependencies:
+     "@dagrejs/graphlib": 2.1.12
+-  checksum: 7c93c58f7f3c32d990f3136ea90802619cf254106755ac8aa09baf3d772b71a39264ce39fa961b1f9b65dcba04b5c229cace129eb74b411087e85f40d7c2008d
++  checksum: 3c6e8873a5598b87ca6adb1da33a0f0a324bae325e946efa08af2e1e138ac48bbe6dbd9ffe9f6026185aa0b71268947237b63e7aceacf603409560bff4998b11
+   languageName: node
+   linkType: hard
+ 

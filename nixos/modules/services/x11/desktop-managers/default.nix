@@ -37,7 +37,7 @@ in
     ./surf-display.nix
     ./cde.nix
     ./cinnamon.nix
-    ./budgie.nix
+    ../../desktop-managers/budgie.nix
     ../../desktop-managers/lomiri.nix
     ../../desktop-managers/cosmic.nix
     ../../desktop-managers/gnome.nix

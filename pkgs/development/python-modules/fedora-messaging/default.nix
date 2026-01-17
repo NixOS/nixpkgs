@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "fedora-messaging";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fedora-infra";
     repo = "fedora-messaging";
     tag = "v${version}";
-    hash = "sha256-2EWeJddhD6tV5jRyr3pvWYQBfq6nq0GxeTgL6MRf/jE=";
+    hash = "sha256-eQ0grcp/Cd9yKNbeUtftSmqv3uwOJCh36E6CC1Si1aY=";
   };
 
   build-system = [ poetry-core ];

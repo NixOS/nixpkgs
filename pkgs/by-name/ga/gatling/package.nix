@@ -44,10 +44,12 @@ stdenv.mkDerivation rec {
     make gatling
   '';
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
+
+  meta = {
     description = "High performance web server";
     homepage = "http://www.fefe.de/gatling/";
     license = lib.licenses.gpl2Only;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

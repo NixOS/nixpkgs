@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
@@ -21,8 +22,6 @@ buildPythonPackage rec {
   pname = "aioconsole";
   version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
@@ -52,14 +51,18 @@ buildPythonPackage rec {
     "test_interact_multiple_indented_lines"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: AF_UNIX path too long
+    "tests/test_server.py::test_uds_server[default]"
+  ];
+
   pythonImportsCheck = [ "aioconsole" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous console and interfaces for asyncio";
     changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ catern ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "apython";
   };
 }

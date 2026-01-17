@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   cryptography,
   freezegun,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "jwt";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GehirnInc";

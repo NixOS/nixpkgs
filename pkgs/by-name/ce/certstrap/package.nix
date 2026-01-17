@@ -21,7 +21,7 @@ buildGoModule rec {
 
   ldflags = [ "-X main.release=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
     mainProgram = "certstrap";
     longDescription = ''
@@ -30,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/square/certstrap";
     changelog = "https://github.com/square/certstrap/releases/tag/${src.rev}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

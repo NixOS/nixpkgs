@@ -37,15 +37,10 @@ let
         helvetic
         wasy
         courier
-        # FIXME: The following packages are used in the Doxygen table
-        # workaround, can be removed once
-        # https://github.com/doxygen/doxygen/issues/11634 is fixed, depending
-        # on what the fix is
         tabularray
+        ltablex
         ninecolors
-        codehigh
-        catchfile
-        environ
+        xltabular
       ]
     )
   );
@@ -67,16 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-Rr8+SNeFps0rjk4Jn2+rFmtRJfL42l0tNOz13oZQy+I=";
   };
-
-  # FIXME: remove once https://github.com/doxygen/doxygen/issues/11634 is resolved
-  # Applies workaround based on what was suggested in
-  # https://github.com/doxygen/doxygen/issues/11634#issuecomment-3027000655,
-  # but rewritten to use the `tabularray` LaTeX package. Unfortunately,
-  # verbatim code snippets in the documentation are not formatted very nicely
-  # with this workaround.
-  postPatch = ''
-    substituteInPlace doc/Doxyfile.in --replace 'LATEX_EXTRA_STYLESHEET =' 'LATEX_EXTRA_STYLESHEET = ${./override_doxygen_tables.sty}'
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -120,11 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Debugger support for control of execution and inspection state";
     homepage = "https://github.com/ROCm/ROCdbgapi";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

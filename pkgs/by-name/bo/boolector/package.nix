@@ -71,11 +71,11 @@ stdenv.mkDerivation rec {
     cp $out/include/boolector/btortypes.h $out/include/btortypes.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast SMT solver for bit-vectors and arrays";
     homepage = "https://boolector.github.io";
-    license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

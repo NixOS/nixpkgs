@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "hatch-jupyter-builder";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QDWHVdjtexUNGRL+dVehdBwahSW2HmNkZKkQyuOghyI=";
   };
 
@@ -38,12 +38,12 @@ buildPythonPackage rec {
     "test_hatch_build"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyterlab/hatch-jupyter-builder/releases/tag/v${version}";
     description = "Hatch plugin to help build Jupyter packages";
     mainProgram = "hatch-jupyter-builder";
     homepage = "https://github.com/jupyterlab/hatch-jupyter-builder";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

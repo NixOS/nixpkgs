@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "8.9.20250723145140";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
@@ -84,11 +82,11 @@ buildPythonPackage rec {
     pycodegen = [ black ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

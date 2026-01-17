@@ -34,6 +34,13 @@ buildPythonPackage rec {
       url = "https://github.com/pycurl/pycurl/commit/eb7f52eeef85feb6c117678d52803050bbdd7bc8.patch";
       hash = "sha256-hdwazS7R9duuMd/7S3SNAxVcToo3GhtyWu/1Q6qTMYc=";
     })
+    # curl 8.17+ compatibility
+    # https://github.com/pycurl/pycurl/pull/909
+    (fetchpatch {
+      name = "pycurl-8.17.0-compat.patch";
+      url = "https://github.com/pycurl/pycurl/commit/ea92e3ca230a3ff3d464cb6816102fa157177aca.patch";
+      hash = "sha256-kmlsG0SFfS9FdRNp8pPgudcWK6hSyD9x5oAedZLgBcY=";
+    })
   ];
 
   preConfigure = ''
@@ -101,14 +108,14 @@ buildPythonPackage rec {
     "tests/multi_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Interface To The cURL library";
     homepage = "http://pycurl.io/";
     changelog =
       "https://github.com/pycurl/pycurl/blob/REL_"
-      + replaceStrings [ "." ] [ "_" ] version
+      + lib.replaceStrings [ "." ] [ "_" ] version
       + "/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       mit
     ];

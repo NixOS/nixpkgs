@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
       --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Discord music bot that's easy to set up and run yourself";
     homepage = "https://github.com/jagrosh/MusicBot";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
     maintainers = [ ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "JMusicBot";

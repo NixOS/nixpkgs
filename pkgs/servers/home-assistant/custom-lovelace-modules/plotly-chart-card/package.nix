@@ -1,5 +1,6 @@
 {
   lib,
+  nodejs_22,
   buildNpmPackage,
   buildGoModule,
   fetchFromGitHub,
@@ -24,7 +25,7 @@ let
   };
 in
 
-buildNpmPackage rec {
+buildNpmPackage.override { nodejs = nodejs_22; } rec {
   pname = "plotly-graph-card";
   version = "3.3.5";
 

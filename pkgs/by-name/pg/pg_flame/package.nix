@@ -17,11 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-ReVaetR3zkLLLc3d0EQkBAyUrxwBn3iq8MZAGzkQfeY=";
 
-  meta = with lib; {
+  meta = {
     description = "Flamegraph generator for Postgres EXPLAIN ANALYZE output";
     homepage = "https://github.com/mgartner/pg_flame";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.asl20;
     mainProgram = "pg_flame";
   };
 }

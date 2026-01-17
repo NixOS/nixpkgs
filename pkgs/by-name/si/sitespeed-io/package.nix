@@ -9,6 +9,7 @@
   imagemagick_light,
   procps,
   python3,
+  versionCheckHook,
   xorg,
   nix-update-script,
 
@@ -24,21 +25,23 @@
 }:
 assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "sitespeed-io";
-  version = "38.4.1";
+  version = "39.3.1";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
-    tag = "v${version}";
-    hash = "sha256-7aqZ63q+17MmUjHwh5Z9yqvwRq/Av+UOswIlSA2V14E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Qgw1rqUZ/2znTmvqSCSyTyzQWpHtxsG/tHNXDphT/Ng=";
   };
 
-  # Don't try to download the browser drivers
-  CHROMEDRIVER_SKIP_DOWNLOAD = true;
-  GECKODRIVER_SKIP_DOWNLOAD = true;
-  EDGEDRIVER_SKIP_DOWNLOAD = true;
+  env = {
+    # Don't try to download the browser drivers
+    CHROMEDRIVER_SKIP_DOWNLOAD = true;
+    GECKODRIVER_SKIP_DOWNLOAD = true;
+    EDGEDRIVER_SKIP_DOWNLOAD = true;
+  };
 
   buildInputs = [
     systemdLibs
@@ -46,12 +49,17 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-2v/3Ygy6pAyfoQKcbJphIExcU46xc9c6+yXP2JbX11Y=";
+  npmDepsHash = "sha256-/SzoscPVDhOlAPKSCNkGnAbXjCXVD6KRD1MglM3ExAQ=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
     mv $out/bin/sitespeed{.,-}io-wpr
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   postFixup =
     let
@@ -95,9 +103,11 @@ buildNpmPackage rec {
   meta = {
     description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
+    downloadPage = "https://github.com/sitespeedio/sitespeed.io";
+    changelog = "https://github.com/sitespeedio/sitespeed.io/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
     mainProgram = "sitespeed-io";
   };
-}
+})

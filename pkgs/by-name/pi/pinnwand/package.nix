@@ -54,13 +54,13 @@ buildPythonApplication rec {
 
   passthru.tests = nixosTests.pinnwand;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
     description = "Python pastebin that tries to keep it simple";
     homepage = "https://github.com/supakeen/pinnwand";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pinnwand";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

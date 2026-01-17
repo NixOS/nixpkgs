@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosmtpd";
@@ -58,7 +56,7 @@ buildPythonPackage rec {
     inherit django aiosmtplib;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio based SMTP server";
     mainProgram = "aiosmtpd";
     homepage = "https://aiosmtpd.readthedocs.io/";
@@ -67,7 +65,7 @@ buildPythonPackage rec {
       This is a server for SMTP and related protocols, similar in utility to the
       standard library's smtpd.py module.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

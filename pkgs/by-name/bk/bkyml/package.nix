@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "bkyml";
   version = "1.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -40,10 +40,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "bkyml" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joscha/bkyml";
     description = "CLI tool to generate a pipeline.yaml file for Buildkite on the fly";
-    license = licenses.mit;
-    maintainers = with maintainers; [ olebedev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ olebedev ];
   };
 }

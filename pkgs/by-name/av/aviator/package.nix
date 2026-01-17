@@ -22,11 +22,11 @@ buildGoModule rec {
   deleteVendor = true;
   vendorHash = "sha256-AJyxCE4DdAXRS+2sY4Zzu8NTEFKJoV1bopfOqOFKZfI=";
 
-  meta = with lib; {
+  meta = {
     description = "Merge YAML/JSON files in a in a convenient fashion";
     mainProgram = "aviator";
     homepage = "https://github.com/herrjulz/aviator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ risson ];
   };
 }

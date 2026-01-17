@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.bz;
 
-  meta = with lib; {
+  meta = {
     description = "Module to obtain and visualize band paths in the Brillouin zone of crystal structures";
     homepage = "https://github.com/giovannipizzi/seekpath";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

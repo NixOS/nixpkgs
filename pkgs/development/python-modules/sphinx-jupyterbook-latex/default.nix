@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   flit-core,
   packaging,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "sphinx-jupyterbook-latex";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
@@ -50,11 +47,11 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Latex specific features for jupyter book";
     homepage = "https://github.com/executablebooks/sphinx-jupyterbook-latex";
     changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

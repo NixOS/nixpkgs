@@ -17,18 +17,28 @@
   ncurses,
   clangStdenv,
   nixpkgs-review,
+  nixpkgs-reviewFull,
   nix-direnv,
   nix-fast-build,
   haskell,
   nix-serve-ng,
   colmena,
   nix-update,
+  nix-init,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
   confDir ? "/etc",
 }:
 let
+  # Support for mdbook >= 0.5, https://git.lix.systems/lix-project/lix/issues/1051
+  lixMdbookPatch = fetchpatch2 {
+    name = "lix-mdbook-0.5-support.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
+    excludes = [ "package.nix" ];
+    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -106,6 +116,14 @@ let
             nix = self.lix;
           };
 
+          # surprisingly nixpkgs-reviewFull.override { nix = self.lix; }
+          # doesn't work, as the way nix-reviewFull is defined uses callPackage
+          # which does it's own makeOverridable and hides the .override
+          # from the derivation.
+          nixpkgs-reviewFull = nixpkgs-reviewFull.override {
+            nixpkgs-review = self.nixpkgs-review;
+          };
+
           nix-direnv = nix-direnv.override {
             nix = self.lix;
           };
@@ -135,6 +153,10 @@ let
           nix-update = nix-update.override {
             nix = self.lix;
             inherit (self) nixpkgs-review;
+          };
+
+          nix-init = nix-init.override {
+            nix = self.lix;
           };
         };
     };
@@ -209,7 +231,33 @@ lib.makeExtensible (
             url = "https://git.lix.systems/lix-project/lix/commit/b6d5670bcffebdd43352ea79b36135e35a8148d9.patch";
             hash = "sha256-f4s0TR5MhNMNM5TYLOR7K2/1rtZ389KDjTCKFVK0OcE=";
           })
+
+          lixMdbookPatch
         ];
+      };
+    };
+
+    lix_2_94 = self.makeLixScope {
+      attrName = "lix_2_94";
+
+      lix-args = rec {
+        version = "2.94.0";
+
+        src = fetchFromGitea {
+          domain = "git.lix.systems";
+          owner = "lix-project";
+          repo = "lix";
+          rev = version;
+          hash = "sha256-X6X3NhgLnpkgWUbLs0nLjusNx/el3L1EkVm6OHqY2z8=";
+        };
+
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          name = "lix-${version}";
+          inherit src;
+          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
+        };
+
+        patches = [ lixMdbookPatch ];
       };
     };
 
@@ -217,14 +265,14 @@ lib.makeExtensible (
       attrName = "git";
 
       lix-args = rec {
-        version = "2.94.0-pre-20251018_${builtins.substring 0 12 src.rev}";
+        version = "2.95.0-pre-20260103_${builtins.substring 0 12 src.rev}";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
-          rev = "6e2edbff930dbf5b17a23e23f0b563e1db201f5b";
-          hash = "sha256-t2f3YDiRTi6GTHc940lwozaxY7RFE1CW7EeNtVYG+FE=";
+          rev = "d387c9113c73f04bed46dbdd59b6c36de2253d73";
+          hash = "sha256-jYUcmXA4FNwoJtxRgH+Be96wQv8h9Y9dByYf+KmcgK4=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {
@@ -235,7 +283,7 @@ lib.makeExtensible (
       };
     };
 
-    latest = self.lix_2_93;
+    latest = self.lix_2_94;
 
     stable = self.lix_2_93;
 

@@ -3,31 +3,31 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation {
   pname = "glabels-qt";
-  version = "unstable-2021-02-06";
+  version = "unstable-2025-12-03";
 
   src = fetchFromGitHub {
     owner = "jimevins";
     repo = "glabels-qt";
-    rev = "glabels-3.99-master564";
-    hash = "sha256-SdNOkjspqf6NuuIBZDsJneY6PNrIiP4HU46wDpBLt9Y=";
+    tag = "3.99-master602";
+    hash = "sha256-7MQufoU1GBvmZd8FRn331/PwmwQMuZeuFKQqViRI754=";
   };
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GLabels Label Designer (Qt/C++)";
     homepage = "https://github.com/jimevins/glabels-qt";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.matthewcroughan ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = lib.platforms.linux;
   };
 }

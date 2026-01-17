@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility for creating image macro style memes";
     homepage = "https://github.com/nomad-software/meme";
-    license = licenses.mit;
-    maintainers = [ maintainers.fgaz ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.fgaz ];
     mainProgram = "meme";
   };
 }

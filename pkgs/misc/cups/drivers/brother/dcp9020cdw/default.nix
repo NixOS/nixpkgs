@@ -66,14 +66,14 @@ in
         }
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "http://www.brother.com/";
       description = "Brother ${model} printer driver";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      platforms = platforms.linux;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = lib.platforms.linux;
       downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_eu&os=128";
-      maintainers = with maintainers; [ pshirshov ];
+      maintainers = with lib.maintainers; [ pshirshov ];
     };
   };
 
@@ -114,14 +114,14 @@ in
       ln -s $out/opt/brother/Printers/${model}/cupswrapper/brother_${model}_printer_en.ppd $out/share/cups/model/
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "http://www.brother.com/";
       description = "Brother ${model} printer CUPS wrapper driver";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      platforms = platforms.linux;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = lib.platforms.linux;
       downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_eu&os=128";
-      maintainers = with maintainers; [ pshirshov ];
+      maintainers = with lib.maintainers; [ pshirshov ];
     };
   };
 }

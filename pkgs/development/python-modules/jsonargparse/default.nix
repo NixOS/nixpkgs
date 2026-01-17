@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.42.0";
+  version = "4.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${version}";
-    hash = "sha256-M6CEUDf6JcjZWRBoHfVyFmX9ZV8xsB7illoBk0YzZs0=";
+    hash = "sha256-bp1oQAVlFSNecE2vOyekfA8ij5Pq2PK0fasTIpoKmqs=";
   };
 
   build-system = [ setuptools ];
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonargparse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to implement minimal boilerplate CLIs derived from various sources";
     homepage = "https://github.com/omni-us/jsonargparse";
     changelog = "https://github.com/omni-us/jsonargparse/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

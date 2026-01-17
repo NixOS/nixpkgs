@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   cffi,
   setuptools,
   ukkonen,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "identify";
   version = "2.6.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pre-commit";

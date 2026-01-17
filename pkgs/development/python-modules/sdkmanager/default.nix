@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   pythonAtLeast,
   argcomplete,
   requests,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "sdkmanager";
   version = "0.6.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitLab {
     owner = "fdroid";

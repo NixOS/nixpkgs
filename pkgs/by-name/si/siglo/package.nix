@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "GTK app to sync InfiniTime watch with PinePhone";
     mainProgram = "siglo";
     homepage = "https://github.com/theironrobin/siglo";
-    changelog = "https://github.com/theironrobin/siglo/tags/v${version}";
+    changelog = "https://github.com/theironrobin/siglo/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;

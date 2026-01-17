@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pdfid";
   version = "0.2.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdfid_v${
@@ -33,12 +33,12 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scan a file to look for certain PDF keywords";
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
-    license = with licenses; [ free ];
+    license = with lib.licenses; [ free ];
     mainProgram = "pdfid";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
   };
 }

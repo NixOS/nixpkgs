@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "python-bidi";
-  version = "0.6.6";
+  version = "0.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MeirKriheli";
     repo = "python-bidi";
     tag = "v${version}";
-    hash = "sha256-8erpcrjAp/1ugPe6cOvjH2CVfy2/hO6xg+cfWWUbj0w=";
+    hash = "sha256-8LNoQwUOa2pKEviBq24IHihUfhyMoA/IV+sBuFUhHdc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Oqtva9cTHAcuOXr/uPbqZczDbPVr0zeIEr5p6PoJ610=";
+    hash = "sha256-27DtYoxd0bPS4A/7HBmuLYCZrG5yu0Tp8jXIBPSrAdc=";
   };
 
   buildInputs = [ libiconv ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Pure python implementation of the BiDi layout algorithm";
     mainProgram = "pybidi";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

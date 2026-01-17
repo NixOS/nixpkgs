@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.32.2";
+  version = "0.34.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,10 +22,14 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-gMXbDpkb+LVIxVkYliskEeHOrkJxAuJdYxUEC4wp3r8=";
+    hash = "sha256-iIh6nowT/lScQfYleKYEj40loKkBsFZTOvUsvTF0RPo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gql"
+  ];
 
   dependencies = [
     aiohttp
@@ -38,8 +42,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Tests access network
-  doCheck = false;
+  disabledTestPaths = [
+    # Tests access network
+    "test/test_tibber.py"
+  ];
 
   pythonImportsCheck = [ "tibber" ];
 

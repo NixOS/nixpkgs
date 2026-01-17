@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
     ronn
   ];
 
+  env.RUSTFLAGS = "-Adangerous_implicit_autorefs";
+
   postInstall = ''
     ronn --roff --organization="termimage developers" termimage.md
     installManPage termimage.1

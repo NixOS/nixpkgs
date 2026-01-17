@@ -33,12 +33,7 @@ in
     enable = lib.mkEnableOption "Photoprism web server";
 
     passwordFile = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.pathWith {
-          inStore = false;
-          absolute = true;
-        }
-      );
+      type = lib.types.nullOr lib.types.externalPath;
       default = null;
       description = ''
         Admin password file.
@@ -46,12 +41,7 @@ in
     };
 
     databasePasswordFile = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.pathWith {
-          inStore = false;
-          absolute = true;
-        }
-      );
+      type = lib.types.nullOr lib.types.externalPath;
       default = null;
       description = ''
         Database password file.
@@ -99,6 +89,18 @@ in
       '';
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "photoprism";
+      description = "User under which photoprism runs.";
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "photoprism";
+      description = "Group under which photoprism runs.";
+    };
+
     package = lib.mkPackageOption pkgs "photoprism" { };
 
     settings = lib.mkOption {
@@ -120,11 +122,11 @@ in
 
       serviceConfig = {
         Restart = "on-failure";
-        User = "photoprism";
-        Group = "photoprism";
+        User = cfg.user;
+        Group = cfg.group;
         DynamicUser = true;
         StateDirectory = "photoprism";
-        WorkingDirectory = "/var/lib/photoprism";
+        WorkingDirectory = cfg.storagePath;
         RuntimeDirectory = "photoprism";
         ReadWritePaths = [
           cfg.originalsPath
@@ -133,10 +135,10 @@ in
         ];
 
         LoadCredential = [
-          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE=${cfg.passwordFile}")
+          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE:${cfg.passwordFile}")
           (lib.optionalString (
             cfg.databasePasswordFile != null
-          ) "PHOTOPRISM_DATABASE_PASSWORD=${cfg.databasePasswordFile}")
+          ) "PHOTOPRISM_DATABASE_PASSWORD:${cfg.databasePasswordFile}")
         ];
 
         LockPersonality = true;

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Configuration framework for Zsh";
     longDescription = ''
       Prezto is the configuration framework for Zsh; it enriches
@@ -41,8 +41,8 @@ stdenv.mkDerivation {
       aliases, functions, auto completion, and prompt themes.
     '';
     homepage = "https://github.com/sorin-ionescu/prezto";
-    license = licenses.mit;
-    maintainers = with maintainers; [ holymonson ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ holymonson ];
+    platforms = lib.platforms.unix;
   };
 }

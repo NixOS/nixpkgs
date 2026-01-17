@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://colobot.info/";
     description = "Real-time strategy game with programmable bots";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

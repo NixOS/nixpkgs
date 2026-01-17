@@ -4,15 +4,12 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-http-client";
   version = "3.3.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sendgrid";
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_http_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python HTTP library to call APIs";
     homepage = "https://github.com/sendgrid/python-http-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2025-05-08";
+  version = "${kernel.version}-unstable-2025-12-15";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210916";
-    rev = "d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf";
-    hash = "sha256-ExT7ONQeejFoMwUUXKua7wMnRi+3IYayLmlWIEWteK4=";
+    rev = "7f63a9da2e8ed83403f6f920e9b1628a37b38ef4";
+    hash = "sha256-RgGO6r2mx6MiDOWpPJIC0MvX7rejWu+TdHWtsW1PNOY=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -36,11 +36,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl8821cu driver";
     homepage = "https://github.com/morrownr/8821cu-20210916";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.contrun ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ contrun ];
   };
 }

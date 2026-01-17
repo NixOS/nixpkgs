@@ -45,8 +45,6 @@ python3Packages.buildPythonApplication {
     ]
     ++ [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   # Disable tests that touch network or shell out to commands
   disabledTests = [
     "get_channels"

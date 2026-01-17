@@ -137,8 +137,8 @@ let
 
       postInstall =
         let
-          cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
-          preservedNixVariables = [
+          cLibsFlags = (map (l: "-H:CLibraryPath=${l}/lib") cLibs);
+          preservedNixVarFlags = [
             "-ENIX_BINTOOLS"
             "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
             "-ENIX_BUILD_CORES"
@@ -161,7 +161,10 @@ let
             "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
             "-ENIX_APPLE_SDK_VERSION"
           ];
-          preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
+          checkToolchainFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+            "-H:+UnlockExperimentalVMOptions"
+            "-H:-CheckToolchain"
+          ];
         in
         ''
           # jni.h expects jni_md.h to be in the header search path.
@@ -169,7 +172,8 @@ let
 
           mkdir -p $out/share
           # move files in $out like LICENSE.txt
-          find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
+          # NOTE: The `release` file must be located at $JAVA_HOME/release
+          find $out/ -maxdepth 1 -type f ! -name release -exec mv {} $out/share \;
           # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
           rm -f $out/LICENSE_NATIVEIMAGE.txt
 
@@ -182,7 +186,7 @@ let
 
           wrapProgram $out/bin/native-image \
             --prefix PATH : ${binPath} \
-            ${toString (cLibsAsFlags ++ preservedNixVariablesAsFlags)}
+            --add-flags "${toString (cLibsFlags ++ preservedNixVarFlags ++ checkToolchainFlags)}"
         '';
 
       preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
@@ -217,14 +221,14 @@ let
         $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
         echo "Ahead-Of-Time compilation"
-        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
+        $out/bin/native-image -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
         ./helloworld | fgrep 'Hello World'
 
         ${
           # -H:+StaticExecutableWithDynamicLibC is only available in Linux
           lib.optionalString (stdenv.hostPlatform.isLinux && !useMusl) ''
             echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-            $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
+            $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility HelloWorld
             ./helloworld | fgrep 'Hello World'
           ''
         }
@@ -233,7 +237,7 @@ let
           # --static is only available in x86_64 Linux
           lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && useMusl) ''
             echo "Ahead-Of-Time compilation with --static and --libc=musl"
-            $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
+            $out/bin/native-image -march=compatibility --libc=musl --static HelloWorld
             ./helloworld | fgrep 'Hello World'
           ''
         }
@@ -251,20 +255,20 @@ let
       // (args.passhtru or { });
 
       meta =
-        with lib;
+
         (
           {
             homepage = "https://www.graalvm.org/";
             description = "High-Performance Polyglot VM";
-            license = with licenses; [
+            license = with lib.licenses; [
               upl
               gpl2
               classpathException20
               bsd3
             ];
-            sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+            sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
-            teams = [ teams.graalvm-ce ];
+            teams = [ lib.teams.graalvm-ce ];
           }
           // (args.meta or { })
         );

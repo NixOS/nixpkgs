@@ -19,7 +19,6 @@
   rrtypes ? false,
   zoneStats ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-
   configFile ? "/etc/nsd/nsd.conf",
 }:
 
@@ -36,13 +35,16 @@ stdenv.mkDerivation rec {
     substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
   '';
 
+  nativeBuildInputs = lib.optionals withSystemd [
+    pkg-config
+  ];
+
   buildInputs = [
     libevent
     openssl
   ]
   ++ lib.optionals withSystemd [
     systemdMinimal
-    pkg-config
   ];
 
   enableParallelBuilding = true;
@@ -78,11 +80,10 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nsd;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.hrdinka ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

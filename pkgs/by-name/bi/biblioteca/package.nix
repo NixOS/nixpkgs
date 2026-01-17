@@ -12,7 +12,7 @@
   gtk4,
   gobject-introspection,
   libadwaita,
-  webkitgtk,
+  webkitgtk_6_0,
   coreutils,
   makeShellWrapper,
   wrapGAppsHook4,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     gobject-introspection
     libadwaita
-    webkitgtk
+    webkitgtk_6_0
     glib-networking
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtk4.devdoc
       glib.devdoc
       libadwaita.devdoc
-      webkitgtk.devdoc
+      webkitgtk_6_0.devdoc
       gobject-introspection.devdoc
     ]
     ++ extraDocsPackage;

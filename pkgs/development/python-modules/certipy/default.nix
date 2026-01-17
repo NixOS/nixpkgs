@@ -5,7 +5,6 @@
   fetchPypi,
   flask,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "certipy";
   version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "certipy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to create and sign CAs and certificates";
     homepage = "https://github.com/LLNL/certipy";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ isgy ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ isgy ];
     mainProgram = "certipy";
   };
 }

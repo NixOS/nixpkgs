@@ -53,8 +53,6 @@ let
       ${config.boot.bootspec.writer}
       ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
     ''}
-
-    ${config.system.extraSystemBuilderCmds}
   '';
 
   # Putting it all together.  This builds a store path containing
@@ -129,6 +127,7 @@ in
       [ "system" "replaceRuntimeDependencies" ]
       [ "system" "replaceDependencies" "replacements" ]
     )
+    (mkRenamedOptionModule [ "system" "extraSystemBuilderCmds" ] [ "system" "systemBuilderCommands" ])
   ];
 
   options = {
@@ -210,15 +209,6 @@ in
       description = ''
         POSIX Extended Regular Expressions that match store paths that
         should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
-      '';
-    };
-
-    system.extraSystemBuilderCmds = mkOption {
-      type = types.lines;
-      internal = true;
-      default = "";
-      description = ''
-        This code will be added to the builder creating the system store path.
       '';
     };
 
@@ -343,7 +333,7 @@ in
       }
     ];
 
-    system.extraSystemBuilderCmds =
+    system.systemBuilderCommands =
       optionalString config.system.copySystemConfiguration ''
         ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
           "$out/configuration.nix"

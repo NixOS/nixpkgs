@@ -7,16 +7,16 @@
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
-  version = "3.5.6";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
     tag = version;
-    hash = "sha256-vBrXK8g+eAxD85iIEtJhTZ4sdohcdjhtzojS+JScLos=";
+    hash = "sha256-ScdrBSJKbVyD/omPrxiZvuaa5uOo2d3SqX/ozalMWHk=";
   };
 
-  mvnHash = "sha256-q61OyBg84Zaf9prM6J3lUVsJXEnmoptcq2EuNs+faDc=";
+  mvnHash = "sha256-pQYLMsxNVdby4WkO/dznIqqeu2dTtiBjrpJ/A3MuJ5Y=";
 
   doCheck = false; # Requires networking
 
@@ -28,12 +28,12 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases";
     homepage = "https://mariadb.com/kb/en/about-mariadb-connector-j/";
     changelog = "https://mariadb.com/kb/en/mariadb-connector-j-release-notes/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ anthonyroussel ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    platforms = lib.platforms.all;
   };
 }

@@ -13,15 +13,33 @@
   lv2,
   php84,
   pkg-config,
+
+  buildVST3 ? true,
+  buildVST2 ? true,
+  buildCLAP ? true,
+  buildLV2 ? true,
+  buildLADSPA ? true,
+  buildJACK ? true,
+  buildGStreamer ? true,
 }:
 
 let
   php = php84;
+
+  subFeatures = [
+    (lib.optionalString (!buildVST3) "vst3")
+    (lib.optionalString (!buildVST2) "vst2")
+    (lib.optionalString (!buildCLAP) "clap")
+    (lib.optionalString (!buildLV2) "lv2")
+    (lib.optionalString (!buildLADSPA) "ladspa")
+    (lib.optionalString (!buildJACK) "jack")
+    (lib.optionalString (!buildGStreamer) "gst")
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
-  version = "1.2.25";
+  version = "1.2.26";
 
   outputs = [
     "out"
@@ -31,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qCm3DfRF7LR6wk5TtC/r1GIA2ZI7YrrZTKNHjLDjJnM=";
+    hash = "sha256-RIMqmSJkF90u+nSICZCj3nGrAx1mfUXsPQb3lXicCfM=";
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself
@@ -70,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    make $makeFlags config
+    make $makeFlags config SUB_FEATURES="${lib.concatStringsSep " " subFeatures}"
 
     runHook postConfigure
   '';
@@ -160,6 +178,10 @@ stdenv.mkDerivation (finalAttrs: {
       - Send
       - Surge Filter
       - Trigger
+
+      Matcher plugins:
+      - Matcher
+      - Sidechain Matcher
     '';
     homepage = "https://lsp-plug.in";
     changelog = "https://github.com/lsp-plugins/lsp-plugins/releases/tag/${finalAttrs.version}";

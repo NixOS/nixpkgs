@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-pw";
   version = "2.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   PBR_VERSION = version;
 
@@ -47,10 +47,10 @@ python3.pkgs.buildPythonApplication rec {
     buildInputs = (old.buildInputs or [ ]) ++ [ git ];
   });
 
-  meta = with lib; {
+  meta = {
     description = "Tool for integrating Git with Patchwork, the web-based patch tracking system";
     homepage = "https://github.com/getpatchwork/git-pw";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

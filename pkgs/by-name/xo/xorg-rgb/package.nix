@@ -8,22 +8,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rgb";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://xorg.freedesktop.org/archive/individual/app/rgb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/APX9W5bKmF2aBZ/iSeUjM5U+TCX58zZ8FYHf0ee03s=";
+    hash = "sha256-yA/ygKAvVsMPrcLfohD8aXnEq5aK+jFSeMuXdotk7Ks=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xorgproto ];
 
-  meta = with lib; {
+  meta = {
     description = "X11 colorname to RGB mapping database";
     mainProgram = "showrgb";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://xorg.freedesktop.org/";
   };
 })

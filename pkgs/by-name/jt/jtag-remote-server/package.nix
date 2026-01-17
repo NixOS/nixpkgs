@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libftdi1 ];
 
-  meta = with lib; {
+  meta = {
     description = "Remote JTAG server for remote debugging";
     mainProgram = "jtag-remote-server";
     homepage = "https://github.com/jiegec/jtag-remote-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.unix;
   };
 }

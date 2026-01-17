@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "y-py";
   version = "0.6.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "y_py";

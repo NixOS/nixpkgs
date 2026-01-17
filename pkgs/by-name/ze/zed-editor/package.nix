@@ -77,6 +77,11 @@ let
         ])
         ++ additionalPkgs pkgs;
 
+      extraBwrapArgs = [
+        "--bind-try /etc/nixos/ /etc/nixos/"
+        "--ro-bind-try /etc/xdg/ /etc/xdg/"
+      ];
+
       # symlink shared assets, including icons and desktop entries
       extraInstallCommands = ''
         ln -s "${zed-editor}/share" "$out/"
@@ -101,7 +106,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.211.6";
+  version = "0.219.4";
 
   outputs = [
     "out"
@@ -114,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JlRsiQHDsQ80/8aM0trCrfvEAAXQtkO75CAKotP1mFs=";
+    hash = "sha256-x0N+xGoWNQOXI/b6hityYy6ZbcAPTrzGKMbgCxDcHhM=";
   };
 
   postPatch = ''
@@ -134,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-DHAERsHGDk7bjTi+nCTf75qt6+uGzHLojEzoDCFkVDc=";
+  cargoHash = "sha256-adHfP57EpqCOo8HSpuG1JTV6qNljz282PYgR32cCuxE=";
 
   nativeBuildInputs = [
     cmake
@@ -203,9 +208,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
+    RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
   };
-
-  RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
 
   preBuild = ''
     bash script/generate-licenses
@@ -221,23 +225,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  checkFlags = [
-    # Flaky: unreliably fails on certain hosts (including Hydra)
-    "--skip=zed::tests::test_window_edit_state_restoring_enabled"
-    # The following tests are flaky on at least x86_64-linux and aarch64-darwin,
-    # where they sometimes fail with: "database table is locked: workspaces".
-    "--skip=zed::tests::test_open_file_in_many_spaces"
-    "--skip=zed::tests::test_open_non_existing_file"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Flaky: unreliably fails on certain hosts (including Hydra)
-    "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
-    "--skip=zed::open_listener::tests::test_open_workspace_with_nonexistent_files"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Fails on certain hosts (including Hydra) for unclear reason
-    "--skip=test_open_paths_action"
-  ];
+  useNextest = true;
 
   installPhase = ''
     runHook preInstall
@@ -306,14 +294,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+        "^v(?!.*(?:-pre|0\\.999999\\.0|0\\.9999-temporary)$)(.+)$"
 
         # use github releases instead of git tags
         # zed sometimes moves git tags, making them unreliable

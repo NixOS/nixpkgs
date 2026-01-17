@@ -6,7 +6,6 @@
   pytest-asyncio_0,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   twisted,
@@ -17,9 +16,7 @@
 buildPythonPackage rec {
   pname = "pyee";
   version = "13.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

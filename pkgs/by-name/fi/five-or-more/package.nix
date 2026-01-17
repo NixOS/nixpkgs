@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/five-or-more";
     description = "Remove colored balls from the board by forming lines";
     mainProgram = "five-or-more";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 })

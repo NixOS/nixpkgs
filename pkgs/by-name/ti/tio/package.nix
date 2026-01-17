@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serial console TTY";
     homepage = "https://tio.github.io/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "tio";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

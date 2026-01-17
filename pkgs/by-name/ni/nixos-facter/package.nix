@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   hwinfo,
   libusb1,
@@ -64,6 +65,8 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) facter;
+    debug-nvd = callPackage ./test-debug-nvd.nix { };
+    debug-nix-diff = nixosTests.facter.nodes.machine.hardware.facter.debug.nix-diff;
   };
 
   meta = {

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   jinja2,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "junit2html";
   version = "30.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "junit2htmlreport" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate HTML reports from Junit results";
     homepage = "https://gitlab.com/inorton/junit2html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "junit2html";
   };
 }

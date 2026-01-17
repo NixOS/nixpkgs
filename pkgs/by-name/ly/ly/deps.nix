@@ -10,9 +10,6 @@
   name ? "zig-packages",
 }:
 
-with builtins;
-with lib;
-
 let
   unpackZigArtifact =
     { name, artifact }:
@@ -41,9 +38,9 @@ let
       rev ? throw "rev is required, remove and regenerate the zon2json-lock file",
     }:
     let
-      parts = splitString "#" url;
-      url_base = elemAt parts 0;
-      url_without_query = elemAt (splitString "?" url_base) 0;
+      parts = lib.splitString "#" url;
+      url_base = lib.elemAt parts 0;
+      url_without_query = lib.elemAt (lib.splitString "?" url_base) 0;
     in
     fetchgit {
       inherit name rev hash;
@@ -59,9 +56,9 @@ let
       ...
     }@args:
     let
-      parts = splitString "://" url;
-      proto = elemAt parts 0;
-      path = elemAt parts 1;
+      parts = lib.splitString "://" url;
+      proto = lib.elemAt parts 0;
+      path = lib.elemAt parts 1;
       fetcher = {
         "git+http" = fetchGitZig (
           args
@@ -97,19 +94,19 @@ linkFarm name [
     };
   }
   {
-    name = "zigini-0.3.2-BSkB7WJJAADybd5DGd9MLCp6ikGGUq9wicxsjv0HF1Qc";
+    name = "zigini-0.3.3-36M0FRJJAADZVq5HPm-hYKMpFFTr0OgjbEYcK2ijKZ5n";
     path = fetchZigArtifact {
       name = "zigini";
-      url = "https://github.com/AnErrupTion/zigini/archive/96ca1d9f1a7ec741f07ceb104dae2b3a7bdfd48a.tar.gz";
-      hash = "sha256-Hhc/+a8ToHI9RAJTIQ6Z3KZKQFvoPvd5ODz7HRbytdw=";
+      url = "https://github.com/AnErrupTion/zigini/archive/9281f47702b57779e831d7618e158abb8eb4d4a2.tar.gz";
+      hash = "sha256-/g0az0MRQOmww0DhZQo/1YH2qkJcscoCpaoW4pWGVIk=";
     };
   }
   {
-    name = "ini-0.1.0-YCQ9YkUnAAA7SjpLwvomwrngMn3TConSAlNgo7Q8ibMZ";
+    name = "ini-0.1.0-YCQ9Ys0pAABixEvvQvhVXAdqRE3wrZk_wiL9TPNHhB8d";
     path = fetchZigArtifact {
       name = "ini";
-      url = "https://github.com/AnErrupTion/ini/archive/ac6e656157b2ac6c98392283a139b47c44a85d54.tar.gz";
-      hash = "sha256-rOXuHsd4WiLDODruQioADMWQ7UkNtx5LUdTcK2dve40=";
+      url = "https://github.com/AnErrupTion/ini/archive/918f16d0dcf893d0c1cdffe204faa08bb3584e04.tar.gz";
+      hash = "sha256-z2IMS0grfnf33h6tz1ERv2i6gfnS6p8oMWFz+AmGoA8=";
     };
   }
   {

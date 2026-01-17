@@ -41,13 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (fetchpatch {
       name = "custom-threading-model.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250716204545.1063669-1-git@JohnEricson.me/raw";
-      hash = "sha256-kxNntY2r4i/+XHQSpf9bYV2Jg+FD/pD5TiMn5hd4ckk=";
+      url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
+      hash = "sha256-U1Eh6ByhmseHQigfHIyO4MlAQB3fECmpPEP/M00DOg0=";
       includes = [
         "config/*"
-        "libatomic/*"
+        "libatomic/configure.ac"
       ];
     })
+    (getVersionFile "libatomic/gthr-include.patch")
   ];
 
   postUnpack = ''

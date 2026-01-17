@@ -344,7 +344,7 @@ class Driver:
                     return ret
 
                 with driver.logger.nested(f"waiting for {self.condition.description}"):
-                    retry(condition, timeout=timeout)
+                    retry(condition, timeout_seconds=timeout)
 
         if fun_ is None:
             return Poll

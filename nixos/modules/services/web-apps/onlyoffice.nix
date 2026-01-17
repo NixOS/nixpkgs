@@ -20,6 +20,25 @@ in
       description = "FQDN for the OnlyOffice instance.";
     };
 
+    securityNonceFile = lib.mkOption {
+      type = lib.types.str;
+      example = "/run/keys/onlyoffice-nginx-nonce.conf";
+      description = ''
+        File holding nginx configuration that sets the nonce used to create secret links.
+
+        Example:
+        ```
+        set $secure_link_secret "changeme";
+        ```
+
+        This file must be readable both by nginx and by the onlyoffice
+        documentserver. Since nginx is added to the onlyoffice group,
+        you may want to make the file readable to the onlyoffice group.
+
+        NOTE: The file must be a valid nginx configuration file. The secret must not contain `$` characters, as they will be interpreted as variables by nginx.
+      '';
+    };
+
     jwtSecretFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -79,6 +98,14 @@ in
       type = lib.types.str;
       default = "amqp://guest:guest@localhost:5672";
       description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
+    };
+
+    wopi = lib.mkEnableOption "Enable WOPI support";
+
+    loglevel = lib.mkOption {
+      type = lib.types.str;
+      default = "WARN";
+      description = "Default loglevel to use for documentserver and converter";
     };
   };
 
@@ -147,7 +174,7 @@ in
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
               more_set_headers "Content-Disposition: attachment; filename*=UTF-8''$arg_filename";
 
-              set $secure_link_secret verysecretstring;
+              include ${cfg.securityNonceFile};
               secure_link $arg_md5,$arg_expires;
               secure_link_md5 "$secure_link_expires$uri$secure_link_secret";
 
@@ -243,8 +270,15 @@ in
           "postgresql.target"
         ];
         wantedBy = [ "multi-user.target" ];
+        environment = {
+          NODE_CONFIG_DIR = "/run/onlyoffice/config";
+          NODE_DISABLE_COLORS = "1";
+          NODE_ENV = "production-linux";
+        };
         serviceConfig = {
-          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper FileConverter/converter /run/onlyoffice/config";
+          # needs to be ran wrapped in FHS for now
+          # because the default config refers to many FHS paths
+          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.fileconverter}/bin/fileconverter /run/onlyoffice/config";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
@@ -279,7 +313,9 @@ in
 
             # for a mapping of environment variables from the docker container to json options see
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
+            FS_SECRET_STRING=$(cut -d '"' -f 2 < ${cfg.securityNonceFile})
             jq '
+              .storage.fs.secretString = "'$FS_SECRET_STRING'" |
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |
               .services.CoAuthoring.sql.dbName = "${cfg.postgresName}" |
@@ -295,12 +331,17 @@ in
               .services.CoAuthoring.secret.outbox.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
               .services.CoAuthoring.secret.session.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
             ''}
-              .rabbitmq.url = "${cfg.rabbitmqUrl}"
+              .rabbitmq.url = "${cfg.rabbitmqUrl}" |
+              .wopi.enable = "${toString cfg.wopi}"
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
             chmod u+w /run/onlyoffice/config/production-linux.json
             jq '.FileConverter.converter.x2tPath = "${cfg.x2t}/bin/x2t"' \
               /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
+
+            chmod u+w /run/onlyoffice/config/log4js/production.json
+            jq '.categories.default.level = "${cfg.loglevel}"' \
+              /run/onlyoffice/config/log4js/production.json | sponge /run/onlyoffice/config/log4js/production.json
 
             if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/removetbl.sql
@@ -315,11 +356,12 @@ in
           after = [
             "network.target"
             "postgresql.target"
+            "rabbitmq.service"
           ];
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
+            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.docservice}/bin/docservice /run/onlyoffice/config";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
@@ -343,4 +385,6 @@ in
 
     users.groups.onlyoffice = { };
   };
+
+  meta.maintainers = with lib.maintainers; [ raboof ];
 }

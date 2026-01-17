@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/myriadrf/LimeSuite/commit/4e5ad459d50c922267a008e5cecb3efdbff31f09.patch";
       hash = "sha256-OASki3bISJvV7wjMz0pBT3kO5RvJ5BnymiF6ruHkCJ8=";
     })
+    # Fixes for C23 (GCC 15). Remove upon next version bump
+    (fetchpatch {
+      url = "https://github.com/myriadrf/LimeSuite/commit/524cd2e548b11084e6f739b2dfe0f958c2e30354.patch";
+      hash = "sha256-wxwhFjXcIgBMTJoJ6efdtyttxMFZviCTXtEb2qFX9yU=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -62,12 +67,12 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/limesuite bin/Release/lms7suite_mcu/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
     homepage = "https://github.com/myriadrf/LimeSuite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
-    badPlatforms = lib.optionals withGui platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.optionals withGui lib.platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
   };
 }

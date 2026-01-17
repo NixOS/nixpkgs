@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "roundcube";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

@@ -5,10 +5,7 @@
   pythonOlder,
   packaging,
   pluggy,
-  py,
-  six,
   virtualenv,
-  toml,
   tomli,
   filelock,
   hatchling,
@@ -20,31 +17,27 @@
   cachetools,
   testers,
   tox,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.28.4";
-  format = "pyproject";
+  version = "4.32.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     tag = version;
-    hash = "sha256-EKJsFf4LvfDi3OL6iNhKEBl5zlpdLET9RkfHEP7E9xU=";
+    hash = "sha256-n2tKjT0t8bm6iatukKKcGw0PC+5EJrQEABMIAumRaqE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "packaging>=22" "packaging"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     chardet
     colorama
@@ -52,13 +45,13 @@ buildPythonPackage rec {
     packaging
     platformdirs
     pluggy
-    py
     pyproject-api
-    six
-    toml
     virtualenv
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+    typing-extensions
+  ];
 
   doCheck = false; # infinite recursion via devpi-client
 
@@ -66,12 +59,12 @@ buildPythonPackage rec {
     version = testers.testVersion { package = tox; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tox-dev/tox/releases/tag/${src.tag}";
     description = "Generic virtualenv management and test command line tool";
     mainProgram = "tox";
     homepage = "https://github.com/tox-dev/tox";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

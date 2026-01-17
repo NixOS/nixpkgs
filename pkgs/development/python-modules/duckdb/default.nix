@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cmake,
   ninja,
   duckdb,
@@ -16,6 +15,7 @@
   psutil,
   pyarrow,
   pybind11,
+  pytz,
   scikit-build-core,
   setuptools-scm,
   pytest-reraise,
@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   inherit (duckdb)
     pname
-    version
+    version # nixpkgs-update: no auto update
     ;
   pyproject = true;
 
@@ -33,14 +33,13 @@ buildPythonPackage rec {
     owner = "duckdb";
     repo = "duckdb-python";
     tag = "v${version}";
-    hash = "sha256-cZyiTqu5iW/cqEo42b/XnOG7hJqtQs1h2RXXL392ujA=";
+    hash = duckdb.passthru.pythonHash;
   };
 
   postPatch = ''
-    # patch cmake to ignore absence of git submodule copy of duckdb
-    substituteInPlace cmake/duckdb_loader.cmake \
-      --replace-fail '"''${CMAKE_CURRENT_SOURCE_DIR}/external/duckdb"' \
-                     '"${duckdb.src}"'
+    # The build depends on a duckdb git submodule
+    rm -r external/duckdb
+    ln -s ${duckdb.src} external/duckdb
 
     # replace pybind11[global] with pybind11
     substituteInPlace pyproject.toml \
@@ -73,16 +72,11 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    # Note: ipython and adbc_driver_manager currently excluded despite inclusion in upstream
-    # https://github.com/duckdb/duckdb-python/blob/v1.4.0/pyproject.toml#L44-L52
     all = [
+      # FIXME package adbc_driver_manager
       ipython
       fsspec
       numpy
-    ]
-    ++ lib.optionals (pythonOlder "3.14") [
-      # https://github.com/duckdb/duckdb-python/blob/0ee500cfa35fc07bf81ed02e8ab6984ea1f665fd/pyproject.toml#L49-L51
-      # adbc_driver_manager noted for migration to duckdb C source
       pandas
       pyarrow
     ];
@@ -105,13 +99,12 @@ buildPythonPackage rec {
     psutil
     pytest-reraise
     pytestCheckHook
+    pytz
   ]
   ++ optional-dependencies.all;
 
-  pytestFlags = [ "--verbose" ];
-
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ];
+  pytestFlags = [ "--verbose" ];
   enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
@@ -148,10 +141,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duckdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

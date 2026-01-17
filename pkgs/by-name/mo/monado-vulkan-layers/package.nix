@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     ./absolute-layer-path.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Layers for Monado";
     homepage = "https://gitlab.freedesktop.org/monado/utilities/vulkan-layers";
-    platforms = platforms.linux;
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       Scrumplex
       passivelemon
     ];

@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-gfm-alerts";
   version = "2.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-gfm-alerts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Hfi4Ek91G8WHAWjv7m52ZnT5Je9QyZT4yWSecaeTcvA=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Format 'GitHub Markdown Alerts', which use blockquotes to render admonitions";
     homepage = "https://github.com/KyleKing/mdformat-gfm-alerts";
-    changelog = "https://github.com/KyleKing/mdformat-gfm-alerts/releases/tag/${src.tag}";
+    changelog = "https://github.com/KyleKing/mdformat-gfm-alerts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast compile-time regular expressions library";
     longDescription = ''
       Fast compile-time regular expressions with support for
       matching/searching/capturing during compile-time or runtime.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://compile-time.re";
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

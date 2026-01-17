@@ -42,12 +42,12 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Executing shell commands via HTTP server";
     mainProgram = "shell2http";
     homepage = "https://github.com/msoap/shell2http";
     changelog = "https://github.com/msoap/shell2http/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

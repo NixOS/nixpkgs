@@ -292,5 +292,4 @@ in
       ) cfg.redsocks;
     };
 
-  meta.maintainers = with lib.maintainers; [ ekleog ];
 }

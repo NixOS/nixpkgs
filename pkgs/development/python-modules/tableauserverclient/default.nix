@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tableauserverclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for working with the Tableau Server REST API";
     homepage = "https://github.com/tableau/server-client-python";
     changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

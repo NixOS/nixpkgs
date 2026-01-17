@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.25.1";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
     tag = "v${version}";
-    hash = "sha256-lh4t03upQQxY2KGwucXfEeNvqVVXlZ6hjR/e47imetk=";
+    hash = "sha256-BA2OWzr0sH77YUkFqMsGJQppqbG3R4sQ2kepicdzejE=";
   };
 
   build-system = [ setuptools ];

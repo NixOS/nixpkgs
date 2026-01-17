@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pgpy-dtc";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DigitalTrustCenter";

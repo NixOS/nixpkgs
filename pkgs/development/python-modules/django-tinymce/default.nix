@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pytest-django,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-tinymce";
   version = "5.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

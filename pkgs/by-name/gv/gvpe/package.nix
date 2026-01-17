@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     sed -e 's@/sbin/ifconfig@${net-tools}/sbin/ifconfig@g' -i src/device-*.C
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Protected multinode virtual network";
     homepage = "http://software.schmorp.de/pkg/gvpe.html";
-    maintainers = [ maintainers.raskin ];
-    platforms = with platforms; linux ++ freebsd;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = with lib.platforms; linux ++ freebsd;
+    license = lib.licenses.gpl2Plus;
   };
 }

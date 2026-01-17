@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Alerting dashboard for Graphite";
     mainProgram = "seyren";
     homepage = "https://github.com/scobal/seyren";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = [ maintainers.offline ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.offline ];
+    platforms = lib.platforms.all;
   };
 }

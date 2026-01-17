@@ -82,8 +82,19 @@ in
       };
       default = { };
       description = ''
-        Configuration settings for the generated config
-        file.
+        Configuration settings for the generated config file.
+
+        This config is combined with the contents of `secretsConfigFile` and
+        passed to zwave-js-server via `--config`. The project's README [1]
+        states that the config must follow the Z-Wave JS config format [2].
+
+        [1]: https://github.com/zwave-js/zwave-js-server/tree/master
+        [2]: https://zwave-js.github.io/node-zwave-js/#/api/driver?id=zwaveoptions
+
+        ::: {.warning}
+        Secrets should go in `secretsConfigFile`. The contents of `settings` is
+        written to the nix store, which is world-readable.
+        :::
       '';
     };
 

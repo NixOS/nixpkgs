@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "cashaddress";
   version = "1.0.6-unstable-2019-05-15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oskyk";

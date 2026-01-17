@@ -5,7 +5,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   twisted,
   zope-interface,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "txaio";
   version = "25.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "txaio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio";
     homepage = "https://github.com/crossbario/txaio";
     changelog = "https://github.com/crossbario/txaio/blob/v${version}/docs/releases.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

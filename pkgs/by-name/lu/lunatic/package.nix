@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage {
     branch = "main";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
     changelog = "https://github.com/lunatic-solutions/lunatic/blob/main/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];

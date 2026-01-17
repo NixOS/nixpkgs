@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   numpy,
   jsonschema,
   svgwrite,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "tskit";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

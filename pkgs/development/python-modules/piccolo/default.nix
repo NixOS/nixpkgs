@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "piccolo" ];
 

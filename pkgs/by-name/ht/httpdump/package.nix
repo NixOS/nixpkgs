@@ -25,11 +25,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse and display HTTP traffic from network device or pcap file";
     mainProgram = "httpdump";
     homepage = "https://github.com/hsiafan/httpdump";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

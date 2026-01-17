@@ -19,11 +19,11 @@ rec {
 
   sourceRoot = "${pname}-${version}";
 
-  meta = with lib; {
+  meta = {
     description = "Support package for GPIB (IEEE 488) hardware";
     homepage = "https://linux-gpib.sourceforge.io/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fsagbuya ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fsagbuya ];
+    platforms = lib.platforms.linux;
   };
 }

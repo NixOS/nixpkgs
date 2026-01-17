@@ -96,8 +96,8 @@
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 buildFun:
@@ -157,7 +157,11 @@ let
     # "snappy"
     "flac"
     "libjpeg"
+  ]
+  ++ lib.optionals needsLibpng [
     "libpng"
+  ]
+  ++ [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -192,6 +196,14 @@ let
       }
     );
 
+  rustTools = symlinkJoin {
+    name = "rustTools";
+    paths = [
+      buildPackages.rust-bindgen
+      buildPackages.rustfmt
+    ];
+  };
+
   chromiumRosettaStone = {
     cpu =
       platform:
@@ -217,6 +229,9 @@ let
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
+  # libpng has been replaced by the png rust crate
+  # https://github.com/image-rs/image-png/discussions/562
+  needsLibpng = !chromiumVersionAtLeast "143";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -321,8 +336,10 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ [
+    ++ lib.optionals needsLibpng [
       (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -370,7 +387,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -378,7 +395,11 @@ let
     ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
+    ]
+    ++ lib.optionals needsLibpng [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+    ]
+    ++ [
       (libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -427,7 +448,7 @@ let
       libffi
       libevdev
     ]
-    ++ lib.optional systemdSupport systemd
+    ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
@@ -585,6 +606,11 @@ let
         revert = true;
         hash = "sha256-bYcJqPMbE7hMvhZVnzqHok1crUAdqrzqxr+4IHNzAtg=";
       })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "144") [
+      # Patch rustc_nightly_capability to eval to false instead of true.
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7022369
+      ./patches/chromium-144-rustc_nightly_capability.patch
     ];
 
     postPatch =
@@ -685,10 +711,6 @@ let
             '/usr/share/locale/' \
             '${glibc}/share/locale/'
 
-      ''
-      + lib.optionalString systemdSupport ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          device/udev_linux/udev?_loader.cc
       ''
       + ''
         # Allow to put extensions into the system-path.
@@ -826,7 +848,8 @@ let
         use_system_libffi = true;
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
-        rust_bindgen_root = "${buildPackages.rust-bindgen}";
+        rust_bindgen_root =
+          if chromiumVersionAtLeast "144" then "${rustTools}" else "${buildPackages.rust-bindgen}";
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -897,7 +920,12 @@ let
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
           bash -s << EOL
           (
-            source chrome/installer/linux/common/installer.include
+            source ${
+              if chromiumVersionAtLeast "144" then
+                "remoting/host/installer/linux/"
+              else
+                "chrome/installer/linux/common"
+            }/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"

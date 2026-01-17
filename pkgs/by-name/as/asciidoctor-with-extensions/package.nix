@@ -36,11 +36,11 @@ bundlerApp rec {
     updateScript = bundlerUpdateScript "asciidoctor-with-extensions";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster Asciidoc processor written in Ruby, with many extensions enabled";
     homepage = "https://asciidoctor.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.unix;
   };
 }

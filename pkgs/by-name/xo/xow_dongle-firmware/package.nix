@@ -43,14 +43,14 @@ stdenvNoCC.mkDerivation {
     install -Dm644 xow_dongle_045e_02e6.bin $out/lib/firmware/xow_dongle_045e_02e6.bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Xbox One wireless dongle firmware";
     homepage = "https://www.xbox.com/en-NZ/accessories/adapters/wireless-adapter-windows";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       rhysmdnz
       fazzi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

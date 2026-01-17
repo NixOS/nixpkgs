@@ -156,8 +156,25 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
+      # Recover overrider and additional attributes for f
+      # When f is a callable attribute set,
+      # it may contain its own `f.override` and additional attributes.
+      # This helper function recovers those attributes and decorate the overrider.
+      recoverMetadata =
+        if isAttrs f then
+          fDecorated:
+          # Preserve additional attributes for f
+          f
+          // fDecorated
+          # Decorate f.override if presented
+          // lib.optionalAttrs (f ? override) {
+            override = fdrv: makeOverridable (f.override fdrv);
+          }
+        else
+          id;
+      decorate = f': recoverMetadata (mirrorArgs f');
     in
-    mirrorArgs (
+    decorate (
       origArgs:
       let
         result = f origArgs;
@@ -323,7 +340,7 @@ rec {
       abort "lib.customisation.callPackageWith: ${error}";
 
   /**
-    Like callPackage, but for a function that returns an attribute
+    Like `callPackage`, but for a function that returns an attribute
     set of derivations. The override function is added to the
     individual attributes.
 
@@ -665,7 +682,7 @@ rec {
     };
 
   /**
-    Like makeScope, but aims to support cross compilation. It's still ugly, but
+    Like `makeScope`, but aims to support cross compilation. It's still ugly, but
     hopefully it helps a little bit.
 
     # Type
@@ -775,7 +792,7 @@ rec {
         `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
 
       `extendDrvArgs` (required)
-      : An extension (overlay) of the argument set, like the one taken by [overrideAttrs](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+      : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
 
       `inheritFunctionArgs` (default to `true`)
       : Whether to inherit `__functionArgs` from the base build helper.

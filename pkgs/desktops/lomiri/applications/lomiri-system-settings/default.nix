@@ -88,6 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'Icon=@SETTINGS_SHARE_DIR@/system-settings.svg' 'Icon=lomiri-system-settings' \
       --replace-fail 'X-Lomiri-Splash-Image=@SETTINGS_SHARE_DIR@/system-settings-app-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-system-settings.svg' \
       --replace-fail 'X-Screenshot=@SETTINGS_SHARE_DIR@/screenshot.png' 'X-Screenshot=lomiri-app-launch/screenshot/lomiri-system-settings.png'
+
+    # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/525
+    substituteInPlace \
+      plugins/notifications/click_applications_model.h \
+      plugins/notifications/general_notification_settings.h \
+      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;
@@ -194,16 +200,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System Settings application for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-system-settings";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${
       if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-system-settings";
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [ "LomiriSystemSettings" ];
   };
 })

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils nix curl jq
+#!nix-shell -i bash -p coreutils nix nix-update curl jq
 # shellcheck shell=bash
 
 set -euo pipefail
@@ -15,7 +15,7 @@ if [[ $old_version == "$new_version" ]]; then
 fi
 
 echo "Updating duckstation from $old_version -> $new_version"
-duckstation_linux_hash=$(nix --extra-experimental-features "nix-command flakes" flake prefetch github:stenzek/duckstation/"$new_version" --json | jq -r '.hash')
+nix-update --src-only --version "$new_version" duckstation
 duckstation_darwin_hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type sha256 "https://github.com/stenzek/duckstation/releases/download/${new_version}/duckstation-mac-release.zip")")
 
 echo "Vendor library update..."
@@ -44,7 +44,6 @@ echo "Regenerating '""$location""/sources.json'"
 JSON=$(
   jq --null-input \
     --arg new_version "${new_version:1}" \
-    --arg duckstation_linux_hash "$duckstation_linux_hash" \
     --arg duckstation_darwin_hash "$duckstation_darwin_hash" \
     --arg discord_rpc_rev "$discord_rpc_rev" \
     --arg discord_rpc_hash "$discord_rpc_hash" \
@@ -55,7 +54,6 @@ JSON=$(
     --arg chtdb_hash "$chtdb_hash" \
     '{ "duckstation": {
              "version": $new_version,
-             "hash_linux": $duckstation_linux_hash,
              "hash_darwin": $duckstation_darwin_hash
            },
            "discord_rpc": {

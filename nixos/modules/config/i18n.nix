@@ -16,7 +16,7 @@ let
     (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
     (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
   ]
-  ++ (builtins.map sanitizeUTF8Capitalization (
+  ++ (map sanitizeUTF8Capitalization (
     lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
   ))
   ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);

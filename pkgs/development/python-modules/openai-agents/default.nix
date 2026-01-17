@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "openai-agents";
-  version = "0.2.9";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "openai_agents";
-    hash = "sha256-YZxRyM5J+EFHSp5hlXPW9/lqRkMpAHUhRa0EMJq3Cuk=";
+    hash = "sha256-KByv+DmzqyzzvFIRCr6TysoASYXEG/B96OYNA8SnUo4=";
   };
 
   build-system = [

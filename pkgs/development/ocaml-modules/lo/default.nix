@@ -30,10 +30,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ liblo ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-lo";
     description = "Bindings for LO library";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

@@ -6,16 +6,16 @@
 }:
 maven.buildMavenPackage rec {
   pname = "keycloak-magic-link";
-  version = "0.38";
+  version = "0.52";
 
   src = fetchFromGitHub {
     owner = "p2-inc";
     repo = "keycloak-magic-link";
     tag = "v${version}";
-    hash = "sha256-+fhWxAUlt9UVM81Ua2Mwek3D5Kzzk/Tsugbo0fLyxiA=";
+    hash = "sha256-giKhcK/bRSYUfix0ttuk9gs2q3A+4dDlayN15tuJhcY=";
   };
 
-  mvnHash = "sha256-edBdooR+KqY0JKwxdwTd5AxJ0qn3MV9xLrqYukIq2oY=";
+  mvnHash = "sha256-x9o83Azzep27jQXjxJoTga6B+mELSAtho568yHKz42k=";
 
   installPhase = ''
     runHook preInstall
@@ -29,6 +29,9 @@ maven.buildMavenPackage rec {
     homepage = "https://github.com/p2-inc/keycloak-magic-link";
     description = "Magic Link Authentication for Keycloak";
     license = lib.licenses.elastic20;
-    maintainers = with lib.maintainers; [ lykos153 ];
+    maintainers = with lib.maintainers; [
+      lykos153
+      anish
+    ];
   };
 }

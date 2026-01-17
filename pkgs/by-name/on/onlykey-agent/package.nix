@@ -22,14 +22,14 @@ let
   # onlykey requires a patched version of libagent
   lib-agent =
     with python3Packages;
-    libagent.overridePythonAttrs (oa: rec {
+    libagent.overridePythonAttrs (old: rec {
       version = "1.0.6";
       src = fetchPypi {
         inherit version;
         pname = "lib-agent";
         sha256 = "sha256-IrJizIHDIPHo4tVduUat7u31zHo3Nt8gcMOyUUqkNu0=";
       };
-      propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
+      propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
         bech32
         cryptography
         cython
@@ -43,7 +43,7 @@ let
       doCheck = false;
       pythonImportsCheck = [ "libagent" ];
 
-      meta = oa.meta // {
+      meta = old.meta // {
         description = "Using OnlyKey as hardware SSH and GPG agent";
         homepage = "https://github.com/trustcrypto/onlykey-agent/tree/ledger";
         maintainers = with lib.maintainers; [ kalbasit ];
@@ -77,10 +77,10 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "onlykey_agent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Middleware that lets you use OnlyKey as a hardware SSH/GPG device";
     homepage = "https://github.com/trustcrypto/onlykey-agent";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

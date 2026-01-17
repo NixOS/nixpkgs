@@ -29,11 +29,11 @@ buildPythonPackage rec {
     "test_performance"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fork of frozendict, an immutable wrapper around dictionaries";
     homepage = "https://github.com/corenting/immutabledict";
     changelog = "https://github.com/corenting/immutabledict/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -22,7 +22,6 @@
   pyopenssl,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   queuelib,
   service-identity,
   setuptools,
@@ -37,16 +36,14 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.13.3";
+  version = "2.13.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-M+Lko0O0xsEPHLghvIGHxIv22XBXaZsujJ2+bjBzGZ4=";
+    hash = "sha256-ZWiJmve1EhtwP9xo39N4f24g0KQMTPKJ43sDSfzi6r8=";
   };
 
   pythonRelaxDeps = [
@@ -155,7 +152,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-level web crawling and web scraping framework";
     mainProgram = "scrapy";
     longDescription = ''
@@ -165,7 +162,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${src.tag}/docs/news.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vinnymeller ];
   };
 }

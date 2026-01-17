@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lark,
   pytestCheckHook,
   setuptools-scm,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-aHaDZvgpiINUEdSYlUVwa0l80mujb9F04eboAdiuzDc=";
   };
 
-  disabled = pythonOlder "3.7";
-
   build-system = [
     setuptools
     setuptools-scm
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for HCL2 written in Python using Lark";
     homepage = "https://github.com/amplify-education/python-hcl2";
     changelog = "https://github.com/amplify-education/python-hcl2/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
 }

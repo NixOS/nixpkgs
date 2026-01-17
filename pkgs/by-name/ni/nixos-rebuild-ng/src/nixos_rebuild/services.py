@@ -8,9 +8,17 @@ from typing import Final
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE
-from .models import Action, BuildAttr, Flake, ImageVariants, NixOSRebuildError, Profile
+from .models import (
+    Action,
+    BuildAttr,
+    Flake,
+    GroupedNixArgs,
+    ImageVariants,
+    NixOSRebuildError,
+    Profile,
+)
 from .process import Remote, cleanup_ssh
-from .utils import Args, tabulate
+from .utils import tabulate
 
 NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
 NIXOS_REBUILD_REEXEC_ENV: Final = "_NIXOS_REBUILD_REEXEC"
@@ -21,8 +29,7 @@ logger: Final = logging.getLogger(__name__)
 def reexec(
     argv: list[str],
     args: argparse.Namespace,
-    build_flags: Args,
-    flake_build_flags: Args,
+    grouped_nix_args: GroupedNixArgs,
 ) -> None:
     if os.environ.get(NIXOS_REBUILD_REEXEC_ENV):
         return
@@ -36,14 +43,14 @@ def reexec(
         drv = nix.build_flake(
             NIXOS_REBUILD_ATTR,
             flake,
-            flake_build_flags | {"no_link": True},
+            grouped_nix_args.flake_build_flags | {"no_link": True},
         )
     else:
         build_attr = BuildAttr.from_arg(args.attr, args.file)
         drv = nix.build(
             NIXOS_REBUILD_ATTR,
             build_attr,
-            build_flags | {"no_out_link": True},
+            grouped_nix_args.build_flags | {"no_out_link": True},
         )
 
     if drv:
@@ -88,21 +95,20 @@ def _get_system_attr(
     args: argparse.Namespace,
     flake: Flake | None,
     build_attr: BuildAttr,
-    common_flags: Args,
-    flake_common_flags: Args,
+    grouped_nix_args: GroupedNixArgs,
 ) -> str:
     match action:
         case Action.BUILD_IMAGE if flake:
             variants = nix.get_build_image_variants_flake(
                 flake,
-                eval_flags=flake_common_flags,
+                eval_flags=grouped_nix_args.flake_common_flags,
             )
             _validate_image_variant(args.image_variant, variants)
             attr = f"config.system.build.images.{args.image_variant}"
         case Action.BUILD_IMAGE:
             variants = nix.get_build_image_variants(
                 build_attr,
-                instantiate_flags=common_flags,
+                instantiate_flags=grouped_nix_args.common_flags,
             )
             _validate_image_variant(args.image_variant, variants)
             attr = f"config.system.build.images.{args.image_variant}"
@@ -146,11 +152,7 @@ def _build_system(
     target_host: Remote | None,
     flake: Flake | None,
     build_attr: BuildAttr,
-    build_flags: Args,
-    common_flags: Args,
-    copy_flags: Args,
-    flake_build_flags: Args,
-    flake_common_flags: Args,
+    grouped_nix_args: GroupedNixArgs,
 ) -> Path:
     dry_run = action == Action.DRY_BUILD
     # actions that we will not add a /result symlink in CWD
@@ -162,32 +164,33 @@ def _build_system(
                 attr,
                 flake,
                 build_host,
-                eval_flags=flake_common_flags,
-                flake_build_flags=flake_build_flags
-                | {"no_link": no_link, "dry_run": dry_run},
-                copy_flags=copy_flags,
+                eval_flags=grouped_nix_args.flake_common_flags,
+                flake_build_flags={"no_link": no_link, "dry_run": dry_run}
+                | grouped_nix_args.flake_build_flags,
+                copy_flags=grouped_nix_args.copy_flags,
             )
         case (None, Flake(_)):
             path_to_config = nix.build_flake(
                 attr,
                 flake,
-                flake_build_flags=flake_build_flags
-                | {"no_link": no_link, "dry_run": dry_run},
+                flake_build_flags={"no_link": no_link, "dry_run": dry_run}
+                | grouped_nix_args.flake_build_flags,
             )
         case (Remote(_), None):
             path_to_config = nix.build_remote(
                 attr,
                 build_attr,
                 build_host,
-                realise_flags=common_flags,
-                instantiate_flags=build_flags,
-                copy_flags=copy_flags,
+                realise_flags=grouped_nix_args.common_flags,
+                instantiate_flags=grouped_nix_args.build_flags,
+                copy_flags=grouped_nix_args.copy_flags,
             )
         case (None, None):
             path_to_config = nix.build(
                 attr,
                 build_attr,
-                build_flags=build_flags | {"no_out_link": no_link, "dry_run": dry_run},
+                build_flags={"no_out_link": no_link, "dry_run": dry_run}
+                | grouped_nix_args.build_flags,
             )
 
     # In dry_run mode there is nothing to copy
@@ -197,7 +200,7 @@ def _build_system(
             path_to_config,
             to_host=target_host,
             from_host=build_host,
-            copy_flags=copy_flags,
+            copy_flags=grouped_nix_args.copy_flags,
         )
 
     return path_to_config
@@ -211,8 +214,7 @@ def _activate_system(
     profile: Profile,
     flake: Flake | None,
     build_attr: BuildAttr,
-    flake_common_flags: Args,
-    common_flags: Args,
+    grouped_nix_args: GroupedNixArgs,
 ) -> None:
     # Print only the result to stdout to make it easier to script
     def print_result(msg: str, result: str | Path) -> None:
@@ -257,13 +259,13 @@ def _activate_system(
                 image_name = nix.get_build_image_name_flake(
                     flake,
                     args.image_variant,
-                    eval_flags=flake_common_flags,
+                    eval_flags=grouped_nix_args.flake_common_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(
                     build_attr,
                     args.image_variant,
-                    instantiate_flags=common_flags,
+                    instantiate_flags=grouped_nix_args.common_flags,
                 )
             disk_path = path_to_config / image_name
             print_result("Done. The disk image can be found in", disk_path)
@@ -277,11 +279,7 @@ def build_and_activate_system(
     profile: Profile,
     flake: Flake | None,
     build_attr: BuildAttr,
-    build_flags: Args,
-    common_flags: Args,
-    copy_flags: Args,
-    flake_build_flags: Args,
-    flake_common_flags: Args,
+    grouped_nix_args: GroupedNixArgs,
 ) -> None:
     logger.info("building the system configuration...")
     attr = _get_system_attr(
@@ -289,8 +287,7 @@ def build_and_activate_system(
         args=args,
         flake=flake,
         build_attr=build_attr,
-        common_flags=common_flags,
-        flake_common_flags=flake_common_flags,
+        grouped_nix_args=grouped_nix_args,
     )
 
     if args.rollback:
@@ -308,11 +305,7 @@ def build_and_activate_system(
             target_host=target_host,
             flake=flake,
             build_attr=build_attr,
-            build_flags=build_flags,
-            common_flags=common_flags,
-            copy_flags=copy_flags,
-            flake_build_flags=flake_build_flags,
-            flake_common_flags=flake_common_flags,
+            grouped_nix_args=grouped_nix_args,
         )
 
     _activate_system(
@@ -323,14 +316,13 @@ def build_and_activate_system(
         profile=profile,
         flake=flake,
         build_attr=build_attr,
-        common_flags=common_flags,
-        flake_common_flags=flake_common_flags,
+        grouped_nix_args=grouped_nix_args,
     )
 
 
-def edit(flake: Flake | None, flake_build_flags: Args | None = None) -> None:
+def edit(flake: Flake | None, grouped_nix_args: GroupedNixArgs) -> None:
     if flake:
-        nix.edit_flake(flake, flake_build_flags)
+        nix.edit_flake(flake, grouped_nix_args.flake_build_flags)
     else:
         nix.edit()
 
@@ -358,17 +350,16 @@ def list_generations(
 def repl(
     flake: Flake | None,
     build_attr: BuildAttr,
-    flake_build_flags: Args,
-    build_flags: Args,
+    grouped_nix_args: GroupedNixArgs,
 ) -> None:
     if flake:
-        nix.repl_flake(flake, flake_build_flags)
+        nix.repl_flake(flake, grouped_nix_args.flake_build_flags)
     else:
-        nix.repl(build_attr, build_flags)
+        nix.repl(build_attr, grouped_nix_args.build_flags)
 
 
-def write_version_suffix(build_flags: Args) -> None:
-    nixpkgs_path = nix.find_file("nixpkgs", build_flags)
+def write_version_suffix(grouped_nix_args: GroupedNixArgs) -> None:
+    nixpkgs_path = nix.find_file("nixpkgs", grouped_nix_args.build_flags)
     rev = nix.get_nixpkgs_rev(nixpkgs_path)
     if nixpkgs_path and rev:
         try:

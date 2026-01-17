@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   packaging,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-rerunfailures";
   version = "16.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to re-run tests to eliminate flaky failures";
     homepage = "https://github.com/pytest-dev/pytest-rerunfailures";
     changelog = "https://github.com/pytest-dev/pytest-rerunfailures/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ das-g ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ das-g ];
   };
 }

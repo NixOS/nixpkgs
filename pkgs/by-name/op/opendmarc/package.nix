@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # gcc15 build failure
+    "-std=gnu17"
+  ];
+
   buildInputs = [ perl ];
   nativeBuildInputs = [
     autoreconfHook
@@ -58,13 +63,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free open source software implementation of the DMARC specification";
     homepage = "http://www.trusteddomain.org/opendmarc/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       sendmail
     ];
-    teams = [ teams.helsinki-systems ];
+    teams = [ lib.teams.helsinki-systems ];
   };
 }

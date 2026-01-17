@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
@@ -52,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iso4217" ];
 
-  meta = with lib; {
+  meta = {
     description = "ISO 4217 currency data package for Python";
     homepage = "https://github.com/dahlia/iso4217";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

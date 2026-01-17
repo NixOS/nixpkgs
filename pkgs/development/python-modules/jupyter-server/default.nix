@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   stdenv,
   buildPythonPackage,
   fetchPypi,
@@ -35,14 +34,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.16.0";
+  version = "2.17.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ZdS0T98ty73+CqGs5KhC1Kr3RqK3sWgTTVqu01Yht/Y=";
+    hash = "sha256-w46omFZpZMiItHcq4e1Y7KhFkuiCUdLPxNFx+B9+mdU=";
   };
 
   build-system = [

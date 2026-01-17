@@ -56,10 +56,9 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Various tools to generate special DNS records";
     homepage = "https://github.com/letoams/hash-slinger";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.gpl2Plus;
   };
 }

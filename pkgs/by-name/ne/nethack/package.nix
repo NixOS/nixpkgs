@@ -67,6 +67,11 @@ stdenvUsed.mkDerivation (finalAttrs: {
     hash = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
+  patches = [
+    # Newer GCC rejects function declarations without explicit parameters.
+    ./function-parameters.patch
+  ];
+
   buildInputs = [
     ncurses
   ]

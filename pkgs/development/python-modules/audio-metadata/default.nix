@@ -10,7 +10,6 @@
   pendulum,
   poetry-core,
   pprintpp,
-  pythonOlder,
   tbm-utils,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "audio-metadata";
   version = "0.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thebigmunch";
@@ -60,11 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "audio_metadata" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for handling the metadata from audio files";
     homepage = "https://github.com/thebigmunch/audio-metadata";
     changelog = "https://github.com/thebigmunch/audio-metadata/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

@@ -4,29 +4,27 @@
   fetchFromGitLab,
   rustPlatform,
   pkg-config,
-  libgit2,
   openssl,
   sqlite,
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "terminal-typeracer";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitLab {
     owner = "ttyperacer";
     repo = "terminal-typeracer";
-    rev = "v${version}";
-    hash = "sha256-S3OW6KihRd6ReTWUXRb1OWC7+YoxehjFRBxcnJVgImU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7LKpOO+PVGGtFJh1dZW/n/zovTxxZbb2VQwzgmjZhIY=";
   };
 
-  cargoHash = "sha256-WYqbG0iSVvnRLCy5Qs4wr72LjQ6uPgskVWP62Af0RQ8=";
+  cargoHash = "sha256-PECQ6KoHLPgUosC7gxniIoLHA5tWb0JfAUm93XFCcpk=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libgit2
     openssl
     sqlite
   ]
@@ -34,15 +32,17 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-  LIBGIT2_NO_VENDOR = 1;
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    LIBGIT2_NO_VENDOR = 0;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Open source terminal based version of Typeracer written in rust";
     homepage = "https://gitlab.com/ttyperacer/terminal-typeracer";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ yoctocell ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ yoctocell ];
     mainProgram = "typeracer";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

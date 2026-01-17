@@ -125,6 +125,10 @@ let
       metal = archived "metal" "2025/10";
       stackpath = archived "stackpath" "2025/10";
       vra7 = archived "vra7" "2025/10";
+      ccloud = removed "ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      argocd = removed "argocd" "2025/12. Try argoproj-labs_argocd instead.";
+      oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
     };
 
   # added 2025-10-12
@@ -240,7 +244,6 @@ let
     linuxbox = lib.warnOnInstantiate "terraform-providers.linuxbox has been renamed to terraform-providers.numtide_linuxbox" actualProviders.numtide_linuxbox;
     secret = lib.warnOnInstantiate "terraform-providers.secret has been renamed to terraform-providers.numtide_secret" actualProviders.numtide_secret;
     nutanix = lib.warnOnInstantiate "terraform-providers.nutanix has been renamed to terraform-providers.nutanix_nutanix" actualProviders.nutanix_nutanix;
-    argocd = lib.warnOnInstantiate "terraform-providers.argocd has been renamed to terraform-providers.oboukili_argocd" actualProviders.oboukili_argocd;
     okta = lib.warnOnInstantiate "terraform-providers.okta has been renamed to terraform-providers.okta_okta" actualProviders.okta_okta;
     oktaasa = lib.warnOnInstantiate "terraform-providers.oktaasa has been renamed to terraform-providers.oktadeveloper_oktaasa" actualProviders.oktadeveloper_oktaasa;
     opennebula = lib.warnOnInstantiate "terraform-providers.opennebula has been renamed to terraform-providers.opennebula_opennebula" actualProviders.opennebula_opennebula;
@@ -260,7 +263,6 @@ let
     rundeck = lib.warnOnInstantiate "terraform-providers.rundeck has been renamed to terraform-providers.rundeck_rundeck" actualProviders.rundeck_rundeck;
     sakuracloud = lib.warnOnInstantiate "terraform-providers.sakuracloud has been renamed to terraform-providers.sacloud_sakuracloud" actualProviders.sacloud_sakuracloud;
     btp = lib.warnOnInstantiate "terraform-providers.btp has been renamed to terraform-providers.sap_btp" actualProviders.sap_btp;
-    ccloud = lib.warnOnInstantiate "terraform-providers.ccloud has been renamed to terraform-providers.sapcc_ccloud" actualProviders.sapcc_ccloud;
     scaleway = lib.warnOnInstantiate "terraform-providers.scaleway has been renamed to terraform-providers.scaleway_scaleway" actualProviders.scaleway_scaleway;
     shell = lib.warnOnInstantiate "terraform-providers.shell has been renamed to terraform-providers.scottwinkler_shell" actualProviders.scottwinkler_shell;
     selectel = lib.warnOnInstantiate "terraform-providers.selectel has been renamed to terraform-providers.selectel_selectel" actualProviders.selectel_selectel;

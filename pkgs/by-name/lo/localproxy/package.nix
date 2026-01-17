@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS IoT Secure Tunneling Local Proxy Reference Implementation C++";
     homepage = "https://github.com/aws-samples/aws-iot-securetunneling-localproxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ spalf ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ spalf ];
+    platforms = lib.platforms.unix;
     mainProgram = "localproxy";
   };
 })

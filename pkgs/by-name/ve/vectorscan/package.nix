@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable fork of the high-performance regular expression matching library";
     longDescription = ''
       A fork of Intel's Hyperscan, modified to run on more platforms. Currently
@@ -117,13 +117,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
     changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       bsd3 # and
       bsd2 # and
-      licenses.boost
+      lib.licenses.boost
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];

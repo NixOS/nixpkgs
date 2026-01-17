@@ -32,8 +32,6 @@ buildPythonPackage rec {
   version = "4.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "falconry";
     repo = "falcon";
@@ -88,10 +86,10 @@ buildPythonPackage rec {
     "tests/asgi/test_cythonized_asgi.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";
     description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

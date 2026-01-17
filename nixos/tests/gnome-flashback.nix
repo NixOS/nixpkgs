@@ -26,8 +26,17 @@
 
       services.desktopManager.gnome.enable = true;
       services.desktopManager.gnome.debug = true;
-      services.desktopManager.gnome.flashback.enableMetacity = true;
-      services.displayManager.defaultSession = "gnome-flashback-metacity";
+
+      services.desktopManager.gnome.flashback.customSessions = [
+        {
+          # Intentionally a different name to test mkSystemdTargetForWm.
+          wmName = "metacitytest";
+          wmLabel = "Metacity";
+          wmCommand = "${pkgs.metacity}/bin/metacity";
+          enableGnomePanel = true;
+        }
+      ];
+      services.displayManager.defaultSession = "gnome-flashback-metacitytest";
     };
 
   testScript =
@@ -40,7 +49,7 @@
     ''
       with subtest("Login to GNOME Flashback with GDM"):
           machine.wait_for_x()
-          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
+          machine.wait_until_succeeds('journalctl -t gnome-session-service --grep "Entering running state"')
           # Wait for alice to be logged in"
           machine.wait_for_unit("default.target", "${user.name}")
           machine.wait_for_file("${xauthority}")

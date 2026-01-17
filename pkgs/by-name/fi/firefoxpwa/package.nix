@@ -29,19 +29,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-GKK5PYWSO+rWtuZuHgDQx3V7f8bEX8JHvvFK8sQRli4=";
+    hash = "sha256-F/Sj72er6aNxoV/dR7wCafgAHOKkQ7267/E+vfXdfdw=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoHash = "sha256-aV6Wvv+GzPLsWtdsS3ki82ju1Fh4IgFnIOF4OTEV7uQ=";
+  cargoHash = "sha256-PnqfYZO454t9XCzc9dwNCe4Qcp0FrG82sQcHUNdEnoo=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
@@ -63,22 +63,21 @@ rustPlatform.buildRustPackage rec {
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
   libs =
     let
-      libs =
-        lib.optionals stdenv.hostPlatform.isLinux [
-          cups
-          ffmpeg
-          libglvnd
-          libnotify
-          libpulseaudio
-          libva
-          libgbm
-          pciutils
-          pipewire
-          udev
-          xorg.libXScrnSaver
-        ]
-        ++ gtk_modules
-        ++ extraLibs;
+      libs = [
+        cups
+        ffmpeg
+        libglvnd
+        libnotify
+        libpulseaudio
+        libva
+        libgbm
+        pciutils
+        pipewire
+        udev
+        xorg.libXScrnSaver
+      ]
+      ++ gtk_modules
+      ++ extraLibs;
     in
     lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
 

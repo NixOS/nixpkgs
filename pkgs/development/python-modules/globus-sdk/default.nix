@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "3.63.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";

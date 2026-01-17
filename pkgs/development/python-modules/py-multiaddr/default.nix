@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   varint,
   base58,
   netaddr,
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "py-multiaddr";
   version = "0.0.10";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "multiformats";
@@ -42,13 +40,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multiaddr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Composable and future-proof network addresses";
     homepage = "https://github.com/multiformats/py-multiaddr";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source C++ implementation of the recently proposed online active set strategy";
     homepage = "https://github.com/coin-or/qpOASES";
     changelog = "https://github.com/coin-or/qpOASES/blob/${finalAttrs.src.tag}/VERSIONS.txt";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 })

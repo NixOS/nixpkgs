@@ -1,73 +1,68 @@
 {
   lib,
   stdenv,
-  yarn,
+  copyDesktopItems,
   dart-sass,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
   electron,
   fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
+  fetchurl,
   makeDesktopItem,
-  copyDesktopItems,
+  makeWrapper,
+  nix-update-script,
+  nodejs,
+  yarn-berry,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.9";
+  version = "3.2.11";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rnW8itUsP2a09gQU3IXZI7kSVKIxxCgbt15NoH/g0a8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/cnaP5DbEqYEkTPd1QWNArvMMr7UbX/danXa7ISfPpc=";
   };
 
-  offlineCache = fetchYarnDeps {
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src patches missingHashes;
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-V6N0RIjT3etoP6XdZhnQv4XViLRypp/JWxnb0sBc6Oo=";
+    hash = "sha256-XusNho027MjQLaBxaXMOb/2rTiSLmi4mfwY2hjHQZgk=";
   };
 
   patches = [
+    # Temporary fix for MiSide cover image https://github.com/ebkr/r2modmanPlus/pull/2024
+    (fetchurl {
+      url = "https://github.com/ebkr/r2modmanPlus/commit/24a2b8386c7fe9a6856cea06967c96aa685d3660.patch";
+      hash = "sha256-6NmwFRtn8+t9XRPHHVLM05idbCSYcBG0VmUOd8fZKs0=";
+    })
+
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
   ];
 
   nativeBuildInputs = [
-    yarn
-    dart-sass
-    fixup-yarn-lock
-    nodejs
-    makeWrapper
     copyDesktopItems
+    dart-sass
+    makeWrapper
+    nodejs
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    # Workaround for webpack bug
-    # https://github.com/webpack/webpack/issues/14532
-    export NODE_OPTIONS="--openssl-legacy-provider"
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
-
-    runHook postConfigure
-  '';
+  env = {
+    # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
+    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+  };
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline quasar build --mode electron --skip-pkg
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    # Remove dev dependencies.
-    yarn install --production --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    yarn quasar build --mode electron --skip-pkg
 
     runHook postBuild
   '';

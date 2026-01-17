@@ -10,7 +10,6 @@
   pypytools,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   requests-unixsocket,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "cheroot";
   version = "10.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -94,11 +91,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, pure-Python HTTP";
     mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

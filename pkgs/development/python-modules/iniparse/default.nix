@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # Does not install tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Accessing and Modifying INI files";
     homepage = "https://github.com/candlepin/python-iniparse";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danbst ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danbst ];
   };
 }

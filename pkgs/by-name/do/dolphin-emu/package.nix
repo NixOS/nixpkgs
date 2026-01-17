@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -19,6 +18,7 @@
   enet,
   ffmpeg,
   fmt,
+  glslang,
   gtest,
   hidapi,
   libXdmcp,
@@ -27,7 +27,6 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
@@ -36,6 +35,7 @@
   sfml,
   xxHash,
   xz,
+  zlib-ng,
   # linux-only
   alsa-lib,
   bluez,
@@ -55,13 +55,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2509";
+  version = "2512";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
+    hash = "sha256-VmDhYZfYyzf08FXZTeBYmdEp9P8AugUpiOxNj8aEJqw=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -71,13 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     '';
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
-      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -98,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     enet
     ffmpeg
     fmt
+    glslang
     gtest
     hidapi
     libXdmcp
@@ -106,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     lz4
     lzo
-    mbedtls
+    #mbedtls_2 # Use vendored, as using nixpkgs' would mark the package unsafe
     miniupnpc
     minizip-ng
     openal
@@ -117,8 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     sfml
     xxHash
     xz
-    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
-    #zlib-ng
+    zlib-ng
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo
@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
       game, or that they are extremely delicious.
     '';
     homepage = "https://worldofgoo.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [ jcumming ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

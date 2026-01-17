@@ -17,14 +17,6 @@ let
             hash = "sha256-MoEee4He7iBj6m0ulPiBmobR84EeSdI2I6QfqDK+8D8=";
           };
         });
-        urllib3 = super.urllib3.overridePythonAttrs (old: rec {
-          version = "1.26.20";
-          src = fetchPypi {
-            pname = "urllib3";
-            inherit version;
-            hash = "sha256-QMLcDGgeR+uPkOfie/b/ffLmd0If1GdW2hFhw5ynDTI=";
-          };
-        });
       };
     in
     python3.override {
@@ -62,6 +54,10 @@ python.pkgs.buildPythonApplication rec {
     urllib3
     httpx
     chardet
+  ];
+
+  pythonRelaxDeps = [
+    "urllib3"
   ];
 
   meta = {

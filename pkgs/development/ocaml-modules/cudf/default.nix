@@ -29,11 +29,11 @@ buildDunePackage rec {
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = with lib; {
+  meta = {
     description = "Library for CUDF format";
     homepage = "https://www.mancoosi.org/cudf/";
     downloadPage = "https://gforge.inria.fr/projects/cudf/";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
 }

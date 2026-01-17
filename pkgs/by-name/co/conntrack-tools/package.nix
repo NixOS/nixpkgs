@@ -13,7 +13,7 @@
   libnetfilter_cthelper,
   libtirpc,
   systemdSupport ? true,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libtirpc
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ];
   nativeBuildInputs = [
     flex
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     (lib.enableFeature systemdSupport "systemd")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://conntrack-tools.netfilter.org/";
     description = "Connection tracking userspace tools";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

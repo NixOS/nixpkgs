@@ -52,11 +52,11 @@ crystal.buildCrystalPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive console for the Crystal programming language";
     mainProgram = "icr";
     homepage = "https://github.com/crystal-community/icr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

@@ -7,7 +7,6 @@
   fetchFromGitHub,
   go,
   pykerberos,
-  pythonOlder,
   skein,
   sqlalchemy,
   traitlets,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "dask-gateway-server";
   version = "2023.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
@@ -57,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tenant server for securely deploying and managing multiple Dask clusters";
     homepage = "https://gateway.dask.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

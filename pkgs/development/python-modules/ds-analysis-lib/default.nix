@@ -1,13 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  dep-scan,
+
+  # build
   setuptools,
+
+  # deps
   appthreat-vulnerability-db,
   custom-json-diff,
   cvss,
   rich,
   toml,
+
+  # test
   writableTmpDirAsHomeHook,
   pytestCheckHook,
   pytest-cov-stub,
@@ -15,17 +21,14 @@
 
 buildPythonPackage rec {
   pname = "ds-analysis-lib";
-  version = "6.0.0b3";
+  inherit (dep-scan) version src;
   pyproject = true;
 
-  # pypi because library is embedded into another project's repo
-  src = fetchPypi {
-    inherit version;
-    pname = "ds_analysis_lib";
-    hash = "sha256-XZZzAxQJk65Xoq6z2OadlHUN0REYTjKmSvwz17tvVqc=";
-  };
+  sourceRoot = "${src.name}/packages/analysis-lib";
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     appthreat-vulnerability-db
@@ -37,12 +40,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "analysis_lib" ];
 
-  # relies on data files that pypi doesn't include
-  disabledTestPaths = [
-    "tests/test_analysis.py"
-    "tests/test_csaf.py"
-  ];
-
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     pytestCheckHook
@@ -51,9 +48,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "Analysis library for owasp depscan";
-    homepage = "https://pypi.org/project/ds-analysis-lib/";
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
-    teams = [ lib.teams.ngi ];
-    license = with lib.licenses; [ mit ];
+    inherit (dep-scan.meta)
+      homepage
+      license
+      maintainers
+      teams
+      ;
   };
 }

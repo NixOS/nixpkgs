@@ -44,7 +44,6 @@
   bokeh,
   boto3,
   cloudpickle,
-  coverage,
   flask,
   google-cloud-artifact-registry,
   google-cloud-compute,
@@ -103,7 +102,6 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     meta = {
@@ -134,7 +132,6 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     checkFlags =
@@ -228,7 +225,6 @@ buildPythonPackage rec {
     bokeh
     boto3
     cloudpickle
-    coverage
     flask
     google-cloud-artifact-registry
     google-cloud-compute

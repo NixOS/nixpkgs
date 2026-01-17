@@ -138,6 +138,7 @@ stubs
   ### O ###
 
   opencflite = pkgs.opencflite; # added 2024-05-02
+  openwith = pkgs.openwith; # added 2025-11-28
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23

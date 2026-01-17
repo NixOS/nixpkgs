@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-env";
   version = "1.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_env";
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin used to set environment variables";
     homepage = "https://github.com/MobileDynasty/pytest-env";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

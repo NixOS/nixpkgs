@@ -13,32 +13,31 @@
   pydantic,
   requests,
   requests-toolbelt,
+  uuid-utils,
   zstandard,
 
   # tests
   anthropic,
+  attrs,
   dataclasses-json,
-  fastapi,
-  freezegun,
-  instructor,
+  multipart,
   opentelemetry-sdk,
   pytest-asyncio,
+  pytest-socket,
   pytest-vcr,
   pytestCheckHook,
-  uvicorn,
-  attr,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.4.41";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-hZRZ4IAPKxCtvDZfk9D5irkYk0KM6pG2l+HSq742KYw=";
+    hash = "sha256-6iJk8JfGIhrAcEXrsJKWn0G2jJ2kitWjx/YJCWcGNfY=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -53,51 +52,47 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+    uuid-utils
     zstandard
   ];
 
   nativeCheckInputs = [
     anthropic
+    attrs
     dataclasses-json
-    fastapi
-    freezegun
-    instructor
     opentelemetry-sdk
     pytest-asyncio
+    multipart
+    pytest-socket
     pytest-vcr
     pytestCheckHook
-    uvicorn
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ];
+
+  # evaluation and external tests require OpenAPI key
+  # integration tests are all marked flaky
+  enabledTestPaths = [
+    "tests/unit_tests"
+  ];
+
+  disabledTestMarks = [
+    "flaky"
+  ];
 
   disabledTests = [
-    # These tests require network access
-    "integration_tests"
     # due to circular import
     "test_as_runnable"
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
-    # Test requires git repo
-    "test_git_info"
-    # Tests require OpenAI API key
-    "test_chat_async_api"
-    "test_chat_sync_api"
-    "test_completions_async_api"
-    "test_completions_sync_api"
   ];
 
   disabledTestPaths = [
-    # Circular import
-    "tests/integration_tests/"
+    # due to circular import
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    "tests/unit_tests/evaluation/test_runner.py"
-    # Require a Langsmith API key
-    "tests/evaluation/test_evaluation.py"
-    "tests/external/test_instructor_evals.py"
-    # Marked as flaky in source
-    "tests/unit_tests/test_run_helpers.py"
+    # flaky time comparisons
+    # https://github.com/langchain-ai/langsmith-sdk/issues/2245
+    "tests/unit_tests/test_uuid_v7.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];

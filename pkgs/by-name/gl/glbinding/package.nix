@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cginternals/glbinding/";
     description = "C++ binding for the OpenGL API, generated using the gl.xml specification";
-    license = licenses.mit;
-    maintainers = [ maintainers.mt-caret ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mt-caret ];
   };
 }

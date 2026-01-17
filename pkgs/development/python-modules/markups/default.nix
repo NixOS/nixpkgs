@@ -17,9 +17,7 @@
 buildPythonPackage rec {
   pname = "markups";
   version = "4.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "retext-project";
@@ -49,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markups" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around various text markup languages";
     homepage = "https://github.com/retext-project/pymarkups";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ klntsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ klntsky ];
   };
 }

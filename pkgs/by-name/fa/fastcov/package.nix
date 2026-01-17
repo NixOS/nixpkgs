@@ -10,7 +10,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "fastcov";
   version = "1.16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RPGillespie6";

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.004";
 
   src = fetchFromGitHub {
-    owner = "nathco";
+    owner = "phooky";
     repo = "Office-Code-Pro";
     rev = version;
     hash = "sha256-qzKTXYswkithZUJT0a3IifCq4RJFeKciZAPhYr2U1X4=";
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Customized version of Source Code Pro";
     longDescription = ''
       Office Code Pro is a customized version of Source Code Pro, the monospaced
@@ -32,8 +32,8 @@ stdenvNoCC.mkDerivation rec {
       Incorporated. The customizations were made specifically for text editors
       and coding environments, but are still very usable in other applications.
     '';
-    homepage = "https://github.com/nathco/Office-Code-Pro";
-    license = licenses.ofl;
+    homepage = "https://github.com/phooky/Office-Code-Pro";
+    license = lib.licenses.ofl;
     maintainers = [ ];
   };
 }

@@ -8,6 +8,7 @@
   wayland-protocols,
   libxkbcommon,
   libxcrypt,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -45,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     ("WAYLAND_SCANNER=" + lib.getExe wayland-scanner)
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   passthru.updateScript = nix-update-script { };
 

@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lctime";
-  version = "0.0.26";
+  version = "0.0.27";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "librecell";
     repo = "lctime";
     tag = version;
-    hash = "sha256-oNmeV8r1dtO2y27jAJnlx4mKGjhzL07ad2yBdOLwgF0=";
+    hash = "sha256-KKZhsKNTr+J5+rLUdlwGMsUCa6NYY1X9yaujPe1c0Do=";
   };
 
   build-system = with python3Packages; [
@@ -30,13 +30,14 @@ python3Packages.buildPythonApplication rec {
     joblib
     klayout
     liberty-parser
-    matplotlib
     networkx
     numpy
     pyspice
     scipy
     sympy
   ];
+
+  optional-dependencies.debug = with python3Packages; [ matplotlib ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook

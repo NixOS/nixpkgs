@@ -38,6 +38,7 @@ let
       # Unfortunately, dotnet has no method for doing this automatically.
       # If unset, all executables in the projects root will get installed. This may cause bloat!
       executables ? null,
+      dontPublish ? false,
       # Packs a project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
       packNupkg ? false,
       # The packages project file, which contains instructions on how to compile it. This can be an array of multiple project files as well.

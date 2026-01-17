@@ -8,7 +8,6 @@
   poetry-core,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   urllib3,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pywemo";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pywemo";
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywemo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover and control WeMo devices";
     homepage = "https://github.com/pywemo/pywemo";
     changelog = "https://github.com/pywemo/pywemo/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

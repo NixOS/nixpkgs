@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socks,
-  pythonOlder,
   tldextract,
   whodap,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "asyncwhois";
   version = "1.1.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
@@ -62,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncwhois" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for retrieving WHOIS information";
     homepage = "https://github.com/pogzyb/asyncwhois";
     changelog = "https://github.com/pogzyb/asyncwhois/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -4,15 +4,12 @@
   fetchPypi,
   idna,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rfc3986";
   version = "2.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rfc3986" ];
 
-  meta = with lib; {
+  meta = {
     description = "Validating URI References per RFC 3986";
     homepage = "https://rfc3986.readthedocs.org";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

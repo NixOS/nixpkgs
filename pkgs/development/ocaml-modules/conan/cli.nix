@@ -1,5 +1,8 @@
 {
+  lib,
+  stdenv,
   buildDunePackage,
+  darwin,
   conan-unix,
   dune-site,
   alcotest,
@@ -24,7 +27,12 @@ buildDunePackage {
     export DUNE_CACHE=disabled
   '';
 
-  nativeCheckInputs = [ conan-database ];
+  nativeCheckInputs = [
+    conan-database
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool # codesign
+  ];
 
   checkInputs = [
     alcotest

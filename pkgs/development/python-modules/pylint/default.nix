@@ -13,6 +13,7 @@
   pytest-timeout,
   pytest-xdist,
   pytest7CheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   setuptools,
@@ -23,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.3.7";
+  version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
     tag = "v${version}";
-    hash = "sha256-EMLnwFurIhTdUJqy9/DLTuucDhlmA5fCPZZ6TA87nEU=";
+    hash = "sha256-DzS5ORhFWmA+eEhGDdpXdHLgWTfw198S7pQueBk44Cw=";
   };
 
   build-system = [ setuptools ];
@@ -95,6 +94,10 @@ buildPythonPackage rec {
     "test_functional"
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ModuleNotFoundError: No module named 'completely_unknown'
+    "test_do_not_import_files_from_local_directory"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_parallel_execution"

@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ texinfo ];
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tlby/netmask";
     description = "IP address formatting tool";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.jensbin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.jensbin ];
     mainProgram = "netmask";
   };
 }

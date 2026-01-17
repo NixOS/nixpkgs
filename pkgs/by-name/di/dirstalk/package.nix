@@ -37,11 +37,11 @@ buildGoModule rec {
   # Tests want to write to the root directory
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to brute force paths on web servers";
     mainProgram = "dirstalk";
     homepage = "https://github.com/stefanoj3/dirstalk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

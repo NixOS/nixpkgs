@@ -32,11 +32,13 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
+
+  meta = {
     description = "GPL reimplementation of libdjb";
     homepage = "https://www.fefe.de/libowfat/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     # build tool "json" is built for the host platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

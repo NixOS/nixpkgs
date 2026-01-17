@@ -22,14 +22,14 @@ stdenvNoCC.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cursor theme designed to look decent";
     homepage = "https://gitlab.com/Burning_Cube/quintom-cursor-theme";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3Only
     ];
-    maintainers = with maintainers; [ frogamic ];
+    maintainers = with lib.maintainers; [ frogamic ];
   };
 }

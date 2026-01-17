@@ -3,7 +3,6 @@
   pkgs,
   src,
   officialRelease,
-  maintainers,
   teams,
   version,
 }:
@@ -123,7 +122,7 @@ let
       +
         lib.optionalString
           (
-            !stdenv.hostPlatform.isWindows
+            !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin)
             # build failure
             && !stdenv.hostPlatform.isStatic
             # LTO breaks exception handling on x86-64-darwin.
@@ -150,7 +149,6 @@ let
       pkg-config
     ];
     separateDebugInfo = !stdenv.hostPlatform.isStatic;
-    hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
@@ -201,7 +199,6 @@ let
           environments.
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
-      maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
       teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
@@ -225,7 +222,6 @@ in
 # This becomes the pkgs.nixComponents attribute set
 {
   inherit version;
-  inherit maintainers;
   inherit teams;
 
   inherit filesetToSource;

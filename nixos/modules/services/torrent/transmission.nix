@@ -585,23 +585,23 @@ in
       include "${cfg.package.apparmor}/bin.transmission-daemon"
     '';
     security.apparmor.includes."local/bin.transmission-daemon" = ''
-      r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},
+      ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE} r,
 
-      owner rw ${cfg.home}/${settingsDir}/**,
-      rw ${cfg.settings.download-dir}/**,
+      owner ${cfg.home}/${settingsDir}/** rw,
+      ${cfg.settings.download-dir}/** rw,
       ${optionalString cfg.settings.incomplete-dir-enabled ''
-        rw ${cfg.settings.incomplete-dir}/**,
+        ${cfg.settings.incomplete-dir}/** rw,
       ''}
       ${optionalString cfg.settings.watch-dir-enabled ''
-        r${optionalString cfg.settings.trash-original-torrent-files "w"} ${cfg.settings.watch-dir}/**,
+        ${cfg.settings.watch-dir}/** r${optionalString cfg.settings.trash-original-torrent-files "w"},
       ''}
       profile dirs {
-        rw ${cfg.settings.download-dir}/**,
+        ${cfg.settings.download-dir}/** rw,
         ${optionalString cfg.settings.incomplete-dir-enabled ''
-          rw ${cfg.settings.incomplete-dir}/**,
+          ${cfg.settings.incomplete-dir}/** rw,
         ''}
         ${optionalString cfg.settings.watch-dir-enabled ''
-          r${optionalString cfg.settings.trash-original-torrent-files "w"} ${cfg.settings.watch-dir}/**,
+          ${cfg.settings.watch-dir}/** r${optionalString cfg.settings.trash-original-torrent-files "w"},
         ''}
       }
 
@@ -612,12 +612,12 @@ in
           # any existing profile for script-torrent-done-filename
           # FIXME: to be tested as I'm not sure it works well with NoNewPrivileges=
           # https://gitlab.com/apparmor/apparmor/-/wikis/AppArmorStacking#seccomp-and-no_new_privs
-          px ${cfg.settings.script-torrent-done-filename} -> &@{dirs},
+          ${cfg.settings.script-torrent-done-filename} px -> &@{dirs},
         ''
       }
 
       ${optionalString (cfg.webHome != null) ''
-        r ${cfg.webHome}/**,
+        ${cfg.webHome}/** r,
       ''}
     '';
   };

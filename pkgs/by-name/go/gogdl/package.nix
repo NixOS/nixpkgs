@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gogdl";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gogdl" ];
 
-  meta = with lib; {
+  meta = {
     description = "GOG Downloading module for Heroic Games Launcher";
     mainProgram = "gogdl";
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
-    license = with licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3 ];
     maintainers = [ ];
   };
 

@@ -3,59 +3,59 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_36,
+  electron_39,
   dart-sass,
-  pnpm_10,
+  mpv,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
 }:
 let
   pname = "feishin";
-  version = "0.21.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-F5m0hsN1BLfiUcl2Go54bpFnN8ktn6Rqa/df1xxoCA4=";
+    hash = "sha256-acNUXvmj964pO8h2fsGfex2BeIshExMWe0w/QmtikkM=";
   };
 
-  electron = electron_36;
-  pnpm = pnpm_10;
+  electron = electron_39;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpmConfigHook;
 
   npmDeps = null;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
       ;
-    fetcherVersion = 2;
-    hash = "sha256-5jEXdQMZ6a0JuhjPS1eZOIGsIGQHd6nKPI02eeR35pg=";
+    fetcherVersion = 3;
+    hash = "sha256-gQooubVt2kDOGq4GEZIT+pQcPnzss9QmqTO9kD5Kx58=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [
+    pnpm
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
-
-    # Don't check for updates.
-    substituteInPlace src/main/index.ts \
-      --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # https://github.com/electron/electron/issues/31121
@@ -97,7 +97,9 @@ buildNpmPackage {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
-    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/feishin
@@ -110,9 +112,11 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set ELECTRON_FORCE_IS_PACKAGED=1 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
 
     for size in 32 64 128 256 512 1024; do
@@ -130,19 +134,21 @@ buildNpmPackage {
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
-      comment = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+      comment = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
       icon = "feishin";
       exec = "feishin %u";
       categories = [
         "Audio"
         "AudioVideo"
+        "Player"
+        "Music"
       ];
       mimeTypes = [ "x-scheme-handler/feishin" ];
     })
   ];
 
   meta = {
-    description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+    description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
@@ -150,6 +156,7 @@ buildNpmPackage {
     platforms = lib.platforms.unix;
     mainProgram = "feishin";
     maintainers = with lib.maintainers; [
+      BatteredBunny
       onny
       jlbribeiro
     ];

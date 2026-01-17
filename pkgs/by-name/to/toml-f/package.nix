@@ -20,13 +20,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "toml-f";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "toml-f";
     rev = "v${version}";
-    hash = "sha256-+cac4rUNpd2w3yBdH1XoCKdJ9IgOHZioZg8AhzGY0FE=";
+    hash = "sha256-QRghnzsLGuQ5MHoVVTDg6ACtwVIkIRexNx/zrrQ0Icc=";
   };
 
   patches = [
@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
   # tftest-build fails on aarch64-linux
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  meta = with lib; {
+  meta = {
     description = "TOML parser implementation for data serialization and deserialization in Fortran";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     homepage = "https://github.com/toml-f/toml-f";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

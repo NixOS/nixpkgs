@@ -93,7 +93,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-decouple
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access
@@ -112,11 +112,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "benedict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
     changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

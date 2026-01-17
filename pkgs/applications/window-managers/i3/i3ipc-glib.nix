@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     gtkdocize
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C interface library to i3wm";
     homepage = "https://github.com/acrisci/i3ipc-glib";
-    maintainers = with maintainers; [ teto ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ teto ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

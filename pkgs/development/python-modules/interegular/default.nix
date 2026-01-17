@@ -15,10 +15,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "interegular" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to check a subset of python regexes for intersections";
     homepage = "https://github.com/MegaIng/interegular";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lach ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lach ];
   };
 }

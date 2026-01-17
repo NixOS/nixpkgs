@@ -98,6 +98,7 @@ let
         exec = "bolt-launcher";
         icon = "bolt-launcher";
         categories = [ "Game" ];
+        startupWMClass = "BoltLauncher";
       })
     ];
   });
@@ -155,6 +156,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       nezia
       jaspersurmont
+      iedame
     ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";

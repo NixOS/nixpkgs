@@ -161,7 +161,7 @@ in
     environment.systemPackages = [
       cfg.finalPackage
     ];
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
+    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
     # On most NixOS configurations /share is already included, so it includes
     # this directory as well. But  This makes sure that /share/nvim/site paths
     # from other packages will be used by neovim.
@@ -171,12 +171,12 @@ in
       builtins.attrValues (
         builtins.mapAttrs (name: value: {
           name = "xdg/nvim/${name}";
-          value = builtins.removeAttrs (
+          value = removeAttrs (
             value
             // {
               target = "xdg/nvim/${value.target}";
             }
-          ) (lib.optionals (builtins.isNull value.source) [ "source" ]);
+          ) (lib.optionals (isNull value.source) [ "source" ]);
         }) cfg.runtime
       )
     );

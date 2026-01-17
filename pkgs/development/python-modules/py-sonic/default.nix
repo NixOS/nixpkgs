@@ -20,10 +20,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "libsonic" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/crustymonkey/py-sonic";
     description = "Python wrapper library for the Subsonic REST API";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ wenngle ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ wenngle ];
   };
 }

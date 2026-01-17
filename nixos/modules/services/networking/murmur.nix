@@ -401,40 +401,40 @@ in
     ];
 
     security.apparmor.policies."bin.mumble-server".profile = ''
+      abi <abi/4.0>,
       include <tunables/global>
 
-      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+      profile ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
         include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
-        pix ${cfg.package}/bin/.mumble-server-wrapped,
+        ${cfg.package}/bin/.mumble-server-wrapped pix,
 
-        r ${config.environment.etc."os-release".source},
-        r ${config.environment.etc."lsb-release".source},
-        owner rwk ${cfg.stateDir}/murmur.sqlite,
-        owner rw ${cfg.stateDir}/murmur.sqlite-journal,
-        owner r ${cfg.stateDir}/,
-        r /run/murmur/murmurd.pid,
-        r /run/murmur/murmurd.ini,
-        r ${configFile},
-    ''
-    + lib.optionalString cfg.logToFile ''
-      rw /var/log/murmur/murmurd.log,
-    ''
-    + lib.optionalString (cfg.sslCert != null) ''
-      r ${cfg.sslCert},
-    ''
-    + lib.optionalString (cfg.sslKey != null) ''
-      r ${cfg.sslKey},
-    ''
-    + lib.optionalString (cfg.sslCa != null) ''
-      r ${cfg.sslCa},
-    ''
-    + lib.optionalString (cfg.dbus != null) ''
-      dbus bus=${cfg.dbus}
-    ''
-    + ''
+        ${config.environment.etc."os-release".source} r,
+        ${config.environment.etc."lsb-release".source} r,
+        owner ${cfg.stateDir}/murmur.sqlite rwk,
+        owner ${cfg.stateDir}/murmur.sqlite-journal rw,
+        owner ${cfg.stateDir}/ r,
+        /run/murmur/murmurd.pid r,
+        /run/murmur/murmurd.ini r,
+        ${configFile} r,
+        ${lib.optionalString cfg.logToFile ''
+          /var/log/murmur/murmurd.log rw,
+        ''}
+        ${lib.optionalString (cfg.sslCert != null) ''
+          ${cfg.sslCert} r,
+        ''}
+        ${lib.optionalString (cfg.sslKey != null) ''
+          ${cfg.sslKey} r,
+        ''}
+        ${lib.optionalString (cfg.sslCa != null) ''
+          ${cfg.sslCa} r,
+        ''}
+        ${lib.optionalString (cfg.dbus != null) ''
+          dbus bus=${cfg.dbus},
+        ''}
+        include if exists <local/bin.mumble-server>
       }
     '';
   };

@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qtdatavis3d,
   setuptools,
   sip,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "pyqtdatavisualization";
   version = "5.15.6";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyQtDataVisualization";
@@ -65,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyQt5.QtDataVisualization" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Qt Data Visualization library";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

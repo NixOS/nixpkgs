@@ -6,7 +6,6 @@
   libiconv,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
   stdenv,
@@ -15,9 +14,7 @@
 buildPythonPackage rec {
   pname = "pyheck";
   version = "0.1.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kevinheavey";
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyheck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for heck, the Rust case conversion library";
     homepage = "https://github.com/kevinheavey/pyheck";
     changelog = "https://github.com/kevinheavey/pyheck/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

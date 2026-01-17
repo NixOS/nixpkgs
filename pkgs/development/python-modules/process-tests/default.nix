@@ -29,9 +29,9 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for testing processes";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/ionelmc/python-process-tests";
   };
 }

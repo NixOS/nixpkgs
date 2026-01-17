@@ -1,27 +1,30 @@
 {
   lib,
-  flutter332,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
+  writeShellScript,
+  nix-update,
+  yq-go,
 }:
 
-flutter332.buildFlutterApplication rec {
+let
+  version = "1.2.3";
+in
+flutter338.buildFlutterApplication {
   pname = "proxypin";
-  version = "1.2.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-PRknUOCaaDE4Ri70EAROx1K3g2bLKI/HKIvo1W1D8ko=";
+    hash = "sha256-0eYfE5ziEMcBpLZ7a48ZPn9pmektdgmMcpDvUz4JrFs=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    desktop_multi_window = "sha256-Tbl0DOxW1F8V2Kj34gcNRbBqr5t9Iq74qCT26deqFdQ=";
-    flutter_code_editor = "sha256-B9aJh6e6iLBZAcacucsT9szWWBwWVBBPDhbKQfnxc6I=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   postPatch = ''
     substituteInPlace linux/my_application.cc \
@@ -34,11 +37,23 @@ flutter332.buildFlutterApplication rec {
     substituteInPlace linux/proxy-pin.desktop \
       --replace-fail "/opt/proxypin/data/flutter_assets/assets/icon.png" "proxypin" \
       --replace-fail "/opt/proxypin/" ""
-    install -Dm0644 linux/proxy-pin.desktop $out/share/applications/proxypin.desktop
-    install -Dm0644 assets/icon.png $out/share/pixmaps/proxypin.png
+    install -D --mode=0644 linux/proxy-pin.desktop $out/share/applications/proxypin.desktop
+    install -D --mode=0644 assets/icon.png $out/share/icons/hicolor/256x256/apps/proxypin.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = writeShellScript "update-proxypin" ''
+    ${lib.getExe nix-update} --use-github-releases proxypin
+    export HOME=$(mktemp -d)
+    src=$(nix build --no-link --print-out-paths .#proxypin.src)
+    WORKDIR=$(mktemp -d)
+    cp --recursive --no-preserve=mode $src/* $WORKDIR
+    PACKAGE_DIR=$(dirname $(EDITOR=echo nix edit --file . proxypin))
+    pushd $WORKDIR
+    ${lib.getExe flutter338} pub get
+    ${lib.getExe yq-go} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
+    popd
+    $(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json
+  '';
 
   meta = {
     description = "Capture HTTP(S) traffic software";

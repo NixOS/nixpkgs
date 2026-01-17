@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.2.2";
+  version = "8.2.3";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-0TMUSNCrDEtOkojcmFFhmLQ0ghyLAn+OS4xl4Sbr76c=";
+    hash = "sha256-PsTAo92Vz+LNxOsbI9VVnx+rHFm67a3bBMeDcLdhXFA=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -65,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
@@ -116,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/redis-server";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests.redis = nixosTests.redis;
@@ -130,10 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [
-      berdario
-      globin
-    ];
+    maintainers = [ ];
     mainProgram = "redis-cli";
   };
 })

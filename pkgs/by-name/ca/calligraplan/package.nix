@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   qt5,
   libsForQt5,
   cmake,
@@ -20,6 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-szPdRxbzJ2+nmgp+1FwmKZwHEDV8EtbDW/3jsw4J6HI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/office/calligraplan/-/commit/cdd85c895b487a8b3837bf8b864103997e0af544.patch";
+      hash = "sha256-IMoJvvszPuIdWedeU7PQw8ngYmMA7k//wXfT+mZQP88=";
+    })
+  ];
 
   buildInputs = [
     qt5.qtbase

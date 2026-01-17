@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "limitcpu";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/limitcpu/cpulimit-${version}.tar.gz";
-    sha256 = "sha256-lGmU7GDznwMJW4m9dOZguJwUyCq6dUVmk5jjArx7I0w=";
+    sha256 = "sha256-Wf/rGjUXr+RZmHFL6EGSYKQ2MvfOwI8LAmwezN/1fPw=";
   };
 
   buildFlags = with stdenv; [
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://limitcpu.sourceforge.net/";
     description = "Tool to throttle the CPU usage of programs";
-    platforms = with platforms; linux ++ freebsd;
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.rycee ];
+    platforms = with lib.platforms; linux ++ freebsd;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.rycee ];
     mainProgram = "cpulimit";
   };
 }

@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Personal finances manager, powered by KDE";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ joko ];
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = with lib.maintainers; [ joko ];
     homepage = "https://skrooge.org/";
   };
 }

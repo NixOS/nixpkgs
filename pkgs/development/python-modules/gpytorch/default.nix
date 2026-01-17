@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.14.2";
+  version = "1.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = "gpytorch";
     tag = "v${version}";
-    hash = "sha256-yDIGiA7q4e6T7SdnO+ALcc3ezmJK964T5Nn48+NGJV8=";
+    hash = "sha256-AuWVNAduh2y/sLIJAXg/9YgpFa21d1sbRHlcdG5cpJ8=";
   };
 
   build-system = [
@@ -58,6 +59,14 @@ buildPythonPackage rec {
     "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Hang forever
+    "test/examples/test_spectral_mixture_gp_regression.py"
+    "test/kernels/test_spectral_mixture_kernel.py"
+    "test/utils/test_nearest_neighbors.py"
+    "test/variational/test_nearest_neighbor_variational_strategy.py"
   ];
 
   meta = {

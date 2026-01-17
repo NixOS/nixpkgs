@@ -23,6 +23,9 @@ stdenv.mkDerivation {
 
   patches = [
     ./darwin-no-universal.patch
+
+    # https://github.com/libui-ng/libui-ng/pull/348
+    ./0001-Remove-cm_print_error-declaration.patch
   ];
 
   nativeBuildInputs = [
@@ -44,11 +47,11 @@ stdenv.mkDerivation {
     tagPrefix = "alpha";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable GUI library for C";
     homepage = "https://github.com/libui-ng/libui-ng";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

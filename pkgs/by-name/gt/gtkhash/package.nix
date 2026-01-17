@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  meta = with lib; {
+  meta = {
     description = "Cross-platform desktop utility for computing message digests or checksums";
     homepage = "https://gtkhash.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ByteSudoer ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
     mainProgram = "gtkhash";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

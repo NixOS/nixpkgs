@@ -1,12 +1,17 @@
 {
   lib,
+  stdenv,
+  config,
   buildNimPackage,
   fetchFromGitHub,
 
   withHEVC ? true,
-  withWhisper ? false,
+  withWhisper ? false, # TODO: Investigate linker failure. See PR 476678
+  withVpx ? true,
+  withSvtAv1 ? true,
+  withCuda ? false,
 
-  ffmpeg,
+  ffmpeg-full,
   yt-dlp,
   lame,
   libopus,
@@ -15,52 +20,45 @@
   x265,
   dav1d,
   svt-av1,
+  libvpl,
   whisper-cpp,
 
   python3,
   python3Packages,
-  nimble,
-  nim,
 }:
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.3.1";
+  version = "29.6.1";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-Nne6niGnhaEQNvvFURmF0N9oyuG1ZvJ4NzxddJdSQtY=";
+    hash = "sha256-7/ey7nZdy1SnGdW5LjX7dtxyqqvrTuIvtJXMXYVYB6k=";
   };
 
   lockFile = ./lock.json;
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-full
     lame
     libopus
-    libvpx
     x264
     dav1d
-    svt-av1
   ]
-  ++ lib.optionals withHEVC [
-    x265
-  ]
-  ++ lib.optionals withWhisper [
-    whisper-cpp
-  ];
+  ++ lib.optionals withHEVC [ x265 ]
+  ++ lib.optionals withWhisper [ whisper-cpp ]
+  ++ lib.optionals withVpx [ libvpx ]
+  ++ lib.optionals withSvtAv1 [ svt-av1 ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libvpl ];
 
-  nimFlags = [
-    "--passc:-Wno-incompatible-pointer-types"
-  ]
-  ++ lib.optionals withHEVC [
-    "-d:enable_hevc"
-  ]
-  ++ lib.optionals withWhisper [
-    "-d:enable_whisper"
-  ];
+  nimFlags =
+    lib.optionals withHEVC [ "-d:enable_hevc" ]
+    ++ lib.optionals withWhisper [ "-d:enable_whisper" ]
+    ++ lib.optionals withVpx [ "-d:enable_vpx" ]
+    ++ lib.optionals withSvtAv1 [ "-d:enable_svtav1" ]
+    ++ lib.optionals withCuda [ "-d:enable_cuda" ];
 
   postPatch = ''
     substituteInPlace src/log.nim \
@@ -71,26 +69,23 @@ buildNimPackage rec {
       --replace-fail '"main=auto-editor"' '"main"'
   '';
 
-  # TODO: Fix checks
-  /*
-    nativeCheckInputs = [
-      python3Packages.av
-      python3
-    ];
+  nativeCheckInputs = [
+    python3
+    python3Packages.av
+  ];
 
-    checkPhase = ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      nim c \
-      ${if withHEVC then "-d:enable_hevc" else ""} \
-      ${if withWhisper then "-d:enable_whisper" else ""} \
-      -r $src/src/rationals
+    eval "nim r --nimcache:$NIX_BUILD_TOP/nimcache $nimFlags $src/tests/unit.nim"
 
-      python3 $src/tests/test.py
+    substituteInPlace tests/test.py \
+      --replace-fail '"./auto-editor"' "\"$out/bin/main\""
 
-      runHook postCheck
-    '';
-  */
+    python3 tests/test.py
+
+    runHook postCheck
+  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor

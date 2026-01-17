@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "dnd-tools";
   version = "0-unstable-2021-02-18";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "savagezen";
@@ -29,11 +29,11 @@ python3.pkgs.buildPythonApplication {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savagezen/dnd-tools";
     description = "Set of interactive command line tools for Dungeons and Dragons 5th Edition";
     mainProgram = "dnd-tools";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.urlordjames ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.urlordjames ];
   };
 }

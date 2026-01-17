@@ -9,7 +9,6 @@
   dssi,
   fluidsynth,
   ladspaH,
-  lash,
   libinstpatch,
   libjack2,
   liblo,
@@ -51,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     dssi
     fluidsynth
     ladspaH
-    lash
     libinstpatch
     libjack2
     liblo
@@ -80,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       it is published under the GNU General Public License.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "muse4";
   };

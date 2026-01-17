@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.24.0";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kb7LHEhtVXzdoRPWMb4JA2REc/V5n21iX+ussWCaaPA=";
+    hash = "sha256-QE0zsQa7JRSXbCBe9yGGGW2ZNo0kp+JD0/5jIyN0OIQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
-  cargoHash = "sha256-xd3rYRJzJspmaQAsTw0lQifHdzB++BtJAjE12GsrLdE=";
+  cargoHash = "sha256-CYRm8wvKK7HIPI1yxTWLV/wpK++mHVT9BvDVX96VFr0=";
 
   nativeCheckInputs = [
     gitMinimal
@@ -63,7 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       danth
-      Br1ght0ne
       Frostman
       da157
       sigmasquadron

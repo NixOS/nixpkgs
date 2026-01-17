@@ -66,10 +66,10 @@ buildPythonPackage rec {
     "tests/test_examples.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy OpenAPI specs and Swagger UI for your Flask API";
     homepage = "https://github.com/flasgger/flasgger/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

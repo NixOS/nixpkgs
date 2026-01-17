@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onetbb";
-  version = "2022.2.0";
+  version = "2022.3.0";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "oneTBB";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ASQPAGm5e4q7imvTVWlmj5ON4fGEao1L5m2C5wF7EhI=";
+    hash = "sha256-HIHF6KHlEI4rgQ9Epe0+DmNe1y95K9iYa4V/wFnJfEU=";
   };
 
   patches = [
@@ -39,18 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # <https://github.com/uxlfoundation/oneTBB/pull/1849>
     ./fix-libtbbmalloc-dlopen.patch
-
-    # Only enable fcf-protection on x86 based processors
-    # <https://github.com/uxlfoundation/oneTBB/pull/1768>
-    # <https://github.com/uxlfoundation/oneTBB/pull/1792>
-    (fetchpatch {
-      url = "https://github.com/uxlfoundation/oneTBB/commit/65d46656f56200a7e89168824c4dbe4943421ff9.patch?full_index=1";
-      hash = "sha256-hhHDuvUsWSqs7AJ5smDYUP1yYZmjV2VISBeKHcFAfG4=";
-    })
-    (fetchpatch {
-      url = "https://github.com/uxlfoundation/oneTBB/commit/e57411968661ab1205322ba1c84fc1cd90a306c6.patch";
-      hash = "sha256-PFixW4lYqA5oy4LSwewvxgJbjVKJceRHnp8mgW9zBF0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -64,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   dontUseNinjaCheck = true;
 
@@ -83,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH" false)
+    (lib.cmakeBool "TBB_TEST" finalAttrs.finalPackage.doCheck)
   ];
 
   env = {
@@ -111,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
       template-based runtime library can help you harness the latent
       performance of multi-core processors.
     '';
-    platforms = lib.platforms.all;
+    platforms = lib.subtractLists lib.platforms.cygwin lib.platforms.all;
+    # oneTBB does not support static builds
+    # "You are building oneTBB as a static library. This is highly discouraged and such configuration is not supported. Consider building a dynamic library to avoid unforeseen issues."
+    # https://github.com/uxlfoundation/oneTBB/blob/db7891a246cafbb90719c3dee497d96889ca692b/CMakeLists.txt#L160
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice

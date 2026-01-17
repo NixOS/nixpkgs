@@ -12,7 +12,7 @@
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "protoletariat";
   version = "3.3.10";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpcloud";
     repo = "protoletariat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oaZmgen/7WkX+nNuphrcyniL7Z/OaeqlcnbCnqR5h0w=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python protocol buffers for the rest of us";
-    changelog = "https://github.com/cpcloud/protoletariat/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/cpcloud/protoletariat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

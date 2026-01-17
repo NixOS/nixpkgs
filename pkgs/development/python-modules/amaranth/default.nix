@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "0.5.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
@@ -71,12 +69,12 @@ buildPythonPackage rec {
     "tests/test_lib_fifo.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     changelog = "https://github.com/amaranth-lang/amaranth/blob/${src.tag}/docs/changes.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       pbsds
     ];

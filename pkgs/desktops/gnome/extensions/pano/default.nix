@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     extensionUuid = "pano@elhan.io";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next-gen Clipboard Manager for Gnome Shell";
     homepage = "https://github.com/oae/gnome-shell-pano";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ honnip ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ honnip ];
+    platforms = lib.platforms.linux;
   };
 })

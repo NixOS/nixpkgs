@@ -60,7 +60,10 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonRelaxDeps = [ "prov" ];
+  pythonRelaxDeps = [
+    "prov"
+    "rdflib"
+  ];
 
   disabledTests = [
     "test_content_types"

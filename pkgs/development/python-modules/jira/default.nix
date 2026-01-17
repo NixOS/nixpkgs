@@ -11,7 +11,6 @@
   pyjwt,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   requests,
   requests-futures,
   requests-mock,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "jira";
   version = "3.10.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
@@ -77,11 +74,11 @@ buildPythonPackage rec {
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
     changelog = "https://github.com/pycontribs/jira/releases/tag/${src.tag}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "jirashell";
   };

@@ -30,10 +30,10 @@ buildPythonPackage rec {
     fs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Piecewise linear interpolation in multiple dimensions with multiple, arbitrarily placed, masters";
     homepage = "https://github.com/LettError/MutatorMath";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

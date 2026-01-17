@@ -4,7 +4,6 @@
   buildPythonPackage,
   git,
   which,
-  pythonOlder,
   unittestCheckHook,
   sphinxHook,
   sphinx-argparse,
@@ -22,7 +21,6 @@ buildPythonPackage rec {
     "out"
     "man"
   ];
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "seppeljordan";
@@ -51,10 +49,10 @@ buildPythonPackage rec {
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";
 
-  meta = with lib; {
+  meta = {
     description = "Prefetch sources from github";
     homepage = "https://github.com/seppeljordan/nix-prefetch-github";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ seppeljordan ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ seppeljordan ];
   };
 }

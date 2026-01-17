@@ -25,7 +25,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyvis,
   pyyaml,
   requests,
@@ -39,16 +38,14 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.13.0.post1";
+  version = "0.14.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-X4PDvxynQkHOdhDC5Aqwnr3jSF/83VgbFiDD1M9LOoM=";
+    hash = "sha256-grF9IToAMc3x5/40+u3lHU9RyjROWu1e3M6N1owq0f4=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -151,6 +148,7 @@ buildPythonPackage rec {
     "test_from_persist_dir"
     "test_mimetype_raw_data"
     "test_multiple_documents_context"
+    "test_predict_and_call_via_react_agent"
     "test_resource"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
@@ -159,11 +157,11 @@ buildPythonPackage rec {
     "test_str"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
     changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

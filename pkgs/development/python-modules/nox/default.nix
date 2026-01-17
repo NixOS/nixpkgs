@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2025.10.16";
+  version = "2025.11.12";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = "nox";
     tag = version;
-    hash = "sha256-oRVDGHw/0HkHLtzcSZL2Aj1uxuRS/ms66cBPDQjJ17I=";
+    hash = "sha256-GYVCM4AX18ryODx0GSm0hRwr1wdluqllsc+iEmLTl6U=";
   };
 
   build-system = [ hatchling ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nox" ];
 

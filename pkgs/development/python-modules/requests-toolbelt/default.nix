@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_toolbelt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolbelt of useful classes and functions to be used with requests";
     homepage = "http://toolbelt.rtfd.org";
     changelog = "https://github.com/requests/toolbelt/blob/${version}/HISTORY.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

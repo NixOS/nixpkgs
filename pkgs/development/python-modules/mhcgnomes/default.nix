@@ -29,10 +29,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mhcgnomes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing MHC nomenclature in the wild";
     homepage = "https://github.com/pirl-unc/mhcgnomes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -158,3 +158,9 @@ The change gets submitted like this:
   * Keep the previously latest kernel until its mainline counterpart gets removed.
     After that `linux_hardened` points to the latest LTS supported by hardened.
 * __SQUASH__ the changes into the `linux_X_Y_hardened: init at …` commit.
+
+### Policy for accepting new kernel flavours {#sec-linux-new-kernels}
+
+No new downstream kernels are accepted into nixpkgs. That includes kernels that use the mainline
+sourcetree, but a different configuration. Kernels for extended hardware support should go
+to [nixos-hardware](github.com/NixOS/nixos-hardware) instead.

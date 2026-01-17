@@ -13,14 +13,47 @@ let
     bool
     listOf
     str
+    attrs
+    submodule
     ;
-  keysPath = "/var/lib/yggdrasil/keys.json";
-
   cfg = config.services.yggdrasil;
-  settingsProvided = cfg.settings != { };
-  configFileProvided = cfg.configFile != null;
 
-  format = pkgs.formats.json { };
+  # Paths for persistent keys
+  stateDir = "/var/lib/yggdrasil";
+  persistentKeyPath = "${stateDir}/private.pem";
+  legacyKeysPath = "${stateDir}/keys.json";
+
+  # Determine which key path to use:
+  # 1. If PrivateKeyPath is explicitly set, use that
+  # 2. If persistentKeys is enabled, use the auto-generated key path
+  effectiveKeyPath =
+    if cfg.settings.PrivateKeyPath != null then
+      cfg.settings.PrivateKeyPath
+    else if cfg.persistentKeys then
+      persistentKeyPath
+    else
+      null;
+
+  # Build base configuration with systemd credential path override
+  baseSettings =
+    cfg.settings
+    // (
+      if effectiveKeyPath != null then
+        {
+          PrivateKeyPath = "/private-key";
+        }
+      else
+        { }
+    );
+
+  # Remove null values that yggdrasil doesn't expect
+  cleanSettings = lib.filterAttrs (n: v: v != null) baseSettings;
+
+  # Generate configuration file from user settings
+  configFile = pkgs.writeTextFile {
+    name = "yggdrasil.conf";
+    text = builtins.toJSON cleanSettings;
+  };
 in
 {
   imports = [
@@ -35,7 +68,59 @@ in
       enable = lib.mkEnableOption "the yggdrasil system service";
 
       settings = mkOption {
-        type = format.type;
+        type = submodule {
+          freeformType = attrs;
+          options = {
+            PrivateKeyPath = mkOption {
+              type = nullOr path;
+              default = null;
+              example = "/run/secrets/yggdrasil-private-key";
+              description = ''
+                Path to the private key file on the host system.
+                When specified, the key will be loaded via systemd credentials
+                for secure access by the yggdrasil service.
+
+                Warning: Do not put private keys directly in the Nix store
+                as they would be world-readable!
+              '';
+            };
+
+            Peers = mkOption {
+              type = listOf str;
+              default = [ ];
+              example = [
+                "tcp://aa.bb.cc.dd:eeeee"
+                "tcp://[aaaa:bbbb:cccc:dddd::eeee]:fffff"
+              ];
+              description = ''
+                List of outbound peer connection strings.
+                Connection strings can contain options, see the yggdrasil documentation.
+              '';
+            };
+
+            Listen = mkOption {
+              type = listOf str;
+              default = [ ];
+              example = [
+                "tcp://0.0.0.0:xxxxx"
+                "tls://[::]:yyyyy"
+              ];
+              description = ''
+                Listen addresses for incoming connections.
+                You need listeners to accept incoming peerings from non-local nodes.
+              '';
+            };
+
+            AllowedPublicKeys = mkOption {
+              type = listOf str;
+              default = [ ];
+              description = ''
+                List of peer public keys to allow incoming peering connections from.
+                If left empty, all connections are allowed by default.
+              '';
+            };
+          };
+        };
         default = { };
         example = {
           Peers = [
@@ -45,44 +130,32 @@ in
           Listen = [
             "tcp://0.0.0.0:xxxxx"
           ];
+          PrivateKeyPath = "/run/secrets/yggdrasil-key";
+          IfName = "ygg0";
+          IfMTU = 65535;
         };
         description = ''
-          Configuration for yggdrasil, as a Nix attribute set.
+          Configuration for yggdrasil, as a structured Nix attribute set.
 
-          Warning: this is stored in the WORLD-READABLE Nix store!
-          Therefore, it is not appropriate for private keys. If you
-          wish to specify the keys, use {option}`configFile`.
+          If you specify settings here, they will be used as persistent
+          configuration and Yggdrasil will retain the same configuration
+          (including IPv6 address if keys are provided) across restarts.
 
-          If the {option}`persistentKeys` is enabled then the
-          keys that are generated during activation will override
-          those in {option}`settings` or
-          {option}`configFile`.
-
-          If no keys are specified then ephemeral keys are generated
+          If no settings are specified, ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
-          each time the service is started. This is the default.
+          each time the service is started.
 
-          If both {option}`configFile` and {option}`settings`
-          are supplied, they will be combined, with values from
-          {option}`configFile` taking precedence.
+          Use {option}`settings.PrivateKeyPath` to securely load private
+          keys from files owned by root via systemd credentials.
+
+          The most important options have dedicated NixOS options above.
+          You can also specify any other yggdrasil configuration option directly.
+
+          For a complete list of available options, see:
+          https://yggdrasil-network.github.io/configurationref.html
 
           You can use the command `nix-shell -p yggdrasil --run "yggdrasil -genconf"`
           to generate default configuration values with documentation.
-        '';
-      };
-
-      configFile = mkOption {
-        type = nullOr path;
-        default = null;
-        example = "/run/keys/yggdrasil.conf";
-        description = ''
-          A file which contains JSON or HJSON configuration for yggdrasil. See
-          the {option}`settings` option for more information.
-
-          Note: This file must not be larger than 1 MB because it is passed to
-          the yggdrasil process via systemd‘s LoadCredential mechanism. For
-          details, see <https://systemd.io/CREDENTIALS/> and `man 5
-          systemd.exec`.
         '';
       };
 
@@ -101,7 +174,7 @@ in
           NixOS firewall blocks link-local communication, so in order to make
           incoming local peering work you will also need to configure
           `MulticastInterfaces` in your Yggdrasil configuration
-          ({option}`settings` or {option}`configFile`). You will then have to
+          ({option}`settings`). You will then have to
           add the ports that you configure there to your firewall configuration
           ({option}`networking.firewall.allowedTCPPorts` or
           {option}`networking.firewall.interfaces.<name>.allowedTCPPorts`).
@@ -125,9 +198,18 @@ in
       package = lib.mkPackageOption pkgs "yggdrasil" { };
 
       persistentKeys = lib.mkEnableOption ''
-        persistent keys. If enabled then keys will be generated once and Yggdrasil
-        will retain the same IPv6 address when the service is
-        restarted. Keys are stored at ${keysPath}
+        automatic generation and persistence of keys.
+        If enabled, a private key will be generated on first startup and stored
+        at ${persistentKeyPath}. This ensures the Yggdrasil node retains the same
+        IPv6 address across reboots.
+
+        If you have existing keys from a previous installation (in the old
+        keys.json format at ${legacyKeysPath}), they will be automatically
+        migrated to the new PEM format on first startup.
+
+        Note: This option is mutually exclusive with {option}`settings.PrivateKeyPath`.
+        If you want to use externally managed keys, use {option}`settings.PrivateKeyPath`
+        instead
       '';
 
       extraArgs = mkOption {
@@ -146,7 +228,6 @@ in
   config = mkIf cfg.enable (
     let
       binYggdrasil = "${cfg.package}/bin/yggdrasil";
-      binHjson = "${pkgs.hjson-go}/bin/hjson-cli";
     in
     {
       assertions = [
@@ -154,67 +235,93 @@ in
           assertion = config.networking.enableIPv6;
           message = "networking.enableIPv6 must be true for yggdrasil to work";
         }
+        {
+          assertion = !(cfg.settings ? PrivateKey);
+          message = ''
+            services.yggdrasil.settings.PrivateKey is not supported because it
+            would be stored in the world-readable Nix store.
+            Use services.yggdrasil.settings.PrivateKeyPath instead to securely load the private key from a file.
+          '';
+        }
+        {
+          assertion = !(cfg.persistentKeys && cfg.settings.PrivateKeyPath != null);
+          message = ''
+            services.yggdrasil.persistentKeys and services.yggdrasil.settings.PrivateKeyPath
+            are mutually exclusive. Use only one of them.
+          '';
+        }
       ];
 
-      # This needs to be a separate service. The yggdrasil service fails if
-      # this is put into its preStart.
+      # One-shot service to generate or migrate persistent keys
       systemd.services.yggdrasil-persistent-keys = lib.mkIf cfg.persistentKeys {
+        description = "Generate or migrate Yggdrasil persistent keys";
         wantedBy = [ "multi-user.target" ];
         before = [ "yggdrasil.service" ];
-        serviceConfig.Type = "oneshot";
-        serviceConfig.RemainAfterExit = true;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        path = [
+          cfg.package
+          pkgs.jq
+        ];
         script = ''
-          if [ ! -e ${keysPath} ]
-          then
-            mkdir --mode=700 -p ${builtins.dirOf keysPath}
-            ${binYggdrasil} -genconf -json \
-              | ${pkgs.jq}/bin/jq \
-                  'to_entries|map(select(.key|endswith("Key")))|from_entries' \
-              > ${keysPath}
+          set -euo pipefail
+
+          # Create state directory with secure permissions
+          mkdir -p ${stateDir}
+          chmod 700 ${stateDir}
+
+          # If new format key already exists, nothing to do
+          if [ -f ${persistentKeyPath} ]; then
+            echo "Persistent key already exists at ${persistentKeyPath}"
+            exit 0
           fi
+
+          # Check for legacy keys.json and migrate if found
+          if [ -f ${legacyKeysPath} ]; then
+            echo "Found legacy keys at ${legacyKeysPath}, migrating to PEM format..."
+
+            # Extract the PrivateKey from the legacy JSON format
+            PRIVATE_KEY_HEX=$(jq -r '.PrivateKey' ${legacyKeysPath})
+
+            if [ -n "$PRIVATE_KEY_HEX" ] && [ "$PRIVATE_KEY_HEX" != "null" ]; then
+              # Use yggdrasil's built-in -exportkey flag to convert to PEM format
+              # Create a minimal config with just the private key
+              echo "{\"PrivateKey\": \"$PRIVATE_KEY_HEX\"}" | yggdrasil -useconf -exportkey > ${persistentKeyPath}
+              chmod 600 ${persistentKeyPath}
+
+              echo "Successfully migrated legacy keys to ${persistentKeyPath}"
+              echo "You may remove the legacy file ${legacyKeysPath} after verifying the migration"
+              exit 0
+            fi
+          fi
+
+          # No existing keys found, generate new ones using yggdrasil
+          echo "Generating new persistent key at ${persistentKeyPath}..."
+          yggdrasil -genconf | yggdrasil -useconf -exportkey > ${persistentKeyPath}
+          chmod 600 ${persistentKeyPath}
+          echo "Successfully generated new persistent key"
         '';
       };
 
       systemd.services.yggdrasil = {
         description = "Yggdrasil Network Service";
-        after = [ "network-pre.target" ];
+        after = [
+          "network-pre.target"
+        ]
+        ++ lib.optional cfg.persistentKeys "yggdrasil-persistent-keys.service";
         wants = [ "network.target" ];
         before = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        # This script first prepares the config file, then it starts Yggdrasil.
-        # The preparation could also be done in ExecStartPre/preStart but only
-        # systemd versions >= v252 support reading credentials in ExecStartPre. As
-        # of February 2023, systemd v252 is not yet in the stable branch of NixOS.
-        #
-        # This could be changed in the future once systemd version v252 has
-        # reached NixOS but it does not have to be. Config file preparation is
-        # fast enough, it does not need elevated privileges, and `set -euo
-        # pipefail` should make sure that the service is not started if the
-        # preparation fails. Therefore, it is not necessary to move the
-        # preparation to ExecStartPre.
-        script = ''
-          set -euo pipefail
-
-          # prepare config file
-          ${
-            (
-              if settingsProvided || configFileProvided || cfg.persistentKeys then
-                "echo "
-
-                + (lib.optionalString settingsProvided "'${builtins.toJSON cfg.settings}'")
-                + (lib.optionalString configFileProvided "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
-                + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
-                + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
-              else
-                "${binYggdrasil} -genconf"
-            )
-            + " > /run/yggdrasil/yggdrasil.conf"
-          }
-
-          # start yggdrasil
-          exec ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf ${lib.strings.escapeShellArgs cfg.extraArgs}
-        '';
+        script =
+          if cfg.settings != { } || cfg.persistentKeys then
+            # Use user settings or persistent keys configuration
+            "exec ${binYggdrasil} -useconffile ${configFile} ${lib.strings.escapeShellArgs cfg.extraArgs}"
+          else
+            # Generate and use ephemeral config
+            "exec ${binYggdrasil} -genconf | ${binYggdrasil} -useconf ${lib.strings.escapeShellArgs cfg.extraArgs}";
 
         serviceConfig = {
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -224,8 +331,8 @@ in
           StateDirectory = "yggdrasil";
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
-          BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
-          LoadCredential = mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
+          BindReadOnlyPaths = lib.optional (effectiveKeyPath != null) "%d/private-key:/private-key";
+          LoadCredential = lib.optional (effectiveKeyPath != null) "private-key:${effectiveKeyPath}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
@@ -265,6 +372,7 @@ in
     maintainers = with lib.maintainers; [
       gazally
       nagy
+      pinpox
     ];
   };
 }

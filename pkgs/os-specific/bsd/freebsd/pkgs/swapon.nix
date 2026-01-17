@@ -1,1 +1,7 @@
-{ mkDerivation }: mkDerivation { path = "sbin/swapon"; }
+{
+  mkDerivation,
+}:
+mkDerivation {
+  path = "sbin/swapon";
+  MK_TESTS = "no";
+}

@@ -19,6 +19,7 @@
   liburing,
   nixosTests,
   writeTextFile,
+  rustc-unwrapped,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -42,8 +43,8 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
-            rev = "cf7f65d0b377af019661c240f9165b3ef60640c3";
-            hash = "sha256-ZSjvAZBfZkJrBIpw8ANZMbJVb8AeuogvuAipGVE4Qe4=";
+            rev = "9a3a213b55df0b11408102c899a940675c0d90e4";
+            hash = "sha256-aOV/jJjRjNJ3hrRqhCsXlIz05NvEhDF/j5Q5UOQuvp8=";
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -87,20 +88,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.5";
+  version = "1.4.9.1";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZKq8ypDU1MkWORHFQhieDSUOqOzBcfqIQ40amyc1ls=";
+    hash = "sha256-Hm0k6N8nSj3nRsppqledtXOKlnWBwG1SjpB4IE5R4vk=";
   };
 
-  cargoHash = "sha256-x+LhpwDytwH/NzKWqAuRRbX77OZ2JGaYSaQxqinf81Q=";
+  cargoHash = "sha256-uXZyAXajWstZ8+fm9BC5ru2BVAXx+vYoe1GXivCOY/8=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  patches = [
+    # reduce closure size by not storing a reference to rustc-unwrapped
+    # alternative to https://github.com/NixOS/nixpkgs/pull/462394
+    ./dont-record-compilation-flags.patch
   ];
 
   buildInputs = [
@@ -171,6 +178,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       inherit (nixosTests) matrix-tuwunel;
     };
   };
+
+  disallowedReferences = [ rustc-unwrapped ];
 
   meta = {
     description = "Matrix homeserver written in Rust, official successor to conduwuit";

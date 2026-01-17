@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     sed -e 's,/usr/bin/getmail,$(dirname $0)/getmail,' -i getmails
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program for retrieving mail";
     homepage = "https://getmail6.org";
     changelog = "https://github.com/getmail6/getmail6/blob/${src.tag}/docs/CHANGELOG";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       abbe
       dotlambda
     ];

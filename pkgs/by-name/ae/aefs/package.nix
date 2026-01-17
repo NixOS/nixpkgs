@@ -18,6 +18,11 @@ stdenv.mkDerivation {
     hash = "sha256-a3YQWxJ7+bYhf1W1kdIykV8U1R4dcDZJ7K3NvNxbF0s=";
   };
 
+  # fix build with c23
+  #   ../system/types.h:27:13: error: 'bool' cannot be defined via 'typedef'
+  #   input.c:228:31: error: expected identifier before 'true'
+  patches = [ ./fix-build-with-c23.patch ];
+
   # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
   # Darwin if FUSE_USE_VERSION isn't set at configure time.
   #

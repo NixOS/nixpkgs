@@ -29,6 +29,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anpin ];
     mainProgram = "CredentialProvider.Microsoft";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.unix;
   };
 }

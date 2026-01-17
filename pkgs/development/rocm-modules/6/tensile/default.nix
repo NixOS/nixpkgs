@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # Using a specific commit which has compression support from after the 6.4 release
   # Without compression packages are too large for hydra
   version = "6.4-unstable-2025-06-12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -82,11 +82,11 @@ buildPythonPackage rec {
     inherit (src) owner repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCm/Tensile";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 }

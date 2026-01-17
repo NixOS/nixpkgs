@@ -54,7 +54,7 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/emqx/MQTTX/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "mqttx";
   };
 }

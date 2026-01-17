@@ -5,7 +5,6 @@
   six,
   httplib2,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   urllib3,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "wsgi-intercept";
   version = "1.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cdent";

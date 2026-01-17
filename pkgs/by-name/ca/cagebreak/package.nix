@@ -23,18 +23,18 @@
   wayland-scanner,
   withXwayland ? true,
   xwayland,
-  wlroots_0_18,
+  wlroots_0_19,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cagebreak";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = "cagebreak";
     tag = finalAttrs.version;
-    hash = "sha256-vXRIZqFyywRettzriOArl1FGdzWdaeVOfYFZCiPLQZg=";
+    hash = "sha256-ADRtfzmn8DmDNbiJO3WbhQZiriJoUAG2TxPmx+RwPXE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     wayland
     wayland-protocols
-    wlroots_0_18
+    wlroots_0_19
   ];
 
   mesonFlags = [

@@ -5,15 +5,12 @@
   python,
   cffi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "xattr";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xattr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for extended filesystem attributes";
     mainProgram = "xattr";
     homepage = "https://github.com/xattr/xattr";
     changelog = "https://github.com/xattr/xattr/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

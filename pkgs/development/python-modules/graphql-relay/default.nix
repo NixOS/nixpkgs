@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "graphql-relay";
   version = "3.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -51,10 +51,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphql_relay" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to help construct a graphql-py server supporting react-relay";
     homepage = "https://github.com/graphql-python/graphql-relay-py/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

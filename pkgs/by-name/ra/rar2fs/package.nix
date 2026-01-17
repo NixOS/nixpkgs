@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     "--disable-static-unrar"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FUSE file system for reading RAR archives";
     homepage = "https://hasse69.github.io/rar2fs/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kraem
       wegank
     ];
-    platforms = with platforms; linux ++ freebsd;
+    platforms = with lib.platforms; linux ++ freebsd;
   };
 }

@@ -5,15 +5,12 @@
   morphys,
   pytestCheckHook,
   python-baseconv,
-  pythonOlder,
   six,
 }:
 buildPythonPackage rec {
   pname = "py-multibase";
   version = "1.0.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multibase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for distinguishing base encodings and other simple string encodings";
     homepage = "https://github.com/multiformats/py-multibase";
     changelog = "https://github.com/multiformats/py-multibase/blob/v${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

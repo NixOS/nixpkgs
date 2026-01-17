@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./proto/ei-scanner
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for Emulated Input";
     mainProgram = "ei-debug-events";
     homepage = "https://gitlab.freedesktop.org/libinput/libei";
-    license = licenses.mit;
-    maintainers = [ maintainers.pedrohlc ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.pedrohlc ];
+    platforms = lib.platforms.linux;
   };
 }

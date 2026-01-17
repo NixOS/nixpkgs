@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gitless";
   version = "0.9.17";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "goldstar611";
@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
     "gitless"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Version control system built on top of Git";
     homepage = "https://gitless.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cransom ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cransom ];
+    platforms = lib.platforms.all;
     mainProgram = "gl";
   };
 }

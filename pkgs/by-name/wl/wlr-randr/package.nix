@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  scdoc,
   wayland,
   wayland-scanner,
 }:
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    scdoc
     wayland-scanner
   ];
   buildInputs = [ wayland ];
@@ -33,12 +35,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     description = "Xrandr clone for wlroots compositors";
     homepage = "https://gitlab.freedesktop.org/emersion/wlr-randr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.linux;
     mainProgram = "wlr-randr";
   };
 }

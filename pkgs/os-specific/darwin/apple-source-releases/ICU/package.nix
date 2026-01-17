@@ -3,8 +3,10 @@
   bootstrapStdenv,
   buildPackages,
   fetchpatch2,
+  icu76, # The ICU version should correspond to the same one used by Apple’s ICU package
   mkAppleDerivation,
   python3,
+  stdenvNoCC,
   testers,
 }:
 
@@ -12,6 +14,19 @@
 # - ../../../development/libraries/icu/make-icu.nix
 # - https://github.com/apple-oss-distributions/ICU/blob/main/makefile
 let
+  privateHeaders = stdenvNoCC.mkDerivation {
+    name = "ICU-deps-private-headers";
+
+    buildCommand = ''
+      mkdir -p "$out/include/os"
+      cat <<EOF > "$out/include/os/feature_private.h"
+      #pragma once
+      extern "C" bool _os_feature_enabled_impl(const char*, const char*);
+      #define os_feature_enabled(a, b) _os_feature_enabled_impl(#a, #b)
+      EOF
+    '';
+  };
+
   stdenv = bootstrapStdenv;
   withStatic = stdenv.hostPlatform.isStatic;
 
@@ -26,13 +41,6 @@ let
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
       ./patches/suppress-icu-check-crash.patch
-
-      # Python 3.13 compatibility
-      (fetchpatch2 {
-        url = "https://github.com/unicode-org/icu/commit/60d6bd71efc0cde8f861b109ff87dbbf9fc96586.patch?full_index=1";
-        hash = "sha256-aJBSVvKidPUjD956jLjyRk8fewUZ9f+Ip4ka6rjevzU=";
-        stripLen = 2;
-      })
     ];
 
     preConfigure = ''
@@ -67,6 +75,7 @@ let
     env.NIX_CFLAGS_COMPILE = toString [
       "-DU_SHOW_CPLUSPLUS_API=1"
       "-DU_SHOW_INTERNAL_API=1"
+      "-I${privateHeaders}/include"
     ];
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -93,24 +102,38 @@ let
     ++ lib.optional withStatic "static";
     outputBin = "dev";
 
-    postPatch = lib.optionalString self.finalPackage.doCheck ''
-      # Skip test for missing encodingSamples data.
-      substituteInPlace test/cintltst/ucsdetst.c \
-        --replace-fail "&TestMailFilterCSS" "NULL"
+    postPatch =
+      lib.optionalString self.finalPackage.doCheck (
+        ''
+          # Skip test for missing encodingSamples data.
+          substituteInPlace test/cintltst/ucsdetst.c \
+            --replace-fail "&TestMailFilterCSS" "NULL"
 
-      # Disable failing tests
-      substituteInPlace test/cintltst/cloctst.c \
-        --replace-fail 'TESTCASE(TestCanonicalForm);' ""
+          # Disable failing tests
+          substituteInPlace test/cintltst/cloctst.c \
+            --replace-fail 'TESTCASE(TestCanonicalForm);' ""
 
-      substituteInPlace test/intltest/rbbitst.cpp \
-        --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
+          substituteInPlace test/intltest/rbbitst.cpp \
+            --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
 
-      # Otherwise `make install` is broken.
-      substituteInPlace Makefile.in \
-        --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
-      substituteInPlace config/dist-data.sh \
-        --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
-    '';
+          # Add missing test data. It’s not included in the source release.
+          chmod u+w "$NIX_BUILD_TOP/source/icu"
+          tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu76.src} icu/testdata
+        ''
+        + lib.optionalString stdenv.hostPlatform.isx86_64 ''
+          # These tests fail under Rosetta 2 with a floating-point exception.
+          substituteInPlace test/intltest/caltest.cpp \
+            --replace-fail 'TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);' "" \
+            --replace-fail 'TESTCASE_AUTO(Test22750Roll);' ""
+        ''
+      )
+      + ''
+        # Otherwise `make install` is broken.
+        substituteInPlace Makefile.in \
+          --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
+        substituteInPlace config/dist-data.sh \
+          --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+      '';
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall =

@@ -11,7 +11,6 @@
   markdown,
   policy-sentry,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   schema,
   setuptools,
@@ -19,22 +18,17 @@
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "cloudsplaining";
     tag = version;
-    hash = "sha256-Ix4SlkGMtserksazXCk0XcDhmxNcfV/QCVsDJjWbu2k=";
+    hash = "sha256-Abp/uvH1IYO/rb2o+7uI0Ef6q7K6T0kN1mo+Qit438E=";
   };
 
-  postPatch = ''
-    # Ignore pinned versions
-    sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" requirements.txt
-  '';
+  pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
@@ -60,12 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cloudsplaining" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for AWS IAM security assessment";
     homepage = "https://github.com/salesforce/cloudsplaining";
     changelog = "https://github.com/salesforce/cloudsplaining/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudsplaining";
   };
 }

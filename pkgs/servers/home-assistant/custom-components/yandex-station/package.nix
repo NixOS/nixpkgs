@@ -43,6 +43,5 @@ buildHomeAssistantComponent rec {
     description = "Controlling Yandex.Station and other smart home devices with Alice from Home Assistant";
     homepage = "https://github.com/AlexxIT/YandexStation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ferrine ];
   };
 }

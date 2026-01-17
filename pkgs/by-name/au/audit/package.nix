@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-legacy-actions"
     "--with-arm"
     "--with-aarch64"
+    "--with-riscv"
     "--with-io_uring"
     # allows putting audit files in /run/audit, which removes the requirement
     # to wait for tmpfiles to set up the /var/run -> /run symlink
@@ -117,8 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "audit" ];
 
-  enableParallelChecking = false;
-  doCheck = true;
+  doCheck = false;
 
   postInstall = ''
     installShellCompletion --bash init.d/audit.bash_completion
@@ -156,6 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
       static = pkgsStatic.audit or null;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       audit = nixosTests.audit;
+      # Broken on a hardened kernel
+      package = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        pname = previousAttrs.pname + "-test";
+        doCheck = true;
+      });
     };
   };
 

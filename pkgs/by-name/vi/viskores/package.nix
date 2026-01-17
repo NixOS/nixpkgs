@@ -13,22 +13,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "viskores";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "viskores";
     repo = "viskores";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jKuDM/NPfbMIfNpDNsDpmXdKuVobsr3s9+iht1zBLvI=";
+    hash = "sha256-s399ZkUlKB1xvow+VcA3FQxd+GVlCJyx6KWLtl2Z3RY=";
   };
-
-  patches = [
-    # https://github.com/Viskores/viskores/pull/137
-    (fetchpatch2 {
-      url = "https://github.com/Viskores/viskores/commit/36bf609511adb5530e6952bc14daefeafdf4ab11.patch?full_index=1";
-      hash = "sha256-SKmgVZhkCk1/X17dLXZ8ceF9Pq1Kkc2sXuFdrvotsdo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

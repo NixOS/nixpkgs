@@ -10,6 +10,7 @@
   types-aiobotocore-account,
   types-aiobotocore-acm-pca,
   types-aiobotocore-acm,
+  types-aiobotocore-aiops,
   types-aiobotocore-alexaforbusiness,
   types-aiobotocore-amp,
   types-aiobotocore-amplify,
@@ -66,6 +67,7 @@
   types-aiobotocore-codebuild,
   types-aiobotocore-codecatalyst,
   types-aiobotocore-codecommit,
+  types-aiobotocore-codeconnections,
   types-aiobotocore-codedeploy,
   types-aiobotocore-codeguru-reviewer,
   types-aiobotocore-codeguru-security,
@@ -136,6 +138,7 @@
   types-aiobotocore-forecast,
   types-aiobotocore-forecastquery,
   types-aiobotocore-frauddetector,
+  types-aiobotocore-freetier,
   types-aiobotocore-fsx,
   types-aiobotocore-gamelift,
   types-aiobotocore-gamesparks,
@@ -240,6 +243,7 @@
   types-aiobotocore-neptune,
   types-aiobotocore-network-firewall,
   types-aiobotocore-networkmanager,
+  types-aiobotocore-networkmonitor,
   types-aiobotocore-nimble,
   types-aiobotocore-oam,
   types-aiobotocore-omics,
@@ -266,6 +270,9 @@
   types-aiobotocore-pricing,
   types-aiobotocore-privatenetworks,
   types-aiobotocore-proton,
+  types-aiobotocore-qapps,
+  types-aiobotocore-qbusiness,
+  types-aiobotocore-qconnect,
   types-aiobotocore-qldb-session,
   types-aiobotocore-qldb,
   types-aiobotocore-quicksight,
@@ -362,15 +369,15 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-aiobotocore";
-  version = "2.25.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_aiobotocore";
-    inherit version;
-    hash = "sha256-Ez09uRNW5T5LIs33RaOS2MBSc4MnPwTUxr0LCkQyDMo=";
+    inherit (finalAttrs) version;
+    hash = "sha256-nDbZ0pBEtCRleQD6mejAWPc9WnVek9IeS76w7qjxk5I=";
   };
 
   build-system = [ setuptools ];
@@ -389,12 +396,14 @@ buildPythonPackage rec {
       aiobotocore
       botocore
     ];
+    aiops = [ types-aiobotocore-aiops ];
     alexaforbusiness = [ types-aiobotocore-alexaforbusiness ];
     all = [
       types-aiobotocore-accessanalyzer
       types-aiobotocore-account
       types-aiobotocore-acm
       types-aiobotocore-acm-pca
+      types-aiobotocore-aiops
       types-aiobotocore-alexaforbusiness
       types-aiobotocore-amp
       types-aiobotocore-amplify
@@ -451,6 +460,7 @@ buildPythonPackage rec {
       types-aiobotocore-codebuild
       types-aiobotocore-codecatalyst
       types-aiobotocore-codecommit
+      types-aiobotocore-codeconnections
       types-aiobotocore-codedeploy
       types-aiobotocore-codeguru-reviewer
       types-aiobotocore-codeguru-security
@@ -521,6 +531,7 @@ buildPythonPackage rec {
       types-aiobotocore-forecast
       types-aiobotocore-forecastquery
       types-aiobotocore-frauddetector
+      types-aiobotocore-freetier
       types-aiobotocore-fsx
       types-aiobotocore-gamelift
       types-aiobotocore-gamesparks
@@ -625,6 +636,7 @@ buildPythonPackage rec {
       types-aiobotocore-neptune
       types-aiobotocore-network-firewall
       types-aiobotocore-networkmanager
+      types-aiobotocore-networkmonitor
       types-aiobotocore-nimble
       types-aiobotocore-oam
       types-aiobotocore-omics
@@ -651,6 +663,9 @@ buildPythonPackage rec {
       types-aiobotocore-pricing
       types-aiobotocore-privatenetworks
       types-aiobotocore-proton
+      types-aiobotocore-qapps
+      types-aiobotocore-qbusiness
+      types-aiobotocore-qconnect
       types-aiobotocore-qldb
       types-aiobotocore-qldb-session
       types-aiobotocore-quicksight
@@ -800,6 +815,7 @@ buildPythonPackage rec {
     codebuild = [ types-aiobotocore-codebuild ];
     codecatalyst = [ types-aiobotocore-codecatalyst ];
     codecommit = [ types-aiobotocore-codecommit ];
+    codeconnections = [ types-aiobotocore-codeconnections ];
     codedeploy = [ types-aiobotocore-codedeploy ];
     codeguru-reviewer = [ types-aiobotocore-codeguru-reviewer ];
     codeguru-security = [ types-aiobotocore-codeguru-security ];
@@ -879,6 +895,7 @@ buildPythonPackage rec {
     forecast = [ types-aiobotocore-forecast ];
     forecastquery = [ types-aiobotocore-forecastquery ];
     frauddetector = [ types-aiobotocore-frauddetector ];
+    freetier = [ types-aiobotocore-freetier ];
     fsx = [ types-aiobotocore-fsx ];
     gamelift = [ types-aiobotocore-gamelift ];
     gamesparks = [ types-aiobotocore-gamesparks ];
@@ -983,6 +1000,7 @@ buildPythonPackage rec {
     neptune = [ types-aiobotocore-neptune ];
     network-firewall = [ types-aiobotocore-network-firewall ];
     networkmanager = [ types-aiobotocore-networkmanager ];
+    networkmonitor = [ types-aiobotocore-networkmonitor ];
     nimble = [ types-aiobotocore-nimble ];
     oam = [ types-aiobotocore-oam ];
     omics = [ types-aiobotocore-omics ];
@@ -1107,10 +1125,10 @@ buildPythonPackage rec {
   # Package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations for aiobotocore generated with mypy-boto3-builder";
     homepage = "https://pypi.org/project/types-aiobotocore/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

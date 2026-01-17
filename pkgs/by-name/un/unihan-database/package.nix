@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unihan-database";
-  version = "15.1.0";
+  version = "17.0.0";
 
   src = fetchurl {
-    url = "https://www.unicode.org/Public/zipped/${version}/Unihan.zip";
-    hash = "sha256-oCJmEOMkvPeErDgOEfTL9TPuHms9AosJkb+MDcP4WFM=";
+    url = "https://www.unicode.org/Public/${version}/ucd/Unihan.zip";
+    hash = "sha256-96SLK1Raz6p3stYHrih0dATOArrv7hY5bF0teo7zS14=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode Han Database";
     homepage = "https://www.unicode.org/";
-    license = licenses.unicode-dfs-2016;
-    platforms = platforms.all;
+    license = lib.licenses.unicode-dfs-2016;
+    platforms = lib.platforms.all;
   };
 }

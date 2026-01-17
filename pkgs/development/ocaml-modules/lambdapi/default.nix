@@ -51,11 +51,11 @@ buildDunePackage rec {
   ];
   doCheck = false; # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Deducteam/lambdapi";
     description = "Proof assistant based on the λΠ-calculus modulo rewriting";
-    license = licenses.cecill21;
+    license = lib.licenses.cecill21;
     changelog = "https://github.com/Deducteam/lambdapi/raw/${version}/CHANGES.md";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

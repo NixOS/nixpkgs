@@ -29,7 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/infrahq/infra";
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.elastic20;
-    maintainers = with lib.maintainers; [ peterromfeldhk ];
     mainProgram = "infra";
   };
 }

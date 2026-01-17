@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
     atari = [
       # multi-agent-ale-py
       pygame

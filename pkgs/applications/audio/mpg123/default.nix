@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "https://mpg123.org";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ ftrvxmtrx ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    platforms = lib.platforms.all;
   };
 }

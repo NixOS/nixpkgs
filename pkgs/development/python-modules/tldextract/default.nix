@@ -6,7 +6,6 @@
   idna,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-file,
   responses,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "tldextract";
   version = "5.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "john-kurkowski";
@@ -50,7 +47,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tldextract" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to accurately separate the TLD from the domain of an URL";
     longDescription = ''
       tldextract accurately separates the gTLD or ccTLD (generic or country code top-level domain)
@@ -58,8 +55,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
     changelog = "https://github.com/john-kurkowski/tldextract/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tldextract";
   };
 }

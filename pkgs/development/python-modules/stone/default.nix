@@ -7,7 +7,6 @@
   packaging,
   ply,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "stone";
   version = "3.3.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dropbox";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stone" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official API Spec Language for Dropbox API V2";
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "stone";
   };

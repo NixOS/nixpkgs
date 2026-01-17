@@ -17,11 +17,11 @@ buildPythonPackage {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Python based websocket server that is simple and easy to use";
     homepage = "https://github.com/dpallot/simple-websocket-server/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
+    platforms = lib.platforms.all;
   };
 }

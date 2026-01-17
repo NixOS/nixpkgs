@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "onigurumacffi";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,10 +22,10 @@ buildPythonPackage rec {
     cffi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python cffi bindings for the oniguruma regex engine";
     homepage = "https://github.com/asottile/onigurumacffi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ melkor333 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ melkor333 ];
   };
 }

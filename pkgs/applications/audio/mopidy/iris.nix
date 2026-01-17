@@ -32,10 +32,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_iris" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jaedb/Iris";
     description = "Fully-functional Mopidy web client encompassing Spotify and many other backends";
-    license = licenses.asl20;
-    maintainers = [ maintainers.rvolosatovs ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.rvolosatovs ];
   };
 }

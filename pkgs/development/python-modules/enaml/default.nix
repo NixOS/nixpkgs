@@ -11,16 +11,13 @@
   qtpy,
   setuptools,
   setuptools-scm,
-  pythonOlder,
   sip,
 }:
 
 buildPythonPackage rec {
   pname = "enaml";
   version = "0.19.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nucleic";
@@ -63,11 +60,11 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Declarative User Interfaces for Python";
     homepage = "https://github.com/nucleic/enaml";
     changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

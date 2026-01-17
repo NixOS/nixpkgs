@@ -24,10 +24,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates JUnit XML test result documents that can be read by tools such as Jenkins";
     homepage = "https://github.com/kyrus/python-junit-xml";
-    maintainers = with maintainers; [ multun ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ multun ];
+    license = lib.licenses.mit;
   };
 }

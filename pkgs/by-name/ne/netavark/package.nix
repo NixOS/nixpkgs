@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.16.1";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "netavark";
     rev = "v${version}";
-    hash = "sha256-8Yai0c5AHHx+xTEVH23C5dy4VXRERLeg0iIAbD/Glis=";
+    hash = "sha256-KLN1Y2C43dTZlm1VNZq49/zQY55iAPf5V7KK5zjC2dw=";
   };
 
-  cargoHash = "sha256-U8rNA5sAR9+q7cWQBt18iJfnylcCq/tVLXAdxWpAhjw=";
+  cargoHash = "sha256-Ac8/0MgvDZ3djUlKOv3yT3aCPkxbNPnFM8ZId6yN354=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/containers/netavark/releases/tag/${src.rev}";
     description = "Rust based network stack for containers";
     homepage = "https://github.com/containers/netavark";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
 }

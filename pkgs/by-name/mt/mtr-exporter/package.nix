@@ -17,14 +17,14 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = ''
       Mtr-exporter periodically executes mtr to a given host and
       provides the measured results as prometheus metrics.
     '';
     homepage = "https://github.com/mgumz/mtr-exporter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jakubgs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jakubgs ];
     mainProgram = "mtr-exporter";
   };
 }

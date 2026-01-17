@@ -64,7 +64,7 @@ in
         boot.loader.grub.enable = false;
 
         specialisation = rec {
-          brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
+          brokenInitInterface.configuration.config.system.systemBuilderCommands = ''
             echo "systemd 0" > $out/init-interface-version
           '';
 

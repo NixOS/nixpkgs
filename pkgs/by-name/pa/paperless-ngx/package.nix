@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   node-gyp,
-  nodejs_20,
+  nodejs,
   nixosTests,
   gettext,
   python3,
@@ -17,6 +17,8 @@
   qpdf,
   tesseract5,
   unpaper,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   poppler-utils,
   liberation_ttf,
@@ -28,13 +30,13 @@
   xorg,
 }:
 let
-  version = "2.19.5";
+  version = "2.20.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-sIPi7A6V5YNDB0ZvB5uIQaO/P5hIxY3JNRnB2sfVii0=";
+    hash = "sha256-xWyYisSJ5FKU+ZFrCtjo94TjqXCzHDVdPAISMTX0Tt8=";
   };
 
   python = python3.override {
@@ -77,17 +79,19 @@ let
 
     src = src + "/src-ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
+      inherit pnpm;
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-lxZOwt+/ReU7m7he0iJSt5HqaPkRksveCgvDG7uodjA=";
+      hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
     };
 
     nativeBuildInputs = [
       node-gyp
-      nodejs_20
+      nodejs
       pkg-config
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -167,11 +171,14 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "celery"
     "django-allauth"
-    "django-cors-headers"
     "drf-spectacular-sidecar"
-    "filelock"
+    "python-dotenv"
+    "gotenberg-client"
     "redis"
+    # requested by maintainer
+    "ocrmypdf"
   ];
 
   dependencies =
@@ -184,18 +191,7 @@ python.pkgs.buildPythonApplication rec {
       concurrent-log-handler
       dateparser
       django
-      # django-allauth version 65.9.X not yet supported
-      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
-      (django-allauth.overrideAttrs (
-        new: prev: rec {
-          version = "65.7.0";
-          src = prev.src.override {
-            tag = version;
-            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
-          };
-          patches = [ ];
-        }
-      ))
+      django-allauth
       django-auditlog
       django-cachalot
       django-celery-results

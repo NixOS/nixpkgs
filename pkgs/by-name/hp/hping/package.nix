@@ -60,10 +60,10 @@ stdenv.mkDerivation {
     ln -s hping3.8.gz $out/share/man/man8/hping2.8.gz
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line oriented TCP/IP packet assembler/analyzer";
     homepage = "https://github.com/antirez/hping";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

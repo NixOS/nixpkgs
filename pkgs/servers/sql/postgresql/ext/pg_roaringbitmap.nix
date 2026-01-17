@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_roaringbitmap";
-  version = "0.5.5";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ChenHuajun";
     repo = "pg_roaringbitmap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5tThowu8k7R33rD/SXINOmzfgSkc4P3lVJ35BeCinZw=";
+    hash = "sha256-XX68Kgx9uFhnWSUIhErw3yOjo7K/seP/6oca3vS7b84=";
   };
 
   meta = {

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [ sox ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital baseband audio protocol decoder";
     mainProgram = "multimon-ng";
     longDescription = ''
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       ZVEI3 DZVEI PZVEI EEA EIA CCIR MORSE CW
     '';
     homepage = "https://github.com/EliasOenal/multimon-ng";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ markuskowa ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

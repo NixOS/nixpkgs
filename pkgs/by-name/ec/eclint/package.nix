@@ -19,11 +19,11 @@ buildGoModule rec {
 
   ldflags = [ "-X main.version=${version}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/greut/eclint";
     description = "EditorConfig linter written in Go";
     mainProgram = "eclint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

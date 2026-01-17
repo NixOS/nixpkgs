@@ -3,9 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  importlib-metadata,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,18 +20,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "chameleon" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/malthe/chameleon/blob/${src.tag}/CHANGES.rst";
     description = "Fast HTML/XML Template Compiler";
     downloadPage = "https://github.com/malthe/chameleon";
     homepage = "https://chameleon.readthedocs.io";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

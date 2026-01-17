@@ -66,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skmisc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous tools for scientific computing";
     homepage = "https://github.com/has2k1/scikit-misc";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

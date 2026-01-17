@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "phrase-cli";
-  version = "2.50.0";
+  version = "2.53.1";
 
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
     rev = version;
-    sha256 = "sha256-FXoejKKbykNKcWN+4hf3PRdhyZaiZef6c2NsMQK/saQ=";
+    sha256 = "sha256-5Iral/ju6tJGRS8JUIXBVEQeme34F+v1i8F7pXprZas=";
   };
 
-  vendorHash = "sha256-uJR5RjBjSZmoYJNsbbvAabYfRhd9APNHwR8SP+44fC0=";
+  vendorHash = "sha256-LyPS2E5v3n7RVV3YEsEUZJZWB5x32TTfeOHAZProuCs=";
 
   ldflags = [ "-X=github.com/phrase/phrase-cli/cmd.PHRASE_CLIENT_VERSION=${version}" ];
 

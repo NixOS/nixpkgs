@@ -37,7 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/AA-Turner/roman-numerals/";
     changelog = "https://github.com/AA-Turner/roman-numerals/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.cc0;
-    teams = sphinx.meta.teams;
     mainProgram = "roman-numerals-py";
     platforms = lib.platforms.all;
   };

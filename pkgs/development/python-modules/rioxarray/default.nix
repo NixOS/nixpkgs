@@ -56,6 +56,8 @@ buildPythonPackage rec {
     # Fails with small numerical errors on GDAL 3.11
     "test_rasterio_vrt_gcps"
     "test_reproject__gcps"
+    # IndexError: range object index out of range (Python 3.13+)
+    "test_indexing"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # numerical errors

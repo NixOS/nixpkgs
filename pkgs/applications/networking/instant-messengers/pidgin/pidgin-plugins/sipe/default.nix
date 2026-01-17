@@ -50,10 +50,10 @@ stdenv.mkDerivation rec {
 
   postInstall = "ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
 
-  meta = with lib; {
+  meta = {
     description = "SIPE plugin for Pidgin IM";
     homepage = "http://sipe.sourceforge.net/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

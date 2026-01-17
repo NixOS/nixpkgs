@@ -51,12 +51,12 @@ let
       (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
     ];
 
-    meta = with lib; {
+    meta = {
       description = "C++ game engine coded on top of SFML used for EmptyEpsilon";
       homepage = "https://github.com/daid/SeriousProton";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fpletz ];
-      platforms = platforms.linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fpletz ];
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -99,15 +99,15 @@ stdenv.mkDerivation {
     "-G Ninja"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source bridge simulator based on Artemis";
     mainProgram = "EmptyEpsilon";
     homepage = "https://daid.github.io/EmptyEpsilon/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       fpletz
       ma27
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

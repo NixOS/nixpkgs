@@ -44,8 +44,14 @@ stdenv.mkDerivation rec {
 
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
   # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
+  # Disable all gnulib tests when building on Darwin due to test-nl_langinfo-mt failure
+  # known by upstream https://www.mail-archive.com/bug-gnulib@gnu.org/msg50806.html
   postPatch =
-    if
+    if stdenv.buildPlatform.isDarwin then
+      ''
+        sed -i 's:gnulib-tests::g' Makefile.in
+      ''
+    else if
       ((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isAarch32))
     then
       ''
@@ -72,11 +78,11 @@ stdenv.mkDerivation rec {
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     maintainers = lib.teams.helsinki-systems.members;
   };
 }

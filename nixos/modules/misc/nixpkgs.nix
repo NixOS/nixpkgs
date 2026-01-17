@@ -16,8 +16,8 @@ let
   mergeConfig =
     lhs_: rhs_:
     let
-      lhs = optCall lhs_ { inherit pkgs; };
-      rhs = optCall rhs_ { inherit pkgs; };
+      lhs = optCall lhs_ { inherit lib pkgs; };
+      rhs = optCall rhs_ { inherit lib pkgs; };
     in
     lib.recursiveUpdate lhs rhs
     // lib.optionalAttrs (lhs ? packageOverrides) {
@@ -119,7 +119,7 @@ in
     pkgs = lib.mkOption {
       defaultText = lib.literalExpression ''
         import "''${nixos}/.." {
-          inherit (cfg) config overlays localSystem crossSystem;
+          inherit (config.nixpkgs) config overlays localSystem crossSystem;
         }
       '';
       type = pkgsType;

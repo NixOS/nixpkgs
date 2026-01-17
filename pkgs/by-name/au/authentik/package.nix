@@ -8,7 +8,7 @@
   bash,
   chromedriver,
   nodejs_24,
-  python312,
+  python3,
   makeWrapper,
 }:
 
@@ -20,7 +20,7 @@ let
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
-    rev = "version/${version}";
+    tag = "version/${version}";
     hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
   };
 
@@ -202,7 +202,7 @@ let
     ];
   };
 
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = final: prev: {
       # https://github.com/goauthentik/authentik/pull/16324
