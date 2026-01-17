@@ -7126,9 +7126,6 @@ with pkgs;
 
   lcms = lcms2;
 
-  libagar = callPackage ../development/libraries/libagar { };
-  libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
-
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or (lib.meta.availableOn stdenv.hostPlatform libpulseaudio);
   };
