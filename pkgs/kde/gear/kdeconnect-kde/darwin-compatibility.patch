@@ -1,0 +1,354 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b25cea40f..b3cb01645 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -136,7 +136,9 @@ add_subdirectory(indicator)
+ add_subdirectory(urlhandler)
+ add_subdirectory(nautilus-extension)
+ add_subdirectory(fileitemactionplugin)
+-add_subdirectory(smsapp)
++if(NOT APPLE)
++    add_subdirectory(smsapp)
++endif()
+ 
+ if(NOT WIN32 AND NOT APPLE)
+     add_subdirectory(kio)
+diff --git a/cli/kdeconnect-cli.cpp b/cli/kdeconnect-cli.cpp
+index 17b4c2758..3f49a32a9 100644
+--- a/cli/kdeconnect-cli.cpp
++++ b/cli/kdeconnect-cli.cpp
+@@ -301,6 +301,10 @@ int main(int argc, char **argv)
+             }
+             blockOnReply(QDBusConnection::sessionBus().asyncCall(msg));
+         } else if (parser.isSet(QStringLiteral("send-sms"))) {
++#ifdef __APPLE__
++            QTextStream(stderr) << i18n("error: SMS is not supported on macOS") << Qt::endl;
++            return 1;
++#else
+             if (parser.isSet(QStringLiteral("destination"))) {
+                 qDBusRegisterMetaType<ConversationAddress>();
+                 QVariantList addresses;
+@@ -330,6 +334,7 @@ int main(int argc, char **argv)
+                 QTextStream(stderr) << i18n("error: should specify the SMS's recipient by passing --destination <phone number>") << Qt::endl;
+                 return 1;
+             }
++#endif
+         } else if (parser.isSet(QStringLiteral("ring"))) {
+             QDBusMessage msg = QDBusMessage::createMethodCall(QStringLiteral("org.kde.kdeconnect"),
+                                                               QLatin1String("/modules/kdeconnect/devices/%1/findmyphone").arg(device),
+diff --git a/declarativeplugin/kdeconnectdeclarativeplugin.cpp b/declarativeplugin/kdeconnectdeclarativeplugin.cpp
+index 02b6faafa..a6f5d43cd 100644
+--- a/declarativeplugin/kdeconnectdeclarativeplugin.cpp
++++ b/declarativeplugin/kdeconnectdeclarativeplugin.cpp
+@@ -65,11 +65,13 @@ void KdeConnectDeclarativePlugin::registerTypes(const char *uri)
+                                                                "FindMyPhoneDbusInterface",
+                                                                QStringLiteral("You're not supposed to instantiate interfaces"));
+     qmlRegisterUncreatableType<ClipboardDbusInterface>(uri, 1, 0, "ClipboardDbusInterface", QStringLiteral("You're not supposed to instantiate interfaces"));
++#ifndef __APPLE__
+     qmlRegisterUncreatableType<RemoteKeyboardDbusInterface>(uri,
+                                                             1,
+                                                             0,
+                                                             "RemoteKeyboardDbusInterface",
+                                                             QStringLiteral("You're not supposed to instantiate interfaces"));
++#endif
+     qmlRegisterUncreatableType<DeviceDbusInterface>(uri, 1, 0, "DeviceDbusInterface", QStringLiteral("You're not supposed to instantiate interfaces"));
+     qmlRegisterUncreatableType<BatteryDbusInterface>(uri, 1, 0, "BatteryDbusInterface", QStringLiteral("You're not supposed to instantiate interfaces"));
+     qmlRegisterUncreatableType<ConnectivityReportDbusInterface>(uri,
+@@ -77,8 +79,10 @@ void KdeConnectDeclarativePlugin::registerTypes(const char *uri)
+                                                                 0,
+                                                                 "ConnectivityReportDbusInterface",
+                                                                 QStringLiteral("You're not supposed to instantiate interfaces"));
++#ifndef __APPLE__
+     qmlRegisterUncreatableType<SftpDbusInterface>(uri, 1, 0, "SftpDbusInterface", QStringLiteral("You're not supposed to instantiate interfaces"));
+     qmlRegisterUncreatableType<SmsDbusInterface>(uri, 1, 0, "SmsDbusInterface", QStringLiteral("You're not supposed to instantiate interfaces"));
++#endif
+     qmlRegisterUncreatableType<VirtualmonitorDbusInterface>(uri,
+                                                             1,
+                                                             0,
+@@ -119,13 +123,19 @@ void KdeConnectDeclarativePlugin::registerTypes(const char *uri)
+     registerFactory<BatteryDbusInterface>(uri, "DeviceBatteryDbusInterfaceFactory");
+     registerFactory<ConnectivityReportDbusInterface>(uri, "DeviceConnectivityReportDbusInterfaceFactory");
+     registerFactory<FindMyPhoneDeviceDbusInterface>(uri, "FindMyPhoneDbusInterfaceFactory");
++#ifndef __APPLE__
+     registerFactory<SftpDbusInterface>(uri, "SftpDbusInterfaceFactory");
+     registerFactory<RemoteKeyboardDbusInterface>(uri, "RemoteKeyboardDbusInterfaceFactory");
++#endif
+     registerFactory<ClipboardDbusInterface>(uri, "ClipboardDbusInterfaceFactory");
+     registerFactory<MprisDbusInterface>(uri, "MprisDbusInterfaceFactory");
++#ifndef __APPLE__
+     registerFactory<RemoteControlDbusInterface>(uri, "RemoteControlDbusInterfaceFactory");
++#endif
+     registerFactory<LockDeviceDbusInterface>(uri, "LockDeviceDbusInterfaceFactory");
++#ifndef __APPLE__
+     registerFactory<SmsDbusInterface>(uri, "SmsDbusInterfaceFactory");
++#endif
+     registerFactory<RemoteCommandsDbusInterface>(uri, "RemoteCommandsDbusInterfaceFactory");
+     registerFactory<ShareDbusInterface>(uri, "ShareDbusInterfaceFactory");
+     registerFactory<RemoteSystemVolumeDbusInterface>(uri, "RemoteSystemVolumeDbusInterfaceFactory");
+diff --git a/indicator/deviceindicator.cpp b/indicator/deviceindicator.cpp
+index d5bbb4b9e..d401e04a7 100644
+--- a/indicator/deviceindicator.cpp
++++ b/indicator/deviceindicator.cpp
+@@ -49,6 +49,7 @@ DeviceIndicator::DeviceIndicator(DeviceDbusInterface *device)
+ 
+     this->addSeparator();
+ 
++#ifndef __APPLE__
+     // Browse device filesystem
+     auto browse = addAction(QIcon::fromTheme(QStringLiteral("document-open-folder")), i18n("Browse device"));
+     connect(browse, &QAction::triggered, device, [device]() {
+@@ -62,6 +63,7 @@ DeviceIndicator::DeviceIndicator(DeviceDbusInterface *device)
+             browse->setVisible(available && !error);
+         },
+         this);
++#endif
+ 
+     // Clipboard
+     auto clipboard = addAction(QIcon::fromTheme(QStringLiteral("klipper")), i18n("Send clipboard"));
+diff --git a/interfaces/CMakeLists.txt b/interfaces/CMakeLists.txt
+index a300428c5..5e7470ad6 100644
+--- a/interfaces/CMakeLists.txt
++++ b/interfaces/CMakeLists.txt
+@@ -46,22 +46,27 @@ geninterface(${PROJECT_SOURCE_DIR}/core/daemon.h generated/daemoninterface)
+ geninterface(${PROJECT_SOURCE_DIR}/core/device.h generated/deviceinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/battery/batteryplugin.h generated/batteryinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/connectivity-report/connectivity_reportplugin.h generated/connectivityinterface)
+-geninterface(${PROJECT_SOURCE_DIR}/plugins/sftp/sftpplugin.h generated/devicesftpinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/notifications/notificationsplugin.h generated/devicenotificationsinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/findmyphone/findmyphoneplugin.h generated/devicefindmyphoneinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/notifications/notification.h generated/notificationinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/mprisremote/mprisremoteplugin.h generated/mprisremoteinterface)
+-geninterface(${PROJECT_SOURCE_DIR}/plugins/remotecontrol/remotecontrolplugin.h generated/remotecontrolinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/lockdevice/lockdeviceplugin.h generated/lockdeviceinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/remotecommands/remotecommandsplugin.h generated/remotecommandsinterface)
+-geninterface(${PROJECT_SOURCE_DIR}/plugins/remotekeyboard/remotekeyboardplugin.h generated/remotekeyboardinterface)
+-geninterface(${PROJECT_SOURCE_DIR}/plugins/sms/smsplugin.h generated/smsinterface)
+-geninterface(${PROJECT_SOURCE_DIR}/plugins/sms/conversationsdbusinterface.h generated/conversationsinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/share/shareplugin.h generated/shareinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/remotesystemvolume/remotesystemvolumeplugin.h generated/remotesystemvolumeinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/virtualmonitor/virtualmonitorplugin.h generated/virtualmonitorinterface)
+ geninterface(${PROJECT_SOURCE_DIR}/plugins/clipboard/clipboardplugin.h generated/deviceclipboardinterface)
+ 
++# These interfaces use Qt types (QPoint, QVariantMap, etc.) that cannot be automatically
++# mapped to D-Bus type signatures on macOS, causing qdbusxml2cpp to fail with empty type=""
++if(NOT APPLE)
++    geninterface(${PROJECT_SOURCE_DIR}/plugins/sftp/sftpplugin.h generated/devicesftpinterface)
++    geninterface(${PROJECT_SOURCE_DIR}/plugins/remotecontrol/remotecontrolplugin.h generated/remotecontrolinterface)
++    geninterface(${PROJECT_SOURCE_DIR}/plugins/remotekeyboard/remotekeyboardplugin.h generated/remotekeyboardinterface)
++    geninterface(${PROJECT_SOURCE_DIR}/plugins/sms/smsplugin.h generated/smsinterface)
++    geninterface(${PROJECT_SOURCE_DIR}/plugins/sms/conversationsdbusinterface.h generated/conversationsinterface)
++endif()
++
+ # System dbus interfaces
+ if (UNIX AND NOT APPLE)
+     geninterface(systeminterfaces/org.freedesktop.login1.xml generated/systeminterfaces/login1)
+diff --git a/interfaces/dbusinterfaces.cpp b/interfaces/dbusinterfaces.cpp
+index 54fed5222..e373b1cee 100644
+--- a/interfaces/dbusinterfaces.cpp
++++ b/interfaces/dbusinterfaces.cpp
+@@ -85,6 +85,7 @@ NotificationDbusInterface::NotificationDbusInterface(const QString &deviceId, co
+ {
+ }
+ 
++#ifndef __APPLE__
+ DeviceConversationsDbusInterface::DeviceConversationsDbusInterface(const QString &deviceId, QObject *parent)
+     : OrgKdeKdeconnectDeviceConversationsInterface(DaemonDbusInterface::activatedService(),
+                                                    QStringLiteral("/modules/kdeconnect/devices/") + deviceId,
+@@ -100,6 +101,7 @@ SftpDbusInterface::SftpDbusInterface(const QString &id, QObject *parent)
+                                           parent)
+ {
+ }
++#endif
+ 
+ MprisDbusInterface::MprisDbusInterface(const QString &id, QObject *parent)
+     : OrgKdeKdeconnectDeviceMprisremoteInterface(DaemonDbusInterface::activatedService(),
+@@ -110,6 +112,7 @@ MprisDbusInterface::MprisDbusInterface(const QString &id, QObject *parent)
+     connect(this, &OrgKdeKdeconnectDeviceMprisremoteInterface::propertiesChanged, this, &MprisDbusInterface::propertiesChangedProxy);
+ }
+ 
++#ifndef __APPLE__
+ RemoteControlDbusInterface::RemoteControlDbusInterface(const QString &id, QObject *parent)
+     : OrgKdeKdeconnectDeviceRemotecontrolInterface(DaemonDbusInterface::activatedService(),
+                                                    QLatin1String("/modules/kdeconnect/devices/%1/remotecontrol").arg(id),
+@@ -117,6 +120,7 @@ RemoteControlDbusInterface::RemoteControlDbusInterface(const QString &id, QObjec
+                                                    parent)
+ {
+ }
++#endif
+ 
+ LockDeviceDbusInterface::LockDeviceDbusInterface(const QString &id, QObject *parent)
+     : OrgKdeKdeconnectDeviceLockdeviceInterface(DaemonDbusInterface::activatedService(),
+@@ -144,6 +148,7 @@ RemoteCommandsDbusInterface::RemoteCommandsDbusInterface(const QString &deviceId
+ {
+ }
+ 
++#ifndef __APPLE__
+ RemoteKeyboardDbusInterface::RemoteKeyboardDbusInterface(const QString &deviceId, QObject *parent)
+     : OrgKdeKdeconnectDeviceRemotekeyboardInterface(DaemonDbusInterface::activatedService(),
+                                                     QLatin1String("/modules/kdeconnect/devices/%1/remotekeyboard").arg(deviceId),
+@@ -160,6 +165,7 @@ SmsDbusInterface::SmsDbusInterface(const QString &deviceId, QObject *parent)
+                                          parent)
+ {
+ }
++#endif
+ 
+ ShareDbusInterface::ShareDbusInterface(const QString &deviceId, QObject *parent)
+     : OrgKdeKdeconnectDeviceShareInterface(DaemonDbusInterface::activatedService(),
+diff --git a/interfaces/dbusinterfaces.h b/interfaces/dbusinterfaces.h
+index bd918307f..30505e59b 100644
+--- a/interfaces/dbusinterfaces.h
++++ b/interfaces/dbusinterfaces.h
+@@ -11,23 +11,26 @@
+ 
+ #include "generated/batteryinterface.h"
+ #include "generated/connectivityinterface.h"
+-#include "generated/conversationsinterface.h"
+ #include "generated/daemoninterface.h"
+ #include "generated/deviceclipboardinterface.h"
+ #include "generated/devicefindmyphoneinterface.h"
+ #include "generated/deviceinterface.h"
+ #include "generated/devicenotificationsinterface.h"
+-#include "generated/devicesftpinterface.h"
+ #include "generated/lockdeviceinterface.h"
+ #include "generated/mprisremoteinterface.h"
+ #include "generated/notificationinterface.h"
+ #include "generated/remotecommandsinterface.h"
+-#include "generated/remotecontrolinterface.h"
+-#include "generated/remotekeyboardinterface.h"
+ #include "generated/remotesystemvolumeinterface.h"
+ #include "generated/shareinterface.h"
+-#include "generated/smsinterface.h"
+ #include "generated/virtualmonitorinterface.h"
++// These interfaces are not generated on macOS (see interfaces/CMakeLists.txt)
++#ifndef __APPLE__
++#include "generated/conversationsinterface.h"
++#include "generated/devicesftpinterface.h"
++#include "generated/remotecontrolinterface.h"
++#include "generated/remotekeyboardinterface.h"
++#include "generated/smsinterface.h"
++#endif
+ 
+ /**
+  * Using these "proxy" classes just in case we need to rename the
+@@ -119,19 +122,23 @@ private:
+     const QString id;
+ };
+ 
++#ifndef __APPLE__
+ class KDECONNECTINTERFACES_EXPORT DeviceConversationsDbusInterface : public OrgKdeKdeconnectDeviceConversationsInterface
+ {
+     Q_OBJECT
+ public:
+     explicit DeviceConversationsDbusInterface(const QString &deviceId, QObject *parent = nullptr);
+ };
++#endif
+ 
++#ifndef __APPLE__
+ class KDECONNECTINTERFACES_EXPORT SftpDbusInterface : public OrgKdeKdeconnectDeviceSftpInterface
+ {
+     Q_OBJECT
+ public:
+     explicit SftpDbusInterface(const QString &deviceId, QObject *parent = nullptr);
+ };
++#endif
+ 
+ class KDECONNECTINTERFACES_EXPORT MprisDbusInterface : public OrgKdeKdeconnectDeviceMprisremoteInterface
+ {
+@@ -154,12 +161,14 @@ Q_SIGNALS:
+     void propertiesChangedProxy();
+ };
+ 
++#ifndef __APPLE__
+ class KDECONNECTINTERFACES_EXPORT RemoteControlDbusInterface : public OrgKdeKdeconnectDeviceRemotecontrolInterface
+ {
+     Q_OBJECT
+ public:
+     explicit RemoteControlDbusInterface(const QString &deviceId, QObject *parent = nullptr);
+ };
++#endif
+ 
+ class KDECONNECTINTERFACES_EXPORT LockDeviceDbusInterface : public OrgKdeKdeconnectDeviceLockdeviceInterface
+ {
+@@ -189,6 +198,7 @@ public:
+     explicit RemoteCommandsDbusInterface(const QString &deviceId, QObject *parent = nullptr);
+ };
+ 
++#ifndef __APPLE__
+ class KDECONNECTINTERFACES_EXPORT RemoteKeyboardDbusInterface : public OrgKdeKdeconnectDeviceRemotekeyboardInterface
+ {
+     Q_OBJECT
+@@ -205,6 +215,7 @@ class KDECONNECTINTERFACES_EXPORT SmsDbusInterface : public OrgKdeKdeconnectDevi
+ public:
+     explicit SmsDbusInterface(const QString &deviceId, QObject *parent = nullptr);
+ };
++#endif
+ 
+ class KDECONNECTINTERFACES_EXPORT ShareDbusInterface : public OrgKdeKdeconnectDeviceShareInterface
+ {
+diff --git a/plugins/CMakeLists.txt b/plugins/CMakeLists.txt
+index b2c6acf5b..b03f36d4e 100644
+--- a/plugins/CMakeLists.txt
++++ b/plugins/CMakeLists.txt
+@@ -3,7 +3,9 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdeconnect-plugins\")
+ add_subdirectory(ping)
+ add_subdirectory(connectivity-report)
+ add_subdirectory(remotecommands)
+-add_subdirectory(remotecontrol)
++if(NOT APPLE)
++    add_subdirectory(remotecontrol)
++endif()
+ add_subdirectory(remotesystemvolume)
+ add_subdirectory(clipboard)
+ add_subdirectory(runcommand)
+@@ -25,12 +27,16 @@ if(NOT APPLE)
+ endif()
+ add_subdirectory(contacts)
+ add_subdirectory(share)
+-add_subdirectory(remotekeyboard)
++if(NOT APPLE)
++    add_subdirectory(remotekeyboard)
++endif()
+ add_subdirectory(notifications)
+ add_subdirectory(findmyphone)
+ add_subdirectory(telephony)
+ add_subdirectory(mousepad)
+-add_subdirectory(sms)
++if(NOT APPLE)
++    add_subdirectory(sms)
++endif()
+ add_subdirectory(screensaver-inhibit)
+ add_subdirectory(virtualmonitor)
+ 
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 8818a3878..8ad9e15e5 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -3,7 +3,6 @@ find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Test)
+ set(kdeconnect_libraries
+     kdeconnectcore
+     kdeconnectinterfaces
+-    kdeconnectsmshelper
+     kdeconnectversion
+     KF6::GuiAddons
+     KF6::I18n
+@@ -16,10 +15,19 @@ set(kdeconnect_libraries
+     Qt::Test
+ )
+ 
++# Add smshelper only on non-Apple platforms
++if(NOT APPLE)
++    list(APPEND kdeconnect_libraries kdeconnectsmshelper)
++endif()
++
+ ecm_add_test(notificationstest.cpp LINK_LIBRARIES ${kdeconnect_libraries})
+ ecm_add_test(pluginloadtest.cpp LINK_LIBRARIES ${kdeconnect_libraries})
+ ecm_add_test(sendfiletest.cpp LINK_LIBRARIES ${kdeconnect_libraries})
+-ecm_add_test(smshelpertest.cpp LINK_LIBRARIES ${kdeconnect_libraries})
++
++# SMS helper test only works on non-Apple platforms
++if(NOT APPLE)
++    ecm_add_test(smshelpertest.cpp LINK_LIBRARIES ${kdeconnect_libraries})
++endif()
+ 
+ if(MDNS_ENABLED)
+     ecm_add_test(mdnstest.cpp LINK_LIBRARIES ${kdeconnect_libraries})
