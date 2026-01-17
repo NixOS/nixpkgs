@@ -7173,10 +7173,6 @@ with pkgs;
     extraOnly = true;
   };
 
-  libgda5 = callPackage ../development/libraries/libgda/5.x.nix { };
-
-  libgda6 = callPackage ../development/libraries/libgda/6.x.nix { };
-
   libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
   libgnome-games-support_2_0 =
     callPackage ../development/libraries/libgnome-games-support/2.0.nix
