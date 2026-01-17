@@ -17,12 +17,12 @@ let
     };
   };
 
-  version = "4.2.0";
+  version = "4.4.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-BQ2vJIEXS51dBkqdmKUuLB6hM8QRJW0zVDayYt8Pe+w=";
+    hash = "sha256-Cm/Ch7dBKInQYPFGfSlSMLgj8uQR6E3S+6gCFUyvFSU=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -35,7 +35,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-kwt4vSIiC8NNaKmygl2moV8ft02eB4ylPND4oe9tBUA=";
+      hash = "sha256-g71OGg0PAo60h0bC+oOyvLvPOCg0pYXuYD8vsR5X9/k=";
     };
 
     nativeBuildInputs = [
@@ -91,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
       factory-boy
       gunicorn
       jsonschema
+      langfuse
       lxml
       markdown
       mozilla-django-oidc
