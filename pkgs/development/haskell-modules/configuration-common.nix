@@ -509,15 +509,19 @@ with haskellLib;
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
-  # Fixes compilation for basement on i686
-  # https://github.com/haskell-foundation/foundation/pull/573
   basement = appendPatches [
+    # Fixes compilation for basement on i686
+    # https://github.com/haskell-foundation/foundation/pull/573
     (fetchpatch {
       name = "basement-i686-ghc-9.4.patch";
       url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
       sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
       stripLen = 1;
     })
+
+    # Fixes compilation on windows
+    ./patches/basement-add-cast.patch
+
   ] super.basement;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
