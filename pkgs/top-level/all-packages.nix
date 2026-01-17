@@ -7173,11 +7173,6 @@ with pkgs;
     extraOnly = true;
   };
 
-  libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
-  libgnome-games-support_2_0 =
-    callPackage ../development/libraries/libgnome-games-support/2.0.nix
-      { };
-
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
