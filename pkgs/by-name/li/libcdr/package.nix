@@ -4,7 +4,7 @@
   fetchurl,
   libwpg,
   libwpd,
-  lcms,
+  lcms2,
   pkg-config,
   librevenge,
   icu,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libwpg
     libwpd
-    lcms
+    lcms2
     librevenge
     icu
     boost
