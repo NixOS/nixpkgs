@@ -9,10 +9,12 @@
   gnome-common,
   gtk-doc,
   gtk2,
-  lua,
+  lua5_1,
   gobject-introspection,
 }:
-
+let
+  lua = lua5_1;
+in
 stdenv.mkDerivation rec {
   pname = "keybinder";
   version = "0.3.1";

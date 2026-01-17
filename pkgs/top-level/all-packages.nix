@@ -7118,10 +7118,6 @@ with pkgs;
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
-  keybinder = callPackage ../development/libraries/keybinder {
-    lua = lua5_1;
-  };
-
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
   };
