@@ -43,6 +43,12 @@ Usage: nixos-container list
          [--port <port>]
          [--host-address <string>]
          [--local-address <string>]
+          [--bind <host_path>:<container_path>]
+          [--bind-ro <host_path>:<container_path>]
+          [--system-call-filter <filter>]
+          [--capability <cap>]
+          [--drop-capability <cap>]
+          [--extra-flags <string>]
        nixos-container destroy <container-name>
        nixos-container restart <container-name>
        nixos-container start <container-name>
@@ -77,6 +83,14 @@ my $localAddress;
 my $flake;
 my $flakeAttr = "container";
 
+my $extraFlags;
+
+my @binds;
+my @bindRos;
+my @systemCallFilters;
+my @capabilities;
+my @dropCapabilities;
+
 # Nix passthru flags.
 my @nixFlags;
 my @nixFlags2;
@@ -107,6 +121,12 @@ GetOptions(
     "host-address=s" => \$hostAddress,
     "local-address=s" => \$localAddress,
     "flake=s" => \$flake,
+    "bind=s" => \@binds,
+    "bind-ro=s" => \@bindRos,
+    "system-call-filter=s" => \@systemCallFilters,
+    "capability=s" => \@capabilities,
+    "drop-capability=s" => \@dropCapabilities,
+    "extra-flags=s" => \$extraFlags,
     # Nix passthru options.
     "log-format=s" => \&copyNixFlags1,
     "option=s{2}" => \&copyNixFlags2,
@@ -265,6 +285,31 @@ if ($action eq "create") {
     push @conf, "HOST_PORT=$port\n";
     push @conf, "AUTO_START=$autoStart\n";
     push @conf, "FLAKE=$flake\n" if defined $flake;
+
+    my @extraFlags;
+    foreach my $bind (@binds) {
+        push @extraFlags, "--bind=$bind";
+    }
+    foreach my $bindRo (@bindRos) {
+        push @extraFlags, "--bind-ro=$bindRo";
+    }
+    foreach my $filter (@systemCallFilters) {
+        push @extraFlags, "--system-call-filter=$filter";
+    }
+    foreach my $cap (@capabilities) {
+        push @extraFlags, "--capability=$cap";
+    }
+    foreach my $dropCap (@dropCapabilities) {
+        push @extraFlags, "--drop-capability=$dropCap";
+    }
+    if (defined $extraFlags) {
+       push @extraFlags, split(/\s+/, $extraFlags);
+    }
+    if (@extraFlags) {
+       my $flags = join(' ', @extraFlags);
+       push @conf, "EXTRA_NSPAWN_FLAGS=$flags\n";
+    }
+
     write_file($confFile, \@conf);
 
     close($lock);

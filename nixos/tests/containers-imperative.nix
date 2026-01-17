@@ -172,6 +172,39 @@
           )
           machine.succeed("nixos-container destroy tmpfiles")
 
+      with subtest("Test bind mounts"):
+          machine.succeed("mkdir -p /bind-test")
+          machine.succeed("echo 'test data' > /bind-test/file.txt")
+          machine.succeed("nixos-container create bindtest --bind /bind-test:/tmp/bind")
+          machine.succeed("nixos-container start bindtest")
+          # Create the bind mount target directory in the container
+          machine.succeed("nixos-container run bindtest -- mkdir -p /tmp/bind")
+          # Check that the file is accessible in the container
+          assert "test data" in machine.succeed("nixos-container run bindtest -- cat /tmp/bind/file.txt")
+          # Modify the file from inside the container
+          machine.succeed("nixos-container run bindtest -- sh -c 'echo modified > /tmp/bind/file.txt'")
+          # Check that the change is reflected on the host
+          assert "modified" in machine.succeed("cat /bind-test/file.txt")
+          machine.succeed("nixos-container destroy bindtest")
+
+      with subtest("Test bind mounts with extra flags"):
+          machine.succeed("mkdir -p /bind-test-rw")
+          machine.succeed("echo 'rw data' > /bind-test-rw/file.txt")
+          machine.succeed("mkdir -p /bind-test-ro")
+          machine.succeed("echo 'ro data' > /bind-test-ro/file.txt")
+          machine.succeed("nixos-container create bindtest2 --bind /bind-test-rw:/tmp/bind-rw --extra-flags='--bind-ro /bind-test-ro:/tmp/bind-ro'")
+          machine.succeed("nixos-container start bindtest2")
+          # Create the bind mount target directories in the container
+          machine.succeed("nixos-container run bindtest2 -- mkdir -p /tmp/bind-rw /tmp/bind-ro")
+          # Check that the rw file is accessible and modifiable
+          assert "rw data" in machine.succeed("nixos-container run bindtest2 -- cat /tmp/bind-rw/file.txt")
+          machine.succeed("nixos-container run bindtest2 -- sh -c 'echo modified-rw > /tmp/bind-rw/file.txt'")
+          assert "modified-rw" in machine.succeed("cat /bind-test-rw/file.txt")
+          # Check that the ro file is accessible but not modifiable
+          assert "ro data" in machine.succeed("nixos-container run bindtest2 -- cat /tmp/bind-ro/file.txt")
+          machine.fail("nixos-container run bindtest2 -- sh -c 'echo should-fail > /tmp/bind-ro/file.txt'")
+          machine.succeed("nixos-container destroy bindtest2")
+
       with subtest("Execute commands via the root shell"):
           assert "Linux" in machine.succeed(f"nixos-container run {id1} -- uname")
 
