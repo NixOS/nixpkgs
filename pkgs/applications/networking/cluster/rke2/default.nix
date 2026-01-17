@@ -16,6 +16,8 @@ rec {
       }
     ) extraArgs).overrideAttrs
       {
+        # limited functionality due to missing version data
+        meta.broken = true;
         meta.knownVulnerabilities = [ "rke2_1_31 has reached end-of-life on 2025-11-11" ];
       };
 
