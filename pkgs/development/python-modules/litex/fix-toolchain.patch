@@ -1,0 +1,37 @@
+--- a/litex/soc/software/libc/Makefile 2026-01-17 00:49:47.966438824 -0800
++++ b/litex/soc/software/libc/Makefile 2026-01-17 00:49:09.146388983 -0800
+@@ -18,9 +18,9 @@
+ define CROSSFILE
+ [binaries]
+ c     = $(MESON_CROSS_CC)
+-ar    = '$(TRIPLE)-gcc-ar'
++ar    = '$(TRIPLE)-ar'
+ as    = '$(TRIPLE)-as'
+-nm    = '$(TRIPLE)-gcc-nm'
++nm    = '$(TRIPLE)-nm'
+ strip = '$(TRIPLE)-strip'
+ 
+ [host_machine]
+@@ -40,9 +40,11 @@
+ 
+ __libc.a: cross.txt
+ 	cp -a $(PICOLIBC_DIRECTORY) $(BUILDINC_DIRECTORY)/../picolibc_src
++	chmod -R u+w $(BUILDINC_DIRECTORY)/../picolibc_src
+ 
+ 	if [ -d "$(LIBC_DIRECTORY)/$(CPUFAMILY)" ]; then \
+ 		cp $(LIBC_DIRECTORY)/$(CPUFAMILY)/* $(BUILDINC_DIRECTORY)/../picolibc_src/newlib/libc/machine/$(CPUFAMILY)/ ;\
++		chmod -R u+w $(BUILDINC_DIRECTORY)/../picolibc_src/newlib/libc/machine/$(CPUFAMILY)/ ;\
+ 	fi
+ 
+ 	meson $(BUILDINC_DIRECTORY)/../picolibc_src \
+--- a/litex/soc/software/common.mak	2026-01-17 01:18:04.295359920 -0800
++++ b/litex/soc/software/common.mak	2026-01-17 01:17:04.555550547 -0800
+@@ -15,7 +15,7 @@
+ CC_normal      := $(CCACHE) $(TARGET_PREFIX)gcc -std=gnu99
+ CX_normal      := $(CCACHE) $(TARGET_PREFIX)g++
+ endif
+-AR_normal      := $(TARGET_PREFIX)gcc-ar
++AR_normal      := $(TARGET_PREFIX)ar
+ LD_normal      := $(TARGET_PREFIX)ld
+ OBJCOPY_normal := $(TARGET_PREFIX)objcopy
+ 

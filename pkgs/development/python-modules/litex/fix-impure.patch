@@ -1,0 +1,136 @@
+--- a/litex/soc/cores/cpu/vexriscv_smp/core.py 2026-01-16 23:27:51.148061993 -0800
++++ b/litex/soc/cores/cpu/vexriscv_smp/core.py 2026-01-16 23:27:47.742045667 -0800
+@@ -6,6 +6,9 @@
+ # SPDX-License-Identifier: BSD-2-Clause
+ 
+ import os
++import tempfile
++import stat
++import shutil
+ import subprocess
+ 
+ from migen import *
+@@ -216,7 +219,6 @@
+         VexRiscvSMP.hardware_breakpoints = 1
+         VexRiscvSMP.coherent_dma = False
+         VexRiscvSMP.generate_cluster_name()
+-        VexRiscvSMP.generate_netlist()
+ 
+         # Single cores.
+         for data_width in [None, 16, 32, 64, 128]:
+@@ -239,12 +241,10 @@
+             # Without DMA.
+             VexRiscvSMP.coherent_dma   = False
+             VexRiscvSMP.generate_cluster_name()
+-            VexRiscvSMP.generate_netlist()
+ 
+             # With DMA.
+             VexRiscvSMP.coherent_dma   = True
+             VexRiscvSMP.generate_cluster_name()
+-            VexRiscvSMP.generate_netlist()
+ 
+             # High cache amount.
+             VexRiscvSMP.dcache_size    = 8192
+@@ -261,12 +261,10 @@
+             # Without DMA.
+             VexRiscvSMP.coherent_dma = False
+             VexRiscvSMP.generate_cluster_name()
+-            VexRiscvSMP.generate_netlist()
+ 
+             # With DMA.
+             VexRiscvSMP.coherent_dma = True
+             VexRiscvSMP.generate_cluster_name()
+-            VexRiscvSMP.generate_netlist()
+ 
+         # Multi cores.
+         for core_count in [2,4]:
+@@ -280,13 +278,16 @@
+             VexRiscvSMP.coherent_dma   = True
+             VexRiscvSMP.cpu_count      = core_count
+             VexRiscvSMP.generate_cluster_name()
+-            VexRiscvSMP.generate_netlist()
+ 
+     # Netlist Generation.
+     @staticmethod
+     def generate_netlist():
+         print(f"Generating cluster netlist")
+         vdir = get_data_mod("cpu", "vexriscv_smp").data_location
++
++        tmpdir = tempfile.mkdtemp(prefix="vexriscv-sbt-")
++        nldir = os.path.join(tmpdir, "netlist")
++
+         gen_args = []
+         if(VexRiscvSMP.coherent_dma):
+             gen_args.append("--coherent-dma")
+@@ -310,14 +311,45 @@
+         gen_args.append(f"--cpu-per-fpu={VexRiscvSMP.cpu_per_fpu}")
+         gen_args.append(f"--rvc={VexRiscvSMP.with_rvc}")
+         gen_args.append(f"--netlist-name={VexRiscvSMP.cluster_name}")
+-        gen_args.append(f"--netlist-directory={vdir}")
++        gen_args.append(f"--netlist-directory={nldir}")
+         gen_args.append(f"--dtlb-size={VexRiscvSMP.dtlb_size}")
+         gen_args.append(f"--itlb-size={VexRiscvSMP.itlb_size}")
+         gen_args.append(f"--jtag-tap={VexRiscvSMP.jtag_tap}")
+ 
+-        cmd = 'cd {path} && sbt "runMain vexriscv.demo.smp.VexRiscvLitexSmpClusterCmdGen {args}"'.format(path=os.path.join(vdir, "ext", "VexRiscv"), args=" ".join(gen_args))
++        workdir = os.path.join(tmpdir, "VexRiscv")
++
++        for name in ["VexRiscv", "SpinalHDL"]:
++            srcdir = os.path.join(vdir, "ext", name)
++            shutil.copytree(srcdir, os.path.join(tmpdir, name), dirs_exist_ok=True)
++
++            for root, dirs, files in os.walk(os.path.join(tmpdir, name)):
++                os.chmod(root, stat.S_IRWXU)
++                for d in dirs:
++                    os.chmod(os.path.join(root, d), stat.S_IRWXU)
++                for f in files:
++                    os.chmod(os.path.join(root, f), stat.S_IRWXU)
++
++        cmd = 'cd {path} && sbt ++compile'.format(
++            path=os.path.join(tmpdir, "SpinalHDL")
++        )
+         subprocess.check_call(cmd, shell=True)
+ 
++        plugin_dst = os.path.join(tmpdir, "SpinalHDL", "target", "scala-2.12")
++
++        os.makedirs(plugin_dst, exist_ok=True)
++
++        plugin_src = os.path.join(tmpdir, "SpinalHDL", "idslplugin", "target", "scala-2.12")
++        for file in os.listdir(plugin_src):
++            if file.startswith("spinalhdl-idsl-plugin") and file.endswith(".jar"):
++                shutil.copy(os.path.join(plugin_src, file), plugin_dst)
++
++        cmd = 'cd {path} && sbt "runMain vexriscv.demo.smp.VexRiscvLitexSmpClusterCmdGen {args}"'.format(
++            path=workdir,
++            args=" ".join(gen_args)
++        )
++        subprocess.check_call(cmd, shell=True)
++        return nldir
++
+ 
+     def __init__(self, platform, variant):
+         self.platform         = platform
+@@ -433,8 +465,7 @@
+     def add_sources(self, platform):
+         vdir = get_data_mod("cpu", "vexriscv_smp").data_location
+         print(f"VexRiscv cluster : {self.cluster_name}")
+-        if not os.path.exists(os.path.join(vdir, self.cluster_name + ".v")):
+-            self.generate_netlist()
++        nldir = self.generate_netlist()
+ 
+ 
+         # Add RAM.
+@@ -452,7 +483,7 @@
+         platform.add_source(os.path.join(vdir, ram_filename), "verilog")
+ 
+         # Add Cluster.
+-        cluster_filename = os.path.join(vdir,  self.cluster_name + ".v")
++        cluster_filename = os.path.join(nldir,  self.cluster_name + ".v")
+         def add_synthesis_define(filename):
+             """Add SYNTHESIS define to verilog for toolchains requiring it, ex Gowin"""
+             synthesis_define = "`define SYNTHESIS\n"
+@@ -589,4 +620,3 @@
+ 
+         # Add verilog sources
+         self.add_sources(self.platform)
+-

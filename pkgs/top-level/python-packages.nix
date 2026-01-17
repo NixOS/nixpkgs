@@ -8822,6 +8822,8 @@ self: super: with self; {
 
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
 
+  litex = callPackage ../development/python-modules/litex { };
+
   littleutils = callPackage ../development/python-modules/littleutils { };
 
   livekit-api = callPackage ../development/python-modules/livekit-api { };
