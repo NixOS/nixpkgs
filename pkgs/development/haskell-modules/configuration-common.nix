@@ -274,7 +274,7 @@ with haskellLib;
       "vector-tests-O2"
     ];
     # inspection-testing doesn't work on all archs & ABIs
-    doCheck = !self.inspection-testing.meta.broken;
+    doCheck = super.vector.doCheck && !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
