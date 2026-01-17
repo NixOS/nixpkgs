@@ -5370,3 +5370,203 @@ index ab37d3d58c..29e59da958 100644
              /* Not added to the tree.  */
              free (crname);
            }
+
+commit f122d0b4d145814869bf10c56db1d971bcba55c5
+Author: Sunil K Pandey <sunil.k.pandey@intel.com>
+Date:   Tue Dec 9 08:57:44 2025 -0800
+
+    nptl: Optimize trylock for high cache contention workloads (BZ #33704)
+    
+    Check lock availability before acquisition to reduce cache line
+    bouncing.  Significantly improves trylock throughput on multi-core
+    systems under heavy contention.
+    
+    Tested on x86_64.
+    
+    Fixes BZ #33704.
+    
+    Co-authored-by: Alex M Wells <alex.m.wells@intel.com>
+    Reviewed-by: Wilco Dijkstra  <Wilco.Dijkstra@arm.com>
+    (cherry picked from commit 63716823dbad9482e09972907ae98e9cb00f9b86)
+
+diff --git a/nptl/pthread_mutex_trylock.c b/nptl/pthread_mutex_trylock.c
+index dbb8fcc754..392619021b 100644
+--- a/nptl/pthread_mutex_trylock.c
++++ b/nptl/pthread_mutex_trylock.c
+@@ -48,7 +48,8 @@ ___pthread_mutex_trylock (pthread_mutex_t *mutex)
+ 	  return 0;
+ 	}
+ 
+-      if (lll_trylock (mutex->__data.__lock) == 0)
++      if (atomic_load_relaxed (&(mutex->__data.__lock)) == 0
++	  && lll_trylock (mutex->__data.__lock) == 0)
+ 	{
+ 	  /* Record the ownership.  */
+ 	  mutex->__data.__owner = id;
+@@ -71,7 +72,10 @@ ___pthread_mutex_trylock (pthread_mutex_t *mutex)
+       /*FALL THROUGH*/
+     case PTHREAD_MUTEX_ADAPTIVE_NP:
+     case PTHREAD_MUTEX_ERRORCHECK_NP:
+-      if (lll_trylock (mutex->__data.__lock) != 0)
++      /* Mutex type is already loaded, lock check overhead should
++         be minimal.  */
++      if (atomic_load_relaxed (&(mutex->__data.__lock)) != 0
++	  || lll_trylock (mutex->__data.__lock) != 0)
+ 	break;
+ 
+       /* Record the ownership.  */
+
+commit b0ec8fb689df862171f0f78994a3bdeb51313545
+Author: Siddhesh Poyarekar <siddhesh@gotplt.org>
+Date:   Thu Jan 15 06:06:40 2026 -0500
+
+    memalign: reinstate alignment overflow check (CVE-2026-0861)
+    
+    The change to cap valid sizes to PTRDIFF_MAX inadvertently dropped the
+    overflow check for alignment in memalign functions, _mid_memalign and
+    _int_memalign.  Reinstate the overflow check in _int_memalign, aligned
+    with the PTRDIFF_MAX change since that is directly responsible for the
+    CVE.  The missing _mid_memalign check is not relevant (and does not have
+    a security impact) and may need a different approach to fully resolve,
+    so it has been omitted.
+    
+    CVE-Id: CVE-2026-0861
+    Vulnerable-Commit: 9bf8e29ca136094f73f69f725f15c51facc97206
+    Reported-by: Igor Morgenstern, Aisle Research
+    Fixes: BZ #33796
+    Reviewed-by: Wilco Dijkstra <Wilco.Dijkstra@arm.com>
+    Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
+    (cherry picked from commit c9188d333717d3ceb7e3020011651f424f749f93)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index 5f3e701fd1..1d5aa304d3 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -5167,7 +5167,7 @@ _int_memalign (mstate av, size_t alignment, size_t bytes)
+   INTERNAL_SIZE_T size;
+ 
+   nb = checked_request2size (bytes);
+-  if (nb == 0)
++  if (nb == 0 || alignment > PTRDIFF_MAX)
+     {
+       __set_errno (ENOMEM);
+       return NULL;
+@@ -5183,7 +5183,10 @@ _int_memalign (mstate av, size_t alignment, size_t bytes)
+      we don't find anything in those bins, the common malloc code will
+      scan starting at 2x.  */
+ 
+-  /* Call malloc with worst case padding to hit alignment. */
++  /* Call malloc with worst case padding to hit alignment.  ALIGNMENT is a
++     power of 2, so it tops out at (PTRDIFF_MAX >> 1) + 1, leaving plenty of
++     space to add MINSIZE and whatever checked_request2size adds to BYTES to
++     get NB.  Consequently, total below also does not overflow.  */
+   m = (char *) (_int_malloc (av, nb + alignment + MINSIZE));
+ 
+   if (m == NULL)
+diff --git a/malloc/tst-malloc-too-large.c b/malloc/tst-malloc-too-large.c
+index a548a37b46..a1bda673a3 100644
+--- a/malloc/tst-malloc-too-large.c
++++ b/malloc/tst-malloc-too-large.c
+@@ -152,7 +152,6 @@ test_large_allocations (size_t size)
+ }
+ 
+ 
+-static long pagesize;
+ 
+ /* This function tests the following aligned memory allocation functions
+    using several valid alignments and precedes each allocation test with a
+@@ -171,8 +170,8 @@ test_large_aligned_allocations (size_t size)
+ 
+   /* All aligned memory allocation functions expect an alignment that is a
+      power of 2.  Given this, we test each of them with every valid
+-     alignment from 1 thru PAGESIZE.  */
+-  for (align = 1; align <= pagesize; align *= 2)
++     alignment for the type of ALIGN, i.e. until it wraps to 0.  */
++  for (align = 1; align > 0; align <<= 1)
+     {
+       test_setup ();
+ #if __GNUC_PREREQ (7, 0)
+@@ -265,11 +264,6 @@ do_test (void)
+   DIAG_IGNORE_NEEDS_COMMENT (7, "-Walloc-size-larger-than=");
+ #endif
+ 
+-  /* Aligned memory allocation functions need to be tested up to alignment
+-     size equivalent to page size, which should be a power of 2.  */
+-  pagesize = sysconf (_SC_PAGESIZE);
+-  TEST_VERIFY_EXIT (powerof2 (pagesize));
+-
+   /* Loop 1: Ensure that all allocations with SIZE close to SIZE_MAX, i.e.
+      in the range (SIZE_MAX - 2^14, SIZE_MAX], fail.
+ 
+
+commit 453e6b8dbab935257eb0802b0c97bca6b67ba30e
+Author: Carlos O'Donell <carlos@redhat.com>
+Date:   Thu Jan 15 15:09:38 2026 -0500
+
+    resolv: Fix NSS DNS backend for getnetbyaddr (CVE-2026-0915)
+    
+    The default network value of zero for net was never tested for and
+    results in a DNS query constructed from uninitialized stack bytes.
+    The solution is to provide a default query for the case where net
+    is zero.
+    
+    Adding a test case for this was straight forward given the existence of
+    tst-resolv-network and if the test is added without the fix you observe
+    this failure:
+    
+    FAIL: resolv/tst-resolv-network
+    original exit status 1
+    error: tst-resolv-network.c:174: invalid QNAME: \146\218\129\128
+    error: 1 test failures
+    
+    With a random QNAME resulting from the use of uninitialized stack bytes.
+    
+    After the fix the test passes.
+    
+    Additionally verified using wireshark before and after to ensure
+    on-the-wire bytes for the DNS query were as expected.
+    
+    No regressions on x86_64.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit e56ff82d5034ec66c6a78f517af6faa427f65b0b)
+
+diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
+index 519f8422ca..e14e959d7c 100644
+--- a/resolv/nss_dns/dns-network.c
++++ b/resolv/nss_dns/dns-network.c
+@@ -207,6 +207,10 @@ _nss_dns_getnetbyaddr_r (uint32_t net, int type, struct netent *result,
+       sprintf (qbuf, "%u.%u.%u.%u.in-addr.arpa", net_bytes[3], net_bytes[2],
+ 	       net_bytes[1], net_bytes[0]);
+       break;
++    default:
++      /* Default network (net is originally zero).  */
++      strcpy (qbuf, "0.0.0.0.in-addr.arpa");
++      break;
+     }
+ 
+   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
+diff --git a/resolv/tst-resolv-network.c b/resolv/tst-resolv-network.c
+index d9f69649d0..181be80835 100644
+--- a/resolv/tst-resolv-network.c
++++ b/resolv/tst-resolv-network.c
+@@ -46,6 +46,9 @@ handle_code (const struct resolv_response_context *ctx,
+ {
+   switch (code)
+     {
++    case 0:
++      send_ptr (b, qname, qclass, qtype, "0.in-addr.arpa");
++      break;
+     case 1:
+       send_ptr (b, qname, qclass, qtype, "1.in-addr.arpa");
+       break;
+@@ -265,6 +268,9 @@ do_test (void)
+                 "error: TRY_AGAIN\n");
+ 
+   /* Lookup by address, success cases.  */
++  check_reverse (0,
++                 "name: 0.in-addr.arpa\n"
++                 "net: 0x00000000\n");
+   check_reverse (1,
+                  "name: 1.in-addr.arpa\n"
+                  "net: 0x00000001\n");
