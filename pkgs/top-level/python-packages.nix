@@ -8826,6 +8826,8 @@ self: super: with self; {
 
   litepcie = callPackage ../development/python-modules/litepcie { };
 
+  litesdcard = callPackage ../development/python-modules/litesdcard { };
+
   litestar = callPackage ../development/python-modules/litestar { };
 
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
