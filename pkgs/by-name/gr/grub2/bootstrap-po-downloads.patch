@@ -1,0 +1,13 @@
+diff --git a/bootstrap b/bootstrap
+index dc9fb4383..5d0e90a92 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -931,7 +931,7 @@ update_po_files() {
+   # Usually contains *.s1 checksum files.
+   ref_po_dir="$po_dir/.reference"
+ 
+-  test -d $ref_po_dir || mkdir $ref_po_dir || return
++  test -d $ref_po_dir && return || mkdir $ref_po_dir
+   download_po_files $ref_po_dir $domain \
+     && ls "$ref_po_dir"/*.po 2>/dev/null |
+       sed 's|.*/||; s|\.po$||' > "$po_dir/LINGUAS" || return
