@@ -15699,6 +15699,10 @@ self: super: with self; {
     callPackage ../development/python-modules/pythondata-cpu-vexriscv_smp
       { };
 
+  pythondata-software-compiler_rt =
+    callPackage ../development/python-modules/pythondata-software-compiler_rt
+      { };
+
   pythondata-software-picolibc =
     callPackage ../development/python-modules/pythondata-software-picolibc
       { };
