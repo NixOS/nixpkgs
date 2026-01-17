@@ -61,6 +61,7 @@ buildPythonPackage rec {
     numba
     numpy
     scipy
+    setuptools
   ];
 
   nativeCheckInputs = [
