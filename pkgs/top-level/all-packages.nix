@@ -7081,13 +7081,6 @@ with pkgs;
     libXinerama = xorg.libXinerama;
   };
 
-  indicator-application-gtk2 =
-    callPackage ../development/libraries/indicator-application/gtk2.nix
-      { };
-  indicator-application-gtk3 =
-    callPackage ../development/libraries/indicator-application/gtk3.nix
-      { };
-
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-3rdparty = recurseIntoAttrs (
     callPackages ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { }
