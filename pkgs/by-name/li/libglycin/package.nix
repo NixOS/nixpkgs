@@ -13,6 +13,7 @@
   vala,
   gi-docgen,
   gobject-introspection,
+  glycin-loaders,
   libseccomp,
   lcms2,
   gtk4,
@@ -137,6 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
             sponge = "${moreutils}/bin/sponge";
           }
         );
+
+    tests = {
+      inherit glycin-loaders;
+    };
   };
 
   meta = {

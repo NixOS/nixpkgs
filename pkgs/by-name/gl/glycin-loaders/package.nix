@@ -1,12 +1,12 @@
 {
   stdenv,
   lib,
-  fetchurl,
   cairo,
   cargo,
   gettext,
-  gnome,
+  glib,
   gtk4,
+  libglycin,
   lcms2,
   libheif,
   libjxl,
@@ -18,25 +18,12 @@
   pkg-config,
   rustc,
   rustPlatform,
-  common-updater-scripts,
-  _experimental-update-script-combinators,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "2.0.7";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xBasKbbT7NxnuQwVU3uhKTzrevlvoQHK5nt9HTflCrA=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "glycin-loaders-deps-${finalAttrs.version}";
-    hash = "sha256-UVVVjMt4vWkLob0H/MxIaW6rkBSFImu+5dezaCnc3Q8=";
-    dontConfigure = true;
-  };
+  inherit (libglycin) version src cargoDeps;
 
   nativeBuildInputs = [
     cargo
@@ -75,36 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
-
-  passthru = {
-    updateScript =
-      let
-        updateSource = gnome.updateScript {
-          attrPath = "glycin-loaders";
-          packageName = "glycin";
-        };
-        updateLockfile = {
-          command = [
-            "sh"
-            "-c"
-            ''
-              PATH=${
-                lib.makeBinPath [
-                  common-updater-scripts
-                ]
-              }
-              update-source-version glycin-loaders --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
-            ''
-          ];
-          # Experimental feature: do not copy!
-          supportedFeatures = [ "silent" ];
-        };
-      in
-      _experimental-update-script-combinators.sequence [
-        updateSource
-        updateLockfile
-      ];
-  };
 
   meta = {
     description = "Glycin loaders for several formats";
