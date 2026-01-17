@@ -7149,10 +7149,6 @@ with pkgs;
     extraOnly = true;
   };
 
-  libextractor = callPackage ../development/libraries/libextractor {
-    libmpeg2 = mpeg2dec;
-  };
-
   libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
   # Use Apple’s fork of libffi by default, which provides APIs and trampoline functionality that is not yet
