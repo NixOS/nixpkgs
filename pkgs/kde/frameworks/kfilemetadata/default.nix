@@ -26,7 +26,8 @@ mkKdeDerivation {
     kconfig
     kdegraphics-mobipocket
     libappimage
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     attr
   ];
 }

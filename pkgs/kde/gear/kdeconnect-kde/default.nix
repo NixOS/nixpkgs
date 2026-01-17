@@ -19,7 +19,8 @@ mkKdeDerivation {
     (replaceVars ./hardcode-sshfs-path.patch {
       sshfs = lib.getExe sshfs;
     })
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fixes macOS build by disabling incompatible D-Bus interfaces, plugins, and tests
     ./darwin-compatibility.patch
   ];
@@ -41,7 +42,8 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtconnectivity
     qtmultimedia
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     wayland-protocols
     libfakekey

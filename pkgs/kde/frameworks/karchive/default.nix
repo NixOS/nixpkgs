@@ -12,5 +12,8 @@ mkKdeDerivation {
     qttools
     pkg-config
   ];
-  extraBuildInputs = [ xz bzip2 ];
+  extraBuildInputs = [
+    xz
+    bzip2
+  ];
 }

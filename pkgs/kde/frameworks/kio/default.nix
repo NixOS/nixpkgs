@@ -20,7 +20,8 @@ mkKdeDerivation {
     qt5compat
     qttools
     kauth
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     attr
   ];

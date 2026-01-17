@@ -109,16 +109,20 @@ let
 
   filteredDepNames = builtins.filter (
     dep:
-    !(builtins.elem dep excludeDependencies)
-    && !(builtins.elem dep darwinExcludedDeps)
+    dep != null && !(builtins.elem dep excludeDependencies) && !(builtins.elem dep darwinExcludedDeps)
   ) depNames;
 
   filteredExtraBuildInputs =
     if stdenv.hostPlatform.isDarwin then
       lib.filter (
         drv:
-        let name = lib.getName drv; in
-        name != "qtwayland" && name != "kdoctools"
+        drv != null
+        && (
+          let
+            name = lib.getName drv;
+          in
+          name != "qtwayland" && name != "kdoctools"
+        )
       ) extraBuildInputs
     else
       extraBuildInputs;
@@ -127,8 +131,13 @@ let
     if stdenv.hostPlatform.isDarwin then
       lib.filter (
         drv:
-        let name = lib.getName drv; in
-        name != "qtwayland" && name != "kdoctools"
+        drv != null
+        && (
+          let
+            name = lib.getName drv;
+          in
+          name != "qtwayland" && name != "kdoctools"
+        )
       ) extraPropagatedBuildInputs
     else
       extraPropagatedBuildInputs;

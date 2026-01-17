@@ -19,7 +19,8 @@ mkKdeDerivation {
     gpgme
     libgcrypt
     libsecret
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     kdoctools
   ];
 
