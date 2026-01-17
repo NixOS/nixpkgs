@@ -1274,11 +1274,11 @@
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-04LRhKCh1AmhhKaDT8+Un9hziJ5l7qrCCKAyBEacEOI=",
+    "hash": "sha256-BovhCb+01LJUE62geNJmDwpzV0ucQLpVWjXwfxsClyI=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.3.1",
+    "rev": "v3.4.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },
