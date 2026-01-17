@@ -25,7 +25,6 @@
   python3Packages,
 
   # Mandatory dependencies
-  libcap,
   util-linux,
   kbd,
   kmod,
@@ -333,7 +332,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcrypt
-    (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
   ]
