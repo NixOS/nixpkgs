@@ -21,21 +21,21 @@
 let
   mygui = callPackage ./mygui.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stuntrally";
   version = "3.3";
 
   src = fetchFromGitHub {
     owner = "stuntrally";
     repo = "stuntrally3";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BJMMsJ/ONZTpvXetaaHlgm6rih9oZmtJNBXv0IM855Y=";
   };
 
   tracks = fetchFromGitHub {
     owner = "stuntrally";
     repo = "tracks3";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nvIN5hIfTfnuJdlLNlmpmYo3WQhUxYWz14OFra/55w4=";
   };
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     cp -r config $share_dir/config
     cp bin/Release/plugins.cfg $share_dir/config
     cp -r data $share_dir/data
-    cp -r ${tracks} $share_dir/data/tracks
+    cp -r ${finalAttrs.tracks} $share_dir/data/tracks
 
     mkdir -p $out/bin
     cp bin/Release/{sr-editor3,sr-translator,stuntrally3} $out/bin
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };
-}
+})
