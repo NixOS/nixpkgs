@@ -7,17 +7,15 @@
   lib,
   nix-update-script,
 }:
-let
+
+buildGoModule (finalAttrs: {
   version = "1.7.2";
-in
-buildGoModule rec {
-  inherit version;
   pname = "scrutiny-collector";
 
   src = fetchFromGitHub {
     owner = "Starosdev";
     repo = "scrutiny";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xoXL8yLrYyjpkxLmbFQz/pp2BauJAU82x1FcslHCPoE=";
   };
 
@@ -48,9 +46,10 @@ buildGoModule rec {
   meta = {
     description = "Hard disk metrics collector for Scrutiny";
     homepage = "https://github.com/Starosdev/scrutiny";
+    changelog = "https://github.com/Starosdev/scrutiny/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samasaur ];
     mainProgram = "scrutiny-collector-metrics";
     platforms = lib.platforms.linux;
   };
-}
+})
