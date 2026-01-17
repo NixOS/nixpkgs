@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "yourdfpy";
-  version = "0.0.58";
+  version = "0.0.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clemense";
     repo = "yourdfpy";
     tag = "v${version}";
-    hash = "sha256-Wi4QcgTOf/1nXWssFtlyRxql8Jg1nNKjEGkWuP+w73g=";
+    hash = "sha256-9GSDD/RjLGlmuncyH97TqKZrPU8WpmbSKGT7sDKy9FA=";
   };
 
   build-system = [
