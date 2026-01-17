@@ -108,9 +108,9 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     substituteInPlace hyprland.pc.in \
-      --replace-fail  @PREFIX@ ""
+      --replace-fail  "@PREFIX@/" ""
     substituteInPlace example/hyprland.desktop.in \
-      --replace-fail  @PREFIX@ ""
+      --replace-fail  "@PREFIX@/" ""
   '';
 
   # variables used by CMake, and shown in `hyprctl version`
