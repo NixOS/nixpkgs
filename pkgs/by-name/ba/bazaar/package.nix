@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dtomvan
-      normalcea
     ];
     mainProgram = "bazaar";
     platforms = lib.platforms.linux;

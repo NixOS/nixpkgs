@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform development base for native Nickvision applications";
     homepage = "https://github.com/NickvisionApps/libnick";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libnick" ];
   };

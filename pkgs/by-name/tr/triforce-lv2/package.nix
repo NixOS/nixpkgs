@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      normalcea
       yuka
     ];
     platforms = [ "aarch64-linux" ];
