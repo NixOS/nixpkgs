@@ -9,6 +9,7 @@
   # dependencies
   eval-type-backport,
   httpx,
+  httpcore,
   invoke,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
@@ -30,7 +31,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistralai";
   version = "1.10.1";
   pyproject = true;
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y1et8Ez5TAge0kk/a9fA1zcgPStYf+6aO19OLhMGk/8=";
   };
 
@@ -89,11 +90,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for Mistral AI platform";
     homepage = "https://github.com/mistralai/client-python";
-    changelog = "https://github.com/mistralai/client-python/blob/${src.tag}/RELEASES.md";
+    changelog = "https://github.com/mistralai/client-python/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       mana-byte
     ];
   };
-}
+})
