@@ -446,6 +446,10 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--enable-dom"
               ];
+              # PHP 8.5+ has lexbor built into core; dom needs its headers.
+              env = lib.optionalAttrs (lib.versionAtLeast php.version "8.5") {
+                NIX_CFLAGS_COMPILE = "-I${php.unwrapped.dev}/include/php/ext/lexbor";
+              };
             }
             {
               name = "enchant";
@@ -571,28 +575,6 @@ lib.makeScope pkgs.newScope (
                      | Copyright (c) The PHP Group                                          |
                 '')
               ];
-            }
-            {
-              name = "opcache";
-              buildInputs = [
-                pcre2
-              ]
-              ++ lib.optional (
-                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
-              ) valgrind.dev;
-              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
-              zendExtension = true;
-              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                # Tests are flaky on darwin
-                rm ext/opcache/tests/blacklist.phpt
-                rm ext/opcache/tests/bug66338.phpt
-                rm ext/opcache/tests/bug78106.phpt
-                rm ext/opcache/tests/issue0115.phpt
-                rm ext/opcache/tests/issue0149.phpt
-                rm ext/opcache/tests/revalidate_path_01.phpt
-              '';
-              # Tests launch the builtin webserver.
-              __darwinAllowLocalNetworking = true;
             }
             {
               name = "openssl";
@@ -827,6 +809,30 @@ lib.makeScope pkgs.newScope (
                 "--with-imap-ssl"
                 "--with-kerberos"
               ];
+            }
+          ]
+          ++ lib.optionals (lib.versionOlder php.version "8.5") [
+            {
+              name = "opcache";
+              buildInputs = [
+                pcre2
+              ]
+              ++ lib.optional (
+                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+              ) valgrind.dev;
+              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              zendExtension = true;
+              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+                # Tests are flaky on darwin
+                rm ext/opcache/tests/blacklist.phpt
+                rm ext/opcache/tests/bug66338.phpt
+                rm ext/opcache/tests/bug78106.phpt
+                rm ext/opcache/tests/issue0115.phpt
+                rm ext/opcache/tests/issue0149.phpt
+                rm ext/opcache/tests/revalidate_path_01.phpt
+              '';
+              # Tests launch the builtin webserver.
+              __darwinAllowLocalNetworking = true;
             }
           ];
 

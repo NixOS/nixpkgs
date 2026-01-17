@@ -1235,6 +1235,10 @@ in
     inherit runTest;
     php = pkgs.php84;
   };
+  php85 = import ./php/default.nix {
+    inherit runTest;
+    php = pkgs.php85;
+  };
   phylactery = runTest ./web-apps/phylactery.nix;
   pict-rs = runTest ./pict-rs.nix;
   pihole-ftl = import ./pihole-ftl { inherit runTest; };
