@@ -7016,8 +7016,6 @@ with pkgs;
 
   hamlib = hamlib_3;
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
-
   harfbuzzFull = harfbuzz.override {
     withGraphite2 = true;
     withIcu = true;
@@ -7128,9 +7126,6 @@ with pkgs;
     gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
   };
 
-  krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
-    inherit (buildPackages.darwin) bootstrap_cmds;
-  };
   libkrb5 = krb5; # TODO(de11n) Try to make krb5 reuse libkrb5 as a dependency
 
   l-smash = callPackage ../development/libraries/l-smash {

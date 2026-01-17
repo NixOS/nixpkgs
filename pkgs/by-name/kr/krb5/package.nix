@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  bootstrap_cmds,
+  darwin,
   byacc, # can also use bison, but byacc has fewer dependencies
   keyutils,
   openssl,
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ]
   # Provides the mig command used by the build scripts
-  ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
 
   buildInputs = [
     openssl
