@@ -33,6 +33,10 @@ let
         # Based on https://gitlab.gnome.org/GNOME/libxml2/-/commit/f75abfcaa419a740a3191e56c60400f3ff18988d
         # Vendored, because there is no xmlCatalogSetDebug in 2.13.9, use fprintf instead
         ./2.13-CVE-2026-0992.patch
+
+        # Based on https://gitlab.gnome.org/GNOME/libxml2/-/commit/19549c61590c1873468c53e0026a2fbffae428ef.patch
+        # There are only whitespace differences from upstream.
+        ./2.13-CVE-2026-0989.patch
       ];
       freezeUpdateScript = true;
       extraMeta = {
