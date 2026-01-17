@@ -87,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r data $share_dir/data
     cp -r ${finalAttrs.tracks} $share_dir/data/tracks
 
+    install -Dm644 -t $out/share/icons/hicolor/512x512/apps data/gui/{stuntrally,sr-editor}.png
+    install -Dm644 -t $out/share/applications dist/{stuntrally3,sr-editor3}.desktop
+
     for binary in sr-editor3 sr-translator stuntrally3
     do
       install -Dm755 -t $out/bin bin/Release/$binary
