@@ -9,11 +9,11 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   gtest,
   zlib,
   version,
   hash,
-  replaceVars,
   versionCheckHook,
 
   # downstream dependencies
@@ -57,6 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         url = "https://github.com/protocolbuffers/protobuf/commit/0e9d0f6e77280b7a597ebe8361156d6bb1971dca.patch";
         hash = "sha256-rIP+Ft/SWVwh9Oy8y8GSUBgP6CtLCLvGmr6nOqmyHhY=";
+      })
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "30") [
+      # workaround nvcc bug in message_lite.h
+      # https://github.com/protocolbuffers/protobuf/issues/21542
+      # Caused by: https://github.com/protocolbuffers/protobuf/commit/8f7aab29b21afb89ea0d6e2efeafd17ca71486a9
+      #
+      # A specific consequence of this bug is a test failure when building onnxruntime with cudaSupport
+      # See https://github.com/NixOS/nixpkgs/pull/450587#discussion_r2698215974
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/conda-forge/protobuf-feedstock/737a13ea0680484c08e8e0ab0144dab82c10c1b3/recipe/patches/0010-Workaround-nvcc-bug-in-message_lite.h.patch";
+        hash = "sha256-uXm/j0r5ya/Hsc6/wAZDHLV2sn9Iv/79oOCmDjiU9UE=";
       })
     ];
 
