@@ -2758,10 +2758,6 @@ with pkgs;
 
   gup = callPackage ../development/tools/build-managers/gup { };
 
-  gupnp = callPackage ../development/libraries/gupnp { };
-
-  gupnp_1_6 = callPackage ../development/libraries/gupnp/1.6.nix { };
-
   gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
 
   gzip = callPackage ../tools/compression/gzip { };
