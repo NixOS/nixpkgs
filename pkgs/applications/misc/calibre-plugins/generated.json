@@ -1,0 +1,3541 @@
+{
+  "ACE": {
+    "hash": "sha256-SD/m92Jwpj7bNp2krV9PPSHxbgkSXpScR/G9o+27bgw=",
+    "info": {
+      "description": "Checks the accessibility of EPUB files with ACE.",
+      "download_link": {
+        "file_name": "ACE.zip",
+        "link": "https://plugins.calibre-ebook.com/313848.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=313848",
+      "name": "ACE",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.6"
+    }
+  },
+  "AI-Config": {
+    "hash": "sha256-B67SxoSGqwUPrG9zvz4Pk62NRI3Dskned7zPzoILBvI=",
+    "info": {
+      "description": "Quick access to AI settings",
+      "download_link": {
+        "file_name": "AI Config.zip",
+        "link": "https://plugins.calibre-ebook.com/371037.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=371037",
+      "name": "AI Config",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.3"
+    }
+  },
+  "ANOBII": {
+    "hash": "sha256-0omtRDbmk4bCDS+P7Im1Wp1I31TbsuX8YJNJqlR+dEg=",
+    "info": {
+      "description": "Downloads metadata en covers van Anobii",
+      "download_link": {
+        "file_name": "ANOBII.zip",
+        "link": "https://plugins.calibre-ebook.com/142708.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=142708",
+      "name": "ANOBII",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.4.3"
+    }
+  },
+  "APNX-Generator": {
+    "hash": "sha256-nSzg7Q6IMLi9Z6mYkb0fATG+Aj0qs3/sgaf20lyf57s=",
+    "info": {
+      "description": "Generate Amazon APNX page number file",
+      "download_link": {
+        "file_name": "APNX Generator.zip",
+        "link": "https://plugins.calibre-ebook.com/126220.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=126220",
+      "name": "APNX Generator",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "Access-Aide": {
+    "hash": "sha256-2HdKtuQrxkSae1IFDoiIdrOyTu+kk3u8X921B41nCp0=",
+    "info": {
+      "description": "Enhance accessibility features in EPUB files.",
+      "download_link": {
+        "file_name": "Access Aide.zip",
+        "link": "https://plugins.calibre-ebook.com/337132.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=337132",
+      "name": "Access Aide",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.1.15"
+    }
+  },
+  "Action-Chains": {
+    "hash": "sha256-tACycYIZL1psDn8nVR7h1kxOQK3+7w4h1/JQRdx9xjI=",
+    "info": {
+      "description": "Automate calibre by chaining actions together and running them through a menu or a keybaord shortcut. Choose from calibre actions, your own custom actions, or from plugin builtins. Run chains automatically in response to events. Includes a Formulas action to do calculations on multiple rows.",
+      "download_link": {
+        "file_name": "Action Chains.zip",
+        "link": "https://plugins.calibre-ebook.com/334974.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=334974",
+      "name": "Action Chains",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.20.10"
+    }
+  },
+  "Adlibris.se": {
+    "hash": "sha256-e2ppAOSGTJMytC44mWviSCFewL4KbWwNQSerrRgvT3o=",
+    "info": {
+      "description": "Handla b\u00f6cker, sk\u00f6nlitteratur och facklitteratur hos Adlibris bokhandel. Priserna ligger l\u00e4gst p\u00e5 marknaden vilket har noterats i ett flertal test i media.",
+      "download_link": {
+        "file_name": "Adlibris.se.zip",
+        "link": "https://plugins.calibre-ebook.com/295403.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=295403",
+      "name": "Adlibris.se",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2025.3.1"
+    }
+  },
+  "Amazon.com-Multiple-Countries": {
+    "hash": "sha256-IoG/FO33tmZ4RtUG2z3ozFHfc/UQSpjiUdBWQUtmqoE=",
+    "info": {
+      "description": "Downloads metadata and covers from an alternative Amazon country portal. Works in tandem with the builtin plugin to enable downloading from multiple Amazon domains",
+      "download_link": {
+        "file_name": "Amazon.com Multiple Countries.zip",
+        "link": "https://plugins.calibre-ebook.com/276521.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=276521",
+      "name": "Amazon.com Multiple Countries",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "Annotations": {
+    "hash": "sha256-sor5OPzNVbVR6gEORMYn7bP3zjBup7eSNHFlsGjmSBA=",
+    "info": {
+      "description": "Import annotations",
+      "download_link": {
+        "file_name": "Annotations.zip",
+        "link": "https://plugins.calibre-ebook.com/241206.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=241206",
+      "name": "Annotations",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.17.13"
+    }
+  },
+  "Anobii-Fetcher": {
+    "hash": "sha256-x+2uY2Bj36i6XfV25C0jX3B2M/PBEkTgYtG2fsS1uZM=",
+    "info": {
+      "description": "Get the metadata of book from anobii.com",
+      "download_link": {
+        "file_name": "Anobii Fetcher.zip",
+        "link": "https://plugins.calibre-ebook.com/220081.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=220081",
+      "name": "Anobii Fetcher",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "Antikvarium_hu": {
+    "hash": "sha256-7Rw1rJoTICR6p/GDLwZ7IO1p1jqawZzZt+zvVu/NT4E=",
+    "info": {
+      "description": "Downloads metadata and cover from antikvarium.hu",
+      "download_link": {
+        "file_name": "Antikvarium_hu.zip",
+        "link": "https://plugins.calibre-ebook.com/194094.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=194094",
+      "name": "Antikvarium_hu",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Apple-Books-covers": {
+    "hash": "sha256-04/0irXVY0sV+BlP0P7p1kGsNA0zytGuZJuRx/AzHHE=",
+    "info": {
+      "description": "Downloads high resolution covers from the Apple Books store",
+      "download_link": {
+        "file_name": "Apple Books covers.zip",
+        "link": "https://plugins.calibre-ebook.com/362859.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=362859",
+      "name": "Apple Books covers",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "Ask-AI-Plugin": {
+    "hash": "sha256-813zShkH5eB61KsxorHdhJ0dO4oKT06ZbS8YYDdE4Dc=",
+    "info": {
+      "description": "Ask questions about books using multiple AI providers",
+      "download_link": {
+        "file_name": "Ask AI Plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/370613.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=370613",
+      "name": "Ask AI Plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.4.1"
+    }
+  },
+  "Ask-Grok": {
+    "hash": "sha256-6DFl++237mxn0HUn8LhhHhBl3DtFgnASKEUoZJmA1r8=",
+    "info": {
+      "description": "Ask questions about a book using AI",
+      "download_link": {
+        "file_name": "Ask Grok.zip",
+        "link": "https://plugins.calibre-ebook.com/4503069.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=4503069",
+      "name": "Ask Grok",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.4"
+    }
+  },
+  "Audio-M3U": {
+    "hash": "sha256-ROSlut8HXATGKg7nQs/OFRG1nu9zAM/BAzd7vr556AU=",
+    "info": {
+      "description": "Audiobook support based on M3U files",
+      "download_link": {
+        "file_name": "Audio M3U.zip",
+        "link": "https://plugins.calibre-ebook.com/354707.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=354707",
+      "name": "Audio M3U",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "AudioBook_Duration": {
+    "hash": "sha256-bqDjqlbmRuzJU8VnWbtS8tCaGNabv7NU+pfhfXbq4tg=",
+    "info": {
+      "description": "Plugin for obtain the duration of audio files",
+      "download_link": {
+        "file_name": "AudioBook_Duration.zip",
+        "link": "https://plugins.calibre-ebook.com/343035.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=343035",
+      "name": "AudioBook_Duration",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.9"
+    }
+  },
+  "Audiobookshelf-Sync": {
+    "hash": "sha256-jGM1jWQ8Lezz9iHgnVvHDJbb1jsFSYCsFz14QmmXr30=",
+    "info": {
+      "description": "Get metadata from a connected Audiobookshelf instance",
+      "download_link": {
+        "file_name": "Audiobookshelf Sync.zip",
+        "link": "https://plugins.calibre-ebook.com/4489158.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=4489158",
+      "name": "Audiobookshelf Sync",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.1"
+    }
+  },
+  "Audit-Log": {
+    "hash": "sha256-MnRriJFWb87COeuBlAeLuSDGNJeuX2XLFt70goqkLkI=",
+    "info": {
+      "description": "Undo/Reverse most metadata deletes and updates weeks later for selected books and log entries.  Creates a log entry for every addition, change or delete for most Calibre standard metadata columns, and for all custom metadata columns.",
+      "download_link": {
+        "file_name": "Audit Log.zip",
+        "link": "https://plugins.calibre-ebook.com/285661.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=285661",
+      "name": "Audit Log",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.19"
+    }
+  },
+  "Author-Book-Count": {
+    "hash": "sha256-sm4yWsry4HuKPGBPIguxlanRKDuQ2Ud4Unydk+lvShs=",
+    "info": {
+      "description": "Updates a custom column for the total number of books written by each author for every book in your library. It has functionality that standard Calibre does not provide, especially the ability to search using queries constructed with integers. Example: ((#abc_numeric:\">6\") and (#abc_numeric:\"<47\")). Its ABC column in the Tag Browser has full functionality based specifically on ABC.",
+      "download_link": {
+        "file_name": "Author Book Count.zip",
+        "link": "https://plugins.calibre-ebook.com/241441.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=241441",
+      "name": "Author Book Count",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.2.3"
+    }
+  },
+  "Author-Book-Count-Hierarchy": {
+    "hash": "sha256-bgljlbhiCBRY4X5pRHhbKmgy72CaPD3X27BiGiUarHE=",
+    "info": {
+      "description": "Creates a Hierarchy of Author Book Counts designed for perusing complex Co-Author relationships, not just simple ABC counts for a single Author.",
+      "download_link": {
+        "file_name": "Author Book Count Hierarchy.zip",
+        "link": "https://plugins.calibre-ebook.com/243873.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=243873",
+      "name": "Author Book Count Hierarchy",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.5"
+    }
+  },
+  "Auto-Datestamp-and-View": {
+    "hash": "sha256-QxZSxDjnc8opOz9aT6JBP6k0tK5Nea4HXLqokQ+g2Bw=",
+    "info": {
+      "description": "Add a date stamp and view current book",
+      "download_link": {
+        "file_name": "Auto Datestamp and View.zip",
+        "link": "https://plugins.calibre-ebook.com/316974.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=316974",
+      "name": "Auto Datestamp and View",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.0.9"
+    }
+  },
+  "BBC-GoodFood-Recipe-Reader": {
+    "hash": "sha256-k2EkNBVew3Oz9rn+vBKajnrTQMp4s0YUOPFaplNuU0I=",
+    "info": {
+      "description": "Converts BBC GoodFood recipes to ebooks",
+      "download_link": {
+        "file_name": "BBC GoodFood Recipe Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/194512.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=194512",
+      "name": "BBC GoodFood Recipe Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "BOL_NL": {
+    "hash": "sha256-2jdM4IhknACci47p0WtCnS6+CN2IxrrlZ6BTn7snGgU=",
+    "info": {
+      "description": "Downloads metadata en covers van BOL.com or from Literatuurplein.nl",
+      "download_link": {
+        "file_name": "BOL_NL.zip",
+        "link": "https://plugins.calibre-ebook.com/139472.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=139472",
+      "name": "BOL_NL",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "6.1.0"
+    }
+  },
+  "Babelio_db": {
+    "hash": "sha256-a7Rj8YR+c8rfCuYYYsXd0d/dnW/AYTz6z6yC96jI6/I=",
+    "info": {
+      "description": "Downloads metadata and covers from www.babelio.com",
+      "download_link": {
+        "file_name": "Babelio_db.zip",
+        "link": "https://plugins.calibre-ebook.com/349713.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=349713",
+      "name": "Babelio_db",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "Backup-Configuration-Folder": {
+    "hash": "sha256-ts7jQNRaQvqEwZtEoG3+zJzVx/qhrN7rzHL57hiF2Rs=",
+    "info": {
+      "description": "Backup the current calibre configuration folder when calibre is closed",
+      "download_link": {
+        "file_name": "Backup Configuration Folder.zip",
+        "link": "https://plugins.calibre-ebook.com/366033.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=366033",
+      "name": "Backup Configuration Folder",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.2"
+    }
+  },
+  "Baen": {
+    "hash": "sha256-iwee8Z/vLZywQQ6XHy7rBQl/mrXP6q70AvRWCeejUcE=",
+    "info": {
+      "description": "Downloads metadata and covers from Baen",
+      "download_link": {
+        "file_name": "Baen.zip",
+        "link": "https://plugins.calibre-ebook.com/349017.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=349017",
+      "name": "Baen",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "Barnes-&-Noble": {
+    "hash": "sha256-iiZ+enNe6o9N3zOJEBQUbkF5JMKf4+kG9M3BGDjvQIs=",
+    "info": {
+      "description": "Downloads metadata and covers from Barnes & Noble",
+      "download_link": {
+        "file_name": "Barnes & Noble.zip",
+        "link": "https://plugins.calibre-ebook.com/132508.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=132508",
+      "name": "Barnes & Noble",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.7"
+    }
+  },
+  "Beam-Ebooks": {
+    "hash": "sha256-K+ou2725HTIsjzlgga6ny2mhzUe+lZ/pPgOysYAv+1Y=",
+    "info": {
+      "description": "Downloads Metadata and covers from Beam Ebooks",
+      "download_link": {
+        "file_name": "Beam Ebooks.zip",
+        "link": "https://plugins.calibre-ebook.com/140858.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=140858",
+      "name": "Beam Ebooks",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "Biblionet_gr": {
+    "hash": "sha256-umlbmwYxatHn7JNN6jonzlvfJuB3AGumd110ayehqTk=",
+    "info": {
+      "description": "Downloads metadata and covers from Biblionet.gr",
+      "download_link": {
+        "file_name": "Biblionet_gr.zip",
+        "link": "https://plugins.calibre-ebook.com/281863.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=281863",
+      "name": "Biblionet_gr",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "BigOven-Recipe-Reader": {
+    "hash": "sha256-XUKCHABjiC70H15BhAjYB8a6Vl0lhJL9OOsuMfMCS8g=",
+    "info": {
+      "description": "Converts bigoven.com recipes to ebooks",
+      "download_link": {
+        "file_name": "BigOven Recipe Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/214699.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=214699",
+      "name": "BigOven Recipe Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Bokon.se": {
+    "hash": "sha256-/GIv2EjeEIj9ZiC2nphpZV30uVt+23cOYaVBi7vmNvA=",
+    "info": {
+      "description": "K\u00f6p e-b\u00f6cker i Sveriges e-bokhandel",
+      "download_link": {
+        "file_name": "Bokon.se.zip",
+        "link": "https://plugins.calibre-ebook.com/295393.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=295393",
+      "name": "Bokon.se",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2025.3.0"
+    }
+  },
+  "Bokus": {
+    "hash": "sha256-qdxqxP+RoHhXNtgez17zX1yxlnnjWjaSUzcgbWNYOwM=",
+    "info": {
+      "description": "Handla b\u00f6cker online - billigt, snabbt & enkelt!",
+      "download_link": {
+        "file_name": "Bokus.zip",
+        "link": "https://plugins.calibre-ebook.com/295399.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=295399",
+      "name": "Bokus",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2025.3.0"
+    }
+  },
+  "BookFusion-Plugin": {
+    "hash": "sha256-Dfz8LB2nFIywI6eg18sDvuY8rRxn6U0UnysJDLiMMC4=",
+    "info": {
+      "description": "Provides synchronization of your eBooks and metadata from Calibre to your devices via the BookFusion iOS, Android & Web reader.",
+      "download_link": {
+        "file_name": "BookFusion Plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/299911.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=299911",
+      "name": "BookFusion Plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.8.1"
+    }
+  },
+  "Bulk-img-resizer": {
+    "hash": "sha256-HlDsSxfAlm+2EzW6St6QmrP+MdmaeYCXCuy7KkIw78k=",
+    "info": {
+      "description": "Resize all images and keep them under specified resolution",
+      "download_link": {
+        "file_name": "Bulk img resizer.zip",
+        "link": "https://plugins.calibre-ebook.com/360699.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=360699",
+      "name": "Bulk img resizer",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "Calibre-Config-Reports": {
+    "hash": "sha256-siv00onHqchMW40fDaPviBBGXLbPnVVlIybfLgIkxvY=",
+    "info": {
+      "description": "A comprehensive configuration reporting tool for Calibre that provides detailed information about your setup. It displays installed plugins, custom columns, keyboard shortcuts, and Calibre settings in an organized, searchable interface. The plugin offers powerful filtering capabilities, export options, and the ability to copy configuration details for troubleshooting or sharing.",
+      "download_link": {
+        "file_name": "Calibre Config Reports.zip",
+        "link": "https://plugins.calibre-ebook.com/369555.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=369555",
+      "name": "Calibre Config Reports",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.0.1"
+    }
+  },
+  "Calibre-Power-Search-Plugin": {
+    "hash": "sha256-r65LZJlk1ZVYx9GnsFJ/fL2E4dcUWCN7Z2XBjTFO86c=",
+    "info": {
+      "description": "Enables Full-text Search",
+      "download_link": {
+        "file_name": "Calibre Power Search Plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/331763.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=331763",
+      "name": "Calibre Power Search Plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.2.0"
+    }
+  },
+  "CalibreSpy": {
+    "hash": "sha256-pjyPL9s7h/vNAIz510fyAdVJ16w8KhB3M4YAFph0Erw=",
+    "info": {
+      "description": "Light GUI for browsing, viewing, searching using VLs and many other search tools, and using many libraries simultaneously by multiple users without running the Calibre GUI itself.",
+      "download_link": {
+        "file_name": "CalibreSpy.zip",
+        "link": "https://plugins.calibre-ebook.com/310103.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=310103",
+      "name": "CalibreSpy",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.92"
+    }
+  },
+  "Category-Tags": {
+    "hash": "sha256-E7h9wIVwC1AEDqntagB5BjnpGJ5rwIJtxWMmB1u0kTA=",
+    "info": {
+      "description": "Tag authors, publishers, sereis and other items",
+      "download_link": {
+        "file_name": "Category Tags.zip",
+        "link": "https://plugins.calibre-ebook.com/4142902.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=4142902",
+      "name": "Category Tags",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.3.2"
+    }
+  },
+  "Check-Books": {
+    "hash": "sha256-X87UqUsmLRXUe5J+ne9ydFEQ6drs3JhYQ0hFGbeqEOM=",
+    "info": {
+      "description": "Check your books with ACE and EPUBCheck",
+      "download_link": {
+        "file_name": "Check Books.zip",
+        "link": "https://plugins.calibre-ebook.com/345485.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=345485",
+      "name": "Check Books",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.0"
+    }
+  },
+  "Chinese-Text-Conversion": {
+    "hash": "sha256-/QVvizCFfvI85vDMCwxlPIDaYiqNBxpO+QIiEd62v20=",
+    "info": {
+      "description": "A plugin to convert traditional and simplified Chinese text",
+      "download_link": {
+        "file_name": "Chinese Text Conversion.zip",
+        "link": "https://plugins.calibre-ebook.com/275572.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=275572",
+      "name": "Chinese Text Conversion",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.1.2"
+    }
+  },
+  "Clean-Comments": {
+    "hash": "sha256-qj+luyuwyHCvqeh2sXsG9OqZfKVO5/mQPRz2zWoT/HU=",
+    "info": {
+      "description": "Remove html format in comments",
+      "download_link": {
+        "file_name": "Clean Comments.zip",
+        "link": "https://plugins.calibre-ebook.com/333465.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=333465",
+      "name": "Clean Comments",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.1"
+    }
+  },
+  "Clean-Metadata": {
+    "hash": "sha256-1Z+YTjHyhcSoJpDR8Z7Y+pVdLiwbVtgfLTeJPbZI3DM=",
+    "info": {
+      "description": "Cleans up the meatadata of books in your library, like titke, authors, series and so on",
+      "download_link": {
+        "file_name": "Clean Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/249929.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=249929",
+      "name": "Clean Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.0.6"
+    }
+  },
+  "Clipboard-Search": {
+    "hash": "sha256-mJo5l7fM3ozLuvSk7CKJSSsUNSFs4s4N6ZMiyup6dAM=",
+    "info": {
+      "description": "Execute a Calibre search using text currently on the clipboard",
+      "download_link": {
+        "file_name": "Clipboard Search.zip",
+        "link": "https://plugins.calibre-ebook.com/118765.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=118765",
+      "name": "Clipboard Search",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.1"
+    }
+  },
+  "Comfy-Reminders": {
+    "hash": "sha256-2DiFyOGO1ClahU9PSlGJLNoKIPJ/bfdSxrwEFQsBy5Y=",
+    "info": {
+      "description": "Create and manage reminders with an integrated notebook",
+      "download_link": {
+        "file_name": "Comfy Reminders.zip",
+        "link": "https://plugins.calibre-ebook.com/367258.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=367258",
+      "name": "Comfy Reminders",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.3.1"
+    }
+  },
+  "Comicvine": {
+    "hash": "sha256-K0HM8YvWJ9m2b8zpvjrOIlfDQWDrBRKMpIc35TSQuNQ=",
+    "info": {
+      "description": "Downloads metadata and covers from Comicvine",
+      "download_link": {
+        "file_name": "Comicvine.zip",
+        "link": "https://plugins.calibre-ebook.com/4237667.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=4237667",
+      "name": "Comicvine",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.14.2"
+    }
+  },
+  "Comments-Cleaner": {
+    "hash": "sha256-kuGm69rXhFrgz5fpCTDHQ0vPkiy4b2pAg3g+5cLjePc=",
+    "info": {
+      "description": "Remove the scraps CSS in HTML comments",
+      "download_link": {
+        "file_name": "Comments Cleaner.zip",
+        "link": "https://plugins.calibre-ebook.com/333861.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=333861",
+      "name": "Comments Cleaner",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.18.2"
+    }
+  },
+  "Consolidate-All-Library-Metadata": {
+    "hash": "sha256-BamiMp95lHGoDoe3mJa3YKG7Fw6ZGoWIQhRatTAqwI4=",
+    "info": {
+      "description": "Consolidate a Snapshot of All Metadata, including Custom Columns, from All of the Books in All of your Libraries for Review, Analysis and Custom Column Standardization using Powerful Tools; Perform Centralized Library Custom Column Metadata Maintenance.",
+      "download_link": {
+        "file_name": "Consolidate All Library Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/265947.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=265947",
+      "name": "Consolidate All Library Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.46"
+    }
+  },
+  "Copy-Cover-To-Device": {
+    "hash": "sha256-pPouN6v1UqbPrdBvfjq/3uQGVz3lN1fIenLZ9/y4MAo=",
+    "info": {
+      "description": "Copy cover(s) to device to use as Standby/PowerOff image(s)",
+      "download_link": {
+        "file_name": "Copy Cover To Device.zip",
+        "link": "https://plugins.calibre-ebook.com/119355.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=119355",
+      "name": "Copy Cover To Device",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.4"
+    }
+  },
+  "Count-Pages": {
+    "hash": "sha256-Z+7zNYgJdv+Z0T7df31xtgji29F3jBJWj5j7o0oGhsQ=",
+    "info": {
+      "description": "Count number of pages/words in an ePub/Mobi to store in custom columns",
+      "download_link": {
+        "file_name": "Count Pages.zip",
+        "link": "https://plugins.calibre-ebook.com/134000.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=134000",
+      "name": "Count Pages",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.14.4"
+    }
+  },
+  "DNB_DE": {
+    "hash": "sha256-dJxOa9r1T6IRsypnjC3dPrSEnDRXfcnrDQWBaNrBOAI=",
+    "info": {
+      "description": "Downloads metadata from the DNB (Deutsche National Bibliothek).",
+      "download_link": {
+        "file_name": "DNB_DE.zip",
+        "link": "https://plugins.calibre-ebook.com/306484.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=306484",
+      "name": "DNB_DE",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.2.5"
+    }
+  },
+  "DOC-Input": {
+    "hash": "sha256-HRtqKVTU5v6SO54Wy8DR5YcFJY5KNYKiJgyKUA8c8XM=",
+    "info": {
+      "description": "Convert DOC files via docx to HTML",
+      "download_link": {
+        "file_name": "DOC Input.zip",
+        "link": "https://plugins.calibre-ebook.com/229166.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=229166",
+      "name": "DOC Input",
+      "platforms": [
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "DeACSM": {
+    "hash": "sha256-tfYbonufW86lfB+yPTbLwb2JEKHzOvCTdbvuNlGHC1A=",
+    "info": {
+      "description": "ACSM Input Plugin - Takes an Adobe ACSM file and converts that into a useable EPUB or PDF file. Python reimplementation of libgourou by Gr\u00e9gory Soutad\u00e9",
+      "download_link": {
+        "file_name": "DeACSM.zip",
+        "link": "https://plugins.calibre-ebook.com/341975.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=341975",
+      "name": "DeACSM",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.0.16"
+    }
+  },
+  "Diaps-Editing-Toolbag": {
+    "hash": "sha256-zAuOkP46zv/nmk8s5aV2P309iQOrvGWbDKIQY2j2zcM=",
+    "info": {
+      "description": "Various tools for ebook editing.",
+      "download_link": {
+        "file_name": "Diaps Editing Toolbag.zip",
+        "link": "https://plugins.calibre-ebook.com/2980740.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=2980740",
+      "name": "Diaps Editing Toolbag",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.5.0"
+    }
+  },
+  "Douban-Books": {
+    "hash": "sha256-7FzPWpYDpQXEr9XXzkHL1PXF2dVi0f4Z9LuIKLh3XQo=",
+    "info": {
+      "description": "Downloads metadata and covers from Douban.com. Useful only for Chinese language books.",
+      "download_link": {
+        "file_name": "Douban Books.zip",
+        "link": "https://plugins.calibre-ebook.com/333817.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=333817",
+      "name": "Douban Books",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.2.0"
+    }
+  },
+  "Drop-Search-Results": {
+    "hash": "sha256-WQCyWoirmPcQd+RMQB2i//sjs0B1pOaFob4xYl6WeXI=",
+    "info": {
+      "description": "Drag-and-Drop Search Results from most search software (e.g. 'Agent Ransack', 'X1', Windows Search) into Calibre so that the books that were found can be automatically marked and displayed.",
+      "download_link": {
+        "file_name": "Drop Search Results.zip",
+        "link": "https://plugins.calibre-ebook.com/271816.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=271816",
+      "name": "Drop Search Results",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.15"
+    }
+  },
+  "EBook-Metaguider-(intellireading)": {
+    "hash": "sha256-En7LtoJG5GhU0tYISQchr/bFOm5cf5DOHbmWo10VdfI=",
+    "info": {
+      "description": "Adds a button to toolbar and context menu, to convert epub and kepub files to a metaguided format, improving your focus and reading speed (sometimes called bionic reading).",
+      "download_link": {
+        "file_name": "EBook Metaguider (intellireading).zip",
+        "link": "https://plugins.calibre-ebook.com/358615.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=358615",
+      "name": "EBook Metaguider (intellireading)",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.1"
+    }
+  },
+  "Ebook-Translator": {
+    "hash": "sha256-jo9LLvaGc54Lx90bnhhSi+EE3fxzoy5mAYs2jg8RlBU=",
+    "info": {
+      "description": "A Calibre plugin to translate ebook into a specified language (optionally keeping the original content).",
+      "download_link": {
+        "file_name": "Ebook Translator.zip",
+        "link": "https://plugins.calibre-ebook.com/353052.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=353052",
+      "name": "Ebook Translator",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.4.1"
+    }
+  },
+  "Editor-Chains": {
+    "hash": "sha256-d0XEf3iutDJDF18S+QgGatuWVhT7sv7KRWJB5Rj4xwg=",
+    "info": {
+      "description": "Automate various tasks in Calibre's ebook editor. Plugin allows to chain multiple actions together. You can choose from Plugin specific actions, calibre builtin actions, or create you own actions through the plugin's module editor.",
+      "download_link": {
+        "file_name": "Editor Chains.zip",
+        "link": "https://plugins.calibre-ebook.com/343178.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=343178",
+      "name": "Editor Chains",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.9"
+    }
+  },
+  "Embed-Comic-Metadata": {
+    "hash": "sha256-tDasC7HPRaTdjbjQGt3K9WlZHcbmBbz5Lhq5nuhMwrA=",
+    "info": {
+      "description": "Embeds calibre metadata into comic archives and imports                            metadata from comic archives into calibre.",
+      "download_link": {
+        "file_name": "Embed Comic Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/264710.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=264710",
+      "name": "Embed Comic Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.6.7"
+    }
+  },
+  "English-Noun-Frequency": {
+    "hash": "sha256-UBe7VEWkf7Wj7cymhAF/8Cmp0itnH5rkwpKLh4x2RVc=",
+    "info": {
+      "description": "Determine 'English Noun Frequencies' for words in a particular book's text, and optionally: 1) Add frequences for the chosen number of frequent nouns to the book's Comments; 2) Create new Tags using the chosen number of frequent nouns for Tags; 3) Update a Custom Column with the chosen number of frequent nouns for a Custom Column.; 4) Update nothing but log the frequent nouns using the number chosen for Comments; 5) Translate the English Comments to another language, showing both; 6) Accumulate the Top 100 English Nouns with frequency counts across all of your books and all of you libraries.",
+      "download_link": {
+        "file_name": "English Noun Frequency.zip",
+        "link": "https://plugins.calibre-ebook.com/263684.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=263684",
+      "name": "English Noun Frequency",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.16"
+    }
+  },
+  "Entities-Manager": {
+    "hash": "sha256-DzVyuDUbV+qZ62SCHcK8WSG3grAHbIK2Mb/m8SKB9lc=",
+    "info": {
+      "description": "Associate Calibre Entities to Links, Notes, and other Entities, plus other information independent of any particular book.",
+      "download_link": {
+        "file_name": "Entities Manager.zip",
+        "link": "https://plugins.calibre-ebook.com/313935.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=313935",
+      "name": "Entities Manager",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.19"
+    }
+  },
+  "EpubCheck": {
+    "hash": "sha256-+2BFwe+M8jczO9oQcEfa0gw4NWGBQkHph4M9w8q4lL8=",
+    "info": {
+      "description": "A simple EPUBCheck wrapper.",
+      "download_link": {
+        "file_name": "EpubCheck.zip",
+        "link": "https://plugins.calibre-ebook.com/282067.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=282067",
+      "name": "EpubCheck",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.6"
+    }
+  },
+  "EpubMerge": {
+    "hash": "sha256-GH6JE7bnnytdOocNtSnh5ENV5cEr7vM6BRyJC8uTijU=",
+    "info": {
+      "description": "UI plugin to concatenate multiple epubs into one.",
+      "download_link": {
+        "file_name": "EpubMerge.zip",
+        "link": "https://plugins.calibre-ebook.com/169744.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=169744",
+      "name": "EpubMerge",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.2.0"
+    }
+  },
+  "EpubSplit": {
+    "hash": "sha256-B2cfPekrJUMJDA0aBPkCZ9Gfa0gP1I64XXr8JvycuQ8=",
+    "info": {
+      "description": "UI plugin to split off parts of an epub into a new book.",
+      "download_link": {
+        "file_name": "EpubSplit.zip",
+        "link": "https://plugins.calibre-ebook.com/178799.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=178799",
+      "name": "EpubSplit",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.12.0"
+    }
+  },
+  "Evrit": {
+    "hash": "sha256-pz0LTqHOVdbuW0xERfST8vHv76irjX3vP8C69aj1WIg=",
+    "info": {
+      "description": "Get metadata information from Evrit.",
+      "download_link": {
+        "file_name": "Evrit.zip",
+        "link": "https://plugins.calibre-ebook.com/351377.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=351377",
+      "name": "Evrit",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.4.0"
+    }
+  },
+  "Ex-Libris": {
+    "hash": "sha256-ikvG0wd12zaXrlUmsqpr80uriLNBIcQPkHvpfhZltuQ=",
+    "info": {
+      "description": "Add a nice ex libris to your EPUB eBook",
+      "download_link": {
+        "file_name": "Ex Libris.zip",
+        "link": "https://plugins.calibre-ebook.com/188619.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=188619",
+      "name": "Ex Libris",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.19"
+    }
+  },
+  "Extract-ISBN": {
+    "hash": "sha256-Jf86Oe2F5Umqw3pcP84LiqB/aDgGO+6cv1NART5AF/4=",
+    "info": {
+      "description": "Extracts the ISBN from the text content of a book format if available",
+      "download_link": {
+        "file_name": "Extract ISBN.zip",
+        "link": "https://plugins.calibre-ebook.com/126727.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=126727",
+      "name": "Extract ISBN",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.6.5"
+    }
+  },
+  "Extract-People-Other-Metadata": {
+    "hash": "sha256-4zSOqXxYdiZdV7vhYAMJo8VGSZ7BsK45R61JL6zir8Y=",
+    "info": {
+      "description": "Extract People & Other Metadata from EPUBs then Update in Custom Columns",
+      "download_link": {
+        "file_name": "Extract People Other Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/4287169.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=4287169",
+      "name": "Extract People Other Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "Extract-RIS-Citations": {
+    "hash": "sha256-coOxZ7zgrYIkza+vd1+XY5Pf4jJIRVcLyoJGC5zGWaY=",
+    "info": {
+      "description": "Extract a Citation from RIS tags then update the new book's bibliographic metadata.",
+      "download_link": {
+        "file_name": "Extract RIS Citations.zip",
+        "link": "https://plugins.calibre-ebook.com/329656.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=329656",
+      "name": "Extract RIS Citations",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.15"
+    }
+  },
+  "FanFicFare": {
+    "hash": "sha256-n4uvuR+PYqjxWgHumTzhaF9SzBLX4K9rgUzQelY6KP0=",
+    "info": {
+      "description": "UI plugin to download FanFiction stories from various sites.",
+      "download_link": {
+        "file_name": "FanFicFare.zip",
+        "link": "https://plugins.calibre-ebook.com/259221.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=259221",
+      "name": "FanFicFare",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "4.54.0"
+    }
+  },
+  "Fantastic-Fiction": {
+    "hash": "sha256-waF/9huxhLBenFa3EDRUbUv3LqZ6VI8CQbxIuhMScys=",
+    "info": {
+      "description": "Downloads metadata and covers from FantasticFiction.com",
+      "download_link": {
+        "file_name": "Fantastic Fiction.zip",
+        "link": "https://plugins.calibre-ebook.com/132908.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=132908",
+      "name": "Fantastic Fiction",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.7.2"
+    }
+  },
+  "Fantastic-Fiction-Adults": {
+    "hash": "sha256-dgdfZmuTOAqICOL7l7vOReWnL2wImsqWhJpqpfkelSA=",
+    "info": {
+      "description": "Downloads metadata and covers from ffadultsonly.com",
+      "download_link": {
+        "file_name": "Fantastic Fiction Adults.zip",
+        "link": "https://plugins.calibre-ebook.com/218482.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=218482",
+      "name": "Fantastic Fiction Adults",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.3.1"
+    }
+  },
+  "Favourites-Menu": {
+    "hash": "sha256-/DzPNxPQ3yHmLoCMolwMEucdlq55UzO2vRJl6h+Zu9M=",
+    "info": {
+      "description": "Create a customised toolbar menu button for features from other plugins or calibre menus to save screen space",
+      "download_link": {
+        "file_name": "Favourites Menu.zip",
+        "link": "https://plugins.calibre-ebook.com/183022.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=183022",
+      "name": "Favourites Menu",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.3.1"
+    }
+  },
+  "Fetch-Audio-Meta": {
+    "hash": "sha256-HxEQiWlYZNoREGw4nlgmAkYbVKHFanC/a/C/IKVy5BI=",
+    "info": {
+      "description": "Update metadata from audio files",
+      "download_link": {
+        "file_name": "Fetch Audio Meta.zip",
+        "link": "https://plugins.calibre-ebook.com/365851.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=365851",
+      "name": "Fetch Audio Meta",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.1.22"
+    }
+  },
+  "FictionDB": {
+    "hash": "sha256-K4e/ad0Gm3nbIGGUgNk64oIvjVjEGAyytmGIE3Zhu64=",
+    "info": {
+      "description": "Downloads metadata and covers from fictiondb.com",
+      "download_link": {
+        "file_name": "FictionDB.zip",
+        "link": "https://plugins.calibre-ebook.com/171674.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=171674",
+      "name": "FictionDB",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.4.2"
+    }
+  },
+  "Find-Duplicates": {
+    "hash": "sha256-YJhPPJcegVOb3GgoQ810FB1SlIOs1Z9mcVlIV/StA0c=",
+    "info": {
+      "description": "Find possible duplicate books based on their metadata",
+      "download_link": {
+        "file_name": "Find Duplicates.zip",
+        "link": "https://plugins.calibre-ebook.com/131017.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=131017",
+      "name": "Find Duplicates",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.10.9"
+    }
+  },
+  "Generate-Cover": {
+    "hash": "sha256-sVx34krC2k6y4Jb5WCn219JiA/Pps9xv9IWYp+nHVrg=",
+    "info": {
+      "description": "Generate covers in Calibre with appearance options",
+      "download_link": {
+        "file_name": "Generate Cover.zip",
+        "link": "https://plugins.calibre-ebook.com/124219.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=124219",
+      "name": "Generate Cover",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.3.6"
+    }
+  },
+  "GetFileName": {
+    "hash": "sha256-02Mvj8EcaSE9ZZM9abDdeIC8H/yby+CTb3SHpim2P5U=",
+    "info": {
+      "description": "Store the filename of the imported book in a custom column",
+      "download_link": {
+        "file_name": "GetFileName.zip",
+        "link": "https://plugins.calibre-ebook.com/278559.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=278559",
+      "name": "GetFileName",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.0"
+    }
+  },
+  "Goodreads": {
+    "hash": "sha256-EQR5+Qd1ETze15e1k/eOHu8K6cmsYiSih5gVhixA6fQ=",
+    "info": {
+      "description": "Downloads metadata and covers from Goodreads",
+      "download_link": {
+        "file_name": "Goodreads.zip",
+        "link": "https://plugins.calibre-ebook.com/130638.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=130638",
+      "name": "Goodreads",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.8.3"
+    }
+  },
+  "Goodreads-More-Tags": {
+    "hash": "sha256-rvB2/iUnJcN7qO/3Uf74Lt2H+ZZ5tmKyzQU5tw2DS+U=",
+    "info": {
+      "description": "Scrape more tags from Goodreads",
+      "download_link": {
+        "file_name": "Goodreads More Tags.zip",
+        "link": "https://plugins.calibre-ebook.com/3875236.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=3875236",
+      "name": "Goodreads More Tags",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.1.2"
+    }
+  },
+  "Goodreads-Sync": {
+    "hash": "sha256-L0biomeN+Rs+OD9ab7DEOvkxjdrfC1xt3guzB6BtiKI=",
+    "info": {
+      "description": "Sync from Calibre with the shelves of your goodreads.com account",
+      "download_link": {
+        "file_name": "Goodreads Sync.zip",
+        "link": "https://plugins.calibre-ebook.com/123281.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=123281",
+      "name": "Goodreads Sync",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.16.12"
+    }
+  },
+  "Hardcover": {
+    "hash": "sha256-yEEooj+KwJCrP0i8440hessQ8B7toWLhgOXT8LMS9J8=",
+    "info": {
+      "description": "Downloads metadata and covers from Hardcover.app",
+      "download_link": {
+        "file_name": "Hardcover.zip",
+        "link": "https://plugins.calibre-ebook.com/364645.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=364645",
+      "name": "Hardcover",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.5.0"
+    }
+  },
+  "Highlights-to-Obsidian": {
+    "hash": "sha256-hj+Zd7RxQhHfToWJ+4tMit7xRc7NOtJeQXO7TGho9GU=",
+    "info": {
+      "description": "Automatically send highlights from calibre to obsidian.md",
+      "download_link": {
+        "file_name": "Highlights to Obsidian.zip",
+        "link": "https://plugins.calibre-ebook.com/351283.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=351283",
+      "name": "Highlights to Obsidian",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.4.1"
+    }
+  },
+  "Hymn-Reader": {
+    "hash": "sha256-ESXes/FJ+Mlo6BT3lAo/OTPL8z0akfxw8iWgpb7+a0s=",
+    "info": {
+      "description": "Converts Hymnwiki hymns to ebooks",
+      "download_link": {
+        "file_name": "Hymn Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/183832.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=183832",
+      "name": "Hymn Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Hyphenate-This!": {
+    "hash": "sha256-1ynMbOc+OzPQCMeN3kBjT5ag6j1W7Mq0Pw2RezoQ8Fg=",
+    "info": {
+      "description": "Hyphenate books for readers supporting soft hyphens.",
+      "download_link": {
+        "file_name": "Hyphenate This!.zip",
+        "link": "https://plugins.calibre-ebook.com/2456848.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=2456848",
+      "name": "Hyphenate This!",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.1.4"
+    }
+  },
+  "INMONDADORI": {
+    "hash": "sha256-LgksSQjoX7nL65a8LladuxlXPbLH5zr+oPUdrD8L2+k=",
+    "info": {
+      "description": "Get book details from inmondadori.com book page in a separate thread",
+      "download_link": {
+        "file_name": "INMONDADORI.zip",
+        "link": "https://plugins.calibre-ebook.com/214494.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=214494",
+      "name": "INMONDADORI",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.1"
+    }
+  },
+  "ISFDB3": {
+    "hash": "sha256-jInIfNKw911yHQNWLJ7oIzJWRZHsA7A/rjheY637BFA=",
+    "info": {
+      "description": "Downloads metadata and covers from ISFDB (https://www.isfdb.org/)",
+      "download_link": {
+        "file_name": "ISFDB3.zip",
+        "link": "https://plugins.calibre-ebook.com/344953.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=344953",
+      "name": "ISFDB3",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.4.10"
+    }
+  },
+  "Import-Audiobooks-Metadata": {
+    "hash": "sha256-J/FaBhvBZ/IrLG9n1tHq4mO1rXW30T1OhwU9M52S0eA=",
+    "info": {
+      "description": "Import metadata from various audio formats including m4b, m4a, mp3, ogg, opus, flac, wma, mp4, and aiff",
+      "download_link": {
+        "file_name": "Import Audiobooks Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/365850.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=365850",
+      "name": "Import Audiobooks Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.7"
+    }
+  },
+  "Import-List": {
+    "hash": "sha256-arVLz93iqvDW5jxJVMkvfWc+gNYftZ8XQzbpzYyFElM=",
+    "info": {
+      "description": "Import lists of books from clipboard, CSV or web",
+      "download_link": {
+        "file_name": "Import List.zip",
+        "link": "https://plugins.calibre-ebook.com/187831.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=187831",
+      "name": "Import List",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.9.8"
+    }
+  },
+  "Input-Order-Swap": {
+    "hash": "sha256-Q+W8g4qzB730lptLuBa+9RwLWSpQO1LsZasafbFSIiI=",
+    "info": {
+      "description": "Toolbar button to swap the top two formats in the preferred input order",
+      "download_link": {
+        "file_name": "Input Order Swap.zip",
+        "link": "https://plugins.calibre-ebook.com/371116.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=371116",
+      "name": "Input Order Swap",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "Job-Spy": {
+    "hash": "sha256-JyX4punwL7jWnySBpnWP4GgXqgudmXqRGt6bQA2QwhI=",
+    "info": {
+      "description": "JS+: Big Tool Box of 80 unique functions to make Calibre better.",
+      "download_link": {
+        "file_name": "Job Spy.zip",
+        "link": "https://plugins.calibre-ebook.com/269911.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=269911",
+      "name": "Job Spy",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.239"
+    }
+  },
+  "K2pdfopt-Plugin": {
+    "hash": "sha256-2noJ6A0yoWdkeQebD0RQkMzLDlYJrv9HdsBycgNBJQQ=",
+    "info": {
+      "description": "Optimizes PDFs for viewing on small screens like ereaders",
+      "download_link": {
+        "file_name": "K2pdfopt Plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/358911.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=358911",
+      "name": "K2pdfopt Plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.5.5"
+    }
+  },
+  "KFX-Input": {
+    "hash": "sha256-pE0Htkw6ZIsSbvdeWlH149DXU9EZJejXJYI6cmtsugQ=",
+    "info": {
+      "description": "Convert from Amazon KFX format",
+      "download_link": {
+        "file_name": "KFX Input.zip",
+        "link": "https://plugins.calibre-ebook.com/291290.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=291290",
+      "name": "KFX Input",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.29.0"
+    }
+  },
+  "KFX-Output": {
+    "hash": "sha256-RDnEc0tSoRQR2BhVSST44TVryKlYeG34l7aPsSDgp/Q=",
+    "info": {
+      "description": null,
+      "download_link": {
+        "file_name": "KFX Output.zip",
+        "link": "https://plugins.calibre-ebook.com/272407.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=272407",
+      "name": "KFX Output",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.18.0"
+    }
+  },
+  "KOReader-Sync": {
+    "hash": "sha256-v9Nea/M5dvWsdufzJAlBpi/ceor3NUSUcmOaoiltzxY=",
+    "info": {
+      "description": "Get metadata from a connected KOReader device",
+      "download_link": {
+        "file_name": "KOReader Sync.zip",
+        "link": "https://plugins.calibre-ebook.com/4441614.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=4441614",
+      "name": "KOReader Sync",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.7.2"
+    }
+  },
+  "KePub-Input": {
+    "hash": "sha256-01Elf6OBghh3cVNXLF8zMsWtM+yuVxC7Bc3tNJCsVYc=",
+    "info": {
+      "description": "Convert KEPUB files (.kepub) to HTML",
+      "download_link": {
+        "file_name": "KePub Input.zip",
+        "link": "https://plugins.calibre-ebook.com/263594.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=263594",
+      "name": "KePub Input",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.6.6"
+    }
+  },
+  "KePub-Metadata-Reader": {
+    "hash": "sha256-fgeCHFG4iYtYPt5bfYGylrChkdL1zsP4Ln+sBHuOc0M=",
+    "info": {
+      "description": "Read metadata from Kobo KePub files",
+      "download_link": {
+        "file_name": "KePub Metadata Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/261009.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=261009",
+      "name": "KePub Metadata Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.4.3"
+    }
+  },
+  "KePub-Metadata-Writer": {
+    "hash": "sha256-iVqG0vl7x1U4N1/FBaH04hUoZFp/hxunrXneUvMhPM4=",
+    "info": {
+      "description": "Set metadata in Kobo KePub files",
+      "download_link": {
+        "file_name": "KePub Metadata Writer.zip",
+        "link": "https://plugins.calibre-ebook.com/261010.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=261010",
+      "name": "KePub Metadata Writer",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.4.3"
+    }
+  },
+  "KePub-Output": {
+    "hash": "sha256-869usz3TtXr977mYjeJ7nrhowDitTP2jAg/m7BesBuc=",
+    "info": {
+      "description": null,
+      "download_link": {
+        "file_name": "KePub Output.zip",
+        "link": "https://plugins.calibre-ebook.com/220565.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=220565",
+      "name": "KePub Output",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.7.3"
+    }
+  },
+  "Kindle-Collections": {
+    "hash": "sha256-4xx7iyOYs0k0BK7WGeBQ9PyGPddd6vd+0KIlFCzt+yI=",
+    "info": {
+      "description": "Manage Kindle collections and settings using Calibre",
+      "download_link": {
+        "file_name": "Kindle Collections.zip",
+        "link": "https://plugins.calibre-ebook.com/244202.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=244202",
+      "name": "Kindle Collections",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.7.29"
+    }
+  },
+  "Kindle-hi-res-covers": {
+    "hash": "sha256-WS8DIqFpcinBXRuTsgleYKv2b6XISiOKzvukQ9ikrpQ=",
+    "info": {
+      "description": "Downloads high resolution covers for Kindle editions from Amazon",
+      "download_link": {
+        "file_name": "Kindle hi-res covers.zip",
+        "link": "https://plugins.calibre-ebook.com/286970.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=286970",
+      "name": "Kindle hi-res covers",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.5.1"
+    }
+  },
+  "KindleUnpack---The-Plugin": {
+    "hash": "sha256-lqU6Of+nCS/qEo0gl4N0mENSzxChjUL48GlSFxGALgY=",
+    "info": {
+      "description": "\nUnpacks a Kindle Book/MOBI into its source components.",
+      "download_link": {
+        "file_name": "KindleUnpack - The Plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/171529.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=171529",
+      "name": "KindleUnpack - The Plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.83.8"
+    }
+  },
+  "Kitapyurdu": {
+    "hash": "sha256-XJ5yPpa9vzBZ+x/wcUOMf9g3RswjA6ojn/g0qAXB/fo=",
+    "info": {
+      "description": "Downloads metadata and covers from kitapyurdu.com",
+      "download_link": {
+        "file_name": "Kitapyurdu.zip",
+        "link": "https://plugins.calibre-ebook.com/352516.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=352516",
+      "name": "Kitapyurdu",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.1"
+    }
+  },
+  "Kobo-Metadata": {
+    "hash": "sha256-Q4wBAPOcaeUoStk1+Xi4FRLn3AhWr83YOWf1wJrfTaU=",
+    "info": {
+      "description": "Downloads metadata and covers from Kobo",
+      "download_link": {
+        "file_name": "Kobo Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/355983.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=355983",
+      "name": "Kobo Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.12.0"
+    }
+  },
+  "Kobo-Utilities": {
+    "hash": "sha256-V4lmbVbJqU57N8Qg4HzxUl5HdZDTYpcaJCV5XP3KjT0=",
+    "info": {
+      "description": "Utilities to use with Kobo ereaders",
+      "download_link": {
+        "file_name": "Kobo Utilities.zip",
+        "link": "https://plugins.calibre-ebook.com/366110.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=366110",
+      "name": "Kobo Utilities",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.25.0"
+    }
+  },
+  "KoboTouch---Metaguide-Driver-(intellireading)": {
+    "hash": "sha256-nGO/8m+jf1CWlIGbw93evkLUlFE99dFyAVgUlKkaPOU=",
+    "info": {
+      "description": "WARNING: PLEASE READ CAREFULLY BEFORE INSTALLING. This driver IS NOT REQUIRED to send ebooks to your Kobo device - Calibre already includes a Kobo driver. DO NOT INSTALL this driver if you do not know what metaguiding is and how it works and if your intention is not to explicitly use metaguiding on your Kobo device. For more information, visit https://go.hugobatista.com/gh/intellireading-calibre-plugins or https://go.hugobatista.com/intellireading . This driver will metaguide ANY epub/kepub file you send to the device, by modifying its content and adding additional markup to the text, like bold tags, eventually improving your reading experience, your focus and reading speed (sometimes called bionic reading). ",
+      "download_link": {
+        "file_name": "KoboTouch - Metaguide Driver (intellireading).zip",
+        "link": "https://plugins.calibre-ebook.com/369647.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=369647",
+      "name": "KoboTouch - Metaguide Driver (intellireading)",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.3"
+    }
+  },
+  "KoboTouch-Config-Button": {
+    "hash": "sha256-xwZ3FfWYAV2WZiA9CSkJGhwAA+ZO4Kp36XMdXytRMfk=",
+    "info": {
+      "description": "Quick access to KoboTouch device driver configuration",
+      "download_link": {
+        "file_name": "KoboTouch Config Button.zip",
+        "link": "https://plugins.calibre-ebook.com/367728.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=367728",
+      "name": "KoboTouch Config Button",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "KoboTouchExtended": {
+    "hash": "sha256-lIhynHFClqXtc7lyo7Nxm3LK9VTcc4itv0jvU7/FkV0=",
+    "info": {
+      "description": "ePub features.",
+      "download_link": {
+        "file_name": "KoboTouchExtended.zip",
+        "link": "https://plugins.calibre-ebook.com/211135.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=211135",
+      "name": "KoboTouchExtended",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.7.3"
+    }
+  },
+  "KyBook3-Sync": {
+    "hash": "sha256-RB4uZ0OA3lcEwzHqm2dScePyw6v4RWrcqVZd20tw2Nk=",
+    "info": {
+      "description": "Syncs books and metadata to KyBook3",
+      "download_link": {
+        "file_name": "KyBook3 Sync.zip",
+        "link": "https://plugins.calibre-ebook.com/337305.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=337305",
+      "name": "KyBook3 Sync",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.12"
+    }
+  },
+  "LCPL-Input": {
+    "hash": "sha256-IzHEzIUrUX5qmJZJCk9PSOOJmrThf0JzFoCiXKgGu6w=",
+    "info": {
+      "description": "Downloads LCP-encrypted books from a LCPL license file. Note: This does not remove the LCP DRM.",
+      "download_link": {
+        "file_name": "LCPL Input.zip",
+        "link": "https://plugins.calibre-ebook.com/342165.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=342165",
+      "name": "LCPL Input",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.0.5"
+    }
+  },
+  "Language-Cleaner": {
+    "hash": "sha256-zuZO6cnhkRjOLbfmVE4VVoFFIQg0tWdjRp5kCOZ6rLk=",
+    "info": {
+      "description": "Replace naughty or offensive language with something more acceptable (to me at least)",
+      "download_link": {
+        "file_name": "Language Cleaner.zip",
+        "link": "https://plugins.calibre-ebook.com/322709.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=322709",
+      "name": "Language Cleaner",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2024.2.29"
+    }
+  },
+  "LanguageTool": {
+    "hash": "sha256-VuGeHUozXIGvmfT4V4vuvIW4p9U2fzhTZmr5/oHN/lU=",
+    "info": {
+      "description": "A simple LanguageTool wrapper.",
+      "download_link": {
+        "file_name": "LanguageTool.zip",
+        "link": "https://plugins.calibre-ebook.com/313257.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=313257",
+      "name": "LanguageTool",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.1.3"
+    }
+  },
+  "Last-Modified": {
+    "hash": "sha256-K7H9efcr2oDvyoZVtOBBYqiXwt6BqpcF23morminRNM=",
+    "info": {
+      "description": "Update a custom date column(s) based on events like book metadata changes, formats changes .... etc",
+      "download_link": {
+        "file_name": "Last Modified.zip",
+        "link": "https://plugins.calibre-ebook.com/341183.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=341183",
+      "name": "Last Modified",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.8.5"
+    }
+  },
+  "Legie": {
+    "hash": "sha256-k/HKhHIfACOwG1Ykf3N1SDmkowG8nG+WEltxLHlEZ74=",
+    "info": {
+      "description": "Downloads metadata and covers from Legie.info (only books in Czech, mainly sci-fi and fantasy)",
+      "download_link": {
+        "file_name": "Legie.zip",
+        "link": "https://plugins.calibre-ebook.com/362097.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=362097",
+      "name": "Legie",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.1.3"
+    }
+  },
+  "Library-Codes---SRU": {
+    "hash": "sha256-3giUr0KyyYCAUK0KEWZ0FFeSv0yFl1KkExSUSmON0X8=",
+    "info": {
+      "description": "Derive Library of Congress Codes, Dewey Decimal Codes, and/or OCLC-OWI plus Other Identifiers for Selected Books Using ISBN or ISSN.",
+      "download_link": {
+        "file_name": "Library Codes - SRU.zip",
+        "link": "https://plugins.calibre-ebook.com/362404.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=362404",
+      "name": "Library Codes - SRU",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.4"
+    }
+  },
+  "Library-Splitter": {
+    "hash": "sha256-hiWCIt9h9xCvMct610XnUlwZBAXSF+kYLjXEmYSd63A=",
+    "info": {
+      "description": "Front-end to Calibre's Copy/Move Book functions.  Automatically copies or moves books from the current library to a target library based on each book's metadata value in a '#target_library' Custom Column.",
+      "download_link": {
+        "file_name": "Library Splitter.zip",
+        "link": "https://plugins.calibre-ebook.com/292467.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=292467",
+      "name": "Library Splitter",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.7"
+    }
+  },
+  "LibraryThing-Match": {
+    "hash": "sha256-X6VypreDO0ZGIqjEgRZ7SaXNorGqxFmI17tEqWH/J9Q=",
+    "info": {
+      "description": "Compare your LibraryThing library with your calibre e-books.",
+      "download_link": {
+        "file_name": "LibraryThing Match.zip",
+        "link": "https://plugins.calibre-ebook.com/337516.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=337516",
+      "name": "LibraryThing Match",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.5"
+    }
+  },
+  "Libri_hu": {
+    "hash": "sha256-SjeJ2aKnIQV4Y8Hg7F34LPqDe1SF+7lAoG0hUNdxGqs=",
+    "info": {
+      "description": "Downloads metadata and cover from libri.hu",
+      "download_link": {
+        "file_name": "Libri_hu.zip",
+        "link": "https://plugins.calibre-ebook.com/192763.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=192763",
+      "name": "Libri_hu",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.0"
+    }
+  },
+  "LubimyCzytac": {
+    "hash": "sha256-oosAGTDbwTkRnrGFfnZ6uwnCkur/wHrKeuwzUi9SLgY=",
+    "info": {
+      "description": "Download book metadata and covers from LubimyCzytac.pl",
+      "download_link": {
+        "file_name": "LubimyCzytac.zip",
+        "link": "https://plugins.calibre-ebook.com/282922.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=282922",
+      "name": "LubimyCzytac",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.3.6"
+    }
+  },
+  "Manage-Series": {
+    "hash": "sha256-EGxBFRiJpxYrd5Xz/ohKKNAfCpC0yKccE16JFK0xdIs=",
+    "info": {
+      "description": "A GUI for manipulating selected books into a series",
+      "download_link": {
+        "file_name": "Manage Series.zip",
+        "link": "https://plugins.calibre-ebook.com/125729.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=125729",
+      "name": "Manage Series",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.2"
+    }
+  },
+  "Manage-Sony-x50-Reader-Book-List": {
+    "hash": "sha256-/bbI8dvES56yG5zZqaMluEy2n8JqYRVa7mAJaXv8Y7E=",
+    "info": {
+      "description": "Manage the Sony x50 Reader book lists explicitly or based on metadata criteria.",
+      "download_link": {
+        "file_name": "Manage Sony x50 Reader Book List.zip",
+        "link": "https://plugins.calibre-ebook.com/120828.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=120828",
+      "name": "Manage Sony x50 Reader Book List",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.11"
+    }
+  },
+  "Markdown-Output": {
+    "hash": "sha256-rGJiYZXShadDuz56+PmkJQlg8FbrBNSAgOSnD2Mf/fg=",
+    "info": {
+      "description": null,
+      "download_link": {
+        "file_name": "Markdown Output.zip",
+        "link": "https://plugins.calibre-ebook.com/3978884.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=3978884",
+      "name": "Markdown Output",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.3"
+    }
+  },
+  "Martinus.sk": {
+    "hash": "sha256-KRjR6JwvWroxr6XziMFSsrnd034UMO/ZSiyNvwOYPe4=",
+    "info": {
+      "description": "Downloads metadata and covers from martinus.sk",
+      "download_link": {
+        "file_name": "Martinus.sk.zip",
+        "link": "https://plugins.calibre-ebook.com/234233.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=234233",
+      "name": "Martinus.sk",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2025.9.20"
+    }
+  },
+  "Mass-Search-Replace": {
+    "hash": "sha256-jYSoiklOt6/+0FWLYApsS0/zy/v474c7aWFHAnTydjA=",
+    "info": {
+      "description": "Easily apply a list of multiple saved Find and Replace operations to your books metadata",
+      "download_link": {
+        "file_name": "Mass Search-Replace.zip",
+        "link": "https://plugins.calibre-ebook.com/335417.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=335417",
+      "name": "Mass Search-Replace",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.8.7"
+    }
+  },
+  "Media-File-Importer": {
+    "hash": "sha256-Am2sLgArjmlyOy9tnZqsqiuYC6Wm2y8zbEEOeeqHmEI=",
+    "info": {
+      "description": "Drag media file paths and Drop them to automatically create new books within Calibre having dynamically created metadata, plus a copy of the original media file placed into the same directory as the new book.  For use in a Workbench/Intake Library only.",
+      "download_link": {
+        "file_name": "Media File Importer.zip",
+        "link": "https://plugins.calibre-ebook.com/277104.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=277104",
+      "name": "Media File Importer",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.27"
+    }
+  },
+  "Medical-Reader": {
+    "hash": "sha256-zkrknwv4fsRN29IqmjO2+yGCS72BBngxKnA0zL5Vvxs=",
+    "info": {
+      "description": "Converts medpedia pages to ebooks",
+      "download_link": {
+        "file_name": "Medical Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/191268.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=191268",
+      "name": "Medical Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Medion-OYO-Device-Interface": {
+    "hash": "sha256-CYq9XjLeCCX15gr85IU/BMto/pUAbftffGKg65pXCbQ=",
+    "info": {
+      "description": "Communicate with the Medion OYO",
+      "download_link": {
+        "file_name": "Medion OYO Device Interface.zip",
+        "link": "https://plugins.calibre-ebook.com/139695.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=139695",
+      "name": "Medion OYO Device Interface",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.8"
+    }
+  },
+  "Modify-ePub": {
+    "hash": "sha256-FEDVey/lFwoT2einAlhsWPEVAbz5PxHfF89+albnsZs=",
+    "info": {
+      "description": "Apply cleanup tasks and updates to an ePub without doing a conversion",
+      "download_link": {
+        "file_name": "Modify ePub.zip",
+        "link": "https://plugins.calibre-ebook.com/154371.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=154371",
+      "name": "Modify ePub",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.8.8"
+    }
+  },
+  "Moly_hu": {
+    "hash": "sha256-7PrmU/s/eFcAiSiBmbAUr2VhcbIDMADwNBeRrVDvQC4=",
+    "info": {
+      "description": "Downloads metadata and covers from moly.hu",
+      "download_link": {
+        "file_name": "Moly_hu.zip",
+        "link": "https://plugins.calibre-ebook.com/193302.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=193302",
+      "name": "Moly_hu",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "5.0.6"
+    }
+  },
+  "MultiColumnSearch": {
+    "hash": "sha256-DOmV+em1ec7PeH8Qdu1IFRU3+PgZHOA/MtBHERVkRKo=",
+    "info": {
+      "description": "Advanced Search Tools: Inter-Book; Intra-Book; Cross-Library; Full-Text; Word-Book Index Search; Native SQL Queries; Cross-Library Duplicate Books per Custom Columns; and more.",
+      "download_link": {
+        "file_name": "MultiColumnSearch.zip",
+        "link": "https://plugins.calibre-ebook.com/261712.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=261712",
+      "name": "MultiColumnSearch",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.96"
+    }
+  },
+  "NASA-STI-Repository": {
+    "hash": "sha256-l24SFVfElKs7De/Kr+fYLIsaqsIJLhJiHLhWbeJi9ws=",
+    "info": {
+      "description": "Download metadata from NASA STI Repository.",
+      "download_link": {
+        "file_name": "NASA STI Repository.zip",
+        "link": "https://plugins.calibre-ebook.com/358965.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=358965",
+      "name": "NASA STI Repository",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "OPML-Importer": {
+    "hash": "sha256-9B5GlPv1FrfweOCzwSao94EOCEvr+t0rnWNq5Egsnsw=",
+    "info": {
+      "description": "Imports an OPML file into recipes",
+      "download_link": {
+        "file_name": "OPML Importer.zip",
+        "link": "https://plugins.calibre-ebook.com/236365.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=236365",
+      "name": "OPML Importer",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Open-With": {
+    "hash": "sha256-toFWrN6zK0/czKd5wm6PBLNZVx/CT/kvfZLtR6HiHF8=",
+    "info": {
+      "description": "Open format or cover of book in a specified external application",
+      "download_link": {
+        "file_name": "Open With.zip",
+        "link": "https://plugins.calibre-ebook.com/118761.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=118761",
+      "name": "Open With",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.8.4"
+    }
+  },
+  "Output-Format-Cycler": {
+    "hash": "sha256-FzL6+t6pxahdpa+b0KvLpvhu6NfUWz6altUspg+EhX0=",
+    "info": {
+      "description": "Toolbar button to cycle the preferred output format",
+      "download_link": {
+        "file_name": "Output Format Cycler.zip",
+        "link": "https://plugins.calibre-ebook.com/371117.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=371117",
+      "name": "Output Format Cycler",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "OverDrive-Libby": {
+    "hash": "sha256-uH2IVb4BPEDWLvSPudOP0OkRWvbJcJHJ9YtAgWYgNRg=",
+    "info": {
+      "description": "Import loans from your OverDrive Libby account",
+      "download_link": {
+        "file_name": "OverDrive Libby.zip",
+        "link": "https://plugins.calibre-ebook.com/354816.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=354816",
+      "name": "OverDrive Libby",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.2.3"
+    }
+  },
+  "Overdrive-Link": {
+    "hash": "sha256-nqjFJv/Qb7klMR6djynf5Acg/7MPnRgb+E8NprH5NkI=",
+    "info": {
+      "description": "Links books in calibre to ebook lending libraries",
+      "download_link": {
+        "file_name": "Overdrive Link.zip",
+        "link": "https://plugins.calibre-ebook.com/187919.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=187919",
+      "name": "Overdrive Link",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.58.0"
+    }
+  },
+  "PDF-Cover": {
+    "hash": "sha256-T5DuQzYH96baE7gnOWhMTQCqrQbaZTr81HTlPTNb+A8=",
+    "info": {
+      "description": "A Plugin that Prepends a Cover Image to the beginning of a PDF",
+      "download_link": {
+        "file_name": "PDF Cover.zip",
+        "link": "https://plugins.calibre-ebook.com/358993.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=358993",
+      "name": "PDF Cover",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.1.0"
+    }
+  },
+  "PDFtoCBZ": {
+    "hash": "sha256-fXDPqAXmUHN/THM9h6zpX4lcGVy8sxeqoBdLmQ8mglI=",
+    "info": {
+      "description": "Convertit les livres PDF en CBZ avec choix du format et compression",
+      "download_link": {
+        "file_name": "PDFtoCBZ.zip",
+        "link": "https://plugins.calibre-ebook.com/370346.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=370346",
+      "name": "PDFtoCBZ",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "4.0.0"
+    }
+  },
+  "Perrypedia": {
+    "hash": "sha256-iG/8VaAyQJ8aP8yYQTcmNm0+nSWjHCyzzWucVH1jasU=",
+    "info": {
+      "description": "Downloads metadata and covers from Perrypedia (perrypedia.de)",
+      "download_link": {
+        "file_name": "Perrypedia.zip",
+        "link": "https://plugins.calibre-ebook.com/334814.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=334814",
+      "name": "Perrypedia",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.10.3"
+    }
+  },
+  "PocketBook-Improved-Device-Interface": {
+    "hash": "sha256-tCUkvqONGxig+CdJ8r1vNYTWAFSx56Gcjvr1ThCe/k8=",
+    "info": {
+      "description": "Communicate with PocketBook readers",
+      "download_link": {
+        "file_name": "PocketBook Improved Device Interface.zip",
+        "link": "https://plugins.calibre-ebook.com/345618.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=345618",
+      "name": "PocketBook Improved Device Interface",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.4"
+    }
+  },
+  "Pocketbook-Collections": {
+    "hash": "sha256-idsAB0kpTRjISU3jIW9uNXk56E31zxZEtMbx/DRVPVc=",
+    "info": {
+      "description": "Sync Pocketbook collections, read statuses and favorite statuses with Calibre",
+      "download_link": {
+        "file_name": "Pocketbook Collections.zip",
+        "link": "https://plugins.calibre-ebook.com/364716.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=364716",
+      "name": "Pocketbook Collections",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.6"
+    }
+  },
+  "Pocketbook-Tools": {
+    "hash": "sha256-N6+z9J2qQuvTMCc7AN2ae5Ld3fvc//QAaVp3WbR5Mdk=",
+    "info": {
+      "description": "Tools for Pocketbook e-readers.",
+      "download_link": {
+        "file_name": "Pocketbook Tools.zip",
+        "link": "https://plugins.calibre-ebook.com/339806.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=339806",
+      "name": "Pocketbook Tools",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.10.0"
+    }
+  },
+  "Prettify-Cover": {
+    "hash": "sha256-bnlIpGHWjVUGvUKbulHD6MZmm422YIbR8rx8x3gPhUs=",
+    "info": {
+      "description": "Scale book-covers proportional to the size of e-readers screen.",
+      "download_link": {
+        "file_name": "Prettify Cover.zip",
+        "link": "https://plugins.calibre-ebook.com/267427.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=267427",
+      "name": "Prettify Cover",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.6.0"
+    }
+  },
+  "Prince-PDF": {
+    "hash": "sha256-EJkGg225sAdbrUq30PPjM92ErQOKrUabx5/jy0btYtI=",
+    "info": {
+      "description": "Converts to PDF using the Prince software (third-party)",
+      "download_link": {
+        "file_name": "Prince PDF.zip",
+        "link": "https://plugins.calibre-ebook.com/230027.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=230027",
+      "name": "Prince PDF",
+      "platforms": [
+        "linux",
+        "windows"
+      ],
+      "version": "1.6.0"
+    }
+  },
+  "Public_gr": {
+    "hash": "sha256-D2ZX5FW9+WiRSTKoh6U1ZEtWLWfan8aKg4cBduw4WKI=",
+    "info": {
+      "description": "Downloads metadata and covers from Public.gr",
+      "download_link": {
+        "file_name": "Public_gr.zip",
+        "link": "https://plugins.calibre-ebook.com/282354.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=282354",
+      "name": "Public_gr",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "QRCode-Tracker-Filidel": {
+    "hash": "sha256-SbO6gam2SGtWytTgQsHWkpFyKvC2UtaCkE2IMw3lQ0g=",
+    "info": {
+      "description": "Inserts a generated QR code image at the end of every chapter, to help tracking reading progress.",
+      "download_link": {
+        "file_name": "QRCode Tracker Filidel.zip",
+        "link": "https://plugins.calibre-ebook.com/282268.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=282268",
+      "name": "QRCode Tracker Filidel",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.7.0"
+    }
+  },
+  "Quality-Check": {
+    "hash": "sha256-EwFENXvEGb/Tw55+9X4lmmkP268a/tnCMnm4qXat880=",
+    "info": {
+      "description": "Query your library for poor quality covers or invalid metadata",
+      "download_link": {
+        "file_name": "Quality Check.zip",
+        "link": "https://plugins.calibre-ebook.com/125428.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=125428",
+      "name": "Quality Check",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.14.6"
+    }
+  },
+  "QuarantineAndScrub": {
+    "hash": "sha256-D/FIn9WVqTaNdmln1jj9xlUUg1cKWlwnxCzD2myZL1c=",
+    "info": {
+      "description": "[For Advanced Calibre Users Only: Must Download Special Database From mobileread.com] Clean Malformed, Misplaced or Missing Author, Title, Series, Index, ISBN; Tag Scrubber, Deriver, Propagator, Defaulter & Minimizer; Series Deriver & Consolidator; Series & Index Validator/Corrector; Genre Deriver; LCC & DDC Deriver; Book Awards; & Much More",
+      "download_link": {
+        "file_name": "QuarantineAndScrub.zip",
+        "link": "https://plugins.calibre-ebook.com/247425.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=247425",
+      "name": "QuarantineAndScrub",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.6.122"
+    }
+  },
+  "Quick-Preferences": {
+    "hash": "sha256-LMuTrQ0DXNdqGWtLCodUgZ0rmaZNG/VhQmuexEdHXxc=",
+    "info": {
+      "description": "Allows quickly changing common preferences via a toolbar menu or shortcuts",
+      "download_link": {
+        "file_name": "Quick Preferences.zip",
+        "link": "https://plugins.calibre-ebook.com/118776.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=118776",
+      "name": "Quick Preferences",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.7.1"
+    }
+  },
+  "Read-Audiobooks-metadata": {
+    "hash": "sha256-RK+TBxwGSwv6M/ynXjiQFny+jLRMRI7vnJ+sRzGPYH8=",
+    "info": {
+      "description": "Read metadata from m4b,m4a files, perhaps more in future...",
+      "download_link": {
+        "file_name": "Read Audiobooks metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/362522.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=362522",
+      "name": "Read Audiobooks metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.1.1"
+    }
+  },
+  "Read-MP3-AudioBook-metadata": {
+    "hash": "sha256-fxAFR7f49QmrVy3SVod5TVVNuAr8aZCOPREj2zq6otc=",
+    "info": {
+      "description": "\nReads metadata from an MP3, M4B, AA and F4B AudioBook file, or M3U playlist.\nUses eyeD3-0.6.17j; mp4file-0.2j; pyaudibletags-1.0.1; flvlib-0.1.12 for parsing files.\n",
+      "download_link": {
+        "file_name": "Read MP3 AudioBook metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/143629.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=143629",
+      "name": "Read MP3 AudioBook metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.79"
+    }
+  },
+  "Reading-Goal": {
+    "hash": "sha256-/7b7eCubGXShi17C7kFYMvbR/p3Cb8R72EYecc75+1g=",
+    "info": {
+      "description": "Manage your annual reading goal",
+      "download_link": {
+        "file_name": "Reading Goal.zip",
+        "link": "https://plugins.calibre-ebook.com/355769.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=355769",
+      "name": "Reading Goal",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.8"
+    }
+  },
+  "Reading-List": {
+    "hash": "sha256-eQdMmsfnMiMQDfDaZYTV+VyfEA6wYjipmpmu6G1cF4c=",
+    "info": {
+      "description": "Define orderable lists of books and synchronise to devices/folders",
+      "download_link": {
+        "file_name": "Reading List.zip",
+        "link": "https://plugins.calibre-ebook.com/134856.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=134856",
+      "name": "Reading List",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.15.6"
+    }
+  },
+  "Recipe-Reader": {
+    "hash": "sha256-GcsqEQ2ZsQrMSVejep+HH1LQADWT3s9hnboxbtWClOY=",
+    "info": {
+      "description": "Converts Cooks.com recipes to ebooks",
+      "download_link": {
+        "file_name": "Recipe Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/183640.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=183640",
+      "name": "Recipe Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Recoll-Full-Text-Search": {
+    "hash": "sha256-KY34VVslxq7ZQ1TpIUBA5c21IiQYlCb8WW024G7CQ2I=",
+    "info": {
+      "description": "A plugin to do a full text search with recoll",
+      "download_link": {
+        "file_name": "Recoll Full Text Search.zip",
+        "link": "https://plugins.calibre-ebook.com/211137.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=211137",
+      "name": "Recoll Full Text Search",
+      "platforms": [
+        "linux"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Reformat-plugin": {
+    "hash": "sha256-ozBG2wGgHlDBDplk4ytsFB4tCusBLc4BS0tkQVh3jIY=",
+    "info": {
+      "description": "Simplifies structure and corrects format of EPUB files",
+      "download_link": {
+        "file_name": "Reformat plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/332268.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=332268",
+      "name": "Reformat plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.4.0"
+    }
+  },
+  "Resize-Cover": {
+    "hash": "sha256-S8xWIs22vwerkefhuHCM0Gn51aCYUMT7G2q2K9PeHnc=",
+    "info": {
+      "description": "Resize cover images to one of your own predefined size(s)",
+      "download_link": {
+        "file_name": "Resize Cover.zip",
+        "link": "https://plugins.calibre-ebook.com/150982.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=150982",
+      "name": "Resize Cover",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.2.1"
+    }
+  },
+  "SF-Leihbuch": {
+    "hash": "sha256-9Uec6uRfYvY/41Ysjz8lvfLUvE7AtfIG1oVOSLA+Urk=",
+    "info": {
+      "description": "Downloads metadata and covers from the science fiction loan book database (http://www.sf-leihbuch.de/)",
+      "download_link": {
+        "file_name": "SF-Leihbuch.zip",
+        "link": "https://plugins.calibre-ebook.com/342698.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=342698",
+      "name": "SF-Leihbuch",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "Save-Composite-Custom-Columns": {
+    "hash": "sha256-FuAUyQIIsvQ2gP0ekoI+AmKwdjExbrgiSmD/V08k31M=",
+    "info": {
+      "description": "Store values of columns \"built from other columns\" for use by apps that read the calibre database, for example Calibre Companion",
+      "download_link": {
+        "file_name": "Save Composite Custom Columns.zip",
+        "link": "https://plugins.calibre-ebook.com/272575.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=272575",
+      "name": "Save Composite Custom Columns",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.1"
+    }
+  },
+  "Save-To-Format": {
+    "hash": "sha256-S9JHtQ0QZ3Xj9eV1mmrKFyK8P0vQ2Aa8F2e7sq75UPI=",
+    "info": {
+      "description": "Save books to particular format with auto conversion",
+      "download_link": {
+        "file_name": "Save To Format.zip",
+        "link": "https://plugins.calibre-ebook.com/207667.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=207667",
+      "name": "Save To Format",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.0.6"
+    }
+  },
+  "Save-Virtual-Libraries-To-Column": {
+    "hash": "sha256-LVShqwftZhsQrDA5+dpc9G8SqoyPPoYy4e+YqUM24G0=",
+    "info": {
+      "description": "Save the names of the virtual libraries containing a book in a tags-like custom column",
+      "download_link": {
+        "file_name": "Save Virtual Libraries To Column.zip",
+        "link": "https://plugins.calibre-ebook.com/3550882.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=3550882",
+      "name": "Save Virtual Libraries To Column",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.1"
+    }
+  },
+  "Save-Virtual-Libraries-To-Column-GUI": {
+    "hash": "sha256-AGWNnv4bmYFoocH+GGDF8JB7X5gUHcj07SPO5B7PeYk=",
+    "info": {
+      "description": "For each book in the library, compute the list of virtual libraries containing that book then save that list to a custom column",
+      "download_link": {
+        "file_name": "Save Virtual Libraries To Column GUI.zip",
+        "link": "https://plugins.calibre-ebook.com/3550903.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?p=3550903",
+      "name": "Save Virtual Libraries To Column GUI",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.3.0"
+    }
+  },
+  "ScrambleEbook": {
+    "hash": "sha256-K2yJBtq9kAttQReLiOJKC84X71NGcyS6pJcMO/0eF/s=",
+    "info": {
+      "description": "Create a copyright-safe scrambled copy of an ebook for debugging purposes",
+      "download_link": {
+        "file_name": "ScrambleEbook.zip",
+        "link": "https://plugins.calibre-ebook.com/267998.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=267998",
+      "name": "ScrambleEbook",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.6.0"
+    }
+  },
+  "Scroll-Book-Details": {
+    "hash": "sha256-0qbLzmTLoPpdQUsuaLq4n1wE//mwaY+lSUQ5rCcfTRA=",
+    "info": {
+      "description": "Use spacebar (or any configured keyboard shortcut) to scroll info in book details panel.",
+      "download_link": {
+        "file_name": "Scroll Book Details.zip",
+        "link": "https://plugins.calibre-ebook.com/339824.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=339824",
+      "name": "Scroll Book Details",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "Search-The-Internet": {
+    "hash": "sha256-uLHcCxB/I0JRFXwCF3ZqYkCtzgD8SU3QMDMoDYPtO9Y=",
+    "info": {
+      "description": "Search various websites for the selected books",
+      "download_link": {
+        "file_name": "Search The Internet.zip",
+        "link": "https://plugins.calibre-ebook.com/118758.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=118758",
+      "name": "Search The Internet",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.11.3"
+    }
+  },
+  "Send-by-RSYNC": {
+    "hash": "sha256-U90zuEXCxReIQtPK2tuY5i2we4jOmWfhKrrk+xYZAfs=",
+    "info": {
+      "description": "Send book(s) by SSH/RSH",
+      "download_link": {
+        "file_name": "Send by RSYNC.zip",
+        "link": "https://plugins.calibre-ebook.com/128011.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=128011",
+      "name": "Send by RSYNC",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "Similar-Stories": {
+    "hash": "sha256-WjS7h4Wtiy7r1bT6fcsfGyJ6XHbpQOYfhK5spSeH+xM=",
+    "info": {
+      "description": "Find stories similar to first selected book using full text information and store similarity score in a custom column",
+      "download_link": {
+        "file_name": "Similar Stories.zip",
+        "link": "https://plugins.calibre-ebook.com/165794.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=165794",
+      "name": "Similar Stories",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.58"
+    }
+  },
+  "Skoob-Books": {
+    "hash": "sha256-RHrNt3Ihj+QFQ8d8br3p0JNrrfclRQij4+TrCyKDbKs=",
+    "info": {
+      "description": "Downloads metadata and covers from Skoob",
+      "download_link": {
+        "file_name": "Skoob Books.zip",
+        "link": "https://plugins.calibre-ebook.com/320753.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=320753",
+      "name": "Skoob Books",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.7"
+    }
+  },
+  "Skoob-Sync": {
+    "hash": "sha256-BXpL3w4J15UQQe+JK7Xwp7g244zGXS9LwJKwoz0qGDw=",
+    "info": {
+      "description": "Sync calibre library with Skoob",
+      "download_link": {
+        "file_name": "Skoob Sync.zip",
+        "link": "https://plugins.calibre-ebook.com/322945.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=322945",
+      "name": "Skoob Sync",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.5.7"
+    }
+  },
+  "SmartEject": {
+    "hash": "sha256-UmanKC3qU/IucwErFBgX5Bwf3HYd7aqIgWYcFW12dKk=",
+    "info": {
+      "description": "UI plugin to Check for Duplicate/Missing/Added Books when Ejecting Devices.",
+      "download_link": {
+        "file_name": "SmartEject.zip",
+        "link": "https://plugins.calibre-ebook.com/192950.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=192950",
+      "name": "SmartEject",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.6.0"
+    }
+  },
+  "Smashwords-Metadata": {
+    "hash": "sha256-EwZc+tSDy0VmdGOnU07+dse1XvJFWw1RF9hYe7HvXDQ=",
+    "info": {
+      "description": "Downloads metadata and covers from Smashwords",
+      "download_link": {
+        "file_name": "Smashwords Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/313929.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=313929",
+      "name": "Smashwords Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "Sony-PRS-T1-notes-plugin": {
+    "hash": "sha256-AYvVodcnjC8A0faLUsgQIUwaBY1JV+tsetGE8X2yvdM=",
+    "info": {
+      "description": "Manages notes (handwriting) of your Sony PRS-T1 device",
+      "download_link": {
+        "file_name": "Sony PRS-T1 notes plugin.zip",
+        "link": "https://plugins.calibre-ebook.com/173321.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=173321",
+      "name": "Sony PRS-T1 notes plugin",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.1.0"
+    }
+  },
+  "Standard-Ebooks": {
+    "hash": "sha256-vAVS39R+bnDGyNseNShAIEXfgCPxKqPlMBAMuTSf+BQ=",
+    "info": {
+      "description": "Free and liberated ebooks, carefully produced for the true book lover.",
+      "download_link": {
+        "file_name": "Standard Ebooks.zip",
+        "link": "https://plugins.calibre-ebook.com/337368.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=337368",
+      "name": "Standard Ebooks",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "StoryGraph": {
+    "hash": "sha256-ZoaSqPRJYSHCsGTS5vGMdEv4xsGuKf+6k4DHLd3/Vgo=",
+    "info": {
+      "description": "Downloads metadata and covers from the StoryGraph",
+      "download_link": {
+        "file_name": "StoryGraph.zip",
+        "link": "https://plugins.calibre-ebook.com/369591.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=369591",
+      "name": "StoryGraph",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.7"
+    }
+  },
+  "TTS-to-MP3": {
+    "hash": "sha256-VHfVIlcMjt1n0ulLnJVxtsvcPu1PYd482ib7Pr6rjAc=",
+    "info": {
+      "description": "Create MP3 audiobook using MSWindows Text-to-Speech\n[EPUB, AZW3, KEPUB]",
+      "download_link": {
+        "file_name": "TTS to MP3.zip",
+        "link": "https://plugins.calibre-ebook.com/299727.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=299727",
+      "name": "TTS to MP3",
+      "platforms": [
+        "windows"
+      ],
+      "version": "0.6.0"
+    }
+  },
+  "Template-Catalog": {
+    "hash": "sha256-4GkWz4hbc84H9M/TLjopdVImFVWU78OWVBzJE0FZ9wk=",
+    "info": {
+      "description": "Manage and organize your templates",
+      "download_link": {
+        "file_name": "Template Catalog.zip",
+        "link": "https://plugins.calibre-ebook.com/366843.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=366843",
+      "name": "Template Catalog",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.0"
+    }
+  },
+  "TextDiff": {
+    "hash": "sha256-ConUZOHf+2J5IXHkZJuQUp/v04apuP6a4GXg7a8bqUY=",
+    "info": {
+      "description": "A Calibre GUI plugin to find text differences in two book formats.",
+      "download_link": {
+        "file_name": "TextDiff.zip",
+        "link": "https://plugins.calibre-ebook.com/350421.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=350421",
+      "name": "TextDiff",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.3.1"
+    }
+  },
+  "Unplugged": {
+    "hash": "sha256-sPceho68nZ9HUTrNoslZ9qg1IVo+FLAmYHJsfmcWXDE=",
+    "info": {
+      "description": "Enables \"unplugged mode\", where new devices are not detected",
+      "download_link": {
+        "file_name": "Unplugged.zip",
+        "link": "https://plugins.calibre-ebook.com/265167.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=265167",
+      "name": "Unplugged",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.0"
+    }
+  },
+  "User-Category": {
+    "hash": "sha256-RtDgYk85tgxsFd0caWsCCdSlHvDZ6LKADwZBB5wklaw=",
+    "info": {
+      "description": "Add or remove to user categories based on the selected book(s)",
+      "download_link": {
+        "file_name": "User Category.zip",
+        "link": "https://plugins.calibre-ebook.com/118934.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=118934",
+      "name": "User Category",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.6.1"
+    }
+  },
+  "VL-from-selection": {
+    "hash": "sha256-2+3nanvr6jsBC2WUVwx8HJT83qHRHwpix1Oku6Sgovc=",
+    "info": {
+      "description": "Create a Virtual Library from selected book IDs quickly, optionally applying tags to the selected books",
+      "download_link": {
+        "file_name": "VL from selection.zip",
+        "link": "https://plugins.calibre-ebook.com/371238.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=371238",
+      "name": "VL from selection",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.3"
+    }
+  },
+  "View-Manager": {
+    "hash": "sha256-trq2AKtjWaGsOjlqx7X/oDPkqHLoy51McTT9utTZYaU=",
+    "info": {
+      "description": "Define your own sets of column views with sort orders",
+      "download_link": {
+        "file_name": "View Manager.zip",
+        "link": "https://plugins.calibre-ebook.com/129014.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=129014",
+      "name": "View Manager",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.10.3"
+    }
+  },
+  "Walk-Search-History": {
+    "hash": "sha256-ZsvuxxnSWvIeCLWZVcXol1yvOMFmIWpsKPhIBsAxB3U=",
+    "info": {
+      "description": "Enables a goto previous/next shortcut for your search history",
+      "download_link": {
+        "file_name": "Walk Search History.zip",
+        "link": "https://plugins.calibre-ebook.com/118772.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=118772",
+      "name": "Walk Search History",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.4"
+    }
+  },
+  "Wiki-Reader": {
+    "hash": "sha256-0kfIWXoa/ZDmZRgqfhd3/qCbO3Y4ysfmDnbDRdhAvt0=",
+    "info": {
+      "description": "Converts wiki pages to ebooks",
+      "download_link": {
+        "file_name": "Wiki Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/183333.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=183333",
+      "name": "Wiki Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.2.1"
+    }
+  },
+  "Wikidata": {
+    "hash": "sha256-0P7I+nCkqSPMMNS+9RJqor8PZJ2RxQKlxgFyFwmBtKU=",
+    "info": {
+      "description": "Downloads metadata and covers via wikidata",
+      "download_link": {
+        "file_name": "Wikidata.zip",
+        "link": "https://plugins.calibre-ebook.com/312253.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=312253",
+      "name": "Wikidata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.0"
+    }
+  },
+  "Wikidata-gui": {
+    "hash": "sha256-RdvSCDEjnKEEc7U9XcT2LwwCqNQx25xqF8d0FUnKtJo=",
+    "info": {
+      "description": "Advanced wikidata metadata manager",
+      "download_link": {
+        "file_name": "Wikidata gui.zip",
+        "link": "https://plugins.calibre-ebook.com/314357.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=314357",
+      "name": "Wikidata gui",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.0.0"
+    }
+  },
+  "WordDumb": {
+    "hash": "sha256-AUUQEHmqcggOfBd1YJAdUWHgOQAK2seviUtJFZw8q/c=",
+    "info": {
+      "description": "Create Kindle Word Wise and X-Ray file and EPUB footnotes then send to e-reader.",
+      "download_link": {
+        "file_name": "WordDumb.zip",
+        "link": "https://plugins.calibre-ebook.com/334681.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=334681",
+      "name": "WordDumb",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.35.4"
+    }
+  },
+  "X-Ray-Creator": {
+    "hash": "sha256-UutDDr+5FEIiI1OWz98il++B5lfhj6eNxXSvkMV4Srw=",
+    "info": {
+      "description": "A plugin to create X-Ray files for Kindle books",
+      "download_link": {
+        "file_name": "X-Ray Creator.zip",
+        "link": "https://plugins.calibre-ebook.com/273189.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=273189",
+      "name": "X-Ray Creator",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "3.2.1"
+    }
+  },
+  "Zotero-Metadata-Importer": {
+    "hash": "sha256-dFNOI8AMHywl/Cf62kDMcmpkOBKOLQo8PgeSQ3Z7Pjo=",
+    "info": {
+      "description": "Add Zotero documents and files plus their metadata to Calibre as books using the normal .csv file exported by Zotero.  Compare items in Zotero to books in Calibre. Export an RIS file with Calibre books and their metadata for import into Zotero.",
+      "download_link": {
+        "file_name": "Zotero Metadata Importer.zip",
+        "link": "https://plugins.calibre-ebook.com/275476.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=275476",
+      "name": "Zotero Metadata Importer",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.78"
+    }
+  },
+  "all-recipes-Recipe-Reader": {
+    "hash": "sha256-djP+UVpsehq2q8Mcz2vnYpCHbxX6H8gKIt30AWSl5wg=",
+    "info": {
+      "description": "Converts allrecipes.com recipes to ebooks",
+      "download_link": {
+        "file_name": "all recipes Recipe Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/218666.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=218666",
+      "name": "all recipes Recipe Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "biblioNETka.pl": {
+    "hash": "sha256-h5jSwtI9TLLxz72Nb3PStaC1C2KGMia9ypjz84TAEvg=",
+    "info": {
+      "description": "Pobiera metadane z serwisu biblioNETka.pl",
+      "download_link": {
+        "file_name": "biblioNETka.pl.zip",
+        "link": "https://plugins.calibre-ebook.com/252922.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=252922",
+      "name": "biblioNETka.pl",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.1"
+    }
+  },
+  "catawiki": {
+    "hash": "sha256-7lMZCAMC5hCwrwCAOXYd76PiGlFcZIN5GnGafE73DH8=",
+    "info": {
+      "description": "Downloads metadata en covers van catawiki.nl",
+      "download_link": {
+        "file_name": "catawiki.zip",
+        "link": "https://plugins.calibre-ebook.com/140909.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=140909",
+      "name": "catawiki",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.0.2"
+    }
+  },
+  "databazeknih.cz": {
+    "hash": "sha256-5nNN6D+aDNjXRoUzIr8+JI7HmUOdzWFpNVlacadOGDE=",
+    "info": {
+      "description": "Downloads metadata and covers from databazeknih.",
+      "download_link": {
+        "file_name": "databazeknih.cz.zip",
+        "link": "https://plugins.calibre-ebook.com/356548.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=356548",
+      "name": "databazeknih.cz",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.5.32"
+    }
+  },
+  "djvumaker": {
+    "hash": "sha256-2FpUKV5KWfP7xeW3bJpH9H7VZMJD432tm8w0X5F4qm0=",
+    "info": {
+      "description": "Convert raster-based document files (Postscript, PDF) to DJVU with GUI button and on-import",
+      "download_link": {
+        "file_name": "djvumaker.zip",
+        "link": "https://plugins.calibre-ebook.com/243217.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=243217",
+      "name": "djvumaker",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "ePub-Extended-Metadata": {
+    "hash": "sha256-6FfVKv68zqcqG/TJaqPYkdP9X1XKcVvmHmPvxzpNrdQ=",
+    "info": {
+      "description": "Read and write a wider range of metadata for ePub's files and associating them to columns in your libraries.",
+      "download_link": {
+        "file_name": "ePub Extended Metadata.zip",
+        "link": "https://plugins.calibre-ebook.com/345069.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=345069",
+      "name": "ePub Extended Metadata",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "0.14.5"
+    }
+  },
+  "food-network-Recipe-Reader": {
+    "hash": "sha256-Ybw+wNJjMrU9qYW/kiKoDagx6j8gOsoaWu4t4iSm3ig=",
+    "info": {
+      "description": "Converts foodnetwork.com recipes to ebooks",
+      "download_link": {
+        "file_name": "food network Recipe Reader.zip",
+        "link": "https://plugins.calibre-ebook.com/214982.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=214982",
+      "name": "food network Recipe Reader",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.0.2"
+    }
+  },
+  "noosfere-DB": {
+    "hash": "sha256-IONDlv+ipomvSKviWfcH+lqtqkJ7I87Zk7tYCl5EWRI=",
+    "info": {
+      "description": "Source extention: downloads and sets metadata from noosfere.org for selected volumes",
+      "download_link": {
+        "file_name": "noosfere DB.zip",
+        "link": "https://plugins.calibre-ebook.com/339410.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=339410",
+      "name": "noosfere DB",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "1.3.0"
+    }
+  },
+  "pitaval": {
+    "hash": "sha256-ZZVcRjtqISyWnyoWQ9gGM8jXTER7YLTXFsoBqiviZBs=",
+    "info": {
+      "description": "Downloads metadata and covers from pitaval.cz (only books in Czech, mainly detective, thriller and spy literature)",
+      "download_link": {
+        "file_name": "pitaval.zip",
+        "link": "https://plugins.calibre-ebook.com/365573.zip"
+      },
+      "homepage": "https://www.mobileread.com/forums/showthread.php?t=365573",
+      "name": "pitaval",
+      "platforms": [
+        "linux",
+        "osx",
+        "windows"
+      ],
+      "version": "2.1.3"
+    }
+  }
+}
