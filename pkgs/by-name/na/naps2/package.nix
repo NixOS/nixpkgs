@@ -10,6 +10,7 @@
   glib,
   sane-backends,
   libnotify,
+  libtiff,
 }:
 
 buildDotnetModule rec {
@@ -49,6 +50,7 @@ buildDotnetModule rec {
     glib
     sane-backends
     libnotify
+    libtiff
   ];
 
   postInstall = ''
