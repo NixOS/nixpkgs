@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   pkg-config,
   cmake,
@@ -79,6 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./msgpack-6-compat.patch
+    # Backport "Add quantize_bf16 to C api output"
+    # Required for onnxruntime 1.23+
+    (fetchpatch {
+      url = "https://github.com/ROCm/AMDMIGraphX/commit/f33afac654dfc4558f4d9867c2d28a2d98cf49b4.patch";
+      hash = "sha256-5O4UanmyhQ9Te830SISaquM4TdG/gEY3wfWSaU/cS30=";
+    })
   ];
 
   nativeBuildInputs = [

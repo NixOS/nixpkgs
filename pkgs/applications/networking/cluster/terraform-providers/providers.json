@@ -45,11 +45,11 @@
     "vendorHash": "sha256-weHY7ZV3HaFBYlDNhwAYN9vDItkI+wtk9UNlM0uuwfY="
   },
   "aliyun_alicloud": {
-    "hash": "sha256-WDFoyj4DxHiS1xIu8bPKUzHaVsGn88rIBzx3KoE8lA0=",
+    "hash": "sha256-4Y6qItQx3gk4LsZb9OB2J2IQ4g6H5uDwy+FkWPCegrg=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.267.0",
+    "rev": "v1.268.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-ogQLStDbsM0aRf4QIbITB8Z+L9DUtZwoAPK6T4xylXI="
   },
@@ -418,11 +418,11 @@
     "vendorHash": "sha256-ZbU2z7qUHPR7vDSflesSjgK7x3LYXVe/gnVsy19q6Bs="
   },
   "fortinetdev_fortios": {
-    "hash": "sha256-dQMDGaYG3TDK5FBH8ODAsDcdScoDWWrk1vsWmL7sIPc=",
+    "hash": "sha256-xXCOhF+FPJDSPl7ISaRTn3FpDRSNmy0+3xdGmjbddKU=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "repo": "terraform-provider-fortios",
-    "rev": "1.23.0",
+    "rev": "1.24.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-V+D/D+i1xbPp9IAfrAds2rNv5t/aXQxPwH9vY09DsMo="
   },
@@ -1229,11 +1229,11 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "spacelift-io_spacelift": {
-    "hash": "sha256-GSGKjV5tuwTyPvdwd/Z8t9g7LFkkg4gHKhI3FYt00gQ=",
+    "hash": "sha256-qQ8/y1KWHIc6WHEVXfiP6LKC44N8uK47x2Lv7TAMedE=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.42.0",
+    "rev": "v1.43.0",
     "spdx": "MIT",
     "vendorHash": "sha256-XNPXjqrrTIC3WrpvDBP7veAYgmYws9FdF4W3j6ewRPk="
   },
