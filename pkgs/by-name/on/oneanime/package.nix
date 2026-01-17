@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   desktop-file-utils,
@@ -65,7 +65,7 @@ let
     hash = "sha256-4EieR+Wys7vK+0/pWF5MkA71EeChThVGJ8J5x/8k8nA=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "oneanime";
   inherit version src;
 

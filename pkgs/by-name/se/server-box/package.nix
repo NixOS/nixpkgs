@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -22,7 +22,7 @@ let
     hash = "sha256-fmL03BNVi1aKhb0jV7MnEtRKTOEaLBGl6uMJtLr6cFk=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
