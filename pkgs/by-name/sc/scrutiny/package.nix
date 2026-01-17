@@ -7,42 +7,40 @@
   nix-update-script,
 }:
 let
+  frontend =
+    finalAttrs:
+    buildNpmPackage {
+      inherit (finalAttrs) version;
+      pname = "${finalAttrs.pname}-webapp";
+      src = "${finalAttrs.src}/webapp/frontend";
+
+      npmDepsHash = "sha256-lOEHLXY13qxWWl2cnmbbqbXXKcg7PNMEMdRhE2HGrAM=";
+
+      buildPhase = ''
+        runHook preBuild
+        mkdir dist
+        npm run build:prod --offline -- --output-path=dist
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        mkdir $out
+        cp -r dist/browser/* $out
+        runHook postInstall
+      '';
+    };
+in
+buildGoModule (finalAttrs: {
   pname = "scrutiny";
   version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "Starosdev";
     repo = "scrutiny";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xoXL8yLrYyjpkxLmbFQz/pp2BauJAU82x1FcslHCPoE=";
   };
-
-  frontend = buildNpmPackage {
-    inherit version;
-    pname = "${pname}-webapp";
-    src = "${src}/webapp/frontend";
-
-    npmDepsHash = "sha256-lOEHLXY13qxWWl2cnmbbqbXXKcg7PNMEMdRhE2HGrAM=";
-
-    buildPhase = ''
-      runHook preBuild
-      mkdir dist
-      npm run build:prod --offline -- --output-path=dist
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mkdir $out
-      cp -r dist/browser/* $out
-      runHook postInstall
-    '';
-
-    passthru.updateScript = nix-update-script { };
-  };
-in
-buildGoModule rec {
-  inherit pname src version;
 
   subPackages = "webapp/backend/cmd/scrutiny";
 
@@ -56,7 +54,7 @@ buildGoModule rec {
 
   postInstall = ''
     mkdir -p $out/share/scrutiny
-    cp -r ${frontend}/* $out/share/scrutiny
+    cp -r ${frontend finalAttrs}/* $out/share/scrutiny
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
@@ -65,10 +63,10 @@ buildGoModule rec {
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
     homepage = "https://github.com/Starosdev/scrutiny";
-    changelog = "https://github.com/Starosdev/scrutiny/releases/tag/v${version}";
+    changelog = "https://github.com/Starosdev/scrutiny/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samasaur ];
     mainProgram = "scrutiny";
     platforms = lib.platforms.linux;
   };
-}
+})
