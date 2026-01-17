@@ -351,7 +351,6 @@ mapAliases {
   pylit = throw "'pylit' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-29
   pymc3 = throw "'pymc3' has been renamed to/replaced by 'pymc'"; # Converted to throw 2025-10-29
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
-  pymicro-vad = throw "'pymicro-vad' was removed because Home Assistant switched to 'pysilero-vad'"; # added 2026-01-08
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
   pyobject = throw "'pyobject' has been removed because it was only supporting python 2"; # Added 2026-01-24
