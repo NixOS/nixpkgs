@@ -757,6 +757,17 @@ with lib.maintainers;
     shortName = "Red Code Labs";
   };
 
+  redox = {
+    members = [
+      theoparis
+      eveeifyeve
+      ericson2314
+      anderscs
+    ];
+    scope = "Maintains the redox package set";
+    shortName = "Redox";
+  };
+
   rocm = {
     github = "rocm";
   };
