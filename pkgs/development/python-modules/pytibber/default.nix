@@ -11,7 +11,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytibber";
   version = "0.35.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zipHn6ZLRwRtvTKgJTrTSZwETviwLOPS8rMTRB3fErs=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
-    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${src.tag}";
+    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
