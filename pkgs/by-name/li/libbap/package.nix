@@ -2,13 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bap,
-  ocaml,
-  findlib,
-  ctypes,
-  ctypes-foreign,
   autoreconfHook,
   which,
+  ocaml-ng,
 }:
 
 stdenv.mkDerivation {
@@ -25,10 +21,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     which
+  ]
+  ++ (with ocaml-ng.ocamlPackages_4_14; [
     ocaml
     findlib
-  ];
-  buildInputs = [
+  ]);
+
+  buildInputs = with ocaml-ng.ocamlPackages_4_14; [
     bap
     ctypes
     ctypes-foreign

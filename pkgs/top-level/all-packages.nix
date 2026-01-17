@@ -7130,16 +7130,6 @@ with pkgs;
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
   libasn1c = callPackage ../servers/osmocom/libasn1c/default.nix { };
 
-  libbap = callPackage ../development/libraries/libbap {
-    inherit (ocaml-ng.ocamlPackages_4_14)
-      bap
-      ocaml
-      findlib
-      ctypes
-      ctypes-foreign
-      ;
-  };
-
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
   libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
