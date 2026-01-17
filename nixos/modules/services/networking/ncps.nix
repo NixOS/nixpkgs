@@ -46,6 +46,7 @@ let
     ))
     ++ (lib.optional cfg.prometheus.enable "--prometheus-enabled")
     ++ (lib.optional (!cfg.analytics.reporting.enable) "--analytics-reporting-enabled=false")
+    ++ (lib.optional cfg.analytics.reporting.samples "--analytics-reporting-samples")
   );
 
   serveFlags = lib.concatStringsSep " " (
@@ -56,12 +57,18 @@ let
       "--server-addr='${cfg.server.addr}'"
     ]
     ++ (lib.optional (cfg.cache.databaseURL != null) "--cache-database-url='${cfg.cache.databaseURL}'")
+    ++ (lib.optional (cfg.cache.database.pool.maxOpenConns != 0)
+      "--cache-database-pool-max-open-conns='${builtins.toString cfg.cache.database.pool.maxOpenConns}'"
+    )
+    ++ (lib.optional (cfg.cache.database.pool.maxIdleConns != 0)
+      "--cache-database-pool-max-idle-conns='${builtins.toString cfg.cache.database.pool.maxIdleConns}'"
+    )
     ++ (lib.optionals (cfg.cache.redis != null) (
       [
-        "--cache-redis-addrs='${builtins.concatStringsSep "," cfg.cache.redis.addresses}'"
         "--cache-redis-db='${builtins.toString cfg.cache.redis.database}'"
         "--cache-redis-pool-size='${builtins.toString cfg.cache.redis.poolSize}'"
       ]
+      ++ (lib.forEach cfg.cache.redis.addresses (addr: "--cache-redis-addrs='${addr}'"))
       ++ (lib.optional (
         cfg.cache.redis.username != null
       ) "--cache-redis-username='${cfg.cache.redis.username}'")
@@ -90,6 +97,29 @@ let
       "--cache-lru-schedule='${cfg.cache.lru.schedule}'"
       "--cache-lru-schedule-timezone='${cfg.cache.lru.scheduleTimeZone}'"
     ])
+    ++ (lib.optional (
+      cfg.cache.lock.redisKeyPrefix != "ncps:lock:"
+    ) "--cache-lock-redis-key-prefix='${cfg.cache.lock.redisKeyPrefix}'")
+    ++ (lib.optional (
+      cfg.cache.lock.postgresKeyPrefix != "ncps:lock:"
+    ) "--cache-lock-postgres-key-prefix='${cfg.cache.lock.postgresKeyPrefix}'")
+    ++ (lib.optional (
+      cfg.cache.lock.downloadTTL != "5m0s"
+    ) "--cache-lock-download-ttl='${cfg.cache.lock.downloadTTL}'")
+    ++ (lib.optional (
+      cfg.cache.lock.lruTTL != "30m0s"
+    ) "--cache-lock-lru-ttl='${cfg.cache.lock.lruTTL}'")
+    ++ (lib.optional (
+      cfg.cache.lock.retry.maxAttempts != 3
+    ) "--cache-lock-retry-max-attempts='${builtins.toString cfg.cache.lock.retry.maxAttempts}'")
+    ++ (lib.optional (
+      cfg.cache.lock.retry.initialDelay != "100ms"
+    ) "--cache-lock-retry-initial-delay='${cfg.cache.lock.retry.initialDelay}'")
+    ++ (lib.optional (
+      cfg.cache.lock.retry.maxDelay != "2s"
+    ) "--cache-lock-retry-max-delay='${cfg.cache.lock.retry.maxDelay}'")
+    ++ (lib.optional (!cfg.cache.lock.retry.jitter) "--cache-lock-retry-jitter='false'")
+    ++ (lib.optional cfg.cache.lock.allowDegradedMode "--cache-lock-allow-degraded-mode")
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
     ++ (lib.optional (!cfg.cache.signNarinfo) "--cache-sign-narinfo='false'")
     ++ (lib.optional (
@@ -136,12 +166,16 @@ in
     services.ncps = {
       enable = lib.mkEnableOption "ncps: Nix binary cache proxy service implemented in Go";
 
-      analytics.reporting.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Enable reporting anonymous usage statistics (DB type, Lock type, Total Size) to the project maintainers.
-        '';
+      analytics.reporting = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Enable reporting anonymous usage statistics (DB type, Lock type, Total Size) to the project maintainers.
+          '';
+        };
+
+        samples = lib.mkEnableOption "Enable printing the analytics samples to stdout. This is useful for debugging and verification purposes only.";
       };
 
       package = lib.mkPackageOption pkgs "ncps" { };
@@ -208,6 +242,28 @@ in
           '';
         };
 
+        database = {
+          pool = {
+            maxOpenConns = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = ''
+                Maximum number of open connections to the database (0 = use
+                database-specific defaults).
+              '';
+            };
+
+            maxIdleConns = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = ''
+                Maximum number of idle connections in the pool (0 = use
+                database-specific defaults).
+              '';
+            };
+          };
+        };
+
         lru = {
           schedule = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
@@ -233,17 +289,97 @@ in
           };
         };
 
-        lock.backend = lib.mkOption {
-          type = lib.types.enum [
-            "local"
-            "redis"
-            "postgres"
-          ];
-          default = "local";
-          description = ''
-            Lock backend to use: 'local' (single instance), 'redis'
-            (distributed), or 'postgres' (distributed, requires PostgreSQL).
-          '';
+        lock = {
+          backend = lib.mkOption {
+            type = lib.types.enum [
+              "local"
+              "redis"
+              "postgres"
+            ];
+            default = "local";
+            description = ''
+              Lock backend to use: 'local' (single instance), 'redis'
+              (distributed), 'postgres' (distributed, requires PostgreSQL).
+            '';
+          };
+
+          redisKeyPrefix = lib.mkOption {
+            type = lib.types.str;
+            default = "ncps:lock:";
+            description = ''
+              Prefix for all Redis lock keys (only used when Redis is
+              configured).
+            '';
+          };
+
+          postgresKeyPrefix = lib.mkOption {
+            type = lib.types.str;
+            default = "ncps:lock:";
+            description = ''
+              Prefix for all PostgreSQL advisory lock keys (only used when
+              PostgreSQL is configured as lock backend).
+            '';
+          };
+
+          downloadTTL = lib.mkOption {
+            type = lib.types.str;
+            default = "5m0s";
+            description = ''
+              TTL for download locks (per-hash locks).
+            '';
+          };
+
+          lruTTL = lib.mkOption {
+            type = lib.types.str;
+            default = "30m0s";
+            description = ''
+              TTL for LRU lock (global exclusive lock).
+            '';
+          };
+
+          retry = {
+            maxAttempts = lib.mkOption {
+              type = lib.types.int;
+              default = 3;
+              description = ''
+                Maximum number of retry attempts for distributed locks.
+              '';
+            };
+
+            initialDelay = lib.mkOption {
+              type = lib.types.str;
+              default = "100ms";
+              description = ''
+                Initial retry delay for distributed locks.
+              '';
+            };
+
+            maxDelay = lib.mkOption {
+              type = lib.types.str;
+              default = "2s";
+              description = ''
+                Maximum retry delay for distributed locks (exponential backoff
+                caps at this).
+              '';
+            };
+
+            jitter = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Enable jitter in retry delays to prevent thundering herd.
+              '';
+            };
+          };
+
+          allowDegradedMode = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Allow falling back to local locks if Redis is unavailable (WARNING:
+              breaks HA guarantees).
+            '';
+          };
         };
 
         maxSize = lib.mkOption {
