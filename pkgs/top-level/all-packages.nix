@@ -7002,10 +7002,6 @@ with pkgs;
     x11Support = true;
   };
 
-  gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
-  gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
-  gtkmm4 = callPackage ../development/libraries/gtkmm/4.x.nix { };
-
   gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix { };
 
   gtk-sharp-3_0 = callPackage ../development/libraries/gtk-sharp/3.0.nix { };
