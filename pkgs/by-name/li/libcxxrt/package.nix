@@ -1,12 +1,19 @@
 {
   lib,
   stdenv,
+  overrideCC,
+  buildPackages,
+  stdenv' ?
+    if stdenv.hostPlatform.useLLVM or false then
+      overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+    else
+      stdenv,
   fetchFromGitHub,
   cmake,
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv'.mkDerivation {
   pname = "libcxxrt";
   version = "4.0.10-unstable-2025-02-25";
 
@@ -32,7 +39,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $dev/include $out/lib
     cp ../src/cxxabi.h $dev/include
-    cp lib/libcxxrt${stdenv.hostPlatform.extensions.library} $out/lib
+    cp lib/libcxxrt${stdenv'.hostPlatform.extensions.library} $out/lib
   '';
 
   passthru = {
