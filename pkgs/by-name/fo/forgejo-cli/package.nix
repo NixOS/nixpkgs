@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "Cyborus";
+    owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8KPR7Fx26hj5glKDjczCLP6GgQBUsA5TpjhO5UZOpik=";
@@ -52,8 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "CLI application for interacting with Forgejo";
-    homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${finalAttrs.version}";
+    homepage = "https://codeberg.org/forgejo-contrib/forgejo-cli";
+    changelog = "https://codeberg.org/forgejo-contrib/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
