@@ -8,11 +8,8 @@ with haskellLib;
 
 (self: super: {
   # cabal2nix doesn't properly add dependencies conditional on os(windows)
-  network =
-    if pkgs.stdenv.hostPlatform.isWindows then
-      addBuildDepends [ self.temporary ] super.network
-    else
-      super.network;
+  network = addBuildDepends [ self.temporary ] super.network;
+  unix-time = addBuildDepends [ pkgs.windows.pthreads ] super.unix-time;
 
   # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
   # See configuration-nix.nix, where iserv-proxy and network are handled.
