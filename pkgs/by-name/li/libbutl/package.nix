@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  build2,
-  DarwinTools,
+  # Dependency of build2, so we must break cycle for this
+  build2-bootstrap,
+  darwin,
   fetchurl,
   libuuid,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -25,10 +26,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    build2
+    build2-bootstrap
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    DarwinTools
+    darwin.DarwinTools
   ];
 
   patches = [
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # Should be true for anything built with build2,
   # but especially important when bootstrapping
-  disallowedReferences = [ build2 ];
+  disallowedReferences = [ build2-bootstrap ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libbutl/uuid-linux.cxx \
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   build2ConfigureFlags = [
-    "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
+    "config.bin.lib=${build2-bootstrap.configSharedStatic enableShared enableStatic}"
   ];
 
   doCheck = true;

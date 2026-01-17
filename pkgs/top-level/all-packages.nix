@@ -5934,12 +5934,6 @@ with pkgs;
 
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
-  # Dependency of build2, must also break cycle for this
-  libbutl = callPackage ../development/libraries/libbutl {
-    build2 = build2.bootstrap;
-    inherit (darwin) DarwinTools;
-  };
-
   buildkite-test-collector-rust =
     callPackage ../development/tools/continuous-integration/buildkite-test-collector-rust
       {
