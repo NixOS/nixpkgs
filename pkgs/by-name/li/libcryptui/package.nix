@@ -10,6 +10,8 @@
   glib,
   gnome,
   gtk3,
+  gtk3-x11,
+  gtk3' ? if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3,
   gtk-doc,
   gnupg,
   gpgme,
@@ -37,14 +39,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     dbus-glib # dbus-binding-tool
-    gtk3 # AM_GLIB_GNU_GETTEXT
+    gtk3' # AM_GLIB_GNU_GETTEXT
     gtk-doc
     intltool
     autoreconfHook
   ];
   buildInputs = [
     glib
-    gtk3
+    gtk3'
     gnupg
     gpgme
     dbus-glib
