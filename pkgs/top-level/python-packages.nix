@@ -8167,6 +8167,8 @@ self: super: with self; {
 
   krb5 = callPackage ../development/python-modules/krb5 { krb5-c = pkgs.krb5; };
 
+  kreuzberg = callPackage ../development/python-modules/kreuzberg { };
+
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
 
   kserve = callPackage ../development/python-modules/kserve { };
