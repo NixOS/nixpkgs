@@ -100,71 +100,77 @@ let
 
   # combine an SDK with the runtime/packages from a base SDK
   combineSdk =
-    base: overlay:
-    if (overlay.runtime.version != base.runtime.version) then
-      throw "combineSdk: unable to combine ${overlay.name} with ${base.name} because runtime versions don't match (${overlay.runtime.version} != ${base.runtime.version})"
+    base: fallback:
+    if (fallback.runtime.version != base.runtime.version) then
+      throw "combineSdk: unable to combine ${fallback.name} with ${base.name} because runtime versions don't match (${fallback.runtime.version} != ${base.runtime.version})"
+    else if base.meta.broken then
+      fallback
     else
-      pkgs.callPackage ./wrapper.nix { } "sdk" (
-        (pkgs.combinePackages [
-          base.runtime
-          base.aspnetcore
-          (overlay.overrideAttrs (old: {
-            passthru = old.passthru // {
-              inherit (base)
-                packages
-                targetPackages
-                ;
-            };
-          }))
-        ]).unwrapped.overrideAttrs
-          (old: {
-            name = overlay.unwrapped.name;
-            # resolve symlinks so DOTNET_ROOT is self-contained
-            postBuild = ''
-              mv "$out"/share/dotnet{,~}
-              cp -Lr "$out"/share/dotnet{~,}
-              rm -r "$out"/share/dotnet~
-            ''
-            + old.postBuild;
-            passthru =
-              old.passthru
-              // (
-                let
-                  # if only overlay has a working ILCompiler, use it
-                  hostRid = pkgs.systemToDotnetRid base.stdenv.hostPlatform.system;
-                  hasILCompiler = base.hasILCompiler || overlay.hasILCompiler;
-                  packageName = "runtime.${hostRid}.Microsoft.DotNet.ILCompiler";
-                  packages =
-                    if !base.hasILCompiler && overlay.hasILCompiler then
-                      lib.filter (x: x.pname != packageName) base.packages
-                      ++ lib.filter (x: x.pname == packageName) overlay.packages
-                    else
-                      base.packages;
-                in
-                {
-                  inherit hasILCompiler packages;
+      let
+        withBaseRuntimes =
+          if fallback.version == base.version then
+            base.unwrapped
+          else
+            (pkgs.combinePackages [
+              base.runtime
+              base.aspnetcore
+              fallback
+            ]).unwrapped.overrideAttrs
+              (old: {
+                name = fallback.unwrapped.name;
+                # resolve symlinks so DOTNET_ROOT is self-contained
+                postBuild = ''
+                  mv "$out"/share/dotnet{,~}
+                  cp -Lr "$out"/share/dotnet{~,}
+                  rm -r "$out"/share/dotnet~
+                ''
+                + old.postBuild;
+                passthru = old.passthru // {
                   inherit (base)
-                    targetPackages
                     runtime
                     aspnetcore
                     ;
-                  inherit (overlay.unwrapped)
+                  inherit (fallback.unwrapped)
                     pname
                     version
                     ;
-                }
-              );
-          })
-      );
+                };
+              });
+
+        withFallbackPackages = withBaseRuntimes.overrideAttrs (old: {
+          passthru =
+            old.passthru
+            // (
+              let
+                hostRid = pkgs.systemToDotnetRid base.stdenv.hostPlatform.system;
+                hasILCompiler = base.hasILCompiler || fallback.hasILCompiler;
+                packageName = "runtime.${hostRid}.Microsoft.DotNet.ILCompiler";
+                mergePackages =
+                  a: b:
+                  let
+                    names = lib.genAttrs' a (p: lib.nameValuePair p.pname null);
+                  in
+                  a ++ lib.filter (p: !lib.hasAttr p.pname names) b;
+                packages = mergePackages base.packages fallback.packages;
+                targetPackages = lib.mapAttrs (
+                  name: value: mergePackages value fallback.targetPackages.${name}
+                ) base.targetPackages;
+              in
+              {
+                inherit hasILCompiler packages targetPackages;
+              }
+            );
+        });
+      in
+      pkgs.callPackage ./wrapper.nix { } "sdk" withFallbackPackages;
 
 in
 pkgs
 // rec {
   # use binary SDK here to avoid downgrading feature band
-  sdk_8_0_1xx = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
-  sdk_9_0_1xx = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
-  sdk_10_0_1xx =
-    if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
+  sdk_8_0_1xx = combineSdk pkgs.dotnet_8.sdk pkgs.sdk_8_0_1xx-bin;
+  sdk_9_0_1xx = combineSdk pkgs.dotnet_9.sdk pkgs.sdk_9_0_1xx-bin;
+  sdk_10_0_1xx = combineSdk pkgs.dotnet_10.sdk pkgs.sdk_10_0_1xx-bin;
   # source-built SDK only exists for _1xx feature band
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_4xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_4xx-bin;
@@ -172,9 +178,10 @@ pkgs
   sdk_8_0 = sdk_8_0_4xx;
   sdk_9_0 = sdk_9_0_3xx;
   sdk_10_0 = sdk_10_0_1xx;
-  sdk_8_0-source = sdk_8_0_1xx;
-  sdk_9_0-source = sdk_9_0_1xx;
-  sdk_10_0-source = sdk_10_0_1xx;
+  sdk_8_0-source = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
+  sdk_9_0-source = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
+  sdk_10_0-source =
+    if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
   runtime_8_0 = sdk_8_0.runtime;
   runtime_9_0 = sdk_9_0.runtime;
   runtime_10_0 = sdk_10_0.runtime;

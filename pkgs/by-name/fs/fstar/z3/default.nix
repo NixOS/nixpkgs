@@ -98,11 +98,9 @@ stdenvNoCC.mkDerivation {
     ln -s ${lib.getExe fstarOldZ3} $out/bin/z3-${lib.escapeShellArg fstarOldZ3.version}
   '';
 
-  passthru = rec {
-    new = fstarNewZ3;
-    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarNewZ3.version}" = new;
+  passthru = {
+    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarNewZ3.version}" = fstarNewZ3;
 
-    old = fstarOldZ3;
-    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarOldZ3.version}" = old;
+    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarOldZ3.version}" = fstarOldZ3;
   };
 }
