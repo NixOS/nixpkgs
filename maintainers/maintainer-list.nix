@@ -22274,6 +22274,13 @@
     githubId = 44014925;
     name = "Rexx Larsson";
   };
+  reylak = {
+    name = "Joaquin Lopez";
+    email = "elreylak@proton.me";
+    github = "Reylak-dev";
+    githubId = 178049808;
+    matrix = "@reylak:unredacted.org";
+  };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";

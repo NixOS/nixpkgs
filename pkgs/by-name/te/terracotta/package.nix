@@ -3,21 +3,21 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  callPackage,
   easytier,
   replaceVars,
   imagemagick,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "terracotta";
-  version = "0.3.14";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "burningtnt";
     repo = "Terracotta";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zp3Ax0A7Vc6LnZiWu2pWzQTWvYH9NRmqSfmxK756qA8=";
+    hash = "sha256-AlbztRTHnrEqJCcNeRNssu2M0QHicdRlGCVHOvYglTw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -40,6 +40,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
+    # remove android-specific git dependency
+    sed -i '/EasyTier.git/d' Cargo.toml
+
     ln -s ${./Cargo.lock} Cargo.lock
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -49,6 +52,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [ imagemagick ];
+
+  cargoBuildFlags = [
+    "--bin"
+    "terracotta"
+  ];
+  cargoTestFlags = [
+    "--bin"
+    "terracotta"
+  ];
 
   cargoLock.lockFile = ./Cargo.lock;
 
@@ -90,7 +102,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail '@TERRACOTTA_BIN@' "$out/bin/terracotta"
     '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
 
   meta = {
     description = "Terracotta provides out-of-the-box multiplayer support for Minecraft";
