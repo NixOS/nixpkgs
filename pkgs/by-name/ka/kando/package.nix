@@ -26,16 +26,16 @@ let
 in
 buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-x+emk0N5AL5Nfk9d1+RehdLoEvqVe5DafZL1WRPFdrc=";
+    hash = "sha256-h6yN6rES20ExpRb56T84PJhIIzMoccl3KGXYFqQ7NyU=";
   };
 
-  npmDepsHash = "sha256-zbPrQpm2IgIMqGvMzj6fzEV/lV/FszfU3fnFx3kPHr4=";
+  npmDepsHash = "sha256-Ne6G/56BjFFzQTkepEZrCg/kH4xs2TovfPsFBC4t0WQ=";
 
   npmFlags = [ "--ignore-scripts" ];
 
