@@ -24754,6 +24754,12 @@
     github = "SnO2WMaN";
     githubId = 15155608;
   };
+  snowflake-hd = {
+    email = "snow.dev.management@gmail.com";
+    github = "snowflake-hd";
+    githubId = 148150165;
+    name = "snowflake-hd";
+  };
   snpschaaf = {
     email = "philipe.schaaf@secunet.com";
     name = "Philippe Schaaf";
