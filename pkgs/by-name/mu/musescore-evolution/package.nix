@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore-evolution";
-  version = "3.7.0-unstable-20260110";
+  version = "3.7.0-unstable-20260112";
 
-  # nix run nixpkgs#nix-prefetch-git -- https://github.com/Jojo-Schmitz/MuseScore.git 44b8c262e47864109e1a773a3bdb4e40b4759f9d
+  # nix run nixpkgs#nix-prefetch-git -- https://github.com/Jojo-Schmitz/MuseScore.git 0b4543baca9b1b70d54cecb33cbf846dabc073d1
   src = fetchFromGitHub {
     owner = "Jojo-Schmitz";
     repo = "MuseScore";
-    rev = "44b8c262e47864109e1a773a3bdb4e40b4759f9d";
-    sha256 = "sha256-pG5CfEvgff48l7OMPEqmYW0EVSROh55bc+K5VZMzCVA=";
+    rev = "0b4543baca9b1b70d54cecb33cbf846dabc073d1";
+    sha256 = "sha256-piOXHKlnfCO1n0kAgeszqa6JVoHgF8B2OF7agpadGKQ=";
   };
 
   # From top-level CMakeLists.txt:
@@ -227,6 +227,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Also don't use upstream musescore tests since this is a different version/fork.
   # passthru.tests = nixosTests.musescore;
   passthru.tests = { };
+
+  passthru.updateScript.command = [ ./update.sh ];
 
   meta = {
     description = "Music notation and composition software";
