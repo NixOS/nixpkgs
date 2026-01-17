@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lctime";
-  version = "0.0.27";
+  version = "0.0.28";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "librecell";
     repo = "lctime";
     tag = version;
-    hash = "sha256-KKZhsKNTr+J5+rLUdlwGMsUCa6NYY1X9yaujPe1c0Do=";
+    hash = "sha256-Td56NtqcI8763hw/XVxLP7+qExraapN9ULD3ZolfR6M=";
   };
 
   build-system = with python3Packages; [
