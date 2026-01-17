@@ -8,6 +8,7 @@
   SDL2,
   libvorbis,
   pkg-config,
+  makeWrapper,
   enet,
   bullet,
   openal,
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     ninja
+    makeWrapper
   ];
 
   buildInputs = [
@@ -85,8 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r data $share_dir/data
     cp -r ${finalAttrs.tracks} $share_dir/data/tracks
 
-    mkdir -p $out/bin
-    cp bin/Release/{sr-editor3,sr-translator,stuntrally3} $out/bin
+    for binary in sr-editor3 sr-translator stuntrally3
+    do
+      install -Dm755 -t $out/bin bin/Release/$binary
+      # Force X11, otherwise fails with `OGRE EXCEPTION(9:UnimplementedException)`
+      wrapProgram $out/bin/$binary \
+        --set SDL_VIDEODRIVER x11
+    done
 
     popd
 
