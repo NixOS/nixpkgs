@@ -54,7 +54,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    inherit (nixosTests) bpf;
+    inherit (nixosTests) bpf docker podman;
   };
 
   meta = {
