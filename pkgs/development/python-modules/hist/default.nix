@@ -21,12 +21,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Z7+A4Vuxq5n4nM9liO+jV9FoJtaRBDtyYWXHgzSpBns=";
   };
 
-  buildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost-histogram
     histoprint
     numpy
@@ -37,9 +37,11 @@ buildPythonPackage (finalAttrs: {
     pytest-mpl
   ];
 
+  pythonImportsCheck = [ "hist" ];
+
   meta = {
     description = "Histogramming for analysis powered by boost-histogram";
-    mainProgram = "hist";
+    mainProgram = "";
     homepage = "https://hist.readthedocs.io/";
     changelog = "https://github.com/scikit-hep/hist/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
