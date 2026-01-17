@@ -51,6 +51,7 @@ let
   serveFlags = lib.concatStringsSep " " (
     [
       "--cache-hostname='${cfg.cache.hostName}'"
+      "--cache-lock-backend='${cfg.cache.lock.backend}'"
       "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
     ]
@@ -230,6 +231,17 @@ in
               for a comprehensive list of possible values for this setting.
             '';
           };
+        };
+
+        lock.backend = lib.mkOption {
+          type = lib.types.enum [
+            "local"
+            "redis"
+          ];
+          default = "local";
+          description = ''
+            Lock backend to use: 'local' (single instance), 'redis' (distributed).
+          '';
         };
 
         maxSize = lib.mkOption {
@@ -486,6 +498,14 @@ in
         assertion =
           cfg.cache.redis == null || cfg.cache.redis.password == null || cfg.cache.redis.passwordFile == null;
         message = "You cannot specify both config.ncps.cache.redis.password and config.ncps.cache.redis.passwordFile";
+      }
+      {
+        assertion = cfg.cache.lock.backend == "redis" -> cfg.cache.redis != null;
+        message = "You must specify config.ncps.cache.redis when config.ncps.cache.lock.backend is set to 'redis'";
+      }
+      {
+        assertion = cfg.cache.redis != null -> cfg.cache.lock.backend == "redis";
+        message = "You must set config.ncps.cache.lock.backend to 'redis' when config.ncps.cache.redis is set";
       }
     ];
 

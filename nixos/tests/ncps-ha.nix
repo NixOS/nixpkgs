@@ -35,6 +35,8 @@ let
 
         databaseURL = "postgres://ncps:${lib.escapeURL postgresPassword}@postgres:5432/ncps?sslmode=disable";
 
+        lock.backend = "redis";
+
         secretKeyPath = builtins.toString (
           pkgs.writeText "ncps-cache-key" "ncps:dcrGsrku0KvltFhrR5lVIMqyloAdo0y8vYZOeIFUSLJS2IToL7dPHSSCk/fi+PJf8EorpBn8PU7MNhfvZoI8mA=="
         );
