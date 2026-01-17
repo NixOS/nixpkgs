@@ -3,9 +3,11 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libdvdread,
+  libdvdread_4_9_9,
 }:
-
+let
+  libdvdread = libdvdread_4_9_9;
+in
 stdenv.mkDerivation rec {
   pname = "libdvdnav";
   version = "4.2.1";
