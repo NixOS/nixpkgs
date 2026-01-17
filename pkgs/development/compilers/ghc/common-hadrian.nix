@@ -50,7 +50,9 @@
   # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
   enableNativeBignum ?
-    !(lib.meta.availableOn stdenv.hostPlatform gmp && lib.meta.availableOn stdenv.targetPlatform gmp)
+    !(lib.meta.availableOn stdenv.hostPlatform gmp)
+    || !(lib.meta.availableOn stdenv.targetPlatform gmp)
+    || stdenv.targetPlatform.isStatic
     || stdenv.targetPlatform.isGhcjs,
   gmp,
 
@@ -311,6 +313,7 @@
   enableUnregisterised ? false,
 }:
 
+assert !enableNativeBignum -> !stdenv.targetPlatform.isStatic;
 assert !enableNativeBignum -> gmp != null;
 
 # GHC does not support building when all 3 platforms are different.
@@ -634,7 +637,7 @@ stdenv.mkDerivation (
       "--with-ffi-includes=${targetLibs.libffi.dev}/include"
       "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
     ]
-    ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
+    ++ lib.optionals (!enableNativeBignum) [
       "--with-gmp-includes=${targetLibs.gmp.dev}/include"
       "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
     ]
