@@ -31,13 +31,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.10.25";
+  version = "0.10.26";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e+Oienb0jhz7XT9NZB5IAELi+YU3i60JIWBDG8LCEZw=";
+    hash = "sha256-1C0BCbDJ6/nYzWEL5UA9GQW4vSo4ZfP6BuA3i4JoiuY=";
   };
 
   patches = [
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-4MRVk5k/HkCMA/OeRMZwwkCyqmSWkujqLe/8sPfYcwc=";
+    hash = "sha256-m5/7fD4OBJcY7stZhwDLw4asmXqUThUjTaRb3oVul78=";
   };
 
   nativeBuildInputs = [
