@@ -15695,6 +15695,10 @@ self: super: with self; {
 
   python3-sipsimple = callPackage ../development/python-modules/python3-sipsimple { };
 
+  pythondata-cpu-vexriscv_smp =
+    callPackage ../development/python-modules/pythondata-cpu-vexriscv_smp
+      { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };

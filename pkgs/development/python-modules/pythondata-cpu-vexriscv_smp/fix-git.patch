@@ -1,0 +1,11 @@
+--- a/pythondata_cpu_vexriscv_smp/verilog/ext/SpinalHDL/build.sbt	2026-01-16 23:06:34.298905619 -0800
++++ b/pythondata_cpu_vexriscv_smp/verilog/ext/SpinalHDL/build.sbt	2026-01-16 22:23:58.100573707 -0800
+@@ -86,7 +86,7 @@
+ def gitHash(dir: File) = (try {
+   s"git -C ${dir.toString} rev-parse HEAD".!!
+ } catch{
+-  case e : java.io.IOException => "???"
++  case e : Throwable => "???"
+ }).linesIterator.next()
+ 
+ 
