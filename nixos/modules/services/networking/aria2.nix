@@ -15,13 +15,7 @@ let
   portRangesToString =
     ranges:
     lib.concatStringsSep "," (
-      map (
-        x:
-        if x.from == x.to then
-          builtins.toString x.from
-        else
-          builtins.toString x.from + "-" + builtins.toString x.to
-      ) ranges
+      map (x: if x.from == x.to then toString x.from else toString x.from + "-" + toString x.to) ranges
     );
 
   customToKeyValue = lib.generators.toKeyValue {
