@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   pkg-config,
   glib,
@@ -8,13 +8,13 @@
   menu-cache,
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "openbox-menu";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://bitbucket.org/fabriceT/openbox-menu/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1hi4b6mq97y6ajq4hhsikbkk23aha7ikaahm92djw48mgj2f1w8l";
+    url = "https://bitbucket.org/fabriceT/openbox-menu/downloads/openbox-menu-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-FPHghHwVES6bSBUqNeNRUA0x55pRQ0iwVMafhKtZJMI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   patches = [ ./000-enable-svg.patch ];
 
   # The strip options are not recognized by Darwin.
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString gccStdenv.hostPlatform.isDarwin ''
     sed -i -e '/strip -s/d' Makefile
   '';
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${gccStdenv.cc.targetPrefix}cc" ];
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "openbox-menu";
   };
-}
+})
