@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.6.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_appengine_logging";
     inherit version;
-    hash = "sha256-SJCShGTJjanuzHv04FQuuiVRUSwCZUYsEPOj0qZCS5A=";
+    hash = "sha256-hLcFpp5BCfwvaN/jbOPfajTVw9mJ7ubQrBsCTdoLpvU=";
   };
 
   build-system = [ setuptools ];
