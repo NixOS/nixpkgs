@@ -7143,9 +7143,6 @@ with pkgs;
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
 
-  libdvdread = callPackage ../development/libraries/libdvdread { };
-  libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
-
   dwarfdump = libdwarf.bin;
 
   libfm-extra = libfm.override {
