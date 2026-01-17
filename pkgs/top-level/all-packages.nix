@@ -1700,7 +1700,6 @@ with pkgs;
       wrapProgram $out/bin/cabal2nix \
         --prefix PATH ":" "${
           lib.makeBinPath [
-            nix
             nix-prefetch-scripts
           ]
         }"
