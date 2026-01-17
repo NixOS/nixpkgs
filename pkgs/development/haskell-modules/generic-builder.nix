@@ -13,6 +13,7 @@
   haskellLib,
   iserv-proxy,
   nodejs,
+  windows,
   writeShellScriptBin,
 }:
 
@@ -357,11 +358,17 @@ let
   ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
 
   ++ optionals enableExternalInterpreter (
-    map (opt: "--ghc-option=${opt}") [
-      "-fexternal-interpreter"
-      "-pgmi"
-      crossSupport.iservWrapper
-    ]
+    map (opt: "--ghc-option=${opt}") (
+      [
+        "-fexternal-interpreter"
+        "-pgmi"
+        crossSupport.iservWrapper
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isWindows [
+        "-L${windows.pthreads}/bin"
+        "-L${windows.pthreads}/lib"
+      ]
+    )
   );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
