@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
-    homepage = "http://stuntrally.tuxfamily.org/";
+    homepage = "https://cryham.org/stuntrally/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
