@@ -7118,10 +7118,6 @@ with pkgs;
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
-  keybinder3 = callPackage ../development/libraries/keybinder3 {
-    gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
-  };
-
   libkrb5 = krb5; # TODO(de11n) Try to make krb5 reuse libkrb5 as a dependency
 
   l-smash = callPackage ../development/libraries/l-smash {
