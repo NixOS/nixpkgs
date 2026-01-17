@@ -25,6 +25,6 @@ mkKdeDerivation {
   ];
 
   extraCmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DBUILD_KWALLET_QUERY=OFF"
+    (lib.cmakeBool "BUILD_KWALLET_QUERY" false)
   ];
 }

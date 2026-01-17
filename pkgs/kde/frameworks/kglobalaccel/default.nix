@@ -10,8 +10,8 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ qttools ];
 
   extraCmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DKF_IGNORE_PLATFORM_CHECK=ON"
-    "-DWITH_X11=OFF"
+    (lib.cmakeBool "KF_IGNORE_PLATFORM_CHECK" true)
+    (lib.cmakeBool "WITH_X11" false)
   ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
