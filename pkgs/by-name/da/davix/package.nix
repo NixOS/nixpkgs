@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "davix";
-    rev = "refs/tags/R_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-n4NeHBgQwGwgHAFQzPc3oEP9k3F/sqrTmkI/zHW+Miw=";
   };
 

@@ -16,16 +16,16 @@
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xiaomi-ble";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
-    tag = "v${version}";
-    hash = "sha256-hZIhMBeF0YN0+dWQPyKf/6LQPq9MKYAE54lvhAvWZCY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/q0MJlsK2skE/fok8C9AHApYZIzKNv6fogFy0cQ186w=";
   };
 
   build-system = [ poetry-core ];
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Xiaomi BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
-    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${src.tag}";
+    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

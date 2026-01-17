@@ -12,19 +12,19 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.1.21";
+  version = "1.1.23";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
-    tag = "v${version}";
-    hash = "sha256-8ykONBWMiq9EACHOsdx1AFPoj53Tsxi3EbUDVciH5Ok=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cvz4HO5vNwA3zWx7zdVfs59Z7vD/00+MMCDbLU5WKpM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -66,18 +66,10 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-gl/5eA4nPLQ2clOcAf0D8/ocjRO4xBm5AQtqrcSdkTw=";
+    outputHash = "sha256-ojbTZBWM353NLMMHckMjFf+k6TpeOoF/yeQR9dq0nNo=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
 
   nativeBuildInputs = [
     bun
@@ -97,7 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/. .
+    cp -R ${finalAttrs.node_modules}/. .
 
     runHook postConfigure
   '';

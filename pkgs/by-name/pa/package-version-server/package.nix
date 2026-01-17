@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "package-version-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/YyJ8+tKrNKVrN+F/oHgtExBBRatIIOvWr9mAyTHA3E=";
   };
 

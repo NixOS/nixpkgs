@@ -17,7 +17,7 @@ let
         src = fetchFromGitHub {
           owner = "urwid";
           repo = "urwid";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-oPb2h/+gaqkZTXIiESjExMfBNnOzDvoMkXvkZ/+KVwo=";
         };
         doCheck = false;

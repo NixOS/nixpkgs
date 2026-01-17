@@ -50,7 +50,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
 

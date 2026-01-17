@@ -19,13 +19,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "steel";
-  version = "0-unstable-2026-01-09";
+  version = "0-unstable-2026-01-15";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "b019511196ef987ee7e368590a852e385dfbae53";
-    hash = "sha256-qG2W6gWSft5xWhna2RwZ847WtBstBEGTQroC598hjTM=";
+    rev = "dd5980a4099afe2af9ce1ae3d8bb30b981294398";
+    hash = "sha256-lBKDRNaX4WMhJVc9162FEv+rXDXqt7ZL0YxNBq2oMcE=";
   };
 
   cargoHash = "sha256-mtRDasfCejM6o664+3XBZJ6sWw1BO+pYi/nrCaglsQ8=";

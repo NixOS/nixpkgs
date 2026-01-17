@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "salsa.debian.org";
     owner = "rousseau";
     repo = "PCSC";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-37qeWGEuutF0cOOidoLchKJLQCvJFdVRZXepWzD4pZs=";
   };
 

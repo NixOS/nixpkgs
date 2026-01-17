@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "lily-is.land";
     owner = "kazv";
     repo = "kazv";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WBS7TJJw0t57V4+NxsG8V8q4UKQXB8kRpWocvNy1Eto=";
   };
 

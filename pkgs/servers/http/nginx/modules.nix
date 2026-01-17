@@ -680,7 +680,7 @@ let
         name = "secure-token";
         owner = "kaltura";
         repo = "nginx-secure-token-module";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-qYTjGS9pykRqMFmNls52YKxEdXYhHw+18YC2zzdjEpU=";
       };
 
@@ -978,7 +978,7 @@ let
         name = "video-thumbextractor";
         owner = "wandenberg";
         repo = "nginx-video-thumbextractor-module";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
       };
 

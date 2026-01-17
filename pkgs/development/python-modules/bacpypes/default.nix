@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JoelBender";
     repo = "bacpypes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BHCHI36nTqBj2dkHB/Y5qkC4uJCmzbHGzSFWKNsIdbc=";
   };
 
