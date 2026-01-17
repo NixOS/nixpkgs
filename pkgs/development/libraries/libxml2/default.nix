@@ -51,6 +51,11 @@ let
           url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/f75abfcaa419a740a3191e56c60400f3ff18988d.patch";
           hash = "sha256-an/PpmsncNwim/pe/zsDx9P6jbuCqvr4QSgTokyDvzw=";
         })
+        (fetchpatch {
+          name = "CVE-2026-0989.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/19549c61590c1873468c53e0026a2fbffae428ef.patch";
+          hash = "sha256-YOF5cYdoFQuvsbcAezamglh/RKv8Zq6rm1nfo2/CLzo=";
+        })
       ];
       extraMeta = {
         maintainers = with lib.maintainers; [
