@@ -1,0 +1,193 @@
+From 446c4c8d36b9b9d3a8eccbb1486ac6e644aed930 Mon Sep 17 00:00:00 2001
+From: Divy <dj.srivastava23@gmail.com>
+Date: Tue, 9 Dec 2025 16:03:37 +0530
+Subject: [PATCH] fix(ext/node): prevent cipher operations after finalize
+ (#31533)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Throw a state error for operations if the cipher is already finalized.
+
+(cherry picked from commit 0bc213b15b819597d935be6cb04cec03659d146b)
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ ext/node/polyfills/internal/crypto/cipher.ts | 25 ++++++++
+ tests/unit_node/crypto/crypto_cipher_test.ts | 63 ++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
+
+diff --git a/ext/node/polyfills/internal/crypto/cipher.ts b/ext/node/polyfills/internal/crypto/cipher.ts
+index d4c790706..ac2a32118 100644
+--- a/ext/node/polyfills/internal/crypto/cipher.ts
++++ b/ext/node/polyfills/internal/crypto/cipher.ts
+@@ -184,6 +184,8 @@ export class Cipheriv extends Transform implements Cipher {
+ 
+   #autoPadding = true;
+ 
++  #finalized = false;
++
+   constructor(
+     cipher: string,
+     key: CipherKey,
+@@ -213,12 +215,17 @@ export class Cipheriv extends Transform implements Cipher {
+   }
+ 
+   final(encoding: string = getDefaultEncoding()): Buffer | string {
++    if (this.#finalized) {
++      throw new ERR_CRYPTO_INVALID_STATE("final");
++    }
++
+     this.#lazyInitDecoder(encoding);
+ 
+     const buf = new FastBuffer(16);
+     if (this.#cache.cache.byteLength == 0) {
+       const maybeTag = op_node_cipheriv_take(this.#context);
+       if (maybeTag) this.#authTag = Buffer.from(maybeTag);
++      this.#finalized = true;
+       return encoding === "buffer" ? Buffer.from([]) : "";
+     }
+ 
+@@ -233,9 +240,11 @@ export class Cipheriv extends Transform implements Cipher {
+     );
+     if (maybeTag) {
+       this.#authTag = Buffer.from(maybeTag);
++      this.#finalized = true;
+       return encoding === "buffer" ? Buffer.from([]) : "";
+     }
+ 
++    this.#finalized = true;
+     if (encoding !== "buffer") {
+       return this.#decoder!.end(buf);
+     }
+@@ -270,6 +279,10 @@ export class Cipheriv extends Transform implements Cipher {
+     inputEncoding?: Encoding,
+     outputEncoding: Encoding = getDefaultEncoding(),
+   ): Buffer | string {
++    if (this.#finalized) {
++      throw new ERR_CRYPTO_INVALID_STATE("update");
++    }
++
+     // TODO(kt3k): throw ERR_INVALID_ARG_TYPE if data is not string, Buffer, or ArrayBufferView
+     let buf = data;
+     if (typeof data === "string") {
+@@ -391,6 +404,8 @@ export class Decipheriv extends Transform implements Cipher {
+ 
+   #authTag?: BinaryLike;
+ 
++  #finalized = false;
++
+   constructor(
+     cipher: string,
+     key: CipherKey,
+@@ -427,6 +442,10 @@ export class Decipheriv extends Transform implements Cipher {
+   }
+ 
+   final(encoding: string = getDefaultEncoding()): Buffer | string {
++    if (this.#finalized) {
++      throw new ERR_CRYPTO_INVALID_STATE("final");
++    }
++
+     this.#lazyInitDecoder(encoding);
+ 
+     let buf = new FastBuffer(16);
+@@ -439,6 +458,7 @@ export class Decipheriv extends Transform implements Cipher {
+     );
+ 
+     if (!this.#needsBlockCache || this.#cache.cache.byteLength === 0) {
++      this.#finalized = true;
+       return encoding === "buffer" ? Buffer.from([]) : "";
+     }
+     if (this.#cache.cache.byteLength != 16) {
+@@ -446,6 +466,7 @@ export class Decipheriv extends Transform implements Cipher {
+     }
+ 
+     buf = buf.subarray(0, 16 - buf.at(-1)); // Padded in Pkcs7 mode
++    this.#finalized = true;
+     if (encoding !== "buffer") {
+       return this.#decoder!.end(buf);
+     }
+@@ -480,6 +501,10 @@ export class Decipheriv extends Transform implements Cipher {
+     inputEncoding?: Encoding,
+     outputEncoding: Encoding = getDefaultEncoding(),
+   ): Buffer | string {
++    if (this.#finalized) {
++      throw new ERR_CRYPTO_INVALID_STATE("update");
++    }
++
+     // TODO(kt3k): throw ERR_INVALID_ARG_TYPE if data is not string, Buffer, or ArrayBufferView
+     let buf = data;
+     if (typeof data === "string") {
+diff --git a/tests/unit_node/crypto/crypto_cipher_test.ts b/tests/unit_node/crypto/crypto_cipher_test.ts
+index 4d96a11d8..a15032dea 100644
+--- a/tests/unit_node/crypto/crypto_cipher_test.ts
++++ b/tests/unit_node/crypto/crypto_cipher_test.ts
+@@ -569,3 +569,66 @@ Deno.test({
+     assertEquals(decryptedText, text);
+   },
+ });
++
++
++Deno.test({
++  name: "createCipheriv - cipher lockdown after final()",
++  fn() {
++    const key = crypto.randomBytes(32);
++    const iv = crypto.randomBytes(16);
++    const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
++
++    // Call final() to lock down the cipher
++    cipher.final();
++
++    assertThrows(
++      () => {
++        cipher.update("test data");
++      },
++      Error,
++      "Invalid state for operation update",
++    );
++
++    assertThrows(
++      () => {
++        cipher.final();
++      },
++      Error,
++      "Invalid state for operation final",
++    );
++  },
++});
++
++Deno.test({
++  name: "createDecipheriv - decipher lockdown after final()",
++  fn() {
++    const key = crypto.randomBytes(32);
++    const iv = crypto.randomBytes(16);
++
++    const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
++    const encrypted = Buffer.concat([
++      cipher.update("test data"),
++      cipher.final(),
++    ]);
++
++    const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
++    decipher.update(encrypted);
++    decipher.final();
++
++    assertThrows(
++      () => {
++        decipher.update(encrypted);
++      },
++      Error,
++      "Invalid state for operation update",
++    );
++
++    assertThrows(
++      () => {
++        decipher.final();
++      },
++      Error,
++      "Invalid state for operation final",
++    );
++  },
++});
+-- 
+2.52.0
+
