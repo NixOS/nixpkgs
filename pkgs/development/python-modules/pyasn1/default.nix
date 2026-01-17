@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyasn1";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b1gNK92ENlOAgwrPRVUPJRFGn2c8tKWuOFejFwEosDQ=";
+    hash = "sha256-m1mislun5PgZfbdobAn7M+ZYuYM5+tuCbpUSYpAXgzs=";
   };
 
   nativeBuildInputs = [ setuptools ];
