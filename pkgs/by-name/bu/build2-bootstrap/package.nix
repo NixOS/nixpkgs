@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  pkgs,
   buildPackages,
   fixDarwinDylibNames,
 }:
@@ -52,5 +51,28 @@ stdenv.mkDerivation rec {
       --subst-var-by isTargetDarwin '${toString stdenv.targetPlatform.isDarwin}'
   '';
 
-  inherit (pkgs.build2) passthru;
+  passthru = {
+    configSharedStatic =
+      enableShared: enableStatic:
+      if enableShared && enableStatic then
+        "both"
+      else if enableShared then
+        "shared"
+      else if enableStatic then
+        "static"
+      else
+        throw "neither shared nor static libraries requested";
+  };
+
+  meta = {
+    homepage = "https://www.build2.org/";
+    description = "Bootstrap for the 'build2' package, you most likely want to use that one";
+    license = lib.licenses.mit;
+    changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      hiro98
+      r-burns
+    ];
+  };
 }

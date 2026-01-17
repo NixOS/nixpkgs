@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  build2,
+  # Break cycle by using self-contained toolchain for bootstrapping
+  build2-bootstrap,
   fetchurl,
   fixDarwinDylibNames,
   libbutl,
@@ -11,18 +12,9 @@
   enableStatic ? !enableShared,
 }:
 let
-  configSharedStatic =
-    enableShared: enableStatic:
-    if enableShared && enableStatic then
-      "both"
-    else if enableShared then
-      "shared"
-    else if enableStatic then
-      "static"
-    else
-      throw "neither shared nor static libraries requested";
+  inherit (build2-bootstrap.passthru) configSharedStatic;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "build2";
   version = "0.17.0";
 
@@ -33,26 +25,25 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  setupHook = ./setup-hook.sh;
+  setupHook = build2-bootstrap.setupHook;
 
   src = fetchurl {
-    url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
+    url = "https://pkg.cppget.org/1/alpha/build2/build2-${finalAttrs.version}.tar.gz";
     hash = "sha256-Kx5X/GV3GjFSbjo1mzteiHnnm4mr6+NAKIR/mEE+IdA=";
   };
 
   patches = [
     # Remove any build/host config entries which refer to nix store paths
     ./remove-config-store-paths.patch
-    # Pick up sysdirs from NIX_LDFLAGS
-    ./nix-ldflags-sysdirs.patch
-  ];
+  ]
+  ++ build2-bootstrap.patches;
 
   strictDeps = true;
   nativeBuildInputs = [
-    build2
+    build2-bootstrap
   ];
   disallowedReferences = [
-    build2
+    build2-bootstrap
     libbutl.dev
     libpkgconf.dev
   ];
@@ -94,14 +85,19 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    bootstrap = build2;
+    bootstrap = build2-bootstrap;
     inherit configSharedStatic;
   };
 
   meta = {
-    homepage = "https://www.build2.org/";
+    inherit (build2-bootstrap.meta)
+      homepage
+      license
+      changelog
+      platforms
+      maintainers
+      ;
     description = "Build2 build system";
-    license = lib.licenses.mit;
     longDescription = ''
       build2 is an open source (MIT), cross-platform build toolchain
       that aims to approximate Rust Cargo's convenience for developing
@@ -114,12 +110,6 @@ stdenv.mkDerivation rec {
       at C/C++ projects as well as mixed-language projects involving
       one of these languages (see bash and rust modules, for example).
     '';
-    changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      hiro98
-      r-burns
-    ];
     mainProgram = "b";
   };
-}
+})
