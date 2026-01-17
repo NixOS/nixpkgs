@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "fabric-ai";
-  version = "1.4.375";
+  version = "1.4.380";
 
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "fabric";
     tag = "v${version}";
-    hash = "sha256-Y8lTYzCQ4ZTTuwijdyY8XKk/4yQn67GzMQFyn34NVZo=";
+    hash = "sha256-d4WjshFCZtO7414It53yBEmKB+ERhA/Q9KUb8bX7tCk=";
   };
 
   vendorHash = "sha256-147i0ZnNtph5DhaxK330kyUkDA4MBcpzrtIJGBEJHHQ=";

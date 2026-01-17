@@ -1029,10 +1029,15 @@ in
   nbd = runTest ./nbd.nix;
   ncdns = runTest ./ncdns.nix;
   ncps = runTest ./ncps.nix;
-  ncps-custom-cache-datapath = runTest {
+  ncps-custom-sqlite-directory = runTest {
     imports = [ ./ncps.nix ];
-    defaults.services.ncps.cache.dataPath = "/path/to/ncps";
+    defaults.services.ncps.cache.databaseURL = "sqlite:/path/to/ncps/db.sqlite";
   };
+  ncps-custom-storage-local = runTest {
+    imports = [ ./ncps.nix ];
+    defaults.services.ncps.cache.storage.local = "/path/to/ncps";
+  };
+  ncps-ha = runTest ./ncps-ha.nix;
   ndppd = runTest ./ndppd.nix;
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
@@ -1332,6 +1337,7 @@ in
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile/default.nix;
   qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras/default.nix;
   quake3 = runTest ./quake3.nix;
+  qui = runTest ./qui.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;
   rabbitmq = runTest ./rabbitmq.nix;

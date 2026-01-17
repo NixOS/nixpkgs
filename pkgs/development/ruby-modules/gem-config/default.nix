@@ -650,6 +650,10 @@ in
       # Fix incompatible function pointer conversion errors with clang 16
       ./hpricot-fix-incompatible-function-pointer-conversion.patch
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   iconv = attrs: {
@@ -657,6 +661,7 @@ in
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   idn-ruby = attrs: {
@@ -1005,6 +1010,7 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   ruby-terminfo = attrs: {
