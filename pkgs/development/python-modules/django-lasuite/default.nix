@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "django-lasuite";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "django-lasuite";
     tag = "v${version}";
-    hash = "sha256-T9FLxgWePifYIiD2Ivbfir2dlpUvZl2jj8y86VbxVDk=";
+    hash = "sha256-H0sa/JaYsOqUdyAdlTzxRwY4WtCmZS+zorhERpCksDs=";
   };
 
   build-system = [ hatchling ];
