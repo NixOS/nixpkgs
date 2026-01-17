@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   makeSetupHook,
   meson,
   ninja,
@@ -40,12 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./path-hook.sh;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "glycin";
-    tag = finalAttrs.version;
-    hash = "sha256-17ebdiLMuDJuuw8TBYWamyyDM4aZgtWRWEQhWGb/2mw=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-xBasKbbT7NxnuQwVU3uhKTzrevlvoQHK5nt9HTflCrA=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-UVVVjMt4vWkLob0H/MxIaW6rkBSFImu+5dezaCnc3Q8=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     gobject-introspection
   ];
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-7x4Ts0wRFoxZ2u3AHVEey8g6+XWDpxM/hFZeomkojKU=";
-  };
 
   buildInputs = [
     libseccomp
