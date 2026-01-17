@@ -20427,6 +20427,12 @@
     githubId = 20529;
     name = "Andreas Pelme";
   };
+  pelpieter = {
+    name = "Pieter Pel";
+    email = "pelpieter@gmail.com";
+    github = "pelpieter";
+    githubId = 25645555;
+  };
   penalty1083 = {
     email = "penalty1083@outlook.com";
     github = "penalty1083";
