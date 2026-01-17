@@ -946,8 +946,8 @@ rec {
     credential matching a well-known service-defined name.
 
     The `bindPath` argument can be passed as a path for a bind mount local to the
-    service. This will produce the appropriate `BindPath` setting in the
-    serviceConfig fragment producedby the option.
+    service. This will produce the appropriate `BindReadOnlyPaths` setting in the
+    serviceConfig fragment produced by the option.
 
     The `asserted` and `condition` arguments can be used to set up the appropriate
     `AssertCredential` and `ConditionCredential` settings in the systemd service
@@ -968,10 +968,11 @@ rec {
 
     One of the following attributes may also be defined: `path` as a path to a file
     containing the secret, which is then loaded into the service with
-    `LoadCredential[Encrypted]`; `data` as the raw secret bytes, in which case the
-    secret is loaded into the service with `SetCredential[Encrypted]`. `reference` as
-    the name of a secret to be resolved by the systemd resolution mechanism, in which
-    case the secret is loaded into the service with `ImportCredential`.
+    `LoadCredential[Encrypted]`; `value` as the raw secret bytes, in which case the
+    secret is loaded into the service with `SetCredential[Encrypted]`. Otherwise the
+    secret will resolved by the service manager as per `ImportCredential`, and the
+    `rename` option can be given to affect the name that the credential is surfaced
+    to the service with.
 
     :::
   */
