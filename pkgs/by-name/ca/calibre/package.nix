@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  calibrePluginsUpdater,
   cmake,
   espeak-ng,
   fetchpatch,
@@ -18,7 +19,7 @@
   libuchardet,
   libusb1,
   libwebp,
-  nix-update-script,
+  nix-update,
   onnxruntime,
   optipng,
   piper-tts,
@@ -29,8 +30,9 @@
   qt6,
   speechd-minimal,
   sqlite,
-  xdg-utils,
   wrapGAppsHook3,
+  writeShellScript,
+  xdg-utils,
   popplerSupport ? true,
   speechSupport ? true,
   unrarSupport ? false,
@@ -270,9 +272,10 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
-  };
+  passthru.updateScript2 = writeShellScript "calibre-updater.sh" ''
+    ${lib.getBin nix-update} calibre --url=https://github.com/kovidgoyal/calibre
+    ${lib.getBin calibrePluginsUpdater}
+  '';
 
   meta = {
     homepage = "https://calibre-ebook.com";
