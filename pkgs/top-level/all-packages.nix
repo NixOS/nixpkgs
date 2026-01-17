@@ -7016,10 +7016,6 @@ with pkgs;
 
   gtksourceview5 = callPackage ../development/libraries/gtksourceview/5.x.nix { };
 
-  gtkspell2 = callPackage ../development/libraries/gtkspell { };
-
-  gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
-
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
   hamlib = hamlib_3;
