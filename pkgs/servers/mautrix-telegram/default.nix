@@ -23,15 +23,15 @@ let
     };
   };
 in
-python.pkgs.buildPythonPackage rec {
+python.pkgs.buildPythonPackage {
   pname = "mautrix-telegram";
-  version = "0.15.3";
+  version = "0.15.3-unstable-2025-09-23";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
-    tag = "v${version}";
-    hash = "sha256-w3BqWyAJV/lZPoOFDzxhootpw451lYruwM9efwS6cEc=";
+    rev = "280c74e9cdbb7f057f5778bb31843647cf39925d";
+    hash = "sha256-SwJ7HrmvRV0zadV0hLdNZbG7lmvK3EoW+OeM7Xc/2tQ=";
   };
 
   format = "setuptools";
@@ -73,6 +73,7 @@ python.pkgs.buildPythonPackage rec {
         python-olm
         pycryptodome
         unpaddedbase64
+        base58
       ]
     );
 
