@@ -33,8 +33,6 @@ lib.extendMkDerivation {
 
       dontFixup = true;
 
-      plugins = [ ];
-
       installPhase = ''
         runHook preInstall
         APP_DIR="$out/Applications/${product}.app"

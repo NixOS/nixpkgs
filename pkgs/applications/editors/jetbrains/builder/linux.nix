@@ -187,11 +187,10 @@ lib.extendMkDerivation {
         runHook postInstall
       '';
 
+      preferLocalBuild = !(finalAttrs.meta.license.free or true);
+
       meta = meta // {
         mainProgram = pname;
       };
-    }
-    // lib.optionalAttrs (!(meta.license.free or true)) {
-      preferLocalBuild = true;
     };
 }
