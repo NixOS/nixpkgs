@@ -11,15 +11,15 @@
 buildGoModule (
   finalAttrs:
   let
-    rev = "9de4eb7fe537b6a8c40977ea99b7e9a5816d62f4";
-    srcHash = "sha256-CC4CNizoi91dfyoNsaIqxAuBB62j8JB076QEIpncky0=";
+    rev = "82abf26775d59c642fa7ea5274cf8631cd6942c6";
+    srcHash = "sha256-CC4CNizoi91dfyoNsaIqxAuBB62j8JB076QEIpncky1=";
     vendorHash = "sha256-opx/NlWgLk1rUHbLJ6Vp2dMLheBdOtL+NgCmWE89H9g=";
     npmDepsHash = "sha256-mYeT07XfdAFYjwD4EfLRAgCZY0S8zj68p8UNGBpcpmQ=";
 
   in
   {
     pname = "gomuks-web";
-    version = "0.2512.0";
+    version = "0.2601.0";
 
     inherit vendorHash;
 
