@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
+    description = "3D racing game with Sci-Fi elements and own Track Editor";
     homepage = "https://cryham.org/stuntrally/";
     mainProgram = "stuntrally3";
     license = lib.licenses.gpl3Plus;
