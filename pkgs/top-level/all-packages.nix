@@ -3082,11 +3082,6 @@ with pkgs;
     ;
   lerna = lerna_8;
 
-  libhandy = callPackage ../development/libraries/libhandy { };
-
-  # Needed for apps that still depend on the unstable version of the library (not libhandy-1)
-  libhandy_0 = callPackage ../development/libraries/libhandy/0.x.nix { };
-
   libint = callPackage ../development/libraries/libint { };
   libintPsi4 = callPackage ../development/libraries/libint {
     enableFortran = false;

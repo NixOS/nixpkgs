@@ -1,3 +1,4 @@
+# Needed for apps that still depend on the unstable version of the library (not libhandy-1)
 {
   lib,
   stdenv,
