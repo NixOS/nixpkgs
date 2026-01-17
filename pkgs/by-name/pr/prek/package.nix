@@ -153,7 +153,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/j178/prek";
     description = "Better `pre-commit`, re-engineered in Rust ";
     mainProgram = "prek";
-    changelog = "https://github.com/j178/prek/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.knl ];
   };
