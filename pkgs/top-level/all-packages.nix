@@ -7116,9 +7116,6 @@ with pkgs;
 
   itk = itk_5;
 
-  jemalloc = callPackage ../development/libraries/jemalloc { };
-
-  rust-jemalloc-sys = callPackage ../development/libraries/jemalloc/rust.nix { };
   rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
