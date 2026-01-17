@@ -5,8 +5,8 @@
   installShellFiles,
   stdenv,
 
-  waylandSupport ? stdenv.isLinux,
-  x11Support ? stdenv.isLinux,
+  waylandSupport ? (!stdenv.hostPlatform.isDarwin),
+  x11Support ? (!stdenv.hostPlatform.isDarwin),
 
   wl-clipboard,
   wtype,
