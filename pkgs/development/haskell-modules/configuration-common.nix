@@ -2467,6 +2467,13 @@ with haskellLib;
     pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
   ) super.crypton-x509-validation;
 
+  crypton-x509-system = overrideCabal (drv: {
+    # Case sensitive when doing cross-compilation to windows
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace crypton-x509-system.cabal --replace-fail "Crypt32" "crypt32"
+    '';
+  }) super.crypton-x509-system;
+
   # Likely fallout from the crypton issues
   # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
   tls = dontCheckIf (
