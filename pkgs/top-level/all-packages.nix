@@ -7002,10 +7002,6 @@ with pkgs;
     x11Support = true;
   };
 
-  gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix { };
-
-  gtk-sharp-3_0 = callPackage ../development/libraries/gtk-sharp/3.0.nix { };
-
   gtk-mac-integration-gtk2 = gtk-mac-integration.override {
     gtk = gtk2;
   };
