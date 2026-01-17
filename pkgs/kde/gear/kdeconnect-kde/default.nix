@@ -50,7 +50,7 @@ mkKdeDerivation {
   ];
 
   extraCmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
+    (lib.cmakeFeature "QtWaylandScanner_EXECUTABLE" "${qtbase}/libexec/qtwaylandscanner")
   ];
 
   meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
