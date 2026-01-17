@@ -15,14 +15,14 @@ let
 in
 ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2025-12-22";
+  version = "0.2-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "014840cd9d87c912577822b171407bf7453373f0";
+    rev = "fcfafe953edbf73a1be00e029564c65193f2ad4b";
     fetchSubmodules = true;
-    hash = "sha256-Mjd2XyPmAsonCcV98L8p9S0yYlJV8OEg2TPjZhzVBj8=";
+    hash = "sha256-Vnty6fZNSmgFTNjWPiqLu5jdtomPuirBz8i9tWBSBR8=";
   };
 
   nativeBuildInputs = with ocamlPackages; [

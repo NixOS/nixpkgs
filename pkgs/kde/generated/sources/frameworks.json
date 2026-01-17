@@ -145,9 +145,9 @@
     "hash": "sha256-My4749CsKuyOeGQZweh1obM66EuKraMoNjnezMb/1Ng="
   },
   "kguiaddons": {
-    "version": "6.22.0",
-    "url": "mirror://kde/stable/frameworks/6.22/kguiaddons-6.22.0.tar.xz",
-    "hash": "sha256-t2Urzr6/yMH9ook8Gu/0E2xYbud//G5YnjY08OVTnu8="
+    "version": "6.22.1",
+    "url": "mirror://kde/stable/frameworks/6.22/kguiaddons-6.22.1.tar.xz",
+    "hash": "sha256-o/WWMtdY753x2uPqQ8it9GFT+aN+Awk48TX6n5gW1bk="
   },
   "kholidays": {
     "version": "6.22.0",
