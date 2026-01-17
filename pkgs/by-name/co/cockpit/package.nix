@@ -14,6 +14,7 @@
   git,
   glib,
   glib-networking,
+  gobject-introspection,
   gnused,
   gnutls,
   hostname,
@@ -160,9 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn '"/usr/share' '"/run/current-system/sw/share' \
       --replace-warn '"/lib/systemd' '"/run/current-system/sw/lib/systemd'
 
-    # replace reference to system python interpreter, used for e.g. sosreport
-    substituteInPlace pkg/lib/python.ts \
-      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
+    # fix polkit agent helper path
+    substituteInPlace src/cockpit/polkit.py \
+      --replace-fail "/usr/lib/polkit-1/polkit-agent-helper-1" "/run/wrappers/bin/polkit-agent-helper-1"
   '';
 
   configureFlags = [
@@ -200,10 +201,10 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
+        --prefix PATH : "/etc/cockpit/bin" \
         --prefix PYTHONPATH : ${
           lib.makeSearchPath python3Packages.python.sitePackages [
             "$out"
-            python3Packages.pygobject3
             "/etc/cockpit"
           ]
         } \
@@ -271,6 +272,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = { inherit (nixosTests) cockpit; };
     updateScript = nix-update-script { };
+    cockpitPath = [
+      glib
+      gobject-introspection
+      python3Packages.python
+      python3Packages.pygobject3
+    ];
   };
 
   meta = {
