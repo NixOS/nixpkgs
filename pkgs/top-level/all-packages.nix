@@ -2756,12 +2756,6 @@ with pkgs;
 
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
 
-  gssdp = callPackage ../development/libraries/gssdp { };
-
-  gssdp_1_6 = callPackage ../development/libraries/gssdp/1.6.nix { };
-
-  gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
-
   gup = callPackage ../development/tools/build-managers/gup { };
 
   gupnp = callPackage ../development/libraries/gupnp { };
