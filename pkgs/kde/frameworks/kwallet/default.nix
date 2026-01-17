@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkKdeDerivation,
   pkg-config,
   gpgme,
@@ -17,6 +19,11 @@ mkKdeDerivation {
     gpgme
     libgcrypt
     libsecret
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     kdoctools
+  ];
+
+  extraCmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DBUILD_KWALLET_QUERY=OFF"
   ];
 }
