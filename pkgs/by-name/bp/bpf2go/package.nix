@@ -52,7 +52,7 @@ buildGoModule rec {
     homepage = "https://github.com/cilium/ebpf";
     changelog = "https://github.com/cilium/ebpf/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ philiptaron ];
     mainProgram = "bpf2go";
     platforms = lib.platforms.linux;
   };
