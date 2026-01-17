@@ -21,11 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-dT5XDc3OtquONi6RzA1Zk77ryT0oe4gXjbVVCfZCOrU=";
   };
 
-  # Remove after https://github.com/ansible/pylibssh/pull/502 is merged
-  postPatch = ''
-    sed -i "/setuptools_scm_git_archive/d" pyproject.toml
-  '';
-
   build-system = [
     cython
     expandvars
@@ -44,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible/pylibssh";
     changelog = "https://github.com/ansible/pylibssh/releases/tag/v${version}";
     license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ wfdewith ];
   };
 }
