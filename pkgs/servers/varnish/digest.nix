@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Digest and HMAC vmod";
     homepage = "https://github.com/varnish/libvmod-digest";
-    inherit (varnish.meta) license platforms teams;
+    inherit (varnish.meta) license platforms;
   };
 }
