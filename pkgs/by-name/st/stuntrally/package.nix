@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@GAME_CONFIG_DIR@" "$out/share/stuntrally3/config"
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     pkg-config
