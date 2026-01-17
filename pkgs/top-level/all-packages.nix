@@ -6983,8 +6983,6 @@ with pkgs;
 
   pangomm_2_42 = callPackage ../development/libraries/pangomm/2.42.nix { };
 
-  gtk2 = callPackage ../development/libraries/gtk/2.x.nix { };
-
   gtk2-x11 = gtk2.override {
     cairo = cairo.override { x11Support = true; };
     pango = pango.override {
@@ -6993,10 +6991,6 @@ with pkgs;
     };
     gdktarget = "x11";
   };
-
-  gtk3 = callPackage ../development/libraries/gtk/3.x.nix { };
-
-  gtk4 = callPackage ../development/libraries/gtk/4.x.nix { };
 
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
