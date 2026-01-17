@@ -15699,6 +15699,10 @@ self: super: with self; {
     callPackage ../development/python-modules/pythondata-cpu-vexriscv_smp
       { };
 
+  pythondata-software-picolibc =
+    callPackage ../development/python-modules/pythondata-software-picolibc
+      { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
