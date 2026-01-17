@@ -8,7 +8,6 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  typing-extensions,
 
   # for passthru.tests
   django,
@@ -32,8 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     atpublic
     attrs
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytest-mock
