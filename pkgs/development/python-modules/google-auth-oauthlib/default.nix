@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-auth-library-python-oauthlib";
     tag = "v${version}";
-    hash = "sha256-1BBtEZfCVTLnbIJQV2o0uXNuAic/ArmgHoAIIJVKRrg=";
+    hash = "sha256-itnkKMHTpJNjMVvpXYq9V/ybaE/Ekt3uED1IoVebRcg=";
   };
 
   build-system = [ setuptools ];
