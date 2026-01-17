@@ -13,14 +13,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-monitoring";
   version = "2.29.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_monitoring";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7tuK/RxOgOjGJDXwXESOnmW+kHJQpm2B5q9ZCXeCZ7Y=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ]
-  ++ optional-dependencies.pandas;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # Test requires credentials
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stackdriver Monitoring API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
-    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${finalAttrs.version}/packages/google-cloud-monitoring";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
