@@ -335,8 +335,8 @@ in
       "sha256-zMNP1LXKSynkfJSLn19sz5UoT8LiswD5qSZCn1y5GsA=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.28"
-      "sha256-Vt3rd5sY2S/RNpgGK6rdQK0EEwe5y8yPTPm4LTk/sIo=";
+    buildMypyBoto3Package "connect" "1.42.30"
+      "sha256-P0z7BN74A6ihdUOE5lFN68BUqvdMLq6KuvX/kY9yJgI=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -563,8 +563,8 @@ in
       "sha256-4LBhjln6mCxMSooGEV7mo1Fe7U6Jssxq+6JYwqnFhRs=";
 
   mypy-boto3-glacier =
-    buildMypyBoto3Package "glacier" "1.42.10"
-      "sha256-EFKWChvNMhj07s/la58yb7iZKtAh96qysffZ8LdvZeE=";
+    buildMypyBoto3Package "glacier" "1.42.30"
+      "sha256-TtiFsS2IIBgVxTwAWwU5M/0pBfXs1zxnnyjMuMhjWDY=";
 
   mypy-boto3-globalaccelerator =
     buildMypyBoto3Package "globalaccelerator" "1.42.3"
@@ -1110,8 +1110,8 @@ in
       "sha256-fijgv07T/uckhzTbyzvQ8IzbtaYyz5QTeHGl3w4+Sko=";
 
   mypy-boto3-resource-explorer-2 =
-    buildMypyBoto3Package "resource-explorer-2" "1.42.3"
-      "sha256-Jvb5qMnUZhiuDYtByiG2CjaQPsm30iyEEWGG1hKUg48=";
+    buildMypyBoto3Package "resource-explorer-2" "1.42.30"
+      "sha256-KP7USy0B599a9Z0R3LwpKeb/XpjPUde3qe2oNH87xR4=";
 
   mypy-boto3-resource-groups =
     buildMypyBoto3Package "resource-groups" "1.42.3"
@@ -1170,8 +1170,8 @@ in
       "sha256-juVfwdjPDNPaT5tvyXpzDtomugqxeu++AERLkVtFIxw=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.42.26"
-      "sha256-v7Ya1FPmGr/HvommCpAZ9IFlkUEXY1tB3adPIuwjoYo=";
+    buildMypyBoto3Package "sagemaker" "1.42.30"
+      "sha256-X4wR1GUZ1rFVDoWx5IODmCYaqGEfuN7oTJRqIE7ypqA=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.42.3"

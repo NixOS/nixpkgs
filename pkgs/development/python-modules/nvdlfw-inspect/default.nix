@@ -11,6 +11,9 @@
   pytestCheckHook,
 }:
 
+# nixpkgs-update: no auto update
+# The bot tries to update the package to the older 0.2 tag
+
 buildPythonPackage (finalAttrs: {
   pname = "nvdlfw-inspect";
   version = "0.2.2";
