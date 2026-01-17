@@ -26981,6 +26981,12 @@
     githubId = 207457;
     name = "Matthieu Chevrier";
   };
+  tremby = {
+    email = "bart@tremby.net";
+    github = "tremby";
+    githubId = 199635;
+    name = "Bart Nagel";
+  };
   trepetti = {
     email = "trepetti@cs.columbia.edu";
     github = "trepetti";
