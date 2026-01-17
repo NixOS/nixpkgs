@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.18.0";
+  version = "4.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
     tag = "v${version}";
-    hash = "sha256-fzHKIojgFlyYH27z0NwCkf0nIkoIyGj5IoKIdy82Da4=";
+    hash = "sha256-CNeHsOpFkKvcCWGEholabcsqXJzINUUxFZ7I5bPBoYM=";
   };
 
   postPatch = ''
