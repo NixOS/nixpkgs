@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "blocky";
   version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "0xERR0R";
     repo = "blocky";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GLVyPb2Qyn1jnRz+e74dFzL/AMloKqSe1BUUAGTquWA=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/0xERR0R/blocky/util.Version=${version}"
+    "-X github.com/0xERR0R/blocky/util.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = { inherit (nixosTests) blocky; };
@@ -35,7 +35,10 @@ buildGoModule rec {
     homepage = "https://0xerr0r.github.io/blocky";
     changelog = "https://github.com/0xERR0R/blocky/releases";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ratsclub ];
+    maintainers = with lib.maintainers; [
+      ratsclub
+      kuflierl
+    ];
     mainProgram = "blocky";
   };
-}
+})
