@@ -29,13 +29,13 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.6.1";
+  version = "29.6.2";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-7/ey7nZdy1SnGdW5LjX7dtxyqqvrTuIvtJXMXYVYB6k=";
+    hash = "sha256-fPaJGx0dgHvrE6xvEIRL6EYMPuFgkVUg2quOGuSIgFc=";
   };
 
   lockFile = ./lock.json;
