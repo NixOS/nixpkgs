@@ -7126,10 +7126,6 @@ with pkgs;
 
   lcms = lcms2;
 
-  libao = callPackage ../development/libraries/libao {
-    usePulseAudio = config.pulseaudio or (lib.meta.availableOn stdenv.hostPlatform libpulseaudio);
-  };
-
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
   libasn1c = callPackage ../servers/osmocom/libasn1c/default.nix { };
