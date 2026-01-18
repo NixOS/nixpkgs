@@ -295,11 +295,12 @@ in
                     };
                   };
                 };
+                description = "Script minification options";
               };
               style = mkOption {
                 type = types.submodule {
                   options = {
-                    enable = mkEnableOption "Script minification via Lightning CSS";
+                    enable = mkEnableOption "Style minification via Lightning CSS";
                     target = mkOption {
                       type = types.nullOr types.nonEmptyStr;
                       default = null;
@@ -311,6 +312,7 @@ in
                     };
                   };
                 };
+                description = "Style minification options";
               };
               svg = mkOption {
                 type = types.submodule {
@@ -318,6 +320,7 @@ in
                     enable = mkEnableOption "SVG minification via Scour";
                   };
                 };
+                description = "SVG minification options";
               };
             };
           }
