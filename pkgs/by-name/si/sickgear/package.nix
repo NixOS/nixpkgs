@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     mainProgram = "sickgear";
     license = lib.licenses.gpl3;
     homepage = "https://github.com/SickGear/SickGear";
-    maintainers = with lib.maintainers; [ rembo10 ];
+    maintainers = [ ];
   };
 }

@@ -22159,11 +22159,6 @@
     githubId = 43930;
     name = "Ricky Elrod";
   };
-  rembo10 = {
-    github = "rembo10";
-    githubId = 801525;
-    name = "rembo10";
-  };
   remcoschrijver = {
     email = "info@writerit.nl";
     matrix = "@remcoschrijver:tchncs.de";
