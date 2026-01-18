@@ -28,6 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/liamg/tml";
     changelog = "https://github.com/liamg/tml/releases/tag/v${version}";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

@@ -13,13 +13,13 @@ stdenv.mkDerivation {
   # as ssdfs-utils, not ssdfs-tools.
   pname = "ssdfs-utils";
   # The version is taken from `configure.ac`, there are no tags.
-  version = "4.61";
+  version = "4.66";
 
   src = fetchFromGitHub {
     owner = "dubeyko";
     repo = "ssdfs-tools";
-    rev = "b53ac1d92d4eedbcddd245143a1d70e872bc4b6b";
-    hash = "sha256-PEmYVZowNyg9rvh26y6lWo17HMqSYABQgMYYVRXo/Nw=";
+    rev = "ac59d21d78e40b760338eadb3b18f65274d63234";
+    hash = "sha256-F1cJAPMDw4iiNzNG4D9+z0esuu3cr45EyJYD3rmHmMM=";
   };
 
   strictDeps = true;
@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SSDFS file system utilities";
     homepage = "https://github.com/dubeyko/ssdfs-tools";
-    license = licenses.bsd3Clear;
-    maintainers = with maintainers; [ ners ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3Clear;
+    maintainers = with lib.maintainers; [ ners ];
+    platforms = lib.platforms.linux;
   };
 }

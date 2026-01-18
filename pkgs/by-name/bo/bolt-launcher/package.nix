@@ -15,37 +15,36 @@
   jdk17,
   pango,
   cairo,
+  pkg-config,
+  libnotify,
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
   enableRS3 ? false,
 }:
 let
-  cef = cef-binary.overrideAttrs (oldAttrs: {
+  cef = cef-binary.override {
     version = "126.2.18";
-    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
     gitRevision = "3647d39";
     chromiumVersion = "126.0.6478.183";
 
-    srcHash =
-      {
-        aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
-        x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  });
+    srcHashes = {
+      aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
+      x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
+    };
+  };
 in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.19.1";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-1BvjKlpUD4gJJOlrc2wsl9Pv2x1TBcejYsGiliMrwao=";
+      hash = "sha256-Gh1xaYAysZshEGzljnEYJuK8Mv4cwSWH1W4rEu2F/0s=";
     };
 
     nativeBuildInputs = [
@@ -54,6 +53,7 @@ let
       luajit
       makeWrapper
       copyDesktopItems
+      pkg-config
     ];
 
     buildInputs = [
@@ -67,7 +67,6 @@ let
     ];
 
     cmakeFlags = [
-      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
       "-G Ninja"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
@@ -99,6 +98,7 @@ let
         exec = "bolt-launcher";
         icon = "bolt-launcher";
         categories = [ "Game" ];
+        startupWMClass = "BoltLauncher";
       })
     ];
   });
@@ -125,6 +125,7 @@ buildFHSEnv {
       SDL2
       sdl3
       libGL
+      libnotify
     ])
     ++ lib.optionals enableRS3 (
       with pkgs;

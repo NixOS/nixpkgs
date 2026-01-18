@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
-    rev = version;
+    tag = version;
     hash = "sha256-9BGgm4yRjCarJIGP/G9gPj/qsYWb96XGJmpgLj3XCdM=";
   };
 
@@ -51,12 +51,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # No checks defined
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial GUI for managing your Distroboxes, written with GTK4 + Libadwaita";
     homepage = "https://dvlv.github.io/BoxBuddyRS";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "boxbuddy-rs";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 }

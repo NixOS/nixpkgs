@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "goxlr-utility";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
     rev = "v${version}";
-    hash = "sha256-Z/VqQKmfzqd1htMlXU8sDkOSw2xczb3tG53LVC0MZhM=";
+    hash = "sha256-+hwNevUT9AwMXHUxmjYVrJ3AKaxICrOJZ642GPRq17Q=";
   };
 
-  cargoHash = "sha256-tSlFMMZWsyZBXBeEW64s0eBt/qrAREfOpfxAgcTK4XQ=";
+  cargoHash = "sha256-NzqyBe/qeWtTcAWu2bE3fyhegtxKpQokEEvNxdu/zUo=";
 
   buildInputs = [
     libpulseaudio
@@ -61,10 +61,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  $completions_dir/_goxlr-daemon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
     homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [ errnoh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ errnoh ];
   };
 }

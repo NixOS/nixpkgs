@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
 
       "-DHIMBAECHEL_GOWIN_DEVICES=all"
       "-DHIMBAECHEL_PRJBEYOND_DB=${prjbeyond_src}"
+      # https://github.com/YosysHQ/nextpnr/issues/1578
+      # `Compatibility with CMake < 3.5 has been removed from CMake.`
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     ]
     ++ (lib.optional enableGui "-DBUILD_GUI=ON");
 

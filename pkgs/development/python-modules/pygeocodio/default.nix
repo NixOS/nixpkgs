@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   requests,
   pytestCheckHook,
   httpretty,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [

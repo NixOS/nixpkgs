@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   cached-ipaddress,
-  dnspython,
   fetchFromGitHub,
   ifaddr,
   netifaces,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   version = "2.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
@@ -33,13 +30,14 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    async-timeout
     aiodns
     cached-ipaddress
-    dnspython
     ifaddr
     netifaces
     pyroute2
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -55,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodiscover" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
     changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

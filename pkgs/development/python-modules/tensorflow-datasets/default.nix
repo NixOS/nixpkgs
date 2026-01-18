@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build system
   setuptools,
@@ -12,6 +13,7 @@
   dm-tree,
   etils,
   immutabledict,
+  importlib-resources,
   numpy,
   promise,
   protobuf,
@@ -24,8 +26,6 @@
   toml,
   tqdm,
   wrapt,
-  pythonOlder,
-  importlib-resources,
 
   # tests
   apache-beam,
@@ -62,7 +62,7 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
   version = "4.9.9";
   pyproject = true;
@@ -70,9 +70,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
+
+  patches = [
+    # TypeError: Cannot handle this data type: (1, 1, 4), <u2
+    # Issue: https://github.com/tensorflow/datasets/issues/11148
+    # PR: https://github.com/tensorflow/datasets/pull/11149
+    (fetchpatch2 {
+      name = "fix-pillow-12-compat";
+      url = "https://github.com/tensorflow/datasets/pull/11149/commits/21062d65b33978f2263443280c03413add5c0224.patch";
+      hash = "sha256-GWb+1E5lQNhFVp57sqjp+WqzZSva1AGpXe9fbvXXeIA=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -82,6 +93,7 @@ buildPythonPackage rec {
     dm-tree
     etils
     immutabledict
+    importlib-resources
     numpy
     promise
     protobuf
@@ -96,10 +108,7 @@ buildPythonPackage rec {
     wrapt
   ]
   ++ etils.optional-dependencies.epath
-  ++ etils.optional-dependencies.etree
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -211,8 +220,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

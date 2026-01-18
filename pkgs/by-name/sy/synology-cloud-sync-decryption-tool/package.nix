@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     update-source-version synology-cloud-sync-decryption-tool "$version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop tool to decrypt data encrypted by Cloud Sync";
     homepage = "https://kb.synology.com/en-global/DSM/help/SynologyCloudSyncDecryptionTool/synologycloudsyncdecryptiontool";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ kalbasit ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ kalbasit ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SynologyCloudSyncDecryptionTool";
   };

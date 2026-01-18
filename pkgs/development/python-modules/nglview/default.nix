@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   nodejs,
   notebook,
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   pname = "nglview";
   version = "3.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nglviewer";

@@ -1,34 +1,38 @@
 {
   lib,
   stdenv,
-  pnpm_10,
-  nodejs_22,
+  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs,
   fetchFromGitHub,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.28";
+  version = "1.3.37";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aLjHKVWkb9XHyoMmDBxLG2Ycg4CJFeieLdEg3CWeIwk=";
+    hash = "sha256-4cz1icY7i8RFdh/HhG/y6UzR/zkhsp4+G2dplm4g+wo=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_10.configHook
+    nodejs
+    pnpmConfigHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-
-    buildInputs = [ nodejs_22 ];
-
-    fetcherVersion = 2;
-    hash = "sha256-DvSBiUkIQbDkdgfHBw9h1odo3ApZq+emBDkbcQnx6NA=";
+    fetcherVersion = 3;
+    hash = "sha256-sU0EBSNwpjqyBsvyJim8Qz90dht7xc6f52HaY0sBPds=";
   };
 
   env = {
@@ -57,9 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withMoonlight
+    );
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Discord client modification, focused on enhancing user and developer experience";
     longDescription = ''
       Moonlight is a ***passion project***—yet another Discord client mod—focused on providing a decent user
@@ -70,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://moonlight-mod.github.io/using/install/#nix";
     changelog = "https://raw.githubusercontent.com/moonlight-mod/moonlight/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
 
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       ilys
       FlameFlag
     ];

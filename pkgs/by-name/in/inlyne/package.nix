@@ -11,6 +11,7 @@
   wayland,
   libGL,
   openssl,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,7 +43,11 @@ rustPlatform.buildRustPackage rec {
     wayland
     libxkbcommon
     openssl
+    oniguruma
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
@@ -50,12 +55,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=watcher::tests::the_gauntlet"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd inlyne \
-      --bash completions/inlyne.bash \
-      --fish completions/inlyne.fish \
-      --zsh completions/_inlyne
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd inlyne \
+        --bash completions/inlyne.bash \
+        --fish completions/inlyne.fish \
+        --zsh completions/_inlyne
+    ''
+    + ''
+      install -Dm444 assets/inlyne.desktop -t $out/share/applications
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
@@ -67,12 +76,12 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/Inlyne-Project/inlyne";
     changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "inlyne";
   };
 }

@@ -19,14 +19,14 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Command code search tool";
     homepage = "https://github.com/boyter/cs";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       unlicense
     ];
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "cs";
   };
 }

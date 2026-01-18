@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vultr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Vultr.com API Client";
     homepage = "https://github.com/spry-group/python-vultr";
     changelog = "https://github.com/spry-group/python-vultr/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

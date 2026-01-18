@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stateless Master Password Manager";
     mainProgram = "qMasterPassword";
     longDescription = ''
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
       no need to trust any online password service.
     '';
     homepage = "https://github.com/bkueng/qMasterPassword";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ teutat3s ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

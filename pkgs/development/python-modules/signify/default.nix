@@ -7,23 +7,20 @@
   mscerts,
   oscrypto,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.8.1";
+  version = "0.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "signify";
     tag = "v${version}";
-    hash = "sha256-kEQPoCNO3jGucnqYKRKOivaBtHHX4SMW9KALBMqqqVo=";
+    hash = "sha256-ICmBzIbkynxRNojNQrQZoydMyFd6j3F1BLWN8VeB5dE=";
   };
 
   build-system = [ setuptools ];

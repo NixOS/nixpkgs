@@ -97,7 +97,7 @@ rec {
       default = null;
       description = documentDefault description strongswanDefault;
     };
-    render = single (b: if b then "yes" else "no");
+    render = single boolToYesNo;
   };
   yes = true;
   no = false;

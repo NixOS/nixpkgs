@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm_10,
   python3,
   nodejs,
@@ -12,8 +14,10 @@
   # build-time deps
   pkg-config,
   makeWrapper,
+  binaryen,
   curl,
   cacert,
+  extism-js,
   unzip,
   # runtime deps
   cairo,
@@ -29,12 +33,11 @@
   pango,
   perl,
   pixman,
-  vips,
+  vips_8_17, # thumbnail generation fails with vips 8.18
   buildPackages,
 }:
 let
   pnpm = pnpm_10;
-  version = "1.143.1";
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -56,7 +59,7 @@ let
 
   buildLock = {
     sources =
-      builtins.map
+      map
         (p: {
           name = p.pname;
           inherit (p) version;
@@ -104,52 +107,29 @@ let
         echo "${date}" > $out/geodata-date.txt
       '';
 
+  # Without this thumbnail generation for raw photos fails with
+  #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
+  vips' = vips_8_17.overrideAttrs (prev: {
+    mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "immich";
+  version = "2.4.1";
+
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
-    tag = "v${version}";
-    hash = "sha256-lP/IrKV2B1Gq43jqVa1hIpx4HOJoiYBDUOvyTJB0t7k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AOtKRK2vRQKoQAzU4P3h4tQebpWPF3zIWLcToKaU0Lc=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    pname = "immich";
-    inherit version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
-    hash = "sha256-ShKgfsYc9n+B+NnSaJOSyLb4ev43ZsympYhRgPZtlxs=";
+    hash = "sha256-1UhyEHSGNWSNvzDJUSojIoIJA/Gz8KMAGMsL2XZfS5s=";
   };
-
-  web = stdenv.mkDerivation {
-    pname = "immich-web";
-    inherit version src pnpmDeps;
-
-    nativeBuildInputs = [
-      nodejs
-      pnpm
-      pnpm.configHook
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter @immich/sdk build
-      pnpm --filter immich-web build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cd web
-      cp -r build $out
-
-      runHook postInstall
-    '';
-  };
-in
-stdenv.mkDerivation {
-  pname = "immich";
-  inherit version src pnpmDeps;
 
   postPatch = ''
     # pg_dumpall fails without database root access
@@ -161,8 +141,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     nodejs
     pkg-config
-    pnpm_10
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
     python3
     makeWrapper
     node-gyp # for building node_modules/sharp from source
@@ -182,7 +162,7 @@ stdenv.mkDerivation {
     pango
     pixman
     # Required for sharp
-    vips
+    vips'
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
@@ -219,14 +199,15 @@ stdenv.mkDerivation {
     \) -exec rm -r {} +
 
     mkdir -p "$packageOut/build"
-    ln -s '${web}' "$packageOut/build/www"
+    ln -s '${finalAttrs.passthru.plugins}' "$packageOut/build/corePlugin"
+    ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
 
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/admin-cli" \
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich-admin" \
       --add-flags "$packageOut/dist/main" \
-      --add-flags cli
+      --add-flags immich-admin
     makeWrapper '${lib.getExe nodejs}' "$out/bin/server" \
       --add-flags "$packageOut/dist/main" \
       --chdir "$packageOut" \
@@ -245,21 +226,81 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich immich-vectorchord-migration;
+      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
     };
 
-    machine-learning = immich-machine-learning;
+    machine-learning = immich-machine-learning.override {
+      immich = finalAttrs.finalPackage;
+    };
+
+    plugins = stdenv.mkDerivation {
+      pname = "immich-plugins";
+      inherit (finalAttrs) version src pnpmDeps;
+
+      nativeBuildInputs = [
+        binaryen
+        extism-js
+        nodejs
+        pnpmConfigHook
+        pnpm
+      ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        pnpm --filter plugins build
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        cd plugins
+        mkdir $out
+        cp -r dist manifest.json $out
+
+        runHook postInstall
+      '';
+    };
+
+    web = stdenv.mkDerivation {
+      pname = "immich-web";
+      inherit (finalAttrs) version src pnpmDeps;
+
+      nativeBuildInputs = [
+        nodejs
+        pnpmConfigHook
+        pnpm
+      ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        pnpm --filter @immich/sdk build
+        pnpm --filter immich-web build
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        cd web
+        cp -r build $out
+
+        runHook postInstall
+      '';
+    };
 
     inherit
-      src
-      web
       geodata
       pnpm
       ;
   };
 
   meta = {
-    changelog = "https://github.com/immich-app/immich/releases/tag/${src.tag}";
+    changelog = "https://github.com/immich-app/immich/releases/tag/${finalAttrs.src.tag}";
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
     license = with lib.licenses; [
@@ -275,4 +316,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };
-}
+})

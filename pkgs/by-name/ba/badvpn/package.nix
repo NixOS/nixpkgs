@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ambrop72";
     repo = "badvpn";
-    rev = version;
+    tag = version;
     sha256 = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
   };
 
@@ -38,12 +38,15 @@ stdenv.mkDerivation rec {
     cmakeFlagsArray=("-DCMAKE_BUILD_TYPE=" "-DCMAKE_C_FLAGS=-O3 ${
       lib.optionalString (!debug) "-DNDEBUG"
     }");
+    sed -e \
+      's/cmake_minimum_required(VERSION 2[.]8)/cmake_minimum_required(VERSION 3.5)/' \
+      -i CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of network-related (mostly VPN-related) tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-skk";
-  version = "5.1.7";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-WMkcZSocanhWMn9kiWyB07jEW4x84G07kAYvn5heenc=";
+    hash = "sha256-1omxT31hKe7gQ5BARJ+0tIp4RT5eM+Tjufd6s/PxBoY=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Input method engine for Fcitx5, which uses libskk as its backend";
     homepage = "https://github.com/fcitx/fcitx5-skk";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wattmto ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wattmto ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-plugins";
-  version = "16.0.0";
+  version = "16.0.1";
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    hash = "sha256-yofHs1IyAkyMqrWlLkmnX+CmH+qsvlhKN1YZM4nRf1M=";
+    hash = "sha256-1P5oVXSx/hGK5MB2grxWtmqsKGtTEmT1XD5+NSsLFUw=";
   };
 
   nativeBuildInputs = [

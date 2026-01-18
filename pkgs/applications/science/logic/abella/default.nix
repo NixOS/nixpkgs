@@ -4,6 +4,7 @@
   fetchurl,
   rsync,
   ocamlPackages,
+  dune,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,10 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     rsync
+    dune
   ]
   ++ (with ocamlPackages; [
     ocaml
-    dune_3
     menhir
     findlib
   ]);

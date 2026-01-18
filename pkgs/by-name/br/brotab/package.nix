@@ -8,12 +8,12 @@
 python3Packages.buildPythonApplication rec {
   pname = "brotab";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = "brotab";
-    rev = version;
+    tag = version;
     hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 
@@ -50,10 +50,10 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/balta2ar/brotab";
     description = "Control your browser's tabs from the command line";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

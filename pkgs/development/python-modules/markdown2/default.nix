@@ -5,23 +5,20 @@
   latex2mathml,
   pygments,
   pytest7CheckHook,
-  pythonOlder,
   setuptools,
   wavedrom,
 }:
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.5.2";
+  version = "2.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "trentm";
     repo = "python-markdown2";
     tag = version;
-    hash = "sha256-SL93JEBBpiYqgCazRkPN5nFBidMpfnGLrHIe7EUwlAY=";
+    hash = "sha256-2w11vVzZUS6HzXmZT+Ag5rPqRnn/tlLnHL4xIDv0l+g=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +31,7 @@ buildPythonPackage rec {
     code_syntax_highlighting = [ pygments ];
     wavedrom = [ wavedrom ];
     latex = [ latex2mathml ];
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   meta = {

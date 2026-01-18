@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-
+  fetchpatch2,
   # nativeBuildInputs
   pkg-config,
   cmake,
@@ -12,7 +12,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt,
+  fmt_9,
   gettext,
   libGL,
   libGLU,
@@ -26,12 +26,13 @@
   libpthreadstubs,
   libpulseaudio,
   libusb1,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   openal,
   pcre,
   portaudio,
   readline,
+  SDL2,
   sfml,
   soundtouch,
   xz,
@@ -62,6 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/9AabEJ2ZOvHeSGXWRuOucmjleBMRcJfhX+VDeldbgo=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
+      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -74,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     enet
     ffmpeg
-    fmt
+    fmt_9
     gettext
     libGL
     libGLU
@@ -88,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpthreadstubs
     libpulseaudio
     libusb1
-    mbedtls_2
+    mbedtls
     miniupnpc
     openal
     pcre
@@ -96,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtsvg
     readline
+    SDL2
     sfml
     soundtouch
     xz
@@ -115,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "USE_SHARED_ENET" true)
     (lib.cmakeBool "ENABLE_LTO" true)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)

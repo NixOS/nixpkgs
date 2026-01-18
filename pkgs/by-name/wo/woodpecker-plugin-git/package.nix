@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "woodpecker-plugin-git";
-  version = "2.6.5";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "plugin-git";
     tag = version;
-    hash = "sha256-9eTkdhlgY7hDqzbgBeoW6mITYsEJFcnRcilruD6wzU4=";
+    hash = "sha256-fUGTO60ZgMt8t/O4Cb3trSMmTFhKBxG8sjft+hrmUjQ=";
   };
 
-  vendorHash = "sha256-Zn2TYNyKvtmtEAlKmWBhjyzHiM0dwDT3E/LOtSzjFK0=";
+  vendorHash = "sha256-FbtktDU6Rl3lu3U2vu20M+hz1HdLMu1krUcqXX3HfeA=";
 
   env.CGO_ENABLED = "0";
 
@@ -38,6 +38,9 @@ buildGoModule rec {
     changelog = "https://github.com/woodpecker-ci/plugin-git/releases/tag/${version}";
     license = lib.licenses.asl20;
     mainProgram = "plugin-git";
-    maintainers = with lib.maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [
+      ambroisie
+      marcusramberg
+    ];
   };
 }

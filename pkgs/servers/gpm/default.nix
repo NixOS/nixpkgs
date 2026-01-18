@@ -64,6 +64,9 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     (if withNcurses then "--with-curses" else "--without-curses")
+    # The code won't compile in c23 mode.
+    # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+    "CFLAGS=-std=gnu17"
   ];
 
   enableParallelBuilding = true;
@@ -79,11 +82,11 @@ stdenv.mkDerivation {
 
   passthru.tests.static = pkgsStatic.gpm;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "Daemon that provides mouse support on the Linux console";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.cygwin;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.cygwin;
     maintainers = [ ];
   };
 }

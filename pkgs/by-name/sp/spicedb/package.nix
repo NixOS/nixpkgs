@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "spicedb";
-  version = "1.45.4";
+  version = "1.47.1";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
     tag = "v${version}";
-    hash = "sha256-q5szY9eJcmlxoA5FcBgOb81l5p8b9+SUSQffXV3KMgk=";
+    hash = "sha256-xFpQxMfT66nHhNxlXHxIwIlE0K8Jv2ziiNBzGdyDryM=";
   };
 
-  vendorHash = "sha256-XqXbQYUAQiOZ0MjWwFSRe0suaQzXb6KQb+KoGAvvceM=";
+  vendorHash = "sha256-H9ffTARE8Gz5kajawW5o12q+VEAGAGUUR6Q9ErBrgNc=";
 
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.tag}'"
@@ -34,7 +34,7 @@ buildGoModule rec {
       --zsh <($out/bin/spicedb completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/authzed/spicedb/releases/tag/${src.tag}";
     description = "Open source permission database";
     longDescription = ''
@@ -42,8 +42,8 @@ buildGoModule rec {
       Google Zanzibar.
     '';
     homepage = "https://authzed.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       squat
       thoughtpolice
     ];

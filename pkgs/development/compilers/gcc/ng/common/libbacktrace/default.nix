@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir ../../build
     cd ../../build
     configureScript=../$sourceRoot/configure
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # GNU debuglink is not supported on macOS (Mach-O format)
+    # Skip the gnudebuglink tests which fail on Darwin
+    export libbacktrace_cv_objcopy_debuglink=no
   '';
 
   installPhase = ''

@@ -14,6 +14,7 @@
     substitutions.jq = "${jq}/bin/jq";
     substitutions.python3 = lib.getExe (python3.withPackages (ps: with ps; [ pyyaml ]));
     substitutions.packageGraphScript = ../../pub2nix/package-graph.py;
+    substitutions.workspacePackageConfigScript = ../workspace-package-config.py;
   } ./dart-config-hook.sh;
   dartBuildHook = makeSetupHook {
     name = "dart-build-hook";

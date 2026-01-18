@@ -28,7 +28,8 @@ python3Packages.buildPythonApplication rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     inherit (platformInfo) platform hash;
   };
 

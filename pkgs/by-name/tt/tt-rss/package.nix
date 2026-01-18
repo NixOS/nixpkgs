@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  version = "0-unstable-2025-04-17";
+  version = "0-unstable-2025-11-01";
 
   src = fetchgit {
-    url = "https://git.tt-rss.org/fox/tt-rss.git";
-    rev = "be82663ac9b59de8a135178a519efe9f7ebae213";
-    hash = "sha256-bZrmOOFB5HhiWsV6wWfqv3/wW4rf/05AX7qU+v1IBFE=";
+    url = "https://github.com/tt-rss/tt-rss.git";
+    rev = "912162ad811869af334232d32fe6c79b3cf095ca";
+    hash = "sha256-2U9V4MTWGNZzdVr9AlH/S7KdBGPap+mm5/KieWLcF1A=";
   };
 
   installPhase = ''
@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web-based news feed (RSS/Atom) aggregator";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://tt-rss.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       gileri
       globin
       zohl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

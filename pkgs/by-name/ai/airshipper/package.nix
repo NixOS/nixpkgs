@@ -26,7 +26,7 @@
   patchelf,
 }:
 let
-  version = "0.16.0";
+  version = "0.17.0";
   # Patch for airshipper to install veloren
   patch =
     let
@@ -65,10 +65,10 @@ rustPlatform.buildRustPackage {
     owner = "Veloren";
     repo = "airshipper";
     tag = "v${version}";
-    hash = "sha256-MHwyXCAqdBzdJlYzSeUXr6bJdTVHcjJ/kGcuAsZCCW8=";
+    hash = "sha256-M89RswC08MZnNfk2T1+rtDajTpDGTnJoZ2U8bU5U2+0=";
   };
 
-  cargoHash = "sha256-TkeB939zV5VvqICFqJd/7uX+ydXyEQOJ3sYQbHbZhP0=";
+  cargoHash = "sha256-ry0hFvMDnotDQu6mqgyt+6hKOvGRJLmZKs3SxEVtDRg=";
 
   buildInputs = [
     fontconfig
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+  env.RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
   postInstall = ''
     install -Dm444 -t "$out/share/applications" "client/assets/net.veloren.airshipper.desktop"
@@ -112,8 +112,11 @@ rustPlatform.buildRustPackage {
       ];
     in
     ''
-      patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
-      wrapProgram "$out/bin/airshipper" --set VELOREN_PATCHER "${patch}"
+      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
+      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
+      wrapProgram "$out/bin/airshipper" \
+        --set VELOREN_PATCHER "${patch}" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     '';
 
   doCheck = false;
@@ -126,11 +129,11 @@ rustPlatform.buildRustPackage {
     "airshipper"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides automatic updates for the voxel RPG Veloren";
     mainProgram = "airshipper";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ yusdacra ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ yusdacra ];
   };
 }

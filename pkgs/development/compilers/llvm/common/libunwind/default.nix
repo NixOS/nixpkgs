@@ -12,7 +12,7 @@
   python3,
   libcxx,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  doFakeLibgcc ? stdenv.hostPlatform.useLLVM,
+  doFakeLibgcc ? stdenv.hostPlatform.useLLVM && !stdenv.hostPlatform.isStatic,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
 }:
@@ -20,9 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
 
   inherit version;
-
-  # TODO: Remove on `staging`.
-  patches = [ ];
 
   src =
     if monorepoSrc != null then
@@ -59,10 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind")
   ]
   ++ devExtraCmakeFlags;
-
-  # TODO: Remove on `staging`.
-  prePatch = "";
-  postPatch = "";
 
   postInstall =
     lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)

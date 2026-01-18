@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "dapr-cli";
-  version = "1.16.0";
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-LX2X9L+aEIFr1lYV7lAlVZM/nQMmdLY9f8XBMm31be0=";
+    hash = "sha256-WNihy2LkL7S5vD+lO5v+jtKNanCWc138y48QdlxKNFU=";
   };
 
-  vendorHash = "sha256-qEbuu4+pQ6g3m1FtisYc26lG/4zY/boQM8d6qA5c1eo=";
+  vendorHash = "sha256-UzZJ9mgMvewahYjhTOBC/HgIaxk312a7iqbS4D5O2VU=";
 
   proxyVendor = true;
 
@@ -43,11 +43,11 @@ buildGoModule rec {
       --zsh <($out/bin/dapr completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for managing Dapr, the distributed application runtime";
     homepage = "https://dapr.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       joshvanl
       lucperkins
     ];

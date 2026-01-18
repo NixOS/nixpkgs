@@ -12,7 +12,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml-augeas";
   version = "0.6";
 
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://people.redhat.com/~rjones/augeas/";
     description = "OCaml bindings for Augeas";
-    license = with licenses; lgpl21Plus;
-    platforms = with platforms; linux;
+    license = with lib.licenses; lgpl21Plus;
+    platforms = with lib.platforms; linux;
   };
 }

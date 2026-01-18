@@ -13,23 +13,23 @@
 }:
 let
   pname = "maptool";
-  version = "1.18.5";
+  version = "1.18.6";
   repoBase = "https://github.com/RPTools/maptool";
   src = fetchurl {
     url = "${repoBase}/releases/download/${version}/maptool-${version}-x86_64.pkg.tar.zst";
-    hash = "sha256-67szWKgx3B5HacpzYThxGDHKHK5qz2GQ15+ZEuEGlAU=";
+    hash = "sha256-QSJjXgzjoKIwTvIx6iWCHjleJTAAI7qnbcxZb8sygxY=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Virtual Tabletop for playing roleplaying games with remote players or face to face";
     mainProgram = "maptool";
     homepage = "https://www.rptools.net/toolbox/maptool/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ rhendric ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ rhendric ];
     platforms = [ "x86_64-linux" ];
   };
 

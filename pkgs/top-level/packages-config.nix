@@ -2,6 +2,7 @@
 {
   # Ensures no aliases are in the results.
   allowAliases = false;
+  allowVariants = false;
 
   # Enable recursion into attribute sets that nix-env normally doesn't look into
   # so that we can get a more complete picture of the available packages for the
@@ -9,7 +10,7 @@
   packageOverrides =
     super:
     with super;
-    lib.mapAttrs (_: set: recurseIntoAttrs set) {
+    lib.mapAttrs (_: set: lib.recurseIntoAttrs set) {
       inherit (super)
         rPackages
         sourceHanPackages

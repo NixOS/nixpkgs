@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "rke";
-  version = "1.8.7";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "rke";
     rev = "v${version}";
-    hash = "sha256-qborClm+QF1cVKSPEY+JYEylQ2I+XHkmCd3ez8fdfmk=";
+    hash = "sha256-oKdq0QZRlIs1yts8zasbDGcQGvYPzeeVI95DIqeXPuM=";
   };
 
   vendorHash = "sha256-OWC8OZhORHwntAR2YHd4KfQgB2Wtma6ayBWfY94uOA4=";
@@ -31,6 +31,6 @@ buildGoModule rec {
     mainProgram = "rke";
     changelog = "https://github.com/rancher/rke/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

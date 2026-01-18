@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "beaupy";
-  version = "3.10.1";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "beaupy";
     rev = "v${version}";
-    hash = "sha256-tN78OV0Ks1MIdqVh8yisTgK4dOaKqYlZxvIoCa44eAI=";
+    hash = "sha256-EQekSvjhL2qVQTjbdv4OqYMRUXrS9VzAIWiDjGdy3Rc=";
   };
 
   build-system = [

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mono
     stfl
   ]
-  ++ lib.optionals (guiSupport) [
+  ++ lib.optionals guiSupport [
     gtk-sharp-2_0
     # loaded at runtime by GTK#
     gdk-pixbuf
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    NOCONFIGURE=1 NOGIT=1 ./autogen.sh
+    NOCONFIGURE=1 NOGIT=1 ACLOCAL_FLAGS="-I ${gettext}/share/gettext/m4" ./autogen.sh
   '';
 
   configureFlags = [

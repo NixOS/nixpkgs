@@ -9,7 +9,6 @@
   lsof,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   twisted,
   zope-interface,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "txtorcon";
   version = "24.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,14 +45,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "txtorcon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
     homepage = "https://github.com/meejah/txtorcon";
     changelog = "https://github.com/meejah/txtorcon/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jluttine
       exarkun
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

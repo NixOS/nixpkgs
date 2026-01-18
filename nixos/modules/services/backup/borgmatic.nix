@@ -54,6 +54,16 @@ let
         }
         // d
       ) s.mysql_databases;
+    })
+    // (lib.optionalAttrs (s ? sqlite_databases && s.sqlite_databases != [ ]) {
+      sqlite_databases = map (
+        d:
+        {
+          sqlite_command = lib.getExe pkgs.sqlite;
+          sqlite_restore_command = lib.getExe pkgs.sqlite;
+        }
+        // d
+      ) s.sqlite_databases;
     });
 
   repository =

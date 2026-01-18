@@ -53,11 +53,11 @@ mkDerivation {
     libbass_fx
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "UltraStar-Creator";
     description = "Ultrastar karaoke song creation tool";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Creator";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }

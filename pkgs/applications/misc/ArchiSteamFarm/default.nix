@@ -6,6 +6,7 @@
   libkrb5,
   zlib,
   openssl,
+  stdenv,
   callPackage,
 }:
 
@@ -20,17 +21,17 @@ in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.2.0.5";
+  version = "6.3.1.6";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-CNnSsFBeO3BHUbom0eytfz02Q7QBv8JEmHbgPSL7I3Y=";
+    hash = "sha256-WbzPlngp+Vjwc14qgQE5i2WVRCGvcs9N8lVv2SpfqdQ=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -51,7 +52,7 @@ buildDotnetModule rec {
     "-p:RuntimeIdentifiers="
   ];
   dotnetBuildFlags = [
-    "--framework=net9.0"
+    "--framework=net10.0"
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 
@@ -61,9 +62,10 @@ buildDotnetModule rec {
     openssl
   ];
 
-  doCheck = true;
+  # times out when trying to connect to something even with relaxed sandbox
+  doCheck = stdenv.hostPlatform.isLinux;
 
-  installPhase = ''
+  preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
 
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -71,14 +73,15 @@ buildDotnetModule rec {
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
+  '';
 
-    dotnetInstallPhase
-
+  postInstall = ''
     buildPlugin() {
       echo "Publishing plugin $1"
-      dotnetProjectFiles=("$1")
-      dotnetInstallPath="$out/lib/ArchiSteamFarm/plugins/$1"
-      dotnetInstallPhase
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        --no-restore --no-build --runtime $dotnetRuntimeIds \
+        $dotnetFlags $dotnetInstallFlags
     }
 
   ''
@@ -97,11 +100,11 @@ buildDotnetModule rec {
     ui = callPackage ./web-ui { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

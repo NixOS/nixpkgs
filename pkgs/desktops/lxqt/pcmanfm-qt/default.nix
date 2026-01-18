@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "pcmanfm-qt";
     rev = version;
-    hash = "sha256-mYjbOb9c7Qc3qhVYt1EHy50YOVguLnwg0NJg2zBgwOM=";
+    hash = "sha256-Pv3N/JfUbLyCBpnmnEHL7i2du1q8vSKxTR1uIEsEe/U=";
   };
 
   nativeBuildInputs = [
@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace-fail @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/pcmanfm-qt";
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     mainProgram = "pcmanfm-qt";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

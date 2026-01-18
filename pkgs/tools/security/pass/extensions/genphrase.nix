@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
       --replace '$EXTENSIONS' "$out/lib/password-store/extensions/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension that generates memorable passwords";
     homepage = "https://github.com/congma/pass-genphrase";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ seqizz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ seqizz ];
+    platforms = lib.platforms.unix;
   };
 }

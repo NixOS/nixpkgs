@@ -50,11 +50,11 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "nwg_wrapper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to display a script output or a text file content on the desktop in sway or other wlroots-based compositors";
     mainProgram = "nwg-wrapper";
     homepage = "https://github.com/nwg-piotr/nwg-wrapper/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

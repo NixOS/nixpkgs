@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
     patchelf --set-rpath ${lib.makeLibraryPath [ wayland ]} $out/bin/waylevel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to print wayland toplevels and other compositor info";
     homepage = "https://git.sr.ht/~shinyzenith/waylevel";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    platforms = lib.platforms.linux;
     mainProgram = "waylevel";
   };
 }

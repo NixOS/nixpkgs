@@ -15,7 +15,6 @@
   pygments,
   python,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools-scm,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "django-silk";
   version = "5.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -84,11 +81,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
     changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

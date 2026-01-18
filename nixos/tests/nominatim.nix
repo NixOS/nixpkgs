@@ -10,10 +10,7 @@ in
 {
   name = "nominatim";
   meta = {
-    maintainers = with lib.teams; [
-      geospatial
-      ngi
-    ];
+    maintainers = with lib.teams; geospatial.members ++ ngi.members;
   };
 
   nodes = {
@@ -62,14 +59,34 @@ in
       { config, pkgs, ... }:
       {
         # Database password
-        system.activationScripts = {
-          passwordFile.text = with config.services.nominatim.database; ''
-            mkdir -p /run/secrets
-            echo "${host}:${toString port}:${dbname}:${apiUser}:password" \
-              > /run/secrets/pgpass
-            chown nominatim-api:nominatim-api /run/secrets/pgpass
-            chmod 0600 /run/secrets/pgpass
-          '';
+        systemd.services.nominatim = {
+          serviceConfig.ExecStartPre =
+            let
+              createPasswordFile = lib.getExe (
+                pkgs.writeShellApplication {
+                  name = "nominatim-pre-start";
+                  text =
+                    let
+                      inherit (config.services.nominatim.database)
+                        host
+                        port
+                        dbname
+                        apiUser
+                        ;
+                    in
+                    ''
+                      mkdir -p /run/secrets
+                      echo "${host}:${toString port}:${dbname}:${apiUser}:password" \
+                        > /run/secrets/pgpass
+                      chown nominatim-api:nominatim-api /run/secrets/pgpass
+                      chmod 0600 /run/secrets/pgpass
+                    '';
+                }
+              );
+            in
+            [
+              "+${createPasswordFile}"
+            ];
         };
 
         # Nominatim

@@ -20,11 +20,11 @@ buildHomeAssistantComponent rec {
     sed -i "/pip>=/d" custom_components/average/manifest.json
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Limych/ha-average/releases/tag/${version}";
     description = "Average Sensor for Home Assistant";
     homepage = "https://github.com/Limych/ha-average";
-    maintainers = with maintainers; [ matthiasbeyer ];
-    license = licenses.cc-by-nc-40;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.cc-by-nc-40;
   };
 }

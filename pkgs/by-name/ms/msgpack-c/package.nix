@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  meta = with lib; {
+  meta = {
     description = "MessagePack implementation for C";
     homepage = "https://github.com/msgpack/msgpack-c";
     changelog = "https://github.com/msgpack/msgpack-c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.boost;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 })

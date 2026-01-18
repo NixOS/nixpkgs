@@ -19,14 +19,12 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "9.0.1";
+  version = "9.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LlksrSIAxalPu/9jm/825uyRIvNLNrL8a01njZ6Y8pw=";
+    hash = "sha256-2ZLt1pipnUXy2QWa8cmujwhtGu7bPoBDYCmi8o0Gn4M=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -58,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ipyparallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
     changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

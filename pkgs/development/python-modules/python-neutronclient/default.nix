@@ -14,7 +14,6 @@
   oslo-log,
   oslo-serialization,
   oslo-utils,
-  os-client-config,
   keystoneauth1,
   python-keystoneclient,
   requests,
@@ -33,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.6.0";
+  version = "11.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-neutronclient";
     tag = version;
-    hash = "sha256-nz7KiFe8IWJypGCjFgrEgGTEsC0xlW3YG/QRNJUzcpc=";
+    hash = "sha256-nkKADTdqYaPMmQU8Fulc8rE5lmMwPjFonyvMNOBvulA=";
   };
 
   env.PBR_VERSION = version;
@@ -60,7 +59,6 @@ buildPythonPackage rec {
     oslo-log
     oslo-serialization
     oslo-utils
-    os-client-config
     keystoneauth1
     python-keystoneclient
     requests
@@ -89,10 +87,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neutronclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the OpenStack Networking API";
     homepage = "https://github.com/openstack/python-neutronclient/";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

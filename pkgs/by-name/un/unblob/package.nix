@@ -122,8 +122,6 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ runtimeDeps;
 
-  versionCheckProgramArg = "--version";
-
   pytestFlags = [
     "--no-cov"
   ];

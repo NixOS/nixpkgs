@@ -3,9 +3,9 @@
   mkKdeDerivation,
   replaceVars,
   sshfs,
+  qtbase,
   qtconnectivity,
   qtmultimedia,
-  qtwayland,
   pkg-config,
   wayland,
   wayland-protocols,
@@ -30,13 +30,12 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtconnectivity
     qtmultimedia
-    qtwayland
     wayland
     wayland-protocols
     libfakekey
   ];
 
   extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
   ];
 }

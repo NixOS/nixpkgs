@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-mfmG2VzBc9bRAjAF2a46JA6fzeXViVkTFUJYEIV44qo=";
 
-  meta = with lib; {
+  meta = {
     description = "'ls' replacement you never knew you needed";
     homepage = "https://github.com/willdoescode/nat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "natls";
   };
 }

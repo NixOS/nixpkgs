@@ -38,9 +38,9 @@ mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
-    platforms = platforms.linux ++ platforms.darwin;
+  meta = {
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://invent.kde.org/frameworks/extra-cmake-modules";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

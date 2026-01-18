@@ -12,6 +12,16 @@ let
   enabledInstances = lib.filterAttrs (_: conf: conf.enable) cfg.instances;
   instanceName = name: if name == "" then "anubis" else "anubis-${name}";
 
+  unixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
+  unixSocketAddrs =
+    settings:
+    lib.filter (x: x != "") [
+      (unixAddr settings.BIND_NETWORK settings.BIND)
+      (unixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
+    ];
+  instanceUsesUnixSockets = instance: lib.length (unixSocketAddrs instance.settings) > 0;
+  runtimeDirectoryPrefix = name: "/run/anubis/${instanceName name}/";
+
   commonSubmodule =
     isDefault:
     let
@@ -182,9 +192,12 @@ let
     options = {
       # see other options above
       BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}.sock";
+        default = "${runtimeDirectoryPrefix name}anubis.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
+          When using unix sockets:
+          - use the prefix "${runtimeDirectoryPrefix ""}" if the instance name is the empty string,
+          - "${runtimeDirectoryPrefix "<name>"}" otherwise.
 
           Defaults to Unix domain sockets. To use TCP sockets, set this to a TCP address and `BIND_NETWORK` to `"tcp"`.
         '';
@@ -192,10 +205,13 @@ let
         type = types.str;
       };
       METRICS_BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}-metrics.sock";
+        default = "${runtimeDirectoryPrefix name}anubis-metrics.sock";
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
+          When using unix sockets:
+          - use the prefix "${runtimeDirectoryPrefix ""}" if the instance name is the empty string,
+          - "${runtimeDirectoryPrefix "<name>"}" otherwise.
 
           The metrics server is enabled by default and may be disabled. However, due to implementation details, this is
           only possible by setting a command line flag. See {option}`services.anubis.defaultOptions.extraFlags` for an
@@ -245,6 +261,25 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
+    assertions =
+      let
+        validInstanceUnixSocketAddrs =
+          name: instance:
+          lib.all (lib.hasPrefix (runtimeDirectoryPrefix name)) (unixSocketAddrs instance.settings);
+      in
+      [
+        {
+          assertion = lib.all (attrs: validInstanceUnixSocketAddrs attrs.name attrs.value) (
+            lib.attrsToList enabledInstances
+          );
+          message = ''
+            When using unix sockets in services.anubis.instances.<name>.settings.BIND and services.anubis.instances.<name>.settings.METRICS_BIND:
+              - use the prefix "${runtimeDirectoryPrefix ""}" if the instance name is the empty string,
+              - "${runtimeDirectoryPrefix "<name>"}" otherwise.
+          '';
+        }
+      ];
+
     users.users = lib.mkIf (cfg.defaultOptions.user == "anubis") {
       anubis = {
         isSystemUser = true;
@@ -287,20 +322,7 @@ in
           ExecStart = lib.concatStringsSep " " (
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
-          RuntimeDirectory =
-            if
-              lib.any (lib.hasPrefix "/run/anubis") (
-                with instance.settings;
-                [
-                  BIND
-                  METRICS_BIND
-                ]
-              )
-            then
-              "anubis"
-            else
-              null;
-
+          RuntimeDirectory = if instanceUsesUnixSockets instance then "anubis/${instanceName name}" else null;
           # hardening
           NoNewPrivileges = true;
           CapabilityBoundingSet = null;

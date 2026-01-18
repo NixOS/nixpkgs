@@ -1,11 +1,11 @@
 {
   lib,
-  apple-sdk_14,
   buildNpmPackage,
   cargo,
   copyDesktopItems,
+  dart-sass,
   darwin,
-  electron_36,
+  electron_37,
   fetchFromGitHub,
   gnome-keyring,
   jq,
@@ -25,7 +25,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_36;
+  electron = electron_37;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.8.2";
+  version = "2025.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-cYSzAdrUvZrYPQ01uPJ6I1yJvTQtdV2rV0GTF6yKVCk=";
+    hash = "sha256-i+hLslZ2i94r04vaOzx9e55AR8aXa9sSK8el+Dcp05A=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-1SDXXsfyJDMjg4v0i9jDh7Y7m6LXd0vW4g0vRLeDXD8=";
+  npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -97,7 +97,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-NWdzdlsRTUoipTCIe/q4jehNBzf9/sBVW0qf6iTsbhU=";
+    hash = "sha256-rA9zY9TAF6DnsTT3MzU18VeQDm6m25gjZ0rcmnbZb8E=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -108,6 +108,7 @@ buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    dart-sass
     jq
     makeWrapper
     napi-rs-cli
@@ -124,15 +125,14 @@ buildNpmPackage' rec {
     darwin.autoSignDarwinBinariesHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ];
-
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    # force our dart-sass executable
+    echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
 
     pushd apps/desktop/desktop_native/napi
     npm run build

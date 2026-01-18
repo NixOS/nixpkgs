@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/cctz";
     description = "C++ library for translating between absolute and civil times";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

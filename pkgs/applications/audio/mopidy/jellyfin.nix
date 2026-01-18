@@ -28,10 +28,10 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "mopidy_jellyfin" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jellyfin/mopidy-jellyfin";
     description = "Mopidy extension for playing audio files from Jellyfin";
-    license = licenses.asl20;
-    maintainers = [ maintainers.pstn ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.pstn ];
   };
 }

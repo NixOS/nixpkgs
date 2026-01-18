@@ -15,12 +15,12 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = extraCommandLineArgs;
 
-  version = "0.2.38";
+  version = "0.8.86";
   pname = "kiro";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.100.3";
+  vscodeVersion = "1.103.2";
 
   executableName = "kiro";
   longName = "Kiro";
@@ -43,7 +43,10 @@ in
     homepage = "https://kiro.dev";
     license = lib.licenses.amazonsl;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ vuks ];
+    maintainers = with lib.maintainers; [
+      vuks
+      jamesward
+    ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

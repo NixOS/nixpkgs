@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "8.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";
@@ -51,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "marshmallow_dataclass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatic generation of marshmallow schemas from dataclasses";
     homepage = "https://github.com/lovasoa/marshmallow_dataclass";
     changelog = "https://github.com/lovasoa/marshmallow_dataclass/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -23,7 +23,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/jca02266/lha";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      sander
       momeemt
     ];
     # Some of the original LHa code has been rewritten and the current author

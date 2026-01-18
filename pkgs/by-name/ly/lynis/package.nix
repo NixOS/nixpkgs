@@ -7,15 +7,15 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lynis";
-  version = "3.1.5";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "CISOfy";
     repo = "lynis";
-    rev = version;
-    sha256 = "sha256-XMgC6KjkLgjSOBHBx7WM7C2Vm3Z/lto7CFs10kIxwZc=";
+    tag = finalAttrs.version;
+    hash = "sha256-XMgC6KjkLgjSOBHBx7WM7C2Vm3Z/lto7CFs10kIxwZc=";
   };
 
   nativeBuildInputs = [
@@ -28,22 +28,23 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -d $out/bin $out/share/lynis/plugins
-    cp -r include db default.prf $out/share/lynis/
-    cp -a lynis $out/bin
-    wrapProgram "$out/bin/lynis" --prefix PATH : ${lib.makeBinPath [ gawk ]}
+    install -d $out/bin $out/share/lynis
+    install -Dm555 -t $out/libexec lynis
+    cp -r include db default.prf plugins $out/share/lynis/
+    makeWrapper "$out/libexec/lynis" "$out/bin/lynis" \
+      --prefix PATH : ${lib.makeBinPath [ gawk ]}
 
     installManPage lynis.8
     installShellCompletion --bash --name lynis.bash \
       extras/bash_completion.d/lynis
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Security auditing tool for Linux, macOS, and UNIX-based systems";
     mainProgram = "lynis";
     homepage = "https://cisofy.com/lynis/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ryneeverett ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ryneeverett ];
   };
-}
+})

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
 }:
 
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "simplehound";
   version = "0.6";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "robmarkcole";
@@ -30,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplehound" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Sighthound";
     homepage = "https://github.com/robmarkcole/simplehound";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

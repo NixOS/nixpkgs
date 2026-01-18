@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   ninja,
+  go,
   python3,
   qtbase,
   qt5compat,
@@ -27,16 +28,31 @@
   rustc-demangle,
   elfutils,
   perf,
+  callPackage,
+  buildGoModule,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
   pname = "qtcreator";
-  version = "17.0.1";
-
+  version = "18.0.1";
   src = fetchurl {
-    url = "mirror://qt/official_releases/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.version}/qt-creator-opensource-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9WcYCEdnBzkami7bmWPqSmtrkMeMvnTs4aygxrQuUYQ=";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-aQQ2lGfefL4swAk/K8LTfZ6NtNKqXTKblyraXrFzy1E=";
   };
+  goModules =
+    (buildGoModule {
+      pname = "gocmdbridge";
+      version = "1.0.0";
+      inherit src;
+      vendorHash = "sha256-PUMQdVlf6evLjzs263SAecIA3aMuMbjIr1xEztiwmro=";
+      setSourceRoot = ''
+        sourceRoot=$(echo */src/libs/gocmdbridge/server)
+      '';
+    }).goModules;
+in
+stdenv.mkDerivation {
+  inherit pname;
+  inherit version;
+  inherit src;
 
   nativeBuildInputs = [
     cmake
@@ -45,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     python3
     ninja
+    go
   ];
 
   buildInputs = [
@@ -86,7 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_QBS" false)
     (lib.cmakeBool "QTC_CLANG_BUILDMODE_MATCH" true)
     (lib.cmakeBool "CLANGTOOLING_LINK_CLANG_DYLIB" true)
+    (lib.cmakeBool "CMDBRIDGE_BUILD_VENDOR_MODE" true)
   ];
+
+  preConfigure = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    cp -r --reflink=auto ${goModules} src/libs/gocmdbridge/server/vendor
+  '';
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
@@ -104,6 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ''${!outputDev}/lib/cmake/QtCreator/QtCreatorConfig.cmake --replace "$out/" ""
   '';
 
+  passthru = {
+    withPackages = callPackage ./with-plugins.nix { };
+  };
+
   meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
@@ -120,4 +148,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "qtcreator";
   };
-})
+}

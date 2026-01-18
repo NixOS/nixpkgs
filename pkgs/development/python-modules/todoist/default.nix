@@ -3,15 +3,12 @@
   fetchPypi,
   buildPythonPackage,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "todoist-python";
   version = "8.1.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "todoist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Todoist Python API library";
     homepage = "https://todoist-python.readthedocs.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

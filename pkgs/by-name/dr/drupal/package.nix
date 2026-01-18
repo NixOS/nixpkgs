@@ -8,18 +8,18 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "drupal";
-  version = "11.2.4";
+  version = "11.3.1";
 
   src = fetchFromGitLab {
     domain = "git.drupalcode.org";
     owner = "project";
     repo = "drupal";
     tag = finalAttrs.version;
-    hash = "sha256-5uzq7zQHWJGi+YU9diRNSlSHIguypTXgOmtgAbF5TBU=";
+    hash = "sha256-dVCDIKqLbYHlVwv5wveXG0oHc2g3Zl6J6LG1/e8IIZw=";
   };
 
-  vendorHash = "sha256-7jZRZ2qlQ7V5Y+aHScR31rahfoYF0p2yiiFiFHgDqa0=";
   composerNoPlugins = false;
+  vendorHash = "sha256-7FwwkPTKc/miStdHv1wfLoZhV4Gku1KwNgSlWdpPG8g=";
 
   passthru = {
     tests = {
@@ -28,8 +28,11 @@ php.buildComposerProject2 (finalAttrs: {
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update xmlstarlet
+
       set -eu -o pipefail
-      version=$(curl -k --silent --globoff "https://updates.drupal.org/release-history/drupal/current" | xmlstarlet sel -t -v "project/releases/release[1]/tag")
+
+      version=$(curl -k --silent --globoff "https://updates.drupal.org/release-history/drupal/current" | xmlstarlet sel -t -v "/project/releases/release/tag[not(contains(., 'alpha'))][not(contains(., 'beta'))][not(contains(., '-rc'))]" | grep -m 1 '.')
+
       nix-update drupal --version $version
     '';
   };

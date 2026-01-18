@@ -37,6 +37,7 @@ writeScriptBin "nvidia-cdi-generator" ''
       }
       --discovery-mode ${discovery-mode} \
       --device-name-strategy ${device-name-strategy} \
+      --disable-hook create-symlinks \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
       --nvidia-cdi-hook-path ${lib.getOutput "tools" nvidia-container-toolkit}/bin/nvidia-cdi-hook \

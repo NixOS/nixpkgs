@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
       "STATIC=${static}"
     ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -std=gnu17";
+
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig
     mv $out/lib/*.pc $dev/lib/pkgconfig
@@ -62,13 +64,13 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
     mainProgram = "libxsmm_gemm_generator";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ chessai ];
   };
 }

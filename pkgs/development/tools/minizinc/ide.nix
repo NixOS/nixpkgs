@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-wYS46keOPPQLs0fFeSeb2wz+VX6A1UUGjiGzHZhPxVk=";
+    hash = "sha256-ZESd83aqXr4vxEt9PvgarnELPi9BaEf68IUALYaTfzI=";
     fetchSubmodules = true;
   };
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
     mainProgram = "MiniZincIDE";
@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
       that it can be mapped onto existing solvers easily and consistently.
       It is a subset of the higher-level language Zinc.
     '';
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.dtzWill ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -30,7 +30,7 @@ in
   options = {
     services.synapse-auto-compressor = {
       enable = lib.mkEnableOption "synapse-auto-compressor";
-      package = lib.mkPackageOption pkgs "rust-synapse-state-compress" { };
+      package = lib.mkPackageOption pkgs "rust-synapse-compress-state" { };
       postgresUrl = lib.mkOption {
         default =
           let
@@ -136,7 +136,7 @@ in
           "-n"
           cfg.settings.chunks_to_compress
           "-l"
-          (lib.concatStringsSep "," (builtins.map builtins.toString cfg.settings.levels))
+          (lib.concatStringsSep "," (map toString cfg.settings.levels))
         ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

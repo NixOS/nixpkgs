@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pyfluidsynth";
   version = "1.3.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fluidsynth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for FluidSynth, a MIDI synthesizer that uses SoundFont instruments";
     homepage = "https://github.com/nwhitehead/pyfluidsynth";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
 }

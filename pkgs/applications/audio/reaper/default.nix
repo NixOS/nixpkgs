@@ -11,7 +11,7 @@
   curl,
   gtk3,
   lame,
-  libxml2,
+  libxml2_13,
   ffmpeg,
   vlc,
   xdg-utils,
@@ -38,17 +38,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.46";
+  version = "7.55";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-uGWeaRl01rH7+RrMoqAv85EiKJ3/qUFiQVt1zILVJTQ="
+        "sha256-meTuaGH9zwx/sT+h0I7JRSCRPD8AryGPvoHUKbyzpHA="
       else
         {
-          x86_64-linux = "sha256-8XEy7IXjjw7WbPxpxFP30ivMgi0/iWbtljuYCQ2BzDI=";
-          aarch64-linux = "sha256-H+lvnpaKESad0DI9l1AexFxgwPi9EidVR1Gh6oITjHQ=";
+          x86_64-linux = "sha256-BOjS39GySB6ptiEJvwlShL4ZcDot2nsKXCAU/CeMEIc=";
+          aarch64-linux = "sha256-oqEwEQKFhpaFMqzcSc28v0njuiMi5CAGjP3fLDECUXU=";
         }
         .${stdenv.hostPlatform.system};
   };
@@ -110,13 +110,13 @@ stdenv.mkDerivation rec {
         # Setting the rpath of the plugin shared object files does not
         # seem to have an effect for some plugins.
         # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
-        # Note that libcurl and libxml2 are needed for ReaPack to run.
+        # Note that libcurl and libxml2_13 are needed for ReaPack to run.
         wrapProgram $out/opt/REAPER/reaper \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
               lame
-              libxml2
+              libxml2_13
               ffmpeg
               vlc
               xdotool
@@ -127,27 +127,29 @@ stdenv.mkDerivation rec {
         mkdir $out/bin
         ln -s $out/opt/REAPER/reaper $out/bin/
 
+        # Avoid store path in Exec, since we already link to $out/bin
+        substituteInPlace $out/share/applications/cockos-reaper.desktop \
+          --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
         runHook postInstall
       '';
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atinba
       ilian
-      orivej
-      uniquepointer
       viraptor
     ];
   };

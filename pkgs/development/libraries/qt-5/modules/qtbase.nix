@@ -17,7 +17,6 @@
   python3,
   which,
   # darwin support
-  apple-sdk_14,
   xcbuild,
 
   dbus,
@@ -86,11 +85,6 @@ let
       "linux-generic-g++"
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
-
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
-  darwinVersionInputs = [
-    apple-sdk_14
-  ];
 in
 
 stdenv.mkDerivation (
@@ -153,10 +147,9 @@ stdenv.mkDerivation (
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
         lib.optional withLibinput libinput ++ lib.optional withGtk3 gtk3
       )
-      ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
       ++ lib.optional developerBuild gdb
       ++ lib.optional (cups != null) cups
-      ++ lib.optional (mysqlSupport) libmysqlclient
+      ++ lib.optional mysqlSupport libmysqlclient
       ++ lib.optional (libpq != null) libpq;
 
       nativeBuildInputs = [
@@ -168,7 +161,7 @@ stdenv.mkDerivation (
         pkg-config
         which
       ]
-      ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
+      ++ lib.optionals mysqlSupport [ libmysqlclient ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     }
@@ -339,11 +332,11 @@ stdenv.mkDerivation (
         );
       }
       // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-        NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
+        NIX_CFLAGS_COMPILE_FOR_BUILD = toString [
           "-Wno-warn=free-nonheap-object"
           "-Wno-free-nonheap-object"
           "-w"
-        ]);
+        ];
       };
 
       prefixKey = "-prefix ";
@@ -493,7 +486,7 @@ stdenv.mkDerivation (
             "-I"
             "${cups.dev}/include"
           ]
-          ++ lib.optionals (mysqlSupport) [
+          ++ lib.optionals mysqlSupport [
             "-L"
             "${libmysqlclient}/lib"
             "-I"
@@ -544,19 +537,18 @@ stdenv.mkDerivation (
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.qt.io/";
         description = "Cross-platform application framework for C++";
-        license = with licenses; [
+        license = with lib.licenses; [
           fdl13Plus
           gpl2Plus
           lgpl21Plus
           lgpl3Plus
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           qknight
           ttuegel
-          periklis
           bkchr
         ];
         pkgConfigModules = [
@@ -578,7 +570,7 @@ stdenv.mkDerivation (
           "Qt5Widgets"
           "Qt5Xml"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
       };
 
     }

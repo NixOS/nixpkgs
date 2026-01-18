@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/sshlatex --prefix PATH : "${binPath}"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of hacks to efficiently run LaTeX via ssh";
     longDescription = ''
       sshlatex is a tool which uploads LaTeX source files to a remote, runs
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/iblech/sshlatex";
     license = lib.licenses.gpl3Plus; # actually dual-licensed gpl3Plus | lppl13cplus
     platforms = lib.platforms.all;
-    maintainers = [ maintainers.iblech ];
+    maintainers = [ lib.maintainers.iblech ];
     mainProgram = "sshlatex";
   };
 }

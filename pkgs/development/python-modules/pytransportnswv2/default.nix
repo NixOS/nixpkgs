@@ -4,22 +4,18 @@
   fetchPypi,
   gtfs-realtime-bindings,
   httpx,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytransportnswv2";
-  version = "2.0.2";
+  version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    pname = "PyTransportNSWv2";
-    inherit version;
-    hash = "sha256-hJy3oUyi+7o3ICWNiPXv944SsfOHQJutIYYyXv9Phbg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-tTbwbT1320kdr4pm9KyPXIdrZknJENPzPrbzEuCxb2k=";
   };
 
   build-system = [ setuptools ];
@@ -35,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "TransportNSWv2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to access Transport NSW information";
     homepage = "https://github.com/andystewart999/TransportNSW";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

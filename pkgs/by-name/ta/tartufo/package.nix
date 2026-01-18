@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tartufo";
-  version = "5.0.2";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "godaddy";
     repo = "tartufo";
     tag = "v${version}";
-    hash = "sha256-s7gqGvOnie7lGlpW3wfd8igWfowxwg9mftRjiHnvedc=";
+    hash = "sha256-GWxDGsoWVKjg/2zTPx+xsMmrBp6yAC5pq5/AALmY7No=";
   };
 
   pythonRelaxDeps = [

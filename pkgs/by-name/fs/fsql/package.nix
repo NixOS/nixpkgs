@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Search through your filesystem with SQL-esque queries";
     homepage = "https://github.com/kshvmdn/fsql";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "fsql";
   };
 }

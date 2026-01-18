@@ -1,7 +1,6 @@
 {
   lib,
   isPyPy,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   nix-update-script,
@@ -44,16 +43,14 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.42";
+  version = "2.0.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-e/DkS9CioMLG/qMOf0//DxMFDTep4xEtCVTp/Hn0Wiw=";
+    hash = "sha256-ZAiRR456KkSdXkCiy+TXjdeOJwrLlmVxJfl1x8/XHIs=";
   };
 
   postPatch = ''
@@ -117,12 +114,12 @@ buildPythonPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }";
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

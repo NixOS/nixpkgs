@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "cssutils";
@@ -48,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
     changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

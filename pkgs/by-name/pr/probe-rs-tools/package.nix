@@ -2,24 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   cmake,
   pkg-config,
   libusb1,
   openssl,
 }:
 
+let
+  # udev rules are in another unversioned repo
+  udevRules = fetchurl {
+    url = "https://raw.githubusercontent.com/probe-rs/webpage/054a0b16831593091a8a5624d0e2305573e860ee/public/files/69-probe-rs.rules";
+    hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.29.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${version}";
-    hash = "sha256-/gP9abygktYSzg/054o1PEcQywiPFTtKNdUdI3hCYyc=";
+    hash = "sha256-3tVCsMXrNTFhTQit4PNTXtHOXq8GSEWdLBJ9iqtgWyQ=";
   };
 
-  cargoHash = "sha256-txHl0+HDCVdmbZppGsFqPjsEbPBCJVEB3XZWZJBBoOk=";
+  cargoHash = "sha256-CL+aTPllQqa22ENU2FWhBMSe0Mf1MAfemytIiqf0bHk=";
 
   buildAndTestSubdir = pname;
 
@@ -34,6 +42,10 @@ rustPlatform.buildRustPackage rec {
     libusb1
     openssl
   ];
+
+  postInstall = ''
+    install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  '';
 
   checkFlags = [
     # require a physical probe

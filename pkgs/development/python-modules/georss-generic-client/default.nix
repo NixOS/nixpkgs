@@ -4,14 +4,12 @@
   fetchFromGitHub,
   georss-client,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "georss-generic-client";
   version = "0.8";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
@@ -26,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "georss_generic_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing generic GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-generic-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   tls-client,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "openaiauth";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "OpenAIAuth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for authenticating with the OpenAI API";
     homepage = "https://github.com/acheong08/OpenAIAuth";
     changelog = "https://github.com/acheong08/OpenAIAuth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ realsnick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ logger ];
   };
 }

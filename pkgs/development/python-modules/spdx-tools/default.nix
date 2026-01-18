@@ -70,11 +70,11 @@ buildPythonPackage rec {
     "test_json_writer"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SPDX parser and tools";
     homepage = "https://github.com/spdx/tools-python";
     changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

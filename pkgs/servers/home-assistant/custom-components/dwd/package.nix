@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "hg1337";
   domain = "dwd";
-  version = "2025.5.0";
+  version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "hg1337";
     repo = "homeassistant-dwd";
     rev = version;
-    hash = "sha256-CuoHVgk4jWDEe3OkzFCok8YqVkWLJF6Rl7i/SDeSU50=";
+    hash = "sha256-hhuSVHa0HgIPGXH9LJg5r0OTRrlY5fX1Ec+C8ZeNiPM=";
   };
 
   dependencies = [ defusedxml ];
@@ -22,11 +22,11 @@ buildHomeAssistantComponent rec {
   # defusedxml version mismatch
   dontCheckManifest = true;
 
-  meta = with lib; {
+  meta = {
     description = "Custom component for Home Assistant that integrates weather data (measurements and forecasts) of Deutscher Wetterdienst";
     homepage = "https://github.com/hg1337/homeassistant-dwd";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hexa
       emilylange
     ];

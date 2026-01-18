@@ -27,9 +27,6 @@ let
       cl-cairo2-xlib = super.cl-cairo2-xlib.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.gtk2-x11 ];
       });
-      cl-freeimage = super.cl-freeimage.overrideLispAttrs (o: {
-        nativeLibs = [ pkgs.freeimage ];
-      });
       cl-freetype2 = super.cl-freetype2.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.freetype ];
         nativeBuildInputs = [ pkgs.freetype ];

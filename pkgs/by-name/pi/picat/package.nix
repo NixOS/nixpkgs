@@ -2,17 +2,27 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   zlib,
 }:
 
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.8#7";
+  version = "3.9#4";
 
   src = fetchurl {
-    url = "https://picat-lang.org/download/picat387_src.tar.gz";
-    hash = "sha256-H+aFmagdb7jU4LZCYrNPa4ZWVB1ziiJHrUe4b1ImWks=";
+    url = "https://picat-lang.org/download/picat394_src.tar.gz";
+    hash = "sha256-dAYiV2zG2Z01qBshsqORL9oR2NvNnRavvGSDaOEJdDk=";
   };
+
+  patches = [
+    # Fix build with GCC 15
+    # https://github.com/picat-lang/Picat/pull/1
+    (fetchpatch {
+      url = "https://github.com/picat-lang/Picat/commit/c50265dc565f1637e3d22c92b4bf9c4c79d57a03.patch";
+      hash = "sha256-21F35CVNgX4Zj0pK0zUyJaVpK0e399lQXD7vQf7GXgQ=";
+    })
+  ];
 
   buildInputs = [ zlib ];
 

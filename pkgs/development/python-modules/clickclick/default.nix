@@ -1,19 +1,20 @@
 {
   lib,
   buildPythonPackage,
+  click,
   fetchFromGitea,
   flake8,
-  click,
-  pyyaml,
-  six,
-  pytestCheckHook,
   pytest-cov-stub,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "clickclick";
   version = "20.10.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -23,23 +24,32 @@ buildPythonPackage rec {
     hash = "sha256-gefU6CI4ibtvonsaKZmuffuUNUioBn5ODs72BI5zXOw=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flake8
     click
     pyyaml
     six
   ];
 
-  # test_cli asserts on exact quoting style of output
-  disabledTests = [ "test_cli" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "clickclick" ];
+
+  disabledTests = [
+    # Tests asserts on exact quoting style of output
+    "test_choice_default"
+    "test_cli"
+  ];
+
+  meta = {
     description = "Click command line utilities";
     homepage = "https://codeberg.org/hjacobs/python-clickclick/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

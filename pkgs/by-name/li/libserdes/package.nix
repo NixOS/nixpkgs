@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libserdes";
-  version = "7.9.2";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "libserdes";
     rev = "v${version}";
-    hash = "sha256-rg4SWa9nIDT6JrnnCDwdiFE1cvpUn0HWHn+bPkXMHQ4=";
+    hash = "sha256-zEBJD7DOhpxfkAPypCZhygA6uaXIdK4yXZtDiuGA5Yg=";
   };
 
   outputs = [
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
     homepage = "https://github.com/confluentinc/libserdes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ liff ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ liff ];
+    platforms = lib.platforms.all;
   };
 }

@@ -16,7 +16,9 @@
   dask,
   dask-awkward,
   dask-histogram,
+  fsspec,
   hist,
+  ipywidgets,
   lz4,
   matplotlib,
   mplhep,
@@ -26,6 +28,7 @@
   pandas,
   pyarrow,
   requests,
+  rich,
   scipy,
   toml,
   tqdm,
@@ -41,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.7.3";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-lCrmWcVzu8Ls0a+r2D1DMZ/Ysq3H9bPj13XOmAS1M5I=";
+    hash = "sha256-vv1eHb8vt4nxdnpLmE0J5g/3oYmcoIykKCuOcQoxA60=";
   };
 
   build-system = [
@@ -69,7 +72,9 @@ buildPythonPackage rec {
     dask
     dask-awkward
     dask-histogram
+    fsspec
     hist
+    ipywidgets
     lz4
     matplotlib
     mplhep
@@ -79,6 +84,7 @@ buildPythonPackage rec {
     pandas
     pyarrow
     requests
+    rich
     scipy
     toml
     tqdm

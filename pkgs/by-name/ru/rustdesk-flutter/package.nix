@@ -4,8 +4,8 @@
   cargo,
   copyDesktopItems,
   fetchFromGitHub,
-  flutter,
-  ffmpeg,
+  flutter329,
+  ffmpeg_7,
   gst_all_1,
   fuse3,
   libXtst,
@@ -30,11 +30,13 @@
   yq,
   callPackage,
   addDriverRunpath,
+  perl,
+  openssl,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.1/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.4/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -56,41 +58,33 @@ let
   };
 
   ffigen = callPackage ./ffigen {
-    inherit flutter;
+    flutter = flutter329;
   };
 
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-nS8KjLzgdzgvn5mM1lJL2vFk0g/ZUZBvdkjyC+MdHDE=";
+    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
   };
 
   strictDeps = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
+  env.OPENSSL_NO_VENDOR = true;
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
   # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = {
-    dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
-    desktop_multi_window = "sha256-NOe0jMcH02c0TDTtv62OMTR/qDPnRQrRe73vXDuEq8Q=";
-    dynamic_layouts = "sha256-eFp1YVI6vI2HRgtE5nTqGZIylB226H0O8kuxy9ypuf8=";
-    flutter_gpu_texture_renderer = "sha256-EZa1FOMbcwdVs/m0vsUvlHv+MifPby4I97ZFe1bqmwQ=";
-    window_manager = "sha256-40mwj4D8W2xW8C7RshTjOhelOiLPM7uU9rsF4NvQn8c=";
-    window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
-    texture_rgba_renderer = "sha256-V/bmT/5x+Bt7kdjLTkgkoXdBcFVXxPyp9kIUhf+Rnt4=";
-    uni_links = "sha256-O2BgNwu5HFRQyaNkskWHORx8pZhdwEjtljvw1+zFzfo=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   # Configure the Rust build
   cargoRoot = "..";
@@ -101,7 +95,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-ecLR6cMVDrTKeoTE5Yxkw5dN4ceAm+RD7BVXwIQ1fnk=";
+    hash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
   };
 
   dontCargoBuild = true;
@@ -125,10 +119,11 @@ flutter.buildFlutterApplication rec {
     rustPlatform.bindgenHook
     ffigen
     yq
+    perl
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -144,6 +139,7 @@ flutter.buildFlutterApplication rec {
     libyuv
     pam
     xdotool
+    openssl
   ];
 
   prePatch = ''
@@ -170,6 +166,8 @@ flutter.buildFlutterApplication rec {
         --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
       sed -i 's/static=//g' $cargoDepsCopy/hwcodec-*/build.rs
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
     fi
 
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""
@@ -250,7 +248,10 @@ flutter.buildFlutterApplication rec {
     homepage = "https://rustdesk.com";
     changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };

@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libucl";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
     rev = version;
-    sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
+    sha256 = "sha256-dub829xZ10sJ5qwegYUiGoyAVLiwg44GKSzz+BMLJis=";
   };
 
   nativeBuildInputs = [
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     feat: enabled: lib.strings.enableFeature enabled feat
   ) features;
 
-  meta = with lib; {
+  meta = {
     description = "Universal configuration library parser";
     homepage = "https://github.com/vstakhov/libucl";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jpotier ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jpotier ];
   };
 }

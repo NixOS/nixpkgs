@@ -4,29 +4,25 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   legacy-cgi,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250922.1";
+  version = "20260110.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uIoPrUMP9i+EDTJXboGdaSVBvZ7aqgVXixNLss0lFyc=";
+    hash = "sha256-YBcZB9q54pphCDObUgRqPe6LUO99ojLTK4Gqwuv0RaA=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  checkInputs = [ legacy-cgi ];
 
   enabledTestPaths = [
     "tests/*.py"
@@ -53,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ wamserma ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

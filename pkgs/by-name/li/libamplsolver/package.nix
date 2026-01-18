@@ -25,6 +25,16 @@ stdenv.mkDerivation {
     })
   ];
 
+  env = {
+    # For non-trapping FP architectures like loongarch64 and riscv64
+    NIX_CFLAGS_COMPILE = lib.optionalString (
+      stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
+    ) "-DNO_fpu_control";
+    # Allow install_name_tool rewrite paths on darwin.
+    #   error: install_name_tool: changing install names or rpaths can't be redone for: /nix/store/...-libamplsolver-.../lib/libamplsolver.dylib (for architecture arm64) because larger updated load commands do not fit (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  };
+
   installPhase = ''
     runHook preInstall
     pushd sys.$(uname -m).$(uname -s)
@@ -40,12 +50,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library of routines that help solvers work with AMPL";
     homepage = "https://ampl.com/netlib/ampl/";
-    license = [ licenses.mit ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aanderse ];
+    license = [ lib.licenses.mit ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aanderse ];
     # generates header at compile time
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

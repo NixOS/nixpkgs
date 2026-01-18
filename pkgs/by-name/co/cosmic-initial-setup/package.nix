@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   just,
+  killall,
   libcosmicAppHook,
   libinput,
   openssl,
@@ -13,16 +14,19 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.2";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-kjJqGNcIlnzEsfA4eQ9D23ZGgRcmWQyWheAlwpjfALA=";
+    hash = "sha256-g1FJiJSyPZTJ1G8cW8A0sxbIUeG3JcjJYo6qHp639d4=";
   };
 
-  cargoHash = "sha256-orwK9gcFXK4/+sfwRubcz0PP6YAFqsENRHnlSLttLxM=";
+  cargoHash = "sha256-co7fOPjNLi32XRXKdmCWC+bWhEljsdSc/scasghG4/8=";
+
+  buildFeatures = [ "nixos" ];
 
   # cargo-auditable fails during the build when compiling the `crabtime::function`
   # procedural macro. It panics because the `--out-dir` flag is not passed to
@@ -38,15 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    killall
     libinput
     openssl
     udev
-  ];
-
-  # These are not needed for NixOS
-  patches = [
-    ./disable-language-page.patch
-    ./disable-timezone-page.patch
   ];
 
   postPatch = ''
@@ -55,6 +54,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail \
       "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
       "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
+  '';
+
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
   '';
 
   dontUseJustBuild = true;
@@ -83,8 +86,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

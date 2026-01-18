@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : '${lib.makeBinPath liveDeps}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "No bullshit 0x0.st client";
     homepage = "https://github.com/ptpb/pb_cli";
-    maintainers = [ maintainers.ar1a ];
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.ar1a ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pb";
   };
 }

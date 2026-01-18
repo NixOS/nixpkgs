@@ -10,9 +10,6 @@
   name ? "zig-packages",
 }:
 
-with builtins;
-with lib;
-
 let
   unpackZigArtifact =
     { name, artifact }:
@@ -41,9 +38,9 @@ let
       rev ? throw "rev is required, remove and regenerate the zon2json-lock file",
     }:
     let
-      parts = splitString "#" url;
-      url_base = elemAt parts 0;
-      url_without_query = elemAt (splitString "?" url_base) 0;
+      parts = lib.splitString "#" url;
+      url_base = lib.elemAt parts 0;
+      url_without_query = lib.elemAt (lib.splitString "?" url_base) 0;
     in
     fetchgit {
       inherit name rev hash;
@@ -59,9 +56,9 @@ let
       ...
     }@args:
     let
-      parts = splitString "://" url;
-      proto = elemAt parts 0;
-      path = elemAt parts 1;
+      parts = lib.splitString "://" url;
+      proto = lib.elemAt parts 0;
+      path = lib.elemAt parts 1;
       fetcher = {
         "git+http" = fetchGitZig (
           args
@@ -89,27 +86,36 @@ let
 in
 linkFarm name [
   {
-    name = "clap-0.10.0-oBajB434AQBDh-Ei3YtoKIRxZacVPF1iSwp3IX_ZB8f0";
+    name = "clap-0.11.0-oBajB-HnAQDPCKYzwF7rO3qDFwRcD39Q0DALlTSz5H7e";
     path = fetchZigArtifact {
       name = "clap";
-      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.10.0.tar.gz";
-      hash = "sha256-cbPGmVlIXwIuRPIfQoFXzwLulT4XEv8rQWcJUl1ueyo=";
+      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.11.0.tar.gz";
+      hash = "sha256-fDWd7EQYZuAlBlrpynBuznK89OiiX74xcZsekv84lkg=";
     };
   }
   {
-    name = "zigini-0.3.1-BSkB7XJGAAB2E-sKyzhTaQCBlYBL8yqzE4E_jmSY99sC";
+    name = "zigini-0.3.3-36M0FRJJAADZVq5HPm-hYKMpFFTr0OgjbEYcK2ijKZ5n";
     path = fetchZigArtifact {
       name = "zigini";
-      url = "https://github.com/Kawaii-Ash/zigini/archive/2ed3d417f17fab5b0ee8cad8a63c6d62d7ac1042.tar.gz";
-      hash = "sha256-Zj9uU6EEHkNZ1cPIDgDj1E2CEpbmPmpJYjSSFnxxdf0=";
+      url = "https://github.com/AnErrupTion/zigini/archive/9281f47702b57779e831d7618e158abb8eb4d4a2.tar.gz";
+      hash = "sha256-/g0az0MRQOmww0DhZQo/1YH2qkJcscoCpaoW4pWGVIk=";
     };
   }
   {
-    name = "N-V-__8AAB9qAACwl56piR-krrhXSPxCvEskA52cmaTWXYk_";
+    name = "ini-0.1.0-YCQ9Ys0pAABixEvvQvhVXAdqRE3wrZk_wiL9TPNHhB8d";
     path = fetchZigArtifact {
       name = "ini";
-      url = "https://github.com/ziglibs/ini/archive/e18d36665905c1e7ba0c1ce3e8780076b33e3002.tar.gz";
-      hash = "sha256-RQ6OPJBqqH7PCL+xiI58JT7vnIo6zbwpLWn+byZO5iM=";
+      url = "https://github.com/AnErrupTion/ini/archive/918f16d0dcf893d0c1cdffe204faa08bb3584e04.tar.gz";
+      hash = "sha256-z2IMS0grfnf33h6tz1ERv2i6gfnS6p8oMWFz+AmGoA8=";
+    };
+  }
+  {
+    name = "N-V-__8AAGcUBQAa5vov1Yi_9AXEffFQ1e2KsXaK4dgygRKq";
+    path = fetchZigArtifact {
+      name = "termbox2";
+      url = "git+https://github.com/AnErrupTion/termbox2?ref=master#290ac6b8225aacfd16851224682b851b65fcb918";
+      hash = "sha256-of95/wJeCTWI3p7NxvnUlb618qffUZv2YxgBgzp+crs=";
+      rev = "290ac6b8225aacfd16851224682b851b65fcb918";
     };
   }
 ]

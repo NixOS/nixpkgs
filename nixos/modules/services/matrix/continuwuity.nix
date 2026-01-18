@@ -216,9 +216,14 @@ in
       startLimitBurst = 5;
       startLimitIntervalSec = 60;
       serviceConfig = {
+        Type = "notify";
+
         DynamicUser = true;
         User = cfg.user;
         Group = cfg.group;
+
+        # To avoid timing out during database migrations
+        TimeoutStartSec = "10m";
 
         DevicePolicy = "closed";
         LockPersonality = true;

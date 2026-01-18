@@ -22,7 +22,7 @@ let
         + "touch $out"
       );
 
-  wrappedHello = hello.overrideAttrs (oa: {
+  wrappedHello = hello.overrideAttrs {
     propagatedBuildInputs = [
       wrapLua
       lua.pkgs.cjson
@@ -30,7 +30,7 @@ let
     postFixup = ''
       wrapLuaPrograms
     '';
-  });
+  };
 
   luaWithModule = lua.withPackages (ps: [
     ps.lua-cjson
@@ -58,7 +58,7 @@ let
       ";./?.lua;${lua}/share/luajit-2.1/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;${lua}/share/lua/5.1/?.lua;${lua}/share/lua/5.1/?/init.lua;";
   };
 in
-pkgs.recurseIntoAttrs {
+lib.recurseIntoAttrs {
 
   checkInterpreterPath =
     let

@@ -3,10 +3,12 @@
   fetchFromGitHub,
   gnused,
   lib,
+  stdenv,
   maven,
   makeWrapper,
   openjdk,
   libGL,
+  alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
@@ -14,13 +16,13 @@
 }:
 
 let
-  version = "2.0.05";
+  version = "2.0.08";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-71CZBI4FvN5X7peDjhv+0cdTYv8hWwzM8ePdvQSb6QI=";
+    hash = "sha256-BiBvHpEgvDp0u8g87LAt4/1FTc9t8FRAtSvPEedndEg=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -31,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-krPOUaJTo5i3imkDvEkBJH3W01y1KypdvitqmZ5JMMA=";
+  mvnHash = "sha256-pa6OMCN1j1l4Kb0oiRQ8ocLLNMeV3ujOeXNpWcODArA=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -106,7 +108,14 @@ maven.buildMavenPackage {
       chmod 555 $out/share/forge/$commandToInstall.sh
       PREFIX_CMD=""
       if [ "$commandToInstall" = "forge-adventure" ]; then
-        PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}"
+        PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath (
+            [
+              libGL
+            ]
+            ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ]
+          )
+        }"
       fi
 
       makeWrapper $out/share/forge/$commandToInstall.sh $out/bin/$commandToInstall \
@@ -125,10 +134,13 @@ maven.buildMavenPackage {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://card-forge.github.io/forge";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ eigengrau ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      dyegoaurelio
+      eigengrau
+    ];
   };
 }

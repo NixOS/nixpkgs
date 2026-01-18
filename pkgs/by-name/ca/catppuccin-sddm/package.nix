@@ -11,6 +11,7 @@
   font ? "Noto Sans",
   fontSize ? "9",
   background ? null,
+  disableBackground ? false,
   loginBackground ? false,
   userIcon ? false,
   clockEnabled ? true,
@@ -64,8 +65,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (background != null) ''
       substituteInPlace $configFile \
-        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"' \
-        --replace-fail 'CustomBackground="false"' 'CustomBackground="true"'
+        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"'
+    ''}
+
+    ${lib.optionalString disableBackground ''
+      substituteInPlace $configFile \
+        --replace-fail 'CustomBackground="true"' 'CustomBackground="false"'
     ''}
 
     ${lib.optionalString loginBackground ''

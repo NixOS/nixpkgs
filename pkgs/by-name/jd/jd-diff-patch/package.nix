@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jd-diff-patch";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "josephburnett";
     repo = "jd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eaNP7cSJ0IxfHLmPaNAw5MQzD41AiOIjVbAjQkU8uec=";
+    hash = "sha256-PefNgh/ASQ2hPOcWH6ThXEZk4Esd0Q+sLx3bWWnpBNM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";
@@ -30,7 +30,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/josephburnett/jd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       juliusfreudenberger
     ];
     mainProgram = "jd";

@@ -19,12 +19,12 @@ let
 
   generated = haskellPackages.callPackage ./generated.nix { haxl = haxlJailbroken; };
 
-  derivationWithVersion = haskell.lib.compose.overrideCabal (rec {
+  derivationWithVersion = haskell.lib.compose.overrideCabal rec {
     version = "0.1.6";
     src = fetchFromGitHub {
       owner = "mzabani";
       repo = "codd";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-KdZCL09TERy/PolQyYYykEbPtG5yhxrLZSSo9n6p2WE=";
     };
 
@@ -48,6 +48,6 @@ let
     changelog = "https://github.com/mzabani/codd/releases/tag/v${version}";
 
     maintainers = with lib.maintainers; [ mzabani ];
-  }) generated;
+  } generated;
 in
 haskell.lib.compose.justStaticExecutables derivationWithVersion

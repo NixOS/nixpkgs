@@ -15,18 +15,18 @@ let
 in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}"
   {
-    meta = with lib; {
+    meta = {
       description = "Wrapper to ease access to ALSA plugins";
       mainProgram = "aserver";
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
     outputs = alsa-lib.outputs;
   }
   (
     (lib.concatMapStringsSep "\n" (output: ''
-      mkdir ${builtins.placeholder output}
+      mkdir ${placeholder output}
       ${lndir}/bin/lndir ${lib.attrByPath [ output ] null alsa-lib} \
-        ${builtins.placeholder output}
+        ${placeholder output}
     '') alsa-lib.outputs)
     + ''
       cp -r ${merged}/lib/alsa-lib $out/lib

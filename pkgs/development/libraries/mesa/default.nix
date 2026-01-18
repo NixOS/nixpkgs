@@ -13,13 +13,13 @@
   spirv-tools,
   intltool,
   jdupes,
+  libdisplay-info,
   libdrm,
   libgbm,
   libglvnd,
   libpng,
   libunwind,
   libva-minimal,
-  libvdpau,
   llvmPackages,
   lm_sensors,
   meson,
@@ -50,6 +50,7 @@
     "asahi" # Apple AGX
     "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
+    "ethosu" # ARM Ethos NPU
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "i915" # Intel extra legacy
@@ -61,6 +62,7 @@
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
+    "rocket" # Rockchip NPU
     "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "tegra" # Nvidia Tegra SoCs
@@ -75,7 +77,7 @@
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "gfxstream" # Android virtualized GPU
-    "imagination-experimental" # PowerVR Rogue (currently N/A)
+    "imagination" # PowerVR Rogue (currently N/A)
     "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
     "intel" # new Intel (aka ANV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
@@ -96,6 +98,7 @@
     "wayland"
   ],
   vulkanLayers ? [
+    "anti-lag"
     "device-select"
     "intel-nullhw"
     "overlay"
@@ -120,8 +123,8 @@ let
   toCommand = dep: "ln -s ${dep} $out/${dep.pname}-${dep.version}.tar.gz";
 
   packageCacheCommand = lib.pipe rustDeps [
-    (builtins.map fetchDep)
-    (builtins.map toCommand)
+    (map fetchDep)
+    (map toCommand)
     (lib.concatStringsSep "\n")
   ];
 
@@ -144,6 +147,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    ./musl.patch
   ];
 
   postPatch = ''
@@ -210,6 +214,10 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
+    # Enable virtio-gpu kernel mode driver (native context) support for amdgpu as well.
+    # This option is ignored when RadeonSI/RADV are not being built.
+    (lib.mesonBool "amdgpu-virtio" true)
+
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
@@ -254,13 +262,13 @@ stdenv.mkDerivation {
       elfutils
       expat
       spirv-tools
+      libdisplay-info
       libdrm
       libgbm
       libglvnd
       libpng
       libunwind
       libva-minimal
-      libvdpau
       libX11
       libxcb
       libXext
@@ -333,6 +341,7 @@ stdenv.mkDerivation {
     moveToOutput bin/panfrost_compile $cross_tools
     moveToOutput bin/panfrost_texfeatures $cross_tools
     moveToOutput bin/panfrostdump $cross_tools
+    moveToOutput bin/pco_clc $cross_tools
     moveToOutput bin/vtn_bindgen2 $cross_tools
 
     moveToOutput "lib/lib*OpenCL*" $opencl

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "lsprotocol";
-  version = "2023.0.1";
+  version = "2023.0.1"; # nixpkgs-update: no auto update
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -56,6 +56,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "lsprotocol" ];
+
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Python implementation of the Language Server Protocol";

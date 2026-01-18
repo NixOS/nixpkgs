@@ -15,6 +15,7 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   qt6Packages,
+  wayland,
   enableWideVine ? false,
   widevine-cdm,
   # can cause issues on some graphics chips
@@ -26,15 +27,15 @@ let
   isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "5.3.31";
+      version = "5.4.394";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-8QNFCIRSaF0y98P1mmx0u+Uf0/Zd7nYlFGXp9SkURTc=";
+      hash = "sha256-KMpSwF5MmoWdNoIUd4ZOwbJZZmjkid8wUoFKw7XjQFA=";
       stripRoot = false;
     };
 
-  version = "3.5.1";
+  version = "3.6.3";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -44,7 +45,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-gmu6MooINXJI1eWob6qwpzZVSXQ5rVTSaeISBVkms44=";
+    hash = "sha256-bb4oieYevWMAOuQLMZ4egfMG6SToMWxnla5IhAIcL68=";
   };
 
   # Needs tox
@@ -104,6 +105,11 @@ python3.pkgs.buildPythonApplication {
   ''
   + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  ''
+  + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform wayland) ''
+    substituteInPlace qutebrowser/misc/wmname.py \
+      --replace-fail '_load_library("wayland-client")' \
+                     'ctypes.CDLL("${lib.getLib wayland}/lib/libwayland-client${stdenv.hostPlatform.extensions.sharedLibrary}")'
   '';
 
   installPhase = ''
@@ -145,7 +151,7 @@ python3.pkgs.buildPythonApplication {
         # avoid persistant warning on starup
         --set QT_STYLE_OVERRIDE Fusion
         ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
-        ${lib.optionalString (enableVulkan) ''
+        ${lib.optionalString enableVulkan ''
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
           --set-default QSG_RHI_BACKEND vulkan
         ''}
@@ -162,9 +168,7 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
     maintainers = with lib.maintainers; [
-      jagajaga
       rnhmjoj
-      ebzzry
       dotlambda
     ];
   };

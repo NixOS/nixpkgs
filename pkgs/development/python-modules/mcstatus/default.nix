@@ -13,16 +13,16 @@
   uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mcstatus";
-  version = "12.0.5";
+  version = "12.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = "mcstatus";
-    tag = "v${version}";
-    hash = "sha256-gtLWUIxG40MsmavA4KrHJ3btCR/zKdstwiUiZGsoNcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PbrgVfLhwiAadrOkSSUM7He/IJZ+hORMV9/thpeB9qA=";
   };
 
   build-system = [
@@ -58,12 +58,12 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for checking the status of Minecraft servers";
     homepage = "https://github.com/py-mine/mcstatus";
-    changelog = "https://github.com/py-mine/mcstatus/releases/tag/${src.tag}";
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
-      perchun
+      PerchunPak
     ];
     mainProgram = "mcstatus";
   };
-}
+})

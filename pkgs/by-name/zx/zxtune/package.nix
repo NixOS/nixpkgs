@@ -45,7 +45,7 @@ let
     boost
     zlib
   ]
-  ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+  ++ lib.optional withQt (if supportWayland then qt5.qtwayland else qt5.qtbase);
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     let
-      setOptionalSupport = name: var: "support_${name}=" + (if (var) then "1" else "");
+      setOptionalSupport = name: var: "support_${name}=" + (if var then "1" else "");
       makeOptsCommon = [
         ''-j$NIX_BUILD_CORES''
         ''root.version=${src.rev}''
@@ -115,11 +115,11 @@ stdenv.mkDerivation rec {
     in
     ''
       runHook preBuild
-      make ${builtins.toString makeOptsCommon} -C apps/xtractor
-      make ${builtins.toString makeOptsCommon} -C apps/zxtune123
+      make ${toString makeOptsCommon} -C apps/xtractor
+      make ${toString makeOptsCommon} -C apps/zxtune123
     ''
     + lib.optionalString withQt ''
-      make ${builtins.toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
+      make ${toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
     ''
     + ''
       runHook postBuild
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Crossplatform chiptunes player";
     longDescription = ''
       Chiptune music player with truly extensive format support. Supported
@@ -172,11 +172,11 @@ stdenv.mkDerivation rec {
       sidplay, and many other libraries.
     '';
     homepage = "https://zxtune.bitbucket.io/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # zxtune supports mac and windows, but more work will be needed to
     # integrate with the custom make system (see platformName above)
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ EBADBEEF ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ EBADBEEF ];
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }

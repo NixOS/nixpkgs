@@ -72,6 +72,13 @@ in
           '';
         };
 
+        host = lib.mkOption {
+          type = types.str;
+          default = "127.0.0.1";
+          example = "0.0.0.0";
+          description = "The host address for Szurubooru to bind to.";
+        };
+
         threads = mkOption {
           type = types.int;
           default = 4;
@@ -265,9 +272,6 @@ in
             (lib.filterAttrsRecursive (_: x: x != null))
           ]
         );
-        pyenv = python.buildEnv.override {
-          extraLibs = [ (python.pkgs.toPythonModule cfg.server.package) ];
-        };
       in
       {
         description = "Server of Szurubooru, an image board engine dedicated for small and medium communities";
@@ -283,35 +287,34 @@ in
         ];
         wants = [ "network-online.target" ];
 
-        environment = {
-          PYTHONPATH = "${pyenv}/${pyenv.sitePackages}/";
-        };
-
-        path =
-          with pkgs;
-          [
-            envsubst
-            ffmpeg_4-full
-          ]
-          ++ (with python.pkgs; [
-            alembic
-            waitress
-          ]);
+        path = with pkgs; [
+          ffmpeg_4-full
+        ];
 
         script = ''
-          export SZURUBOORU_SECRET="$(<${cfg.server.settings.secretFile})"
-          export SZURUBOORU_DATABASE_PASSWORD="$(<${cfg.database.passwordFile})"
+          export SZURUBOORU_SECRET="$(<$CREDENTIALS_DIRECTORY/secret)"
+          export SZURUBOORU_DATABASE_PASSWORD="$(<$CREDENTIALS_DIRECTORY/database)"
           ${lib.optionalString (cfg.server.settings.smtp.passFile != null) ''
-            export SZURUBOORU_SMTP_PASS=$(<${cfg.server.settings.smtp.passFile})
+            export SZURUBOORU_SMTP_PASS=$(<$CREDENTIALS_DIRECTORY/smtp)
           ''}
           install -m0640 ${cfg.server.package.src}/config.yaml.dist ${cfg.dataDir}/config.yaml.dist
-          envsubst -i ${configFile} -o ${cfg.dataDir}/config.yaml
+          touch ${cfg.dataDir}/config.yaml
+          chmod 0640 ${cfg.dataDir}/config.yaml
+          ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${cfg.dataDir}/config.yaml
           sed 's|script_location = |script_location = ${cfg.server.package.src}/|' ${cfg.server.package.src}/alembic.ini > ${cfg.dataDir}/alembic.ini
-          alembic upgrade head
-          waitress-serve --port ${toString cfg.server.port} --threads ${toString cfg.server.threads} szurubooru.facade:app
+          ${lib.getExe cfg.server.package.alembic} upgrade head
+          ${lib.getExe cfg.server.package.waitress} --host ${cfg.server.host} --port ${toString cfg.server.port} --threads ${toString cfg.server.threads} szurubooru.facade:app
         '';
 
         serviceConfig = {
+          LoadCredential = [
+            "secret:${cfg.server.settings.secretFile}"
+            "database:${cfg.database.passwordFile}"
+          ]
+          ++ (lib.optionals (cfg.server.settings.smtp.passFile != null) [
+            "smtp:${cfg.server.settings.smtp.passFile}"
+          ]);
+
           User = cfg.user;
           Group = cfg.group;
 

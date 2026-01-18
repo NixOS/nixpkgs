@@ -9,7 +9,7 @@
   findlib,
 }:
 
-if lib.versionAtLeast ocaml.version "5.4" then
+if lib.versionAtLeast ocaml.version "5.5" then
   throw "camlp4 is not available for OCaml ${ocaml.version}"
 else
 
@@ -84,6 +84,10 @@ else
           version = "5.3";
           sha256 = "sha256-V/kKhTP9U4jWDFuQKuB7BS3XICg1lq/2Avj7UJR55+k=";
         };
+        "5.4" = {
+          version = "5.4";
+          sha256 = "sha256-7FsKEr0cRVF4LIOvROWMyXBefRTBaS66ZqwtP2VLefM=";
+        };
       }
       .${ocaml.meta.branch};
   in
@@ -145,7 +149,7 @@ else
 
     dontStrip = true;
 
-    meta = with lib; {
+    meta = {
       description = "Software system for writing extensible parsers for programming languages";
       homepage = "https://github.com/ocaml/camlp4";
       platforms = ocaml.meta.platforms or [ ];

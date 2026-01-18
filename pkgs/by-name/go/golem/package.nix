@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = [ "${placeholder "out"}/bin/golem-cli" ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

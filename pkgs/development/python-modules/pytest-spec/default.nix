@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-spec";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pchomik";
     repo = "pytest-spec";
     tag = version;
-    hash = "sha256-uzl7T2h7s2YjC0nd1FbubRca8oTU4kEe4cEpIGPLaHA=";
+    hash = "sha256-nKBzQrosgTKHoID43u6G31fphsDyCVZhsNQuYIHiLfA=";
   };
 
   build-system = [

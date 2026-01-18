@@ -33,10 +33,10 @@ buildDunePackage rec {
     ounit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared memory rings for RPC and bytestream communications";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/shared-memory-ring";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

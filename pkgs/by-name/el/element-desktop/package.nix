@@ -4,33 +4,32 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  yarn,
   nodejs,
-  jq,
-  electron_38,
+  electron_39,
   element-web,
   sqlcipher,
   callPackage,
-  desktopToDarwinBundle,
   typescript,
-  useKeytar ? true,
   # command line arguments which are always set
   commandLineArgs ? "",
+  yarnConfigHook,
+  yarnBuildHook,
+  fetchYarnDeps,
+  asar,
+  copyDesktopItems,
+  darwin,
 }:
 
 let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_38;
-  keytar = callPackage ./keytar {
-    inherit electron;
-  };
+  electron = electron_39;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (
   finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
+  removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";
@@ -41,24 +40,25 @@ stdenv.mkDerivation (
       hash = desktopSrcHash;
     };
 
-    # TODO: fetchYarnDeps currently does not deal properly with a dependency
-    # declared as a pin to a commit in a specific git repository.
-    # While it does download everything correctly, `yarn install --offline`
-    # always wants to `git ls-remote` to the repository, ignoring the local
-    # cached tarball.
-    offlineCache = callPackage ./yarn.nix {
-      inherit (finalAttrs) version src;
+    offlineCache = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/yarn.lock";
       hash = desktopYarnHash;
     };
 
+    env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
     nativeBuildInputs = [
+      asar
+      copyDesktopItems
       nodejs
       makeWrapper
-      jq
-      yarn
       typescript
+      yarnConfigHook
+      yarnBuildHook
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.autoSignDarwinBinariesHook
+    ];
 
     inherit seshat;
 
@@ -67,116 +67,113 @@ stdenv.mkDerivation (
     # this shouldn't be in the closure just for unused scripts.
     dontPatchShebangs = true;
 
-    configurePhase = ''
-      runHook preConfigure
+    postPatch = ''
+      cp -r ${electron.dist} electron-dist
+      chmod -R u+w electron-dist
 
-      mkdir -p node_modules/
-      cp -r $offlineCache/node_modules/* node_modules/
-      substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
+      substituteInPlace package.json \
+        --replace-fail \
+        ' electron-builder",' \
+        ' electron-builder --dir -c.electronDist=electron-dist -c.electronVersion=${electron.version} -c.mac.identity=null",'
 
-      runHook postConfigure
+      # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
+      substituteInPlace ./electron-builder.ts \
+        --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
+
+      # Need to disable asar integrity check to copy in native seshat files, see postBuild phase
+      substituteInPlace ./electron-builder.ts \
+        --replace-fail "enableEmbeddedAsarIntegrityValidation: true" "enableEmbeddedAsarIntegrityValidation: false"
     '';
 
-    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
-    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export TMPDIR="$(mktemp -d)"
+    preBuild = ''
+      # Apply upstream patch
+      # Can be removed if upstream removes patches/@types+auto-launch+5.0.5.patch introduced in
+      # https://github.com/element-hq/element-desktop/commit/5e882f8e08d58bf9663c8e3ab33885bf7b3709de
+      node ./node_modules/patch-package/index.js
     '';
 
-    buildPhase = ''
-      runHook preBuild
+    postBuild = ''
+      # relative path to app.asar differs on Linux and MacOS
+      packed=$(find ./dist -name app.asar)
+      asar extract "$packed" tmp-app
 
-      yarn --offline run build:ts
-      node node_modules/matrix-web-i18n/scripts/gen-i18n.js
-      yarn --offline run i18n:sort
-      yarn --offline run build:res
+      # linking here leads to Error: tmp-app/node_modules/matrix-seshat: file ... links out of the package
+      cp -r $seshat tmp-app/node_modules/matrix-seshat
 
-      chmod -R a+w node_modules/keytar-forked
-      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
-      ln -s $seshat node_modules/matrix-seshat
-
-      runHook postBuild
+      asar pack tmp-app "$packed"
     '';
 
     installPhase = ''
       runHook preInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications" "$out/bin"
+      mv dist/mac*/Element.app "$out/Applications"
 
-      # resources
-      mkdir -p "$out/share/element"
+      ln -s '${element-web}' "$out/Applications/Element.app/Contents/Resources/webapp"
+
+      wrapProgram "$out/Applications/Element.app/Contents/MacOS/Element" \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
+
+      makeWrapper "$out/Applications/Element.app/Contents/MacOS/Element" "$out/bin/${executableName}"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      mkdir -p "$out/bin" "$out/share"
+
+      cp -a dist/*-unpacked/resources $out/share/element
+
       ln -s '${element-web}' "$out/share/element/webapp"
-      cp -r '.' "$out/share/element/electron"
-      chmod -R "a+w" "$out/share/element/electron/node_modules"
-      rm -rf "$out/share/element/electron/node_modules"
-      cp -r './node_modules' "$out/share/element/electron"
-      cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
-      ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
-      # icon
-      mkdir -p "$out/share/icons/hicolor/icon/apps"
-      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/icon/apps/element.png"
-
-      # desktop item
-      mkdir -p "$out/share"
-      ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
+      # icon, used in makeDesktopItem
+      mkdir -p "$out/share/icons/hicolor/512x512/apps"
+      ln -s "$out/share/element/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
 
       # executable wrapper
       # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
-      makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+      makeWrapper '${lib.getExe electron}' "$out/bin/${executableName}" \
         --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
-        --add-flags "$out/share/element/electron" \
+        --add-flags "$out/share/element/app.asar" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
-
+    ''
+    + ''
       runHook postInstall
     '';
 
     # The desktop item properties should be kept in sync with data from upstream:
     # https://github.com/element-hq/element-desktop/blob/develop/package.json
-    desktopItem = makeDesktopItem {
-      name = "element-desktop";
-      exec = "${executableName} %u";
-      icon = "element";
-      desktopName = "Element";
-      genericName = "Matrix Client";
-      comment = finalAttrs.meta.description;
-      categories = [
-        "Network"
-        "InstantMessaging"
-        "Chat"
-      ];
-      startupWMClass = "Element";
-      mimeTypes = [
-        "x-scheme-handler/element"
-        "x-scheme-handler/io.element.desktop"
-      ];
-    };
-
-    postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
-    '';
+    desktopItems = [
+      (makeDesktopItem {
+        name = "element-desktop";
+        exec = "${executableName} %u";
+        icon = "element";
+        desktopName = "Element";
+        genericName = "Matrix Client";
+        comment = finalAttrs.meta.description;
+        categories = [
+          "Network"
+          "InstantMessaging"
+          "Chat"
+        ];
+        startupWMClass = "Element";
+        mimeTypes = [
+          "x-scheme-handler/element"
+          "x-scheme-handler/io.element.desktop"
+        ];
+      })
+    ];
 
     passthru = {
       # run with: nix-shell ./maintainers/scripts/update.nix --argstr package element-desktop
       updateScript = ./update.sh;
-
-      # TL;DR: keytar is optional while seshat isn't.
-      #
-      # This prevents building keytar when `useKeytar` is set to `false`, because
-      # if libsecret is unavailable (e.g. set to `null` or fails to build), then
-      # this package wouldn't even considered for building because
-      # "one of the dependencies failed to build",
-      # although the dependency wouldn't even be used.
-      #
-      # It needs to be `passthru` anyways because other packages do depend on it.
-      inherit keytar;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Feature-rich client for Matrix.org";
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
-      license = licenses.asl20;
-      teams = [ teams.matrix ];
+      license = lib.licenses.agpl3Plus;
+      teams = [ lib.teams.matrix ];
       platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
     };

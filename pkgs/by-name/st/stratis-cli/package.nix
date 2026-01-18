@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
-  version = "3.8.2";
+  version = "3.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratis-cli";
     tag = "v${version}";
-    hash = "sha256-0evuBr3ziiWKkR0FDjZ9BXrfRpQR7JtHsm/sYE8pIbg=";
+    hash = "sha256-wkFInG/sbHxyi5UIjIANxsTd9BrIHuyAfYG4DvqLsmU=";
   };
 
   build-system = with python3Packages; [
@@ -46,11 +46,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests = nixosTests.stratis;
 
-  meta = with lib; {
+  meta = {
     description = "CLI for the Stratis project";
     homepage = "https://stratis-storage.github.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "stratis";
   };
 }

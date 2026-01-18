@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
       url = "https://git.kraxel.org/cgit/fbida/patch/?id=1bb8a8aa29845378903f3c690e17c0867c820da2";
       sha256 = "0n5vqbp8wd87q60zfwdf22jirggzngypc02ha34gsj1rd6pvwahi";
     })
+    # Prevents using function declaration without explicit parameters.
+    ./function-parameters.patch
   ];
 
   nativeBuildInputs = [
@@ -81,11 +83,11 @@ stdenv.mkDerivation rec {
     sed -e 's@$(HAVE_LINUX_FB_H)@yes@' -i GNUmakefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
     homepage = "https://www.kraxel.org/blog/linux/fbida/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

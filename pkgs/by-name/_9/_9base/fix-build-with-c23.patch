@@ -1,0 +1,101 @@
+From ba9e372f3165e0cfd73fcc8a1352fbb790ea2439 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 27 Dec 2025 23:22:47 +0800
+Subject: [PATCH] fix build with c23
+
+---
+ dd/dd.c    |  4 ++--
+ troff/n5.c | 24 ++++++++++++------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/dd/dd.c b/dd/dd.c
+index 9e69b6b..1e7d4c5 100644
+--- a/dd/dd.c
++++ b/dd/dd.c
+@@ -312,11 +312,11 @@ match(char *s)
+ 	cs = string;
+ 	while(*cs++ == *s)
+ 		if(*s++ == '\0')
+-			goto true;
++			goto match_true;
+ 	if(*s != '\0')
+ 		return 0;
+ 
+-true:
++match_true:
+ 	cs--;
+ 	string = cs;
+ 	return 1;
+diff --git a/troff/n5.c b/troff/n5.c
+index 7266432..7566068 100644
+--- a/troff/n5.c
++++ b/troff/n5.c
+@@ -642,15 +642,15 @@ void caseif(void)
+ void caseif1(int x)
+ {
+ 	extern int falsef;
+-	int notflag, true;
++	int notflag, truev;
+ 	Tchar i;
+ 
+ 	if (x == 2) {
+ 		notflag = 0;
+-		true = iflist[ifx];
++		truev = iflist[ifx];
+ 		goto i1;
+ 	}
+-	true = 0;
++	truev = 0;
+ 	skip();
+ 	if ((cbits(i = getch())) == '!') {
+ 		notflag = 1;
+@@ -663,37 +663,37 @@ void caseif1(int x)
+ 	ifnum = 0;
+ 	if (!nonumb) {
+ 		if (i > 0)
+-			true++;
++			truev++;
+ 		goto i1;
+ 	}
+ 	i = getch();
+ 	switch (cbits(i)) {
+ 	case 'e':
+ 		if (!(numtabp[PN].val & 01))
+-			true++;
++			truev++;
+ 		break;
+ 	case 'o':
+ 		if (numtabp[PN].val & 01)
+-			true++;
++			truev++;
+ 		break;
+ 	case 'n':
+ 		if (NROFF)
+-			true++;
++			truev++;
+ 		break;
+ 	case 't':
+ 		if (TROFF)
+-			true++;
++			truev++;
+ 		break;
+ 	case ' ':
+ 		break;
+ 	default:
+-		true = cmpstr(i);
++		truev = cmpstr(i);
+ 	}
+ i1:
+-	true ^= notflag;
++	truev ^= notflag;
+ 	if (x == 1)
+-		iflist[ifx] = !true;
+-	if (true) {
++		iflist[ifx] = !truev;
++	if (truev) {
+ i2:
+ 		while ((cbits(i = getch())) == ' ')
+ 			;
+-- 
+2.51.2
+

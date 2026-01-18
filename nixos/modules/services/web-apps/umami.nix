@@ -36,7 +36,6 @@ in
       apply =
         pkg:
         pkg.override {
-          databaseType = cfg.settings.DATABASE_TYPE;
           collectApiEndpoint = optionalString (
             cfg.settings.COLLECT_API_ENDPOINT != null
           ) cfg.settings.COLLECT_API_ENDPOINT;
@@ -95,10 +94,7 @@ in
             type = types.nullOr (
               types.str
               // {
-                check =
-                  it:
-                  isString it
-                  && ((hasPrefix "postgresql://" it) || (hasPrefix "postgres://" it) || (hasPrefix "mysql://" it));
+                check = it: isString it && ((hasPrefix "postgresql://" it) || (hasPrefix "postgres://" it));
               }
             );
             # For some reason, Prisma requires the username in the connection string
@@ -111,8 +107,7 @@ in
             defaultText = literalExpression ''if config.services.umami.createPostgresqlDatabase then "postgresql://umami@localhost/umami?host=/run/postgresql" else null'';
             example = "postgresql://root:root@localhost/umami";
             description = ''
-              Connection string for the database. Must start with `postgresql://`, `postgres://`
-              or `mysql://`.
+              Connection string for the database. Must start with `postgresql://` or `postgres://`.
             '';
           };
           DATABASE_URL_FILE = mkOption {
@@ -128,29 +123,9 @@ in
             example = "/run/secrets/umamiDatabaseUrl";
             description = ''
               A file containing a connection string for the database. The connection string
-              must start with `postgresql://`, `postgres://` or `mysql://`.
-              If using this, then DATABASE_TYPE must be set to the appropriate value.
+              must start with `postgresql://` or `postgres://`.
               The contents of the file are read through systemd credentials, therefore the
               user running umami does not need permissions to read the file.
-            '';
-          };
-          DATABASE_TYPE = mkOption {
-            type = types.nullOr (
-              types.enum [
-                "postgresql"
-                "mysql"
-              ]
-            );
-            default =
-              if cfg.settings.DATABASE_URL != null && hasPrefix "mysql://" cfg.settings.DATABASE_URL then
-                "mysql"
-              else
-                "postgresql";
-            defaultText = literalExpression ''if config.services.umami.settings.DATABASE_URL != null && hasPrefix "mysql://" config.services.umami.settings.DATABASE_URL then "mysql" else "postgresql"'';
-            example = "mysql";
-            description = ''
-              The type of database to use. This is automatically inferred from DATABASE_URL, but
-              must be set manually if you are using DATABASE_URL_FILE.
             '';
           };
           COLLECT_API_ENDPOINT = mkOption {
@@ -238,6 +213,10 @@ in
           cfg.createPostgresqlDatabase
           -> cfg.settings.DATABASE_URL == "postgresql://umami@localhost/umami?host=/run/postgresql";
         message = "The option config.services.umami.createPostgresqlDatabase is enabled, but config.services.umami.settings.DATABASE_URL has been modified.";
+      }
+      {
+        assertion = cfg.settings.DATABASE_TYPE or null != "mysql";
+        message = "Umami only supports PostgreSQL as of 3.0.0. Follow migration instructions if you are using MySQL: https://umami.is/docs/guides/migrate-mysql-postgresql";
       }
     ];
 

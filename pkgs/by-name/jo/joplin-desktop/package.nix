@@ -13,16 +13,17 @@
   cairo,
   pixman,
   libsecret,
-  electron_36,
+  electron_37,
   xcbuild,
   buildPackages,
   callPackage,
   runCommand,
   libGL,
+  clang_20,
 }:
 
 let
-  electron = electron_36;
+  electron = electron_37;
   yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     buildPackages.cctools
+    clang_20 # clang_21 breaks keytar, sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
@@ -209,6 +211,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Necessary for builtin Backup plugin
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      chmod a+x $out/share/joplin-desktop/resources/build/7zip/7za
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      chmod a+x $out/Applications/Joplin.app/Contents/Resources/build/7zip/7za
+    '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "joplin";
@@ -222,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
@@ -233,10 +244,10 @@ stdenv.mkDerivation (finalAttrs: {
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       fugi
     ];
-    inherit (electron.meta) platforms;
+    platforms = electron.meta.platforms ++ lib.platforms.darwin;
   };
 })

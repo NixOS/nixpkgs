@@ -29,10 +29,10 @@ buildPythonPackage {
     "pretix_stretchgoals"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Display the average ticket sales price over time";
     homepage = "https://github.com/rixx/pretix-stretchgoals";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

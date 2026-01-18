@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for maintaining UEFI signature databases";
     homepage = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hmenke
       raitobezarius
     ];
@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ]; # Broken on i686
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

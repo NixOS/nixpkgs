@@ -62,13 +62,13 @@ buildPythonPackage rec {
       ]
     ++ [ ./stringIO.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Python simple and lightweight SOAP Library";
     homepage = "https://github.com/pysimplesoap/pysimplesoap";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
 
     # I don't directly use this, only needed it as a dependency of debianbts
     #  so co-maintainers would be welcome.
-    maintainers = [ maintainers.nicoo ];
+    maintainers = [ lib.maintainers.nicoo ];
   };
 }

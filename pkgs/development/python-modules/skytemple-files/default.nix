@@ -13,7 +13,6 @@
   pyyaml,
   pmdsky-debug-py,
   range-typed-integers,
-  pythonOlder,
   # optional dependencies for SpriteCollab
   aiohttp,
   lru-dict,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "skytemple-files";
   version = "1.8.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
@@ -90,12 +87,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skytemple_files" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-files";
     description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky";
     mainProgram = "skytemple_export_maps";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
   };
 }

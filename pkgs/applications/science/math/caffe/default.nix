@@ -112,9 +112,11 @@ stdenv.mkDerivation rec {
   propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
   patches = [
+    ./cmake-minimum-required.patch
     ./darwin.patch
     ./glog-cmake.patch
     ./random-shuffle.patch
+    ./random-shuffle-includes.patch
     (fetchpatch {
       name = "support-opencv4";
       url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
@@ -163,7 +165,7 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and
@@ -176,7 +178,7 @@ stdenv.mkDerivation rec {
       (pythonSupport && (python.isPy310))
       || !(leveldbSupport -> (leveldb != null && snappy != null))
       || !(pythonSupport -> (python != null && numpy != null));
-    license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

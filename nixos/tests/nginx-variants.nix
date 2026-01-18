@@ -1,6 +1,6 @@
 { pkgs, runTest, ... }:
 builtins.listToAttrs (
-  builtins.map
+  map
     (packageName: {
       name = packageName;
       value = runTest {
@@ -25,10 +25,8 @@ builtins.listToAttrs (
     })
     [
       "angie"
-      "angieQuic"
       "nginxStable"
       "nginxMainline"
-      "nginxQuic"
       "nginxShibboleth"
       "openresty"
       "tengine"

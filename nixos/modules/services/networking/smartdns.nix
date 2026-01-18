@@ -23,7 +23,7 @@ let
     with generators;
     toKeyValue {
       mkKeyValue = mkKeyValueDefault {
-        mkValueString = v: if isBool v then if v then "yes" else "no" else mkValueStringDefault { } v;
+        mkValueString = v: if isBool v then boolToYesNo v else mkValueStringDefault { } v;
       } " ";
       listsAsDuplicateKeys = true; # Allowing duplications because we need to deal with multiple entries with the same key.
     } cfg.settings

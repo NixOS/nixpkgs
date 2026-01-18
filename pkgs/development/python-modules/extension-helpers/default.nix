@@ -4,6 +4,8 @@
   fetchFromGitHub,
   build,
   cython,
+  findutils,
+  pip,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
@@ -16,8 +18,6 @@ buildPythonPackage rec {
   pname = "extension-helpers";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "astropy";
@@ -36,6 +36,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     build
     cython
+    findutils
+    pip
     pytestCheckHook
     wheel
   ];
@@ -45,17 +47,15 @@ buildPythonPackage rec {
   enabledTestPaths = [ "extension_helpers/tests" ];
 
   disabledTests = [
-    # Test require network access
-    "test_only_pyproject"
-    # ModuleNotFoundError
-    "test_no_setup_py"
+    # https://github.com/astropy/extension-helpers/issues/43
+    "test_write_if_different"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Helpers to assist with building Python packages with compiled C/Cython extensions";
     homepage = "https://github.com/astropy/extension-helpers";
     changelog = "https://github.com/astropy/extension-helpers/blob/${src.tag}/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

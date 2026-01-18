@@ -48,22 +48,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.7";
+  version = "9.8";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-6LsmrQKT+bWh/EP7QrqXDjEsZs6SwbCxZxPXUA2yUb8=";
+    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
   };
 
   patches = [
-    # Heap buffer overflow that's been here since coreutils 7.2 in 2009:
-    # https://www.openwall.com/lists/oss-security/2025/05/27/2
-    ./CVE-2025-5278.patch
-
-    # Fixes test-float-h failure on ppc64 with C23
-    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
-    # Multiple upstream commits squashed with adjustments, see header
-    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+    # Extremely bad bug where `tail` prints fewer lines than it should.
+    # https://github.com/coreutils/coreutils/commit/914972e80dbf82aac9ffe3ff1f67f1028e1a788b
+    ./tail.patch
+    # Fix performance regression in cp.
+    # https://github.com/coreutils/coreutils/commit/231cc20195294c9774ab68f523dd06059f4b0a5c
+    # https://github.com/coreutils/coreutils/commit/64b8fdb5b4767e0f833486507c3eae46ed1b40f8
+    # https://github.com/coreutils/coreutils/commit/2c5754649e08a664f3d43f7bc1df08f498bc1554
+    ./cp-1.patch
+    ./cp-2.patch
+    ./cp-3.patch
   ];
 
   postPatch = ''
@@ -105,6 +107,11 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > "$f"
     done
 
+    # These tests sometimes fail on ZFS-backed NFS filesystems
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-file-has-acl-1.sh
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-set-mode-acl-1.sh
+    sed '2i echo "Skipping test: ls/removed-directory" && exit 77' -i ./tests/ls/removed-directory.sh
+
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 
@@ -141,11 +148,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     xz.bin
-  ]
-  ++ optionals stdenv.hostPlatform.isCygwin [
-    # due to patch
-    autoreconfHook
-    texinfo
   ];
 
   buildInputs =
@@ -213,6 +215,10 @@ stdenv.mkDerivation rec {
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
     ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+    # gnulib does not consider Clang-specific warnings to be bugs:
+    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+    # TODO: find out why these are happening on cygwin, which is gcc
+    ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
   );
 
   # Works around a bug with 8.26:
@@ -254,7 +260,7 @@ stdenv.mkDerivation rec {
       '';
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "GNU Core Utilities";
     longDescription = ''
@@ -262,9 +268,12 @@ stdenv.mkDerivation rec {
       utilities of the GNU operating system. These are the core utilities which
       are expected to exist on every operating system.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      das_j
+      mdaniels5757
+    ];
+    platforms = with lib.platforms; unix ++ windows;
     priority = 10;
   };
 }

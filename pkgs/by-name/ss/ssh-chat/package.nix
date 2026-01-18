@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-QTUBorUAsWDOpNP3E/Y6ht7ZXZViWBbrMPtLl7lHtgE=";
 
-  meta = with lib; {
+  meta = {
     description = "Chat over SSH";
     mainProgram = "ssh-chat";
     homepage = "https://github.com/shazow/ssh-chat";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

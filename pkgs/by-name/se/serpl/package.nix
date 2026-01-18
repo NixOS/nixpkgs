@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/serpl";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

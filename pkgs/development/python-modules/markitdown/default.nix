@@ -30,20 +30,23 @@
 
 buildPythonPackage rec {
   pname = "markitdown";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${version}";
-    hash = "sha256-bHnJsv4ln1W0lVbWwLmCzQ15KOGJZ9gF2yx4TDuBqBI=";
+    hash = "sha256-WKA2eY8wY3SM9xZ7Cek5eUcJbO5q6eMDx2aTKfQnFvE=";
   };
 
   sourceRoot = "${src.name}/packages/markitdown";
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "magika"
+  ];
   dependencies = [
     beautifulsoup4
     defusedxml
@@ -85,7 +88,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

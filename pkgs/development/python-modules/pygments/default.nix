@@ -13,13 +13,13 @@
 }:
 
 let
-  pygments = buildPythonPackage rec {
+  pygments = buildPythonPackage (finalAttrs: {
     pname = "pygments";
     version = "2.19.2";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-Y2yyR3zsf4lSU2lwvFM7xDdDVC9wOSrgJjdGAK3VuIc=";
     };
 
@@ -47,7 +47,7 @@ let
     };
 
     meta = {
-      changelog = "https://github.com/pygments/pygments/releases/tag/${version}";
+      changelog = "https://github.com/pygments/pygments/releases/tag/${finalAttrs.version}";
       homepage = "https://pygments.org/";
       description = "Generic syntax highlighter";
       mainProgram = "pygmentize";
@@ -57,6 +57,6 @@ let
         ryand56
       ];
     };
-  };
+  });
 in
 pygments

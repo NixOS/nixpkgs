@@ -1,11 +1,10 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   cmake,
   llvmPackages,
   xcbuild,
-  targetPackages,
   libxml2,
   ninja,
   zlib,
@@ -23,7 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   inherit version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
@@ -125,16 +125,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = import ./passthru.nix {
     inherit
-      lib
       stdenv
       callPackage
       wrapCCWith
       wrapBintoolsWith
       overrideCC
-      targetPackages
       ;
     zig = finalAttrs.finalPackage;
   };
+
+  env = {
+    # This zig_default_optimize_flag below is meant to avoid CPU feature impurity in
+    # Nixpkgs. However, this flagset is "unstable": it is specifically meant to
+    # be controlled by the upstream development team - being up to that team
+    # exposing or not that flags to the outside (especially the package manager
+    # teams).
+
+    # Because of this hurdle, @andrewrk from Zig Software Foundation proposed
+    # some solutions for this issue. Hopefully they will be implemented in
+    # future releases of Zig. When this happens, this flagset should be
+    # revisited accordingly.
+
+    # Below are some useful links describing the discovery process of this 'bug'
+    # in Nixpkgs:
+
+    # https://github.com/NixOS/nixpkgs/issues/169461
+    # https://github.com/NixOS/nixpkgs/issues/185644
+    # https://github.com/NixOS/nixpkgs/pull/197046
+    # https://github.com/NixOS/nixpkgs/pull/241741#issuecomment-1624227485
+    # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
+    zig_default_cpu_flag = "-Dcpu=baseline";
+
+    zig_default_optimize_flag =
+      if lib.versionAtLeast finalAttrs.version "0.12" then
+        "--release=safe"
+      else if lib.versionAtLeast finalAttrs.version "0.11" then
+        "-Doptimize=ReleaseSafe"
+      else
+        "-Drelease-safe=true";
+  };
+
+  setupHook = ./setup-hook.sh;
+
+  # while xcrun is already included in the darwin stdenv, Zig also needs
+  # xcode-select (provided by xcbuild) for SDK detection
+  propagatedNativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   meta = {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
@@ -145,9 +180,5 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;
-    # Zig 0.15.1 fails some tests on x86_64-darwin thus we mark it broken
-    # see https://github.com/ziglang/zig/issues/24974
-    broken =
-      stdenv.hostPlatform.system == "x86_64-darwin" && lib.versionAtLeast finalAttrs.version "0.15";
   };
 })

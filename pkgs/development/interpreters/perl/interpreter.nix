@@ -15,7 +15,7 @@
   zlib,
   config,
   passthruFun,
-  perlAttr ? "perl${lib.versions.major version}${lib.versions.minor version}",
+  perlAttr ? "perl${lib.versions.major version}",
   enableThreading ? true,
   coreutils,
   makeWrapper,
@@ -33,6 +33,52 @@ assert (enableCrypt -> (libxcrypt != null));
 
 let
   crossCompiling = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  commonPatches = [
+    # Do not look in /usr etc. for dependencies.
+    ./no-sys-dirs.patch
+  ]
+
+  # Fix build on Solaris on x86_64
+  # See also:
+  # * perl tracker: https://github.com/Perl/perl5/issues/9669
+  # * netbsd tracker: https://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=44999
+  ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+
+  # Don't pass -no-cpp-precomp, even if it is "supported"
+  #
+  # cpp-precomp is a relic from NeXT days, when there was a separate
+  # cpp preprocessor that produced "precompiled header files" (hence
+  # cpp-precomp) - binary files containing information from .h files, that
+  # sped up the compilation slightly.
+  #
+  # However, cpp-precomp was semi-broken and didn't accept a lot of valid
+  # code, so there was a way to disable it (-no-cpp-precomp).
+  #
+  # This flag seems to have lost all relevance back in 2002 or so, when
+  # cpp-precomp stopped being used; gcc dropped it completely in 4.8 (and
+  # now errors out if you pass it), but for some reason clang still accepts
+  # it (but it's a no-op). This means that if you compile perl with clang,
+  # it will think that this flag is still supported, and it can cause issues
+  # if you compile c code from perl:
+  # https://trac.macports.org/ticket/38913
+  #
+  # More info about -no-cpp-precomp: https://www.mistys-internet.website/blog/blog/2013/10/19/no-cpp-precomp-the-compiler-flag-that-time-forgot
+  #
+  # See also: https://github.com/NixOS/nixpkgs/pull/1160
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./cpp-precomp.patch
+
+  # Miniperl is a "bootstrap" perl which doesn't support dynamic loading, among other things.
+  # It is used to build modules for the "final" perl.
+  #
+  # This patch enables more modules to be loaded with miniperl (mostly by
+  # removing dynamically loaded libraries and using perl builtins instead),
+  # which is needed during cross-compilation because the bootstrapping process
+  # has more stages than the default build and doesn't get to the main perl
+  # binary as early.
+  #
+  # Some more details: https://arsv.github.io/perl-cross/modules.html
+  ++ lib.optional crossCompiling ./cross.patch;
+
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -71,27 +117,7 @@ stdenv.mkDerivation (
 
     disallowedReferences = [ stdenv.cc ];
 
-    patches = [
-      ./CVE-2024-56406.patch
-      ./CVE-2025-40909.patch
-    ]
-    # Do not look in /usr etc. for dependencies.
-    ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
-    ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
-
-    # Fix compilation on platforms with only a C locale: https://github.com/Perl/perl5/pull/22569
-    ++ lib.optional (version == "5.40.0") ./fix-build-with-only-C-locale-5.40.0.patch
-
-    ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./cpp-precomp.patch
-      ./sw_vers.patch
-    ]
-    # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
-    # https://github.com/arsv/perl-cross/pull/159
-    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross-fdopendir.patch
-    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
-    ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
+    patches = commonPatches;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -159,6 +185,7 @@ stdenv.mkDerivation (
         "-Dinstallstyle=lib/perl5"
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
+        "-Accflags=-D_GNU_SOURCE"
       ]
       ++ lib.optional stdenv.hostPlatform.isStatic "-Uusedl"
       ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [
@@ -177,16 +204,20 @@ stdenv.mkDerivation (
     configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
     # !canExecute cross uses miniperl which doesn't have this
-    postConfigure = lib.optionalString (!crossCompiling && stdenv.cc.targetPrefix != "") ''
-      substituteInPlace Makefile \
-        --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
-    '';
+    postConfigure =
+      lib.optionalString (!crossCompiling && stdenv.cc.targetPrefix != "") ''
+        substituteInPlace Makefile \
+          --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
+      ''
+      + lib.optionalString crossCompiling ''
+        substituteInPlace miniperl_top --replace-fail '-I$top/lib' '-I$top/cpan/JSON-PP/lib -I$top/cpan/CPAN-Meta-YAML/lib -I$top/lib'
+      '';
 
     dontAddStaticConfigureFlags = true;
 
     dontAddPrefix = !crossCompiling;
 
-    enableParallelBuilding = false;
+    enableParallelBuilding = true;
 
     # perl includes the build date, the uname of the build system and the
     # username of the build user in some files.
@@ -236,6 +267,13 @@ stdenv.mkDerivation (
     configurePlatforms = [ ];
 
     setupHook = ./setup-hook.sh;
+
+    env = {
+      # https://github.com/llvm/llvm-project/issues/152241
+      NIX_CFLAGS_COMPILE = lib.optionalString (
+        stdenv.hasCC && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "21"
+      ) "-fno-strict-aliasing";
+    };
 
     # copied from python
     passthru =
@@ -320,17 +358,20 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs crossCompiling rec {
-    crossVersion = "1.6.2";
+    crossVersion = "1.6.4";
 
     perl-cross-src = fetchFromGitHub {
       name = "perl-cross-${crossVersion}";
       owner = "arsv";
       repo = "perl-cross";
       rev = crossVersion;
-      hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
+      hash = "sha256-Qcysy7f887XHlq23iE5U92PhxDhpgaluITZBSdcc9Ck=";
     };
-
-    # Patches are above!!!
+    patches = commonPatches ++ [
+      # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
+      # https://github.com/arsv/perl-cross/pull/159
+      ./cross-fdopendir.patch
+    ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc

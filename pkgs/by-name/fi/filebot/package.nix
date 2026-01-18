@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate TV and Movie Renamer";
     longDescription = ''
       FileBot is the ultimate tool for organizing and renaming your Movies, TV
@@ -100,16 +100,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://filebot.net";
     changelog = "https://www.filebot.net/forums/viewforum.php?f=7";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
       gleber
       felschr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "filebot";
   };
 })

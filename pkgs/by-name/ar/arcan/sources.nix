@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchFromGitea,
 }:
 
 {
@@ -7,13 +8,14 @@
     let
       self = {
         pname = "arcan";
-        version = "0.6.3.3";
+        version = "0.7.1";
 
-        src = fetchFromGitHub {
+        src = fetchFromGitea {
+          domain = "codeberg.org";
           owner = "letoram";
           repo = "arcan";
-          rev = self.version;
-          hash = "sha256-YH3VGU3gSR5gqHnAlA2vrzU8vasKd0hOpc+2ludnV+Y=";
+          tag = self.version;
+          hash = "sha256-rADO6xLkUa3iIOSOR96fr1mR7wAUJpsSPoVn+CTNyOo=";
         };
       };
     in
@@ -21,13 +23,13 @@
 
   letoram-openal = {
     pname = "letoram-openal";
-    version = "0.6.2";
+    version = "0.6.2-unstable-2025-06-26";
 
     src = fetchFromGitHub {
       owner = "letoram";
       repo = "openal";
-      rev = "81e1b364339b6aa2b183f39fc16c55eb5857e97a";
-      hash = "sha256-X3C3TDZPiOhdZdpApC4h4KeBiWFMxkFsmE3gQ1Rz420=";
+      rev = "731bdaefeb9cfcc52267bb8fc884248e4420e9ec";
+      hash = "sha256-jrgZRekhEiztJ8vodWnCpeYmT54Ei/c27XrD5S98gjk=";
     };
   };
 

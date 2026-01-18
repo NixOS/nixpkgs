@@ -33,7 +33,8 @@
   python,
   qt6,
   setuptools,
-  tbb,
+  stdenv,
+  onetbb,
   withDocs ? false,
   withOsl ? true,
   withTools ? false,
@@ -60,8 +61,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
-
-  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
@@ -126,7 +125,7 @@ buildPythonPackage rec {
     opencolorio
     openimageio
     ptex
-    tbb
+    onetbb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11

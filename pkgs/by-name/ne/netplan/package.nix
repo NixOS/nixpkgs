@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     "BASH_COMPLETIONS_DIR=share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backend-agnostic network configuration in YAML";
     homepage = "https://netplan.io";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.linux;
     mainProgram = "netplan";
   };
 }

@@ -12,20 +12,30 @@
 }:
 let
   inherit (lib)
-    isStorePath
+    isStringLike
     substring
     stringLength
     optionalString
     escapeShellArgs
     concatMap
     ;
+
+  isNonCaStorePath =
+    x:
+    if isStringLike x then
+      let
+        str = toString x;
+      in
+      builtins.substring 0 1 str == "/" && (dirOf str == builtins.storeDir)
+    else
+      false;
 in
 if replacements == [ ] then
   drv
 else
   let
     drvName =
-      if isStorePath drv then
+      if isNonCaStorePath drv then
         # Reconstruct the name from the actual store path if available.
         substring 33 (stringLength (baseNameOf drv)) (baseNameOf drv)
       else if drv ? drvAttrs.name then

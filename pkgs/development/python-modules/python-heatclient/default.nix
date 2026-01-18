@@ -14,7 +14,6 @@
   prettytable,
   python-openstackclient,
   python-swiftclient,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "python-heatclient";
   version = "4.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "python_heatclient";
@@ -80,11 +77,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heatclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Heat built on the Heat orchestration API";
     mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

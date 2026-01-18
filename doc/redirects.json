@@ -20,6 +20,12 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "coq-withPackages": [
+    "index.html#coq-withPackages"
+  ],
+  "coq-withPackages-usage": [
+    "index.html#coq-withPackages-usage"
+  ],
   "cuda": [
     "index.html#cuda"
   ],
@@ -58,9 +64,8 @@
   ],
   "cuda-updating-redistributables": [
     "index.html#cuda-updating-redistributables",
-    "index.html#updating-cuda-redistributables"
-  ],
-  "cuda-updating-cutensor": [
+    "index.html#updating-cuda-redistributables",
+    "index.html#updating-the-cuda-toolkit",
     "index.html#cuda-updating-cutensor",
     "index.html#updating-cutensor"
   ],
@@ -71,10 +76,6 @@
   "cuda-updating-the-cuda-package-set": [
     "index.html#cuda-updating-the-cuda-package-set",
     "index.html#updating-the-cuda-package-set"
-  ],
-  "cuda-updating-the-cuda-toolkit": [
-    "index.html#cuda-updating-the-cuda-toolkit",
-    "index.html#updating-the-cuda-toolkit"
   ],
   "cuda-user-guide": [
     "index.html#cuda-user-guide"
@@ -123,6 +124,48 @@
   ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
+  ],
+  "julec-hook": [
+    "index.html#julec-hook"
+  ],
+  "julec-hook-example-code-snippet": [
+    "index.html#julec-hook-example-code-snippet"
+  ],
+  "julec-hook-variable-dontusejulecbuild": [
+    "index.html#julec-hook-variable-dontusejulecbuild"
+  ],
+  "julec-hook-variable-dontusejuleccheck": [
+    "index.html#julec-hook-variable-dontusejuleccheck"
+  ],
+  "julec-hook-variable-dontusejulecinstall": [
+    "index.html#julec-hook-variable-dontusejulecinstall"
+  ],
+  "julec-hook-variable-jule-out-dir": [
+    "index.html#julec-hook-variable-jule-out-dir"
+  ],
+  "julec-hook-variable-jule-out-name": [
+    "index.html#julec-hook-variable-jule-out-name"
+  ],
+  "julec-hook-variable-jule-src-dir": [
+    "index.html#julec-hook-variable-jule-src-dir"
+  ],
+  "julec-hook-variable-jule-test-dir": [
+    "index.html#julec-hook-variable-jule-test-dir"
+  ],
+  "julec-hook-variable-jule-test-out-dir": [
+    "index.html#julec-hook-variable-jule-test-out-dir"
+  ],
+  "julec-hook-variable-jule-test-out-name": [
+    "index.html#julec-hook-variable-jule-test-out-name"
+  ],
+  "julec-hook-variables": [
+    "index.html#julec-hook-variables"
   ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
@@ -216,6 +259,15 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-darwin-availability-checks": [
+    "index.html#sec-darwin-availability-checks"
+  ],
+  "sec-darwin-libcxx-deployment-targets": [
+    "index.html#sec-darwin-libcxx-deployment-targets"
+  ],
+  "sec-darwin-libcxx-versions": [
+    "index.html#sec-darwin-libcxx-versions"
+  ],
   "sec-functions-library-treefmt": [
     "index.html#sec-functions-library-treefmt"
   ],
@@ -252,6 +304,31 @@
   "chap-overlays": [
     "index.html#chap-overlays"
   ],
+  "sec-nixpkgs-release-26.05": [
+    "release-notes.html#sec-nixpkgs-release-26.05"
+  ],
+  "sec-nixpkgs-release-26.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.05-highlights"
+  ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib"
+  ],
+  "sec-nixpkgs-release-26.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations",
+    "index.html#fetchfromsavannah"
+  ],
+  "sec-nixpkgs-release-26.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.05-notable-changes"
+  ],
   "sec-nixpkgs-release-25.11": [
     "release-notes.html#sec-nixpkgs-release-25.11"
   ],
@@ -259,7 +336,16 @@
     "release-notes.html#sec-nixpkgs-release-25.11-highlights"
   ],
   "sec-nixpkgs-release-25.11-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities",
+    "index.html#enocache-errors-from-buildbowercomponents",
+    "index.html#ex-bowerGulpFile",
+    "index.html#ex-bowerJson",
+    "index.html#ex-buildBowerComponents",
+    "index.html#ex-buildBowerComponentsDefaultNix",
+    "index.html#sec-bower",
+    "index.html#ssec-bower2nix-troubleshooting",
+    "index.html#ssec-bower2nix-usage",
+    "index.html#ssec-build-bower-components"
   ],
   "sec-nixpkgs-release-25.11-lib": [
     "release-notes.html#sec-nixpkgs-release-25.11-lib"
@@ -307,6 +393,9 @@
   "sec-nixpkgs-release-25.05-notable-changes": [
     "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
+  "sec-nrfutil": [
+    "index.html#sec-nrfutil"
+  ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
   ],
@@ -339,6 +428,24 @@
   ],
   "sec-pkg-overrideDerivation": [
     "index.html#sec-pkg-overrideDerivation"
+  ],
+  "sec-platform-breakdown": [
+    "index.html#sec-platform-breakdown"
+  ],
+  "sec-platform-tier1": [
+    "index.html#sec-platform-tier1"
+  ],
+  "sec-platform-tier2": [
+    "index.html#sec-platform-tier2"
+  ],
+  "sec-platform-tier3": [
+    "index.html#sec-platform-tier3"
+  ],
+  "sec-platform-tier4-7": [
+    "index.html#sec-platform-tier4-7"
+  ],
+  "sec-platform-tiers": [
+    "index.html#sec-platform-tiers"
   ],
   "sec-lib-makeOverridable": [
     "index.html#sec-lib-makeOverridable"
@@ -687,6 +794,9 @@
   ],
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
+  ],
+  "var-stdenv-strictDeps": [
+    "index.html#var-stdenv-strictDeps"
   ],
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
@@ -1175,7 +1285,8 @@
     "index.html#sec-purity-in-nixpkgs"
   ],
   "sec-hardening-in-nixpkgs": [
-    "index.html#sec-hardening-in-nixpkgs"
+    "index.html#sec-hardening-in-nixpkgs",
+    "index.html#pie"
   ],
   "sec-hardening-flags-enabled-by-default": [
     "index.html#sec-hardening-flags-enabled-by-default"
@@ -1209,9 +1320,6 @@
   ],
   "sec-hardening-flags-disabled-by-default": [
     "index.html#sec-hardening-flags-disabled-by-default"
-  ],
-  "pie": [
-    "index.html#pie"
   ],
   "shadowstack": [
     "index.html#shadowstack"
@@ -1677,9 +1785,6 @@
   ],
   "fetchfrombitbucket": [
     "index.html#fetchfrombitbucket"
-  ],
-  "fetchfromsavannah": [
-    "index.html#fetchfromsavannah"
   ],
   "fetchfromrepoorcz": [
     "index.html#fetchfromrepoorcz"
@@ -2351,6 +2456,9 @@
   "cmake-build-dir": [
     "index.html#cmake-build-dir"
   ],
+  "cmake-build-type": [
+    "index.html#cmake-build-type"
+  ],
   "dont-use-cmake-configure": [
     "index.html#dont-use-cmake-configure"
   ],
@@ -2609,16 +2717,20 @@
   "waf-hook-honored-variables": [
     "index.html#waf-hook-honored-variables"
   ],
-  "zig-hook": [
+  "zig": [
+    "index.html#zig",
     "index.html#zig-hook"
   ],
-  "zig-hook-example-code-snippet": [
+  "zig-example-code-snippet": [
+    "index.html#zig-example-code-snippet",
     "index.html#zig-hook-example-code-snippet"
   ],
-  "zig-hook-variables-controlling": [
+  "zig-variables-controlling": [
+    "index.html#zig-variables-controlling",
     "index.html#zig-hook-variables-controlling"
   ],
-  "zig-hook-exclusive-variables": [
+  "zig-exclusive-variables": [
+    "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
   ],
   "dont-use-zig-build": [
@@ -2630,10 +2742,15 @@
   "dont-use-zig-install": [
     "index.html#dont-use-zig-install"
   ],
-  "zig-hook-similar-variables": [
+  "dont-set-zig-default-flags": [
+    "index.html#dont-set-zig-default-flags"
+  ],
+  "zig-similar-variables": [
+    "index.html#zig-similar-variables",
     "index.html#zig-hook-similar-variables"
   ],
-  "zig-hook-variables-honored": [
+  "zig-variables-honored": [
+    "index.html#zig-variables-honored",
     "index.html#zig-hook-variables-honored"
   ],
   "xcbuildhook": [
@@ -2800,33 +2917,6 @@
   ],
   "elixir---phoenix-project": [
     "index.html#elixir---phoenix-project"
-  ],
-  "sec-bower": [
-    "index.html#sec-bower"
-  ],
-  "ssec-bower2nix-usage": [
-    "index.html#ssec-bower2nix-usage"
-  ],
-  "ex-bowerJson": [
-    "index.html#ex-bowerJson"
-  ],
-  "ssec-build-bower-components": [
-    "index.html#ssec-build-bower-components"
-  ],
-  "ex-buildBowerComponents": [
-    "index.html#ex-buildBowerComponents"
-  ],
-  "ex-bowerGulpFile": [
-    "index.html#ex-bowerGulpFile"
-  ],
-  "ex-buildBowerComponentsDefaultNix": [
-    "index.html#ex-buildBowerComponentsDefaultNix"
-  ],
-  "ssec-bower2nix-troubleshooting": [
-    "index.html#ssec-bower2nix-troubleshooting"
-  ],
-  "enocache-errors-from-buildbowercomponents": [
-    "index.html#enocache-errors-from-buildbowercomponents"
   ],
   "sec-chicken": [
     "index.html#sec-chicken"
@@ -3351,15 +3441,6 @@
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
   ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
-  ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"
   ],
@@ -3776,6 +3857,9 @@
   ],
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
+  ],
+  "overriding-python-build-helpers": [
+    "index.html#overriding-python-build-helpers"
   ],
   "overriding-python-packages": [
     "index.html#overriding-python-packages"
@@ -4306,6 +4390,15 @@
   "sec-linux-kernel": [
     "index.html#sec-linux-kernel"
   ],
+  "sec-linux-kernel-maintainer-information": [
+    "index.html#sec-linux-kernel-maintainer-information"
+  ],
+  "sec-linux-updates": [
+    "index.html#sec-linux-updates"
+  ],
+  "sec-linux-add-new-kernel-version": [
+    "index.html#sec-linux-add-new-kernel-version"
+  ],
   "ex-overriding-kernel-derivation": [
     "index.html#ex-overriding-kernel-derivation"
   ],
@@ -4317,6 +4410,9 @@
   ],
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
+  ],
+  "sec-linux-new-kernels": [
+    "index.html#sec-linux-new-kernels"
   ],
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
@@ -4586,12 +4682,8 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
-    "index.html#chap-contributing"
-  ],
-  "sec-contributing-devmode": [
-    "index.html#sec-contributing-devmode"
-  ],
-  "sec-contributing-markup": [
+    "index.html#chap-contributing",
+    "index.html#sec-contributing-devmode",
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

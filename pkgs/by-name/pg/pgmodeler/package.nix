@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-DIyqUewP8q9O6O/v82a2DNgyrBffWkBmyhBm3pA1qVY=";
+    sha256 = "sha256-gDhH6b+8zFIsosdecUUkwAQMP1HME4EbJZsFyTzvGcE=";
   };
 
   nativeBuildInputs = [
@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Database modeling tool for PostgreSQL";
     homepage = "https://pgmodeler.io/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.esclear ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.esclear ];
+    platforms = lib.platforms.unix;
   };
 }

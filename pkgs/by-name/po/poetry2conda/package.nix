@@ -10,7 +10,7 @@ buildPythonApplication rec {
   pname = "poetry2conda";
   version = "0.3.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dojeda";
@@ -40,11 +40,11 @@ buildPythonApplication rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Script to convert a Python project declared on a pyproject.toml to a conda environment";
     homepage = "https://github.com/dojeda/poetry2conda";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "poetry2conda";
   };
 }

@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     execer cannot bin/quota
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools to manage kernel-level quotas in Linux";
     homepage = "https://sourceforge.net/projects/linuxquota/";
-    license = licenses.gpl2Plus; # With some files being BSD as an exception
-    platforms = platforms.linux;
-    maintainers = [ maintainers.dezgeg ];
+    license = lib.licenses.gpl2Plus; # With some files being BSD as an exception
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.dezgeg ];
   };
 }

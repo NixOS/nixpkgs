@@ -22,7 +22,7 @@ rec {
       splittedPath = lib.splitString "." packagePlatformPath;
 
       # ["python312Packages" "numpy" "aarch64-linux"] -> ["python312Packages" "numpy"]
-      packagePath = lib.sublist 0 (lib.length splittedPath - 1) splittedPath;
+      packagePath = lib.init splittedPath;
 
       # "python312Packages.numpy"
       name = lib.concatStringsSep "." packagePath;
@@ -66,7 +66,7 @@ rec {
   */
   convertToPackagePlatformAttrs =
     packagePlatformPaths:
-    builtins.filter (x: x != null) (builtins.map convertToPackagePlatformAttr packagePlatformPaths);
+    builtins.filter (x: x != null) (map convertToPackagePlatformAttr packagePlatformPaths);
 
   /*
     Converts a list of `packagePlatformPath`s directly to a list of (unique) package names
@@ -91,7 +91,7 @@ rec {
     let
       packagePlatformAttrs = convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths);
     in
-    uniqueStrings (builtins.map (p: p.name) packagePlatformAttrs);
+    uniqueStrings (map (p: p.name) packagePlatformAttrs);
 
   /*
     Group a list of `packagePlatformAttr`s by platforms

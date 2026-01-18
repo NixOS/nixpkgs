@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "lilex";
-  version = "2.610";
+  version = "2.621";
 
   src = fetchurl {
     url = "https://github.com/mishamyrt/Lilex/releases/download/${version}/Lilex.zip";
-    hash = "sha256-iU0NLIy0wAFFBDSYmjo7tjKQ+I1GJ1hZTkcByxePYGM=";
+    hash = "sha256-TsLJ96SZpokW3354/yt0Re4ZtFXqYK/46iyZXdPKhoE=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source programming font";
     homepage = "https://github.com/mishamyrt/Lilex";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ redyf ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ redyf ];
+    platforms = lib.platforms.all;
   };
 }

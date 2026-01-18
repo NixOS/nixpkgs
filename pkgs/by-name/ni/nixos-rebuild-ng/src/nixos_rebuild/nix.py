@@ -37,6 +37,8 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "LOCALE_ARCHIVE",
     "-E",
     "NIXOS_INSTALL_BOOTLOADER",
+    "-E",
+    "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
     "--pipe",
@@ -190,7 +192,7 @@ def copy_closure(
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
     extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
+        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))
     }
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
@@ -380,6 +382,9 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
 
     Can be used to generate `.version-suffix` file."""
     if not nixpkgs_path:
+        return None
+
+    if not (nixpkgs_path / ".git").exists():
         return None
 
     try:

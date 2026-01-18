@@ -14,8 +14,6 @@
 }:
 
 let
-  mkFlag = b: if b then "yes" else "no";
-
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
   wrapper = import ./wrapper.nix {
@@ -58,9 +56,9 @@ let
     ++ lib.optional openalSupport openal;
 
     makeFlags = [
-      "WITH_OPENAL=${mkFlag openalSupport}"
+      "WITH_OPENAL=${lib.boolToYesNo openalSupport}"
       "WITH_SYSTEMWIDE=yes"
-      "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
+      "WITH_SYSTEMDIR=\${out}/share/games/quake2"
     ];
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -94,12 +92,12 @@ let
       })
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.gpl2Plus;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ tadfisher ];
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ tadfisher ];
     };
   };
 

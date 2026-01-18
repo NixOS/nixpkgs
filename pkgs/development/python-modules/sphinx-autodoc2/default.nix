@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchDebianPatch,
 
   flit-core,
 
@@ -21,14 +21,23 @@ buildPythonPackage rec {
   version = "0.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "sphinx-extensions2";
     repo = "sphinx-autodoc2";
     tag = "v${version}";
     hash = "sha256-Wu079THK1mHVilD2Fx9dIzuIOOYOXpo/EMxVczNutCI=";
   };
+
+  patches = [
+    # compatibility with astroid 4, see: https://github.com/sphinx-extensions2/sphinx-autodoc2/pull/93
+    (fetchDebianPatch {
+      pname = "python-sphinx-autodoc2";
+      inherit version;
+      debianRevision = "9";
+      patch = "astroid-4.patch";
+      hash = "sha256-tRWDee30GSQ+AobCAHdtw65B6YyRpzn7kW5rzK7/QOk=";
+    })
+  ];
 
   build-system = [ flit-core ];
 

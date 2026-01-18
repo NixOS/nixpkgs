@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      figsoda
       numkem
     ];
   };

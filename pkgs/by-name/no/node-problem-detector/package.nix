@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "node-problem-detector";
-  version = "0.8.21";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "node-problem-detector";
     rev = "v${version}";
-    sha256 = "sha256-byxj6EXKAmesFOBtBt0URcT0h1pYdrW8ewtITuEPFcs=";
+    sha256 = "sha256-titH2HHXxm8SpfisAWckwPSA11rsqssMCVmDbdPHDI8=";
   };
 
   vendorHash = null;

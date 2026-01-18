@@ -20,6 +20,7 @@ let
       hash = "sha256-fh31qrqjQiRQL03pQl4KJAEtbKMwG8/nJroqIDOIePw=";
     })
     ./super-slicer-use-boost186.patch
+    ./super-slicer-fix-cereal-1.3.1.patch
   ];
 
   wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
@@ -126,11 +127,11 @@ let
         })
       ];
 
-      meta = with lib; {
+      meta = {
         inherit description;
         homepage = "https://github.com/supermerill/SuperSlicer";
-        license = licenses.agpl3Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.agpl3Plus;
+        maintainers = with lib.maintainers; [
           cab404
           tmarkus
         ];

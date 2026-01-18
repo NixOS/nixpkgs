@@ -113,8 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/etc/bash_completion.d" "$out/etc/bash_completion.d"
   '';
 
-  dontFixCmake = true;
-
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   preVersionCheck = ''
@@ -123,16 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       malt3
       katexochen
     ];
     mainProgram = "dnf5";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "24";
+  version = "28";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha256-mzmviZuyS68SZhOAzwWOdZLveOTS5UOgY1oW+oAv9Gs=";
+    hash = "sha256-ALn6XALAcQbf6zeoieKgTj4sUis24VzzfTHukPoa/DI=";
   };
 
   buildCommand = ''
@@ -91,7 +91,6 @@ stdenv.mkDerivation {
       binaryNativeCode
     ];
     maintainers = with lib.maintainers; [
-      sander
       rszibele
       kashw2
     ];

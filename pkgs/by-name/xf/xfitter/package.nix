@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "fitters";
     repo = "xfitter";
-    rev = "refs/tags/2.2.0_Future_Freeze";
+    tag = "2.2.0_Future_Freeze";
     domain = "gitlab.cern.ch";
     hash = "sha256-wanxgldvBEuAEOeVok3XgRVStcn9APd+Nj7vpRZUtGs=";
   };
@@ -60,6 +60,12 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
+  preConfigure = ''
+    substituteInPlace "CMakeLists.txt" \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12.2)' \
+                     'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"
   ) "-I${libtirpc.dev}/include/tirpc";
@@ -72,11 +78,11 @@ stdenv.mkDerivation {
     ln -sv "$out/lib/xfitter/"* "$out/lib/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source QCD fit framework designed to extract PDFs and assess the impact of new data";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://www.xfitter.org/xFitter";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

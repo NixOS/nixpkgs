@@ -1,153 +1,7 @@
-commit eca36e8293bef85493657f514cf37119bb27e2e0
-Author: rnhmjoj <rnhmjoj@inventati.org>
-Date:   Wed Jul 30 16:34:18 2025 +0200
-
-    Update toolchain
-
-diff --git a/common/net/src/lib.rs b/common/net/src/lib.rs
-index 671aa074d..78cfdcb96 100644
---- a/common/net/src/lib.rs
-+++ b/common/net/src/lib.rs
-@@ -1,5 +1,5 @@
- #![allow(incomplete_features)]
--#![feature(generic_const_exprs, const_fn_floating_point_arithmetic)]
-+#![feature(generic_const_exprs)]
- pub mod msg;
- pub mod sync;
- pub mod synced_components;
-diff --git a/common/systems/src/mount.rs b/common/systems/src/mount.rs
-index ed1b7f3c4..9acf953ec 100644
---- a/common/systems/src/mount.rs
-+++ b/common/systems/src/mount.rs
-@@ -67,7 +67,7 @@ impl<'a> System<'a> for Sys {
-                             if !matches!(body, Some(Body::Humanoid(_))) {
-                                 let actions = c
-                                     .actions
--                                    .extract_if(|action| match action {
-+                                    .extract_if(.., |action| match action {
-                                         ControlAction::StartInput { input: i, .. }
-                                         | ControlAction::CancelInput(i) => matches!(
-                                             i,
-@@ -164,7 +164,7 @@ impl<'a> System<'a> for Sys {
-             let inputs = controllers.get_mut(entity).map(|c| {
-                 let actions: Vec<_> = c
-                     .actions
--                    .extract_if(|action| match action {
-+                    .extract_if(.., |action| match action {
-                         ControlAction::StartInput { input: i, .. }
-                         | ControlAction::CancelInput(i) => {
-                             matches!(i, InputKind::Jump | InputKind::Fly | InputKind::Roll)
-diff --git a/network/examples/fileshare/main.rs b/network/examples/fileshare/main.rs
-index 015e46e9e..fc8db3a0d 100644
---- a/network/examples/fileshare/main.rs
-+++ b/network/examples/fileshare/main.rs
-@@ -1,4 +1,3 @@
--#![feature(async_closure)]
- //!run with
- //! (cd network/examples/fileshare && RUST_BACKTRACE=1 cargo run
- //! --profile=release -Z unstable-options  -- --trace=info --port 15006)
-diff --git a/rtsim/src/lib.rs b/rtsim/src/lib.rs
-index ef62db65e..000831da3 100644
---- a/rtsim/src/lib.rs
-+++ b/rtsim/src/lib.rs
-@@ -2,7 +2,6 @@
-     never_type,
-     try_blocks,
-     trait_alias,
--    control_flow_enum,
-     let_chains,
-     binary_heap_drain_sorted,
-     fn_traits,
-diff --git a/voxygen/benches/meshing_benchmark.rs b/voxygen/benches/meshing_benchmark.rs
-index 2cfe9563a..929d62b17 100644
---- a/voxygen/benches/meshing_benchmark.rs
-+++ b/voxygen/benches/meshing_benchmark.rs
-@@ -146,7 +146,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
-     for x in 1..GEN_SIZE - 1 {
-         for y in 1..GEN_SIZE - 1 {
-             let (volume, range) = sample(Vec2::new(x, y));
--            meshing_benches.bench_function(&format!("Terrain mesh {}, {}", x, y), move |b| {
-+            meshing_benches.bench_function(format!("Terrain mesh {}, {}", x, y), move |b| {
-                 b.iter(|| {
-                     generate_mesh(
-                         black_box(&volume),
-diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
-index 70ca5dd10..143791d2f 100644
---- a/voxygen/src/lib.rs
-+++ b/voxygen/src/lib.rs
-@@ -9,7 +9,6 @@
- #![feature(
-     extract_if,
-     trait_alias,
--    option_get_or_insert_default,
-     map_try_insert,
-     slice_as_chunks,
-     let_chains,
-diff --git a/voxygen/src/panic_handler.rs b/voxygen/src/panic_handler.rs
-index a2c0ee381..9cecff787 100644
---- a/voxygen/src/panic_handler.rs
-+++ b/voxygen/src/panic_handler.rs
-@@ -1,4 +1,4 @@
--use std::{panic, panic::PanicInfo, path::PathBuf};
-+use std::{panic, panic::PanicHookInfo, path::PathBuf};
- use tracing::error;
- 
- pub fn set_panic_hook(log_filename: String, logs_dir: PathBuf) {
-@@ -113,7 +113,7 @@ enum PotentialPanicCause {
-     GraphicsCardIncompatibleWithRenderingBackend,
- }
- 
--fn potential_cause(panic_info: &PanicInfo) -> Option<String> {
-+fn potential_cause(panic_info: &PanicHookInfo) -> Option<String> {
-     let location = panic_info
-         .location()
-         .map_or("".to_string(), |x| x.file().to_string())
-diff --git a/voxygen/src/scene/figure/cache.rs b/voxygen/src/scene/figure/cache.rs
-index d5251b53a..e654a288b 100644
---- a/voxygen/src/scene/figure/cache.rs
-+++ b/voxygen/src/scene/figure/cache.rs
-@@ -406,7 +406,8 @@ where
-         item_key: Option<ItemKey>,
-     ) -> (FigureModelEntryLod<'c>, &'c Skel::Attr)
-     where
--        for<'a> &'a Skel::Body: Into<Skel::Attr>,
-+        Skel::Attr: 'c,
-+        Skel::Attr: for<'a> From<&'a Skel::Body>,
-         Skel::Body: Clone + Send + Sync + 'static,
-         <Skel::Body as BodySpec>::Spec: Send + Sync + 'static,
-     {
-@@ -443,7 +444,7 @@ where
-                                 opaque,
-                                 bounds,
-                                 vertex_range,
--                            }) = Arc::get_mut(recv).take().and_then(|cell| cell.take())
-+                            }) = Arc::get_mut(recv).and_then(|cell| cell.take())
-                             {
-                                 let model_entry = atlas.create_figure(
-                                     renderer,
-@@ -641,6 +642,7 @@ where
-         sprite_render_state: &Arc<SpriteRenderState>,
-     ) -> (TerrainModelEntryLod<'c>, &'c Skel::Attr)
-     where
-+        Skel::Attr: 'c,
-         for<'a> &'a Skel::Body: Into<Skel::Attr>,
-         Skel::Body: Clone + Send + Sync + 'static,
-         <Skel::Body as BodySpec>::Spec: Send + Sync + 'static,
-@@ -669,7 +671,7 @@ where
-                                 sprite_instances,
-                                 blocks_of_interest,
-                                 blocks_offset,
--                            }) = Arc::get_mut(recv).take().and_then(|cell| cell.take())
-+                            }) = Arc::get_mut(recv).and_then(|cell| cell.take())
-                             {
-                                 let model_entry = atlas.create_terrain(
-                                     renderer,
-
-commit 97378a437847b8860e548de3ce70c2c53f9347f6
-Author: rnhmjoj <rnhmjoj@inventati.org>
-Date:   Wed Jul 30 00:23:35 2025 +0200
-
-    Fix wasmtime-wasi build
+From 2de00daf09e66064e37b52664f17f3cc0f6a1161 Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Sat, 13 Dec 2025 07:37:19 +0100
+Subject: [PATCH] Update toolchain
 
 diff --git a/Cargo.lock b/Cargo.lock
 index f751793bc..593f05ec1 100644
@@ -1587,6 +1441,84 @@ index f751793bc..593f05ec1 100644
  ]
  
  [[package]]
+diff --git a/common/Cargo.toml b/common/Cargo.toml
+index b11b5ad6f..4515fadbd 100644
+--- a/common/Cargo.toml
++++ b/common/Cargo.toml
+@@ -32,7 +32,7 @@ serde = { workspace = true, features = ["rc"] }
+ 
+ # Util
+ enum-map = { workspace = true, features = ["serde"] }
+-vek = { workspace = true, features = ["repr_simd"] }
++vek = { workspace = true }
+ chrono = { workspace = true }
+ chrono-tz = { workspace = true }
+ itertools = { workspace = true }
+diff --git a/common/net/src/lib.rs b/common/net/src/lib.rs
+index 671aa074d..78cfdcb96 100644
+--- a/common/net/src/lib.rs
++++ b/common/net/src/lib.rs
+@@ -1,5 +1,5 @@
+ #![allow(incomplete_features)]
+-#![feature(generic_const_exprs, const_fn_floating_point_arithmetic)]
++#![feature(generic_const_exprs)]
+ pub mod msg;
+ pub mod sync;
+ pub mod synced_components;
+diff --git a/common/src/comp/ori.rs b/common/src/comp/ori.rs
+index 567332430..93ab1f49a 100644
+--- a/common/src/comp/ori.rs
++++ b/common/src/comp/ori.rs
+@@ -364,6 +364,7 @@ impl From<Quaternion<f32>> for Ori {
+     fn from(quat: Quaternion<f32>) -> Self { Self::new(quat) }
+ }
+ 
++/*
+ impl From<vek::quaternion::repr_simd::Quaternion<f32>> for Ori {
+     fn from(
+         vek::quaternion::repr_simd::Quaternion { x, y, z, w }: vek::quaternion::repr_simd::Quaternion<f32>,
+@@ -371,16 +372,19 @@ impl From<vek::quaternion::repr_simd::Quaternion<f32>> for Ori {
+         Self::from(Quaternion { x, y, z, w })
+     }
+ }
++*/
+ 
+ impl From<Ori> for Quaternion<f32> {
+     fn from(Ori(q): Ori) -> Self { q }
+ }
+ 
++/*
+ impl From<Ori> for vek::quaternion::repr_simd::Quaternion<f32> {
+     fn from(Ori(Quaternion { x, y, z, w }): Ori) -> Self {
+         vek::quaternion::repr_simd::Quaternion { x, y, z, w }
+     }
+ }
++*/
+ 
+ impl From<Ori> for Dir {
+     fn from(ori: Ori) -> Self { ori.look_dir() }
+@@ -390,17 +394,21 @@ impl From<Ori> for Vec3<f32> {
+     fn from(ori: Ori) -> Self { ori.look_vec() }
+ }
+ 
++/*
+ impl From<Ori> for vek::vec::repr_simd::Vec3<f32> {
+     fn from(ori: Ori) -> Self { vek::vec::repr_simd::Vec3::from(ori.look_vec()) }
+ }
++*/
+ 
+ impl From<Ori> for Vec2<f32> {
+     fn from(ori: Ori) -> Self { ori.look_dir().to_horizontal().unwrap_or_default().xy() }
+ }
+ 
++/*
+ impl From<Ori> for vek::vec::repr_simd::Vec2<f32> {
+     fn from(ori: Ori) -> Self { vek::vec::repr_simd::Vec2::from(ori.look_vec().xy()) }
+ }
++*/
+ 
+ // Validate at Deserialization
+ #[derive(Copy, Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 diff --git a/common/state/Cargo.toml b/common/state/Cargo.toml
 index d786873af..934e288a3 100644
 --- a/common/state/Cargo.toml
@@ -1683,92 +1615,49 @@ index 72d4f9904..3189c909c 100644
          if self.1 == tracing::Level::INFO {
              Box::new(InfoStream(self.0.clone()))
          } else {
-diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
-index a9273e7c8..70ca5dd10 100644
---- a/voxygen/src/lib.rs
-+++ b/voxygen/src/lib.rs
-@@ -14,7 +14,6 @@
-     slice_as_chunks,
+diff --git a/common/systems/src/mount.rs b/common/systems/src/mount.rs
+index ed1b7f3c4..9acf953ec 100644
+--- a/common/systems/src/mount.rs
++++ b/common/systems/src/mount.rs
+@@ -67,7 +67,7 @@ impl<'a> System<'a> for Sys {
+                             if !matches!(body, Some(Body::Humanoid(_))) {
+                                 let actions = c
+                                     .actions
+-                                    .extract_if(|action| match action {
++                                    .extract_if(.., |action| match action {
+                                         ControlAction::StartInput { input: i, .. }
+                                         | ControlAction::CancelInput(i) => matches!(
+                                             i,
+@@ -164,7 +164,7 @@ impl<'a> System<'a> for Sys {
+             let inputs = controllers.get_mut(entity).map(|c| {
+                 let actions: Vec<_> = c
+                     .actions
+-                    .extract_if(|action| match action {
++                    .extract_if(.., |action| match action {
+                         ControlAction::StartInput { input: i, .. }
+                         | ControlAction::CancelInput(i) => {
+                             matches!(i, InputKind::Jump | InputKind::Fly | InputKind::Roll)
+diff --git a/network/examples/fileshare/main.rs b/network/examples/fileshare/main.rs
+index 015e46e9e..fc8db3a0d 100644
+--- a/network/examples/fileshare/main.rs
++++ b/network/examples/fileshare/main.rs
+@@ -1,4 +1,3 @@
+-#![feature(async_closure)]
+ //!run with
+ //! (cd network/examples/fileshare && RUST_BACKTRACE=1 cargo run
+ //! --profile=release -Z unstable-options  -- --trace=info --port 15006)
+diff --git a/rtsim/src/lib.rs b/rtsim/src/lib.rs
+index ef62db65e..000831da3 100644
+--- a/rtsim/src/lib.rs
++++ b/rtsim/src/lib.rs
+@@ -2,7 +2,6 @@
+     never_type,
+     try_blocks,
+     trait_alias,
+-    control_flow_enum,
      let_chains,
-     generic_const_exprs,
--    maybe_uninit_uninit_array,
-     maybe_uninit_array_assume_init,
-     closure_lifetime_binder
- )]
-
-commit d585b16256152fff3eaa69ec2b5b75dbe1c53f7a
-Author: Isse <git@isse.rs>
-Date:   Thu Jan 23 12:32:17 2025 +0100
-
-    Don't use vek::repr_simd
-
-diff --git a/common/Cargo.toml b/common/Cargo.toml
-index b11b5ad6f..4515fadbd 100644
---- a/common/Cargo.toml
-+++ b/common/Cargo.toml
-@@ -32,7 +32,7 @@ serde = { workspace = true, features = ["rc"] }
- 
- # Util
- enum-map = { workspace = true, features = ["serde"] }
--vek = { workspace = true, features = ["repr_simd"] }
-+vek = { workspace = true }
- chrono = { workspace = true }
- chrono-tz = { workspace = true }
- itertools = { workspace = true }
-diff --git a/common/src/comp/ori.rs b/common/src/comp/ori.rs
-index 567332430..93ab1f49a 100644
---- a/common/src/comp/ori.rs
-+++ b/common/src/comp/ori.rs
-@@ -364,6 +364,7 @@ impl From<Quaternion<f32>> for Ori {
-     fn from(quat: Quaternion<f32>) -> Self { Self::new(quat) }
- }
- 
-+/*
- impl From<vek::quaternion::repr_simd::Quaternion<f32>> for Ori {
-     fn from(
-         vek::quaternion::repr_simd::Quaternion { x, y, z, w }: vek::quaternion::repr_simd::Quaternion<f32>,
-@@ -371,16 +372,19 @@ impl From<vek::quaternion::repr_simd::Quaternion<f32>> for Ori {
-         Self::from(Quaternion { x, y, z, w })
-     }
- }
-+*/
- 
- impl From<Ori> for Quaternion<f32> {
-     fn from(Ori(q): Ori) -> Self { q }
- }
- 
-+/*
- impl From<Ori> for vek::quaternion::repr_simd::Quaternion<f32> {
-     fn from(Ori(Quaternion { x, y, z, w }): Ori) -> Self {
-         vek::quaternion::repr_simd::Quaternion { x, y, z, w }
-     }
- }
-+*/
- 
- impl From<Ori> for Dir {
-     fn from(ori: Ori) -> Self { ori.look_dir() }
-@@ -390,17 +394,21 @@ impl From<Ori> for Vec3<f32> {
-     fn from(ori: Ori) -> Self { ori.look_vec() }
- }
- 
-+/*
- impl From<Ori> for vek::vec::repr_simd::Vec3<f32> {
-     fn from(ori: Ori) -> Self { vek::vec::repr_simd::Vec3::from(ori.look_vec()) }
- }
-+*/
- 
- impl From<Ori> for Vec2<f32> {
-     fn from(ori: Ori) -> Self { ori.look_dir().to_horizontal().unwrap_or_default().xy() }
- }
- 
-+/*
- impl From<Ori> for vek::vec::repr_simd::Vec2<f32> {
-     fn from(ori: Ori) -> Self { vek::vec::repr_simd::Vec2::from(ori.look_vec().xy()) }
- }
-+*/
- 
- // Validate at Deserialization
- #[derive(Copy, Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+     binary_heap_drain_sorted,
+     fn_traits,
 diff --git a/voxygen/anim/src/plugin/mod.rs b/voxygen/anim/src/plugin/mod.rs
 index 224cc644e..534f6426d 100644
 --- a/voxygen/anim/src/plugin/mod.rs
@@ -1800,6 +1689,95 @@ index a056cd664..b4ded62a9 100644
      quaternion::repr_c::*, transform::repr_c::*, transition::*, vec::repr_c::*,
 -};*/
 +};
+diff --git a/voxygen/benches/meshing_benchmark.rs b/voxygen/benches/meshing_benchmark.rs
+index 2cfe9563a..929d62b17 100644
+--- a/voxygen/benches/meshing_benchmark.rs
++++ b/voxygen/benches/meshing_benchmark.rs
+@@ -146,7 +146,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
+     for x in 1..GEN_SIZE - 1 {
+         for y in 1..GEN_SIZE - 1 {
+             let (volume, range) = sample(Vec2::new(x, y));
+-            meshing_benches.bench_function(&format!("Terrain mesh {}, {}", x, y), move |b| {
++            meshing_benches.bench_function(format!("Terrain mesh {}, {}", x, y), move |b| {
+                 b.iter(|| {
+                     generate_mesh(
+                         black_box(&volume),
+diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
+index a9273e7c8..143791d2f 100644
+--- a/voxygen/src/lib.rs
++++ b/voxygen/src/lib.rs
+@@ -9,12 +9,10 @@
+ #![feature(
+     extract_if,
+     trait_alias,
+-    option_get_or_insert_default,
+     map_try_insert,
+     slice_as_chunks,
+     let_chains,
+     generic_const_exprs,
+-    maybe_uninit_uninit_array,
+     maybe_uninit_array_assume_init,
+     closure_lifetime_binder
+ )]
+diff --git a/voxygen/src/panic_handler.rs b/voxygen/src/panic_handler.rs
+index a2c0ee381..9cecff787 100644
+--- a/voxygen/src/panic_handler.rs
++++ b/voxygen/src/panic_handler.rs
+@@ -1,4 +1,4 @@
+-use std::{panic, panic::PanicInfo, path::PathBuf};
++use std::{panic, panic::PanicHookInfo, path::PathBuf};
+ use tracing::error;
+ 
+ pub fn set_panic_hook(log_filename: String, logs_dir: PathBuf) {
+@@ -113,7 +113,7 @@ enum PotentialPanicCause {
+     GraphicsCardIncompatibleWithRenderingBackend,
+ }
+ 
+-fn potential_cause(panic_info: &PanicInfo) -> Option<String> {
++fn potential_cause(panic_info: &PanicHookInfo) -> Option<String> {
+     let location = panic_info
+         .location()
+         .map_or("".to_string(), |x| x.file().to_string())
+diff --git a/voxygen/src/scene/figure/cache.rs b/voxygen/src/scene/figure/cache.rs
+index d5251b53a..e654a288b 100644
+--- a/voxygen/src/scene/figure/cache.rs
++++ b/voxygen/src/scene/figure/cache.rs
+@@ -406,7 +406,8 @@ where
+         item_key: Option<ItemKey>,
+     ) -> (FigureModelEntryLod<'c>, &'c Skel::Attr)
+     where
+-        for<'a> &'a Skel::Body: Into<Skel::Attr>,
++        Skel::Attr: 'c,
++        Skel::Attr: for<'a> From<&'a Skel::Body>,
+         Skel::Body: Clone + Send + Sync + 'static,
+         <Skel::Body as BodySpec>::Spec: Send + Sync + 'static,
+     {
+@@ -443,7 +444,7 @@ where
+                                 opaque,
+                                 bounds,
+                                 vertex_range,
+-                            }) = Arc::get_mut(recv).take().and_then(|cell| cell.take())
++                            }) = Arc::get_mut(recv).and_then(|cell| cell.take())
+                             {
+                                 let model_entry = atlas.create_figure(
+                                     renderer,
+@@ -641,6 +642,7 @@ where
+         sprite_render_state: &Arc<SpriteRenderState>,
+     ) -> (TerrainModelEntryLod<'c>, &'c Skel::Attr)
+     where
++        Skel::Attr: 'c,
+         for<'a> &'a Skel::Body: Into<Skel::Attr>,
+         Skel::Body: Clone + Send + Sync + 'static,
+         <Skel::Body as BodySpec>::Spec: Send + Sync + 'static,
+@@ -669,7 +671,7 @@ where
+                                 sprite_instances,
+                                 blocks_of_interest,
+                                 blocks_offset,
+-                            }) = Arc::get_mut(recv).take().and_then(|cell| cell.take())
++                            }) = Arc::get_mut(recv).and_then(|cell| cell.take())
+                             {
+                                 let model_entry = atlas.create_terrain(
+                                     renderer,
 diff --git a/voxygen/src/scene/math.rs b/voxygen/src/scene/math.rs
 index 6caf30b7d..7ca3d7953 100644
 --- a/voxygen/src/scene/math.rs
@@ -1817,3 +1795,2481 @@ index 6caf30b7d..7ca3d7953 100644
  
  pub fn aabb_to_points<T: Float>(bounds: Aabb<T>) -> [Vec3<T>; 8] {
      [
+-- 
+2.51.2
+
+
+From fd5fe591a8a2cbb8697ad4dfb738e0d1b0030cbc Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Mon, 15 Dec 2025 16:11:08 +0100
+Subject: [PATCH] Avoid if let chains
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 593f05ec1..65f8be773 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3387,6 +3387,12 @@ dependencies = [
+  "icu_properties",
+ ]
+ 
++[[package]]
++name = "if_chain"
++version = "1.0.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "cd62e6b5e86ea8eeeb8db1de02880a6abc01a397b2ebb64b5d74ac255318f5cb"
++
+ [[package]]
+ name = "image"
+ version = "0.25.2"
+@@ -7993,6 +7999,7 @@ dependencies = [
+  "hashbrown 0.15.4",
+  "iced_native",
+  "iced_winit",
++ "if_chain",
+  "image",
+  "inline_tweak",
+  "itertools 0.13.0",
+diff --git a/common/Cargo.toml b/common/Cargo.toml
+index 4515fadbd..3d8fc7c3c 100644
+--- a/common/Cargo.toml
++++ b/common/Cargo.toml
+@@ -87,6 +87,7 @@ specs = { workspace = true, features = [
+     "storage-event-control",
+     "shred-derive",
+ ] }
++if_chain = "1.0.3"
+ 
+ [dev-dependencies]
+ #bench
+diff --git a/common/src/combat.rs b/common/src/combat.rs
+index 913ec91c2..8ce3f8842 100644
+--- a/common/src/combat.rs
++++ b/common/src/combat.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{
+     comp::{
+         ability::Capability,
+@@ -914,18 +915,18 @@ pub fn permit_pvp(
+     let target_owner = owner_if_pet(target);
+ 
+     // If both players are in the same ForcePvP aura, allow them to harm eachother
+-    if let (Some(attacker_auras), Some(target_auras)) = (
++    if_chain! {if let (Some(attacker_auras), Some(target_auras)) = (
+         entered_auras.get(attacker_owner),
+         entered_auras.get(target_owner),
+-    ) && attacker_auras
++    ); if attacker_auras
+         .auras
+         .get(&AuraKindVariant::ForcePvP)
+         .zip(target_auras.auras.get(&AuraKindVariant::ForcePvP))
+         // Only allow forced pvp if both entities are affectd by the same FriendlyFire aura
+-        .is_some_and(|(attacker, target)| attacker.intersection(target).next().is_some())
+-    {
++        .is_some_and(|(attacker, target)| attacker.intersection(target).next().is_some());
++    then {
+         return true;
+-    }
++    }}
+ 
+     // Prevent PvP between pets, unless friendly fire is enabled
+     //
+diff --git a/common/src/comp/body/ship.rs b/common/src/comp/body/ship.rs
+index 82c1c82da..61bb83eb3 100644
+--- a/common/src/comp/body/ship.rs
++++ b/common/src/comp/body/ship.rs
+@@ -191,6 +191,7 @@ pub const AIRSHIP_SCALE: f32 = 11.0;
+ /// avoid having to refactor all of that to `common` for using voxels as
+ /// collider geometry
+ pub mod figuredata {
++    use if_chain::if_chain;
+     use crate::{
+         assets::{self, AssetExt, AssetHandle, DotVoxAsset, Ron},
+         figure::TerrainSegment,
+@@ -307,13 +308,13 @@ pub mod figuredata {
+                     let dyna = base_structure.vol.map_into(|cell| {
+                         if let Some(i) = cell {
+                             let color = base_structure.palette[u8::from(i) as usize];
+-                            if let Some(block) = spec.custom_indices.get(&i.get())
+-                                && index == 0
+-                            {
++                            if_chain!{if let Some(block) = spec.custom_indices.get(&i.get());
++                                if index == 0;
++                            then {
+                                 block.to_block(color)
+                             } else {
+                                 Block::new(BlockKind::Misc, color)
+-                            }
++                            }}
+                         } else {
+                             Block::empty()
+                         }
+diff --git a/common/src/comp/buff.rs b/common/src/comp/buff.rs
+index 2331eb278..abc848d0e 100644
+--- a/common/src/comp/buff.rs
++++ b/common/src/comp/buff.rs
+@@ -1,4 +1,5 @@
+ #![allow(clippy::nonstandard_macro_braces)] //tmp as of false positive !?
++use if_chain::if_chain;
+ use crate::{
+     combat::{
+         AttackEffect, CombatBuff, CombatBuffStrength, CombatEffect, CombatRequirement,
+@@ -972,10 +973,10 @@ impl Buffs {
+         };
+ 
+         // If another buff with the same fields is found, update end_time and effects
+-        let key = if !kind.stacks()
+-            && let Some((other_buff, key)) =
+-                other_key.and_then(|key| Some((self.buffs.get_mut(key)?, key)))
+-        {
++        let key = if_chain!{if !kind.stacks();
++            if let Some((other_buff, key)) =
++                other_key.and_then(|key| Some((self.buffs.get_mut(key)?, key)));
++        then {
+             other_buff.end_time = buff.end_time;
+             other_buff.effects = buff.effects;
+             key
+@@ -987,7 +988,7 @@ impl Buffs {
+                 .0
+                 .push(key);
+             key
+-        };
++        }};
+ 
+         self.sort_kind(kind);
+         if kind.queues() {
+diff --git a/common/src/comp/group.rs b/common/src/comp/group.rs
+index 2f686f3c6..a9d872250 100644
+--- a/common/src/comp/group.rs
++++ b/common/src/comp/group.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{comp::Alignment, uid::Uid};
+ use hashbrown::HashMap;
+ use serde::{Deserialize, Serialize};
+@@ -425,9 +426,9 @@ impl GroupManager {
+             let leaving_pets = pets(member, leaving_member_uid, alignments, entities);
+ 
+             // Handle updates for the leaving group member and their pets.
+-            if let Some(special_group) = alignments.get(member).and_then(|a| a.group())
+-                && !to_be_deleted
+-            {
++            if_chain!{if let Some(special_group) = alignments.get(member).and_then(|a| a.group());
++                if !to_be_deleted;
++            then {
+                 // Set NPC and pets back to their the special alignment based group
+                 for entity in iter::once(member).chain(leaving_pets.iter().copied()) {
+                     groups
+@@ -438,31 +439,34 @@ impl GroupManager {
+             // * Alignment not for a special npc group (handled above)
+             // * The entity has pets.
+             // * The entity isn't about to be deleted.
+-            } else if !leaving_pets.is_empty()
+-                && !to_be_deleted
+-                && alignments.get(member).and_then(Alignment::group).is_none()
+-            {
+-                let new_group = self.create_group(member, 1);
+-
+-                notifier(member, ChangeNotification::NewGroup {
+-                    leader: member,
+-                    members: leaving_pets
+-                        .iter()
+-                        .map(|p| (*p, Role::Pet))
+-                        .chain(iter::once((member, Role::Member)))
+-                        .collect(),
+-                });
+-
+-                let _ = groups.insert(member, new_group).unwrap();
+-                leaving_pets.iter().for_each(|&e| {
+-                    let _ = groups.insert(e, new_group).unwrap();
+-                });
+             } else {
+-                let _ = groups.remove(member);
+-                notifier(member, ChangeNotification::NoGroup);
+-                leaving_pets.iter().for_each(|&e| {
+-                    let _ = groups.remove(e);
+-                });
++                if !leaving_pets.is_empty()
++                    && !to_be_deleted
++                    && alignments.get(member).and_then(Alignment::group).is_none()
++                {
++                    let new_group = self.create_group(member, 1);
++
++                    notifier(member, ChangeNotification::NewGroup {
++                        leader: member,
++                        members: leaving_pets
++                            .iter()
++                            .map(|p| (*p, Role::Pet))
++                            .chain(iter::once((member, Role::Member)))
++                            .collect(),
++                    });
++
++                    let _ = groups.insert(member, new_group).unwrap();
++                    leaving_pets.iter().for_each(|&e| {
++                        let _ = groups.insert(e, new_group).unwrap();
++                    });
++                } else {
++                    let _ = groups.remove(member);
++                    notifier(member, ChangeNotification::NoGroup);
++                    leaving_pets.iter().for_each(|&e| {
++                        let _ = groups.remove(e);
++                    });
++                }
++            }
+             }
+ 
+             // Handle updates for the rest of the group, potentially disbanding it if there
+diff --git a/common/src/comp/inventory/mod.rs b/common/src/comp/inventory/mod.rs
+index 853a23f27..dcdb81d58 100644
+--- a/common/src/comp/inventory/mod.rs
++++ b/common/src/comp/inventory/mod.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use core::ops::Not;
+ use hashbrown::HashMap;
+ use serde::{Deserialize, Serialize};
+@@ -1057,16 +1058,16 @@ impl Inventory {
+         let (slots_mut, recently_unequipped_items) =
+             self.slots_mut_with_mutable_recently_unequipped_items();
+         slots_mut.filter_map(|slot| slot.as_mut()).for_each(|item| {
+-            if item
++            if_chain!{if item
+                 .durability_lost()
+-                .map_or(false, |dur| dur < Item::MAX_DURABILITY)
+-                && let Some((_unequip_time, count)) =
+-                    recently_unequipped_items.get_mut(&item.item_definition_id())
+-                && *count > 0
+-            {
++                .map_or(false, |dur| dur < Item::MAX_DURABILITY);
++                if let Some((_unequip_time, count)) =
++                    recently_unequipped_items.get_mut(&item.item_definition_id());
++                if *count > 0;
++            then {
+                 *count -= 1;
+                 item.increment_damage(ability_map, msm);
+-            }
++            }}
+         });
+     }
+ 
+diff --git a/common/src/comp/skillset/mod.rs b/common/src/comp/skillset/mod.rs
+index 71f90acc8..3724e91fc 100644
+--- a/common/src/comp/skillset/mod.rs
++++ b/common/src/comp/skillset/mod.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{
+     assets::{self, Asset, AssetExt},
+     comp::{item::tool::ToolKind, skills::Skill},
+@@ -497,9 +498,9 @@ impl SkillSet {
+             let prerequisites_met = this.prerequisites_met(skill);
+             // Check that skill is not yet at max level
+             if !matches!(this.skills.get(&skill), Some(level) if *level == skill.max_level()) {
+-                if let Some(skill_group) = this.skill_groups.get(&skill_group_kind)
+-                    && this.skill_group_accessible_if_exists(skill_group_kind)
+-                {
++                if_chain!{if let Some(skill_group) = this.skill_groups.get(&skill_group_kind);
++                    if this.skill_group_accessible_if_exists(skill_group_kind);
++                then {
+                     if prerequisites_met {
+                         if let Some(new_available_sp) = skill_group
+                             .available_sp
+@@ -533,7 +534,7 @@ impl SkillSet {
+                 } else {
+                     trace!("Tried to unlock skill for a skill group that player does not have");
+                     Err(SkillUnlockError::UnavailableSkillGroup)
+-                }
++                }}
+             } else {
+                 trace!("Tried to unlock skill the player already has");
+                 Err(SkillUnlockError::SkillAlreadyUnlocked)
+diff --git a/common/src/interaction.rs b/common/src/interaction.rs
+index d9961c913..072902846 100644
+--- a/common/src/interaction.rs
++++ b/common/src/interaction.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use std::time::Duration;
+ 
+ use hashbrown::HashMap;
+@@ -120,23 +121,23 @@ impl Link for Interaction {
+         if this.interactor == this.target {
+             // Can't interact with itself
+             Err(InteractionError::NotInteractable)
+-        } else if let Some(interactor) = entity(this.interactor)
+-            && let Some(target) = entity(this.target)
+-        {
++        } else {if_chain!{if let Some(interactor) = entity(this.interactor);
++            if let Some(target) = entity(this.target);
++        then {
+             // Can only interact with one thing at a time.
+-            if !is_interactors.contains(interactor)
++            if_chain!{if !is_interactors.contains(interactor)
+                 && character_states
+                     .get(interactor)
+-                    .map_or(true, |state| state.can_interact())
+-                && let Some(pos) = positions.get(interactor)
+-                && let Some(target_pos) = positions.get(target)
+-                && match this.kind {
++                    .map_or(true, |state| state.can_interact());
++                if let Some(pos) = positions.get(interactor);
++                if let Some(target_pos) = positions.get(target);
++                if match this.kind {
+                     InteractionKind::HelpDowned => {
+                         can_help_downed(*pos, *target_pos, healths.get(target))
+                     },
+                     InteractionKind::Pet => can_pet(*pos, *target_pos, alignments.get(target)),
+-                }
+-            {
++                };
++            then {
+                 if let Some(mut character_state) = character_states.get_mut(interactor) {
+                     let (buildup_duration, use_duration, recover_duration) = this.kind.durations();
+                     *character_state = CharacterState::Interact(crate::states::interact::Data {
+@@ -171,10 +172,10 @@ impl Link for Interaction {
+                 }
+             } else {
+                 Err(InteractionError::CannotInteract)
+-            }
++            }}
+         } else {
+             Err(InteractionError::NoSuchEntity)
+-        }
++        }}}
+     }
+ 
+     fn persist(
+@@ -194,22 +195,22 @@ impl Link for Interaction {
+         let is_alive =
+             |entity| entities.is_alive(entity) && healths.get(entity).map_or(true, |h| !h.is_dead);
+ 
+-        if let Some(interactor) = entity(this.interactor)
+-            && let Some(target) = entity(this.target)
+-            && is_interactors.contains(interactor)
+-            && let Some(interactors) = interactors.get(target)
+-            && interactors.interactors.contains_key(&this.interactor)
+-            && is_alive(interactor)
+-            && is_alive(target)
+-            && let Some(pos) = positions.get(interactor)
+-            && let Some(target_pos) = positions.get(target)
+-            && match this.kind {
++        if_chain!{if let Some(interactor) = entity(this.interactor);
++            if let Some(target) = entity(this.target);
++            if is_interactors.contains(interactor);
++            if let Some(interactors) = interactors.get(target);
++            if interactors.interactors.contains_key(&this.interactor);
++            if is_alive(interactor);
++            if is_alive(target);
++            if let Some(pos) = positions.get(interactor);
++            if let Some(target_pos) = positions.get(target);
++            if match this.kind {
+                 InteractionKind::HelpDowned => {
+                     can_help_downed(*pos, *target_pos, healths.get(target))
+                 },
+                 InteractionKind::Pet => can_pet(*pos, *target_pos, alignments.get(target)),
+-            }
+-            && let Some(CharacterState::Interact(crate::states::interact::Data {
++            };
++            if let Some(CharacterState::Interact(crate::states::interact::Data {
+                 static_data:
+                     crate::states::interact::StaticData {
+                         interact:
+@@ -220,14 +221,14 @@ impl Link for Interaction {
+                         ..
+                     },
+                 ..
+-            })) = character_states.get(interactor)
+-            && *state_target == this.target
+-            && *state_kind == this.kind
+-        {
++            })) = character_states.get(interactor);
++            if *state_target == this.target;
++            if *state_kind == this.kind;
++        then {
+             true
+         } else {
+             false
+-        }
++        }}
+     }
+ 
+     fn delete(
+@@ -251,10 +252,10 @@ impl Link for Interaction {
+         });
+ 
+         // yay pattern matching 🦀
+-        if let Some(character_state) = interactor
++        if_chain!{if let Some(character_state) = interactor
+             .and_then(|interactor| character_states.get_mut(interactor))
+-            .as_deref_mut()
+-            && let CharacterState::Interact(crate::states::interact::Data {
++            .as_deref_mut();
++            if let CharacterState::Interact(crate::states::interact::Data {
+                 static_data:
+                     crate::states::interact::StaticData {
+                         interact:
+@@ -266,14 +267,14 @@ impl Link for Interaction {
+                         ..
+                     },
+                 ..
+-            }) = *character_state
+-            && state_target == this.target
+-            && state_kind == this.kind
+-        {
++            }) = *character_state;
++            if state_target == this.target;
++            if state_kind == this.kind;
++        then {
+             // If the character state we created with this link still persists, the target
+             // has become invalid so we set it to that. And the character state decides how
+             // it handles that, be it ending or something else.
+             *interact = crate::states::interact::InteractKind::Invalid;
+-        }
++        }}
+     }
+ }
+diff --git a/common/src/lib.rs b/common/src/lib.rs
+index 1ccbc46ce..6c59bfead 100644
+--- a/common/src/lib.rs
++++ b/common/src/lib.rs
+@@ -6,7 +6,6 @@
+ #![feature(
+     associated_type_defaults,
+     fundamental,
+-    let_chains,
+     option_zip,
+     trait_alias,
+     type_alias_impl_trait,
+diff --git a/common/src/states/utils.rs b/common/src/states/utils.rs
+index 02c44dadc..f45723feb 100644
+--- a/common/src/states/utils.rs
++++ b/common/src/states/utils.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{
+     astar::Astar,
+     comp::{
+@@ -632,9 +633,9 @@ pub fn handle_orientation(
+         (a.to_quat().into_vec4() - b.to_quat().into_vec4()).reduce(|a, b| a.abs() + b.abs())
+     }
+ 
+-    let (tilt_ori, efficiency) = if let Body::Ship(ship) = data.body
+-        && ship.has_wheels()
+-    {
++    let (tilt_ori, efficiency) = if_chain!{if let Body::Ship(ship) = data.body;
++        if ship.has_wheels();
++    then {
+         let height_at = |rpos| {
+             data.terrain
+                 .ray(
+@@ -665,7 +666,7 @@ pub fn handle_orientation(
+         )
+     } else {
+         (Quaternion::identity(), efficiency)
+-    };
++    }};
+ 
+     // Direction is set to the override if one is provided, else if entity is
+     // strafing or attacking the horiontal component of the look direction is used,
+diff --git a/common/systems/Cargo.toml b/common/systems/Cargo.toml
+index 993dc34cf..ae485d6a6 100644
+--- a/common/systems/Cargo.toml
++++ b/common/systems/Cargo.toml
+@@ -27,6 +27,7 @@ specs = { workspace = true, features = ["serde", "storage-event-control", "deriv
+ 
+ # Tweak running code
+ # inline_tweak = { workspace = true, features = ["release_tweak"] }
++if_chain = "1.0.3"
+ 
+ [dev-dependencies]
+ # Setup a State
+diff --git a/common/systems/src/lib.rs b/common/systems/src/lib.rs
+index a2529528e..3ea35f009 100644
+--- a/common/systems/src/lib.rs
++++ b/common/systems/src/lib.rs
+@@ -1,4 +1,4 @@
+-#![feature(extract_if, let_chains)]
++#![feature(extract_if)]
+ #![allow(clippy::option_map_unit_fn)]
+ 
+ mod aura;
+diff --git a/common/systems/src/mount.rs b/common/systems/src/mount.rs
+index 9acf953ec..c1b1a2f63 100644
+--- a/common/systems/src/mount.rs
++++ b/common/systems/src/mount.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{
+     comp::{
+         Body, CharacterActivity, Collider, ControlAction, Controller, InputKind, Ori, Pos, Scale,
+@@ -103,12 +104,12 @@ impl<'a> System<'a> for Sys {
+                 let _ = velocities.insert(rider, vel);
+             }
+             // ...and apply the rider's inputs to the mount's controller
+-            if let Some((inputs, actions)) = inputs_and_actions
+-                && let Some(controller) = controllers.get_mut(entity)
+-            {
++            if_chain!{if let Some((inputs, actions)) = inputs_and_actions;
++                if let Some(controller) = controllers.get_mut(entity);
++            then {
+                 controller.inputs = inputs;
+                 controller.actions = actions;
+-            }
++            }}
+         }
+ 
+         // For each volume rider.
+diff --git a/common/systems/src/phys.rs b/common/systems/src/phys.rs
+index 401201fad..881a5dcf7 100644
+--- a/common/systems/src/phys.rs
++++ b/common/systems/src/phys.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{
+     comp::{
+         body::ship::figuredata::{VoxelCollider, VOXEL_COLLIDER_MANIFEST},
+@@ -1079,9 +1080,9 @@ impl<'a> PhysicsData<'a> {
+                         character_state.map_or(false, |cs| matches!(cs, CharacterState::Climb(_)));
+ 
+                     let friction_factor = |vel: Vec3<f32>| {
+-                        if let Some(Body::Ship(ship)) = body
+-                            && ship.has_wheels()
+-                        {
++                        if_chain!{if let Some(Body::Ship(ship)) = body;
++                            if ship.has_wheels();
++                        then {
+                             vel.try_normalized()
+                                 .and_then(|dir| {
+                                     Some(orientations.get(entity)?.right().dot(dir).abs())
+@@ -1090,7 +1091,7 @@ impl<'a> PhysicsData<'a> {
+                                 .max(0.2)
+                         } else {
+                             1.0
+-                        }
++                        }}
+                     };
+ 
+                     match &collider {
+diff --git a/rtsim/Cargo.toml b/rtsim/Cargo.toml
+index 484e5677d..96b69c1a2 100644
+--- a/rtsim/Cargo.toml
++++ b/rtsim/Cargo.toml
+@@ -20,3 +20,4 @@ rand_chacha = { workspace = true }
+ fxhash = { workspace = true }
+ itertools = { workspace = true }
+ rayon = { workspace = true }
++if_chain = "1.0.3"
+diff --git a/rtsim/src/data/npc.rs b/rtsim/src/data/npc.rs
+index 67c38c69a..99f36bf58 100644
+--- a/rtsim/src/data/npc.rs
++++ b/rtsim/src/data/npc.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{
+     ai::Action,
+     data::{Reports, Sentiments},
+@@ -340,11 +341,11 @@ impl NpcLinks {
+         if Actor::Npc(mount) == rider {
+             return Err(MountingError::MountSelf);
+         }
+-        if let Actor::Npc(rider) = rider
+-            && self.mount_map.contains_key(rider)
+-        {
++        if_chain!{if let Actor::Npc(rider) = rider;
++            if self.mount_map.contains_key(rider);
++        then {
+             return Err(MountingError::RiderIsMounted);
+-        }
++        }}
+         if self.rider_map.contains_key(&Actor::Npc(mount)) {
+             return Err(MountingError::MountIsRiding);
+         }
+diff --git a/rtsim/src/lib.rs b/rtsim/src/lib.rs
+index 000831da3..4695025e5 100644
+--- a/rtsim/src/lib.rs
++++ b/rtsim/src/lib.rs
+@@ -1,8 +1,8 @@
++#![recursion_limit = "256"]
+ #![feature(
+     never_type,
+     try_blocks,
+     trait_alias,
+-    let_chains,
+     binary_heap_drain_sorted,
+     fn_traits,
+     unboxed_closures,
+diff --git a/rtsim/src/rule/migrate.rs b/rtsim/src/rule/migrate.rs
+index e723ea467..eda377832 100644
+--- a/rtsim/src/rule/migrate.rs
++++ b/rtsim/src/rule/migrate.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{data::Site, event::OnSetup, RtState, Rule, RuleError};
+ use rand::prelude::*;
+ use rand_chacha::ChaChaRng;
+@@ -64,9 +65,9 @@ impl Rule for Migrate {
+             // Reassign NPCs to sites if their old one was deleted. If they were already
+             // homeless, no need to do anything.
+             for npc in data.npcs.values_mut() {
+-                if let Some(home) = npc.home
+-                    && !data.sites.contains_key(home)
+-                {
++                if_chain!{if let Some(home) = npc.home;
++                    if !data.sites.contains_key(home);
++                then {
+                     // Choose the closest habitable site as the new home for the NPC
+                     npc.home = data
+                         .sites
+@@ -89,7 +90,7 @@ impl Rule for Migrate {
+                             site.wpos.as_().distance_squared(npc.wpos.xy()) as i32
+                         })
+                         .map(|(site_id, _)| site_id);
+-                }
++                }}
+             }
+         });
+ 
+diff --git a/rtsim/src/rule/npc_ai.rs b/rtsim/src/rule/npc_ai.rs
+index eeabe09bb..7aa1d3516 100644
+--- a/rtsim/src/rule/npc_ai.rs
++++ b/rtsim/src/rule/npc_ai.rs
+@@ -1,4 +1,5 @@
+ use std::{collections::VecDeque, hash::BuildHasherDefault};
++use if_chain::if_chain;
+ 
+ use crate::{
+     ai::{
+@@ -545,9 +546,9 @@ fn travel_to_site<S: State>(tgt_site: SiteId, speed_factor: f32) -> impl Action<
+ 
+         // If we're currently in a site, try to find a path to the target site via
+         // tracks
+-        if let Some(current_site) = ctx.npc.current_site
+-            && let Some(tracks) = path_between_towns(current_site, tgt_site, sites, ctx.world)
+-        {
++        if_chain!{if let Some(current_site) = ctx.npc.current_site;
++            if let Some(tracks) = path_between_towns(current_site, tgt_site, sites, ctx.world);
++        then {
+ 
+             let mut path_nodes = tracks.path
+                 .into_iter()
+@@ -616,13 +617,13 @@ fn travel_to_site<S: State>(tgt_site: SiteId, speed_factor: f32) -> impl Action<
+             //     })
+             //         .debug(move || format!("travel via track {:?} ({}/{})", track_id, i + 1, track_count))))
+             //     .boxed()
+-        } else if let Some(site) = sites.get(tgt_site) {
++        } else {if let Some(site) = sites.get(tgt_site) {
+             // If all else fails, just walk toward the target site in a straight line
+             travel_to_point(site.wpos.map(|e| e as f32 + 0.5), speed_factor).debug(|| "travel to point fallback").boxed()
+         } else {
+             // If we can't find a way to get to the site at all, there's nothing more to be done
+             finish().boxed()
+-        }
++        }}}
+             // Stop the NPC early if we're near the site to prevent huddling around the centre
+             .stop_if(move |ctx: &mut NpcCtx| site_wpos.map_or(false, |site_wpos| ctx.npc.wpos.xy().distance_squared(site_wpos) < 16f32.powi(2)))
+     })
+@@ -639,15 +640,15 @@ fn talk_to<S: State>(tgt: Actor, _subject: Option<Subject>) -> impl Action<S> +
+             idle().l()
+         } else {
+             // Mention nearby sites
+-            let comment = if ctx.rng.gen_bool(0.3)
+-                && let Some(current_site) = ctx.npc.current_site
+-                && let Some(current_site) = ctx.state.data().sites.get(current_site)
+-                && let Some(mention_site) = current_site.nearby_sites_by_size.choose(&mut ctx.rng)
+-                && let Some(mention_site) = ctx.state.data().sites.get(*mention_site)
+-                && let Some(mention_site_name) = mention_site
++            let comment = if_chain!{if ctx.rng.gen_bool(0.3);
++                if let Some(current_site) = ctx.npc.current_site;
++                if let Some(current_site) = ctx.state.data().sites.get(current_site);
++                if let Some(mention_site) = current_site.nearby_sites_by_size.choose(&mut ctx.rng);
++                if let Some(mention_site) = ctx.state.data().sites.get(*mention_site);
++                if let Some(mention_site_name) = mention_site
+                     .world_site
+-                    .map(|ws| ctx.index.sites.get(ws).name().to_string())
+-            {
++                    .map(|ws| ctx.index.sites.get(ws).name().to_string());
++            then {
+                 Content::localized_with_args("npc-speech-tell_site", [
+                     ("site", Content::Plain(mention_site_name)),
+                     (
+@@ -664,28 +665,28 @@ fn talk_to<S: State>(tgt: Actor, _subject: Option<Subject>) -> impl Action<S> +
+                     ),
+                 ])
+             // Mention current site
+-            } else if ctx.rng.gen_bool(0.3)
+-                && let Some(current_site) = ctx.npc.current_site
+-                && let Some(current_site) = ctx.state.data().sites.get(current_site)
+-                && let Some(current_site_name) = current_site
++            } else {if_chain!{if ctx.rng.gen_bool(0.3);
++                if let Some(current_site) = ctx.npc.current_site;
++                if let Some(current_site) = ctx.state.data().sites.get(current_site);
++                if let Some(current_site_name) = current_site
+                     .world_site
+-                    .map(|ws| ctx.index.sites.get(ws).name().to_string())
+-            {
++                    .map(|ws| ctx.index.sites.get(ws).name().to_string());
++            then {
+                 Content::localized_with_args("npc-speech-site", [(
+                     "site",
+                     Content::Plain(current_site_name),
+                 )])
+ 
+             // Mention nearby monsters
+-            } else if ctx.rng.gen_bool(0.3)
+-                && let Some(monster) = ctx
++            } else {if_chain!{if ctx.rng.gen_bool(0.3);
++                if let Some(monster) = ctx
+                     .state
+                     .data()
+                     .npcs
+                     .values()
+                     .filter(|other| matches!(&other.role, Role::Monster))
+-                    .min_by_key(|other| other.wpos.xy().distance(ctx.npc.wpos.xy()) as i32)
+-            {
++                    .min_by_key(|other| other.wpos.xy().distance(ctx.npc.wpos.xy()) as i32);
++            then {
+                 Content::localized_with_args("npc-speech-tell_monster", [
+                     ("body", monster.body.localize_npc()),
+                     (
+@@ -699,11 +700,12 @@ fn talk_to<S: State>(tgt: Actor, _subject: Option<Subject>) -> impl Action<S> +
+                     ),
+                 ])
+             // Specific night dialog
+-            } else if ctx.rng.gen_bool(0.6) && DayPeriod::from(ctx.time_of_day.0).is_dark() {
++            } else { if ctx.rng.gen_bool(0.6) && DayPeriod::from(ctx.time_of_day.0).is_dark() {
+                 Content::localized("npc-speech-night")
+             } else {
+                 ctx.npc.personality.get_generic_comment(&mut ctx.rng)
+-            };
++            }}}}}}};
++
+             // TODO: Don't special-case players
+             let wait = if matches!(tgt, Actor::Character(_)) {
+                 0.0
+@@ -871,15 +873,15 @@ const WALKING_SPEED: f32 = 0.35;
+ fn villager(visiting_site: SiteId) -> impl Action<DefaultState> {
+     choose(move |ctx, state: &mut DefaultState| {
+         // Consider moving home if the home site gets too full
+-        if state.move_home_timer.should(ctx)
+-            && let Some(home) = ctx.npc.home
+-            && Some(home) == ctx.npc.current_site
+-            && let Some(home_pop_ratio) = ctx.state.data().sites.get(home)
++        if_chain!{if state.move_home_timer.should(ctx);
++            if let Some(home) = ctx.npc.home;
++            if Some(home) == ctx.npc.current_site;
++            if let Some(home_pop_ratio) = ctx.state.data().sites.get(home)
+                 .and_then(|site| Some((site, ctx.index.sites.get(site.world_site?).site2()?)))
+                 .map(|(site, site2)| site.population.len() as f32 / site2.plots().len() as f32)
+                 // Only consider moving if the population is more than 1.5x the number of homes
+-                .filter(|pop_ratio| *pop_ratio > 1.5)
+-            && let Some(new_home) = ctx
++                .filter(|pop_ratio| *pop_ratio > 1.5);
++            if let Some(new_home) = ctx
+                 .state
+                 .data()
+                 .sites
+@@ -902,8 +904,8 @@ fn villager(visiting_site: SiteId) -> impl Action<DefaultState> {
+                 .filter(|(_, site, site2)| (site.population.len() as f32 / site2.plots().len() as f32) < home_pop_ratio)
+                 // Find the closest of the candidate sites
+                 .min_by_key(|(_, site, _)| site.wpos.as_().distance(ctx.npc.wpos.xy()) as i32)
+-                .map(|(site_id, _, _)| site_id)
+-        {
++                .map(|(site_id, _, _)| site_id);
++        then {
+             let site_name = ctx.state.data().sites[new_home].world_site
+                 .map(|ws| ctx.index.sites.get(ws).name().to_string());
+             return important(just(move |ctx, _| {
+@@ -913,7 +915,7 @@ fn villager(visiting_site: SiteId) -> impl Action<DefaultState> {
+             })
+                 .then(travel_to_site(new_home, 0.5))
+                 .then(just(move |ctx, _| ctx.controller.set_new_home(new_home))));
+-        }
++        }}
+         let day_period = DayPeriod::from(ctx.time_of_day.0);
+         let is_weekend = ctx.time_of_day.day() as u64 % 6 == 0;
+         if day_period.is_dark()
+@@ -964,8 +966,8 @@ fn villager(visiting_site: SiteId) -> impl Action<DefaultState> {
+             && (matches!(day_period, DayPeriod::Evening) || is_weekend || ctx.rng.gen_bool(0.05)) {
+             let mut fun_stuff = Vec::new();
+ 
+-            if let Some(ws_id) = ctx.state.data().sites[visiting_site].world_site
+-                && let Some(ws) = ctx.index.sites.get(ws_id).site2() {
++            if_chain!{if let Some(ws_id) = ctx.state.data().sites[visiting_site].world_site;
++                if let Some(ws) = ctx.index.sites.get(ws_id).site2(); then {
+                 if let Some(arena) = ws.plots().find_map(|p| match p.kind() { PlotKind::DesertCityArena(a) => Some(a), _ => None}) {
+                     let wait_time = ctx.rng.gen_range(100.0..300.0);
+                     // We don't use Z coordinates for seats because they are complicated to calculate from the Ramp procedural generation
+@@ -1082,7 +1084,7 @@ fn villager(visiting_site: SiteId) -> impl Action<DefaultState> {
+ 
+                     fun_stuff.push(action);
+                 }
+-            }
++            }}
+ 
+ 
+             if !fun_stuff.is_empty() {
+@@ -1156,18 +1158,18 @@ fn villager(visiting_site: SiteId) -> impl Action<DefaultState> {
+             return casual(
+                 just(|ctx, _| {
+                     // Try to direct our speech at nearby actors, if there are any
+-                    let (target, phrase) = if ctx.rng.gen_bool(0.3) && let Some(other) = ctx
++                    let (target, phrase) = if_chain!{if ctx.rng.gen_bool(0.3); if let Some(other) = ctx
+                         .state
+                         .data()
+                         .npcs
+                         .nearby(Some(ctx.npc_id), ctx.npc.wpos, 8.0)
+-                        .choose(&mut ctx.rng)
+-                    {
++                        .choose(&mut ctx.rng);
++                    then {
+                         (Some(other), "npc-speech-merchant_sell_directed")
+                     } else {
+                         // Otherwise, resort to generic expressions
+                         (None, "npc-speech-merchant_sell_undirected")
+-                    };
++                    }};
+ 
+                     ctx.controller.say(target, Content::localized(phrase));
+                 })
+@@ -1365,9 +1367,9 @@ fn check_inbox<S: State>(ctx: &mut NpcCtx) -> Option<impl Action<S>> {
+                         sprite,
+                     } => {
+                         // Check if this happened at home, where we know what belongs to who
+-                        if let Some(site) = site
+-                            && ctx.npc.home == Some(site)
+-                        {
++                        if_chain!{if let Some(site) = site;
++                            if ctx.npc.home == Some(site);
++                        then {
+                             // TODO: Don't hardcode sentiment change.
+                             ctx.sentiments
+                                 .toward_mut(thief)
+@@ -1391,7 +1393,7 @@ fn check_inbox<S: State>(ctx: &mut NpcCtx) -> Option<impl Action<S>> {
+                                     .l(),
+                                 );
+                             }
+-                        }
++                        }}
+                     },
+                     // We don't care about deaths of non-civilians
+                     ReportKind::Death { .. } => {},
+diff --git a/rtsim/src/rule/simulate_npcs.rs b/rtsim/src/rule/simulate_npcs.rs
+index bab550719..0ca5999f2 100644
+--- a/rtsim/src/rule/simulate_npcs.rs
++++ b/rtsim/src/rule/simulate_npcs.rs
+@@ -16,6 +16,7 @@ use slotmap::SecondaryMap;
+ use tracing::{error, warn};
+ use vek::{Clamp, Vec2};
+ use world::{site::SiteKind, CONFIG};
++use if_chain::if_chain;
+ 
+ pub struct SimulateNpcs;
+ 
+@@ -33,19 +34,19 @@ fn on_mount_volume(ctx: EventCtx<SimulateNpcs, OnMountVolume>) {
+     let data = &mut *ctx.state.data_mut();
+ 
+     // TODO: Add actor to riders.
+-    if let VolumePos {
++    if_chain!{if let VolumePos {
+         kind: Volume::Entity(vehicle),
+         ..
+-    } = ctx.event.pos
+-        && let Some(link) = data.npcs.mounts.get_steerer_link(vehicle)
+-        && let Actor::Npc(driver) = link.rider
+-        && let Some(driver) = data.npcs.get_mut(driver)
+-    {
++    } = ctx.event.pos;
++        if let Some(link) = data.npcs.mounts.get_steerer_link(vehicle);
++        if let Actor::Npc(driver) = link.rider;
++        if let Some(driver) = data.npcs.get_mut(driver);
++    then {
+         driver.controller.actions.push(NpcAction::Say(
+             Some(ctx.event.actor),
+             comp::Content::localized("npc-speech-welcome-aboard"),
+         ))
+-    }
++    }}
+ }
+ 
+ fn on_death(ctx: EventCtx<SimulateNpcs, OnDeath>) {
+diff --git a/rtsim/src/rule/sync_npcs.rs b/rtsim/src/rule/sync_npcs.rs
+index 370e391e9..50ff520ca 100644
+--- a/rtsim/src/rule/sync_npcs.rs
++++ b/rtsim/src/rule/sync_npcs.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{
+     event::{EventCtx, OnDeath, OnHealthChange, OnSetup, OnTick},
+     RtState, Rule, RuleError,
+@@ -77,13 +78,13 @@ fn on_health_change(ctx: EventCtx<SyncNpcs, OnHealthChange>) {
+ 
+     // As this handler does not correctly handle death, ignore events that set the
+     // health fraction to 0 (dead)
+-    if ctx.event.new_health_fraction != 0.0
+-        && let Actor::Npc(npc_id) = ctx.event.actor
+-    {
++    if_chain!{if ctx.event.new_health_fraction != 0.0;
++        if let Actor::Npc(npc_id) = ctx.event.actor;
++    then {
+         if let Some(npc) = data.npcs.get_mut(npc_id) {
+             npc.health_fraction = ctx.event.new_health_fraction;
+         }
+-    }
++    }}
+ }
+ 
+ fn on_death(ctx: EventCtx<SyncNpcs, OnDeath>) {
+@@ -114,9 +115,9 @@ fn on_tick(ctx: EventCtx<SyncNpcs, OnTick>) {
+ 
+         // Share known reports with current site, if it's our home
+         // TODO: Only share new reports
+-        if let Some(current_site) = npc.current_site
+-            && Some(current_site) == npc.home
+-        {
++        if_chain!{if let Some(current_site) = npc.current_site;
++            if Some(current_site) == npc.home;
++        then {
+             if let Some(site) = data.sites.get_mut(current_site) {
+                 // TODO: Sites should have an inbox and their own AI code
+                 site.known_reports.extend(npc.known_reports.iter().copied());
+@@ -128,7 +129,7 @@ fn on_tick(ctx: EventCtx<SyncNpcs, OnTick>) {
+                         .map(NpcInput::Report),
+                 );
+             }
+-        }
++        }}
+ 
+         // Update the NPC's grid cell
+         let chunk_pos = npc.wpos.xy().as_().wpos_to_cpos();
+diff --git a/server/Cargo.toml b/server/Cargo.toml
+index bc0e816cb..1a92f3dba 100644
+--- a/server/Cargo.toml
++++ b/server/Cargo.toml
+@@ -75,3 +75,4 @@ rusqlite = { workspace = true }
+ refinery = { version = "0.8.14", features = ["rusqlite"] }
+ 
+ schnellru = "0.2.1"
++if_chain = "1.0.3"
+diff --git a/server/agent/Cargo.toml b/server/agent/Cargo.toml
+index 5093f22f9..62417bace 100644
+--- a/server/agent/Cargo.toml
++++ b/server/agent/Cargo.toml
+@@ -22,3 +22,4 @@ rand = { workspace = true, features = ["small_rng"] }
+ itertools = { workspace = true }
+ lazy_static = { workspace = true }
+ tracing = { workspace = true }
++if_chain = "1.0.3"
+diff --git a/server/agent/src/action_nodes.rs b/server/agent/src/action_nodes.rs
+index 24cbe31cf..82918ae35 100644
+--- a/server/agent/src/action_nodes.rs
++++ b/server/agent/src/action_nodes.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use crate::{
+     consts::{
+         AVG_FOLLOW_DIST, DEFAULT_ATTACK_RANGE, IDLE_HEALING_ITEM_THRESHOLD, MAX_PATROL_DIST,
+@@ -488,14 +489,14 @@ impl<'a> AgentData<'a> {
+                 } else {
+                     break 'activity;
+                 }
+-            } else if let Some(owner_uid) = owner_uid
+-                && is_in_range
+-                && !is_being_pet
+-                && rng.gen_bool(0.01)
+-            {
++            } else {if_chain!{if let Some(owner_uid) = owner_uid;
++                if is_in_range;
++                if !is_being_pet;
++                if rng.gen_bool(0.01);
++            then {
+                 controller.push_event(ControlEvent::Mount(*owner_uid));
+                 break 'activity;
+-            }
++            }}}
+ 
+             // Bats should fly
+             // Use a proportional controller as the bouncing effect mimics bat flight
+@@ -548,14 +549,14 @@ impl<'a> AgentData<'a> {
+                 * agent.psyche.aggro_range_multiplier.max(0.0).sqrt();
+             if let Some(patrol_origin) = agent.patrol_origin
+                 // Use owner as patrol origin otherwise
+-                .or_else(|| if let Some(Alignment::Owned(owner_uid)) = self.alignment
+-                    && let Some(owner) = get_entity_by_id(*owner_uid, read_data)
+-                    && let Some(pos) = read_data.positions.get(owner)
+-                {
++                .or_else(|| if_chain!{if let Some(Alignment::Owned(owner_uid)) = self.alignment;
++                    if let Some(owner) = get_entity_by_id(*owner_uid, read_data);
++                    if let Some(pos) = read_data.positions.get(owner);
++                then {
+                     Some(pos.0)
+                 } else {
+                     None
+-                })
++                }})
+             {
+                 agent.bearing += ((patrol_origin.xy() - self.pos.0.xy())
+                     / (0.01 + MAX_PATROL_DIST * agent.psyche.idle_wander_factor))
+diff --git a/server/agent/src/lib.rs b/server/agent/src/lib.rs
+index a64db066e..22847b981 100644
+--- a/server/agent/src/lib.rs
++++ b/server/agent/src/lib.rs
+@@ -1,4 +1,3 @@
+-#![feature(let_chains)]
+ #![allow(
+     clippy::needless_pass_by_ref_mut //until we find a better way for specs
+ )]
+diff --git a/server/src/chat.rs b/server/src/chat.rs
+index d5890a34d..33e6743ee 100644
+--- a/server/src/chat.rs
++++ b/server/src/chat.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use chrono::{DateTime, Utc};
+ use common::{
+     comp,
+@@ -221,10 +222,13 @@ impl ChatForwarder {
+         while let Some(msg) = self.chat_r.recv().await {
+             let drop_older_than = msg.time.sub(self.keep_duration);
+             let mut messages = self.messages.lock().await;
+-            while let Some(msg) = messages.front()
+-                && msg.time < drop_older_than
+-            {
+-                messages.pop_front();
++            loop {
++            if_chain!{if let Some(msg) = messages.front();
++                if msg.time < drop_older_than;
++                then {
++                    messages.pop_front();
++                }}
++                break;
+             }
+             messages.push_back(msg);
+             const MAX_CACHE_MESSAGES: usize = 10_000; // in case we have a short spam of many many messages, we dont want to keep the capacity forever
+diff --git a/server/src/cmd.rs b/server/src/cmd.rs
+index c1668d646..25a1ebe50 100644
+--- a/server/src/cmd.rs
++++ b/server/src/cmd.rs
+@@ -2,6 +2,7 @@
+ //! To implement a new command provide a handler function
+ //! in [do_command].
+ #[cfg(feature = "worldgen")]
++use if_chain::if_chain;
+ use crate::weather::WeatherJob;
+ use crate::{
+     client::Client,
+@@ -1446,13 +1447,13 @@ fn handle_alias(
+ 
+         // Update name on client player lists
+         let ecs = server.state.ecs();
+-        if let (Some(uid), Some(player), Some(client), Some(old_alias)) = (
++        if_chain!{if let (Some(uid), Some(player), Some(client), Some(old_alias)) = (
+             ecs.read_storage::<Uid>().get(target),
+             ecs.read_storage::<comp::Player>().get(target),
+             ecs.read_storage::<Client>().get(target),
+             old_alias_optional,
+-        ) && client.client_type.emit_login_events()
+-        {
++        ); if client.client_type.emit_login_events();
++        then {
+             let msg = ServerGeneral::PlayerListUpdate(PlayerListUpdate::Alias(
+                 *uid,
+                 player.alias.clone(),
+@@ -1466,7 +1467,7 @@ fn handle_alias(
+                     Content::Plain(format!("{} is now known as {}.", old_alias, player.alias)),
+                 ));
+             }
+-        }
++        }}
+         if client != target {
+             // Notify target that an admin changed the alias due to /sudo
+             server.notify_client(
+@@ -3925,15 +3926,15 @@ fn handle_join_faction(
+                 .map(|comp::Faction(f)| f);
+             (faction_leave, mode)
+         };
+-        if let Some(faction) = faction_leave
+-            && emit_join_message
+-        {
++        if_chain!{if let Some(faction) = faction_leave;
++            if emit_join_message;
++        then {
+             server.state.send_chat(
+                 // TODO: Localise
+                 ChatType::FactionMeta(faction.clone())
+                     .into_plain_msg(format!("[{}] left faction ({})", alias, faction)),
+             );
+-        }
++        }}
+         server.notify_client(target, ServerGeneral::ChatMode(mode));
+         Ok(())
+     } else {
+diff --git a/server/src/events/entity_manipulation.rs b/server/src/events/entity_manipulation.rs
+index 4cc218790..52493419e 100644
+--- a/server/src/events/entity_manipulation.rs
++++ b/server/src/events/entity_manipulation.rs
+@@ -1,4 +1,5 @@
+ #[cfg(feature = "worldgen")]
++use if_chain::if_chain;
+ use crate::rtsim::RtSim;
+ use crate::{
+     client::Client,
+@@ -342,11 +343,11 @@ impl ServerEvent for HelpDownedEvent {
+                 if let Some(mut health) = healths.get_mut(entity) {
+                     health.refresh_death_protection();
+                 }
+-                if let Some(mut character_state) = character_states.get_mut(entity)
+-                    && matches!(*character_state, comp::CharacterState::Crawl)
+-                {
++                if_chain!{if let Some(mut character_state) = character_states.get_mut(entity);
++                    if matches!(*character_state, comp::CharacterState::Crawl);
++                then {
+                     *character_state = CharacterState::Idle(Default::default());
+-                }
++                }}
+             }
+         }
+     }
+@@ -935,12 +936,12 @@ impl ServerEvent for DestroyEvent {
+                 {
+                     // Only drop loot if entity has agency (not a player),
+                     // and if it is not owned by another entity (not a pet)
+-                    if !matches!(alignment, Some(Alignment::Owned(_)))
+-                        && let Some(items) = data
++                    if_chain!{if !matches!(alignment, Some(Alignment::Owned(_)));
++                        if let Some(items) = data
+                             .item_drops
+                             .remove(ev.entity)
+-                            .map(|comp::ItemDrops(item)| item)
+-                    {
++                            .map(|comp::ItemDrops(item)| item);
++                    then {
+                         // Remove entries where zero exp was awarded - this happens because some
+                         // entities like Object bodies don't give EXP.
+                         let mut item_receivers = HashMap::new();
+@@ -1015,7 +1016,7 @@ impl ServerEvent for DestroyEvent {
+                                 },
+                             );
+                         }
+-                    }
++                    }}
+                 }
+                 true
+             };
+@@ -1037,11 +1038,11 @@ impl ServerEvent for DestroyEvent {
+                         });
+ 
+                 // Modify durability on all equipped items
+-                if !resists_durability
+-                    && let Some(mut inventory) = data.inventories.get_mut(ev.entity)
+-                {
++                if_chain!{if !resists_durability;
++                    if let Some(mut inventory) = data.inventories.get_mut(ev.entity);
++                then {
+                     inventory.damage_items(&data.ability_map, &data.msm, *data.time);
+-                }
++                }}
+             }
+ 
+             #[cfg(feature = "worldgen")]
+@@ -1049,12 +1050,12 @@ impl ServerEvent for DestroyEvent {
+                 |entity| entity_as_actor(entity, &data.rtsim_entities, &data.presences);
+ 
+             #[cfg(feature = "worldgen")]
+-            if let Some(actor) = entity_as_actor(ev.entity)
++            if_chain!{if let Some(actor) = entity_as_actor(ev.entity);
+                 // Skip the death hook for rtsim entities if they aren't deleted, otherwise
+                 // we'll end up with rtsim respawning an entity that wasn't actually
+                 // removed, producing 2 entities having the same RtsimEntityId.
+-                && should_delete
+-            {
++                if should_delete;
++            then {
+                 data.rtsim.hook_rtsim_actor_death(
+                     &data.world,
+                     data.index.as_index_ref(),
+@@ -1071,7 +1072,7 @@ impl ServerEvent for DestroyEvent {
+                         )
+                         .and_then(entity_as_actor),
+                 );
+-            }
++            }}
+ 
+             if should_delete {
+                 delete_emitter.emit(DeleteEvent(ev.entity));
+@@ -2098,9 +2099,9 @@ impl ServerEvent for ParryHookEvent {
+                 }
+             };
+ 
+-            if let Some(attacker) = ev.attacker
+-                && matches!(ev.source, AttackSource::Melee)
+-            {
++            if_chain!{if let Some(attacker) = ev.attacker;
++                if matches!(ev.source, AttackSource::Melee);
++            then {
+                 // When attacker is parried, the debuff lasts 2 seconds, the attacker takes
+                 // poise damage, get precision vulnerability and get slower recovery speed
+                 let data = buff::BuffData::new(1.0, Some(Secs(2.0)));
+@@ -2147,7 +2148,7 @@ impl ServerEvent for ParryHookEvent {
+                         time: *time,
+                     },
+                 });
+-            }
++            }}
+         }
+     }
+ }
+@@ -2540,10 +2541,10 @@ impl ServerEvent for RegrowHeadEvent {
+     ) {
+         let mut health_change_emitter = health_change_events.emitter();
+         for ev in events {
+-            if let Some(mut heads) = heads.get_mut(ev.entity)
+-                && heads.regrow_oldest()
+-                && let Some(health) = healths.get(ev.entity)
+-            {
++            if_chain!{if let Some(mut heads) = heads.get_mut(ev.entity);
++                if heads.regrow_oldest();
++                if let Some(health) = healths.get(ev.entity);
++            then {
+                 let amount = 1.0 / (heads.capacity() as f32) * health.maximum();
+                 health_change_emitter.emit(HealthChangeEvent {
+                     entity: ev.entity,
+@@ -2556,7 +2557,7 @@ impl ServerEvent for RegrowHeadEvent {
+                         instance: rand::random(),
+                     },
+                 })
+-            }
++            }}
+         }
+     }
+ }
+diff --git a/server/src/events/interaction.rs b/server/src/events/interaction.rs
+index a1ac1f78c..5ae8b155f 100755
+--- a/server/src/events/interaction.rs
++++ b/server/src/events/interaction.rs
+@@ -1,4 +1,5 @@
+ use std::{f32::consts::PI, ops::Mul};
++use if_chain::if_chain;
+ 
+ use common_state::{BlockChange, ScheduledBlockChange};
+ use specs::{DispatcherBuilder, Join, ReadExpect, ReadStorage, WriteExpect, WriteStorage};
+@@ -116,16 +117,16 @@ impl ServerEvent for NpcInteractEvent {
+                     })
+             };
+ 
+-            if within_range
+-                && let Some(agent) = agents.get_mut(npc_entity)
+-                && agent.target.is_none()
+-            {
++            if_chain!{if within_range;
++                if let Some(agent) = agents.get_mut(npc_entity);
++                if agent.target.is_none();
++            then {
+                 if let Some(interactor_uid) = uids.get(interactor) {
+                     agent
+                         .inbox
+                         .push_back(AgentEvent::Talk(*interactor_uid, subject));
+                 }
+-            }
++            }}
+         }
+     }
+ }
+@@ -259,9 +260,9 @@ impl ServerEvent for MineBlockEvent {
+                         .and_then(|damage| Some((sprite?.mine_drop_interval(), damage)))
+                         .map_or(false, |(interval, damage)| damage % interval == 0);
+ 
+-                    if (stage_changed || is_broken)
+-                        && let Some(items) = comp::Item::try_reclaim_from_block(block)
+-                    {
++                    if_chain!{if (stage_changed || is_broken);
++                        if let Some(items) = comp::Item::try_reclaim_from_block(block);
++                    then {
+                         let mut items: Vec<_> =
+                             flatten_counted_items(&items, &ability_map, &msm).collect();
+                         let maybe_uid = uids.get(ev.entity).copied();
+@@ -269,8 +270,8 @@ impl ServerEvent for MineBlockEvent {
+                         if let Some(mut skillset) = skill_sets.get_mut(ev.entity) {
+                             use common::comp::skills::{MiningSkill, Skill, SKILL_MODIFIERS};
+ 
+-                            if is_broken
+-                                && let (Some(tool), Some(uid), exp_reward @ 1..) = (
++                            if_chain!{if is_broken;
++                                if let (Some(tool), Some(uid), exp_reward @ 1..) = (
+                                     ev.tool,
+                                     maybe_uid,
+                                     items
+@@ -285,8 +286,8 @@ impl ServerEvent for MineBlockEvent {
+                                             })
+                                         })
+                                         .sum(),
+-                                )
+-                            {
++                                );
++                            then {
+                                 let skill_group = comp::SkillGroupKind::Weapon(tool);
+                                 if let Some(level_outcome) =
+                                     skillset.add_experience(skill_group, exp_reward)
+@@ -302,7 +303,7 @@ impl ServerEvent for MineBlockEvent {
+                                     exp: exp_reward,
+                                     xp_pools: HashSet::from([skill_group]),
+                                 });
+-                            }
++                            }}
+ 
+                             let stage_ore_chance = || {
+                                 let chance_mod = f64::from(SKILL_MODIFIERS.mining_tree.ore_gain);
+@@ -360,7 +361,7 @@ impl ServerEvent for MineBlockEvent {
+                                 loot_owner,
+                             });
+                         }
+-                    }
++                    }}
+ 
+                     if damage.is_some() && !is_broken {
+                         block_change.set(ev.pos, block);
+@@ -488,10 +489,10 @@ impl ServerEvent for ToggleSpriteLightEvent {
+         (mut block_change, terrain, positions): Self::SystemData<'_>,
+     ) {
+         for ev in events.into_iter() {
+-            if let Some(entity_pos) = positions.get(ev.entity)
+-                && entity_pos.0.distance_squared(ev.pos.as_()) < MAX_INTERACT_RANGE.powi(2)
+-                && block_change.can_set_block(ev.pos)
+-            {
++            if_chain!{if let Some(entity_pos) = positions.get(ev.entity);
++                if entity_pos.0.distance_squared(ev.pos.as_()) < MAX_INTERACT_RANGE.powi(2);
++                if block_change.can_set_block(ev.pos);
++            then {
+                 if let Some(new_block) = terrain
+                     .get(ev.pos)
+                     .ok()
+@@ -500,7 +501,7 @@ impl ServerEvent for ToggleSpriteLightEvent {
+                     block_change.set(ev.pos, new_block);
+                     // TODO: Emit outcome
+                 }
+-            }
++            }}
+         }
+     }
+ }
+diff --git a/server/src/events/inventory_manip.rs b/server/src/events/inventory_manip.rs
+index 514946c20..46f8ef148 100644
+--- a/server/src/events/inventory_manip.rs
++++ b/server/src/events/inventory_manip.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use hashbrown::HashSet;
+ use rand::{seq::IteratorRandom, Rng};
+ use specs::{
+@@ -368,13 +369,13 @@ impl ServerEvent for InventoryManipEvent {
+                         if block.is_collectible() && data.block_change.can_set_block(sprite_pos) {
+                             // Send event to rtsim if something was stolen.
+                             #[cfg(feature = "worldgen")]
+-                            if block.is_owned()
+-                                && let Some(actor) = super::entity_manipulation::entity_as_actor(
++                            if_chain!{if block.is_owned();
++                                if let Some(actor) = super::entity_manipulation::entity_as_actor(
+                                     entity,
+                                     &data.rtsim_entities,
+                                     &data.presences,
+-                                )
+-                            {
++                                );
++                            then {
+                                 data.rtsim.hook_pickup_owned_sprite(
+                                     &data.world,
+                                     data.index.as_index_ref(),
+@@ -384,7 +385,7 @@ impl ServerEvent for InventoryManipEvent {
+                                     sprite_pos,
+                                     actor,
+                                 );
+-                            }
++                            }}
+                             // If an item was required to collect the sprite, consume it now
+                             if let Some((inv_slot, true)) = required_item {
+                                 inventory.take(inv_slot, &data.ability_map, &data.msm);
+@@ -1103,9 +1104,9 @@ impl ServerEvent for InventoryManipEvent {
+                             }
+                         }
+ 
+-                        if !dropped.is_empty()
+-                            && let Some(pos) = data.positions.get(entity)
+-                        {
++                        if_chain!{if !dropped.is_empty();
++                            if let Some(pos) = data.positions.get(entity);
++                        then {
+                             for item in dropped {
+                                 dropped_items.push((
+                                     *pos,
+@@ -1114,7 +1115,7 @@ impl ServerEvent for InventoryManipEvent {
+                                     *uid,
+                                 ));
+                             }
+-                        }
++                        } }
+ 
+                         true
+                     } else {
+diff --git a/server/src/events/mounting.rs b/server/src/events/mounting.rs
+index e0f8cccdb..d7bdaadc5 100644
+--- a/server/src/events/mounting.rs
++++ b/server/src/events/mounting.rs
+@@ -1,5 +1,6 @@
+ #[cfg(feature = "worldgen")] use std::sync::Arc;
+ 
++use if_chain::if_chain;
+ use common::{
+     comp::{self, pet::is_mountable},
+     consts::{MAX_MOUNT_RANGE, MAX_SPRITE_MOUNT_RANGE},
+@@ -95,9 +96,9 @@ pub fn handle_mount_volume(
+         &state.read_storage(),
+     );
+ 
+-    if let Some((mat, _, block)) = block_transform
+-        && let Some(mount_offset) = block.mount_offset()
+-    {
++    if_chain!{if let Some((mat, _, block)) = block_transform;
++        if let Some(mount_offset) = block.mount_offset();
++    then {
+         let mount_pos = (mat * mount_offset.0.with_w(1.0)).xyz();
+         let within_range = {
+             let positions = state.ecs().read_storage::<comp::Pos>();
+@@ -108,9 +109,9 @@ pub fn handle_mount_volume(
+ 
+         let maybe_uid = state.ecs().read_storage::<Uid>().get(rider).copied();
+ 
+-        if let Some(rider) = maybe_uid
+-            && within_range
+-        {
++        if_chain!{if let Some(rider) = maybe_uid;
++            if within_range;
++        then {
+             let _link_successful = state
+                 .link(VolumeMounting {
+                     pos: volume_pos,
+@@ -121,13 +122,13 @@ pub fn handle_mount_volume(
+             #[cfg(feature = "worldgen")]
+             if _link_successful {
+                 let uid_allocator = state.ecs().read_resource::<IdMaps>();
+-                if let Some(rider_entity) = uid_allocator.uid_entity(rider)
+-                    && let Some(rider_actor) = state.entity_as_actor(rider_entity)
+-                    && let Some(volume_pos) = volume_pos.try_map_entity(|uid| {
++                if_chain!{if let Some(rider_entity) = uid_allocator.uid_entity(rider);
++                    if let Some(rider_actor) = state.entity_as_actor(rider_entity);
++                    if let Some(volume_pos) = volume_pos.try_map_entity(|uid| {
+                         let entity = uid_allocator.uid_entity(uid)?;
+                         state.read_storage::<RtSimEntity>().get(entity).map(|v| v.0)
+-                    })
+-                {
++                    });
++                then {
+                     state
+                         .ecs()
+                         .write_resource::<RtSim>()
+@@ -140,10 +141,10 @@ pub fn handle_mount_volume(
+                             volume_pos,
+                             rider_actor,
+                         );
+-                }
++                }}
+             }
+-        }
+-    }
++        }}
++    }}
+ }
+ 
+ pub fn handle_unmount(server: &mut Server, UnmountEvent(rider): UnmountEvent) {
+diff --git a/server/src/events/player.rs b/server/src/events/player.rs
+index 900d9c1f3..d5273d638 100644
+--- a/server/src/events/player.rs
++++ b/server/src/events/player.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use super::Event;
+ use crate::{
+     client::Client, metrics::PlayerMetrics, persistence::character_updater::CharacterUpdater,
+@@ -72,10 +73,10 @@ pub fn handle_exit_ingame(server: &mut Server, entity: EcsEntity, skip_persisten
+     // logic below relies on this...
+     let maybe_uid = state.delete_component::<Uid>(entity);
+ 
+-    if let Some(client) = state.delete_component::<Client>(entity)
+-        && let Some(uid) = maybe_uid
+-        && let Some(player) = state.delete_component::<comp::Player>(entity)
+-    {
++    if_chain!{if let Some(client) = state.delete_component::<Client>(entity);
++        if let Some(uid) = maybe_uid;
++        if let Some(player) = state.delete_component::<comp::Player>(entity);
++    then {
+         // Tell client its request was successful
+         client.send_fallible(ServerGeneral::ExitInGameSuccess);
+ 
+@@ -126,7 +127,7 @@ pub fn handle_exit_ingame(server: &mut Server, entity: EcsEntity, skip_persisten
+         // group restructuring when deleting this entity.
+     } else {
+         error!("handle_exit_ingame called with entity that is missing expected components");
+-    }
++    }}
+ 
+     let (maybe_character, sync_me) = state
+         .read_storage::<Presence>()
+@@ -252,11 +253,11 @@ pub fn handle_client_disconnect(
+ 
+     // Tell other clients to remove from player list
+     // And send a disconnected message
+-    if let (Some(uid), Some(_)) = (
++    if_chain!{if let (Some(uid), Some(_)) = (
+         state.read_storage::<Uid>().get(entity),
+         state.read_storage::<comp::Player>().get(entity),
+-    ) && emit_logoff_event
+-    {
++    ); if emit_logoff_event;
++    then {
+         state.notify_players(ServerGeneral::server_msg(
+             comp::ChatType::Offline(*uid),
+             Content::Plain("".to_string()),
+@@ -265,7 +266,7 @@ pub fn handle_client_disconnect(
+         state.notify_players(ServerGeneral::PlayerListUpdate(PlayerListUpdate::Remove(
+             *uid,
+         )));
+-    }
++    }}
+ 
+     // Sync the player's character data to the database
+     if !skip_persistence {
+@@ -565,9 +566,9 @@ pub fn handle_possess(
+         // old player.
+         // Fetches from possessee entity here since we have transferred over the
+         // `Player` component.
+-        if let Some(player) = players.get(possessee)
+-            && emit_player_list_events
+-        {
++        if_chain!{if let Some(player) = players.get(possessee);
++            if emit_player_list_events;
++        then {
+             use common_net::msg;
+ 
+             let add_player_msg = ServerGeneral::PlayerListUpdate(PlayerListUpdate::Add(
+@@ -592,7 +593,7 @@ pub fn handle_possess(
+             drop((clients, players)); // need to drop so we can use `notify_players` below
+             state.notify_players(remove_player_msg);
+             state.notify_players(add_player_msg);
+-        }
++        }}
+         drop(admins);
+ 
+         // Put possess item into loadout
+diff --git a/server/src/lib.rs b/server/src/lib.rs
+index 93a09f7a7..bd6de7d92 100644
+--- a/server/src/lib.rs
++++ b/server/src/lib.rs
+@@ -7,7 +7,6 @@
+ #![deny(clippy::clone_on_ref_ptr)]
+ #![feature(
+     box_patterns,
+-    let_chains,
+     never_type,
+     option_zip,
+     unwrap_infallible,
+diff --git a/server/src/settings/banlist.rs b/server/src/settings/banlist.rs
+index 8a4b24f01..880c3916f 100644
+--- a/server/src/settings/banlist.rs
++++ b/server/src/settings/banlist.rs
+@@ -2,6 +2,7 @@
+ 
+ // NOTE: Needed to allow the second-to-last migration to call try_into().
+ 
++use if_chain::if_chain;
+ use super::{BANLIST_FILENAME as FILENAME, MIGRATION_UPGRADE_GUARANTEE};
+ use crate::settings::editable::{EditableSetting, Version};
+ use authc::Uuid;
+@@ -612,6 +613,7 @@ mod v1 {
+ }
+ 
+ mod v2 {
++    use if_chain::if_chain;
+     use super::{
+         v1 as prev, BanError, BanErrorKind, BanKind, BanOperation, BanOperationError, Final,
+     };
+@@ -1132,9 +1134,9 @@ mod v2 {
+                     make_error(BanErrorKind::CorrespondingUuidBanMissing, &self.current)
+                 })?;
+ 
+-                if let BanAction::Ban(ip_ban) = &self.current.action
+-                    && !self.current.is_expired(now)
+-                {
++                if_chain!{if let BanAction::Ban(ip_ban) = &self.current.action;
++                    if !self.current.is_expired(now);
++                then {
+                     if let BanAction::Ban(uuid_ban) = &uuid_entry.current.action {
+                         let ip_info = ip_ban.info.as_ref().ok_or_else(|| {
+                             make_error(BanErrorKind::NonLegacyBanMissingBanInfo, &self.current)
+@@ -1162,7 +1164,7 @@ mod v2 {
+                             &self.current,
+                         ))
+                     }?;
+-                }
++                }}
+             }
+ 
+             // Make sure the expired hint is correct, and if not indicate that we should
+@@ -1531,9 +1533,9 @@ mod v2 {
+                 //
+                 // collapsible_if: more clear not to have side effects in the if condition
+                 #[allow(clippy::collapsible_if)]
+-                if let Some(uuid) = value.current.uuid_when_performed
+-                    && !value.current.is_expired(now)
+-                {
++                if_chain!{if let Some(uuid) = value.current.uuid_when_performed;
++                    if !value.current.is_expired(now);
++                then {
+                     if !uuids.insert(uuid) {
+                         return Err(BanError::Ip {
+                             kind: BanErrorKind::ActiveIpBansShareUuid,
+@@ -1543,7 +1545,7 @@ mod v2 {
+                                 .map(|e| e.current.username_when_performed.clone()),
+                         });
+                     }
+-                }
++                }}
+                 if matches!(value.validate(now, uuid_bans)?, Version::Old) {
+                     // Update detected.
+                     version = Version::Old;
+diff --git a/server/src/sys/agent/behavior_tree/interaction.rs b/server/src/sys/agent/behavior_tree/interaction.rs
+index 987e0ec21..44f77abac 100644
+--- a/server/src/sys/agent/behavior_tree/interaction.rs
++++ b/server/src/sys/agent/behavior_tree/interaction.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{
+     comp::{
+         agent::{AgentEvent, Target, TimerAction},
+@@ -89,17 +90,17 @@ pub fn handle_inbox_talk(bdata: &mut BehaviorData) -> bool {
+         let by_entity = get_entity_by_id(by, read_data);
+ 
+         if let Some(rtsim_outbox) = &mut agent.rtsim_outbox {
+-            if let Subject::Regular | Subject::Mood | Subject::Work = subject
+-                && let Some(by_entity) = by_entity
+-                && let Some(actor) = read_data
++            if_chain!{if let Subject::Regular | Subject::Mood | Subject::Work = subject;
++                if let Some(by_entity) = by_entity;
++                if let Some(actor) = read_data
+                     .presences
+                     .get(by_entity)
+                     .and_then(|p| p.kind.character_id().map(Actor::Character))
+-                    .or_else(|| Some(Actor::Npc(read_data.rtsim_entities.get(by_entity)?.0)))
+-            {
++                    .or_else(|| Some(Actor::Npc(read_data.rtsim_entities.get(by_entity)?.0)));
++            then {
+                 rtsim_outbox.push_back(NpcInput::Interaction(actor, subject));
+                 return false;
+-            }
++            }}
+         }
+ 
+         if agent.allowed_to_speak() {
+diff --git a/server/src/sys/agent/behavior_tree/mod.rs b/server/src/sys/agent/behavior_tree/mod.rs
+index e9ee407d4..df6107ed3 100644
+--- a/server/src/sys/agent/behavior_tree/mod.rs
++++ b/server/src/sys/agent/behavior_tree/mod.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{
+     comp::{
+         agent::{
+@@ -438,14 +439,14 @@ fn do_pickup_loot(bdata: &mut BehaviorData) -> bool {
+ 
+ /// If there are nearby downed allies, save them.
+ fn do_save_allies(bdata: &mut BehaviorData) -> bool {
+-    if let Some(Target {
++    if_chain!{if let Some(Target {
+         target,
+         hostile: false,
+         aggro_on: false,
+         ..
+-    }) = bdata.agent.target
+-        && let Some(target_uid) = bdata.read_data.uids.get(target)
+-    {
++    }) = bdata.agent.target;
++        if let Some(target_uid) = bdata.read_data.uids.get(target);
++    then {
+         let needs_saving = is_downed(
+             bdata.read_data.healths.get(target),
+             bdata.read_data.char_states.get(target),
+@@ -467,10 +468,10 @@ fn do_save_allies(bdata: &mut BehaviorData) -> bool {
+                                 !interactors.has_interaction(InteractionKind::HelpDowned)
+                             }) && bdata.agent_data.char_state.can_interact();
+ 
+-        if needs_saving
+-            && wants_to_save
+-            && let Some(target_pos) = bdata.read_data.positions.get(target)
+-        {
++        if_chain!{if needs_saving;
++            if wants_to_save;
++            if let Some(target_pos) = bdata.read_data.positions.get(target);
++        then {
+             let dist_sqr = bdata.agent_data.pos.0.distance_squared(target_pos.0);
+             if dist_sqr < (MAX_INTERACT_RANGE * 0.5).powi(2) {
+                 bdata.controller.push_event(ControlEvent::InteractWith {
+@@ -496,8 +497,8 @@ fn do_save_allies(bdata: &mut BehaviorData) -> bool {
+                 bdata.controller.inputs.move_z = bearing.z;
+             }
+             return true;
+-        }
+-    }
++        }}
++    }}
+     false
+ }
+ 
+@@ -871,11 +872,11 @@ fn do_combat(bdata: &mut BehaviorData) -> bool {
+                     controller.push_action(ControlAction::Stand);
+ 
+                     // Stay still if we're being helped up.
+-                    if let Some(interactors) = read_data.interactors.get(*agent_data.entity)
+-                        && interactors.has_interaction(InteractionKind::HelpDowned)
+-                    {
++                    if_chain!{if let Some(interactors) = read_data.interactors.get(*agent_data.entity);
++                        if interactors.has_interaction(InteractionKind::HelpDowned);
++                    then {
+                         return true;
+-                    }
++                    }}
+ 
+                     (true, 5.0)
+                 },
+diff --git a/server/src/sys/entity_sync.rs b/server/src/sys/entity_sync.rs
+index 0df151f14..57c15e3a6 100644
+--- a/server/src/sys/entity_sync.rs
++++ b/server/src/sys/entity_sync.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use super::sentinel::{DeletedEntities, TrackedStorages, UpdateTrackers};
+ use crate::{client::Client, presence::RegionSubscription, EditableSettings, Tick};
+ use common::{
+@@ -336,7 +337,7 @@ impl<'a> System<'a> for Sys {
+                 include_all_comps,
+             );
+ 
+-            if include_all_comps && let Some(&pos) = maybe_pos {
++            if_chain!{if include_all_comps; if let Some(&pos) = maybe_pos; then {
+                 let send_now = should_sync_client_physics(
+                     entity,
+                     &player_physics_settings,
+@@ -354,7 +355,7 @@ impl<'a> System<'a> for Sys {
+                     ori,
+                     vel,
+                 );
+-            }
++            }}
+ 
+             if !comp_sync_package.is_empty() {
+                 client.send_fallible(ServerGeneral::CompSync(
+diff --git a/server/src/sys/msg/character_screen.rs b/server/src/sys/msg/character_screen.rs
+index 3cdcc1bec..5fb34554a 100644
+--- a/server/src/sys/msg/character_screen.rs
++++ b/server/src/sys/msg/character_screen.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ #[cfg(not(feature = "worldgen"))]
+ use crate::test_world::World;
+ #[cfg(feature = "worldgen")]
+@@ -98,15 +99,15 @@ impl Sys {
+         match msg {
+             // Request spectator state
+             ClientGeneral::Spectate(requested_view_distances) => {
+-                if let Some(admin) = admins.get(entity)
+-                    && admin.0 >= AdminRole::Moderator
+-                {
++                if_chain!{if let Some(admin) = admins.get(entity);
++                    if admin.0 >= AdminRole::Moderator;
++                then {
+                     send_join_messages()?;
+ 
+                     emitters.emit(InitializeSpectatorEvent(entity, requested_view_distances));
+                 } else {
+                     debug!("dropped Spectate msg from unprivileged client")
+-                }
++                }}
+             },
+             ClientGeneral::Character(character_id, requested_view_distances) => {
+                 if let Some(player) = players.get(entity) {
+diff --git a/server/src/sys/msg/in_game.rs b/server/src/sys/msg/in_game.rs
+index f2c3ddce6..b2de5b23a 100644
+--- a/server/src/sys/msg/in_game.rs
++++ b/server/src/sys/msg/in_game.rs
+@@ -1,4 +1,5 @@
+ #[cfg(feature = "persistent_world")]
++use if_chain::if_chain;
+ use crate::TerrainPersistence;
+ use crate::{client::Client, EditableSettings, Settings};
+ use common::{
+@@ -116,9 +117,9 @@ impl Sys {
+                 }
+             },
+             ClientGeneral::ControlEvent(event) => {
+-                if presence.kind.controlling_char()
+-                    && let Some(controller) = controller
+-                {
++                if_chain!{if presence.kind.controlling_char();
++                    if let Some(controller) = controller;
++                then {
+                     // Skip respawn if client entity is alive
+                     let skip_respawn = matches!(event, ControlEvent::Respawn)
+                         && healths.get(entity).map_or(true, |h| !h.is_dead);
+@@ -126,7 +127,7 @@ impl Sys {
+                     if !skip_respawn {
+                         controller.push_event(event);
+                     }
+-                }
++                }}
+             },
+             ClientGeneral::ControlAction(event) => {
+                 if presence.kind.controlling_char() {
+@@ -242,14 +243,14 @@ impl Sys {
+                 emitters.emit(event::UpdateMapMarkerEvent { entity, update });
+             },
+             ClientGeneral::SpectatePosition(pos) => {
+-                if let Some(admin) = maybe_admin
+-                    && admin.0 >= AdminRole::Moderator
+-                    && presence.kind == PresenceKind::Spectator
+-                {
++                if_chain!{if let Some(admin) = maybe_admin;
++                    if admin.0 >= AdminRole::Moderator;
++                    if presence.kind == PresenceKind::Spectator;
++                then {
+                     if let Some(position) = position {
+                         position.0 = pos;
+                     }
+-                }
++                }}
+             },
+             ClientGeneral::RequestCharacterList
+             | ClientGeneral::CreateCharacter { .. }
+@@ -427,11 +428,11 @@ impl<'a> System<'a> for Sys {
+                         )
+                     });
+ 
+-                    if let Some((new_pos, new_vel, new_ori)) = player_physics
+-                        && let Some(old_pos) = pos.as_deref_mut()
+-                        && let Some(old_vel) = vel.as_deref_mut()
+-                        && let Some(old_ori) = ori.as_deref_mut()
+-                    {
++                    if_chain!{if let Some((new_pos, new_vel, new_ori)) = player_physics;
++                        if let Some(old_pos) = pos.as_deref_mut();
++                        if let Some(old_vel) = vel.as_deref_mut();
++                        if let Some(old_ori) = ori.as_deref_mut();
++                    then {
+                         enum Rejection {
+                             TooFar { old: Vec3<f32>, new: Vec3<f32> },
+                             TooFast { vel: Vec3<f32> },
+@@ -526,7 +527,7 @@ impl<'a> System<'a> for Sys {
+                             *old_vel = new_vel;
+                             *old_ori = new_ori;
+                         }
+-                    }
++                    }}
+ 
+                     // Ensure deferred view distance changes are applied (if the
+                     // requsite time has elapsed).
+diff --git a/server/src/sys/pets.rs b/server/src/sys/pets.rs
+index 54ca969d6..3ae223a8e 100755
+--- a/server/src/sys/pets.rs
++++ b/server/src/sys/pets.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{
+     comp::{Agent, Alignment, Pet, PhysicsState, Pos},
+     terrain::TerrainGrid,
+@@ -59,16 +60,16 @@ impl<'a> System<'a> for Sys {
+ 
+         for (pet_entity, owner_pos) in lost_pets.iter() {
+             let stay = agn.get(*pet_entity).and_then(|x| x.stay_pos).is_some();
+-            if let Some(pet_pos) = positions.get_mut(*pet_entity)
+-                && !stay
+-            {
++            if_chain!{if let Some(pet_pos) = positions.get_mut(*pet_entity);
++                if !stay;
++            then {
+                 // Move the pets to their owner's position
+                 // TODO: Create a teleportation event to handle this instead of
+                 // processing the entity position move here
+                 pet_pos.0 = terrain
+                     .find_ground(owner_pos.0.map(|e| e.floor() as i32))
+                     .map(|e| e as f32);
+-            }
++            }}
+         }
+     }
+ }
+diff --git a/server/src/sys/server_info.rs b/server/src/sys/server_info.rs
+index 76ec3c7d9..b2e04ae24 100644
+--- a/server/src/sys/server_info.rs
++++ b/server/src/sys/server_info.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{comp::Player, util::GIT_DATE_TIMESTAMP};
+ use common_ecs::{Origin, Phase, System};
+ use lazy_static::lazy_static;
+@@ -35,9 +36,9 @@ impl<'a> System<'a> for Sys {
+         _job: &mut common_ecs::Job<Self>,
+         (tick, settings, sender, players, clients): Self::SystemData,
+     ) {
+-        if let Some(sender) = sender.as_ref()
+-            && tick.0 % INFO_SEND_INTERVAL == 0
+-        {
++        if_chain!{if let Some(sender) = sender.as_ref();
++            if tick.0 % INFO_SEND_INTERVAL == 0;
++        then {
+             let count = (&players, &clients)
+                 .join()
+                 // Hide silent spectators from the player count
+@@ -54,6 +55,6 @@ impl<'a> System<'a> for Sys {
+             }) {
+                 warn!(?e, "Failed to send server info to the query server");
+             }
+-        }
++        }}
+     }
+ }
+diff --git a/server/src/weather/tick.rs b/server/src/weather/tick.rs
+index f34d0fc55..7f06d9a12 100644
+--- a/server/src/weather/tick.rs
++++ b/server/src/weather/tick.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use common::{
+     comp,
+     event::EventBus,
+@@ -108,9 +109,9 @@ impl<'a> System<'a> for Sys {
+         };
+ 
+         if let Some(weather_job) = to_update {
+-            if matches!(weather_job.state, WeatherJobState::Working(_))
+-                && let Ok((new_grid, new_lightning_cells, sim)) = weather_job.weather_rx.try_recv()
+-            {
++            if_chain!{if matches!(weather_job.state, WeatherJobState::Working(_));
++                if let Ok((new_grid, new_lightning_cells, sim)) = weather_job.weather_rx.try_recv();
++            then {
+                 *grid = new_grid;
+                 *lightning_cells = new_lightning_cells;
+                 let mut lazy_msg = None;
+@@ -123,7 +124,7 @@ impl<'a> System<'a> for Sys {
+                     lazy_msg.as_ref().map(|msg| client.send_prepared(msg));
+                 }
+                 weather_job.state = WeatherJobState::Idle(sim);
+-            }
++            }}
+ 
+             if matches!(weather_job.state, WeatherJobState::Idle(_)) {
+                 weather_job.last_update = *program_time;
+diff --git a/voxygen/Cargo.toml b/voxygen/Cargo.toml
+index a0e5c325d..0f8219113 100644
+--- a/voxygen/Cargo.toml
++++ b/voxygen/Cargo.toml
+@@ -148,6 +148,7 @@ inline_tweak = { workspace = true }
+ itertools = { workspace = true }
+ sha2 = { workspace = true }
+ bitflags = { workspace = true, features = ["serde"] }
++if_chain = "1.0.3"
+ 
+ # Discord RPC
+ discord-sdk = { version = "0.3.0", optional = true }
+diff --git a/voxygen/i18n-helpers/Cargo.toml b/voxygen/i18n-helpers/Cargo.toml
+index 8773bfc10..72796d1e9 100644
+--- a/voxygen/i18n-helpers/Cargo.toml
++++ b/voxygen/i18n-helpers/Cargo.toml
+@@ -11,3 +11,4 @@ common = {package = "veloren-common", path = "../../common"}
+ i18n = {package = "veloren-client-i18n", path = "../../client/i18n"}
+ # Utility
+ tracing = { workspace = true }
++if_chain = "1.0.3"
+diff --git a/voxygen/i18n-helpers/src/lib.rs b/voxygen/i18n-helpers/src/lib.rs
+index 87bc472cb..7637587b7 100644
+--- a/voxygen/i18n-helpers/src/lib.rs
++++ b/voxygen/i18n-helpers/src/lib.rs
+@@ -1,6 +1,5 @@
+-#![feature(let_chains)]
++use if_chain::if_chain;
+ use std::borrow::Cow;
+-
+ use common::{
+     comp::{
+         body::Gender,
+@@ -134,13 +133,13 @@ pub fn localize_chat_message(
+     let message_format = |from: &Uid, content: &Content, group: Option<&String>| {
+         let alias = name_format_or_complex(true, from);
+ 
+-        let name = if let Some(pi) = info.player_info.get(from).cloned()
+-            && show_char_name
+-        {
++        let name = if_chain!{if let Some(pi) = info.player_info.get(from).cloned();
++            if show_char_name;
++        then {
+             pi.character.map(|c| c.name)
+         } else {
+             None
+-        };
++        }};
+ 
+         let message = localization.get_content(content);
+ 
+diff --git a/voxygen/src/audio/ambience.rs b/voxygen/src/audio/ambience.rs
+index e083837d1..811049aad 100644
+--- a/voxygen/src/audio/ambience.rs
++++ b/voxygen/src/audio/ambience.rs
+@@ -14,6 +14,7 @@ use serde::Deserialize;
+ use strum::IntoEnumIterator;
+ use tracing::warn;
+ use vek::*;
++use if_chain::if_chain;
+ 
+ #[derive(Debug, Default, Deserialize)]
+ pub struct AmbienceCollection {
+@@ -64,25 +65,25 @@ impl AmbienceMgr {
+         for tag in AmbienceChannelTag::iter() {
+             // Init: Spawn a channel for each tag
+             // TODO: Find a good way to cull unneeded channels
+-            if let Some(inner) = audio.inner.as_mut()
+-                && inner.channels.get_ambience_channel(tag).is_none()
+-            {
++            if_chain!{if let Some(inner) = audio.inner.as_mut();
++                if inner.channels.get_ambience_channel(tag).is_none();
++            then {
+                 inner.new_ambience_channel(tag);
+                 let track = ambience_sounds.tracks.iter().find(|track| track.tag == tag);
+                 if let Some(track) = track {
+                     audio.play_ambience_looping(tag, &track.path);
+                 }
+-            }
+-            if let Some(inner) = audio.inner.as_mut()
+-                && let Some(channel) = inner.channels.get_ambience_channel(tag)
+-            {
++            }}
++            if_chain!{if let Some(inner) = audio.inner.as_mut();
++                if let Some(channel) = inner.channels.get_ambience_channel(tag);
++            then {
+                 // Maintain: get the correct volume of whatever the tag of the current
+                 // channel is
+                 let target_volume = get_target_volume(tag, client, camera);
+ 
+                 // Fade to the target volume over a short period of time
+                 channel.fade_to(target_volume, 1.0);
+-            }
++            }}
+         }
+     }
+ }
+diff --git a/voxygen/src/audio/mod.rs b/voxygen/src/audio/mod.rs
+index 927f122e4..0941d2b9e 100644
+--- a/voxygen/src/audio/mod.rs
++++ b/voxygen/src/audio/mod.rs
+@@ -7,6 +7,7 @@ pub mod music;
+ pub mod sfx;
+ pub mod soundcache;
+ 
++use if_chain::if_chain;
+ use anim::vek::Quaternion;
+ use channel::{
+     AmbienceChannel, AmbienceChannelTag, LoopPoint, MusicChannel, MusicChannelTag, SfxChannel,
+@@ -399,9 +400,9 @@ impl AudioFrontend {
+     /// Play a music file with the given tag. Pass in the length of the track in
+     /// seconds.
+     fn play_music(&mut self, sound: &str, channel_tag: MusicChannelTag, length: f32) {
+-        if self.music_enabled()
+-            && let Some(inner) = &mut self.inner
+-        {
++        if_chain!{if self.music_enabled();
++            if let Some(inner) = &mut self.inner;
++        then {
+             let mtm = self.mtm.read();
+ 
+             if let Some(current_channel) = inner.channels.music.iter_mut().find(|c| !c.is_done()) {
+@@ -438,7 +439,7 @@ impl AudioFrontend {
+                 .sound_player
+                 .play_sound(source, Some(*fade_in), Some(*fade_out));
+             channel.set_source(handle);
+-        }
++        }}
+     }
+ 
+     /// Turn on or off looping
+@@ -528,10 +529,10 @@ impl AudioFrontend {
+         if let Some((sfx_file, dur, subtitle)) = Self::get_sfx_file(trigger_item) {
+             self.emit_subtitle(subtitle, Some(position), dur);
+             // Play sound in empty channel at given position
+-            if self.sfx_enabled()
+-                && let Some(inner) = self.inner.as_mut()
+-                && let Some(channel) = inner.channels.get_sfx_channel()
+-            {
++            if_chain!{if self.sfx_enabled();
++                if let Some(inner) = self.inner.as_mut();
++                if let Some(channel) = inner.channels.get_sfx_channel();
++            then {
+                 let sound = load_ogg(sfx_file, false);
+                 channel.update(position);
+                 let emitter = channel.get_emitter();
+@@ -541,7 +542,7 @@ impl AudioFrontend {
+                     .output_destination(emitter);
+                 let handle = inner.sound_player.play_sound(source, None, None);
+                 channel.set_source(handle);
+-            }
++            }}
+         } else {
+             warn!(
+                 "Missing sfx trigger config for sfx event at position: {:?}",
+@@ -561,15 +562,15 @@ impl AudioFrontend {
+             self.emit_subtitle(subtitle, None, dur);
+ 
+             // Play sound in empty channel
+-            if self.sfx_enabled()
+-                && let Some(inner) = self.inner.as_mut()
+-                && let Some(channel) = inner.channels.get_ui_channel()
+-            {
++            if_chain!{if self.sfx_enabled();
++                if let Some(inner) = self.inner.as_mut();
++                if let Some(channel) = inner.channels.get_ui_channel();
++            then {
+                 let sound = load_ogg(sfx_file, false)
+                     .volume(Volume::Amplitude(volume.unwrap_or(1.0) as f64));
+                 let handle = inner.sound_player.play_sound(sound, None, None);
+                 channel.set_source(handle);
+-            }
++            }}
+         } else {
+             warn!("Missing sfx trigger config for ui sfx event.",);
+         }
+@@ -598,17 +599,17 @@ impl AudioFrontend {
+ 
+     /// Plays an ambience sound that loops in the channel with a given tag
+     pub fn play_ambience_looping(&mut self, channel_tag: AmbienceChannelTag, sound: &str) {
+-        if self.ambience_enabled()
+-            && let Some(inner) = self.inner.as_mut()
+-            && let Some(channel) = inner.channels.get_ambience_channel(channel_tag)
+-        {
++        if_chain!{if self.ambience_enabled();
++            if let Some(inner) = self.inner.as_mut();
++            if let Some(channel) = inner.channels.get_ambience_channel(channel_tag);
++        then {
+             let source = load_ogg(sound, true)
+                 .loop_region(0.0..)
+                 .output_destination(channel.get_track());
+             channel.set_looping(true);
+             let handle = inner.sound_player.play_sound(source, Some(1.0), None);
+             channel.set_source(handle);
+-        }
++        }}
+     }
+ 
+     /// Plays an ambience sound once at the given volume after the given delay.
+@@ -621,11 +622,11 @@ impl AudioFrontend {
+         volume: Option<f32>,
+         delay: Option<f32>,
+     ) {
+-        if self.ambience_enabled()
+-            && trigger_item.is_some()
+-            && let Some(inner) = self.inner.as_mut()
+-            && let Some(channel) = inner.channels.get_ambience_channel(channel_tag)
+-        {
++        if_chain!{if self.ambience_enabled();
++            if trigger_item.is_some();
++            if let Some(inner) = self.inner.as_mut();
++            if let Some(channel) = inner.channels.get_ambience_channel(channel_tag);
++        then {
+             let sound = AudioFrontend::get_sfx_file(trigger_item)
+                 .unwrap_or(("", 0.0, Some("")))
+                 .0;
+@@ -637,7 +638,7 @@ impl AudioFrontend {
+             channel.fade_to(1.0, 0.0);
+             let handle = inner.sound_player.play_sound(source, None, delay);
+             channel.set_source(handle);
+-        }
++        }}
+     }
+ 
+     pub fn set_listener_pos(&mut self, pos: Vec3<f32>, ori: Vec3<f32>) {
+diff --git a/voxygen/src/hud/mod.rs b/voxygen/src/hud/mod.rs
+index b994d4654..d5196e772 100755
+--- a/voxygen/src/hud/mod.rs
++++ b/voxygen/src/hud/mod.rs
+@@ -36,6 +36,7 @@ pub use loot_scroller::LootMessage;
+ pub use settings_window::ScaleChange;
+ pub use subtitles::Subtitle;
+ 
++use if_chain::if_chain;
+ use bag::Bag;
+ use buffs::BuffsBar;
+ use buttons::Buttons;
+@@ -2056,8 +2057,8 @@ impl Hud {
+             }
+ 
+             // Render overtime for an interactable block
+-            if let Some(Interactable::Block(block, pos, interaction)) = interactable
+-                && let Some((mat, _, _)) = pos.get_block_and_transform(
++            if_chain!{if let Some(Interactable::Block(block, pos, interaction)) = interactable;
++                if let Some((mat, _, _)) = pos.get_block_and_transform(
+                     &ecs.read_resource(),
+                     &ecs.read_resource(),
+                     |e| {
+@@ -2066,8 +2067,8 @@ impl Hud {
+                             .map(|interpolated| (comp::Pos(interpolated.pos), interpolated.ori))
+                     },
+                     &ecs.read_storage(),
+-                )
+-            {
++                );
++            then {
+                 let overitem_id = overitem_walker.next(
+                     &mut self.ids.overitems,
+                     &mut ui_widgets.widget_id_generator(),
+@@ -2272,7 +2273,7 @@ impl Hud {
+                     .position_ingame(over_pos)
+                     .set(overitem_id, ui_widgets);
+                 }
+-            } else if let Some(Interactable::Entity(entity)) = interactable {
++            } else {if let Some(Interactable::Entity(entity)) = interactable {
+                 // show hud for campfires and portals
+                 if let Some(body) = client
+                     .state()
+@@ -2331,7 +2332,7 @@ impl Hud {
+                     .position_ingame(over_pos)
+                     .set(overitem_id, ui_widgets);
+                 }
+-            }
++            }}}
+ 
+             let speech_bubbles = &self.speech_bubbles;
+             // Render overhead name tags and health bars
+diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
+index 143791d2f..4278ea5dc 100644
+--- a/voxygen/src/lib.rs
++++ b/voxygen/src/lib.rs
+@@ -11,7 +11,6 @@
+     trait_alias,
+     map_try_insert,
+     slice_as_chunks,
+-    let_chains,
+     generic_const_exprs,
+     maybe_uninit_array_assume_init,
+     closure_lifetime_binder
+diff --git a/voxygen/src/scene/particle.rs b/voxygen/src/scene/particle.rs
+index f83643c81..861ce8552 100644
+--- a/voxygen/src/scene/particle.rs
++++ b/voxygen/src/scene/particle.rs
+@@ -1,3 +1,4 @@
++use if_chain::if_chain;
+ use super::{terrain::BlocksOfInterest, FigureMgr, SceneData, Terrain};
+ use crate::{
+     ecs::comp::Interpolated,
+@@ -1584,9 +1585,9 @@ impl ParticleMgr {
+                     }
+                 },
+                 CharacterState::Transform(data) => {
+-                    if matches!(data.stage_section, StageSection::Buildup)
+-                        && let Some(specifier) = data.static_data.specifier
+-                    {
++                    if_chain!{if matches!(data.stage_section, StageSection::Buildup);
++                        if let Some(specifier) = data.static_data.specifier;
++                    then {
+                         match specifier {
+                             states::transform::FrontendSpecifier::Evolve => {
+                                 self.particles.resize_with(
+@@ -1637,7 +1638,7 @@ impl ParticleMgr {
+                                 )
+                             },
+                         }
+-                    }
++                    }}
+                 },
+                 CharacterState::ChargedMelee(_melee) => {
+                     self.maintain_hydra_tail_swipe_particles(
+diff --git a/voxygen/src/session/interactable.rs b/voxygen/src/session/interactable.rs
+index 61932199a..2e4c9bd3c 100644
+--- a/voxygen/src/session/interactable.rs
++++ b/voxygen/src/session/interactable.rs
+@@ -1,6 +1,7 @@
+ use ordered_float::OrderedFloat;
+ use specs::{Join, LendJoin, ReadStorage, WorldExt};
+ use vek::*;
++use if_chain::if_chain;
+ 
+ use super::{
+     find_shortest_distance,
+@@ -176,9 +177,9 @@ pub(super) fn select_interactable(
+                         // interactable. We are only returning the mineable air
+                         // elements (e.g. minerals). The mineable weakrock are used
+                         // in the terrain selected_pos, but is not an interactable.
+-                        if let Some(mine_tool) = b.mine_tool()
+-                            && b.is_air()
+-                        {
++                        if_chain!{if let Some(mine_tool) = b.mine_tool();
++                            if b.is_air();
++                        then {
+                             Some(Interactable::Block(
+                                 b,
+                                 VolumePos::terrain(t.position_int()),
+@@ -186,7 +187,7 @@ pub(super) fn select_interactable(
+                             ))
+                         } else {
+                             None
+-                        }
++                        }}
+                     })
+                 } else {
+                     None
+diff --git a/voxygen/src/session/mod.rs b/voxygen/src/session/mod.rs
+index 0217a8a24..8d261af06 100644
+--- a/voxygen/src/session/mod.rs
++++ b/voxygen/src/session/mod.rs
+@@ -10,6 +10,7 @@ use ordered_float::OrderedFloat;
+ use specs::{Join, LendJoin, WorldExt};
+ use tracing::{error, info};
+ use vek::*;
++use if_chain::if_chain;
+ 
+ use client::{self, Client};
+ use common::{
+@@ -1011,19 +1012,19 @@ impl PlayState for SessionState {
+                                             ))
+                                         });
+                                 }
+-                                if let Some(pet_entity) = close_pet
+-                                    && client
++                                if_chain!{if let Some(pet_entity) = close_pet;
++                                    if client
+                                         .state()
+                                         .read_storage::<Is<Mount>>()
+                                         .get(pet_entity)
+-                                        .is_none()
+-                                {
++                                        .is_none();
++                                then {
+                                     let is_staying = client
+                                         .state()
+                                         .read_component_copied::<CharacterActivity>(pet_entity)
+                                         .map_or(false, |activity| activity.is_pet_staying);
+                                     client.set_pet_stay(pet_entity, !is_staying);
+-                                }
++                                }}
+                             },
+                             GameInput::Interact => {
+                                 if state {
+@@ -1161,11 +1162,11 @@ impl PlayState for SessionState {
+                                                         _ => false,
+                                                     });
+ 
+-                                                if let Some(uid) =
+-                                                    client.state().ecs().uid_from_entity(*entity)
+-                                                    && (can_trade_to_alignment
+-                                                        || client.player_list().contains_key(&uid))
+-                                                {
++                                                if_chain!{if let Some(uid) =
++                                                    client.state().ecs().uid_from_entity(*entity);
++                                                    if (can_trade_to_alignment
++                                                        || client.player_list().contains_key(&uid));
++                                                then {
+                                                     let name = client
+                                                         .player_list()
+                                                         .get(&uid)
+@@ -1188,7 +1189,7 @@ impl PlayState for SessionState {
+                                                     ));
+ 
+                                                     client.send_invite(uid, InviteKind::Trade)
+-                                                };
++                                                }};
+                                             },
+                                         }
+                                     }
+diff --git a/voxygen/src/singleplayer/mod.rs b/voxygen/src/singleplayer/mod.rs
+index 3a014f758..07ac86540 100644
+--- a/voxygen/src/singleplayer/mod.rs
++++ b/voxygen/src/singleplayer/mod.rs
+@@ -14,6 +14,7 @@ use std::{
+ };
+ use tokio::runtime::Runtime;
+ use tracing::{error, info, trace, warn};
++use if_chain::if_chain;
+ 
+ mod singleplayer_world;
+ pub use singleplayer_world::{SingleplayerWorld, SingleplayerWorlds};
+@@ -73,16 +74,16 @@ impl SingleplayerState {
+             let mut settings = server::Settings::singleplayer(&server_data_dir);
+             let editable_settings = server::EditableSettings::singleplayer(&server_data_dir);
+ 
+-            let file_opts = if let Some(gen_opts) = &world.gen_opts
+-                && !world.is_generated
+-            {
++            let file_opts = if_chain!{if let Some(gen_opts) = &world.gen_opts;
++                if !world.is_generated;
++            then {
+                 server::FileOpts::Save(world.map_path.clone(), gen_opts.clone())
+             } else {
+                 if !world.is_generated && world.gen_opts.is_none() {
+                     world.copy_default_world();
+                 }
+                 server::FileOpts::Load(world.map_path.clone())
+-            };
++            }};
+ 
+             settings.map_file = Some(file_opts);
+             settings.world_seed = world.seed;
+diff --git a/world/Cargo.toml b/world/Cargo.toml
+index 1d31fb448..c8eea9b15 100644
+--- a/world/Cargo.toml
++++ b/world/Cargo.toml
+@@ -63,7 +63,7 @@ rstar = { version = "0.12", optional = true }
+ clap = { workspace = true, optional = true }
+ signal-hook = { version = "0.3.6", optional = true }
+ indicatif = { version = "0.17.8", optional = true }
+-
++if_chain = "1.0.3"
+ 
+ [dev-dependencies]
+ common-frontend = { package = "veloren-common-frontend", path = "../common/frontend" }
+diff --git a/world/src/lib.rs b/world/src/lib.rs
+index eeae18fb6..6b9caba39 100644
+--- a/world/src/lib.rs
++++ b/world/src/lib.rs
+@@ -7,7 +7,7 @@
+ )]
+ #![allow(clippy::branches_sharing_code)] // TODO: evaluate
+ #![deny(clippy::clone_on_ref_ptr)]
+-#![feature(option_zip, let_chains)]
++#![feature(option_zip)]
+ #![cfg_attr(feature = "simd", feature(portable_simd))]
+ 
+ mod all;
+diff --git a/world/src/site2/plot/tavern.rs b/world/src/site2/plot/tavern.rs
+index 31a200315..941ba9310 100644
+--- a/world/src/site2/plot/tavern.rs
++++ b/world/src/site2/plot/tavern.rs
+@@ -1,4 +1,5 @@
+ use std::{mem::swap, ops::RangeInclusive};
++use if_chain::if_chain;
+ 
+ use common::{
+     comp::Content,
+@@ -1496,9 +1497,9 @@ impl Structure for Tavern {
+                     },
+                 }
+             }
+-            if let Some(door) = wall.door_bounds()
+-                && !matches!(kinds, (Some(RoomKind::Garden), Some(RoomKind::Garden)))
+-            {
++            if_chain!{if let Some(door) = wall.door_bounds();
++                if !matches!(kinds, (Some(RoomKind::Garden), Some(RoomKind::Garden)));
++            then {
+                 let orth = wall.to_dir.orthogonal();
+                 painter
+                     .aabb(aabb(Aabb {
+@@ -1581,7 +1582,7 @@ impl Structure for Tavern {
+                         },
+                     );
+                 }
+-            }
++            }}
+         }
+     }
+ }
+-- 
+2.51.2
+

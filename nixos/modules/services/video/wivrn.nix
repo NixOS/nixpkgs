@@ -217,7 +217,6 @@ in
     };
 
     services = {
-      udev.packages = with pkgs; [ android-udev-rules ];
       avahi = {
         enable = true;
         publish = {
@@ -231,6 +230,8 @@ in
       allowedTCPPorts = [ 9757 ];
       allowedUDPPorts = [ 9757 ];
     };
+
+    services.firewalld.packages = [ cfg.package ];
 
     environment = {
       systemPackages = [

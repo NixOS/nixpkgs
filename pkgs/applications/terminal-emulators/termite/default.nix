@@ -101,12 +101,12 @@ stdenv.mkDerivation rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple VTE-based terminal";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";
-    maintainers = with maintainers; [ koral ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ koral ];
+    platforms = lib.platforms.all;
     mainProgram = "termite";
   };
 }

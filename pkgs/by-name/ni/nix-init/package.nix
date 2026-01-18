@@ -85,7 +85,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -96,6 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.eclairevoyant ];
   };
 })

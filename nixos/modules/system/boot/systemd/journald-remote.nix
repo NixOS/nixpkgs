@@ -7,9 +7,9 @@
 
 let
   cfg = config.services.journald.remote;
-  format = pkgs.formats.systemd;
+  format = pkgs.formats.systemd { };
 
-  cliArgs = lib.cli.toGNUCommandLineShell { } {
+  cliArgs = lib.cli.toCommandLineShellGNU { } {
     inherit (cfg) output;
     # "-3" specifies the file descriptor from the .socket unit.
     "listen-${cfg.listen}" = "-3";

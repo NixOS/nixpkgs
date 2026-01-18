@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "napari-plugin-engine";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "napari_plugin_engine" ];
 
-  meta = with lib; {
+  meta = {
     description = "First generation napari plugin engine";
     homepage = "https://github.com/napari/napari-plugin-engine";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

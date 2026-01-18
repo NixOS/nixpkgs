@@ -7,7 +7,6 @@
   pillow,
   pypaInstallHook,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptoolsBuildHook,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "image-go-nord";
   version = "1.2.0";
   pyproject = false;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Schrodinger-Hat";
@@ -47,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
     changelog = "https://github.com/Schroedinger-Hat/ImageGoNord-pip/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

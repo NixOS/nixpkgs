@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       sha256 = "01bc23z0mva9l9jv587sq2r9w3diachgkmb9ad99hlzgj02fmq4v";
       stripLen = 1;
     })
+    ./add-missing-arguments-to-function-prototypes.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -49,13 +50,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
     mainProgram = "mcabber";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; linux;
     downloadPage = "http://mcabber.com/files/";
   };
 }

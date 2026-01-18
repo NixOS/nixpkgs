@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makePerlPath perlDeps}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "mbox to maildir tool";
     mainProgram = "mb2md";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = [ maintainers.jb55 ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.jb55 ];
   };
 }

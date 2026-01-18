@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
       # Without this, the `tget_set_d128` test experiences a link
       # error due to missing `__dpd_trunctdkf`.
       "--disable-decimal-float"
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isPE "LDFLAGS=-Wl,-no-undefined";
 
   doCheck = true; # not cross;
 

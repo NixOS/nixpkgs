@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "solanum";
-  version = "0-unstable-2025-09-11";
+  version = "0-unstable-2026-01-11";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "994e753fed3916b159b4bc4945b7de700643b0ad";
-    hash = "sha256-hJOM7ZiJDAgkQ2/tqeHF6Qiw7M+cuBgUAIMiuwX7DYk=";
+    rev = "e2a499f7192fa5e966dab03b7980e3240111d7b3";
+    hash = "sha256-F+CtxubdNz+B/a9sAoZW4tIvj72Mms/0bUKmvm14wHg=";
   };
 
   patches = [
@@ -81,11 +81,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.unix;
   };
 }

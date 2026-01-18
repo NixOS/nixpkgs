@@ -12,6 +12,8 @@
   libvorbis,
   gettext,
   physfs,
+  iconv,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +33,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    iconv
+    makeBinaryWrapper
+  ];
   buildInputs = [
     libpng
     SDL2
@@ -38,9 +44,11 @@ stdenv.mkDerivation rec {
     libjpeg
     SDL2_ttf
     libvorbis
-    libX11
     gettext
     physfs
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
   ];
 
   dontPatchELF = true;
@@ -48,7 +56,21 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e 's@\./data@'$out/share/neverball/data@ share/base_config.h Makefile
     sed -i -e 's@\./locale@'$out/share/neverball/locale@ share/base_config.h Makefile
-    sed -i -e 's@-lvorbisfile@-lvorbisfile -lX11 -lgcc_s@' Makefile
+    sed -i -e 's@-lvorbisfile@-lvorbisfile${
+      lib.optionalString (!stdenv.hostPlatform.isDarwin) " -lX11"
+      + lib.optionalString stdenv.cc.isGNU " -lgcc_s"
+    }@' Makefile
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for game in ball putt; do
+      pushd macosx/xcode/''${game}_items/
+      substituteInPlace Info.plist --replace-fail '1.5.3' "$version"
+      iconv -f UTF-16LE -t UTF-8 English.lproj/InfoPlist.strings > English.lproj/InfoPlist.strings.tmp
+      substituteInPlace English.lproj/InfoPlist.strings.tmp --replace-fail '1.5.3' "$version" --replace-fail '2002-2009' '2002-2014'
+      iconv -f UTF-8 -t UTF-16LE English.lproj/InfoPlist.strings.tmp > English.lproj/InfoPlist.strings
+      rm English.lproj/InfoPlist.strings.tmp
+      popd
+    done
   '';
 
   # The map generation code requires a writable HOME
@@ -57,8 +79,23 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/share/neverball
     cp -R data locale $out/share/neverball
-    cp neverball $out/bin
-    cp neverputt $out/bin
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/Applications/Never{ball,putt}.app/Contents/{MacOS,Resources}
+          for game in ball putt; do
+            cp never$game $out/Applications/Never$game.app/Contents/MacOS/Never$game
+            makeWrapper $out/Applications/Never$game.app/Contents/MacOS/Never$game $out/bin/never$game
+            cp macosx/xcode/''${game}_items/Info.plist $out/Applications/Never$game.app/Contents/Info.plist
+            cp -r macosx/icons/never$game.icns macosx/xcode/''${game}_items/English.lproj $out/Applications/Never$game.app/Contents/Resources/
+          done
+        ''
+      else
+        ''
+          cp neverball $out/bin
+          cp neverputt $out/bin
+        ''
+    }
     cp mapc $out/bin
   '';
 
@@ -67,8 +104,13 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://neverball.org/";
     description = "Tilt the floor to roll a ball";
-    license = "GPL";
-    maintainers = [ ];
-    platforms = with lib.platforms; linux;
+    license = with lib.licenses; [
+      gpl2Plus
+      ijg
+      mit
+      gpl3Only
+    ];
+    maintainers = with lib.maintainers; [ Rhys-T ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

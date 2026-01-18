@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   bundlerEnv,
   ruby_3_3,
@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "6.0.7";
+  version = "6.0.8";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -25,13 +25,13 @@ let
     ];
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iCRWCgdnPce1nxygv5182FTGxMl9D+VVpdvrozK43+g=";
+    hash = "sha256-5DCIUq/2Yylqn3fTEwL00BjgQwXtAwq9R5gtXdoDzEY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -64,15 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.redmine = nixosTests.redmine;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.redmine.org/";
     changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       aanderse
       felixsinger
       megheaiulian
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 })

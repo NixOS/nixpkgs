@@ -83,13 +83,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.11.4";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CFQF3vDhhXsAnIfUcn6oTQ4Xm+GH/36dqSGc0HvyEJ0=";
+    hash = "sha256-vs9qun9Z8o4KPxWjKOV9Lp/GgAsYW7gseYv4G7+liso=";
   };
 
   nativeBuildInputs = [
@@ -264,6 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # tests that attempt to make network requests
     "test_jp2openjpeg_45"
+    "test_ogr_gmlas_datetime"
+    "test_vrtrawlink_GDAL_VRT_RAWRASTERBAND_ALLOWED_SOURCE_ONLY_REMOTE_accepted"
     # tests that require the full proj dataset which we don't package yet
     # https://github.com/OSGeo/gdal/issues/5523
     "test_transformer_dem_overrride_srs"
@@ -310,16 +312,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       marcweber
       dotlambda
     ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 })

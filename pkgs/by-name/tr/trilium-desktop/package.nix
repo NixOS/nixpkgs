@@ -5,7 +5,7 @@
   fetchurl,
   makeBinaryWrapper,
   # use specific electron since it has to load a compiled module
-  electron_37,
+  electron_39,
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
@@ -15,7 +15,7 @@
 
 let
   pname = "trilium-desktop";
-  version = "0.98.1";
+  version = "0.101.3";
 
   triliumSource = os: arch: hash: {
     url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-${os}-${arch}.zip";
@@ -26,10 +26,10 @@ let
   darwinSource = triliumSource "macos";
 
   # exposed like this for update.sh
-  x86_64-linux.hash = "sha256-e8duXDIODrU3eYuZvUcOoT8pAquRIOQ1aUtceY49s+s=";
-  aarch64-linux.hash = "sha256-HtNzzlnqApwt04R9W6cby8J/0xuYdUX2kMN4vBNKeiQ=";
-  x86_64-darwin.hash = "sha256-guM1FmDD+J0oBEH+hCzXBkrF0bzvyp5yvCeIO7mGcJg=";
-  aarch64-darwin.hash = "sha256-fHgPbJS4ZraqowkjPdDg0BbPiI+4dk9JpMSDKASl8wE=";
+  x86_64-linux.hash = "sha256-+Q0RfWa9wl0SEb5hiT9q9+careuLgZh7Bgpi8HuUFyA=";
+  aarch64-linux.hash = "sha256-r8CJBBiSzgNpZ5K3FKwKR84xqm90pxgBEj1NVbRfQos=";
+  x86_64-darwin.hash = "sha256-oprNyKQs8sPPrm67SyTxvlgGuRKJ0OcVJ4OGAsOT6rQ=";
+  aarch64-darwin.hash = "sha256-1VXeU+a1tw4fhlZX0r88BkIo/wXBvWEFBzloBjVvouk=";
 
   sources = {
     x86_64-linux = linuxSource "x64" x86_64-linux.hash;
@@ -42,7 +42,7 @@ let
 
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
-    homepage = "https://github.com/TriliumNext/Notes";
+    homepage = "https://triliumnotes.org/";
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
@@ -111,7 +111,7 @@ let
       asar pack $tmp/ $out/share/trilium/resources/app.asar
       rm -rf $tmp
 
-      makeWrapper ${lib.getExe electron_37} $out/bin/trilium \
+      makeWrapper ${lib.getExe electron_39} $out/bin/trilium \
         "''${gappsWrapperArgs[@]}" \
         --set-default ELECTRON_IS_DEV 0 \
         --add-flags $out/share/trilium/resources/app.asar

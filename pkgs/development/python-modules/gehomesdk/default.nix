@@ -1,54 +1,52 @@
 {
   lib,
   aiohttp,
+  beautifulsoup4,
   bidict,
   buildPythonPackage,
+  cryptography,
   fetchPypi,
   humanize,
-  lxml,
-  pythonOlder,
+  pytestCheckHook,
   requests,
   setuptools,
-  slixmpp,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "gehomesdk";
-  version = "2025.5.0";
+  version = "2025.11.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YMw0W9EWz3KY1+aZMdtE4TRvFd9yqTHkfw0X3+ZDCfQ=";
+    hash = "sha256-HS33yTE+3n0DKRD4+cr8zAE+xcW1ca7q8inQ7qwKJMA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    beautifulsoup4
     bidict
     humanize
-    lxml
     requests
-    slixmpp
     websockets
   ];
 
-  # Tests are not shipped and source is not tagged
-  # https://github.com/simbaja/gehome/issues/32
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    cryptography
+  ];
 
   pythonImportsCheck = [ "gehomesdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for GE smart appliances";
     homepage = "https://github.com/simbaja/gehome";
-    changelog = "https://github.com/simbaja/gehome/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/simbaja/gehome/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gehome-appliance-data";
   };
 }

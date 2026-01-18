@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "6.7.1104";
+  version = "6.12.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
     rev = version;
-    hash = "sha256-ABghlNOeWqsXapz3dMtzGBre8BcttZG3PlYCqPk3+fM=";
+    hash = "sha256-9LAThwBnW4JB7qOz7A4M/JLcjGqNyvKgXOQjdVgvsiU=";
   };
 
-  vendorHash = "sha256-bpfDnVqJoJi9WhlA6TDWAhBRkbbQn1BHfnLJ8BTmhGM=";
+  vendorHash = "sha256-z4Clm+WdwMcdO+tMLqUQx6tNiGJ+ZSK+Zt0JKwrQdVk=";
 
   subPackages = [
     "cmd/src"
@@ -38,13 +38,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sourcegraph CLI";
     homepage = "https://github.com/sourcegraph/src-cli";
     changelog = "https://github.com/sourcegraph/src-cli/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       keegancsmith
     ];
     mainProgram = "src";

@@ -21,7 +21,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
-    maid (0.10.0)
+    maid (0.11.2)
       deprecated (~> 3.0.0)
       dimensions (>= 1.0.0, < 2.0)
       escape (>= 0.0.1, < 0.1.0)
@@ -31,7 +31,7 @@ GEM
       mime-types (~> 3.0, < 4.0)
       rubyzip (~> 2.3.2)
       rufus-scheduler (~> 3.8.2)
-      thor (~> 1.2.1)
+      thor (~> 1.4.0)
       xdg (~> 2.2.3)
     mime-types (3.7.0)
       logger
@@ -45,7 +45,7 @@ GEM
     rubyzip (2.3.2)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
-    thor (1.2.2)
+    thor (1.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     xdg (2.2.5)
@@ -54,8 +54,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  maid (~> 0.10.0)
+  maid (~> 0.11.2)
   rake
 
 BUNDLED WITH
-   2.6.6
+   2.7.2

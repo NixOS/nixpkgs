@@ -1,0 +1,17 @@
+diff --git a/configure.in b/configure.in
+index eb71bdf..ba056df 100644
+--- a/configure.in
++++ b/configure.in
+@@ -1,9 +1,12 @@
+ AC_INIT([Music On Console],[2.6-alpha3],[mocmaint@daper.net],[moc],
+                            [http://moc.daper.net/])
++AC_CONFIG_MACRO_DIRS([m4])
+ AC_CONFIG_SRCDIR([main.c])
+ AC_CONFIG_HEADERS([config.h])
+ 
+ AM_INIT_AUTOMAKE([dist-xz no-dist-gzip])
++AM_GNU_GETTEXT_VERSION([0.20])
++AM_GNU_GETTEXT([external])
+ 
+ AC_PREREQ([2.64])
+ 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-plus";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_plus" ];
 
-  meta = with lib; {
+  meta = {
     description = "pytest-plus adds new features to pytest";
     homepage = "https://github.com/pytest-dev/pytest-plus";
     changelog = "https://github.com/pytest-dev/pytest-plus/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ robsliwi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ robsliwi ];
   };
 }

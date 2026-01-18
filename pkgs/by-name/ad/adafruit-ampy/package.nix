@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "adafruit-ampy";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pycampers/ampy";
     license = lib.licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ampy";
   };
 }

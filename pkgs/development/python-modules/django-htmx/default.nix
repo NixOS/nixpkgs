@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "django-htmx";
   version = "1.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "adamchainz";

@@ -15,7 +15,7 @@
   mpfr,
   pcl,
   libsForQt5,
-  tbb,
+  onetbb,
   xercesc,
   wrapGAppsHook3,
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
     libsForQt5.qtsvg
     libsForQt5.qttools
-    tbb
+    onetbb
     xercesc
   ];
 
@@ -91,6 +91,9 @@ stdenv.mkDerivation rec {
     "-DPLUGIN_STANDARD_QRANSAC_SD=OFF" # not compatible with GPL, broken on non-x86
     "-DPLUGIN_STANDARD_QSRA=ON"
     "-DPLUGIN_STANDARD_QCLOUDLAYERS=ON"
+    # Fix the build with CMake 4, by overriding the minimum version globally, as support for < 3.5 was removed
+    # Ideally this can be removed at some time, but there are a lot of dependencies (e.g. plugins) which have a lower minimum version configured.
+    (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
   dontWrapGApps = true;
@@ -149,12 +152,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "CloudCompare";
-    platforms = with platforms; linux; # only tested here; might work on others
+    platforms = with lib.platforms; linux; # only tested here; might work on others
   };
 }

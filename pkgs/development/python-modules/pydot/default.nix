@@ -8,7 +8,6 @@
   pytestCheckHook,
   chardet,
   parameterized,
-  pythonOlder,
   pyparsing,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pydot";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

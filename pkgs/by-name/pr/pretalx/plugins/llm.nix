@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pretalx-llm";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "why2025-datenzone";
     repo = "pretalx-llm";
     rev = "v${version}";
-    hash = "sha256-Ga6Itvc+yL+p6K7w6WYTeNfxahaohDidDWnt0GtcWEM=";
+    hash = "sha256-KnL4X24RESAgO0Oh1k9c+K4zaho6CEFHMQvDeRdLBzs=";
   };
 
   build-system = [

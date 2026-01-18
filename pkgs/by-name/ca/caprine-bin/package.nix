@@ -6,12 +6,12 @@
 let
   pname = "caprine";
   version = "2.59.1";
-  metaCommon = with lib; {
+  metaCommon = {
     description = "Elegant Facebook Messenger desktop app";
     homepage = "https://sindresorhus.com/caprine";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ShamrockLee ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
   x86_64-appimage = callPackage ./build-from-appimage.nix {
     inherit pname version metaCommon;

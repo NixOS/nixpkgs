@@ -6,7 +6,8 @@
   which is `throw`'s and `abort`'s, without error messages.
 
   If you need to test error messages or more complex evaluations, see
-  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
+  `lib/tests/modules.sh`, `lib/tests/sources.sh`, `lib/tests/filesystem.sh` or
+  `lib/tests/debug.sh` as examples.
 
   To run these tests:
 
@@ -69,6 +70,7 @@ let
     id
     ifilter0
     isStorePath
+    join
     lazyDerivation
     length
     lists
@@ -200,6 +202,85 @@ runTests {
       c = true;
     };
   };
+
+  testOverridePreserveFunctionMetadata =
+    let
+      toCallableAttrs = f: setFunctionArgs f (functionArgs f);
+      constructDefinition =
+        {
+          a ? 3,
+        }:
+        toCallableAttrs (
+          {
+            b ? 5,
+          }:
+          {
+            inherit a b;
+          }
+        )
+        // {
+          inherit a;
+          c = 7;
+        };
+      construct0 = makeOverridable constructDefinition { };
+      construct1 = makeOverridable construct0;
+      construct0p = construct0.override { a = 11; };
+      construct1p = construct1.override { a = 11; };
+    in
+    {
+      expr = {
+        construct-metadata = {
+          inherit (construct1) a c;
+        };
+        construct-overridden-metadata = {
+          v = construct0p.a;
+          inherit (construct1p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = mapAttrs (_: f: (f { }) ? override) {
+            inherit construct1 construct1p;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit ((construct1p { }).override { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct1p { b = 13; }) a b;
+            };
+            v = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+          };
+        };
+      };
+      expected = {
+        construct-metadata = {
+          inherit (construct0) a c;
+        };
+        construct-overridden-metadata = {
+          v = 11;
+          inherit (construct0p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = {
+            construct1 = true;
+            construct1p = true;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            v = {
+              a = 11;
+              b = 13;
+            };
+          };
+        };
+      };
+    };
 
   testCallPackageWithOverridePreservesArguments =
     let
@@ -434,6 +515,15 @@ runTests {
   };
 
   # STRINGS
+
+  testJoin = {
+    expr = join "," [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = "a,b,c";
+  };
 
   testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") [
@@ -773,6 +863,21 @@ runTests {
   testEscapeShellArgsUnicode = {
     expr = strings.escapeShellArg "á";
     expected = "'á'";
+  };
+
+  testEscapeNixIdentifierNoQuote = {
+    expr = strings.escapeNixIdentifier "foo";
+    expected = ''foo'';
+  };
+
+  testEscapeNixIdentifierNumber = {
+    expr = strings.escapeNixIdentifier "1foo";
+    expected = ''"1foo"'';
+  };
+
+  testEscapeNixIdentifierKeyword = {
+    expr = strings.escapeNixIdentifier "assert";
+    expected = ''"assert"'';
   };
 
   testSplitStringsDerivation = {
@@ -1278,25 +1383,23 @@ runTests {
     expected = [ 15 ];
   };
 
-  testFold =
+  testFoldr =
     let
-      f = op: fold: fold op 0 (range 0 100);
-      # fold with associative operator
+      f = op: foldr: foldr op 0 (range 0 100);
+      # foldr with associative operator
       assoc = f builtins.add;
-      # fold with non-associative operator
+      # foldr with non-associative operator
       nonAssoc = f builtins.sub;
     in
     {
       expr = {
         assocRight = assoc foldr;
-        # right fold with assoc operator is same as left fold
+        # foldr with assoc operator is same as foldl
         assocRightIsLeft = assoc foldr == assoc foldl;
         nonAssocRight = nonAssoc foldr;
         nonAssocLeft = nonAssoc foldl;
-        # with non-assoc operator the fold results are not the same
+        # with non-assoc operator the foldr results are not the same
         nonAssocRightIsNotLeft = nonAssoc foldl != nonAssoc foldr;
-        # fold is an alias for foldr
-        foldIsRight = nonAssoc fold == nonAssoc foldr;
       };
       expected = {
         assocRight = 5050;
@@ -1304,7 +1407,6 @@ runTests {
         nonAssocRight = 50;
         nonAssocLeft = (-5050);
         nonAssocRightIsNotLeft = true;
-        foldIsRight = true;
       };
     };
 
@@ -2698,6 +2800,7 @@ runTests {
         ];
         emptylist = [ ];
         attrs = {
+          "assert" = false;
           foo = null;
           "foo b/ar" = "baz";
         };
@@ -2717,7 +2820,7 @@ runTests {
         functionArgs = "<function, args: {arg?, foo}>";
         list = "[ 3 4 ${function} [ false ] ]";
         emptylist = "[ ]";
-        attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
+        attrs = "{ \"assert\" = false; foo = null; \"foo b/ar\" = \"baz\"; }";
         emptyattrs = "{ }";
         drv = "<derivation ${deriv.name}>";
       };
@@ -3094,6 +3197,86 @@ runTests {
     };
 
     expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
+  };
+
+  testToCommandLine = {
+    expr =
+      let
+        optionFormat = optionName: {
+          option = "-${optionName}";
+          sep = "=";
+          explicitBool = true;
+        };
+      in
+      cli.toCommandLine optionFormat {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+      };
+
+    expected = [
+      "-data={\"id\":0}"
+      "-e=s/a/b/"
+      "-e=s/b/c/"
+      "-i=.bak"
+      "-n=false"
+      "-testsuite=unit"
+      "-testsuite=integration"
+      "-v=true"
+      "-verbose=true"
+      "-verbose=true"
+      "-verbose=false"
+    ];
+  };
+
+  testToCommandLineGNU = {
+    expr = cli.toCommandLineGNU { } {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
+    };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
@@ -4488,7 +4671,7 @@ runTests {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
       # Do NOT remove the `builtins.toString` call here!!!
-      directory = builtins.toString ./packages-from-directory/plain;
+      directory = toString ./packages-from-directory/plain;
     };
     expected = {
       a = "a";
@@ -4651,4 +4834,79 @@ runTests {
     expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
   };
 
+  testRenameCrossIndexFrom = {
+    expr = lib.renameCrossIndexFrom "pkgs" {
+      pkgsBuildBuild = "dummy-build-build";
+      pkgsBuildHost = "dummy-build-host";
+      pkgsBuildTarget = "dummy-build-target";
+      pkgsHostHost = "dummy-host-host";
+      pkgsHostTarget = "dummy-host-target";
+      pkgsTargetTarget = "dummy-target-target";
+    };
+    expected = {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+  };
+
+  testRenameCrossIndexTo = {
+    expr = lib.renameCrossIndexTo "self" {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+    expected = {
+      selfBuildBuild = "dummy-build-build";
+      selfBuildHost = "dummy-build-host";
+      selfBuildTarget = "dummy-build-target";
+      selfHostHost = "dummy-host-host";
+      selfHostTarget = "dummy-host-target";
+      selfTargetTarget = "dummy-target-target";
+    };
+  };
+
+  testMapCrossIndex = {
+    expr = lib.mapCrossIndex (x: x * 10) {
+      buildBuild = 1;
+      buildHost = 2;
+      buildTarget = 3;
+      hostHost = 4;
+      hostTarget = 5;
+      targetTarget = 6;
+    };
+    expected = {
+      buildBuild = 10;
+      buildHost = 20;
+      buildTarget = 30;
+      hostHost = 40;
+      hostTarget = 50;
+      targetTarget = 60;
+    };
+  };
+
+  testMapCrossIndexString = {
+    expr = lib.mapCrossIndex (x: "prefix-${x}") {
+      buildBuild = "bb";
+      buildHost = "bh";
+      buildTarget = "bt";
+      hostHost = "hh";
+      hostTarget = "ht";
+      targetTarget = "tt";
+    };
+    expected = {
+      buildBuild = "prefix-bb";
+      buildHost = "prefix-bh";
+      buildTarget = "prefix-bt";
+      hostHost = "prefix-hh";
+      hostTarget = "prefix-ht";
+      targetTarget = "prefix-tt";
+    };
+  };
 }

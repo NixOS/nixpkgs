@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "crlfsuite";
   version = "2.5.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nefcore";
@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     "crlfsuite"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CRLF injection (HTTP Response Splitting) scanner";
     mainProgram = "crlfsuite";
     homepage = "https://github.com/Nefcore/CRLFsuite";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       c0bw3b
       fab
     ];

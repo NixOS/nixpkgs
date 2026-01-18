@@ -68,7 +68,6 @@ buildGoModule rec {
     mainProgram = "dissent";
     maintainers = with lib.maintainers; [
       hmenke
-      urandom
       aleksana
     ];
   };

@@ -32,8 +32,6 @@
   socat,
   libslirp,
   libcbor,
-  apple-sdk_13,
-  darwinMinVersionHook,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -90,7 +88,7 @@
   tpmSupport ? !minimal,
   uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
   liburing,
-  canokeySupport ? !minimal,
+  canokeySupport ? false,
   canokey-qemu,
   capstoneSupport ? !minimal,
   capstone,
@@ -128,14 +126,6 @@ assert lib.assertMsg (
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
-
-  # needed in buildInputs and depsBuildBuild
-  # check log for warnings eg: `warning: 'hv_vm_config_get_max_ipa_size' is only available on macOS 13.0`
-  # to indicate if min version needs to get bumped.
-  darwinSDK = [
-    apple-sdk_13
-    (darwinMinVersionHook "13")
-  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -146,17 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.1.0";
+  version = "10.1.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4FFzSbUMpz6+wvqFsGBQ1cRjymXHOIM72PwfFfGAvlE=";
+    hash = "sha256-nXXzMcGly5tuuP2fZPVj7C6rNGyCLLl/izXNgtPxFHk=";
   };
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ]
-  ++ lib.optionals stdenv.buildPlatform.isDarwin darwinSDK
   ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
@@ -205,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!userOnly) [ curl ]
   ++ lib.optionals ncursesSupport [ ncurses ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin darwinSDK
   ++ lib.optionals seccompSupport [ libseccomp ]
   ++ lib.optionals numaSupport [ numactl ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -442,14 +430,14 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta =
-    with lib;
+
     {
       homepage = "https://www.qemu.org/";
       description = "Generic and open source machine emulator and virtualizer";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ qyliss ];
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ qyliss ];
       teams = lib.optionals xenSupport xen.meta.teams;
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     }
     # toolsOnly: Does not have qemu-kvm and there's no main support tool
     # userOnly: There's one qemu-<arch> for every architecture
@@ -458,7 +446,7 @@ stdenv.mkDerivation (finalAttrs: {
     }
     # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
     // lib.optionalAttrs userOnly {
-      platforms = with platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+      platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
     };
 })

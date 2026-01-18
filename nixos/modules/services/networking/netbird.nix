@@ -20,6 +20,7 @@ let
     mapAttrsToList
     mkAliasOptionModule
     mkDefault
+    mkEnableOption
     mkIf
     mkMerge
     mkOption
@@ -31,6 +32,7 @@ let
     optionalAttrs
     optionalString
     optionals
+    pipe
     toShellVars
     versionAtLeast
     versionOlder
@@ -40,6 +42,7 @@ let
     attrsOf
     bool
     enum
+    listOf
     nullOr
     package
     path
@@ -92,7 +95,6 @@ in
         services.netbird.clients.default = {
           port = 51820;
           name = "netbird";
-          systemd.name = "netbird";
           interface = "wt0";
           hardened = false;
         };
@@ -204,7 +206,7 @@ in
                     NB_SERVICE = client.service.name;
                     NB_WIREGUARD_PORT = toString client.port;
                   } // optionalAttrs (client.dns-resolver.address != null) {
-                    NB_DNS_RESOLVER_ADDRESS = "''${client.dns-resolver.address}:''${builtins.toString client.dns-resolver.port}";
+                    NB_DNS_RESOLVER_ADDRESS = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
                 '';
                 description = ''
@@ -223,12 +225,40 @@ in
                 '';
               };
 
+              login.enable = mkEnableOption "automated login for NetBird client";
+              login.setupKeyFile = mkOption {
+                type = nullOr str;
+                default = null;
+                example = "/run/secrets/netbird-priv/setup-key";
+                description = ''
+                  A Setup Key file path used for automated login of the machine.
+                '';
+              };
+              login.systemdDependencies = mkOption {
+                type = listOf str;
+                default = [ ];
+                example = lib.literalExpression ''
+                  [ "sops-install-secrets.service" ]
+                '';
+                description = ''
+                  Additional systemd dependencies required to succeed before the Setup Key file becomes available.
+                '';
+              };
+
               openFirewall = mkOption {
                 type = bool;
                 default = true;
                 description = ''
                   Opens up firewall `port` for communication between NetBird peers directly over LAN or public IP,
                   without using (internet-hosted) TURN servers as intermediaries.
+                '';
+              };
+
+              openInternalFirewall = mkOption {
+                type = bool;
+                default = true;
+                description = ''
+                  Opens up internal firewall ports for the NetBird's network interface.
                 '';
               };
 
@@ -326,7 +356,7 @@ in
                     WgIface = client.interface;
                     WgPort = client.port;
                   } // optionalAttrs (client.dns-resolver.address != null) {
-                    CustomDNSAddress = "''${client.dns-resolver.address}:''${builtins.toString client.dns-resolver.port}";
+                    CustomDNSAddress = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
                 '';
                 description = ''
@@ -417,7 +447,7 @@ in
               NB_WIREGUARD_PORT = toString client.port;
             }
             // optionalAttrs (client.dns-resolver.address != null) {
-              NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
+              NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
             };
 
             config.config = {
@@ -426,7 +456,7 @@ in
               WgPort = client.port;
             }
             // optionalAttrs (client.dns-resolver.address != null) {
-              CustomDNSAddress = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
+              CustomDNSAddress = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
             };
           }
         )
@@ -500,14 +530,33 @@ in
         ) "loose";
 
         # Ports opened on a specific
-        interfaces = listToAttrs (
-          toClientList (client: {
-            name = client.interface;
-            value.allowedUDPPorts = optionals client.openFirewall [
-              5353 # required for the DNS forwarding/routing to work
-            ];
-          })
+        interfaces = lib.mkIf (config.networking.firewall.backend != "firewalld") (
+          listToAttrs (
+            toClientList (client: {
+              name = client.interface;
+              value.allowedUDPPorts = optionals client.openInternalFirewall [
+                # note: those should be opened up by NetBird itself, but it needs additional
+                #  NixOS -specific debugging and tweaking before it works
+                5353 # <0.59.0 DNS forwarder port, kept for compatibility with those clients
+                22054 # >=0.59.0 DNS forwarder port
+              ];
+            })
+          )
         );
+      };
+
+      services.firewalld.zones.netbird = {
+        interfaces = lib.pipe cfg.clients [
+          (lib.filterAttrs (_: client: client.openFirewall))
+          lib.attrValues
+          (map (client: client.interface))
+        ];
+        ports = [
+          {
+            protocol = "udp";
+            port = 5353;
+          }
+        ];
       };
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
@@ -543,14 +592,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
-          path =
-            optionals (!config.services.resolved.enable) [ pkgs.openresolv ]
-            # useful for `netbird debug` system info gathering
-            ++ optionals config.networking.nftables.enable [ pkgs.nftables ]
-            ++ optionals (!config.networking.nftables.enable) [
-              pkgs.iptables
-              pkgs.ipset
-            ];
+          path = optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
             ExecStart = "${getExe client.wrapper} service run";
@@ -571,6 +613,38 @@ in
           };
 
           stopIfChanged = false;
+        }
+      );
+    }
+    # netbird debug bundle related configurations
+    {
+      systemd.services = toClientAttrs (
+        client:
+        nameValuePair client.service.name {
+          /*
+            lets NetBird daemon know which systemd service to gather logs for
+            see https://github.com/netbirdio/netbird/blob/2c87fa623654c5eef76bc0226062290201eef13a/client/internal/debug/debug_linux.go#L50-L51
+          */
+          environment.SYSTEMD_UNIT = client.service.name;
+
+          path =
+            optionals config.networking.nftables.enable [ pkgs.nftables ]
+            ++ optionals (!config.networking.nftables.enable) [
+              pkgs.iptables
+              pkgs.ipset
+            ];
+        }
+      );
+      users.users = toHardenedClientAttrs (
+        client:
+        nameValuePair client.user.name {
+          extraGroups = [
+            /*
+              allows debug bundles to gather systemd logs for `netbird*.service`
+              this is not ideal for hardening as it grants access to the whole journal, not just own logs
+            */
+            "systemd-journal"
+          ];
         }
       );
     }
@@ -637,6 +711,7 @@ in
             "org.freedesktop.resolve1.set-default-route",
             "org.freedesktop.resolve1.set-dns-servers",
             "org.freedesktop.resolve1.set-domains",
+            "org.freedesktop.resolve1.set-dnssec",
           ];
           var users = ${builtins.toJSON (toHardenedClientList (client: client.user.name))};
 
@@ -646,6 +721,71 @@ in
         });
       '';
     })
+    # Setup Keys login automation
+    {
+      systemd.services = pipe cfg.clients [
+        (filterAttrs (_: client: client.login.enable))
+        (mapAttrs' (
+          _: client:
+          nameValuePair "${client.service.name}-login" {
+            after = [ "${client.service.name}.service" ] ++ client.login.systemdDependencies;
+            requires = [ "${client.service.name}.service" ] ++ client.login.systemdDependencies;
+            wantedBy = [ "${client.service.name}.service" ];
+
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+
+              User = client.user.name;
+              Group = client.user.group;
+
+              RemoveIPC = true;
+              PrivateTmp = "disconnected"; # "disconnected" puts /tmp on `tmpfs`
+              ProtectSystem = "strict";
+              ProtectHome = "yes";
+
+              LoadCredential = [ "setup-key:${client.login.setupKeyFile}" ];
+            };
+
+            environment.NB_SETUP_KEY_FILE = "%d/setup-key";
+            /*
+              might want to do something similar to the docker entrypoint (watching log messages) instead
+              see https://github.com/netbirdio/netbird/blob/dc30dcacce4c322502975f1f491e6774efd7e1e9/client/netbird-entrypoint.sh
+            */
+            script = ''
+              set -x
+              # uses a file on a `tmpfs`, because variable updates get lost in the loop
+              status_file="/tmp/status.txt"
+
+              refresh_status() {
+                '${lib.getExe client.wrapper}' status &>"$status_file" || :
+              }
+
+              print_short_setup_key() {
+                cut -b1-8 <"$NB_SETUP_KEY_FILE"
+              }
+
+              main() {
+                refresh_status
+                <"$status_file" sed 's/^/STATUS:PRE-CONNECT : /g'
+
+                until refresh_status && <"$status_file" grep --quiet 'Connected\|NeedsLogin' ; do
+                  sleep 1
+                done
+                <"$status_file" sed 's/^/STATUS:POST-CONNECT: /g'
+
+                if <"$status_file" grep --quiet 'NeedsLogin' ; then
+                  echo "Using Setup Key File with key: $(print_short_setup_key)" >&2
+                  '${lib.getExe client.wrapper}' up --setup-key-file="$NB_SETUP_KEY_FILE"
+                fi
+              }
+
+              main "$@"
+            '';
+          }
+        ))
+      ];
+    }
     # migration & temporary fixups section
     {
       systemd.services = toClientAttrs (

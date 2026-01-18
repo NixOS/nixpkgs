@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mbedtls" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic library with an mbed TLS back end";
     homepage = "https://github.com/Synss/python-mbedtls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -17,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipx";
     tag = version;
-    hash = "sha256-diHWzrSpXWbNosXKN5nj2FM09HicDhHWKxQDXc+AZ4o=";
+    hash = "sha256-TEF5zBAB0tvfY0dsZOnu2r9P+pheMr/OOI6CCY8PItg=";
   };
 
   build-system = [
@@ -107,12 +105,12 @@ buildPythonPackage rec {
       --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Install and run Python applications in isolated environments";
     mainProgram = "pipx";
     homepage = "https://github.com/pypa/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yshym ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yshym ];
   };
 }

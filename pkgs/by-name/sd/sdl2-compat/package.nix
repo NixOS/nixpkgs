@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.56";
+  version = "2.32.60";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Xg886KX54vwGANIhTAFslzPw/sZs2SvpXzXUXcOKgMs=";
+    hash = "sha256-8nhSyifEeYEZj9tqid1x67jhxqmrR61NwQ/g0Z8vbw8=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  patches = [ ./find-headers.patch ];
+  patches = [
+    ./find-headers.patch
+  ];
   setupHook = ./setup-hook.sh;
 
   postFixup = ''

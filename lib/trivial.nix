@@ -18,6 +18,23 @@ let
     ;
 in
 {
+  # Pull in some builtins not included elsewhere.
+  inherit (builtins)
+    pathExists
+    readFile
+    isBool
+    isInt
+    isFloat
+    add
+    sub
+    lessThan
+    seq
+    deepSeq
+    genericClosure
+    bitAnd
+    bitOr
+    bitXor
+    ;
 
   ## Simple (higher order) functions
 
@@ -180,7 +197,7 @@ in
 
     : 2\. Function argument
   */
-  or = x: y: x || y;
+  "or" = x: y: x || y;
 
   /**
     boolean “and”
@@ -263,7 +280,11 @@ in
   /**
     Merge two attribute sets shallowly, right side trumps left
 
+    # Type
+
+    ```
     mergeAttrs :: attrs -> attrs -> attrs
+    ```
 
     # Inputs
 
@@ -327,7 +348,7 @@ in
     f b a;
 
   /**
-    Return `maybeValue` if not null, otherwise return `default`.
+    Returns `maybeValue` if not null, otherwise return `default`.
 
     # Inputs
 
@@ -384,24 +405,6 @@ in
   */
   mapNullable = f: a: if a == null then a else f a;
 
-  # Pull in some builtins not included elsewhere.
-  inherit (builtins)
-    pathExists
-    readFile
-    isBool
-    isInt
-    isFloat
-    add
-    sub
-    lessThan
-    seq
-    deepSeq
-    genericClosure
-    bitAnd
-    bitOr
-    bitXor
-    ;
-
   ## nixpkgs version strings
 
   /**
@@ -429,7 +432,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2505;
+    2511;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
@@ -459,7 +462,7 @@ in
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Xantusia";
+  codeName = "Yarara";
 
   /**
     Returns the current nixpkgs version suffix as string.
@@ -529,7 +532,7 @@ in
   ## Integer operations
 
   /**
-    Return minimum of two numbers.
+    Returns minimum of two numbers.
 
     # Inputs
 
@@ -544,7 +547,7 @@ in
   min = x: y: if x < y then x else y;
 
   /**
-    Return maximum of two numbers.
+    Returns maximum of two numbers.
 
     # Inputs
 
@@ -769,7 +772,7 @@ in
     importTOML :: path -> any
     ```
   */
-  importTOML = path: builtins.fromTOML (builtins.readFile path);
+  importTOML = path: fromTOML (builtins.readFile path);
 
   /**
     `warn` *`message`* *`value`*
@@ -913,7 +916,7 @@ in
   throwIfNot = cond: msg: if cond then x: x else throw msg;
 
   /**
-    Like throwIfNot, but negated (throw if the first argument is `true`).
+    Like `throwIfNot`, but negated (throw if the first argument is `true`).
 
     # Inputs
 
@@ -975,7 +978,7 @@ in
       unexpected = lib.subtractLists valid given;
     in
     lib.throwIfNot (unexpected == [ ])
-      "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
+      "${msg}: ${builtins.concatStringsSep ", " (map toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (map toString valid)}";
 
   info = msg: builtins.trace "INFO: ${msg}";
 
@@ -988,11 +991,16 @@ in
     The metadata should match the format given by
     builtins.functionArgs, i.e. a set from expected argument to a bool
     representing whether that argument has a default or not.
-    setFunctionArgs : (a → b) → Map String Bool → (a → b)
 
     This function is necessary because you can't dynamically create a
-    function of the { a, b ? foo, ... }: format, but some facilities
-    like callPackage expect to be able to query expected arguments.
+    function of the `{ a, b ? foo, ... }:` format, but some facilities
+    like `callPackage` expect to be able to query expected arguments.
+
+    # Type
+
+    ```
+    setFunctionArgs : (a -> b) -> Map String Bool -> (a -> b)
+    ```
 
     # Inputs
 
@@ -1012,10 +1020,15 @@ in
 
   /**
     Extract the expected function arguments from a function.
-    This works both with nix-native { a, b ? foo, ... }: style
-    functions and functions with args set with 'setFunctionArgs'. It
-    has the same return type and semantics as builtins.functionArgs.
-    setFunctionArgs : (a → b) → Map String Bool.
+    This works both with nix-native `{ a, b ? foo, ... }:` style
+    functions and functions with args set with `setFunctionArgs`. It
+    has the same return type and semantics as `builtins.functionArgs`.
+
+    # Type
+
+    ```
+    functionArgs : (a -> b) -> Map String Bool
+    ```
 
     # Inputs
 
@@ -1125,11 +1138,12 @@ in
     # Type
 
     ```
-    fromHexString :: String -> [ String ]
+    fromHexString :: String -> Int
     ```
 
     # Examples
-
+    :::{.example}
+    ## `lib.trivial.fromHexString` usage examples
     ```nix
     fromHexString "FF"
     => 255
@@ -1137,6 +1151,7 @@ in
     fromHexString "0x7fffffffffffffff"
     => 9223372036854775807
     ```
+    :::
   */
   fromHexString =
     str:
@@ -1144,7 +1159,7 @@ in
       match = builtins.match "(0x)?([0-7]?[0-9A-Fa-f]{1,15})" str;
     in
     if match != null then
-      (builtins.fromTOML "v=0x${builtins.elemAt match 1}").v
+      (fromTOML "v=0x${builtins.elemAt match 1}").v
     else
       # TODO: Turn this into a `throw` in 26.05.
       assert lib.warn "fromHexString: ${
@@ -1153,17 +1168,24 @@ in
       let
         noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower str);
       in
-      (builtins.fromTOML "v=0x${noPrefix}").v;
+      (fromTOML "v=0x${noPrefix}").v;
 
   /**
     Convert the given positive integer to a string of its hexadecimal
-    representation. For example:
+    representation.
 
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toHexString` usage example
+
+    ```nix
     toHexString 0 => "0"
 
     toHexString 16 => "10"
 
     toHexString 250 => "FA"
+    ```
+    :::
   */
   toHexString =
     let
@@ -1180,14 +1202,8 @@ in
     i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /**
-    `toBaseDigits base i` converts the positive integer i to a list of its
-    digits in the given base. For example:
-
-    toBaseDigits 10 123 => [ 1 2 3 ]
-
-    toBaseDigits 2 6 => [ 1 1 0 ]
-
-    toBaseDigits 16 250 => [ 15 10 ]
+    `toBaseDigits base i` converts the positive integer `i` to a list of its
+    digits in the given base.
 
     # Inputs
 
@@ -1198,6 +1214,19 @@ in
     `i`
 
     : 2\. Function argument
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toBaseDigits`
+
+    ```nix
+    toBaseDigits 10 123 => [ 1 2 3 ]
+
+    toBaseDigits 2 6 => [ 1 1 0 ]
+
+    toBaseDigits 16 250 => [ 15 10 ]
+    ```
+    :::
   */
   toBaseDigits =
     base: i:

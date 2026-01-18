@@ -2,38 +2,50 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   flit-core,
+
+  # dependencies
   pyyaml,
+
+  # tests
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "1.7.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "confuse";
     rev = "v${version}";
-    hash = "sha256-zdH5DNXnuAfYTuaG9EIKiXL2EbLSfzYjPSkC3G06bU8=";
+    hash = "sha256-TVx0cBXv/fIuli/xrFXBAmwJ1rQr5xJL1Q67FaDr4ow=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ pyyaml ];
+  dependencies = [
+    pyyaml
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "confuse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python configuration library for Python that uses YAML";
     homepage = "https://github.com/beetbox/confuse";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      doronbehar
+    ];
   };
 }

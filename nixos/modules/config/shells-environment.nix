@@ -36,6 +36,24 @@ in
 
   options = {
 
+    environment.shell.enable = lib.mkEnableOption "" // {
+      default = true;
+      internal = true;
+      description = ''
+        Whether to enable the shell environment.
+
+        This does NOT necessarily disable all shells on your system. Instead it
+        just disables the shell environment that configures user shells (i.e.
+        those in `environment.shells`).
+
+        System services might still depend on and use shells even if this
+        option is set to false.
+
+        Only set this option if you're sure that you can recover from potential
+        issues.
+      '';
+    };
+
     environment.variables = lib.mkOption {
       default = { };
       example = {
@@ -175,10 +193,10 @@ in
     };
 
     environment.binsh = lib.mkOption {
-      default = "${config.system.build.binsh}/bin/sh";
-      defaultText = lib.literalExpression ''"''${config.system.build.binsh}/bin/sh"'';
+      default = null;
+      defaultText = lib.literalExpression ''"''${pkgs.bashInteractive}/bin/sh"'';
       example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
-      type = lib.types.path;
+      type = lib.types.nullOr lib.types.path;
       visible = false;
       description = ''
         The shell executable that is linked system-wide to
@@ -201,9 +219,10 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.shell.enable {
 
-    system.build.binsh = pkgs.bashInteractive;
+    # Set this here so its enabled only when shell support is enabled
+    environment.binsh = lib.mkDefault "${pkgs.bashInteractive}/bin/sh";
 
     # Set session variables in the shell as well. This is usually
     # unnecessary, but it allows changes to session variables to take

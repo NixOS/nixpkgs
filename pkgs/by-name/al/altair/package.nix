@@ -7,11 +7,11 @@
 
 let
   pname = "altair";
-  version = "8.2.5";
+  version = "8.5.0";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-P0CVJFafrsvWzDWyJZEds812m3yUDpo4eocysEIQqrw=";
+    sha256 = "sha256-ImcnV+Z1J+6wGs3HmlCpXmLb/BbyEcunY+IZ2cbD8Ns=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -31,12 +31,12 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich GraphQL Client IDE";
     mainProgram = "altair";
     homepage = "https://github.com/imolorhe/altair";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evalexpr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evalexpr ];
     platforms = [ "x86_64-linux" ];
   };
 }

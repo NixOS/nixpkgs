@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) please; };
 
-  meta = with lib; {
+  meta = {
     description = "Polite regex-first sudo alternative";
     longDescription = ''
       Delegate accurate least privilege access with ease. Express easily with a
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://www.usenix.org.uk/content/please.html";
     changelog = "https://github.com/edneville/please/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   requests,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dropbox";
   version = "12.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   outputs = [
     "out"

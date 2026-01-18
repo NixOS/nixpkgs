@@ -42,6 +42,7 @@
   pdfslicer,
   scribus,
   vips,
+  testers,
 }:
 
 let
@@ -55,13 +56,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "c79c6839e859dbee6b73ac260788fa2de8618ba4";
-    hash = "sha256-j66AsBUnFpO5athVgQmf4vcyXxYcJ/plJtHg+3vXG4Y=";
+    rev = "9d5011815a14c157ba25bb160187842fb81579a5";
+    hash = "sha256-sA5f235IJpzzzHqpwHM3zCZC2Yh0ztA6PZa84j/6tfY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "25.07.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "25.10.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [
     "out"
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xQSpBm29/r43etU87GQf2XHulsTh6Mp05snAPUbYF64=";
+    hash = "sha256-a16btk2rsVeHoU2xZ1KRx6+vk4dDjMk6T7f2rsTub+A=";
   };
 
   nativeBuildInputs = [
@@ -172,6 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
         ;
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -187,5 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ttuegel ];
     teams = [ lib.teams.freedesktop ];
+    pkgConfigModules = [
+      "poppler"
+    ]
+    ++ lib.optionals (!minimal) [ "poppler-cpp" ]
+    ++ lib.optionals introspectionSupport [ "poppler-glib" ];
   };
 })

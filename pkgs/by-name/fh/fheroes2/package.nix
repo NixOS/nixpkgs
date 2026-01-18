@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.1.10";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    hash = "sha256-dtc+/FvYJPgdtrDRq+fofrlXW3NjgtFMDd6rCmweiMw=";
+    hash = "sha256-U8iJAhubMHGPXNph+kWhMzRDbh3e4bikgQKbPPeKqV8=";
   };
 
   nativeBuildInputs = [ imagemagick ];
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [
-    "FHEROES2_STRICT_COMPILATION=1"
     "FHEROES2_DATA=\"${placeholder "out"}/share/fheroes2\""
   ];
 
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ihhub/fheroes2";
     description = "Free implementation of Heroes of Might and Magic II game engine";
     mainProgram = "fheroes2";
@@ -87,8 +86,8 @@ stdenv.mkDerivation rec {
       Please refer to README of the project for instructions.
       On linux, the data can be placed in ~/.local/share/fheroes2 folder.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

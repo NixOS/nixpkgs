@@ -77,12 +77,12 @@ rec {
   isOption = lib.isType "option";
 
   /**
-    Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+    Creates an Option declaration for use with the module system.
 
     # Inputs
 
-    Structured attribute set
-    : Attribute set containing none or some of the following attributes.
+    Attribute set
+    : containing none or some of the following attributes.
 
       `default`
       : Optional default value used when no definition is given in the configuration.
@@ -122,16 +122,16 @@ rec {
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
 
-      `...` (any other attribute)
-      : Any other attribute is passed through to the resulting option attribute set.
-
     # Examples
     :::{.example}
     ## `lib.options.mkOption` usage example
 
     ```nix
-    mkOption { }  // => { _type = "option"; }
-    mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+    mkOption { }
+    # => Empty option; type = types.anything
+
+    mkOption { default = "foo"; }
+    # => Same as above, with a default value
     ```
 
     :::
@@ -152,7 +152,7 @@ rec {
     attrs // { _type = "option"; };
 
   /**
-    Creates an option declaration with a default value of ´false´, and can be defined to ´true´.
+    Creates an option declaration with a default value of `false`, and can be defined to `true`.
 
     # Inputs
 
@@ -345,13 +345,6 @@ rec {
     );
 
   /**
-    Deprecated alias of mkPackageOption, to be removed in 25.05.
-
-    Previously used to create options with markdown documentation, which is no longer required.
-  */
-  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
-
-  /**
     This option accepts arbitrary definitions, but it does not produce an option value.
 
     This is useful for sharing a module across different module sets
@@ -440,7 +433,7 @@ rec {
     else if all isAttrs list then
       foldl' lib.mergeAttrs { } list
     else if all isBool list then
-      foldl' lib.or false list
+      foldl' lib."or" false list
     else if all isString list then
       lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then
@@ -451,14 +444,18 @@ rec {
   /**
     Require a single definition.
 
-    WARNING: Does not perform nested checks, as this does not run the merge function!
+    ::: {.warning}
+    Does not perform nested checks, as this does not run the merge function!
+    :::
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
   /**
     Require a single definition.
 
-    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    ::: {.note}
+    When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+    :::
 
     # Inputs
 
@@ -503,7 +500,7 @@ rec {
     loc: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    # Return early if we only have one element
+    # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then
@@ -523,7 +520,7 @@ rec {
       ) (head defs) (tail defs)).value;
 
   /**
-    Extracts values of all "value" keys of the given list.
+    Extracts values of all `value` keys of the given list.
 
     # Type
 
@@ -545,7 +542,7 @@ rec {
   getValues = map (x: x.value);
 
   /**
-    Extracts values of all "file" keys of the given list
+    Extracts values of all `file` keys of the given list
 
     # Type
 
@@ -622,7 +619,7 @@ rec {
     (on the order of megabytes) and is not actually used by the
     manual generator.
 
-    This function was made obsolete by renderOptionValue and is kept for
+    This function was made obsolete by `renderOptionValue` and is kept for
     compatibility with out-of-tree code.
 
     # Inputs
@@ -690,8 +687,6 @@ rec {
         _type = "literalExpression";
         inherit text;
       };
-
-  literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
   /**
     For use in the `defaultText` and `example` option attributes. Causes the

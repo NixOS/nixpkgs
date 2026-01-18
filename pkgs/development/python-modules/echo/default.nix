@@ -18,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "echo";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "echo";
     tag = "v${version}";
-    sha256 = "sha256-Uikzn9vbLctiZ6W0uA6hNvr7IB/FhCcHk+JxBW7yrA4=";
+    sha256 = "sha256-aeewirt3jNZLZUkM0Gis6nhUS/ezlKHlk6wlwgtoC4w=";
   };
 
   build-system = [
@@ -64,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "echo" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/glue-viz/echo";
     description = "Callback Properties in Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -43,6 +44,7 @@
   semver,
   sexpdata,
   shapely,
+  truststore,
   typer,
   urllib3,
   zstd,
@@ -57,11 +59,12 @@
   pytest-xdist,
   hypothesis,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atopile";
-  version = "0.11.2";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -69,9 +72,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
-    tag = "v${version}";
-    hash = "sha256-JczlQulHlViV9pg0uPXd9Boagp74VBdZ1UMDXh2c3DA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "migrate-to-pygls-v2.patch";
+      url = "https://github.com/atopile/atopile/pull/1533.patch";
+      hash = "sha256-yyRtYFwwcwliz38l7WkzT+zvi+uxWzHdZ06cl8q09Ec=";
+    })
+  ];
 
   build-system = [
     hatchling
@@ -120,6 +131,7 @@ buildPythonPackage rec {
     semver
     sexpdata
     shapely
+    truststore
     typer
     urllib3
     zstd
@@ -127,6 +139,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "posthog"
+    "prompt-toolkit"
     "zstd"
   ];
 
@@ -140,7 +153,9 @@ buildPythonPackage rec {
     pytest-datafiles
     pytest-timeout
     hypothesis
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # do not report worker logs to filee
@@ -182,9 +197,13 @@ buildPythonPackage rec {
   disabledTests = [
     # timeout
     "test_build_error_logging"
+    "test_can_evaluate_literals"
+    "test_examples_build"
+    "test_net_names_deterministic"
     "test_performance_mifs_bus_params"
-    "test_resistor"
+    "test_regression_rp2040_usb_diffpair"
     "test_reserved_attrs"
+    "test_resistor"
     # requires internet
     "test_simple_pick"
     "test_simple_negative_pick"
@@ -192,14 +211,15 @@ buildPythonPackage rec {
     "test_jlcpcb_pick_capacitor"
     "test_regression_rp2040_usb_diffpair_full"
     "test_model_translations"
-    # type error
-    "test_alternate_trait_constructor_with_params"
-    "test_parameterised_trait_with_params"
-    "test_trait_alternate_constructor_precedence"
-    "test_trait_template_enum"
-    "test_trait_template_enum_invalid"
-    # failure
-    "test_solve_voltage_divider_complex"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/build/logs/latest'
+    "test_muster_diamond_dependencies"
+    "test_muster_disconnected_components"
+    "test_muster_register_decorator"
+    "test_muster_select_skips_targets_with_failed_dependencies"
+    "test_muster_select_skips_targets_with_partial_failed_dependencies"
+    "test_muster_select_yields_targets_with_all_successful_dependencies"
+    "test_muster_specific_targets_with_dependencies"
   ];
 
   # in order to use pytest marker, we need to use ppytestFlagsArray
@@ -217,9 +237,9 @@ buildPythonPackage rec {
     description = "Design circuit boards with code";
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
-    changelog = "https://github.com/atopile/atopile/releases/tag/${src.tag}";
+    changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";
   };
-}
+})

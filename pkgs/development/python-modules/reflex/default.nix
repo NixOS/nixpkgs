@@ -2,77 +2,81 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  alembic,
-  attrs,
-  build,
-  ruff,
-  dill,
-  granian,
+  pythonAtLeast,
+
+  # build-system
   hatchling,
+  pre-commit,
+  toml,
+
+  # dependencies
+  alembic,
+  click,
+  granian,
   httpx,
-  numpy,
   packaging,
-  pandas,
-  pillow,
   platformdirs,
-  playwright,
-  plotly,
   psutil,
   pydantic,
-  pytest-asyncio,
-  pytest-mock,
-  python-dotenv,
-  pytestCheckHook,
   python-multipart,
   python-socketio,
   redis,
   reflex-hosting-cli,
   rich,
   sqlmodel,
-  starlette-admin,
-  stdenv,
-  typer,
+  starlette,
   typing-extensions,
+  wrapt,
+
+  # tests
+  attrs,
+  numpy,
+  pandas,
+  pillow,
+  playwright,
+  plotly,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-dotenv,
+  ruff,
+  starlette-admin,
   unzip,
   uvicorn,
   versionCheckHook,
-  wrapt,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.8.11";
+  version = "0.8.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    tag = "v${version}";
-    hash = "sha256-kIYwdtzyhkg1y4Rv+HN1656ET8lhRtIBrrS5W9obmoM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pp4onogav+kad0JpBRPnar30elP1aYuhA9AMoSjjRss=";
   };
 
-  # 'rich' is also somehow checked when building the wheel,
-  # pythonRelaxDepsHook modifies the wheel METADATA in postBuild
-  pypaBuildFlags = [ "--skip-dependency-check" ];
+  # For some reason, pre_commit is supposedly missing when python>=3.14
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pre_commit", ' ""
+  '';
 
-  pythonRelaxDeps = [
-    # needed
-    "click"
-    "starlette"
-    "rich"
+  build-system = [
+    hatchling
+    pre-commit
+    toml
   ];
-
-  build-system = [ hatchling ];
 
   dependencies = [
     alembic
-    build # used in custom_components/custom_components.py
-    dill # used in state.py
+    click
     granian
-    granian.optional-dependencies.reload
     httpx
-    packaging # used in utils/prerequisites.py
+    packaging
     platformdirs
     psutil
     pydantic
@@ -82,28 +86,29 @@ buildPythonPackage rec {
     reflex-hosting-cli
     rich
     sqlmodel
-    typer # optional dep
+    starlette
     typing-extensions
     wrapt
-  ];
+  ]
+  ++ granian.optional-dependencies.reload;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-mock
-    python-dotenv
-    ruff
-    playwright
     attrs
     numpy
-    plotly
     pandas
     pillow
+    playwright
+    plotly
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+    python-dotenv
+    ruff
+    starlette-admin
     unzip
     uvicorn
-    starlette-admin
-    writableTmpDirAsHomeHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
 
@@ -124,13 +129,9 @@ buildPythonPackage rec {
     "test_output_system_info"
     # Comparison with magic string
     "test_background_task_no_block"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted (fails in sandbox)
-    "test_is_process_on_port_free_port"
-    "test_is_process_on_port_occupied_port"
-    "test_is_process_on_port_both_protocols"
-    "test_is_process_on_port_concurrent_access"
+    # reflex.utils.exceptions.StateSerializationError: Failed to serialize state
+    # reflex___istate___dynamic____dill_state due to unpicklable object.
+    "test_fallback_pickle"
   ];
 
   disabledTestPaths = [
@@ -138,14 +139,16 @@ buildPythonPackage rec {
     "tests/integration/"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "reflex" ];
 
   meta = {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
-    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${src.tag}";
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "reflex";
   };
-}
+})

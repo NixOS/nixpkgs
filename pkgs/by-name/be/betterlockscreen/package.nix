@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and sweet looking lockscreen for linux systems with effects";
     homepage = "https://github.com/betterlockscreen/betterlockscreen";
     mainProgram = "betterlockscreen";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       eyjhb
       sebtm
     ];

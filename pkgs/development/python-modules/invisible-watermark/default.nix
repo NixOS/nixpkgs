@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   opencv-python,
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   pname = "invisible-watermark";
   version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ShieldMnt";
@@ -86,7 +84,7 @@ buildPythonPackage rec {
               ;
           };
         };
-      allTests = builtins.map createTest testCases;
+      allTests = map createTest testCases;
     in
     (lib.attrsets.mergeAttrsList allTests)
     // {

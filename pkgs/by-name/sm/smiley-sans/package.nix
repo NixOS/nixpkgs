@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Condensed and oblique Chinese typeface seeking a visual balance between the humanist and the geometric";
     homepage = "https://atelier-anchor.com/typefaces/smiley-sans/";
     changelog = "https://github.com/atelier-anchor/smiley-sans/blob/main/CHANGELOG.md";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

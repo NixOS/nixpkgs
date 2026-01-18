@@ -16,24 +16,19 @@
 
 buildPythonPackage rec {
   pname = "ml-dtypes";
-  version = "0.5.3";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jax-ml";
     repo = "ml_dtypes";
     tag = "v${version}";
-    hash = "sha256-y0w+8h6KMYf6ZvlP3rEVt1I11jkbNNuJDIvfNFFaBQE=";
+    hash = "sha256-vGCDLs7Te/3fBZmCQVp2Zm5NnP7K/KCkTod0oFVVKN4=";
     # Since this upstream patch (https://github.com/jax-ml/ml_dtypes/commit/1bfd097e794413b0d465fa34f2eff0f3828ff521),
     # the attempts to use the nixpkgs packaged eigen dependency have failed.
     # Hence, we rely on the bundled eigen library.
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=80.8.0" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 

@@ -26,7 +26,7 @@ let
     set:
     if builtins.isAttrs set then
       if (set.type or "") == "derivation" then
-        set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
+        set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
         pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else
@@ -43,7 +43,7 @@ rec {
     }
   );
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (
+  nixpkgs = removeAttrs (removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
@@ -64,7 +64,7 @@ rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ ];
+        maintainers = [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
@@ -98,9 +98,9 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
-        (onFullSupported "nixos.tests.gitlab")
+        (onFullSupported "nixos.tests.gitlab.gitlab")
+        (onFullSupported "nixos.tests.gitlab.runner")
         (onFullSupported "nixos.tests.gnome")
-        (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")

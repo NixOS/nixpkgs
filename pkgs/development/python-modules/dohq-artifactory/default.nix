@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Python interface library for JFrog Artifactory";
     homepage = "https://devopshq.github.io/artifactory/";
     changelog = "https://github.com/devopshq/artifactory/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ h7x4 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ h7x4 ];
   };
 }

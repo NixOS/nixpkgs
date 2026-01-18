@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
@@ -12,13 +12,13 @@
   binutils,
   cairo,
   epoll-shim,
-  git,
   glaze,
   hyprcursor,
   hyprgraphics,
   hyprland-qtutils,
   hyprlang,
   hyprutils,
+  hyprwire,
   hyprwayland-scanner,
   libGL,
   libdrm,
@@ -27,6 +27,7 @@
   libuuid,
   libxkbcommon,
   libgbm,
+  muparser,
   pango,
   pciutils,
   pkgconf,
@@ -41,7 +42,7 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
@@ -62,8 +63,7 @@ let
   inherit (lib.strings)
     makeBinPath
     optionalString
-    mesonBool
-    mesonEnable
+    cmakeBool
     ;
   inherit (lib.trivial)
     importJSON
@@ -75,11 +75,11 @@ let
   # which would be controlled by the `debug` flag
   # Condition on darwin to avoid breaking eval for darwin in CI,
   # even though darwin is not supported anyway.
-  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
+  adapters = lib.optionals (!gcc15Stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
-  customStdenv = foldl' (acc: adapter: adapter acc) stdenv adapters;
+  customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
 in
 assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
@@ -91,32 +91,40 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.51.1";
+  version = "0.53.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TPlZf0urtvDH4Cb4By06szJmzR4sBlgQATuGQy8bH6U=";
+    hash = "sha256-hzhaKo5Cx/hr0QWXnpbF59TzF1GwVPCdT70Zbcxgyg4=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
-    sed -i "s#/usr#$out#" src/render/OpenGL.cpp
+    substituteInPlace src/render/OpenGL.cpp \
+      --replace-fail /usr $out
 
     # Remove extra @PREFIX@ to fix pkg-config paths
-    sed -i "s#@PREFIX@/##g" hyprland.pc.in
+    substituteInPlace hyprland.pc.in \
+      --replace-fail  "@PREFIX@/" ""
+    substituteInPlace example/hyprland.desktop.in \
+      --replace-fail  "@PREFIX@/" ""
   '';
 
-  # variables used by generateVersion.sh script, and shown in `hyprctl version`
-  BRANCH = info.branch;
-  COMMITS = info.commit_hash;
-  DATE = info.date;
-  DIRTY = "";
-  HASH = info.commit_hash;
-  MESSAGE = info.commit_message;
-  TAG = info.tag;
+  # variables used by CMake, and shown in `hyprctl version`
+  env = {
+    GIT_BRANCH = info.branch;
+    # The amount of commits altogether. Not really worth getting that info from
+    # GitHub's API, so we set a dummy value.
+    GIT_COMMITS = "-1";
+    GIT_COMMIT_DATE = info.date;
+    GIT_DIRTY = "clean";
+    GIT_COMMIT_HASH = info.commit_hash;
+    GIT_COMMIT_MESSAGE = info.commit_message;
+    GIT_TAG = info.tag;
+  };
 
   depsBuildBuild = [
     # to find wayland-scanner when cross-compiling
@@ -125,13 +133,15 @@ customStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hyprwayland-scanner
+    hyprwire
     makeWrapper
+    cmake
+    # meson + ninja are used to build the hyprland-protocols submodule
     meson
     ninja
     pkg-config
     wayland-scanner
     # for udis86
-    cmake
     python3
   ];
 
@@ -146,7 +156,6 @@ customStdenv.mkDerivation (finalAttrs: {
       aquamarine
       cairo
       glaze
-      git
       hyprcursor.dev
       hyprgraphics
       hyprlang
@@ -157,6 +166,7 @@ customStdenv.mkDerivation (finalAttrs: {
       libuuid
       libxkbcommon
       libgbm
+      muparser
       pango
       pciutils
       re2
@@ -177,24 +187,20 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  mesonBuildType = if debug then "debug" else "release";
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
   strictDeps = true;
 
-  mesonFlags = concatLists [
-    (mapAttrsToList mesonEnable {
-      "xwayland" = enableXWayland;
-      "systemd" = withSystemd;
-      "uwsm" = false;
-      "hyprpm" = false;
-    })
-    (mapAttrsToList mesonBool {
-      # PCH provides no benefits when building with Nix
-      "b_pch" = false;
-      "tracy_enable" = false;
-    })
-  ];
+  cmakeFlags = mapAttrsToList cmakeBool {
+    "BUILT_WITH_NIX" = true;
+    "NO_XWAYLAND" = !enableXWayland;
+    "NO_SYSTEMD" = !withSystemd;
+    "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
+    "NO_UWSM" = !withSystemd;
+    "NO_HYPRPM" = true;
+    "TRACY_ENABLE" = false;
+  };
 
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''
@@ -211,7 +217,7 @@ customStdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    providedSessions = [ "hyprland" ];
+    providedSessions = [ "hyprland" ] ++ optionals withSystemd [ "hyprland-uwsm" ];
     updateScript = ./update.sh;
   };
 

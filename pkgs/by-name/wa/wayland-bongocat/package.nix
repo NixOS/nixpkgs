@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  bash,
   fetchFromGitHub,
+  gitUpdater,
   pkg-config,
   wayland,
   wayland-protocols,
@@ -10,12 +12,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-bongocat";
-  version = "1.2.5";
+  version = "1.3.2";
   src = fetchFromGitHub {
     owner = "saatvik333";
     repo = "wayland-bongocat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VkBuqmen6s/LDFu84skQ3wOpIeURZ5e93lvAiEdny70=";
+    hash = "sha256-hsCNbweWBqCQRCKnVTSQwwQCPz/U2KoqpZZE92Q5BhA=";
   };
 
   # Package dependencies
@@ -25,17 +27,21 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
   buildInputs = [
+    bash
     wayland
     wayland-protocols
   ];
 
-  # Build phases
-  # Ensure that the Makefile has the correct directory with the Wayland protocols
-  preBuild = ''
-    export WAYLAND_PROTOCOLS_DIR="${wayland-protocols}/share/wayland-protocols"
+  makeFlags = [
+    "WAYLAND_PROTOCOLS_DIR=${wayland-protocols}/share/wayland-protocols"
+    "release"
+  ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'CC = gcc' 'CC ?= gcc'
   '';
 
-  makeFlags = [ "release" ];
   installPhase = ''
     runHook preInstall
 
@@ -49,7 +55,18 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  # Package information
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/bongocat-find-devices --help
+
+    runHook postInstallCheck
+  '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = {
     description = "Delightful Wayland overlay that displays an animated bongo cat reacting to keyboard input";
     homepage = "https://github.com/saatvik333/wayland-bongocat";

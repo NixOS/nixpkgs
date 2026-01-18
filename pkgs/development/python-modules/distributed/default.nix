@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  versioneer,
 
   # dependencies
   click,
@@ -28,28 +27,20 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2025.7.0";
+  version = "2025.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     tag = version;
-    hash = "sha256-np4hCamNTbnmLdfjFeHsxEEm9XI1O0kOczDe1YjSziw=";
+    hash = "sha256-srFYbAdlnxpxhSVFqd1geOBoD7bbpLNSlAUWNtefokM=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
-    versioneer
-  ]
-  ++ versioneer.optional-dependencies.toml;
+  ];
 
   pythonRelaxDeps = [ "dask" ];
 

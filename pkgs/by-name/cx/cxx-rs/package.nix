@@ -53,11 +53,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     command = "cxxbridge --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Safe FFI between Rust and C++";
     mainProgram = "cxxbridge";
     homepage = "https://github.com/dtolnay/cxx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ centromere ];
   };
 })

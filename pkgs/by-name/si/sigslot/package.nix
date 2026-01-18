@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Header-only, thread safe implementation of signal-slots for C++";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/palacaze/sigslot";
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

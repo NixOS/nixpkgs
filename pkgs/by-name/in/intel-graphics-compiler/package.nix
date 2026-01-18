@@ -14,9 +14,12 @@
   spirv-headers,
 }:
 
+let
+  llvmVersion = "16.0.6";
+in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.18.5";
+  version = "2.24.8";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -26,36 +29,53 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-AvEeK3rySEu89br4JgeZlXVQ6IXEzStVZYvehzdWq7g=";
+      hash = "sha256-h/YlZatUn61M5/F4msJljZDWcQyivgCAi1HC9CXvTts=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
       owner = "llvm";
       repo = "llvm-project";
-      tag = "llvmorg-15.0.7";
-      hash = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
+      tag = "llvmorg-${llvmVersion}";
+      hash = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     })
     (fetchFromGitHub {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
-      tag = "v0.23.1";
-      hash = "sha256-7coQegLcgIKiqnonZmgrKlw6FCB3ltSh6oMMvdopeQc=";
+      tag = "v0.24.1";
+      hash = "sha256-IpScRc+sWEcD8ZH5TinMPVFq1++vIVp774TJsg8mUMY=";
     })
     (fetchFromGitHub {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v15.0.3";
-      hash = "sha256-JkYFmnDh7Ot3Br/818aLN33COEG7+xyOf8OhdoJX9Cw==";
+      tag = "v16.0.6";
+      hash = "sha256-qxMnKQWQ32yF2rZGGOel2ynZJKfbAlk9U+ttWuzYRog=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v15.0.15";
-      hash = "sha256-kFVDS+qwoG1AXrZ8LytoiLVbZkTGR9sO+Wrq3VGgWNQ=";
+      tag = "v16.0.19";
+      hash = "sha256-GTTEThCNPyq0CpD6Vp4L0ZEEqOZ7uLbt9sdgXLs7MUg=";
     })
+  ];
+
+  patches = [
+    # Raise minimum CMake version to 3.5
+    # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
+    # https://github.com/intel/intel-graphics-compiler/pull/364
+    ./bump-cmake.patch
+
+    # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
+    # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
+    # on https://github.com/intel/intel-graphics-compiler/pull/383.
+    ./gcc15-llvm-header-fixes.patch
+
+    # Fix for GCC 15 by disabling `-Werror` for `-Wfree-nonheap-object`
+    # warnings within LLVM. This is in accordance with IGC disabling warnings
+    # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
+    ./gcc15-allow-llvm-free-nonheap-object-warning.patch
   ];
 
   sourceRoot = ".";
@@ -80,8 +100,12 @@ stdenv.mkDerivation rec {
     git -C llvm-project init
     git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
-      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --ignore-whitespace -C0 ' \
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
                      'COMMAND patch -p1 --ignore-whitespace -i '
+
+    # match default LLVM version with our provided version to apply correct patches
+    substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
+      --replace-fail "16.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [
@@ -121,12 +145,12 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
     changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

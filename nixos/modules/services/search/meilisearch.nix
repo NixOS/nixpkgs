@@ -11,7 +11,7 @@ let
 
   # These secrets are used in the config file and can be set to paths.
   secrets-with-path =
-    builtins.map
+    map
       (
         { environment, name }:
         {
@@ -43,18 +43,17 @@ let
   master-key-placeholder = "@MASTER_KEY@";
 
   configFile = settingsFormat.generate "config.toml" (
-    builtins.removeAttrs (
+    removeAttrs (
       if cfg.masterKeyFile != null then
         cfg.settings // { master_key = master-key-placeholder; }
       else
-        builtins.removeAttrs cfg.settings [ "master_key" ]
+        removeAttrs cfg.settings [ "master_key" ]
     ) (map (secret: secret.name) secrets-with-path)
   );
 
 in
 {
   meta.maintainers = with lib.maintainers; [
-    Br1ght0ne
     happysalada
   ];
   meta.doc = ./meilisearch.md;
@@ -140,7 +139,7 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        imports = builtins.map (secret: {
+        imports = map (secret: {
           # give them proper types, just so they're easier to consume from this file
           options.${secret.name} = lib.mkOption {
             # but they should not show up in documentation as special in any way.
@@ -180,23 +179,10 @@ in
 
       # this is intentionally different from upstream's default.
       no_analytics = lib.mkDefault true;
+
+      # allow updating without manual intervention
+      experimental_dumpless_upgrade = lib.mkDefault true;
     };
-
-    warnings = lib.optional (lib.versionOlder cfg.package.version "1.12") ''
-      Meilisearch 1.11 will be removed in NixOS 25.11. As it was the last
-      version not to support dumpless upgrades, you will have to manually
-      migrate your data before that. Instructions can be found at
-      https://www.meilisearch.com/docs/learn/update_and_migration/updating#using-a-dump
-      and afterwards, you can set `services.meilisearch.package = pkgs.meilisearch;`
-      to use the latest version.
-    '';
-
-    services.meilisearch.package = lib.mkDefault (
-      if lib.versionAtLeast config.system.stateVersion "25.05" then
-        pkgs.meilisearch
-      else
-        pkgs.meilisearch_1_11
-    );
 
     # used to restore dumps
     environment.systemPackages = [ cfg.package ];
@@ -216,27 +202,34 @@ in
       ];
 
       environment = builtins.listToAttrs (
-        builtins.map (secret: {
+        map (secret: {
           name = secret.environment;
           value = lib.mkIf (secret.setting != null) "%d/${secret.name}";
         }) secrets-with-path
       );
 
       serviceConfig = {
+        Type = "simple";
+        DynamicUser = true;
+        Restart = "always";
         LoadCredential = lib.mkMerge (
           [
             (lib.mkIf (cfg.masterKeyFile != null) [ "master_key:${cfg.masterKeyFile}" ])
           ]
-          ++ builtins.map (
+          ++ map (
             secret: lib.mkIf (secret.setting != null) [ "${secret.name}:${secret.setting}" ]
           ) secrets-with-path
         );
         ExecStart = "${lib.getExe cfg.package} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
-        DynamicUser = true;
         StateDirectory = "meilisearch";
         WorkingDirectory = "%S/meilisearch";
         RuntimeDirectory = "meilisearch";
         RuntimeDirectoryMode = "0700";
+        ReadWritePaths = [
+          cfg.settings.db_path
+          cfg.settings.dump_dir
+          cfg.settings.snapshot_dir
+        ];
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -255,6 +248,7 @@ in
         RestrictSUIDSGID = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        RemoveIPC = true;
 
         # Meilisearch needs to determine cgroup memory limits to set its own memory limits.
         # This means this can't be set to "pid"

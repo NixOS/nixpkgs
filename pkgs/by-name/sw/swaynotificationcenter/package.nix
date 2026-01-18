@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SwayNotificationCenter";
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtcT2N08BVxVrzEd1Z/s5MXWHaHFt6PqBH4gdH6TEvs=";
+    hash = "sha256-8zVG3mJxT6K0jkqsnaJ4wscPAk3z00YTsmHsJmuKWc8=";
   };
 
   # build pkg-config is required to locate the native `scdoc` input
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     scdoc
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -81,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     pantheon.granite7
     # systemd # ends with broken permission
-    wayland-scanner
   ];
 
   postPatch = ''
@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build-aux/meson/postinstall.py
     substituteInPlace src/functions.vala --replace "/usr/local/etc/xdg/swaync" "$out/etc/xdg/swaync"
   '';
+
+  strictDeps = true;
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

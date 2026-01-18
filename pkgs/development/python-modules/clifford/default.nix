@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   h5py,
   ipython,
   numba,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "clifford";
   version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -63,14 +60,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clifford" ];
 
-  meta = with lib; {
+  meta = {
     description = "Numerical Geometric Algebra Module";
     homepage = "https://clifford.readthedocs.io";
     changelog = "https://github.com/pygae/clifford/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     # Broken with numba >= 0.54
     # see https://github.com/pygae/clifford/issues/430
-    broken = versionAtLeast numba.version "0.58";
+    broken = lib.versionAtLeast numba.version "0.58";
   };
 }

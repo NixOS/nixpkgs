@@ -1,21 +1,25 @@
 {
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
   lib,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "sillytavern";
-  version = "1.13.4";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "SillyTavern";
     repo = "SillyTavern";
     tag = finalAttrs.version;
-    hash = "sha256-C1VWyowuk4w1F5u88Xcp9m3UgNmcDKEn/NSojuLGAd8=";
+    hash = "sha256-yx1vPnKxhQTRnBDOTR4jEcDaU8DDDOW7P98LI3hOTHc=";
   };
-  npmDepsHash = "sha256-lVG00oUzrMxIVoKqTRtkMYUmS45YEOkcepXJl4vth2w=";
+  npmDepsHash = "sha256-fKFt10eg72C5wBeAQ6SQH6mBF1Lf/EADN/wCrHkDf3U=";
 
   dontNpmBuild = true;
+
+  # https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   # These dirs are not installed automatically.
   # And if they were not in place, the app would try to create them at runtime, which is of course impossible to achieve.

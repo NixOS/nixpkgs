@@ -45,7 +45,7 @@ let
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
-  versionFile = builtins.toString ./default.nix;
+  versionFile = toString ./default.nix;
 
   neededLibraries = [
     xorg.libX11
@@ -138,13 +138,11 @@ let
     };
   };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = pnameBase;
   version = buildVersion;
 
   dontUnpack = true;
-
-  ${primaryBinary} = binaryPackage;
 
   nativeBuildInputs = [
     makeWrapper
@@ -153,7 +151,7 @@ stdenv.mkDerivation (rec {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin"
-    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    makeWrapper "${binaryPackage}/${primaryBinary}" "$out/bin/${primaryBinary}"
   ''
   + builtins.concatStringsSep "" (
     map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
@@ -162,19 +160,21 @@ stdenv.mkDerivation (rec {
     mkdir -p "$out/share/applications"
 
     substitute \
-      "''$${primaryBinary}/${primaryBinary}.desktop" \
+      "${binaryPackage}/${primaryBinary}.desktop" \
       "$out/share/applications/${primaryBinary}.desktop" \
       --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
 
-    for directory in ''$${primaryBinary}/Icon/*; do
+    for directory in ${binaryPackage}/Icon/*; do
       size=$(basename $directory)
       mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+      ln -s ${binaryPackage}/Icon/$size/* $out/share/icons/hicolor/$size/apps
     done
     runHook postInstall
   '';
 
   passthru = {
+    unwrapped = binaryPackage;
+
     updateScript =
       let
         script = writeShellScript "${packageAttribute}-update-script" ''
@@ -196,7 +196,7 @@ stdenv.mkDerivation (rec {
           fi
 
           for platform in ${lib.escapeShellArgs meta.platforms}; do
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}".unwrapped "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
       in
@@ -218,4 +218,4 @@ stdenv.mkDerivation (rec {
       "x86_64-linux"
     ];
   };
-})
+}

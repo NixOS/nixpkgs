@@ -1,9 +1,9 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGo124Module rec {
   pname = "gci";
   version = "0.13.7";
 
@@ -16,10 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-NWVhuJAWwZ9EPLq/PY8nqqRXXPgahGdFNVqBTDvCnMw=";
 
-  meta = with lib; {
+  meta = {
     description = "Controls golang package import order and makes it always deterministic";
     homepage = "https://github.com/daixiang0/gci";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ krostar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ krostar ];
   };
 }

@@ -10,7 +10,7 @@
   flex,
   llvmPackages,
   ncurses,
-  tbb,
+  onetbb,
   # the default test target is sse4, but that is not supported by all Hydra agents
   testedTargets ?
     if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then
@@ -19,17 +19,15 @@
       [ "sse2-i32x4" ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ispc";
-  version = "1.28.2";
-
-  dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "ispc";
     repo = "ispc";
-    rev = "v${version}";
-    sha256 = "sha256-dmpOvJ5dVhjGKpJ9xw/lXbvk2FgLv2vjzmUExUfLRmo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4kYyUBGhTS9XurRjxXnEv12+UzZvSnu7DndhS5AhwQo=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
     flex
     python3
     llvmPackages.libllvm.dev
-    tbb
+    onetbb
   ];
 
   buildInputs = with llvmPackages; [
@@ -50,12 +48,13 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace CURSES_CURSES_LIBRARY CURSES_NCURSES_LIBRARY
-    substituteInPlace cmake/GenerateBuiltins.cmake \
-      --replace 'bit 32 64' 'bit 64'
-  '';
+  postPatch =
+    # Workaround for LLVM version mismatch: the build uses libcxx 19 (from darwin
+    # stdenv), while LLVM 21 is provided as a runtime dependency.
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/util.cpp \
+        --replace-fail "#ifdef _LIBCPP_VERSION" "#if FALSE"
+    '';
 
   inherit testedTargets;
 
@@ -81,39 +80,32 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
-    "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
-    "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
-    "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
-    "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
-    "-DISPC_INCLUDE_EXAMPLES=OFF"
-    "-DISPC_INCLUDE_UTILS=OFF"
-    (
-      "-DARM_ENABLED="
-      + (if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE")
-    )
-    (
-      "-DX86_ENABLED="
-      + (if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE")
-    )
+    (lib.cmakeFeature "FILE_CHECK_EXECUTABLE" "${llvmPackages.llvm}/bin/FileCheck")
+    (lib.cmakeFeature "LLVM_AS_EXECUTABLE" "${llvmPackages.llvm}/bin/llvm-as")
+    (lib.cmakeFeature "LLVM_CONFIG_EXECUTABLE" "${llvmPackages.llvm.dev}/bin/llvm-config")
+    (lib.cmakeFeature "CLANG_EXECUTABLE" "${llvmPackages.clang}/bin/clang")
+    (lib.cmakeFeature "CLANGPP_EXECUTABLE" "${llvmPackages.clang}/bin/clang++")
+    (lib.cmakeBool "ISPC_INCLUDE_EXAMPLES" false)
+    (lib.cmakeBool "ISPC_INCLUDE_UTILS" false)
+    (lib.cmakeFeature "ARM_ENABLED=" (
+      if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE"
+    ))
+    (lib.cmakeFeature "X86_ENABLED=" (
+      if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE"
+    ))
   ];
 
-  meta = with lib; {
-    homepage = "https://ispc.github.io/";
+  meta = {
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
-    mainProgram = "ispc";
-    license = licenses.bsd3;
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "aarch64-darwin"
-    ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [
-      aristid
+    homepage = "https://ispc.github.io/";
+    changelog = "https://github.com/ispc/ispc/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       athas
       alexfmpe
     ];
+    mainProgram = "ispc";
+    platforms = with lib.platforms; linux ++ darwin; # TODO: buildable on more platforms?
   };
-}
+})

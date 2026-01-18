@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # Fix dlopen path
   postPatch = ''
-    substituteInPlace include/cecloader.h --replace "libcec.so" "$out/lib/libcec.so"
+    substituteInPlace include/cecloader.h --replace "\"libcec." "\"$out/lib/libcec."
   '';
 
   nativeBuildInputs = [
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     cmake
   ];
   buildInputs = [
-    udev
     libcec_platform
   ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optional withLibraspberrypi libraspberrypi;
 
   cmakeFlags = [
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     "-DHAVE_LINUX_API=1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows you (with the right hardware) to control your device with your TV remote control using existing HDMI cabling";
     homepage = "http://libcec.pulse-eight.com";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.kodi ];
   };
 }

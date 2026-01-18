@@ -85,13 +85,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-3";
+  version = "7.1.2-11";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-L4apUdF1VJXSVqWAyjYFG/4qDJoJ0ObmSOpd90kqXsU=";
+    hash = "sha256-RFiE23VW8AbVb7iglxjQMT6njDw+P7vLW6+nSKqN0p8=";
   };
 
   outputs = [
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.imagemagick.org/";
     changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "Software suite to create, edit, compose, or convert bitmap images";
@@ -202,13 +202,13 @@ stdenv.mkDerivation (finalAttrs: {
       "ImageMagick"
       "MagickWand"
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       dotlambda
       rhendric
       faukah
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "magick";
   };
 })

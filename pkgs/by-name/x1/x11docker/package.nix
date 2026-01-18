@@ -20,7 +20,7 @@
   weston,
   xwayland,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x11docker";
   version = "7.6.0-unstable-2024-04-04";
   src = fetchFromGitHub {

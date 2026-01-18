@@ -26,11 +26,11 @@ buildGoModule rec {
   # Tests requires a running Docker instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for extracting nested CI/CD supply chains and executing commands";
     mainProgram = "oshka";
     homepage = "https://github.com/k1LoW/oshka";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

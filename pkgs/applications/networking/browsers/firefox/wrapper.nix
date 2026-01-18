@@ -11,7 +11,7 @@
   writeText,
 
   ## various stuff that can be plugged in
-  ffmpeg,
+  ffmpeg_7,
   xorg,
   alsa-lib,
   libpulseaudio,
@@ -35,10 +35,23 @@
 
 ## configurability of the wrapper itself
 
-browser:
+browser_:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
+  browser =
+    # Wrapper breaks codesigning on macOS; though plugins that may require
+    # original mozilla signature (like 1Password) won't work with signatures
+    # stripped, at least the wrapped browser will launch.
+    if isDarwin then
+      browser_.overrideAttrs (
+        oldAttrs:
+        lib.optionalAttrs (oldAttrs.dontFixup or false) {
+          dontFixup = false;
+        }
+      )
+    else
+      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
@@ -76,7 +89,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      allNativeMessagingHosts = builtins.map lib.getBin nativeMessagingHosts;
+      allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
       libs =
         lib.optionals stdenv.hostPlatform.isLinux (
@@ -93,7 +106,7 @@ let
           ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
         )
         ++ lib.optional pipewireSupport pipewire
-        ++ lib.optional ffmpegSupport ffmpeg
+        ++ lib.optional ffmpegSupport ffmpeg_7
         ++ lib.optional gssSupport libkrb5
         ++ lib.optional useGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) (
@@ -116,7 +129,7 @@ let
         ++ lib.optional smartcardSupport opensc
         ++ pkcs11Modules
         ++ lib.optionals (!isDarwin) gtk_modules;
-      gtk_modules = [ libcanberra-gtk3 ];
+      gtk_modules = lib.optionals (!isDarwin) [ libcanberra-gtk3 ];
 
       # Darwin does not rename bundled binaries
       launcherName = "${applicationName}${lib.optionalString (!isDarwin) nameSuffix}";
@@ -130,7 +143,7 @@ let
 
       usesNixExtensions = nixExtensions != null;
 
-      nameArray = builtins.map (a: a.name) (lib.optionals usesNixExtensions nixExtensions);
+      nameArray = map (a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
       # Check that every extension has a unique .name attribute
       # and an extid attribute
@@ -140,7 +153,7 @@ let
         else if browser.requireSigning || !browser.allowAddonSideload then
           throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
         else
-          builtins.map (
+          map (
             a:
             if !(builtins.hasAttr "extid" a) then
               throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
@@ -516,7 +529,7 @@ let
           rm -f "$POL_PATH"
           cat ${policiesJson} >> "$POL_PATH"
 
-          extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
+          extraPoliciesFiles=(${toString extraPoliciesFiles})
           for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
             jq -s '.[0] * .[1]' $extraPoliciesFile "$POL_PATH" > .tmp.json
             mv .tmp.json "$POL_PATH"
@@ -533,7 +546,7 @@ let
           ${mozillaCfg}
           EOF
 
-          extraPrefsFiles=(${builtins.toString extraPrefsFiles})
+          extraPrefsFiles=(${toString extraPrefsFiles})
           for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
             cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
           done

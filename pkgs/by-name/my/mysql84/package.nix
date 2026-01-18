@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.6";
+  version = "8.4.7";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-oeUj3IvpbRilreEGmYZhKFygG29bRsCLJlQRDkDfL7c=";
+    hash = "sha256-wL8zqUzbkI8UmuoHl6/7GxOSYszw4Ll4ehckYgdULmk=";
   };
 
   nativeBuildInputs = [
@@ -113,13 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mysql.com/";
     description = "World's most popular open source database";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      orivej
+    license = lib.licenses.gpl2;
+    maintainers = [
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

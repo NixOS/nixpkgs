@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  nix,
+  nixVersions,
   perlPackages,
   buildEnv,
   makeWrapper,
@@ -38,7 +38,7 @@
   mdbook,
   foreman,
   python3,
-  libressl,
+  netcat,
   cacert,
   glibcLocales,
   meson,
@@ -50,6 +50,8 @@
 }:
 
 let
+  nix = nixVersions.nix_2_32;
+
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths =
@@ -117,13 +119,12 @@ let
         TermReadKey
         Test2Harness
         TestPostgreSQL
-        TestSimple13
         TextDiff
         TextTable
         UUID4Tiny
         XMLSimple
         YAML
-        (nix.libs.nix-perl-bindings or nix.perl-bindings)
+        (nix.libs.nix-perl-bindings or nix.perl-bindings or null)
         git
       ];
   };
@@ -131,14 +132,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-09-13";
+  version = "0-unstable-2025-11-06";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "274027eb504c7fe090e00c16fd94f4b832981095";
-    hash = "sha256-d2e+WCO5vNIgSd7bzm4JD5zU3gZ8mepXKCvt5NGv0Zw=";
+    rev = "241ab718002ca5740b7e3f659d0fbd483ab40523";
+    hash = "sha256-ifmzQS+u/dODQXmMVQLIb4AF4dkWI9s7VGYpV6x/Iq4=";
   };
 
   outputs = [
@@ -208,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
     foreman
     glibcLocales
     python3
-    libressl.nc
+    netcat
     nix-eval-jobs
     openldap
     postgresql
@@ -258,12 +259,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nix-based continuous build system";
     homepage = "https://nixos.org/hydra";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi ];
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+      mindavi
+    ];
   };
 })

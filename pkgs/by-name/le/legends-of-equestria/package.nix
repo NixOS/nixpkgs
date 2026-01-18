@@ -33,21 +33,21 @@
 
 let
   pname = "legends-of-equestria";
-  version = "2025.02.001";
+  version = "2025.06.002";
   description = "Free-to-play MMORPG";
 
   srcOptions = {
     x86_64-linux = {
-      url = "https://mega.nz/file/w6pxUQJS#5r_oxsCqLyIUya8fbIATPtKAbsacXkD-bVArjjOBu3w";
-      outputHash = "k5kASgZwCoKVtHDEFjegAl31KZlrkNse4Baph1l/SUc=";
+      url = "https://mega.nz/file/QmBXXDiC#XoG19N2_uBIHVKDNId5mE4cod9q29iPkYOfGDgAX_Oo";
+      outputHash = "IdcowkU2k2grg133jTf3EOENATCCige64BMYXtFupRE=";
     };
     x86_64-darwin = {
-      url = "https://mega.nz/file/wyoHSZTK#ig1laiSWijTxnN_tS2m5di1Mdly8zDHP1euLVFqG_ug";
-      outputHash = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+      url = "https://mega.nz/file/Uy4WzbCL#5tCRmmrizaIdilo2iYLSVkoSSNDleyQ8ZNYYT5hJsR4";
+      outputHash = "D/2G7w89Z4JTP0TEjnlBKI7XCBx2LBurXZcEp0gW+JA=";
     };
     aarch64-darwin = {
-      url = "https://mega.nz/file/EihRWKgb#KDtmmzLWVKW5uxkKkBEVE0yJioYPkOqutWwwMLhbedA";
-      outputHash = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+      url = "https://mega.nz/file/xr4AHIrb#pD5wDIiYys2my4_59UWiYoqBpdyUQHf_CalPZe7hpME";
+      outputHash = "PpDUFnobznB5FHYSF+m9S3RcNIdi7eWyxxDHRdS+zlY=";
     };
   };
 
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
 
         loeHome=$out/lib/${pname}
         mkdir -p $loeHome
-        cp -r LoE/* $loeHome
+        cp -r * $loeHome
 
         chmod +x $loeHome/LoE.x86_64
         makeWrapper $loeHome/LoE.x86_64 $out/bin/LoE \

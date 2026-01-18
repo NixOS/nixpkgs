@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   respx,
   rich,
   syrupy,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pytrydan";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dgomes";
@@ -52,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytrydan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with V2C EVSE Trydan";
     homepage = "https://github.com/dgomes/pytrydan";
     changelog = "https://github.com/dgomes/pytrydan/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytrydan";
   };
 }

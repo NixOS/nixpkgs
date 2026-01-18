@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp -R 3rdparty assets css directives js $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web client for Weechat";
     homepage = "https://github.com/glowing-bear/glowing-bear";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

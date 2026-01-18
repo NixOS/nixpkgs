@@ -15,19 +15,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.15";
+  version = "9.0.22";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JpQ9I6Bm6HbRYDGZYkif/IWK6PXhGeTl2yY+K3ydLqI=";
+    hash = "sha256-gQcMpwVf49m/f62ABd7/IluLe8mUjapNtnrPSmaLJJ0=";
   };
 
   patches = [
     # An earlier version of this patch was submitted upstream but did not get
     # any interest there - https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
+    # Fix include directory in generated cmake files with split outputs
+    ./cmake-include-dir.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   nativeBuildInputs = [
@@ -42,8 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     icu
     protobuf
-  ]
-  ++ lib.optionals enableTests [
+  ];
+
+  propagatedBuildInputs = lib.optionals enableTests [
     boost
   ];
 
@@ -63,12 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
     ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       illegalprime
       wegank
     ];

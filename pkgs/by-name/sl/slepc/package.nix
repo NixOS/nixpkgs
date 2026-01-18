@@ -3,25 +3,31 @@
   stdenv,
   fetchFromGitLab,
   python3Packages,
-  arpack-mpi,
+  arpack,
   petsc,
-  mpi,
   mpiCheckPhaseHook,
   pythonSupport ? false,
   withExamples ? false,
   withArpack ? stdenv.hostPlatform.isLinux,
 }:
-assert petsc.mpiSupport;
-assert pythonSupport -> petsc.pythonSupport;
+let
+  slepcPackages = petsc.petscPackages.overrideScope (
+    final: prev: {
+      inherit pythonSupport;
+      mpiSupport = true;
+      arpack = final.callPackage arpack.override { useMpi = true; };
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.3";
+  version = "3.24.1";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0sUJet4eViFxOR0XOAxNSprnL+kN4OW1npGihT0Q4Y=";
+    hash = "sha256-Eg0GLPM1AbgUl2/c2+F012LjZweuBNAWjY1WtlghjeY=";
   };
 
   postPatch = ''
@@ -31,14 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
       "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
-  '';
-
-  # Usually this project is being built as part of a `petsc` build or as part of
-  # other projects, e.g when `petsc` is `./configure`d with
-  # `--download-slepc=1`. This instructs the slepc to be built as a standalone
-  # project.
-  preConfigure = ''
-    export SLEPC_DIR=$PWD
   '';
 
   nativeBuildInputs = [
@@ -58,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs = [
-    mpi
+    slepcPackages.mpi
   ]
   ++ lib.optionals withArpack [
-    arpack-mpi
+    slepcPackages.arpack
   ];
 
   propagatedBuildInputs = [
@@ -94,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "slepc4py" ];
 
-  shellHook = ./setup-hook.sh;
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "Scalable Library for Eigenvalue Problem Computations";
     homepage = "https://slepc.upv.es";
-    changelog = "https://gitlab.com/slepc/slepc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/slepc/slepc/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       bsd2
     ];

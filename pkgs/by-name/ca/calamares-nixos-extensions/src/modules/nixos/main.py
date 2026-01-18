@@ -197,7 +197,7 @@ cfgbudgie = """  # Enable the X11 windowing system.
 
   # Enable the Budgie Desktop environment.
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.budgie.enable = true;
+  services.desktopManager.budgie.enable = true;
 
 """
 
@@ -797,7 +797,16 @@ def run():
             "nixos-install",
             "--no-root-passwd",
             "--root",
-            root_mount_point
+            root_mount_point,
+            # Nix requires its build directory to have no
+            # world-writable parent directories. The chroot store that
+            # nixos-install uses will use the state dir in the chroot
+            # for the build-dir, but the chroot is under /tmp, which
+            # is writable. It doesn't have to be in the chroot though,
+            # so we can just realign it with the host state dir.
+            "--option",
+            "build-dir",
+            "/nix/var/nix/builds",
         ]
     )
 

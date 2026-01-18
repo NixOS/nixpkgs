@@ -67,15 +67,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/Hypr --prefix PATH : ${lib.makeBinPath [ xmodmap ]}
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Tiling X11 window manager written in modern C++";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
     mainProgram = "Hypr";
   };

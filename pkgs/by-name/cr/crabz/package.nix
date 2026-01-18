@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       unlicense # or
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "crabz";
   };
 }

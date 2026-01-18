@@ -3,36 +3,24 @@
   stdenv,
   copyDesktopItems,
   buildNpmPackage,
-  electron_35,
+  electron,
   fetchFromGitLab,
   makeBinaryWrapper,
   makeDesktopItem,
-  at-spi2-atk,
-  gtk3,
-  libappindicator-gtk3,
-  libnotify,
-  libsecret,
-  libuuid,
-  nss,
-  xdg-utils,
-  xorg,
+  nix-update-script,
 }:
-let
-  version = "2.250820.0";
-  electron = electron_35;
-in
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
-  inherit version;
+  version = "2.260101.3";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker2";
-    tag = "v${version}";
-    hash = "sha256-d40oq8UXNFaybjbbhqV8Gfkj8SEdTuF92Y0elW9dksY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gtz5/caaDAIwG/vqtOO9w5ouysAIzQgD7GcTvXri8T8=";
   };
 
-  npmDepsHash = "sha256-q9QGNYMmeNCouPW9GFsVHSYK9T8N7H4hg6hkOtjmLAY=";
+  npmDepsHash = "sha256-8bhOfLLsNSK+/mXku5ukLr65bfk+RwC3SyOGRHndqVQ=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -59,10 +47,6 @@ buildNpmPackage (finalAttrs: {
       ];
     })
   ];
-
-  postPatch = ''
-    install -Dvm644 ${./package-lock.json} package-lock.json
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -91,21 +75,6 @@ buildNpmPackage (finalAttrs: {
     runHook postBuild
   '';
 
-  runtimeInputs = [
-    at-spi2-atk
-    gtk3
-    libnotify
-    libsecret
-    libuuid
-    nss
-    xdg-utils
-    xorg.libXScrnSaver
-    xorg.libXtst
-  ]
-  ++ lib.optionals stdenv.isLinux [
-    libappindicator-gtk3
-  ];
-
   installPhase = ''
     runHook preInstall
 
@@ -120,8 +89,6 @@ buildNpmPackage (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/gridtracker2 \
       --add-flags $out/share/gridtracker2/resources/app.asar \
-      --prefix PATH : "${lib.makeBinPath finalAttrs.runtimeInputs}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.runtimeInputs}" \
       --add-flags "--no-sandbox --disable-gpu-sandbox" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
@@ -134,6 +101,8 @@ buildNpmPackage (finalAttrs: {
   + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Warehouse of amateur radio information";

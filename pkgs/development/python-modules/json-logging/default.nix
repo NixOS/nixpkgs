@@ -6,7 +6,6 @@
   flask,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
   quart,
   requests,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "json-logging";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bobbui";
@@ -60,7 +57,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python library to emit logs in JSON format";
     longDescription = ''
       Python logging library to emit JSON log that can be easily indexed and searchable by logging
@@ -68,7 +65,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bobbui/json-logging-python";
     changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -16,6 +16,18 @@ stdenv.mkDerivation {
 
   postPatch = ''
     cd sources/shiboken2
+    substituteInPlace doc/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.1)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    for i in {.,ApiExtractor}/CMakeLists.txt; do
+      substituteInPlace $i --replace-fail \
+        "cmake_minimum_required(VERSION 3.1)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace $i --replace-fail \
+        "cmake_policy(VERSION 3.1)" \
+        "cmake_policy(VERSION 3.10)"
+    done
+    head CMakeLists.txt
   '';
 
   CLANG_INSTALL_DIR = llvmPackages.libclang.out;
@@ -54,15 +66,15 @@ stdenv.mkDerivation {
     rm $out/bin/shiboken_tool.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generator for the PySide2 Qt bindings";
     mainProgram = "shiboken2";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl21
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = python.pythonAtLeast "3.13";
   };
 }

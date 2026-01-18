@@ -10,19 +10,19 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  yarl,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "aioamazondevices";
-  version = "6.0.0";
+  version = "11.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${version}";
-    hash = "sha256-PHgYyQInXT7gwgBnKm1FfEUiHygMCcPcFJk0zU5tWOc=";
+    hash = "sha256-nxKWnNLmraPtMA+WZO4FOWbcbZr/HS6dhACKcFUq7D0=";
   };
 
   build-system = [ poetry-core ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     colorlog
     langcodes
     orjson
-    yarl
+    python-dateutil
   ];
 
   pythonImportsCheck = [ "aioamazondevices" ];

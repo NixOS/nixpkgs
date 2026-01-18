@@ -6,21 +6,21 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-Es3xy8NVDo7Xgu32jJa4lhYWGa5hJnRyDKFYQqB3aBY=",
+  vendorHash ? "sha256-bnNpJgy54wvTST1Jtfbd1ldLJrIzTW62TL7wyHeqz28=",
 }:
 
 let
-  attrsToSources = attrs: builtins.map ({ repo, version, ... }: "${repo}@${version}") attrs;
+  attrsToSources = attrs: map ({ repo, version, ... }: "${repo}@${version}") attrs;
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.12.2";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P4GhWrEACR1ZhNhGAoXWvNXYlpwnm2dz6Ggqv72zYog=";
+    hash = "sha256-9ggyFixdNy0t4UA8ZxU5oMUzA/8EB/k1jors4f8Q6YE=";
   };
 
   inherit vendorHash;
@@ -75,8 +75,9 @@ buildGoModule (finalAttrs: {
       ) externalPlugins)
     }
     diff -u plugin.cfg.orig plugin.cfg || true
-    for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
-    GOOS= GOARCH= go generate
+    for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
+    CC= GOOS= GOARCH= go generate
+    go mod tidy
     go mod vendor
   '';
 
@@ -89,7 +90,7 @@ buildGoModule (finalAttrs: {
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
-    GOOS= GOARCH= go generate
+    CC= GOOS= GOARCH= go generate
   '';
 
   postPatch = ''
@@ -134,6 +135,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       deltaevo
       djds
+      johanot
       rtreffer
       rushmorem
     ];

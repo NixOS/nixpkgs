@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "jefferson";
   version = "0.4.6";
-  format = "pyproject";
+  pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
@@ -39,11 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];

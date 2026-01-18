@@ -29,6 +29,7 @@
   vulkan-loader,
   libthai,
   libdrm,
+  libgbm,
   libdatrie,
   lttng-ust,
   libepoxy,
@@ -78,6 +79,9 @@
   gtk3,
   withLibinput ? false,
   libinput,
+  withWayland ? lib.meta.availableOn stdenv.hostPlatform wayland,
+  wayland,
+  wayland-scanner,
   # options
   qttranslations ? null,
 }:
@@ -133,6 +137,7 @@ stdenv.mkDerivation rec {
     lttng-ust
     libthai
     libdrm
+    libgbm
     libdatrie
     udev
     # Text rendering
@@ -156,7 +161,11 @@ stdenv.mkDerivation rec {
     xorg.xcbutilcursor
     libepoxy
   ]
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
+  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ];
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
@@ -186,7 +195,14 @@ stdenv.mkDerivation rec {
   ]
   # I’m not sure if this is necessary, but the macOS mkspecs stuff
   # tries to call `xcrun xcodebuild`, so better safe than sorry.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]
+  # wayland-scanner needs to be propagated as both build
+  # (for the wayland-scanner binary) and host (for the
+  # actual wayland.xml protocol definition)
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ];
 
   strictDeps = true;
 
@@ -198,6 +214,9 @@ stdenv.mkDerivation rec {
 
     # allow translations to be found outside of install prefix, as is the case in our split builds
     ./allow-translations-outside-prefix.patch
+
+    # make internal find_package calls between Qt components work with split builds
+    ./use-cmake-path.patch
 
     # always link to libraries by name in qmake-generated build scripts
     ./qmake-always-use-libname.patch
@@ -251,6 +270,9 @@ stdenv.mkDerivation rec {
   qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
+    # makes Qt print the configure summary
+    "--log-level=STATUS"
+
     "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
     "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
     "-DINSTALL_QMLDIR=${qtQmlPrefix}"
@@ -307,19 +329,19 @@ stdenv.mkDerivation rec {
 
   setupHook = ../../hooks/qtbase-setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.qt.io/";
     description = "Cross-platform application framework for C++";
-    license = with licenses; [
+    license = with lib.licenses; [
       fdl13Plus
       gpl2Plus
       lgpl21Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nickcao
       LunNova
     ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

@@ -4,7 +4,6 @@
   dvc,
   fetchFromGitHub,
   fsspec,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "dvc-hdfs";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_hdfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "HDFS/WebHDFS plugin for dvc";
     homepage = "https://github.com/iterative/dvc-hdfs";
     changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

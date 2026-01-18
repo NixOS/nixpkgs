@@ -13,7 +13,6 @@
   pbr,
   ply,
   pytest,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "pywbem";
   version = "1.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -61,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywbem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
     changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

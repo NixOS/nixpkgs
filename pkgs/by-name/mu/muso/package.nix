@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-L0ZQoz9J5Hxg98puk1RbKuybLboIoOsy5qqGnvEPi1U=";
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Automatic music sorter (based on ID3 tags)";
     mainProgram = "muso";
     homepage = "https://github.com/quebin31/muso";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ crertel ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ crertel ];
   };
 }

@@ -12,15 +12,15 @@
   pulseaudioSupport ? config.pulseaudio or true,
   libpulseaudio,
   ossSupport ? false,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmatemixer";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/libmatemixer-${finalAttrs.version}.tar.xz";
     sha256 = "XXO5Ijl/YGiOPJUw61MrzkbDDiYtsbU1L6MsQNhwoMc=";
   };
 
@@ -44,13 +44,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/libmatemixer";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Mixer library for MATE";
     homepage = "https://github.com/mate-desktop/libmatemixer";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.mate ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.mate ];
   };
-}
+})

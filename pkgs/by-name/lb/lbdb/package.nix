@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lbdb";
-  version = "0.56";
+  version = "0.57";
 
   src = fetchurl {
     url = "https://www.spinnaker.de/lbdb/download/lbdb-${version}.tar.gz";
-    sha256 = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
+    sha256 = "sha256-IS/i5A317T5Ulrxegh5LBoOmyVI7iIXn6HtjS8+SOog=";
   };
 
   buildInputs = [
@@ -57,14 +57,14 @@ stdenv.mkDerivation rec {
     ./add-methods-to-rc.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.spinnaker.de/lbdb/";
     description = "Little Brother's Database";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       kaiha
       bfortz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

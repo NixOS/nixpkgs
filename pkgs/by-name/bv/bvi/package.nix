@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Hex editor with vim style keybindings";
     homepage = "https://bvi.sourceforge.net/download.html";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

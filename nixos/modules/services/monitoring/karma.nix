@@ -117,7 +117,7 @@ in
         Type = "simple";
         DynamicUser = true;
         Restart = "on-failure";
-        ExecStart = "${pkgs.karma}/bin/karma --config.file ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraOptions}";
+        ExecStart = "${lib.getExe cfg.package} --config.file ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraOptions}";
       };
     };
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.listen.port ];

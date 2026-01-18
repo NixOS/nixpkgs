@@ -20,6 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-UNrXP5strO6LIkIM3etBo1+Vm+1lR5wF0VfKtZYRoYc=";
   };
 
+  preBuild = ''
+    touch requirements.txt
+  '';
+
   propagatedBuildInputs = [
     packaging
     jinja2

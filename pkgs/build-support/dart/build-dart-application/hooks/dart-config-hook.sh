@@ -9,6 +9,9 @@ dartConfigHook() {
     echo "Installing dependencies"
     mkdir -p .dart_tool
     cp "$packageConfig" .dart_tool/package_config.json
+    chmod u+w .dart_tool/package_config.json
+    @python3@ @workspacePackageConfigScript@
+    chmod u-w .dart_tool/package_config.json
     @python3@ @packageGraphScript@ > .dart_tool/package_graph.json
 
     packagePath() {

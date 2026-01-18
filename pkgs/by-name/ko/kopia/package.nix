@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.21.1";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-0i8bKah3a7MrgzATysgFCsmDZxK9qH+4hmBMW+GR9/4=";
+    hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
   };
 
-  vendorHash = "sha256-x5WIwYvQtbR72jqdD+O4Wg+4/qs24aqNeBuron/0ztk=";
+  vendorHash = "sha256-szlCiZOLU0KVWb2YX3Wmicrumn+fNm2AWdPxaJZZT90=";
 
   subPackages = [ "." ];
 
@@ -30,6 +30,12 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  postPatch = ''
+    substituteInPlace internal/mount/mount_posix_webdav_helper_linux.go \
+      --replace-fail "/usr/bin/mount" "mount" \
+      --replace-fail "/usr/bin/umount" "umount"
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kopia \

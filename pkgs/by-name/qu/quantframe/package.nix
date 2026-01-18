@@ -5,6 +5,8 @@
   cargo-tauri,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
   glib-networking,
   openssl,
@@ -15,16 +17,15 @@
   gtk3,
   nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
-  version = "1.4.3";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "Kenya-DK";
     repo = "quantframe-react";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ls6c9xLmjjx0kSh1s+HkdClrcTOvsAemjzqNwMeOd9c=";
+    hash = "sha256-jrGDgK/Z9oLSvtFfC+uIs0vj4Nku4Sp/bdR1MX/SK2E=";
   };
 
   postPatch = ''
@@ -35,24 +36,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
   '';
 
-  patches = [
-    ./0001-disable-telemetry.patch
-  ];
+  patches = [ ./0001-disable-telemetry.patch ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-3IHwwbl1aH3Pzh9xq2Jfev9hj6/LXZaVaIJOPbgsquE=";
+    hash = "sha256-ncoxliXnLxWEXL1Z7ixOULI/uYkxmfLiDWu1tDSRsrM=";
   };
 
-  cargoHash = "sha256-UyfSmlr+5mWmlisNtjF6jZKx92kdQziG26mgeZtkySY=";
+  cargoHash = "sha256-0IgQK0jMVN6u5i4lBKK8njbMyRQCLguTdDcSBnFnyso=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = [
@@ -75,6 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://quantframe.app/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nyukuru ];
+    maintainers = with lib.maintainers; [
+      nyukuru
+      enkarterisi
+    ];
   };
 })

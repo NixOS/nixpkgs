@@ -47,15 +47,6 @@ index e8299202..19dbd7b1 100644
  {
    received_requests_.clear();
    curl::HttpClientSync http_client;
-@@ -495,7 +495,7 @@ TEST_F(BasicCurlHttpTests, GetBaseUri)
-             "http://127.0.0.1:31339/");
- }
- 
--TEST_F(BasicCurlHttpTests, SendGetRequestAsync)
-+TEST_F(BasicCurlHttpTests, DISABLED_SendGetRequestAsync)
- {
-   curl::HttpClient http_client;
- 
 @@ -570,7 +570,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequestAsyncTimeout)
    }
  }

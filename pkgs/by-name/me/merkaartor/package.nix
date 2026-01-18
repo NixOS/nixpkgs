@@ -2,12 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+
   cmake,
   pkg-config,
   gdal,
   proj,
   protobuf,
-  qt5,
+  qt6,
   withGeoimage ? true,
   exiv2,
   withGpsdlib ? (!stdenv.hostPlatform.isDarwin),
@@ -25,24 +27,34 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
-    rev = version;
+    tag = version;
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
+
+  patches = [
+    # Fix for GDAL 3.12
+    # https://github.com/openstreetmap/merkaartor/pull/316
+    (fetchpatch {
+      url = "https://github.com/openstreetmap/merkaartor/commit/28cca84e9f5db0aaba87c2084ed32f9677598823.diff";
+      hash = "sha256-so0La5djYhWF6NqLpShWa3vGl5A2jkS3Xwg5Pe1yse4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     gdal
     proj
     protobuf
-    qt5.qtnetworkauth
-    qt5.qtsvg
-    qt5.qtwebengine
+    qt6.qt5compat
+    qt6.qtnetworkauth
+    qt6.qtsvg
+    qt6.qtwebengine
   ]
   ++ lib.optional withGeoimage exiv2
   ++ lib.optional withGpsdlib gpsd
@@ -70,7 +82,7 @@ stdenv.mkDerivation rec {
     homepage = "https://merkaartor.be/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "merkaartor";
-    maintainers = with lib.maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
 }

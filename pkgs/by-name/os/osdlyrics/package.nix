@@ -4,8 +4,10 @@
   fetchFromGitHub,
 
   autoreconfHook,
-  pkg-config,
+  gobject-introspection,
   intltool,
+  pkg-config,
+  wrapGAppsNoGuiHook,
 
   glib,
   gtk2,
@@ -29,8 +31,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
+    gobject-introspection
     intltool
+    pkg-config
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -49,6 +53,8 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  dontWrapGApps = true;
 
   postFixup = ''
     extractExecLine() {
@@ -75,15 +81,16 @@ stdenv.mkDerivation rec {
 
     for p in "$out/bin/osdlyrics-create-lyricsource" "$out/bin/osdlyrics-daemon" "$out/libexec/osdlyrics"/*; do
       wrapProgram "$p" \
+        ''${gappsWrapperArgs[@]} \
         --prefix PYTHONPATH : "$out/${python3.sitePackages}"
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standalone lyrics fetcher/displayer";
     homepage = "https://github.com/osdlyrics/osdlyrics";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pedrohlc ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pedrohlc ];
+    platforms = lib.platforms.linux;
   };
 }

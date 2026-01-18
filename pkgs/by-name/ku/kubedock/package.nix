@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubedock";
-  version = "0.18.2";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "joyrex2001";
     repo = "kubedock";
     rev = version;
-    hash = "sha256-95C14Vo3QbHR/PEIPoLECCq9hhLg0Q7iThvdfaV6/lY=";
+    hash = "sha256-ZwNixOeBuyuFT0Hfl3USfArhmyIPHFP0fTbiztTSPOA=";
   };
 
-  vendorHash = "sha256-iTXpODO45oUgpSvKmjLBQWAVDHLrOYN6iBL/58dd1Mg=";
+  vendorHash = "sha256-QLiu014QowDqebDCXSxOH2TPHUG2d+34mlnbo3NdafA=";
 
   # config.Build not defined as it would break r-ryantm
   ldflags = [
@@ -26,11 +26,11 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  meta = with lib; {
+  meta = {
     description = "Minimal implementation of the Docker API that will orchestrate containers on a Kubernetes cluster";
     homepage = "https://github.com/joyrex2001/kubedock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mausch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mausch ];
     mainProgram = "kubedock";
   };
 }

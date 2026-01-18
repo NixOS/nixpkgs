@@ -6,21 +6,22 @@
   nix-update-script,
   alsa-lib,
   libGL,
+  libxcb,
   libxkbcommon,
   vulkan-headers,
   wayland,
   xorg,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "sointu";
-  version = "0.4.1-unstable-2025-08-13";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "vsariola";
     repo = "sointu";
-    rev = "74fea4138fd788eddeb726440c872937de56fd1c";
-    hash = "sha256-kHK35Bt/+ucPCsFE3p72J3jSHzhOK9QKtJPG+3grBvs=";
+    tag = "v${version}";
+    hash = "sha256-xHKD+zArsdQVffwbbSOOdzC6o5sxpez8VLAwIzV5X4E=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildGoModule {
   buildInputs = [
     alsa-lib
     libGL
+    libxcb
     libxkbcommon
     vulkan-headers
     wayland
@@ -47,9 +49,7 @@ buildGoModule {
     "cmd/sointu-play"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fork of 4klang that can target 386, amd64 and WebAssembly";

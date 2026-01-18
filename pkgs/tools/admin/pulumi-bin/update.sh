@@ -3,9 +3,12 @@
 # shellcheck shell=bash
 # Bash 3 compatible for Darwin
 
-if [ -z "${GITHUB_TOKEN}" ] || [ $# -ne 1 ]; then
-  echo >&2 "usage: GITHUB_TOKEN=… ./update.sh pulumi-version"
-  exit 1
+if ! gh auth status --hostname github.com >/dev/null 2>&1; then
+  if [ -z "${GITHUB_TOKEN}" ] || [ $# -ne 1 ]; then
+    echo >&2 "Login to github.com with gh or provide GITHUB_TOKEN env"
+    echo >&2 "usage: GITHUB_TOKEN=… ./update.sh pulumi-version"
+    exit 1
+  fi
 fi
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )

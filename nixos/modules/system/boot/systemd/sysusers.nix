@@ -152,7 +152,7 @@ in
           # systemd-sysusers cannot find it when we also pass another flag.
           ExecStart = lib.mkIf immutableEtc [
             ""
-            "${config.systemd.package}/bin/systemd-sysusers --root ${builtins.dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
+            "${config.systemd.package}/bin/systemd-sysusers --root ${dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
           ];
 
           # Make the source files writable before executing sysusers.
@@ -183,9 +183,9 @@ in
     };
 
     environment.etc = lib.mkMerge [
-      ({
+      {
         "sysusers.d".source = sysusersConfig;
-      })
+      }
 
       # Statically create the symlinks to immutablePasswordFilesLocation when
       # using an immutable /etc because we will not be able to do it at

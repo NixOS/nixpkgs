@@ -12,12 +12,13 @@
   udev,
   wrapGAppsHook3,
   writeScript,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "9.28.0";
-  revision = "234";
+  version = "9.32.2";
+  revision = "240";
 
   src = fetchurl {
     # find the latest version with
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
     url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
-    hash = "sha512-2zGt4nL8E99s4J9vmzKoOGgEI3XnEx3m7JwFkWuT5wYv/JWoJWnh9dNWlHzRHPpLU8/lAZUG2F4AVYCmPGa96A==";
+    hash = "sha512-TPfQ413zbnuKAhflLZPvLeVdrqdUEi+I/inWAs8SJ1j8rYW1TrHDyMB8S/HpWboRWXmUhPHulNXfGpHKUu453Q==";
   };
 
   desktopItem = makeDesktopItem {
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libsecret
     libgbm
+    sqlite
   ];
 
   unpackPhase = ''
@@ -107,14 +109,13 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       th0rgal
       Rishik-Y
     ];

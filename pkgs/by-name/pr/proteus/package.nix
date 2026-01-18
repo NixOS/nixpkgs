@@ -44,13 +44,27 @@ stdenv.mkDerivation rec {
     libXrandr
     libXrender
   ];
+
+  postPatch = ''
+    substituteInPlace modules/libsamplerate/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1..3.18)" "cmake_minimum_required(VERSION 3.18)"
+    substituteInPlace modules/{json,RTNeural}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   # JUCE loads most dependencies at runtime:
   runtimeDependencies = map lib.getLib buildInputs;
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Support JACK output in the standalone application:
     "-DJUCE_JACK"
-    # Accommodate -flto:
+    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+    # a Link Time Optimization flag, and instructs the plugin compiled here to
+    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+    # successful linking while still providing LTO benefits. If our build of
+    # `juce` was used as a dependency, we could have patched that `-flto` line
+    # in our juce's source, but that is not possible because it is used as a
+    # Git Submodule.
     "-ffat-lto-objects"
   ];
 
@@ -66,12 +80,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Guitar amp and pedal capture plugin using neural networks";
     homepage = "https://github.com/GuitarML/Proteus";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "Proteus";
   };
 }

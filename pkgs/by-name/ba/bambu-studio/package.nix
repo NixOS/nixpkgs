@@ -3,6 +3,7 @@
   lib,
   binutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   pkg-config,
@@ -34,7 +35,7 @@
   opencv,
   pcre,
   systemd,
-  tbb_2022,
+  onetbb,
   webkitgtk_4_1,
   wxGTK31,
   xorg,
@@ -56,13 +57,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.02.02.56";
+  version = "02.04.00.70";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vg+sEIztFBfzROl2surRd4l/afZ+tGMtG65m3kDIPAY=";
+    hash = "sha256-BrH8gKbc0y76wbWrQxU+0xMJcYAm4Gi/xmECVf6pGkI=";
   };
 
   nativeBuildInputs = [
@@ -101,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2022
+    onetbb
     webkitgtk_4_1
     wxGTK'
     xorg.libX11
@@ -117,6 +118,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
+    # Don't link cereal
+    ./patches/no-cereal.patch
+    # Cmake 4 support
+    ./patches/cmake.patch
+    # Fix build with gcc15
+    # https://github.com/bambulab/BambuStudio/pull/8555
+    (fetchpatch {
+      name = "bambu-studio-include-stdint-header.patch";
+      url = "https://github.com/bambulab/BambuStudio/commit/434752bf643933f22348d78335abe7f60550e736.patch";
+      hash = "sha256-vWqTM6IHL/gBncLk6gZHw+dFe0sdVuPdUqYeVJUbTis=";
+    })
   ];
 
   doCheck = true;

@@ -10,7 +10,6 @@
   fastapi,
   fetchFromGitHub,
   httpx,
-  importlib-metadata,
   mysqlclient,
   nest-asyncio,
   orjson,
@@ -20,17 +19,13 @@
   pymysql,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
   version = "0.20.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collerek";
@@ -55,10 +50,6 @@ buildPythonPackage rec {
     pydantic
     sqlalchemy
     psycopg2
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
   ];
 
   optional-dependencies = {
@@ -139,12 +130,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ormar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
     changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andreasfelix ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andreasfelix ];
     broken = true;
   };
 }

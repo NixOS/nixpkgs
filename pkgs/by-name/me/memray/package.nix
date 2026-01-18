@@ -10,23 +10,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.18.0";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${version}";
-    hash = "sha256-bShFMuDJlvBA3rQJRwXlsgRk4q+gdFQjOpDzOrp4/8k=";
+    hash = "sha256-RdOtgNSkFIVl8Uve2iaJ7G0X1IHJ/Yo4h8hWP3pTV8g=";
   };
-
-  # AttributeError: 'Label' object has no attribute 'renderable'.
-  # In textual==0.6.0, the `renderable` property was renamed to `content`
-  # https://github.com/Textualize/textual/pull/6041
-  postPatch = ''
-    substituteInPlace tests/unit/test_tui_reporter.py \
-      --replace-fail ".renderable" ".content"
-  '';
 
   build-system = with python3Packages; [
     distutils

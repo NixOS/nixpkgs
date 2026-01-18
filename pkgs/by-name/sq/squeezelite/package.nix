@@ -39,13 +39,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1541";
+  version = "2.0.0.1556";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "72e1fd8abfa9b2f8e9636f033247526920878718";
-    hash = "sha256-1uzkf7vkzfHdsWvWcXnUv279kgtzrHLU0hAPaTKRWI8=";
+    rev = "6d571de8fa6dfff23a5a0cbb2c81b402d2c30c31";
+    hash = "sha256-rwiRZaadku4xAAQiloghnmMtRlflgGJ8prEUQJsuR8c=";
   };
 
   buildInputs = [
@@ -104,13 +104,16 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
-    license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
+    license = with lib.licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
     mainProgram = binName;
-    maintainers = with maintainers; [ adamcstephens ];
+    maintainers = with lib.maintainers; [ adamcstephens ];
     platforms =
-      if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
+      if (audioBackend == "pulse") then
+        lib.platforms.linux
+      else
+        lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

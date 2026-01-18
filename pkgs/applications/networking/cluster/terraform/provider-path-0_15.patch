@@ -1,18 +1,19 @@
-diff -Naur terraform.old/internal/command/init.go terraform.new/internal/command/init.go
---- terraform.old/internal/command/init.go
-+++ terraform.new/internal/command/init.go
-@@ -7,6 +7,7 @@
- 	"context"
+diff -Naur terraform.old/internal/command/init_run.go terraform.new/internal/command/init_run.go
+--- terraform.old/internal/command/init_run.go
++++ terraform.new/internal/command/init_run.go
+@@ -6,6 +6,7 @@
+ import (
  	"errors"
  	"fmt"
 +	"os"
- 	"log"
- 	"reflect"
- 	"sort"
-@@ -79,6 +80,11 @@
+ 	"strings"
+ 
+ 	"github.com/hashicorp/hcl/v2"
+@@ -76,6 +77,11 @@
+ 	if c.forceInitCopy {
  		c.migrateState = true
  	}
-
+ 
 +	val, ok := os.LookupEnv("NIX_TERRAFORM_PLUGIN_DIR")
 +	if ok {
 +		initArgs.PluginPath = append(initArgs.PluginPath, val)

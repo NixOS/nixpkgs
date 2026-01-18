@@ -3,6 +3,7 @@
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   stdenv,
 
@@ -12,7 +13,7 @@
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
-  rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets,
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
   openclSupport ? false,
   clblast,
@@ -30,14 +31,12 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
-  apple-sdk_14,
   curl,
   llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
   ninja,
-  git,
 }:
 
 let
@@ -75,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6479";
+  version = "7767";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-wgfYjG9m/ainCI85FlCb12Dz01R+pZfFeDX613M4xpQ=";
+    hash = "sha256-k6Q1fUci0SkEB8vH5G3oG/evG7aUYBSqo+iXYG6x/dE=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -89,26 +88,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patches = lib.optionals vulkanSupport [ ./disable_bfloat16.patch ];
-
-  postPatch = ''
-    # Workaround for local-ai package which overrides this package to an older llama-cpp
-    if [ -f ./ggml/src/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
-
-    if [ -f ./ggml/src/ggml-metal/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
-  '';
-
   nativeBuildInputs = [
     cmake
+    installShellFiles
     ninja
     pkg-config
-    git
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -121,7 +105,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
-    ++ optionals metalSupport [ apple-sdk_14 ]
     ++ [ curl ];
 
   preConfigure = ''
@@ -150,7 +133,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
-    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmGpuTargets)
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
@@ -170,6 +153,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
+
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
@@ -177,7 +164,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    tests = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       metal = llama-cpp.override { metalSupport = true; };
     };
     updateScript = nix-update-script {
@@ -199,6 +186,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       dit7ya
       philiptaron
       xddxdd
+      yuannan
     ];
     platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;

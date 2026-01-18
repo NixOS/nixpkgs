@@ -1,6 +1,6 @@
 {
   buildDunePackage,
-  dune_3,
+  dune,
   dyn,
   ordering,
   csexp,
@@ -8,8 +8,7 @@
 
 buildDunePackage {
   pname = "stdune";
-  inherit (dune_3) version src;
-  duneVersion = "3";
+  inherit (dune) version src;
 
   dontAddPrefix = true;
 
@@ -23,7 +22,7 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
-  meta = dune_3.meta // {
+  meta = dune.meta // {
     description = "Dune's unstable standard library";
   };
 }

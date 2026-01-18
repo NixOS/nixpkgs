@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     cp -a esshader $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline ShaderToy-compatible GLSL shader viewer using OpenGL ES 2.0";
     homepage = "https://github.com/cmcsun/esshader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ astro ];
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

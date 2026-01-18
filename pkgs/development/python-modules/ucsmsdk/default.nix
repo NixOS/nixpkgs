@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ucsmsdk";
-  version = "0.9.22";
+  version = "0.9.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CiscoUcs";
     repo = "ucsmsdk";
     tag = "v${version}";
-    hash = "sha256-zpb43Id6uHBKpEORDGKNW8lXP10fQJm9lGOztxaTZSI=";
+    hash = "sha256-c2Tvm4xMyda9PoL7VWMCo7/RjSVcHBJQMh4GeTzgz5I=";
   };
 
   build-system = [ setuptools ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ucsmsdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for Cisco UCS";
     homepage = "https://github.com/CiscoUcs/ucsmsdk";
     changelog = "https://github.com/CiscoUcs/ucsmsdk/blob/${src.tag}/HISTORY.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

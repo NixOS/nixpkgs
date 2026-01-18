@@ -52,10 +52,7 @@ in
 
 ## 1. Patches relevant on every platform ####################################
 
-[ ]
-# Pass the path to a C++ compiler directly in the Makefile.in
-++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
-++ optionals (noSysDirs) (
+optionals noSysDirs (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
     ./gcc-12-no-sys-dirs.patch
@@ -86,11 +83,12 @@ in
 )
 # Pass CFLAGS on to gnat
 ++ optional langAda ./gnat-cflags-11.patch
-++ optional langFortran (
-  # Fix interaction of gfortran and libtool
-  # Fixes the output of -v
-  # See also https://github.com/nixOS/nixpkgs/commit/cc6f814a8f0e9b70ede5b24192558664fa1f98a2
-  ./gcc-12-gfortran-driving.patch)
+++
+  optional langFortran
+    # Fix interaction of gfortran and libtool
+    # Fixes the output of -v
+    # See also https://github.com/nixOS/nixpkgs/commit/cc6f814a8f0e9b70ede5b24192558664fa1f98a2
+    ./gcc-12-gfortran-driving.patch
 # Do not pass a default include dir on PowerPC+Musl
 # See https://github.com/NixOS/nixpkgs/pull/45340/commits/d6bb7d45162ac93e017cc9b665ae4836f6410710
 ++ [ ./ppc-musl.patch ]
@@ -99,6 +97,9 @@ in
 # See https://github.com/NixOS/nixpkgs/pull/354107/commits/2de1b4b14e17f42ba8b4bf43a29347c91511e008
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
+# c++tools: Don't check --enable-default-pie.
+# --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
+++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
@@ -162,13 +163,17 @@ in
 
 ## Darwin
 
-# Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
+# Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
 ++ optional (
+  # this one would conflict with gcc-14-darwin-aarch64-support.patch
   is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
 ) ../patches/14/libgcc-darwin-detection.patch
+++ optional (atLeast15 && stdenv.hostPlatform.isDarwin) ../patches/15/libgcc-darwin-detection.patch
+
+# Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
 ++ optional (
-  atLeast15 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/15/libgcc-darwin-detection.patch
+  atLeast15 && stdenv.hostPlatform.isDarwin
+) ../patches/15/libgcc-darwin-fix-reexport.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
@@ -223,3 +228,22 @@ in
   }
   .${majorVersion} or [ ]
 )
+
+++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
+  name = "libstdc-fix-compilation-in-freestanding-win32.patch";
+  url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-2-corngood@gmail.com/raw";
+  hash = "sha256-+EYW9lG8CviVX7RyNHp+iX+8BRHUjt5b07k940khbbY=";
+})
+
+++ optionals targetPlatform.isCygwin [
+  (fetchpatch {
+    name = "cygwin-fix-compilation-with-inhibit_libc.patch";
+    url = "https://inbox.sourceware.org/gcc-patches/20250926170154.2222977-1-corngood@gmail.com/raw";
+    hash = "sha256-mgzMRvgPdhj+Q2VRsFhpE2WQzg0CvWsc5/FRAsSU1Es=";
+  })
+  (fetchpatch {
+    name = "cygwin-use-builtin_define_std-for-unix.patch";
+    url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-3-corngood@gmail.com/raw";
+    hash = "sha256-8I2G4430gkYoWgUued4unqhk8ZCajHf1dcivAeuLZ0E=";
+  })
+]

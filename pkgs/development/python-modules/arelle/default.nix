@@ -1,36 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   setuptools,
   setuptools-scm,
 
+  bottle,
   certifi,
   filelock,
   isodate,
+  jaconv,
+  jsonschema,
   lxml,
   numpy,
   openpyxl,
+  pillow,
   pyparsing,
   python-dateutil,
   regex,
+  truststore,
+  typing-extensions,
 
   gui ? true,
   tkinter,
 
-  pycryptodome,
+  aniso8601,
+  cheroot,
+  graphviz,
+  holidays,
+  matplotlib,
   pg8000,
+  pycryptodome,
   pymysql,
   pyodbc,
-  rdflib,
-  holidays,
   pytz,
+  rdflib,
   tinycss2,
-  graphviz,
-  cheroot,
-  cherrypy,
   tornado,
 
   sphinxHook,
@@ -39,22 +45,21 @@
   sphinx-copybutton,
   furo,
 
+  writableTmpDirAsHomeHook,
   pytestCheckHook,
   boto3,
 }:
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.30.25";
+  version = "2.38.4";
   pyproject = true;
-
-  disabled = pythonAtLeast "3.13"; # Note: when updating, check if this is still needed
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
     tag = version;
-    hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
+    hash = "sha256-ngFhY6yngr2OVQ6gsdpk5UAhzIpIrwiw+S+HK3oqfec=";
   };
 
   outputs = [
@@ -64,9 +69,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
-        'requires = ["setuptools~=73.0", "wheel~=0.44", "setuptools_scm[toml]~=8.1"]' \
+        'requires = ["setuptools>=80.9,<81", "wheel>=0.45,<1", "setuptools_scm[toml]>=9.2,<10"]' \
         'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
   '';
+
+  pythonRelaxDeps = [
+    "pillow" # pillow's current version is above what arelle officially supports, but it should be fine
+  ];
 
   build-system = [
     setuptools
@@ -74,37 +83,47 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    bottle
     certifi
     filelock
     isodate
+    jaconv
+    jsonschema
     lxml
     numpy
     openpyxl
+    pillow
     pyparsing
     python-dateutil
     regex
+    truststore
+    typing-extensions
   ]
   ++ lib.optionals gui [ tkinter ];
 
   optional-dependencies = {
     crypto = [ pycryptodome ];
     db = [
+      # cx-oracle # Unfree
       pg8000
       pymysql
       pyodbc
       rdflib
     ];
     efm = [
+      aniso8601
       holidays
+      matplotlib
       pytz
     ];
     esef = [ tinycss2 ];
     objectmaker = [ graphviz ];
+    # viewer = [ ixbrl-viewer ]; # Not yet packaged
     webserver = [
       cheroot
-      cherrypy
       tornado
     ];
+    xule = [ aniso8601 ];
   };
 
   nativeBuildInputs = [
@@ -122,14 +141,11 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     pytestCheckHook
     boto3
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/integration_tests"

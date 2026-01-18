@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "9.5.1";
+  version = "9.14.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${version}";
-    hash = "sha256-cSFqPSLeM7hw1bxQZ2FhlHUP+O3iyrwBz4+Jz90Zck8=";
+    hash = "sha256-kKULORORg187jwEp5rjtWBVYdS0IA+aYCnPhJj7mVNE=";
   };
 
   postPatch = ''
@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication rec {
     snakemake-interface-logger-plugins
     snakemake-interface-storage-plugins
     snakemake-interface-report-plugins
+    snakemake-interface-scheduler-plugins
     stopit
     tabulate
     throttler
@@ -85,8 +86,6 @@ python3Packages.buildPythonApplication rec {
       polars
     ])
     ++ [ writableTmpDirAsHomeHook ];
-
-  versionCheckProgramArg = "--version";
 
   enabledTestPaths = [
     "tests/tests.py"
@@ -140,6 +139,11 @@ python3Packages.buildPythonApplication rec {
     # Requires snakemake-storage-plugin-http
     "test_keep_local"
     "test_retrieve"
+
+    # Requires conda
+    "test_jupyter_notebook"
+    "test_jupyter_notebook_nbconvert"
+    "test_jupyter_notebook_draft"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Unclear failure:

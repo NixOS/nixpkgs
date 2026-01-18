@@ -30,11 +30,11 @@ buildGoModule rec {
   # Tests contain network calls
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Transifex command-line client";
     homepage = "https://github.com/transifex/cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thornycrackers ];
     mainProgram = "tx";
   };
 }

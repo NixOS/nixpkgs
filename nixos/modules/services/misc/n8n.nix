@@ -6,12 +6,33 @@
 }:
 let
   cfg = config.services.n8n;
-  format = pkgs.formats.json { };
-  configFile = format.generate "n8n.json" cfg.settings;
+
+  envVarToCredName = varName: lib.toLower varName;
+
+  # Partition environment variables into regular and file-based (_FILE suffix)
+  regularEnv = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) cfg.environment;
+  fileBasedEnv = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) cfg.environment;
+
+  # Transform file-based env vars to point to credentials directory
+  fileBasedEnvTransformed = lib.mapAttrs' (
+    varName: _secretPath: lib.nameValuePair varName "%d/${envVarToCredName varName}"
+  ) fileBasedEnv;
+
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "n8n" "settings" ] "Use services.n8n.environment instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "n8n"
+      "webhookUrl"
+    ] "Use services.n8n.environment.WEBHOOK_URL instead.")
+  ];
+
   options.services.n8n = {
     enable = lib.mkEnableOption "n8n server";
+
+    package = lib.mkPackageOption pkgs "n8n" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
@@ -19,53 +40,97 @@ in
       description = "Open ports in the firewall for the n8n web interface.";
     };
 
-    settings = lib.mkOption {
-      type = format.type;
+    environment = lib.mkOption {
+      description = ''
+        Environment variables to pass to the n8n service.
+        See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
+
+        Environment variables ending with `_FILE` are automatically handled as secrets:
+        they are loaded via systemd credentials for secure access with `DynamicUser=true`.
+
+        This can be useful to pass secrets via tools like `agenix` or `sops-nix`.
+      '';
+      example = lib.literalExpression ''
+        {
+          N8N_ENCRYPTION_KEY_FILE = "/run/n8n/encryption_key";
+          DB_POSTGRESDB_PASSWORD_FILE = "/run/n8n/db_postgresdb_password";
+          WEBHOOK_URL = "https://n8n.example.com";
+        }
+      '';
+      type = lib.types.submodule {
+        freeformType =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            (coercedTo int toString str)
+            (coercedTo bool builtins.toJSON str)
+          ]);
+        options = {
+          GENERIC_TIMEZONE = lib.mkOption {
+            type = with lib.types; nullOr str;
+            default = config.time.timeZone;
+            defaultText = lib.literalExpression "config.time.timeZone";
+            description = ''
+              The n8n instance timezone. Important for schedule nodes (such as Cron).
+            '';
+          };
+          N8N_PORT = lib.mkOption {
+            type = with lib.types; coercedTo port toString str;
+            default = 5678;
+            description = "The HTTP port n8n runs on.";
+          };
+          N8N_USER_FOLDER = lib.mkOption {
+            type = lib.types.path;
+            # This folder must be writeable as the application is storing
+            # its data in it, so the StateDirectory is a good choice
+            default = "/var/lib/n8n";
+            description = ''
+              Provide the path where n8n will create the .n8n folder.
+              This directory stores user-specific data, such as database file and encryption key.
+            '';
+            readOnly = true;
+          };
+          N8N_DIAGNOSTICS_ENABLED = lib.mkOption {
+            type = with lib.types; coercedTo bool builtins.toJSON str;
+            default = false;
+            description = ''
+              Whether to share selected, anonymous telemetry with n8n.
+              Note that if you set this to false, you can't enable Ask AI in the Code node.
+            '';
+          };
+          N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkOption {
+            type = with lib.types; coercedTo bool builtins.toJSON str;
+            default = false;
+            description = ''
+              When enabled, n8n sends notifications of new versions and security updates.
+            '';
+          };
+        };
+      };
       default = { };
-      description = ''
-        Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
-        for supported values.
-      '';
     };
-
-    webhookUrl = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = ''
-        WEBHOOK_URL for n8n, in case we're running behind a reverse proxy.
-        This cannot be set through configuration and must reside in an environment variable.
-      '';
-    };
-
   };
 
   config = lib.mkIf cfg.enable {
-    services.n8n.settings = {
-      # We use this to open the firewall, so we need to know about the default at eval time
-      port = lib.mkDefault 5678;
-    };
-
     systemd.services.n8n = {
-      description = "N8N service";
+      description = "n8n service";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = {
-        # This folder must be writeable as the application is storing
-        # its data in it, so the StateDirectory is a good choice
-        N8N_USER_FOLDER = "/var/lib/n8n";
-        HOME = "/var/lib/n8n";
-        N8N_CONFIG_FILES = "${configFile}";
-        WEBHOOK_URL = "${cfg.webhookUrl}";
-
-        # Don't phone home
-        N8N_DIAGNOSTICS_ENABLED = "false";
-        N8N_VERSION_NOTIFICATIONS_ENABLED = "false";
-      };
+      environment =
+        regularEnv
+        // {
+          HOME = config.services.n8n.environment.N8N_USER_FOLDER;
+        }
+        // fileBasedEnvTransformed;
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.n8n}/bin/n8n";
+        ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         StateDirectory = "n8n";
+
+        LoadCredential = lib.mapAttrsToList (
+          varName: secretPath: "${envVarToCredName varName}:${secretPath}"
+        ) fileBasedEnv;
 
         # Basic Hardening
         NoNewPrivileges = "yes";
@@ -88,7 +153,7 @@ in
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.port ];
+      allowedTCPPorts = [ (lib.toInt cfg.environment.N8N_PORT) ];
     };
   };
 }

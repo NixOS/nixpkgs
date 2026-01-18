@@ -1,12 +1,14 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   hwinfo,
   libusb1,
   gcc,
   pkg-config,
   makeWrapper,
+  nixosTests,
   stdenv,
   systemdMinimal,
 }:
@@ -16,23 +18,23 @@ let
     src = fetchFromGitHub {
       owner = "numtide";
       repo = "hwinfo";
-      rev = "c2259845d10694c099fb306a8cfc5a403e71c708";
-      hash = "sha256-RGIoJkYiNMRHwUclzdRMELxCgBU9Pfvaghvt3op0zM0=";
+      rev = "bfeab0b4e38b200c7a62a44d4d01601a86fe1091";
+      hash = "sha256-GL3fNCSaU45fNihEksgtPtbuLkc+tVGXtPH05wbrHwI=";
     };
   };
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     tag = "v${version}";
-    hash = "sha256-4kER7CyFvMKVpKxCYHuf9fkkYVzVK9AWpF55cBNzPc0=";
+    hash = "sha256-oMOiZhppyUwyhLMtTofmeQINi8rHwsuQ1cD8Kr1/KwM=";
   };
 
-  vendorHash = "sha256-A7ZuY8Gc/a0Y8O6UG2WHWxptHstJOxi4n9F8TY6zqiw=";
+  vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
 
   env.CGO_ENABLED = 1;
 
@@ -60,6 +62,12 @@ buildGoModule rec {
     "-X git.numtide.com/numtide/nixos-facter/build.Version=v${version}"
     "-X github.com/numtide/nixos-facter/pkg/build.System=${stdenv.hostPlatform.system}"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) facter;
+    debug-nvd = callPackage ./test-debug-nvd.nix { };
+    debug-nix-diff = nixosTests.facter.nodes.machine.hardware.facter.debug.nix-diff;
+  };
 
   meta = {
     description = "Declarative hardware configuration for NixOS";

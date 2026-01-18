@@ -17,16 +17,14 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-CwIfRmwJREz24Qj6J2PKQp+ix+/ZXo1oamcHc1fPUoc=";
+  vendorHash = "sha256-/Kvj3vd2YG7DFvodtvEkWdAsbMazBHJHmUTBexxFsII=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
-    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/nunomaduro/phpinsights/releases/tag/v${finalAttrs.version}";
     description = "Instant PHP quality checks from your console";
     homepage = "https://phpinsights.com/";

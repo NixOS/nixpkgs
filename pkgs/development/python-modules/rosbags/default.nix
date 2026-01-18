@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "rosbags";
-  version = "0.10.11";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ternaris";
     repo = "rosbags";
     tag = "v${version}";
-    hash = "sha256-uHRmeHwNswZt5q+RSlzjqZiXhH6qYAkf8AufrRNbBtY=";
+    hash = "sha256-CSRJIGLhQwuaGatfWIbnYNdjUva+klBYPyDbjHfUNlM=";
   };
 
   build-system = [

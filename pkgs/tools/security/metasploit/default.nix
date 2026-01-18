@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "metasploit-framework";
-  version = "6.4.53";
+  version = "6.4.106";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     tag = finalAttrs.version;
-    hash = "sha256-yHat9U8EZbUWo4j9ut6K9IPtPFm130pfSmIuhtQhFoQ=";
+    hash = "sha256-FpSx6CuVa2fOCoJesQcK+Nft+6k8iPDKyGvTec8TMbo=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontPatchELF = true; # stay away from exploit executables
+
+  postPatch = ''
+    # Patch the boot script to disable bootsnap.
+    # Bootsnap tries to write cache files to the frozen /nix/store, causing a crash on startup.
+    sed -i '/bootsnap\/setup/d' config/boot.rb
+
+    # Remove the strict version check for ActionView.
+    # Metasploit upstream enforces a specific patch version (e.g., 7.2.2.2), but our bundler
+    # environment may resolve to a newer, compatible version (e.g., 7.2.3), causing the app to raise an exception.
+    sed -i "/ActionView::VERSION::STRING == /d" config/application.rb
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -73,14 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Metasploit Framework - a collection of exploits";
     homepage = "https://docs.metasploit.com/";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       fab
       makefu
+      Misaka13514
     ];
     mainProgram = "msfconsole";
   };

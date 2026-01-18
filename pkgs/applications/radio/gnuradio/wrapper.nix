@@ -9,7 +9,7 @@
   # For the wrapper
   makeWrapper,
   # For lndir
-  xorg,
+  lndir,
   # To define a the gnuradio.pkgs scope
   newScope,
   # For Emulating wrapGAppsHook3
@@ -67,7 +67,7 @@ let
       (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
     ]
     # Add the extraPackages as python modules as well
-    ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
+    ++ (map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (
       lib.mapAttrsToList (
         feat: info:
@@ -79,7 +79,7 @@ let
   pythonEnv = unwrapped.python.withPackages (ps: pythonPkgs);
 
   pname = unwrapped.pname + "-wrapped";
-  inherit (unwrapped) version;
+  inherit (unwrapped) outputs version;
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
     ]
@@ -167,7 +167,7 @@ let
               "QT_PLUGIN_PATH"
               ":"
               "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix (
-                builtins.map lib.getBin (
+                map lib.getBin (
                   [
                     unwrapped.qt.qtbase
                   ]
@@ -180,7 +180,7 @@ let
               "QML2_IMPORT_PATH"
               ":"
               "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix (
-                builtins.map lib.getBin (
+                map lib.getBin (
                   [
                     unwrapped.qt.qtbase
                   ]
@@ -214,18 +214,27 @@ let
   self =
     if doWrap then
       stdenv.mkDerivation {
-        inherit pname version passthru;
-        nativeBuildInputs = [ makeWrapper ];
-        buildInputs = [
-          xorg.lndir
+        inherit
+          pname
+          outputs
+          version
+          passthru
+          ;
+        nativeBuildInputs = [
+          makeWrapper
+          lndir
         ];
         buildCommand = ''
-          mkdir $out
+          ${builtins.concatStringsSep "\n" (
+            map (output: ''
+              mkdir ''$${output}
+              lndir -silent ${unwrapped.${output}} ''$${output}
+            '') outputs
+          )}
           cd $out
-          lndir -silent ${unwrapped}
           ${lib.optionalString (extraPackages != [ ]) (
             builtins.concatStringsSep "\n" (
-              builtins.map (pkg: ''
+              map (pkg: ''
                 if [[ -d ${lib.getBin pkg}/bin/ ]]; then
                   lndir -silent ${pkg}/bin ./bin
                 fi
@@ -240,7 +249,7 @@ let
             mv -f "$i".tmp "$i"
             if head -1 "$i" | grep -q ${unwrapped.python}; then
               substituteInPlace "$i" \
-                --replace ${unwrapped.python} ${pythonEnv}
+                --replace-fail ${unwrapped.python} ${pythonEnv}
             fi
             wrapProgram "$i" ${makeWrapperArgs}
           done

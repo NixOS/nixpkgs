@@ -9,6 +9,7 @@
 
   # dependencies
   glib,
+  libxfixes,
   libXinerama,
   catch2,
   gperf,
@@ -64,6 +65,7 @@
   extrasSupport ? true,
 
   versionCheckHook,
+  expat,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;
@@ -129,11 +131,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional ncursesSupport ncurses
   ++ lib.optionals x11Support [
     freetype
+    libxfixes
     xorg.libICE
     xorg.libX11
     xorg.libXext
     xorg.libXft
+    xorg.libXfixes
     xorg.libSM
+    expat
   ]
   ++ lib.optionals waylandSupport [
     pango
@@ -180,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

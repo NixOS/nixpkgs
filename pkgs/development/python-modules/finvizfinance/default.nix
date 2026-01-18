@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   beautifulsoup4,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "finvizfinance";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "lit26";
@@ -57,11 +54,11 @@ buildPythonPackage rec {
     "test_screener_overview"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Finviz Finance information downloader";
     homepage = "https://github.com/lit26/finvizfinance";
     changelog = "https://github.com/lit26/finvizfinance/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ icyrockcom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ icyrockcom ];
   };
 }

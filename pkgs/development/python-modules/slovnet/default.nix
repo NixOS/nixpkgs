@@ -31,10 +31,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "slovnet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep-learning based NLP modeling for Russian language";
     homepage = "https://github.com/natasha/slovnet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ npatsakula ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ npatsakula ];
   };
 }

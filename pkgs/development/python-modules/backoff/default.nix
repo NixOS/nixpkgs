@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "backoff";
   version = "2.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litl";
@@ -19,6 +19,11 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
+
+  patches = [
+    # https://github.com/litl/backoff/pull/220
+    ./python314-compat.patch
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -30,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backoff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Function decoration for backoff and retry";
     homepage = "https://github.com/litl/backoff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }

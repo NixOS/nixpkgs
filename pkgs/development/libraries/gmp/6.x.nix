@@ -69,7 +69,7 @@ let
     ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
-    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
+    ++ optional (!withStatic && stdenv.hostPlatform.isPE) "--disable-static --enable-shared"
     ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-assembly";
 
     doCheck = true; # not cross;
@@ -78,10 +78,10 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://gmplib.org/";
       description = "GNU multiple precision arithmetic library";
-      license = with licenses; [
+      license = with lib.licenses; [
         lgpl3Only
         gpl2Only
       ];
@@ -108,7 +108,7 @@ let
         asymptotically faster algorithms.
       '';
 
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
       maintainers = [ ];
     };
   };

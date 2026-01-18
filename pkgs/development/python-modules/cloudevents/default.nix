@@ -28,10 +28,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  dependencies = [
+    deprecation
+  ];
+
   pythonImportsCheck = [ "cloudevents" ];
 
   nativeCheckInputs = [
-    deprecation
     flask
     pydantic
     pytestCheckHook

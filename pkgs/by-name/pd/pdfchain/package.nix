@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
         --replace "/usr/share" "$out/share"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for the PDF Toolkit (PDFtk)";
     homepage = "https://pdfchain.sourceforge.io";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hqurve ];
+    platforms = lib.platforms.unix;
     mainProgram = "pdfchain";
   };
 }

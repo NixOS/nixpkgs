@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   llvmPackages,
   elfutils,
   bcc,
@@ -16,18 +17,19 @@
   flex,
   bison,
   util-linux,
+  xxd,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.23.5";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-Shtf4PSXxUV0Bd7ORYyP06lbWf3LE6BQi7WfTIGDOfk=";
+    hash = "sha256-LkiHwmKU+TOtn6mDvlqIKvSOQaU320aVQOkcElzB7gM=";
   };
 
   buildInputs = with llvmPackages; [
@@ -49,11 +51,12 @@ stdenv.mkDerivation rec {
     bison
     llvmPackages.llvm.dev
     util-linux
+    xxd
   ];
 
   cmakeFlags = [
     "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
-    "-DINSTALL_TOOL_DOCS=OFF"
+    "-DUSE_SYSTEM_LIBBPF=ON"
     "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
   ];
 
@@ -72,7 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    bpf = nixosTests.bpf;
+    inherit (nixosTests) bpf;
   };
 
   meta = {

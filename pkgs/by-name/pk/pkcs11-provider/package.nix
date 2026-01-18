@@ -6,6 +6,8 @@
   nss,
   p11-kit,
   opensc,
+  softhsm,
+  kryoptic,
   gnutls,
   expect,
   which,
@@ -44,20 +46,35 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  # don't add SoftHSM to here: https://github.com/openssl/openssl/issues/22508
   nativeCheckInputs = [
     p11-kit.bin
     opensc
+    kryoptic
     nss.tools
     gnutls
     openssl.bin
     expect
     valgrind
     pkcs11ProviderPython3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # softokn and kryoptic are OK; softhsm is pretty flaky.
+    # This fails with a `pkcs11-provider:softhsm / tls - FAIL - exit status 1`.
+    # Considering that kryoptic is the Rust replacement, we can rely on it instead:
+    # https://github.com/softhsm/SoftHSMv2/issues/803
+    softhsm
   ];
 
+  env = {
+    KRYOPTIC = "${lib.getLib kryoptic}/lib";
+  };
+
+  # Fix a typo in the Kryoptic test (remove this in v1.2).
   postPatch = ''
     patchShebangs --build .
+    substituteInPlace tests/kryoptic-init.sh \
+      --replace-fail /usr/local/lib/kryoptic "\\''${KRYOPTIC}" \
+      --replace-fail "libkryoptic_pkcs11so" libkryoptic_pkcs11.so
   '';
 
   preInstall = ''
@@ -84,11 +101,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/latchset/pkcs11-provider";
     description = "OpenSSL 3.x provider to access hardware or software tokens using the PKCS#11 Cryptographic Token Interface";
-    maintainers = with maintainers; [ numinit ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ numinit ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

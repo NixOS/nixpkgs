@@ -17,14 +17,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.10";
+  version = "1.14.12";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xB3AHg9t/X8vw5p7ohFQ+WuMjb1P8DAP3pROiwWkVPs=";
+    hash = "sha256-J5unC9KTnbwTlBMi/sCAyxD3R18vb9bHK1NPU/0NHwM=";
   };
+
+  prePatch = ''
+    substituteInPlace module/Makefile \
+      --replace-fail '/etc/os-release' '/dev/null'
+  '';
 
   env.CFLAGS = toString [
     "-Wno-error"
@@ -75,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Only
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -46,7 +46,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
           sha,
           commit,
           severity: 'warning',
-          message: `Couldn't locate original commit hash in message of ${sha}.`,
+          message: `Couldn't locate the cherry-picked commit's hash in the commit message of ${sha}.`,
           type: 'no-commit-hash',
         }
 

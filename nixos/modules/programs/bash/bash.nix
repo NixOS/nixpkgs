@@ -141,9 +141,6 @@ in
       loginShellInit = cfge.loginShellInit;
 
       interactiveShellInit = ''
-        # Check the window size after every command.
-        shopt -s checkwinsize
-
         # Disable hashing (i.e. caching) of command lookups.
         set +h
 

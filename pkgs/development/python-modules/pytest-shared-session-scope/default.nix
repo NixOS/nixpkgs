@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-shared-session-scope";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StefanBRas";
     repo = "pytest-shared-session-scope";
     tag = "v${version}";
-    hash = "sha256-HB8RuF/+BmW3KBZ7C8EpUMuBntvcjSsrkLUiBvPwcf8=";
+    hash = "sha256-IPTktwOJhzoC7/gPgMVwbLCkRuhbPf90m23yznqHha4=";
   };
 
   build-system = [ hatchling ];
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Pytest session-scoped fixture that works with xdist";
     homepage = "https://pypi.org/project/pytest-shared-session-scope/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

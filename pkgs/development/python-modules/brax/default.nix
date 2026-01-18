@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "brax";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${version}";
-    hash = "sha256-mSFbFzSrfAvAE6y7atUeucUkpp/20KP70j5xPm/xvB0=";
+    hash = "sha256-CkRXEYtlP8IhEZ7lVnpxlwiyLdICAfILwHfRUfuub08=";
   };
 
   build-system = [
@@ -82,7 +82,14 @@ buildPythonPackage rec {
     transforms3d
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+  disabledTests = [
+    # AttributeError: 'functools.partial' object has no attribute 'value'
+    "testModelEncoding0"
+    "testModelEncoding1"
+    "testTrain"
+    "testTrainDomainRandomize"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # Flaky:
     # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
     "test_pendulum_period2"

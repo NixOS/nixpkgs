@@ -19,6 +19,11 @@ stdenv.mkDerivation {
     hash = "sha256-L9SLyr7XuBUniMH3JtaBrUHIGzVTF5pr014xovQf2cI=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
   buildInputs = [
@@ -36,7 +41,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel Graph Partitioning and Fill-reducing Matrix Ordering";
     longDescription = ''
       MPI-based parallel library that implements a variety of algorithms for
@@ -47,8 +52,8 @@ stdenv.mkDerivation {
       schemes
     '';
     homepage = "https://github.com/KarypisLab/ParMETIS";
-    platforms = platforms.all;
-    license = licenses.unfree;
-    maintainers = [ maintainers.costrouc ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

@@ -5,28 +5,30 @@
   makeWrapper,
   node-gyp,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   stdenv,
   xcbuild,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
-  version = "11.0.3";
+  version = "11.10.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cdxgen";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-H83HEiBdXBIhSR18EtYcQey6aXy8URSjpeNVEs3UBm8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RmgR6OfNrZUYFyn36zTHERIHlzszaFqTX8b4Rf2TF/U=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
     node-gyp # required for sqlite3 bindings
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     python3 # required for sqlite3 bindings
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin [
@@ -34,10 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-7NrDYd4H0cPQs8w4lWlB0BhqcYZVo6/9zf0ujPjBzsE=";
+    pnpm = pnpm_10;
+    fetcherVersion = 2;
+    hash = "sha256-o5pNgn+ZqaEfsWO97jXkRyPH+0pffR6TBZcF6nApWVg=";
   };
 
   buildPhase = ''
@@ -63,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
     mainProgram = "cdxgen";
     homepage = "https://github.com/CycloneDX/cdxgen";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       dit7ya
       quincepie
     ];

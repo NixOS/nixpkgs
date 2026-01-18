@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mill";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src =
     let
@@ -47,9 +47,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://com-lihaoyi.github.io/mill/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Build tool for Scala, Java and more";
     mainProgram = "mill";
     longDescription = ''
@@ -59,8 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [
-      scalavision
+    maintainers = with lib.maintainers; [
       zenithal
     ];
     platforms = [
@@ -69,6 +68,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

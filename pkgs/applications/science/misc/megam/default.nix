@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MEGA Model Optimization Package";
     longDescription = ''
       The software here is an implementation of maximum likelihood and maximum a
@@ -62,8 +62,8 @@ stdenv.mkDerivation {
       almost every other maxent package out there.
     '';
     homepage = "http://www.umiacs.umd.edu/~hal/megam";
-    license = "non-commercial";
-    maintainers = with maintainers; [ leixb ];
-    platforms = platforms.unix;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ leixb ];
+    platforms = lib.platforms.unix;
   };
 }

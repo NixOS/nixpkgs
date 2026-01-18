@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.9.0";
+  version = "1.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-VMLcGtyJIH3jsTkHrIUhCpjwm6ljsRSyRECYhaafjD8=";
+    hash = "sha256-t4a/Zp8rC+DMjskdwVvYIfYDAT57zGVfVu7IApwRNGA=";
   };
 
   patches = [
@@ -118,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
       ''
     ]
     # Remove problematic tests
-    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+    ++ (map (f: ''rm -vr "${f}";'') (
       [
         # requires git, creating cyclic dependency
         ''test cases/common/66 vcstag''

@@ -3,7 +3,9 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_37,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  electron_39,
   python3,
   makeWrapper,
   callPackage,
@@ -22,8 +24,8 @@
 }:
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_37;
+  pnpm = pnpm_10;
+  electron = electron_39;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +54,13 @@ let
     '';
   });
 
-  version = "7.70.0";
+  version = "7.84.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-y9i9YQPsLt3SLqROyEZsyIkVy/os3hy+1UMUSFMZJTY=";
+    hash = "sha256-Ay4mMurnEDNoFkEhxPn4SWBhrkNg94+AGFMrNA0mTcE=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -66,16 +68,18 @@ let
     inherit version;
     src = src + "/sticker-creator";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
+      inherit pnpm;
       fetcherVersion = 1;
-      hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
+      hash = "sha256-m/JxsKnVhcya7dUz1MBMQKwEdqoV3xQiGOoT4egh3K4=";
     };
 
     strictDeps = true;
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
     ];
 
     buildPhase = ''
@@ -98,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     makeWrapper
     copyDesktopItems
     python3
@@ -120,29 +125,34 @@ stdenv.mkDerivation (finalAttrs: {
     # resource if the nixpkgs version is different. To fix this we hardcode
     # the electron version to the declared one here instead of interpolating
     # it at runtime.
-    substituteInPlace app/updateDefaultSession.ts \
+    substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+
+    # https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace ts/util/version.std.ts \
+      --replace-fail 'isAdhoc(version)' 'true'
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    inherit pnpm;
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-uVVUHvYhBCplKPyuS2+PKCxox8uWU2E/2EXLCG1ot54="
+        "sha256-/1/sUHt1J6wv/MuaZdE1XbkIkXfrllBoqt8AXP1d0Pw="
       else
-        "sha256-tbfk/tIgqpjDtDiULbTVUOJf5i9eLX9xY7vUPrrjmu0=";
+        "sha256-x2A4sX7m/zNVTEWRXOKD6VsUR+aGjEFhIv+NQVe+RwQ=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1757542492;
+    SOURCE_DATE_EPOCH = 1767827358;
   };
 
   preBuild = ''
@@ -221,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

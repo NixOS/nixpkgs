@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-passbook";
-  version = "1.13.3";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-passbook";
     rev = "v${version}";
-    hash = "sha256-xN37nM2AQVxFg+TOZ3cEvEV4F115U9m6YVX12al4SIw=";
+    hash = "sha256-Qy9VQBhC6SvLqmQvf4nVFhHPRNYDn1W6eEdCOGbD0y8=";
   };
 
   patches = [
@@ -50,10 +50,10 @@ buildPythonPackage rec {
     "pretix_passbook"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Support for Apple Wallet/Passbook files in pretix";
     homepage = "https://github.com/pretix/pretix-passbook";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

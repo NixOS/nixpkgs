@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage rec {
       gpl3Only
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

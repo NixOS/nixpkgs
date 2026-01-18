@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   configureFlags = [ "--enable-posix-api=yes" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kkos/oniguruma";
     description = "Regular expressions library";
     mainProgram = "onig-config";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ artturin ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ artturin ];
+    platforms = lib.platforms.unix;
   };
 }

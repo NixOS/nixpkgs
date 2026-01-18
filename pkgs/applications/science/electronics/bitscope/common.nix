@@ -24,21 +24,18 @@ let
     wrapProgram "$out/bin/${binaryName}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libPaths}"
   '';
-  pkg = stdenv.mkDerivation (rec {
+  pkg = stdenv.mkDerivation rec {
     inherit (attrs) version src;
 
     name = "${toolName}-${version}";
 
     meta =
-      with lib;
+
       {
         homepage = "http://bitscope.com/software/";
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        license = licenses.unfree;
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        license = lib.licenses.unfree;
         platforms = [ "x86_64-linux" ];
-        maintainers = with maintainers; [
-          vidbina
-        ];
       }
       // (attrs.meta or { });
 
@@ -71,7 +68,7 @@ let
         cp -a usr/* "$out/"
         ${(wrapBinary libs) attrs.toolName}
       '';
-  });
+  };
 in
 buildFHSEnv {
   pname = attrs.toolName;

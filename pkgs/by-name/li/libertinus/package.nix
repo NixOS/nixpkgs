@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Libertinus font family";
     longDescription = ''
       The Libertinus font project began as a fork of the Linux Libertine and
@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation rec {
       full-fledged fork addressing many of the bugs in the Libertine fonts.
     '';
     homepage = "https://github.com/alerque/libertinus";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ siddharthist ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ siddharthist ];
+    platforms = lib.platforms.all;
   };
 }

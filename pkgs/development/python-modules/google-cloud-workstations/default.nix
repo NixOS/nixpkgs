@@ -10,21 +10,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-workstations";
-  version = "0.5.15";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_cloud_workstations";
     inherit version;
-    hash = "sha256-/lpcGxxc1razAXmESpn6JfVYkqj5gRoLiyWM3vXlqWk=";
+    hash = "sha256-/CwdmF9fSTDPXbWTq3o+ZaWvgd/F2wVB7zboSOQ7+GY=";
   };
 
   build-system = [ setuptools ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
     "google.cloud.workstations_v1beta"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Cloud Workstations";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-workstations";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workstations-v${version}/packages/google-cloud-workstations/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

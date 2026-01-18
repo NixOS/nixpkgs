@@ -25,7 +25,10 @@ in
 
   options.virtualisation.waydroid = {
     enable = lib.mkEnableOption "Waydroid";
-    package = lib.mkPackageOption pkgs "waydroid" { };
+    package = lib.mkPackageOption pkgs "waydroid" { } // {
+      default = if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid;
+      defaultText = lib.literalExpression ''if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid'';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -63,7 +66,7 @@ in
       serviceConfig = {
         Type = "dbus";
         UMask = "0022";
-        ExecStart = "${cfg.package}/bin/waydroid -w container start";
+        ExecStart = "${cfg.package}/bin/waydroid container start";
         BusName = "id.waydro.Container";
       };
     };

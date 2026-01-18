@@ -3,26 +3,20 @@
   stdenvNoCC,
   fetchurl,
   nodejs,
-  gitUpdater,
+  sysctl,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
-let
-  owner = "google-gemini";
-  repo = "gemini-cli";
-  asset = "gemini.js";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.6.0";
+  version = "0.22.5";
 
   src = fetchurl {
-    url = "https://github.com/${owner}/${repo}/releases/download/v${finalAttrs.version}/${asset}";
-    hash = "sha256-jmZvL4Rst3238H2BdZ/bQuddFkFcFLRABJ1wTHm8qPM=";
+    url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
+    hash = "sha256-g6b45+EWBiZ6Ij0nXp0L5jBW8wv1y0KK5CgiThk8Y7U=";
   };
 
-  phases = [
-    "installPhase"
-    "fixupPhase"
-  ];
+  dontUnpack = true;
 
   strictDeps = true;
 
@@ -33,14 +27,39 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -D "$src" "$out/bin/gemini"
 
+    # ideal method to disable auto-update
+    sed -i '/disableautoupdate: {/,/}/ s/default: false/default: true/' "$out/bin/gemini"
+
+    # disable auto-update for real because the default value in settingsschema isn't cleanly applied
+    # https://github.com/google-gemini/gemini-cli/issues/13569
+    substituteInPlace $out/bin/gemini \
+      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)" \
+      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
+      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
+
     runHook postInstall
   '';
 
-  passthru.updateScript = [
-    ./update-asset.sh
-    "${owner}/${repo}"
-    "${asset}"
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (with stdenvNoCC.hostPlatform; isDarwin && isx86_64) [
+    sysctl
   ];
+  # versionCheckHook cannot be used because the reported version might be incorrect (e.g., 0.6.1 returns 0.6.0).
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    "$out/bin/gemini" -v
+
+    runHook postInstallCheck
+  '';
+
+  passthru.updateScript = nix-update-script {
+    # Ignore `preview` and `nightly` tags
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";

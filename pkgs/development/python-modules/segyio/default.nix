@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   scikit-build,
@@ -15,12 +16,11 @@ buildPythonPackage rec {
   pyproject = false; # Built with cmake
 
   patches = [
-    # https://github.com/equinor/segyio/pull/570
-    ./add_missing_cstdint.patch
-    # https://github.com/equinor/segyio/pull/576/
-    ./fix-setuptools.patch
-    ./explicitly-cast.patch
-    ./numpy-2.patch
+    # Bump minimum CMake version to 3.11
+    (fetchpatch {
+      url = "https://github.com/equinor/segyio/commit/3e2cbe6ca6d4bc7d4f4d95666f5d2983836e8461.patch?full_index=1";
+      hash = "sha256-sOBHi8meMSkxEZy0AXwebAnIVPatpwQHd+4Co5zIhLQ=";
+    })
   ];
 
   postPatch = ''

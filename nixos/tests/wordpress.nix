@@ -5,7 +5,6 @@ rec {
   meta = with lib.maintainers; {
     maintainers = [
       flokli
-      grahamc # under duress!
       mmilata
     ];
   };

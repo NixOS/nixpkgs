@@ -12,7 +12,7 @@ let
 
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  version = "2025.3-b154";
+  version = "2025.9-b161";
 
   arches = {
     aarch64-linux = "arm64";
@@ -22,8 +22,8 @@ let
   arch = arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-X9YQy12rfTWOVKX2ufmS4GxLGp/I6jhZAZyRBfLuOuk=";
-    x64 = "sha256-BuEfpMEgkOcbUra6eT/sTiVhXpheMaCe55M/CuG0kHE=";
+    arm64 = "sha256-8fBe6evrCdbobx7tvWw+zqKBSLrnksib/EQmskmKiZc=";
+    x64 = "sha256-h+8BHW6Y1Km2iHyONA4DPyUWxrA9R66322lPFBz/bGw=";
   };
 
   desktopItem = makeDesktopItem {
@@ -91,14 +91,14 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
     homepage = "https://www.yourkit.com";
     changelog = "https://www.yourkit.com/changes/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "yourkit-java-profiler";
-    platforms = attrNames arches;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ herberteuler ];
+    platforms = lib.attrNames arches;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ herberteuler ];
   };
 }

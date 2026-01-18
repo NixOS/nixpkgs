@@ -32,11 +32,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern way to convert python dataclasses or other objects to and from more common types like dicts or json-like structures";
     homepage = "https://github.com/reagento/dataclass-factory";
     changelog = "https://github.com/reagento/dataclass-factory/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -6,20 +6,21 @@
   installShellFiles,
   pkg-config,
   openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "languagetool-rust";
-  version = "2.1.5";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "languagetool-rust";
     rev = "v${version}";
-    hash = "sha256-8YgSxAF4DA1r7ylj6rx+fGubvT7MeiRQeowuiu0GWwQ=";
+    hash = "sha256-LHlM+PJbBqsgOwK9Mw8oVVP+dq4IBFhxjRaXLIGxZPg=";
   };
 
-  cargoHash = "sha256-MIGoGEd/N2qlcawYRLMuac4SexHEMJnOS+FbPFJIsso=";
+  cargoHash = "sha256-VfvdIjNIHpvN370/3y2XXxaIyEL9+tG0OcnONhs9Z2I=";
 
   buildFeatures = [ "full" ];
 
@@ -31,6 +32,9 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # requires network access
+    "--skip=api::server::tests::test_server_annotate"
+    "--skip=api::server::tests::test_server_check_multiple_and_join"
+    "--skip=api::server::tests::test_server_check_multiple_and_join_without_context"
     "--skip=server::tests::test_server_check_data"
     "--skip=server::tests::test_server_check_text"
     "--skip=server::tests::test_server_languages"
@@ -39,12 +43,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_match_positions_2"
     "--skip=test_match_positions_3"
     "--skip=test_match_positions_4"
-    "--skip=src/lib/lib.rs"
+    "--skip=src/lib.rs"
     "--skip=test_basic_check_data"
     "--skip=test_basic_check_file"
     "--skip=test_basic_check_files"
+    "--skip=test_basic_check_no_errors"
+    "--skip=test_basic_check_ping"
     "--skip=test_basic_check_piped"
     "--skip=test_basic_check_text"
+    "--skip=test_basic_check_stdin_verbose"
     "--skip=test_check_with_dict"
     "--skip=test_check_with_dicts"
     "--skip=test_check_with_disabled_categories"
@@ -78,11 +85,13 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/ltrs completions zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "LanguageTool API in Rust";
     homepage = "https://github.com/jeertmans/languagetool-rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ name-snrl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ name-snrl ];
     mainProgram = "ltrs";
   };
 }

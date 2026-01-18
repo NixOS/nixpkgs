@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch2,
   gitUpdater,
   cmake,
   nasm,
-  cpuinfo,
 
   # for passthru.tests
   ffmpeg,
@@ -14,31 +12,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "3.0.2";
+  version = "3.1.2";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WS9awjnJV0ok6ePlLcpHPAr2gsZjbZcdFSDEmyx7vwk=";
+    hash = "sha256-/CpcxdyC4qf9wdzzySMYw17FbjYpasT+QVykXSlx28U=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/commit/ec699561b51f3204e2df6d4c2578eea1f7bd52be.patch?full_index=1";
-      hash = "sha256-QVdvqWWT5tlNKBX9pQJwWgaOq+wNkYiBJTSeytRxrwo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
-    cpuinfo
   ];
 
   cmakeFlags = [
@@ -54,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/AOMediaCodec/SVT-AV1";
     description = "AV1-compliant encoder/decoder library core";
 
@@ -68,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       aom
       bsd3
     ];
     mainProgram = "SvtAv1EncApp";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

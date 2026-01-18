@@ -12,13 +12,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
   # nixpkgs-update: no auto update
-  version = "0.21.2";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-io";
     rev = "v${version}";
-    hash = "sha256-QNf4TJIqtypDliiu6I72CbgjyJhdS9Uuim9tZOb3SJs=";
+    hash = "sha256-NOEjXk4s/FV4CdmyXOr4Oh2y+pFNrUMP/Sy+X+fVQc4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK for C module for IO and TLS";
     homepage = "https://github.com/awslabs/aws-c-io";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "universal-ctags";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-M2MuVWUsN9kBRF4OAavTYQGPUYvzNmP30AWnW1SendU=";
+    hash = "sha256-x5ZlWTNUc1J/yslKHc8rCIl9LtNTN/HTaAJpFyF0KRI=";
   };
 
   depsBuildBuild = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     "units"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.ctags.io/en/latest/";
     description = "Maintained ctags implementation";
     longDescription = ''
@@ -85,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       source files for programming languages. This index makes it easy for text
       editors and other tools to locate the indexed items.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "ctags";
     priority = 1; # over the emacs implementation
   };

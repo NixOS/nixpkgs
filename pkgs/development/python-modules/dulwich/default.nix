@@ -13,13 +13,11 @@
   merge3,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   rich,
   rustPlatform,
   rustc,
   setuptools,
   setuptools-rust,
-  typing-extensions,
   urllib3,
 }:
 
@@ -27,8 +25,6 @@ buildPythonPackage rec {
   pname = "dulwich";
   version = "0.24.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
@@ -55,9 +51,6 @@ buildPythonPackage rec {
 
   dependencies = [
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   optional-dependencies = {
@@ -79,7 +72,7 @@ buildPythonPackage rec {
     glibcLocales
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 
@@ -88,24 +81,24 @@ buildPythonPackage rec {
     "test_file_win"
     # dulwich.errors.NotGitRepository: No git repository was found at .
     "WorktreeCliTests"
-    # 'SwiftPackData' object has no attribute '_file'
-    "test_iterobjects_subset_all_present"
-    "test_iterobjects_subset_missing_allowed"
-    "test_iterobjects_subset_missing_not_allowed"
     # Adding a symlink to a directory outside the repo doesn't raise
     "test_add_symlink_absolute_to_system"
+    # Depends on setuid which is not available in sandboxed environments
+    "SharedRepositoryTests"
+    # TypeError: pack index v1 only supports SHA-1 names
+    "test_pack_index_v1_with_sha256"
   ];
 
   disabledTestPaths = [
-    # requires swift config file
-    "tests/contrib/test_swift_smoke.py"
+    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
+    "tests/contrib"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Git file formats and protocols";
     longDescription = ''
       Dulwich is a Python implementation of the Git file formats and protocols, which
@@ -113,10 +106,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl2Plus
     ];
-    maintainers = with maintainers; [ koral ];
+    maintainers = with lib.maintainers; [
+      koral
+      sarahec
+    ];
   };
 }

@@ -20,7 +20,7 @@ let
     };
 
     plugins."io.containerd.grpc.v1.cri" = {
-      sandbox_image = "pause:latest";
+      sandbox_image = "docker.io/library/pause:latest";
 
       cni = {
         bin_dir = "/opt/cni/bin";
@@ -342,14 +342,12 @@ in
         # dns addon is enabled by default
         services.kubernetes.addons.dns.enable = lib.mkDefault true;
 
-        services.kubernetes.apiserverAddress = lib.mkDefault (
-          "https://${
-            if cfg.apiserver.advertiseAddress != null then
-              cfg.apiserver.advertiseAddress
-            else
-              "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"
-          }"
-        );
+        services.kubernetes.apiserverAddress = lib.mkDefault "https://${
+          if cfg.apiserver.advertiseAddress != null then
+            cfg.apiserver.advertiseAddress
+          else
+            "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"
+        }";
       }
     )
   ];

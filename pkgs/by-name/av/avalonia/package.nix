@@ -46,14 +46,14 @@ stdenvNoCC.mkDerivation (
     }
     rec {
       pname = "Avalonia";
-      version = "11.3.6";
+      version = "11.3.11";
 
       src = fetchFromGitHub {
         owner = "AvaloniaUI";
         repo = "Avalonia";
         tag = version;
         fetchSubmodules = true;
-        hash = "sha256-ulGaYlhWxSWKLMh6Hy6gzFuDl4rmF3NDlcAL12YYtAg=";
+        hash = "sha256-lB0Td/YmQc8GtTpoinxDYHfxnDLQPTWXsp/X0ddslFM=";
       };
 
       patches = [
@@ -62,6 +62,12 @@ stdenvNoCC.mkDerivation (
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         # [ERR] Compile: [...]/Microsoft.NET.Sdk.targets(148,5): error MSB4018: System.IO.IOException: The process cannot access the file '/build/source/src/tools/DevAnalyzers/bin/Release/netstandard2.0/DevAnalyzers.deps.json' because it is being used by another process. [/build/source/src/tools/DevAnalyzers/DevAnalyzers.csproj]
         ./0002-disable-parallel-compile.patch
+        # Microsoft.Common.CurrentVersion.targets(5034,5): error MSB3021: Unable to copy file "[...]/JetBrains.Annotations.dll" to "bin/Debug/JetBrains.Annotations.dll". Access to the path '/build/source/nukebuild/bin/Debug/JetBrains.Annotations.dll' is denied. [/build/source/nukebuild/_build.csproj]
+        # This happens because the source packages have symlinks due to linkNuGetPackagesAndSources.
+        ./0003-disable-hard-links.patch
+        # Remove dependencies on Microsoft.WindowsDesktop.App.Ref, which sdk
+        # specific and currently not packaged in nixpkgs
+        ./0004-disable-windows-desktop.patch
       ];
 
       # this needs to be match the version being patched above

@@ -1,14 +1,16 @@
 {
   lib,
+
   buildPythonPackage,
   fetchFromGitHub,
-
+  writableTmpDirAsHomeHook,
   fontconfig,
 
   # nativeBuildInputs
   cmake,
   doxygen,
   graphviz,
+  pkg-config,
   scipy,
 
   # buildInputs
@@ -18,7 +20,6 @@
   eigen,
   jrl-cmakemodules,
   numpy,
-
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,6 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  # Fontconfig error: No writable cache directories
-  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
-
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
@@ -57,7 +55,9 @@ buildPythonPackage rec {
     cmake
     doxygen
     graphviz
+    pkg-config
     scipy
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [ boost ];
@@ -68,19 +68,21 @@ buildPythonPackage rec {
     numpy
   ];
 
-  preInstallCheck = "make test";
+  preInstallCheck = ''
+    make test
+  '';
 
   pythonImportsCheck = [ "eigenpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
     changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

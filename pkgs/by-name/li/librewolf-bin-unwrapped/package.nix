@@ -37,7 +37,7 @@ let
 
   pname = "librewolf-bin-unwrapped";
 
-  version = "143.0-1";
+  version = "146.0.1-1";
 in
 
 stdenv.mkDerivation {
@@ -47,9 +47,9 @@ stdenv.mkDerivation {
     url = "https://gitlab.com/api/v4/projects/44042130/packages/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
     hash =
       {
-        i686-linux = "sha256-ZDsPexyrK8FgMKAP3TzHnBTvDXLnW50SW6tOTGqWVaI=";
-        x86_64-linux = "sha256-jP6PBvh+RNDpgv5OGX7HSR1Lo//vDSVjUFUsayMONTM=";
-        aarch64-linux = "sha256-DuCQMjL7ZsHAtu2ppX/46QRL/Dt3acOJaTzGoYGfQuM=";
+        i686-linux = "sha256-Z8dQhYH3PuKI2vXQ2nQ4CmyNyDxtAirX0YVxI0r5n3w=";
+        x86_64-linux = "sha256-pRpSHAkLQpg80pOfUBvGBujr4fDDg4wpltVIw9wrlBE=";
+        aarch64-linux = "sha256-BTqzBAohy+kcWou2WKStoAykcqV1DYfLRNbjUF/TTIY=";
       }
       .${stdenv.hostPlatform.system} or throwSystem;
   };
@@ -113,5 +113,8 @@ stdenv.mkDerivation {
     mainProgram = "librewolf";
     hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      "librewolf-bin lacks maintenance in nixpkgs, consider using an alternative"
+    ];
   };
 }

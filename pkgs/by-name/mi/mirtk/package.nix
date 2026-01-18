@@ -10,18 +10,18 @@
   fltk,
   vtk,
   zlib,
-  tbb,
+  onetbb,
 }:
 
 stdenv.mkDerivation {
   pname = "mirtk";
-  version = "unstable-2022-07-22";
+  version = "2.0.0-unstable-2025-02-27";
 
   src = fetchFromGitHub {
     owner = "BioMedIA";
     repo = "MIRTK";
-    rev = "973ce2fe3f9508dec68892dbf97cca39067aa3d6";
-    hash = "sha256-vKgkDrbyGOcbaYlxys1duC8ZNG0Y2nqh3TtSQ06Ox0Q=";
+    rev = "ef71a176c120447b3f95291901af7af8b4f00544";
+    hash = "sha256-77Om/+qApt9AiSYbaPc2QNh+RKcYajobD7VDhvPtf/I=";
     fetchSubmodules = true;
   };
 
@@ -41,6 +41,22 @@ stdenv.mkDerivation {
   # unclear if specific to Nixpkgs
   doCheck = false;
 
+  postPatch = ''
+    # Their old `FindTBB` module conflicts with others.
+    rm CMake/Modules/FindTBB.cmake
+    substituteInPlace CMake/Modules/CMakeLists.txt \
+      --replace-fail '"FindTBB.cmake"' ""
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace CMake/Basis/{BasisSettings.cmake,ProjectTools.cmake,configure_script.cmake.in} \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace {ThirdParty/LBFGS,Packages/Deformable,Packages/Mapping,Packages/Scripting,Packages/Viewer}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     install -Dm644 -t "$out/share/bash-completion/completions/mirtk" share/completion/bash/mirtk
   '';
@@ -54,7 +70,7 @@ stdenv.mkDerivation {
     fltk
     libGLU
     python3
-    tbb
+    onetbb
     vtk
     zlib
   ];

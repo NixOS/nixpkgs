@@ -86,21 +86,26 @@ let
           "chromadb/test/test_chroma.py"
           "chromadb/test/test_client.py"
           "chromadb/test/ef/test_multimodal_ef.py"
+
+          # sqlite3.OperationalError: no such table: migrations
+          "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.15";
+  version = "0.7.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-YRvJVdNZLmNongYEy06QPsmJkPvmg7cucjLJY05yD54=";
+    hash = "sha256-RU9WnKuPaxDnPW5MQyrxPEw7ufMcVNxSRyJ5QvrzoVs=";
   };
 
   build-system = with python.pkgs; [
@@ -184,6 +189,7 @@ python.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # Require internet access
+    "test_build_query_results_chunk_mode_success"
     "test_chunked_add"
     "test_chunked_add_empty_file"
     "test_chunked_add_truncated"

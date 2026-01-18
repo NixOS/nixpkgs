@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "geoserver";
-  version = "2.27.2";
+  version = "2.28.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${finalAttrs.version}/geoserver-${finalAttrs.version}-bin.zip";
-    hash = "sha256-yzejVi+0FzTCtUirCvn3PsxLLmoIUSxS2sA1KWWo30U=";
+    hash = "sha256-wll05KPMVfpZGnybBxLeGH3pan8q4eWy8F4v5y5N3Gk=";
   };
 
   sourceRoot = ".";
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
               (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
             );
             postInstall = (previousAttrs.postInstall or "") + ''
-              for extension in ${builtins.toString selectedExtensions} ; do
+              for extension in ${toString selectedExtensions} ; do
                 cp -r $extension/* $out
                 # Some files are the same for all/several extensions. We allow overwriting them again.
                 chmod -R +w $out

@@ -33,11 +33,11 @@ buildGoModule rec {
       --zsh <($out/bin/humioctl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/humio/cli";
     description = "CLI for managing and sending data to Humio";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
     mainProgram = "humioctl";
   };
 }

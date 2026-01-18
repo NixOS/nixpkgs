@@ -7,8 +7,6 @@
 let
   cfg = config.security.doas;
 
-  inherit (pkgs) doas;
-
   mkUsrString = user: toString user;
 
   mkGrpString = group: ":${toString group}";
@@ -66,6 +64,8 @@ in
         non-root users to execute commands as root.
       '';
     };
+
+    package = lib.mkPackageOption pkgs "doas" { };
 
     wheelNeedsPassword = lib.mkOption {
       type = with lib.types; bool;
@@ -256,11 +256,11 @@ in
       setuid = true;
       owner = "root";
       group = "root";
-      source = "${doas}/bin/doas";
+      source = lib.getExe cfg.package;
     };
 
     environment.systemPackages = [
-      doas
+      cfg.package
     ];
 
     security.pam.services.doas = {

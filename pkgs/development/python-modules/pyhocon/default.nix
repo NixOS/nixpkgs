@@ -6,15 +6,12 @@
   pyparsing,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyhocon";
   version = "0.3.61";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chimpler";
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     "test_include_dict"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HOCON parser for Python";
     mainProgram = "pyhocon";
     homepage = "https://github.com/chimpler/pyhocon/";
@@ -61,7 +58,7 @@ buildPythonPackage rec {
       A HOCON parser for Python. It additionally provides a tool (pyhocon) to convert
       any HOCON content into JSON, YAML and properties format.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chreekat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chreekat ];
   };
 }

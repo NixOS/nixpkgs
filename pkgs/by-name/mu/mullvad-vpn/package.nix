@@ -67,7 +67,7 @@ let
     systemd
   ];
 
-  version = "2025.7";
+  version = "2025.14";
 
   selectSystem =
     attrs:
@@ -79,8 +79,8 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-wKmwCLF+H/ByZFYGQMEJT6gmAt2Aa0vZalqaMptPjhU=";
-    aarch64-linux = "sha256-lsHpbxVxThxi+eKY+9c7VcXlDdxBTds6NQKrS0rxt34=";
+    x86_64-linux = "sha256-JHuYHi4uBHzMopa45ipwsdx/3Ox/FxN3lYhBACQOCkE=";
+    aarch64-linux = "sha256-miCh1x6sCcAbg9iX7SJzYcxJ8DIQVNdrg6b39ht8gTw=";
   };
 in
 
@@ -147,7 +147,6 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
@@ -158,10 +157,10 @@ stdenv.mkDerivation {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
+    mainProgram = "mullvad-vpn";
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       ymarkus
     ];
   };

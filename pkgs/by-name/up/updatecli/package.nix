@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "updatecli";
-  version = "0.105.0";
+  version = "0.113.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${version}";
-    hash = "sha256-VE5sU3R9dVi97fyc+bafZUz/9v6iPfw3MRsjCm8ifuo=";
+    hash = "sha256-sol0adhlIoB+/lTGbIk8R2Rv8rw1GlzBcuXISzLYceE=";
   };
 
-  vendorHash = "sha256-HdeFXQGisz0q/ZZv1UMo9ig9zBzH6Uyap8c1vl4zl5w=";
+  vendorHash = "sha256-CbtpjJDlqNYOZ/xkIJ3Ct0LLoK3NWOH2Ke3OIsbZMa4=";
 
   # tests require network access
   doCheck = false;
@@ -56,15 +56,18 @@ buildGoModule rec {
     installManPage updatecli.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Declarative Dependency Management tool";
     longDescription = ''
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
     changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "updatecli";
-    maintainers = with maintainers; [ croissong ];
+    maintainers = with lib.maintainers; [
+      croissong
+      lpostula
+    ];
   };
 }

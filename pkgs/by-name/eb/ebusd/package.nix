@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ebusd";
     homepage = "https://github.com/john30/ebusd";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nathan-gs ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nathan-gs ];
+    platforms = lib.platforms.linux;
   };
 }

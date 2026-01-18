@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   which,
   # Most packages depending on openblas expect integer width to match
@@ -194,6 +195,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-foP2OXUL6ttgYvCxLsxUiVdkPoTvGiHomdNudbSUmSE=";
   };
 
+  patches = [
+    # Remove this once https://github.com/OpenMathLib/OpenBLAS/issues/5414 is
+    # resolved.
+    ./disable-sme-sgemm-kernel.patch
+
+    # https://github.com/OpenMathLib/OpenBLAS/issues/5460
+    (fetchpatch {
+      name = "0001-openblas-Use-generic-kernels-for-SCAL-on-POWER4-5.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/14c9dcaac70d9382de00ba4418643d9587f4950e.patch";
+      hash = "sha256-mIOqRc7tE1rV/krrAu630JwApZHdeHCdVmO5j6eDC8U=";
+    })
+  ];
+
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
     substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
@@ -275,6 +289,9 @@ stdenv.mkDerivation rec {
     })
   );
 
+  # The default "all" target unconditionally builds the "tests" target.
+  buildFlags = lib.optionals (!doCheck) [ "shared" ];
+
   doCheck = true;
   checkTarget = "tests";
 
@@ -325,11 +342,11 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Basic Linear Algebra Subprograms";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
-    platforms = attrNames configs;
-    maintainers = with maintainers; [ ttuegel ];
+    platforms = lib.attrNames configs;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

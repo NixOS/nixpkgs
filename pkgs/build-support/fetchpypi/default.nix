@@ -1,7 +1,7 @@
 # `fetchPypi` function for fetching artifacts from PyPI.
 {
+  lib,
   fetchurl,
-  makeOverridable,
 }:
 
 let
@@ -43,10 +43,10 @@ let
       );
 
     in
-    compute (builtins.removeAttrs attrs [ "format" ]);
+    compute (removeAttrs attrs [ "format" ]);
 
 in
-makeOverridable (
+lib.makeOverridable (
   {
     format ? "setuptools",
     sha256 ? "",
@@ -55,7 +55,7 @@ makeOverridable (
   }@attrs:
   let
     url = computeUrl (
-      builtins.removeAttrs attrs [
+      removeAttrs attrs [
         "sha256"
         "hash"
       ]

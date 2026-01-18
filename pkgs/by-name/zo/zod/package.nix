@@ -21,7 +21,7 @@ let
   version = "2011-09-06";
   src = fetchzip {
     url = "mirror://sourceforge/zod/linux_releases/zod_linux-${version}.tar.gz";
-    sha256 = "017v96aflrv07g8j8zk9mq8f8rqxl5228rjff5blq8dxpsv1sx7h";
+    hash = "sha256-8HQdtr69IUxXcU5mJEShHWfkEK5pfiTRO2Bn6pRJ+wQ=";
   };
   postPatch = ''
     sed '1i#include <ctime>' -i zod_src/common.cpp # gcc12
@@ -50,7 +50,7 @@ let
       hardeningDisable
       NIX_LDFLAGS
       ;
-    pname = "${pname}-engine";
+    pname = "zod-engine-engine";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
     installPhase = ''
@@ -69,7 +69,7 @@ let
       hardeningDisable
       NIX_LDFLAGS
       ;
-    pname = "${pname}-map_editor";
+    pname = "zod-engine-map_editor";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
     makeFlags = [ "map_editor" ];
@@ -88,7 +88,7 @@ let
       zod_engine
       zod_map_editor
       ;
-    pname = "${pname}-launcher";
+    pname = "zod-engine-launcher";
     # This is necessary because the zod_launcher has terrible fixed-width window
     # the Idea is to apply the scalingFactor to all positions and sizes and I tested 1,2,3 and 4
     # 2,3,4 look acceptable on my 4k monitor and 1 is unreadable.
@@ -109,7 +109,7 @@ let
       install -m755 zod_launcher $out/bin
     '';
   };
-  zod_assets = runCommandLocal "${pname}-assets" { } ''
+  zod_assets = runCommandLocal "zod-engine-assets" { } ''
     mkdir -p $out/usr/lib/commander-zod{,blank_maps}
     cp -r ${src}/assets $out/usr/lib/commander-zod/assets
     for i in ${src}/*.map ${src}/*.txt; do
@@ -128,11 +128,11 @@ symlinkJoin {
     zod_map_editor
     zod_assets
   ];
-  meta = with lib; {
+  meta = {
     description = "Multiplayer remake of ZED";
     homepage = "https://zod.sourceforge.net/";
-    maintainers = with maintainers; [ zeri ];
-    license = licenses.gpl3Plus; # Says the website
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ zeri ];
+    license = lib.licenses.gpl3Plus; # Says the website
+    platforms = lib.platforms.linux;
   };
 }

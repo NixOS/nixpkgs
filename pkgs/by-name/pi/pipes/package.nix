@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Animated pipes terminal screensaver";
     homepage = "https://github.com/pipeseroni/pipes.sh";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "pipes.sh";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

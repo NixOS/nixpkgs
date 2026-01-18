@@ -12,6 +12,7 @@
   gdal,
   harfbuzz,
   icu,
+  libavif,
   libjpeg,
   libpng,
   libtiff,
@@ -25,17 +26,18 @@
   libpq,
   protozero,
   sparsehash,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+PCN3bjLGqfK4MF6fWApnSua4Pn/mKo2m9CY8/c5xC4=";
+    hash = "sha256-hlPH0gvEURidPeEnDgpDfp89haMSBoZahoW/xNNZ5XA=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdal
     (harfbuzz.override { withIcu = true; })
     icu
+    libavif
     libjpeg
     libpng
     libtiff
@@ -85,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpq
     protozero
     sparsehash
+    openssl
   ];
 
   cmakeFlags = [
@@ -124,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mapnik.org";
     changelog = "https://github.com/mapnik/mapnik/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      hrdinka
       hummeltech
     ];
     teams = [ lib.teams.geospatial ];

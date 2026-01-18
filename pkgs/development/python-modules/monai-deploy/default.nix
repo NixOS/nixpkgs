@@ -9,6 +9,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tritonclient,
   typeguard,
   versioneer,
 }:
@@ -17,8 +18,6 @@ buildPythonPackage rec {
   pname = "monai-deploy";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
@@ -43,6 +42,7 @@ buildPythonPackage rec {
     numpy
     networkx
     colorama
+    tritonclient
     typeguard
   ];
 
@@ -64,12 +64,13 @@ buildPythonPackage rec {
     # like highdicom and pydicom
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework and tools to design, develop and verify AI applications in healthcare imaging";
     mainProgram = "monai-deploy";
     homepage = "https://monai.io/deploy.html";
     changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/${src.tag}.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true; # requires holoscan and holoscan-cli, not in Nixpkgs
   };
 }

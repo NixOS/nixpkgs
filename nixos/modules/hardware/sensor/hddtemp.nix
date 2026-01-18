@@ -9,21 +9,26 @@ let
 
   cfg = config.hardware.sensor.hddtemp;
 
-  wrapper = pkgs.writeShellScript "hddtemp-wrapper" ''
+  script = ''
     set -eEuo pipefail
 
     file=/var/lib/hddtemp/hddtemp.db
 
-    drives=(${toString (map (e: ''$(realpath ${lib.escapeShellArg e}) '') cfg.drives)})
+    raw_drives=""
+    ${lib.concatStringsSep "\n" (map (drives: "raw_drives+=\"${drives} \"") cfg.drives)}
+    drives=""
+    for i in $raw_drives; do
+      drives+=" $(realpath $i)"
+    done
 
     cp ${pkgs.hddtemp}/share/hddtemp/hddtemp.db $file
     ${lib.concatMapStringsSep "\n" (e: "echo ${lib.escapeShellArg e} >> $file") cfg.dbEntries}
 
-    exec ${pkgs.hddtemp}/bin/hddtemp ${lib.escapeShellArgs cfg.extraArgs} \
+    ${pkgs.hddtemp}/bin/hddtemp ${lib.escapeShellArgs cfg.extraArgs} \
       --daemon \
       --unit=${cfg.unit} \
       --file=$file \
-      ''${drives[@]}
+      $drives
   '';
 
 in
@@ -77,9 +82,9 @@ in
       description = "HDD/SSD temperature";
       documentation = [ "man:hddtemp(8)" ];
       wantedBy = [ "multi-user.target" ];
+      inherit script;
       serviceConfig = {
         Type = "forking";
-        ExecStart = wrapper;
         StateDirectory = "hddtemp";
         PrivateTmp = true;
         ProtectHome = "tmpfs";

@@ -5,6 +5,7 @@
   meta,
   binaryName,
   desktopName,
+  self,
   autoPatchelfHook,
   makeDesktopItem,
   lib,
@@ -252,13 +253,21 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
-    updateScript = writeScript "discord-update-script" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-      set -eou pipefail;
-      url=$(curl -sI -o /dev/null -w '%header{location}' "https://discord.com/api/download/${branch}?platform=linux&format=tar.gz")
-      version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
-      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
-    '';
+    updateScript = ./update.py;
+
+    tests = {
+      withVencord = self.override {
+        withVencord = true;
+      };
+      withEquicord = self.override {
+        withEquicord = true;
+      };
+      withMoonlight = self.override {
+        withMoonlight = true;
+      };
+      withOpenASAR = self.override {
+        withOpenASAR = true;
+      };
+    };
   };
 })

@@ -12,7 +12,6 @@
   psutil,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,
@@ -38,15 +37,14 @@ in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.52";
+  version = "1.5.55";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
     tag = "v${version}";
-    hash = "sha256-8WE/tR0tGwdNSPtieS90QAOFlS66h/JxaV2LvpZjx2E=";
+    hash = "sha256-aO7l/paYqbneDArAbXxptIlMGfvc1dAaFLucEj/7xbk=";
   };
 
   patches = [
@@ -95,6 +93,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Flaky -- socket collision
     "test_show_browser"
+    # File not found
+    "test_nested_package_relative_import"
   ];
 
   # remove scalene directory to prevent pytest import confusion
@@ -104,13 +104,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scalene" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-resolution, low-overhead CPU, GPU, and memory profiler for Python with AI-powered optimization suggestions";
     homepage = "https://github.com/plasma-umass/scalene";
     changelog = "https://github.com/plasma-umass/scalene/releases/tag/v${version}";
     mainProgram = "scalene";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sarahec ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarahec ];
     badPlatforms = [
       # The scalene doesn't seem to account for arm64 linux
       "aarch64-linux"

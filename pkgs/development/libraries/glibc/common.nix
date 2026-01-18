@@ -111,6 +111,10 @@ stdenv.mkDerivation (
         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
+
+      # enable parallel & reproducible build of glibcLocales
+      ./0001-localedata-allow-reproducible-parallel-install-of-lo.patch
+      ./0002-Makeconfig-make-inst_complocaledir-overridable.patch
     ]
     /*
       NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
@@ -337,7 +341,7 @@ stdenv.mkDerivation (
       doCheck = false; # fails
 
       meta =
-        with lib;
+
         {
           homepage = "https://www.gnu.org/software/libc/";
           description = "GNU C Library";
@@ -351,13 +355,13 @@ stdenv.mkDerivation (
             most systems with the Linux kernel.
           '';
 
-          license = licenses.lgpl2Plus;
+          license = lib.licenses.lgpl2Plus;
 
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             ma27
             connorbaker
           ];
-          platforms = platforms.linux;
+          platforms = lib.platforms.linux;
         }
         // (args.meta or { });
     }

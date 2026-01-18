@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bluemap";
-  version = "5.11";
+  version = "5.15";
 
   src = fetchurl {
     url = "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v${version}/BlueMap-${version}-cli.jar";
-    hash = "sha256-DhsnuwVDvIb7eR4Hs2jOTufY2ysd+Awo0b8xg84quGU=";
+    hash = "sha256-g50V/4LtHaHNRMTt+PK/ZTf4Tber2D6ZHJvuAXQLaFI=";
   };
 
   dontUnpack = true;

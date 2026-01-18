@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-+Z62imfH1Uhmt3Bq8kXoe6Bg1BmgYkdLRW07yNSr29E=";
+    hash = "sha256-86MIKiOzfCk6T80QUxR7Nx8v+R+n6hsqUuM1Z2usgtw=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    # Threading tests need to be linked against pthread
+    # See: https://github.com/libffi/libffi/pull/944
+    ./freebsd-tsan-pthread.patch
   ];
 
   strictDeps = true;
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -87,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
       conversions for values passed between the two languages.
     '';
     homepage = "http://sourceware.org/libffi/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "libffi" ];
   };
 })

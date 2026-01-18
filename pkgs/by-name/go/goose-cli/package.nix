@@ -8,6 +8,7 @@
   xorg,
   pkg-config,
   protobuf,
+  openssl,
   writableTmpDirAsHomeHook,
   nix-update-script,
   llvmPackages,
@@ -27,23 +28,34 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.6.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfS0U7PpGWWuqGKd7IjRaavqZSySx93F9S1d7r2wMkE=";
+    hash = "sha256-lMlpgsLkPQsvc5Ad8sRrwO27ytb5hpF3doUR18DUrvw=";
   };
 
-  cargoHash = "sha256-uYgYzP75QkN1VksYL3KeNMNy7wb0TgCP8HPN1QrfZoo=";
+  cargoHash = "sha256-WPrCwvGVOuTKXEHLR0WRV+YXr4r10fQf9t/Sfs/2bNI=";
+
+  cargoBuildFlags = [
+    "--bin"
+    "goose"
+    "--bin"
+    "goosed"
+  ];
 
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
 
-  buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+  buildInputs = [
+    dbus
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
@@ -81,9 +93,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=transport::streamable_http::tests::test_handle_outgoing_message_session_id_handling"
     "--skip=transport::streamable_http::tests::test_handle_outgoing_message_session_not_found"
     "--skip=transport::streamable_http::tests::test_handle_outgoing_message_successful_request"
+    "--skip=routes::audio::tests::test_transcribe_endpoint_requires_auth"
+    "--skip=routes::config_management::tests::test_get_provider_models_openai_configured"
+    # tunnel tests that need external connectivity to Cloudflare
+    "--skip=tunnel::lapstone_test::test_tunnel_end_to_end"
+    "--skip=tunnel::lapstone_test::test_tunnel_post_request"
+    # integration tests that need network access
+    "--skip=test_replayed_session::vec_uvx_mcp_server_fetch_vec_calltoolrequestparam_name_fetch_into_arguments_some_object_url_https_example_com_vec_expects"
+    "--skip=test_replayed_session::vec_github_mcp_server_stdio_vec_calltoolrequestparam_name_get_file_contents_into_arguments_some_object_owner_block_repo_goose_path_readme_md_sha_ab62b863c1666232a67048b6c4e10007a2a5b83c_vec_github_personal_access_token_expects"
+    "--skip=test_replayed_session::vec_cargo_run_quiet_p_goose_server_bin_goosed_mcp_developer_vec_calltoolrequestparam_name_text_editor_into_arguments_some_object_command_view_path_goose_crates_goose_tests_tmp_goose_txt_calltoolrequestparam_name_text_editor_into_arguments_some_object_command_str_replace_path_goose_crates_goose_tests_tmp_goose_txt_old_str_goose_new_str_goose_modified_by_test_calltoolrequestparam_name_shell_into_arguments_some_object_command_cat_goose_crates_goose_tests_tmp_goose_txt_calltoolrequestparam_name_text_editor_into_arguments_some_object_command_str_replace_path_goose_crates_goose_tests_tmp_goose_txt_old_str_goose_modified_by_test_new_str_goose_calltoolrequestparam_name_list_windows_into_arguments_some_object_vec_expects"
+    "--skip=test_replayed_session::vec_npx_y_modelcontextprotocol_server_everything_vec_calltoolrequestparam_name_echo_into_arguments_some_object_message_hello_world_calltoolrequestparam_name_add_into_arguments_some_object_a_1_b_2_calltoolrequestparam_name_longrunningoperation_into_arguments_some_object_duration_1_steps_5_calltoolrequestparam_name_structuredcontent_into_arguments_some_object_location_11238_vec_expects"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--skip=context_mgmt::auto_compact::tests::test_auto_compact_respects_config"
+    "--skip=scheduler::tests::test_scheduled_session_has_schedule_id"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=logging::tests::test_log_file_name_no_session"
@@ -102,6 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       cloudripper
       thardin
+      brittonr
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

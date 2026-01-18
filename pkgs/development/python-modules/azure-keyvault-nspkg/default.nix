@@ -24,10 +24,10 @@ buildPythonPackage rec {
   #   https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/keyvault/tests.yml
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Namespace Package [Internal]";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

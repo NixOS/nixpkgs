@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "electrum-grs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1k078jg3bw4n3kcxy917m30x1skxm679w8hcw8mlxb94ikrjc66h";
   };
 
@@ -128,7 +128,7 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum-grs help >/dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Groestlcoin wallet";
     longDescription = ''
       An easy-to-use Groestlcoin client featuring wallets generated from
@@ -137,10 +137,10 @@ python3.pkgs.buildPythonApplication {
       of the blockchain.
     '';
     homepage = "https://groestlcoin.org/";
-    downloadPage = "https://github.com/Groestlcoin/electrum-grs/releases/tag/v{version}";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gruve-p ];
+    downloadPage = "https://github.com/Groestlcoin/electrum-grs/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gruve-p ];
     mainProgram = "electrum-grs";
   };
 }

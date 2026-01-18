@@ -1,4 +1,4 @@
-# This file is used by .github/workflows/labels.yml
+# This file is used by .github/workflows/bot.yml
 # This version uses `sync-labels: false`, meaning that a non-match will NOT remove the label
 
 # keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
@@ -22,12 +22,15 @@
               - doc/**/*
               - nixos/doc/**/*
 
-"backport release-25.05":
-  - any:
+"backport release-25.11":
+  - all:
       - changed-files:
           - any-glob-to-any-file:
               - .github/actions/*
               - .github/workflows/*
+              - .github/labeler*.yml
               - ci/**/*.*
+              - maintainers/github-teams.json
+      - base-branch: ['master']
 
 # keep-sorted end

@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation {
   pname = "NetworkManager-iodine${lib.optionalString withGnome "-gnome"}";
-  version = "1.2.0-unstable-2025-09-06";
+  version = "1.2.0-unstable-2025-12-22";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "network-manager-iodine";
-    rev = "2a630d5c492521378160882864eb88277f6315cb";
-    sha256 = "vSvvJVWtV+BHM3rDtgUWYlIOfhP80J3uDHPMwd0vvbM=";
+    rev = "c329a1fc2be59a6094ef7f7b1fe5fd92f73947a4";
+    sha256 = "mE7Hzvh3mZKwcVPeVlB8jWcTRp3sDLe0zr0l6kaUEo8=";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];
@@ -70,9 +70,9 @@ stdenv.mkDerivation {
     networkManagerPlugin = "VPN/nm-iodine-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's iodine plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

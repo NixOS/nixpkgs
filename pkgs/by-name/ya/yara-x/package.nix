@@ -1,27 +1,29 @@
 {
   lib,
-  rust,
+  buildPackages,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
   cargo-c,
-  testers,
-  yara-x,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yara-x";
-  version = "1.6.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LpdpdzUof+Buz5QQcWUr23AsSyfvUQYPp7RhHWXRb+I=";
+    hash = "sha256-UE5x9w9I4l9OqRVv6klveEvIap+El6vea6OsnnOJHus=";
   };
 
-  cargoHash = "sha256-IO8ER92vWO3Q9MntaGwdhEFgy9G35Q3LOG5GU5rJpQY=";
+  cargoHash = "sha256-rQ8uBgsJ86K0Qc3uTiFDPmcRU+dF5gu0b5pzMcGAAVU=";
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,11 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
@@ -42,9 +44,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/yr completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = yara-x;
-  };
+  checkFlags = [
+    # Seems to be flaky
+    "--skip=scanner::blocks::tests::block_scanner_timeout"
+  ];
+  checkType = "debug";
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to do pattern matching for malware research";

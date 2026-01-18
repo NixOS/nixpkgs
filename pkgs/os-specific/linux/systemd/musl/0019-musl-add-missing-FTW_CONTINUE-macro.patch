@@ -1,0 +1,35 @@
+From 7d4b4e49729f7c7d5164ba2c5040ed522d68ee7a Mon Sep 17 00:00:00 2001
+From: Chen Qi <Qi.Chen@windriver.com>
+Date: Mon, 25 Feb 2019 15:00:06 +0800
+Subject: [PATCH 19/30] musl: add missing FTW_CONTINUE macro
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is to avoid build failures like below for musl.
+
+  test-recurse-dir.c:23:24: error: ‘FTW_CONTINUE’ undeclared
+
+Co-authored-by: Yu Watanabe <watanabe.yu+github@gmail.com>
+---
+ src/include/musl/ftw.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 src/include/musl/ftw.h
+
+diff --git a/src/include/musl/ftw.h b/src/include/musl/ftw.h
+new file mode 100644
+index 0000000000..fd153734d0
+--- /dev/null
++++ b/src/include/musl/ftw.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <ftw.h>
++
++#ifndef FTW_CONTINUE
++#define FTW_CONTINUE 0
++#endif
+-- 
+2.51.0
+

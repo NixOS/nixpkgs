@@ -351,7 +351,7 @@ package-set { inherit pkgs lib callPackage; } self
   developPackage =
     {
       root,
-      name ? lib.optionalString (builtins.typeOf root == "path") (builtins.baseNameOf root),
+      name ? lib.optionalString (builtins.typeOf root == "path") (baseNameOf root),
       source-overrides ? { },
       overrides ? self: super: { },
       modifier ? drv: drv,
@@ -634,7 +634,7 @@ package-set { inherit pkgs lib callPackage; } self
       # pkgWithCombinedDepsDevDrv :: Derivation
       pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-      mkDerivationArgs = builtins.removeAttrs args [
+      mkDerivationArgs = removeAttrs args [
         "genericBuilderArgsModifier"
         "packages"
         "withHoogle"
@@ -674,10 +674,6 @@ package-set { inherit pkgs lib callPackage; } self
         inherit src;
         nativeBuildInputs = [
           buildHaskellPackages.cabal-install
-
-          # TODO after https://github.com/haskell/cabal/issues/8352
-          #      remove ghc
-          self.ghc
         ];
         dontUnpack = false;
       }
@@ -699,10 +695,18 @@ package-set { inherit pkgs lib callPackage; } self
   */
   buildFromCabalSdist =
     pkg:
-    haskellLib.overrideSrc {
-      src = self.cabalSdist { inherit (pkg) src; };
-      version = pkg.version;
-    } pkg;
+    haskellLib.overrideCabal
+      (_: {
+        # Patches are already applied by srcOnly above, so clear them
+        # to avoid double-application.
+        patches = [ ];
+      })
+      (
+        haskellLib.overrideSrc {
+          src = self.cabalSdist { src = pkgs.srcOnly pkg; };
+          version = pkg.version;
+        } pkg
+      );
 
   /*
     Modify a Haskell package to add shell completion scripts for the

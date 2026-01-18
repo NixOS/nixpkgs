@@ -159,7 +159,6 @@ def get_dart_hashes(dart_version, channel):
         code = load_code(
             "get-dart-hashes.nix",
             dart_version=dart_version,
-            channel=channel,
             platform=platform,
         )
         stderr = nix_build_to_fail(code)

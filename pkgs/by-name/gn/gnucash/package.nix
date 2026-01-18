@@ -35,14 +35,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.12";
+  version = "5.14";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-s1tHVr4SvP2+1URo8wRD+lPyOFIKnOrVveLmxHc/vzk=";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-DG/SAhTahqmgRDNZ97YtmivU7YAv1oCFPaS3V6NxrJE=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,22 @@ stdenv.mkDerivation rec {
     "-DWITH_PYTHON=\"ON\""
     "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
+
+  env = {
+    # https://github.com/Gnucash/gnucash/commit/e680a87a66b8ec17132f186e222cbc94ad52b3d0
+    GNC_DBD_DIR = "${libdbiDrivers}/lib/dbd";
+
+    # this needs to be an environment variable and not a cmake flag to suppress
+    # guile warning
+    GUILE_AUTO_COMPILE = "0";
+
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+        # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+        "-Wno-error=use-after-free"
+      ]
+    );
+  };
 
   buildInputs = [
     aqbanking
@@ -98,52 +114,47 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    find . -name '._*' -type f -delete
+
     substituteInPlace bindings/python/__init__.py \
       --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
-      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${version}"};
+      --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"};
   '';
-
-  # this needs to be an environment variable and not a cmake flag to suppress
-  # guile warning
-  env.GUILE_AUTO_COMPILE = "0";
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-      "-Wno-error=use-after-free"
-    ]
-  );
 
   doCheck = true;
   enableParallelChecking = true;
   checkTarget = "check";
 
-  passthru.docs = stdenv.mkDerivation {
-    pname = "gnucash-docs";
-    inherit version;
+  passthru = {
+    docs = stdenv.mkDerivation {
+      pname = "gnucash-docs";
+      inherit (finalAttrs) version;
 
-    src = fetchFromGitHub {
-      owner = "Gnucash";
-      repo = "gnucash-docs";
-      rev = version;
-      hash = "sha256-9hXOgHdNtTcPOf44L2RrfOTXAgJi2Xu6gWnjDU7gHjU=";
+      src = fetchFromGitHub {
+        owner = "Gnucash";
+        repo = "gnucash-docs";
+        tag = finalAttrs.version;
+        hash = "sha256-KaUkpqBSQnrWR/ynZC6DuUUnbCURxwFBVg+f4HVwy3Q=";
+      };
+
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [
+        libxml2
+        libxslt
+      ];
     };
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [
-      libxml2
-      libxslt
-    ];
+    updateScript = ./update.sh;
   };
 
   preFixup = ''
     gappsWrapperArgs+=(
       # documentation
-      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
+      --prefix XDG_DATA_DIRS : ${finalAttrs.passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
       # gsettings schema location on Nix
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${version}"}
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"}
     )
   '';
 
@@ -175,9 +186,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
 
-  passthru.updateScript = ./update.sh;
-
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnucash.org/";
     description = "Free software for double entry accounting";
     longDescription = ''
@@ -200,13 +209,13 @@ stdenv.mkDerivation rec {
       - Scheduled Transactions
       - Financial Calculations
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nevivurn
       ryand56
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "gnucash";
   };
-}
+})
 # TODO: investigate Darwin support

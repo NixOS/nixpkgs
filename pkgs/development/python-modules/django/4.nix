@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pythonAtLeast,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -45,16 +44,16 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.24";
-  format = "pyproject";
+  version = "4.2.27";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zDPK30u2QFbHCqnlTMqF1w9iN2sPDphhyKU1u+Mp5ho=";
+    tag = version;
+    hash = "sha256-vdY85Ib2knRFLPmZZ6ojiD5R9diuvpVut1+nOVXSp0Y=";
   };
 
   patches = [
@@ -137,7 +136,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   doCheck =
     !stdenv.hostPlatform.isDarwin
@@ -164,12 +163,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     mainProgram = "django-admin";
     homepage = "https://www.djangoproject.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

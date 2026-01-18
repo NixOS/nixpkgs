@@ -6,6 +6,8 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
+  fetchpatch2,
+  fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -59,6 +61,7 @@
   libdatachannel,
   libvpl,
   qrcodegencpp,
+  simde,
   nix-update-script,
   extra-cmake-modules,
 }:
@@ -66,38 +69,55 @@
 let
   inherit (lib) optional optionals;
 
-  cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "138.0.17";
-    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
-    gitRevision = "ac9b751";
-    chromiumVersion = "138.0.7204.97";
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
 
-    srcHash =
-      {
-        aarch64-linux = "sha256-kdO7c9oUfv0HK8wTmvYzw9S6EapnSGEQNCGN9D1JSL0=";
-        x86_64-linux = "sha256-3qgIhen6l/kxttyw0z78nmwox62riVhlmFSGPkUot7g=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  });
+  cef = cef-binary.overrideAttrs (
+    oldAttrs:
+    let
+      version = "6533";
+      revision = "6";
+    in
+    {
+      inherit version;
+
+      src = fetchurl {
+        url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_${version}_linux_${
+          selectSystem {
+            aarch64-linux = "aarch64";
+            x86_64-linux = "x86_64";
+          }
+        }_v${revision}.tar.xz";
+        hash = selectSystem {
+          aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
+          x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
+        };
+      };
+    }
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.1.2";
+  version = "32.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-QZoIyjliVruDPZj8hzTABaDn+nCTVs5qQCdBLtSOKvI=";
+    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
   patches = [
-    # Lets obs-browser build against CEF 90.1.0+
-    ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
+    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
+    (fetchpatch2 {
+      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
+      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -156,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional browserSupport cef
   ++ optional withFdk fdk_aac;
 
+  propagatedBuildInputs = [ simde ];
+
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''
     ln -s ${cef} cef
@@ -174,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
@@ -228,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster
@@ -236,12 +259,12 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       materus
       fpletz
     ];
-    license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
+    license = with lib.licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [
       "x86_64-linux"
       "i686-linux"

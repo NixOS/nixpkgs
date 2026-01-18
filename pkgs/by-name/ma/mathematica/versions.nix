@@ -9,6 +9,20 @@
 let
   versions = [
     {
+      version = "14.3.0";
+      lang = "en";
+      language = "English";
+      sha256 = "sha256-F4Rl4xz3vso+N//Uz7ZXvh5CrM6nsKMQxrRR11o/aNA=";
+      installer = "Wolfram_14.3.0_LIN.sh";
+    }
+    {
+      version = "14.3.0";
+      lang = "en";
+      language = "English";
+      sha256 = "sha256-FvcXXijGOcuRA1UFyVvPIyR1YaK/qrkMpLxf+mz+A/c=";
+      installer = "Wolfram_14.3.0_LIN_Bndl.sh";
+    }
+    {
       version = "14.2.1";
       lang = "en";
       language = "English";

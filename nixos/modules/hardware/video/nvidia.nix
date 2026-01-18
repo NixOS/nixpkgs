@@ -333,7 +333,7 @@ in
     lib.mkIf cfg.enabled (
       lib.mkMerge [
         # Common
-        ({
+        {
           assertions = [
             {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
@@ -350,6 +350,7 @@ in
           boot = {
             blacklistedKernelModules = [
               "nouveau"
+              "nova_core"
               "nvidiafb"
             ];
 
@@ -388,7 +389,7 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
-        })
+        }
 
         # X11
         (lib.mkIf nvidiaEnabled {
@@ -709,7 +710,7 @@ in
                 "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
             services = lib.mkMerge [
-              ({
+              {
                 nvidia-fabricmanager = {
                   enable = true;
                   description = "Start NVIDIA NVLink Management";
@@ -736,7 +737,7 @@ in
                     LimitCORE = "infinity";
                   };
                 };
-              })
+              }
               (lib.mkIf cfg.nvidiaPersistenced {
                 "nvidia-persistenced" = {
                   description = "NVIDIA Persistence Daemon";

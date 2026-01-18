@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "flannel";
-  version = "0.27.3";
+  version = "0.28.0";
   rev = "v${version}";
 
-  vendorHash = "sha256-JchHjQh1ZP6wdpgUwfNyhD93Wlf4FvCD0h4Tte47z3U=";
+  vendorHash = "sha256-w3Z6iP65HASQD79lNXbVVuBbsYLfMl8dFGLzLszF+wE=";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "flannel-io";
     repo = "flannel";
-    sha256 = "sha256-r+9pII4zlPJ7UNdE0sR6Aul7p0sK+BRHq71S+NEekvM=";
+    sha256 = "sha256-h2eNdZw84YgOfPktVVZIFPGPHf4JgEFOaqt1txeLxZ0=";
   };
 
   ldflags = [ "-X github.com/flannel-io/flannel/pkg/version.Version=${rev}" ];
@@ -26,15 +26,15 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) flannel; };
 
-  meta = with lib; {
+  meta = {
     description = "Network fabric for containers, designed for Kubernetes";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/flannel-io/flannel";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johanot
       offline
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "flannel";
   };
 }

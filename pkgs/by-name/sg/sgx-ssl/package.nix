@@ -84,7 +84,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/intel/intel-sgx-ssl";
     maintainers = with lib.maintainers; [
       phlip9
-      trundle
       veehaitch
     ];
     platforms = [ "x86_64-linux" ];

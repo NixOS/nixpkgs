@@ -11,7 +11,7 @@ let
   opt = options.services.parsedmarc;
   isSecret = v: isAttrs v && v ? _secret && isString v._secret;
   ini = pkgs.formats.ini {
-    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
       mkValueString =
         v:
         if isInt v then
@@ -404,7 +404,7 @@ in
           "batch_size"
         ];
       in
-      builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
+      map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
     services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
 

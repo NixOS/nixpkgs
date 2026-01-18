@@ -80,9 +80,6 @@ in
             host sameuser miniflux samenet scram-sha-256
           '';
         };
-        systemd.services.postgresql-setup.postStart = lib.mkAfter ''
-          psql -tAd miniflux -c 'CREATE EXTENSION hstore;'
-        '';
         networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
       };
     externalDb =

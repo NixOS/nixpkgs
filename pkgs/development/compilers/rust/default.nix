@@ -11,6 +11,7 @@
   llvmSharedForHost,
   llvmSharedForTarget,
   llvmPackages, # Exposed through rustc for LTO in Firefox
+  cargo-auditable,
 }:
 {
   stdenv,
@@ -92,7 +93,7 @@ in
         buildRustPackages = (selectRustPackage pkgsBuildHost).packages.stable;
         # Analogous to stdenv
         rustPlatform = makeRustPlatform self.buildRustPackages;
-        rustc-unwrapped = self.callPackage ./rustc.nix ({
+        rustc-unwrapped = self.callPackage ./rustc.nix {
           version = rustcVersion;
           sha256 = rustcSha256;
           inherit enableRustcDev;
@@ -109,7 +110,7 @@ in
 
           # Use boot package set to break cycle
           inherit (bootstrapRustPackages) cargo rustc rustfmt;
-        });
+        };
         rustc = wrapRustcWith {
           inherit (self) rustc-unwrapped;
           sysroot = if fastCross then self.rustc-unwrapped else null;
@@ -125,7 +126,7 @@ in
             }
           else
             self.callPackage ./cargo_cross.nix { };
-        cargo-auditable = self.callPackage ./cargo-auditable.nix { };
+        inherit cargo-auditable;
         cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
         clippy-unwrapped = self.callPackage ./clippy.nix { };
         clippy = if !fastCross then self.clippy-unwrapped else self.callPackage ./clippy-wrapper.nix { };

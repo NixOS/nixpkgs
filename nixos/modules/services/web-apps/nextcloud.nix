@@ -120,7 +120,8 @@ let
     ++ (lib.optional (
       cfg.config.objectstore.s3.sseCKeyFile != null
     ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
-    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
+    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}")
+    ++ (lib.mapAttrsToList (credential: file: "${credential}:${file}") cfg.secrets);
 
   requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
 
@@ -166,6 +167,7 @@ let
             --setenv OC_PASS \
             --setenv NC_PASS \
             --quiet \
+            -- \
             ${command}
         elif [[ "$USER" != nextcloud ]]; then
           if [[ -x /run/wrappers/bin/sudo ]]; then
@@ -174,6 +176,7 @@ let
               --preserve-env=OC_PASS \
               --preserve-env=NC_PASS \
               --user=nextcloud \
+              -- \
               ${command}
           else
             exec ${lib.getExe' pkgs.util-linux "runuser"} \
@@ -181,6 +184,7 @@ let
               --whitelist-environment=OC_PASS \
               --whitelist-environment=NC_PASS \
               --user=nextcloud \
+              -- \
               ${command}
           fi
         else
@@ -260,7 +264,7 @@ let
           $decoded = json_decode(nix_read_secret($credential_name), true);
 
           if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+            error_log(sprintf("Cannot decode %s, because: %s", $credential_name, json_last_error_msg()));
             exit(1);
           }
 
@@ -283,7 +287,7 @@ let
         'apps_paths' => [
           ${lib.concatStrings (lib.mapAttrsToList mkAppStoreConfig appStores)}
         ],
-        ${lib.optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+        ${lib.optionalString showAppStoreSetting "'appstoreenabled' => ${renderedAppStoreSetting},"}
         ${lib.optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
         ${lib.optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
         ${lib.optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -293,6 +297,9 @@ let
         ) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
         ${lib.optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
+        )}
         ${objectstoreConfig}
       ];
 
@@ -319,6 +326,9 @@ in
     '')
     (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
       Add port to services.nextcloud.config.dbhost instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "nginx" "recommendedHttpHeaders" ] ''
+      This option has been removed to always follow upstream's security recommendation.
     '')
     (lib.mkRenamedOptionModule
       [ "services" "nextcloud" "logLevel" ]
@@ -384,6 +394,24 @@ in
       '';
       example = "/mnt/nextcloud-file";
     };
+    secrets = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        }
+      );
+      default = { };
+      description = ''
+        Secret files to read into entries in `config.php`.
+        This uses `nix_read_secret` and LoadCredential to read the contents of the file into the entry in `config.php`.
+      '';
+      example = lib.literalExpression ''
+        {
+          oidc_login_client_secret = "/run/secrets/nextcloud_oidc_secret";
+        }
+      '';
+    };
     extraApps = lib.mkOption {
       type = lib.types.attrsOf lib.types.package;
       default = { };
@@ -396,11 +424,11 @@ in
         {
           inherit (pkgs.nextcloud31Packages.apps) mail calendar contacts;
           phonetrack = pkgs.fetchNextcloudApp {
-            name = "phonetrack";
+            appName = "phonetrack";
+            appVersion = "0.8.2";
             license = "agpl3Plus";
             sha512 = "f67902d1b48def9a244383a39d7bec95bb4215054963a9751f99dae9bd2f2740c02d2ef97b3b76d69a36fa95f8a9374dd049440b195f4dad2f0c4bca645de228";
             url = "https://github.com/julien-nc/phonetrack/releases/download/v0.8.2/phonetrack-0.8.2.tar.gz";
-            version = "0.8.2";
           };
         }
       '';
@@ -437,12 +465,12 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud30"
         "nextcloud31"
+        "nextcloud32"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {
-      default = [ "php83" ];
+      default = [ "php84" ];
       example = "php82";
     };
 
@@ -544,12 +572,13 @@ in
         "pm.min_spare_servers" = "6";
         "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
+        "pm.status_path" = "/status";
       };
       description = ''
         Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
         configuration directives. The above are recommended for a server with 4GiB of RAM.
 
-        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#tune-php-fpm)
         and consider customizing the values.
       '';
     };
@@ -641,7 +670,7 @@ in
         '';
       };
       adminuser = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nullOr lib.types.str;
         default = "root";
         description = ''
           Username for the admin account. The username is only set during the
@@ -650,7 +679,7 @@ in
         '';
       };
       adminpassFile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nullOr lib.types.str;
         description = ''
           The full path to a file that contains the admin's password. The password is
           set only in the initial setup of Nextcloud by the systemd service `nextcloud-setup.service`.
@@ -950,6 +979,144 @@ in
               Only has an effect in Nextcloud 23 and later.
             '';
           };
+          enabledPreviewProviders = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [
+              "OC\\Preview\\PNG"
+              "OC\\Preview\\JPEG"
+              "OC\\Preview\\GIF"
+              "OC\\Preview\\BMP"
+              "OC\\Preview\\XBitmap"
+              "OC\\Preview\\Krita"
+              "OC\\Preview\\WebP"
+              "OC\\Preview\\MarkDown"
+              "OC\\Preview\\TXT"
+              "OC\\Preview\\OpenDocument"
+            ];
+            description = ''
+              The preview providers that should be explicitly enabled.
+            '';
+          };
+          mail_domain = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              The return address that you want to appear on emails sent by the Nextcloud server, for example `nc-admin@example.com`, substituting your own domain, of course.
+            '';
+          };
+          mail_from_address = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              FROM address that overrides the built-in `sharing-noreply` and `lostpassword-noreply` FROM addresses.
+              Defaults to different FROM addresses depending on the feature.
+            '';
+          };
+          mail_smtpdebug = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Enable SMTP class debugging.
+              `loglevel` will likely need to be adjusted too.
+              [See docs](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/email_configuration.html#enabling-debug-mode).
+            '';
+          };
+          mail_smtpmode = lib.mkOption {
+            type = lib.types.enum [
+              "sendmail"
+              "smtp"
+              "qmail"
+              "null" # Yes, this is really a string null and not null.
+            ];
+            default = "smtp";
+            description = ''
+              Which mode to use for sending mail.
+              If you are using local or remote SMTP, set this to `smtp`.
+              For the `sendmail` option, you need an installed and working email system on the server, with your local `sendmail` installation.
+              For `qmail`, the binary is /var/qmail/bin/sendmail, and it must be installed on your Unix system.
+              Use the string null to send no mails (disable mail delivery). This can be useful if mails should be sent via APIs and rendering messages is not necessary.
+            '';
+          };
+          mail_smtphost = lib.mkOption {
+            type = lib.types.str;
+            default = "127.0.0.1";
+            description = ''
+              This depends on `mail_smtpmode`. Specify the IP address of your mail server host. This may contain multiple hosts separated by a semicolon. If you need to specify the port number, append it to the IP address separated by a colon, like this: `127.0.0.1:24`.
+            '';
+          };
+          mail_smtpport = lib.mkOption {
+            type = lib.types.port;
+            default = 25;
+            description = ''
+              This depends on `mail_smtpmode`. Specify the port for sending mail.
+            '';
+          };
+          mail_smtptimeout = lib.mkOption {
+            type = lib.types.int;
+            default = 10;
+            description = ''
+              This depends on `mail_smtpmode`. This sets the SMTP server timeout, in seconds. You may need to increase this if you are running an anti-malware or spam scanner.
+            '';
+          };
+          mail_smtpsecure = lib.mkOption {
+            type = lib.types.enum [
+              ""
+              "ssl"
+            ];
+            default = "";
+            description = ''
+              This depends on `mail_smtpmode`. Specify `ssl` when you are using SSL/TLS. Any other value will be ignored.
+              If the server advertises STARTTLS capabilities, they might be used, but they cannot be enforced by this config option.
+            '';
+          };
+          mail_smtpauth = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              This depends on `mail_smtpmode`. Change this to `true` if your mail server requires authentication.
+            '';
+          };
+          mail_smtpname = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = ''
+              This depends on `mail_smtpauth`. Specify the username for authenticating to the SMTP server.
+            '';
+          };
+          # mail_smtppassword is skipped as it must be set through services.nextcloud.secrets
+          mail_template_class = lib.mkOption {
+            type = lib.types.str;
+            default = "\\OC\\Mail\\EMailTemplate";
+            description = ''
+              Replaces the default mail template layout. This can be utilized if the options to modify the mail texts with the theming app are not enough.
+              The class must extend `\OC\Mail\EMailTemplate`
+            '';
+          };
+          mail_send_plaintext_only = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Email will be sent by default with an HTML and a plain text body. This option allows sending only plain text emails.
+            '';
+          };
+          mail_smtpstreamoptions = lib.mkOption {
+            type = lib.types.attrsOf (lib.types.attrsOf lib.types.anything);
+            default = { };
+            description = ''
+              This depends on `mail_smtpmode`. Array of additional streams options that will be passed to underlying Swift mailer implementation.
+            '';
+          };
+          mail_sendmailmode = lib.mkOption {
+            type = lib.types.enum [
+              "smtp"
+              "pipe"
+            ];
+            default = "smtp";
+            description = ''
+              For `smtp`, the sendmail binary is started with the parameter `-bs`: Use the SMTP protocol on standard input and output.
+              For `pipe`, the binary is started with the parameters `-t`: Read message from STDIN and extract recipients.
+            '';
+          };
         };
       };
       default = { };
@@ -980,11 +1147,6 @@ in
     };
 
     nginx = {
-      recommendedHttpHeaders = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable additional recommended HTTP response headers";
-      };
       hstsMaxAge = lib.mkOption {
         type = lib.types.ints.positive;
         default = 15552000;
@@ -1024,6 +1186,8 @@ in
         The value can be customized for `nextcloud-cron.service` using this option.
       '';
     };
+
+    imaginary.enable = lib.mkEnableOption "Imaginary";
   };
 
   config = lib.mkIf cfg.enable (
@@ -1031,7 +1195,7 @@ in
       {
         warnings =
           let
-            latest = 31;
+            latest = 32;
             upgradeWarning = major: nixos: ''
               A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
@@ -1062,7 +1226,8 @@ in
           ++ (lib.optional (lib.versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
           ++ (lib.optional (lib.versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
           ++ (lib.optional (lib.versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"));
+          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"))
+          ++ (lib.optional (lib.versionOlder overridePackage.version "32") (upgradeWarning 31 "25.11"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
@@ -1071,14 +1236,12 @@ in
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if lib.versionOlder stateVersion "24.05" then
-            pkgs.nextcloud27
-          else if lib.versionOlder stateVersion "24.11" then
-            pkgs.nextcloud29
           else if lib.versionOlder stateVersion "25.05" then
             pkgs.nextcloud30
-          else
+          else if lib.versionOlder stateVersion "25.11" then
             pkgs.nextcloud31
+          else
+            pkgs.nextcloud32
         );
 
         services.nextcloud.phpOptions = lib.mkMerge [
@@ -1124,6 +1287,33 @@ in
               https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
             '';
           }
+          {
+            assertion =
+              lib.versionAtLeast overridePackage.version "32.0.0"
+              || (cfg.config.adminuser != null && cfg.config.adminpassFile != null);
+            message = ''
+              Disabling initial admin user creation is only available on Nextcloud >= 32.0.0.
+            '';
+          }
+          {
+            assertion = cfg.config.adminuser == null -> cfg.config.adminpassFile == null;
+            message = ''
+              If `services.nextcloud.config.adminuser` is null, `services.nextcloud.config.adminpassFile` must be null as well in order to disable initial admin user creation.
+            '';
+          }
+          {
+            assertion = cfg.config.adminpassFile == null -> cfg.config.adminuser == null;
+            message = ''
+              If `services.nextcloud.config.adminpassFile` is null, `services.nextcloud.config.adminuser` must be null as well in order to disable initial admin user creation.
+            '';
+          }
+          {
+            assertion = !(cfg.settings ? mail_smtppassword);
+            message = ''
+              The option `services.nextcloud.settings.mail_smtppassword` must not be used, as it puts the password into the world-readable nix store.
+              Use `services.nextcloud.secrets.mail_smtppassword` instead and set it to a file containing the password.
+            '';
+          }
         ];
       }
 
@@ -1167,10 +1357,14 @@ in
                     arg = "DBPASS";
                     value = if c.dbpassFile != null then ''"$(<"$CREDENTIALS_DIRECTORY/dbpass")"'' else ''""'';
                   };
-                  adminpass = {
-                    arg = "ADMINPASS";
-                    value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
-                  };
+                  adminpass =
+                    if c.adminpassFile != null then
+                      {
+                        arg = "ADMINPASS";
+                        value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
+                      }
+                    else
+                      null;
                   installFlags = lib.concatStringsSep " \\\n    " (
                     lib.mapAttrsToList (k: v: "${k} ${toString v}") {
                       "--database" = ''"${c.dbtype}"'';
@@ -1181,15 +1375,16 @@ in
                       ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
                       ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
                       "--database-pass" = "\"\$${dbpass.arg}\"";
-                      "--admin-user" = ''"${c.adminuser}"'';
-                      "--admin-pass" = "\"\$${adminpass.arg}\"";
+                      ${if c.adminuser != null then "--admin-user" else null} = ''"${c.adminuser}"'';
+                      ${if adminpass != null then "--admin-pass" else null} = "\"\$${adminpass.arg}\"";
+                      ${if c.adminuser == null && adminpass == null then "--disable-admin-user" else null} = "";
                       "--data-dir" = ''"${datadir}/data"'';
                     }
                   );
                 in
                 ''
                   ${mkExport dbpass}
-                  ${mkExport adminpass}
+                  ${lib.optionalString (adminpass != null) (mkExport adminpass)}
                   ${lib.getExe occ} maintenance:install \
                       ${installFlags}
                 '';
@@ -1210,16 +1405,20 @@ in
               path = [ occ ];
               restartTriggers = [ overrideConfig ];
               script = ''
+                export OCC_BIN="${lib.getExe occ}"
+
                 ${lib.optionalString (c.dbpassFile != null) ''
                   if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                     echo "dbpassFile ${c.dbpassFile} is empty!"
                     exit 1
                   fi
                 ''}
-                if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
-                  echo "adminpassFile ${c.adminpassFile} is empty!"
-                  exit 1
-                fi
+                ${lib.optionalString (c.adminpassFile != null) ''
+                  if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
+                    echo "adminpassFile ${c.adminpassFile} is empty!"
+                    exit 1
+                  fi
+                ''}
 
                 # Check if systemd-tmpfiles setup worked correctly
                 if [[ ! -O "${datadir}/config" ]]; then
@@ -1248,23 +1447,22 @@ in
                   ${occInstallCmd}
                 fi
 
-                ${lib.getExe occ} upgrade
+                $OCC_BIN upgrade
 
-                ${lib.getExe occ} config:system:delete trusted_domains
+                $OCC_BIN config:system:delete trusted_domains
 
                 ${lib.optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                   # Try to enable apps
-                  ${lib.getExe occ} app:enable ${lib.concatStringsSep " " (lib.attrNames cfg.extraApps)}
+                  $OCC_BIN app:enable ${lib.concatStringsSep " " (lib.attrNames cfg.extraApps)}
                 ''}
 
                 ${occSetTrustedDomainsCmd}
               '';
               serviceConfig.Type = "oneshot";
               serviceConfig.User = "nextcloud";
-              serviceConfig.LoadCredential = [
-                "adminpass:${cfg.config.adminpassFile}"
-              ]
-              ++ runtimeSystemdCredentials;
+              serviceConfig.LoadCredential =
+                lib.optional (cfg.config.adminpassFile != null) "adminpass:${cfg.config.adminpassFile}"
+                ++ runtimeSystemdCredentials;
               # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
               # an automatic creation of the database user.
               environment.NC_setup_create_db_user = "false";
@@ -1433,6 +1631,20 @@ in
                 port = 0;
               };
             })
+            # https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#previews
+            (lib.mkIf cfg.imaginary.enable {
+              preview_imaginary_url = "http://${config.services.imaginary.address}:${toString config.services.imaginary.port}";
+
+              # Imaginary replaces a few of the built-in providers, so the default value has to be adjusted.
+              enabledPreviewProviders = lib.mkDefault [
+                "OC\\Preview\\Imaginary"
+                "OC\\Preview\\ImaginaryPDF"
+                "OC\\Preview\\Krita"
+                "OC\\Preview\\MarkDown"
+                "OC\\Preview\\TXT"
+                "OC\\Preview\\OpenDocument"
+              ];
+            })
           ];
         };
 
@@ -1501,7 +1713,7 @@ in
                 fastcgi_pass unix:${fpm.socket};
                 fastcgi_intercept_errors on;
                 fastcgi_request_buffering ${if cfg.nginx.enableFastcgiRequestBuffering then "on" else "off"};
-                fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
+                fastcgi_read_timeout ${toString cfg.fastcgiTimeout}s;
               '';
             };
             "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
@@ -1535,19 +1747,23 @@ in
           };
           extraConfig = ''
             index index.php index.html /index.php$request_uri;
-            ${lib.optionalString (cfg.nginx.recommendedHttpHeaders) ''
-              add_header X-Content-Type-Options nosniff;
-              add_header X-Robots-Tag "noindex, nofollow";
-              add_header X-Permitted-Cross-Domain-Policies none;
-              add_header X-Frame-Options sameorigin;
-              add_header Referrer-Policy no-referrer;
-            ''}
+            add_header X-Content-Type-Options nosniff;
+            add_header X-Robots-Tag "noindex, nofollow";
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options sameorigin;
+            add_header Referrer-Policy no-referrer;
             ${lib.optionalString (cfg.https) ''
               add_header Strict-Transport-Security "max-age=${toString cfg.nginx.hstsMaxAge}; includeSubDomains" always;
             ''}
             client_max_body_size ${cfg.maxUploadSize};
             fastcgi_buffers 64 4K;
             fastcgi_hide_header X-Powered-By;
+            # mirror upstream htaccess file https://github.com/nextcloud/server/blob/v32.0.0/.htaccess#L40-L41
+            fastcgi_hide_header Referrer-Policy;
+            fastcgi_hide_header X-Content-Type-Options;
+            fastcgi_hide_header X-Frame-Options;
+            fastcgi_hide_header X-Permitted-Cross-Domain-Policies;
+            fastcgi_hide_header X-Robots-Tag;
             gzip on;
             gzip_vary on;
             gzip_comp_level 4;
@@ -1560,6 +1776,13 @@ in
               rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
             ''}
           '';
+        };
+
+        services.imaginary = lib.mkIf cfg.imaginary.enable {
+          enable = true;
+          # add -return-size flag recommend by Nextcloud
+          # https://github.com/h2non/imaginary/pull/382
+          settings.return-size = true;
         };
       }
     ]

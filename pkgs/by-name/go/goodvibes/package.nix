@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goodvibes";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     owner = "goodvibes";
     repo = "goodvibes";
     rev = "v${version}";
-    hash = "sha256-AHw8KlU1lmgH837GOpxGBgngwRIs5XV3+TvH4MuCx54=";
+    hash = "sha256-Lh4FPH0Bdxg2J4IxsZPs8Zjc7Tcobb4bTpvJzVNIy0Y=";
   };
 
   nativeBuildInputs = [
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight internet radio player";
     homepage = "https://gitlab.com/goodvibes/goodvibes";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

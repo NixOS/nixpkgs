@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ]
   ++
     lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
-      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+      "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # bacula’s `configure` script fails to detect CoreFoundation correctly,
     # but these symbols are available in the nixpkgs CoreFoundation framework.
@@ -68,17 +68,17 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise ready, Network Backup Tool";
     homepage = "http://bacula.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       eleanor
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

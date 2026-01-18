@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command that lists Wayland toplevels";
     homepage = "https://sr.ht/~leon_plickat/lswt";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ edrex ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ edrex ];
+    platforms = lib.platforms.linux;
     mainProgram = "lswt";
   };
 }

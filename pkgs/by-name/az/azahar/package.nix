@@ -34,6 +34,8 @@
   xorg,
   enableQtTranslations ? true,
   qt6,
+  gtk3,
+  gsettings-desktop-schemas,
   enableCubeb ? true,
   cubeb,
   useDiscordRichPresence ? true,
@@ -42,8 +44,6 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
-  darwinMinVersionHook,
-  apple-sdk_12,
 }:
 let
   inherit (lib)
@@ -55,17 +55,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2123.2";
+  version = "2124";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-T0oVWYedap3BfMvnzKWEoW3+y3f3ld0RKp3z49LJIds=";
+    hash = "sha256-k/Rz7hiYtX0tVW2lrrEwiB8LanvAuhXHxPC79Dy4aUI=";
   };
-
-  patches = [
-    # https://github.com/azahar-emu/azahar/pull/1305
-    ./fix-zstd-seekable-include.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -104,8 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     xbyak
 
-    # https://github.com/azahar-emu/azahar/pull/1281
+    # https://github.com/azahar-emu/azahar/issues/1283
     # spirv-tools
+    # spirv-headers
 
     # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
     # zstd
@@ -122,10 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
-
-    # error: 'lowPowerModeEnabled' is unavailable: not available on macOS
-    apple-sdk_12
-    (darwinMinVersionHook "12.0")
   ];
 
   postPatch = ''
@@ -150,6 +142,13 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
 
   passthru.updateScript = nix-update-script { };
 

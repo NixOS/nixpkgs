@@ -3,6 +3,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  isPyPy,
   mypy,
   pytestCheckHook,
   requests,
@@ -23,12 +24,12 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    mypy
     setuptools
     setuptools-scm
-  ];
+  ]
+  ++ lib.optional (!isPyPy) mypy;
 
-  env.CHARSET_NORMALIZER_USE_MYPYC = "1";
+  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString (!isPyPy) "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -38,12 +39,12 @@ buildPythonPackage rec {
     inherit aiohttp requests;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python module for encoding and language detection";
     mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
     changelog = "https://github.com/jawah/charset_normalizer/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

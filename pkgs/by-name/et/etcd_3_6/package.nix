@@ -1,8 +1,7 @@
 {
   applyPatches,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   k3s,
   lib,
@@ -12,11 +11,11 @@
 }:
 
 let
-  version = "3.6.4";
-  etcdSrcHash = "sha256-otz+06cOD2MVnMZWKId1GN+MeZfnDbdudiYfVCKdzuo=";
-  etcdCtlVendorHash = "sha256-kTH+s/SY+xwo6kt6iPJ7XDhin0jPk0FBr0eOe/717bE=";
-  etcdUtlVendorHash = "sha256-P0yx9YMMD9vT7N6LOlo26EAOi+Dj33p3ZjAYEoaL19A=";
-  etcdServerVendorHash = "sha256-kgbCT1JxI98W89veCItB7ZfW4d9D3/Ip3tOuFKEX9v4=";
+  version = "3.6.7";
+  etcdSrcHash = "sha256-i8VZlK76OQQeojKHo9sdkyNR0Hdiofx0TLUDWKiXOTU=";
+  etcdCtlVendorHash = "sha256-jN+oNoIxNYM2Wm3s+/zDyacyXxVWaHl9t7sot8PL9xk=";
+  etcdUtlVendorHash = "sha256-A2rYstzlBlS3ta5yJVP/RTjgBz+9Y0I79ITr77GrqOo=";
+  etcdServerVendorHash = "sha256-hUFUcoXaOKTkoJ7YUwljpg7EZRhXi5tXcE2bteVRBE0=";
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -25,12 +24,6 @@ let
       tag = "v${version}";
       hash = etcdSrcHash;
     };
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/etcd-io/etcd/commit/31650ab0c8df43af05fc4c13b48ffee59271eec7.patch";
-        hash = "sha256-Q94HOLFx2fnb61wMQsAUT4sIBXfxXqW9YEayukQXX18=";
-      })
-    ];
   };
 
   env = {
@@ -46,7 +39,7 @@ let
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGoModule {
+  etcdserver = buildGo124Module {
     pname = "etcdserver";
 
     inherit
@@ -73,7 +66,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGoModule {
+  etcdutl = buildGo124Module {
     pname = "etcdutl";
 
     inherit
@@ -99,7 +92,7 @@ let
     '';
   };
 
-  etcdctl = buildGoModule {
+  etcdctl = buildGo124Module {
     pname = "etcdctl";
 
     inherit
@@ -132,11 +125,7 @@ symlinkJoin {
     deps = {
       inherit etcdserver etcdutl etcdctl;
     };
-    # Fix-Me: Tests for etcd 3.6 needs work.
-    # tests = {
-    #   inherit (nixosTests) etcd etcd-cluster;
-    #   k3s = k3s.passthru.tests.etcd;
-    # };
+    tests = nixosTests.etcd."3_6";
     updateScript = ./update.sh;
   };
 

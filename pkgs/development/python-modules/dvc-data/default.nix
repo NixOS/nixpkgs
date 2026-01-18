@@ -15,9 +15,9 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-data";
-  version = "3.16.12";
+  version = "3.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-data";
-    tag = version;
-    hash = "sha256-eGicR+fWsgE2mSjhf/r96IBvXX4cLG/nmtt7Q2MCxkE=";
+    tag = finalAttrs.version;
+    hash = "sha256-3Zct/cOSxf8UYT4Kss4krWERrBatd5R3mcpDivsCIac=";
   };
 
   build-system = [ setuptools-scm ];
@@ -48,12 +48,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "DVC's data management subsystem";
     homepage = "https://github.com/iterative/dvc-data";
-    changelog = "https://github.com/iterative/dvc-data/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/dvc-data/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dvc-data";
   };
-}
+})

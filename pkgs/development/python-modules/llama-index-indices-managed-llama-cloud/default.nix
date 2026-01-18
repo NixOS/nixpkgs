@@ -5,15 +5,12 @@
   hatchling,
   llama-cloud,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
   version = "0.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.indices.managed.llama_cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaCloud Index and Retriever";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/indices/llama-index-indices-managed-llama-cloud";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,18 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "carl";
-  version = "0.3.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "b1rger";
     repo = "carl";
     rev = "v${version}";
-    hash = "sha256-+l11eP+1qKrWbZhyUJgQ8FgQ+2rncx778F5RPzCfvV4=";
+    hash = "sha256-ikD4T3zP/IJ+8Wxn8aohJTKbcy+QKAUoX/kkVAUVoNk=";
   };
 
   doCheck = false;
 
-  cargoHash = "sha256-kzHMjrLCiiMLMTSozKq5jMWq3rGb+xsXhZoOuod7qGE=";
+  cargoHash = "sha256-b2BilwYCNTT1B3Cuia8N6ay6HRxf0Mkrkdu5qzksxoQ=";
 
   meta = {
     description = "cal(1) with more features and written in rust";

@@ -29,12 +29,12 @@ buildGoModule rec {
     mv $out/bin/{internal,butane}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translates human-readable Butane configs into machine-readable Ignition configs";
     mainProgram = "butane";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/coreos/butane";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       elijahcaine
       ruuda
     ];

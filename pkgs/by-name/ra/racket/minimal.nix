@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       }@config:
       assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
       writers.makeScriptWriter (
-        builtins.removeAttrs config [ "libraries" ]
+        removeAttrs config [ "libraries" ]
         // {
           interpreter = "${lib.getExe finalAttrs.finalPackage}";
         }

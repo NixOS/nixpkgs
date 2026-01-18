@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "drawing";
   version = "1.0.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "maoschanz";
@@ -58,6 +58,13 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py # patchShebangs requires executable file
     patchShebangs build-aux/meson/postinstall.py
+  '';
+
+  # Prevent double wrapping because of wrapGAppsHook3
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   strictDeps = false;

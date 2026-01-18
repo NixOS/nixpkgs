@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     hareHook
   ];
 
-  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   checkTarget = "check_local";
 

@@ -6,13 +6,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bikeshed";
-  version = "5.3.4";
+  version = "7.0.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QcypdeFIzEt2cx8PWWWhnMMhnc2oEWZUOm8kge4KJQY=";
+    hash = "sha256-s+NHSOHqJl89/sB5b3SWS+dT7WpsSv9tedoOfuDA2ls=";
   };
+
+  patches = [ ./remove-install-check.patch ];
 
   build-system = [ python3Packages.setuptools ];
 
@@ -59,7 +61,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "bikeshed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for anyone writing specifications that converts source files into actual specs";
     mainProgram = "bikeshed";
     longDescription = ''
@@ -70,7 +72,7 @@ python3Packages.buildPythonApplication rec {
       and many other W3C working groups, WHATWG, the C++ standards committee, and elsewhere!
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       matthiasbeyer
       hemera

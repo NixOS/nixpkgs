@@ -5,7 +5,7 @@
   fetchpatch2,
   cmake,
   doctest,
-  fmt_11,
+  fmt,
   perl,
   glib,
   luajit,
@@ -56,8 +56,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningEnable = [ "pie" ];
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     doctest
-    fmt_11
+    fmt
     glib
     openssl
     pcre
@@ -111,16 +109,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests.rspamd = nixosTests.rspamd;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rspamd.com";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avnik
       fpletz
-      globin
       lewo
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

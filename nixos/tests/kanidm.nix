@@ -8,7 +8,7 @@ let
   };
 
   # copy certs to store to work around mount namespacing
-  certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+  certsPath = pkgs.runCommand "snakeoil-certs" { } ''
     mkdir $out
     cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
     cp ${certs."${serverDomain}".key} $out/snakeoil.key
@@ -66,7 +66,7 @@ in
         };
         enablePam = true;
         unixSettings = {
-          pam_allowed_login_groups = [ "shell" ];
+          kanidm.pam_allowed_login_groups = [ "shell" ];
         };
       };
 

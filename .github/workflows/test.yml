@@ -11,7 +11,7 @@ permissions: {}
 
 jobs:
   prepare:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       merge-group: ${{ steps.files.outputs.merge-group }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
@@ -19,14 +19,21 @@ jobs:
       push: ${{ steps.files.outputs.push }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           sparse-checkout-cone-mode: true # default, for clarity
           sparse-checkout: |
             ci/github-script
       - id: prepare
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
+          retries: 10
+          # The default for this includes code 422, which happens regularly for us when comparing commits:
+          #   422 - Server Error: Sorry, this diff is taking too long to generate.
+          # Listing all other values from here to effectively remove 422:
+          #   https://github.com/octokit/plugin-retry.js/blob/9a2443746c350b3beedec35cf26e197ea318a261/src/index.ts#L14
+          retry-exempt-status-codes: 400,401,403,404
           script: |
             require('./ci/github-script/prepare.js')({
               github,
@@ -48,6 +55,7 @@ jobs:
             })).map(file => file.filename)
 
             if (files.some(file => [
+              '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
@@ -55,21 +63,17 @@ jobs:
 
             if (files.some(file => [
               '.github/actions/checkout/action.yml',
+              '.github/workflows/bot.yml',
               '.github/workflows/build.yml',
               '.github/workflows/check.yml',
               '.github/workflows/eval.yml',
-              '.github/workflows/labels.yml',
               '.github/workflows/lint.yml',
-              '.github/workflows/pr.yml',
-              '.github/workflows/reviewers.yml',
+              '.github/workflows/pull-request-target.yml',
               '.github/workflows/test.yml',
+              'ci/github-script/bot.js',
+              'ci/github-script/merge.js',
+              'ci/github-script/withRateLimit.js',
             ].includes(file))) core.setOutput('pr', true)
-
-            if (files.some(file => [
-              '.github/workflows/eval.yml',
-              '.github/workflows/push.yml',
-              '.github/workflows/test.yml',
-            ].includes(file))) core.setOutput('push', true)
 
   merge-group:
     if: needs.prepare.outputs.merge-group
@@ -78,10 +82,10 @@ jobs:
     uses: ./.github/workflows/merge-group.yml
     # Those are actually only used on the merge_group event, but will throw an error if not set.
     permissions:
+      pull-requests: write
       statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
+      artifact-prefix: mg-
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
 
@@ -89,26 +93,13 @@ jobs:
     if: needs.prepare.outputs.pr
     name: PR
     needs: [prepare]
-    uses: ./.github/workflows/pr.yml
+    uses: ./.github/workflows/pull-request-target.yml
     # Those are actually only used on the pull_request_target event, but will throw an error if not set.
     permissions:
       issues: write
       pull-requests: write
       statuses: write
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
-      OWNER_RO_APP_PRIVATE_KEY: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
-
-  push:
-    if: needs.prepare.outputs.push
-    name: Push
-    needs: [prepare]
-    uses: ./.github/workflows/push.yml
-    # Those are not actually used on the push or pull_request events, but will throw an error if not set.
-    permissions:
-      statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
-      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      artifact-prefix: pr-

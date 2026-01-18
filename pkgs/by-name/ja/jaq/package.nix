@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -72,7 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
-      figsoda
       siraben
     ];
     mainProgram = "jaq";

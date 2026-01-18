@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mommy";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "FWDekker";
     repo = "mommy";
     rev = "v${version}";
-    hash = "sha256-ZxGHoBRWeGdUelykDdR51HigB85IrvNyswWjCTaOLvg=";
+    hash = "sha256-G/8gUoJ6zKtSVlxrMYAkPX28SNG9XnLE72FZkqGhe+o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/FWDekker/mommy/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mommy";
   };
 }

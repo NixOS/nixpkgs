@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     inherit (python3.pkgs) h5py;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
@@ -141,9 +141,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = [ lib.maintainers.markuskowa ];
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

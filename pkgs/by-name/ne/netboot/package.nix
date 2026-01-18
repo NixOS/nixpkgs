@@ -34,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/nbdbtool";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

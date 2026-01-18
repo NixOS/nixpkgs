@@ -67,6 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     docutils
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.3)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/luastatus-stdout-wrapper \
       --prefix LUASTATUS : $out/bin/luastatus
@@ -78,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LUASTATUS : $out/bin/luastatus
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal status bar content generator";
     homepage = "https://github.com/shdown/luastatus";
     changelog = "https://github.com/shdown/luastatus/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.linux;
   };
 })

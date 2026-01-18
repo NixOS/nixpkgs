@@ -11,7 +11,7 @@
   libGL,
   libpng,
   openexr,
-  tbb,
+  onetbb,
   xorg,
   ilmbase,
   llvmPackages,
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     libGL
     libpng
     openexr
-    tbb
+    onetbb
     xorg.libX11
     xorg.libXcursor
     xorg.libXext
@@ -70,15 +70,20 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
+  postPatch = ''
+    substituteInPlace extern/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "2D and 3D geometric modelling programming language for creating art with maths";
     homepage = "https://codeberg.org/doug-moen/curv";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "curv";
   };
 }

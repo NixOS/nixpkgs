@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -11,7 +10,7 @@
   fastdtw,
   numpy,
   psutil,
-  qiskit-terra,
+  qiskit,
   scikit-learn,
   sparse,
   torch,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   version = "0.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
@@ -43,7 +40,7 @@ buildPythonPackage rec {
     numpy
     psutil
     torch
-    qiskit-terra
+    qiskit
     scikit-learn
     sparse
   ];
@@ -83,12 +80,13 @@ buildPythonPackage rec {
     "test_qgan_training"
   ];
 
-  meta = with lib; {
+  meta = {
+    broken = true; # incompatible with qiskit >= 2.0 (see https://github.com/Qiskit/qiskit-machine-learning/issues/934)
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

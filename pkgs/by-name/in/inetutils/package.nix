@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
+
+    ./tests-libls.sh.patch
   ];
 
   strictDeps = true;
@@ -69,21 +71,23 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.ping <<EOF
-    $out/bin/ping {
+    abi <abi/4.0>,
+    include <tunables/global>
+    profile $out/bin/ping {
       include <abstractions/base>
       include <abstractions/consoles>
       include <abstractions/nameservice>
       include "${apparmorRulesFromClosure { name = "ping"; } [ stdenv.cc.libc ]}"
-      include <local/bin.ping>
       capability net_raw,
       network inet raw,
       network inet6 raw,
       mr $out/bin/ping,
+      include if exists <local/bin.ping>
     }
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of common network programs";
 
     longDescription = ''
@@ -94,10 +98,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/inetutils/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
 
     /**
       The `logger` binary from `util-linux` is preferred over `inetutils`.

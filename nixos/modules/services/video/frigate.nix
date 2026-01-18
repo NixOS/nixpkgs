@@ -53,6 +53,7 @@ let
         cp ${configFileUnchecked} $out
         export CONFIG_FILE=$out
         export PYTHONPATH=${cfg.package.pythonPath}
+        ${cfg.preCheckConfig}
         ${cfg.package.python.interpreter} -m frigate --validate-config || error
       '';
   configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
@@ -205,6 +206,16 @@ in
       '';
       description = ''
         Whether to check the configuration at build time.
+      '';
+    };
+
+    preCheckConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        This script gets run before the config is checked. It can be used to,
+        e.g., set environment variables needed or transform the config
+        (available as `$out`) to make it checkable in the sandbox.
       '';
     };
 
@@ -578,7 +589,7 @@ in
               add_header Cache-Control "public";
             '';
           };
-          "~ ^/.*-([A-Za-z0-9]+)\.webmanifest$" = {
+          "~ ^/.*-([A-Za-z0-9]+)\\.webmanifest$" = {
             root = cfg.package.web;
             extraConfig = ''
               access_log off;
@@ -637,6 +648,7 @@ in
         '';
       };
       appendConfig = ''
+        # frigate
         rtmp {
             server {
                 listen 1935;
@@ -653,6 +665,7 @@ in
         }
       '';
       appendHttpConfig = ''
+        # frigate
         map $sent_http_content_type $should_not_cache {
           'application/json' 0;
           default 1;

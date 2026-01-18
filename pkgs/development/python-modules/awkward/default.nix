@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.8.5";
+  version = "2.8.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-vcVJ9dLiZ3wfZU989slefSJoD2hKlRCwxRALvRGLZPA=";
+    hash = "sha256-76DeL/KIna8Hd9eukCzuRXKO+awkbpc4trCeKTSfGmA=";
   };
 
   build-system = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Need to be run on a GPU platform.
-    "tests-cuda"
+    "tests-cuda/*"
   ];
 
   meta = {

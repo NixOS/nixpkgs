@@ -13,20 +13,20 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "12.5.3";
+  version = "13.1.1";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-4XBbpjxcC5SWLGz0SLKF70G6Gk5bKqKvEwD/My7siUA=";
+    hash = "sha256-c/K8jAWwul0FQGYxEbuhQnqXe5+R57TzOXwWUv68M1Q=";
   };
 
   sourceRoot = "${src.name}/Source";
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -57,8 +57,6 @@ buildDotnetModule rec {
   postInstall = ''
     install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/libation.svg
     install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/libation.desktop
-    substituteInPlace $out/share/applications/libation.desktop \
-      --replace-fail "/usr/bin/libation" "libation"
   '';
 
   # wrap manually, because we need lower case executables
@@ -78,6 +76,9 @@ buildDotnetModule rec {
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Plus;
     mainProgram = "libation";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      tebriel
+    ];
   };
 }

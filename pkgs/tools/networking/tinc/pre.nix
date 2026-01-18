@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) tinc; };
 
-  meta = with lib; {
+  meta = {
     description = "VPN daemon with full mesh routing";
     longDescription = ''
       tinc is a Virtual Private Network (VPN) daemon that uses tunnelling and
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
       authentication, compression and ethernet bridging.
     '';
     homepage = "http://www.tinc-vpn.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lassulus
       mic92
     ];

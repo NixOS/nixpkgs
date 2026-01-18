@@ -35,24 +35,24 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "9";
+  version = "13";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-O211trFJ9tQRVdlztp5ER0Ej6SIrCDn45mRGns7NV90=";
+    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
   frontend = buildNpmPackage {
-    name = "grayjay-frontend";
+    pname = "grayjay-frontend";
     inherit version src;
 
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-pTEbMSAJwTY6ZRriPWfBFnRHSYufSsD0d+hWGz35xFM=";
+    npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
 
     installPhase = ''
       runHook preInstall
@@ -124,7 +124,7 @@ buildDotnetModule (finalAttrs: {
       targetPackages
       ;
   };
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   executables = [ "Grayjay" ];
 
@@ -181,10 +181,10 @@ buildDotnetModule (finalAttrs: {
         "--subpackage"
         "frontend"
         "--url"
-        "https://github.com/futo-org/Grayjay.Desktop"
+        "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
       ];
     })
-    (finalAttrs.passthru.fetch-deps)
+    finalAttrs.passthru.fetch-deps
   ];
 
   meta = {
@@ -198,7 +198,10 @@ buildDotnetModule (finalAttrs: {
     '';
     homepage = "https://grayjay.app/desktop/";
     license = lib.licenses.sfl;
-    maintainers = with lib.maintainers; [ samfundev ];
+    maintainers = with lib.maintainers; [
+      kruziikrel13
+      samfundev
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };

@@ -4,7 +4,6 @@
   fetchPypi,
   astropy,
   pillow,
-  pythonOlder,
   pytestCheckHook,
   pytest-astropy,
   requests,
@@ -15,14 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.7";
+  version = "1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pvrZ79QQcy0RPlXfQ7AgHJrLLinydTLHG9pW84zmIyA=";
+    hash = "sha256-ZvSIn9jjnd30b+SYYV02FW1JT2or7FOIa68cLFQyKGE=";
   };
 
   build-system = [
@@ -49,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Astropy affiliated package for accessing Virtual Observatory data and services";
     homepage = "https://github.com/astropy/pyvo";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

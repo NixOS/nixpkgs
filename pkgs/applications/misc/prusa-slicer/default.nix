@@ -28,7 +28,7 @@
   opencascade-occt_7_6_1,
   openvdb,
   qhull,
-  tbb_2022,
+  onetbb,
   wxGTK32,
   xorg,
   libbgcode,
@@ -56,19 +56,18 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2022 = openvdb.override { tbb = tbb_2022; };
   wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-B2uHrh09xKehmxnk3I4MHIjBfB/pGgFXC6R5k10JoJY=";
+    hash = "sha256-1ilgr9RaIoWvj0TDVc20XjjUUcNtnicR7KlE0ii3GQE=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -124,9 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
     nanosvg-fltk
     nlopt
     opencascade-override'
-    openvdb_tbb_2022
+    openvdb
     qhull
-    tbb_2022
+    onetbb
     wxGTK-override'
     xorg.libX11
     libbgcode
@@ -188,6 +187,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
     "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
+    # there is many different min versions set accross different
+    # Find*.cmake files, substituting them all is not viable
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   postInstall = ''

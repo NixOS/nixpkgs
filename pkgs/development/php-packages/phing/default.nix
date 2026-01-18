@@ -17,7 +17,7 @@
       hash = "sha256-gY6ocmkd7eJIMaBrewfxYL7gTr+1qNHTkuAp+w9ApUU=";
     };
 
-    vendorHash = "sha256-3frpoQzHtJA2/jJpZT+yIRatEwiY6LIUGzEZBa8hXbM=";
+    vendorHash = "sha256-yfGfMAQGlXnCoww4rtynknL7qDjcQFEM8p8FbsIqJZU=";
 
     nativeInstallCheckInputs = [
       versionCheckHook

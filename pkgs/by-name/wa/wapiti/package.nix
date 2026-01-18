@@ -2,22 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  php,
   python3Packages,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.2.5";
+  version = "3.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = version;
-    hash = "sha256-Sof7ZaCeIJ6Hsut0uK9yPcunXArexpzIbSbksZpHqVU=";
+    hash = "sha256-/w5t/BcMPewl0Wp6vx9kZamqHArb7+fnfktfEIUDL8Y=";
   };
 
   pythonRelaxDeps = true;
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication rec {
     mitmproxy
     msgpack
     packaging
+    playwright
     pyasn1
     sqlalchemy
     tld
@@ -63,10 +65,10 @@ python3Packages.buildPythonApplication rec {
       pytestCheckHook
     ]
     ++ [
+      php
       versionCheckHook
       writableTmpDirAsHomeHook
     ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tests requires network access
@@ -94,6 +96,7 @@ python3Packages.buildPythonApplication rec {
     "test_meta_detection"
     "test_multi_detection"
     "test_no_crash"
+    "test_ns_takeover"
     "test_options"
     "test_out_of_band"
     "test_partial_tag_name_escape"
@@ -168,7 +171,7 @@ python3Packages.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${src.tag}/doc/ChangeLog_Wapiti";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wapiti";

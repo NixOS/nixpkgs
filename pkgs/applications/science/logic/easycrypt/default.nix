@@ -4,25 +4,26 @@
   darwin,
   fetchFromGitHub,
   ocamlPackages,
+  dune,
   why3,
   python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";
-  version = "2025.08";
+  version = "2025.11";
 
   src = fetchFromGitHub {
     owner = "easycrypt";
     repo = "easycrypt";
     tag = "r${version}";
-    hash = "sha256-WUms6hh7T5/gxRLFvbJQiT1ErLr8KFilFNOMTT/fIyY=";
+    hash = "sha256-BLyC8AB075Nyhb5heIKVkxnWWt4Zn8Doo10ShsACJ4g=";
   };
 
   nativeBuildInputs =
     with ocamlPackages;
     [
-      dune_3
+      dune
       findlib
       menhir
       ocaml
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     batteries
     dune-build-info
     dune-site
-    inifiles
+    pcre2
     why3
     yojson
     zarith

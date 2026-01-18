@@ -9,7 +9,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sigstore,
   writableTmpDirAsHomeHook,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aiogithubapi";
   version = "25.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ludeeus";

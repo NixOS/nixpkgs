@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kafkactl";
-  version = "5.12.1";
+  version = "5.17.0";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = "kafkactl";
     tag = "v${version}";
-    hash = "sha256-f4Y8JOXw4bWW3fCnRZ02AE2HcdgeEfUlZgO7VoZeJ6k=";
+    hash = "sha256-nZkIAlvQ3jsXWJXLYbaZWJYOgxF7okRY//BZdGPNU0s=";
   };
 
-  vendorHash = "sha256-sVvEHMXpjas+l93IZfAChDX5eDm0lkUNCr5r1JaVQ9I=";
+  vendorHash = "sha256-oiN1nMln8oXy/e7gt0JtynCQxcxi0rwcdVthaWhjBWQ=";
 
   doCheck = false;
 
@@ -33,6 +33,6 @@ buildGoModule rec {
       - directly access kafka clusters inside your kubernetes cluster
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ grburst ];
+    maintainers = [ ];
   };
 }

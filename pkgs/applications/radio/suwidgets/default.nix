@@ -42,12 +42,12 @@ stdenv.mkDerivation {
     "SuWidgetsLib.pro"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sigutils-related widgets";
     homepage = "https://github.com/BatchDrake/SuWidgets";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       polygon
       oxapentane
     ];

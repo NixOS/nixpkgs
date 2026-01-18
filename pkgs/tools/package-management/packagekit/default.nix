@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.3.1";
+  version = "1.3.2";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "PackageKit";
     repo = "PackageKit";
     rev = "v${version}";
-    hash = "sha256-8sgvD6pZ2n4Du44kTPsvYtSYpkMKCpfxeSrGjWeSw50=";
+    hash = "sha256-oQuJpn9G/V8CrrEs2agbKVS9xZnS1MgHa8B8P1nFmiw=";
   };
 
   buildInputs = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     nixos-test = nixosTests.packagekit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "System to facilitate installing and updating packages";
     longDescription = ''
       PackageKit is a system designed to make installing and updating software
@@ -116,8 +116,8 @@ stdenv.mkDerivation rec {
       mode package managers.
     '';
     homepage = "https://github.com/PackageKit/PackageKit";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -166,7 +166,7 @@ class GitilesRepo(Repo):
         # (making it count the compressed instead of uncompressed size)
         # rather than complying with it.
         if url == "https://chromium.googlesource.com/chromium/src.git":
-            self.args["postFetch"] = "rm -r $out/third_party/blink/web_tests; "
+            self.args["postFetch"] = "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); "
             self.args["postFetch"] += "rm -r $out/content/test/data; "
             self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "

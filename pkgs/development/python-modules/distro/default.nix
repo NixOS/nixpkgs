@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "distro";
   version = "1.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "distro" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nir0s/distro";
     description = "Linux Distribution - a Linux OS platform information API";
     mainProgram = "distro";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

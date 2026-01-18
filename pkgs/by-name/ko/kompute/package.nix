@@ -6,7 +6,7 @@
   cmake,
   vulkan-headers,
   vulkan-loader,
-  fmt_10,
+  fmt,
   spdlog,
   glslang,
   ninja,
@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/KomputeProject/kompute/commit/299b11fb4b8a7607c5d2c27e2735f26b06ae8e29.patch";
       sha256 = "sha256-JuoTQ+VjIdyF+I1IcT1ofbBjRS0Ibm2w6F2jrRJlx40=";
     })
+
+    # Fix the build with fmt ≥ 11.
+    (fetchpatch {
+      url = "https://github.com/KomputeProject/kompute/commit/e7985da9950bf75f00799f73b0e1d4ea7c24f0b2.patch";
+      hash = "sha256-sZf1lazaGaiRzry0Y+KE6z3FKm79gVKoSFyW0GN3TMM=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -50,7 +56,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
   buildInputs = [
-    fmt_10
+    fmt
     spdlog
   ];
   propagatedBuildInputs = [
@@ -59,7 +65,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
-  meta = with lib; {
+  meta = {
     description = "General purpose GPU compute framework built on Vulkan";
     longDescription = ''
       General purpose GPU compute framework built on Vulkan to
@@ -69,8 +75,8 @@ stdenv.mkDerivation rec {
       processing usecases. Backed by the Linux Foundation"
     '';
     homepage = "https://kompute.cc/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ atila ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ atila ];
+    platforms = lib.platforms.linux;
   };
 }

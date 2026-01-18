@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.26.1";
+  version = "0.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-kjKsujDxX2+X6omP9qDWc2JI8bxQlOSVOcEnfACoL2I=";
+    hash = "sha256-p4oyPlrz+fsAj3PXQnt3HOG48bkWbbG4BVU8pm2P2aU=";
   };
 
   build-system = [
@@ -133,6 +133,10 @@ buildPythonPackage rec {
     # KeyError: 'dask'
     "tests/dask/test_dask.py::test_series_schema"
     "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
+
+    # TypeError: memtable() got an unexpected keyword argument 'name'
+    # https://github.com/unionai-oss/pandera/issues/2154
+    "tests/ibis/test_ibis_container.py"
   ];
 
   disabledTests = [

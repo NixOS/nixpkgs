@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.14.1";
+  version = "3.15.4";
 
   src = fetchurl {
-    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    hash = "sha256-QXuto6Ydbt/wTNSJBHWstv/SomhWl40EbVSRfR0N8j0=";
+    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/UnityHubSetup-${version}-amd64.deb";
+    hash = "sha256-O8rR4gLToJgUe8EsTvsk1AShGAAsgU4cy1+UITXiVm8=";
   };
 
   nativeBuildInputs = [

@@ -6,6 +6,7 @@
   git,
   scriv,
   testers,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,6 +18,14 @@ python3.pkgs.buildPythonApplication rec {
     inherit pname version;
     hash = "sha256-fBqL5jUdA2kuXnV4Te6g2PEbLJD5G+GLD7OjdVVbUl4=";
   };
+
+  patches = [
+    # fix tests by removing deprecated Click parameter from fixture
+    (fetchpatch {
+      url = "https://github.com/nedbat/scriv/commit/04ac45da9e1adb24a95ad9643099fe537b3790fd.diff";
+      hash = "sha256-Gle3zWC/WypGHsKmVlqedRAZVWsBjGpzMq3uKuG9+SY=";
+    })
+  ];
 
   build-system = with python3.pkgs; [ setuptools ];
 

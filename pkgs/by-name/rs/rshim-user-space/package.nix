@@ -4,6 +4,7 @@
   bashNonInteractive,
   coreutils,
   fetchFromGitHub,
+  fetchpatch2,
   fuse,
   gawk,
   gnugrep,
@@ -16,21 +17,31 @@
   procps,
   pv,
   stdenv,
-  which,
+  systemd,
   util-linux,
+  which,
   withBfbInstall ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.4.4";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
     rev = "rshim-${version}";
-    hash = "sha256-w2+1tUDWYmgDC0ycWGdtVfdbkZCmtvwXm47qK5PCCfg=";
+    hash = "sha256-dXrReU6Wx8t6ObrrF3MeUWdFBSfn6tyQqQdGBAZsvDg=";
   };
+
+  # came up shortly after 2.5.7 release, remove with next update
+  patches = [
+    (fetchpatch2 {
+      name = "rshim-fix-bfb-install.patch";
+      url = "https://github.com/Mellanox/rshim-user-space/commit/0b2b17eeb04d80b7efb20aa2a9dc24759680aaea.patch";
+      hash = "sha256-JqnCGWM6Wjg+WFQhqHv6h4VbawyCf75L4wfd7L+n7po=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -40,9 +51,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
 
   buildInputs = [
-    pciutils
-    libusb1
     fuse
+    libusb1
+    pciutils
+    systemd
   ];
 
   prePatch = ''
@@ -73,13 +85,14 @@ stdenv.mkDerivation rec {
           pciutils
           procps
           pv
+          systemd
           util-linux
           which
         ]
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-space rshim driver for the BlueField SoC";
     longDescription = ''
       The rshim driver provides a way to access the rshim resources on the
@@ -89,9 +102,9 @@ stdenv.mkDerivation rec {
       target and provides a way to access the internal rshim registers.
     '';
     homepage = "https://github.com/Mellanox/rshim-user-space";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thillux
     ];
   };

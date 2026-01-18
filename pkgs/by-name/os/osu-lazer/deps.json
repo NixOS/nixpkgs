@@ -571,23 +571,23 @@
   },
   {
     "pname": "OpenTabletDriver",
-    "version": "0.6.5.1",
-    "hash": "sha256-/awjEXQ2F8Zoj/2xZJnSg8pBP6hN0zet0lycALfjVoM="
+    "version": "0.6.6.2",
+    "hash": "sha256-y8qI1EPIxKky0M4wDwvo0EEnkXGKNa5bmclPlQGvCBY="
   },
   {
     "pname": "OpenTabletDriver.Configurations",
-    "version": "0.6.5.1",
-    "hash": "sha256-4NFcoDlDrNKnaV+Vz6nGKGhZzxPB6ykEAiauHrDRfGU="
+    "version": "0.6.6.2",
+    "hash": "sha256-tsVq8FRk472eqMhRjyxDZlu8R0M4x7IyLcBVFnDLpF8="
   },
   {
     "pname": "OpenTabletDriver.Native",
-    "version": "0.6.5.1",
-    "hash": "sha256-04Oh5wYEj1qRq6RIoSM9bDTzwFKJS3LKo9d25FAyseI="
+    "version": "0.6.6.2",
+    "hash": "sha256-okPhvAieIc+4ojQK9vd9kWQcAIXhcKZBl5D3eJ4gQxc="
   },
   {
     "pname": "OpenTabletDriver.Plugin",
-    "version": "0.6.5.1",
-    "hash": "sha256-9N8+hq2ZoAiZlU6pk214zu3e4l50s40bgYUK3Aw7w7k="
+    "version": "0.6.6.2",
+    "hash": "sha256-EcrM+3NeTrPnIhNGPqNm2LzUTxdDGRC1BwyaCYlrUYE="
   },
   {
     "pname": "PolySharp",
@@ -596,13 +596,13 @@
   },
   {
     "pname": "ppy.LocalisationAnalyser",
-    "version": "2024.802.0",
-    "hash": "sha256-vyRWbdPUp5n8hJPJReU9LUy2o/bwwLT1po9f2M16tMA="
+    "version": "2025.1208.0",
+    "hash": "sha256-klogAaNxpEVJKd1NcySgTUwv5WwrvaUXBRypj5wKX5Y="
   },
   {
     "pname": "ppy.LocalisationAnalyser.Tools",
-    "version": "2024.802.0",
-    "hash": "sha256-bniBSY8rS005OHO/ixn2NFM0/KIMiawHyMSXhlAEqwc="
+    "version": "2025.1208.0",
+    "hash": "sha256-diVAckS1zNyVE1UGkbiu9jH/25j/c+Ad5XC3EjdLDsg="
   },
   {
     "pname": "ppy.ManagedBass",
@@ -626,8 +626,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2025.908.0",
-    "hash": "sha256-ywGPEtZqgeqgG7LJ459FfRy+JtCw9zChuYUHHY4QIcU="
+    "version": "2026.102.0",
+    "hash": "sha256-hmZfLliFuninJkIFml+hRSzpfp+q5h98i7yzTUaH/R8="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -636,13 +636,13 @@
   },
   {
     "pname": "ppy.osu.Framework.SourceGeneration",
-    "version": "2024.1128.0",
-    "hash": "sha256-7ovye7QXFeFr68IxmwIAWA9Fgm686NTYVTUXGQWtKPM="
+    "version": "2025.1121.1",
+    "hash": "sha256-B4uPnJYYtQiuqAEDRbCtW4jJboPE0sRVSfle8eZGYn4="
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2025.911.0",
-    "hash": "sha256-N7CPME+A+tPpojOe7HN7Vz49VwtcmRKCJK4IIdY0kFs="
+    "version": "2025.1218.0",
+    "hash": "sha256-ZtCdeZpFJd4t7PAf8uVrqMazyifi+MiTQHO/c/9nHP8="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -656,8 +656,8 @@
   },
   {
     "pname": "ppy.SDL3-CS",
-    "version": "2025.828.0",
-    "hash": "sha256-3+ShJIv4TJuzPAIF7uiwOXVyb+5EpCAuIz1Ff0dPdhA="
+    "version": "2025.1205.0",
+    "hash": "sha256-Mu5kn/yC7afo3+Nz755UzspUmOOEKtZ6/N4ENCzshtM="
   },
   {
     "pname": "ppy.Veldrid",

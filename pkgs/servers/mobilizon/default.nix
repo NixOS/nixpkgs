@@ -10,7 +10,6 @@
   nixosTests,
   nixfmt,
   mobilizon-frontend,
-  ...
 }:
 
 let
@@ -19,6 +18,9 @@ let
 in
 mixRelease rec {
   inherit (common) pname version src;
+
+  # A typo that is a build failure on elixir 1.18
+  patches = [ ./alias.patch ];
 
   nativeBuildInputs = [
     git
@@ -47,16 +49,12 @@ mixRelease rec {
             repo = "cldr";
             rev = "v${old.version}";
             hash =
-              assert old.version == "2.37.5";
-              "sha256-T5Qvuo+xPwpgBsqHNZYnTCA4loToeBn1LKTMsDcCdYs=";
+              assert old.version == "2.44.1";
+              "sha256-5XLPQYDW9yV0ZkWbyiB2s213GTccFjdqckBmx09n4eE=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
           '';
-        });
-        # Upstream issue: https://github.com/bryanjos/geo_postgis/pull/87
-        geo_postgis = prev.geo_postgis.overrideAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ [ final.ecto ];
         });
 
         # The remainder are Git dependencies (and their deps) that are not supported by mix2nix currently.
@@ -76,12 +74,12 @@ mixRelease rec {
         };
         icalendar = buildMix rec {
           name = "icalendar";
-          version = "unstable-2022-04-10";
+          version = "1.1.2";
           src = fetchFromGitHub {
-            owner = "tcitworld";
+            owner = "mobilizon-tools";
             repo = name;
-            rev = "1033d922c82a7223db0ec138e2316557b70ff49f";
-            hash = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
+            rev = "b8fc5360b1755f60f2768d40f6aca949ef598a00";
+            hash = "sha256-UAdlYTRt1itkR/dmC2/AM89MlJIABJw9N0XfYR6IcVI=";
           };
           beamDeps = with final; [
             mix_test_watch
@@ -150,12 +148,12 @@ mixRelease rec {
     elixirPackage = beamPackages.elixir;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
     homepage = "https://joinmobilizon.org/";
     changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       minijackson
       erictapen
     ];

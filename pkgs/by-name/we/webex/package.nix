@@ -50,18 +50,18 @@
   xcbutilrenderutil,
   xcbutilwm,
   p7zip,
-  tbb,
+  onetbb,
   wayland,
   libXScrnSaver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "45.6.2.32823";
+  version = "45.10.1.33646";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250725151734/Webex_ubuntu.7z";
-    sha256 = "72e9693d7c1c09ebf2c93c5e29e2b52a012eaf3ac108d7759d66be500c528b3b";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20251205014600/Webex_ubuntu.7z";
+    sha256 = "59894d56ed2d55df1ca908d8b6993c208d685f6e77b8c315e370471e616cfd8d";
   };
 
   nativeBuildInputs = [
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    tbb
+    onetbb
     wayland
   ];
 
@@ -172,11 +172,11 @@ stdenv.mkDerivation rec {
     update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/by-name/we/webex/package.nix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one app to call, meet, message, and get work done";
     homepage = "https://webex.com/";
     downloadPage = "https://www.webex.com/downloads.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ uvnikita ];
     platforms = [ "x86_64-linux" ];
   };

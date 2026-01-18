@@ -38,7 +38,7 @@ let
       runHook postInstall
     '';
 
-    passthru.updatescript = nix-update-script { };
+    passthru.updateScript = nix-update-script { };
   };
 in
 buildGoModule rec {
@@ -60,14 +60,14 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
-  passthru.updatescript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
     homepage = "https://github.com/AnalogJ/scrutiny";
     changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "scrutiny";
     platforms = lib.platforms.linux;
   };

@@ -4,35 +4,37 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatch-vcs,
+  hatchling,
+  markdown,
+  mkdocs,
   pydantic,
+  pymdown-extensions,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich-rst,
   rich,
+  sphinx,
+  syrupy,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "3.24.0";
+  version = "4.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-gJflZBH3xCGKffKGt7y1xGXQR8C1wK19LnbunZ0kbAc=";
+    hash = "sha256-kp/mnqa2difEA3s1jtXF1fDluQhLCJ4f6rFRruRbE9k=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -45,28 +47,41 @@ buildPythonPackage rec {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
+    docs = [ sphinx ];
+    mkdocs = [
+      mkdocs
+      markdown
+      pymdown-extensions
+    ];
   };
 
   nativeCheckInputs = [
     pydantic
     pytest-mock
     pytestCheckHook
-    pyyaml
+    syrupy
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Assertion error
-    "test_pydantic_error_msg"
+    # Test requires bash
+    "test_positional_not_treated_as_command"
+    # Building docs
+    "build_succeeds"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Tests requires sphinx
+    "tests/test_sphinx_ext.py"
+  ];
+
+  meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
     changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

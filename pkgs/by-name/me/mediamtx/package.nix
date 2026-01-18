@@ -15,16 +15,16 @@ in
 buildGoModule (finalAttrs: {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.15.0";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = "mediamtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-omeaOAhH4adNpA0VXxcZkre3tGZUwHxBrIT85X3D+n0=";
+    hash = "sha256-alZn6o8S6HWlYdsziptsqqSZKdfYHGB1VhPGhTJNbqQ=";
   };
 
-  vendorHash = "sha256-YSH8cu7+LIsJ3/o2FYBYlnc6adORJdzhCqQVH0252Ec=";
+  vendorHash = "sha256-/k0fIxL6x1X1kDNuMVWb40nkXbl+IakSYUgugd8vlLk=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js

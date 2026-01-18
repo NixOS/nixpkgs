@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.2";
+  version = "0.18.4.4";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-ibwcvEHlJkMjXoJQMPVrlir5irdclJsmV7aBB4/m190=";
+    hash = "sha256-NH15PKlkm9Hpt25iIuUQmhDg+X3Qo+yUAbDY4LNnZdM=";
   };
 
   patches = [
@@ -97,8 +97,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
   ++ lib.optional trezorSupport [
     "-DUSE_DEVICE_TREZOR=ON"
-    # fix build on recent gcc versions
-    "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];
 
   outputs = [

@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "refs/tags/v${libflux_version}";
+      tag = "v${libflux_version}";
       hash = "sha256-v9MUR+PcxAus91FiHYrMN9MbNOTWewh7MT6/t/QWQcM=";
     };
     patches = [
@@ -73,7 +73,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "kapacitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vxaLfJq0NFAJst0/AEhNJUl9dAaZY3blZAFthseMSX0=";
   };
 

@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ndonfris";
     name = "fish-lsp";
-    version = "0.1.14";
-    hash = "sha256-1OUVZJ5TTeR2nChRPSU5ViLAaUAovtqOk9kq408iW84=";
+    version = "0.1.18";
+    hash = "sha256-skNFNiVx7g/lpsxegTync9yEjt+h/Eb+5TnByeLXSPY=";
   };
 
   meta = {

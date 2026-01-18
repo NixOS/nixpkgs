@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "deepl";
-  version = "1.22.0";
-  format = "pyproject";
+  version = "1.25.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6wlWjlmW3/aiwxjUCiK9Z9P88E8uwrGvmFuNS2zwlrY=";
+    hash = "sha256-nFvmNQVug6czSECorez9lixcuFV58hsVwQZD6dd8I4o=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language translation API that allows other computer programs to send texts and documents to DeepL's servers and receive high-quality translations";
     mainProgram = "deepl";
     homepage = "https://github.com/DeepLcom/deepl-python";
     changelog = "https://github.com/DeepLcom/deepl-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MaskedBelgian ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MaskedBelgian ];
   };
 }

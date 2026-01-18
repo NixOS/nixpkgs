@@ -23,7 +23,7 @@ let
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
   };
 in
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "cle";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
   };
 
@@ -79,10 +79,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Python loader for many binary formats";
     homepage = "https://github.com/angr/cle";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

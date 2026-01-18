@@ -3,24 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   cffi,
   setuptools,
   ukkonen,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "identify";
-  version = "2.6.14";
+  version = "2.6.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "identify";
-    tag = "v${version}";
-    hash = "sha256-l486vlvhDEm9f11z1FDB9AxAbQ+jgHvGppn4CTc/dLk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+iLIU2NfKogFAdbAXXER3G7cDyvcey9pR+0HifQZoh8=";
   };
 
   build-system = [ setuptools ];
@@ -40,4 +37,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "identify-cli";
   };
-}
+})

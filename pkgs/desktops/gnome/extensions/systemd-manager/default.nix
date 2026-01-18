@@ -55,11 +55,11 @@ stdenvNoCC.mkDerivation rec {
     extensionPortalSlug = "systemd-manager";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Shell extension to manage systemd services";
     homepage = "https://github.com/hardpixel/systemd-manager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       linsui
       doronbehar
     ];

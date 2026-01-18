@@ -7,6 +7,7 @@
   wrapGAppsHook3,
   cairo,
   dblatex,
+  ghostscript,
   gnumake,
   gobject-introspection,
   graphicsmagick,
@@ -23,6 +24,33 @@
   pkg-config,
   poppler,
 }:
+let
+  perlWithPackages = perl.withPackages (
+    p: with p; [
+      ArchiveZip
+      Cairo
+      CairoGObject
+      DBDSQLite
+      DBI
+      EmailAddress
+      EmailMIME
+      EmailSender
+      EmailSimple
+      Glib
+      GlibObjectIntrospection
+      Gtk3
+      HashMerge
+      LocaleGettext
+      NetCUPS
+      OpenOfficeOODoc
+      PerlMagick
+      TextCSV
+      XMLParser
+      XMLSimple
+      XMLWriter
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "auto-multiple-choice";
   version = "1.7.0";
@@ -36,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   makeFlags = [
-    "PERLPATH=${perl}/bin/perl"
+    "PERLPATH=${perlWithPackages}/bin/perl"
     # We *need* to set DESTDIR as empty and use absolute paths below,
     # because the Makefile ignores PREFIX and MODSDIR is required to
     # be an absolute path to not trigger "portable distribution" check
@@ -72,30 +100,16 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${
-      with perlPackages;
-      makeFullPerlPath [
-        ArchiveZip
-        DBDSQLite
-        Cairo
-        CairoGObject
-        DBI
-        Glib
-        GlibObjectIntrospection
-        Gtk3
-        HashMerge
-        LocaleGettext
-        OpenOfficeOODoc
-        PerlMagick
-        TextCSV
-        XMLParser
-        XMLSimple
-        XMLWriter
-      ]
-    }:"$out/share/perl5 \
+    --prefix PERL5LIB : $out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-    --prefix PATH : "$out/bin" \
-    --set TEXINPUTS ":.:$out/tex/latex"
+    --prefix PATH : ${
+      lib.makeBinPath [
+        (placeholder "out")
+        ghostscript
+        netpbm
+      ]
+    } \
+    --set TEXINPUTS ".:$out/tex/latex:"
   '';
 
   nativeBuildInputs = [
@@ -121,31 +135,15 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
     pango
     poppler
-  ]
-  ++ (with perlPackages; [
-    perl
-    ArchiveZip
-    Cairo
-    CairoGObject
-    DBDSQLite
-    DBI
-    Glib
-    GlibObjectIntrospection
-    Gtk3
-    LocaleGettext
-    PerlMagick
-    TextCSV
-    XMLParser
-    XMLSimple
-    XMLWriter
-  ]);
+    perlWithPackages
+  ];
 
   passthru = {
     tlType = "run";
     pkgs = [ finalAttrs.finalPackage ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create and manage multiple choice questionnaires with automated marking";
     mainProgram = "auto-multiple-choice";
     longDescription = ''
@@ -174,8 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.auto-multiple-choice.net/";
     changelog = "https://gitlab.com/jojo_boulix/auto-multiple-choice/-/blob/master/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.thblt ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.thblt ];
+    platforms = lib.platforms.all;
   };
 })

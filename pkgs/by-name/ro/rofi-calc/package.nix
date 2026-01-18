@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-calc";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "rofi-calc";
     rev = "v${version}";
-    sha256 = "sha256-iTLi76GinRASawPSWAqmxSwLZPGvHesarHNoqO4m4dM=";
+    sha256 = "sha256-/UKOyJfCsV/+kZDndHZmrPdE2MjVlQWSiWQRIUPGz/I=";
   };
 
   nativeBuildInputs = [
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
       "'$out/lib/rofi'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Do live calculations in rofi";
     homepage = "https://github.com/svenstaro/rofi-calc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
+    platforms = with lib.platforms; linux;
   };
 }

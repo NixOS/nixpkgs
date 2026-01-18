@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "duperemove";
   };
 }

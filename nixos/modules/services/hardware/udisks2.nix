@@ -25,7 +25,7 @@ in
 
       enable = lib.mkEnableOption "udisks2, a DBus service that allows applications to query and manipulate storage devices";
 
-      package = lib.mkPackageOption pkgs "udisks2" { };
+      package = lib.mkPackageOption pkgs "udisks" { };
 
       mountOnMedia = lib.mkOption {
         type = lib.types.bool;

@@ -5,7 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
+  fetchpatch2,
   asn1crypto,
   cffi,
   cryptography,
@@ -27,16 +27,12 @@ buildPythonPackage rec {
   version = "2.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
   };
 
   patches = [
-    # Fix hardcoded `fapi-config.json` configuration path
-    ./fapi-config.patch
     # libtpms (underneath swtpm) bumped the TPM revision
     # https://github.com/tpm2-software/tpm2-pytss/pull/593
     (fetchpatch {
@@ -48,6 +44,22 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
       hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
+    })
+    # Properly restore environment variables upon exit from
+    # FAPIConfig context. Accepted into upstream, not yet released.
+    (fetchpatch2 {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/afdee627d0639eb05711a2191f2f76e460793da9.patch?full_index=1";
+      hash = "sha256-Y6drcBg4gnbSvnCGw69b42Q/QfLI3u56BGRUEkpdB0M=";
+    })
+    # Fix build with gcc15 by using c99 for preprocessing
+    # The first patch is needed to apply the second; it doesn't affect us
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/55d28b259f1a68f60c937ea8be7815685d32757f.patch";
+      hash = "sha256-sGxUyQ2W2Jl9ROSt1w0E0dVTgFPAmYWlNgcpHcTVv90=";
+    })
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/61d00b4dcca131b3f03f674ceabf4260bdbd6a61.patch";
+      hash = "sha256-0dwfyW0Fi5FkzYnaMOb2ua9O6eyCnMgJqT09tTT56vY=";
     })
   ]
   ++ lib.optionals isCross [
@@ -62,10 +74,6 @@ buildPythonPackage rec {
       crossPrefix = stdenv.hostPlatform.config;
     })
   ];
-
-  postPatch = ''
-    sed -i "s#@TPM2_TSS@#${tpm2-tss.out}#" src/tpm2_pytss/FAPI.py
-  '';
 
   # Hardening has to be disabled
   # due to pycparsing handling it poorly.
@@ -95,13 +103,20 @@ buildPythonPackage rec {
     swtpm
   ];
 
+  preCheck = ''
+    export TSS2_FAPICONF=${tpm2-tss.out}/etc/tpm2-tss/fapi-config-test.json
+  '';
+
   pythonImportsCheck = [ "tpm2_pytss" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
     changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      baloo
+      scottstephens
+    ];
   };
 }

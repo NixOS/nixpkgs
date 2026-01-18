@@ -1,36 +1,44 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
-  pythonOlder,
+  pythonAtLeast,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   grpclib,
   python-dateutil,
+  typing-extensions,
+
+  # optional-dependencies
   black,
   jinja2,
   isort,
-  python,
-  pydantic,
-  pytest7CheckHook,
-  pytest-asyncio_0_21,
-  pytest-mock,
-  typing-extensions,
-  tomlkit,
+
+  # tests
+  addBinToPathHook,
+  cachelib,
   grpcio-tools,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  tomlkit,
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "betterproto";
-  version = "2.0.0b6";
+  version = "2.0.0b7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
-    tag = "v.${version}";
-    hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-T7QSPH8MFa1hxJOhXc3ZMM62/FxHWjCJJ59IpeM41rI=";
   };
 
   postPatch = ''
@@ -53,14 +61,16 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
+    cachelib
     grpcio-tools
     pydantic
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytest-mock
-    pytest7CheckHook
+    pytestCheckHook
     tomlkit
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "betterproto" ];
 
@@ -68,20 +78,24 @@ buildPythonPackage rec {
   # the protoc-gen-python_betterproto script from the package to be on PATH.
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export PATH=$PATH:$out/bin
     patchShebangs src/betterproto/plugin/main.py
     ${python.interpreter} -m tests.generate
   '';
 
-  disabledTestPaths = [
-    # https://github.com/danielgtaylor/python-betterproto/issues/530
-    "tests/inputs/oneof/test_oneof.py"
-  ];
-
   disabledTests = [
-    "test_pydantic_no_value"
+    # incompatible with pytest 8:
+    #     TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_message_with_deprecated_field_not_set"
+    "test_service_with_deprecated_method"
     # Test is flaky
     "test_binary_compatibility"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: issubclass() arg 1 must be a class
+    "tests/test_inputs.py::test_message_can_instantiated[namespace_builtin_types]"
+    "tests/test_inputs.py::test_message_equality[namespace_builtin_types]"
+    "tests/test_inputs.py::test_message_json[namespace_builtin_types]"
   ];
 
   meta = {
@@ -93,8 +107,8 @@ buildPythonPackage rec {
       features and generating readable, understandable, idiomatic Python code.
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
-    changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/danielgtaylor/python-betterproto/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nikstur ];
   };
-}
+})

@@ -5,19 +5,19 @@
   cmake,
   ninja,
   useFloat ? false,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fuzzylite";
-  version = "6.0";
+  version = "6.0-unstable-2025-08-30";
 
   src = fetchFromGitHub {
     owner = "fuzzylite";
     repo = "fuzzylite";
-    rev = "v${version}";
-    hash = "sha256-i1txeUE/ZSRggwLDtpS8dd4uuZfHX9w3zRH0gBgGXnk=";
+    rev = "fe62b61ad0e301fbd8868d5fc3d76d7590c59636";
+    hash = "sha256-p3ikdY3kfC8N7XsHHa3HzWI0blciWoxCHiEOOUt2yLY=";
   };
-  sourceRoot = "${src.name}/fuzzylite";
 
   outputs = [
     "out"
@@ -39,13 +39,16 @@ stdenv.mkDerivation rec {
     "-DFL_USE_FLOAT:BOOL=${if useFloat then "ON" else "OFF"}"
   ];
 
-  meta = with lib; {
+  # use unstable as latest release does not yet support cmake-4
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
+  meta = {
     description = "Fuzzy logic control library in C++";
     mainProgram = "fuzzylite";
     homepage = "https://fuzzylite.com";
     changelog = "https://github.com/fuzzylite/fuzzylite/${src.rev}/release/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

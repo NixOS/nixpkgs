@@ -1,0 +1,53 @@
+From bc1a52062adfacc94661883157dd4ef58e00e031 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 8 Nov 2025 14:48:04 +0100
+Subject: [PATCH] Use SDL_AllocFormat instead of creating it manually
+
+According to the docs, `SDL_PixelFormat` is a read-only structure.
+Creating it manually leaves out some important fields like `format` and
+`next` pointer to be undefined.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ src_c/surface.c | 25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
+
+diff --git a/src_c/surface.c b/src_c/surface.c
+index 958ce43f..9be3d8fb 100644
+--- a/src_c/surface.c
++++ b/src_c/surface.c
+@@ -3730,24 +3730,13 @@ pgSurface_Blit(pgSurfaceObject *dstobj, pgSurfaceObject *srcobj,
+         }
+         else {
+             SDL_PixelFormat *fmt = src->format;
+-            SDL_PixelFormat newfmt;
+-
+-            newfmt.palette = 0; /* Set NULL (or SDL gets confused) */
+-            newfmt.BitsPerPixel = fmt->BitsPerPixel;
+-            newfmt.BytesPerPixel = fmt->BytesPerPixel;
+-            newfmt.Amask = 0;
+-            newfmt.Rmask = fmt->Rmask;
+-            newfmt.Gmask = fmt->Gmask;
+-            newfmt.Bmask = fmt->Bmask;
+-            newfmt.Ashift = 0;
+-            newfmt.Rshift = fmt->Rshift;
+-            newfmt.Gshift = fmt->Gshift;
+-            newfmt.Bshift = fmt->Bshift;
+-            newfmt.Aloss = 0;
+-            newfmt.Rloss = fmt->Rloss;
+-            newfmt.Gloss = fmt->Gloss;
+-            newfmt.Bloss = fmt->Bloss;
+-            src = SDL_ConvertSurface(src, &newfmt, 0);
++            SDL_PixelFormat *newfmt =
++                SDL_AllocFormat(SDL_MasksToPixelFormatEnum(
++                    fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, 0));
++
++            src = SDL_ConvertSurface(src, newfmt, 0);
++
++            SDL_FreeFormat(newfmt);
+             if (src) {
+                 result = SDL_BlitSurface(src, srcrect, dst, dstrect);
+                 SDL_FreeSurface(src);
+-- 
+2.51.0
+

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "7.1.21";
+  version = "7.1.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     tag = "v${version}";
-    hash = "sha256-IbVs/fjNRDhp4a78ZbgqUOxyrlZjEwsKSlQV3+mmCjo=";
+    hash = "sha256-uEOhOVXaz4g1Ciun8x2AT8pRBkKR6uEfu4KJ1XSwouY=";
   };
 
   build-system = [ flit-core ];
@@ -81,11 +81,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnmp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmp";
     changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

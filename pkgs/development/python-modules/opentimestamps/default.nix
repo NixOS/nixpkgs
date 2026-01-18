@@ -6,15 +6,12 @@
   gitpython,
   pycryptodomex,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "opentimestamps";
   version = "0.4.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "opentimestamps";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentimestamps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/python-opentimestamps";
     changelog = "https://github.com/opentimestamps/python-opentimestamps/releases/tag/python-opentimestamps-v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

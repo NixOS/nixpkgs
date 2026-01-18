@@ -14,12 +14,15 @@ let
     sha256 = "sha256-g4Jam7yxMc+piYQzgMvVsNTF+ce1U3thzYl/M9rKG4o=";
   };
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because both indradb-server and indradb-client
+    # have failed on Hydra for nearly a year.
+    broken = true;
     description = "Graph database written in rust";
     homepage = "https://github.com/indradb/indradb";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
   };
 in
 {

@@ -20,10 +20,10 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "gps3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for GPSD";
     homepage = "https://github.com/wadda/gps3";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

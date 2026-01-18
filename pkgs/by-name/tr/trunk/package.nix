@@ -24,14 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/5zvbSlMzZHxnAwuu0Jd6WVVjxJtIAQpRwZZHgYyPbs=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
     mainProgram = "trunk";
-    maintainers = with maintainers; [
-      freezeboy
-      ctron
-    ];
-    license = with licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ ctron ];
+    license = with lib.licenses; [ asl20 ];
   };
 }

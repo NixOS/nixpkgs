@@ -66,6 +66,7 @@
   ffado,
   libselinux,
   libebur128,
+  bashNonInteractive,
 }:
 
 let
@@ -77,7 +78,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.7";
+  version = "1.4.9";
 
   outputs = [
     "out"
@@ -93,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-U9J7f6nDO4tp6OCBtBcZ9HP9KDKLfuuRWDEbgLL9Avs=";
+    sha256 = "sha256-380KY17l6scVchZAoSHswTvceYl427e79eU11JQallc=";
   };
 
   patches = [
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     ncurses
     readline
+    bashNonInteractive
   ]
   ++ (
     if enableSystemd then
@@ -241,9 +243,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   doInstallCheck = true;
 
-  postUnpack = ''
-    patchShebangs ${finalAttrs.src.name}/doc/*.py
-    patchShebangs ${finalAttrs.src.name}/doc/input-filter-h.sh
+  postPatch = ''
+    patchShebangs doc/*.py
+    patchShebangs doc/input-filter-h.sh
+
+    # Remove installed-test that runs forever
+    sed -i -e "/test-pipewire-alsa-stress/d" pipewire-alsa/tests/meson.build
   '';
 
   postInstall = ''
@@ -257,14 +262,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Server and user space API to deal with multimedia pipelines";
     changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${finalAttrs.version}";
     homepage = "https://pipewire.org/";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.freebsd;
-    maintainers = with maintainers; [
-      kranzes
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [
       k900
     ];
     pkgConfigModules = [

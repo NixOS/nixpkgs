@@ -9,20 +9,19 @@
 }:
 
 stdenv.mkDerivation {
-  version = "2018-08-15";
+  version = "2023-09-03";
   pname = "pbrt-v3";
 
   src = fetchFromGitHub {
-    rev = "86b5821308088deea70b207bc8c22219d0103d65";
+    rev = "13d871faae88233b327d04cda24022b8bb0093ee";
     owner = "mmp";
     repo = "pbrt-v3";
-    sha256 = "0f7ivsczba6zfk5f0bba1js6dcwf6w6jrkiby147qp1sx5k35cv8";
+    hash = "sha256-xg99l1o4MychQiOYkfsvD9vO0ysfmgQyaNaf8oqoWzk=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # https://github.com/mmp/pbrt-v3/issues/196
-    ./openexr-cmake-3.12.patch
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   nativeBuildInputs = [
@@ -32,12 +31,12 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pbrt.org/";
     description = "Renderer described in the third edition of the book 'Physically Based Rendering: From Theory To Implementation'";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = [ maintainers.juliendehos ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.juliendehos ];
     priority = 10;
   };
 }

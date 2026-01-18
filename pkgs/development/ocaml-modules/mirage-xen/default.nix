@@ -43,10 +43,10 @@ buildDunePackage rec {
     duration
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Xen core platform libraries for MirageOS";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/mirage-xen";
   };
 }

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -96,16 +97,16 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ibis-framework";
-  version = "10.8.0";
+  version = "11.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
-    tag = version;
-    hash = "sha256-Uuqm9Exu/oK3BGBL4ViUOGArMWhVutUn1gFRj1I4vt4=";
+    tag = finalAttrs.version;
+    hash = "sha256-hf5guWeX9WQbKaNrs7ALwwDxV1Rgeb5Z0PedTQ4P7S0=";
   };
 
   build-system = [
@@ -138,11 +139,15 @@ buildPythonPackage rec {
     pytest-xdist
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+  ++ lib.concatMap (name: finalAttrs.passthru.optional-dependencies.${name}) testBackends;
 
   pytestFlags = [
     "--benchmark-disable"
     "-Wignore::FutureWarning"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    "-Wignore::DeprecationWarning"
   ];
 
   enabledTestMarks = testBackends ++ [ "core" ];
@@ -175,6 +180,20 @@ buildPythonPackage rec {
 
     # duckdb ParserError: syntax error at or near "AT"
     "test_90"
+
+    # assert 0 == 3 (tests edge case behavior of databases)
+    "test_self_join_with_generated_keys"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ExceptionGroup: multiple unraisable exception warnings (4 sub-exceptions)
+    "test_non_roundtripable_str_type"
+    "test_parse_dtype_roundtrip"
+
+    # AssertionError: value does not match the expected value in snapshot ...
+    "test_annotated_function_without_decoration"
+    "test_error_message"
+    "test_error_message_when_constructing_literal"
+    "test_signature_from_callable_with_keyword_only_arguments"
   ];
 
   # patch out tests that check formatting with black
@@ -354,11 +373,11 @@ buildPythonPackage rec {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${src.tag}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/blob/${finalAttrs.src.tag}/docs/release_notes.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cpcloud
       sarahec
     ];
   };
-}
+})

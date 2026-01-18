@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
   installCheckPhase = "make check";
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for keyword extraction";
     mainProgram = "extract";
 
@@ -123,9 +123,9 @@ stdenv.mkDerivation rec {
       additional MIME types are detected.
     '';
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ maintainers.jorsn ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.jorsn ];
+    platforms = lib.platforms.unix;
   };
 }

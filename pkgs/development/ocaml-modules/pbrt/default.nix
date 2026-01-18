@@ -17,10 +17,10 @@ buildDunePackage rec {
     hash = "sha256-EXugdcjALukSjB31zAVG9WiN6GMGXi2jlhHWaZ+p+uM=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mransan/ocaml-protoc";
     description = "Runtime library for Protobuf tooling";
-    license = licenses.mit;
-    maintainers = [ maintainers.vyorkin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vyorkin ];
   };
 }

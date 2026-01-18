@@ -22,7 +22,7 @@
   zlib,
   which,
   sysctl,
-  buildLlvmTools,
+  buildLlvmPackages,
   updateAutotoolsGnuConfigScriptsHook,
   enableManpages ? false,
   enableSharedLibraries ? !stdenv.hostPlatform.isStatic,
@@ -84,9 +84,6 @@ stdenv.mkDerivation (
   {
     pname = "llvm";
     inherit version;
-
-    # TODO: Remove on `staging`.
-    shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
     src =
       if monorepoSrc != null then
@@ -196,6 +193,10 @@ stdenv.mkDerivation (
           stripLen = 1;
           hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
         })
+        # Fix build with gcc15
+        # https://github.com/llvm/llvm-project/commit/8f39502b85d34998752193e85f36c408d3c99248
+        # https://github.com/llvm/llvm-project/commit/7abf44069aec61eee147ca67a6333fc34583b524
+        ./llvm-add-include-cstdint.patch
       ]
       ++ lib.optionals (lib.versionOlder release_version "19") [
         # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
@@ -272,7 +273,7 @@ stdenv.mkDerivation (
           # and thus fails under the sandbox:
           ''
             substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
+              --replace-fail '/usr/bin/sw_vers' "${(toString darwin.DarwinTools) + "/bin/sw_vers"}"
           ''
         +
           # This test tries to call the intrinsics `@llvm.roundeven.f32` and
@@ -299,7 +300,7 @@ stdenv.mkDerivation (
       )
       +
         # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
           # fails when run in sandbox
           (
             ''
@@ -346,7 +347,7 @@ stdenv.mkDerivation (
                 rm test/tools/dsymutil/ARM/obfuscated.test
               ''
           )
-        )
+
       +
         # FileSystem permissions tests fail with various special bits
         ''
@@ -471,7 +472,7 @@ stdenv.mkDerivation (
           (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
           (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
           (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
-          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
         ];
       in
       flagsForLlvmConfig

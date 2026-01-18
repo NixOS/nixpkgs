@@ -30,22 +30,25 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cleanlab";
-  version = "2.7.1";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
-    tag = "v${version}";
-    hash = "sha256-KzVqBOLTxxkgvoGPYMeYb7zMuG8VwQwX6SYR/FUhfBw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0H4JTAc2tCtIFklGciXQ+TCWOiJ6kRkqcycJNeIpero=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=65.0,<70.0" "setuptools"
+  '';
 
-  pythonRelaxDeps = [
-    "numpy"
+  build-system = [
+    setuptools
   ];
 
   dependencies = [
@@ -55,13 +58,6 @@ buildPythonPackage rec {
     tqdm
     pandas
   ];
-
-  # This is ONLY turned off when we have testing enabled.
-  # The reason we do this is because of duplicate packages in the enclosure
-  # when using the packages in nativeCheckInputs.
-  # Affected packages: grpcio protobuf tensorboard tensorboard-plugin-profile
-  catchConflicts = (!doCheck);
-  doCheck = true;
 
   nativeCheckInputs = [
     cleanvision
@@ -85,6 +81,9 @@ buildPythonPackage rec {
 
     # Requires the datasets we prevent from downloading
     "test_create_imagelab"
+
+    # AssertionError: assert np.int64(36) == 35
+    "test_num_label_issues"
 
     # Non-trivial numpy2 incompatibilities
     # assert np.float64(0.492) == 0.491
@@ -111,12 +110,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standard data-centric AI package for data quality and machine learning with messy, real-world data and labels";
     homepage = "https://github.com/cleanlab/cleanlab";
-    changelog = "https://github.com/cleanlab/cleanlab/releases/tag/v${version}";
+    changelog = "https://github.com/cleanlab/cleanlab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
-    # cleanlab is incompatible with datasets>=4.0.0
-    # cleanlab/datalab/internal/data.py:313: AssertionError
-    # https://github.com/cleanlab/cleanlab/issues/1244
-    broken = lib.versionAtLeast datasets.version "4.0.0";
   };
-}
+})

@@ -30,8 +30,6 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -45,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "clashtui";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

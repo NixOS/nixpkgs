@@ -26,11 +26,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquibase";
-  version = "4.33.0";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${finalAttrs.version}/liquibase-${finalAttrs.version}.tar.gz";
-    hash = "sha256-aJrPzcl7rQ1MFQ0e+rnIUeJRs5jLPWMm916Kr+QO1Xg=";
+    hash = "sha256-OuEczc1MCA5CHl/QQ729Yk1W/PybKU1dnYmMuLB05Ek=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -86,14 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Version Control for your database";
     mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jsoo1 ];
-    platforms = with platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jsoo1 ];
+    platforms = with lib.platforms; unix;
   };
 })

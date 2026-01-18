@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   networkx,
-  pythonOlder,
   setuptools,
   tqdm,
   z3-solver,
@@ -11,15 +10,13 @@
 
 buildPythonPackage rec {
   pname = "model-checker";
-  version = "1.2.10";
+  version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "model_checker";
     inherit version;
-    hash = "sha256-wU79zM2hGjmv/IxfQHHSLPBJFzoAPusHgtAaFSumFr0=";
+    hash = "sha256-vIH3CFgFEO+UlmpS7FhBsQtZv5Yep4OQ6koMGzyJGa4=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
@@ -39,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "model_checker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hyperintensional theorem prover for counterfactual conditionals and modal operators";
     homepage = "https://pypi.org/project/model-checker/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

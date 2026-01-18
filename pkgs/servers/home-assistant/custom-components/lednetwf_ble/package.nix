@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.0.15.1";
+  version = "2.0.0";
 in
 buildHomeAssistantComponent {
   owner = "8none1";
@@ -19,7 +19,7 @@ buildHomeAssistantComponent {
     owner = "8none1";
     repo = "lednetwf_ble";
     tag = "v${version}";
-    hash = "sha256-LSVvwJZFtBC+iwxfZ3R8msPvrvimPw2Tjzqw6Dx7ZsM=";
+    hash = "sha256-Keb2Eph2DvS0zsg7wa30LrfqkmmccLl9okfdd0OTpqc=";
   };
 
   dependencies = [

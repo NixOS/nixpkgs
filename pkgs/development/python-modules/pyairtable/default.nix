@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "pyairtable";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9v0eOr3CgBTb7N6FkcgmVgxctaLTieUYZHwuXsuIR40=";
+    hash = "sha256-1tO3f2/regKoR3nCI103pGYF82AwzyDtmbCLq3MQiow=";
   };
 
   build-system = [

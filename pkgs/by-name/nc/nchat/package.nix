@@ -12,17 +12,17 @@
   cmake,
   gperf,
   nix-update-script,
-  withWhatsApp ? (!stdenv.isDarwin), # macOS 12.0+ required
+  withWhatsApp ? true,
 }:
 
 let
-  version = "5.10.15";
+  version = "5.12.21";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-wA0sLOcCDPi3w1naIx/Q82DJk/tl/LTnrUBbMAPvvFU=";
+    hash = "sha256-WofBqdUX88USnCA4iyDVMDXyx4Bxz/ZV0FqDUeAOe4Q=";
   };
 
   libcgowm = buildGoModule {
@@ -30,7 +30,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-u64b9z/B0j3qArMfxJ8QolgDc9k7Q+LqrQRle3nN7eM=";
+    vendorHash = "sha256-4jn2CDWqg0GqZ7QTTaZh+9GDUH7L6WllfTONkxnfKEU=";
 
     buildPhase = ''
       runHook preBuild

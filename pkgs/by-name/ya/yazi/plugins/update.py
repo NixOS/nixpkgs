@@ -284,7 +284,9 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
         "old_version": old_version,
         "new_version": new_version,
         "old_commit": old_commit,
-        "new_commit": latest_commit
+        "new_commit": latest_commit,
+        "owner": owner,
+        "repo": repo,
     }
 
 
@@ -365,18 +367,31 @@ def commit_changes(updated_plugins: list[dict[str, str]]) -> None:
 
         current_date = run_command("date +%Y-%m-%d", capture_output=True)
 
+        def get_compare_url(plugin: dict[str, str]) -> str | None:
+            if plugin["old_commit"] != "unknown":
+                owner = plugin['owner'].strip()
+                repo = plugin['repo'].strip()
+                return f"https://github.com/{owner}/{repo}/compare/{plugin['old_commit']}...{plugin['new_commit']}"
+            return None
+
         if len(updated_plugins) == 1:
             plugin = updated_plugins[0]
             commit_message = f"yaziPlugins.{plugin['name']}: update from {plugin['old_version']} to {plugin['new_version']}"
+            compare_url = get_compare_url(plugin)
+            if compare_url:
+                commit_message += f"\n\nCompare: {compare_url}"
         else:
             commit_message = f"yaziPlugins: update on {current_date}\n\n"
             for plugin in sorted(updated_plugins, key=lambda x: x['name']):
                 commit_message += f"- {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}\n"
+                compare_url = get_compare_url(plugin)
+                if compare_url:
+                    commit_message += f"  Compare: {compare_url}\n"
 
         run_command("git add pkgs/by-name/ya/yazi/plugins/", capture_output=False)
 
-        run_command(f'git commit -m "{commit_message}"', capture_output=False)
-        print(f"\nCommitted changes with message: {commit_message}")
+        subprocess.run(["git", "commit", "--no-verify", "-m", commit_message], check=True)
+        print(f"\nCommitted changes with message:\n{commit_message}")
     except Exception as e:
         print(f"Error committing changes: {e}")
 

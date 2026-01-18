@@ -3,12 +3,14 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   cargo,
   capstone,
   libbfd,
   libelf,
   libiberty,
   readline,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,8 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "endrazine";
     repo = "wcc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hyelDAsE3IFvUxBqttYW7QmM6NPEa6pOREmawFjW2Q8=";
-    deepClone = true;
+    hash = "sha256-cg8rf8R3xYNJTJhrDfIdVAUR/OOd6JjB0NYHRosUzvU=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
     libiberty
     readline
+  ];
+
+  patches = [
+    # The upstream forgot to bump WVERSION in header before tagging `v0.0.11`.
+    (fetchpatch2 {
+      url = "https://github.com/endrazine/wcc/commit/4bea2dac8b49d82e4f72e42027d74fc654380f7b.patch?full_index=1";
+      hash = "sha256-RK0ue8hdK/G+njwGmWpaewclRHprO8aBdZ9vBGQIQOc=";
+    })
   ];
 
   postPatch = ''
@@ -71,6 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
@@ -80,8 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [
-      orivej
       DieracDelta
     ];
+    mainProgram = "wcc";
   };
 })

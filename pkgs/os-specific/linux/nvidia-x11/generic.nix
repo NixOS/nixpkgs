@@ -77,7 +77,7 @@ let
   rewritePatch =
     { from, to }:
     patch:
-    runCommandLocal (builtins.baseNameOf patch)
+    runCommandLocal (baseNameOf patch)
       {
         inherit patch;
         nativeBuildInputs = [ patchutils ];
@@ -215,6 +215,9 @@ stdenv.mkDerivation (finalAttrs: {
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
+    ]
   );
 
   hardeningDisable = [
@@ -249,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
           ...
         }@args:
         let
-          args' = builtins.removeAttrs args [
+          args' = removeAttrs args [
             "owner"
             "repo"
             "rev"
@@ -276,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
           inherit hash;
           nvidia_x11 = finalAttrs.finalPackage;
           patches =
-            (builtins.map (rewritePatch {
+            (map (rewritePatch {
               from = "kernel";
               to = "kernel-open";
             }) patches)
@@ -324,18 +327,18 @@ stdenv.mkDerivation (finalAttrs: {
       inherit lib32;
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "${
       if useFabricmanager then "Data Center" else "X.org"
     } driver and kernel module for NVIDIA cards";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     platforms = [
       "x86_64-linux"
     ]
     ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kiskae
       edwtjo
     ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "electrickite";
     repo = "batsignal";
-    rev = version;
+    tag = version;
     sha256 = "sha256-yngd2yP6XtRp8y8ZUd0NISdf8+8wJvpLogrQQMdB0lA=";
   };
 
@@ -25,12 +25,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+  ];
+
+  meta = {
     homepage = "https://github.com/electrickite/batsignal";
     description = "Lightweight battery daemon written in C";
-    license = licenses.isc;
-    maintainers = with maintainers; [ SlothOfAnarchy ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ SlothOfAnarchy ];
+    platforms = lib.platforms.linux;
     mainProgram = "batsignal";
   };
 }

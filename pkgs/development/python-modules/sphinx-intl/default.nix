@@ -6,6 +6,7 @@
   babel,
   click,
   setuptools,
+  setuptools-scm,
   sphinx,
   pytestCheckHook,
   mock,
@@ -23,7 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-5Ro+UG9pwwp656fYyCsna6P4s9Gb86Tu3Qm2WUI7tsE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     babel
@@ -40,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_intl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx utility that make it easy to translate and to apply translation";
     homepage = "https://github.com/sphinx-doc/sphinx-intl";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

@@ -3,7 +3,6 @@
   pkgs,
   src,
   officialRelease,
-  maintainers,
   teams,
   version,
 }:
@@ -123,7 +122,7 @@ let
       +
         lib.optionalString
           (
-            !stdenv.hostPlatform.isWindows
+            !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin)
             # build failure
             && !stdenv.hostPlatform.isStatic
             # LTO breaks exception handling on x86-64-darwin.
@@ -150,22 +149,30 @@ let
       pkg-config
     ];
     separateDebugInfo = !stdenv.hostPlatform.isStatic;
-    hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-    env =
-      prevAttrs.env or { }
-      // lib.optionalAttrs (
-        stdenv.isLinux
-        && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
-        && !(
-          stdenv.buildPlatform.config != stdenv.hostPlatform.config
-          && stdenv.hostPlatform.system == "powerpc64-linux"
-        )
-        && !(stdenv.system == "loongarch64-linux")
-        && !(stdenv.hostPlatform.useLLVM or false)
-      ) { LDFLAGS = "-fuse-ld=gold"; };
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
+    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
+    # reports of undefined behavior on previous versions. Note that this does //not// use
+    # `finalAttrs.version` in order to avoid infinite recursion.
+    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
+      let
+        interpositionFlags = [
+          "-fno-semantic-interposition"
+          "-Wl,-Bsymbolic-functions"
+        ];
+      in
+      # NOTE: By default GCC disables interprocedular optimizations (in particular inlining) for
+      # position-independent code and thus shared libraries.
+      # Since LD_PRELOAD tricks aren't worth losing out on optimizations, we disable it for good.
+      # This is not the case for Clang, where inlining is done by default even without -fno-semantic-interposition.
+      # https://reviews.llvm.org/D102453
+      # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+      prevAttrs.preConfigure or ""
+      + lib.optionalString stdenv.cc.isGNU ''
+        export CFLAGS="''${CFLAGS:-} ${toString interpositionFlags}"
+        export CXXFLAGS="''${CXXFLAGS:-} ${toString interpositionFlags}"
+      '';
     outputs = prevAttrs.outputs or [ "out" ] ++ [ "dev" ];
   };
 
@@ -192,7 +199,6 @@ let
           environments.
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
-      maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
       teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
@@ -216,7 +222,6 @@ in
 # This becomes the pkgs.nixComponents attribute set
 {
   inherit version;
-  inherit maintainers;
   inherit teams;
 
   inherit filesetToSource;

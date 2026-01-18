@@ -18,7 +18,7 @@ let
     }
     // (lib.optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
-      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
+      addr = "${cfg.listenAddress}:${toString cfg.port}";
       headers.X-Content-Type-Options = [ "nosniff" ];
     };
     health.storagedriver = {
@@ -48,7 +48,7 @@ in
   options.services.dockerRegistry = {
     enable = lib.mkEnableOption "Docker Registry";
 
-    package = lib.mkPackageOption pkgs "docker-distribution" {
+    package = lib.mkPackageOption pkgs "distribution" {
       example = "gitlab-container-registry";
     };
 

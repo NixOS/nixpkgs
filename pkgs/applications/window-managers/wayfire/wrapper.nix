@@ -31,6 +31,7 @@ symlinkJoin {
   };
 
   meta = wayfire.meta // {
+    outputsToInstall = [ "out" ];
     # To prevent builds on hydra
     hydraPlatforms = [ ];
     # prefer wrapper over the package

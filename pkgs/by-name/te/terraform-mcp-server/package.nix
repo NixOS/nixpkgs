@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "terraform-mcp-server";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gV7oFQnfDsEHdU3kIObwZnmrxUaVFqOLLWRFYzxdfjo=";
+    hash = "sha256-DPm5kmlQNsE+C/CUzPML6HG32E5UZOacQw91lAuECOs=";
   };
 
-  vendorHash = "sha256-bTfPY6TO+/zzo/nnvzHnFFQXz7Ui4ykEf4Dw951wnVA=";
+  vendorHash = "sha256-n5mneP4S8TZClaaVEykuAzcSDj0Y4YSl/o5ril3+hNo=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
@@ -28,7 +28,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Terraform Model Context Protocol (MCP) Server";

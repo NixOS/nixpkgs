@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   typing-extensions,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "simple-di";
   version = "0.1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "simple_di";
@@ -30,10 +27,10 @@ buildPythonPackage rec {
   # pypi distribution contains no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple dependency injection library";
     homepage = "https://github.com/bentoml/simple_di";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sauyon ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sauyon ];
   };
 }

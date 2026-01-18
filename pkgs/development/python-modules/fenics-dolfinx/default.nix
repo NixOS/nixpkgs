@@ -16,6 +16,7 @@
 
   # buildInputs
   dolfinx,
+  darwinMinVersionHook,
 
   # dependency
   numpy,
@@ -54,7 +55,7 @@ let
     }
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (dolfinx)
     version
     src
@@ -63,7 +64,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   pythonRelaxDeps = [
-    "cffi"
     "fenics-ufl"
   ];
 
@@ -87,7 +87,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     fenicsPackages.dolfinx
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
 
   dependencies = [
     numpy
@@ -102,8 +103,6 @@ buildPythonPackage rec {
     (mpi4py.override { inherit (fenicsPackages) mpi; })
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     scipy
     matplotlib
@@ -113,19 +112,11 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    rm -rf dolfinx
+    cd test
   '';
 
   pythonImportsCheck = [
     "dolfinx"
-  ];
-
-  disabledTests = [
-    # require cffi<1.17
-    "test_cffi_expression"
-    "test_hexahedron_mesh"
-    # https://github.com/FEniCS/dolfinx/issues/1104
-    "test_cube_distance"
   ];
 
   passthru = {
@@ -145,7 +136,7 @@ buildPythonPackage rec {
     homepage = "https://fenicsproject.org";
     downloadPage = "https://github.com/fenics/dolfinx";
     description = "Computational environment of FEniCSx and implements the FEniCS Problem Solving Environment in C++ and Python";
-    changelog = "https://github.com/fenics/dolfinx/releases/tag/${src.tag}";
+    changelog = "https://github.com/fenics/dolfinx/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       bsd2
       lgpl3Plus
@@ -153,4 +144,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

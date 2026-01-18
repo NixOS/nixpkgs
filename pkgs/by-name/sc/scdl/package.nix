@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchPypi,
+  ffmpeg-headless,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,15 +28,24 @@ python3Packages.buildPythonApplication rec {
     filelock
   ];
 
+  # Ensure ffmpeg is available in $PATH:
+  makeWrapperArgs =
+    let
+      packagesToBinPath = [ ffmpeg-headless ];
+    in
+    [
+      ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
+    ];
+
   # No tests in repository
   doCheck = false;
 
   pythonImportsCheck = [ "scdl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Download Music from Soundcloud";
     homepage = "https://github.com/flyingrub/scdl";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "scdl";
   };

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LoliGothick/mitama-cpp-result";
     description = "Library that provides `result<T, E>` and `maybe<T>` and monadic functions for them";
     longDescription = ''
@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
       mitama-cpp-result provides `result<T, E>`, `maybe<T>`, and associated monadic functions
       (like Result and Option in Programming Language Rust).
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })
 # TODO [ ken-matsui ]: tests

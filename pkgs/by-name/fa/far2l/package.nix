@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   cmake,
@@ -51,6 +52,14 @@ stdenv.mkDerivation rec {
     rev = "v_${version}";
     sha256 = "sha256-a/k36O19z/lHnETOGIbTJ7BNAI5zOQxVUSp+nIM08i4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix";
+      url = "https://github.com/elfmz/far2l/commit/97ac0a3a0f29110a330d8f8634775e024561e817.patch?full_index=1";
+      hash = "sha256-LlCKgFPxoRrb2nD+PARsJCpUXqMO0rLyNbuvLh949fU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -125,11 +134,11 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hypersw ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hypersw ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -36,12 +36,12 @@ mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Simple input device tester for linux with Qt GUI";
     mainProgram = "evtest-qt";
     homepage = "https://github.com/Grumbel/evtest-qt";
-    maintainers = with maintainers; [ alexarice ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ alexarice ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

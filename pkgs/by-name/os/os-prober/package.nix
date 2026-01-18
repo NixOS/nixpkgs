@@ -16,14 +16,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.83";
+  version = "1.84";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "os-prober";
     rev = version;
-    sha256 = "sha256-cTufM82YE1L7d3kIOtncICInBPEw4o4NzQXB4uDrMKI=";
+    sha256 = "sha256-91UTiwg4qIi+aCzAto7tCd5WZFjI15XxR1/hZQ0fUa4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     os-prober = nixosTests.os-prober;
   };
-  meta = with lib; {
+  meta = {
     description = "Utility to detect other OSs on a set of drives";
     homepage = "http://packages.debian.org/source/sid/os-prober";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "os-prober";
-    maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ symphorien ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -5,24 +5,27 @@
   lib,
   makeWrapper,
   stdenv,
+  writableTmpDirAsHomeHook,
   xdg-utils,
 }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "7.2.0";
+  version = "7.8.7";
 
   src = fetchFromGitHub {
-    owner = "99designs";
+    owner = "ByteNess";
     repo = "aws-vault";
     rev = "v${version}";
-    hash = "sha256-Qs4vxFgehWQYYECBGBSU8YI/BHLwOQUO5wBlNEUzD7c=";
+    hash = "sha256-q4I/sCFo8svf+XL+Eln5TWLvj1ggaRjUplSgV6M0f9s=";
   };
 
-  vendorHash = "sha256-4bJKDEZlO0DzEzTQ7m+SQuzhe+wKmL6wLueqgSz/46s=";
+  proxyVendor = true;
+  vendorHash = "sha256-tsIyY+L3Bvv/3uvRVkCGK4cAZXQyZSa0mUPDg8Aqml8=";
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = ''
@@ -52,11 +55,14 @@ buildGoModule rec {
     $out/bin/aws-vault --version 2>&1 | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vault for securely storing and accessing AWS credentials in development environments";
     mainProgram = "aws-vault";
-    homepage = "https://github.com/99designs/aws-vault";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    homepage = "https://github.com/ByteNess/aws-vault";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      zimbatm
+      er0k
+    ];
   };
 }

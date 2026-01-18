@@ -285,6 +285,19 @@ in
           description = "Filename to be used for the dump. If `null` a default name is chosen by forgejo.";
           example = "forgejo-dump";
         };
+
+        age = mkOption {
+          type = types.str;
+          default = "4w";
+          example = "5d";
+          description = ''
+            Age of backup used to decide what files to delete when cleaning.
+            If a file or directory is older than the current time minus the age field, it is deleted.
+
+            The format is described in
+            {manpage}`tmpfiles.d(5)`.
+          '';
+        };
       };
 
       lfs = {
@@ -327,7 +340,7 @@ in
             };
             mailer = {
               ENABLED = true;
-              MAILER_TYPE = "sendmail";
+              PROTOCOL = "sendmail";
               FROM = "do-not-reply@example.org";
               SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
@@ -596,7 +609,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} ${cfg.dump.age} -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -788,9 +801,9 @@ in
       // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
-    services.openssh.settings.AcceptEnv = mkIf (
-      !cfg.settings.server.START_SSH_SERVER or false
-    ) "GIT_PROTOCOL";
+    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.server.START_SSH_SERVER or false) [
+      "GIT_PROTOCOL"
+    ];
 
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {
@@ -836,9 +849,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.maintainers = with lib.maintainers; [
-    bendlas
-    emilylange
-    pyrox0
-  ];
+  meta.maintainers = lib.teams.forgejo.members;
 }

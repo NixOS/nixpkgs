@@ -187,7 +187,7 @@ in
 
     settings = mkOption {
       type = types.submodule {
-        freeformType = types.attrsOf (
+        freeformType = types.lazyAttrsOf (
           types.nullOr (
             types.oneOf [
               types.str

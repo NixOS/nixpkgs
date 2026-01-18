@@ -8,7 +8,7 @@
   boost,
   fuse3,
   lib45d,
-  tbb_2022,
+  onetbb,
   liburing,
   installShellFiles,
 }:
@@ -41,12 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Required by rocksdb after 10.7.5
+  env.EXTRA_CFLAGS = "-std=c++20 -fno-char8_t";
+
   buildInputs = [
     rocksdb
     boost
     fuse3
     lib45d
-    tbb_2022
+    onetbb
     liburing
   ];
 

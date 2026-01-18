@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  apple-sdk_11,
   cmake,
   pkg-config,
   ninja,
@@ -120,9 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcb-util-cursor
     pcre
     mount
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   postInstall =
@@ -150,14 +146,14 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
-    lib.makeLibraryPath ([
+    lib.makeLibraryPath [
       libX11
       libXrandr
       libXinerama
       libXext
       libXcursor
       libXScrnSaver
-    ])
+    ]
   }";
 
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath

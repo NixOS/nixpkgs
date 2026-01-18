@@ -12,20 +12,20 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.72.0";
+  version = "1.81.0";
 
   # `tag` is what `dependabot` uses to find the relevant docker images.
   tag = "nixpkgs-dependabot-cli-${version}";
 
   # Get these hashes from
   # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
-  updateJobProxy.imageDigest = "sha256:b0a4c841300510255d6e647e9bcdb939d194bc644dee7962a543f637515b0f23";
-  updateJobProxy.hash = "sha256-+drR2uTtaQU0ckPTEbEBj5yvDtSP0BC3D0MxqRZ1Cjc=";
+  updateJobProxy.imageDigest = "sha256:d26fd269228ce287141aef81ef54e23a0001d2c6c6a3e16db286488c7d769c8c";
+  updateJobProxy.hash = "sha256-6mmiI2AjKxopeC5SfTa9XOR4hatxEu6M/28wycRnz2w=";
 
   # Get these hashes from
   # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
-  updaterGitHubActions.imageDigest = "sha256:3cbd297b1181de69e72a43ce2d7aa02eb7c2e71bc0c11d41288a86384af24aa0";
-  updaterGitHubActions.hash = "sha256-Btn7bsBNJb34T7JXmgpTxkxBXXT9IpQihernhNAT/HQ=";
+  updaterGitHubActions.imageDigest = "sha256:5964979027fe1d6fc358e89774074bfe34fa89b2b53ce7d45b44b4ebf71b7953";
+  updaterGitHubActions.hash = "sha256-dmMq/T7DLomvzPtOGIBQnrv+k5/NpfxbcXFxxo5ij6o=";
 in
 buildGoModule {
   inherit pname version;
@@ -34,10 +34,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-YI5HkypIEWkPmdtPvMrOp7r71ccucAEKNFo/va6yICE=";
+    hash = "sha256-9//TW+56UM/5J6psJWcS6lJqyKwQUEOWftTOJxEaCcQ=";
   };
 
-  vendorHash = "sha256-KrjwObQ3o5A0JuOW71EKNi9yNJYwsPHI+6a0AZY/cqU=";
+  vendorHash = "sha256-dD48OKpuGAJAro7qV4tqpf/uENV2X1VQ2kUvAuJLXc0=";
 
   ldflags = [
     "-s"

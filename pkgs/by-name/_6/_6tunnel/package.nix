@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wojtekka";
     repo = "6tunnel";
-    rev = version;
+    tag = version;
     sha256 = "sha256-ftTAFjHlXRrXH6co8bX0RY092lAmv15svZn4BKGVuq0=";
   };
 
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wojtekka/6tunnel";
     changelog = "https://github.com/wojtekka/6tunnel/blob/${version}/ChangeLog";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
     platforms = lib.platforms.unix;
   };
 }

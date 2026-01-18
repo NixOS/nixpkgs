@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+  patches = [
+    # https://github.com/rheit/zdbsp/pull/7
+    ./fix-cmake-version.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
@@ -28,15 +33,15 @@ stdenv.mkDerivation rec {
     install -Dm755 zdbsp $out/bin/zdbsp
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zdoom.org/wiki/ZDBSP";
     description = "ZDoom's internal node builder for DOOM maps";
     mainProgram = "zdbsp";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lassulus
       siraben
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

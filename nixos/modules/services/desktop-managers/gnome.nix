@@ -30,7 +30,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
@@ -42,7 +42,7 @@ let
     inherit flashbackEnabled nixos-background-dark nixos-background-light;
   };
 
-  nixos-background-info = pkgs.writeTextFile rec {
+  nixos-background-info = pkgs.writeTextFile {
     name = "nixos-background-info";
     text = ''
       <?xml version="1.0"?>
@@ -75,6 +75,8 @@ let
   notExcluded =
     pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
 
+  removeExcluded =
+    pkgList: utils.removePackagesByName pkgList config.environment.gnome.excludePackages;
 in
 
 {
@@ -232,7 +234,7 @@ in
 
     environment.gnome.excludePackages = mkOption {
       default = [ ];
-      example = literalExpression "[ pkgs.totem ]";
+      example = literalExpression "[ pkgs.showtime ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
@@ -297,8 +299,12 @@ in
 
       systemd.packages = [
         pkgs.gnome-flashback
+        pkgs.metacity
+        (pkgs.gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
       ]
-      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm cfg.flashback.customSessions;
 
       environment.systemPackages = [
         pkgs.gnome-flashback
@@ -311,13 +317,13 @@ in
         wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
       ) flashbackWms)
       # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (
-        wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
-      ) flashbackWms);
+      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel; }) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
+      i18n.inputMethod.enable = mkDefault true;
+      i18n.inputMethod.type = mkDefault "ibus";
       programs.dconf.enable = true;
       security.polkit.enable = true;
       security.rtkit.enable = mkDefault true;
@@ -326,7 +332,7 @@ in
       services.power-profiles-daemon.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
-      services.gnome.gnome-keyring.enable = true;
+      services.gnome.gnome-keyring.enable = mkDefault true;
       services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
       services.gnome.localsearch.enable = mkDefault true;
@@ -412,9 +418,9 @@ in
 
       services.orca.enable = notExcluded pkgs.orca;
 
-      fonts.packages = utils.removePackagesByName [
+      fonts.packages = removeExcluded [
         pkgs.adwaita-fonts
-      ] config.environment.gnome.excludePackages;
+      ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
@@ -438,55 +444,51 @@ in
             pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
           ];
         in
-        mandatoryPackages
-        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+        mandatoryPackages ++ removeExcluded optionalPackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
-      environment.systemPackages = utils.removePackagesByName (
-        [
-          pkgs.baobab
-          pkgs.decibels
-          pkgs.epiphany
-          pkgs.gnome-text-editor
-          pkgs.gnome-calculator
-          pkgs.gnome-calendar
-          pkgs.gnome-characters
-          pkgs.gnome-clocks
-          pkgs.gnome-console
-          pkgs.gnome-contacts
-          pkgs.gnome-font-viewer
-          pkgs.gnome-logs
-          pkgs.gnome-maps
-          pkgs.gnome-music
-          pkgs.gnome-system-monitor
-          pkgs.gnome-weather
-          pkgs.loupe
-          pkgs.nautilus
-          pkgs.gnome-connections
-          pkgs.simple-scan
-          pkgs.snapshot
-          pkgs.totem
-          pkgs.yelp
-        ]
-        ++ lib.optionals config.services.flatpak.enable [
-          # Since PackageKit Nix support is not there yet,
-          # only install gnome-software if flatpak is enabled.
-          pkgs.gnome-software
-        ]
-      ) config.environment.gnome.excludePackages;
+      environment.systemPackages = removeExcluded [
+        pkgs.baobab
+        pkgs.decibels
+        pkgs.epiphany
+        pkgs.gnome-text-editor
+        pkgs.gnome-calculator
+        pkgs.gnome-calendar
+        pkgs.gnome-characters
+        pkgs.gnome-clocks
+        pkgs.gnome-console
+        pkgs.gnome-contacts
+        pkgs.gnome-font-viewer
+        pkgs.gnome-logs
+        pkgs.gnome-maps
+        pkgs.gnome-music
+        pkgs.gnome-system-monitor
+        pkgs.gnome-weather
+        pkgs.loupe
+        pkgs.nautilus
+        pkgs.papers
+        pkgs.gnome-connections
+        pkgs.showtime
+        pkgs.simple-scan
+        pkgs.snapshot
+        pkgs.yelp
+      ];
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
-      programs.evince.enable = notExcluded pkgs.evince;
-      programs.file-roller.enable = notExcluded pkgs.file-roller;
-      programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
+
+      # Since PackageKit Nix support is not there yet,
+      # only install gnome-software if flatpak is enabled.
+      services.gnome.gnome-software.enable = lib.mkIf config.services.flatpak.enable (
+        notExcluded pkgs.gnome-software
+      );
 
       # VTE shell integration for gnome-console
       programs.bash.vteIntegration = mkDefault true;
@@ -505,7 +507,7 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.aisleriot
         pkgs.atomix
         pkgs.five-or-more
@@ -526,12 +528,12 @@ in
         pkgs.quadrapassel
         pkgs.swell-foop
         pkgs.tali
-      ] config.environment.gnome.excludePackages;
+      ];
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = utils.removePackagesByName [
+      environment.systemPackages = removeExcluded [
         pkgs.dconf-editor
         pkgs.devhelp
         pkgs.d-spy
@@ -542,7 +544,7 @@ in
         # https://github.com/NixOS/nixpkgs/issues/60908
         # pkgs.gnome-boxes
         pkgs.sysprof
-      ] config.environment.gnome.excludePackages;
+      ];
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })

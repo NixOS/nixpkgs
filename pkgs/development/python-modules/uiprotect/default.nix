@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -12,6 +11,7 @@
   aiohttp,
   aioshutil,
   async-timeout,
+  av,
   convertertools,
   dateparser,
   orjson,
@@ -40,16 +40,14 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "7.21.1";
+  version = "8.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${version}";
-    hash = "sha256-8OxEEQuCMKHTYIpa9pfgyAhgkCMy6wpvJDMcckbV8wY=";
+    hash = "sha256-YYF7YERl9pKpnfD1Q00NlL8zWfEohMBO3UuidedLHn0=";
   };
 
   build-system = [ poetry-core ];
@@ -64,6 +62,7 @@ buildPythonPackage rec {
     aiohttp
     aioshutil
     async-timeout
+    av
     convertertools
     dateparser
     orjson
@@ -93,24 +92,13 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  disabledTests = [
-    # https://127.0.0.1 vs https://127.0.0.1:0
-    "test_base_url"
-    "test_bootstrap"
-  ];
-
-  disabledTestPaths = [
-    # hangs the test suite
-    "tests/test_api_ws.py"
-  ];
-
   pythonImportsCheck = [ "uiprotect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
     changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

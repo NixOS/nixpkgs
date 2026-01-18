@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple TLS-only IRC logger";
     homepage = "https://code.causal.agency/june/litterbox";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "litterbox";
-    maintainers = with maintainers; [ ajwhouse ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ajwhouse ];
+    platforms = lib.platforms.linux;
   };
 }

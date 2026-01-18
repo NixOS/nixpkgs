@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-anthy";
-  version = "5.1.7";
+  version = "5.1.9";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/fcitx5-anthy/${pname}-${version}.tar.zst";
-    hash = "sha256-lY5GFbeIee7u1NsLbkYt6BvST9lidvZLpaylL0wE2+0=";
+    hash = "sha256-XDsKmhc5h3YAEfQOWtK46tZ+70DS1Cv3RP5kkixSQN8=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     anthy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Anthy Wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-anthy";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elnudev ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ elnudev ];
+    platforms = lib.platforms.linux;
   };
 }

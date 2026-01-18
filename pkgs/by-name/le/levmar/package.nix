@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/include $out/lib
-    cp lm.h $out/include
+    cp levmar.h lm.h $out/include
     cp liblevmar.a $out/lib
   '';
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ANSI C implementations of Levenberg-Marquardt, usable also from C++";
     homepage = "https://www.ics.forth.gr/~lourakis/levmar/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.nim65s ];
     platforms = lib.platforms.all;
   };
 })

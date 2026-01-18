@@ -94,7 +94,7 @@ rec {
         preferLocalBuild = true;
         allowSubstitutes = false;
       })
-      // builtins.removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
@@ -182,7 +182,7 @@ rec {
     path: text:
     writeTextFile {
       inherit text;
-      name = builtins.baseNameOf path;
+      name = baseNameOf path;
       destination = "/${path}";
     };
 
@@ -350,12 +350,10 @@ rec {
         ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       ''
       + lib.optionalString (runtimeEnv != null) (
-        lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            ${lib.toShellVar name value}
-            export ${name}
-          '') runtimeEnv
-        )
+        lib.concatMapAttrsStringSep "" (name: value: ''
+          ${lib.toShellVar name value}
+          export ${name}
+        '') runtimeEnv
       )
       + lib.optionalString (runtimeInputs != [ ]) ''
 
@@ -958,7 +956,6 @@ rec {
       outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
-      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_
@@ -983,7 +980,7 @@ rec {
 
   # TODO: move copyPathsToStore docs to the Nixpkgs manual
   # Copy a list of paths to the Nix store.
-  copyPathsToStore = builtins.map copyPathToStore;
+  copyPathsToStore = map copyPathToStore;
 
   # TODO: move applyPatches docs to the Nixpkgs manual
   /*
@@ -1009,7 +1006,7 @@ rec {
       name ?
         (
           if builtins.typeOf src == "path" then
-            builtins.baseNameOf src
+            baseNameOf src
           else if builtins.isAttrs src && builtins.hasAttr "name" src then
             src.name
           else

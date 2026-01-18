@@ -5,15 +5,12 @@
   fetchpatch,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "opytimark";
   version = "1.0.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gugarosa";
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opytimark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library consisting of optimization benchmarking functions";
     homepage = "https://github.com/gugarosa/opytimark";
     changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ firefly-cpp ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

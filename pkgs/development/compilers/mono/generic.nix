@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit enableParallelBuilding;
 
-  meta = with lib; {
+  meta = {
     # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129.
     # Cross build is broken due to attempt to execute cert-sync built for the host.
     broken =
@@ -115,18 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
       else
         "https://gitlab.winehq.org/mono/mono";
     description = "Cross platform, open source .NET development framework";
-    platforms = with platforms; darwin ++ linux;
+    platforms = with lib.platforms; darwin ++ linux;
     knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "6.14.0") [
       ''
         mono was archived upstream, see https://www.mono-project.com/
         While WineHQ has taken over development, consider using 6.14.0 or newer.
       ''
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thoughtpolice
       obadz
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       # runtime, compilers, tools and most class libraries licensed
       mit
       # runtime includes some code licensed

@@ -7,6 +7,7 @@
   npmHooks,
   nodejs,
   git,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "auto-changelog";
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline run test -i -g 'compileTemplate'
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line tool for generating a changelog from git tags and commit history";

@@ -1,11 +1,15 @@
 { pkgs }:
-
-with pkgs;
-
+let
+  inherit (pkgs)
+    stdenv
+    callPackage
+    config
+    lib
+    ;
+in
 {
-  inherit (pkgs) openjfx17 openjfx21 openjfx23;
-
-  compiler =
+  inherit (pkgs) openjfx17 openjfx21 openjfx25;
+  compiler = lib.recurseIntoAttrs (
     let
       # merge meta.platforms of both packages so that dependent packages and hydra build them
       mergeMetaPlatforms =
@@ -43,20 +47,20 @@ with pkgs;
       corretto11 = callPackage ../development/compilers/corretto/11.nix { };
       corretto17 = callPackage ../development/compilers/corretto/17.nix { };
       corretto21 = callPackage ../development/compilers/corretto/21.nix { };
+      corretto25 = callPackage ../development/compilers/corretto/25.nix { };
 
       openjdk8 = mkOpenjdk "8";
       openjdk11 = mkOpenjdk "11";
       openjdk17 = mkOpenjdk "17";
       openjdk21 = mkOpenjdk "21";
-      openjdk23 = mkOpenjdk "23";
-      openjdk24 = mkOpenjdk "24";
+      openjdk25 = mkOpenjdk "25";
 
       # Legacy aliases
       openjdk8-bootstrap = temurin-bin.jdk-8;
       openjdk11-bootstrap = temurin-bin.jdk-11;
       openjdk17-bootstrap = temurin-bin.jdk-17;
 
-      temurin-bin = recurseIntoAttrs (
+      temurin-bin = lib.recurseIntoAttrs (
         let
           temurinLinux = import ../development/compilers/temurin-bin/jdk-linux.nix {
             inherit (pkgs) lib callPackage stdenv;
@@ -68,7 +72,7 @@ with pkgs;
         lib.mapAttrs (name: drv: mkLinuxDarwin drv temurinDarwin.${name}) temurinLinux
       );
 
-      semeru-bin = recurseIntoAttrs (
+      semeru-bin = lib.recurseIntoAttrs (
         let
           semeruLinux = import ../development/compilers/semeru-bin/jdk-linux.nix {
             inherit (pkgs) lib callPackage;
@@ -79,7 +83,8 @@ with pkgs;
         in
         lib.mapAttrs (name: drv: mkLinuxDarwin drv semeruDarwin.${name}) semeruLinux
       );
-    };
+    }
+  );
 }
 // lib.optionalAttrs config.allowAliases {
   jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";

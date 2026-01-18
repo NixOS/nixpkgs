@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     # See also an upstream report for gtest 1.13+ and C++14:
     # https://github.com/mfontanini/libtins/issues/
     ./0001-force-cpp-17.patch
+    # Update CMake minimum required version for CMake 4 compatibility
+    # https://github.com/mfontanini/libtins/pull/553
+    ./cmake-3.10.patch
   ];
 
   postPatch = ''
@@ -42,6 +45,12 @@ stdenv.mkDerivation rec {
     openssl
     libpcap
     boost
+  ];
+
+  cmakeFlags = [
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   configureFlags = [

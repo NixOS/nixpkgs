@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   version = "1.1.1";
   pname = "grappelli-safe";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "grappelli_safe";
@@ -26,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grappelli_safe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snapshot of django-grappelli for the Mezzanine CMS";
     longDescription = ''
       grappelli_safe was created to provide a snapshot of the
@@ -41,7 +38,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/stephenmcd/grappelli-safe";
     downloadPage = "http://pypi.python.org/pypi/grappelli_safe/";
     changelog = "https://github.com/stephenmcd/grappelli-safe/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ prikhi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ prikhi ];
   };
 }

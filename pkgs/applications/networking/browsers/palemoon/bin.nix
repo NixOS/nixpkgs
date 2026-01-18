@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.8.2";
+  version = "33.9.1";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -173,11 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         gtk3 = fetchzip {
           urls = urlRegionVariants "gtk3";
-          hash = "sha256-W5N2OzHTYhJ7Lha/iduN7JPcczF+VPU9I36BAUiXUmU=";
+          hash = "sha256-muFqS3NpYX0Walhd+RFIZh7pUKQ5ZbPMZJasm9+rqTE=";
         };
         gtk2 = fetchzip {
           urls = urlRegionVariants "gtk2";
-          hash = "sha256-RmX/yCWHzZEdkh6TnUQ/guIc7+iEdpK8ANhJxL3MbzI=";
+          hash = "sha256-lRFXpv+dp3ALVSiEDwE4kiaVjBX5XuVZeugEr+St53I=";
         };
       };
 
@@ -204,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.palemoon.org/";
     description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
@@ -220,15 +220,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
-      licenses.mpl20
+      lib.licenses.mpl20
       {
         fullName = "Pale Moon Redistribution License";
         url = "https://www.palemoon.org/redist.shtml";
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];

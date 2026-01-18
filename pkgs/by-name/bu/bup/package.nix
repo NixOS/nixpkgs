@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     repo = "bup";
     owner = "bup";
-    rev = version;
+    tag = version;
     hash = "sha256-MW4kScu81XW89W7WpvOj40+S8bG5QozN30Hfj4TsnX4=";
   };
 
@@ -81,19 +81,19 @@ stdenv.mkDerivation {
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
     mainProgram = "bup";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       Highly efficient file backup system based on the git packfile format.
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
     # bespoke ./configure does not like cross
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };

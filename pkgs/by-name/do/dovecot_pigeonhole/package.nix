@@ -39,12 +39,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pigeonhole.dovecot.org/";
     description = "Sieve plugin for the Dovecot IMAP server";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ globin ];
-    teams = [ teams.helsinki-systems ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
+    platforms = lib.platforms.unix;
   };
 }

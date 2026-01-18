@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bgMQTiNeJR6zPTy/YpQ0oI1oGBzCf+VtBUn6pgADZAY=";
+    hash = "sha256-CbpUg+PB4Kx8AJavXY1GorNb3KfyKl8ovY2y2658UXI=";
   };
 
-  cargoHash = "sha256-VxyYnX6AW+AS4NOB1XZXi2Dyrf4rtJzKHXMYwgLY6pQ=";
+  cargoHash = "sha256-+3r3FXol7FzgpaasNT3uVT+PhfoRrRNS4z1iYPiwHRM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # we do this here so that the binary is usable during integration tests
-  RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
+  env.RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
     lib.concatStringsSep " " [
       "-C link-arg=-Wl,-rpath,${
         lib.makeLibraryPath [
@@ -128,7 +128,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/ilya-zlobintsev/LACT";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       atemu
       cything
       johnrtitor

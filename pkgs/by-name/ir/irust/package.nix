@@ -46,11 +46,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cross Platform Rust Repl";
     homepage = "https://github.com/sigmaSd/IRust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "irust";
   };
 }

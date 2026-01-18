@@ -28,11 +28,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.13";
+  version = "1.4.14";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-XuJ252RNcT4Z5LatwAtECvtYUf8h5lgh/67YnhWl4Wc=";
+    hash = "sha256-FE9AfULteg7BRwpA7xetQRM/6RC86GXdn+CE1JyQdSY=";
   };
 
   nativeBuildInputs = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) "--undefined-version";
 
-  meta = with lib; {
+  meta = {
     description = "Trivial database";
     longDescription = ''
       TDB is a Trivial Database. In concept, it is very much like GDBM,
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
       other. TDB is also extremely small.
     '';
     homepage = "https://tdb.samba.org/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
   };
 }

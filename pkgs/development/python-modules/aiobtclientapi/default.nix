@@ -12,17 +12,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobtclientapi";
-  version = "1.1.3";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "plotski";
     repo = "aiobtclientapi";
-    tag = "v${version}";
-    hash = "sha256-ZpUaMsJs1vdVGQOid7aJ+SJKaCbTtHfSw7cOwPTL0ss=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ga3EyKhfdEKkjFktUlgLSX54QbTc/a48vmWjmRqa+4w=";
   };
 
   pythonRelaxDeps = [
@@ -48,6 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobtclientapi" ];
 
+  disabledTests = [
+    # Timing-sensitive, e.g. "AssertionError: assert 9 <= 7"
+    "test_Monitor_block_until_timeout"
+  ];
+
   disabledTestPaths = [
     # AttributeError
     "tests/clients_test/rtorrent_test/rtorrent_api_test.py"
@@ -59,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

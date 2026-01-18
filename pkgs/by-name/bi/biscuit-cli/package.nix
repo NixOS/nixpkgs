@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "biscuit-auth";
     repo = "biscuit-cli";
-    rev = version;
+    tag = version;
     sha256 = "sha256-s4Y4MhM79Z+4VxB03+56OqRQJaSHj2VQEJcL6CsT+2k=";
   };
 
@@ -29,14 +29,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI to generate and inspect biscuit tokens";
     homepage = "https://www.biscuitsec.org/";
-    maintainers = with maintainers; [
-      shlevy
-      gaelreyrol
-    ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ shlevy ];
+    license = lib.licenses.bsd3;
     mainProgram = "biscuit";
   };
 }

@@ -1,40 +1,43 @@
 {
   fetchFromGitHub,
-  stdenv,
   lib,
-  nixosTests,
+  php84,
 }:
 
-stdenv.mkDerivation rec {
+let
+  php = php84;
+in
+php.buildComposerProject2 (finalAttrs: {
   pname = "postfixadmin";
-  version = "3.3.16";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "postfixadmin";
     repo = "postfixadmin";
-    tag = "postfixadmin-${version}";
-    hash = "sha256-sSn5XHxnpP2Axv9BD9IvzSmu8MthcylEPk1kU51p/3k=";
+    tag = "postfixadmin-${finalAttrs.version}";
+    hash = "sha256-mr5FBURTGP2J3JMlcexXjz4GFJNqPR4rZyqHVN7+6iM=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  # Upstream does not ship a lock file, we have to maintain our own for now.
+  # https://github.com/postfixadmin/postfixadmin/issues/948
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-uyHEfWCC6V4d+ez7FbqBKrh4IfbQ2pgD4UvbdGEfobI=";
 
-    mkdir $out
-    cp -r * $out/
-    ln -sf /etc/postfixadmin/config.local.php $out/
-    ln -sf /var/cache/postfixadmin/templates_c $out/
+  postInstall = ''
+    out_dir="$out"/share/php/postfixadmin/
 
-    runHook postInstall
+    ln -sf /etc/postfixadmin/config.local.php "$out_dir"
+    ln -sf /var/cache/postfixadmin/templates_c "$out_dir"
   '';
 
-  passthru.tests = { inherit (nixosTests) postfixadmin; };
+  passthru.phpPackage = php;
 
   meta = {
-    changelog = "https://github.com/postfixadmin/postfixadmin/releases/tag/${src.tag}";
+    changelog = "https://github.com/postfixadmin/postfixadmin/releases/tag/${finalAttrs.src.tag}";
     description = "Web based virtual user administration interface for Postfix mail servers";
     homepage = "https://postfixadmin.sourceforge.io/";
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = with lib.maintainers; [ yayayayaka ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
+})

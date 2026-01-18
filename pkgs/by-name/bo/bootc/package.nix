@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   libz,
   zstd,
   pkg-config,
@@ -24,6 +25,13 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/bootc-dev/bootc/commit/ff8b1b411270275c49ee512d54b27ed7a2fca112.patch";
+      hash = "sha256-7UKquq6ZargQUDGZk22X9Co92v8e995bL+tuAjvh/7c=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

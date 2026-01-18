@@ -25,24 +25,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.1.3";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-JFtStE1avSWGptgj9KtfAr55+J1FydEzD5plvSe2mjM=";
+    hash = "sha256-Y0jJIS2DSJWQJK0Uyzyb/WSHTE/uQZefRidf0hRQwNU=";
   };
 
-  patches = [
-    # Fix tests on 8.1.3
-    # FIXME: remove for next release
-    (fetchpatch {
-      url = "https://github.com/valkey-io/valkey/commit/02d7ee08489fe34f853ffccce9057dea6f03d957.diff";
-      hash = "sha256-/5U6HqgK4m1XQGTZchSmzl7hOBxCwL4XZVjE5QIZVjc=";
-    })
-  ]
-  ++ lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
+  patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -71,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
@@ -122,12 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     serverBin = "valkey-server";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://valkey.io/";
     description = "High-performance data structure server that primarily serves key/value workloads";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

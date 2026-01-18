@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "python-openapi";
@@ -61,11 +59,11 @@ buildPythonPackage rec {
     "openapi_spec_validator.readers"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
     mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

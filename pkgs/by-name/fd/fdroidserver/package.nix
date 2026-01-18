@@ -2,15 +2,21 @@
   lib,
   fetchFromGitLab,
   python3Packages,
-  python3,
   fetchPypi,
   apksigner,
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      sqlalchemy = self.sqlalchemy_1_4;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.4.2";
+  version = "2.4.3";
 
   pyproject = true;
 
@@ -18,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "fdroid";
     repo = "fdroidserver";
     tag = version;
-    hash = "sha256-26D+nnytLOsEAWNj2XvKM2O00epGtvJaJhUw+yoBl9Y=";
+    hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
   };
 
   pythonRelaxDeps = [
@@ -37,7 +43,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python3.pythonOnBuildForHost.interpreter} setup.py compile_catalog
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
@@ -49,12 +55,12 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     babel
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     androguard
     biplist
     clint

@@ -10,7 +10,7 @@ let
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -31,6 +31,6 @@ python3Packages.buildPythonApplication {
     description = "Browse and preview Base16 Shell themes in your terminal";
     mainProgram = "base16-shell-preview";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "asgineer";
-  version = "0.9.3";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "asgineer";
     tag = "v${version}";
-    hash = "sha256-Uk1kstEBt321BVeNcfdhZuonmm1i9IXSBnZLa4eDS2E=";
+    hash = "sha256-8qI5eHt+UmQGZNCn12Iup9dIVd+aI6r3Z1R+u+SziMc=";
   };
 
   build-system = [ flit-core ];
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asgineer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Really thin ASGI web framework";
     homepage = "https://asgineer.readthedocs.io";
     changelog = "https://github.com/almarklein/asgineer/releases/tag/v${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

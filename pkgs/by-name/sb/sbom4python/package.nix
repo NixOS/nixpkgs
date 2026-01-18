@@ -36,7 +36,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [
     "sbom4python"
@@ -48,6 +47,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/anthonyharrison/sbom4python";
     license = lib.licenses.asl20;
     mainProgram = "sbom4python";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

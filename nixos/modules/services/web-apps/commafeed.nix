@@ -111,5 +111,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.raroh73 ];
+  meta.maintainers = [ ];
 }

@@ -18,7 +18,7 @@ buildPythonPackage {
     repo = "django-crossdomainmedia";
     # Release is not tagged yet
     # https://github.com/stefanw/django-crossdomainmedia/issues/1
-    # rev = "refs/tags/v${version}";
+    # tag = "v${version}";
     rev = "45af45a82e2630d99381758c7660fe9bdad06d2d";
     hash = "sha256-nwFUm+cxokZ38c5D77z15gIO/kg49oRACOl6+eGGEtQ=";
   };

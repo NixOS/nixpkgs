@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "amneziawg-go";
-  version = "0.2.15";
+  version = "0.2.16";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-go";
     tag = "v${version}";
-    hash = "sha256-xz807BLNoh1sMfyDXMAXPU9mHSxfxI3k5ayEVQM+HH0=";
+    hash = "sha256-JGmWMPVgereSZmdHUHC7ZqWCwUNfxfj3xBf/XDDHhpo=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildGoModule rec {
     rm -f format_test.go
   '';
 
-  vendorHash = "sha256-VYDc6oI0CqW1T3tVX0CWQLfLIOvqHCawVA8BWASWLLY=";
+  vendorHash = "sha256-ZO8sLOaEY3bii9RSxzXDTCcwlsQEYmZDI+X1WPXbE9c=";
 
   subPackages = [ "." ];
 

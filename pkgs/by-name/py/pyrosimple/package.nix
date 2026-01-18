@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pyrosimple";
   version = "2.14.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kannibalox";

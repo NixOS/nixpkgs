@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ emacs ]; # tests/bytecode_test
 
-  meta = with lib; {
+  meta = {
     description = "Emacs LSP performance booster";
     homepage = "https://github.com/blahgeek/emacs-lsp-booster";
-    license = licenses.mit;
-    maintainers = with maintainers; [ icy-thought ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ icy-thought ];
     mainProgram = "emacs-lsp-booster";
   };
 }

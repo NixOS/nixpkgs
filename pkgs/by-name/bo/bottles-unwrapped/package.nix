@@ -32,19 +32,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.24";
+  version = "60.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = version;
-    hash = "sha256-cKW2b8MVpVksDnthn9kPBtUoCiiCMTQ993KTJSJuZDE=";
+    hash = "sha256-d9nRT6AvFxnhI/theJtPg79EdmA+9UFS4OWDlkV03sA=";
   };
 
   patches = [
     ./vulkan_icd.patch
     ./redirect-bugtracker.patch
     ./remove-flatpak-check.patch
+    ./terminal.patch # Needed for `Launch with Terminal`
   ]
   ++ (
     if removeWarningPopup then
@@ -114,7 +115,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''

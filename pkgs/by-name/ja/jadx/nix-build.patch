@@ -1,0 +1,216 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 7e4d28a9..0fe94ff6 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -115,46 +115,11 @@ fun isNonStable(version: String): Boolean {
+ 	destinationDirectory.set(layout.buildDirectory)
+ }
+ 
+-val distWin by tasks.registering(Zip::class) {
+-	group = "jadx"
+-	description = "Build Windows bundle"
+-
+-	val guiTask = tasks.getByPath("jadx-gui:copyDistWin")
+-	dependsOn(guiTask)
+-	from(guiTask.outputs)
+-
+-	destinationDirectory.set(layout.buildDirectory.dir("distWin"))
+-	archiveFileName.set("jadx-gui-$jadxVersion-win.zip")
+-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+-}
+-
+-val distWinWithJre by tasks.registering(Zip::class) {
+-	description = "Build Windows with JRE bundle"
+-
+-	val guiTask = tasks.getByPath(":jadx-gui:copyDistWinWithJre")
+-	dependsOn(guiTask)
+-	from(guiTask.outputs)
+-
+-	destinationDirectory.set(layout.buildDirectory.dir("distWinWithJre"))
+-	archiveFileName.set("jadx-gui-$jadxVersion-with-jre-win.zip")
+-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+-}
+-
+ val dist by tasks.registering {
+ 	group = "jadx"
+ 	description = "Build jadx distribution zip bundles"
+ 
+ 	dependsOn(pack)
+-
+-	val os = DefaultNativePlatform.getCurrentOperatingSystem()
+-	if (os.isWindows) {
+-		if (project.hasProperty("bundleJRE")) {
+-			println("Build win bundle with JRE")
+-			dependsOn(distWinWithJre)
+-		} else {
+-			dependsOn(distWin)
+-		}
+-	}
+ }
+ 
+ val cleanBuildDir by tasks.registering(Delete::class) {
+diff --git a/buildSrc/build.gradle.kts b/buildSrc/build.gradle.kts
+index ff9e7e36..7a63af40 100644
+--- a/buildSrc/build.gradle.kts
++++ b/buildSrc/build.gradle.kts
+@@ -4,8 +4,6 @@
+ 
+ dependencies {
+ 	implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0")
+-
+-	implementation("org.openrewrite:plugin:6.19.1")
+ }
+ 
+ repositories {
+diff --git a/buildSrc/src/main/kotlin/jadx-java.gradle.kts b/buildSrc/src/main/kotlin/jadx-java.gradle.kts
+index ad65de18..ecb53db1 100644
+--- a/buildSrc/src/main/kotlin/jadx-java.gradle.kts
++++ b/buildSrc/src/main/kotlin/jadx-java.gradle.kts
+@@ -3,8 +3,6 @@
+ plugins {
+ 	java
+ 	checkstyle
+-
+-	id("jadx-rewrite")
+ }
+ 
+ val jadxVersion: String by rootProject.extra
+diff --git a/buildSrc/src/main/kotlin/jadx-rewrite.gradle.kts b/buildSrc/src/main/kotlin/jadx-rewrite.gradle.kts
+deleted file mode 100644
+index aab46d55..00000000
+--- a/buildSrc/src/main/kotlin/jadx-rewrite.gradle.kts
++++ /dev/null
+@@ -1,35 +0,0 @@
+-plugins {
+-	id("org.openrewrite.rewrite")
+-}
+-
+-repositories {
+-	mavenCentral()
+-}
+-
+-dependencies {
+-	rewrite("org.openrewrite.recipe:rewrite-testing-frameworks:3.13.0")
+-	rewrite("org.openrewrite.recipe:rewrite-logging-frameworks:3.11.0")
+-	rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.13.0")
+-	rewrite("org.openrewrite.recipe:rewrite-static-analysis:2.12.0")
+-}
+-
+-tasks {
+-	rewrite {
+-		// exclusion("src/test/java/jadx/tests/integration")
+-
+-		// activeRecipe("org.openrewrite.java.migrate.Java8toJava11")
+-
+-		// checkstyle auto fix
+-		// activeRecipe("org.openrewrite.staticanalysis.CodeCleanup")
+-		// setCheckstyleConfigFile(file("$rootDir/config/checkstyle/checkstyle.xml"))
+-
+-		// logging
+-		// activeRecipe("org.openrewrite.java.logging.slf4j.Slf4jBestPractices")
+-		// activeRecipe("org.openrewrite.java.logging.slf4j.LoggersNamedForEnclosingClass")
+-		// activeRecipe("org.openrewrite.java.logging.slf4j.ParameterizedLogging")
+-		// activeRecipe("org.openrewrite.java.logging.PrintStackTraceToLogError")
+-
+-		// testing
+-		activeRecipe("org.openrewrite.java.testing.assertj.Assertj")
+-	}
+-}
+diff --git a/jadx-gui/build.gradle.kts b/jadx-gui/build.gradle.kts
+index b9d64ae7..4c1c23f8 100644
+--- a/jadx-gui/build.gradle.kts
++++ b/jadx-gui/build.gradle.kts
+@@ -2,7 +2,6 @@
+ 	id("jadx-kotlin")
+ 	id("application")
+ 	id("jadx-library")
+-	id("edu.sc.seis.launch4j") version "3.0.6"
+ 	id("com.gradleup.shadow") version "8.3.8"
+ 	id("org.beryx.runtime") version "1.13.1"
+ }
+@@ -136,36 +135,6 @@
+ 	}
+ }
+ 
+-launch4j {
+-	mainClassName.set(application.mainClass.get())
+-	copyConfigurable.set(listOf<Any>())
+-	dontWrapJar.set(true)
+-	icon.set("$projectDir/src/main/resources/logos/jadx-logo.ico")
+-	outfile.set("jadx-gui-$jadxVersion.exe")
+-	version.set(jadxVersion)
+-	copyright.set("Skylot")
+-	windowTitle.set("jadx")
+-	companyName.set("jadx")
+-	jreMinVersion.set("11")
+-	jvmOptions.set(escapeJVMOptions())
+-	requires64Bit.set(true)
+-	downloadUrl.set("https://www.oracle.com/java/technologies/downloads/#jdk21-windows")
+-	supportUrl.set("https://github.com/skylot/jadx")
+-
+-	bundledJrePath.set(if (project.hasProperty("bundleJRE")) "%EXEDIR%/jre" else "%JAVA_HOME%")
+-	classpath.set(tasks.getByName("shadowJar").outputs.files.map { "%EXEDIR%/lib/${it.name}" }.sorted().toList())
+-	println("Launch4J classpath: ${classpath.get()}")
+-
+-	chdir.set("") // don't change current dir
+-	libraryDir.set("") // don't add any libs
+-}
+-
+-fun escapeJVMOptions(): List<String> {
+-	return application.applicationDefaultJvmArgs
+-		.toList()
+-		.map { if (it.startsWith("-D")) "\"$it\"" else it }
+-}
+-
+ runtime {
+ 	addOptions("--strip-debug", "--compress", "zip-9", "--no-header-files", "--no-man-pages")
+ 	addModules(
+@@ -186,48 +155,6 @@ fun escapeJVMOptions(): List<String> {
+ 	}
+ }
+ 
+-val copyDistWin by tasks.registering(Copy::class) {
+-	description = "Copy files for Windows bundle"
+-
+-	val libTask = tasks.getByName("shadowJar")
+-	dependsOn(libTask)
+-	from(libTask.outputs) {
+-		include("*.jar")
+-		into("lib")
+-	}
+-	val exeTask = tasks.getByName("createExe")
+-	dependsOn(exeTask)
+-	from(exeTask.outputs) {
+-		include("*.exe")
+-	}
+-	into(layout.buildDirectory.dir("jadx-gui-win"))
+-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+-}
+-
+-val copyDistWinWithJre by tasks.registering(Copy::class) {
+-	description = "Copy files for Windows with JRE bundle"
+-
+-	val jreTask = tasks.runtime.get()
+-	dependsOn(jreTask)
+-	from(jreTask.jreDir) {
+-		include("**/*")
+-		into("jre")
+-	}
+-	val libTask = tasks.getByName("shadowJar")
+-	dependsOn(libTask)
+-	from(libTask.outputs) {
+-		include("*.jar")
+-		into("lib")
+-	}
+-	val exeTask = tasks.getByName("createExe")
+-	dependsOn(exeTask)
+-	from(exeTask.outputs) {
+-		include("*.exe")
+-	}
+-	into(layout.buildDirectory.dir("jadx-gui-with-jre-win"))
+-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+-}
+-
+ val syncNLSLines by tasks.registering(JavaExec::class) {
+ 	group = "jadx-dev"
+ 	description = "Utility task to sync new/missing translation using EN as a reference"

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   babel,
   buildPythonPackage,
   cssselect,
@@ -19,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate";
     tag = version;
-    hash = "sha256-jDeme5eOuX9aQ+4A/pLnH/SuCOztyZzKdSBYKVC63Bk=";
+    hash = "sha256-Pp5pUOycDGzymIvwWoDAaOomTsxAfDNdSGwOG5a25Hc=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +47,11 @@ buildPythonPackage rec {
     lxml
     pyicu
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Output is slightly different on macOS
+    "test_cast_format_locale"
   ];
 
   pythonImportsCheck = [ "agate" ];

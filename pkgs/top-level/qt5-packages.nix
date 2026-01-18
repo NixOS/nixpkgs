@@ -76,7 +76,7 @@ makeScopeWithSplicing' {
 
         futuresql = callPackage ../development/libraries/futuresql { };
 
-        qgpgme = callPackage ../development/libraries/gpgme { };
+        qgpgme = callPackage ../development/libraries/qgpgme { };
 
         grantlee = callPackage ../development/libraries/grantlee/5 { };
 
@@ -91,8 +91,6 @@ makeScopeWithSplicing' {
         kdiagram = callPackage ../development/libraries/kdiagram { };
 
         kdsoap = callPackage ../development/libraries/kdsoap { };
-
-        kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
 
         kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
 
@@ -215,8 +213,6 @@ makeScopeWithSplicing' {
           callPackage ../development/libraries/sailfish-access-control-plugin
             { };
 
-        soqt = callPackage ../development/libraries/soqt { };
-
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
         qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
@@ -226,6 +222,12 @@ makeScopeWithSplicing' {
         timed = callPackage ../applications/system/timed { };
 
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
+      }
+      // lib.optionalAttrs config.allowAliases {
+        kf5gpgmepp = throw ''
+          'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
+          Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
+        ''; # Added 2025-10-25
       }
     ))
   );

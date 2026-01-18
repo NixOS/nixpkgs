@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "trezord";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [
       mmahut
       _1000101
     ];

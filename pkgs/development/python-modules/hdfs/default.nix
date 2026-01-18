@@ -37,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hdfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API and command line interface for HDFS";
     homepage = "https://github.com/mtth/hdfs";
     changelog = "https://github.com/mtth/hdfs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
     mainProgram = "hdfscli";
   };
 }

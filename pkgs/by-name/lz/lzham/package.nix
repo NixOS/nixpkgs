@@ -5,29 +5,38 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lzham";
-  version = "1.0";
+  version = "1.0-unstable-2023-05-14";
 
   src = fetchFromGitHub {
     owner = "richgel999";
-    repo = "lzham_codec";
-    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}_release";
-    sha256 = "14c1zvzmp1ylp4pgayfdfk1kqjb23xj4f7ll1ra7b18wjxc9ja1v";
+    repo = "lzham_codec_devel";
+    rev = "d09fc6676a0313c3814457fbc76351a68f653092";
+    hash = "sha256-zKzz4gEB2dkIIAuDhKGWeV1hn8tCMVILsiQ/gu6aAEE=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ../bin_linux/lzhamtest $out/bin
+  cmakeFlags = [
+    "-DCMAKE_SKIP_RPATH=ON"
+  ];
+
+  postPatch = ''
+    substituteInPlace {./,lzhamcomp/,lzhamdecomp/,lzhamdll/,lzhamtest/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    mkdir -p $out/bin
+    cp lzhamtest/lzhamtest $out/bin/
+  '';
+
+  meta = {
     description = "Lossless data compression codec with LZMA-like ratios but 1.5x-8x faster decompression speed";
     mainProgram = "lzhamtest";
     homepage = "https://github.com/richgel999/lzham_codec";
-    license = with licenses; [ mit ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

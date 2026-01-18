@@ -1,6 +1,6 @@
 {
   hare,
-  runCommandNoCC,
+  runCommand,
   writeText,
 }:
 let
@@ -18,7 +18,7 @@ let
       };
   '';
 in
-runCommandNoCC "mime-module-test" { nativeBuildInputs = [ hare ]; } ''
+runCommand "mime-module-test" { nativeBuildInputs = [ hare ]; } ''
   HARECACHE="$(mktemp -d)"
   export HARECACHE
   readonly binout="test-bin"

@@ -1,27 +1,27 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   autoPatchelfHook,
   buildGoModule,
   libayatana-appindicator,
 }:
 
 let
-  version = "1.8.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-GUCc6GK1yhVbk3Ss1XnT23wtz22uTgdSSDfEdr4mMpA=";
+    hash = "sha256-ze0hoTR3e3Wrgtv2FlM81faXmij61NEcPLzO4WDXIak=";
   };
 
   metaCommon = {
-    description = "Modern download manager that supports all platforms";
+    description = "Modern download manager";
     homepage = "https://github.com/GopeedLab/gopeed";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 
@@ -29,7 +29,14 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-7SPTMeaHvqTZJQYPoGUGRudNRTcsEl/8AKgI6W/XCJQ=";
+    vendorHash = "sha256-rIj4T+NEqWla6/+ofosTwagL4/VMovDp1NEYMuzbOrQ=";
+
+    # Fix C23 compat
+    preBuild = ''
+      chmod +w vendor/github.com/anacrolix/go-libutp/utp_types.h
+      substituteInPlace vendor/github.com/anacrolix/go-libutp/utp_types.h \
+        --replace-fail "typedef uint8 bool;" ""
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -44,7 +51,7 @@ let
     meta = metaCommon;
   };
 in
-flutter327.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit version src;
   pname = "gopeed";
 
@@ -52,10 +59,7 @@ flutter327.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    install_plugin = "sha256-3FM08D2pbtWmitf8R4pAylVqum7IfbWh6pOIEhJdySk=";
-    permission_handler_windows = "sha256-MRTmuH0MfhGaMEb9bRotimAPRlFyl3ovtJUJ2WK7+DA=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [ autoPatchelfHook ];
 

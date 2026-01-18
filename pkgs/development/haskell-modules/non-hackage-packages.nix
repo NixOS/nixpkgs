@@ -41,12 +41,13 @@ self: super:
 
   ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
 
-  # https://github.com/channable/vaultenv/issues/1
+  # Upstream won't upload vaultenv to Hackage:
+  # https://github.com/channable/vaultenv/issues/1 krank:ignore-line
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
-  # spago is not released to Hackage.
-  # https://github.com/spacchetti/spago/issues/512
-  spago = self.callPackage ../tools/purescript/spago/spago.nix { };
+  # spago-legacy won't be released to Hackage:
+  # https://github.com/spacchetti/spago/issues/512 krank:ignore-line
+  spago-legacy = self.callPackage ../../by-name/sp/spago-legacy/spago-legacy.nix { };
 
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix

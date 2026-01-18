@@ -6,7 +6,6 @@
   flask,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   werkzeug,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytest-flask";
   version = "1.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,11 +37,11 @@ buildPythonPackage rec {
     "tests/test_live_server.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of pytest fixtures to test Flask applications";
     homepage = "https://pytest-flask.readthedocs.io/";
     changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vanschelven ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vanschelven ];
   };
 }

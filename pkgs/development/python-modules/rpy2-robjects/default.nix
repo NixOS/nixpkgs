@@ -16,8 +16,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.2";
-  format = "pyproject";
+  version = "3.6.3";
+  pyproject = true;
   pname = "rpy2-robjects";
 
   disabled = isPyPy;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
       builtins.replaceStrings [ "-" ] [ "_" ] pname
     }-${version}.tar.gz";
-    hash = "sha256-rJGvMtXE2iNrBaPNaNr7JM2PWogPAHhim48r8CUFQjs=";
+    hash = "sha256-cxqhpJBcSyXAVk1yy/2F+SMBAvmJ56IlFYhekdTfPUA=";
   };
 
   patches = [

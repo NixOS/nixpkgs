@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   fetchFromGitea,
   setuptools,
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "desktop-entry-lib";
   version = "3.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   # We could use fetchPypi, but then the tests won't run
   src = fetchFromGitea {
@@ -26,10 +24,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "desktop_entry_lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows reading and writing .desktop files according to the Desktop Entry Specification";
     homepage = "https://codeberg.org/JakobDev/desktop-entry-lib";
     changelog = "https://codeberg.org/JakobDev/desktop-entry-lib/releases/tag/${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

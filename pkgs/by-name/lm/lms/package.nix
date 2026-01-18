@@ -18,17 +18,18 @@
   stb,
   openssl,
   xxHash,
+  pugixml,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.69.0";
+  version = "3.74.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-fdsKNicBcdUoxFLYg8Lq1KFZub1P3pt2rOKQ/1V2VtU=";
+    hash = "sha256-D1Sg6XzZ8t/dFKrVh7k+KGLg2r6LeLGJk4FweVb4L1A=";
   };
 
   strictDeps = true;
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     stb
     openssl
     xxHash
+    pugixml
   ];
 
   postPatch = ''

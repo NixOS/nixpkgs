@@ -5,7 +5,7 @@ fixupOutputHooks+=(_patchPpdFileCommands4fixupOutputHooks)
 # Install a hook for the `fixupPhase`:
 # If the variable `ppdFileCommands` contains a list of
 # executable names, the hook calls `patchPpdFileCommands`
-# on each output's `/share/cups/model` and `/share/ppds`
+# on each output's `/share/cups/model` and `/share/ppd`
 # directories in order to replace calls to those executables.
 
 _patchPpdFileCommands4fixupOutputHooks () {
@@ -13,8 +13,8 @@ _patchPpdFileCommands4fixupOutputHooks () {
     if [[ -d $prefix/share/cups/model ]]; then
         patchPpdFileCommands "$prefix/share/cups/model" $ppdFileCommands
     fi
-    if [[ -d $prefix/share/ppds ]]; then
-        patchPpdFileCommands "$prefix/share/ppds" $ppdFileCommands
+    if [[ -d $prefix/share/ppd ]]; then
+        patchPpdFileCommands "$prefix/share/ppd" $ppdFileCommands
     fi
 }
 

@@ -1,35 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  future,
+  fetchFromGitHub,
   pycryptodomex,
-  pytest,
+  pytestCheckHook,
   requests,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "pyjwkest";
-  version = "1.4.2";
-  format = "setuptools";
+  version = "1.4.4";
+  pyproject = true;
 
-  meta = {
-    description = "Implementation of JWT, JWS, JWE and JWK";
-    homepage = "https://github.com/rohe/pyjwkest";
-    license = lib.licenses.asl20;
+  src = fetchFromGitHub {
+    owner = "IdentityPython";
+    repo = "pyjwkest";
+    tag = "v${version}";
+    hash = "sha256-G4/qLOOQHsNSMVndUdYBhrrk8uEufbI8Od3ziQiY0XI=";
   };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5560fd5ba08655f29ff6ad1df1e15dc05abc9d976fcbcec8d2b5167f49b70222";
-  };
+  build-system = [ setuptools ];
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [
-    future
+  # Remove unused future import, see pending PR:
+  # https://github.com/IdentityPython/pyjwkest/pull/107
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"future"' ""
+  '';
+
+  dependencies = [
     pycryptodomex
     requests
     six
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "jwkest" ];
+
+  meta = {
+    description = "Implementation of JWT, JWS, JWE and JWK";
+    homepage = "https://github.com/IdentityPython/pyjwkest";
+    license = lib.licenses.asl20;
+  };
 }

@@ -7,9 +7,7 @@
 
 with rPackages;
 let
-  buildRPackage' = args: buildRPackage ({ name = "${args.pname}-${args.version}"; } // args);
-
-  jaspGraphs = buildRPackage' {
+  jaspGraphs = buildRPackage {
     pname = "jaspGraphs";
     version = "0.19.2-unstable-2025-07-25";
 
@@ -41,7 +39,7 @@ let
     hash = "sha256-VOMcoXpLH24auQfZCWW6hQ10u6n2GxuEQHMaXrvGTnI=";
   };
 
-  jaspBase = buildRPackage' {
+  jaspBase = buildRPackage {
     pname = "jaspBase";
     version = jasp-version;
 
@@ -82,7 +80,7 @@ let
     ];
   };
 
-  stanova = buildRPackage' {
+  stanova = buildRPackage {
     pname = "stanova";
     version = "0.3-unstable-2021-06-06";
 
@@ -102,7 +100,7 @@ let
     ];
   };
 
-  bstats = buildRPackage' {
+  bstats = buildRPackage {
     pname = "bstats";
     version = "0.0.0.9004-unstable-2023-09-08";
 
@@ -120,7 +118,7 @@ let
     ];
   };
 
-  flexplot = buildRPackage' {
+  flexplot = buildRPackage {
     pname = "flexplot";
     version = "0.25.5";
 
@@ -153,7 +151,7 @@ let
   };
 
   # conting has been removed from CRAN
-  conting' = buildRPackage' {
+  conting' = buildRPackage {
     pname = "conting";
     version = "1.7.9999";
 
@@ -176,17 +174,17 @@ let
     {
       pname,
       version,
+      rev ? "refs/tags/${version}",
       hash,
       deps,
     }:
-    buildRPackage' {
+    buildRPackage {
       inherit pname version;
       src = fetchFromGitHub {
         name = "${pname}-${version}-source";
         owner = "jasp-stats";
         repo = pname;
-        tag = "v${version}";
-        inherit hash;
+        inherit rev hash;
       };
       propagatedBuildInputs = deps;
       # some packages have a .Rprofile that tries to activate renv
@@ -627,6 +625,7 @@ in
         pwr
         jaspBase
         jaspGraphs
+        viridis
       ];
     };
     jaspPredictiveAnalytics = buildJaspModule {
@@ -713,8 +712,9 @@ in
     };
     jaspRegression = buildJaspModule {
       pname = "jaspRegression";
-      version = "0.95.0";
-      hash = "sha256-9Q5Ei9vjFaDte//1seCj9++ftbDctkHzP8ZpGVETXH0=";
+      version = "0.95.0-unstable-2025-08-27";
+      rev = "b0ecad26bb248964e778ee6d4486d671b83930b2";
+      hash = "sha256-wm/Fz/wA7B96bzj8UylZjFgrrZgwOTdGnCsmfaCPGp0=";
       deps = [
         BAS
         boot
@@ -723,7 +723,6 @@ in
         emmeans
         ggplot2
         ggrepel
-        hmeasure
         jaspAnova
         jaspBase
         jaspDescriptives

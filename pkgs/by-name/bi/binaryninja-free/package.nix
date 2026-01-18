@@ -20,11 +20,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
-  version = "5.1.8005";
+  version = "5.2.8722";
 
   src = fetchurl {
     url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
-    hash = "sha256-vXR0TXcQwEoYz1qiGO3TYajUt+QR9wfV0es6yTZvYLs=";
+    hash = "sha256-YlBr/Cdjev7LWY/VsKgv/i3zHj4YR49RX69zmhhie7U=";
   };
 
   icon = fetchurl {
@@ -67,12 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilwm
   ];
 
-  preFixup = ''
-    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-    mkdir -p "$out/lib"
-    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
-  '';
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/
@@ -98,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
       free = false;
     };
     mainProgram = "binaryninja";
-    maintainers = with lib.maintainers; [ scoder12 ];
+    maintainers = with lib.maintainers; [
+      scoder12
+      timschumi
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

@@ -82,13 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Next version of the bwa-mem algorithm in bwa, a software package for mapping low-divergent sequences against a large reference genome";
     mainProgram = "bwa-mem2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/bwa-mem2/bwa-mem2/";
     changelog = "https://github.com/bwa-mem2/bwa-mem2/blob/${finalAttrs.src.rev}/NEWS.md";
-    platforms = platforms.x86_64;
-    maintainers = with maintainers; [ apraga ];
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ apraga ];
   };
 })

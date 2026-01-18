@@ -89,8 +89,7 @@ in
                 (
                   cfg:
                   lib.attrsets.mapAttrsToList (
-                    domain: cfg:
-                    builtins.map (builtins.replaceStrings [ "*." ] [ "" ]) ([ domain ] ++ cfg.extraDomainNames)
+                    domain: cfg: map (builtins.replaceStrings [ "*." ] [ "" ]) ([ domain ] ++ cfg.extraDomainNames)
                   ) cfg.configuration.security.acme.certs
                 )
                 # A specialisation's config is nested under its configuration attribute.
@@ -99,7 +98,7 @@ in
             )
           );
         in
-        builtins.listToAttrs (builtins.map (ip: lib.attrsets.nameValuePair ip names) ips)
+        builtins.listToAttrs (map (ip: lib.attrsets.nameValuePair ip names) ips)
       ) nodes;
     };
 

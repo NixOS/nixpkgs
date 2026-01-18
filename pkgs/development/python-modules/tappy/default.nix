@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   pyyaml,
@@ -15,8 +14,6 @@ buildPythonPackage {
   pname = "tap.py";
   inherit version;
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "tap_py";
@@ -45,6 +42,6 @@ buildPythonPackage {
     changelog = "https://tappy.readthedocs.io/en/latest/releases.html";
     mainProgram = "tappy";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

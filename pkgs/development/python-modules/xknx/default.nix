@@ -1,29 +1,25 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   cryptography,
   ifaddr,
   freezegun,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xknx";
-  version = "3.9.0";
+  version = "3.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";
-    tag = version;
-    hash = "sha256-68Vt5jwtEND2Ej6JP10Rp+kqYc2qu9XbmgZgPOmkWWw=";
+    tag = finalAttrs.version;
+    hash = "sha256-22xKxdjf0WEF2efHiGCYVhTCZ5jrD+26oqBdlxHwYdU=";
   };
 
   build-system = [ setuptools ];
@@ -31,14 +27,15 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     ifaddr
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio_0
+    pytest-asyncio
     pytestCheckHook
   ];
+
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "xknx" ];
 
@@ -49,27 +46,18 @@ buildPythonPackage rec {
     "test_start_secure_routing_explicit_keyring"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
-    # RuntimeError: Event loop is closed
-    "test_has_group_address_localtime"
-    "test_invalid_authentication"
-    "test_invalid_frames"
-    "test_no_authentication"
-    "test_process_read_localtime"
-    "test_sync_date"
-    "test_sync_datetime"
-    "test_sync_time_local"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KNX Library Written in Python";
     longDescription = ''
       XKNX is an asynchronous Python library for reading and writing KNX/IP
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/XKNX/xknx";
-    changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/XKNX/xknx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
-}
+})

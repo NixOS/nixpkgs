@@ -4,7 +4,6 @@
   cryptography,
   fetchFromGitHub,
   getmac,
-  pythonOlder,
   requests,
   setuptools,
   zeroconf,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "boschshcpy";
   version = "0.2.107";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tschamm";
@@ -38,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boschshcpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to work with the Bosch Smart Home Controller API";
     homepage = "https://github.com/tschamm/boschshcpy";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

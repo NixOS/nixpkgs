@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     "VERSION=$(version)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Program to generate and execute DesktopEntry files of the Application type";
     homepage = "https://github.com/jceb/dex";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "dex";
   };
 }

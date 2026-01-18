@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-sepadebit";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-sepadebit";
     tag = "v${version}";
-    hash = "sha256-o4HVPuSpYIFjxmYuL+IsJJDkv+4ARuvaDqPjxWxlhMg=";
+    hash = "sha256-Xnp7aic+Xf4wJzJbWqhsfMajT4AOQGQMIGIewJ5B37o=";
   };
 
   build-system = [
@@ -55,10 +55,16 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=pretix.testutils.settings
   '';
 
-  meta = with lib; {
+  disabledTests = [
+    # https://github.com/pretix/pretix-sepadebit/issues/69
+    "test_mail_context"
+    "test_call_mail_context"
+  ];
+
+  meta = {
     description = "Plugin to receive payments via SEPA direct debit";
     homepage = "https://github.com/pretix/pretix-sepadebit";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbenno ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbenno ];
   };
 }

@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Prosody configuration for Jitsi Meet";
     longDescription = ''
       This package contains configuration for Prosody to be used with Jitsi Meet.
     '';
     homepage = "https://github.com/jitsi/jitsi-meet/";
-    license = licenses.asl20;
-    teams = [ teams.jitsi ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.jitsi ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -6,7 +6,6 @@
   ppx_yojson_conv_lib,
   trace,
   uutf,
-  yojson,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -27,7 +26,6 @@ buildDunePackage (finalAttrs: {
     ppx_yojson_conv_lib
     trace
     uutf
-    yojson
   ];
 
   meta = {

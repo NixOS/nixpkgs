@@ -13,18 +13,18 @@
 }:
 let
   inherit (lib) lists strings;
-  inherit (cudaPackages) backendStdenv cudaAtLeast flags;
+  inherit (cudaPackages) backendStdenv flags;
 
   cuda-common-redist = with cudaPackages; [
     (lib.getDev cuda_cudart) # cuda_runtime.h
     (lib.getLib cuda_cudart)
     (lib.getDev cuda_cccl) # <nv/target>
-    (lib.getDev libcublas) # cublas_v2.h
-    (lib.getLib libcublas)
-    (lib.getDev libcusolver) # cusolverDn.h
-    (lib.getLib libcusolver)
-    (lib.getDev libcusparse) # cusparse.h
-    (lib.getLib libcusparse)
+    (lib.getInclude cuda_nvrtc) # nvrtc.h
+    (lib.getLib cuda_nvrtc)
+    (lib.getInclude libcublas) # cublas_v2.h
+    (lib.getLib libcublas) # cublas_v2.h
+    (lib.getInclude libcusolver) # cusolverDn.h
+    (lib.getInclude libcusparse) # cusparse.h
   ];
 
   cuda-native-redist = symlinkJoin {
@@ -38,7 +38,6 @@ let
   };
 
   unsupportedCudaCapabilities = [
-    "9.0a"
   ];
 
   cudaCapabilities = lists.subtractLists unsupportedCudaCapabilities flags.cudaCapabilities;
@@ -47,7 +46,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiny-cuda-nn";
-  version = "1.6";
+  version = "2.0";
   strictDeps = true;
 
   format = strings.optionalString pythonSupport "setuptools";
@@ -55,17 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "tiny-cuda-nn";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-qW6Fk2GB71fvZSsfu+mykabSxEKvaikZ/pQQZUycOy0=";
+    hash = "sha256-m73lnXufFQOoYHko8x/gIT2UAuHADAGRxVqDSbW+KlY=";
   };
-
-  # Remove this once a release is made with
-  # https://github.com/NVlabs/tiny-cuda-nn/commit/78a14fe8c292a69f54e6d0d47a09f52b777127e1
-  postPatch = ''
-    substituteInPlace bindings/torch/setup.py --replace-fail \
-      "-std=c++14" "-std=c++17"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -78,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       pip
       setuptools
-      wheel
     ]
   );
 
@@ -164,16 +155,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  pythonImportsCheck = lib.optionals pythonSupport [ "tinycudann" ];
+
   passthru = {
     inherit cudaPackages;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightning fast C++/CUDA neural network framework";
     homepage = "https://github.com/NVlabs/tiny-cuda-nn";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ connorbaker ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/NVlabs/tiny-cuda-nn/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ connorbaker ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # g++: error: unrecognized command-line option '-mf16c'
       lib.systems.inspect.patterns.isAarch64

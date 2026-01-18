@@ -15,11 +15,14 @@
   glib,
   gitUpdater,
   bubblewrap,
+  xapp-symbolic-icons,
 }:
 
 let
   pythonEnv = python3.withPackages (
-    pp: with pp; [
+    pp:
+    with pp;
+    [
       grpcio-tools
       protobuf
       pygobject3
@@ -27,7 +30,6 @@ let
       python-xapp
       zeroconf
       grpcio
-      setuptools
       cryptography
       pynacl
       netifaces
@@ -35,17 +37,18 @@ let
       ifaddr
       qrcode
     ]
+    ++ qrcode.optional-dependencies.pil
   );
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.10";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "warpinator";
     rev = version;
-    hash = "sha256-OSZYjCnFIHmWCwVcWP1MLmezt5HL4Njf0WMyCRmPP58=";
+    hash = "sha256-3ZkufMZFTn8BQO9DHr3s9ELRuDrTflE4Ym73dO7rrKs=";
   };
 
   nativeBuildInputs = [
@@ -86,15 +89,21 @@ stdenv.mkDerivation rec {
       --replace-fail 'GLib.find_program_in_path("bwrap")' "True"
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
   passthru.updateScript = gitUpdater {
     ignoredVersions = "^master.*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

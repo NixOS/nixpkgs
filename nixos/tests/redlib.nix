@@ -1,4 +1,8 @@
 { lib, pkgs, ... }:
+let
+  certs = import redlib/snakeoil-certs.nix;
+  redditDomain = certs.domain;
+in
 {
   name = "redlib";
   meta.maintainers = with lib.maintainers; [
@@ -7,6 +11,24 @@
   ];
 
   nodes.machine = {
+    # The test will hang if Redlib can't initialize its OAuth client, so we
+    # provide it with a mock endpoint.
+    networking.hosts."127.0.0.1" = [ redditDomain ];
+    security.pki.certificates = [
+      (builtins.readFile certs.ca.cert)
+    ];
+    services.nginx = {
+      enable = true;
+      virtualHosts.${redditDomain} = {
+        onlySSL = true;
+        sslCertificate = certs.${redditDomain}.cert;
+        sslCertificateKey = certs.${redditDomain}.key;
+        locations."/auth/v2/oauth/access-token/loid".extraConfig = ''
+          return 200 "{\"access_token\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"expires_in\":0}";
+        '';
+      };
+    };
+
     services.redlib = {
       package = pkgs.redlib;
       enable = true;

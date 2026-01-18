@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File system and storage benchmark that can generate both micro and macro workloads";
     homepage = "https://sourceforge.net/projects/filebench/";
-    license = licenses.cddl;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.cddl;
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.linux;
     mainProgram = "filebench";
   };
 }

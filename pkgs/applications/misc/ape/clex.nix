@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Attempto";
     repo = "Clex";
-    rev = version;
+    tag = version;
     sha256 = "0p9s64g1jic213bwm6347jqckszgnni9szrrz31qjgaf32kf7nkp";
   };
 
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     cp clex_lexicon.pl $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Large lexicon for APE (~100,000 entries)";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yrashk ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yrashk ];
   };
 }

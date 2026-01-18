@@ -160,7 +160,7 @@ in
 
   ###### implementation
 
-  config = lib.mkIf (lib.length (enabledNylons) > 0) {
+  config = lib.mkIf (lib.length enabledNylons > 0) {
 
     users.users.nylon = {
       group = "nylon";

@@ -1,0 +1,109 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b3c57799..eeeca4c8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -52,9 +52,11 @@ set(CPACK_PACKAGE_VENDOR "Zuse Institute Berlin")
+ set(CPACK_PACKAGE_CONTACT "http://scipopt.org")
+ include(CPack)
+ 
+-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++if(CMAKE_PROJECT_NAME EQUAL "SCIP")
++  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++endif()
+ 
+ if(SCIPOptSuite_BINARY_DIR)
+   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${SCIPOptSuite_BINARY_DIR}/bin)
+@@ -517,10 +519,10 @@ endif()
+ message(STATUS "Finding Solver \"${LPS}\"")
+ if(LPS STREQUAL "spx")
+     message(STATUS "Finding Soplex")
+-    find_package(SOPLEX REQUIRED CONFIG HINTS ${SOPLEX_DIR})
+-    if(NOT SOPLEX_FOUND)
++    if(NOT TARGET libsoplex-pic OR NOT TARGET libsoplex)
+         message(FATAL_ERROR "Requested LP solver SoPlex not found.")
+     endif()
++    set(SOPLEX_FOUND TRUE)
+     if (DEFINED SOPLEX_WITH_PAPILO)
+         message(STATUS "SOPLEX links PAPILO")
+         if((NOT SCIP_WITH_PAPILO)) # TODO not sure how to handle AUTOBUILD
+@@ -593,11 +595,11 @@ if(SOPLEX_FOUND)
+     message(STATUS "Finding SOPLEX - found")
+     # SoPlex headers can be directly included
+     include_directories(${SOPLEX_INCLUDE_DIRS})
+-    set(LPS_LIBRARIES ${SOPLEX_LIBRARIES})
+-    set(LPS_PIC_LIBRARIES ${SOPLEX_PIC_LIBRARIES})
++    set(LPS_LIBRARIES libsoplex)
++    set(LPS_PIC_LIBRARIES libsoplex-pic)
+     set(lpi lpi/lpi_spx.cpp)
+ else()
+-    message(STATUS "Support SOPLEX: OFF")
++    message(FATAL_ERROR "SOPLEX not found !")
+ endif()
+ 
+ if(CLP_FOUND)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c6ce7283..6b6b1fc8 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1213,6 +1213,13 @@ target_link_libraries(scip
+ add_dependencies(libscip scip_update_githash)
+ add_dependencies(scip scip_update_githash)
+ 
++if(APPLE)
++  set_target_properties(libscip PROPERTIES
++    INSTALL_RPATH "@loader_path")
++elseif(UNIX)
++  set_target_properties(libscip PROPERTIES
++    INSTALL_RPATH "$ORIGIN")
++endif()
+ set_target_properties(libscip PROPERTIES
+     VERSION ${SCIP_VERSION_MAJOR}.${SCIP_VERSION_MINOR}.${SCIP_VERSION_PATCH}
+     SOVERSION ${SCIP_VERSION_MAJOR}.${SCIP_VERSION_MINOR}
+@@ -1265,17 +1272,8 @@ install(FILES ${PROJECT_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}
+ install(FILES ${PROJECT_SOURCE_DIR}/src/tclique/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/scip/tclique)
+ 
+ # Add all targets to the build-tree export set
+-export(TARGETS scip libscip
+-  FILE "${PROJECT_BINARY_DIR}/scip-targets.cmake")
+-
+-# make soplex and zimpl dir absolute for the config file
+-if(SOPLEX_NEEDED)
+-    get_filename_component(CONF_SOPLEX_DIR ${SOPLEX_DIR} REALPATH BASE_DIR ${CMAKE_SOURCE_DIR})
+-endif()
+-
+-if(ZIMPL_NEEDED)
+-    get_filename_component(CONF_ZIMPL_DIR ${ZIMPL_DIR} REALPATH BASE_DIR ${CMAKE_SOURCE_DIR})
+-endif()
++#export(TARGETS scip libscip
++#  FILE "${PROJECT_BINARY_DIR}/scip-targets.cmake")
+ 
+ # Configure scip-config.cmake for the build-tree:
+ # We add the CMake module path from the sources.
+@@ -1295,18 +1293,16 @@ ${PROJECT_BINARY_DIR}/scip-config-version.cmake
+ # We add the current directory of the installed scip-config.cmake as a CMake module path.
+ set(EXTRA_CMAKE_MODULE_PATH "\${CMAKE_CURRENT_LIST_DIR}")
+ set(CONF_INCLUDE_DIRS "\${CMAKE_CURRENT_LIST_DIR}/../../../include")
+-if(SOPLEX_NEEDED)
+-    set(CONF_SOPLEX_DIR "\${CMAKE_CURRENT_LIST_DIR}/../soplex")
+-endif()
+-if(ZIMPL_NEEDED)
+-    set(CONF_ZIMPL_DIR "\${CMAKE_CURRENT_LIST_DIR}/../zimpl")
+-endif()
+ configure_file(${PROJECT_SOURCE_DIR}/scip-config.cmake.in
+   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/scip-config.cmake" @ONLY)
+ 
+ # install the targets of the scip export group and the config file so that other projects
+ # can link easily against scip
+-install(EXPORT scip-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scip)
++install(EXPORT scip-targets
++  NAMESPACE SCIP::
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scip
++  COMPONENT Devel
++)
+ install(FILES "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/scip-config.cmake"
+               ${PROJECT_BINARY_DIR}/scip-config-version.cmake
+         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scip)

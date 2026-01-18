@@ -1,4 +1,15 @@
+source "$NIX_ATTRS_SH_FILE"
 source $mirrorsFile
+
+# Normalize `curlOpts` as a string.
+# If defined as a list (deprecated), it would be a bash array.
+if [[ "$(declare -p curlOpts 2&>/dev/null || true)" =~ ^"declare -a" ]]; then
+    unset _temp
+    _temp="${curlOpts[*]}"
+    unset curlOpts
+    curlOpts=$_temp
+    unset _temp
+fi
 
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
@@ -22,9 +33,16 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
-eval "curl+=($curlOptsList)"
+# NOTE:
+# `netrcPhase` should not attempt to access builder.sh implementation details (e.g., the `${curl[@]}` array),
+# The implementation detail could change in any Nixpkgs revision, including backports.
+if [[ -n "${netrcPhase-}" ]]; then
+    runPhase netrcPhase
+    curl+=(--netrc-file "$PWD/netrc")
+fi
 
 curl+=(
+    "${curlOptsList[@]}"
     $curlOpts
     $NIX_CURL_FLAGS
 )
@@ -32,9 +50,9 @@ curl+=(
 downloadedFile="$out"
 if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
 
-
 tryDownload() {
     local url="$1"
+    local target="$2"
     echo
     echo "trying $url"
     local curlexit=18;
@@ -44,7 +62,7 @@ tryDownload() {
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
-       if "${curl[@]}" -C - --fail "$url" --output "$downloadedFile"; then
+       if "${curl[@]}" -C - --fail "$url" --output "$target"; then
           success=1
           break
        else
@@ -81,7 +99,9 @@ tryHashedMirrors() {
         if "${curl[@]}" --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
             --write-out "%{http_code}" --output /dev/null > code 2> log; then
-            tryDownload "$url"
+            # Directly download to $out, because postFetch doesn't need to run,
+            # since hashed mirrors provide pre-built derivation outputs.
+            tryDownload "$url" "$out"
 
             # We skip postFetch here, because hashed-mirrors are
             # already content addressed. So if $outputHash is in the
@@ -104,10 +124,10 @@ tryHashedMirrors() {
 # URL list may contain ?. No glob expansion for that, please
 set -o noglob
 
-urls2=
-for url in $urls; do
+resolvedUrls=()
+for url in "${urls[@]}"; do
     if test "${url:0:9}" != "mirror://"; then
-        urls2="$urls2 $url"
+        resolvedUrls+=("$url")
     else
         url2="${url:9}"; echo "${url2/\// }" > split; read site fileName < split
         #varName="mirror_$site"
@@ -122,18 +142,17 @@ for url in $urls; do
             if test -n "${!varName}"; then mirrors="${!varName}"; fi
 
             for url3 in $mirrors; do
-                urls2="$urls2 $url3$fileName";
+                resolvedUrls+=("$url3$fileName");
             done
         fi
     fi
 done
-urls="$urls2"
 
 # Restore globbing settings
 set +o noglob
 
 if test -n "$showURLs"; then
-    echo "$urls" > $out
+    echo "${resolvedUrls[*]}" > $out
     exit 0
 fi
 
@@ -145,7 +164,7 @@ fi
 set -o noglob
 
 success=
-for url in $urls; do
+for url in "${resolvedUrls[@]}"; do
     if [ -z "$postFetch" ]; then
        case "$url" in
            https://github.com/*/archive/*)
@@ -156,7 +175,7 @@ for url in $urls; do
                ;;
        esac
     fi
-    tryDownload "$url"
+    tryDownload "$url" "$downloadedFile"
     if test -n "$success"; then finish; fi
 done
 
