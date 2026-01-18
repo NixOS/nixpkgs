@@ -5,13 +5,10 @@ let
 in
 {
   name = "iscsi";
-  meta.maintainers =
-    with lib.maintainers;
-    [
-      das_j
-      helsinki-Jo
-    ]
-    ++ lib.teams.deshaw.members;
+  meta.maintainers = with lib.maintainers; [
+    das_j
+    helsinki-Jo
+  ];
 
   nodes = {
     target =
