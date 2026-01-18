@@ -2,37 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mpd-mpris";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "natsukagami";
     repo = "mpd-mpris";
-    rev = "v${version}";
-    sha256 = "sha256-QxPkGWpCWiyEbChH9SHeD+SiV8k0c/G7MG/azksP3xU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w8OH34JW++OYLpNIHfQvc45dFyU/wVWVa+vEwWb8VqU=";
   };
 
-  patches = [
-    # Makes Exec= path not absolute, see https://github.com/natsukagami/mpd-mpris/pull/42
-    (fetchpatch {
-      url = "https://github.com/natsukagami/mpd-mpris/commit/8a5b53b1aa3174c3ccb1db24fb4e39f90012b98f.patch";
-      hash = "sha256-LArPq+RRPJOs0je1olqg+pK7nvU7UIlrpGtHv2PhIY4=";
-    })
-  ];
-
-  vendorHash = "sha256-HCDJrp9WFB1z+FnYpOI5e/AojtdnpN2ZNtgGVaH/v/Q=";
-
-  doCheck = false;
+  vendorHash = "sha256-ugJEw02jSsfObljDaup31zoQlf2HvwDRUljD7lp7Ys4=";
 
   subPackages = [ "cmd/mpd-mpris" ];
 
+  postPatch = ''
+    substituteInPlace services/mpd-mpris.service --replace-fail "ExecStart=" "ExecStart=$out/bin/"
+  '';
+
   postInstall = ''
-    install -Dm644 mpd-mpris.service $out/lib/systemd/user/mpd-mpris.service
-    install -Dm644 mpd-mpris.desktop $out/etc/xdg/autostart/mpd-mpris.desktop
+    install -Dm644 services/mpd-mpris.service -t $out/lib/systemd/user
+    install -Dm644 mpd-mpris.desktop -t $out/etc/xdg/autostart
   '';
 
   meta = {
@@ -42,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "mpd-mpris";
   };
-}
+})
