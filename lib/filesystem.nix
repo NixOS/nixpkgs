@@ -7,21 +7,20 @@
 # Tested in lib/tests/filesystem.sh
 let
   inherit (builtins)
-    readDir
+    attrNames
+    concatMap
     pathExists
+    readDir
     toString
     ;
 
   inherit (lib.filesystem)
     pathIsDirectory
-    pathIsRegularFile
     pathType
     packagesFromDirectoryRecursive
     ;
 
-  inherit (lib.strings)
-    hasSuffix
-    ;
+  inherit (lib.strings) hasSuffix;
 in
 
 {
@@ -231,6 +230,66 @@ in
         ) (builtins.readDir dir));
     in
     dir: lib.flatten (internalFunc dir);
+
+  /**
+    Given a directory and some condition, return a flattened list of all files that matched the condition.
+
+    # Inputs
+
+    `dir`
+
+    : The path to recursively list files from
+
+    `condition`
+
+    : The condition to be called on the filename of each regular file
+
+    # Type
+
+    ```
+    listFilesRecursiveCond :: Path -> (String -> Bool) -> [ Path ]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.filesystem.listFilesRecursiveCond` usage example
+
+    ```nix
+    listFilesRecursiveCond ./modules (filename: true)
+    => [./modules/foo.nix ./modules/nested/_bar.nix ./modules/nested/baz.json]
+
+    listFilesRecursiveCond ./modules (filename: lib.hasSuffix ".nix" filename)
+    => [./modules/foo.nix ./modules/nested/_bar.nix]
+
+    listFilesRecursiveCond ./modules (filename: lib.hasSuffix ".nix" filename && !lib.hasPrefix "_" filename)
+    => [./modules/foo.nix]
+    ```
+
+    :::
+  */
+  listFilesRecursiveCond =
+    dir: condition:
+    let
+      internalFunc =
+        folder:
+        let
+          contents = readDir folder;
+        in
+        concatMap (
+          filename:
+          let
+            subpath = folder + "/${filename}";
+            type = contents.${filename};
+          in
+          if type == "regular" && condition filename then
+            [ subpath ]
+          else if type == "directory" then
+            internalFunc subpath
+          else
+            [ ]
+        ) (attrNames contents);
+    in
+    internalFunc dir;
 
   /**
     Transform a directory tree containing package files suitable for
