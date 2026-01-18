@@ -45,6 +45,11 @@ in
       type = types.str;
       description = "The Hostname under which the frontend is running.";
     };
+    address = mkOption {
+      type = types.str;
+      default = "0.0.0.0";
+      description = "The IP address to bind to.";
+    };
     port = mkOption {
       type = types.port;
       default = 3456;
@@ -105,7 +110,7 @@ in
           ;
       };
       service = {
-        interface = ":${toString cfg.port}";
+        interface = "${cfg.address}:${toString cfg.port}";
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
