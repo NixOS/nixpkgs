@@ -13951,6 +13951,8 @@ self: super: with self; {
 
   pymfy = callPackage ../development/python-modules/pymfy { };
 
+  pymicro-vad = callPackage ../development/python-modules/pymicro-vad { };
+
   pymicrobot = callPackage ../development/python-modules/pymicrobot { };
 
   pymiele = callPackage ../development/python-modules/pymiele { };
