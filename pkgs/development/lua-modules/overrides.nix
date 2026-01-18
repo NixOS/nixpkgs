@@ -127,6 +127,10 @@ in
       }
     ];
 
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-std=gnu17"; # for gcc15
+    };
+
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
     postConfigure =
