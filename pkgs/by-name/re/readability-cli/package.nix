@@ -9,18 +9,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "readability-cli";
-  version = "2.4.5";
+  version = "2.4.5-unstable-2026-01-07";
 
   src = fetchFromGitLab {
     owner = "gardenappl";
     repo = "readability-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-fkXhAXbvCj5eRkPcv0Q7ryZeGdERI/lHHg64EDyK2F4=";
+    rev = "72c232e3cd33e91ab04b7dacfa649082b8037436";
+    hash = "sha256-5a4mQbfJKAL8nOSnqnKQCjb6bJEEX59puwCw0KmddOo=";
   };
-
-  patches = [
-    ./lockfile.patch
-  ];
 
   postPatch = ''
     # Set a script name to avoid yargs using index.js as $0
@@ -28,7 +24,7 @@ buildNpmPackage (finalAttrs: {
       --replace-fail '.version(false)' '.version(false).scriptName("readable")'
   '';
 
-  npmDepsHash = "sha256-9sN1TgyOjgGLQsAlnI/fVbez7Oy2r6QwfaUTKyLQRVc=";
+  npmDepsHash = "sha256-vzNUbC5q5mdmyQZYUsw9Qw/Uxk+H7meW2R8j9R5auPY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
