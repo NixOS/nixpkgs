@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchpatch,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/lib.rs \
       --replace-fail '/usr/bin/ls' 'ls'
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/jakwai01/lurk/releases/tag/v${finalAttrs.version}";
