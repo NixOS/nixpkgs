@@ -473,7 +473,7 @@ in
 
       nginx.hostName = mkOption {
         type = types.str;
-        example = literalExpression ''wiki.example.com'';
+        example = literalExpression "wiki.example.com";
         default = "localhost";
         description = ''
           The hostname to use for the nginx virtual host.
@@ -743,9 +743,21 @@ in
           } \
           --dbuser ${lib.escapeShellArg cfg.database.user} \
           ${
-            optionalString (
-              cfg.database.passwordFile != null
-            ) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
+            if
+              (
+                cfg.database.passwordFile == null
+                && cfg.database.type == "postgres"
+                && cfg.database.dbserver == "/run/postgresql"
+              )
+            then
+              # Lets hack around PHP not being properly typed
+              # https://phabricator.wikimedia.org/T414884
+              # TypeError: MediaWiki\Installer\PostgresInstaller::openConnectionToAnyDB(): Argument #2 ($password) must be of type string, null given, called in /nix/store/...-mediawiki-full-1.45.0/share/mediawiki/includes/installer/PostgresInstaller.php on line 120
+              ''--dbpass "banana"''
+            else if (cfg.database.passwordFile != null) then
+              "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
+            else
+              ""
           } \
           --passfile ${lib.escapeShellArg cfg.passwordFile} \
           --dbtype ${cfg.database.type} \
