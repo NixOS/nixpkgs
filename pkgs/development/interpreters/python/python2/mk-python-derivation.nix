@@ -187,7 +187,6 @@ let
         "catchConflicts"
         "format"
         "disabledTestPaths"
-        "outputs"
       ])
       // {
 
