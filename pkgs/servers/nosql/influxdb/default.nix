@@ -57,16 +57,16 @@ let
 in
 buildGoModule rec {
   pname = "influxdb";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    hash = "sha256-jSv3zzU/jIqALF9mb4gV7zyQvm8pIwJU6Y4ADBlpVOE=";
+    hash = "sha256-Q05mKmAXxrk7IVNxUD8HHNKnWCxmNCdsr6NK7d7vOHM=";
   };
 
-  vendorHash = "sha256-tPw/1vkUTwmRHrnENDG3NJTV6RplI4pCP6GueRT8dbc=";
+  vendorHash = "sha256-+6fOq/2YVz74Loy1pVLVRTr4OQm/fEBNtHy3+FQn51A=";
 
   nativeBuildInputs = [ pkg-config ];
 
