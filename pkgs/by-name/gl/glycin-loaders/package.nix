@@ -16,6 +16,8 @@
   meson,
   ninja,
   pkg-config,
+  python3,
+  shared-mime-info,
   rustc,
   rustPlatform,
 }:
@@ -33,17 +35,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    python3
+    # Tests use Rust glycin library.
+    libglycin.patchVendorHook
   ];
 
   buildInputs = [
-    gtk4 # for GdkTexture
     cairo
-    lcms2
     libheif
     libxml2 # for librsvg crate
     librsvg
     libseccomp
     libjxl
+  ];
+
+  # Tests in passthru.tests to avoid dependency cycles.
+  checkInputs = [
+    glib
+    gtk4
+    lcms2
   ];
 
   mesonFlags = [
@@ -52,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibglycin=false"
     "-Dlibglycin-gtk4=false"
     "-Dvapi=false"
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   strictDeps = true;
@@ -59,9 +72,31 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace glycin-loaders/meson.build \
       --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    chmod +x build-aux/setup-integration-test.py
+
+    patchShebangs \
+      build-aux/setup-integration-test.py
+  '';
+
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    # Fix test files being considered application/octet-stream
+    export XDG_DATA_DIRS=${shared-mime-info}/share:$XDG_DATA_DIRS
+
+    # fonts test will not be able to create cache without this
+    export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  passthru = {
+    tests = {
+      withTests = finalAttrs.finalPackage.overrideAttrs {
+        doCheck = true;
+      };
+    };
+  };
 
   meta = {
     description = "Glycin loaders for several formats";
