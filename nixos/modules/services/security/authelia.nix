@@ -74,6 +74,30 @@ let
                 '';
               };
 
+              notifierSmtpPasswordFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your SMTP password file used to authenticate with the SMTP server.
+                '';
+              };
+
+              notifierSmtpTlsCertificateChainFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your certificate chain file used for TLS connection verification with the SMTP server.
+                '';
+              };
+
+              notifierSmtpTlsPrivateKeyFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your private key file used for TLS connection verification with the SMTP server.
+                '';
+              };
+
               oidcIssuerPrivateKeyFile = mkOption {
                 type = types.nullOr types.path;
                 default = null;
@@ -372,6 +396,10 @@ in
               AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = instance.secrets.storageEncryptionKeyFile;
               AUTHELIA_SESSION_SECRET_FILE = instance.secrets.sessionSecretFile;
               AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = instance.secrets.oidcHmacSecretFile;
+              AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = instance.secrets.notifierSmtpPasswordFile;
+              AUTHELIA_NOTIFIER_SMTP_TLS_CERTIFICATE_CHAIN_FILE =
+                instance.secrets.notifierSmtpTlsCertificateChainFile;
+              AUTHELIA_NOTIFIER_SMTP_TLS_PRIVATE_KEY_FILE = instance.secrets.notifierSmtpTlsPrivateKeyFile;
             })
             // instance.environmentVariables;
 
