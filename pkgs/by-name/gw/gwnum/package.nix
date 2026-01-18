@@ -4,8 +4,8 @@
   fetchurl,
   unzip,
   gmp,
-  version ? "31.01b02",
-  hash ? "sha256-TttiqcMY/8+Vf4SF31B2/sMrRmUzfLR6Xu26Y5McEfM=",
+  version ? "31.04b02",
+  hash ? "sha256-9raQlbY7CRybXQA/GBUK4Pat6mlzUV8+o9m7ErP/Tr0=",
 }:
 
 let
@@ -17,10 +17,6 @@ let
       throw "Invalid version format: ${version}";
   rawMinor = lib.elemAt versionMatch 1;
   rawPatch = lib.elemAt versionMatch 2;
-
-  minor = toString (lib.toIntBase10 rawMinor);
-  paddedMinor = lib.fixedWidthString 2 "0" minor;
-  patch = lib.fixedWidthString 2 "0" rawPatch;
 in
 stdenv.mkDerivation {
   pname = "gwnum";
@@ -28,8 +24,8 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
-      "https://download.mersenne.ca/gimps/v${major}/${major}.${minor}/p95v${major}${paddedMinor}b${patch}.source.zip"
-      "https://download.mersenne.ca/gimps/v${major}/_pre-release/p95v${major}${paddedMinor}b${patch}.source.zip"
+      "https://download.mersenne.ca/gimps/v${major}/${major}.${rawMinor}/p95v${major}${rawMinor}b${rawPatch}.source.zip"
+      "https://download.mersenne.ca/gimps/v${major}/_pre-release/${major}.${rawMinor}/p95v${major}${rawMinor}b${rawPatch}.source.zip"
     ];
     inherit hash;
   };

@@ -26,6 +26,20 @@ fi
 
 BASE_URL="https://download.mersenne.ca/gimps/v$LATEST_MAJOR/${LATEST_MINOR_DIR}/"
 
+if [[ "$LATEST_MINOR_DIR" == "_pre-release" ]]; then
+    echo "Checking $BASE_URL for subdirectories..."
+    SUB_DIR=$(curl -s "$BASE_URL" | \
+        grep -oP 'href="/gimps/v[0-9]+/_pre-release/([^"]+)"' | \
+        cut -d'"' -f2 | \
+        rev | cut -d/ -f1 | rev | \
+        grep -vE "parent|http" | \
+        sort -V | \
+        tail -n 1)
+    if [[ -n "$SUB_DIR" ]]; then
+        BASE_URL="${BASE_URL}${SUB_DIR}/"
+    fi
+fi
+
 echo "Checking $BASE_URL for the latest source zip..."
 LATEST_FILE=$(curl -s "$BASE_URL" | grep -oP 'p95v[0-9]+b[0-9]+\.source\.zip' | sort -V | tail -n 1)
 
