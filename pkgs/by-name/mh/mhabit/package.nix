@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter332,
+  flutter338,
   sqlite,
   libsecret,
   _experimental-update-script-combinators,
@@ -12,16 +12,16 @@
 }:
 
 let
-  version = "1.22.6+133";
+  version = "1.23.3+142";
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
-    hash = "sha256-zdgD3TGSjRQc6PAeTh2EV42X5EEgiOh0yH0+Fqre+Qc=";
+    hash = "sha256-jseb1AcM+AygVLFN3O5P2LiQppxOuLWMmBON0FRqPFQ=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "mhabit";
   inherit version src;
 
