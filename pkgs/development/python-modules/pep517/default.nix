@@ -4,9 +4,6 @@
   fetchPypi,
   flit-core,
   tomli,
-  pythonOlder,
-  importlib-metadata,
-  zipp,
   pytestCheckHook,
   setuptools,
   testpath,
@@ -28,10 +25,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    zipp
   ];
 
   nativeCheckInputs = [

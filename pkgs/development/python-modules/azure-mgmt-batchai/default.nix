@@ -5,8 +5,6 @@
   azure-common,
   azure-mgmt-core,
   isodate,
-  pythonOlder,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,8 +22,7 @@ buildPythonPackage rec {
     isodate
     azure-common
     azure-mgmt-core
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

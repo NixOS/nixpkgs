@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
   version = "5.1.1";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
