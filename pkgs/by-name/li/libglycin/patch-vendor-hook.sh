@@ -24,6 +24,11 @@ libglycinPatchVendorHook() {
   fi
   echo "patching glycin crate at '$glycinPath'"
 
+  # Allow use in non-FHS environments like tests in Nix build sandbox.
+  substituteInPlace "$glycinPath/src/sandbox.rs" \
+    --replace-fail '"--ro-bind",
+            "/usr",' '"--ro-bind-try", "/usr",'
+
   substituteInPlace "$glycinPath/src/sandbox.rs" \
     --replace-fail '"bwrap"' '"@bwrap@"'
 
