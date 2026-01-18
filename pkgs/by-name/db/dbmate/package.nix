@@ -2,6 +2,9 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+
+  # testing
+  sqlite,
 }:
 
 buildGoModule rec {
@@ -15,9 +18,13 @@ buildGoModule rec {
     hash = "sha256-H/HBDM2uBRrlgetU2S9ZS1c6//Le+DlrYlnnJpTs3XM=";
   };
 
-
-  doCheck = false;
   vendorHash = "sha256-wfcVb8fqnpT8smKuL6SPANAK86tLXglhQPZCA4G8P9E=";
+
+  tags = [ "fts5" ];
+
+  nativeCheckInputs = [
+    sqlite
+  ];
 
   meta = {
     description = "Database migration tool";
