@@ -269,14 +269,17 @@ let
 
         outputs = outputs ++ lib.optional withDistOutput "dist";
 
-        passthru.updateScript =
-          let
-            filename = builtins.head (lib.splitString ":" self.meta.position);
-          in
-          attrs.passthru.updateScript or [
-            update-python-libraries
-            filename
-          ];
+        passthru = {
+          updateScript =
+            let
+              filename = builtins.head (lib.splitString ":" self.meta.position);
+            in
+            [
+              update-python-libraries
+              filename
+            ];
+        }
+        // passthru;
 
         meta = {
           # default to python's platforms
