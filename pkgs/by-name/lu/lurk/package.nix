@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -14,6 +15,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Sng+mMMKDuI1aSgusJDRFMT5iKNUlp9arp9ruRn0bb0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-aarch64-build.patch";
+      url = "https://github.com/JakWai01/lurk/commit/132e6557ddeafbdb1bb1d4d1411099f0d7df7a51.patch?full_index=1";
+      hash = "sha256-B5rNLipnFFWxIhTm+eCacJkw38D7stQ27WIHzgj7Vy0=";
+    })
+  ];
 
   cargoHash = "sha256-Cmlhhda35FmNg/OvfMRPHBLPRXF5bs0ebBYT7KfierA=";
 
