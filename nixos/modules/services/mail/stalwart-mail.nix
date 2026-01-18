@@ -17,7 +17,7 @@ let
       splitAddress = addr: lib.splitString ":" addr;
       extractPort = addr: lib.toInt (builtins.foldl' (a: b: b) "" (splitAddress addr));
     in
-    builtins.map (address: extractPort address) (parseAddresses listeners);
+    map (address: extractPort address) (parseAddresses listeners);
 
 in
 {

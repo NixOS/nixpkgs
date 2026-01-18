@@ -13,7 +13,7 @@ let
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml { };
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (
-    builtins.map (pkg: {
+    map (pkg: {
       name = pkg.pname;
       path = pkg;
     }) cfg.declarativePlugins

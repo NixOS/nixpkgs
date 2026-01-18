@@ -300,7 +300,7 @@ let
         idx:
         { size, ... }:
         ''
-          test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
+          test -e "empty${toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${toString idx}.qcow2" "${toString size}M"
         ''
       ))
       (builtins.concatStringsSep "")

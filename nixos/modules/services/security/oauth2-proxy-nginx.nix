@@ -113,10 +113,7 @@ in
               let
                 maybeQueryArg =
                   name: value:
-                  if value == null then
-                    null
-                  else
-                    "${name}=${lib.concatStringsSep "," (builtins.map lib.escapeURL value)}";
+                  if value == null then null else "${name}=${lib.concatStringsSep "," (map lib.escapeURL value)}";
                 allArgs = lib.mapAttrsToList maybeQueryArg conf;
                 cleanArgs = builtins.filter (x: x != null) allArgs;
                 cleanArgsStr = lib.concatStringsSep "&" cleanArgs;
