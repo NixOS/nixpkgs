@@ -106,6 +106,7 @@
 
   # passthru.tests
   runCommand,
+  beets,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -500,6 +501,32 @@ buildPythonPackage (finalAttrs: {
           };
         }
       );
+      # Test that disabling
+      with-mpd-plugins-disabled = beets.override {
+        pluginOverrides = {
+          # These two plugins require mpd2 Python dependency. If they are
+          # disabled, this dependency shouldn't be pulled, and the `runCommand`
+          # test below should fail with a `ModuleNotFoundError`
+          mpdstats.enable = false;
+          mpdupdate.enable = false;
+        };
+      };
+      mpd-plugins-really-disabled = runCommand "beets-mpd-plugins-disabled-test" { } ''
+        set -euo pipefail
+        export HOME=$(mktemp -d)
+        mkdir $out
+
+        cat << EOF > $out/config.yaml
+        plugins:
+          - mpdstats
+        EOF
+        ${finalAttrs.finalPackage.passthru.tests.with-mpd-plugins-disabled}/bin/beet \
+          -c $out/config.yaml \
+          --help 2> $out/help-stderr || true
+        ${finalAttrs.finalPackage.passthru.tests.with-mpd-plugins-disabled}/bin/beet \
+          -c $out/config.yaml \
+          mpdstats --help 2> $out/mpdstats-help-stderr || true
+      '';
     };
   };
 
