@@ -2777,10 +2777,6 @@ with pkgs;
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
-  halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_19;
-  };
-
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
   hdf5 = callPackage ../tools/misc/hdf5 {

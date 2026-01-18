@@ -1,10 +1,9 @@
 {
+  lib,
   stdenv,
   llvmPackages,
-  lib,
   fetchFromGitHub,
   cmake,
-  fetchpatch2,
   flatbuffers,
   libffi,
   libpng,
@@ -29,28 +28,14 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "halide";
-  version = "19.0.0";
+  version = "21.0.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0SFGX4G6UR8NS4UsdFOb99IBq2/hEkr/Cm2p6zkIh/8=";
+    hash = "sha256-A5EnZgXc9+L+bzWHftaL74nHmP8Jf0rnT5KJAAWvKis=";
   };
-
-  patches = [
-    # The following two patches fix cmake/HalidePackageConfigHelpers.cmake to
-    # support specifying an absolute library install path (which is what Nix
-    # does when "lib" is included as a separate output)
-    (fetchpatch2 {
-      url = "https://github.com/halide/Halide/commit/ac2cd23951aff9ac3b765e51938f1e576f1f0ee9.diff?full_index=1";
-      hash = "sha256-JTktOTSyReDUEHTaPPMoi+/K/Gzg39i6MI97cO3654k=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/halide/Halide/commit/59f4fff30f4ab628da9aa7e5f77a7f1bb218a779.diff?full_index=1";
-      hash = "sha256-yOzE+1jai1w1GQisLYfu8F9pbTE/bYg0MTLq8rPXdGk=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/runtime/CMakeLists.txt --replace-fail \
@@ -69,18 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DWITH_PYTHON_BINDINGS=${if pythonSupport then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_PYTHON_BINDINGS" pythonSupport)
     (lib.cmakeBool "WITH_TESTS" doCheck)
     (lib.cmakeBool "WITH_TUTORIALS" doCheck)
     # Disable performance tests since they may fail on busy machines
-    "-DWITH_TEST_PERFORMANCE=OFF"
+    (lib.cmakeBool "WITH_TEST_PERFORMANCE" false)
     # Disable fuzzing tests -- this has become the default upstream after the
     # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
     # These tests also fail to compile on Darwin because of some missing command line options...
-    "-DWITH_TEST_FUZZ=OFF"
+    (lib.cmakeBool "WITH_TEST_FUZZ" false)
     # Disable FetchContent and use versions from nixpkgs instead
-    "-DHalide_USE_FETCHCONTENT=OFF"
-    "-DHalide_WASM_BACKEND=${if wasmSupport then "wabt" else "OFF"}"
+    (lib.cmakeBool "Halide_USE_FETCHCONTENT" false)
+    (lib.cmakeFeature "Halide_WASM_BACKEND" (if wasmSupport then "wabt" else "OFF"))
     (lib.cmakeBool "Halide_LLVM_SHARED_LIBS" wasmSupport)
   ];
 
@@ -101,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     "anderson2021_test_apps_autoscheduler"
     "correctness_cross_compilation"
     "correctness_simd_op_check_hvx"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Failed  Required regular expression not found
+    "mullapudi2016_histogram"
   ];
 
   dontUseNinjaCheck = true;
@@ -158,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
+    changelog = "https://github.com/halide/Halide/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
@@ -166,5 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
       twesterhout
     ];
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    badPlatforms = [
+      # Build fails on darwin:
+      # FAILED: [code=133] test/autoschedulers/anderson2021/anderson2021_demo.h
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 })
