@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit (libglycin) glycinPathsPatch;
     updateScript = nix-update-script { };
   };
 
