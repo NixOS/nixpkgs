@@ -317,7 +317,16 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    # Revert apple sdk bump to 26.1
+    # Revert apple sdk bump to 26.1 and 26.2
+    ++
+      lib.optionals (lib.versionAtLeast version "148" && lib.versionOlder apple-sdk_26.version "26.2")
+        [
+          (fetchpatch {
+            url = "https://github.com/mozilla-firefox/firefox/commit/73cbb9ff0fdbf8b13f38d078ce01ef6ec0794f9c.patch";
+            hash = "sha256-ghdddJxsaxXzLZpOOfwss+2S/UUcbLqKGzWWqKy9h/k=";
+            revert = true;
+          })
+        ]
     ++
       lib.optionals (lib.versionAtLeast version "146" && lib.versionOlder apple-sdk_26.version "26.1")
         [

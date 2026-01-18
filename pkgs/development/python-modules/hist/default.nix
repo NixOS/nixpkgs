@@ -11,22 +11,22 @@
   pytest-mpl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hist";
-  version = "2.9.1";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kjxztsTVEicXXMgnk3vKl5Fgv+gxygmZJmUPcPabW2s=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Z7+A4Vuxq5n4nM9liO+jV9FoJtaRBDtyYWXHgzSpBns=";
   };
 
-  buildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost-histogram
     histoprint
     numpy
@@ -37,12 +37,14 @@ buildPythonPackage rec {
     pytest-mpl
   ];
 
+  pythonImportsCheck = [ "hist" ];
+
   meta = {
     description = "Histogramming for analysis powered by boost-histogram";
-    mainProgram = "hist";
+    mainProgram = "";
     homepage = "https://hist.readthedocs.io/";
-    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

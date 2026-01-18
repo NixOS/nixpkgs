@@ -64,7 +64,6 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pyo3 = maturin.tests.pyo3.override {
-      format = "setuptools";
       buildAndTestSubdir = null;
 
       nativeBuildInputs = [
