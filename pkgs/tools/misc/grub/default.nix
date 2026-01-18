@@ -25,6 +25,7 @@
   buildPackages,
   nixosTests,
   fuse, # only needed for grub-mount
+  xz, # for xz compression support. Usually counterproductive, so don't try to force compression in your GRUB install.
   runtimeShell,
   zfs ? null,
   efiSupport ? false,
@@ -33,7 +34,7 @@
   xenSupport ? false,
   xenPvhSupport ? false,
   corebootSupport ? false,
-  kbdcompSupport ? false || corebootSupport,
+  kbdcompSupport ? corebootSupport,
   ckbcomp,
 }:
 
@@ -159,6 +160,7 @@ stdenv.mkDerivation rec {
     freetype
     lvm2
     fuse
+    xz
     libtool
     bash
   ]
