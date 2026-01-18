@@ -9,18 +9,18 @@
 
 let
   gwnum-pinned = gwnum.override {
-    version = "31.01b02";
-    hash = "sha256-TttiqcMY/8+Vf4SF31B2/sMrRmUzfLR6Xu26Y5McEfM=";
+    version = "31.04b02";
+    hash = "sha256-9raQlbY7CRybXQA/GBUK4Pat6mlzUV8+o9m7ErP/Tr0=";
   };
 in
 stdenv.mkDerivation {
   pname = "pfgw";
-  version = "4.1.5-unstable-2025-11-17";
+  version = "4.1.7-unstable-2026-01-05";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/openpfgw/code/";
-    rev = "709";
-    hash = "sha256-FPZ2kz1Pc3tTeRxHj6ETHfHsjmEehVM/lYzqXd+UKF8=";
+    rev = "711";
+    hash = "sha256-0AQuBT1Vll3TOrTWCTCHqt15lynXLtUcpnZA7aAT4jA=";
   };
 
   buildInputs = [

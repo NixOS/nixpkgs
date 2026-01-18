@@ -69,14 +69,14 @@ GWNUM_MINOR_PADDED=$(printf "%02d" "${GWNUM_MINOR#0}")
 
 echo "pfgw expects gwnum: $GWNUM_MAJOR.$GWNUM_MINOR"
 
-BASE_URL="https://download.mersenne.ca/gimps/v$GWNUM_MAJOR/$GWNUM_MAJOR.$GWNUM_MINOR/"
+BASE_URL="https://download.mersenne.ca/gimps/v$GWNUM_MAJOR/$GWNUM_MAJOR.$GWNUM_MINOR_PADDED/"
 if ! curl --output /dev/null --silent --head --fail "$BASE_URL"; then
-    BASE_URL="https://download.mersenne.ca/gimps/v$GWNUM_MAJOR/_pre-release/"
+    BASE_URL="https://download.mersenne.ca/gimps/v$GWNUM_MAJOR/_pre-release/$GWNUM_MAJOR.$GWNUM_MINOR_PADDED/"
 fi
 
 echo "Scanning $BASE_URL..."
 LATEST_PATCH=$(curl -s "$BASE_URL" | \
-    grep -oP "p95v${GWNUM_MAJOR}${GWNUM_MINOR_PADDED}b\K[0-9]+" | \
+    grep -oP "p95v${GWNUM_MAJOR}${GWNUM_MINOR_PADDED}b\K[0-9]+(?=\.source\.zip)" | \
     sort -rn | head -n 1)
 
 if [[ -z "$LATEST_PATCH" ]]; then
