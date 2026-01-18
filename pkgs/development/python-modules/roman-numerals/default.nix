@@ -2,37 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   flit-core,
   pytestCheckHook,
-  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "roman-numerals";
-  version = "3.1.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AA-Turner";
     repo = "roman-numerals";
     tag = "v${version}";
-    hash = "sha256-YLF09jYwXq48iMvmqbj/cocYJPp7RsCXzbN0DV9gpis=";
+    hash = "sha256-v+aPIcsggjRJ3l6Xfw97b3zcqpyWNY4XWy2+5aWyitY=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/AA-Turner/roman-numerals/commit/cc8ec3aca53c9246965500f8fc14aee636fd5307.patch";
-      hash = "sha256-zSnJ3DP0hdwhKkFzPWZGJNn1OzwLBF3W8Q6KzwX4Ap4=";
-    })
-  ];
-
-  postPatch = ''
-    ls -lah
-    cp LICENCE.rst python/
-
-    cd python
-  '';
+  sourceRoot = "${src.name}/python";
 
   build-system = [ flit-core ];
 
