@@ -19,7 +19,7 @@
   typing-inspection,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unstructured-client";
   version = "0.42.8";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BXHJOkTZdAnpf38WdHugcwYyWuURylbYTjaKoPt7O5A=";
   };
 
@@ -66,15 +66,16 @@ buildPythonPackage rec {
   enabledTestPaths = [
     "_test_unstructured_client"
   ];
+
   enabledTests = [
     "unit"
   ];
 
   meta = {
-    changelog = "https://github.com/Unstructured-IO/unstructured-python-client/blob/${src.tag}/RELEASES.md";
+    changelog = "https://github.com/Unstructured-IO/unstructured-python-client/blob/${finalAttrs.src.tag}/RELEASES.md";
     description = "Python Client SDK for Unstructured API";
     homepage = "https://github.com/Unstructured-IO/unstructured-python-client";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
