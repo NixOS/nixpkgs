@@ -4368,9 +4368,7 @@ self: super: with self; {
   # LTS in extended support phase
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
-  django_5 = self.django_5_2;
-
-  django_5_2 = callPackage ../development/python-modules/django/5_2.nix { };
+  django_5 = callPackage ../development/python-modules/django/5.nix { };
 
   djangocms-admin-style = callPackage ../development/python-modules/djangocms-admin-style { };
 
