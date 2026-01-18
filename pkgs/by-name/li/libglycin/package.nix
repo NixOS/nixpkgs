@@ -128,10 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
         updateLockfile
       ];
 
-    glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
-      bwrap = "${bubblewrap}/bin/bwrap";
-    };
-
     patchVendorHook =
       makeSetupHook
         {
