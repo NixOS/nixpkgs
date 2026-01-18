@@ -27,7 +27,24 @@
   eggBuildHook,
   eggInstallHook,
 }:
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
 
+  excludeDrvArgNames = [
+        "disabled"
+        "checkPhase"
+        "checkInputs"
+        "nativeCheckInputs"
+        "doCheck"
+        "doInstallCheck"
+        "dontWrapPythonPrograms"
+        "catchConflicts"
+        "format"
+        "disabledTestPaths"
+  ];
+
+  extendDrvArgs =
+    finalAttrs:
 {
   name ? "${attrs.pname}-${attrs.version}",
 
@@ -173,22 +190,8 @@ let
     in
     inputs: map checkDrv inputs;
 
-  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = toPythonModule (
-    stdenv.mkDerivation (
-      (removeAttrs attrs [
-        "disabled"
-        "checkPhase"
-        "checkInputs"
-        "nativeCheckInputs"
-        "doCheck"
-        "doInstallCheck"
-        "dontWrapPythonPrograms"
-        "catchConflicts"
-        "format"
-        "disabledTestPaths"
-      ])
-      // {
+in
+      {
 
         name = namePrefix + name_;
 
@@ -274,7 +277,7 @@ let
             ;
           updateScript =
             let
-              filename = builtins.head (lib.splitString ":" self.meta.position);
+              filename = builtins.head (lib.splitString ":" finalAttrs.finalPackage.meta.position);
             in
             [
               update-python-libraries
@@ -297,10 +300,10 @@ let
       }
       // lib.optionalAttrs (disabledTestPaths != [ ]) {
         disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
-      }
-    )
-  );
+      };
 
+  transformDrv =
+    let
   # Workaround to make the `lib.extendDerivation`-based disabled functionality
   # respect `<pkg>.overrideAttrs`
   # It doesn't cover `<pkg>.<output>.overrideAttrs`.
@@ -313,5 +316,7 @@ let
     // {
       overrideAttrs = fdrv: disablePythonPackage (drv.overrideAttrs fdrv);
     };
-in
-disablePythonPackage self
+    in
+    drv:
+    disablePythonPackage (toPythonModule drv);
+}
