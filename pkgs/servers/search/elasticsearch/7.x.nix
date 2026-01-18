@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.elastic20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      apeschar
       basvandijk
     ];
   };
