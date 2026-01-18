@@ -23399,12 +23399,6 @@
     githubId = 30531572;
     name = "Robert James Hernandez";
   };
-  sargon = {
-    email = "danielehlers@mindeye.net";
-    github = "sargon";
-    githubId = 178904;
-    name = "Daniel Ehlers";
-  };
   sarunint = {
     email = "nixpkgs@sarunint.com";
     github = "sarunint";
