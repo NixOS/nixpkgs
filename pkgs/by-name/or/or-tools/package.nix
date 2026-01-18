@@ -43,7 +43,6 @@ let
       ninja
       numpy
       pytestCheckHook
-      pythonOlder
       setuptools
       ;
     python = python3;
