@@ -2,7 +2,7 @@
   variant,
 }:
 let
-  pkgs = import ../../../../. { config.allowAliases = false; };
+  pkgs = import ../../../. { config.allowAliases = false; };
   lib = pkgs.lib;
   optionalsWithSuccess =
     toTry: next:
