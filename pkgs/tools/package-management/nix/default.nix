@@ -143,8 +143,8 @@ lib.makeExtensible (
         patches = patches_common ++ [
           (fetchpatch2 {
             name = "nix-2.28-14764-mdbook-0.5-support.patch";
-            url = "https://github.com/NixOS/nix/commit/5a64138e862fe364e751c5c286e8db8c466aaee7.patch";
-            hash = "sha256-K5TNroqSRH9j7vSzWw/6/b19mu7q+J5XPTDvJ3xVWlE=";
+            url = "https://github.com/NixOS/nix/commit/5a64138e862fe364e751c5c286e8db8c466aaee7.patch?full_index=1";
+            hash = "sha256-vFv/D08x9urtoIE9wiC7Lln4Eq3sgNBwU7TBE1iyrfI=";
           })
         ];
       };
@@ -166,8 +166,8 @@ lib.makeExtensible (
             ++ [
               (fetchpatch2 {
                 name = "nix-2.30-14695-mdbook-0.5-support.patch";
-                url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
-                hash = "sha256-w8WQfWxMtprDLoZUhrCm4zr6xZXKhoIirq3la0Y7/wU=";
+                url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch?full_index=1";
+                hash = "sha256-r2ZF1zBZDKMvyX6X4VsaTMrg0zdjn59Jf6Hqg56r29E=";
               })
             ]
           );
