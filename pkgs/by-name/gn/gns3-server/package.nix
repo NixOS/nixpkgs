@@ -8,12 +8,13 @@
   stdenv,
   testers,
   util-linux,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gns3-server";
   version = "2.2.55";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -27,6 +28,14 @@ python3Packages.buildPythonApplication rec {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
+  pythonRelaxDeps = [
+    "aiohttp"
+    "aiohttp-cors"
+    "jsonschema"
+    "platformdirs"
+    "sentry-sdk"
+  ];
+
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
@@ -34,6 +43,7 @@ python3Packages.buildPythonApplication rec {
     aiohttp
     aiohttp-cors
     async-generator
+    async-timeout
     distro
     jinja2
     jsonschema
@@ -54,18 +64,11 @@ python3Packages.buildPythonApplication rec {
   # util-linux (script program) is required for Docker support
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ util-linux ]}" ];
 
-  doCheck = true;
-
-  # Otherwise tests will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [

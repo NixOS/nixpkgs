@@ -5,6 +5,7 @@
   python3Packages,
   qt5,
   testers,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -17,7 +18,7 @@ in
 pythonPackages.buildPythonApplication rec {
   pname = "gns3-gui";
   version = "2.2.55";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -26,11 +27,16 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-6jblQakNpoSQXfy5pU68Aedg661VcwpqQilvqOV15pQ";
   };
 
+  pythonRelaxDeps = [
+    "jsonschema"
+    "sentry-sdk"
+  ];
+
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  build-system = with pythonPackages; [ setuptools ];
+  buildInputs = [ qt5.qtwayland ];
 
-  propagatedBuildInputs = [ qt5.qtwayland ];
+  build-system = with pythonPackages; [ setuptools ];
 
   dependencies = with pythonPackages; [
     distro
@@ -49,14 +55,14 @@ pythonPackages.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  doCheck = true;
-
-  checkInputs = with pythonPackages; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonPackages; [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
-    export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
+    export QT_PLUGIN_PATH="${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM_PLUGIN_PATH="${lib.getBin qt5.qtbase}/lib/qt-${qt5.qtbase.version}/plugins";
     export QT_QPA_PLATFORM=offscreen
   '';
 
