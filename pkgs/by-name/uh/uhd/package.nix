@@ -98,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DENABLE_LIBUHD=ON"
-    "-DENABLE_USB=ON"
+    (cmakeBool "ENABLE_LIBUHD" true)
+    (cmakeBool "ENABLE_USB" true)
     # Regardless of doCheck, we want to build the tests to help us gain
     # confident that the package is OK.
-    "-DENABLE_TESTS=ON"
+    (cmakeBool "ENABLE_TESTS" true)
     (cmakeBool "ENABLE_EXAMPLES" enableExamples)
     (cmakeBool "ENABLE_UTILS" enableUtils)
     (cmakeBool "ENABLE_C_API" enableCApi)
