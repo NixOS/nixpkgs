@@ -12,14 +12,18 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.185.0";
+  version = "2.188.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-api-python-client";
     tag = "v${version}";
-    hash = "sha256-uItN7P6tZTxEHfma+S0p4grRRnAaIhuTezvJzWjvkfE=";
+    hash = "sha256-uNvsWCfoT+wp6UnbDP5QS7Os2FnEsTzusdGZ9lD/LwY=";
+    # Remove mixed-case files that cause hash differences between platforms
+    postFetch = ''
+      rm -rf $out/docs/
+    '';
   };
 
   build-system = [ setuptools ];
