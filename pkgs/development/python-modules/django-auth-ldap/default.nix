@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-auth-ldap";
     repo = "django-auth-ldap";
     tag = version;
-    hash = "sha256-/Wy5ZCRBIeEXOFqQW4e+GzQWpZyI9o39TfFAVb7OYeo=";
+    hash = "sha256-+ezadod2ZKrsNW7lVO1dVqQWUnzP1Mi9On8/RJ2qNfI=";
   };
 
   build-system = [ setuptools-scm ];

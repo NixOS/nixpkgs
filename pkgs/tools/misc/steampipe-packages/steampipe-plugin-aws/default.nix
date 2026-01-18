@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "steampipe-plugin-aws";
-  version = "1.24.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe-plugin-aws";
     tag = "v${version}";
-    hash = "sha256-01eF1hs36dSdwT1PfvKeuRUBAA7CZTBFxEP53mvU4mw=";
+    hash = "sha256-tpRiQUdZro0wkGn/XJDlMtOsFNicmgLqb+fI1ozrOf0=";
   };
 
-  vendorHash = "sha256-9Kl4aTQQNQVIkFTLnXVEyN5WYxgihSeYlnL/r/vsGKU=";
+  vendorHash = "sha256-ZN1OordavH5BCarEpUxjgsIUvM4PruAeIaNRMYXrmRM=";
 
   ldflags = [
     "-s"

@@ -10,7 +10,6 @@
   fastapi,
   fetchFromGitHub,
   httpx,
-  importlib-metadata,
   mysqlclient,
   nest-asyncio,
   orjson,
@@ -20,9 +19,7 @@
   pymysql,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -53,10 +50,6 @@ buildPythonPackage rec {
     pydantic
     sqlalchemy
     psycopg2
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
   ];
 
   optional-dependencies = {

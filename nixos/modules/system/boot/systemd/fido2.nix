@@ -24,7 +24,7 @@ in
       '')
     ];
     boot.initrd.systemd.storePaths = [
-      "${pkgs.systemd}/lib/udev/fido_id"
+      "${cfg.package}/lib/udev/fido_id"
       "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
       "${pkgs.libfido2}/lib/libfido2.so.1"
     ];
