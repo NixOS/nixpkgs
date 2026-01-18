@@ -14,7 +14,6 @@ bundlerApp {
     description = "Download websites from the Internet Archive Wayback Machine";
     homepage = "https://github.com/hartator/wayback-machine-downloader";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.manveru ];
     platforms = lib.platforms.all;
     mainProgram = "wayback_machine_downloader";
   };

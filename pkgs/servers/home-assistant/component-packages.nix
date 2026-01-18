@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.1.1";
+  version = "2026.1.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -33,8 +33,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -157,8 +157,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -298,7 +298,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "anwb_energie" =
@@ -386,8 +386,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -428,7 +428,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "assist_satellite" =
@@ -437,7 +437,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "asuswrt" =
@@ -469,7 +469,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -658,8 +658,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -705,8 +705,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -731,8 +731,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -832,8 +832,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -889,7 +889,7 @@
         plexauth
         plexwebsocket
         pychromecast
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -952,7 +952,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -1153,9 +1153,9 @@
         numpy
         pillow
         psutil-home-assistant
+        pymicro-vad
         pynacl
         pyserial
-        pysilero-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -1313,8 +1313,8 @@
         ifaddr
         mutagen
         py-dormakaba-dkey
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1605,8 +1605,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1636,8 +1636,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1675,8 +1675,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1824,8 +1824,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2013,8 +2013,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2153,7 +2153,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "google_mail" =
@@ -2217,8 +2217,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2478,9 +2478,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyroute2
         pyserial
-        pysilero-vad
         pyspeex-noise
         python-otbr-api
         zeroconf
@@ -2551,8 +2551,8 @@
         hueble
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2597,8 +2597,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2653,8 +2653,8 @@
         ibeacon-ble
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2684,8 +2684,8 @@
         idasen-ha
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2763,8 +2763,8 @@
         ifaddr
         mutagen
         py-improv-ble-client
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2808,8 +2808,8 @@
         ifaddr
         inkbird-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2922,9 +2922,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pynecil
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3052,8 +3052,8 @@
         ifaddr
         kegtron-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3086,9 +3086,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pymicrobot
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3166,8 +3166,8 @@
         ifaddr
         mutagen
         pykulersky
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3208,8 +3208,8 @@
         ifaddr
         mutagen
         pylamarzocco
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3269,8 +3269,8 @@
         ifaddr
         ld2410-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3296,8 +3296,8 @@
         ifaddr
         leaone-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3323,8 +3323,8 @@
         ifaddr
         led-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3481,7 +3481,7 @@
         home-assistant-intents
         loqedapi
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -3621,8 +3621,8 @@
         ifaddr
         medcom-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3673,8 +3673,8 @@
         ifaddr
         melnor-bluetooth
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3795,8 +3795,8 @@
         ifaddr
         moat-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3810,8 +3810,8 @@
         home-assistant-intents
         mutagen
         pillow
+        pymicro-vad
         pynacl
-        pysilero-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -3882,8 +3882,8 @@
         ifaddr
         mopeka-iot-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3914,8 +3914,8 @@
         ifaddr
         motionblindsble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4056,7 +4056,7 @@
         home-assistant-intents
         mutagen
         pyatmo
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -4270,7 +4270,7 @@
         home-assistant-intents
         mutagen
         ollama
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "ombi" =
@@ -4301,7 +4301,7 @@
         home-assistant-intents
         mutagen
         onedrive-personal-sdk
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -4333,7 +4333,7 @@
         home-assistant-intents
         mutagen
         openai
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-open-router
       ];
@@ -4344,7 +4344,7 @@
         home-assistant-intents
         mutagen
         openai
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "openalpr_cloud" =
@@ -4434,8 +4434,8 @@
         ifaddr
         mutagen
         oralb-ble
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4494,7 +4494,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         python-overseerr
@@ -4515,8 +4515,8 @@
         home-assistant-intents
         mutagen
         paho-mqtt
+        pymicro-vad
         pynacl
-        pysilero-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -4639,8 +4639,8 @@
         hassil
         home-assistant-intents
         mutagen
+        pymicro-vad
         pyplaato
-        pysilero-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -4722,8 +4722,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4748,9 +4748,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyprobeplus
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4885,8 +4885,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         qingping-ble
         zeroconf
@@ -4938,7 +4938,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -5005,8 +5005,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         rapt-ble
         zeroconf
@@ -5047,7 +5047,7 @@
         home-assistant-frontend
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -5251,8 +5251,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         ruuvitag-ble
         zeroconf
@@ -5378,8 +5378,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         sensirion-ble
         zeroconf
@@ -5414,8 +5414,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         sensorpro-ble
         zeroconf
@@ -5441,8 +5441,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         sensorpush-ble
         zeroconf
@@ -5702,8 +5702,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pysnooz
         pyspeex-noise
         zeroconf
@@ -5944,8 +5944,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         pyswitchbot
         zeroconf
@@ -6139,8 +6139,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         thermobeacon-ble
         zeroconf
@@ -6169,8 +6169,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         thermopro-ble
         zeroconf
@@ -6236,8 +6236,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         tilt-ble
         zeroconf
@@ -6302,7 +6302,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -6630,8 +6630,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ]; # missing inputs: victron-ble-ha-parser
@@ -6673,7 +6673,7 @@
         home-assistant-intents
         ifaddr
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         voip-utils
       ];
@@ -6731,7 +6731,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -6822,7 +6822,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -6872,7 +6872,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         wyoming
       ];
@@ -6916,8 +6916,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         xiaomi-ble
         zeroconf
@@ -6950,7 +6950,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-matter-server
         pyturbojpeg
@@ -6983,8 +6983,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         yalexs-ble
         zeroconf

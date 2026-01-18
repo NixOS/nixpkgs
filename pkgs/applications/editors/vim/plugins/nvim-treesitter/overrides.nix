@@ -21,7 +21,10 @@ let
     vimUtils.toVimPlugin (
       runCommand "nvim-treesitter-queries-${language}"
         {
-          passthru = { inherit language; };
+          passthru = {
+            inherit language;
+            isTreesitterQuery = true;
+          };
           meta.description = "Queries for ${language} from nvim-treesitter";
         }
         ''
@@ -94,12 +97,7 @@ let
       ];
     in
     self.nvim-treesitter.overrideAttrs {
-      passthru.dependencies = [
-        (symlinkJoin {
-          name = "nvim-treesitter-grammars";
-          paths = grammarPlugins ++ queryPlugins;
-        })
-      ];
+      passthru.dependencies = grammarPlugins ++ queryPlugins;
     };
 
   withAllGrammars = withPlugins (_: allGrammars);

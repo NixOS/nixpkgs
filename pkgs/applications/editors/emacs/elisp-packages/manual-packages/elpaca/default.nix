@@ -66,7 +66,6 @@ melpaBuild rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       abhisheksingh0x558
-      normalcea
     ];
   };
 }

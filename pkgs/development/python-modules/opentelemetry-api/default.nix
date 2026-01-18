@@ -65,7 +65,6 @@ let
       changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${src.tag}";
       license = lib.licenses.asl20;
       maintainers = [ lib.maintainers.natsukium ];
-      teams = [ lib.teams.deshaw ];
     };
   };
 in
