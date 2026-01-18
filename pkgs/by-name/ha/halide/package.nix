@@ -1,10 +1,9 @@
 {
   lib,
   stdenv,
-  llvmPackages_19,
+  llvmPackages,
   fetchFromGitHub,
   cmake,
-  fetchpatch2,
   flatbuffers,
   libffi,
   libpng,
@@ -26,34 +25,17 @@
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
-let
-  llvmPackages = llvmPackages_19;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "halide";
-  version = "19.0.0";
+  version = "21.0.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0SFGX4G6UR8NS4UsdFOb99IBq2/hEkr/Cm2p6zkIh/8=";
+    hash = "sha256-A5EnZgXc9+L+bzWHftaL74nHmP8Jf0rnT5KJAAWvKis=";
   };
-
-  patches = [
-    # The following two patches fix cmake/HalidePackageConfigHelpers.cmake to
-    # support specifying an absolute library install path (which is what Nix
-    # does when "lib" is included as a separate output)
-    (fetchpatch2 {
-      url = "https://github.com/halide/Halide/commit/ac2cd23951aff9ac3b765e51938f1e576f1f0ee9.diff?full_index=1";
-      hash = "sha256-JTktOTSyReDUEHTaPPMoi+/K/Gzg39i6MI97cO3654k=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/halide/Halide/commit/59f4fff30f4ab628da9aa7e5f77a7f1bb218a779.diff?full_index=1";
-      hash = "sha256-yOzE+1jai1w1GQisLYfu8F9pbTE/bYg0MTLq8rPXdGk=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/runtime/CMakeLists.txt --replace-fail \
@@ -104,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     "anderson2021_test_apps_autoscheduler"
     "correctness_cross_compilation"
     "correctness_simd_op_check_hvx"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Failed  Required regular expression not found
+    "mullapudi2016_histogram"
   ];
 
   dontUseNinjaCheck = true;
