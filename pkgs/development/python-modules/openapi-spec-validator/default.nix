@@ -1,14 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   poetry-core,
 
   # propagates
-  importlib-resources,
   jsonschema,
   jsonschema-path,
   lazy-object-proxy,
@@ -39,8 +37,7 @@ buildPythonPackage rec {
     jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
