@@ -25865,11 +25865,6 @@
     githubId = 156964;
     name = "Thomas Boerger";
   };
-  tbwanderer = {
-    github = "tbwanderer";
-    githubId = 125365236;
-    name = "Ice Layer";
-  };
   tc-kaluza = {
     github = "tc-kaluza";
     githubId = 101565936;
