@@ -1,17 +1,10 @@
 {
-  channel,
-  version,
-  hash,
-}:
-
-{
   fetchFromGitHub,
   gns3-gui,
   lib,
   python3Packages,
   qt5,
   testers,
-  wrapQtAppsHook,
 }:
 
 let
@@ -23,17 +16,17 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "gns3-gui";
-  inherit version;
+  version = "2.2.55";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    inherit hash;
     owner = "GNS3";
     repo = "gns3-gui";
     tag = "v${version}";
+    hash = "sha256-6jblQakNpoSQXfy5pU68Aedg661VcwpqQilvqOV15pQ";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   build-system = with pythonPackages; [ setuptools ];
 
@@ -53,7 +46,7 @@ pythonPackages.buildPythonApplication rec {
   dontWrapQtApps = true;
 
   preFixup = ''
-    wrapQtApp "$out/bin/gns3"
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   doCheck = true;
@@ -73,7 +66,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Graphical Network Simulator 3 GUI (${channel} release)";
+    description = "Graphical Network Simulator 3 GUI";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
       requires access to a local or remote GNS3 server (it's recommended to

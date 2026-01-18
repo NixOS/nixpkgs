@@ -6945,9 +6945,6 @@ with pkgs;
 
   #GMP ex-satellite, so better keep it near gmp
   # A GMP fork
-  gns3Packages = recurseIntoAttrs (callPackage ../applications/networking/gns3 { });
-  gns3-gui = gns3Packages.guiStable;
-  gns3-server = gns3Packages.serverStable;
 
   gobject-introspection = callPackage ../development/libraries/gobject-introspection/wrapper.nix { };
 

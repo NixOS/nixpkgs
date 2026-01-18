@@ -1,10 +1,4 @@
 {
-  channel,
-  version,
-  hash,
-}:
-
-{
   fetchFromGitHub,
   gns3-server,
   lib,
@@ -16,16 +10,16 @@
   util-linux,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "gns3-server";
-  inherit version;
+  version = "2.2.55";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    inherit hash;
     owner = "GNS3";
     repo = "gns3-server";
     tag = "v${version}";
+    hash = "sha256-o04RrHYsa5sWYUBDLJ5xgcK4iJK8CfZ4YdAiZ4eV/o4=";
   };
 
   # GNS3 2.3.26 requires a static BusyBox for the Docker integration
@@ -94,7 +88,7 @@ python3Packages.buildPythonApplication {
   };
 
   meta = {
-    description = "Graphical Network Simulator 3 server (${channel} release)";
+    description = "Graphical Network Simulator 3 server";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
