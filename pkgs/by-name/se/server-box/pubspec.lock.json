@@ -587,8 +587,8 @@
       "dependency": "direct dev",
       "description": {
         "path": ".",
-        "ref": "v1.0.52",
-        "resolved-ref": "38e7d41ccd71bf44e286d86b4ad656f05c5c2548",
+        "ref": "v1.0.53",
+        "resolved-ref": "61ee37ea6f082592f5be56340b7746dce4ffbfda",
         "url": "https://github.com/lppcg/fl_build.git"
       },
       "source": "git",
@@ -1998,7 +1998,7 @@
       "version": "2.2.2"
     },
     "url_launcher": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "url_launcher",
         "sha256": "f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8",
