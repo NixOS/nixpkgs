@@ -29,7 +29,6 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Luflosi
-      elitak
     ];
     mainProgram = "fs-repo-migrations";
   };

@@ -7635,12 +7635,6 @@
     githubId = 161958668;
     name = "Élise Souche";
   };
-  elitak = {
-    email = "elitak@gmail.com";
-    github = "elitak";
-    githubId = 769073;
-    name = "Eric Litak";
-  };
   elizagamedev = {
     email = "eliza@eliza.sh";
     github = "elizagamedev";
