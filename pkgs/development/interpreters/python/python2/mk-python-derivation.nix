@@ -301,7 +301,18 @@ let
       }
     )
   );
+
+  # Workaround to make the `lib.extendDerivation`-based disabled functionality
+  # respect `<pkg>.overrideAttrs`
+  # It doesn't cover `<pkg>.<output>.overrideAttrs`.
+  disablePythonPackage =
+    drv:
+    lib.extendDerivation (
+      drv.disabled
+      -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+    ) { } drv
+    // {
+      overrideAttrs = fdrv: disablePythonPackage (drv.overrideAttrs fdrv);
+    };
 in
-lib.extendDerivation (
-  disabled -> throw "${name} not supported for interpreter ${python.executable}"
-) { } self
+disablePythonPackage self
