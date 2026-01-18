@@ -26,6 +26,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/prometheus/memcached_exporter";
     license = lib.licenses.asl20;
     mainProgram = "memcached_exporter";
-    teams = with lib.teams; [ deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
 })

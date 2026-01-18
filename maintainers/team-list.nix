@@ -141,13 +141,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  cloudposse = {
-    members = [ dudymas ];
-    scope = "Maintain atmos and applications made by the Cloud Posse team.";
-    shortName = "CloudPosse";
-    enableFeatureFreezePing = true;
-  };
-
   coq = {
     members = [
       cohencyril
@@ -193,17 +186,6 @@ with lib.maintainers;
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
-  };
-
-  deshaw = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      de11n
-      despsyched
-      invokes-su
-    ];
-    scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
-    shortName = "D. E. Shaw employees";
   };
 
   dhall = {
@@ -363,17 +345,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  helsinki-systems = {
-    # Verify additions to this team with at least one already existing member of the team.
-    members = [
-      das_j
-      conni2461
-      helsinki-Jo
-    ];
-    scope = "Group registration for packages maintained by Helsinki Systems";
-    shortName = "Helsinki Systems employees";
-  };
-
   home-assistant = {
     members = [
       dotlambda
@@ -393,16 +364,6 @@ with lib.maintainers;
     members = [ akhilmhdh ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
-  };
-
-  iog = {
-    members = [
-      cleverca22
-      disassembler
-      manveru
-    ];
-    scope = "Input-Output Global employees, which maintain critical software";
-    shortName = "Input-Output Global employees";
   };
 
   java = {
@@ -556,18 +517,6 @@ with lib.maintainers;
     shortName = "Matrix";
   };
 
-  mercury = {
-    members = [
-      _9999years
-      Gabriella439
-      curran
-      lf-
-      jkachmar
-    ];
-    scope = "Group registry for packages maintained by Mercury";
-    shortName = "Mercury Employees";
-  };
-
   minimal-bootstrap = {
     members = [
       alejandrosame
@@ -680,17 +629,6 @@ with lib.maintainers;
     shortName = "OpenStack";
   };
 
-  ororatech = {
-    # email: nixdevs@ororatech.com
-    shortName = "OroraTech GmbH. employees";
-    scope = "Team for packages maintained by employees of OroraTech GmbH.";
-    # Edits to this list should only be done by an already existing member.
-    members = [
-      kip93
-      victormeriqui
-    ];
-  };
-
   pantheon = {
     github = "pantheon";
     enableFeatureFreezePing = true;
@@ -745,16 +683,6 @@ with lib.maintainers;
     scope = "Maintain the R programming language and related packages.";
     shortName = "R";
     enableFeatureFreezePing = true;
-  };
-
-  redcodelabs = {
-    members = [
-      unrooted
-      wr0belj
-      wintrmvte
-    ];
-    scope = "Maintain Red Code Labs related packages and modules.";
-    shortName = "Red Code Labs";
   };
 
   rocm = {
