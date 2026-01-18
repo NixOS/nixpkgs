@@ -10503,18 +10503,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  nidhogg-nvim = buildVimPlugin {
-    pname = "nidhogg.nvim";
-    version = "0-unstable-2026-01-11";
-    src = fetchgit {
-      url = "https://codeberg.org/koibtw/nidhogg.nvim";
-      rev = "a8c72aa204f68d5bd79a2508fbbed7b0ad2290cf";
-      hash = "sha256-x8CryNcg3u5uCncCMTgK7yzCvk5MiomjKpdjNEoCQu4=";
-    };
-    meta.homepage = "https://codeberg.org/koibtw/nidhogg.nvim";
-    meta.hydraPlatforms = [ ];
-  };
-
   night-owl-nvim = buildVimPlugin {
     pname = "night-owl.nvim";
     version = "0.5-beta-unstable-2024-09-12";
