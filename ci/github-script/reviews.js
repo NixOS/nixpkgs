@@ -19,13 +19,13 @@ async function dismissReviews({ github, context, dry }) {
             ...context.repo,
             pull_number,
             review_id: review.id,
-            message: 'All good now, thank you!',
+            message: 'Review dismissed automatically',
           })
         }
         await github.graphql(
           `mutation($node_id:ID!) {
             minimizeComment(input: {
-              classifier: RESOLVED,
+              classifier: OUTDATED,
               subjectId: $node_id
             })
             { clientMutationId }
@@ -49,10 +49,7 @@ async function postReview({ github, context, core, dry, body }) {
       review.user?.login === 'github-actions[bot]' &&
       // If a review is still pending, we can just update this instead
       // of posting a new one.
-      (review.state === 'CHANGES_REQUESTED' ||
-        // No need to post a new review, if an older one with the exact
-        // same content had already been dismissed.
-        review.body === body),
+      review.state === 'CHANGES_REQUESTED',
   )
 
   if (dry) {
