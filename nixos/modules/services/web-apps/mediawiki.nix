@@ -730,7 +730,7 @@ in
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
         ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
-        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
