@@ -715,22 +715,22 @@
     "vendorHash": "sha256-8gBaOdoUjmeomi8+H2gMypKnJdkXGzgzu8K0ATqMfxE="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-B7THs+KpB9j72Jklzpw9GmjM/U5rqvZG9kxNbU/YkFY=",
+    "hash": "sha256-4YCixNM2I/v8pn6CAiNQf2tXKTeNjAWpHGDF3yOwIYs=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.84.0",
+    "rev": "v1.85.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "ibm-cloud_ibm": {
-    "hash": "sha256-xiiQKp4ZBLAR1OM31D8UWJbaZ2SkzrBIr3uW3N3iSZg=",
+    "hash": "sha256-DvWlf3FHYDcNxUZUOoslQjhuwGvElAEu/duDsX4xbKs=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.86.1",
+    "rev": "v1.87.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vHgeVhZV9JLH2vXwFUO0N8xp8BLBPk7ypK+kkWwtbTk="
+    "vendorHash": "sha256-vKu5ytMAhIYKoPNfuxpyBT9gRdSAR4wFI/7A9K+RiAo="
   },
   "icinga_icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -1193,13 +1193,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "selectel_selectel": {
-    "hash": "sha256-2lo5CF+FmQW2JIHCoI5zGZBaquIo4RXzvD8MeNWTHhQ=",
+    "hash": "sha256-BT8sDYfcEtsvMg1aLi2QRo4wu2V/hkWEk4PKQmN3vtg=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v7.3.0",
+    "rev": "v7.4.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-wAVTsN0ZizBU4dMLK2wxf3RSNE6GCbXL1jTIULpKfNU="
+    "vendorHash": "sha256-OJlD1P+CUEsLk2xSsQ2QQBvGewYNly1dIJh8kMi+ChE="
   },
   "siderolabs_talos": {
     "hash": "sha256-NsIFyngT6/bU744fftNWWHU43W3sXO/0yzzAKSEH9/Q=",
@@ -1274,11 +1274,11 @@
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-04LRhKCh1AmhhKaDT8+Un9hziJ5l7qrCCKAyBEacEOI=",
+    "hash": "sha256-BovhCb+01LJUE62geNJmDwpzV0ucQLpVWjXwfxsClyI=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.3.1",
+    "rev": "v3.4.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },

@@ -962,6 +962,12 @@ self: super: with self; {
 
   arviz = callPackage ../development/python-modules/arviz { };
 
+  arviz-base = callPackage ../development/python-modules/arviz-base { };
+
+  arviz-plots = callPackage ../development/python-modules/arviz-plots { };
+
+  arviz-stats = callPackage ../development/python-modules/arviz-stats { };
+
   arxiv = callPackage ../development/python-modules/arxiv { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
@@ -8007,6 +8013,8 @@ self: super: with self; {
 
   kagglehub = callPackage ../development/python-modules/kagglehub { };
 
+  kagglesdk = callPackage ../development/python-modules/kagglesdk { };
+
   kahip = toPythonModule (
     pkgs.kahip.override {
       pythonSupport = true;
@@ -12401,6 +12409,8 @@ self: super: with self; {
   pnglatex = callPackage ../development/python-modules/pnglatex { };
 
   pocket = callPackage ../development/python-modules/pocket { };
+
+  pocket-tts = callPackage ../development/python-modules/pocket-tts { };
 
   pocketsphinx = callPackage ../development/python-modules/pocketsphinx {
     inherit (pkgs) pocketsphinx;

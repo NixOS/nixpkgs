@@ -311,6 +311,7 @@ mapAliases {
   archi = throw "'archi' has been removed, since its upstream maintainers do not want it packaged"; # Added 2025-11-18
   archipelago-minecraft = throw "archipelago-minecraft has been removed, as upstream no longer ships minecraft as a default APWorld."; # Added 2025-07-15
   archivebox = throw "archivebox has been removed, since the packaged version was stuck on django 3."; # Added 2025-08-01
+  archiver = throw "archiver has been removed, as it has been unmaintained upstream since November 2024"; # Added 2026-01-15
   ardour_7 = throw "ardour_7 has been removed because it relies on gtk2, please use ardour instead."; # Added 2025-10-04
   argo = throw "'argo' has been renamed to/replaced by 'argo-workflows'"; # Converted to throw 2025-10-27
   aria = throw "'aria' has been renamed to/replaced by 'aria2'"; # Converted to throw 2025-10-27
@@ -568,6 +569,7 @@ mapAliases {
   dumb = throw "'dumb' has been archived by upstream. Upstream recommends libopenmpt as a replacement."; # Added 2025-09-14
   dump1090 = throw "'dump1090' has been renamed to/replaced by 'dump1090-fa'"; # Converted to throw 2025-10-27
   dune_1 = throw "'dune_1' has been removed"; # Added 2025-11-13
+  e17gtk = throw "'e17gtk' has been removed because it was archived upstream."; # Added 2026-01-15
   eask = throw "'eask' has been renamed to/replaced by 'eask-cli'"; # Converted to throw 2025-10-27
   easyloggingpp = throw "easyloggingpp has been removed, as it is deprecated upstream and does not build with CMake 4"; # Added 2025-09-17
   EBTKS = throw "'EBTKS' has been renamed to/replaced by 'ebtks'"; # Converted to throw 2025-10-27

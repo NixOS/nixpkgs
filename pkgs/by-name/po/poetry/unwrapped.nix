@@ -57,6 +57,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "dulwich"
     "keyring"
+    "pbs-installer"
   ];
 
   dependencies = [

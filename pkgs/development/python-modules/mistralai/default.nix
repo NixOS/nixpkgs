@@ -4,11 +4,12 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   eval-type-backport,
   httpx,
+  httpcore,
   invoke,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
@@ -30,16 +31,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
-    tag = "v${version}";
-    hash = "sha256-B7ZJTwykFnOibTJL5AP3eKT15rLgAJ1hc53BL9TR0CM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y1et8Ez5TAge0kk/a9fA1zcgPStYf+6aO19OLhMGk/8=";
   };
 
   preBuild = ''
@@ -47,7 +48,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   pythonRelaxDeps = [
@@ -89,8 +90,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for Mistral AI platform";
     homepage = "https://github.com/mistralai/client-python";
-    changelog = "https://github.com/mistralai/client-python/blob/${src.tag}/RELEASES.md";
+    changelog = "https://github.com/mistralai/client-python/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mana-byte
+    ];
   };
-}
+})

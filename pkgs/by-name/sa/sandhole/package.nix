@@ -24,8 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     echo "fn main() {}" > tests/integration/main.rs
   '';
 
-  buildInputs = [ cmake ];
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
+  strictDeps = true;
 
   useNextest = true;
   checkFlags = [

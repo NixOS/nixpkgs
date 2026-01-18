@@ -15,6 +15,7 @@
   ninja,
   ant,
   openjdk,
+  mongoc,
   perl,
   perlPackages,
   makeWrapper,
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     lrs
     nauty
     openjdk
+    mongoc
   ]
   ++ (with perlPackages; [
     JSON
@@ -62,6 +64,10 @@ stdenv.mkDerivation rec {
     TermReadKey
     XMLSAX
   ]);
+
+  configureFlags = [
+    "--with-mongoc=${mongoc}"
+  ];
 
   ninjaFlags = [
     "-C"
