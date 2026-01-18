@@ -206,7 +206,7 @@ let
     self = python;
     packageOverrides = final: prev: {
       # https://github.com/goauthentik/authentik/pull/16324
-      django = final.django_5_2;
+      django = final.django_5;
 
       django-channels-postgres = final.buildPythonPackage {
         pname = "django-channels-postgres";
