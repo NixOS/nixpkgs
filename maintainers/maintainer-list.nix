@@ -28916,7 +28916,7 @@
     githubId = 102890144;
   };
   yiyu = {
-    email = "yiyuzhou19@gmail.com";
+    email = "yiyu@yiyuzhou.io";
     name = "Yiyu Zhou";
     github = "yzhou216";
     githubId = 50000936;
