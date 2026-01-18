@@ -113,10 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
         updateLockfile
       ];
 
-    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
-      bwrap = "${bubblewrap}/bin/bwrap";
-    };
-
     glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
