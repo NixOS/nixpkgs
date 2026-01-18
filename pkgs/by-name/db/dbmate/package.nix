@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 
   # testing
   sqlite,
@@ -25,6 +26,8 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [
     sqlite
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Database migration tool";
