@@ -29,6 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
   version = "2.0.7";
 
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
+
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
@@ -82,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs \
       build-aux/crates-version.py
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
