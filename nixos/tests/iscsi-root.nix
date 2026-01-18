@@ -5,9 +5,13 @@ let
 in
 {
   name = "iscsi";
-  meta = {
-    maintainers = lib.teams.deshaw.members ++ lib.teams.helsinki-systems.members;
-  };
+  meta.maintainers =
+    with lib.maintainers;
+    [
+      das_j
+      helsinki-Jo
+    ]
+    ++ lib.teams.deshaw.members;
 
   nodes = {
     target =
