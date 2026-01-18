@@ -216,7 +216,16 @@ lib.makeExtensible (
             hash = "sha256-TVKn52SoKq8mMyW/x3NPPskGVurFdnGGV0DGvnL0gak=";
           };
         }).appendPatches
-          patches_common;
+          (
+            patches_common
+            ++ [
+              (fetchpatch2 {
+                name = "nix-2.33-15012-missing-include-glibc-2.42.patch";
+                url = "https://github.com/NixOS/nix/commit/c0c13d73233c740b7d278c71b161da7b16217564.patch?full_index=1";
+                hash = "sha256-iRMg36UMs5WmUfNxz4zoZq6mM3dwo2NiR8s1cM/uooU=";
+              })
+            ]
+          );
 
       nix_2_33 = addTests "nix_2_33" self.nixComponents_2_33.nix-everything;
 
