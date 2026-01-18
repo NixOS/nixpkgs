@@ -126,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
     ];
     maintainers = with lib.maintainers; [
-      manveru
       vlinkz
     ];
     platforms = lib.platforms.linux;

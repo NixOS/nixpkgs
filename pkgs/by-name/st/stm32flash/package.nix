@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/stm32flash/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all; # Should work on all platforms
-    maintainers = with lib.maintainers; [ elitak ];
+    maintainers = [ ];
   };
 }

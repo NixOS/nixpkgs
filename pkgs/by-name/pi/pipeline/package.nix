@@ -105,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       chuangzhu
-      normalcea
     ];
     platforms = lib.platforms.linux;
   };

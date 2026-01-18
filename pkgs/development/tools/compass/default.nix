@@ -20,7 +20,6 @@ bundlerEnv {
     license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       offline
-      manveru
       nicknovitski
     ];
     mainProgram = "compass";

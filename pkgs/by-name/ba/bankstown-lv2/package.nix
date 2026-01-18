@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Lightweight psychoacoustic bass enhancement plugin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      normalcea
       yuka
     ];
     platforms = lib.platforms.linux;
