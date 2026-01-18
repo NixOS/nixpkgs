@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     python3
     rustPlatform.cargoSetupHook
+    finalAttrs.passthru.patchVendorHook
   ]
   ++ lib.optionals withIntrospection [
     vala
@@ -89,8 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patch -p2 < ${finalAttrs.passthru.glycin3PathsPatch}
-
     patchShebangs \
       build-aux/crates-version.py
   '';
