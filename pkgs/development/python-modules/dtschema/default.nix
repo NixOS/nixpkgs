@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2025.08";
+  version = "2025.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devicetree-org";
     repo = "dt-schema";
     tag = "v${version}";
-    sha256 = "sha256-SW2WAVB7ZSgKRjIyFdMqe8tRIuM97ZVBg4d0BJC6SBI=";
+    sha256 = "sha256-DCkZDI0/W/4IkMzaa769vKJxlSMWoEsLIdlyChYd+Mk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -46,13 +46,7 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ sorki ];
 
-    broken = (
-      # Library not loaded: @rpath/libfdt.1.dylib
-      stdenv.hostPlatform.isDarwin
-      ||
-
-        # see https://github.com/devicetree-org/dt-schema/issues/108
-        lib.versionAtLeast jsonschema.version "4.18"
-    );
+    # Library not loaded: @rpath/libfdt.1.dylib
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
