@@ -10,11 +10,13 @@ let
   inherit (utils.systemdUtils.unitOptions) unitOption;
 
   inherit (lib)
+    concatStringsSep
+    elem
+    isList
     literalExpression
     mkIf
     mkMerge
     mkOption
-    mkOptionDefault
     mkOrder
     mkRenamedOptionModule
     mkRemovedOptionModule
@@ -26,7 +28,25 @@ let
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  resolvedConf = settingsToSections cfg.settings;
+  transformSettings =
+    settings:
+    lib.mapAttrs (
+      key: value:
+      # concat lists for options that should result in space-separated values
+      if
+        elem key [
+          "DNS"
+          "Domains"
+          "FallbackDNS"
+        ]
+        && isList value
+      then
+        concatStringsSep " " value
+      else
+        value
+    ) settings;
+
+  resolvedConf = settingsToSections (transformSettings cfg.settings);
 in
 {
   imports = [
@@ -60,22 +80,56 @@ in
   options = {
     services.resolved = {
       enable = lib.mkEnableOption "the Systemd DNS resolver daemon (systemd-resolved)";
+
       settings.Resolve = mkOption {
         description = ''
           Settings option for systemd-resolved.
           See {manpage}`resolved.conf(5)` for all available options.
         '';
-        # Remember to keep this in sync to the actual settings at the bottom of the page.
-        defaultText = literalExpression ''
-          {
-            DNS = config.networking.nameservers;
-            DNSOverTLS = false;
-            DNSSEC = false;
-            Domains = config.networking.search;
-            LLMNR = true;
-          }
-        '';
-        type = types.attrsOf unitOption;
+        default = { };
+        type = types.submodule {
+          freeformType = types.attrsOf unitOption;
+          options = {
+            DNS = mkOption {
+              type = unitOption;
+              default = config.networking.nameservers;
+              defaultText = literalExpression "config.networking.nameservers";
+              description = ''
+                List of IP addresses to query as recursive DNS resolvers.
+              '';
+            };
+
+            DNSOverTLS = mkOption {
+              type = unitOption;
+              default = false;
+              description = ''
+                Whether to use TLS encryption for DNS queries. Requires
+                nameservers that support DNS-over-TLS.
+              '';
+            };
+
+            DNSSEC = mkOption {
+              type = unitOption;
+              default = false;
+              description = ''
+                Whether to validate DNSSEC for DNS lookups.
+              '';
+            };
+
+            Domains = mkOption {
+              type = unitOption;
+              default = config.networking.search;
+              defaultText = literalExpression "config.networking.search";
+              example = [
+                "scope.example.com"
+                "example.com"
+              ];
+              description = ''
+                List of search domains used to complete unqualified name lookups.
+              '';
+            };
+          };
+        };
       };
 
     };
@@ -100,15 +154,6 @@ in
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
       ];
-
-      # If updating any of these attrs, also update the defaultText above.
-      services.resolved.settings.Resolve = {
-        DNS = config.networking.nameservers;
-        DNSOverTLS = mkOptionDefault false;
-        DNSSEC = mkOptionDefault false;
-        Domains = mkOptionDefault config.networking.search;
-        LLMNR = mkOptionDefault true;
-      };
 
       users.users.systemd-resolve.group = "systemd-resolve";
 
