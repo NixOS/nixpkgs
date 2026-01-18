@@ -11272,10 +11272,6 @@ with pkgs;
 
   openambit = qt5.callPackage ../applications/misc/openambit { };
 
-  openbox-menu = callPackage ../applications/misc/openbox-menu {
-    stdenv = gccStdenv;
-  };
-
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
   opencpn = callPackage ../applications/misc/opencpn {
