@@ -7326,7 +7326,6 @@ broken-packages:
   - xslt # failure in job https://hydra.nixos.org/build/233225636 at 2023-09-02
   - xtea # failure in job https://hydra.nixos.org/build/282175333 at 2024-12-23
   - xxhash # failure in job https://hydra.nixos.org/build/233240335 at 2023-09-02
-  - xz # failure in job https://hydra.nixos.org/build/307523211 at 2025-09-19
   - y0l0bot # failure in job https://hydra.nixos.org/build/233212722 at 2023-09-02
   - yabi-muno # failure in job https://hydra.nixos.org/build/233246871 at 2023-09-02
   - yackage # failure in job https://hydra.nixos.org/build/233213393 at 2023-09-02
