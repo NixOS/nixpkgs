@@ -13,7 +13,7 @@
 }:
 let
   pname = "gitui";
-  version = "0.27.0";
+  version = "0.28.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage {
     owner = "extrawurst";
     repo = "gitui";
     rev = "v${version}";
-    hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
+    hash = "sha256-B3Cdhhu8ECfpc57TKe6u08Q/Kl4JzUlzw4vtJJ1YAUQ=";
   };
 
-  cargoHash = "sha256-Le/dD8bTd5boz1IeEq4ItJZYC3MRW8uiT/3Zy1yv5L0=";
+  cargoHash = "sha256-dq5F7NJ0XcJ9x6hVWOboQQn8Liw8n8vkFgQSmTYIkSw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,16 +38,6 @@ rustPlatform.buildRustPackage {
   ++ lib.optional stdenv.hostPlatform.isLinux xclip
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-  ];
-
-  patches = [
-    # Fixes the build for rust 1.89
-    # Upstream PR: https://github.com/gitui-org/gitui/pull/2663
-    # TOREMOVE for gitui > 0.27.0
-    (fetchpatch {
-      url = "https://github.com/gitui-org/gitui/commit/950e703cab1dd37e3d02e7316ec99cc0dc70513c.patch";
-      sha256 = "sha256-KDgOPLKGuJaF0Nc6rw9FPFmcI07I8Gyp/KNX8x6+2xw=";
-    })
   ];
 
   postPatch = ''
