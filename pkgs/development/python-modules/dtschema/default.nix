@@ -12,7 +12,7 @@
   dtc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dtschema";
   version = "2025.12";
   pyproject = true;
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devicetree-org";
     repo = "dt-schema";
-    tag = "v${version}";
-    sha256 = "sha256-DCkZDI0/W/4IkMzaa769vKJxlSMWoEsLIdlyChYd+Mk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DCkZDI0/W/4IkMzaa769vKJxlSMWoEsLIdlyChYd+Mk=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     rfc3987
     ruamel-yaml
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
-    changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
+    changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       bsd2 # or
       gpl2Only
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     # Library not loaded: @rpath/libfdt.1.dylib
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
