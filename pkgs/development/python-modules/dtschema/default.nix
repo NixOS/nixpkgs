@@ -8,6 +8,8 @@
   ruamel-yaml,
   setuptools-scm,
   libfdt,
+  pytestCheckHook,
+  dtc,
 }:
 
 buildPythonPackage rec {
@@ -31,10 +33,14 @@ buildPythonPackage rec {
     libfdt
   ];
 
-  # Module has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "dtschema" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    dtc
+  ];
+
+  enabledTestPaths = [ "test/test-dt-validate.py" ];
 
   meta = {
     description = "Tooling for devicetree validation using YAML and jsonschema";
