@@ -11,14 +11,12 @@
   defusedxml,
   fetchPypi,
   fetchpatch,
-  importlib-metadata,
   micloud,
   netifaces,
   poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   pyyaml,
   tqdm,
@@ -67,8 +65,7 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

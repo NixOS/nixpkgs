@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  importlib-metadata,
   passlib,
   python-dateutil,
-  pythonOlder,
   scramp,
   hatchling,
   versioningit,
@@ -30,8 +28,7 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
