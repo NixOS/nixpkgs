@@ -272,6 +272,15 @@ let
 
         outputs = outputs ++ lib.optional withDistOutput "dist";
 
+        passthru.updateScript =
+          let
+            filename = builtins.head (lib.splitString ":" self.meta.position);
+          in
+          attrs.passthru.updateScript or [
+            update-python-libraries
+            filename
+          ];
+
         meta = {
           # default to python's platforms
           platforms = python.meta.platforms;
@@ -289,16 +298,7 @@ let
       }
     )
   );
-
-  passthru.updateScript =
-    let
-      filename = builtins.head (lib.splitString ":" self.meta.position);
-    in
-    attrs.passthru.updateScript or [
-      update-python-libraries
-      filename
-    ];
 in
 lib.extendDerivation (
   disabled -> throw "${name} not supported for interpreter ${python.executable}"
-) passthru self
+) { } self
