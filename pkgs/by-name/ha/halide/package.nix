@@ -1,6 +1,6 @@
 {
   stdenv,
-  llvmPackages,
+  llvmPackages_19,
   lib,
   fetchFromGitHub,
   cmake,
@@ -26,6 +26,9 @@
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+let
+  llvmPackages = llvmPackages_19;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "halide";
