@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.5.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-6iJk8JfGIhrAcEXrsJKWn0G2jJ2kitWjx/YJCWcGNfY=";
+    hash = "sha256-325A2kEx2UrykxVRzp6WQCPrg92Vy+6R1CfgnCLV2V8=";
   };
 
   sourceRoot = "${src.name}/python";
