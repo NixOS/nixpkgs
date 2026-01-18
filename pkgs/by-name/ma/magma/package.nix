@@ -4,8 +4,8 @@
   cmake,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
+  fetchFromGitHub,
   fetchpatch,
-  fetchurl,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
   rocmPackages,
@@ -13,6 +13,7 @@
   lib,
   libpthreadstubs,
   ninja,
+  perl,
   python3,
   config,
   # At least one back-end has to be enabled,
@@ -115,9 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "magma";
   version = "2.9.0";
 
-  src = fetchurl {
-    url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/3f9Nyaz3+w7+1V5CwZICqXMOEOWwts1xW/a5KgsZBw=";
+  src = fetchFromGitHub {
+    owner = "icl-utk-edu";
+    repo = "magma";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZV50id9qiCrc1K87812Lvv1tmeU/6vhpxFCz8nj61wM=";
   };
 
   # Magma doesn't have anything which could be run under doCheck, but it does build test suite executables.
@@ -134,6 +137,24 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/icl-utk-edu/magma/commit/2fecaf3f0c811344363f713669c1fe30f6879acd.patch";
       hash = "sha256-Dfzq2gqoLSByCLWV5xvY/lXZeVa/yQ67lDSoIAa9jUU=";
     })
+  ]
+  ++ lib.optionals rocmSupport [
+    # TODO: Drop both these patches on next magma release
+    (fetchpatch {
+      # ROCm 7.0 compat: use HIPBLAS_V2 types and APIs
+      # Requires building from git w/ make generate call. If applied to release tarball
+      # pre-generated hipified code will remain unpatched
+      name = "magma-ROCm-7.0-compat.patch";
+      url = "https://github.com/icl-utk-edu/magma/commit/02ecee0ccc56cce85194fdda18c9e0614797b2f9.patch";
+      hash = "sha256-vm58X30ZR02sOMsKrvxEcEF27tJYuuyZZrz+GGFNz5Q=";
+      excludes = [
+        "testing/testing_ztrsv_batched.cpp"
+        "CMakeLists.txt"
+        "Makefile"
+      ];
+    })
+    # Vendored patch with CMakeLists.txt and Makefile hunks from above commit (context differs)
+    ./magma-hipblas-v2-buildflags.patch
   ];
 
   postPatch = ''
@@ -147,11 +168,24 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     cmake
     ninja
+    perl # for make generate
     gfortran
   ]
   ++ lists.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
+
+  # README Step 0: generate precision variants and CMake.src.{hip|cuda} when building from git
+  # GPU_TARGET is a dummy value; CMake vars control target selection and `make generate`
+  # does not use the target setting, but the main makefile errors without it
+  preConfigure = ''
+    cat > make.inc <<EOF
+    BACKEND = ${if rocmSupport then "hip" else "cuda"}
+    FORT = true
+    GPU_TARGET = ${if rocmSupport then "gfx900" else "sm_90"}
+    EOF
+    make -j$NIX_BUILD_CORES generate
+  '';
 
   buildInputs = [
     libpthreadstubs
@@ -183,6 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.CFLAGS = "-DADD_" + lib.optionalString rocmSupport " -fopenmp";
   env.CXXFLAGS = finalAttrs.env.CFLAGS;
   env.FFLAGS = "-DADD_";
+  env.ROCM_PATH = lib.optionalString rocmSupport rocmPackages.clr;
 
   cmakeFlags = [
     (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
@@ -199,10 +234,6 @@ stdenv.mkDerivation (finalAttrs: {
     (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
   ]
   ++ lists.optionals rocmSupport [
-    # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
-    # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
-    # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
-    (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
     (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clang}/bin/clang")
     (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clang}/bin/clang++")
   ];
