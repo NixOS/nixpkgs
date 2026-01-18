@@ -179,6 +179,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
             (load "$emacs/share/emacs/site-lisp/site-start"))
           ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
           ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
+          (setenv "PATH" (concat "$out/bin:" (getenv "PATH"))) ; some packages blindly overwrite exec-path with $PATH
           (add-to-list 'exec-path "$out/bin")
           ${lib.optionalString withTreeSitter ''
             (add-to-list 'treesit-extra-load-path "$out/lib/")
