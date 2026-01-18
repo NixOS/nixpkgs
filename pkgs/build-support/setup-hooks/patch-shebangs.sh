@@ -162,7 +162,7 @@ patchShebangsAuto () {
         if [[ "$output" != out && "$output" = "$outputDev" ]]; then
             patchShebangs --build "$prefix"
         else
-            patchShebangs --host "$prefix"
+            patchShebangs --update --host "$prefix"
         fi
     fi
 }
