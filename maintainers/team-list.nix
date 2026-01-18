@@ -539,18 +539,6 @@ with lib.maintainers;
     shortName = "Matrix";
   };
 
-  mercury = {
-    members = [
-      _9999years
-      Gabriella439
-      curran
-      lf-
-      jkachmar
-    ];
-    scope = "Group registry for packages maintained by Mercury";
-    shortName = "Mercury Employees";
-  };
-
   minimal-bootstrap = {
     members = [
       alejandrosame
