@@ -93,7 +93,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      stesie
       marcin-serwin
       emilylange
     ];

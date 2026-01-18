@@ -12,15 +12,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-network-connectivity";
-  version = "2.11.0";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "google_cloud_network_connectivity";
-    hash = "sha256-PBqFMVGTn7si4UgAc4zk/97M9mWSnVJMX9gZk0eXpSY=";
+    hash = "sha256-4CF79YGR8Ean5PoGLjhWAME+0VYSS3YOPVp9uGeUjaY=";
   };
 
   build-system = [ setuptools ];
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "API Client library for Google Cloud Network Connectivity Center";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-network-connectivity";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-network-connectivity-v${version}/packages/google-cloud-network-connectivity/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-network-connectivity-v${finalAttrs.version}/packages/google-cloud-network-connectivity/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aksiksi ];
   };
-}
+})
