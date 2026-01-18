@@ -43,7 +43,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
-  nodejs_22,
+  nodejs-slim_22,
   jq,
   moreutils,
   terser,
@@ -72,7 +72,7 @@ let
     gnutar
     git
     brotli
-    nodejs_22
+    nodejs-slim_22
 
     # Misc required system utils
     which
@@ -193,9 +193,9 @@ let
             cd ../..
 
             mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-            ln -s "${nodejs_22.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+            ln -s "${nodejs-slim_22.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-            ln -s ${nodejs_22.libv8}/include vendor/v8/include
+            ln -s ${nodejs-slim_22.libv8}/include vendor/v8/include
 
             mkdir -p ext/libv8-node
             echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -318,7 +318,7 @@ let
       terser
       jq
       moreutils
-      nodejs_22
+      nodejs-slim_22
       pnpmConfigHook
       pnpm_9
     ];
