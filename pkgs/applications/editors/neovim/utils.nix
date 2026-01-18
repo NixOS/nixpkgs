@@ -60,7 +60,7 @@ let
     };
 
   /**
-    * Builds a vim package (see ':h packages') with additionnal info:
+    * Builds a vim package (see ':h packages') with additional info:
     - the user lua configuration (specified by user)
     - the advised and advised by nixpkgs in passthru.initLua)
     - runtime dependencies (specified in plugins' "runtimeDeps")
@@ -110,7 +110,7 @@ let
       # viml config set by the user along with the plugin
       inherit userPluginViml;
 
-      # recommanded configuration set in vim plugins ".passthru.initLua"
+      # recommended configuration set in vim plugins ".passthru.initLua"
       inherit pluginAdvisedLua;
 
       # A Vim "package", see ':h packages'
@@ -135,8 +135,8 @@ let
     arguments (["-u" writeText "init.vim" GENERATEDRC)]).
     This makes it possible to write the config anywhere: on a per-project basis
     .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-    anymore, $MYVIMRC wont be set etc
+    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc won't be loaded
+    anymore, $MYVIMRC won't be set etc
   */
   makeNeovimConfig =
     {
@@ -344,7 +344,9 @@ let
 
           nativeBuildInputs = [ toNvimTreesitterGrammar ];
 
-          passthru = grammar.passthru or { };
+          passthru = grammar.passthru or { } // {
+            isTreesitterGrammar = true;
+          };
 
           meta = {
             platforms = lib.platforms.all;

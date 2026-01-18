@@ -5,6 +5,7 @@
   vim,
   vimPlugins,
   buildEnv,
+  symlinkJoin,
   writeText,
   runCommand,
   makeWrapper,
@@ -200,12 +201,26 @@ let
           # and can simply pass `null`.
           depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
           startWithDeps = findDependenciesRecursively start;
-          allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+          allPluginsAndGrammars = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+
           allPython3Dependencies =
             ps: lib.flatten (map (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins);
           python3Env = python3.withPackages allPython3Dependencies;
 
-          packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;
+          partitionGrammars = lib.partition (
+            p: p.isTreesitterGrammar or false || p.isTreesitterQuery or false
+          );
+          allPluginsAndGrammarsPartitioned = partitionGrammars allPluginsAndGrammars;
+          allPlugins = allPluginsAndGrammarsPartitioned.wrong;
+          allGrammars = allPluginsAndGrammarsPartitioned.right;
+          allGrammarsSymlinked = symlinkJoin {
+            name = "nvim-treesitter-grammars";
+            paths = allGrammars;
+          };
+
+          packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" (
+            if allGrammars != [ ] then allPlugins ++ [ allGrammarsSymlinked ] else allPlugins
+          );
           packdirOpt = vimFarm "pack/${packageName}/opt" "packdir-opt" opt;
           # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
           # for each plugin.
