@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   checkTarget = "check";
 
-  checkInputs = [
+  nativeCheckInputs = [
     apparmor-parser
     apparmor-utils
   ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation {
   '';
 
   doCheck = true;
+  strictDeps = true;
 
   meta = libapparmor.meta // {
     description = "Mandatory access control system - profiles";
