@@ -17003,8 +17003,6 @@ self: super: with self; {
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
 
-  scrapy-fake-useragent = callPackage ../development/python-modules/scrapy-fake-useragent { };
-
   scrapy-splash = callPackage ../development/python-modules/scrapy-splash { };
 
   screed = callPackage ../development/python-modules/screed { };

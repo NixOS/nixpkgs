@@ -451,6 +451,7 @@ mapAliases {
   schemainspect = throw "schemainspect has been removed because it has transitively been marked broken since May 2024, and is unmaintained upstream."; # Added 2025-10-11
   scikitimage = throw "'scikitimage' has been renamed to/replaced by 'scikit-image'"; # Converted to throw 2025-10-29
   scikitlearn = throw "'scikitlearn' has been renamed to/replaced by 'scikit-learn'"; # Converted to throw 2025-10-29
+  scrapy-fake-useragent = throw "scrapy-fake-useragent has been removed because it is incompatible with scrapy >= 2.14"; # Added 2026-01-14
   seaserv = throw "seaserv has been removed as it is unmaintained"; # Added 2025-08-21
   sentry-sdk_2 = throw "'sentry-sdk_2' has been renamed to/replaced by 'sentry-sdk'"; # Converted to throw 2025-10-29
   setuptools_dso = throw "'setuptools_dso' has been renamed to/replaced by 'setuptools-dso'"; # Converted to throw 2025-10-29
