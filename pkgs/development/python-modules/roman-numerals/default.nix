@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roman-numerals";
   version = "4.1.0";
   pyproject = true;
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AA-Turner";
     repo = "roman-numerals";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v+aPIcsggjRJ3l6Xfw97b3zcqpyWNY4XWy2+5aWyitY=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [ flit-core ];
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Manipulate roman numerals";
     homepage = "https://github.com/AA-Turner/roman-numerals/";
-    changelog = "https://github.com/AA-Turner/roman-numerals/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/AA-Turner/roman-numerals/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
   };
-}
+})
