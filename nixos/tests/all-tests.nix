@@ -1652,6 +1652,7 @@ in
   userborn-immutable-users = runTest ./userborn-immutable-users.nix;
   userborn-mutable-etc = runTest ./userborn-mutable-etc.nix;
   userborn-mutable-users = runTest ./userborn-mutable-users.nix;
+  userborn-static = runTest ./userborn-static.nix;
   ustreamer = runTest ./ustreamer.nix;
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
