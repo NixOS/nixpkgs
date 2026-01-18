@@ -10,6 +10,7 @@
   hatch-vcs,
   hatchling,
   platformdirs,
+  pytest-freezer,
   pytest-mock,
   pytestCheckHook,
   time-machine,
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
+  ++ lib.optionals isPyPy [ pytest-freezer ]
   ++ lib.optionals (!isPyPy) [ time-machine ];
 
   disabledTestPaths = [
