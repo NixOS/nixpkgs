@@ -646,6 +646,23 @@ in
                 EOF
               '';
             };
+
+          no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
+
+          inhibitors.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            quz = "bor";
+          };
+
+          inhibitors_changed.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "baz";
+            quz = "boz";
+          };
+
+          inhibitors_new.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            qux = "baz";
+          };
         };
       };
 
@@ -658,6 +675,7 @@ in
         echo "this should succeed (config: $config, action: $action)"
         [ "$action" == "check" ] || [ "$action" == "test" ]
       '';
+      boot.loader.grub.enable = false;
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail
         false
@@ -744,6 +762,24 @@ in
           machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
           out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
           assert_contains(out, "this will fail")
+
+      with subtest("switch inhibitors"):
+          # Start without any inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
+          # Check that we can switch into a generation with inhibitors from one that doesn't have any
+          switch_to_specialisation("${machine}", "inhibitors", action="switch")
+          # Check that we cannot switch into a generation that has a different value for an existing inhibitor
+          out = switch_to_specialisation("${machine}", "inhibitors_changed", action="switch", fail=True)
+          assert_contains(out, "There are changes to critical components of the system")
+          assert_contains(out, "foo")
+          assert_contains(out, "bar")
+          assert_contains(out, "baz")
+          # Confirm that we can set that same generation as the new boot default
+          switch_to_specialisation("${machine}", "inhibitors_changed", action="boot")
+          # Check that we can switch into a new generation with new inhibitors, but same values for existing ones
+          switch_to_specialisation("${machine}", "inhibitors_new", action="switch")
+          # Check that we can switch back into a generation without inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
 
       with subtest("actions"):
           # boot action

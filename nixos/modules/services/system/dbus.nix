@@ -104,6 +104,8 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      system.switch.inhibitors.dbus-implementation = cfg.implementation;
+
       environment.etc."dbus-1".source = configDir;
 
       environment.pathsToLink = [
