@@ -25224,12 +25224,6 @@
     githubId = 45735;
     keys = [ { fingerprint = "0AFE 77F7 474D 1596 EE55  7A29 1D9A 17DF D23D CB91"; } ];
   };
-  stesie = {
-    email = "stesie@brokenpipe.de";
-    github = "stesie";
-    githubId = 113068;
-    name = "Stefan Siegl";
-  };
   steve-chavez = {
     email = "stevechavezast@gmail.com";
     github = "steve-chavez";
