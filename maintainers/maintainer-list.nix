@@ -6723,12 +6723,6 @@
     githubId = 392583;
     name = "Dirk-Willem van Gulik";
   };
-  disassembler = {
-    email = "disasm@gmail.com";
-    github = "disassembler";
-    githubId = 651205;
-    name = "Samuel Leathers";
-  };
   disserman = {
     email = "disserman@gmail.com";
     github = "divi255";
@@ -16050,13 +16044,6 @@
     github = "manojkarthick";
     githubId = 7802795;
     name = "Manoj Karthick";
-  };
-  manveru = {
-    email = "m.fellinger@gmail.com";
-    matrix = "@manveru:matrix.org";
-    github = "manveru";
-    githubId = 3507;
-    name = "Michael Fellinger";
   };
   maolonglong = {
     email = "shaolong.chen@outlook.it";

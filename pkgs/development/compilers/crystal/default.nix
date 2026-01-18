@@ -275,7 +275,6 @@ let
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
           david50407
-          manveru
           peterhoeg
           donovanglover
         ];

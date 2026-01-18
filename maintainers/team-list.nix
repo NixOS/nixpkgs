@@ -395,16 +395,6 @@ with lib.maintainers;
     shortName = "Infisical";
   };
 
-  iog = {
-    members = [
-      cleverca22
-      disassembler
-      manveru
-    ];
-    scope = "Input-Output Global employees, which maintain critical software";
-    shortName = "Input-Output Global employees";
-  };
-
   java = {
     github = "java";
     enableFeatureFreezePing = true;

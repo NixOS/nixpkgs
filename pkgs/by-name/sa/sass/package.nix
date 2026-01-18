@@ -21,7 +21,6 @@ bundlerApp {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       romildo
-      manveru
       nicknovitski
     ];
     platforms = lib.platforms.unix;
