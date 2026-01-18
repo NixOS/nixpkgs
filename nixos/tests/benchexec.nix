@@ -18,7 +18,7 @@ in
     { ... }:
     let
       runexec = lib.getExe' pkgs.benchexec "runexec";
-      echo = builtins.toString pkgs.benchexec;
+      echo = toString pkgs.benchexec;
       test = lib.getExe (
         pkgs.writeShellApplication rec {
           name = "test";
