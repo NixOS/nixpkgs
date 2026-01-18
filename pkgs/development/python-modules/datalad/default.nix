@@ -161,17 +161,6 @@ buildPythonPackage (finalAttrs: {
     "test_wtf"
     # hangs
     "test_keyring"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # For all: https://github.com/datalad/datalad/issues/7781
-    # AssertionError: `assert 1 == 0` (refcount error)
-    "test_GitRepo_flyweight"
-    "test_Dataset_flyweight"
-    "test_AnnexRepo_flyweight"
-    # TypeError: cannot pickle '_thread.lock' object
-    "test_popen_invocation"
-    # datalad.runner.exception.CommandError: '/python3.14 -i -u -q -']' timed out after 0.5 seconds
-    "test_asyncio_loop_noninterference1"
   ];
 
   nativeCheckInputs = [
