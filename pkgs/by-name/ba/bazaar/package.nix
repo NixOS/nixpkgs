@@ -18,6 +18,7 @@
   libadwaita,
   libdex,
   libglycin,
+  libglycin-gtk4,
   libsoup_3,
   libxmlb,
   libyaml,
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libdex
     libglycin
+    libglycin-gtk4
     libsoup_3
     libxmlb
     libyaml

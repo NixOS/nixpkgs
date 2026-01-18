@@ -11,6 +11,7 @@
   desktop-file-utils,
   libadwaita,
   libglycin,
+  libglycin-gtk4,
   libva-utils,
   ffmpeg,
   gst-thumbnailers,
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libadwaita
     libglycin
+    libglycin-gtk4
   ];
 
   dependencies = [

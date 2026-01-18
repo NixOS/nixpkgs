@@ -13,6 +13,7 @@
   json-glib,
   libsecret,
   libglycin,
+  libglycin-gtk4,
   glib-networking,
   glycin-loaders,
 
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libsecret
     libglycin
+    libglycin-gtk4
     glib-networking
   ];
 

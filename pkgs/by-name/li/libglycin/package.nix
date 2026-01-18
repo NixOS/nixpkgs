@@ -15,10 +15,10 @@
   glib,
   gobject-introspection,
   glycin-loaders,
+  libglycin-gtk4,
   fontconfig,
   libseccomp,
   lcms2,
-  gtk4,
   gnome,
   replaceVars,
   bubblewrap,
@@ -73,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libseccomp
     lcms2
-    gtk4
   ];
 
   propagatedBuildInputs = [
@@ -88,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "glycin-loaders" false)
     (lib.mesonBool "glycin-thumbnailer" false)
     (lib.mesonBool "libglycin" true)
+    (lib.mesonBool "libglycin-gtk4" false)
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "vapi" withIntrospection)
     (lib.mesonBool "capi_docs" withIntrospection)
@@ -146,7 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
         );
 
     tests = {
-      inherit glycin-loaders;
+      inherit
+        glycin-loaders
+        libglycin-gtk4
+        ;
     };
   };
 
@@ -163,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "glycin-1"
-      "glycin-gtk4-1"
     ];
   };
 })
