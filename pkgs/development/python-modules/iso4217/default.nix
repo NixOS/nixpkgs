@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  importlib-resources,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
 }:
 let
@@ -29,8 +27,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
