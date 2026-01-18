@@ -7,7 +7,6 @@
   fetchFromGitHub,
   fonttools,
   fs,
-  importlib-metadata,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -43,8 +42,7 @@ buildPythonPackage rec {
     # required by fonttools[ufo]
     fs
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   nativeCheckInputs = [
     pytestCheckHook

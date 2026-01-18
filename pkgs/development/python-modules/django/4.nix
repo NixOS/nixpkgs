@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pythonAtLeast,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -48,7 +47,7 @@ buildPythonPackage rec {
   version = "4.2.27";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "django";
