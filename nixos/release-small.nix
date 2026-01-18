@@ -167,7 +167,7 @@ rec {
           "nixos.tests.proxy"
           "nixos.tests.simple"
           "nixpkgs.jdk"
-          "nixpkgs.tetsts.stdenv.tests-stdenv-gcc-stageCompare"
+          "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"
         ])
       ];
