@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     ))
   ];
+
   patches = [
     # Compiles, but doesn't launch without this, see:
     # https://gitlab.gnome.org/GNOME/ocrfeeder/-/issues/83
