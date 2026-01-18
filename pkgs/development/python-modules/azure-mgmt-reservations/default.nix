@@ -6,8 +6,6 @@
   msrest,
   azure-common,
   azure-mgmt-core,
-  typing-extensions,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +25,7 @@ buildPythonPackage rec {
     msrest
     azure-common
     azure-mgmt-core
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   # has no tests
   doCheck = false;

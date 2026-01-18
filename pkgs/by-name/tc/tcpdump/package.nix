@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
-  version = "4.99.5";
+  version = "4.99.6";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
-    hash = "sha256-jHWFbgCt3urfcNrWfJ/z3TaFNrK4Vjq/aFTXx2TNOts=";
+    hash = "sha256-WDmSGg9n19j6PazZzUHkTInMuGfoptshbWJijH/RSwk=";
   };
 
   postPatch = ''

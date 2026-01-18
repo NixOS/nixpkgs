@@ -3,8 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  pythonOlder,
   uv-build,
   pytestCheckHook,
   go,
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "ffmpy";
   version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8.1";
 
   src = fetchFromGitHub {
     owner = "Ch00k";
