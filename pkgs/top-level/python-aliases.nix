@@ -470,6 +470,7 @@ mapAliases {
   spark_parser = throw "'spark_parser' has been renamed to/replaced by 'spark-parser'"; # Converted to throw 2025-10-29
   SPARQLWrapper = throw "'SPARQLWrapper' has been renamed to/replaced by 'sparqlwrapper'"; # Converted to throw 2025-10-29
   sparsezoo = throw "sparsezoo has been removed since it is abandonned"; # added 2025-09-01
+  sphinx-hoverxref = throw "'sphinx-hoverxref' has been deprecated upstream. It's functionality was merged into the readthedocs.org admin panel."; # Added 2026-01-18"
   sphinx-jquery = throw "'sphinx-jquery' has been renamed to/replaced by 'sphinxcontrib-jquery'"; # Converted to throw 2025-10-29
   sphinx_rtd_theme = throw "'sphinx_rtd_theme' has been renamed to/replaced by 'sphinx-rtd-theme'"; # Converted to throw 2025-10-29
   sphinxcontrib-autoapi = throw "'sphinxcontrib-autoapi' has been renamed to/replaced by 'sphinx-autoapi'"; # Converted to throw 2025-10-29
