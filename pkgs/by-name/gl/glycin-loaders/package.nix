@@ -5,7 +5,6 @@
   cairo,
   cargo,
   gettext,
-  git,
   gnome,
   gtk4,
   lcms2,
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cargo
     gettext # for msgfmt
-    git
     meson
     ninja
     pkg-config
