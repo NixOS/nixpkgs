@@ -78,6 +78,7 @@ in
     security.pam.services.greetd = {
       allowNullPassword = true;
       startSession = true;
+      enableUMask = true;
       enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
     };
 

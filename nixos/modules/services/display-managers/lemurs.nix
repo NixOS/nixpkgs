@@ -59,6 +59,7 @@ in
     security.pam.services.lemurs = {
       unixAuth = true;
       startSession = true;
+      enableUMask = true;
       # See https://github.com/coastalwhite/lemurs/issues/166
       setLoginUid = false;
       enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;

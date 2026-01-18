@@ -1632,6 +1632,7 @@ in
   udp-over-tcp = runTest ./udp-over-tcp.nix;
   ulogd = runTest ./ulogd/ulogd.nix;
   umami = runTest ./web-apps/umami.nix;
+  umask = runTest ./umask.nix;
   umurmur = runTest ./umurmur.nix;
   unbound = runTest ./unbound.nix;
   unifi = runTest ./unifi.nix;

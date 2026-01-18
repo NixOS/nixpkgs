@@ -74,6 +74,12 @@ in
               ];
             };
 
+            HOME_MODE = lib.mkOption {
+              description = "The mode for new home directories.";
+              default = "077";
+              type = lib.types.str;
+            };
+
             SYS_UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 400;
@@ -138,10 +144,9 @@ in
               type = lib.types.str;
             };
 
-            # Ensure privacy for newly created home directories.
             UMASK = lib.mkOption {
               description = "The file mode creation mask is initialized to this value.";
-              default = "077";
+              default = "022";
               type = lib.types.str;
             };
           };
@@ -245,6 +250,7 @@ in
         groupdel.rootOK = true;
         login = {
           startSession = true;
+          enableUMask = true;
           allowNullPassword = true;
           showMotd = true;
           updateWtmp = true;
