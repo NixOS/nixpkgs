@@ -958,7 +958,7 @@ let
       rustc
     ];
     vdiffr = [ pkgs.libpng.dev ];
-    V8 = [ pkgs.nodejs.libv8 ];
+    V8 = [ pkgs.nodejs_22.libv8 ]; # when unpinning the version, don't forget about the other usages later
     xactonomial = with pkgs; [
       cargo
       rustc
@@ -2514,8 +2514,9 @@ let
       '';
 
       preConfigure = ''
-        export INCLUDE_DIR=${pkgs.nodejs.libv8}/include
-        export LIB_DIR=${pkgs.nodejs.libv8}/lib
+        # when unpinning the version, don't forget about the other usage earlier
+        export INCLUDE_DIR=${pkgs.nodejs_22.libv8}/include
+        export LIB_DIR=${pkgs.nodejs_22.libv8}/lib
         patchShebangs configure
       '';
 
