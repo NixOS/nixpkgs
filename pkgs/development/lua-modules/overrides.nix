@@ -997,6 +997,27 @@ in
     '';
   };
 
+  rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+      writableTmpDirAsHomeHook
+    ];
+
+    doCheck = lua.luaversion == "5.1";
+
+    nvimSkipModules = [
+      "bootstrap" # tries to install luarocks from network
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      busted --run=offline
+      runHook postCheck
+    '';
+  });
+
   rtp-nvim = prev.rtp-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
