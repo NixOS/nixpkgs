@@ -1,7 +1,7 @@
 {
+  lib,
   stdenv,
   llvmPackages_19,
-  lib,
   fetchFromGitHub,
   cmake,
   fetchpatch2,
@@ -72,18 +72,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DWITH_PYTHON_BINDINGS=${if pythonSupport then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_PYTHON_BINDINGS" pythonSupport)
     (lib.cmakeBool "WITH_TESTS" doCheck)
     (lib.cmakeBool "WITH_TUTORIALS" doCheck)
     # Disable performance tests since they may fail on busy machines
-    "-DWITH_TEST_PERFORMANCE=OFF"
+    (lib.cmakeBool "WITH_TEST_PERFORMANCE" false)
     # Disable fuzzing tests -- this has become the default upstream after the
     # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
     # These tests also fail to compile on Darwin because of some missing command line options...
-    "-DWITH_TEST_FUZZ=OFF"
+    (lib.cmakeBool "WITH_TEST_FUZZ" false)
     # Disable FetchContent and use versions from nixpkgs instead
-    "-DHalide_USE_FETCHCONTENT=OFF"
-    "-DHalide_WASM_BACKEND=${if wasmSupport then "wabt" else "OFF"}"
+    (lib.cmakeBool "Halide_USE_FETCHCONTENT" false)
+    (lib.cmakeFeature "Halide_WASM_BACKEND" (if wasmSupport then "wabt" else "OFF"))
     (lib.cmakeBool "Halide_LLVM_SHARED_LIBS" wasmSupport)
   ];
 
@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
+    changelog = "https://github.com/halide/Halide/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
