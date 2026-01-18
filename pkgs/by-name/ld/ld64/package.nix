@@ -73,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0016-Add-dyldinfo-to-the-ld64-build.patch
     ./patches/0017-Fix-dyldinfo-build.patch
     ./patches/0018-Use-STL-containers-instead-of-LLVM-containers.patch
+
+    # Fix zippered versions on macOS 26+. Part of upstream ld64-956.6. Remove on next version bump.
+    # https://github.com/apple-oss-distributions/ld64/commit/1a4389663d65d6630e4b3e31ace2a86b6183b452
+    ./patches/0019-Fix-zippered-versions-macos-26.patch
   ];
 
   prePatch = ''
