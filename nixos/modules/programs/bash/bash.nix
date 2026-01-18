@@ -217,10 +217,6 @@ in
       fi
     '';
 
-    # Configuration for readline in bash. We use "option default"
-    # priority to allow user override using both .text and .source.
-    environment.etc.inputrc.source = lib.mkOptionDefault ./inputrc;
-
     users.defaultUserShell = lib.mkDefault pkgs.bashInteractive;
 
     environment.pathsToLink = lib.optionals cfg.completion.enable [
