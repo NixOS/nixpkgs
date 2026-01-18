@@ -273,6 +273,9 @@ let
         outputs = outputs ++ lib.optional withDistOutput "dist";
 
         passthru = {
+          inherit
+            disabled
+            ;
           updateScript =
             let
               filename = builtins.head (lib.splitString ":" self.meta.position);
