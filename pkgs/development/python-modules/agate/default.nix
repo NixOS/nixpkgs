@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.14.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate";
     tag = version;
-    hash = "sha256-Pp5pUOycDGzymIvwWoDAaOomTsxAfDNdSGwOG5a25Hc=";
+    hash = "sha256-REo26vSWFzWsvJzmqlc5A5xEYA2TebQFW6jFRIbH53I=";
   };
 
   build-system = [ setuptools ];
