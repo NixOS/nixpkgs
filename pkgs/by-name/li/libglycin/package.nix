@@ -12,8 +12,10 @@
   rustPlatform,
   vala,
   gi-docgen,
+  glib,
   gobject-introspection,
   glycin-loaders,
+  fontconfig,
   libseccomp,
   lcms2,
   gtk4,
@@ -68,12 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    fontconfig
     libseccomp
     lcms2
     gtk4
   ];
 
   propagatedBuildInputs = [
+    glib
+    # TODO: these should not be required by .pc file
+    fontconfig
     libseccomp
     lcms2
   ];
