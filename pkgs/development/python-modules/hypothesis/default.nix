@@ -10,15 +10,9 @@
   doCheck ? true,
   pytestCheckHook,
   pytest-xdist,
-  python,
   sortedcontainers,
-  stdenv,
   pythonAtLeast,
   pythonOlder,
-  sphinxHook,
-  sphinx-rtd-theme,
-  sphinx-hoverxref,
-  sphinx-codeautolink,
   tzdata,
 }:
 
@@ -139,30 +133,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "hypothesis" ];
-
-  passthru = {
-    doc = stdenv.mkDerivation {
-      # Forge look and feel of multi-output derivation as best as we can.
-      #
-      # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-      pname = "${pname}-doc";
-      inherit src version;
-
-      postInstallSphinx = ''
-        mv $out/share/doc/* $out/share/doc/python$pythonVersion-$pname-$version
-      '';
-
-      nativeBuildInputs = [
-        sphinxHook
-        sphinx-rtd-theme
-        sphinx-hoverxref
-        sphinx-codeautolink
-      ];
-
-      inherit (python) pythonVersion;
-      inherit meta;
-    };
-  };
 
   meta = {
     description = "Library for property based testing";
