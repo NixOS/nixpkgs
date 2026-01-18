@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "penelope";
   version = "0.18.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "brightio";
     repo = "penelope";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ryUG/OQsU6mecr+kSe5CD41a53xNRrPs1esL+V1lmdQ=";
   };
 
@@ -30,10 +30,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Penelope Shell Handler";
     homepage = "https://github.com/brightio/penelope";
-    changelog = "https://github.com/brightio/penelope/releases/tag/v${version}";
+    changelog = "https://github.com/brightio/penelope/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "penelope.py";
     platforms = lib.platforms.all;
   };
-}
+})
