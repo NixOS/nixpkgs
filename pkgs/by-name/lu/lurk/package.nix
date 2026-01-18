@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/jakwai01/lurk/releases/tag/v${finalAttrs.version}";
