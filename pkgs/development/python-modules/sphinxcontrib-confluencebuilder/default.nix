@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-confluencebuilder";
-  version = "2.17.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_confluencebuilder";
     inherit version;
-    hash = "sha256-Cc5ogZn3QpqNsPHyYpyvtMVEnQK+QHO1pSxg3pDrMLM=";
+    hash = "sha256-+Z4rsqozJ3DWrg7SYr7dh7CIQlCgpX9Fj6lJmcCxoMk=";
   };
 
   build-system = [ flit-core ];
