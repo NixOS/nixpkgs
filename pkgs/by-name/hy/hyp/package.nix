@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "hyp-server";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1lafjdcn9nnq6xc3hhyizfwh6l69lc7rixn6dx65aq71c913jc15";
   };
 
@@ -29,4 +29,4 @@ python3Packages.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "fw-fanctrl";
   version = "1.0.4";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TamtamHero";
     repo = "fw-fanctrl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lwuBbyJnWUAXkKemhsdx73fAzO2QX2n81az074hGkzI=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.Svenum ];
   };
-}
+})

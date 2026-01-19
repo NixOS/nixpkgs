@@ -4,7 +4,7 @@
   python3Packages,
   ffmpeg,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "unsilence";
   version = "1.0.9";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lagmoellertim";
     repo = "unsilence";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-M4Ek1JZwtr7vIg14aTa8h4otIZnPQfKNH4pZE4GpiBQ=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ esau79p ];
   };
-}
+})

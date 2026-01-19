@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "lice";
   version = "0.6";
   pyproject = true;
 
   # github is missing tags
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LZU2YPdJiepaCH/TWNrtJiuyPlJP6t1+c3a2uHL0fmo=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "lice";
   };
 
-}
+})

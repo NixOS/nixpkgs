@@ -12,7 +12,7 @@
   requests,
   tqdm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stac-validator";
   version = "4.1.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "stac-validator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qO1DRYpPn+zarHTj2mZQ2LJ2uhmS1bax6Yxy035ZEUA=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };
-}
+})
