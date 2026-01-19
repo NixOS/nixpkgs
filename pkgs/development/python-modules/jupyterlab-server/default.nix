@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   babel,
-  importlib-metadata,
   jinja2,
   json5,
   jsonschema,
@@ -45,8 +43,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     openapi = [
