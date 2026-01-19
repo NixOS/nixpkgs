@@ -20,7 +20,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
+  pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
   version = "0.15.4";
 
   src = fetchFromGitHub {
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p $out/lib/systemd/system
 
-    substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \
+    substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart.service \
       --replace-fail "__PATH__" "$out"
   '';
 
@@ -185,20 +185,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webadmin = buildPackages.callPackage ./webadmin.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
     updateScript = nix-update-script { };
-    tests.stalwart-mail = nixosTests.stalwart-mail;
+    tests.stalwart = nixosTests.stalwart;
   };
 
   meta = {
-    description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
-    homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    description = "Secure, modern, and all-in-one mail & collaboration server fluent in IMAP, JMAP, SMTP, CalDAV, CardDAV, and WebDAV";
+    homepage = "https://github.com/stalwartlabs/stalwart";
+    changelog = "https://github.com/stalwartlabs/stalwart/blob/main/CHANGELOG.md";
     license = [
       lib.licenses.agpl3Only
     ]
     ++ lib.optionals stalwartEnterprise [
       {
         fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
-        url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+        url = "https://github.com/stalwartlabs/stalwart/blob/main/LICENSES/LicenseRef-SEL.txt";
         free = false;
         redistributable = false;
       }

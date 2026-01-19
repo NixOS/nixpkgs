@@ -1,4 +1,4 @@
-# Rudimentary test checking that the Stalwart email server can:
+# Rudimentary test checking that the Stalwart collaboration server can:
 # - receive some message through SMTP submission, then
 # - serve this message through IMAP.
 
@@ -8,13 +8,13 @@ let
 in
 { lib, ... }:
 {
-  name = "stalwart-mail";
+  name = "stalwart";
 
   nodes.main =
     { pkgs, ... }:
     {
       imports = [
-        ./stalwart-mail-config.nix
+        ./stalwart-config.nix
       ];
 
       environment.systemPackages = [
@@ -57,7 +57,7 @@ in
 
   testScript = # python
     ''
-      main.wait_for_unit("stalwart-mail.service")
+      main.wait_for_unit("stalwart.service")
       main.wait_for_open_port(587)
       main.wait_for_open_port(143)
       main.wait_for_open_port(80)
@@ -65,14 +65,14 @@ in
       main.succeed("test-smtp-submission")
 
       # restart stalwart to test rocksdb compaction of existing database
-      main.succeed("systemctl restart stalwart-mail.service")
+      main.succeed("systemctl restart stalwart.service")
       main.wait_for_open_port(587)
       main.wait_for_open_port(143)
       main.wait_for_open_port(80)
 
       main.succeed("test-imap-read")
 
-      main.succeed("test -d /var/cache/stalwart-mail/STALWART_WEBADMIN")
+      main.succeed("test -d /var/cache/stalwart/STALWART_WEBADMIN")
       main.succeed("curl --fail http://localhost")
     '';
 

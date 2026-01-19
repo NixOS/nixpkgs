@@ -7,7 +7,7 @@ in
 {
   security.pki.certificateFiles = [ certs.ca.cert ];
 
-  services.stalwart-mail = {
+  services.stalwart = {
     enable = true;
     settings = {
       server.hostname = domain;

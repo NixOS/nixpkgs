@@ -8982,10 +8982,10 @@ with pkgs;
     enableAirplay2 = true;
   };
 
-  stalwart-mail-webadmin = stalwart-mail.webadmin;
-  stalwart-mail-spam-filter = stalwart-mail.spam-filter;
+  stalwart-webadmin = stalwart.webadmin;
+  stalwart-spam-filter = stalwart.spam-filter;
 
-  stalwart-mail-enterprise = stalwart-mail.override {
+  stalwart-enterprise = stalwart.override {
     stalwartEnterprise = true;
   };
 
