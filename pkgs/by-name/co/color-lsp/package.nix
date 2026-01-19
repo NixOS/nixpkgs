@@ -18,8 +18,14 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-etK+9fcKS+y+0C36vJrMkQ0yyVSpCW/DLKg4nTw3LrE=";
 
   # Only build the color-lsp binary, not the zed extension
-  cargoBuildFlags = [ "-p" "color-lsp" ];
-  cargoTestFlags = [ "-p" "color-lsp" ];
+  cargoBuildFlags = [
+    "-p"
+    "color-lsp"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "color-lsp"
+  ];
 
   meta = {
     description = "A document color language server supporting HEX, RGB, HSL, and named colors";
