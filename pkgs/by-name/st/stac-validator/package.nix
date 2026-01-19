@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "stac-validator";
   version = "3.10.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "stac-validator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Csw7+/0VTZuZ7xBmdPAWBk8NMGXtjKfr15F3IkbCFZ8=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

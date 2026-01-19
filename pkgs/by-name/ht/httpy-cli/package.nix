@@ -5,13 +5,13 @@
   curl,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "httpy-cli";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "httpy-cli";
     hash = "sha256-uhF/jF4buHMDiXOuuqjskynioz4qVBevQhdcUbH+91Q=";
   };
@@ -51,4 +51,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "httpy";
     maintainers = with lib.maintainers; [ eymeric ];
   };
-}
+})
