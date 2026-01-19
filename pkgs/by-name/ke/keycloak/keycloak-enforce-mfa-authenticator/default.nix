@@ -30,7 +30,7 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
     install -Dm644 enforce-mfa/target/netzbegruenung.enforce-mfa-v${version}.jar \
-      $out/share/java/keycloak/keycloak-enforce-mfa-authenticator.jar
+      $out/keycloak-enforce-mfa-authenticator.jar
     runHook postInstall
   '';
 

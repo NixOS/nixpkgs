@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 target/keycloak-config-cli.jar "$out/keycloak-config-cli.jar"
+    install -Dm444 -t "$out" target/keycloak-config-cli.jar
     runHook postInstall
   '';
 
