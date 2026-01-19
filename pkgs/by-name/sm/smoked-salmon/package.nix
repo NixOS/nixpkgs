@@ -17,7 +17,7 @@ let
     sox
   ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "smoked-salmon";
   version = "0.9.7.4";
   pyproject = true;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "smokin-salmon";
     repo = "smoked-salmon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JOwqu/Hu7BjYLo3DdL6o+9TI/OQvlgj5Xu8WQ0cujwo=";
   };
 
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
     "--suffix"
     "PATH"
     ":"
-    (lib.makeBinPath runtimeDeps)
+    (lib.makeBinPath finalAttrs.passthru.runtimeDeps)
   ];
 
   passthru = {
@@ -91,4 +91,4 @@ python3Packages.buildPythonApplication rec {
       undefined-landmark
     ];
   };
-}
+})

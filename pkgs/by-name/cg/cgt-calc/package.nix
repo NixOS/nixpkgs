@@ -5,7 +5,7 @@
   withTeXLive ? true,
   texliveSmall,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cgt-calc";
   version = "1.13.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "capital-gains-calculator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y/Y05wG89nccXyxfjqazyPJhd8dOkfwRJre+Rzx97Hw=";
   };
 
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     platforms = lib.platforms.unix;
   };
-}
+})
