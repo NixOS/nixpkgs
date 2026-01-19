@@ -13,6 +13,7 @@ let
   inherit (lib)
     types
     mkMerge
+    mkEnableOption
     mkOption
     mkChangedOptionModule
     mkRenamedOptionModule
@@ -40,7 +41,6 @@ let
     isInt
     isString
     hashString
-    isPath
     ;
 
   prefixUnlessEmpty = prefix: string: optionalString (string != "") "${prefix}${string}";
@@ -92,49 +92,37 @@ in
         port
         listOf
         ;
-
-      assertStringPath =
-        optionName: value:
-        if isPath value then
-          throw ''
-            services.keycloak.${optionName}:
-              ${toString value}
-              is a Nix path, but should be a string, since Nix
-              paths are copied into the world-readable Nix store.
-          ''
-        else
-          value;
     in
     {
-      enable = mkOption {
-        type = bool;
+      enable = mkEnableOption "Keycloak identity and access management server";
+
+      enableSSL = mkOption {
+        type = types.bool;
         default = false;
-        example = true;
+        description = "Whether or not to enable TLS/SSL connections.";
+      };
+
+      sslCertCredential = mkOption {
+        type = str;
+        default = "keycloak.ssl_cert";
         description = ''
-          Whether to enable the Keycloak identity and access management
-          server.
+          The systemd credential name of a PEM formatted certificate
+          to use for TLS/SSL connections.
+
+            This will be resolved as per the systemd setting
+            `ImportCredential`, documented at <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ImportCredential=GLOB>
         '';
       };
 
-      sslCertificate = mkOption {
-        type = nullOr path;
-        default = null;
-        example = "/run/keys/ssl_cert";
-        apply = assertStringPath "sslCertificate";
+      sslKeyCredential = mkOption {
+        type = str;
+        default = "keycloak.ssl_key";
         description = ''
-          The path to a PEM formatted certificate to use for TLS/SSL
-          connections.
-        '';
-      };
+          The systemd credential name of PEM formatted private key
+          to use for TLS/SSL connections.
 
-      sslCertificateKey = mkOption {
-        type = nullOr path;
-        default = null;
-        example = "/run/keys/ssl_key";
-        apply = assertStringPath "sslCertificateKey";
-        description = ''
-          The path to a PEM formatted private key to use for TLS/SSL
-          connections.
+            This will be resolved as per the systemd setting
+            `ImportCredential`, documented at <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ImportCredential=GLOB>
         '';
       };
 
@@ -257,16 +245,25 @@ in
           '';
         };
 
-        passwordFile = mkOption {
-          type = nullOr path;
-          default = null;
-          example = "/run/keys/db_password";
-          apply = assertStringPath "passwordFile";
+        enablePassword = mkOption {
+          type = types.bool;
+          default = false;
           description = ''
-            The path to a file containing the database password.
+            Whether or not to enable the database password.
 
             Not required when using Unix socket authentication (peer auth)
             by setting `host` to a socket path like `/run/postgresql`.
+          '';
+        };
+
+        passwordCredential = mkOption {
+          type = str;
+          default = "keycloak.db_password";
+          description = ''
+            The systemd credential name of the database password.
+
+            This will be resolved as per the systemd setting
+            `ImportCredential`, documented at <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ImportCredential=GLOB>
           '';
         };
       };
@@ -325,7 +322,7 @@ in
               str
               int
               bool
-              (attrsOf path)
+              (attrsOf str)
             ])
           );
 
@@ -411,7 +408,7 @@ in
           {
             hostname = "keycloak.example.com";
             https-key-store-file = "/path/to/file";
-            https-key-store-password = { _secret = "/run/keys/store_password"; };
+            https-key-store-password = { _secret = "systemd.credential.name"; };
           }
         '';
 
@@ -423,13 +420,14 @@ in
 
           Options containing secret data should be set to an attribute
           set containing the attribute `_secret` - a
-          string pointing to a file containing the value the option
-          should be set to. See the example to get a better picture of
-          this: in the resulting
+          string naming a systemd credential containing the value the
+          option should be set to. See the example to get a better
+          picture of this: in the resulting
           {file}`conf/keycloak.conf` file, the
           `https-key-store-password` key will be set
           to the contents of the
-          {file}`/run/keys/store_password` file.
+          `systemd.credential.name` credential, as per the systemd
+          setting `ImportCredential`, documented at <https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ImportCredential=GLOB>
         '';
       };
     };
@@ -564,9 +562,9 @@ in
           '';
         }
         {
-          assertion = cfg.database.passwordFile != null || hasPrefix "/" cfg.database.host;
+          assertion = cfg.database.enablePassword || hasPrefix "/" cfg.database.host;
           message = ''
-            services.keycloak.database.passwordFile must be set unless using
+            services.keycloak.database.enablePassword must be set unless using
             Unix socket authentication (host starting with /).
           '';
         }
@@ -611,8 +609,8 @@ in
           {
             db = if cfg.database.type == "postgresql" then "postgres" else cfg.database.type;
             db-username = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
-            db-password = mkIf (cfg.database.passwordFile != null) {
-              _secret = cfg.database.passwordFile;
+            db-password = mkIf (cfg.database.enablePassword) {
+              _secret = cfg.database.passwordCredential;
             };
           }
           (mkIf isUnixSocket {
@@ -625,7 +623,7 @@ in
             db-url-properties = prefixUnlessEmpty "?" dbProps;
             db-url = null;
           })
-          (mkIf (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
+          (mkIf (cfg.enableSSL) {
             https-certificate-file = "/run/keycloak/ssl/ssl_cert";
             https-certificate-key-file = "/run/keycloak/ssl/ssl_key";
           })
@@ -641,7 +639,7 @@ in
           RemainAfterExit = true;
           User = "postgres";
           Group = "postgres";
-          LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
+          ImportCredential = [ "${cfg.database.passwordCredential}:db_password" ];
         };
         script = ''
           set -o errexit -o pipefail -o nounset -o errtrace
@@ -674,7 +672,7 @@ in
           RemainAfterExit = true;
           User = config.services.mysql.user;
           Group = config.services.mysql.group;
-          LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
+          ImportCredential = [ "${cfg.database.passwordCredential}:db_password" ];
         };
         script = ''
           set -o errexit -o pipefail -o nounset -o errtrace
@@ -729,11 +727,11 @@ in
               ]
             else
               [ ];
-          secretPaths = catAttrs "_secret" (collect isSecret cfg.settings);
-          mkSecretReplacement = file: ''
-            replace-secret ${hashString "sha256" file} "$CREDENTIALS_DIRECTORY/${baseNameOf file}" /run/keycloak/conf/keycloak.conf
+          secretCreds = catAttrs "_secret" (collect isSecret cfg.settings);
+          mkSecretReplacement = name: ''
+            replace-secret ${hashString "sha256" name} "$CREDENTIALS_DIRECTORY/${name}" /run/keycloak/conf/keycloak.conf
           '';
-          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+          secretReplacements = lib.concatMapStrings mkSecretReplacement secretCreds;
         in
         {
           after = databaseServices;
@@ -753,12 +751,16 @@ in
             KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
           };
           serviceConfig = {
-            LoadCredential =
-              map (p: "${baseNameOf p}:${p}") secretPaths
-              ++ optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null) [
-                "ssl_cert:${cfg.sslCertificate}"
-                "ssl_key:${cfg.sslCertificateKey}"
+            ImportCredential =
+              secretCreds
+              ++ optionals (cfg.enableSSL) [
+                "${cfg.sslCertCredential}:ssl_cert"
+                "${cfg.sslKeyCredential}:ssl_key"
               ];
+            BindReadOnlyPaths = [
+              "%d/ssl_cert:/run/keycloak/ssl/ssl_cert"
+              "%d/ssl_key:/run/keycloak/ssl/ssl_key"
+            ];
             User = "keycloak";
             Group = "keycloak";
             DynamicUser = true;
@@ -787,12 +789,6 @@ in
             # sequences.
             sed -i '/db-/ s|\\|\\\\|g' /run/keycloak/conf/keycloak.conf
 
-          ''
-          + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
-            mkdir -p /run/keycloak/ssl
-            cp "$CREDENTIALS_DIRECTORY"/ssl_{cert,key} /run/keycloak/ssl/
-          ''
-          + ''
             kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
           '';
           enableStrictShellChecks = true;
