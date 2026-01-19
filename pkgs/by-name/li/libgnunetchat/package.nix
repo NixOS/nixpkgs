@@ -15,7 +15,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "libgnunetchat";
+  pname = "libgnunetchat";
   version = "0.6.0";
 
   src = fetchgit {
