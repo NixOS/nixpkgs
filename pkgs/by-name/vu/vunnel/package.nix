@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vunnel";
   version = "0.48.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D0/DoYmmLeAvGnr6ljE8p0B6dmFi4UHwcWCQRb85OkM=";
     leaveDotGit = true;
   };
@@ -85,9 +85,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
-    changelog = "https://github.com/anchore/vunnel/releases/tag/${src.tag}";
+    changelog = "https://github.com/anchore/vunnel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vunnel";
   };
-}
+})
