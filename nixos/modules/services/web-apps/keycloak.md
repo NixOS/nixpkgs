@@ -41,13 +41,13 @@ External database access can also be configured by setting
 appropriate. Note that you need to manually create the database
 and allow the configured database user full access to it.
 
-[](#opt-services.keycloak.database.passwordFile)
-must be set to the path to a file containing the password used
-to log in to the database. If [](#opt-services.keycloak.database.host)
-and [](#opt-services.keycloak.database.createLocally)
-are kept at their defaults, the database role
-`keycloak` with that password is provisioned
-on the local database instance.
+[](#opt-services.keycloak.database.passwordCredential)
+must be set to the name of a systemd credential containing the
+password used to log in to the database. If
+[](#opt-services.keycloak.database.host) and
+[](#opt-services.keycloak.database.createLocally) are kept at
+their defaults, the database role `keycloak` with that password
+is provisioned on the local database instance.
 
 ::: {.warning}
 The path should be provided as a string, not a Nix path, since Nix
@@ -110,9 +110,10 @@ network.
 
 HTTPS support requires a TLS/SSL certificate and a private key,
 both [PEM formatted](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail).
-Their paths should be set through
-[](#opt-services.keycloak.sslCertificate) and
-[](#opt-services.keycloak.sslCertificateKey).
+The names of their systemd credentials should be set through
+[](#opt-services.keycloak.sslCertCredential) and
+[](#opt-services.keycloak.sslKeyCredential), and they should be enabled
+through [](#opt-services.keycloak.enableSSL).
 
 ::: {.warning}
  The paths should be provided as a strings, not a Nix paths,
@@ -157,9 +158,10 @@ A basic configuration with some custom settings could look like this:
       hostname-strict-backchannel = true;
     };
     initialAdminPassword = "e6Wcm0RrtegMEHl"; # change on first login
-    sslCertificate = "/run/keys/ssl_cert";
-    sslCertificateKey = "/run/keys/ssl_key";
-    database.passwordFile = "/run/keys/db_password";
+    enableSSL = true;
+    sslCertCredential = "systemd.credential.ssl_cert";
+    sslKeyCredential = "systemd.credential.ssl_key";
+    database.passwordCredential = "systemd.credential.db_password";
   };
 }
 ```
