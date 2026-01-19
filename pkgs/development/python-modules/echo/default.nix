@@ -3,10 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  libxcrypt,
   numpy,
   qt6,
   qtpy,
@@ -36,8 +34,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
   ];
-
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dependencies = [
     qt6.qtconnectivity

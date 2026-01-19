@@ -32,8 +32,6 @@ ps.buildPythonApplication rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = ps.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "dynobo";
     repo = "normcap";

@@ -4,12 +4,10 @@
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
-  importlib-resources,
   mistune,
   mypy,
   mypy-extensions,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   requests,
   ruamel-yaml,
@@ -56,8 +54,7 @@ buildPythonPackage rec {
     types-requests
     types-setuptools
   ]
-  ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
