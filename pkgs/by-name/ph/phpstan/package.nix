@@ -1,23 +1,37 @@
 {
-  fetchFromGitHub,
+  stdenv,
   lib,
+  fetchFromGitHub,
   php,
   versionCheckHook,
+  makeBinaryWrapper,
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phpstan";
-  version = "2.1.32";
+  version = "2.1.34";
 
   src = fetchFromGitHub {
     owner = "phpstan";
-    repo = "phpstan-src";
+    repo = "phpstan";
     tag = finalAttrs.version;
-    hash = "sha256-fP+R22TN3I/Afn+N/6sqlYuN0GxTzPt3bSZjtFrkr1A=";
+    hash = "sha256-/SSOLJiZunLDoxsKmVxICjymFLLu0aOXCTn2jNklTyA=";
   };
 
-  composerStrictValidation = false;
-  vendorHash = "sha256-NW5yx9jD7aXmqq9kzSNr/U1CkW0VN8qm0yHOQlxVi0c=";
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
+  postInstall = ''
+    install -D ./phpstan.phar $out/libexec/phpstan/phpstan.phar
+    makeWrapper ${lib.getExe php} $out/bin/phpstan \
+      --add-flags "$out/libexec/phpstan/phpstan.phar" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          php
+        ]
+      }
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

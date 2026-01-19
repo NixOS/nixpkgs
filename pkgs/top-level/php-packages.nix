@@ -251,14 +251,13 @@ lib.makeScope pkgs.newScope (
 
       phpspy = callPackage ../development/php-packages/phpspy { };
 
-      phpstan = callPackage ../development/php-packages/phpstan { };
-
       psalm = callPackage ../development/php-packages/psalm { };
     }
     // lib.optionalAttrs config.allowAliases {
       deployer = throw "`php8${lib.versions.minor php.version}Packages.deployer` has been removed, use `deployer`";
       phpcbf = throw "`php8${lib.versions.minor php.version}Packages.phpcbf` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
       phpcs = throw "`php8${lib.versions.minor php.version}Packages.phpcs` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      phpstan = throw "`php8${lib.versions.minor php.version}Packages.phpstan` has been removed, use `phpstan` instead.";
       psysh = throw "`php8${lib.versions.minor php.version}Packages.psysh` has been removed, use `psysh`";
     };
 
