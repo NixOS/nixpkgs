@@ -24,10 +24,7 @@ in
   imports = [
     # since 0.12.0 (2025-05-26) release, upstream re-branded project to 'stalwart' due to inclusion of collaboration features (CalDAV, CardDAV, and WebDAV)
     #  https://github.com/stalwartlabs/stalwart/releases/tag/v0.12.0
-    (lib.mkRenamedOptionModule
-      [ "services" "stalwart-mail" ]
-      [ "services" "stalwart" ]
-    )
+    (lib.mkRenamedOptionModule [ "services" "stalwart-mail" ] [ "services" "stalwart" ])
   ];
   options.services.stalwart = {
     enable = lib.mkEnableOption "the all-in-one collaboration and mail server, Stalwart";
