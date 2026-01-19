@@ -1,0 +1,57 @@
+diff --git a/meson.build b/meson.build
+index 397ea0730b..4ebe88eab3 100644
+--- a/meson.build
++++ b/meson.build
+@@ -534,6 +534,7 @@ cdata.set('HAVE_PANGOFT', pangoft_dep.found() ? 1 : false)
+ atk_pkgs = ['atk']
+ 
+ wayland_pkgs = []
++wayland_private_pkgs = []
+ if wayland_enabled
+   wlclientdep    = dependency('wayland-client', version:  wayland_req)
+   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
+@@ -546,6 +547,8 @@ if wayland_enabled
+ 
+   wayland_pkgs = [
+     'wayland-client', wayland_req,
++  ]
++  wayland_private_pkgs = [
+     'xkbcommon', xkbcommon_req,
+     'wayland-cursor', wayland_req,
+     'wayland-egl',
+@@ -890,7 +893,9 @@ pkgconf.set('host', '@0@-@1@'.format(host_machine.cpu_family(), host_machine.sys
+ pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
+ gdk_packages = ' '.join([ pango_pkgname, pango_req,
+                        'pangocairo', pango_req,
+-                       'gdk-pixbuf-2.0', gdk_pixbuf_req ])
++                       'gdk-pixbuf-2.0', gdk_pixbuf_req,
++                       wayland_pkgs,
++                       'zlib' ])
+ 
+ cairo_packages = ''
+ 
+@@ -915,7 +920,7 @@ else
+ endif
+ 
+ pkgconf.set('GDK_PRIVATE_PACKAGES',
+-            ' '.join(gio_packages + x11_pkgs + wayland_pkgs + cairo_backends +
++            ' '.join(gio_packages + x11_pkgs + wayland_private_pkgs + cairo_backends +
+                      ['epoxy', epoxy_req] + cloudproviders_packages +
+                      ['fribidi', fribidi_req]))
+ 
+@@ -924,13 +929,14 @@ gtk_packages = ' '.join([
+     cairo_packages,
+     pixbuf_dep.name(), gdk_pixbuf_req,
+     'gio-2.0', glib_req,
++    wayland_pkgs
+ ])
+ pkgconf.set('GTK_PACKAGES', gtk_packages)
+ 
+ # Requires.private
+ pc_gdk_extra_libs += cairo_libs
+ 
+-gtk_private_packages = atk_pkgs + wayland_pkgs + ['epoxy', epoxy_req, 'fribidi', fribidi_req]
++gtk_private_packages = atk_pkgs + wayland_private_pkgs + ['epoxy', epoxy_req, 'fribidi', fribidi_req]
+ if wayland_enabled or x11_enabled
+   gtk_private_packages += ['pangoft2']
+ endif
