@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  name = "test-containers";
+  name = "containers";
   meta.maintainers = with pkgs.lib.maintainers; [ jfly ];
 
   nodes = {
