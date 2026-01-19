@@ -16,8 +16,6 @@ maven.buildMavenPackage rec {
 
   mvnHash = "sha256-AJwt6JnNAffXzazWI2fIUMp5j/Fm5LRhO31bOUOl7g0=";
 
-  mvnParameters = "-Dmaven.test.skip";
-
   installPhase = ''
     runHook preInstall
     install -Dm644 target/secrets-provider-${version}.jar $out/share/java/keycloak/keycloak-secrets-vault-provider.jar
@@ -28,6 +26,9 @@ maven.buildMavenPackage rec {
     homepage = "https://github.com/Nordix/keycloak-secrets-vault-provider";
     description = "Keycloak Vault SPI provider for OpenBao and HashiCorp Vault";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ krit ];
+    maintainers = with lib.maintainers; [
+      krit
+      anish
+    ];
   };
 }

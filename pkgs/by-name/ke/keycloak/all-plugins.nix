@@ -14,6 +14,7 @@
   keycloak-orgs = callPackage ./keycloak-orgs { };
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
+  keycloak-secrets-vault-provider = callPackage ./keycloak-secrets-vault-provider { };
   scim-for-keycloak = callPackage ./scim-for-keycloak { };
   scim-keycloak-user-storage-spi = callPackage ./scim-keycloak-user-storage-spi { };
 
