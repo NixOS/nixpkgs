@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vampire";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRzVh1KirWi9GpOkzSGoIBUExDN1rV0b3AGwa6gWb3I=";
+    hash = "sha256-Ka9HmicIf7b5VN9nbiCW604ZZrGpJuP57RPTzOnwJbU=";
     fetchSubmodules = true;
   };
 
