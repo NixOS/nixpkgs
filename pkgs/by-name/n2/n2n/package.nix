@@ -10,6 +10,7 @@
 stdenv.mkDerivation rec {
   pname = "n2n";
   version = "3.0";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ntop";
