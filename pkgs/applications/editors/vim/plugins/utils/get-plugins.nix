@@ -14,16 +14,15 @@ let
       "outputHash"
     ] value;
 
-  parse = name: value: {
-    pname = value.pname;
-    version = value.version;
+  parse = _name: value: {
+    inherit (value) pname version;
     homePage = value.meta.homepage;
     checksum =
       if hasChecksum value then
         {
           submodules = value.src.fetchSubmodules or false;
           sha256 = value.src.outputHash;
-          rev = value.src.rev;
+          inherit (value.src) rev;
         }
       else
         null;
