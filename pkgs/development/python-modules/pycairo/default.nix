@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   meson,
   ninja,
@@ -8,7 +7,6 @@
   pytestCheckHook,
   pkg-config,
   cairo,
-  libxcrypt,
   python,
 }:
 
@@ -31,7 +29,7 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ cairo ] ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [ cairo ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

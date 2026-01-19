@@ -10,8 +10,6 @@ python3Packages.buildPythonApplication rec {
   version = "0.2.12";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";

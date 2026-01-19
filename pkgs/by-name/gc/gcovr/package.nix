@@ -12,8 +12,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
   version = "8.4";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "gcovr";
     repo = "gcovr";

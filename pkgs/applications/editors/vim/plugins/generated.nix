@@ -16184,6 +16184,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tuis-nvim = buildVimPlugin {
+    pname = "tuis.nvim";
+    version = "0-unstable-2026-01-15";
+    src = fetchFromGitHub {
+      owner = "jrop";
+      repo = "tuis.nvim";
+      rev = "3f3daa725cf1faffe07287cfe347e054d2f80470";
+      hash = "sha256-IJIqWD6XNzoAVr75WLzBf1Ut35RxSHzZ0//hTskEdSA=";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/jrop/tuis.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   tv-nvim = buildVimPlugin {
     pname = "tv.nvim";
     version = "0-unstable-2026-01-10";
