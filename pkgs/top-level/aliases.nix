@@ -1225,6 +1225,7 @@ mapAliases {
   nfstrace = throw "nfstrace has been removed, as it was broken"; # Added 2025-08-25
   nginxQuic = throw "'nginxQuic' has been removed. QUIC support is now available in the default nginx builds.";
   ngrid = throw "'ngrid' has been removed as it has been unmaintained upstream and broken"; # Added 2025-11-15
+  nimbo = throw "'nimbo' has been removed due to being archived upstream."; # Added 2026-01-18
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
   nix-linter = throw "nix-linter has been removed as it was broken for 3 years and unmaintained upstream"; # Added 2025-09-06
