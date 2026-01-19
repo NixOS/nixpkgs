@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
-    sha256 = "sha256-vt3zISMtW9CBBsF528YA+M6I6zYgtKWaYykGO3j2RjU=";
+    sha256 = "sha256-VErhQBL45+QmuMtSLrCqqsgxrXw1YB0c8x03Zw4Ouzs=";
   };
 
   depsBuildBuild = [

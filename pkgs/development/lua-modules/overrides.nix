@@ -836,7 +836,8 @@ in
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
         --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
-        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim'," \
+        --replace-fail ", 'nvim-treesitter-legacy-api == 0.9.2'" ""
     '';
   };
 
