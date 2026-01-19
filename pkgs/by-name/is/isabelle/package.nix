@@ -290,6 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.jvanbruegge
+      lib.maintainers.sempiternal-aurora
     ];
     platforms = [
       "x86_64-linux"
