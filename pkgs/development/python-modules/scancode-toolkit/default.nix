@@ -45,7 +45,6 @@
   pygments,
   pymaven-patch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools,
@@ -57,7 +56,6 @@
   urlpy,
   writableTmpDirAsHomeHook,
   xmltodict,
-  zipp,
 }:
 
 buildPythonPackage rec {
@@ -126,8 +124,7 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ zipp ];
+  ];
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook

@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  typing-extensions,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -19,8 +17,6 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-FRO/stQDTa4W1f6mLPDCJslYFfIvgS0EgoEhuh0rxwA=";
   };
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook

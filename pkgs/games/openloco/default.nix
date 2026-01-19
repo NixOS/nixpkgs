@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ icewind1991 ];
+    mainProgram = "OpenLoco";
   };
 }
