@@ -8,7 +8,6 @@
   hicolor-icon-theme,
   numix-icon-theme-circle,
   gitUpdater,
-  allColorVariants ? false,
   colorVariants ? [ ],
 }:
 
@@ -17,16 +16,18 @@ let
 in
 lib.checkListOfEnum "${pname}: color variants"
   [
-    "-blue"
-    "-red"
-    "-pink"
-    "-purple"
-    "-green"
-    "-orange"
-    "-brown"
-    "-grey"
-    "-black"
-    "-cyan"
+    "black"
+    "blue"
+    "brown"
+    "cyan"
+    "green"
+    "grey"
+    "lightblue"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "all"
   ]
   colorVariants
 
@@ -73,7 +74,7 @@ lib.checkListOfEnum "${pname}: color variants"
       mkdir -p $out/share/icons
 
       name= ./install.sh \
-        ${if allColorVariants then "-a" else toString colorVariants} \
+        -t ${toString colorVariants} \
         -d $out/share/icons
 
       rm $out/share/icons/*/{AUTHORS,COPYING}
