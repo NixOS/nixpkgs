@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-osVYIm/E2eTOMxvS/Tw/F/lVEV0sAORHYYpO+ZeKKnM=";
   };
 
+  patches = [
+    ./gcc15-musl.patch
+  ];
+
   strictDeps = true;
   enableParallelBuilding = true;
 
