@@ -757,6 +757,12 @@ in
                 "${cfg.sslCertCredential}:ssl_cert"
                 "${cfg.sslKeyCredential}:ssl_key"
               ];
+            ConditionCredential =
+              secretCreds
+              ++ optionals (cfg.enableSSL) [
+                cfg.sslCertCredential
+                cfg.sslKeyCredential
+              ];
             BindReadOnlyPaths = [
               "%d/ssl_cert:/run/keycloak/ssl/ssl_cert"
               "%d/ssl_key:/run/keycloak/ssl/ssl_key"
