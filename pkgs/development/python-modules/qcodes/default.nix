@@ -209,6 +209,8 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
 })
