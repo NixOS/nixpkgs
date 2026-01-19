@@ -42,7 +42,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_2;
+      django = prev.django_5;
 
       fido2 = prev.fido2.overridePythonAttrs {
         version = "1.2.0";
