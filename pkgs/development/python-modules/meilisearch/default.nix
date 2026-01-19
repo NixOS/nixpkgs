@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "meilisearch";
-  version = "0.39.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meilisearch-python";
     tag = "v${version}";
-    hash = "sha256-+BhoJjYpvRSMK8P6coHYH0KFTDUKOeeEmyogYpAMWeE=";
+    hash = "sha256-mxIE2/gZhV8geE0UJ2ModGKs0TPjJLyp38Wvcs59wz8=";
   };
 
   build-system = [ setuptools ];
