@@ -33,13 +33,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "scrutiny";
-  version = "1.7.2";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "Starosdev";
     repo = "scrutiny";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xoXL8yLrYyjpkxLmbFQz/pp2BauJAU82x1FcslHCPoE=";
+    hash = "sha256-t0oy1y8aJadgmQE/pR/8kwW4GAuKvsUtU76aV1nhww0=";
   };
 
   subPackages = "webapp/backend/cmd/scrutiny";
