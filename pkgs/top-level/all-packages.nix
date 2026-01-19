@@ -9448,6 +9448,14 @@ with pkgs;
     ipuVersion = "ipu6epmtl";
   };
 
+  ipu7x-camera-hal = callPackage ../development/libraries/ipu7-camera-hal {
+    ipuVersion = "ipu7x";
+  };
+
+  ipu75xa-camera-hal = callPackage ../development/libraries/ipu7-camera-hal {
+    ipuVersion = "ipu75xa";
+  };
+
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
