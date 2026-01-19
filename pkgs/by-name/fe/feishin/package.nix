@@ -12,6 +12,7 @@
   darwin,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 let
   pname = "feishin";
@@ -146,6 +147,8 @@ buildNpmPackage {
       mimeTypes = [ "x-scheme-handler/feishin" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
