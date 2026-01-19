@@ -9,7 +9,6 @@
   pkg-config,
   wrapGAppsHook4,
   appstream,
-  bubblewrap,
   flatpak,
   glib-networking,
   glycin-loaders,
@@ -58,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdex
     libglycin
     libglycin-gtk4
+    glycin-loaders
     libsoup_3
     libxmlb
     libyaml
@@ -65,13 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_6_0
     libsecret
   ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ bubblewrap ]}"
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
