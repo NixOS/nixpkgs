@@ -19,6 +19,7 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
+  electron,
 }:
 
 let
@@ -192,10 +193,15 @@ stdenv.mkDerivation (finalAttrs: {
     arch=${
       if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
     }
-    for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
+    for f in contrib/*/$arch/{z3,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
+
+    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
+    rm contrib/vscodium-*/*/*.so{,.*}
+    rm contrib/vscodium-*/*/chrome*
+
     for d in contrib/kodkodi-*/jni/$arch; do
       patchelf --set-rpath "${
         lib.concatStringsSep ":" [
@@ -279,7 +285,12 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
       lib.maintainers.jvanbruegge
     ];
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
   passthru.withComponents =
