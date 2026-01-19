@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
+      --replace-fail 'export SSH_AUTH_SOCK="/run/user/$(id -u)/keyring/ssh"' 'export SSH_AUTH_SOCK="/run/user/$(id -u)/gcr/ssh"' \
       --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
     substituteInPlace data/cosmic.desktop \
       --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
