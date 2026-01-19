@@ -436,6 +436,14 @@ overrideLlvmPackagesRocm (s: {
       isGNU = false;
     };
   compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
+    patches = old.patches ++ [
+      # fix build with glibc >= 2.42
+      (fetchpatch {
+        url = "https://github.com/llvm/llvm-project/commit/59978b21ad9c65276ee8e14f26759691b8a65763.patch";
+        hash = "sha256-ys5SMLfO3Ay9nCX9GV5yRCQ6pLsseFu/ZY6Xd6OL4p0=";
+        relative = "compiler-rt";
+      })
+    ];
     meta = old.meta // llvmMeta;
   });
   compiler-rt = s.final.compiler-rt-libc;
