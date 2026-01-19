@@ -185,7 +185,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webadmin = buildPackages.callPackage ./webadmin.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
     updateScript = nix-update-script { };
-    tests.stalwart-mail = nixosTests.stalwart-mail;
+    tests.stalwart = nixosTests.stalwart;
   };
 
   meta = {
