@@ -10,6 +10,7 @@
   makeWrapper,
   displayServer ? "x11",
   nixosTests,
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "displayServer" displayServer [
@@ -22,16 +23,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # release version needs nightly, so we use a custom tree, see:
   # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3676256971
-  version = "0.13.2-unstable-2025-12-19";
+  version = "0.14.0-unstable-2026-01-19";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "clipboard-history";
-    rev = "08a2a2a77fa38240dfc6a33adabb3a473ce6bcfd";
-    hash = "sha256-iG/pk6xizCv2sUqTA44nb4AnbaOuDsIONuUfJuOWnc8=";
+    rev = "cb2e94add2388a68a8f015b77f9b082b1658b3b7";
+    hash = "sha256-r2632XJ/2Er1TuHCDNm6uItvdhqJ87i9p+h9M2MwKwk=";
   };
 
-  cargoHash = "sha256-LuWUf37X/Z0xCbAQmaMY8lle7gGZWoz2bgYhe/uRonU=";
+  cargoHash = "sha256-c5Zdvz2xHsGh4VnOED2JiitNWwNTSkygaMFHPPLANqw=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -97,11 +98,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sed -i "s|Icon=ringboard|Icon=$out/share/icons/hicolor/1024x1024/ringboard.jpeg|g" $out/share/applications/ringboard-egui.desktop
   '';
 
-  passthru.tests.nixos = nixosTests.ringboard;
+  passthru = {
+    tests.nixos = nixosTests.ringboard;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch=stable" ]; };
+  };
 
   meta = {
     description = "Fast, efficient, and composable clipboard manager for Linux";
     homepage = "https://github.com/SUPERCILEX/clipboard-history";
+    changelog = "https://github.com/SUPERCILEX/clipboard-history/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.magnetophon ];
