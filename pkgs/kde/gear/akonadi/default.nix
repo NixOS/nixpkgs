@@ -31,6 +31,7 @@ mkKdeDerivation {
   ]
   ++ lib.optionals (backend == "mysql") [
     "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
+    "-DMYSQLD_EXECUTABLE=${lib.getBin mariadb}/bin/mariadbd"
   ]
   ++ lib.optionals (backend == "postgres") [
     "-DPOSTGRES_PATH=${lib.getBin libpq}/bin"
