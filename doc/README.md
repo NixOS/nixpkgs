@@ -3,7 +3,7 @@
 This directory houses the source files for the Nixpkgs reference manual.
 
 > [!IMPORTANT]
-> We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
+> We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr).
 >
 > Going forward, this directory should **only** contain [reference documentation](https://nix.dev/contributing/documentation/diataxis#reference).
 > For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
@@ -60,7 +60,7 @@ Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when ed
 
 ### Testing redirects
 
-Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
+Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor and observe the redirection.
 
 Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload.
 This is because browsers do not re-run client JS code when only the anchor has changed.
@@ -79,7 +79,7 @@ Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gf
 #### Anchors
 
 Explicitly defined **anchors** on headings, to allow linking to sections.
-These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
+These should always be used to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
 
 It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
 
@@ -92,7 +92,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 
 #### Inline Anchors
 
-Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
+Allow linking to an arbitrary place in the text (e.g., individual list items, sentences…).
 
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
@@ -111,7 +111,7 @@ This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/us
 #### HTML
 
 Inlining HTML is not allowed.
-Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of the NixOS manual.
 
 #### Roles
 
@@ -130,7 +130,7 @@ A few markups for other kinds of literals are also available:
 These literal kinds are used mostly in NixOS option documentation.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
-Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+Though the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage), with slightly different syntax.
 They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
@@ -211,7 +211,7 @@ You, as the writer of documentation, are still in charge of its content.
 
 Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
-It also helps identifying long sentences at a glance.
+It also helps identify long sentences at a glance.
 
 Not everything has been migrated to this format yet.
 Please always use it for new content.
@@ -223,7 +223,7 @@ Function documentation is *reference documentation*, for which
 [diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
 
 On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
-the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+the first sentence is in the present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
 For example:
 
 ```nix
@@ -332,7 +332,7 @@ Example of how to use `buildImage` goes here.
 
 ### Function arguments
 
-Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments, as well as their [types](https://nixos.org/manual/nix/stable/language/values).
 For example:
 
 ```markdown
@@ -364,7 +364,7 @@ Otherwise, just describe the single argument or start the arguments' definition 
 ```
 
 Checklist:
-- Start with a synopsis, to show the order of positional arguments.
+- Start with a synopsis to show the order of positional arguments.
 - Metavariables are in emphasized code spans: ``` *`arg1`* ```.
   Metavariables are placeholders where users may write arbitrary expressions.
   This includes positional arguments.
@@ -372,12 +372,12 @@ Checklist:
   These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
 - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
 - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
-- Nix types aren't in code spans, because they are not code
-- Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
+- Nix types aren't in code spans, because they are not code.
+- Nix types are capitalized to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
 
 #### Examples
 
-To define a referenceable figure use the following fencing:
+To define a referenceable figure, use the following fencing:
 
 ```markdown
 :::{.example #an-attribute-set-example}
@@ -398,7 +398,7 @@ Though this is not shown in the rendered documentation on nixos.org.
 
 #### Figures
 
-To define a referenceable figure use the following fencing:
+To define a referenceable figure, use the following fencing:
 
 ```markdown
 ::: {.figure #nixos-logo}
@@ -422,7 +422,7 @@ Sometimes it's better to add context [^context] in a footnote.
 
 #### Inline comments
 
-Inline comments are supported with following syntax:
+Inline comments are supported with the following syntax:
 
 ```markdown
 <!-- This is an inline comment -->
