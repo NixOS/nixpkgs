@@ -41,6 +41,9 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/IdreesInc/Monocraft";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ zhaofengli ];
+    maintainers = with lib.maintainers; [
+      zhaofengli
+      coca
+    ];
   };
 }
