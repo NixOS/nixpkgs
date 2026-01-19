@@ -12,7 +12,8 @@
 }:
 
 symlinkJoin {
-  name = "rofi-${rofi-unwrapped.version}";
+  pname = "rofi";
+  inherit (rofi-unwrapped) version;
 
   paths = [
     rofi-unwrapped.out
