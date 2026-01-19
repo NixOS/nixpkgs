@@ -225,6 +225,7 @@ let
         chooseDevOutputs
         recurseIntoAttrs
         dontRecurseIntoAttrs
+        recurseIntoAttrsRelease
         cartesianProduct
         mapCartesianProduct
         updateManyAttrsByPath

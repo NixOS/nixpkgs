@@ -2217,6 +2217,49 @@ rec {
   dontRecurseIntoAttrs = attrs: attrs // { recurseForDerivations = false; };
 
   /**
+    Make CI and Hydra consider the contents of the resulting attribute set
+    when looking for what to build, find, etc.
+
+    In comparison to `rerecurseIntoAttrs` this does affect user-facing Nix tools.
+
+    This function only affects a single attribute set;
+    it does not apply itself recursively for nested attribute sets.
+    # Inputs
+
+    `attrs`
+
+    : An attribute set to scan for derivations.
+
+    # Type
+
+    ```
+    recurseIntoAttrsRelease :: AttrSet -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.recurseIntoAttrsRelease` usage example
+
+    ```nix
+    { pkgs ? import <nixpkgs> {} }:
+    {
+      myTools = pkgs.lib.recurseIntoAttrsRelease {
+        inherit (pkgs) hello figlet;
+      };
+    }
+    ```
+
+    :::
+  */
+  recurseIntoAttrsRelease =
+    attrs:
+    attrs
+    // {
+      recurseForDerivations = false;
+      recurseForRelease = true;
+    };
+
+  /**
     `unionOfDisjoint x y` is equal to `x // y`, but accessing attributes present
     in both `x` and `y` will throw an error.  This operator is commutative, unlike `//`.
 
