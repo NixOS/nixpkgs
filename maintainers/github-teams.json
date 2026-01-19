@@ -730,7 +730,9 @@
       "philiptaron": 43863,
       "zowoq": 59103226
     },
-    "members": {},
+    "members": {
+      "mdaniels5757": 8762511
+    },
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
