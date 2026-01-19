@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       contrun
+      magicquark
       yayayayaka
     ];
   };
