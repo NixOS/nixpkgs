@@ -28,9 +28,9 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "packagekit";
-  version = "1.3.2";
+  version = "1.3.3";
 
   outputs = [
     "out"
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "v${version}";
-    hash = "sha256-oQuJpn9G/V8CrrEs2agbKVS9xZnS1MgHa8B8P1nFmiw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BgVfM2EtuvV9qTFSy+WW5Ny1QrHIj3t2Royrn7ZHAA8=";
   };
 
   buildInputs = [
@@ -94,9 +94,9 @@ stdenv.mkDerivation rec {
     # those files in $out/etc ; we just override the runtime paths here
     # same for /var & $out/var
     substituteInPlace etc/meson.build \
-      --replace "install_dir: join_paths(get_option('sysconfdir'), 'PackageKit')" "install_dir: join_paths('$out', 'etc', 'PackageKit')"
+      --replace-fail "install_dir: join_paths(get_option('sysconfdir'), 'PackageKit')" "install_dir: join_paths('$out', 'etc', 'PackageKit')"
     substituteInPlace data/meson.build \
-      --replace "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
+      --replace-fail "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
   '';
 
   passthru.tests = {
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
