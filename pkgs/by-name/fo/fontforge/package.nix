@@ -11,6 +11,7 @@
   zlib,
   glib,
   giflib,
+  gettext,
   libpng,
   libjpeg,
   libtiff,
@@ -83,9 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
   # do not use x87's 80-bit arithmetic, rounding errors result in very different font binaries
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     cmake
+    gettext
   ];
 
   buildInputs = [
@@ -118,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
   ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
   ++ lib.optional (!withPython) "-DENABLE_PYTHON_SCRIPTING=OFF"
+  ++ lib.optional withPython "-DPython3_EXECUTABLE=${lib.getExe py}"
   ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
   preConfigure = ''
