@@ -509,6 +509,9 @@ builtins.intersectAttrs super {
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
   # Fix strictDeps build error "could not execute: hspec-discover"
+  hspec-wai = addTestToolDepends [ self.hspec-discover ] super.hspec-wai;
+
+  # Fix strictDeps build error "could not execute: hspec-discover"
   http-date = addTestToolDepends [ self.hspec-discover ] super.http-date;
 
   # Fix strictDeps build error "could not execute: hspec-discover"
