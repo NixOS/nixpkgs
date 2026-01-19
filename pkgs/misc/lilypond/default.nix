@@ -142,6 +142,7 @@ stdenv.mkDerivation rec {
       yurrriq
     ];
     platforms = lib.platforms.all;
+    mainProgram = "lilypond";
   };
 
   FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {
