@@ -88,6 +88,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "grpcio"
     "jsonpickle"
+    "objsize"
 
     # As of apache-beam v2.55.1, the requirement is cloudpickle~=2.2.1, but
     # the current (2024-04-20) nixpkgs's pydot version is 3.0.0.
