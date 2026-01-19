@@ -397,12 +397,11 @@ qtModule (
       # Pipewire
       pipewire
     ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # FIXME This dependency shouldn't be needed but can't find a way
+      # around it. Chromium pulls this in while bootstrapping GN.
+      cctools.libtool
 
-    # FIXME These dependencies shouldn't be needed but can't find a way
-    # around it. Chromium pulls this in while bootstrapping GN.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       cups
 
       # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
