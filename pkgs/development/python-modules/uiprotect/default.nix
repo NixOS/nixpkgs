@@ -29,7 +29,6 @@
   # tests
   aiosqlite,
   asttokens,
-  ffmpeg,
   pytest-asyncio,
   pytest-benchmark,
   pytest-cov-stub,
@@ -40,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "8.0.0";
+  version = "8.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${version}";
-    hash = "sha256-YYF7YERl9pKpnfD1Q00NlL8zWfEohMBO3UuidedLHn0=";
+    hash = "sha256-9iMHupHSojOMFSqkfXu6wWeYI/Az4mi4wbvcKjozsBE=";
   };
 
   build-system = [ poetry-core ];
@@ -81,7 +80,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiosqlite
     asttokens
-    ffmpeg # Required for command ffprobe
     pytest-asyncio
     pytest-benchmark
     pytest-cov-stub
