@@ -33,14 +33,13 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "argcomplete"
+    "beautifulsoup4"
     "cryptography"
     "dnspython"
     "ldap3"
     "pycryptodome"
     "pyopenssl"
   ];
-
-  pythonRemoveDeps = [ "bs4" ];
 
   build-system = [ setuptools ];
 
