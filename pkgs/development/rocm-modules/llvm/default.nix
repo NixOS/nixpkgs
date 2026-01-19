@@ -285,13 +285,6 @@ overrideLlvmPackagesRocm (s: {
       # TODO: consider reapplying "Don't include aliases in RegisterClassInfo::IgnoreCSRForAllocOrder"
       # it was reverted as it's a pessimization for non-GPU archs, but this compiler
       # is used mostly for amdgpu
-
-      # fix build w/ glibc-2.42
-      (fetchpatch {
-        url = "https://github.com/llvm/llvm-project/commit/6ee49080e4bb43efe7ede10bed15935853bbd434.patch";
-        hash = "sha256-DHEhTC3IWjWksMTD4RqsPQBTKKJOJcNCt16xsEe0QZs=";
-        relative = "llvm";
-      })
     ];
     dontStrip = profilableStdenv;
     hardeningDisable = [ "all" ];
