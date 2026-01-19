@@ -2072,6 +2072,8 @@ self: super: with self; {
 
   blacken-docs = callPackage ../development/python-modules/blacken-docs { };
 
+  blackfire = callPackage ../development/python-modules/blackfire { };
+
   blackjax = callPackage ../development/python-modules/blackjax { };
 
   blackrenderer = callPackage ../development/python-modules/blackrenderer { };
