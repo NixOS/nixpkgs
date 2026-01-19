@@ -5,7 +5,12 @@
   gnugrep,
   python3,
 }:
-
+let
+  runtimeDeps = [
+    coccinelle
+    gnugrep
+  ];
+in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cvehound";
   version = "1.2.1";
@@ -17,15 +22,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-UvjmlAm/8B4KfE9grvvgn37Rui+ZRfs2oTLqYYgqcUQ=";
   };
-
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        coccinelle
-        gnugrep
-      ]
-    }"
-  ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -44,6 +40,17 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   # Tries to clone the kernel sources
   doCheck = false;
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath finalAttrs.passthru.runtimeDeps)
+  ];
+
+  passthru = {
+    inherit runtimeDeps;
+  };
 
   meta = {
     description = "Tool to check linux kernel source dump for known CVEs";
