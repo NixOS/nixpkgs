@@ -100,6 +100,9 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
+# http://gcc.gnu.org/PR120718 backport (will be inclkuded in 15.3.0) to
+# fix `highway-1.3.0` ICE on aarch64-linux.
+++ optional is15 ./15/aarch64-sve-rtx.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
