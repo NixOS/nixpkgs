@@ -14219,6 +14219,12 @@
     githubId = 160317;
     name = "Kristoffer Søholm";
   };
+  krit = {
+    email = "dasskrit@gmail.com";
+    github = "kritdass";
+    githubId = 68750861;
+    name = "Krit Dass";
+  };
   kritnich = {
     email = "kritnich@kritni.ch";
     github = "Kritnich";
