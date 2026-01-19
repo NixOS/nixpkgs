@@ -11,12 +11,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rathole";
-  version = "0.5.0-unstable-2024-06-06";
+  version = "0.5.0-unstable-2025-07-29";
 
   src = fetchFromGitHub {
-    owner = "rapiz1";
+    owner = "rathole-org";
     repo = "rathole";
-    rev = "be14d124a22e298d12d92e56ef4fec0e51517998";
+    rev = "5a9dd6d939744859af322aeff7fd60f7483a68bc";
     hash = "sha256-C0/G4JOZ4pTAvcKZhRHsGvlLlwAyWBQ0rMScLvaLSuA=";
   };
 
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Reverse proxy for NAT traversal";
-    homepage = "https://github.com/rapiz1/rathole";
+    homepage = "https://github.com/rathole-org/rathole";
     license = lib.licenses.asl20;
     mainProgram = "rathole";
     maintainers = with lib.maintainers; [
