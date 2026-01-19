@@ -1,6 +1,7 @@
 {
   lib,
   appstream,
+  blueprint-compiler,
   desktop-file-utils,
   fetchFromGitHub,
   glib,
@@ -18,20 +19,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "drum-machine";
-  version = "1.5.0";
+  version = "2.2.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
     tag = "v${version}";
-    hash = "sha256-F3h3BxLNkJq0jpfNOGcTbckpc8CksyA3Bc8GNKviB+I=";
+    hash = "sha256-CBDRoUD4kvbqkyUzxmPEcbW4UJLycRAYC4s40fZ0xYY=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     appstream
+    blueprint-compiler
     desktop-file-utils
     glib
     gobject-introspection
