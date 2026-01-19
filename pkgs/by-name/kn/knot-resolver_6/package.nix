@@ -72,6 +72,7 @@ let
       pkg-config
       meson
       ninja
+      protobufc
     ];
 
     # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
@@ -119,16 +120,20 @@ let
 
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
-      cmocka
       which
       cacert
       lua.cqueues
       lua.basexx
       lua.http
     ];
+    installCheckInputs = [
+      cmocka
+    ];
     installCheckPhase = ''
       meson test --print-errorlogs --no-suite snowflake
     '';
+
+    strictDeps = true;
 
     passthru = {
       inherit lua;
