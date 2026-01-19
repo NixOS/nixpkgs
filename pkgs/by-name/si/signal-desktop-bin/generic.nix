@@ -296,6 +296,7 @@ stdenv.mkDerivation rec {
       lib.licenses.mit # emoji-data
     ];
     maintainers = with lib.maintainers; [
+      eclairevoyant
       mic92
       equirosa
       bkchr
