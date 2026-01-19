@@ -24,7 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/redcode-labs/GoSH";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    teams = [ lib.teams.redcodelabs ];
     mainProgram = "GoSH";
   };
 }

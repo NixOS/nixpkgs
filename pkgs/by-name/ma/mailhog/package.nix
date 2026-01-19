@@ -40,7 +40,6 @@ buildGoModule rec {
     homepage = "https://github.com/mailhog/MailHog";
     changelog = "https://github.com/mailhog/MailHog/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
-      disassembler
       jojosch
     ];
     license = lib.licenses.mit;

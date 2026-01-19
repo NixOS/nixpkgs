@@ -44,7 +44,6 @@ buildGoModule rec {
     homepage = "https://livepeer.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      elitak
       bot-wxt1221
     ];
     mainProgram = "livepeer";

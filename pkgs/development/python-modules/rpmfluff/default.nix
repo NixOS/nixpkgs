@@ -22,6 +22,5 @@ buildPythonPackage rec {
     description = "Lightweight way of building RPMs, and sabotaging them";
     homepage = "https://pagure.io/rpmfluff";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ disassembler ];
   };
 }

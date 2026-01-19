@@ -88,6 +88,5 @@ mkDerivation rec {
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [
     lnl7
-    manveru
   ];
 }

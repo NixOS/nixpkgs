@@ -110,8 +110,12 @@ rec {
       subversion
       tarball
       vim
-      tests-stdenv-gcc-stageCompare
       ;
+    tests.stdenv = {
+      inherit (nixpkgs'.tests.stdenv)
+        tests-stdenv-gcc-stageCompare
+        ;
+    };
   };
 
   tested =
@@ -163,7 +167,7 @@ rec {
           "nixos.tests.proxy"
           "nixos.tests.simple"
           "nixpkgs.jdk"
-          "nixpkgs.tests-stdenv-gcc-stageCompare"
+          "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"
         ])
       ];

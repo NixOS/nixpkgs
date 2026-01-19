@@ -800,7 +800,10 @@ let
         description = "SPNEGO HTTP Authentication Module";
         homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
         license = with lib.licenses; [ bsd2 ];
-        teams = [ lib.teams.deshaw ];
+        maintainers = with lib.maintainers; [
+          de11n
+          despsyched
+        ];
       };
     };
 

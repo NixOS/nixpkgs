@@ -2724,7 +2724,10 @@ with self;
     meta = {
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -4967,7 +4970,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -5982,7 +5984,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13427,7 +13432,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13458,7 +13466,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13773,7 +13784,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14018,7 +14032,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14036,7 +14053,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14742,7 +14762,10 @@ with self;
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -15271,7 +15294,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -18917,7 +18943,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -20409,7 +20438,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -26712,8 +26744,11 @@ with self;
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
-      maintainers = [ maintainers.ztzg ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+        ztzg
+      ];
     };
   };
 
@@ -27084,7 +27119,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -27272,7 +27306,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -27964,7 +28001,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -28037,7 +28073,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
     };
   };
@@ -28457,7 +28492,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -28475,7 +28513,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
     };
   };

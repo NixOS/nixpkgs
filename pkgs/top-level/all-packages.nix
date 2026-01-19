@@ -1565,9 +1565,7 @@ with pkgs;
 
   gams = callPackage ../tools/misc/gams (config.gams or { });
 
-  gancioPlugins = recurseIntoAttrs (
-    callPackage ../by-name/ga/gancio/plugins.nix { inherit (gancio) nodejs; }
-  );
+  gancioPlugins = recurseIntoAttrs (callPackage ../by-name/ga/gancio/plugins.nix { });
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
@@ -2429,8 +2427,7 @@ with pkgs;
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
-  rocmPackages = recurseIntoAttrs rocmPackages_6;
-  rocmPackages_6 = callPackage ../development/rocm-modules/6 { };
+  rocmPackages = recurseIntoAttrs (callPackage ../development/rocm-modules { });
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
@@ -2779,10 +2776,6 @@ with pkgs;
   hassil = with python3Packages; toPythonApplication hassil;
 
   haste-client = callPackage ../tools/misc/haste-client { };
-
-  halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_19;
-  };
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
@@ -4105,6 +4098,7 @@ with pkgs;
 
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
+  opensplatWithRocm = opensplat.override { rocmSupport = true; };
   opensplatWithCuda = opensplat.override { cudaSupport = true; };
 
   chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
@@ -8787,8 +8781,6 @@ with pkgs;
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
-  home-assistant-component-tests = recurseIntoAttrs home-assistant.tests.components;
-
   icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
   icingaweb2-thirdparty = callPackage ../servers/icingaweb2/thirdparty.nix { };
   icingaweb2 = callPackage ../servers/icingaweb2 { };
@@ -11821,8 +11813,6 @@ with pkgs;
   tuxclocker-without-unfree = libsForQt5.callPackage ../applications/misc/tuxclocker { };
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
-
-  tests-stdenv-gcc-stageCompare = callPackage ../test/stdenv/gcc-stageCompare.nix { };
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
