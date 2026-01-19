@@ -8,10 +8,38 @@
 
 linkFarm "zig-packages" [
   {
+    name = "N-V-__8AAFXYAQKsK51AAGXB9HziPDFjS_DVUq6_QHVxHrBM";
+    path = fetchzip {
+      url = "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.330.tar.gz";
+      hash = "sha256-4AY/BxwTUtzgDTv22HjAvTso0K06QKCYRle3xKeShLs=";
+    };
+  }
+  {
+    name = "N-V-__8AAGYqgADJ4CSWkkwZd12lq-o6Y9ByBpscPmS_tpH4";
+    path = fetchzip {
+      url = "https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/v1.4.330.tar.gz";
+      hash = "sha256-mHaeM/3YgrNFKMU/Q2A3BgWkSvAcizSW5ZoGRoy+gcg=";
+    };
+  }
+  {
     name = "N-V-__8AAHgEOgBtc1wN1FEbxkhfZ2mjZ1rElhauQ0FnJ-FT";
     path = fetchzip {
       url = "https://github.com/KhronosGroup/SPIRV-Headers/archive/09913f088a1197aba4aefd300a876b2ebbaa3391.tar.gz";
       hash = "sha256-Q1i6i5XimULuGufP6mimwDW674anAETUiIEvDQwvg5Y=";
+    };
+  }
+  {
+    name = "N-V-__8AAHvZ7QLIOvinD_aUpUBYF-rgwHYY6ZQXNHcltRfd";
+    path = fetchzip {
+      url = "https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/refs/tags/v1.4.330.tar.gz";
+      hash = "sha256-ffFG2mqZdMnIe5X6t7ulaLos0S5lxilgQN1x66BuMiY=";
+    };
+  }
+  {
+    name = "N-V-__8AAKFjBABZzn84N4iiLQyNQSMVsv5XBJSvZTPcQL2H";
+    path = fetchzip {
+      url = "https://github.com/jkuhlmann/cgltf/archive/refs/tags/v1.15.tar.gz";
+      hash = "sha256-e+sVqcdOuLhsDHVntGzAwxtPxookrn706yEWDzNVvgI=";
     };
   }
   {
@@ -43,6 +71,13 @@ linkFarm "zig-packages" [
     };
   }
   {
+    name = "N-V-__8AAO62gwMuCOpZesC2YsUnsRFbbzsCigpvKBUl8QwB";
+    path = fetchzip {
+      url = "https://github.com/KhronosGroup/MoltenVK/releases/download/v1.4.0/MoltenVK-macos.tar";
+      hash = "sha256-eP9wSizVxPYzDuqfOUq0zXoFYCiGxpfBdDGtDCZ7S/0=";
+    };
+  }
+  {
     name = "N-V-__8AAP4lXQKz3tL4vtQfkU_xbsKoxat8ehi0lpR9s7-3";
     path = fetchzip {
       url = "https://github.com/KhronosGroup/glslang/archive/7200bc12a8979d13b22cd52de80ffb7d41939615.tar.gz";
@@ -50,10 +85,31 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "glslang-1.4.309-eMn68Pu-CQBK98WlBPbet0hMUVM2hNWdVP4mKn1hNsD-";
+    name = "N-V-__8AAP75OgDs2RQmQLAddfjvhD4RXblO1kSMg0ZvpCC1";
     path = fetchzip {
-      url = "https://github.com/Games-by-Mason/glslang-zig/archive/4d2877072dc0ebb97698e6620a59e55ef3f367ce.tar.gz";
-      hash = "sha256-0Jt+IExSP93qzbl0Q+nxhXoUz1n6lTkk2dEW2s+yeRs=";
+      url = "https://github.com/KhronosGroup/SPIRV-Headers/archive/6bb105b6c4b3a246e1e6bb96366fe14c6dbfde83.tar.gz";
+      hash = "sha256-rgLhWf3U7gMjB+mpwq4EgQdRS6yP2/Q71Ns42ZDu7cc=";
+    };
+  }
+  {
+    name = "N-V-__8AAPKLeADUZQZzoYbObh2HUYR9pBncy2MDKFCCqtXz";
+    path = fetchzip {
+      url = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/refs/tags/v1.4.330.tar.gz";
+      hash = "sha256-7SYRTJLLkC1OXDZ/llNRpVKhQeNak2IFxrHNJKRfrLk=";
+    };
+  }
+  {
+    name = "N-V-__8AAPu4vwC_P5AHlL_kEON58uGgrDcJSjGq9Hc5yadh";
+    path = fetchzip {
+      url = "https://github.com/mackron/miniaudio/archive/refs/tags/0.11.23.tar.gz";
+      hash = "sha256-ZrfKw5a3AtIER2btCKWhuvygasNaHNf9EURf1Kv96Vc=";
+    };
+  }
+  {
+    name = "glslang-1.4.309-eMn68KLGCQDAuHVUzugaYOOEhbkyHmN526R7mHIq9YUs";
+    path = fetchzip {
+      url = "https://github.com/Games-by-Mason/glslang-zig/archive/cf74b30857e349c819c1c34ec717d4c9fc0eec5c.tar.gz";
+      hash = "sha256-C1Yinm2RZFlOTfuKYBrd4ziWtQNTztBLmHfnKECEICY=";
     };
   }
 ]

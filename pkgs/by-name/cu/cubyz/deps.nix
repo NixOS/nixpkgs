@@ -7,61 +7,78 @@
 }:
 
 linkFarm "zig-packages" [
+
   {
-    name = "N-V-__8AAAI8tQKULcx4VW98BqluDNYJhHtN2OBlFw2Cm19f";
+    name = "N-V-__8AABM8UQAfsn8D1FzsIx9X-_hv1PV6Uypq-3_AOKhz";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_aarch64-windows-gnu.tar.gz";
-      hash = "sha256-hLn1ppvYtpj2SzPR9TnHIKUqp9cjW4Wvnpjn+hMzyFE=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_headers.tar.gz";
+      hash = "sha256-r4WjR3bxr1MkRdWWDfXszOBUC0/UeZCpm8zBgqoucrE=";
     };
   }
+
   {
-    name = "N-V-__8AAAxDUATPdad1MQC8jeiFsoXRet_SvG6acW5Dmxdh";
-    path = fetchgit {
-      url = "https://github.com/PixelGuys/Cubyz-Assets/";
-      rev = "e0ea686f86c008b29cd109e1bdd757ce6574eaf3";
-      hash = "sha256-/Yl8z3KPK07/zedSjdQDgnWF2FWFVp+OIgWeQcepzfY=";
-    };
-  }
-  {
-    name = "N-V-__8AADJklgJD6krSuvgtV1hLIkVBhgIjmFZVB-Yzu9F8";
+    name = "N-V-__8AAOB2RgUFQ1vKl7FLhU7W1ucWY4hzCAgFLjOCZvMv";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_aarch64-linux-musl.tar.gz";
-      hash = "sha256-1OV6MNCoOnaVRWbs9Ln879ItoeMBS6hJOqG/oTCe2PQ=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_aarch64-macos-none.tar.gz";
+      hash = "sha256-q+VsKtfQz6lAXnJZVhbMMoYsG41ZZDGk6QOI0LL3aqU=";
     };
   }
+
   {
-    name = "N-V-__8AAESlRAJiVpVgSi6YuJieVxeJkkCVVsorbxiSyRyZ";
+    name = "N-V-__8AAMKYmALYJagGXb55bnr5tivdM2qeeAxlxZ6-0VXj";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_aarch64-macos-none.tar.gz";
-      hash = "sha256-L2J87H61k7Ki5/EnVjNWXnsrwSVU/1WlysR/AqbstuU=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_aarch64-linux-musl.tar.gz";
+      hash = "sha256-qWEHfeA31UhLvCBFQsuuh72lyc6Af90kMomANSmsX4Y=";
     };
   }
+
   {
-    name = "N-V-__8AAI-aOwAGCfJiF1xWZSQ0yxGSyyuj-VO5P_UqqyJ0";
+    name = "N-V-__8AAAKKsgLGEFVLVPhQczn5HBCqcmVRYj8iEj7IXSjU";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_headers.tar.gz";
-      hash = "sha256-HE/C+d7H6eQcr1R0GtBijVWhGtueO6ymQV7hFIsGhbw=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_aarch64-windows-gnu.tar.gz";
+      hash = "sha256-zJbsOPB9oCxjmJaGij0UeyaA4/jodZJbEMCVdUfn0UM=";
     };
   }
+
   {
-    name = "N-V-__8AAIKQlALN_67_ilCxZcxIGddSBBi7A4lVVa0jFeW9";
+    name = "N-V-__8AAMVvOwWQ7I7EJqNdUGW-fF6N03t34bOHAWCBfLOV";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_x86_64-linux-musl.tar.gz";
-      hash = "sha256-CVXw/7XLVP8iyLIwhQb6QWKOLAjts5VPzqj5Qg9oZJA=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_x86_64-macos-none.tar.gz";
+      hash = "sha256-6hOiWHAdt2oLLD0HamE092ZS+1kP7sSVM9EpLfRWU+w=";
     };
   }
+
   {
-    name = "N-V-__8AAM4p1wKrLLOhfB8egk7fpA7WnEGIU46h_pKk8Xou";
+    name = "N-V-__8AAKrklQLxT8Q2ws0fyWKyBkBXD2rFbqWc6U5_aFim";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_x86_64-windows-gnu.tar.gz";
-      hash = "sha256-lEVL5HT6JBh1rAxk7ClbUtzPBfgNZVuDCfrPiANem2E=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_x86_64-linux-musl.tar.gz";
+      hash = "sha256-A/+CxQV+rJ4jxA6zK/9pY+Moo9f+tOrBz/eC6gCiL9A=";
     };
   }
+
   {
-    name = "N-V-__8AANi9PQLVH2WpYTmNnlcdBHDkNZI9yJz6fAznklHu";
+    name = "N-V-__8AAGrg1wJu_--PyVWOh9LDJMBcBxSFQKLUEqWahoLP";
     path = fetchzip {
-      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/8/cubyz_deps_x86_64-macos-none.tar.gz";
-      hash = "sha256-kowp1WD8Fa2nV9sQBrbIMHSIpNfDqphcxOLqa7nGRhE=";
+      url = "https://github.com/PixelGuys/Cubyz-Libs/releases/download/10/cubyz_deps_x86_64-windows-gnu.tar.gz";
+      hash = "sha256-WCeNTNmDsKjNVOJCiccp86wJW+QylomWD3xkkZ8HceY=";
     };
   }
+
+  {
+    name = "N-V-__8AACQYrweKK0-hEabTekSwmGwxKrIbdY_2QTOEA7TN";
+    path = fetchzip {
+      stripRoot = false;
+      url = "https://github.com/PixelGuys/Cubyz-Assets/releases/download/0.1.0/assets.tar.gz";
+      hash = "sha256-sAhWHGP5aCwQG7HoL9uV0fpT/OuhjtYtyyFA0Jh1Z5Q=";
+    };
+  }
+
+  {
+    name = "zig-0.0.0-Fp4XJAXmXQ1r23tqehV14LpPFILnnXSyg7bPitqs8mrf";
+    path = fetchzip {
+      url = "https://github.com/PixelGuys/Cubyz-std-lib/archive/refs/tags/0.16.0-dev.1424+1.tar.gz";
+      hash = "sha256-HerxBcFxsz7mbweAuSGxSaol6gZ7emmIIGX9Guwh5ac=";
+    };
+  }
+
 ]

@@ -2,25 +2,46 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchgit,
   callPackage,
-  zig_0_14,
+  zig,
+  llvmPackages,
+  #  pkg-config,
 }:
-
 let
-  zig = zig_0_14;
-  zig_hook = zig.hook.overrideAttrs {
-    zig_default_flags = "";
-  };
+  zig_hook =
+    (
+      (zig.override {
+        llvmPackages = llvmPackages;
+      }).overrideAttrs
+      (oldAttrs: {
+        version = "0.16.0";
+        src = fetchgit {
+          url = "https://codeberg.org/ziglang/zig";
+          rev = "d3e20e71be8d94b8c0534d2cb57a1a27c451db9f";
+          hash = "sha256-DKOQiB183AuWhkitPclFJqKBi9CTkK6Lccw1vLgF0OQ=";
+        };
+
+        nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
+          llvmPackages.llvm
+          llvmPackages.lld
+          llvmPackages.clang
+        ];
+      })
+    ).hook.overrideAttrs
+      {
+        zig_default_flags = "";
+      };
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "8";
+  version = "10";
   pname = "cubyz-libs";
   src = fetchFromGitHub {
     owner = "pixelguys";
     repo = "cubyz-libs";
     tag = finalAttrs.version;
-    hash = "sha256-xg6nk2Oxe7PjT6CbPjDPegcZEn1P36PNc3YKLopb168=";
+    hash = "sha256-fGuTKV+B7lbyPUQ1BViz11QEwRuWV9x3H+96vk5IW9E=";
   };
 
   postPatch = ''
@@ -33,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [
     #"-j6"				# Included in zig default flags
-    "-Dcpu=baseline" # Included in zig default flags
+    #"-Dcpu=baseline" # Included in zig default flags
     "-Dtarget=native-linux-musl"
     "-Doptimize=ReleaseSafe"
   ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchgit,
   callPackage,
   makeWrapper,
   libx11,
@@ -12,41 +13,51 @@
   vulkan-validation-layers,
   vulkan-tools,
   zig,
+  llvmPackages,
 }:
 
+# This is kinda atrocious, but it works
 let
-  # This is kinda atrocious, but it works
-  # Override default zig flags
   zig_hook =
-    (zig.overrideAttrs {
-      version = "0.15.0";
-      src = fetchFromGitHub {
-        owner = "ziglang";
-        repo = "zig";
-        rev = "bd97b66186dabb3533df1ea9eb650d7574496a59";
-        hash = "sha256-EVIg01kQ3JCZxnnrk6qMJn3Gm3+BZzPs75x9Q+sxqBw=";
-      };
+    (
+      (zig.override {
+        llvmPackages = llvmPackages;
+      }).overrideAttrs
+      (oldAttrs: {
+        version = "0.16.0";
+        src = fetchgit {
+          url = "https://codeberg.org/ziglang/zig";
+          rev = "d3e20e71be8d94b8c0534d2cb57a1a27c451db9f";
+          hash = "sha256-DKOQiB183AuWhkitPclFJqKBi9CTkK6Lccw1vLgF0OQ=";
+        };
 
-      assets = fetchFromGitHub {
-        owner = "PixelGuys";
-        repo = "Cubyz-Assets";
-        rev = "fc6e9a79b7806fe753799ac0ebe83735da9cd999";
-        hash = "sha256-adMgfoAlyqRTIO8R42djn6FbLoDpFZDcWQdbm9f0p+A=";
-      };
-    }).hook.overrideAttrs
+        nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
+          llvmPackages.llvm
+          llvmPackages.lld
+          llvmPackages.clang
+        ];
+      })
+    ).hook.overrideAttrs
       {
         zig_default_flags = "";
       };
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.0.1";
+  version = "0.1.1";
   pname = "cubyz";
   src = fetchFromGitHub {
     owner = "pixelguys";
     repo = "cubyz";
     tag = finalAttrs.version;
-    hash = "sha256-SbMRr4kktwagYUyVBKFZLOwgSmkPngV8NbwkJRk2Zvg=";
+    hash = "sha256-i4AtZR++xnpbYOr1/defKW85Zj+u0Tgs4wZLZWZ2ST0=";
+  };
+
+  cubAssets = fetchFromGitHub {
+    owner = "PixelGuys";
+    repo = "Cubyz-Assets";
+    rev = "e4bc38baffdeb9912280eefeebb7d40e8e95fa3f";
+    hash = "sha256-uPHH5hWcw/HJ/AiXK+FsvQLycvTBJ1LIsnGOzF/KXlk=";
   };
 
   postPatch = ''
@@ -75,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [
     #"-j6"				# Included in zig default flags
-    "-Dcpu=baseline" # Included in zig default flags
+    #"-Dcpu=baseline" # Included in zig default flags
     "-Drelease"
     "-Dlocal" # Use local libraries
     "-Doptimize=ReleaseSafe"
@@ -84,13 +95,15 @@ stdenv.mkDerivation (finalAttrs: {
   # Symlink the assets to $out, add a desktop entry
   postBuild = ''
     mkdir -p $out/assets/cubyz
-    ln -s $assets/* $out/assets/cubyz/
-    ln -s $src/assets/cubyz/* $out/assets/cubyz/
+    ln -s $cubAssets/* $out/assets/cubyz/.
+    ln -s $src/assets/cubyz/* $out/assets/cubyz/.
 
     mkdir -p $out/share/applications
     printf "
       [Desktop Entry]
       Name=Cubyz
+      Version=${finalAttrs.version}
+      Comment=${finalAttrs.meta.description}
       Exec=$out/bin/Cubyz
       Icon=$out/assets/cubyz/logo.png
       Type=Application
@@ -98,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     " > $out/share/applications/cubyz.desktop
   '';
 
-  # Change some env variables, move a bunch of stuff under .config for modding purposes, symlink a desktop entry
+  # Change some env variables, move a bunch of stuff under .config for modding purposes
   postInstall = ''
     wrapProgram $out/bin/Cubyz \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
