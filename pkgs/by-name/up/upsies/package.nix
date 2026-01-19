@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytestCheckHook
       trustme
     ]
-    ++ runtimeDeps;
+    ++ finalAttrs.passthru.runtimeDeps;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fail during object comparisons on Darwin
@@ -110,10 +110,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--suffix"
     "PATH"
     ":"
-    (lib.makeBinPath runtimeDeps)
+    (lib.makeBinPath finalAttrs.passthru.runtimeDeps)
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    inherit runtimeDeps;
+  };
 
   meta = {
     description = "Toolkit for collecting, generating, normalizing and sharing video metadata";
