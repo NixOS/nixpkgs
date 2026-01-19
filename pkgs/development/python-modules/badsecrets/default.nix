@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-Yvd9AGbVDOfXep8y+XzwYP2EpTvy+rwyz5hRIe7v4oc=";
   };
 
+  pythonRelaxDeps = [
+    "django"
+    "viewstate"
+  ];
+
   build-system = [
     poetry-core
     poetry-dynamic-versioning
@@ -39,8 +44,6 @@ buildPythonPackage rec {
     requests
     viewstate
   ];
-
-  pythonRelaxDeps = [ "viewstate" ];
 
   pythonImportsCheck = [ "badsecrets" ];
 
