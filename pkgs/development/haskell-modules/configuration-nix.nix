@@ -508,10 +508,8 @@ builtins.intersectAttrs super {
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
-  safe-exceptions = overrideCabal (drv: {
-    # Fix strictDeps build error "could not execute: hspec-discover"
-    testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
-  }) super.safe-exceptions;
+  # Fix strictDeps build error "could not execute: hspec-discover"
+  safe-exceptions = addTestToolDepends [ self.hspec-discover ] super.safe-exceptions;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
