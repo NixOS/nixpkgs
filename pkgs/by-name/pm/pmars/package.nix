@@ -21,20 +21,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmars";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchzip {
     url = "http://www.koth.org/pmars/pmars-${finalAttrs.version}.zip";
-    hash = "sha256-68zsH9HWWp13pozjMajayS/VhY8iTosUp1CvcAmj/dE=";
+    stripRoot = false;
+    hash = "sha256-p6iZkb0Nrcj7LtAxtS6Ics5CS9taPHbsoIdE5C1QYnI=";
   };
 
   patches = [
-    # Error under Clang due to global "round" variable: redefinition of 'round' as different kind of symbol
-    ./0001-fix-round-redefinition.patch
-
-    # call to undeclared function 'sighandler' & undefined sighandler on Darwin
-    ./0002-fix-sighandler.patch
-
     # ncurses' WINDOW struct was turned opaque for outside code, use functions for accessing values instead
     ./0003-fix-ncurses-opaque-WINDOW.patch
   ];
@@ -43,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/Makefile \
       --replace-fail 'CC = gcc' "CC = $CC" \
       --replace-fail '@strip' "@$STRIP" \
-      --replace-fail 'CFLAGS = -O -DEXT94 -DXWINGRAPHX -DPERMUTATE -DRWLIMIT' "CFLAGS = ${
+      --replace-fail 'CFLAGS += -O -DEXT94 -DXWINGRAPHX -DPERMUTATE -DRWLIMIT' "CFLAGS += ${
         lib.concatMapStringsSep " " (opt: "-D${opt}") options
       } ${
         lib.optionalString (
