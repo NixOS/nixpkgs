@@ -1,0 +1,27 @@
+diff --git a/scripts/bootstrap/compile.sh b/scripts/bootstrap/compile.sh
+index 1bad14cba7..d312fe08bb 100755
+--- a/scripts/bootstrap/compile.sh
++++ b/scripts/bootstrap/compile.sh
+@@ -402,7 +402,7 @@ cp $OUTPUT_DIR/libblaze.jar ${ARCHIVE_DIR}
+ # TODO(b/28965185): Remove when xcode-locator is no longer required in embedded_binaries.
+ log "Compiling xcode-locator..."
+ if [[ $PLATFORM == "darwin" ]]; then
+-  run /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices -framework Foundation -o ${ARCHIVE_DIR}/xcode-locator tools/osx/xcode_locator.m
++  run @clangDarwin@ -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices -framework Foundation -o ${ARCHIVE_DIR}/xcode-locator tools/osx/xcode_locator.m
+ else
+   cp tools/osx/xcode_locator_stub.sh ${ARCHIVE_DIR}/xcode-locator
+ fi
+diff --git a/tools/osx/BUILD b/tools/osx/BUILD
+index 5b99589ad4..3d3269772b 100644
+--- a/tools/osx/BUILD
++++ b/tools/osx/BUILD
+@@ -27,7 +27,7 @@ exports_files([
+ ])
+ 
+ DARWIN_XCODE_LOCATOR_COMPILE_COMMAND = """
+-  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
++  @clangDarwin@ -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
+       -framework Foundation -arch arm64 -arch x86_64 -o $@ $<
+ """
+ 
+

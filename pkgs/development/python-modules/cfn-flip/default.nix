@@ -1,0 +1,53 @@
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pyyaml,
+  six,
+}:
+
+buildPythonPackage rec {
+  pname = "cfn-flip";
+  version = "1.3.0";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "awslabs";
+    repo = "aws-cfn-template-flip";
+    rev = version;
+    hash = "sha256-lfhTR3+D1FvblhQGF83AB8+I8WDPBTmo+q22ksgDgt4=";
+  };
+
+  propagatedBuildInputs = [
+    click
+    pyyaml
+    six
+  ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # TypeError: load() missing 1 required positional argument: 'Loader'
+    "test_flip_to_yaml_with_longhand_functions"
+    "test_yaml_no_ordered_dict"
+  ];
+
+  pythonImportsCheck = [ "cfn_flip" ];
+
+  meta = {
+    description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
+    mainProgram = "cfn-flip";
+    homepage = "https://github.com/awslabs/aws-cfn-template-flip";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      kamadorueda
+      psyanticy
+    ];
+  };
+}

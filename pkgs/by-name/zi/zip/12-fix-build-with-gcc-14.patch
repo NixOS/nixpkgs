@@ -1,0 +1,56 @@
+From: Santiago Vila <sanvila@debian.org>
+Subject: Fix build with gcc-14
+Bug-Debian: https://bugs.debian.org/1075706
+X-Debian-version: 3.0-14
+
+--- a/unix/configure
++++ b/unix/configure
+@@ -514,14 +514,16 @@
+   echo Check for $func
+   echo "int main(){ $func(); return 0; }" > conftest.c
+   $CC $BFLAG -o conftest conftest.c >/dev/null 2>/dev/null
+-  [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_`echo $func | tr '[a-z]' '[A-Z]'`"
++# glibc-based systems do not need this
++# [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_`echo $func | tr '[a-z]' '[A-Z]'`"
+ done
+ 
+ 
+ echo Check for memset
+ echo "int main(){ char k; memset(&k,0,0); return 0; }" > conftest.c
+ $CC -o conftest conftest.c >/dev/null 2>/dev/null
+-[ $? -ne 0 ] && CFLAGS="${CFLAGS} -DZMEM"
++# glibc-based systems do not need this
++# [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DZMEM"
+ 
+ 
+ echo Check for memmove
+@@ -551,7 +553,8 @@
+ }
+ _EOF_
+ $CC $CFLAGS -c conftest.c >/dev/null 2>/dev/null
+-[ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_ERRNO"
++# glibc-based systems do not need this
++# [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_ERRNO"
+ 
+ 
+ echo Check for directory libraries
+@@ -567,7 +570,8 @@
+     $CC -o conftest conftest.c -l$lib >/dev/null 2>/dev/null
+     [ $? -eq 0 ] && OPT=-l$lib && break
+   done
+-  if [ ${OPT} ]; then
++  # glibc-based systems do not need this
++  if true; then
+     LFLAGS2="${LFLAGS2} ${OPT}"
+   else
+     CFLAGS="${CFLAGS} -DNO_DIR"
+@@ -629,7 +633,8 @@
+ }
+ _EOF_
+ $CC ${CFLAGS} -c conftest.c > /dev/null 2>/dev/null
+-[ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_VALLOC"
++# glibc-based systems do not need this
++# [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_VALLOC"
+ 
+ 
+ echo Check for /usr/local/bin and /usr/local/man

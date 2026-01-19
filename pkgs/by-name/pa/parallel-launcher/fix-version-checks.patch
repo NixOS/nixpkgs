@@ -1,0 +1,90 @@
+diff --git a/src/core/updates.cpp b/src/core/updates.cpp
+index cb9ca39..4dc5dfb 100644
+--- a/src/core/updates.cpp
++++ b/src/core/updates.cpp
+@@ -24,8 +24,8 @@
+ #endif
+ 
+ const InstalledVersionsInfo InstalledVersionsInfo::Default {
+-	/* retroArchVersion */ RetroArchVersion{ Version{ 0, 0, 0 }, false },
+-	/* parallelVersion */ Version{ 0, 0, 0 },
++	/* retroArchVersion */ RetroArchVersion{ Version{ @retroArchVersion@ }, true },
++	/* parallelVersion */ Version{ @parallelN64CoreVersion@ },
+ 	/* lastUpdateCheck */ 0
+ };
+ 
+@@ -41,15 +41,7 @@ template<> void JsonSerializer::serialize<RetroArchVersion>( JsonWriter &jw, con
+ }
+ 
+ template<> RetroArchVersion JsonSerializer::parse<RetroArchVersion>( const Json &json ) {
+-	Version version = Version{ 0, 0, 0 };
+-	if( json[P_VERSION].exists() ) {
+-		version = parse<Version>( json[P_VERSION] );
+-	}
+-
+-	return RetroArchVersion {
+-		version,
+-		json[P_LOCK].getOrDefault<bool>( false )
+-	};
++	return InstalledVersionsInfo::Default.retroArchVersion;
+ }
+ 
+ static constexpr char P_RETROARCH[] = "retroarch";
+@@ -67,44 +59,15 @@ template<> void JsonSerializer::serialize<InstalledVersionsInfo>( JsonWriter &jw
+ }
+ 
+ template<> InstalledVersionsInfo JsonSerializer::parse<InstalledVersionsInfo>( const Json &json ) {
+-	Version parallelVersion;
+-	try {
+-		parallelVersion = parse<Version>( json[P_PARALLEL] );
+-	} catch( ... ) {
+-		parallelVersion = { 0, 0, 0 };
+-	}
+-
+-	RetroArchVersion retroVersion;
+-	try {
+-		retroVersion = parse<RetroArchVersion>( json[P_RETROARCH] );
+-	} catch( ... ) {
+-		retroVersion = RetroArchVersion{ Version{ 0, 0, 0 }, false };
+-	}
+-
+-	return InstalledVersionsInfo {
+-		retroVersion,
+-		parallelVersion,
+-		json[P_LAST_CHECKED].get<int64>()
+-	};
++	return InstalledVersionsInfo::Default;
+ }
+ 
+ template<> ParallelCoreVersion JsonSerializer::parse<ParallelCoreVersion>( const Json &json ) {
+-#if defined(__linux__)
+-	const Json &vjson = json["linux_x64"];
+-#elif defined(_WIN32)
+-	const Json &vjson = json["windows_x64"];
+-#elif defined(__APPLE__)
+-	const Json &vjson = AppleUtil::shouldUseArmCore() ? json["macos_arm64"] : json["macos_x64"];
+-#else
+-	const Json &vjson = json;
+-	static_assert( false );
+-#endif
+-
+ 	return ParallelCoreVersion{
+-		JsonSerializer::parse<Version>( vjson["version"] ),
+-		vjson["sha1"].get<string>(),
+-		vjson["zipSignature"].get<string>(),
+-		vjson["url"].get<string>()
++		InstalledVersionsInfo::Default.parallelVersion,
++		"",
++		"",
++		""
+ 	};
+ }
+ 
+@@ -169,6 +132,7 @@ void RetroUpdater::checkForUpdates(
+ 	bool waitForCoreUpdates,
+ 	bool forceUpdate
+ ) {
++	return;
+ 	InstalledVersionsInfo installedVersions = FileController::loadInstalledVersions();
+ 
+ 	if( forceUpdate || checkSchedule( installedVersions ) ) {

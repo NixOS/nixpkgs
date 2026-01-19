@@ -1,0 +1,12 @@
+diff --git i/src/Implicit/impSurface.h w/src/Implicit/impSurface.h
+index 41fab81..027587f 100644
+--- i/src/Implicit/impSurface.h
++++ w/src/Implicit/impSurface.h
+@@ -25,6 +25,7 @@
+ #ifdef WIN32
+ 	#include <windows.h>
+ #endif
++#include <cstddef>
+ #include <vector>
+ #include <GL/gl.h>
+ 

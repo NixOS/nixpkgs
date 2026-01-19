@@ -1,0 +1,37 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  py,
+  pytest,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "pytest-datafiles";
+  version = "3.0.0";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "omarkohl";
+    repo = "pytest-datafiles";
+    tag = version;
+    hash = "sha256-YFD8M5TG6VtLRX04R3u0jtYDDlaK32D4ArWxS6x2b/E=";
+  };
+
+  buildInputs = [
+    py
+    pytest
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pytest_datafiles" ];
+
+  meta = {
+    description = "Pytest plugin to create a tmpdir containing predefined files/directories";
+    homepage = "https://github.com/omarkohl/pytest-datafiles";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+  };
+}

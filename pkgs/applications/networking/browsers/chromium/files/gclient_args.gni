@@ -1,0 +1,12 @@
+build_with_chromium = true
+checkout_android = false
+checkout_android_prebuilts_build_tools = false
+checkout_clang_coverage_tools = false
+checkout_copybara = false
+checkout_ios_webkit = false
+checkout_nacl = false
+checkout_openxr = false
+checkout_src_internal = false
+cros_boards = ""
+cros_boards_with_qemu_images = ""
+generate_location_tags = true

@@ -1,0 +1,23 @@
+diff --git a/searchhandlers/khc_mansearch.py b/searchhandlers/khc_mansearch.py
+index ce61ed9c..a8c4c653 100755
+--- a/searchhandlers/khc_mansearch.py
++++ b/searchhandlers/khc_mansearch.py
+@@ -32,15 +32,15 @@ def main():
+     # If the query is a single word, perhaps it is the literal name of the
+     # command, or a prefix, or a substring
+     if not ' ' in words:
+-        results_prefix = subprocess.run(['whatis', '-w', words + '*'], capture_output=True, text=True)
++        results_prefix = subprocess.run(['@man-db@/bin/whatis', '-w', words + '*'], capture_output=True, text=True)
+         if results_prefix.returncode == 0:
+             command_results += results_prefix.stdout
+-        results_substring = subprocess.run(['whatis', '-w', '*' + words + '*'], capture_output=True, text=True)
++        results_substring = subprocess.run(['@man-db@/bin/whatis', '-w', '*' + words + '*'], capture_output=True, text=True)
+         if results_substring.returncode == 0:
+             command_results += results_substring.stdout
+ 
+     # Build the apropos command line
+-    apropos = ['apropos', '-L', args.lang]
++    apropos = ['@man-db@/bin/apropos', '-L', args.lang]
+     if args.method == 'and':
+         apropos.append('--and')
+     apropos.extend(words.split(' '))

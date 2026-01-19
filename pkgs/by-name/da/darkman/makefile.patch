@@ -1,0 +1,21 @@
+diff --git a/Makefile b/Makefile
+index ab6997b..c3687ef 100644
+--- a/Makefile
++++ b/Makefile
+@@ -30,7 +30,6 @@ site/index.html: darkman.1
+ 	mandoc -T html -O style=man-style.css < darkman.1 > site/index.html
+ 
+ install: build
+-	@install -Dm755 darkman 	${DESTDIR}${PREFIX}/bin/darkman
+ 	@install -Dm644 darkman.1	${DESTDIR}${PREFIX}/share/man/man1/darkman.1
+ 	@install -Dm644 LICENCE 	${DESTDIR}${PREFIX}/share/licenses/darkman/LICENCE
+ 	@install -Dm644 _darkman.zsh ${DESTDIR}${PREFIX}/share/zsh/site-functions/_darkman
+@@ -38,8 +37,6 @@ install: build
+ 	@install -Dm644 darkman.fish ${DESTDIR}${PREFIX}/share/fish/vendor_completions.d/darkman.fish
+ 	@install -Dm644 contrib/darkman.service \
+ 		${DESTDIR}${PREFIX}/lib/systemd/user/darkman.service
+-	@install -Dm755 contrib/darkman.openrc \
+-		${DESTDIR}/etc/user/init.d/darkman
+ 	@install -Dm644 contrib/dbus/nl.whynothugo.darkman.service \
+ 		${DESTDIR}${PREFIX}/share/dbus-1/services/nl.whynothugo.darkman.service
+ 	@install -Dm644 contrib/dbus/org.freedesktop.impl.portal.desktop.darkman.service \

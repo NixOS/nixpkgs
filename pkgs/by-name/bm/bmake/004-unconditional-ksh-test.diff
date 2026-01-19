@@ -1,0 +1,12 @@
+--- bmake/unit-tests/Makefile.orig	2021-07-04 19:13:09.068094922 +0200
++++ bmake/unit-tests/Makefile	2021-07-04 19:13:14.630080696 +0200
+@@ -295,9 +295,7 @@
+ TESTS+=		sh-single-line
+ TESTS+=		shell-csh
+ TESTS+=		shell-custom
+-.if exists(/bin/ksh)
+ TESTS+=		shell-ksh
+-.endif
+ TESTS+=		shell-sh
+ TESTS+=		suff-add-later
+ TESTS+=		suff-clear-regular

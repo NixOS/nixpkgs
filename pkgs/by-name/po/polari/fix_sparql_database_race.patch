@@ -1,0 +1,63 @@
+diff --git a/src/utils.js b/src/utils.js
+index 3a9863d..6314f39 100644
+--- a/src/utils.js
++++ b/src/utils.js
+@@ -547,29 +547,40 @@ export function formatDateTime(date) {
+ }
+ 
+ /**
+- * @returns {Tracker.SparqlConnection}
++ * @returns {Promise<Tracker.SparqlConnection>}
+  */
+ export async function getSparqlStore() {
+-    await _sparqlStorePromise;
++    if (_sparqlStorePromise)
++        return _sparqlStorePromise;
+ 
+-    if (_sparqlStore)
+-        return _sparqlStore;
+-
+-    const {promise, resolve} = Promise.withResolvers();
++    const { promise, resolve, reject } = Promise.withResolvers();
+     _sparqlStorePromise = promise;
+ 
+-    const path = GLib.build_filenamev(
+-        [GLib.get_user_data_dir(), 'polari', 'chatlogs.v1']);
+-    const dir = Gio.File.new_for_path(path);
+-    const ontology = Gio.File.new_for_uri(
+-        'resource:///org/gnome/Polari/ontologies/');
+-
+-    _sparqlStore = await Tracker.SparqlConnection.new_async(
+-        Tracker.SparqlConnectionFlags.FTS_ENABLE_STEMMER |
+-        Tracker.SparqlConnectionFlags.FTS_ENABLE_UNACCENT,
+-        dir, ontology, null);
++    (async () => {
++        try {
++            if (_sparqlStore) {
++                resolve(_sparqlStore);
++                return;
++            }
+ 
+-    resolve();
++            const path = GLib.build_filenamev(
++                [GLib.get_user_data_dir(), 'polari', 'chatlogs.v1']);
++            const dir = Gio.File.new_for_path(path);
++            const ontology = Gio.File.new_for_uri(
++                'resource:///org/gnome/Polari/ontologies/');
++
++            const store = await Tracker.SparqlConnection.new_async(
++                Tracker.SparqlConnectionFlags.FTS_ENABLE_STEMMER |
++                Tracker.SparqlConnectionFlags.FTS_ENABLE_UNACCENT,
++                dir, ontology, null
++            );
++
++            _sparqlStore = store;
++            resolve(store);
++        } catch (e) {
++            reject(e);
++        }
++    })();
+ 
+-    return _sparqlStore;
++    return promise;
+ }

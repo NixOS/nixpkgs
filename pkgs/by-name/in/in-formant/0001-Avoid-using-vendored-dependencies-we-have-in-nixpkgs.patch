@@ -1,0 +1,47 @@
+From 42eda1afc1cfb0506b02baae894fb32f7e21755d Mon Sep 17 00:00:00 2001
+From: ckie <git-525ff67@ckie.dev>
+Date: Fri, 10 Mar 2023 04:39:38 +0200
+Subject: [PATCH] Avoid using vendored dependencies we have in nixpkgs
+
+---
+ CMakeLists.txt | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 136e7b0..5416da1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -246,8 +246,6 @@ qt6_add_resources(RESOURCES_OBJ resources/qml.qrc)
+ qt6_add_big_resources(RESOURCES_OBJ resources/other.qrc)
+ set_property(SOURCE "${RESOURCES_OBJ}" PROPERTY SKIP_AUTOMOC ON)
+ 
+-set(ARMADILLO_INCLUDE_DIR external/armadillo/include)
+-set(TOMLPP_INCLUDE_DIR external/tomlplusplus/include)
+ 
+ ### SEARCH AUDIO MODULES 
+ 
+@@ -334,17 +332,15 @@ target_include_directories(in-formant SYSTEM PRIVATE ${ARMADILLO_INCLUDE_DIR} ${
+ target_link_libraries(in-formant PRIVATE Eigen3::Eigen ${FFTW_LIBRARIES} Qt6::Charts Qt6::Quick Qt6::QuickControls2 Qt6::QuickTemplates2 Qt6::Qml Qt6::Widgets Qt6::OpenGL Qt6::Gui Qt6::Core)
+ target_link_directories(in-formant PRIVATE ${FFTW_LIBRARY_DIRS})
+ 
+-set(BUILD_SHARED_LIBS TRUE)
+-add_subdirectory(external/freetype EXCLUDE_FROM_ALL)
++find_package(Freetype)
+ target_link_libraries(in-formant PRIVATE freetype)
+-set(BUILD_SHARED_LIBS)
+ 
+ add_subdirectory(external/rpmalloc EXCLUDE_FROM_ALL)
+ target_link_libraries(in-formant PRIVATE rpcxx_only)
+ 
+-add_subdirectory(external/libsamplerate)
+-target_link_libraries(in-formant PRIVATE lsr)
+-target_include_directories(in-formant PRIVATE external/libsamplerate/src)
++
++find_library(LIBSAMPLERATE_LIBRARY NAMES samplerate libsamplerate-0 samplerate-0)
++target_link_libraries(in-formant PRIVATE ${LIBSAMPLERATE_LIBRARY})
+ 
+ target_compile_definitions(in-formant PRIVATE
+     -DINFORMANT_VERSION=${CUR_VERSION} -DARMA_DONT_USE_WRAPPER
+-- 
+2.39.0
+

@@ -1,0 +1,23 @@
+--- a/configure
++++ b/configure
+@@ -327,9 +327,9 @@
+ SNOLIB_LOCAL="$SNOLIB/local"
+ SNOLIB_DOC="$SNOLIB"
+ # XXX use $PREFIX/include/snobol4 ???
+-INCLUDE_DIR="$SNOLIB/include"
++INCLUDE_DIR="$PREFIX"/include/snolib4
+
+-DOC_DIR="$PREFIX/share/doc/snobol4-$VERSION"
++DOC_DIR="$doc/share/doc/snobol4-$VERSION"
+
+ echo 'BINDIR=$(DESTDIR)'"$BINDIR"    >> $CONFIG_M4
+ echo 'MANDIR=$(DESTDIR)'"$MANDIR"    >> $CONFIG_M4
+@@ -2110,7 +2110,7 @@
+ # IRIX /sbin/install
+
+ # should always find ./install-sh
+-for DIR in /usr/bin /usr/ucb /usr/local/bin /bin .; do
++for DIR in `echo $PATH | tr ':' ' '`; do
+     for INSTALL in install ginstall scoinst install-sh; do
+  IPATH=$DIR/$INSTALL
+  if [ -d $IPATH ]; then

@@ -1,0 +1,24 @@
+diff --git a/packages/app-lib/java/build.gradle.kts b/packages/app-lib/java/build.gradle.kts
+index 10435b98..c4346a0c 100644
+--- a/packages/app-lib/java/build.gradle.kts
++++ b/packages/app-lib/java/build.gradle.kts
+@@ -1,6 +1,5 @@
+ plugins {
+     java
+-    id("com.diffplug.spotless") version "8.0.0"
+     id("com.gradleup.shadow") version "9.2.2"
+ }
+ 
+@@ -28,12 +27,6 @@ tasks.withType<JavaCompile>().configureEach {
+     options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror"))
+ }
+ 
+-spotless {
+-    java {
+-        palantirJavaFormat()
+-        removeUnusedImports()
+-    }
+-}
+ 
+ tasks.jar {
+     enabled = false

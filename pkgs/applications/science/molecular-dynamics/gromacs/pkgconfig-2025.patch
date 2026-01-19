@@ -1,0 +1,36 @@
+diff --git a/src/external/muparser/muparser.pc.in b/src/external/muparser/muparser.pc.in
+index 646787cb53..d26e84de8f 100644
+--- a/src/external/muparser/muparser.pc.in
++++ b/src/external/muparser/muparser.pc.in
+@@ -1,11 +1,9 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-
+-Name: @PACKAGE_NAME@
+-Description: Mathematical expressions parser library
+-Version: @MUPARSER_VERSION@
+-Requires:
+-Libs: -L${libdir} -lmuparser
+-Cflags: -I${includedir} @PKG_CONFIG_FLAGS@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++
++Name: @PACKAGE_NAME@
++Description: Mathematical expressions parser library
++Version: @MUPARSER_VERSION@
++Requires:
++Libs: -L${libdir} -lmuparser
++Cflags: -I${includedir} @PKG_CONFIG_FLAGS@
+diff --git a/src/gromacs/libgromacs.pc.cmakein b/src/gromacs/libgromacs.pc.cmakein
+index af9b5a6dc0..5f58d549bf 100644
+--- a/src/gromacs/libgromacs.pc.cmakein
++++ b/src/gromacs/libgromacs.pc.cmakein
+@@ -1,5 +1,4 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+
+ Name: libgromacs@GMX_LIBS_SUFFIX@
+ Description: Gromacs library

@@ -1,0 +1,14 @@
+diff --git a/warpgate-common/src/version.rs b/warpgate-common/src/version.rs
+index 07db547..2a7967f 100644
+--- a/warpgate-common/src/version.rs
++++ b/warpgate-common/src/version.rs
+@@ -1,8 +1,3 @@
+-use git_version::git_version;
+-
+ pub fn warpgate_version() -> &'static str {
+-    git_version!(
+-        args = ["--tags", "--always", "--dirty=-modified"],
+-        fallback = "unknown"
+-    )
++    "v@version@"
+ }

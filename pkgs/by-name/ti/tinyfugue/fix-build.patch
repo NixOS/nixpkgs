@@ -1,0 +1,46 @@
+diff -ur a/src/malloc.c b/src/malloc.c
+--- a/src/malloc.c
++++ b/src/malloc.c
+@@ -12,7 +12,6 @@
+ #include "signals.h"
+ #include "malloc.h"
+ 
+-caddr_t mmalloc_base = NULL;
+ int low_memory_warning = 0;
+ static char *reserve = NULL;
+ 
+diff -ur a/src/malloc.h b/src/malloc.h
+--- a/src/malloc.h
++++ b/src/malloc.h
+@@ -34,6 +34,8 @@
+ # define realloc(ptr, size)		mrealloc(NULL, ptr, size)
+ # define free(ptr)			mfree(NULL, ptr)
+ #else
++# include <stdlib.h>
++# include <sys/types.h>
+ # define mmalloc(md, size)		malloc(size)
+ # define mcalloc(md, size)		calloc(size)
+ # define mrealloc(md, ptr, size)	realloc(ptr, size)
+diff -ur a/src/socket.c b/src/socket.c
+--- a/src/socket.c
++++ b/src/socket.c
+@@ -2600,7 +2600,7 @@
+ 	    socks_with_lines--;
+ 
+ 	if (line->attrs & (F_TFPROMPT)) {
+-	    incoming_text = line;
++	    incoming_text = (String*)line;
+ 	    handle_prompt(incoming_text, 0, TRUE);
+ 	    continue;
+ 	}
+diff -ur a/src/tfio.c b/src/tfio.c
+--- a/src/tfio.c
++++ b/src/tfio.c
+@@ -70,6 +70,7 @@
+ static void filenputs(const char *str, int n, FILE *fp);
+ static void queueputline(conString *line, TFILE *file);
+ 
++extern void main_loop(void);
+ 
+ void init_tfio(void)
+ {

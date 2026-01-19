@@ -1,0 +1,101 @@
+From 29ac95ac76a9d9977561cef352f8b803579fea2a Mon Sep 17 00:00:00 2001
+From: Shinbar <richard.shine@gmail.com>
+Date: Thu, 26 Mar 2020 19:33:39 +0000
+Subject: [PATCH 1/3] PPDs (e.g. Del-1660.ppd) are specifying paper sizes as
+ parameters e.g. -p1 which are then being picked up as an invalid paper size
+ In cups error_log manifesting as: foo2hbpl1-wrapper: Unimplemented paper code
+ 1
+
+Have amended foo2hbpl1-wrapper.in to intepret paper sizes
+paper parameters are also now being interpreted.
+This has fixed for a Dell 1660w printer, running on Ubuntu 18.04
+---
+ foo2hbpl1-wrapper.in | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/foo2hbpl1-wrapper.in b/foo2hbpl1-wrapper.in
+index 567e891..bb20ed5 100644
+--- a/foo2hbpl1-wrapper.in
++++ b/foo2hbpl1-wrapper.in
+@@ -341,20 +341,20 @@ Custom*)
+ # /usr/share/ghostscript/9.10/Resource/Init/gs_statd.ps
+ # foo2hbpl1 will provide the appropriate numeric value
+ 
+-letter)		DIM=5100x6600  ;;
+-legal)		DIM=5100x8400  ;;
+-a4)		DIM=4961x7016  ;;
+-executive)	DIM=4350x6300  ;;
+-env10)		DIM=2475x5700  ;;
+-monarch)	DIM=2325x4500  ;;
+-c5)		DIM=3827x5409  ;;
+-envDL)		DIM=2599x5197  ;;
+-isob5|b5)	DIM=4158x5906  ;;
+-jisb5)		DIM=4299x6071  ;;
+-a5)		DIM=3496x4961  ;;
+-folio)		DIM=5100x7800  ;;
+-pa4)		DIM=4961x6600  ;;
+-archA)		DIM=5400x7200  ;;
++4|letter|Letter)	DIM=5100x6600  ;;
++7|legal|Legal)		DIM=5100x8400  ;;
++1|a4|A4)		DIM=4961x7016  ;;
++5|executive|Executive)	DIM=4350x6300  ;;
++9|env10|Env10)		DIM=2475x5700  ;;
++10|monarch|EnvMonarch)	DIM=2325x4500  ;;
++11|c5|EnvC5)		DIM=3827x5409  ;;
++12|envDL|EnvDL)		DIM=2599x5197  ;;
++isob5|b5)		DIM=4158x5906  ;;
++2|jisb5|B5jis)		DIM=4299x6071  ;;
++a5)			DIM=3496x4961  ;;
++6|folio|Folio)		DIM=5100x7800  ;;
++pa4)			DIM=4961x6600  ;;
++archA)			DIM=5400x7200  ;;
+ *)		error "Unimplemented paper code $PAPER";;
+ esac
+ 
+
+From 289d55ded5af7d84a91b0ecf26bbea18f3cb2d9e Mon Sep 17 00:00:00 2001
+From: Shinbar <richard.shine@gmail.com>
+Date: Fri, 27 Mar 2020 09:19:40 +0000
+Subject: [PATCH 2/3] Added A5 paper size parameter
+
+---
+ foo2hbpl1-wrapper.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/foo2hbpl1-wrapper.in b/foo2hbpl1-wrapper.in
+index bb20ed5..474972d 100644
+--- a/foo2hbpl1-wrapper.in
++++ b/foo2hbpl1-wrapper.in
+@@ -351,7 +351,7 @@ Custom*)
+ 12|envDL|EnvDL)		DIM=2599x5197  ;;
+ isob5|b5)		DIM=4158x5906  ;;
+ 2|jisb5|B5jis)		DIM=4299x6071  ;;
+-a5)			DIM=3496x4961  ;;
++3|a5|A5)		DIM=3496x4961  ;;
+ 6|folio|Folio)		DIM=5100x7800  ;;
+ pa4)			DIM=4961x6600  ;;
+ archA)			DIM=5400x7200  ;;
+
+From 393f7a7c70bbf9fa0c39ac1504b220793670d201 Mon Sep 17 00:00:00 2001
+From: Shinbar <richard.shine@gmail.com>
+Date: Sun, 29 Mar 2020 10:01:31 +0100
+Subject: [PATCH 3/3] Makefile now works in FreeBSD
+
+---
+ osx-hotplug/Makefile | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/osx-hotplug/Makefile b/osx-hotplug/Makefile
+index 4165085..a9aa06a 100644
+--- a/osx-hotplug/Makefile
++++ b/osx-hotplug/Makefile
+@@ -64,8 +64,5 @@ clean:
+ 	rm -f *.o *.1
+ 
+ uninstall:
+-	( \
+-		echo "g/osx-hplj-hotplug/d"; \
+-		echo "w"; \
+-	) | ex $(RC)
++	-(echo "g/osx-hplj-hotplug/d"; echo "w") | ex $(RC)
+ 	-rm -f $(BIN)/osx-hplj-hotplug

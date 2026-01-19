@@ -1,0 +1,14 @@
+--- a/src/VBox/HostDrivers/Support/SUPR3HardenedMain.cpp
++++ b/src/VBox/HostDrivers/Support/SUPR3HardenedMain.cpp
+@@ -2131,6 +2131,11 @@ static void supR3HardenedMainPurgeEnvironment(char **envp)
+         /** @todo Call NT API to do the same. */
+ #endif
+     }
++
++    /*
++     * NixOS hack: Set QT_PLUGIN_PATH to make Qt find plugins.
++     */
++    setenv("QT_PLUGIN_PATH", "@qtPluginPath@", /*overwrite=*/ 1);
+ }
+ 
+ 

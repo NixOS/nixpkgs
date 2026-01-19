@@ -1,0 +1,60 @@
+diff --git a/src/include/map/SeedPosition.hpp b/src/include/map/SeedPosition.hpp
+index 30a7d47..c05af16 100644
+--- a/src/include/map/SeedPosition.hpp
++++ b/src/include/map/SeedPosition.hpp
+@@ -16,6 +16,7 @@
+ #define MAP_SEED_POSITION_HPP
+ 
+ #include <ostream>
++#include <cstdint>
+ 
+ #include "sequences/Seed.hpp"
+ 
+diff --git a/src/include/sequences/Read.hpp b/src/include/sequences/Read.hpp
+index 460c1cb..c7ff619 100644
+--- a/src/include/sequences/Read.hpp
++++ b/src/include/sequences/Read.hpp
+@@ -16,6 +16,7 @@
+ #define SEQUENCES_READ_HPP
+ 
+ #include <iostream>
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+diff --git a/src/include/sequences/Seed.hpp b/src/include/sequences/Seed.hpp
+index a242153..dd4d23b 100644
+--- a/src/include/sequences/Seed.hpp
++++ b/src/include/sequences/Seed.hpp
+@@ -16,6 +16,7 @@
+ #define SEQUENCES_SEED_HPP
+ 
+ #include <ostream>
++#include <cstdint>
+ #include <vector>
+ 
+ #include "sequences/Read.hpp"
+diff --git a/src/lib/sequences/tests/unit/CrcHasherMocks.hpp b/src/lib/sequences/tests/unit/CrcHasherMocks.hpp
+index 1866be7..5d9b7d7 100644
+--- a/src/lib/sequences/tests/unit/CrcHasherMocks.hpp
++++ b/src/lib/sequences/tests/unit/CrcHasherMocks.hpp
+@@ -2,6 +2,7 @@
+ 
+ #include <array>
+ #include <cassert>
++#include <cstdint>
+ #include <cstdlib>
+ #include <string>
+ 
+diff --git a/stubs/dragen/src/host/dragen_api/read_group_list.hpp b/stubs/dragen/src/host/dragen_api/read_group_list.hpp
+index eefb9ae..623a77f 100644
+--- a/stubs/dragen/src/host/dragen_api/read_group_list.hpp
++++ b/stubs/dragen/src/host/dragen_api/read_group_list.hpp
+@@ -14,6 +14,7 @@
+ #define __READ_GROUP_LIST_HPP__
+ 
+ #include "dragen_exception.hpp"
++#include <cstdint>
+ class ReadGroupList {
+ public:
+   const std::string &getReadGroupName(const uint16_t idx) const {

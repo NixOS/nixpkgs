@@ -1,0 +1,42 @@
+This patch arranges so that we don't end up, with profiling builds, with a
+file named `<stdout>.gcov' since that confuses lcov:
+
+  <stdout>:cannot open source file
+  geninfo: ERROR: cannot read <stdout>.gcov!
+
+--- guile/libguile/c-tokenize.c	2009-09-13 13:05:15.000000000 +0200
++++ guile/libguile/c-tokenize.c	2009-10-28 16:24:15.000000000 +0100
+@@ -1,5 +1,5 @@
+ 
+-#line 3 "<stdout>"
++#line 3 "c-tokenize.c"
+ 
+ #define  YY_INT_ALIGNED short int
+ 
+@@ -616,7 +616,7 @@ int cookie_was_last = 0; 
+ #define IS_COOKIE cookie_was_last = 1
+ #define IS_NOT_COOKIE cookie_was_last = 0
+  
+-#line 620 "<stdout>"
++#line 620 "c-tokenize.c"
+ 
+ #define INITIAL 0
+ 
+@@ -799,7 +799,7 @@ YY_DECL
+ #line 65 "./c-tokenize.lex"
+ 
+ 
+-#line 803 "<stdout>"
++#line 803 "c-tokenize.c"
+ 
+ 	if ( !(yy_init) )
+ 		{
+@@ -1235,7 +1235,7 @@ YY_RULE_SETUP
+ #line 181 "./c-tokenize.lex"
+ ECHO;
+ 	YY_BREAK
+-#line 1239 "<stdout>"
++#line 1239 "c-tokenize.c"
+ case YY_STATE_EOF(INITIAL):
+ 	yyterminate();
+ 

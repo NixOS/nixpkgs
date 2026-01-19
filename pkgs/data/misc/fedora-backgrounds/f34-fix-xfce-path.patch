@@ -1,0 +1,13 @@
+diff --git a/default/Makefile b/default/Makefile
+index 172d5d9..540a1c0 100644
+--- a/default/Makefile
++++ b/default/Makefile
+@@ -1,7 +1,7 @@
+ WP_NAME=f34
+ WP_BIGNAME=F34
+ WP_DIR=$(DESTDIR)/usr/share/backgrounds/$(WP_NAME)
+-WP_DIR_LN=/usr/share/backgrounds/$(WP_NAME)
++WP_DIR_LN=$(DESTDIR)/usr/share/backgrounds/$(WP_NAME)
+ GNOME_BG_DIR=$(DESTDIR)/usr/share/gnome-background-properties
+ KDE_BG_DIR=$(DESTDIR)/usr/share/wallpapers
+ MATE_BG_DIR=$(DESTDIR)/usr/share/mate-background-properties

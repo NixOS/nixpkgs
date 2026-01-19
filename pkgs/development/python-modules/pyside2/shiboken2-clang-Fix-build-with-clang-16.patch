@@ -1,0 +1,108 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 25 Apr 2023 14:01:45 +0200
+Subject: shiboken2/clang: Fix build with clang 16
+
+clang 16 returns more elaborated types instead of fully qualified type
+names. Qualify elaborated types when retrieving the type name.
+
+[ChangeLog][shiboken6] Support for libclang version 16 has been added.
+
+Task-number: PYSIDE-2288
+Pick-to: 6.5 5.15
+Change-Id: Ibd428280180967f11d82a72159e744c016afc927
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+(cherry picked from commit 44ef1859214c66861a251d4a0faf5c38dc050850)
+---
+ .../ApiExtractor/clangparser/clangbuilder.cpp      |  2 +-
+ .../ApiExtractor/clangparser/clangutils.cpp        | 23 ++++++++++++++++++++++
+ .../ApiExtractor/clangparser/clangutils.h          |  1 +
+ .../shiboken2/ApiExtractor/tests/testtemplates.cpp |  3 +--
+ 4 files changed, 26 insertions(+), 3 deletions(-)
+
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+index 332f1da..ed1e15d 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+@@ -524,7 +524,7 @@ TypeInfo BuilderPrivate::createTypeInfoHelper(const CXType &type) const
+     typeInfo.setConstant(clang_isConstQualifiedType(nestedType) != 0);
+     typeInfo.setVolatile(clang_isVolatileQualifiedType(nestedType) != 0);
+ 
+-    QString typeName = getTypeName(nestedType);
++    QString typeName = getResolvedTypeName(nestedType);
+     while (TypeInfo::stripLeadingConst(&typeName)
+            || TypeInfo::stripLeadingVolatile(&typeName)) {
+     }
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp b/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp
+index 57271ef..295ede3 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp
+@@ -130,6 +130,23 @@ QString getCursorDisplayName(const CXCursor &cursor)
+     return result;
+ }
+ 
++static inline bool isBuiltinType(CXTypeKind kind)
++{
++    return kind >= CXType_FirstBuiltin && kind <= CXType_LastBuiltin;
++}
++
++// Resolve elaborated types occurring with clang 16
++static CXType resolveType(const CXType &type)
++{
++    if (!isBuiltinType(type.kind)) {
++        CXCursor decl = clang_getTypeDeclaration(type);
++        auto resolvedType = clang_getCursorType(decl);
++        if (resolvedType.kind != CXType_Invalid && resolvedType.kind != type.kind)
++            return resolvedType;
++    }
++    return type;
++}
++
+ QString getTypeName(const CXType &type)
+ {
+     CXString typeSpelling = clang_getTypeSpelling(type);
+@@ -138,6 +155,12 @@ QString getTypeName(const CXType &type)
+     return result;
+ }
+ 
++// Resolve elaborated types occurring with clang 16
++QString getResolvedTypeName(const CXType &type)
++{
++    return getTypeName(resolveType(type));
++}
++
+ Diagnostic::Diagnostic(const QString &m, const CXCursor &c, CXDiagnosticSeverity s)
+     : message(m), source(Other), severity(s)
+ {
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangutils.h b/sources/shiboken2/ApiExtractor/clangparser/clangutils.h
+index f7c230a..aacaf63 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangutils.h
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangutils.h
+@@ -52,6 +52,7 @@ QString getCursorKindName(CXCursorKind cursorKind);
+ QString getCursorSpelling(const CXCursor &cursor);
+ QString getCursorDisplayName(const CXCursor &cursor);
+ QString getTypeName(const CXType &type);
++QString getResolvedTypeName(const CXType &type);
+ inline QString getCursorTypeName(const CXCursor &cursor)
+     { return getTypeName(clang_getCursorType(cursor)); }
+ inline QString getCursorResultTypeName(const CXCursor &cursor)
+diff --git a/sources/shiboken2/ApiExtractor/tests/testtemplates.cpp b/sources/shiboken2/ApiExtractor/tests/testtemplates.cpp
+index 9f929c4..fbc5c4c 100644
+--- a/sources/shiboken2/ApiExtractor/tests/testtemplates.cpp
++++ b/sources/shiboken2/ApiExtractor/tests/testtemplates.cpp
+@@ -236,7 +236,6 @@ struct List {
+     const AbstractMetaFunction *erase = list->findFunction(QStringLiteral("erase"));
+     QVERIFY(erase);
+     QCOMPARE(erase->arguments().size(), 1);
+-    QEXPECT_FAIL("", "Clang: Some other code changes the parameter type", Abort);
+     QCOMPARE(erase->arguments().at(0)->type()->cppSignature(), QLatin1String("List::Iterator"));
+ }
+ 
+@@ -389,7 +388,7 @@ typedef BaseTemplateClass<TypeOne> TypeOneClass;
+     const ComplexTypeEntry* oneType = one->typeEntry();
+     const ComplexTypeEntry* baseType = base->typeEntry();
+     QCOMPARE(oneType->baseContainerType(), baseType);
+-    QCOMPARE(one->baseClassNames(), QStringList(QLatin1String("BaseTemplateClass<TypeOne>")));
++    QCOMPARE(one->baseClassNames(), QStringList(QLatin1String("NSpace::BaseTemplateClass<NSpace::TypeOne>")));
+ 
+     QVERIFY(one->hasTemplateBaseClassInstantiations());
+     AbstractMetaTypeList instantiations = one->templateBaseClassInstantiations();

@@ -1,0 +1,26 @@
+diff --git a/music_assistant/providers/spotify/helpers.py b/music_assistant/providers/spotify/helpers.py
+index fe7af648..3f5121de 100644
+--- a/music_assistant/providers/spotify/helpers.py
++++ b/music_assistant/providers/spotify/helpers.py
+@@ -6,6 +6,7 @@ import asyncio
+ import os
+ import platform
+ import time
++from shutil import which
+ from typing import TYPE_CHECKING, Any
+ from urllib.parse import urlencode
+ 
+@@ -35,12 +36,8 @@ async def get_librespot_binary() -> str:
+         except OSError:
+             return None
+ 
+-    base_path = os.path.join(os.path.dirname(__file__), "bin")
+-    system = platform.system().lower().replace("darwin", "macos")
+-    architecture = platform.machine().lower()
+-
+     if librespot_binary := await check_librespot(
+-        os.path.join(base_path, f"librespot-{system}-{architecture}")
++        which("librespot")
+     ):
+         return librespot_binary
+ 

@@ -1,0 +1,126 @@
+Swiftpm may invoke clang, not clang++, to compile C++. Our cc-wrapper also
+doesn't pick up the arguments that enable C++ compilation in this case. Patch
+swiftpm to properly invoke clang++.
+
+--- a/Sources/Build/BuildPlan/BuildPlan+Product.swift
++++ b/Sources/Build/BuildPlan/BuildPlan+Product.swift
+@@ -53,7 +53,7 @@
+         for target in dependencies.staticTargets {
+             if case let target as ClangTarget = target.underlyingTarget, target.isCXX {
+                 if buildParameters.targetTriple.isDarwin() {
+-                    buildProduct.additionalFlags += ["-lc++"]
++                    buildProduct.additionalFlags += ["-lc++", "-lc++abi"]
+                 } else if buildParameters.targetTriple.isWindows() {
+                     // Don't link any C++ library.
+                 } else {
+--- a/Sources/Build/BuildManifest/LLBuildManifestBuilder+Clang.swift
++++ b/Sources/Build/BuildManifest/LLBuildManifestBuilder+Clang.swift
+@@ -97,7 +97,7 @@
+ 
+             args += ["-c", path.source.pathString, "-o", path.object.pathString]
+ 
+-            let clangCompiler = try buildParameters.toolchain.getClangCompiler().pathString
++            let clangCompiler = try buildParameters.toolchain.getClangCompiler(isCXX: isCXX).pathString
+             args.insert(clangCompiler, at: 0)
+ 
+             let objectFileNode: Node = .file(path.object)
+--- a/Sources/PackageModel/Toolchain.swift
++++ b/Sources/PackageModel/Toolchain.swift
+@@ -23,7 +23,7 @@ public protocol Toolchain {
+     var macosSwiftStdlib: AbsolutePath { get throws }
+ 
+     /// Path of the `clang` compiler.
+-    func getClangCompiler() throws -> AbsolutePath
++    func getClangCompiler(isCXX: Bool) throws -> AbsolutePath
+ 
+     // FIXME: This is a temporary API until index store is widely available in
+     // the OSS clang compiler. This API should not used for any other purpose.
+--- a/Sources/PackageModel/UserToolchain.swift
++++ b/Sources/PackageModel/UserToolchain.swift
+@@ -57,7 +57,7 @@ public final class UserToolchain: Toolchain {
+     /// Only use search paths, do not fall back to `xcrun`.
+     let useXcrun: Bool
+ 
+-    private var _clangCompiler: AbsolutePath?
++    private var _clangCompiler: [Bool: AbsolutePath] = [:]
+ 
+     private let environment: EnvironmentVariables
+ 
+@@ -262,33 +262,35 @@
+     }
+ 
+     /// Returns the path to clang compiler tool.
+-    public func getClangCompiler() throws -> AbsolutePath {
++    public func getClangCompiler(isCXX: Bool) throws -> AbsolutePath {
+         // Check if we already computed.
+-        if let clang = self._clangCompiler {
++        if let clang = self._clangCompiler[isCXX] {
+             return clang
+         }
+ 
+         // Check in the environment variable first.
++        let envVar = isCXX ? "CXX" : "CC"
+         if let toolPath = UserToolchain.lookup(
+-            variable: "CC",
++            variable: envVar,
+             searchPaths: self.envSearchPaths,
+             environment: environment
+         ) {
+-            self._clangCompiler = toolPath
++            self._clangCompiler[isCXX] = toolPath
+             return toolPath
+         }
+ 
+         // Then, check the toolchain.
++        let tool = isCXX ? "clang++" : "clang"
+         do {
+-            if let toolPath = try? UserToolchain.getTool("clang", binDirectories: self.swiftSDK.toolset.rootPaths) {
+-                self._clangCompiler = toolPath
++            if let toolPath = try? UserToolchain.getTool(tool, binDirectories: self.swiftSDK.toolset.rootPaths) {
++                self._clangCompiler[isCXX] = toolPath
+                 return toolPath
+             }
+         }
+ 
+         // Otherwise, lookup it up on the system.
+-        let toolPath = try UserToolchain.findTool("clang", envSearchPaths: self.envSearchPaths, useXcrun: useXcrun)
+-        self._clangCompiler = toolPath
++        let toolPath = try UserToolchain.findTool(tool, envSearchPaths: self.envSearchPaths, useXcrun: useXcrun)
++        self._clangCompiler[isCXX] = toolPath
+         return toolPath
+     }
+ 
+
+--- a/Sources/SPMBuildCore/BuildParameters/BuildParameters.swift
++++ b/Sources/SPMBuildCore/BuildParameters/BuildParameters.swift
+@@ -394,7 +394,7 @@ private struct _Toolchain: Encodable {
+     public func encode(to encoder: Encoder) throws {
+         var container = encoder.container(keyedBy: CodingKeys.self)
+         try container.encode(toolchain.swiftCompilerPath, forKey: .swiftCompiler)
+-        try container.encode(toolchain.getClangCompiler(), forKey: .clangCompiler)
++        try container.encode(toolchain.getClangCompiler(isCXX: false), forKey: .clangCompiler)
+ 
+         try container.encode(toolchain.extraFlags.cCompilerFlags, forKey: .extraCCFlags)
+         // Maintaining `extraCPPFlags` key for compatibility with older encoding.
+--- a/Sources/XCBuildSupport/XcodeBuildSystem.swift
++++ b/Sources/XCBuildSupport/XcodeBuildSystem.swift
+@@ -182,7 +182,7 @@ public final class XcodeBuildSystem: SPMBuildCore.BuildSystem {
+         // Generate a table of any overriding build settings.
+         var settings: [String: String] = [:]
+         // An error with determining the override should not be fatal here.
+-        settings["CC"] = try? buildParameters.toolchain.getClangCompiler().pathString
++        settings["CC"] = try? buildParameters.toolchain.getClangCompiler(isCXX: false).pathString
+         // Always specify the path of the effective Swift compiler, which was determined in the same way as for the native build system.
+         settings["SWIFT_EXEC"] = buildParameters.toolchain.swiftCompilerPath.pathString
+         settings["LIBRARY_SEARCH_PATHS"] = "$(inherited) \(try buildParameters.toolchain.toolchainLibDir.pathString)"
+--- a/Tests/BuildTests/MockBuildTestHelper.swift
++++ b/Tests/BuildTests/MockBuildTestHelper.swift
+@@ -36,7 +36,7 @@
+     let extraFlags = PackageModel.BuildFlags()
+     let installedSwiftPMConfiguration = InstalledSwiftPMConfiguration.default
+ 
+-    func getClangCompiler() throws -> AbsolutePath {
++    func getClangCompiler(isCXX: Bool) throws -> AbsolutePath {
+         return "/fake/path/to/clang"
+     }
+ 

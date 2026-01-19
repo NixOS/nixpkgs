@@ -1,0 +1,76 @@
+--- a/ApiExtractor/clangparser/compilersupport.cpp
++++ b/ApiExtractor/clangparser/compilersupport.cpp
+@@ -18,6 +18,7 @@
+ #include <QtCore/qprocess.h>
+ #include <QtCore/qstandardpaths.h>
+ #include <QtCore/qstringlist.h>
++#include <QtCore/qregularexpression.h>
+ 
+ #include <clang-c/Index.h>
+ 
+@@ -638,6 +639,13 @@ QByteArrayList emulatedCompilerOptions(LanguageLevel level)
+ {
+     QByteArrayList result;
+     HeaderPaths headerPaths;
++
++    bool isNixDebug = qgetenv("NIX_DEBUG").toInt() > 0;
++    // examples:
++    // /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-qtsensors-6.4.2-dev/include
++    // /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-qtbase-6.4.2-dev/include
++    QRegularExpression qtHeaderRegex(uR"(/[0-9a-z]{32}-qt[a-z0-9]+-)"_s);
++
+     switch (compiler()) {
+     case Compiler::Msvc:
+         result.append("-fms-compatibility-version="_ba + msvcCompatVersion());
+@@ -651,10 +659,27 @@ QByteArrayList emulatedCompilerOptions(LanguageLevel level)
+             appendClangBuiltinIncludes(&headerPaths);
+         break;
+     case Compiler::Clang:
+-        headerPaths.append(gppInternalIncludePaths(compilerFromCMake(u"clang++"_s),
+-                                                   _compilerArguments));
++    {
++        // fix: qt.shiboken: x is specified in typesystem, but not defined. This could potentially lead to compilation errors.
++        // PySide requires that Qt headers are not -isystem
++        // https://bugreports.qt.io/browse/PYSIDE-787
++        const HeaderPaths clangPaths = gppInternalIncludePaths(compilerFromCMake(u"clang++"_s), _compilerArguments);
++        for (const HeaderPath &h : clangPaths) {
++            auto match = qtHeaderRegex.match(QString::fromUtf8(h.path));
++            if (!match.hasMatch()) {
++                if (isNixDebug)
++                    qDebug() << "shiboken compilersupport.cpp: found non-qt header: " << h.path;
++                // add using -isystem
++                headerPaths.append(h);
++            } else {
++                if (isNixDebug)
++                    qDebug() << "shiboken compilersupport.cpp: found qt header: " << h.path;
++                headerPaths.append({h.path, HeaderType::Standard});
++            }
++        }
+         result.append(noStandardIncludeOption());
+         break;
++    }
+     case Compiler::Gpp:
+         if (needsClangBuiltinIncludes())
+             appendClangBuiltinIncludes(&headerPaths);
+@@ -664,8 +689,20 @@ QByteArrayList emulatedCompilerOptions(LanguageLevel level)
+         const HeaderPaths gppPaths = gppInternalIncludePaths(compilerFromCMake(u"g++"_s),
+                                                              _compilerArguments);
+         for (const HeaderPath &h : gppPaths) {
+-            if (h.path.contains("c++") || h.path.contains("sysroot"))
++            // fix: qt.shiboken: x is specified in typesystem, but not defined. This could potentially lead to compilation errors.
++            // PySide requires that Qt headers are not -isystem
++            // https://bugreports.qt.io/browse/PYSIDE-787
++            auto match = qtHeaderRegex.match(QString::fromUtf8(h.path));
++            if (!match.hasMatch()) {
++                if (isNixDebug)
++                    qDebug() << "shiboken compilersupport.cpp: found non-qt header: " << h.path;
++                // add using -isystem
+                 headerPaths.append(h);
++            } else {
++                if (isNixDebug)
++                    qDebug() << "shiboken compilersupport.cpp: found qt header: " << h.path;
++                headerPaths.append({h.path, HeaderType::Standard});
++            }
+         }
+         break;
+     }

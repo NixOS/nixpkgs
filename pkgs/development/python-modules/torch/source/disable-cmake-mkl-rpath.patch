@@ -1,0 +1,17 @@
+diff --git a/cmake/public/mkl.cmake b/cmake/public/mkl.cmake
+index 2f6d1fd905..f30464be07 100644
+--- a/cmake/public/mkl.cmake
++++ b/cmake/public/mkl.cmake
+@@ -16,12 +16,6 @@ foreach(MKL_LIB IN LISTS MKL_LIBRARIES)
+   endif()
+ endforeach()
+ 
+-# TODO: This is a hack, it will not pick up architecture dependent
+-# MKL libraries correctly; see https://github.com/pytorch/pytorch/issues/73008
+-set_property(
+-  TARGET caffe2::mkl PROPERTY INTERFACE_LINK_DIRECTORIES
+-  ${MKL_ROOT}/lib ${MKL_ROOT}/lib/intel64 ${MKL_ROOT}/lib/intel64_win ${MKL_ROOT}/lib/win-x64)
+-
+ if(UNIX)
+   if(USE_STATIC_MKL)
+     foreach(MKL_LIB_PATH IN LISTS MKL_LIBRARIES)

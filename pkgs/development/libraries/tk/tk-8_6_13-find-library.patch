@@ -1,0 +1,25 @@
+diff --git a/generic/tkWindow.c b/generic/tkWindow.c
+index fa25553..ad45598 100644
+--- a/generic/tkWindow.c
++++ b/generic/tkWindow.c
+@@ -1045,6 +1045,7 @@ TkCreateMainWindow(
+ 
+     Tcl_SetVar2(interp, "tk_patchLevel", NULL, TK_PATCH_LEVEL, TCL_GLOBAL_ONLY);
+     Tcl_SetVar2(interp, "tk_version",    NULL, TK_VERSION,     TCL_GLOBAL_ONLY);
++    Tcl_SetVar2(interp, "tk_library",    NULL, TK_LIBRARY,     TCL_GLOBAL_ONLY);
+ 
+     tsdPtr->numMainWindows++;
+     return tkwin;
+diff --git a/unix/Makefile.in b/unix/Makefile.in
+index e98070e..f417753 100644
+--- a/unix/Makefile.in
++++ b/unix/Makefile.in
+@@ -1033,7 +1033,7 @@ tkVisual.o: $(GENERIC_DIR)/tkVisual.c
+ 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkVisual.c
+ 
+ tkWindow.o: $(GENERIC_DIR)/tkWindow.c tkUuid.h
+-	$(CC) -c $(CC_SWITCHES) -I. $(GENERIC_DIR)/tkWindow.c
++	$(CC) -c $(CC_SWITCHES) -I. -DTK_LIBRARY=\"${TK_LIBRARY}\" $(GENERIC_DIR)/tkWindow.c
+ 
+ tkButton.o: $(GENERIC_DIR)/tkButton.c
+ 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkButton.c

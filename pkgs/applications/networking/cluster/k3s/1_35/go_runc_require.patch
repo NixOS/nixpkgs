@@ -1,0 +1,15 @@
+diff --git a/scripts/package-cli b/scripts/package-cli
+index a15d754926..bc450dbe4e 100755
+--- a/scripts/package-cli
++++ b/scripts/package-cli
+@@ -3,7 +3,10 @@ set -e -x
+ 
+ cd $(dirname $0)/..
+ 
++runc_require=$(grep "github.com/opencontainers/runc" go.mod | awk -F '=> ' '{print $2}' | xargs -0 printf 'require %s')
++echo "$runc_require" >> go.mod
+ . ./scripts/version.sh
++sed -i '$d' go.mod
+ 
+ GO=${GO-go}
+ 

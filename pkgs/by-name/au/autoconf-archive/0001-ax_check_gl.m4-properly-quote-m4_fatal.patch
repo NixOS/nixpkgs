@@ -1,0 +1,38 @@
+From 427e226a2fe3980388abffd6de25ed6b9591cce3 Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz93@gmail.com>
+Date: Sat, 19 Oct 2024 21:51:30 -0400
+Subject: [PATCH 1/3] ax_check_gl.m4: properly quote m4_fatal
+
+It needs to only run as an argument of m4_if, not all the time.
+
+Fixes: 753493bf7e251997f02559b98fc599d4a337d8cd
+Bug: https://bugs.gentoo.org/941845
+---
+ m4/ax_check_gl.m4 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/m4/ax_check_gl.m4 b/m4/ax_check_gl.m4
+index 850d407..4c2e4ef 100644
+--- a/m4/ax_check_gl.m4
++++ b/m4/ax_check_gl.m4
+@@ -85,7 +85,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 23
++#serial 24
+ 
+ # example gl program
+ m4_define([_AX_CHECK_GL_PROGRAM],
+@@ -187,7 +187,7 @@ AC_DEFUN([_AX_CHECK_GL_LINK_CV],
+ AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_GENERIC], [
+   AS_IF([test -n "$GL_LIBS"],[], [
+     ax_check_gl_manual_libs_generic_extra_libs="$1"
+-    m4_if($1, [], m4_fatal([$0: argument must not be empty]))
++    m4_if($1, [], [m4_fatal([$0: argument must not be empty])])
+ 
+     _AX_CHECK_GL_SAVE_FLAGS([CFLAGS])
+     AC_SEARCH_LIBS([glBegin],[$ax_check_gl_manual_libs_generic_extra_libs], [
+-- 
+2.46.1
+

@@ -1,0 +1,12 @@
+diff --git a/obabeliface/obabeliface.cpp b/obabeliface/obabeliface.cpp
+index 98a9020..a168803 100644
+--- a/obabeliface/obabeliface.cpp
++++ b/obabeliface/obabeliface.cpp
+@@ -196,6 +196,7 @@ namespace Molsketch
+ 
+   // TODO should be const, but OpenBabel iterator methods do not support const
+   bool hasCoordinates(OpenBabel::OBMol &molecule) {
++    using namespace OpenBabel;
+     FOR_ATOMS_OF_MOL(obatom, molecule) {
+       if (obatom->GetVector() != OpenBabel::VZero)
+         return true;

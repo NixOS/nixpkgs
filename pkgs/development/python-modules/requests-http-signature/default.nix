@@ -1,0 +1,49 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  http-message-signatures,
+  http-sfv,
+  requests,
+  pytestCheckHook,
+  setuptools-scm,
+}:
+
+buildPythonPackage rec {
+  pname = "requests-http-signature";
+  version = "0.7.1";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "pyauth";
+    repo = "requests-http-signature";
+    rev = "v${version}";
+    hash = "sha256-sW2vYqT/nY27DvEKHdptc3dUpuqKmD7PLMs+Xp+cpeU=";
+  };
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    http-message-signatures
+    http-sfv
+    requests
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "test/test.py" ];
+
+  disabledTests = [
+    # Test require network access
+    "test_readme_example"
+  ];
+
+  pythonImportsCheck = [ "requests_http_signature" ];
+
+  meta = {
+    description = "Requests authentication module for HTTP Signature";
+    homepage = "https://github.com/kislyuk/requests-http-signature";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mmai ];
+  };
+}

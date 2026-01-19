@@ -1,0 +1,15 @@
+plugins {
+    id('application')
+}
+
+String getPropOrDie(String prop, String message) {
+    def ret = System.getProperty(prop)
+    if (!ret) {
+        throw new RuntimeException(message)
+    }
+    return ret
+}
+
+application {
+    mainClass = getPropOrDie('nix.test.mainClass', 'No main class defined, perhaps GRADLE_OPTS broke?')
+}
