@@ -3,7 +3,7 @@
   python3Packages,
   lib,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "garmin-grafana";
   version = "0.3.0";
 
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arpanghosh8453";
     repo = "garmin-grafana";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nuVT6LK9KIs/FwUbdfI4xpKru4jfAyj1/vmk7ji43zk=";
   };
 
@@ -45,10 +45,10 @@ python3Packages.buildPythonPackage rec {
       for visualizing long-term health trends with Grafana
     '';
     homepage = "https://github.com/arpanghosh8453/garmin-grafana";
-    changelog = "https://github.com/arpanghosh8453/garmin-grafana/releases/tag/v${version}";
+    changelog = "https://github.com/arpanghosh8453/garmin-grafana/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ aciceri ];
     mainProgram = "garmin-fetch";
     platforms = lib.platforms.linux;
   };
-}
+})

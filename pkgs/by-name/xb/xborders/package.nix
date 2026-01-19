@@ -10,7 +10,7 @@
   replaceVars,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "xborders";
   version = "3.4"; # in version.txt
   pyproject = true;
@@ -44,8 +44,8 @@ python3Packages.buildPythonPackage rec {
   postPatch =
     let
       setup = replaceVars ./setup.py {
-        desc = meta.description; # "description" is reserved
-        inherit pname version;
+        desc = finalAttrs.meta.description; # "description" is reserved
+        inherit (finalAttrs) pname version;
       };
     in
     ''
@@ -60,4 +60,4 @@ python3Packages.buildPythonPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "xborders";
   };
-}
+})

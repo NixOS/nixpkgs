@@ -26,7 +26,7 @@ let
   };
   python3Packages = python.pkgs;
 in
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "commitizen";
   version = "4.10.1";
   pyproject = true;
@@ -34,7 +34,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B4V2UPTEXQNASrwGRZbfFOqPuBIFzBM39a5rAC+Hk5Q=";
   };
 
@@ -120,7 +120,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
-    changelog = "https://github.com/commitizen-tools/commitizen/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "cz";
     maintainers = with lib.maintainers; [
@@ -128,4 +128,4 @@ python3Packages.buildPythonPackage rec {
       anthonyroussel
     ];
   };
-}
+})

@@ -10,7 +10,7 @@
 
 let
   # mbuild is a custom build system used only to build xed
-  mbuild = python3Packages.buildPythonPackage rec {
+  mbuild = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "mbuild";
     version = "2024.11.04";
     pyproject = true;
@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "intelxed";
       repo = "mbuild";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-iQVykBG3tEPxI1HmqBkvO1q+K8vi64qBfVC63/rcTOk=";
     };
 
@@ -29,7 +29,7 @@ let
       homepage = "https://github.com/intelxed/mbuild";
       license = lib.licenses.asl20;
     };
-  };
+  });
 
 in
 stdenv.mkDerivation (finalAttrs: {

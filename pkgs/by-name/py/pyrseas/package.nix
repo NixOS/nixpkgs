@@ -5,7 +5,7 @@
 }:
 
 let
-  pgdbconn = python3Packages.buildPythonPackage rec {
+  pgdbconn = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "pgdbconn";
     version = "0.8.0";
     pyproject = true;
@@ -13,7 +13,7 @@ let
     src = fetchFromGitHub {
       owner = "perseas";
       repo = "pgdbconn";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       sha256 = "09r4idk5kmqi3yig7ip61r6js8blnmac5n4q32cdcbp1rcwzdn6z";
     };
 
@@ -25,10 +25,10 @@ let
     dependencies = with python3Packages; [
       psycopg2
     ];
-  };
+  });
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyrseas";
   version = "0.9.1";
   pyproject = true;
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "perseas";
     repo = "Pyrseas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
   };
 
@@ -59,4 +59,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pmeunier ];
   };
-}
+})

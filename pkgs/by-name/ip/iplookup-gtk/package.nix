@@ -11,7 +11,7 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "iplookup-gtk";
   version = "0.5.0";
   pyproject = false; # Built with meson
@@ -19,7 +19,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bytezz";
     repo = "IPLookup-gtk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pRTN91uwjYu3Li4NbDvJ6l9gikBnXj0j+ApMWpuLUTU=";
   };
 
@@ -49,10 +49,10 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Find info about an IP address";
     homepage = "https://github.com/Bytezz/IPLookup-gtk";
-    changelog = "https://github.com/Bytezz/IPLookup-gtk/releases/tag/${src.tag}";
+    changelog = "https://github.com/Bytezz/IPLookup-gtk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "iplookup";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

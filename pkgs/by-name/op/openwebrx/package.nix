@@ -19,7 +19,7 @@
 
 let
 
-  js8py = python3Packages.buildPythonPackage rec {
+  js8py = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "js8py";
     version = "0.1.1";
     format = "setuptools";
@@ -27,7 +27,7 @@ let
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = "js8py";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-nAj8fI4MkAKr+LjvJQbz7Px8TVAYA9AwZYWy8Cj7AMk=";
     };
 
@@ -41,16 +41,16 @@ let
       description = "Library to decode the output of the js8 binary of JS8Call";
       license = lib.licenses.gpl3Only;
     };
-  };
+  });
 
-  owrx_connector = stdenv.mkDerivation rec {
+  owrx_connector = stdenv.mkDerivation (finalAttrs: {
     pname = "owrx_connector";
     version = "0.6.0";
 
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = "owrx_connector";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
     };
 
@@ -83,10 +83,10 @@ let
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.unix;
     };
-  };
+  });
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openwebrx";
   version = "1.2.2";
   format = "setuptools";
@@ -94,7 +94,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "openwebrx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-i3Znp5Sxs/KtJazHh2v9/2P+3cEocWB5wIpF7E4pK9s=";
   };
 
@@ -135,4 +135,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "openwebrx";
     license = lib.licenses.gpl3Only;
   };
-}
+})

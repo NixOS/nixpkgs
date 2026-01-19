@@ -6,7 +6,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "my-b-bscan";
   version = "3.2.0";
   pyproject = false;
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "0xB9";
     repo = "MyBBscan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cX1483JK+bejQWua9d7V3GDw6cPPvlnLX5w2XQjqMOQ=";
   };
 
@@ -43,4 +43,4 @@ python3Packages.buildPythonPackage rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.all;
   };
-}
+})
