@@ -30,7 +30,7 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
     install -Dm644 sms-authenticator/target/netzbegruenung.sms-authenticator-v${version}.jar \
-      $out/share/java/keycloak/keycloak-2fa-sms-authenticator.jar
+      $out/keycloak-2fa-sms-authenticator.jar
     runHook postInstall
   '';
 

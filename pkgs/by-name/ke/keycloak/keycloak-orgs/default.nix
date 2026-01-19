@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 target/keycloak-orgs-${version}.jar $out/share/java/keycloak/keycloak-orgs.jar
+    install -Dm644 -t "$out" target/keycloak-orgs-${version}.jar
     runHook postInstall
   '';
 
