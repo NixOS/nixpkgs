@@ -127,6 +127,10 @@ in
       }
     ];
 
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-std=gnu17"; # for gcc15
+    };
+
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
     postConfigure =
@@ -1011,6 +1015,27 @@ in
       runHook postCheck
     '';
   };
+
+  rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+      writableTmpDirAsHomeHook
+    ];
+
+    doCheck = lua.luaversion == "5.1";
+
+    nvimSkipModules = [
+      "bootstrap" # tries to install luarocks from network
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      busted --run=offline
+      runHook postCheck
+    '';
+  });
 
   rtp-nvim = prev.rtp-nvim.overrideAttrs {
     doCheck = lua.luaversion == "5.1";

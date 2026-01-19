@@ -17325,6 +17325,12 @@
     githubId = 20436235;
     name = "Billy Zaelani Malik";
   };
+  mio = {
+    name = "Mio";
+    email = "mio@mio19.uk";
+    github = "mio-19";
+    githubId = 57285379;
+  };
   mir06 = {
     email = "armin.leuprecht@uni-graz.at";
     github = "mir06";

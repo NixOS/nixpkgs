@@ -1,0 +1,17 @@
+diff --git a/src/exo/utils/dashboard_path.py b/src/exo/utils/dashboard_path.py
+index b5ce9c04..ec60ef4a 100644
+--- a/src/exo/utils/dashboard_path.py
++++ b/src/exo/utils/dashboard_path.py
+@@ -5,11 +5,7 @@ from typing import cast
+ 
+ 
+ def find_dashboard() -> Path:
+-    dashboard = (
+-        _find_dashboard_in_env()
+-        or _find_dashboard_in_repo()
+-        or _find_dashboard_in_bundle()
+-    )
++    dashboard = "@dashboard@"
+     if not dashboard:
+         raise FileNotFoundError(
+             "Unable to locate dashboard assets - make sure the dashboard has been built, or export DASHBOARD_DIR if you've built the dashboard elsewhere."

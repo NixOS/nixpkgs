@@ -14,7 +14,14 @@
   wrapQtAppsHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      pyqt5 = prev.pyqt5.override { withWebSockets = true; };
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "gns3-gui";
   inherit version;
   format = "setuptools";
@@ -28,20 +35,20 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
   propagatedBuildInputs = [ qt5.qtwayland ];
 
   dependencies =
-    with python3Packages;
+    with pythonPackages;
     [
       distro
       jsonschema
       psutil
+      pyqt5
       sentry-sdk
       setuptools
       sip
-      (pyqt5.override { withWebSockets = true; })
       truststore
     ]
     ++ lib.optionals (pythonOlder "3.9") [
@@ -56,7 +63,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with pythonPackages; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

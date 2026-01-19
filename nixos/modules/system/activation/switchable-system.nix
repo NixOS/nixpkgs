@@ -32,12 +32,12 @@
     };
 
     inhibitors = lib.mkOption {
-      type = lib.types.listOf lib.types.pathInStore;
-      default = [ ];
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
       description = ''
-        List of derivations that will prevent switching into a configuration when
+        Attribute set of strings that will prevent switching into a configuration when
         they change.
-        This can be manually overridden on the command line if required.
+        The switch can be manually forced on the command line if required.
       '';
     };
   };
@@ -67,80 +67,86 @@
         ln -s ${config.system.build.inhibitSwitch} $out/switch-inhibitors
       '';
 
-      build.inhibitSwitch = pkgs.writeTextFile {
-        name = "switch-inhibitors";
-        text = lib.concatMapStringsSep "\n" (drv: drv.outPath) config.system.switch.inhibitors;
-      };
+      build.inhibitSwitch = pkgs.writers.writeJSON "switch-inhibitors" config.system.switch.inhibitors;
 
       preSwitchChecks.switchInhibitors =
         let
           realpath = lib.getExe' pkgs.coreutils "realpath";
-          sha256sum = lib.getExe' pkgs.coreutils "sha256sum";
-          diff = lib.getExe' pkgs.diffutils "diff";
+          mktemp = lib.getExe' pkgs.coreutils "mktemp";
+          rm = lib.getExe' pkgs.coreutils "rm";
+          jq = lib.getExe' pkgs.jq "jq";
         in
-        lib.mkIf (lib.length config.system.switch.inhibitors > 0)
-          # bash
-          ''
-            incoming="''${1-}"
-            action="''${2-}"
+        # bash
+        ''
+          incoming="''${1-}"
+          action="''${2-}"
 
-            if [ "$action" == "boot" ]; then
-              echo "Not checking switch inhibitors (action = $action)"
-              exit
-            fi
+          if [ "$action" == "boot" ]; then
+            echo "Not checking switch inhibitors (action = $action)"
+            exit
+          fi
 
-            echo -n "Checking switch inhibitors..."
+          echo -n "Checking switch inhibitors..."
 
-            booted_inhibitors="$(${realpath} /run/booted-system)/switch-inhibitors"
-            booted_inhibitors_sha="$(
-              if [ -f "$booted_inhibitors" ]; then
-                ${sha256sum} - < "$booted_inhibitors"
-              else
-                echo 'none'
-              fi
-            )"
+          # Create a temporary file that we use in case a generation does not have
+          # the switch-inhibitors file.
+          empty="$(${mktemp} -t switch_inhibit.XXXX)"
+          # shellcheck disable=SC2329
+          clean_up() {
+            ${rm} -f "$empty"
+          }
+          trap clean_up EXIT
+          echo "{}" > "$empty"
 
-            if [ "$booted_inhibitors_sha" == "none" ]; then
-              echo
-              echo "The previous configuration did not specify switch inhibitors, nothing to check."
-              exit
-            fi
+          current_inhibitors="$(${realpath} /run/current-system)/switch-inhibitors"
+          if [ ! -f "$current_inhibitors" ]; then
+            current_inhibitors="$empty"
+          fi
 
-            new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
-            new_inhibitors_sha="$(
-              if [ -f "$new_inhibitors" ]; then
-                ${sha256sum} - < "$new_inhibitors"
-              else
-                echo 'none'
-              fi
-            )"
+          new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
+          if [ ! -f "$new_inhibitors" ]; then
+            new_inhibitors="$empty"
+          fi
 
-            if [ "$new_inhibitors_sha" == "none" ]; then
-              echo
-              echo "The new configuration does not specify switch inhibitors, nothing to check."
-              exit
-            fi
+          diff="$(
+            ${jq} \
+              --raw-output \
+              --null-input \
+              --rawfile current "$current_inhibitors" \
+              --rawfile newgen "$new_inhibitors" \
+            '
+              $current | try fromjson catch {} as $old |
+              $newgen | try fromjson catch {} as $new |
+              $old |
+              to_entries |
+              map(
+                select(.key | in ($new)) |
+                select(.value != $new.[.key]) |
+                [ .key, ":", .value, "->", $new.[.key] ] | join(" ")
+              ) |
+              join("\n")
+            ' \
+          )"
 
-            if [ "$new_inhibitors_sha" != "$booted_inhibitors_sha" ]; then
-              echo
-              echo "Found diff in switch inhibitors:"
-              echo
-              ${diff} --color "$booted_inhibitors" "$new_inhibitors"
-              echo
-              echo "The new configuration contains changes to packages that were"
-              echo "listed as switch inhibitors."
-              echo "You probably want to run 'nixos-rebuild boot' and reboot your system."
-              echo
-              echo "If you really want to switch into this configuration directly, then"
-              echo "you can set NIXOS_NO_CHECK=1 to ignore pre-switch checks."
-              echo
-              echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
-              echo
-              exit 1
-            else
-              echo " done"
-            fi
-          '';
+          if [ -n "$diff" ]; then
+            echo
+            echo "There are changes to critical components of the system:"
+            echo
+            echo "$diff"
+            echo
+            echo "Switching into this system is not recommended."
+            echo "You probably want to run 'nixos-rebuild boot' and reboot your system instead."
+            echo
+            echo "If you really want to switch into this configuration directly, then"
+            echo "you can set NIXOS_NO_CHECK=1 to ignore pre-switch checks."
+            echo
+            echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
+            echo
+            exit 1
+          else
+            echo " done"
+          fi
+        '';
     };
 
     security =

@@ -264,6 +264,11 @@ buildPythonPackage (finalAttrs: {
     # Files under this directory are not considered as tests by upstream and should be skipped
     "extra/"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Aborted
+    # in ...onnxruntime/capi/_pybind_state.py", line 32 in <module>
+    "test/models/test_onnx.py"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED]
     # certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1032)>
