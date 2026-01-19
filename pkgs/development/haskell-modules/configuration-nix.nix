@@ -511,6 +511,9 @@ builtins.intersectAttrs super {
   # Fix strictDeps build error "could not execute: hspec-discover"
   safe-exceptions = addTestToolDepends [ self.hspec-discover ] super.safe-exceptions;
 
+  # Fix strictDeps build error "could not execute: hspec-discover"
+  unliftio = addTestToolDepends [ self.hspec-discover ] super.unliftio;
+
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
   hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
