@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   bash,
   rustPlatform,
   just,
@@ -23,6 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-wFh9AYQRZB9qK0vCrhW9Zk61Yg+VY3VPAqJRD47NbK4=";
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pop-os/cosmic-session/commit/de27085e4908ed48f34d7d6b4f24edbae5e2d113.patch";
+      hash = "sha256-kxV0B7DFU/7OTouZkws6ODnTY4mjOrPSqn5jlpgB4xk=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace data/start-cosmic \
