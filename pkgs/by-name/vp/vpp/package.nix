@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   writeText,
 
   cmake,
@@ -78,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   enableParallelBuilding = true;
-  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-array-bounds -Wno-maybe-uninitialized";
+  # -Wno-incompatible-pointer-types can be removed in 26.02 (https://github.com/NixOS/nixpkgs/pull/479794)
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-array-bounds -Wno-maybe-uninitialized -Wno-incompatible-pointer-types";
 
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
@@ -127,6 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableAfXdpSkbMode ./xdp-skb-mode.patch;
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit (nixosTests) vpp;
+  };
 
   meta = {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
