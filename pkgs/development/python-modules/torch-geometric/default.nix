@@ -71,7 +71,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torch-geometric";
   version = "2.7.0";
   pyproject = true;
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xlOzpoYRoEfIRWSQoZbEPvUW43AMr3rCgIYnxwG/z3A=";
   };
 
@@ -165,9 +165,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "torch_geometric"
-  ];
+  pythonImportsCheck = [ "torch_geometric" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -249,26 +247,67 @@ buildPythonPackage rec {
 
     # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
     "test_feature_store"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: cannot pickle 'sqlite3.Connection' object
+    "test_dataloader_on_disk_dataset"
+
+    # AssertionError: assert False
+    # assert utils.supports_bipartite_graphs('SAGEConv')
+    "test_gnn_cheatsheet"
+
+    # AttributeError: readonly attribute
+    "test_fill_config_store"
+    "test_register"
+    "test_to_dataclass"
+
+    # AttributeError: '...' object has no attribute '__annotations__'
+    "test_degree_scaler_aggregation"
+    "test_explain_message"
+    "test_fused_aggregation"
+    "test_gcn_conv_with_decomposed_layers"
+    "test_hetero_dict_linear_jit"
+    "test_hetero_linear_basic"
+    "test_jit"
+    "test_mlp"
+    "test_multi_agg"
+    "test_my_commented_conv"
+    "test_my_conv_jit"
+    "test_my_conv_jit_save"
+    "test_my_default_arg_conv"
+    "test_my_edge_conv_jit"
+    "test_my_kwargs_conv"
+    "test_my_multiple_aggr_conv_jit"
+    "test_pickle"
+    "test_sequential_jit"
+    "test_torch_script"
+    "test_traceable_my_conv_with_self_loops"
+    "test_tuple_output_jit"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # MPS (Metal) tests are failing when using `libtorch_cpu`.
-    # Crashes in `structured_cat_out_mps`
-    "test/nn/models/test_deep_graph_infomax.py::test_infomax_predefined_model[mps]"
-    "test/nn/norm/test_instance_norm.py::test_instance_norm[True-mps]"
-    "test/nn/norm/test_instance_norm.py::test_instance_norm[False-mps]"
-    "test/nn/norm/test_layer_norm.py::test_layer_norm[graph-True-mps]"
-    "test/nn/norm/test_layer_norm.py::test_layer_norm[graph-False-mps]"
-    "test/nn/norm/test_layer_norm.py::test_layer_norm[node-True-mps]"
-    "test/nn/norm/test_layer_norm.py::test_layer_norm[node-False-mps]"
-    "test/utils/test_scatter.py::test_group_cat[mps]"
-  ];
+  disabledTestPaths =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # MPS (Metal) tests are failing when using `libtorch_cpu`.
+      # Crashes in `structured_cat_out_mps`
+      "test/nn/models/test_deep_graph_infomax.py::test_infomax_predefined_model[mps]"
+      "test/nn/norm/test_instance_norm.py::test_instance_norm[True-mps]"
+      "test/nn/norm/test_instance_norm.py::test_instance_norm[False-mps]"
+      "test/nn/norm/test_layer_norm.py::test_layer_norm[graph-True-mps]"
+      "test/nn/norm/test_layer_norm.py::test_layer_norm[graph-False-mps]"
+      "test/nn/norm/test_layer_norm.py::test_layer_norm[node-True-mps]"
+      "test/nn/norm/test_layer_norm.py::test_layer_norm[node-False-mps]"
+      "test/utils/test_scatter.py::test_group_cat[mps]"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.14") [
+      # AttributeError: '...' object has no attribute '__annotations__'
+      "test/nn/aggr/test_aggr_utils.py"
+    ];
 
   meta = {
     description = "Graph Neural Network Library for PyTorch";
     homepage = "https://github.com/pyg-team/pytorch_geometric";
-    changelog = "https://github.com/pyg-team/pytorch_geometric/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pyg-team/pytorch_geometric/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
