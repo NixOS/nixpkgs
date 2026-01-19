@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   buildEnv,
   linkFarm,
@@ -23,14 +22,14 @@
 }:
 
 let
-  version = "0.95.0";
+  version = "0.95.4";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-RR7rJJb0qKqZs7K3zP6GxlDXpmSNnGQ3WDExUgm9pKQ=";
+    hash = "sha256-n7lXedICK+sAuSW6hODy+TngAZpDIObWDhTtOjiTXgc=";
   };
 
   moduleSet = import ./modules.nix {
@@ -64,11 +63,6 @@ stdenv.mkDerivation {
   inherit version src;
 
   patches = [
-    (fetchpatch {
-      name = "readstat-use-find-library.patch";
-      url = "https://github.com/jasp-stats/jasp-desktop/commit/87c5a1f4724833aed0f7758499b917b3107ee196.patch";
-      hash = "sha256-0CrMKJkZpS97KmQFvZPyV1h3C7eKVr/IT0dARYBoKFo=";
-    })
     ./link-boost-dynamically.patch
     ./disable-module-install-logic.patch # don't try to install modules via cmake
     ./disable-renv-logic.patch
