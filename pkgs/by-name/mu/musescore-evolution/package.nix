@@ -35,17 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-piOXHKlnfCO1n0kAgeszqa6JVoHgF8B2OF7agpadGKQ=";
   };
 
+  patches = [
+    ./musescore-evolution-pch-fix.patch
+  ];
+
   # From top-level CMakeLists.txt:
   # - DOWNLOAD_SOUNDFONT defaults ON and tries to fetch from the network.
   # Download manually at Help > Manage Resources
   cmakeFlags = [
     "-DDOWNLOAD_SOUNDFONT=OFF"
-  ]
-
-  # TODO: REMOVE
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Disable precompiled headers on macOS to avoid some build errors
-    "-DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON"
   ];
 
   qtWrapperArgs = [
