@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ghapi";
   version = "1.0.9";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "ghapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gBwOxWHjGyTrAKpG7BVoO7eQJw3fcLMXaF7CbAwMOj8=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to GitHub's API";
     homepage = "https://github.com/fastai/ghapi";
-    changelog = "https://github.com/fastai/ghapi/releases/tag/${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/fastai/ghapi/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
