@@ -6,8 +6,6 @@
   fetchpatch,
   filelock,
   lxml,
-  pythonOlder,
-  pytz,
   requests,
   setuptools-scm,
 }:
@@ -41,8 +39,7 @@ buildPythonPackage rec {
     lxml
     requests
   ]
-  ++ requests.optional-dependencies.socks
-  ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  ++ requests.optional-dependencies.socks;
 
   # There are no tests; make sure the executable works.
   checkPhase = ''

@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication rec {
   pname = "tg";
   version = "0.22.0";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "paul-nameless";
