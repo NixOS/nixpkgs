@@ -25,7 +25,12 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
             .unwrap_or_default()
             .into_iter()
             .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-            .map(|(n, p)| Package { name: Some(n), ..p })
+            .map(|(n, p)| Package {
+                // Use the package's own name if present (for aliases like string-width-cjs -> string-width),
+                // otherwise extract from the lockfile key
+                name: Some(p.name.unwrap_or(n)),
+                ..p
+            })
             .collect(),
         _ => bail!(
             "We don't support lockfile version {}, please file an issue.",
@@ -73,6 +78,7 @@ struct OldPackage {
 pub(super) struct Package {
     #[serde(default)]
     pub(super) name: Option<String>,
+    pub(super) version: Option<String>,
     pub(super) resolved: Option<UrlOrString>,
     pub(super) integrity: Option<HashCollection>,
 }
@@ -249,6 +255,7 @@ fn to_new_packages(
 
         new.push(Package {
             name: Some(name),
+            version: None, // v1 lockfiles don't include version in the same structure
             resolved: if matches!(package.version, UrlOrString::Url(_)) {
                 Some(package.version)
             } else {
@@ -310,6 +317,7 @@ mod tests {
         assert_eq!(new.len(), 1, "new packages map should contain 1 value");
         assert_eq!(new[0], Package {
             name: Some(String::from("sqlite3")),
+            version: None,
             resolved: Some(UrlOrString::Url(Url::parse("git+ssh://git@github.com/mapbox/node-sqlite3.git#593c9d498be2510d286349134537e3bf89401c4a").unwrap())),
             integrity: None
         });

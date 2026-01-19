@@ -112,6 +112,7 @@ pub fn lockfile(
 #[derive(Debug)]
 pub struct Package {
     pub name: String,
+    pub version: Option<String>,
     pub url: Url,
     specifics: Specifics,
 }
@@ -175,6 +176,7 @@ impl Package {
 
         Ok(Package {
             name: pkg.name.unwrap(),
+            version: pkg.version,
             url: resolved,
             specifics,
         })

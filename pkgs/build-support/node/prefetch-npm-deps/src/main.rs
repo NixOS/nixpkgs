@@ -1,11 +1,12 @@
 #![warn(clippy::pedantic)]
 
-use crate::cacache::{Cache, Key};
+use crate::cacache::{Cache, Key, ReqHeaders};
 use anyhow::{anyhow, bail};
+use log::info;
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     env, fs,
     path::{Path, PathBuf},
     process,
@@ -20,6 +21,160 @@ mod util;
 
 fn cache_map_path() -> Option<PathBuf> {
     env::var_os("CACHE_MAP_PATH").map(PathBuf::from)
+}
+
+/// Get the packument URL for a package name
+fn get_packument_url(registry: &str, package_name: &str) -> anyhow::Result<Url> {
+    // URL-encode the package name for scoped packages
+    let encoded_name = package_name.replace('/', "%2f");
+    Url::parse(&format!("{registry}/{encoded_name}"))
+        .map_err(|e| anyhow!("failed to construct packument URL: {e}"))
+}
+
+/// Normalize packument data to ensure determinism.
+///
+/// Filters to whitelisted fields and requested versions only.
+/// Allowed top-level fields in normalized packuments.
+///
+/// For lockfile-based installs, versions are exact (e.g., "4.17.21") so npm-pick-manifest
+/// just does a direct `versions[ver]` lookup. Tarballs are fetched via the resolved URL.
+const ALLOWED_TOP_LEVEL_FIELDS: &[&str] = &["name", "versions"];
+
+/// Allowed fields in version objects.
+///
+/// Based on analysis of pacote, npm-pick-manifest, npm-install-checks, and arborist.
+/// Only fields actually read during `npm install` are included.
+const ALLOWED_VERSION_FIELDS: &[&str] = &[
+    "name",
+    "version",
+    // Dependencies
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "peerDependenciesMeta",
+    "optionalDependencies",
+    "bundleDependencies",
+    "bundledDependencies",
+    // Distribution (tarball URL and integrity)
+    "dist",
+    // Executables
+    "bin",
+    // Platform constraints (npm-install-checks)
+    "engines",
+    "os",
+    "cpu",
+    // Lifecycle scripts
+    "scripts",
+    // Version selection hint (npm-pick-manifest)
+    "deprecated",
+];
+
+fn normalize_packument(
+    package_name: &str,
+    data: &[u8],
+    requested_versions: &HashSet<String>,
+) -> anyhow::Result<Vec<u8>> {
+    let mut json: Value = serde_json::from_slice(data)
+        .map_err(|e| anyhow!("failed to parse packument JSON for {package_name}: {e}"))?;
+
+    let obj = json
+        .as_object_mut()
+        .ok_or_else(|| anyhow!("packument for {package_name} is not a JSON object"))?;
+
+    // Keep only whitelisted top-level fields to ensure determinism
+    obj.retain(|key, _| ALLOWED_TOP_LEVEL_FIELDS.contains(&key.as_str()));
+
+    // Filter and normalize versions
+    if let Some(Value::Object(versions)) = obj.get_mut("versions") {
+        // Only keep versions that are in the lockfile
+        versions.retain(|version, _| requested_versions.contains(version));
+
+        // Normalize each version object to only include necessary fields
+        for version_val in versions.values_mut() {
+            if let Some(version_obj) = version_val.as_object_mut() {
+                version_obj.retain(|key, _| ALLOWED_VERSION_FIELDS.contains(&key.as_str()));
+            }
+        }
+    }
+
+    serde_json::to_vec(&json)
+        .map_err(|e| anyhow!("failed to re-serialize packument for {package_name}: {e}"))
+}
+
+/// Fetch and cache packuments (package metadata) for all packages.
+///
+/// This is needed because npm may query package metadata for optional peer dependencies
+/// and for workspace packages.
+///
+/// npm's cache policy checks that the Accept header matches between the cached
+/// request and the new request. npm can request packuments with two different headers:
+/// 1. "corgiDoc" (abbreviated metadata) - used initially
+/// 2. "fullDoc" (full metadata) - used when npm needs full package info (e.g., workspaces)
+///
+/// We cache both versions to ensure cache hits regardless of which header npm uses.
+/// See: pacote/lib/registry.js and @npmcli/arborist/lib/arborist/build-ideal-tree.js
+fn fetch_packuments(
+    cache: &Cache,
+    package_versions: HashMap<String, HashSet<String>>,
+) -> anyhow::Result<()> {
+    const CORGI_DOC: &str =
+        "application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*";
+    const FULL_DOC: &str = "application/json";
+
+    info!("Fetching {} packuments", package_versions.len());
+
+    package_versions
+        .into_par_iter()
+        .try_for_each(|(package_name, requested_versions)| {
+            let packument_url = get_packument_url("https://registry.npmjs.org", &package_name)?;
+
+            match util::get_url_body_with_retry(&packument_url) {
+                Ok(packument_data) => {
+                    let normalized_data =
+                        normalize_packument(&package_name, &packument_data, &requested_versions)?;
+
+                    // npm's make-fetch-happen uses the URL-encoded form for cache keys
+                    // e.g., "https://registry.npmjs.org/@types%2freact-dom" not "@types/react-dom"
+                    // We must use the encoded form in both the cache key string AND the metadata URL
+
+                    // Cache with corgiDoc header (for initial requests)
+                    cache
+                        .put(
+                            format!("make-fetch-happen:request-cache:{packument_url}"),
+                            packument_url.clone(),
+                            &normalized_data,
+                            None, // Packuments don't have integrity hashes
+                            Some(ReqHeaders {
+                                accept: String::from(CORGI_DOC),
+                            }),
+                        )
+                        .map_err(|e| {
+                            anyhow!("couldn't insert packument cache entry (corgi) for {package_name}: {e:?}")
+                        })?;
+
+                    // Cache with fullDoc header (for workspace/full metadata requests)
+                    cache
+                        .put(
+                            format!("make-fetch-happen:request-cache:{packument_url}"),
+                            packument_url.clone(),
+                            &normalized_data,
+                            None,
+                            Some(ReqHeaders {
+                                accept: String::from(FULL_DOC),
+                            }),
+                        )
+                        .map_err(|e| {
+                            anyhow!("couldn't insert packument cache entry (full) for {package_name}: {e:?}")
+                        })?;
+                }
+                Err(e) => {
+                    // Log but don't fail - some packages might not need packuments
+                    info!("Warning: couldn't fetch packument for {package_name}: {e}");
+                }
+            }
+
+            Ok::<_, anyhow::Error>(())
+        })
 }
 
 /// `fixup_lockfile` rewrites `integrity` hashes to match cache and removes the `integrity` field from Git dependencies.
@@ -157,9 +312,21 @@ fn map_cache() -> anyhow::Result<HashMap<Url, String>> {
 
         if entry.file_type().is_file() {
             let content = fs::read_to_string(entry.path())?;
-            let key: Key = serde_json::from_str(content.split_ascii_whitespace().nth(1).unwrap())?;
+            // cacache index format: each line is <sha1_hash>\t<json>
+            // Multiple entries can exist in the same file (e.g., same URL with different headers)
+            for line in content.lines() {
+                if line.is_empty() {
+                    continue;
+                }
+                // Split on tab, not whitespace, because JSON values may contain spaces
+                let json_part = line
+                    .split_once('\t')
+                    .map(|(_, json)| json)
+                    .ok_or_else(|| anyhow!("invalid cache index entry: missing tab separator"))?;
+                let key: Key = serde_json::from_str(json_part)?;
 
-            hashes.insert(key.metadata.url, key.integrity);
+                hashes.insert(key.metadata.url, key.integrity);
+            }
         }
     }
 
@@ -241,6 +408,26 @@ fn main() -> anyhow::Result<()> {
     let cache = Cache::new(out.join("_cacache"));
     cache.init()?;
 
+    // Collect package names and their versions from the lockfile for packument filtering.
+    // For non-aliased packages: extract from lockfile keys like "node_modules/@scope/name" -> "@scope/name"
+    // For aliased packages: the name is already the real package name (e.g., "string-width" not "string-width-cjs")
+    // We only care about packages that have a version string (registry packages).
+    let mut package_versions: HashMap<String, HashSet<String>> = HashMap::new();
+    for p in &packages {
+        if let Some(version) = &p.version {
+            let pkg_name = p
+                .name
+                .rsplit_once("node_modules/")
+                .map(|(_, name)| name.to_string())
+                .unwrap_or_else(|| p.name.clone());
+            package_versions
+                .entry(pkg_name)
+                .or_default()
+                .insert(version.to_string());
+        }
+    }
+
+    // Fetch and cache tarballs
     packages.into_par_iter().try_for_each(|package| {
         let tarball = package
             .tarball()
@@ -253,11 +440,23 @@ fn main() -> anyhow::Result<()> {
                 package.url,
                 &tarball,
                 integrity,
+                None, // tarballs don't need special request headers
             )
             .map_err(|e| anyhow!("couldn't insert cache entry for {}: {e:?}", package.name))?;
 
         Ok::<_, anyhow::Error>(())
     })?;
+
+    // Fetch and cache packuments (package metadata) - only for fetcher version 2+
+    let fetcher_version: u32 = env::var("NPM_FETCHER_VERSION")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(1);
+
+    if fetcher_version >= 2 {
+        fetch_packuments(&cache, package_versions)?;
+        fs::write(out.join(".fetcher-version"), format!("{fetcher_version}"))?;
+    }
 
     fs::write(out.join("package-lock.json"), lock_content)?;
 
@@ -422,4 +621,5 @@ mod tests {
 
         Ok(())
     }
+
 }

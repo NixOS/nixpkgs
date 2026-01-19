@@ -215,6 +215,10 @@
       # A string with a JSON attrset specifying registry mirrors, for example
       #   {"registry.example.org": "my-mirror.local/registry.example.org"}
       npmRegistryOverridesString ? config.npmRegistryOverridesString,
+      # Fetcher format version. Bump this to invalidate all existing hashes.
+      # Version 1: original format (tarballs only)
+      # Version 2: includes packuments for workspace support
+      fetcherVersion ? 1,
       ...
     }@args:
     let
@@ -271,6 +275,10 @@
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
         NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
+
+        # Fetcher version controls which features are enabled in prefetch-npm-deps
+        # Version 2+ enables packument fetching for workspace support
+        NPM_FETCHER_VERSION = toString fetcherVersion;
 
         SSL_CERT_FILE =
           if
