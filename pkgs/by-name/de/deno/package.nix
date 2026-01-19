@@ -53,6 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
+    # CVE-2026-22863: prevent cipher operations after finalize
+    # https://github.com/denoland/deno/security/advisories/GHSA-5379-f5hf-w38v
+    ./patches/0005-fix-ext-node-prevent-cipher-operations-after-finalize.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
