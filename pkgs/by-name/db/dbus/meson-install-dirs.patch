@@ -1,0 +1,190 @@
+diff --git a/bus/legacy-config/meson.build b/bus/legacy-config/meson.build
+index 1e635713..4be240e9 100644
+--- a/bus/legacy-config/meson.build
++++ b/bus/legacy-config/meson.build
+@@ -24,7 +24,7 @@ if platform_unix
+         input: 'system.conf.in',
+         output: 'system.conf',
+         configuration: data_config,
+-        install_dir: get_option('sysconfdir') / 'dbus-1',
++        install_dir: install_sysconfdir / 'dbus-1',
+     )
+ endif
+ 
+@@ -32,5 +32,5 @@ configure_file(
+     input: 'session.conf.in',
+     output: 'session.conf',
+     configuration: data_config,
+-    install_dir: get_option('sysconfdir') / 'dbus-1',
++    install_dir: install_sysconfdir / 'dbus-1',
+ )
+diff --git a/bus/meson.build b/bus/meson.build
+index 058e3b25..0a5de112 100644
+--- a/bus/meson.build
++++ b/bus/meson.build
+@@ -23,7 +23,7 @@ session_conf = configure_file(
+     input: 'session.conf.in',
+     output: 'session.conf',
+     configuration: data_config,
+-    install_dir: get_option('datadir') / 'dbus-1',
++    install_dir: install_datadir / 'dbus-1',
+ )
+ 
+ if platform_unix
+@@ -31,7 +31,7 @@ if platform_unix
+         input: 'system.conf.in',
+         output: 'system.conf',
+         configuration: data_config,
+-        install_dir: get_option('datadir') / 'dbus-1',
++        install_dir: install_datadir / 'dbus-1',
+     )
+ endif
+ 
+@@ -39,19 +39,19 @@ configure_file(
+     input: 'example-system-enable-stats.conf.in',
+     output: 'example-system-enable-stats.conf',
+     configuration: data_config,
+-    install_dir: get_option('datadir') / 'doc' / 'dbus' / 'examples',
++    install_dir: install_datadir / 'doc' / 'dbus' / 'examples',
+ )
+ 
+ configure_file(
+     input: 'example-session-disable-stats.conf.in',
+     output: 'example-session-disable-stats.conf',
+     configuration: data_config,
+-    install_dir: get_option('datadir') / 'doc' / 'dbus' / 'examples',
++    install_dir: install_datadir / 'doc' / 'dbus' / 'examples',
+ )
+ 
+ install_data(
+     'example-system-hardening-without-traditional-activation.conf',
+-    install_dir: get_option('datadir') / 'doc' / 'dbus' / 'examples',
++    install_dir: install_datadir / 'doc' / 'dbus' / 'examples',
+ )
+ 
+ if use_launchd
+@@ -185,15 +185,14 @@ if platform_unix and use_traditional_activation
+ endif
+ 
+ install_emptydirs += [
+-    get_option('datadir') / 'dbus-1' / 'session.d',
+-    get_option('datadir') / 'dbus-1' / 'services',
++    install_datadir / 'dbus-1' / 'session.d',
++    install_datadir / 'dbus-1' / 'services',
+ ]
+ 
+ if platform_unix
+     install_emptydirs += [
+-        runstatedir / 'dbus',
+-        get_option('datadir') / 'dbus-1' / 'system.d',
+-        get_option('datadir') / 'dbus-1' / 'system-services',
++        install_datadir / 'dbus-1' / 'system.d',
++        install_datadir / 'dbus-1' / 'system-services',
+     ]
+ endif
+ 
+diff --git a/doc/meson.build b/doc/meson.build
+index adc6f17d..1f2c5dce 100644
+--- a/doc/meson.build
++++ b/doc/meson.build
+@@ -142,7 +142,7 @@ configure_file(
+ # Install dtd files
+ 
+ 
+-xml_dir = get_option('datadir') / 'xml' / 'dbus-1'
++xml_dir = install_datadir / 'xml' / 'dbus-1'
+ dtd_files = [
+     'busconfig.dtd',
+     'introspect.dtd',
+diff --git a/meson.build b/meson.build
+index 3f4ad316..6cee2c6b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -918,7 +918,17 @@ dbus_enable_modular_tests = (
+ ###############################################################################
+ # Paths and directories
+ 
+-docs_dir = get_option('datadir') / 'doc' / 'dbus'
++install_datadir = get_option('install_datadir')
++if install_datadir == ''
++  install_datadir = get_option('prefix') / get_option('datadir')
++endif
++
++install_sysconfdir = get_option('install_sysconfdir')
++if install_sysconfdir == ''
++  install_sysconfdir = get_option('prefix') / get_option('sysconfdir')
++endif
++
++docs_dir = install_datadir / 'doc' / 'dbus'
+ 
+ # TODO: If a future Meson version gets a runstatedir option, try both.
+ # https://github.com/mesonbuild/meson/issues/4141
+diff --git a/meson_options.txt b/meson_options.txt
+index 1bd00579..1dfb3c15 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -109,6 +109,20 @@ option(
+   description: 'Inotify support on Linux'
+ )
+ 
++option(
++  'install_datadir',
++  type: 'string',
++  value: '',
++  description: 'datadir for installation, so that we can set --datadir=/etc and have dbus load files from there but still install them to $out/share'
++)
++
++option(
++  'install_sysconfdir',
++  type: 'string',
++  value: '',
++  description: 'sysconfdir for installation, so that we can set --sysconfdir=/etc and have dbus load files from there but still install them to $out/etc'
++)
++
+ option(
+   'installed_tests',
+   type: 'boolean',
+diff --git a/test/data/meson.build b/test/data/meson.build
+index ef570492..713396b7 100644
+--- a/test/data/meson.build
++++ b/test/data/meson.build
+@@ -224,14 +224,14 @@ if install_tests
+                 'link_name': 'session.conf',
+                 'install_dir': test_exec_dir / 'data' / 'valid-config-files',
+                 'pointing_to':
+-                    get_option('prefix') / get_option('datadir') /
++                    install_datadir /
+                     'dbus-1' / 'session.conf',
+             },
+             {
+                 'link_name': 'system.conf',
+                 'install_dir': test_exec_dir / 'data' / 'valid-config-files-system',
+                 'pointing_to':
+-                    get_option('prefix') / get_option('datadir') /
++                    install_datadir /
+                     'dbus-1' / 'system.conf',
+             },
+         ]
+diff --git a/test/meson.build b/test/meson.build
+index a60afac6..be7bd935 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -25,7 +25,7 @@
+ install_tests = get_option('installed_tests')
+ 
+ test_exec_dir = get_option('libexecdir') / 'installed-tests' / 'dbus'
+-test_meta_dir = get_option('datadir') / 'installed-tests' / 'dbus'
++test_meta_dir = install_datadir / 'installed-tests' / 'dbus'
+ 
+ ###############################################################################
+ # Test configuration needs some specific keys
+diff --git a/tools/meson.build b/tools/meson.build
+index 5d78d93a..7d094364 100644
+--- a/tools/meson.build
++++ b/tools/meson.build
+@@ -112,5 +112,4 @@ install_data('GetAllMatchRules.py',
+ 
+ # Create the empty directory to hold the machine ID
+ install_emptydirs += [
+-    get_option('localstatedir') / 'lib' / 'dbus',
+ ]
