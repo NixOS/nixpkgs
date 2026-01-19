@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "makejinja";
   version = "2.8.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TH4pgohh6yIgsPtsHnYSUr17Apk8C02KD+8sNO5GOf8=";
   };
 
@@ -46,6 +46,6 @@ python3Packages.buildPythonApplication rec {
       mirkolenz
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
-    changelog = "https://github.com/mirkolenz/makejinja/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mirkolenz/makejinja/blob/${finalAttrs.src.rev}/CHANGELOG.md";
   };
-}
+})
