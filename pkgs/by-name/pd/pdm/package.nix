@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch,
   runtimeShell,
   installShellFiles,
   testers,
@@ -39,6 +40,14 @@ python.pkgs.buildPythonApplication rec {
     tag = version;
     hash = "sha256-l5ALdpRSN7gzN+KPfFcfMno7gxs0E7VhtKip/LasyEo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-with-dep-logic-0.5.2.patch";
+      url = "https://github.com/pdm-project/pdm/commit/d2b1c578622c94093b70d9370c80e3af6fec611e.patch";
+      hash = "sha256-RwwYjk52Zg+h3LX9LOnS2eNfWr8N7zGqz+COXZclWwE=";
+    })
+  ];
 
   pythonRelaxDeps = [ "hishel" ];
 
