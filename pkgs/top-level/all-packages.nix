@@ -5096,6 +5096,7 @@ with pkgs;
 
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
+    stdenv = gcc14Stdenv;
   };
 
   urweb = callPackage ../development/compilers/urweb {
