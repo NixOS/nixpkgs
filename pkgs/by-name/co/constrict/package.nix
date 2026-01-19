@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libadwaita
     libglycin
     libglycin-gtk4
+    glycin-loaders
   ];
 
   dependencies = [
@@ -62,7 +63,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=(
       ''${gappsWrapperArgs[@]}
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
     )
   '';
