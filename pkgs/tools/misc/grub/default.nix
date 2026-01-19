@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchgit,
   flex,
   bison,
   python3,
@@ -82,6 +83,24 @@ let
   };
 
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
+
+  gnulib = fetchgit {
+    url = "https://git.savannah.gnu.org/git/gnulib.git";
+    # NOTE: get $GNULIB_REVISION from bootstrap.conf!
+    rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
+    hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
+  };
+
+  # The locales are fetched from translationproject.org at build time,
+  # but those translations are not versioned/stable. For that reason
+  # we take them from the nearest release tarball instead:
+  locales = fetchzip {
+    url = "https://ftp.gnu.org/gnu/grub/grub-${version}.tar.gz";
+    hash = "sha256-NUlE6l8Ul3i1Si9mZgND6lnvFqc74EGptHV2iCtu+As=";
+  };
+
+  # This is the variable that sets the GRUB release.
+  version = "2.14";
 in
 
 assert zfsSupport -> zfs != null;
@@ -99,16 +118,32 @@ assert lib.asserts.assertMsg (
 
 stdenv.mkDerivation rec {
   pname = "grub";
-  version = "2.14";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://gnu/grub/grub-${version}.tar.xz";
-    hash = "sha256-vI08c1NbiDjYyOJlTXPtxOaujIrNtF1d9dyaFUdEbUM=";
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/git/grub.git";
+    tag = "grub-${version}";
+    hash = "sha256-Gkpde5CeJOQ+0p5WGwXZ2P881jxrWkuFw3Fh4lul/so=";
   };
 
   patches = [
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
+
+    /*
+      Restore gfxterm_menu (and cmdline_cat). The NixOS installer uses it.
+
+      I want to mention that dead code gets automatically removed by the bootstrapper.
+      This would include files like `grub-core/tests/gfxterm_menu.c`.
+
+      Luckily for us, it doesn't have to be this way. We can re-run `autogen.sh`.
+    */
+    (fetchpatch {
+      name = "03_restore_gfxterm_menu.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ca2a91f43bf6e1df23a07c295534f871ddf2d401";
+      revert = true;
+      hash = "sha256-nFOoIyJqORY3I/mFGB9rcdpsnUcoUwfsQ7F+TQr4Aps=";
+    })
 
     /*
       The commit that we're reverting below breaks the `kernel.img` payload that's generated at runtime.
@@ -129,16 +164,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    if kbdcompSupport then
-      ''
-        sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
-      ''
-    else
-      ''
-        echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
-        echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
-      '';
+  postPatch = ''
+    ${
+      if kbdcompSupport then
+        ''
+          sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
+        ''
+      else
+        ''
+          echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
+          echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
+        ''
+    }
+
+    GNULIB_REVISION=$(. bootstrap.conf; echo $GNULIB_REVISION)
+    if [ "$GNULIB_REVISION" != ${gnulib.rev} ]; then
+      echo "This version of GRUB requires a different gnulib revision!"
+      echo "We have: ${gnulib.rev}"
+      echo "GRUB needs: $GNULIB_REVISION"
+      exit 1
+    fi
+  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -150,7 +196,6 @@ stdenv.mkDerivation rec {
     freetype
     autoconf
     autoconf-archive
-    autoreconfHook
     automake
     help2man
   ];
@@ -190,6 +235,12 @@ stdenv.mkDerivation rec {
     # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
     sed -i "tests/util/grub-shell.in" \
         -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+
+    patchShebangs .
+
+    cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
+
+    ./bootstrap --skip-po --no-git --gnulib-srcdir=${gnulib}
 
     substituteInPlace ./configure --replace-fail '/usr/share/fonts/unifont' '${unifont}/share/fonts'
   '';
