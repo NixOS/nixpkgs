@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "ruqola";
+  pname = "ruqola";
   version = "2.5.1";
 
   src = fetchFromGitLab {
