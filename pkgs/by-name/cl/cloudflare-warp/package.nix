@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
             -H 'Accept: application/vnd.github+json' \
             -H 'X-GitHub-Api-Version: 2022-11-28' \
             'https://api.github.com/repos/cloudflare/cloudflare-docs/git/trees/production?recursive=true' |
-            jq 'last(.tree.[] | select(.path | startswith("src/content/warp-releases/linux/ga/"))).path' |
+            jq -r '[.tree[].path | select(startswith("src/content/warp-releases/linux/ga/"))] | max_by(split("/")[-1] | split(".") | map(tonumber?))' |
             rg '([^/]+)\.0\.yaml\b' --only-matching --replace '$1'
         )"
 
