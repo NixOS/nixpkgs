@@ -43,9 +43,11 @@ let
       (builtins.mapAttrs (name: _: call name))
     ];
 
-  plugins = callPackage ./generated.nix {
-    inherit buildVimPlugin;
-  };
+  plugins =
+    self: super:
+    callPackage ./utils/parse-generated.nix {
+      inherit buildVimPlugin;
+    };
 
   corePlugins = callPackage ./corePlugins.nix { };
 
