@@ -119,6 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     net-tools
   ];
 
+  patches = [
+    # Make "isabelle build" work when generating documents
+    # See: https://github.com/NixOS/nixpkgs/issues/289529
+    ./fix-copied-permissions.patch
+  ];
+
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
 
   sourceRoot = "${finalAttrs.dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
