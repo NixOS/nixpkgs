@@ -5,7 +5,6 @@
   lib,
   makeWrapper,
   electron,
-  imagemagick,
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
@@ -72,7 +71,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-    imagemagick
     autoPatchelfHook
     copyDesktopItems
   ];
