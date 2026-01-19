@@ -37,7 +37,7 @@ The `wrapFirefox` function allows to pass policies, preferences and extensions t
     };
 
     extraPrefs = ''
-      // Show more ssl cert infos
+      // Show more SSL cert infos
       lockPref("security.identityblock.show_extended_validation", true);
     '';
   };

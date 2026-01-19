@@ -1,4 +1,4 @@
-# Javascript {#language-javascript}
+# JavaScript {#language-javascript}
 
 ## Introduction {#javascript-introduction}
 
@@ -13,7 +13,7 @@ Finally, some tool-specific instructions will be given.
 If you find you are lacking inspiration for packaging JavaScript applications, the links below might prove useful.
 Searching online for prior art can be helpful if you are running into solved problems.
 
-### Github {#javascript-finding-examples-github}
+### GitHub {#javascript-finding-examples-github}
 
 - Searching Nix files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+language%3ANix&type=code>
 - Searching just `flake.nix` files for `yarnConfigHook`: <https://github.com/search?q=yarnConfigHook+path%3A**%2Fflake.nix&type=code>
