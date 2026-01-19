@@ -12077,6 +12077,13 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jefferyoo = {
+    email = "oojefferywm@proton.me";
+    github = "jefferyoo";
+    githubId = 237098253;
+    name = "Jeffery Oo";
+    keys = [ { fingerprint = "7129 408E 3D97 47EB FCE1  A6D5 1999 2BEC E706 CC59"; } ];
+  };
   jemand771 = {
     email = "willy@jemand771.net";
     github = "jemand771";
