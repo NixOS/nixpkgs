@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "infisicalsdk";
   version = "1.0.15";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Infisical";
     repo = "python-sdk-official";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZmX3j6BxMWP0+7AvJx/3szDk2O5COHDes3pJQaqf4Yc=";
   };
 
@@ -35,4 +35,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artur-sannikov ];
   };
-}
+})

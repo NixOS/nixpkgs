@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "commitizen";
   version = "4.13.6";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f0fB5FkWG4fkV7ccMPJ8z5MBFVYBwE33BDa4Cz94K4M=";
   };
 
@@ -110,7 +110,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
-    changelog = "https://github.com/commitizen-tools/commitizen/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "cz";
     maintainers = with lib.maintainers; [
@@ -118,4 +118,4 @@ python3Packages.buildPythonPackage rec {
       anthonyroussel
     ];
   };
-}
+})
