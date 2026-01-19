@@ -13,7 +13,7 @@ let
   python = python3.override {
     self = python3;
     packageOverrides = self: super: {
-      django = super.django_5_2;
+      django = super.django_5;
     };
   };
 

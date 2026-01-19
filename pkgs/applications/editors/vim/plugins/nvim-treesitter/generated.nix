@@ -52,6 +52,9 @@
         rev = "3bd2036e710f609ea08fcfca5a1eb1169ecc114f";
         hash = "sha256-VdfPZ39AEjvl+9r/LZNRGNIQsiTB9S065AnUc4MeohU=";
       };
+      passthru.requires = [
+        "html"
+      ];
       meta.homepage = "https://github.com/dlvandenberg/tree-sitter-angular";
     };
     apex = buildGrammar {
@@ -75,6 +78,9 @@
         rev = "53eb391da4c6c5857f8defa2c583c46c2594f565";
         hash = "sha256-qQVUWCOZ4y9FTsIf0FI3vmYBhLYz4hcqRTo+5C2MYvc=";
       };
+      passthru.requires = [
+        "cpp"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-arduino";
     };
     asm = buildGrammar {
@@ -97,6 +103,9 @@
         rev = "213f6e6973d9b456c6e50e86f19f66877e7ef0ee";
         hash = "sha256-TpXs3jbYn39EHxTdtSfR7wLA1L8v9uyK/ATPp5v4WqE=";
       };
+      passthru.requires = [
+        "html"
+      ];
       meta.homepage = "https://github.com/virchau13/tree-sitter-astro";
     };
     authzed = buildGrammar {
@@ -405,6 +414,9 @@
         rev = "12bd6f7e96080d2e70ec51d4068f2f66120dde35";
         hash = "sha256-vmXTv6Idf0Le5ZVa8Rc1DVefqzUxkGeLGsYcSDNBpQU=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-cpp";
     };
     css = buildGrammar {
@@ -428,6 +440,9 @@
         hash = "sha256-9mW0kT4av/ULFqLXdMuyLrMPtQxrIOKY60GQ4QDB33o=";
       };
       location = "csv";
+      passthru.requires = [
+        "tsv"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-csv";
     };
     cuda = buildGrammar {
@@ -439,6 +454,9 @@
         rev = "48b066f334f4cf2174e05a50218ce2ed98b6fd01";
         hash = "sha256-sX9AOe8dJJsRbzGq20qakWBnLiwYQ90mQspAuYxQzoQ=";
       };
+      passthru.requires = [
+        "cpp"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-cuda";
     };
     cue = buildGrammar {
@@ -882,6 +900,9 @@
         rev = "69086d7627c03e1f4baf766bcef14c60d9e92331";
         hash = "sha256-U0P9QoOZST1h6XI83CI0/6/CDTvqkv1Yiq62h6YdHpI=";
       };
+      passthru.requires = [
+        "gap"
+      ];
       meta.homepage = "https://github.com/gap-system/tree-sitter-gaptst";
     };
     gdscript = buildGrammar {
@@ -1003,6 +1024,9 @@
         rev = "12d98944c1d5077b957cbdb90d663a7c4d50118c";
         hash = "sha256-3cJI6vcbU62kUIhphprNeAl9RyY9TThrzVeArdLfxnI=";
       };
+      passthru.requires = [
+        "typescript"
+      ];
       meta.homepage = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-typescript";
     };
     glsl = buildGrammar {
@@ -1014,6 +1038,9 @@
         rev = "24a6c8ef698e4480fecf8340d771fbcb5de8fbb4";
         hash = "sha256-TjF79WH3bX4nueYr8CbPptkNb2lNkHQNB0VZoMB35Nk=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-glsl";
     };
     gn = buildGrammar {
@@ -1268,6 +1295,9 @@
         rev = "02fa3b79b3ff9a296066da6277adfc3f26cbc9e0";
         hash = "sha256-NsTf3DR3gHVMYZDmTNvThB5bJcDwTcJ1+3eJhvsiDn8=";
       };
+      passthru.requires = [
+        "json"
+      ];
       meta.homepage = "https://github.com/winston0410/tree-sitter-hjson";
     };
     hlsl = buildGrammar {
@@ -1279,6 +1309,9 @@
         rev = "bab9111922d53d43668fabb61869bec51bbcb915";
         hash = "sha256-BWjgXtMN6y/0ahD44Cm8a+MxxVMpCNhkf33V/vsCBTU=";
       };
+      passthru.requires = [
+        "cpp"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-hlsl";
     };
     hlsplaylist = buildGrammar {
@@ -1422,6 +1455,9 @@
         rev = "9b2f9aec2106b94b4e099fe75e73ebd8ae707c04";
         hash = "sha256-vxe+g7o0gXgB4GjhjkxqLqcLL2+8wqMB3tm1xQFSitI=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-ispc";
     };
     janet_simple = buildGrammar {
@@ -1478,6 +1514,9 @@
         hash = "sha256-a4/+tsouuYkkVEStpOEUiIos9H4Hw7NhJOFaasylWUk=";
       };
       location = "tree-sitter-jinja";
+      passthru.requires = [
+        "jinja_inline"
+      ];
       meta.homepage = "https://github.com/cathaysia/tree-sitter-jinja";
     };
     jinja_inline = buildGrammar {
@@ -1788,6 +1827,9 @@
         rev = "a8914d6c1fc5131f8e1c13f769fa704c9f5eb02f";
         hash = "sha256-5qbZA2mxTvrsfUrpgD+4y3oeJsifA91c/hfcVwQBRgI=";
       };
+      passthru.requires = [
+        "lua"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-luau";
     };
     m68k = buildGrammar {
@@ -1822,6 +1864,9 @@
         hash = "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek=";
       };
       location = "tree-sitter-markdown";
+      passthru.requires = [
+        "markdown_inline"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
     };
     markdown_inline = buildGrammar {
@@ -1945,6 +1990,9 @@
         rev = "4ad352773688deb84a95eeaa9872acda5b466439";
         hash = "sha256-dinMmbD36o1QkcLk2mgycgHZ9sW5Mg6lfnxssynaj58=";
       };
+      passthru.requires = [
+        "nim_format_string"
+      ];
       meta.homepage = "https://github.com/alaviss/tree-sitter-nim";
     };
     nim_format_string = buildGrammar {
@@ -2011,6 +2059,9 @@
         rev = "181a81b8f23a2d593e7ab4259981f50122909fda";
         hash = "sha256-7W8ozhQJL+f+tQYz61EZexk9NkMu1pCAP5IIy1m3qak=";
       };
+      passthru.requires = [
+        "c"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-objc";
     };
     objdump = buildGrammar {
@@ -2046,6 +2097,9 @@
         hash = "sha256-8u1jtUFMjykVG6aCDzqcb4vFCY401CZ2o+JPGMadg6o=";
       };
       location = "grammars/interface";
+      passthru.requires = [
+        "ocaml"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-ocaml";
     };
     ocamllex = buildGrammar {
@@ -2125,6 +2179,9 @@
         hash = "sha256-XEKlsqC7HJ3mShmcwmfpezNP9DHE8f73f7/ru4MuxEo=";
       };
       location = "php";
+      passthru.requires = [
+        "php_only"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-php";
     };
     php_only = buildGrammar {
@@ -2259,6 +2316,9 @@
         hash = "sha256-SEqqmkfV/wsr1ObcBN5My29RY9TWfxnQlsnEEIZyR18=";
       };
       location = "grammars/problog";
+      passthru.requires = [
+        "prolog"
+      ];
       meta.homepage = "https://github.com/foxyseta/tree-sitter-prolog";
     };
     prolog = buildGrammar {
@@ -2327,6 +2387,9 @@
         hash = "sha256-9mW0kT4av/ULFqLXdMuyLrMPtQxrIOKY60GQ4QDB33o=";
       };
       location = "psv";
+      passthru.requires = [
+        "tsv"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-csv";
     };
     pug = buildGrammar {
@@ -2712,6 +2775,9 @@
         rev = "c478c6868648eff49eb04a4df90d703dc45b312a";
         hash = "sha256-BFtMT6eccBWUyq6b8UXRAbB1R1XD3CrrFf1DM3aUI5c=";
       };
+      passthru.requires = [
+        "css"
+      ];
       meta.homepage = "https://github.com/serenadeai/tree-sitter-scss";
     };
     sflog = buildGrammar {
@@ -3126,6 +3192,9 @@
         hash = "sha256-Kq0KtkF6xtZcN2s8KzYGyguJH2iOTlA2WRytZ+KGTUE=";
       };
       location = "dialects/terraform";
+      passthru.requires = [
+        "hcl"
+      ];
       meta.homepage = "https://github.com/MichaHoffmann/tree-sitter-hcl";
     };
     textproto = buildGrammar {
@@ -3227,6 +3296,9 @@
         hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
       };
       location = "tsx";
+      passthru.requires = [
+        "typescript"
+      ];
       meta.homepage = "https://github.com/tree-sitter/tree-sitter-typescript";
     };
     turtle = buildGrammar {
@@ -3528,6 +3600,9 @@
         hash = "sha256-0ztP30xWqVWy5upWPp0JwhpQphOJufzlcYn+KvLejVs=";
       };
       location = "xml";
+      passthru.requires = [
+        "dtd"
+      ];
       meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-xml";
     };
     xresources = buildGrammar {
@@ -3642,18 +3717,29 @@
     };
     angular = buildQueries {
       language = "angular";
+      requires = [
+        "html"
+        "html_tags"
+      ];
     };
     apex = buildQueries {
       language = "apex";
     };
     arduino = buildQueries {
       language = "arduino";
+      requires = [
+        "cpp"
+      ];
     };
     asm = buildQueries {
       language = "asm";
     };
     astro = buildQueries {
       language = "astro";
+      requires = [
+        "html"
+        "html_tags"
+      ];
     };
     authzed = buildQueries {
       language = "authzed";
@@ -3738,15 +3824,24 @@
     };
     cpp = buildQueries {
       language = "cpp";
+      requires = [
+        "c"
+      ];
     };
     css = buildQueries {
       language = "css";
     };
     csv = buildQueries {
       language = "csv";
+      requires = [
+        "tsv"
+      ];
     };
     cuda = buildQueries {
       language = "cuda";
+      requires = [
+        "cpp"
+      ];
     };
     cue = buildQueries {
       language = "cue";
@@ -3870,6 +3965,9 @@
     };
     gaptst = buildQueries {
       language = "gaptst";
+      requires = [
+        "gap"
+      ];
     };
     gdscript = buildQueries {
       language = "gdscript";
@@ -3900,12 +3998,21 @@
     };
     glimmer_javascript = buildQueries {
       language = "glimmer_javascript";
+      requires = [
+        "ecma"
+      ];
     };
     glimmer_typescript = buildQueries {
       language = "glimmer_typescript";
+      requires = [
+        "typescript"
+      ];
     };
     glsl = buildQueries {
       language = "glsl";
+      requires = [
+        "c"
+      ];
     };
     gn = buildQueries {
       language = "gn";
@@ -3975,9 +4082,15 @@
     };
     hjson = buildQueries {
       language = "hjson";
+      requires = [
+        "json"
+      ];
     };
     hlsl = buildQueries {
       language = "hlsl";
+      requires = [
+        "cpp"
+      ];
     };
     hlsplaylist = buildQueries {
       language = "hlsplaylist";
@@ -3990,6 +4103,9 @@
     };
     html = buildQueries {
       language = "html";
+      requires = [
+        "html_tags"
+      ];
     };
     html_tags = buildQueries {
       language = "html_tags";
@@ -4020,6 +4136,9 @@
     };
     ispc = buildQueries {
       language = "ispc";
+      requires = [
+        "c"
+      ];
     };
     janet_simple = buildQueries {
       language = "janet_simple";
@@ -4032,9 +4151,16 @@
     };
     javascript = buildQueries {
       language = "javascript";
+      requires = [
+        "ecma"
+        "jsx"
+      ];
     };
     jinja = buildQueries {
       language = "jinja";
+      requires = [
+        "jinja_inline"
+      ];
     };
     jinja_inline = buildQueries {
       language = "jinja_inline";
@@ -4122,6 +4248,9 @@
     };
     luau = buildQueries {
       language = "luau";
+      requires = [
+        "lua"
+      ];
     };
     m68k = buildQueries {
       language = "m68k";
@@ -4131,6 +4260,9 @@
     };
     markdown = buildQueries {
       language = "markdown";
+      requires = [
+        "markdown_inline"
+      ];
     };
     markdown_inline = buildQueries {
       language = "markdown_inline";
@@ -4164,6 +4296,9 @@
     };
     nim = buildQueries {
       language = "nim";
+      requires = [
+        "nim_format_string"
+      ];
     };
     nim_format_string = buildQueries {
       language = "nim_format_string";
@@ -4182,6 +4317,9 @@
     };
     objc = buildQueries {
       language = "objc";
+      requires = [
+        "c"
+      ];
     };
     objdump = buildQueries {
       language = "objdump";
@@ -4191,6 +4329,9 @@
     };
     ocaml_interface = buildQueries {
       language = "ocaml_interface";
+      requires = [
+        "ocaml"
+      ];
     };
     ocamllex = buildQueries {
       language = "ocamllex";
@@ -4212,6 +4353,9 @@
     };
     php = buildQueries {
       language = "php";
+      requires = [
+        "php_only"
+      ];
     };
     php_only = buildQueries {
       language = "php_only";
@@ -4248,6 +4392,9 @@
     };
     problog = buildQueries {
       language = "problog";
+      requires = [
+        "prolog"
+      ];
     };
     prolog = buildQueries {
       language = "prolog";
@@ -4266,6 +4413,9 @@
     };
     psv = buildQueries {
       language = "psv";
+      requires = [
+        "tsv"
+      ];
     };
     pug = buildQueries {
       language = "pug";
@@ -4290,6 +4440,9 @@
     };
     qmljs = buildQueries {
       language = "qmljs";
+      requires = [
+        "ecma"
+      ];
     };
     query = buildQueries {
       language = "query";
@@ -4371,6 +4524,9 @@
     };
     scss = buildQueries {
       language = "scss";
+      requires = [
+        "css"
+      ];
     };
     sflog = buildQueries {
       language = "sflog";
@@ -4443,6 +4599,9 @@
     };
     svelte = buildQueries {
       language = "svelte";
+      requires = [
+        "html_tags"
+      ];
     };
     sway = buildQueries {
       language = "sway";
@@ -4482,6 +4641,9 @@
     };
     terraform = buildQueries {
       language = "terraform";
+      requires = [
+        "hcl"
+      ];
     };
     textproto = buildQueries {
       language = "textproto";
@@ -4509,6 +4671,11 @@
     };
     tsx = buildQueries {
       language = "tsx";
+      requires = [
+        "ecma"
+        "jsx"
+        "typescript"
+      ];
     };
     turtle = buildQueries {
       language = "turtle";
@@ -4518,6 +4685,9 @@
     };
     typescript = buildQueries {
       language = "typescript";
+      requires = [
+        "ecma"
+      ];
     };
     typespec = buildQueries {
       language = "typespec";
@@ -4569,6 +4739,9 @@
     };
     vue = buildQueries {
       language = "vue";
+      requires = [
+        "html_tags"
+      ];
     };
     wgsl = buildQueries {
       language = "wgsl";
@@ -4590,6 +4763,9 @@
     };
     xml = buildQueries {
       language = "xml";
+      requires = [
+        "dtd"
+      ];
     };
     xresources = buildQueries {
       language = "xresources";
