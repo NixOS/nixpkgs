@@ -15806,6 +15806,11 @@
     githubId = 401263;
     keys = [ { fingerprint = "1147 43F1 E707 6F3E 6F4B  2C96 B9A8 B592 F126 F8E8"; } ];
   };
+  macbucheron = {
+    name = "Nathan Deprat";
+    github = "Macbucheron1";
+    githubId = 95475157;
+  };
   macronova = {
     name = "Sicheng Pan";
     email = "trivial@invariantspace.com";
