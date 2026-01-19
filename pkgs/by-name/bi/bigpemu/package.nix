@@ -27,7 +27,7 @@ let
   };
 in
 buildFHSEnv {
-  name = "bigpemu";
+  pname = "bigpemu";
   version = bigpemu-unwrapped.version;
   targetPkgs = pkgs: [
     glui
