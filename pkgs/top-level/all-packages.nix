@@ -9570,7 +9570,12 @@ with pkgs;
   };
 
   mdadm = mdadm4;
-  minimal-bootstrap = recurseIntoAttrs (
+
+  # minimal-bootstrap packages aren't used for anything but bootstrapping our
+  # stdenv. They should not be used for any other purpose and therefore not
+  # show up in search results or repository tracking services that consume our
+  # packages.json https://github.com/NixOS/nixpkgs/issues/244966
+  minimal-bootstrap = lib.recurseIntoAttrsRelease (
     import ../os-specific/linux/minimal-bootstrap {
       inherit (stdenv) buildPlatform hostPlatform;
       inherit lib config;
