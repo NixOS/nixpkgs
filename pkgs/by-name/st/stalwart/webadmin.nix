@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  stalwart-mail,
+  stalwart,
   fetchFromGitHub,
   trunk,
   tailwindcss_3,
@@ -68,10 +68,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";
+    description = "Secure, modern, and all-in-one mail & collaboration server, Stalwart (webadmin module)";
     homepage = "https://github.com/stalwartlabs/webadmin";
     changelog = "https://github.com/stalwartlabs/webadmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    inherit (stalwart-mail.meta) maintainers;
+    inherit (stalwart.meta) maintainers;
   };
 })
