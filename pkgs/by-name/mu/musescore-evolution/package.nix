@@ -28,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "musescore-evolution";
   version = "3.7.0-unstable-2026-01-12";
 
-  # nix run nixpkgs#nix-prefetch-git -- https://github.com/Jojo-Schmitz/MuseScore.git 0b4543baca9b1b70d54cecb33cbf846dabc073d1
   src = fetchFromGitHub {
     owner = "Jojo-Schmitz";
     repo = "MuseScore";
@@ -42,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DDOWNLOAD_SOUNDFONT=OFF"
   ]
+
+  # TODO: REMOVE
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Disable precompiled headers on macOS to avoid some build errors
     "-DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON"
@@ -64,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # Recreate correct symlinks (let fixupPhase handle compression)
+    if [ -e "$manDir/mscore-evo.1" ]; then
+      ln -sf "mscore-evo.1" "$manDir/musescore-evo.1"
+    fi
   '';
 
   dontWrapGApps = true;
@@ -116,15 +122,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Patch the generated install script to drop Qt resource / QtWebEngine installs.
   preInstall = ''
-    if [ -f main/cmake_install.cmake ]; then
-      sed -i '
-        /QtWebEngineProcess/d
-        /resources\"/d
-        /qtwebengine_locales/d
-        /qtwebengine/d
-        /QT_INSTALL_PREFIX/d
-      ' main/cmake_install.cmake
-    fi
+    sed -i '
+      /QtWebEngineProcess/d
+      /resources\"/d
+      /qtwebengine_locales/d
+      /qtwebengine/d
+      /QT_INSTALL_PREFIX/d
+    ' main/cmake_install.cmake
   '';
 
   # On macOS, move the .app into Applications/ and symlink the binary to bin/
@@ -159,7 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
     # 3b) Rename mimetype icons (mimetypes/) to unique names
     for icon in "$out"/share/icons/hicolor/*/mimetypes/application-x-musescore.* \
                 "$out"/share/icons/hicolor/*/mimetypes/application-x-musescore+xml.*; do
-      [ -e "$icon" ] || continue
       dir="''${icon%/*}"; base="''${icon##*/}"; ext="''${base##*.}"
       case "$base" in
         application-x-musescore.*) mv "$icon" "$dir/application-x-musescore-evo.$ext" ;;
@@ -183,19 +186,11 @@ stdenv.mkDerivation (finalAttrs: {
       -exec rm -f {} +
 
     # Rename real files
-    for man in "$manDir"/mscore.1* "$manDir"/musescore.1*; do
-      [ -e "$man" ] || continue
-      [ -L "$man" ] && continue
+    find "$manDir" \( -name 'mscore.1*' -o -name 'musescore.1*' \) -type f |
+    while IFS= read -r man; do
       base="$(basename "$man")"
       newname=$(echo "$base" | sed -e 's/^mscore/mscore-evo/' -e 's/^musescore/mscore-evo/')
       mv "$man" "$manDir/$newname"
-    done
-
-    # Recreate correct symlinks
-    for ext in 1 1.gz; do
-      if [ -e "$manDir/mscore-evo.$ext" ]; then
-        ln -sf "mscore-evo.$ext" "$manDir/musescore-evo.$ext"
-      fi
     done
 
     # 6) Rename AppStream metadata and its IDs
@@ -210,10 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
-
-  # Also don't use upstream musescore tests since this is a different version/fork.
-  # passthru.tests = nixosTests.musescore;
-  passthru.tests = { };
 
   passthru.updateScript.command = [ ./update.sh ];
 

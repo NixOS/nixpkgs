@@ -13,7 +13,7 @@ generated_version=$(nix eval --raw -f . ${UPDATE_NIX_ATTR_PATH}.version)
 
 # Extract only the date part (after the last dash) (e.g. 0-unstable-2026-01-12)
 parts=(${generated_version//-/ }) # Split up by dashes
-clean_date="${parts[2]}${parts[3]}${parts[4]}" # Get clean date in YYYYMMDD format (e.g. "20260112")
+clean_date="${parts[2]}-${parts[3]}-${parts[4]}" # Get clean date in YYYY-MM-DD format (e.g. "2026-01-12")
 
 # Compute version prefix based on previous version
 old_version="$UPDATE_NIX_OLD_VERSION"
