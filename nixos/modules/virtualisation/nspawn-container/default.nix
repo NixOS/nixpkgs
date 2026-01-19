@@ -70,7 +70,7 @@ in
   config = {
     boot.isNspawnContainer = true;
 
-    # Needed since nixpkgs 7fb2f407c01b017737eafc26b065d7f56434a992 removed the getty unit by default.
+    # TODO(arianvp): Remove after https://github.com/NixOS/nixpkgs/pull/480686 is merged
     console.enable = true;
 
     virtualisation.systemd-nspawn.options = [
