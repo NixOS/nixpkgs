@@ -19106,12 +19106,6 @@
     github = "0xnook";
     githubId = 88323754;
   };
-  noreferences = {
-    email = "norkus@norkus.net";
-    github = "jozuas";
-    githubId = 13085275;
-    name = "Juozas Norkus";
-  };
   norfair = {
     email = "syd@cs-syd.eu";
     github = "NorfairKing";

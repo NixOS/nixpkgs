@@ -15,7 +15,7 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glymur";
   version = "0.13.6";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quintusdias";
     repo = "glymur";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tIvDhlFPpDxC3CgBDT0RN9MM8ycY+J1hjcLXzx14Zhs=";
   };
 
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for accessing JPEG2000 files";
     homepage = "https://github.com/quintusdias/glymur";
-    changelog = "https://github.com/quintusdias/glymur/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/quintusdias/glymur/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

@@ -6,7 +6,7 @@
   SDL2,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pyxel";
   version = "2.3.18";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kitao";
     repo = "pyxel";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pw1ZDmQ7zGwfM98jjym34RbLmUbjuuUnCoPGczxdai8=";
   };
 
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/kitao/pyxel/tree/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/kitao/pyxel/tree/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Retro game engine for Python";
     homepage = "https://github.com/kitao/pyxel";
     license = lib.licenses.mit;
@@ -60,4 +60,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
