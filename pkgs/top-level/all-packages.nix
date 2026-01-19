@@ -240,6 +240,14 @@ with pkgs;
     };
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
+  checkBinaryArchHook = makeSetupHook {
+    name = "check-binary-arch-hook";
+    propagatedBuildInputs = [ python3Minimal ];
+    substitutions = {
+      pythonScript = ../build-support/setup-hooks/check-binary-arch.py;
+    };
+  } ../build-support/setup-hooks/check-binary-arch.sh;
+
   appimageTools = callPackage ../build-support/appimage { };
 
   appimageupdate-qt = appimageupdate.override { withQtUI = true; };
