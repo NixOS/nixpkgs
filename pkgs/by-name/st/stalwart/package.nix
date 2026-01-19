@@ -20,17 +20,17 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.14.1";
+  pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wsk4n6jLOAFhxYb5Hw8XvQem0xccGGoD729nRz3bRF0=";
+    hash = "sha256-MIy1/8r5CMrTbVTjLFuUneoL3J38kZIgUMweoeaf3L0=";
   };
 
-  cargoHash = "sha256-LFXpv8/rHQwzdKEyS4VplQSwFUnZrgv0qDIhZUOGfpo=";
+  cargoHash = "sha256-jVD11wz9Ab1E9KdNG4kp8Jqm2rJ2aUWuFTAOBga6Fgg=";
 
   depsBuildBuild = [
     pkg-config
@@ -61,9 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "postgres"
     "mysql"
     "rocks"
-    "elastic"
     "s3"
     "redis"
+    "azure"
+    "nats"
   ]
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
@@ -86,8 +87,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p $out/lib/systemd/system
 
-    substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \
-      --replace "__PATH__" "$out"
+    substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart.service \
+      --replace-fail "__PATH__" "$out"
   '';
 
   checkFlags = lib.forEach [
@@ -169,6 +170,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   left: ElementEnd
     #  right: Bytes([...])
     "responses::tests::parse_responses"
+    # thread 'store::search_tests' (912386) panicked at tests/src/store/mod.rs:116:10:
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "store::search_tests"
   ] (test: "--skip=${test}");
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
@@ -185,16 +189,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
-    homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    description = "Secure, modern, and all-in-one mail & collaboration server fluent in IMAP, JMAP, SMTP, CalDAV, CardDAV, and WebDAV";
+    homepage = "https://github.com/stalwartlabs/stalwart";
+    changelog = "https://github.com/stalwartlabs/stalwart/blob/main/CHANGELOG.md";
     license = [
       lib.licenses.agpl3Only
     ]
     ++ lib.optionals stalwartEnterprise [
       {
         fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
-        url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+        url = "https://github.com/stalwartlabs/stalwart/blob/main/LICENSES/LicenseRef-SEL.txt";
         free = false;
         redistributable = false;
       }

@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  stalwart-mail,
+  stalwart,
   nix-update-script,
 }:
 
@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Secure & modern all-in-one mail server Stalwart (spam-filter module)";
+    description = "Secure, modern, and all-in-one mail & collaboration server, Stalwart (spam-filter module)";
     homepage = "https://github.com/stalwartlabs/spam-filter";
     changelog = "https://github.com/stalwartlabs/spam-filter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    inherit (stalwart-mail.meta) maintainers;
+    inherit (stalwart.meta) maintainers;
   };
 })
