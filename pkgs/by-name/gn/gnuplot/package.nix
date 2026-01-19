@@ -28,22 +28,19 @@
   gnused,
   coreutils,
   withQt ? false,
-  qttools,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
+  libsForQt5,
 }:
 
 let
   withX = !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnuplot";
   version = "6.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnuplot/gnuplot-${version}.tar.gz";
-    sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
+    url = "mirror://sourceforge/gnuplot/gnuplot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +49,8 @@ stdenv.mkDerivation rec {
     texinfo
   ]
   ++ lib.optionals withQt [
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -74,8 +71,8 @@ stdenv.mkDerivation rec {
     libxaw
   ]
   ++ lib.optionals withQt [
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
   ]
   ++ lib.optional withWxGTK wxGTK32;
 
@@ -129,4 +126,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lovek323 ];
     mainProgram = "gnuplot";
   };
-}
+})
