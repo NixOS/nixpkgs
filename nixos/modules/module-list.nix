@@ -407,6 +407,7 @@
   ./security/sudo-rs.nix
   ./security/sudo.nix
   ./security/systemd-confinement.nix
+  ./security/systemd-harden.nix
   ./security/tpm2.nix
   ./security/wrappers/default.nix
   ./services/accessibility/orca.nix
