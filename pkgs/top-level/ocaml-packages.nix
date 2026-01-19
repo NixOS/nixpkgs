@@ -521,7 +521,9 @@ let
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-        eigen = callPackage ../development/ocaml-modules/eigen { };
+        eigen = callPackage ../development/ocaml-modules/eigen {
+          stdenv = pkgs.gcc14Stdenv;
+        };
 
         eio = callPackage ../development/ocaml-modules/eio { };
         eio_linux = callPackage ../development/ocaml-modules/eio/linux.nix { };
