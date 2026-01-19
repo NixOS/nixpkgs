@@ -1111,10 +1111,6 @@ with pkgs;
     wine = wineWowPackages.yabridge;
   };
 
-  yafetch = callPackage ../tools/misc/yafetch {
-    stdenv = clangStdenv;
-  };
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   # The full-featured Git.

@@ -1,18 +1,18 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "yafetch";
   version = "unstable-2022-04-20";
 
   src = fetchFromGitHub {
     owner = "kira64xyz";
-    repo = pname;
+    repo = "yafetch";
     rev = "a118cfc13f0b475db7c266105c10138d838788b8";
-    sha256 = "bSJlerfbJG6h5dDwWQKHnVLH6DEuvuUyqaRuJ7jvOsA=";
+    hash = "sha256-bSJlerfbJG6h5dDwWQKHnVLH6DEuvuUyqaRuJ7jvOsA=";
   };
 
   # Use the provided NixOS logo automatically
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "yafetch";
   };
-}
+})
