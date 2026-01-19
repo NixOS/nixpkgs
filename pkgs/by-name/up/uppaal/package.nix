@@ -9,6 +9,11 @@
   wrapGAppsHook3,
   shared-mime-info,
   gdk-pixbuf,
+  autoPatchelfHook,
+  stdenv,
+  libxml2,
+  zlib,
+  openssl,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -38,12 +43,17 @@ stdenvNoCC.mkDerivation rec {
     makeWrapper
     wrapGAppsHook3
     copyDesktopItems
+    autoPatchelfHook
   ];
 
   buildInputs = [
     jdk17
     gdk-pixbuf
     shared-mime-info
+    stdenv.cc.cc.lib
+    openssl
+    libxml2
+    zlib
   ];
 
   dontBuild = true;
@@ -59,12 +69,26 @@ stdenvNoCC.mkDerivation rec {
 
     cp -r * $out/lib/uppaal
 
+    rm -f $out/lib/uppaal/bin/lib/libc.so*
+    rm -f $out/lib/uppaal/bin/lib/libm.so*
+    rm -f $out/lib/uppaal/bin/lib/libgcc_s.so*
+    rm -f $out/lib/uppaal/bin/lib/libstdc++.so*
+    rm -f $out/lib/uppaal/bin/lib/ld-linux.so*
+
+    rm -f $out/lib/uppaal/bin/libcrypto.so*
+    rm -f $out/lib/uppaal/bin/libssl.so*
+
     chmod +x $out/lib/uppaal/uppaal
 
     makeWrapper $out/lib/uppaal/uppaal $out/bin/uppaal \
       --set JAVA_HOME ${jdk17} \
       --set PATH $out/lib/uppaal:$PATH \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+
+    chmod +x $out/lib/uppaal/bin/verifyta
+
+    makeWrapper $out/lib/uppaal/bin/verifyta $out/bin/verifyta \
+      --set PATH $out/lib/uppaal:$PATH
 
     runHook postInstall
   '';
