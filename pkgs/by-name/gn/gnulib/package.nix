@@ -8,12 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "gnulib";
-  version = "20241001";
+  version = "20260214";
 
   src = fetchgit {
     url = "https://git.savannah.gnu.org/git/gnulib.git";
-    rev = "0a01f6737dc5666c730bdfe6a038da53a4156cc2";
-    hash = "sha256-kbmXnXXoaTPGwjUJvnHWCQFS2KGQ9fsjIyloNmkKdc4=";
+    branchName = "stable-202601";
+    rev = "b5fe5eef18655492142cf781d60eaebe9cfad04b";
+    hash = "sha256-AR3pSaJgKbcLQINwrB3GFFjhFGFSY9xlusfh0z2Trno=";
   };
 
   postPatch = ''
@@ -33,11 +34,6 @@ stdenv.mkDerivation {
 
   # do not change headers to not update all vendored build files
   dontFixup = true;
-
-  passthru.patches = {
-    memcpy-fix = ./memcpy-fix.patch;
-    memcpy-fix-backport-250512 = ./memcpy-fix-backport-250512.patch;
-  };
 
   meta = {
     description = "Central location for code to be shared among GNU packages";
