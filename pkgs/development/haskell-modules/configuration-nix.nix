@@ -1027,6 +1027,7 @@ builtins.intersectAttrs super {
     (disableCabalFlag "no-exe")
     enableSeparateBinOutput
     (addBuildDepend self.optparse-applicative)
+    (addTestToolDepend self.hspec-discover)
   ];
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
