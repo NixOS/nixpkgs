@@ -11,22 +11,22 @@
   proto-plus,
   protobuf,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.26.0";
+  version = "2.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
     tag = "v${version}";
-    hash = "sha256-BA2OWzr0sH77YUkFqMsGJQppqbG3R4sQ2kepicdzejE=";
+    hash = "sha256-wqDGtCYAH2f+P3zUfXgiQTePLr7a0qzUTeEc6pdCGio=";
   };
 
   build-system = [ setuptools ];
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
   ];
 
