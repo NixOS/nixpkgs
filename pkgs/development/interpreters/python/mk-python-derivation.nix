@@ -420,6 +420,7 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
         updateScript = nix-update-script { };
+        ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
       }
       // attrs.passthru or { };
 

@@ -11,7 +11,6 @@
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
-  pythonAtLeast,
   six,
 }:
 
@@ -41,9 +40,6 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  # Don't run tests for older Pythons
-  doCheck = pythonAtLeast "3.9";
 
   disabledTests = [
     # ValueError: Unable to load PEM file.

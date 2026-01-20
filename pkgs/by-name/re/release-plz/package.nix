@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "release-plz";
-  version = "0.3.150";
+  version = "0.3.151";
 
   src = fetchFromGitHub {
     owner = "MarcoIeni";
     repo = "release-plz";
     rev = "release-plz-v${version}";
-    hash = "sha256-gV1B7c7yC5KBjQ5y44dAgMUuGtL55ICM++kNShNh/nM=";
+    hash = "sha256-yH+ggH5bJNvdD+iv3gk6PZ/EXHoQhdl7ur9Sj6/GE/Q=";
   };
 
-  cargoHash = "sha256-o1Gds4UDZRVstPNPaisriUUeX0fabqLrS5TSqXMEB1c=";
+  cargoHash = "sha256-hi0TghUBEXBMSXq+gjxeGZWzpqzQTBg8WGOdkzP1Q70=";
 
   nativeBuildInputs = [
     installShellFiles
