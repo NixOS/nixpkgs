@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sanic-ext";
-  version = "24.12.0";
+  version = "25.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-ext";
     tag = "v${version}";
-    hash = "sha256-H1tqiPQ4SwlNGj7GtB2h7noZpU+gbGXIbmRK1TSSqVA=";
+    hash = "sha256-h1yN5VYFPFUZoeZeJ6+CfGE3m/5zz+/G3BbetDKtZAo=";
   };
 
   build-system = [ setuptools ];
@@ -55,12 +55,6 @@ buildPythonPackage rec {
     pytest-asyncio
     tox
     jinja2
-  ];
-
-  disabledTests = [
-    "test_models[FooPydanticDataclass]" # KeyError: 'paths'
-    "test_pydantic_base_model[AlertResponsePydanticBaseModel-True]" # AssertionError: assert 'AlertPydanticBaseModel' in {'AlertResponsePydanticBaseModel': ... }
-    "test_pydantic_base_model[AlertResponsePydanticDataclass-True]" # AssertionError: assert 'AlertPydanticDataclass' in {'AlertResponsePydanticDataclass': ... }
   ];
 
   pythonImportsCheck = [ "sanic_ext" ];
