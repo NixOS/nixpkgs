@@ -10,8 +10,6 @@
   setuptools,
   tqdm,
   urllib3,
-  pythonOlder,
-  importlib-metadata,
 }:
 
 buildPythonPackage rec {
@@ -34,8 +32,7 @@ buildPythonPackage rec {
     jsonpatch
     schema
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [
     responses

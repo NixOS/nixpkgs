@@ -32,7 +32,6 @@
   setproctitle,
   setuptools,
   pythonOlder,
-  eval-type-backport,
   typing-extensions,
 
   # tests
@@ -206,9 +205,6 @@ buildPythonPackage rec {
     setproctitle
     # setuptools is necessary since pkg_resources is required at runtime.
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    eval-type-backport
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions

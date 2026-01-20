@@ -97,7 +97,7 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
         if lit := option_is(option, key, 'literalMD'):
             return [ self._render(f"*{key.capitalize()}:*\n{lit['text']}") ]
         elif lit := option_is(option, key, 'literalExpression'):
-            code = md_make_code(lit['text'])
+            code = md_make_code(lit['text'], info="nix")
             return [ self._render(f"*{key.capitalize()}:*\n{code}") ]
         elif key in option:
             raise Exception(f"{key} has unrecognized type", option[key])

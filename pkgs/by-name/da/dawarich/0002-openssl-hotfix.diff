@@ -1,0 +1,32 @@
+diff --git a/Gemfile b/Gemfile
+index 36cf0d9c..fc914849 100644
+--- a/Gemfile
++++ b/Gemfile
+@@ -28,6 +28,7 @@ gem 'omniauth-github', '~> 2.0.0'
+ gem 'omniauth-google-oauth2'
+ gem 'omniauth_openid_connect'
+ gem 'omniauth-rails_csrf_protection'
++gem 'openssl'
+ gem 'parallel'
+ gem 'pg'
+ gem 'prometheus_exporter'
+diff --git a/Gemfile.lock b/Gemfile.lock
+index a32eb801..b2fc45bc 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -348,6 +348,7 @@ GEM
+       tzinfo
+       validate_url
+       webfinger (~> 2.0)
++    openssl (3.3.1)
+     optimist (3.2.1)
+     orm_adapter (0.5.0)
+     ostruct (0.6.1)
+@@ -665,6 +666,7 @@ DEPENDENCIES
+   omniauth-google-oauth2
+   omniauth-rails_csrf_protection
+   omniauth_openid_connect
++  openssl
+   parallel
+   pg
+   prometheus_exporter

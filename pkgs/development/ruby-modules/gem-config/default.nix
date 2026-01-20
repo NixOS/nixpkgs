@@ -90,6 +90,7 @@
   fribidi,
   harfbuzz,
   bison,
+  h3_3,
   flex,
   pango,
   python3,
@@ -635,6 +636,21 @@ in
       # For >= v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
         --replace 'apple_toolchain = ' 'apple_toolchain = false && '
+    '';
+  };
+
+  h3 = attrs: {
+    # This gem attempts to build h3 using cmake, but fails because that is not in the path
+    # Use h3 from nixpkgs instead, and reduce closure size by deleting the h3 source code
+    dontBuild = false; # allow applying patches
+    postPatch = ''
+      substituteInPlace ext/h3/Makefile \
+        --replace-fail 'cd src; cmake . -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_SHARED_LIBS=true -DBUILD_FILTERS=OFF -DBUILD_BENCHMARKS=OFF -DENABLE_LINTING=OFF; make' ':'
+      substituteInPlace lib/h3/bindings/base.rb \
+        --replace-fail '__dir__ + "/../../../ext/h3/src/lib"' '"${h3_3}/lib"'
+    '';
+    postInstall = ''
+      rm -rf $out/${ruby.gemPath}/gems/h3-${attrs.version}/ext/h3/src
     '';
   };
 
