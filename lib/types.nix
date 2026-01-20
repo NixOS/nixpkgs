@@ -1696,7 +1696,5 @@ rec {
     in
     if merged == null then setType "merge-error" { error = "Cannot merge types"; } else merged;
 
-  # TODO: Migrate usage of lib.types.types in nixpkgs
-  # Then add a deprecation warning
-  types = lib.types;
+  types = lib.warn "lib.types.types is deprecated, please use lib.types instead." lib.types;
 }
