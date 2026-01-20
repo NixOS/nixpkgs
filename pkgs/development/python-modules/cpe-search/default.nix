@@ -11,7 +11,7 @@
   ujson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cpe-search";
   version = "0.1.9";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ra1nb0rn";
     repo = "cpe_search";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Joo95w5fql9dkBe+tz6MfOWEp1dbJEv6gBdv4HgGq/w=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Search for Common Platform Enumeration (CPE) strings using software names and titles";
     homepage = "https://github.com/ra1nb0rn/cpe_search";
-    changelog = "https://github.com/ra1nb0rn/cpe_search/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ra1nb0rn/cpe_search/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
