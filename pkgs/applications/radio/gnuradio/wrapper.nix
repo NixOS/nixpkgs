@@ -50,6 +50,8 @@
     soapyplutosdr
     soapyremote
     soapyrtlsdr
+  ]
+  ++ lib.optionals (unwrapped.hasFeature "gr-uhd") [
     soapyuhd
   ],
   # Allow to add whatever you want to the wrapper
