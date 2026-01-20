@@ -3,17 +3,28 @@
   python3Packages,
   fetchFromGitHub,
 }:
+let
+  pyinputfix = python3Packages.pynput.overrideAttrs {
+    version = "1.8.2";
 
+    src = fetchFromGitHub {
+      owner = "AuroraWright";
+      repo = "pynputfix";
+      tag = "1.8.2";
+      hash = "sha256-SKw745hh0G2NoWgUUjShyjiG2NYPd4iJlWx7IeGpW/4=";
+    };
+  };
+in
 python3Packages.buildPythonApplication {
   pname = "owocr";
-  version = "1.7.5-unstable-2024-06-26";
+  version = "1.22.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AuroraWright";
     repo = "owocr";
-    rev = "743c64aa16a760f87bf5ea1f54364d828eb3eddb"; # no tags
-    hash = "sha256-TXQwJRgRp7fZBN0r4XGVtlb+iOMRqEUf+LbfBG/vsr8=";
+    rev = "9b9c8b1b4f12a592877a66d727eb25a30462c177"; # no tags
+    hash = "sha256-N9XbuoUbb1qxp/dFacpuDErh01oWmKRdTon3OvLaMfc=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -41,6 +52,11 @@ python3Packages.buildPythonApplication {
     manga-ocr
     rapidocr
     requests # winRT OCR
+    pyinputfix
+    curl-cffi
+    pygobject3
+    dbus-python
+    pywayland
   ];
 
   doCheck = false; # no tests
