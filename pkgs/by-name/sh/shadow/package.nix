@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
-  version = "4.19.1";
+  version = "4.19.2";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     tag = finalAttrs.version;
-    hash = "sha256-7JrRWZ/c9mvainRM1N1mX56wngFPMQcRmbMcnRRRnWU=";
+    hash = "sha256-MtZq5+4CilIpCwJs1a5ZCnPclQgkYSOeYXG2XSUmkJE=";
   };
 
   outputs = [
