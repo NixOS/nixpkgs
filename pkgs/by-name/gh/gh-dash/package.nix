@@ -2,22 +2,22 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  gh-dash,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "gh-dash";
-  version = "4.18.0";
+  version = "4.22.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
     rev = "v${version}";
-    hash = "sha256-iYz4rHoIWIW1XR83ZqkAbsU+5mIkLzq8wemVKUMGf6A=";
+    hash = "sha256-vfp0AUSNl11w9jo7UeYDt+AdSxPzwPdeX7bWcZUkOGc=";
   };
 
-  vendorHash = "sha256-IsEz6hA8jnWP+2ELkZ6V5Y0/rpTz1tAzaYJvzgPQQCo=";
+  vendorHash = "sha256-4AbeoH0l7eIS7d0yyJxM7+woC7Q/FCh0BOJj3d1zyX4=";
 
   ldflags = [
     "-s"
@@ -30,9 +30,9 @@ buildGoModule rec {
     "-skip=TestFullOutput"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = gh-dash; };
-  };
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/dlvhdr/gh-dash/releases/tag/${src.rev}";
