@@ -497,6 +497,20 @@ Composed types are types that take a type as parameter. `listOf
     value of type *`to`*. Can be used to preserve backwards compatibility
     of an option if its type was changed.
 
+`types.json`
+
+:   A type representing JSON-compatible values. This includes `null`, booleans,
+    integers, floats, strings, paths, attribute sets, and lists.
+    Attribute sets and lists can be arbitrarily nested and contain any JSON-compatible
+    values.
+
+`types.toml`
+
+:   A type representing TOML-compatible values. This includes booleans,
+    integers, floats, strings, paths, attribute sets, and lists.
+    Attribute sets and lists can be arbitrarily nested and contain any TOML-compatible
+    values.
+
 ## Submodule {#section-option-types-submodule}
 
 `submodule` is a very powerful type that defines a set of sub-options

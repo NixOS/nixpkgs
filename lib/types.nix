@@ -1437,6 +1437,45 @@ rec {
       };
     };
 
+  /**
+    Creates a value type suitable for serialization formats.
+
+    Parameters:
+    - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
+    - nullable: Whether the structured value type allows `null` values.
+
+    Returns a type suitable for structured data formats that supports:
+    - Basic types: boolean, integer, float, string, path
+    - Complex types: attribute sets and lists
+  */
+  serializableValueWith =
+    {
+      typeName,
+      nullable ? true,
+    }:
+    let
+      baseType = oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ];
+      valueType = (if nullable then nullOr baseType else baseType) // {
+        description = "${typeName} value";
+      };
+    in
+    valueType;
+
+  json = serializableValueWith { typeName = "JSON"; };
+
+  toml = serializableValueWith {
+    typeName = "TOML";
+    nullable = false;
+  };
+
   # Either value of type `t1` or `t2`.
   either =
     t1: t2:
