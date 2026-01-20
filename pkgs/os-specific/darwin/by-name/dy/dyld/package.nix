@@ -30,6 +30,9 @@ let
     name = "dyld-deps-private-headers";
 
     buildCommand = ''
+      install -D -t "$out/include" \
+        '${Libc}/include/_bounds.h'
+
       mkdir -p "$out/include/System"
       for dir in arm i386 machine; do
         mkdir -p "$out/include/$dir"
@@ -45,9 +48,8 @@ let
         '${Libc}/stdlib/FreeBSD/atexit.h'
 
       install -D -m644 -t "$out/include/System/sys" \
-        '${xnu}/bsd/sys/csr.h'
-      substitute '${xnu}/bsd/sys/fsgetpath.h' "$out/include/System/sys/fsgetpath.h" \
-        --replace-fail '#ifdef __APPLE_API_PRIVATE' '#if 1'
+        '${xnu}/bsd/sys/csr.h' \
+        '${xnu}/bsd/sys/fsgetpath.h'
 
       install -D -m644 -t "$out/include" \
         '${libplatform}/private/_simple.h' \
