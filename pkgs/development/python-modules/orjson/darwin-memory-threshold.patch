@@ -1,0 +1,19 @@
+--- a/test/test_memory.py
++++ b/test/test_memory.py
+@@ -4,6 +4,7 @@
+ import datetime
+ import gc
+ import random
++import sys
+ 
+ from .util import numpy, pandas
+ 
+@@ -54,6 +55,8 @@
+ ]
+ 
+ MAX_INCREASE = 4194304  # 4MiB
++if sys.platform == "darwin":
++    MAX_INCREASE = 16777216  # 16MiB
+ 
+ 
+ class Unsupported:

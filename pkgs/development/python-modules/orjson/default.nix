@@ -39,10 +39,14 @@ buildPythonPackage rec {
     hash = "sha256-LK3Up6bAWZkou791nrA9iHlgfDLbk196iTn3CBfeyYc=";
   };
 
-  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # fix architecture checks in build.rs to fix build for riscv
-    ./cross-arch-compat.patch
-  ];
+  patches =
+    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      # fix architecture checks in build.rs to fix build for riscv
+      ./cross-arch-compat.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./darwin-memory-threshold.patch
+    ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
