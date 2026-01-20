@@ -49,6 +49,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  patches = [
+    ./darwin-timeout.patch
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';

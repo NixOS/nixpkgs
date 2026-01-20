@@ -1,0 +1,20 @@
+diff --git a/tests/test_nb_run.py b/tests/test_nb_run.py
+index 44a09f1..b784a05 100644
+--- a/tests/test_nb_run.py
++++ b/tests/test_nb_run.py
+@@ -1,4 +1,5 @@
+ from pathlib import Path
++import sys
+ 
+ import pytest
+ from nbformat import write
+@@ -113,7 +114,8 @@ class TestNotebookRun:
+ 
+     def test_when_import_error_then_fails(self, testdir2: Never):
+         nb = Path(__file__).parent / "resources" / "import_errs.ipynb"
+-        run = NotebookRun(nb, 1, find_import_errors=True)
++        timeout = 5 if sys.platform == "darwin" else 1
++        run = NotebookRun(nb, timeout, find_import_errors=True)
+         res: NotebookResult = run.execute()
+         assert res.error is not None
+         assert "ModuleNotFoundError" in res.error.summary
