@@ -160,8 +160,8 @@
     "version": "69"
   },
   "dtrace": {
-    "hash": "sha256-04Q35rCKnM5Csv5poFJKpK0VplWq4hvy251/Cb2Kl80=",
-    "version": "401.100.3"
+    "hash": "sha256-iNEZyxK3DmEwO3gzrfvCaVZSEuuOMQm5IG/6FodPNdI=",
+    "version": "411"
   },
   "dyld": {
     "hash": "sha256-pbpSD5OeSMOcMJFAd7kyLINPROjqsafsCSphVGyIPyg=",
