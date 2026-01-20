@@ -858,18 +858,6 @@ let
 
           auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
 
-          auto-virtualenv = super.auto-virtualenv.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
-                  url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
-                  hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
-                })
-              ];
-            }
-          );
-
           aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
           badger-theme = ignoreCompilationError super.badger-theme; # elisp error
