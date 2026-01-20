@@ -20,6 +20,28 @@ in
 
     security.polkit.debug = lib.mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
 
+    security.polkit.packages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        with pkgs; [
+          udisks
+          rtkit
+          (writeTextDir "share/polkit-1/rules.d/20-other.rules" '''
+            ...
+          ''')
+          (writeTextDir "share/polkit-1/actions/org.example.MyService1.policy" '''
+            ...
+          ''')
+        ]
+      '';
+      description = ''
+        Packages containing polkit rulesets and actions to be added to the system.
+
+        The items should be located in {file}`@out@/share/polkit-1/` in the packages specified.
+      '';
+    };
+
     security.polkit.extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -74,7 +96,7 @@ in
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
     systemd.services.polkit.reloadTriggers = [
-      config.environment.etc."polkit-1/rules.d/10-nixos.rules".source
+      config.environment.etc."polkit-1".source
     ];
     systemd.services.polkit.stopIfChanged = false;
 
@@ -82,13 +104,22 @@ in
     environment.pathsToLink = [ "/share/polkit-1" ];
 
     # PolKit rules for NixOS.
-    environment.etc."polkit-1/rules.d/10-nixos.rules".text = ''
-      polkit.addAdminRule(function(action, subject) {
-        return [${lib.concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
-      });
+    environment.etc."polkit-1".source = pkgs.symlinkJoin {
+      name = "polkit-rules";
+      paths = cfg.packages;
+      stripPrefix = "/share/polkit-1";
+    };
 
-      ${cfg.extraConfig}
-    ''; # TODO: validation on compilation (at least against typos)
+    security.polkit.packages = [
+      # TODO: validation on compilation (at least against typos)
+      (pkgs.writeTextDir "share/polkit-1/rules.d/10-nixos.rules" ''
+        polkit.addAdminRule(function(action, subject) {
+          return [${lib.concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
+        });
+
+        ${cfg.extraConfig}
+      '')
+    ];
 
     services.dbus.packages = [ cfg.package.out ];
 
