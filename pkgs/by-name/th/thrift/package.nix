@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests that hang up in the Darwin sandbox
     "SecurityTest"
     "SecurityFromBufferTest"
-    "python_test"
 
     # fails on hydra, passes locally
     "concurrency_test"
