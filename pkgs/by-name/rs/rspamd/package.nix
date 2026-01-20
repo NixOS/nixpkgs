@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   doctest,
   fmt,
@@ -40,20 +39,16 @@ assert (!withHyperscan) || (!withVectorscan);
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.13.0";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-0qX/rvcEXxzr/PGL2A59T18Mfcalrjz0KJpEWBKJsZg=";
+    hash = "sha256-XpCdjS6c9nLi1ngeSPBldmK3HmMFfDNW+tNpxdrUoKg=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/rspamd/rspamd/commit/d808fd75ff1db1821b1dd817eb4ba9a118b31090.patch";
-      hash = "sha256-v1Gn3dPxN/h92NYK3PTrZomnbwUcVkAWcYeQCFzQNyo=";
-    })
   ];
 
   nativeBuildInputs = [
