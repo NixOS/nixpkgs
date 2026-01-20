@@ -133,6 +133,11 @@ module.exports = async ({ github, context, core, dry }) => {
           id,
         })
         .then((resp) => resp.data)
+        .catch((e) => {
+          // User may have deleted their account
+          if (e.status === 404) return null
+          throw e
+        })
     }
 
     return users[id]
