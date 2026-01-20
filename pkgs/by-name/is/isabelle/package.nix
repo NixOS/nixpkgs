@@ -12,6 +12,8 @@
   verit,
   vampire,
   eprover-ho,
+  cvc5,
+  csdp,
   rlwrap,
   perl,
   procps,
@@ -85,6 +87,16 @@ let
     '';
   };
 
+  cvc5' = cvc5.overrideAttrs {
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "cvc5";
+      repo = "cvc5";
+      tag = "cvc5-1.2.0";
+      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+    };
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -117,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     vampire'
     eprover-ho
     net-tools
+    cvc5'
+    csdp
   ];
 
   patches = [
@@ -158,6 +172,17 @@ stdenv.mkDerivation (finalAttrs: {
       VAMPIRE_EXTRA_OPTIONS="--mode casc"
     EOF
 
+    cat >contrib/cvc5-*/etc/settings <<EOF
+      CVC5_HOME=${cvc5'}
+      CVC5_VERSION=${cvc5'.version}
+      CVC5_SOLVER=${cvc5'}/bin/cvc5
+      CVC5_INSTALLED=yes
+    EOF
+
+    cat >contrib/csdp-*/etc/settings <<EOF
+      ISABELLE_CSDP=${csdp}/bin/csdp
+    EOF
+
     cat >contrib/polyml-*/etc/settings <<EOF
       ML_SYSTEM_64=true
       ML_SYSTEM=${polyml'.name}
@@ -174,7 +199,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* \
+                contrib/e-* contrib/cvc5-* contrib/csdp-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
     rm -rf contrib/*/src
@@ -300,32 +326,38 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  passthru.withComponents =
-    f:
-    let
-      isabelle = finalAttrs.finalPackage;
-      base = "$out/${isabelle.dirname}";
-      components = f isabelle-components;
-    in
-    symlinkJoin {
-      name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
+  passthru = {
+    vampire = vampire';
+    polyml = polyml';
+    cvc5 = cvc5';
+    sha1 = sha1;
+    withComponents =
+      f:
+      let
+        isabelle = finalAttrs.finalPackage;
+        base = "$out/${isabelle.dirname}";
+        components = f isabelle-components;
+      in
+      symlinkJoin {
+        name = "isabelle-with-components-${isabelle.version}";
+        paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
 
-      postBuild = ''
-        rm $out/bin/*
+        postBuild = ''
+          rm $out/bin/*
 
-        cd ${base}
-        rm bin/*
-        cp ${isabelle}/${isabelle.dirname}/bin/* bin/
-        rm etc/components
-        cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
+          cd ${base}
+          rm bin/*
+          cp ${isabelle}/${isabelle.dirname}/bin/* bin/
+          rm etc/components
+          cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
 
-        export HOME=$TMP
-        bin/isabelle install $out/bin
-        patchShebangs $out/bin
-      ''
-      + lib.concatMapStringsSep "\n" (c: ''
-        echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
-      '') components;
-    };
+          export HOME=$TMP
+          bin/isabelle install $out/bin
+          patchShebangs $out/bin
+        ''
+        + lib.concatMapStringsSep "\n" (c: ''
+          echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+        '') components;
+      };
+  };
 })
