@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "littlegptracker";
-  version = "1.5.0";
+  version = "1.6.0-bacon5";
 
   src = fetchFromGitHub {
     owner = "djdiskmachine";
     repo = "littlegptracker";
     tag = finalAttrs.version;
-    hash = "sha256-SidrFsqAn0JQqthEoYA9H0RdF6jeCeP2Pe+UpAbbL48=";
+    hash = "sha256-RvowzNunu5J+8IBUGi1bSL9QWChAXUcRfpGY6+iUjR8=";
   };
 
   nativeBuildInputs = [
