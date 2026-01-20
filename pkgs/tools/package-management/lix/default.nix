@@ -64,24 +64,10 @@ let
             confDir
             ;
 
-          boehmgc =
-            # TODO: Why is this called `boehmgc-nix_2_3`?
-            let
-              boehmgc-nix_2_3 = boehmgc.override {
-                enableLargeConfig = true;
-                initialMarkStackSize = 1048576;
-              };
-            in
-            # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
-            if lib.versionOlder lix-args.version "2.91" then
-              boehmgc-nix_2_3.overrideAttrs (drv: {
-                patches = (drv.patches or [ ]) ++ [
-                  # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-                  ../nix/patches/boehmgc-coroutine-sp-fallback.patch
-                ];
-              })
-            else
-              boehmgc-nix_2_3;
+          boehmgc = boehmgc.override {
+            enableLargeConfig = true;
+            initialMarkStackSize = 1048576;
+          };
 
           aws-sdk-cpp =
             (aws-sdk-cpp.override {

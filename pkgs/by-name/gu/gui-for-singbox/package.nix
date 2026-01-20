@@ -18,13 +18,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-8X+hLtNKE9iFJMvUtY1ZDXwp39b4bKDotiU79jVto4E=";
+    hash = "sha256-CY5i5+ObqPVCPiqHLttjxhMOi9fiHp5HWX33fq43txw=";
   };
 
   metaCommon = {
