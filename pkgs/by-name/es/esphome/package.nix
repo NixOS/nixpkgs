@@ -4,6 +4,7 @@
   callPackage,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   platformio,
   esptool,
@@ -49,6 +50,12 @@ python.pkgs.buildPythonApplication rec {
     # own python environment through `python -m esptool` and then fails to find
     # the esptool library.
     ./esp32-post-build-esptool-reference.patch
+
+    (fetchpatch {
+      name = "CVE-2026-23833.patch";
+      url = "https://github.com/esphome/esphome/commit/69d7b6e9210390051318bd8e6410727689de08d6.patch";
+      hash = "sha256-TuKsj5tSxV49U9f3OpJECe7UcpKYhkvwPclRtDkK3KU=";
+    })
   ];
 
   build-system = with python.pkgs; [
