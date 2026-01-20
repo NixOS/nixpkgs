@@ -54,12 +54,13 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./django_5_set_zoneinfo_dir.patch {
-      zoneinfo = tzdata + "/share/zoneinfo";
+      zoneinfo = tzdata + "/${python.sitePackages}/tzdata/zoneinfo";
     })
     # prevent tests from messing with our pythonpath
     ./django_5_tests_pythonpath.patch
-    # disable test that expects timezone issues
-    ./django_5_disable_failing_tests.patch
+    ./django_5_darwin_perf.patch
+    ./django_5_test_sqlite_root_urlconf.patch
+    ./django_5_debug_sql_separate_db.patch
 
     # 3.14.1/3.13.10 comapt
     (fetchpatch {
@@ -124,7 +125,8 @@ buildPythonPackage rec {
     # fails to import github_links from docs/_ext/github_links.py
     rm tests/sphinx/test_github_links.py
 
-    # provide timezone data, works only on linux
+    # provide timezone data for zoneinfo on darwin and linux
+    export TZPATH=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
 
     export PYTHONPATH=$PWD/docs/_ext:$PYTHONPATH

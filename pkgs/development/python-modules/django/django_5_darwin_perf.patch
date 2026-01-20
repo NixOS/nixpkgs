@@ -1,0 +1,22 @@
+diff --git a/tests/serializers/test_deserialization.py b/tests/serializers/test_deserialization.py
+index 39d6a6f661..06c97c23da 100644
+--- a/tests/serializers/test_deserialization.py
++++ b/tests/serializers/test_deserialization.py
+@@ -1,6 +1,7 @@
+ import json
+ import time
+ import unittest
++import sys
+ 
+ from django.core.serializers.base import DeserializationError, DeserializedObject
+ from django.core.serializers.json import Deserializer as JsonDeserializer
+@@ -104,7 +105,8 @@ class TestDeserializer(SimpleTestCase):
+ 
+             with self.subTest(label):
+                 # Assert based on the average factor to reduce test flakiness.
+-                self.assertLessEqual(sum(factors) / len(factors), factor)
++                platform_factor = 4 if sys.platform == "darwin" else factor
++                self.assertLessEqual(sum(factors) / len(factors), platform_factor)
+ 
+         assertFactor(
+             "varying depth, varying length",

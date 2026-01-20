@@ -1,0 +1,89 @@
+--- a/tests/test_runner/test_debug_sql.py
++++ b/tests/test_runner/test_debug_sql.py
+@@ -1,9 +1,11 @@
+ import unittest
+ from io import StringIO
+ 
+-from django.db import connection
++from django.conf import settings
++from django.db import connection, connections
+ from django.test import TestCase
+ from django.test.runner import DiscoverRunner
++from django.test.utils import override_settings
+ from django.utils.version import PY311
+ 
+ from .models import Person
+@@ -53,26 +55,55 @@
+                 raise Exception
+ 
+     def _test_output(self, verbosity):
+-        runner = DiscoverRunner(debug_sql=True, verbosity=0)
+-        suite = runner.test_suite()
+-        suite.addTest(self.FailingTest())
+-        suite.addTest(self.ErrorTest())
+-        suite.addTest(self.PassingTest())
+-        suite.addTest(self.PassingSubTest())
+-        suite.addTest(self.FailingSubTest())
+-        suite.addTest(self.ErrorSubTest())
+-        old_config = runner.setup_databases()
+-        stream = StringIO()
+-        resultclass = runner.get_resultclass()
+-        runner.test_runner(
+-            verbosity=verbosity,
+-            stream=stream,
+-            resultclass=resultclass,
+-        ).run(suite)
+-        runner.teardown_databases(old_config)
++        databases = {}
++        for alias, config in settings.DATABASES.items():
++            test_config = config.get("TEST", {}).copy()
++            test_config["NAME"] = (
++                f"file:memorydb_debug_sql_{alias}?mode=memory&cache=shared"
++            )
++            test_config["MIGRATE"] = False
++            databases[alias] = {**config, "TEST": test_config}
+ 
+-        return stream.getvalue()
++        with override_settings(DATABASES=databases):
++            original_settings = connections._settings
++            original_connections = connections._connections
++            original_cached_settings = connections.__dict__.get("settings")
++            try:
++                connections.close_all()
++                connections._settings = None
++                connections._connections = original_connections.__class__(
++                    connections.thread_critical
++                )
++                connections.__dict__.pop("settings", None)
+ 
++                runner = DiscoverRunner(debug_sql=True, verbosity=0)
++                suite = runner.test_suite()
++                suite.addTest(self.FailingTest())
++                suite.addTest(self.ErrorTest())
++                suite.addTest(self.PassingTest())
++                suite.addTest(self.PassingSubTest())
++                suite.addTest(self.FailingSubTest())
++                suite.addTest(self.ErrorSubTest())
++                old_config = runner.setup_databases()
++                stream = StringIO()
++                resultclass = runner.get_resultclass()
++                runner.test_runner(
++                    verbosity=verbosity,
++                    stream=stream,
++                    resultclass=resultclass,
++                ).run(suite)
++                runner.teardown_databases(old_config)
++
++                return stream.getvalue()
++            finally:
++                connections.close_all()
++                connections._settings = original_settings
++                connections._connections = original_connections
++                if original_cached_settings is None:
++                    connections.__dict__.pop("settings", None)
++                else:
++                    connections.__dict__["settings"] = original_cached_settings
++
+     def test_output_normal(self):
+         full_output = self._test_output(1)
+         for output in self.expected_outputs:

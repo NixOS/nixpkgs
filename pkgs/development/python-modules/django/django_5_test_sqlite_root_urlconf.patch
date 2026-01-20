@@ -1,0 +1,9 @@
+--- a/tests/test_sqlite.py
++++ b/tests/test_sqlite.py
+@@ -30,4 +30,6 @@
+ 
+ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+ 
++ROOT_URLCONF = "urls"
++
+ USE_TZ = False
