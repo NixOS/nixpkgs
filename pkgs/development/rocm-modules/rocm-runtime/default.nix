@@ -53,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Vendored upstream PR for fix for segfault when queue allocation fails
+    # https://github.com/ROCm/rocm-systems/pull/2850
+    ./queue-failure.patch
     (fetchpatch {
       # [PATCH] rocr: Extend HIP ISA compatibility check
       sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
