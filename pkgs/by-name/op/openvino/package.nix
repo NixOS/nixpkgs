@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $dev/lib/pkgconfig/openvino.pc \
       --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
-      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="}
+      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="
   '';
 
   meta = with lib; {
