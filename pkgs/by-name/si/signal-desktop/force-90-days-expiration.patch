@@ -1,0 +1,28 @@
+diff --git a/ts/scripts/get-expire-time.node.ts b/ts/scripts/get-expire-time.node.ts
+index 7938f74d3..9d427977d 100644
+--- a/ts/scripts/get-expire-time.node.ts
++++ b/ts/scripts/get-expire-time.node.ts
+@@ -18,7 +18,7 @@ const buildCreation = unixTimestamp * 1000;
+ 
+ // NB: Build expirations are also determined via users' auto-update settings; see
+ // getExpirationTimestamp
+-const validDuration = isNotUpdatable(version) ? DAY * 30 : DAY * 90;
++const validDuration = DAY * 90;
+ const buildExpiration = buildCreation + validDuration;
+ 
+ const localProductionPath = join(
+diff --git a/ts/util/buildExpiration.std.ts b/ts/util/buildExpiration.std.ts
+index 530443ec7..26cb03d7c 100644
+--- a/ts/util/buildExpiration.std.ts
++++ b/ts/util/buildExpiration.std.ts
+@@ -70,9 +70,7 @@ export function hasBuildExpired({
+     return true;
+   }
+ 
+-  const safeExpirationMs = autoDownloadUpdate
+-    ? NINETY_ONE_DAYS
+-    : THIRTY_ONE_DAYS;
++  const safeExpirationMs = NINETY_ONE_DAYS;
+ 
+   const buildExpirationDuration = buildExpirationTimestamp - now;
+   const tooFarIntoFuture = buildExpirationDuration > safeExpirationMs;

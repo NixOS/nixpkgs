@@ -413,6 +413,8 @@ let
 
         dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
 
+        dns-client-miou-unix = callPackage ../development/ocaml-modules/dns/client-miou-unix.nix { };
+
         dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
         dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };

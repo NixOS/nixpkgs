@@ -2625,8 +2625,6 @@ self: super: with self; {
 
   character-encoding-utils = callPackage ../development/python-modules/character-encoding-utils { };
 
-  characteristic = callPackage ../development/python-modules/characteristic { };
-
   chardet = callPackage ../development/python-modules/chardet { };
 
   charset-normalizer = callPackage ../development/python-modules/charset-normalizer { };

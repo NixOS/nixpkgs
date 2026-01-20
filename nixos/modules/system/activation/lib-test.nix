@@ -10,13 +10,7 @@ let
 
   runTests = stdenv.mkDerivation {
     name = "tests-activation-lib";
-    src = fileset.toSource {
-      root = ./.;
-      fileset = fileset.unions [
-        ./lib.sh
-        ./test.sh
-      ];
-    };
+    src = ./lib;
     buildPhase = ":";
     doCheck = true;
     postUnpack = ''
