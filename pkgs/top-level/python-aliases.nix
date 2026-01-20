@@ -88,6 +88,7 @@ mapAliases {
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
   BlinkStick = throw "'BlinkStick' has been renamed to/replaced by 'blinkstick'"; # Converted to throw 2025-10-29
   bsblan = throw "'bsblan' has been renamed to/replaced by 'python-bsblan'"; # Converted to throw 2025-10-29
+  bsddb3 = throw "'bsddb3' has been removed because it was deprecated in favor of 'berkeleydb'"; # added 2026-01-20
   bt_proximity = throw "'bt_proximity' has been renamed to/replaced by 'bt-proximity'"; # Converted to throw 2025-10-29
   btchip = throw "'btchip' has been renamed to/replaced by 'btchip-python'"; # Converted to throw 2025-10-29
   BTrees = throw "'BTrees' has been renamed to/replaced by 'btrees'"; # Converted to throw 2025-10-29
