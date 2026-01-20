@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "awsiotsdk";
-  version = "1.27.0";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python-v2";
     tag = "v${version}";
-    hash = "sha256-CafecTMRNIKQ2FB13SLJwtYwysNMG5DYl2xfHnejApU=";
+    hash = "sha256-Cs+MbI/23bPvdZNaze7ENyEZNT/AVYsPz/dEEzaAy8c=";
   };
 
   postPatch = ''
