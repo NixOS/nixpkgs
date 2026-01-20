@@ -7,21 +7,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zopfli";
   version = "0.4.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qO6ZKyVJ4JDNPwF4v2Bt1Bop4GE6BM31BUIkZixy3OY=";
   };
 
-  pyproject = true;
-
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   buildInputs = [ zopfli ];
-  USE_SYSTEM_ZOPFLI = "True";
+
+  env.USE_SYSTEM_ZOPFLI = "True";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})
