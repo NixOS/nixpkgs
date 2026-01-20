@@ -64,32 +64,33 @@ stdenv.mkDerivation (finalAttrs: {
     # hash.
     sha256 = "194gsmvn7gmwj7b1lw9sq0d0y0babbd0q1229qbb3qjc6f6m0p0y";
   };
-  # This are the minimum required Python dependencies, this attribute might
-  # be useful if you want to build a development environment with a python
-  # interpreter able to import the uhd module.
-  pythonPath =
-    optionals (enablePythonApi || enableUtils) [
-      python3.pkgs.numpy
-      python3.pkgs.setuptools
-    ]
-    ++ optionals enableUtils [
-      python3.pkgs.requests
-      python3.pkgs.six
-
-      /*
-        These deps are needed for the usrp_hwd.py utility, however even if they
-        would have been added here, the utility wouldn't have worked because it
-        depends on an old python library mprpc that is not supported for Python >
-        3.8. See also report upstream:
-        https://github.com/EttusResearch/uhd/issues/744
-
-        python3.pkgs.gevent
-        python3.pkgs.pyudev
-        python3.pkgs.pyroute2
-      */
-    ];
+  inherit (finalAttrs.finalPackage.passthru) pythonPath;
   passthru = {
-    runtimePython = python3.withPackages (ps: finalAttrs.pythonPath);
+    runtimePython = python3.withPackages (ps: finalAttrs.finalPackage.passthru.pythonPath);
+    # This are the minimum required Python dependencies, this attribute might
+    # be useful if you want to build a development environment with a python
+    # interpreter able to import the uhd module.
+    pythonPath =
+      optionals (enablePythonApi || enableUtils) [
+        python3.pkgs.numpy
+        python3.pkgs.setuptools
+      ]
+      ++ optionals enableUtils [
+        python3.pkgs.requests
+        python3.pkgs.six
+
+        /*
+          These deps are needed for the usrp_hwd.py utility, however even if they
+          would have been added here, the utility wouldn't have worked because it
+          depends on an old python library mprpc that is not supported for Python >
+          3.8. See also report upstream:
+          https://github.com/EttusResearch/uhd/issues/744
+
+          python3.pkgs.gevent
+          python3.pkgs.pyudev
+          python3.pkgs.pyroute2
+        */
+      ];
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
