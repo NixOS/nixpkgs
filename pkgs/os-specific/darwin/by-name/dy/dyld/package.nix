@@ -175,5 +175,10 @@ mkAppleDerivation {
 
   dontUseCmakeConfigure = true;
 
+  postInstall = ''
+    install_name_tool "''${!outputBin}/bin/dsc_extractor" \
+      -change @rpath/dsc_extractor.bundle "''${!outputLib}/lib/dsc_extractor.bundle"
+  '';
+
   meta.description = "Dyld-related commands for Darwin";
 }
