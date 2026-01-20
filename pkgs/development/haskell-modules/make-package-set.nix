@@ -210,12 +210,15 @@ let
       fi
     '';
 
-  hackage2nix =
-    name: version:
+  hackage2nix = name: version: self.hackage2nixWithOptions name version "";
+
+  hackage2nixWithOptions =
+    name: version: extraCabal2nixOptions:
     let
       component = all-cabal-hashes-component name version;
     in
     self.haskellSrc2nix {
+      inherit extraCabal2nixOptions;
       name = "${name}-${version}";
       sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}.json")'';
       src = "${component}/${name}.cabal";
@@ -247,6 +250,7 @@ package-set { inherit pkgs lib callPackage; } self
     callPackage
     haskellSrc2nix
     hackage2nix
+    hackage2nixWithOptions
     buildHaskellPackages
     ;
 
@@ -256,7 +260,15 @@ package-set { inherit pkgs lib callPackage; } self
   #
   # e.g., while overriding a package set:
   #    '... foo = self.callHackage "foo" "1.5.3" {}; ...'
-  callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
+  callHackage = name: version: self.callHackageWithOptions name version "";
+
+  # callHackageWithOptions :: Text -> Text -> Text -> AttrSet -> HaskellPackage
+  #
+  # e.g., while overriding a package set:
+  #    '... foo = self.callHackageWithOptions "foo" "1.5.3" "-f some_cabal_flag" {}; ...'
+  callHackageWithOptions =
+    name: version: extraCabal2nixOptions:
+    callPackageKeepDeriver (self.hackage2nixWithOptions name version extraCabal2nixOptions);
 
   # callHackageDirect
   #   :: { pkg :: Text, ver :: Text, sha256 :: Text }
