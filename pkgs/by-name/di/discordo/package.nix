@@ -51,7 +51,10 @@ buildGoModule (finalAttrs: {
     description = "Lightweight, secure, and feature-rich Discord terminal client";
     homepage = "https://github.com/ayn2op/discordo";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ arian-d ];
+    maintainers = with lib.maintainers; [
+      arian-d
+      e-v-o-l-v-e
+    ];
     mainProgram = "discordo";
   };
 })
