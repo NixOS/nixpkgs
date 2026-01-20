@@ -25,13 +25,13 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "4.3.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_heatclient";
     inherit version;
-    hash = "sha256-itp863fyXw2+OuLjMoowRhrblP+/NrDCqrwszkg7dfA=";
+    hash = "sha256-q3CtG+bRPo9gNHl6KJSutDU33EKUun/7C0pBe1ahpx4=";
   };
 
   build-system = [
