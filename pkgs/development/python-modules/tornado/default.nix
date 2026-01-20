@@ -34,6 +34,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # To allow tests to pass on slower/high-load machines
+  env.ASYNC_TEST_TIMEOUT = 30;
+
   disabledTestPaths = [
     # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
     # https://github.com/tornadoweb/tornado/blob/v6.2.0/maint/test/README
