@@ -5,6 +5,7 @@
   findlib,
   framac,
   camlzip,
+  dune-site,
   ocamlgraph,
   menhirLib,
   ppx_deriving,
@@ -23,6 +24,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     camlzip
+    dune-site
     menhirLib
     ocamlgraph
     ppx_deriving

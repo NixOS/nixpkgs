@@ -234,9 +234,9 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "gitlab${lib.optionalString gitlabEnterprise "-ee"}-${version}";
+  pname = "gitlab${lib.optionalString gitlabEnterprise "-ee"}";
 
-  inherit src;
+  inherit src version;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
