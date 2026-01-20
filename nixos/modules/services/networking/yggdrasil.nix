@@ -13,7 +13,6 @@ let
     bool
     listOf
     str
-    attrs
     submodule
     ;
   cfg = config.services.yggdrasil;
@@ -69,7 +68,7 @@ in
 
       settings = mkOption {
         type = submodule {
-          freeformType = attrs;
+          freeformType = (pkgs.formats.json { }).type;
           options = {
             PrivateKeyPath = mkOption {
               type = nullOr path;

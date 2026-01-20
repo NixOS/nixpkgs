@@ -33,13 +33,13 @@
   gpsdGroup ? "dialout",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpsd";
-  version = "3.27.3";
+  version = "3.27.5";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-pNhbZ3l1Iq6GEZWLX9oLtn5JIa/ia9U+HS/wpBWNrMs=";
+    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-QJhz9QSEYu8axBOlGrNcqotQsxvmKzNHvuHMKZTnxkk=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -148,11 +148,11 @@ stdenv.mkDerivation rec {
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
-    changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
+    changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bjornfor
     ];
   };
-}
+})
