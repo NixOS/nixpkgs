@@ -65,8 +65,6 @@ const ALLOWED_VERSION_FIELDS: &[&str] = &[
     "cpu",
     // Lifecycle scripts
     "scripts",
-    // Version selection hint (npm-pick-manifest)
-    "deprecated",
 ];
 
 fn normalize_packument(
