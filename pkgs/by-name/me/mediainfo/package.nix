@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mediainfo";
-  version = "25.09";
+  version = "25.10";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    hash = "sha256-jUug2L19QJf9CjiNQTHeQMNaxdvlKkdgt52PHSnvLmM=";
+    hash = "sha256-NmsyUQGrGppO55+9uOPdnni8wKIcD5sZZjE6rtPTNQI=";
   };
 
   nativeBuildInputs = [
