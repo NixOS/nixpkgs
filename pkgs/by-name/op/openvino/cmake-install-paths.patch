@@ -34,7 +34,7 @@
 +        set(OV_CPACK_ARCHIVEDIR "${CMAKE_INSTALL_LIBDIR}")
      endif()
 -    set(OV_CPACK_PLUGINSDIR ${OV_CPACK_RUNTIMEDIR})
-+    set(OV_CPACK_PLUGINSDIR "${OV_CPACK_RUNTIMEDIR}/openvino")
++    set(OV_CPACK_PLUGINSDIR "${OV_CPACK_RUNTIMEDIR}")
  endmacro()
 
  ov_archive_cpack_set_dirs()
