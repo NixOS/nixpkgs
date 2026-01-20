@@ -418,6 +418,9 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
         updateScript = nix-update-script { };
+        # __stdenvPythonCompat attribute is here for overrideStdenvCompat in `python-packages-base.nix` to work.
+        # It is internal and subject to changes.
+        # TODO(@ShamrockLee): Remove when overrideStdenvCompat gets removed.
         ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
       }
       // attrs.passthru or { };
