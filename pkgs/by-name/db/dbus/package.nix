@@ -129,6 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dselinux=disabled"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # D-Bus defaults to launchd-activation on Darwin, but that requires the launch agent be installed. It also breaks
+    # anything that uses `dbus-run-session` in tests. Changing the default aligns Darwin with other UNIX platforms.
+    "-Ddbus_session_bus_listen_address=unix:tmpdir=/tmp"
     # `launchctl` is only needed at runtime. Lie to `find_program` because it will always be present on a Darwin host.
     "--cross-file=${writeText "darwin.ini" ''
       [binaries]
