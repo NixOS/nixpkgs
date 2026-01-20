@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstall_sysconfdir=${placeholder "out"}/etc"
     "-Ddoxygen_docs=disabled"
     "-Dducktype_docs=disabled"
+    "-Dlaunchd_agent_dir=${placeholder "out"}/Library/LaunchAgents"
     "-Dqt_help=disabled"
     "-Drelocation=disabled" # Conflicts with multiple outputs
     "-Dmodular_tests=disabled" # Requires glib
@@ -113,6 +114,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
     (lib.mesonEnable "systemd" enableSystemd)
     "-Dselinux=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # `launchctl` is only needed at runtime. Lie to `find_program` because it will always be present on a Darwin host.
+    "--cross-file=${writeText "darwin.ini" ''
+      [binaries]
+      launchctl = 'true'
+    ''}"
   ]
   ++ lib.optionals enableSystemd [
     "--cross-file=${writeText "crossfile.ini" ''
