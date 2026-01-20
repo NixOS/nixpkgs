@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -57,16 +58,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simple_parsing" ];
 
-  nativeCheckInputs = [
-    matplotlib
-    numpy
-    orion
-    pytest-benchmark
-    pytest-regressions
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    [
+      matplotlib
+      numpy
+      pytest-benchmark
+      pytest-regressions
+      pytestCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ orion ];
 
   pytestFlags = [ "--benchmark-disable" ];
+
+  preCheck = ''
+    export MPLBACKEND=Agg
+  '';
 
   disabledTests = [
     # AssertionError
