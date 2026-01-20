@@ -1,0 +1,10 @@
+--- a/pytest.ini
++++ b/pytest.ini
+@@ -1,7 +1,6 @@
+ [pytest]
+ norecursedirs=dist build .tox .eggs
+ addopts=
+-	--doctest-modules
+ 	--import-mode importlib
+ consider_namespace_packages=true
+ filterwarnings=

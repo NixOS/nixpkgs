@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-Ym0r92xCh+DNpFexqPlRVgcDGYNvnaJHEs5/RMaUr+s=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin-no-doctest.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"coherent.licensed",' ""
@@ -35,6 +40,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--import-mode=prepend"
+    "-p"
+    "no:tmpdir"
+  ];
 
   pythonImportsCheck = [ "jaraco.test" ];
 
