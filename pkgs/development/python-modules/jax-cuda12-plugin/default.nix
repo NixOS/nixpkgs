@@ -39,42 +39,42 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
-      hash = "sha256-CwozBM5+SUrNjZxZNJDBEqMs22AQ/hr8WE2eQf2GMWc=";
+      hash = "sha256-iTh3d+FyGqq97aGKV3r8fP5O4KscN7MmG9Ryq43wcvc=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp311";
-      hash = "sha256-cNMyIkhK1cN1uPg1e3wjysuET27Pw5Vn+N1H/eboeFg=";
+      hash = "sha256-ocPzEElPn3vmLyuEJXBcPEZvKmIbTk29v7Fa2aevvcA=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-IBZYYbPT5m67LA9jpUfR1e4X6kSsO+cVPHkIycqMiPM=";
+      hash = "sha256-NJNtd+1oWdoIwugYpRVMx++1hFHZ0Ew+zVtE02BfvfI=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-QD1eB3MbXNrDvZ+z9Ei9hIAGLLLAq2HqKtI/zQplR5o=";
+      hash = "sha256-3i6vpuutVBA/CccRAOTkb36gl+jRGUWe+R6OWxTLn6I=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-gsZ5i+Zr+MdzOGkY5MjlzYEZdT87+zyku8RoGCg3UMY=";
+      hash = "sha256-ZnkKIJR/f2RqKkqcXvghdW0sM/uZ3iqA5hKIwI3BeJo=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-Y3OH3DQIzSBFYmaFAvnpX3bG7d4KbS5I8FUWLcKuvw0=";
+      hash = "sha256-mNfwbW7TH/5Ug2A1gv/fyAsTG9fjl+YStiTiG/ad4uI=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-pYmLrB2KtgILVFRkQCVkCfLGa8u7OhCZykc8hIQ63a0=";
+      hash = "sha256-lELFh5/7QAfiU7p+cThmQls7pwg2PNuxoRM4KZwye70=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-WMUUc/xiLgMTgDWYX3QYM1ZNcKS9WiF49htizaoy/5Q=";
+      hash = "sha256-6pHYc/E6Y8QBwoOk9e6HC4EcsrgSLi9qp9Wr+iRBDzM=";
     };
   };
 in
