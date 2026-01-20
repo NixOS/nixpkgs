@@ -1081,15 +1081,20 @@ stdenv.mkDerivation (
     # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
     # See the explanation in addDriverRunpath.
     postFixup =
+      let
+        vulkanLoaderPath = lib.makeLibraryPath [ vulkan-loader ];
+        addLibvulkanRpath = versionAtLeast version "5.0" && withVulkan;
+      in
       optionalString (stdenv.hostPlatform.isLinux && withLib) ''
         addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
         addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
       ''
       # https://trac.ffmpeg.org/ticket/10809
-      + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''
-        patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${
-          lib.makeLibraryPath [ vulkan-loader ]
-        }
+      + optionalString (addLibvulkanRpath && stdenv.hostPlatform.isDarwin) ''
+        install_name_tool $lib/lib/libavcodec.dylib -add_rpath ${vulkanLoaderPath}
+      ''
+      + optionalString (addLibvulkanRpath && stdenv.hostPlatform.isElf) ''
+        patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${vulkanLoaderPath}
       '';
 
     enableParallelBuilding = true;
