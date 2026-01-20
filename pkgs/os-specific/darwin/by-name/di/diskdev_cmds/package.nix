@@ -15,6 +15,8 @@ let
     name = "diskdev_cmds-deps-private-headers";
 
     buildCommand = ''
+      install -D -t "$out/include" \
+        '${Libc}/include/_bounds.h'
       for dir in arm i386 machine sys; do
         install -D -t "$out/include/$dir" '${xnu}'"/bsd/$dir/disklabel.h"
       done
