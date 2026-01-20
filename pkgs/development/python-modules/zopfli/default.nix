@@ -9,12 +9,11 @@
 
 buildPythonPackage rec {
   pname = "zopfli";
-  version = "0.2.3";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";
-    extension = "zip";
+    hash = "sha256-qO6ZKyVJ4JDNPwF4v2Bt1Bop4GE6BM31BUIkZixy3OY=";
   };
 
   pyproject = true;
