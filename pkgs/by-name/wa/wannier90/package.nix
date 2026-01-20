@@ -2,6 +2,7 @@
   stdenv,
   lib,
   gfortran,
+  perl,
   blas,
   lapack,
   python3,
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
   pname = "wannier90";
   version = "3.1.0";
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [
+    gfortran
+    perl
+  ];
   buildInputs = [
     blas
     lapack
@@ -37,9 +41,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # test cases are removed as error bounds of wannier90 are obviously to tight
+  # Increase all numerical thresholds by a factor of 5. The tests are not
+  # numerically stable enough with differen BLAS and LAPACK implementations and
+  # dynamic CPU detection.
   postPatch = ''
-    rm -r test-suite/tests/testpostw90_{fe_kpathcurv,fe_kslicecurv,si_geninterp,si_geninterp_wsdistance}
+    perl -i.bak -pe 's/(\d+\.\d+e[+-]?\d+)/sprintf("%.10e", $1 * 5)/ge' test-suite/tests/userconfig
     rm -r test-suite/tests/testw90_example26   # Fails without AVX optimizations
     patchShebangs test-suite/run_tests test-suite/testcode/bin/testcode.py
   '';
