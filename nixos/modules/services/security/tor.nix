@@ -1441,9 +1441,9 @@ in
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
         BindReadOnlyPaths = [
-          builtins.storeDir
           "/etc"
         ]
+        ++ lib.optional (!config.systemd.services.tor.confinement.enable) builtins.storeDir
         ++ lib.optionals config.services.resolved.enable [
           "/run/systemd/resolve/stub-resolv.conf"
           "/run/systemd/resolve/resolv.conf"
