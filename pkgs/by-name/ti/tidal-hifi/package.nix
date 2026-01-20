@@ -47,7 +47,7 @@
 }:
 
 let
-  version = "6.0.0";
+  version = "6.0.1";
 
   electronLibPath = lib.makeLibraryPath [
     alsa-lib
@@ -95,7 +95,7 @@ buildNpmPackage (self: {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = version;
-    hash = "sha256-t9sNOLIhxA2/5tpILgGkNkkg1wmX2smcEeWWh424GPA=";
+    hash = "sha256-wc8KsZGNjaIG9sijVGEzoJ7ZTmu4xX8b/ETjlMkNyDs=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ buildNpmPackage (self: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-CvqKElGYJ/sXxIz/vEWi21tyyPbRoZgQG8We1g2XNHM=";
+  npmDepsHash = "sha256-lec3XcdZc+lcp/b175m/4dgBPLJCvlUPN8Ttqdehgw4=";
   forceGitDeps = true;
   makeCacheWritable = true;
 

@@ -7,7 +7,6 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdenv,
   urllib3,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "geventhttpclient";
   version = "2.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geventhttpclient";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   google-auth,
   google-auth-oauthlib,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "gcsfs";
   version = "2025.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fsspec";

@@ -5,7 +5,6 @@
   decorator,
   fetchPypi,
   numpy,
-  pythonOlder,
   scipy,
   setuptools,
   six,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pysptk";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

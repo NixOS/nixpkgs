@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   # build_requires
   cython,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   version = "0.8.18";
 
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "clickhouse-connect";

@@ -8,7 +8,6 @@
   numpy,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   remotezip,
   requests-mock,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "asf-search";
   version = "9.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asfadmin";

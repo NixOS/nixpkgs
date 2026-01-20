@@ -5,16 +5,12 @@
   pytestCheckHook,
   click,
   setuptools-scm,
-  pythonOlder,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "cloup";
   version = "3.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,7 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ click ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

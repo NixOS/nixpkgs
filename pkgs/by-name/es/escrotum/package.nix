@@ -13,7 +13,7 @@
 python3Packages.buildPythonApplication {
   pname = "escrotum";
   version = "1.0.1-unstable-2020-12-07";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Roger";

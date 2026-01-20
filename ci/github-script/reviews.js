@@ -1,3 +1,16 @@
+const eventToState = {
+  COMMENT: 'COMMENTED',
+  REQUEST_CHANGES: 'CHANGES_REQUESTED',
+}
+
+/**
+ * @param {{
+ *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
+ *  context: import('@actions/github/lib/context').Context
+ *  core: import('@actions/core')
+ *  dry: boolean
+ * }} CheckTargetBranchProps
+ */
 async function dismissReviews({ github, context, dry }) {
   const pull_number = context.payload.pull_request.number
 
@@ -19,13 +32,13 @@ async function dismissReviews({ github, context, dry }) {
             ...context.repo,
             pull_number,
             review_id: review.id,
-            message: 'All good now, thank you!',
+            message: 'Review dismissed automatically',
           })
         }
         await github.graphql(
           `mutation($node_id:ID!) {
             minimizeComment(input: {
-              classifier: RESOLVED,
+              classifier: OUTDATED,
               subjectId: $node_id
             })
             { clientMutationId }
@@ -36,7 +49,14 @@ async function dismissReviews({ github, context, dry }) {
   )
 }
 
-async function postReview({ github, context, core, dry, body }) {
+async function postReview({
+  github,
+  context,
+  core,
+  dry,
+  body,
+  event = 'REQUEST_CHANGES',
+}) {
   const pull_number = context.payload.pull_request.number
 
   const pendingReview = (
@@ -49,10 +69,7 @@ async function postReview({ github, context, core, dry, body }) {
       review.user?.login === 'github-actions[bot]' &&
       // If a review is still pending, we can just update this instead
       // of posting a new one.
-      (review.state === 'CHANGES_REQUESTED' ||
-        // No need to post a new review, if an older one with the exact
-        // same content had already been dismissed.
-        review.body === body),
+      review.state === eventToState[event],
   )
 
   if (dry) {
@@ -72,7 +89,7 @@ async function postReview({ github, context, core, dry, body }) {
       await github.rest.pulls.createReview({
         ...context.repo,
         pull_number,
-        event: 'REQUEST_CHANGES',
+        event,
         body,
       })
     }

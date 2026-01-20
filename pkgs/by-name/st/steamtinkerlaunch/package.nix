@@ -112,7 +112,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      urandom
       surfaceflinger
     ];
     platforms = lib.platforms.linux;

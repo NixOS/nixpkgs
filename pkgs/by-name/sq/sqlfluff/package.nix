@@ -22,31 +22,25 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "click"
   ];
-  dependencies =
-    with python3Packages;
-    [
-      appdirs
-      cached-property
-      chardet
-      click
-      colorama
-      configparser
-      diff-cover
-      jinja2
-      oyaml
-      pathspec
-      platformdirs
-      pytest
-      regex
-      tblib
-      toml
-      tqdm
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      backports.cached-property
-      importlib_metadata
-    ];
+  dependencies = with python3Packages; [
+    appdirs
+    cached-property
+    chardet
+    click
+    colorama
+    configparser
+    diff-cover
+    jinja2
+    oyaml
+    pathspec
+    platformdirs
+    pytest
+    regex
+    tblib
+    toml
+    tqdm
+    typing-extensions
+  ];
 
   nativeCheckInputs = with python3Packages; [
     hypothesis

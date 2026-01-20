@@ -1,7 +1,6 @@
 {
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  fetchpatch2,
   lib,
 
   # dependencies

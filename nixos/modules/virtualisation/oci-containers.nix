@@ -555,7 +555,7 @@ in
       backend = "docker";
       containers = lib.mapAttrs (
         n: v:
-        builtins.removeAttrs (
+        removeAttrs (
           v
           // {
             extraOptions = v.extraDockerOptions or [ ];

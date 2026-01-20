@@ -4,16 +4,13 @@
   cython,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asyncmy";
   version = "0.2.10";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "long2ice";

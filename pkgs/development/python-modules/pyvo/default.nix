@@ -4,7 +4,6 @@
   fetchPypi,
   astropy,
   pillow,
-  pythonOlder,
   pytestCheckHook,
   pytest-astropy,
   requests,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyvo";
   version = "1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;

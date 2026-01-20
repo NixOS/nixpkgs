@@ -12,7 +12,6 @@
   aiofiles,
   etils,
   humanize,
-  importlib-resources,
   jax,
   msgpack,
   nest-asyncio,
@@ -57,7 +56,6 @@ buildPythonPackage rec {
     aiofiles
     etils
     humanize
-    importlib-resources
     jax
     msgpack
     nest-asyncio
@@ -68,7 +66,9 @@ buildPythonPackage rec {
     simplejson
     tensorstore
     typing-extensions
-  ];
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.epy;
 
   nativeCheckInputs = [
     chex

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "sphinx-togglebutton";
   version = "0.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

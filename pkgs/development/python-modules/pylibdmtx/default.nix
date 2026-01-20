@@ -47,6 +47,5 @@ buildPythonPackage rec {
     description = "Read and write Data Matrix barcodes from Python 2 and 3 using the libdmtx library";
     homepage = "https://github.com/NaturalHistoryMuseum/pylibdmtx/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ grahamc ];
   };
 }

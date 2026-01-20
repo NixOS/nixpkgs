@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
   basemap,
   gfortran,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "wrf-python";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NCAR";

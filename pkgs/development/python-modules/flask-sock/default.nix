@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitHub,
   flask,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "flask-sock";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";

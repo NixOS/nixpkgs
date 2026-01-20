@@ -32,6 +32,6 @@ buildGoModule rec {
     mainProgram = "gotrue";
     changelog = "https://github.com/netlify/gotrue/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

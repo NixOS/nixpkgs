@@ -59,10 +59,11 @@ let
 
   _icu = if isDarwin then darwin.ICU else icu;
 
-in
-stdenv.mkDerivation rec {
-  pname = "${baseName}-vmr";
   version = release;
+in
+stdenv.mkDerivation {
+  pname = "${baseName}-vmr";
+  inherit version;
 
   # TODO: fix this in the binary sdk packages
   preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -383,7 +384,9 @@ stdenv.mkDerivation rec {
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString isLinux "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (
+    isLinux && glibcLocales != null
+  ) "${glibcLocales}/lib/locale/locale-archive";
 
   # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
   # caused by separateDebugInfo
@@ -398,9 +401,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "10") [
-    "--branding rtm"
   ]
   ++ [
     "--"

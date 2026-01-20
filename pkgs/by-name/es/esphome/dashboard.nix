@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PZf9YLtHqeR+5BRVv1yOMVt6NVlbJTj98ukGnO0RV0Q=";
   };
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   pytestCheckHook,
   ujson,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "demoji";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bsolomon1124";

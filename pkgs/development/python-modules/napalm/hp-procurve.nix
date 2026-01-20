@@ -7,7 +7,6 @@
   pip,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   standard-telnetlib,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "napalm-hp-procurve";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napalm-automation-community";

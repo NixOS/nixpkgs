@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "instaloader";
   version = "4.14.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "instaloader";

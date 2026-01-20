@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-launcher";
-  version = "1.0.1";
+  version = "1.0.2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {

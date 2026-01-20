@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "atomic-operator";
   version = "0.8.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swimlane";

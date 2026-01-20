@@ -9,7 +9,7 @@ echo "Updating metasploit to $latest"
 
 sed -i "s#refs/tags/.*#refs/tags/$latest\"#" Gemfile
 
-bundler install
+BUNDLE_FORCE_RUBY_PLATFORM=true bundle lock --update
 bundix
 sed -i '/[ ]*dependencies =/d' gemset.nix
 

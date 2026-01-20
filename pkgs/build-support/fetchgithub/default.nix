@@ -15,6 +15,7 @@ let
     fetchLFS = false;
     forceFetchGit = false;
     leaveDotGit = null;
+    postCheckout = "";
     rootDir = "";
     sparseCheckout = null;
   };

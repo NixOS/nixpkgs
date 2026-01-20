@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.17.5";
+  version = "3.18.0";
 
   pyproject = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "translate";
     repo = "translate";
     tag = version;
-    hash = "sha256-I0HpVL/bH78oFGDWkXyRvZejXzjDHXFfdPu/+iMgAQw=";
+    hash = "sha256-wc8bSXdFHVSzm4CWZ9b27zEYNH0rbEXf0i947VNTg/8=";
   };
 
   build-system = [ setuptools-scm ];

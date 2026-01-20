@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   dbus,
-  fltk13,
+  fltk_1_3,
   gtk2,
   libICE,
   libSM,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    fltk13
+    fltk_1_3
     gtk2
     libICE
     libSM

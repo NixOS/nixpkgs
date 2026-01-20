@@ -2,8 +2,10 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  primecount,
+  meson-python,
   cython,
+  pkg-config,
+  primecount,
   cysignals,
 
   # Reverse dependency
@@ -12,18 +14,24 @@
 
 buildPythonPackage rec {
   pname = "primecountpy";
-  version = "0.1.1";
-  format = "setuptools";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yFYYF8C+hu7/xBuXtu9hfXlfcs895Z2SNNHIPX5CQDA=";
+    sha256 = "sha256-iIcGq2XMCJ+5g95GOTYN3ccouqTZh3p62LEW9kVlCzk=";
   };
+
+  build-system = [
+    meson-python
+    cython
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ primecount ];
 
   propagatedBuildInputs = [
-    cython
     cysignals
   ];
 

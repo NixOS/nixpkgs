@@ -11,7 +11,6 @@
   pysingleton,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   tag-expressions,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "radish-bdd";
   version = "0.18.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = pname;

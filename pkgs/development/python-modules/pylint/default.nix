@@ -13,6 +13,7 @@
   pytest-timeout,
   pytest-xdist,
   pytest7CheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   setuptools,
@@ -25,8 +26,6 @@ buildPythonPackage rec {
   pname = "pylint";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
@@ -45,8 +44,7 @@ buildPythonPackage rec {
     platformdirs
     tomlkit
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     gitpython
@@ -95,6 +93,10 @@ buildPythonPackage rec {
     "test_functional"
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ModuleNotFoundError: No module named 'completely_unknown'
+    "test_do_not_import_files_from_local_directory"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_parallel_execution"

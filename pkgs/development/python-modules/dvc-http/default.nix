@@ -6,7 +6,6 @@
   dvc-objects,
   fsspec,
   funcy,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "dvc-http";
   version = "2.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";

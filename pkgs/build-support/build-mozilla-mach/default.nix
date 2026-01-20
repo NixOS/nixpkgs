@@ -51,7 +51,7 @@ in
   autoconf,
   cargo,
   dump_syms,
-  makeWrapper,
+  makeBinaryWrapper,
   mimalloc,
   nodejs,
   perl,
@@ -76,8 +76,8 @@ in
   glib,
   gnum4,
   gtk3,
-  icu73,
   icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
+  icu78,
   libGL,
   libGLU,
   libevent,
@@ -130,7 +130,9 @@ in
   jemallocSupport ? !stdenv.hostPlatform.isMusl,
   jemalloc,
   ltoSupport ? (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV
+    (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && stdenv.hostPlatform.is64bit
+    && !stdenv.hostPlatform.isRiscV
   ),
   overrideCC,
   buildPackages,
@@ -163,7 +165,7 @@ in
   geolocationSupport ? !privacySupport,
   webrtcSupport ? !privacySupport,
 
-  # digital rights managemewnt
+  # digital rights management
 
   # This flag controls whether Firefox will show the nagbar, that allows
   # users at runtime the choice to enable Widevine CDM support when a site
@@ -315,7 +317,16 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    # Revert apple sdk bump to 26.1
+    # Revert apple sdk bump to 26.1 and 26.2
+    ++
+      lib.optionals (lib.versionAtLeast version "148" && lib.versionOlder apple-sdk_26.version "26.2")
+        [
+          (fetchpatch {
+            url = "https://github.com/mozilla-firefox/firefox/commit/73cbb9ff0fdbf8b13f38d078ce01ef6ec0794f9c.patch";
+            hash = "sha256-ghdddJxsaxXzLZpOOfwss+2S/UUcbLqKGzWWqKy9h/k=";
+            revert = true;
+          })
+        ]
     ++
       lib.optionals (lib.versionAtLeast version "146" && lib.versionOlder apple-sdk_26.version "26.1")
         [
@@ -354,7 +365,7 @@ buildStdenv.mkDerivation {
     cargo
     gnum4
     llvmPackagesBuildBuild.bintools
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     perl
     python3
@@ -466,7 +477,7 @@ buildStdenv.mkDerivation {
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
   ]
-  # LTO is done using clang and lld on Linux.
+  # LTO is done using clang and lld.
   ++ lib.optionals ltoSupport [
     "--enable-lto=cross,full" # Cross-Language LTO
     "--enable-linker=lld"
@@ -581,7 +592,7 @@ buildStdenv.mkDerivation {
       libdrm
     ]
   ))
-  ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
+  ++ [ (if (lib.versionAtLeast version "147") then icu78 else icu77) ]
   ++ lib.optional gssSupport libkrb5
   ++ lib.optional jemallocSupport jemalloc
   ++ extraBuildInputs;
@@ -657,9 +668,6 @@ buildStdenv.mkDerivation {
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
-
-      # Needed to find Mozilla runtime
-      gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
 
       resourceDir=$out/lib/${binaryName}
     ''

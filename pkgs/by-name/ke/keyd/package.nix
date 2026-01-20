@@ -23,7 +23,7 @@ let
   appMap = pypkgs.buildPythonApplication rec {
     pname = "keyd-application-mapper";
     inherit version src;
-    format = "other";
+    pyproject = false;
 
     postPatch = ''
       substituteInPlace scripts/${pname} \
@@ -72,6 +72,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Key remapping daemon for Linux";
+    homepage = "https://github.com/rvaiya/keyd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alfarel ];
     platforms = lib.platforms.linux;

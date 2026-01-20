@@ -6,15 +6,12 @@
   mdformat,
   mdit-py-plugins,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-admon";
   version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KyleKing";

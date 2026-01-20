@@ -13,13 +13,13 @@
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "25.12.0";
+  version = "26.1.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-hu5Y67vomAJI1IJ1gLAdapRACDW/Q+cOAB+Bo4uQ9+w=";
+    hash = "sha256-WjWmiosDgEj3vTsOIKysR5HrNzkApQppUsdSil4Umbo=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -27,8 +27,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "570f8db9dd436810e014d587b4d27105bce7dfda";
-    hash = "sha256-fVyO4rMgbdI1Hm3J4ka9/72sNcwlfLS6Ef06YUvx4Gs=";
+    rev = "813c3d7cc8feb667c0ea3c25ba13156d75475cfe";
+    hash = "sha256-Qv9FFQCZv6WxYffP1W8Hdw15NDiGhkTeAUbyrOV5wxw=";
   };
 
 in
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Hlc/UMPfZCBbBcmCzmNgDSX+uH8WDEIp/KE9H5jYr2Y=";
+    hash = "sha256-7CxsRmuA53JZJa8IznJKGVvHzE7CeM7XklIZznRqXis=";
   };
 
   pname = "actual-server";
@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag
+      lib.maintainers.yash-garg
     ];
   };
 })

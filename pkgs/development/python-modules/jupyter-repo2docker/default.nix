@@ -10,7 +10,6 @@
   jinja2,
   pkgs-docker,
   python-json-logger,
-  pythonOlder,
   requests,
   ruamel-yaml,
   semver,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "jupyter-repo2docker";
   version = "2025.08.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";

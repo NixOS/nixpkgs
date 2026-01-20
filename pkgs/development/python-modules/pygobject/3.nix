@@ -11,7 +11,6 @@
   ncurses,
   meson,
   ninja,
-  pythonOlder,
   gnome,
   python,
 }:
@@ -25,9 +24,7 @@ buildPythonPackage rec {
     "dev"
   ];
 
-  disabled = pythonOlder "3.9";
-
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";

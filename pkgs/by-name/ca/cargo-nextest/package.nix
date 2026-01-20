@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
-    rev = "cargo-nextest-${version}";
+    tag = "cargo-nextest-${version}";
     hash = "sha256-Ff9GibY6pm7+NbgAB8iNO+uj+uK1sxU+UkaiIS5BLEk=";
   };
 
@@ -33,7 +33,9 @@ rustPlatform.buildRustPackage rec {
     "cargo-nextest"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^cargo-nextest-([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Next-generation test runner for Rust projects";
@@ -46,6 +48,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       matthiasbeyer
+      chrjabs
     ];
   };
 }

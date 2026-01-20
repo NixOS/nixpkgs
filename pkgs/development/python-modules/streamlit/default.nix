@@ -15,7 +15,6 @@
   protobuf,
   pyarrow,
   pydeck,
-  pythonOlder,
   setuptools,
   requests,
   rich,
@@ -26,21 +25,17 @@
   watchdog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit";
-  version = "1.52.2";
+  version = "1.53.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZKTdqLxc3Te/1JDpO7U9o1qu+Ub8/Cg6eYDazfFlEIs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ARQRbTRYny5lK/Ssc1o6ymmAfmWfkvmcmOe2INAAg48=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [ "packaging" ];
 
@@ -77,7 +72,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://streamlit.io/";
-    changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
+    changelog = "https://github.com/streamlit/streamlit/releases/tag/${finalAttrs.version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
     maintainers = with lib.maintainers; [
@@ -86,4 +81,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.asl20;
   };
-}
+})

@@ -23,6 +23,9 @@ stdenv.mkDerivation {
 
   patches = [
     ./darwin-no-universal.patch
+
+    # https://github.com/libui-ng/libui-ng/pull/348
+    ./0001-Remove-cm_print_error-declaration.patch
   ];
 
   nativeBuildInputs = [

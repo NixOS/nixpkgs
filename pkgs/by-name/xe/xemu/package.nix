@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.129";
+  version = "0.8.132";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y7iIODMczLFRisOPxLPsl2Ot44I8pvjflD3vI+4rIlk=";
+    hash = "sha256-oIsO3pYP3ggs9IgMlMi2z+AWZT6HvCpPOzOk2FdgOPs=";
 
     nativeBuildInputs = [
       git
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
-  __structuredAttrs = true;
+  __structuredAttrs = false;
   nativeBuildInputs = [
     SDL2
     meson

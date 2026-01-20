@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "eero-lehtinen";
     repo = "oklch-color-picker";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-dbsE1mYt/GhpkWIBS6MejiKKKz1B+h/3wqGKHCp0p2Q=";
   };
 

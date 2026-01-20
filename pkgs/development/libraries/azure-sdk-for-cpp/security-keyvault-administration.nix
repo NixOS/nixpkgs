@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-security-keyvault-administration_4.0.0-beta.5";
     hash = "sha256-EaiJ2Q6c1VsL+RRF0MvS8jdcHwrKLeTJ0fBlySFt/+w=";
   };
-  sourceRoot = "source/sdk/keyvault/azure-security-keyvault-administration";
+  sourceRoot = "${finalAttrs.src.name}/sdk/keyvault/azure-security-keyvault-administration";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

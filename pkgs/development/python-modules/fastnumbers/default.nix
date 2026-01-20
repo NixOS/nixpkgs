@@ -6,7 +6,6 @@
   hypothesis,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "fastnumbers";
   version = "5.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SethMMorton";

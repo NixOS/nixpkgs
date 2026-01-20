@@ -24,7 +24,7 @@
   pipewire,
   symlinkJoin,
   udev,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   xorg,
 }:
 
@@ -38,7 +38,7 @@ symlinkJoin {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook4
+    wrapGAppsHook3
   ];
 
   buildInputs = [

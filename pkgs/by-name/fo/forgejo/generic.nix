@@ -114,6 +114,9 @@ buildGoModule rec {
     getGoDirs() {
       make show-backend-tests
     }
+
+    # TestRunHookPrePostReceive (cmd/hook_test.go) needs .git to pass
+    git init
   '';
 
   checkFlags =

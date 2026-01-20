@@ -5,8 +5,8 @@
   build,
   click,
   fetchFromGitHub,
-  pep517,
   pip,
+  pyproject-hooks,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -19,29 +19,27 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.5.1-unstable-2025-11-08";
+  version = "7.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "pip-tools";
-    rev = "785ed5e30f4c86c24141898553a356402b142adf";
-    hash = "sha256-2mYUjLqrpN/sjR79t/ZIfpvVXAgpk/tpZWFcT/6e7uk=";
+    tag = "v${version}";
+    hash = "sha256-+y4oXiLWGFIzIT75EZFpcYCX5HKeEyPsk+phTOyoKl8=";
   };
 
   patches = [
     ./fix-setup-py-bad-syntax-detection.patch
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "7.5.1";
-
   build-system = [ setuptools-scm ];
 
   dependencies = [
     build
     click
-    pep517
     pip
+    pyproject-hooks
     setuptools
     wheel
   ]
@@ -60,12 +58,22 @@ buildPythonPackage rec {
     export no_proxy='*';
   '';
 
+  disabledTestPaths = [
+    # Most tests require network access
+    "tests/test_cli_compile.py"
+  ];
+
   disabledTests = [
     # Tests require network access
     "network"
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
     "test_bad_setup_file"
+    "test_get_hashes_local_repository_cache_miss"
+    "test_toggle_reuse_hashes_local_repository"
+    "test_get_hashes_from_mixed"
+    "test_toggle_reuse_hashes_local_repository"
+    "test_generate_hashes_all_platforms"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"
@@ -75,11 +83,6 @@ buildPythonPackage rec {
     # Deprecations
     "test_error_in_pyproject_toml"
 
-    # pip 25.0 compat issues
-    # https://github.com/jazzband/pip-tools/issues/2112
-    # requirement doesn't end with semicolon
-    "test_resolver"
-    "test_resolver__custom_unsafe_deps"
     # constraints.txt is now in a tmpdir
     "test_preserve_via_requirements_constrained_dependencies_when_run_twice"
     "test_annotate_option"

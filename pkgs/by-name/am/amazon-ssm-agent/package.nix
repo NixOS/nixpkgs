@@ -174,7 +174,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      manveru
       anthonyroussel
       arianvp
     ];

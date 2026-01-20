@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pypinyin";
   version = "0.55.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mozillazg";

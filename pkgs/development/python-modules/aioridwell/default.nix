@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   titlecase,
   types-pytz,
@@ -20,9 +19,7 @@
 buildPythonPackage rec {
   pname = "aioridwell";
   version = "2025.09.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";

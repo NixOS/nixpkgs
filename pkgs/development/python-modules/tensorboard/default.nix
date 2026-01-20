@@ -27,7 +27,8 @@ buildPythonPackage rec {
   # tensorflow/tensorboard is built from a downloaded wheel, because
   # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";

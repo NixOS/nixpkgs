@@ -11,7 +11,15 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "cmake-language-server";
   version = "0.1.11";
   pyproject = true;
@@ -31,12 +39,12 @@ python3Packages.buildPythonApplication rec {
         "CALL_TIMEOUT = 10"
   '';
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     pdm-backend
   ];
   dontUseCmakeConfigure = true;
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     pygls
   ];
 
@@ -47,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     cmake-format
     versionCheckHook
   ]
-  ++ (with python3Packages; [
+  ++ (with pythonPackages; [
     pytest-datadir
     pytestCheckHook
   ]);

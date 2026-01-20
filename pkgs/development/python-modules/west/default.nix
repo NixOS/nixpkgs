@@ -6,7 +6,6 @@
   fetchPypi,
   packaging,
   pykwalify,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "west";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

@@ -14,16 +14,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2025.12.0";
+  version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-Pas9NQKLblVuB0Gx4j6Y64Mb2+RaCg7iquSWtN4K7kU=";
+    hash = "sha256-yER9LDFwTQkOdjB84UhEiWUDE+5Qa2vlRzq1/Qc/soY=";
   };
 
   patches = [
+    # https://github.com/bitwarden/clients/pull/18308
     ./fix-lockfile.patch
   ];
 
@@ -34,7 +35,7 @@ buildNpmPackage (finalAttrs: {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-N7e8WKk2REEH4gP5c7k5zsu3n44hFFLxQ2X35viMuwM=";
+  npmDepsHash = "sha256-kgYXuiHeyqAKW0gVitL3b7eZMiZPFCeVeNtxClEJRfc=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl

@@ -66,7 +66,7 @@
   nspr,
   libwpg,
   dbus-glib,
-  clucene_core_2,
+  clucene-core_2,
   libcdr,
   lcms2,
   unixODBC,
@@ -408,7 +408,7 @@ stdenv.mkDerivation (finalAttrs: {
       bluez5
       box2d_2
       cairo
-      clucene_core_2
+      clucene-core_2
       cppunit
       cups
       curl

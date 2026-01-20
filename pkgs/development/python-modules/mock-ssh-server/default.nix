@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   paramiko,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "mock-ssh-server";
   version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carletes";

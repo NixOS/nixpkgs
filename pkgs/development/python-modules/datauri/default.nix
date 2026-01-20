@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
   cached-property,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "datauri";
   version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fcurella";

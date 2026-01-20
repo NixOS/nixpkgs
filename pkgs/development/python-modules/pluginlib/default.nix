@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rockhopper-Technologies";
     repo = "pluginlib";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-mt3VE8iJPCmbws8bAdYMK9to446z8FQtsMZOlkLVUIU=";
   };
 

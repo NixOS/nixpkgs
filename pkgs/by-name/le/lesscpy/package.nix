@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "lesscpy";
   version = "0.15.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

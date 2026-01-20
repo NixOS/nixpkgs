@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Beautiful and customizable wallpaper manager for Linux";
     homepage = "https://github.com/Komorebi-Fork/komorebi";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

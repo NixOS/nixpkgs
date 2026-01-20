@@ -7,7 +7,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   python-dateutil,
-  pythonOlder,
   pytz,
   taskwarrior2,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "taskw-ng";
   version = "0.2.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bergercookie";

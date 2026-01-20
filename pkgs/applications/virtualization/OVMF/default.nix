@@ -91,7 +91,7 @@ let
       "debian/PkKek-1-*.pem"
       "debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch"
     ];
-    rev = "refs/tags/debian/2025.02-8";
+    tag = "debian/2025.02-8";
     hash = "sha256-n/6T5UBwW8U49mYhITRZRgy2tNdipeU4ZgGGDu9OTkg=";
   };
 
@@ -136,7 +136,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "stackprotector"
     "pic"
     "fortify"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "relro";
 
   buildFlags =
     # IPv6 has no reason to be disabled.

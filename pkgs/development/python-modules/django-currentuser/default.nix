@@ -6,7 +6,6 @@
   hatchling,
   pyhamcrest,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "django-currentuser";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zsoldosp";

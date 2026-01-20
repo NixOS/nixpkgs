@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   srsly,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "confection";
   version = "0.1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "explosion";

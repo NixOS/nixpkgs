@@ -69,7 +69,6 @@ in
     homepage = "https://github.com/nix-community/lorri";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      grahamc
       Profpatsch
       nyarly
     ];

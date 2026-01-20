@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "mlmmj";
     repo = "mlmmj";
-    rev = "refs/tags/RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
+    tag = "RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
     hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
   };
 

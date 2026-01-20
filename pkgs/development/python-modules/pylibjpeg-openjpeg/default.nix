@@ -2,7 +2,6 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   cython,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pylibjpeg-openjpeg";
   version = "2.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydicom";

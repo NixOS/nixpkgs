@@ -8,13 +8,15 @@
   glibc,
   harfbuzz,
   libheif,
+  nixosTests,
+  optipng,
   x265,
   libde265,
   icu,
   jdk,
   lib,
-  nodejs,
-  nodePackages,
+  # workaround https://github.com/NixOS/nixpkgs/issues/477805
+  nodejs_22,
   # needs to be static and built with MD2 support!
   openssl,
   pkg-config,
@@ -23,11 +25,12 @@
   stdenv,
   writeScript,
   x2t,
+  grunt-cli,
 }:
 
 let
   qmake = qt5.qmake;
-  libv8 = nodejs.libv8;
+  libv8 = nodejs_22.libv8;
   fixIcu = writeScript "fix-icu.sh" ''
     substituteInPlace \
       $BUILDRT/Common/3dParty/icu/icu.pri \
@@ -42,19 +45,19 @@ let
     "QMAKE_LFLAGS+=-licudata"
     "QMAKE_LFLAGS+=-L${icu}/lib"
   ];
-  # see core/Common/3dParty/html/fetch.sh
-  katana-parser-src = fetchFromGitHub {
-    owner = "jasenhuang";
-    repo = "katana-parser";
-    rev = "be6df458d4540eee375c513958dcb862a391cdd1";
-    hash = "sha256-SYJFLtrg8raGyr3zQIEzZDjHDmMmt+K0po3viipZW5c=";
-  };
   # see core/Common/3dParty/html/fetch.py
   gumbo-parser-src = fetchFromGitHub {
     owner = "google";
     repo = "gumbo-parser";
     rev = "aa91b27b02c0c80c482e24348a457ed7c3c088e0";
     hash = "sha256-+607iXJxeWKoCwb490pp3mqRZ1fWzxec0tJOEFeHoCs=";
+  };
+  # see core/Common/3dParty/html/fetch.sh
+  katana-parser-src = fetchFromGitHub {
+    owner = "jasenhuang";
+    repo = "katana-parser";
+    rev = "be6df458d4540eee375c513958dcb862a391cdd1";
+    hash = "sha256-SYJFLtrg8raGyr3zQIEzZDjHDmMmt+K0po3viipZW5c=";
   };
   # see build_tools scripts/core_common/modules/googletest.py
   googletest-src = fetchFromGitHub {
@@ -117,17 +120,22 @@ let
   qmakeFlags = [ ];
   dontStrip = false;
 
-  # Revisions that correspond to onlyoffice-documentserver 9.1.0
-  core-rev = "82e281cf6bf89498e4de6018423b36576706c2b6";
+  # x2t is not 'directly' versioned, so we version it after the version
+  # of documentserver it's pulled into as a submodule
+  version = "9.2.1";
+  core-rev = "a22f0bfb6032e91f218951ef1c0fc29f6d1ceb36";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-LzbO2A29WxM0XTAO2LGTtg9omL0Pvoh+6+q3ux4i7do=";
+    hash = "sha256-RSoCRcUGnavcNdZEfmBdtxJbEXhiOvbA8IwSeGBkWcs=";
   };
   web-apps = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-core-webapps";
+
+    # workaround for https://github.com/NixOS/nixpkgs/issues/477803
+    nodejs = nodejs_22;
 
     #src = /home/aengelen/d/onlyoffice/documentserver/web-apps;
     #sourceRoot = "/build/web-apps/build";
@@ -135,8 +143,8 @@ let
       owner = "ONLYOFFICE";
       repo = "web-apps";
       # rev that the 'web-apps' submodule in documentserver points at
-      rev = "f63e9674a5d2d2e5a660ab726ec00a359fc3c750";
-      hash = "sha256-kKm6+phd6a7kP/kv6/v/FFgh96Kbs6h6jIjpFtRJgps=";
+      rev = "c2074bbff69902490d49fa7fb511801a11c581f4";
+      hash = "sha256-i+m8a1b8RaVmyUAC+FiEdSyXmPWse9XaJaaLL7iq73o=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -149,15 +157,24 @@ let
     nativeBuildInputs = [
       autoconf
       automake
-      nodePackages.grunt-cli
+      grunt-cli
+      optipng
     ];
 
     dontNpmBuild = true;
+
+    preBuild = ''
+      export PRODUCT_VERSION=${version}
+    '';
 
     postBuild = ''
       chmod u+w ..
       mkdir ../deploy
       chmod u+w -R ../apps
+
+      mkdir -p ./node_modules/optipng-bin/vendor
+      ln -s ${optipng}/bin/optipng ./node_modules/optipng-bin/vendor/optipng
+
       grunt --force
     '';
 
@@ -165,6 +182,11 @@ let
       runHook preInstall
 
       cp -r ../deploy/web-apps $out
+
+      ## see usr/bin/documentserver-flush-cache.sh
+      chmod u+w $out/apps/api/documents
+      substituteInPlace $out/apps/api/documents/api.js \
+        --replace-fail '{{HASH_POSTFIX}}' "$(basename $out | cut -d '-' -f 1)"
 
       runHook postInstall
     '';
@@ -175,8 +197,8 @@ let
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "d169f841a7e9e46368c36236dd5820e3e10d4a98";
-      hash = "sha256-GQwzz3P49sWjCxh41zyuUs5MyMjBQXaMKzxUUTHq0UE=";
+      rev = "1e81e7e844fcc602c639067cce7d7726749dc11b";
+      hash = "sha256-9vDGU8paLUAk3GtLbawhog2EDtCVHzNPBjkryxyg6Gs=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -189,7 +211,7 @@ let
     dontNpmBuild = true;
 
     nativeBuildInputs = [
-      nodePackages.grunt-cli
+      grunt-cli
       jdk
     ];
 
@@ -714,6 +736,32 @@ let
       runHook postInstall
     '';
   };
+  allthemesgen = buildCoreComponent "DesktopEditor/allthemesgen" {
+    buildInputs = [
+      unicodeConverter
+      kernel
+      graphics
+      network
+      doctrenderer
+      docxrenderer
+      pdffile
+      xpsfile
+      djvufile
+    ];
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+    preConfigure = ''
+      source ${fixIcu}
+    '';
+    dontStrip = true;
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp $BUILDRT/build/bin/*/* $BUILDRT/build/bin/*/*/* $out/bin
+
+      runHook postInstall
+    '';
+  };
   core-fonts = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core-fonts";
@@ -736,9 +784,7 @@ let
 in
 buildCoreComponent "X2tConverter/build/Qt" {
   pname = "x2t";
-  # x2t is not 'directly' versioned, so we version it after the version
-  # of documentserver it's pulled into as a submodule
-  version = "9.1.0";
+  inherit version;
 
   buildInputs = [
     unicodeConverter
@@ -789,7 +835,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
     mkdir -p $out/bin
     find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
-    mkdir -p $out/etc
+    mkdir $out/etc
     cat >$out/etc/DoctRenderer.config <<EOF
           <Settings>
             <file>${sdkjs}/common/Native/native.js</file>
@@ -800,6 +846,11 @@ buildCoreComponent "X2tConverter/build/Qt" {
             <dictionaries>${dictionaries}</dictionaries>
           </Settings>
     EOF
+
+    # TODO when allthemesgen invokes x2t as the converter, it
+    # hard-codes expecting DoctRenderer.config in the same dir
+    # the x2t binary is located:
+    ln -s $out/etc/DoctRenderer.config $out/bin/DoctRenderer.config
 
     runHook postInstall
   '';
@@ -814,11 +865,14 @@ buildCoreComponent "X2tConverter/build/Qt" {
     x2t = runCommand "x2t-test" { } ''
       (${x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
     '';
+    nixos-module = nixosTests.onlyoffice;
   };
   passthru.components = {
     inherit
       allfontsgen
+      allthemesgen
       allfonts
+      core-fonts
       unicodeConverter
       kernel
       graphics

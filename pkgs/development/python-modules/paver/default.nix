@@ -6,7 +6,6 @@
   mock,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   six,
   virtualenv,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "paver";
   version = "1.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Paver";

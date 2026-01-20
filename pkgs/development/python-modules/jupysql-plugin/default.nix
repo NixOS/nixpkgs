@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   hatch-jupyter-builder,
   hatch-nodejs-version,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   version = "0.4.5";
 
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   # using pypi archive which includes pre-built assets
   src = fetchPypi {

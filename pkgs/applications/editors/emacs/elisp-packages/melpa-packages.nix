@@ -353,7 +353,7 @@ let
                 pkgs.pkg-config
               ];
 
-              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant_2 ];
 
               postBuild = ''
                 NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
@@ -1765,10 +1765,9 @@ let
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
 
           ws-butler = super.ws-butler.overrideAttrs (old: {
-            # work around https://github.com/NixOS/nixpkgs/issues/436534
-            src = pkgs.fetchFromSavannah {
-              repo = "emacs/nongnu";
-              inherit (old.src) rev outputHash outputHashAlgo;
+            # TODO: Remove override when URL was updated in MELPA.
+            src = old.src.override {
+              url = "https://https.git.savannah.gnu.org/git/elpa/nongnu.git";
             };
           });
 

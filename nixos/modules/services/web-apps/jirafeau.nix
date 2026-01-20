@@ -19,7 +19,7 @@ let
       $cfg['admin_password'] = '${cfg.adminPasswordSha256}';
       $cfg['web_root'] = 'http://${withTrailingSlash cfg.hostName}';
       $cfg['var_root'] = '${withTrailingSlash cfg.dataDir}';
-      $cfg['maximal_upload_size'] = ${builtins.toString cfg.maxUploadSizeMegabytes};
+      $cfg['maximal_upload_size'] = ${toString cfg.maxUploadSizeMegabytes};
       $cfg['installation_done'] = true;
 
       ${cfg.extraConfig}

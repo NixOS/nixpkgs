@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "ansi2html";
   version = "1.9.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

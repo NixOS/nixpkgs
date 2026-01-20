@@ -11,7 +11,6 @@
   pymongo,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
   sqlalchemy,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "filedepot";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "amol-";

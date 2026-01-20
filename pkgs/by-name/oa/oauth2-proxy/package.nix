@@ -28,7 +28,6 @@ buildGoModule rec {
     description = "Reverse proxy that provides authentication with Google, Github, or other providers";
     homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.serokell ];
     mainProgram = "oauth2-proxy";
   };
 }

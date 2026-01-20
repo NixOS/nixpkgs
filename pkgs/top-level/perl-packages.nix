@@ -2724,7 +2724,10 @@ with self;
     meta = {
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -4967,7 +4970,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -5982,7 +5984,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -8827,10 +8832,10 @@ with self;
 
   DateManip = buildPerlPackage {
     pname = "Date-Manip";
-    version = "6.92";
+    version = "6.98";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.92.tar.gz";
-      hash = "sha256-q5Yr05ygnsb8/n5aaRKvcbDB9vA+TtK+9uRHHJ02ehM=";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.98.tar.gz";
+      hash = "sha256-rP2KYFGbpM0YHIpnqD1/ApxtmrTosCEtxH5B1iEP2kk=";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
     patchPhase = ''
@@ -13427,7 +13432,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13458,7 +13466,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -13773,7 +13784,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14018,7 +14032,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14036,7 +14053,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -14742,7 +14762,10 @@ with self;
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -15271,7 +15294,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -18100,9 +18126,12 @@ with self;
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz";
       hash = "sha256-34tRQ9mn3pnEe1XxoXC9H2n3EZNcGGptwKtW3QV1jjU=";
     };
-    # Do not abort cross-compilation on failure to load native JSON module into host perl
+    # Force core provided JSON::PP backend when cross building since dynamic
+    # loading attempts of other backends presumably fail
     preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Makefile.PL --replace "exit 0;" ""
+      substituteInPlace lib/JSON.pm \
+        --replace-fail 'my $backend = exists $ENV{PERL_JSON_BACKEND} ? $ENV{PERL_JSON_BACKEND} : 1;' \
+                       'my $backend = "JSON::PP";'
     '';
     buildInputs = [ TestPod ];
     meta = {
@@ -18914,7 +18943,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -20406,7 +20438,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -26709,8 +26744,11 @@ with self;
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
-      maintainers = [ maintainers.ztzg ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+        ztzg
+      ];
     };
   };
 
@@ -27081,7 +27119,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -27269,7 +27306,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -27961,7 +28001,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
     };
   };
 
@@ -28034,7 +28073,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
     };
   };
@@ -28454,7 +28492,10 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
     };
   };
 
@@ -28472,7 +28513,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
     };
   };

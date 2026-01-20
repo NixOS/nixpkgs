@@ -12,7 +12,6 @@
   psutil,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   pname = "scalene";
   version = "1.5.55";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";

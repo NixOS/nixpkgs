@@ -15,7 +15,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "unbound_exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xVc6xES3YdKIaP6rwAzI0/RLoer7bcq7VAmfjYii8VI=";
   };
 

@@ -9,7 +9,7 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandoc-latex-environment";
   version = "1.2.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chdemko";
     repo = "pandoc-latex-environment";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uyOqw8YnTljgXkwZOXTXAsnobVSV65EVicohREBNMCY=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

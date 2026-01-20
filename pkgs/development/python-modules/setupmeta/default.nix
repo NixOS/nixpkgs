@@ -7,7 +7,6 @@
   pep440,
   pip,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "setupmeta";
   version = "3.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "codrsquad";

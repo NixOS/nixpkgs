@@ -13,7 +13,7 @@
   zlib,
   setuptools,
   cudaSupport ? config.cudaSupport or false,
-  cudaPackages_12_9,
+  cudaPackages,
   addDriverRunpath,
   # runtime dependencies
   httpx,
@@ -23,6 +23,7 @@
   decorator,
   astor,
   opt-einsum,
+  rdma-core,
   safetensors,
   typing-extensions,
 }:
@@ -33,15 +34,25 @@ let
   version = sources.version;
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  cpuOrGpu = if cudaSupport then "gpu" else "cpu";
-  hash =
-    sources."${stdenv.hostPlatform.system}"."${cpuOrGpu}"."${pyShortVersion}"
-      or (throw "${pname} has no sources.nix entry for '${stdenv.hostPlatform.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
-  platform = sources."${stdenv.hostPlatform.system}".platform;
+  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version}";
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  systemSources = sources."${stdenv.hostPlatform.system}" or throwSystem;
+
+  supportedCudaVersions = lib.concatStringsSep ", " (builtins.attrNames systemSources.gpu);
+  throwCuda = throw "Unsupported CUDA version: ${cudaVersion}. Supported versions: ${supportedCudaVersions}";
+  platformSources =
+    if cudaSupport then systemSources.gpu.${cudaVersion} or throwCuda else systemSources.cpu;
+
+  throwPython = throw "Unsupported python version: ${pyShortVersion}";
+  hash = platformSources.${pyShortVersion} or throwPython;
+
+  platform = sources.${stdenv.hostPlatform.system}.platform;
+
   src =
     if cudaSupport then
       (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/cu129/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
+        url = "https://paddle-whl.bj.bcebos.com/stable/${cudaVersion}/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
         inherit hash;
       })
     else
@@ -73,6 +84,8 @@ buildPythonPackage {
   ]
   ++ lib.optionals cudaSupport [ autoPatchelfHook ];
 
+  buildInputs = lib.optionals cudaSupport [ rdma-core ];
+
   dependencies = [
     setuptools
     httpx
@@ -101,7 +114,7 @@ buildPythonPackage {
             (lib.getLib stdenv.cc.cc)
           ]
           ++ lib.optionals cudaSupport (
-            with cudaPackages_12_9;
+            with cudaPackages;
             [
               cudatoolkit.lib
               cudatoolkit.out

@@ -11,16 +11,13 @@
   rustc,
   setuptools-rust,
   openssl,
-  Security ? null,
   isPyPy,
   cffi,
   pkg-config,
   pytestCheckHook,
   pytest-subtests,
-  pythonOlder,
   pretend,
   libiconv,
-  libxcrypt,
   iso8601,
   py,
   pytz,
@@ -34,7 +31,6 @@ buildPythonPackage rec {
   pname = "cryptography";
   version = "40.0.1"; # Also update the hash in vectors.nix
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -91,8 +87,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 

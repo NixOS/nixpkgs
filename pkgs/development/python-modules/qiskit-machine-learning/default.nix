@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "qiskit-machine-learning";
   version = "0.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";

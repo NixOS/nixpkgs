@@ -7,7 +7,7 @@
 let
   cfg = config.services.ddclient;
   dataDir = "/var/lib/ddclient";
-  StateDirectory = builtins.baseNameOf dataDir;
+  StateDirectory = baseNameOf dataDir;
   RuntimeDirectory = StateDirectory;
 
   configFile' = pkgs.writeText "ddclient.conf" ''

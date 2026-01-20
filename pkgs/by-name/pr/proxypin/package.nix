@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   writeShellScript,
@@ -9,9 +9,9 @@
 }:
 
 let
-  version = "1.2.2";
+  version = "1.2.3";
 in
-flutter332.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "proxypin";
   inherit version;
 
@@ -19,7 +19,7 @@ flutter332.buildFlutterApplication {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-aMBUQkG/sZ7M9GzxKpO56MuGPRFLRGjrFpvsIUGDgkA=";
+    hash = "sha256-0eYfE5ziEMcBpLZ7a48ZPn9pmektdgmMcpDvUz4JrFs=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -49,7 +49,7 @@ flutter332.buildFlutterApplication {
     cp --recursive --no-preserve=mode $src/* $WORKDIR
     PACKAGE_DIR=$(dirname $(EDITOR=echo nix edit --file . proxypin))
     pushd $WORKDIR
-    ${lib.getExe flutter332} pub get
+    ${lib.getExe flutter338} pub get
     ${lib.getExe yq-go} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
     popd
     $(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json

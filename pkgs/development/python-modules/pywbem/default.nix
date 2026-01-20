@@ -13,7 +13,6 @@
   pbr,
   ply,
   pytest,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "pywbem";
   version = "1.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

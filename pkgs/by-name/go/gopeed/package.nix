@@ -31,6 +31,13 @@ let
 
     vendorHash = "sha256-rIj4T+NEqWla6/+ofosTwagL4/VMovDp1NEYMuzbOrQ=";
 
+    # Fix C23 compat
+    preBuild = ''
+      chmod +w vendor/github.com/anacrolix/go-libutp/utp_types.h
+      substituteInPlace vendor/github.com/anacrolix/go-libutp/utp_types.h \
+        --replace-fail "typedef uint8 bool;" ""
+    '';
+
     buildPhase = ''
       runHook preBuild
 

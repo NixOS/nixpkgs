@@ -64,6 +64,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
 
+  # This gets installed automatically by cargoInstallHook,
+  # but we don't actually need it, and it leaks a reference to rustc.
+  postInstall = ''
+    rm $out/lib/libhtml2md.so
+  '';
+
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 

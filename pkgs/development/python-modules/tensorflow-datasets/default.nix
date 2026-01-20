@@ -13,6 +13,7 @@
   dm-tree,
   etils,
   immutabledict,
+  importlib-resources,
   numpy,
   promise,
   protobuf,
@@ -25,8 +26,6 @@
   toml,
   tqdm,
   wrapt,
-  pythonOlder,
-  importlib-resources,
 
   # tests
   apache-beam,
@@ -63,7 +62,7 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
   version = "4.9.9";
   pyproject = true;
@@ -71,7 +70,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
 
@@ -94,6 +93,7 @@ buildPythonPackage rec {
     dm-tree
     etils
     immutabledict
+    importlib-resources
     numpy
     promise
     protobuf
@@ -108,10 +108,7 @@ buildPythonPackage rec {
     wrapt
   ]
   ++ etils.optional-dependencies.epath
-  ++ etils.optional-dependencies.etree
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -223,8 +220,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

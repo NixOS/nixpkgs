@@ -11,7 +11,6 @@
   pathlib2,
   pyfakefs,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "cryptolyzer";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -75,7 +72,7 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
 }

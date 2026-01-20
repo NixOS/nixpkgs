@@ -16,16 +16,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
-    tag = "v${version}";
-    hash = "sha256-s/czHIwQzcDvK6PBEFflYnT0S97qDUoYiH5ZPlnhMGE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+YyRfEhPRZLIo9T4mpYL5a/37CwWxAcuEOF+coR7erM=";
   };
 
   pythonRelaxDeps = [
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to parse and convert Sigma rules into queries";
     homepage = "https://github.com/SigmaHQ/pySigma";
-    changelog = "https://github.com/SigmaHQ/pySigma/releases/tag/${src.tag}";
+    changelog = "https://github.com/SigmaHQ/pySigma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

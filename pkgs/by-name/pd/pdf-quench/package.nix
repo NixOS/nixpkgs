@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication {
     pypdf2
   ];
 
-  format = "other";
+  pyproject = false;
   doCheck = false;
 
   installPhase = ''

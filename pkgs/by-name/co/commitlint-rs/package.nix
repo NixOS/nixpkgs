@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "KeisukeYamashita";
     repo = "commitlint-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rNCMvIVJ/aOTNMyAmwX3Ir6IjHf6wxZ1XlGIWp7omkQ=";
   };
 

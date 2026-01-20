@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "influxdb-cxx";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "offa";
     repo = "influxdb-cxx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bP3Mfsv+20BfYiNdGFeNKHYdqGJSryrd7MWfqXjGnZw=";
+    hash = "sha256-5y9yRc69IH94Lmokp+XzXehQYkfj/vr3qnNmjTMylsg=";
   };
 
   nativeBuildInputs = [ cmake ];

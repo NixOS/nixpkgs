@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mktoc";
-  version = "5.0.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "KevinGimbel";
     repo = "mktoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QiV0lPM5rRAVH+a15f3G8quoa26I8jHEvbtfTQU5FKM=";
+    hash = "sha256-EyQrfLpeWacAEpVnaz4alEF/IAjSH/4HsTsdJldOJxg=";
   };
 
-  cargoHash = "sha256-Ny9g1TQUSGOBocFtzmxfFZp5K8t7z3JlEMHBTi69bLU=";
+  cargoHash = "sha256-yTTJ0gxmQhn40eI+Elzvv/t0WLivI0TV8B/LS6KLg14=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

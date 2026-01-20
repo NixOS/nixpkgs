@@ -115,5 +115,5 @@ in
     })
   ];
 
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.mushrowan ];
 }

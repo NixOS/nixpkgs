@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "docopt-ng";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "docopt_ng";

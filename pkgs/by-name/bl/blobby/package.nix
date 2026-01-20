@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   SDL2,
   SDL2_image,
   libGLU,
@@ -17,11 +17,13 @@
 
 stdenv.mkDerivation {
   pname = "blobby-volley";
-  version = "1.1.1";
+  version = "1.1.1-unstable-2025-07-26";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/blobby/Blobby%20Volley%202%20%28Linux%29/1.1.1/blobby2-linux-1.1.1.tar.gz";
-    sha256 = "sha256-NX7lE+adO1D2f8Bj1Ky3lZpf6Il3gX8KqxTMxw2yFLo=";
+  src = fetchFromGitHub {
+    owner = "danielknobe";
+    repo = "blobbyvolley2";
+    rev = "9bc797f0fade4766f2d98f8cf4db0a8a7b82a950";
+    sha256 = "sha256-0e1YOwHX2x/snkyH1qeQowJr1YGdExstUoCBOhG1kBU=";
   };
 
   nativeBuildInputs = [
@@ -38,10 +40,6 @@ stdenv.mkDerivation {
     boost
     zlib
   ];
-
-  preConfigure = ''
-    sed -e '1i#include <iostream>' -i src/NetworkMessage.cpp
-  '';
 
   inherit unzip;
 

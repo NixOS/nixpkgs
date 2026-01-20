@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -26,7 +25,6 @@
   # optional dependencies
   defusedxml,
   olefile,
-  typing-extensions,
 
   # tests
   numpy,
@@ -100,7 +98,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     fpx = [ olefile ];
     mic = [ olefile ];
-    typing = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
     xmp = [ defusedxml ];
   };
 

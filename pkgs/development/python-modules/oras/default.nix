@@ -5,7 +5,6 @@
   fetchFromGitHub,
   jsonschema,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "oras";
   version = "0.2.37";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oras-project";

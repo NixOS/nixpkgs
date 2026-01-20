@@ -15,7 +15,9 @@ for system in $systems; do
     done
 done
 
-for pythonPackages in "python313Packages" "python312Packages"; do
-    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw --file . pkgsCuda.$pythonPackages.paddlepaddle.src.url --system x86_64-linux)))
-    update-source-version pkgsCuda.$pythonPackages.paddlepaddle $latestVersion $hash --file=pkgs/development/python-modules/paddlepaddle/sources.nix --system=x86_64-linux --ignore-same-version --ignore-same-hash
+for cuda in "12_6" "12_9" "13_0"; do
+    for pythonPackages in "python313Packages" "python312Packages"; do
+        hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw --file . pkgsCuda.cudaPackages_${cuda}.pkgs.$pythonPackages.paddlepaddle.src.url --system x86_64-linux)))
+        update-source-version pkgsCuda.cudaPackages_${cuda}.pkgs.$pythonPackages.paddlepaddle $latestVersion $hash --file=pkgs/development/python-modules/paddlepaddle/sources.nix --system=x86_64-linux --ignore-same-version --ignore-same-hash
+    done
 done

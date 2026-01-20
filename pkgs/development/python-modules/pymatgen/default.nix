@@ -133,6 +133,10 @@ buildPythonPackage rec {
     # ensure tests can find these
     ''
       export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    ''
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
     '';
 
   disabledTests = [
@@ -147,25 +151,6 @@ buildPythonPackage rec {
     "test_mean_field"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-    # https://github.com/materialsproject/pymatgen/issues/4452
-    "test_angle"
-    "test_as_dict_from_dict"
-    "test_attributes"
-    "test_basic"
-    "test_core_state_eigen"
-    "test_eos_func"
-    "test_get_info_cohps_to_neighbors"
-    "test_get_plot"
-    "test_get_point_group_operations"
-    "test_matplotlib_plots"
-    "test_ph_plot_w_gruneisen"
-    "test_plot"
-    "test_proj_bandstructure_plot"
-    "test_structure"
-    "test_structure_environments"
-
     # attempt to insert nil object from objects[1]
     "test_timer_10_2_7"
     "test_timer"

@@ -3,7 +3,6 @@
   angr,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   tqdm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "angrop";
   version = "9.2.12.post3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";

@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Eam0MDACJN/a8J1Za7Xwy0Jlv/KGNn4M13C2yaCgLnU=";
   };
 

@@ -5,7 +5,7 @@ let
     "man-db"
   ];
 
-  machineNames = builtins.map machineSafe manImplementations;
+  machineNames = map machineSafe manImplementations;
 
   makeConfig = useImpl: {
     # Note: mandoc currently can't index symlinked section directories.
@@ -26,7 +26,7 @@ let
         generateCaches = true;
       }
       // lib.listToAttrs (
-        builtins.map (impl: {
+        map (impl: {
           name = impl;
           value = {
             enable = useImpl == impl;
@@ -43,7 +43,7 @@ in
   meta.maintainers = [ lib.maintainers.sternenseemann ];
 
   nodes = lib.listToAttrs (
-    builtins.map (i: {
+    map (i: {
       name = machineSafe i;
       value = makeConfig i;
     }) manImplementations

@@ -4,7 +4,6 @@
   fetchPypi,
   pymongo,
   pythonAtLeast,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -14,7 +13,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # use the removed ssl.wrap_socket function
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

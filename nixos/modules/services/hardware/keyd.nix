@@ -75,6 +75,8 @@ in
   options.services.keyd = {
     enable = lib.mkEnableOption "keyd, a key remapping daemon";
 
+    package = lib.mkPackageOption pkgs "keyd" { };
+
     keyboards = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule keyboardOptions);
       default = { };
@@ -138,7 +140,7 @@ in
       environment.KEYD_SOCKET = "/run/keyd/keyd.sock";
 
       serviceConfig = {
-        ExecStart = "${pkgs.keyd}/bin/keyd";
+        ExecStart = lib.getExe' cfg.package "keyd";
         Restart = "always";
 
         # TODO investigate why it doesn't work propeprly with DynamicUser

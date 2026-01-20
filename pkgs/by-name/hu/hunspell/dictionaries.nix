@@ -844,7 +844,12 @@ rec {
       license = with lib.licenses; [
         gpl3Plus
       ];
-      teams = [ lib.teams.uzinfocom ];
+      maintainers = with lib.maintainers; [
+        orzklv
+        shakhzodkudratov
+        bahrom04
+        bemeritus
+      ];
     };
   };
 

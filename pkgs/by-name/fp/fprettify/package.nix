@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "fprettify";
   version = "0.3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pseewald";

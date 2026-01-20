@@ -39,6 +39,5 @@ buildGoModule rec {
     mainProgram = "grafana-reporter";
     homepage = "https://github.com/IzakMarais/reporter";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.disassembler ];
   };
 }

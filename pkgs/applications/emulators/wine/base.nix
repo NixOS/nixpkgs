@@ -221,6 +221,7 @@ stdenv.mkDerivation (
         )
       )
     );
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (wineRelease == "yabridge") "-std=gnu17";
 
     # Don't shrink the ELF RPATHs in order to keep the extra RPATH
     # elements specified above.

@@ -81,6 +81,7 @@ jobs:
     uses: ./.github/workflows/eval.yml
     permissions:
       # compare
+      pull-requests: write
       statuses: write
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}

@@ -11,7 +11,6 @@
   pyside2,
   pyside6,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
   typing-extensions,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "superqt";
   version = "0.7.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";

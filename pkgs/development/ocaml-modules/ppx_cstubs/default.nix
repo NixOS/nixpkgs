@@ -18,7 +18,16 @@ buildDunePackage rec {
   pname = "ppx_cstubs";
   version = "0.7.0";
 
-  minimalOCamlVersion = "4.08";
+  env =
+    # Fix build with gcc15
+    lib.optionalAttrs
+      (
+        lib.versionAtLeast ocaml.version "4.10" && lib.versionOlder ocaml.version "4.14"
+        || lib.versions.majorMinor ocaml.version == "5.0"
+      )
+      {
+        NIX_CFLAGS_COMPILE = "-std=gnu11";
+      };
 
   src = fetchFromGitHub {
     owner = "fdopen";

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meowpdf";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "monoamine11231";
     repo = "meowpdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RwhzPaqV7N6K5fO2ptBgZ2jRifZexpSvh+hJN0seIPc=";
+    hash = "sha256-Q3upQj7ppusWzrmESuPJrBO9kLde9lPLKA1b4jXrKQ0=";
   };
 
-  cargoHash = "sha256-OH+0Pxb4QcRkjT2cOi9GJa5jss1DaMKUzVSmiwyIoAg=";
+  cargoHash = "sha256-qhoTOYR2K49Bhipnar/RxFFHvTTlwx1kS3YArPlYm/I=";
 
   nativeBuildInputs = [
     pkg-config

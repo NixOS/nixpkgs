@@ -6,7 +6,6 @@
   poetry-core,
   pytestCheckHook,
   pytest-benchmark,
-  pythonOlder,
 }:
 let
   owner = "whtsky";
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pixelmatch";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchgit {
     url = "https://github.com/whtsky/pixelmatch-py.git";

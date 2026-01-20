@@ -23,7 +23,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
   version = "1.6.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "waydroid";

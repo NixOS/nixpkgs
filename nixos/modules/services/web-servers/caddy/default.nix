@@ -183,12 +183,12 @@ in
 
     adapter = mkOption {
       default =
-        if ((cfg.configFile != configFile) || (builtins.baseNameOf cfg.configFile) == "Caddyfile") then
+        if ((cfg.configFile != configFile) || (baseNameOf cfg.configFile) == "Caddyfile") then
           "caddyfile"
         else
           null;
       defaultText = literalExpression ''
-        if ((cfg.configFile != configFile) || (builtins.baseNameOf cfg.configFile) == "Caddyfile") then "caddyfile" else null
+        if ((cfg.configFile != configFile) || (baseNameOf cfg.configFile) == "Caddyfile") then "caddyfile" else null
       '';
       example = literalExpression "nginx";
       type = with types; nullOr str;

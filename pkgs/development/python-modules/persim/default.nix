@@ -10,16 +10,12 @@
   scikit-learn,
   scipy,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persim";
   version = "0.3.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,7 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "persim" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # AttributeError: module 'collections' has no attribute 'Iterable'
     "test_empyt_diagram_list"
     "test_empty_diagram_list"

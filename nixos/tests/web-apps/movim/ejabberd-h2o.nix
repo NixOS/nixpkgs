@@ -245,7 +245,7 @@ in
 
       server.wait_for_unit("phpfpm-movim.service")
       server.wait_for_unit("h2o.service")
-      server.wait_for_open_port(${builtins.toString movim.port})
+      server.wait_for_open_port(${toString movim.port})
       server.wait_for_open_port(80)
 
       server.wait_for_unit("ejabberd.service")

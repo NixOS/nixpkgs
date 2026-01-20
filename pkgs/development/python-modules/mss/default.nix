@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   stdenv,
   replaceVars,
 
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "mss";
   version = "10.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

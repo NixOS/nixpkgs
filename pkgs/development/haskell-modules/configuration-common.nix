@@ -610,7 +610,7 @@ with haskellLib;
       src = pkgs.fetchgit {
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
-        rev = "refs/tags/" + super.git-annex.version;
+        tag = super.git-annex.version;
         sha256 = "sha256-+OLFMrqpf1Ooy7CQ9S+N/H5R5+aHQtbO1pYwDF4ln8A=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
@@ -1002,6 +1002,7 @@ with haskellLib;
   lvmrun = disableHardening [ "format" ] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
   milena = dontCheck super.milena;
+  MIP = dontCheck super.MIP; # https://github.com/msakai/haskell-MIP/issues/87
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   network-dbus = dontCheck super.network-dbus;
@@ -1546,7 +1547,16 @@ with haskellLib;
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
-    patches = (drv.patches or [ ]) ++ [ ./patches/portmidi-alsa-plugins.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      ./patches/portmidi-alsa-plugins.patch
+      # Fixes compilation with GCC15 which defaults to C23
+      # https://github.com/PortMidi/PortMidi-haskell/pull/24
+      (pkgs.fetchpatch {
+        name = "PortMidi-C23.patch";
+        url = "https://github.com/PortMidi/PortMidi-haskell/commit/24b6ce1c77137b055ae57a99080d5f1616490197.patch";
+        sha256 = "sha256-PqnWA/DMW00Gtfa4YDV6iC/MXwQ3gFsNESbx+daw4C4=";
+      })
+    ];
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
         --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
@@ -3367,146 +3377,6 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
-
-  # 2025-08-04: Disable failing testcases. It would feel bad to disable all the
-  # checks in a cryptography related package.
-  botan-low = overrideCabal (drv: {
-    testFlags =
-      drv.testFlags or [ ]
-      ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-        # botan-low-cipher-tests
-        "/AES-128/SIV/can incrementally / online encipher a message/"
-        "/AES-128/SIV/can incrementally / online decipher a message/"
-        "/AES-128/SIV/has parity between online and offline/"
-        "/AES-192/SIV/can incrementally / online encipher a message/"
-        "/AES-192/SIV/can incrementally / online decipher a message/"
-        "/AES-192/SIV/has parity between online and offline/"
-        "/AES-256/SIV/can incrementally / online encipher a message/"
-        "/AES-256/SIV/can incrementally / online decipher a message/"
-        "/AES-256/SIV/has parity between online and offline/"
-        "/ARIA-128/SIV/can incrementally / online encipher a message/"
-        "/ARIA-128/SIV/can incrementally / online decipher a message/"
-        "/ARIA-128/SIV/has parity between online and offline/"
-        "/ARIA-192/SIV/can incrementally / online encipher a message/"
-        "/ARIA-192/SIV/can incrementally / online decipher a message/"
-        "/ARIA-192/SIV/has parity between online and offline/"
-        "/ARIA-256/SIV/can incrementally / online encipher a message/"
-        "/ARIA-256/SIV/can incrementally / online decipher a message/"
-        "/ARIA-256/SIV/has parity between online and offline/"
-        "/Camellia-128/SIV/can incrementally / online encipher a message/"
-        "/Camellia-128/SIV/can incrementally / online decipher a message/"
-        "/Camellia-128/SIV/has parity between online and offline/"
-        "/Camellia-192/SIV/can incrementally / online encipher a message/"
-        "/Camellia-192/SIV/can incrementally / online decipher a message/"
-        "/Camellia-192/SIV/has parity between online and offline/"
-        "/Camellia-256/SIV/can incrementally / online encipher a message/"
-        "/Camellia-256/SIV/can incrementally / online decipher a message/"
-        "/Camellia-256/SIV/has parity between online and offline/"
-        "/Noekeon/SIV/can incrementally / online encipher a message/"
-        "/Noekeon/SIV/can incrementally / online decipher a message/"
-        "/Noekeon/SIV/has parity between online and offline/"
-        "/SEED/SIV/can incrementally / online encipher a message/"
-        "/SEED/SIV/can incrementally / online decipher a message/"
-        "/SEED/SIV/has parity between online and offline/"
-        "/SM4/SIV/can incrementally / online encipher a message/"
-        "/SM4/SIV/can incrementally / online decipher a message/"
-        "/SM4/SIV/has parity between online and offline/"
-        "/Serpent/SIV/can incrementally / online encipher a message/"
-        "/Serpent/SIV/can incrementally / online decipher a message/"
-        "/Serpent/SIV/has parity between online and offline/"
-        "/Twofish/SIV/can incrementally / online encipher a message/"
-        "/Twofish/SIV/can incrementally / online decipher a message/"
-        "/Twofish/SIV/has parity between online and offline/"
-        "/AES-128/CCM/can incrementally / online encipher a message/"
-        "/AES-128/CCM/can incrementally / online decipher a message/"
-        "/AES-128/CCM/has parity between online and offline/"
-        "/AES-192/CCM/can incrementally / online encipher a message/"
-        "/AES-192/CCM/can incrementally / online decipher a message/"
-        "/AES-192/CCM/has parity between online and offline/"
-        "/AES-256/CCM/can incrementally / online encipher a message/"
-        "/AES-256/CCM/can incrementally / online decipher a message/"
-        "/AES-256/CCM/has parity between online and offline/"
-        "/ARIA-128/CCM/can incrementally / online encipher a message/"
-        "/ARIA-128/CCM/can incrementally / online decipher a message/"
-        "/ARIA-128/CCM/has parity between online and offline/"
-        "/ARIA-192/CCM/can incrementally / online encipher a message/"
-        "/ARIA-192/CCM/can incrementally / online decipher a message/"
-        "/ARIA-192/CCM/has parity between online and offline/"
-        "/ARIA-256/CCM/can incrementally / online encipher a message/"
-        "/ARIA-256/CCM/can incrementally / online decipher a message/"
-        "/ARIA-256/CCM/has parity between online and offline/"
-        "/Camellia-128/CCM/can incrementally / online encipher a message/"
-        "/Camellia-128/CCM/can incrementally / online decipher a message/"
-        "/Camellia-128/CCM/has parity between online and offline/"
-        "/Camellia-192/CCM/can incrementally / online encipher a message/"
-        "/Camellia-192/CCM/can incrementally / online decipher a message/"
-        "/Camellia-192/CCM/has parity between online and offline/"
-        "/Camellia-256/CCM/can incrementally / online encipher a message/"
-        "/Camellia-256/CCM/can incrementally / online decipher a message/"
-        "/Camellia-256/CCM/has parity between online and offline/"
-        "/Noekeon/CCM/can incrementally / online encipher a message/"
-        "/Noekeon/CCM/can incrementally / online decipher a message/"
-        "/Noekeon/CCM/has parity between online and offline/"
-        "/SEED/CCM/can incrementally / online encipher a message/"
-        "/SEED/CCM/can incrementally / online decipher a message/"
-        "/SEED/CCM/has parity between online and offline/"
-        "/SM4/CCM/can incrementally / online encipher a message/"
-        "/SM4/CCM/can incrementally / online decipher a message/"
-        "/SM4/CCM/has parity between online and offline/"
-        "/Serpent/CCM/can incrementally / online encipher a message/"
-        "/Serpent/CCM/can incrementally / online decipher a message/"
-        "/Serpent/CCM/has parity between online and offline/"
-        "/Twofish/CCM/can incrementally / online encipher a message/"
-        "/Twofish/CCM/can incrementally / online decipher a message/"
-        "/Twofish/CCM/has parity between online and offline/"
-        # botan-low-mpi-tests
-        "/can compute the modular inverse/"
-        # botan-low-pubkey-dsa-tests
-        "/modp/srp/1024/privKeyLoadDSA/"
-        "/modp/srp/1024/pubKeyLoadDSA/"
-        "/modp/srp/1536/privKeyLoadDSA/"
-        "/modp/srp/1536/pubKeyLoadDSA/"
-        "/modp/srp/2048/privKeyLoadDSA/"
-        "/modp/srp/2048/pubKeyLoadDSA/"
-        "/modp/srp/3072/privKeyLoadDSA/"
-        "/modp/srp/3072/pubKeyLoadDSA/"
-        "/modp/srp/4096/privKeyLoadDSA/"
-        "/modp/srp/4096/pubKeyLoadDSA/"
-        "/modp/srp/6144/privKeyLoadDSA/"
-        "/modp/srp/6144/pubKeyLoadDSA/"
-        "/modp/srp/8192/privKeyLoadDSA/"
-        "/modp/srp/8192/pubKeyLoadDSA/"
-        # botan-low-pubkey-decrypt-tests
-        "/SM2 sm2p256v1 SHA-256/decrypt/"
-        # botan-low-pubkey-encrypt-tests
-        "/SM2 sm2p256v1 SHA-256/encrypt/"
-        # botan-low-pwdhash-tests
-        "/Scrypt/pwdhashTimed/"
-        # botan-low-srp6-tests
-        "/ffdhe/ietf/2048/can negotiate a shared secret/"
-        "/ffdhe/ietf/3072/can negotiate a shared secret/"
-        "/ffdhe/ietf/4096/can negotiate a shared secret/"
-        "/ffdhe/ietf/6144/can negotiate a shared secret/"
-        "/ffdhe/ietf/8192/can negotiate a shared secret/"
-        "/modp/ietf/1024/can negotiate a shared secret/"
-        "/modp/ietf/1536/can negotiate a shared secret/"
-        "/modp/ietf/2048/can negotiate a shared secret/"
-        "/modp/ietf/3072/can negotiate a shared secret/"
-        "/modp/ietf/4096/can negotiate a shared secret/"
-        "/modp/ietf/6144/can negotiate a shared secret/"
-        "/modp/ietf/8192/can negotiate a shared secret/"
-        "/modp/srp/1024/can negotiate a shared secret/"
-        "/modp/srp/1536/can negotiate a shared secret/"
-        "/modp/srp/2048/can negotiate a shared secret/"
-        "/modp/srp/3072/can negotiate a shared secret/"
-        "/modp/srp/4096/can negotiate a shared secret/"
-        "/modp/srp/6144/can negotiate a shared secret/"
-        "/modp/srp/8192/can negotiate a shared secret/"
-        "/dsa/jce/1024/can negotiate a shared secret/"
-        "/dsa/botan/2048/can negotiate a shared secret/"
-        "/dsa/botan/3072/can negotiate a shared secret/"
-      ]);
-  }) super.botan-low;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
@@ -3907,13 +3777,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.9.1";
+    version = "1.10.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
+      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
     };
   in
   {

@@ -10,7 +10,6 @@
   pillow,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   ujson,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "pytelegrambotapi";
   version = "4.29.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eternnoir";

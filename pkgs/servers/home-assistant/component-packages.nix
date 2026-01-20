@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.12.5";
+  version = "2026.1.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -124,6 +124,9 @@
       ps: with ps; [
         airos
       ];
+    "airpatrol" =
+      ps: with ps; [
+      ]; # missing inputs: airpatrol
     "airq" =
       ps: with ps; [
         aioairq
@@ -275,7 +278,10 @@
       ];
     "anglian_water" =
       ps: with ps; [
+        fnv-hash-fast
+        psutil-home-assistant
         pyanglianwater
+        sqlalchemy
       ];
     "anova" =
       ps: with ps; [
@@ -1432,6 +1438,9 @@
       ps: with ps; [
         pythonegardia
       ];
+    "egauge" =
+      ps: with ps; [
+      ]; # missing inputs: egauge-async
     "eheimdigital" =
       ps: with ps; [
         eheimdigital
@@ -1777,9 +1786,13 @@
       ps: with ps; [
         pymata-express
       ];
+    "fish_audio" =
+      ps: with ps; [
+      ]; # missing inputs: fish-audio-sdk
     "fitbit" =
       ps: with ps; [
         fitbit
+        fitbit-web-api
       ];
     "fivem" =
       ps: with ps; [
@@ -1850,6 +1863,9 @@
       ps: with ps; [
         pyflume
       ];
+    "fluss" =
+      ps: with ps; [
+      ]; # missing inputs: fluss-api
     "flux" =
       ps: with ps; [
       ];
@@ -1909,6 +1925,9 @@
       ps: with ps; [
         pyfreedompro
       ];
+    "fressnapf_tracker" =
+      ps: with ps; [
+      ]; # missing inputs: fressnapftracker
     "fritz" =
       ps:
       with ps;
@@ -2030,6 +2049,9 @@
       ps: with ps; [
         geniushub-client
       ];
+    "gentex_homelink" =
+      ps: with ps; [
+      ]; # missing inputs: homelink-integration-api
     "geo_json_events" =
       ps: with ps; [
         aio-geojson-generic-client
@@ -2377,6 +2399,7 @@
         ha-silabs-firmware-client
         psutil-home-assistant
         pyserial
+        serialx
         universal-silabs-flasher
       ];
     "homeassistant_green" =
@@ -2386,6 +2409,7 @@
         ha-silabs-firmware-client
         psutil-home-assistant
         pyserial
+        serialx
         universal-silabs-flasher
       ];
     "homeassistant_hardware" =
@@ -2394,6 +2418,7 @@
         aiousbwatcher
         ha-silabs-firmware-client
         pyserial
+        serialx
         universal-silabs-flasher
       ];
     "homeassistant_sky_connect" =
@@ -2403,6 +2428,7 @@
         ha-silabs-firmware-client
         psutil-home-assistant
         pyserial
+        serialx
         universal-silabs-flasher
       ];
     "homeassistant_yellow" =
@@ -2412,6 +2438,7 @@
         ha-silabs-firmware-client
         psutil-home-assistant
         pyserial
+        serialx
         universal-silabs-flasher
       ];
     "homee" =
@@ -3311,6 +3338,9 @@
     "letpot" =
       ps: with ps; [
         letpot
+      ];
+    "levoit" =
+      ps: with ps; [
       ];
     "lg_netcast" =
       ps: with ps; [
@@ -4438,6 +4468,7 @@
         pyroute2
         pyserial
         python-otbr-api
+        serialx
         universal-silabs-flasher
         zeroconf
         zha
@@ -6691,6 +6722,21 @@
       ps: with ps; [
         watergate-local-api
       ];
+    "watts" =
+      ps: with ps; [
+        aiohasupervisor
+        cronsim
+        ha-ffmpeg
+        hass-nabucasa
+        hassil
+        home-assistant-intents
+        mutagen
+        pymicro-vad
+        pyspeex-noise
+        python-matter-server
+        pyturbojpeg
+        securetar
+      ]; # missing inputs: visionpluspython
     "watttime" =
       ps: with ps; [
         aiowatttime
@@ -6713,6 +6759,9 @@
     "weatherkit" =
       ps: with ps; [
         apple-weatherkit
+      ];
+    "web_rtc" =
+      ps: with ps; [
       ];
     "webdav" =
       ps: with ps; [
@@ -7025,6 +7074,7 @@
         aiousbwatcher
         ha-silabs-firmware-client
         pyserial
+        serialx
         universal-silabs-flasher
         zha
       ];
@@ -7404,6 +7454,7 @@
     "hdmi_cec"
     "heos"
     "here_travel_time"
+    "hikvision"
     "hisense_aehw4a1"
     "history"
     "history_stats"
@@ -8022,6 +8073,7 @@
     "vicare"
     "victron_remote_monitoring"
     "vilfo"
+    "vivotek"
     "vizio"
     "vlc_telnet"
     "vodafone_station"
@@ -8042,6 +8094,7 @@
     "weatherflow"
     "weatherflow_cloud"
     "weatherkit"
+    "web_rtc"
     "webdav"
     "webhook"
     "webmin"

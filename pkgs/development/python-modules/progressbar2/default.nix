@@ -6,7 +6,6 @@
   freezegun,
   pytestCheckHook,
   python-utils,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "progressbar2";
   version = "4.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

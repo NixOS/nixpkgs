@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   wcwidth,
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   version = "0.9.0";
   pname = "tabulate";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

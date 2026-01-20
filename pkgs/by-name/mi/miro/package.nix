@@ -36,13 +36,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libglvnd
   ];
 
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-lxkbcommon"
-    "-Wl,--pop-state"
-  ];
+  env.RUSTFLAGS = toString (
+    map (a: "-C link-arg=${a}") [
+      "-Wl,--push-state,--no-as-needed"
+      "-lEGL"
+      "-lwayland-client"
+      "-lxkbcommon"
+      "-Wl,--pop-state"
+    ]
+  );
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

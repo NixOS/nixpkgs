@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   distutils,
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "lcov-cobertura";
   version = "2.1.1";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "lcov_cobertura";

@@ -4,15 +4,12 @@
   fetchPypi,
   llama-index-core,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-json";
   version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_json";

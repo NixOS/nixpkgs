@@ -1,19 +1,22 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anyconfig";
   version = "0.14.0";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LN9Ur12ujpF0Pe2CxU7Z2Krvo6lyL11F6bX3S2A+AU0=";
+  src = fetchFromGitHub {
+    owner = "ssato";
+    repo = "python-anyconfig";
+    tag = "RELEASE_${finalAttrs.version}";
+    hash = "sha256-ngXj/KzErz81T09j6tlV9OYDX3DqW5I8xo/ulLNokpQ=";
   };
 
   postPatch = ''
@@ -27,6 +30,11 @@ buildPythonPackage rec {
   disabledTests = [
     # OSError: /build/anyconfig-0.12.0/tests/res/cli/no_template/10/e/10.* should exists but not
     "test_runs_for_datasets"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Python 3.14: output format has changed
+    "test_dumps"
+    "test_dump"
   ];
 
   disabledTestPaths = [
@@ -44,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tboerger ];
   };
-}
+})

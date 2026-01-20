@@ -7,9 +7,7 @@
 
 with rPackages;
 let
-  buildRPackage' = args: buildRPackage ({ name = "${args.pname}-${args.version}"; } // args);
-
-  jaspGraphs = buildRPackage' {
+  jaspGraphs = buildRPackage {
     pname = "jaspGraphs";
     version = "0.19.2-unstable-2025-07-25";
 
@@ -41,7 +39,7 @@ let
     hash = "sha256-VOMcoXpLH24auQfZCWW6hQ10u6n2GxuEQHMaXrvGTnI=";
   };
 
-  jaspBase = buildRPackage' {
+  jaspBase = buildRPackage {
     pname = "jaspBase";
     version = jasp-version;
 
@@ -82,7 +80,7 @@ let
     ];
   };
 
-  stanova = buildRPackage' {
+  stanova = buildRPackage {
     pname = "stanova";
     version = "0.3-unstable-2021-06-06";
 
@@ -102,7 +100,7 @@ let
     ];
   };
 
-  bstats = buildRPackage' {
+  bstats = buildRPackage {
     pname = "bstats";
     version = "0.0.0.9004-unstable-2023-09-08";
 
@@ -120,7 +118,7 @@ let
     ];
   };
 
-  flexplot = buildRPackage' {
+  flexplot = buildRPackage {
     pname = "flexplot";
     version = "0.25.5";
 
@@ -153,7 +151,7 @@ let
   };
 
   # conting has been removed from CRAN
-  conting' = buildRPackage' {
+  conting' = buildRPackage {
     pname = "conting";
     version = "1.7.9999";
 
@@ -180,7 +178,7 @@ let
       hash,
       deps,
     }:
-    buildRPackage' {
+    buildRPackage {
       inherit pname version;
       src = fetchFromGitHub {
         name = "${pname}-${version}-source";

@@ -7,16 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tencentcloud-sdk-python";
-  version = "3.1.24";
+  version = "3.1.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
-    tag = version;
-    hash = "sha256-jRuQOcmBBbzpQHapezXmHwCfGJXv6zkXrdpW+W8biaQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-ELXBgIBR4RwW1mB6zN6t7ayoohwnvRzjQph9MJXSPRc=";
   };
 
   build-system = [ setuptools ];
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tencent Cloud API 3.0 SDK for Python";
     homepage = "https://github.com/TencentCloud/tencentcloud-sdk-python";
-    changelog = "https://github.com/TencentCloud/tencentcloud-sdk-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/TencentCloud/tencentcloud-sdk-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

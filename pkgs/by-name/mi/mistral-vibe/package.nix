@@ -10,16 +10,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "1.3.3";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
-    tag = "v${version}";
-    hash = "sha256-nW7pRSyv+t/7yatx84PMgxsHRTfRqqpy6rz+dQfLluU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R+sh8xQpLDIKqQwE1JjguP4NwE2Jz7tuXNK1+EsHnrA=";
   };
 
   build-system = with python3Packages; [
@@ -51,6 +51,8 @@ python3Packages.buildPythonApplication rec {
     rich
     textual
     textual-speedups
+    tree-sitter
+    tree-sitter-grammars.tree-sitter-bash
     tomli-w
     watchfiles
   ];
@@ -67,12 +69,11 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   pytestFlags = [ "tests/cli/test_clipboard.py" ];
 
   disabledTests = [
-    # AssertionError: assert '/nix/store/rlq03x4cwf8zn73hxaxnx0zn5q9kifls-bash-5.3p3/bin/sh:
+    # AssertionError: assert '/nix/store/00000000000000000000000000000000-bash-5.3p3/bin/sh:
     # warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory\n' == ''
     "test_decodes_non_utf8_bytes"
     "test_runs_echo_successfully"
@@ -96,12 +97,13 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Minimal CLI coding agent by Mistral";
     homepage = "https://github.com/mistralai/mistral-vibe";
-    changelog = "https://github.com/mistralai/mistral-vibe/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mistralai/mistral-vibe/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       shikanime
+      mana-byte
     ];
     mainProgram = "vibe";
   };
-}
+})

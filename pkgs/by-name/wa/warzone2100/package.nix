@@ -36,14 +36,15 @@
 
   gitUpdater,
 
-  withVideos ? false,
+  withVideos ? true,
 }:
 
 let
   pname = "warzone2100";
-  sequences_src = fetchurl {
+
+  sequences = fetchurl {
     url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
-    sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
+    hash = "sha256-kP9VLKSnDiU34CfiLFCY6k7RvBG7f8lBOMbJQac9Kfo=";
   };
 in
 
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
-    cp ${sequences_src} $out/share/warzone2100/sequences.wz
+    ln -sn ${sequences} $out/share/warzone2100/sequences.wz
   '';
 
   passthru.tests = {

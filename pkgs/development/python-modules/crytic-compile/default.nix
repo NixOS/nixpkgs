@@ -4,7 +4,6 @@
   cbor2,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   setuptools,
   solc-select,
   toml,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "crytic-compile";
   version = "0.3.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";

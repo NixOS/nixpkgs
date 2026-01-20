@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "steamship";
   version = "2.17.34";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

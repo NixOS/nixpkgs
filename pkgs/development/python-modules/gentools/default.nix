@@ -2,18 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gentools";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ariebovenberg";
@@ -23,8 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

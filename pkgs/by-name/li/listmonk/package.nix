@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "5.1.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rb0/T7I6yLGJBXikOHuXwDdW20nFXpssXfgViHSIIOU=";
+    hash = "sha256-FUhmbp4P9zQFlSf3ss17zs4ZaPUi0CbVceq3ZJeIXBY=";
   };
 
-  vendorHash = "sha256-bFUWjaaFHB2pnGHBsvUBS2icQkMrB/CfXFa+3vGFFvU=";
+  vendorHash = "sha256-R4chuOzpy/aEB5i5owZV3M7ByqnrXzxLaCeUOcjzQKE=";
 
   nativeBuildInputs = [
     stuffbin
@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
       vfsMappings = [
         "config.toml.sample"
         "schema.sql"
-        "queries.sql"
+        "queries"
         "permissions.json"
         "static/public:/public"
         "${finalAttrs.passthru.frontend}/altcha.umd.js:/public/static/altcha.umd.js"

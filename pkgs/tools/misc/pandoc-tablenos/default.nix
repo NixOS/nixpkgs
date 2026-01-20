@@ -9,7 +9,7 @@
 buildPythonApplication rec {
   pname = "pandoc-tablenos";
   version = "2.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomduck";

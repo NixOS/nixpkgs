@@ -59,6 +59,74 @@ let
       opt = map (x: x.plugin) pluginsPartitioned.right;
     };
 
+  /**
+    * Builds a vim package (see ':h packages') with additional info:
+    - the user lua configuration (specified by user)
+    - the advised and advised by nixpkgs in passthru.initLua)
+    - runtime dependencies (specified in plugins' "runtimeDeps")
+    - plugin dependencies (vim plugins, python deps)
+  */
+  makeVimPackageInfo =
+    # a list of neovim plugin derivations, for instance
+    #  [
+    #     {
+    #       plugin   = vimPlugins.grug-far-nvim;
+    #       config   = "let g:grug_far = { 'startInInsertMode': v:false }";
+    #       optional = false;
+    #     }
+    #     vimPlugins.vim-fugitive
+    #  ]
+    plugins:
+
+    let
+      pluginsNormalized = normalizePlugins plugins;
+
+      vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
+
+      userPluginViml = lib.foldl (
+        acc: p: if p.config != null then acc ++ [ p.config ] else acc
+      ) [ ] pluginsNormalized;
+
+      pluginAdvisedLua =
+        let
+          op =
+            acc: normalizedPlugin:
+            acc
+            ++ lib.optional (
+              normalizedPlugin.plugin.passthru ? initLua
+            ) normalizedPlugin.plugin.passthru.initLua;
+        in
+        lib.foldl' op [ ] pluginsNormalized;
+
+      getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
+
+      requiredPlugins = vimUtils.requiredPluginsForPackage vimPackage;
+      pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
+    in
+    {
+      # plugins' python dependencies
+      inherit pluginPython3Packages;
+
+      # viml config set by the user along with the plugin
+      inherit userPluginViml;
+
+      # recommended configuration set in vim plugins ".passthru.initLua"
+      inherit pluginAdvisedLua;
+
+      # A Vim "package", see ':h packages'
+      # You most likely want to use vimPackage as follows:
+      #     packpathDirs.myNeovimPackages = vimPackage;
+      #     finalPackdir = neovimUtils.packDir packpathDirs;
+      inherit vimPackage;
+
+      runtimeDeps =
+        let
+          op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [ ];
+        in
+        lib.foldl' op [ ] pluginsNormalized;
+
+    };
+
   /*
     returns everything needed for the caller to wrap its own neovim:
     - the generated content of the future init.vim
@@ -67,8 +135,8 @@ let
     arguments (["-u" writeText "init.vim" GENERATEDRC)]).
     This makes it possible to write the config anywhere: on a per-project basis
     .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-    anymore, $MYVIMRC wont be set etc
+    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc won't be loaded
+    anymore, $MYVIMRC won't be set etc
   */
   makeNeovimConfig =
     {
@@ -246,8 +314,9 @@ let
       in
 
       (toVimPlugin (
-        stdenv.mkDerivation {
-          name = "nvim-treesitter-grammar-${name}";
+        stdenv.mkDerivation (finalAttrs: {
+          pname = "nvim-treesitter-grammar-${name}";
+          inherit (grammar) version;
 
           origGrammar = grammar;
           grammarName = name;
@@ -275,13 +344,15 @@ let
 
           nativeBuildInputs = [ toNvimTreesitterGrammar ];
 
-          passthru = grammar.passthru or { };
+          passthru = grammar.passthru or { } // {
+            isTreesitterGrammar = true;
+          };
 
           meta = {
             platforms = lib.platforms.all;
           }
           // grammar.meta;
-        }
+        })
       ));
 
   /*
@@ -297,7 +368,6 @@ let
     packages:
     let
       rawPackDir = vimUtils.packDir packages;
-
     in
     rawPackDir.override {
       postBuild = ''
@@ -311,6 +381,7 @@ let
 in
 {
   inherit makeNeovimConfig;
+  inherit makeVimPackageInfo;
   inherit generateProviderRc;
   inherit legacyWrapper;
   inherit grammarToPlugin;

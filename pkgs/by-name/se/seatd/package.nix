@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seatd";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "seatd";
     rev = finalAttrs.version;
-    hash = "sha256-6F+TPSpcEwX4wW5GPy5Ck2AeHyH/Ba2oBUSUnVyAMeA=";
+    hash = "sha256-B1MIPnf5rO+Jj2/0xuWvsigShmcRF/8/KP2Xh4YTseY=";
   };
 
   outputs = [

@@ -9,6 +9,7 @@
   makeWrapper,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   wayland,
   wayland-protocols,
@@ -18,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waywall";
-  version = "0.2025.12.20";
+  version = "0.2026.01.11";
 
   src = fetchFromGitHub {
     owner = "tesselslate";
     repo = "waywall";
     tag = finalAttrs.version;
-    hash = "sha256-sGb/dxXBlzXBvv2IWjgwSE8WM5qB04mYATl0uhSozMQ=";
+    hash = "sha256-VOtwVFMGgUvsGnD1CnflKtUy5tTKqK2C/qNsWwgbyEU=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wayland compositor for Minecraft speedrunning";

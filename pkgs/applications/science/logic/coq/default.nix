@@ -320,7 +320,7 @@ let
         Zimmi48
       ];
       platforms = lib.platforms.unix;
-      mainProgram = "coqide";
+      mainProgram = if buildIde then "coqide" else "coqtop";
     };
   };
 in

@@ -4,7 +4,6 @@
   django,
   fetchFromGitHub,
   polib,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-rosetta";
   version = "0.10.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mbi";

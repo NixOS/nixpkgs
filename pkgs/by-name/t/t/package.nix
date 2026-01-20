@@ -17,7 +17,6 @@ bundlerApp {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       offline
-      manveru
       nicknovitski
     ];
     platforms = lib.platforms.unix;

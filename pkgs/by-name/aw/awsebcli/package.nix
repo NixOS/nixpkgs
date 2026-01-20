@@ -26,7 +26,7 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.25.3";
+  version = "3.26";
   pyproject = true;
   doInstallCheck = true;
 
@@ -34,7 +34,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-PFyLVpmye+WIiF9xR37ydjLy0OvlIMDSIMaN4y0WM/E=";
+    hash = "sha256-HiVRlXND1ErZhmQow+VV4HkY4Auhbcq1afR1Lf8ITPI=";
   };
 
   pythonRelaxDeps = [
@@ -95,6 +95,12 @@ python.pkgs.buildPythonApplication rec {
     # ebcli.objects.exceptions.CredentialsError: Operation Denied. You appear to have no credentials
     "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
+
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
 
   meta = {
     description = "Command line interface for Elastic Beanstalk";

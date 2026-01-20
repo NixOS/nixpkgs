@@ -7,7 +7,7 @@
   colorama,
   jinja2,
   jsonschema,
-  pygls_2,
+  pygls,
   tree-sitter,
   pytestCheckHook,
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     colorama
     jinja2
     jsonschema
-    pygls_2
+    pygls
     tree-sitter
   ];
   nativeCheckInputs = [ pytestCheckHook ];

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   responses,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pykeyatome";
   version = "2.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jugla";

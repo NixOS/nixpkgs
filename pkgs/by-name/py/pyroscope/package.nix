@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pyroscope";
-  version = "1.13.4";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pyroscope";
-    rev = "v1.13.4";
-    hash = "sha256-nyb91BO4zzJl3AG/ojBO+q7WiicZYmOtztW6FTlQHMM=";
+    rev = "v1.17.1";
+    hash = "sha256-fwElc9UoFdsFuzDCEKlqIPQPDOnBJX3vO4tspr5URDo=";
   };
 
-  vendorHash = "sha256-GZMoXsoE3pL0T3tkWY7i1f9sGy5uVDqeurCvBteqV9A=";
+  vendorHash = "sha256-KqaOfyS5CJZOv+bwGSs483SztuRyQ+qYp1E9POw07T8=";
   proxyVendor = true;
 
   subPackages = [
@@ -55,7 +55,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/grafana/pyroscope";
     changelog = "https://github.com/grafana/pyroscope/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+      lf-
+    ];
     mainProgram = "pyroscope";
   };
 })

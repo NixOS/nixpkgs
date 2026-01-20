@@ -16,11 +16,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.plasticscm.com/plasticrepo/stable/debian/amd64/plasticscm-client-core_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-NuMY75JnnWVRKBSh/1XYipqc0m+O0vt7lJMVkQyTaNA=";
+    hash = "sha256-9K4pvl+hxB3+bQwC3HYaEOq5nQlCyTQQuYsuqT4BbRg=";
+    nativeBuildInputs = [ dpkg ];
+    downloadToTemp = true;
+    recursiveHash = true;
+    postFetch = ''
+      mkdir -p $out
+      dpkg-deb --fsys-tarfile $downloadedFile | tar --extract --directory=$out
+      rm -rf $out/usr/share/doc
+    '';
   };
 
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
@@ -40,15 +47,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runtimeInputs = [
       common-updater-scripts
       curl
+      dpkg
       jc
       jq
     ];
     text = ''
-      eval "$(curl -sSL https://www.plasticscm.com/plasticrepo/stable/debian/Packages |
+      version="$(curl -sSL https://www.plasticscm.com/plasticrepo/stable/debian/Packages |
         jc --pkg-index-deb |
-        jq -r '[.[] | select(.package == "plasticscm-client-core")] | sort_by(.version) | last | @sh "version=\(.version) hash=\(.sha256)"')"
-      # shellcheck disable=SC2154
-      update-source-version plasticscm-client-core-unwrapped "$version" "sha256-$(xxd -r -p <<<"$hash" | base64)"
+        jq -r '[.[] | select(.package == "plasticscm-client-core")] | sort_by(.version) | last | .version')"
+
+      update-source-version --ignore-same-hash plasticscm-client-core-unwrapped "$version"
     '';
   });
 

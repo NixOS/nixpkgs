@@ -3,7 +3,6 @@
   buildPythonPackage,
   rustPlatform,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 let
@@ -20,8 +19,6 @@ in
 buildPythonPackage {
   inherit pname version src;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;

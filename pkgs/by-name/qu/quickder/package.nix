@@ -22,7 +22,7 @@ let
           src = fetchFromGitHub {
             owner = "pyparsing";
             repo = "pyparsing";
-            rev = "refs/tags/${version}";
+            tag = version;
             hash = "sha256-0B8DjO4kLgvt4sYsk8CZI+5icdKy73XE2tWeqVLqO5A=";
           };
         });

@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "azure-kusto-data";
   version = "5.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Azure";

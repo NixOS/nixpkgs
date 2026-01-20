@@ -18,7 +18,7 @@
   expect,
   xvfb-run,
   writeText,
-  enableStoneSense ? false,
+  enableStoneSense ? enableDFHack,
   enableTWBT ? false,
   twbt,
   themes ? { },

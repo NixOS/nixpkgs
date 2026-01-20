@@ -9,7 +9,6 @@
   setuptools,
   build,
   coloredlogs,
-  importlib-metadata,
   packaging,
   pip,
   toml,
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   pname = "bork";
   version = "9.0.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "duckinator";
@@ -46,8 +44,7 @@ buildPythonPackage rec {
     pip
     urllib3
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ toml ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ toml ];
 
   pythonImportsCheck = [
     "bork"

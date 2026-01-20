@@ -20,6 +20,12 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "coq-withPackages": [
+    "index.html#coq-withPackages"
+  ],
+  "coq-withPackages-usage": [
+    "index.html#coq-withPackages-usage"
+  ],
   "cuda": [
     "index.html#cuda"
   ],
@@ -314,7 +320,8 @@
     "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
   ],
   "sec-nixpkgs-release-26.05-lib-deprecations": [
-    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations",
+    "index.html#fetchfromsavannah"
   ],
   "sec-nixpkgs-release-26.05-lib-additions-improvements": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
@@ -1779,9 +1786,6 @@
   "fetchfrombitbucket": [
     "index.html#fetchfrombitbucket"
   ],
-  "fetchfromsavannah": [
-    "index.html#fetchfromsavannah"
-  ],
   "fetchfromrepoorcz": [
     "index.html#fetchfromrepoorcz"
   ],
@@ -2713,16 +2717,20 @@
   "waf-hook-honored-variables": [
     "index.html#waf-hook-honored-variables"
   ],
-  "zig-hook": [
+  "zig": [
+    "index.html#zig",
     "index.html#zig-hook"
   ],
-  "zig-hook-example-code-snippet": [
+  "zig-example-code-snippet": [
+    "index.html#zig-example-code-snippet",
     "index.html#zig-hook-example-code-snippet"
   ],
-  "zig-hook-variables-controlling": [
+  "zig-variables-controlling": [
+    "index.html#zig-variables-controlling",
     "index.html#zig-hook-variables-controlling"
   ],
-  "zig-hook-exclusive-variables": [
+  "zig-exclusive-variables": [
+    "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
   ],
   "dont-use-zig-build": [
@@ -2734,10 +2742,15 @@
   "dont-use-zig-install": [
     "index.html#dont-use-zig-install"
   ],
-  "zig-hook-similar-variables": [
+  "dont-set-zig-default-flags": [
+    "index.html#dont-set-zig-default-flags"
+  ],
+  "zig-similar-variables": [
+    "index.html#zig-similar-variables",
     "index.html#zig-hook-similar-variables"
   ],
-  "zig-hook-variables-honored": [
+  "zig-variables-honored": [
+    "index.html#zig-variables-honored",
     "index.html#zig-hook-variables-honored"
   ],
   "xcbuildhook": [

@@ -4,29 +4,20 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonAtLeast,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.21.0";
+  version = "0.22.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beartype";
     repo = "beartype";
     tag = "v${version}";
-    hash = "sha256-oD7LS+c+mZ8W4YnAaAYxQkbUlmO8E2TPxy0PBI7Jr7A=";
+    hash = "sha256-F9x2qvzll1nUcTQZjaky+0ukP1RXoW35crzfS/pmvTs=";
   };
-
-  # Several tests fail with:
-  # - beartype.roar.BeartypeDecorHintNonpepException
-  # - RuntimeError: There is no current event loop in thread 'MainThread'
-  # - Failed: DID NOT RAISE <class 'beartype.roar.BeartypeDecorHintNonpepException'>
-  # - AssertionError
-  # - ...
-  disabled = pythonAtLeast "3.14";
 
   build-system = [ hatchling ];
 
@@ -36,15 +27,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "beartype" ];
-
-  disabledTests = [
-    # No warnings of type (<class 'beartype.roar._roarwarn.BeartypeValeLambdaWarning'>,) were emitted.
-    "test_is_hint_pep593_beartype"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # this test is not run upstream, and broke in 3.13 (_nparams removed)
-    "test_door_is_subhint"
-  ];
 
   meta = {
     description = "Fast runtime type checking for Python";

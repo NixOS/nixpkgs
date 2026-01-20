@@ -9,16 +9,13 @@
   mecab-python3,
   jieba,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "wordfreq";
   version = "3.0.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rspeer";

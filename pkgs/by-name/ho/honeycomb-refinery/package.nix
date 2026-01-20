@@ -52,6 +52,9 @@ buildGoModule (finalAttrs: {
     description = "Tail-sampling proxy for OpenTelemetry";
     mainProgram = "refinery";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+      lf-
+    ];
   };
 })

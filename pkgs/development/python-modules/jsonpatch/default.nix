@@ -4,15 +4,12 @@
   fetchFromGitHub,
   jsonpointer,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jsonpatch";
   version = "1.33";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stefankoegl";

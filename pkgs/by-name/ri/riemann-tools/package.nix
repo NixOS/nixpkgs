@@ -36,7 +36,6 @@ bundlerApp {
     description = "Tools to submit data to Riemann";
     homepage = "https://riemann.io";
     maintainers = with lib.maintainers; [
-      manveru
       nicknovitski
     ];
     license = lib.licenses.mit;

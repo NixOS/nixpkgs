@@ -16,7 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
   version = "2.0.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

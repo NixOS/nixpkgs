@@ -3,6 +3,7 @@
   enableDaemon ? false, # build amule daemon
   httpServer ? false, # build web interface for the daemon
   client ? false, # build amule remote gui
+  mainProgram ? "amule",
   fetchFromGitHub,
   fetchpatch,
   stdenv,
@@ -103,10 +104,10 @@ stdenv.mkDerivation rec {
       no adware or spyware as is often found in proprietary P2P
       applications.
     '';
-
     homepage = "https://github.com/amule-project/amule";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aciceri ];
+    inherit mainProgram;
     platforms = lib.platforms.unix;
     # Undefined symbols for architecture arm64: "_FSFindFolder"
     broken = stdenv.hostPlatform.isDarwin;

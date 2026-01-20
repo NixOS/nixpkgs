@@ -4,15 +4,12 @@
   fetchFromGitHub,
   nanomsg,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "nanomsg-python";
   version = "1.0.20190114";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tonysimpson";

@@ -7,16 +7,13 @@
   google-auth-oauthlib,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   strenum,
 }:
 
 buildPythonPackage rec {
   pname = "gspread";
   version = "6.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "burnash";

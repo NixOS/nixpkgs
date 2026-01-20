@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   python,
-  pythonOlder,
   astropy,
   cloudpickle,
   cython,
@@ -36,9 +35,7 @@ let
   self = buildPythonPackage rec {
     pname = "scikit-image";
     version = "0.25.2";
-    format = "pyproject";
-
-    disabled = pythonOlder "3.8";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "scikit-image";

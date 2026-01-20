@@ -4,7 +4,6 @@
   dvc-objects,
   fetchPypi,
   ossfs,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dvc-oss";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

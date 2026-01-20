@@ -6,7 +6,6 @@
   pscript,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,12 +13,10 @@ buildPythonPackage rec {
   version = "0.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "manatlan";
     repo = "vbuild";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p9v1FiYn0cI+f/25hvjwm7eb1GqxXvNnmXBGwZe9fk0=";
   };
 

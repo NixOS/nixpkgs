@@ -4,7 +4,6 @@
   fetchPypi,
   findutils,
   krb5-c,
-  pythonOlder,
   setuptools,
   replaceVars,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-raises,
-  pythonOlder,
   respx,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "envoy-reader";
   version = "0.21.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jesserizzo";

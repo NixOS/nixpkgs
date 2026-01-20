@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     group = "xorg";
     owner = "app";
     repo = "xlogo";
-    rev = "refs/tags/xlogo-${version}";
+    tag = "xlogo-${version}";
     hash = "sha256-KjJhuiFVn34vEZbC7ds4MrcXCHq9PcIpAuaCGBX/EXc=";
   };
 

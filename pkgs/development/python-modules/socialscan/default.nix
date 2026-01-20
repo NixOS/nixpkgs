@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   colorama,
-  pythonOlder,
   tqdm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "socialscan";
   version = "2.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iojw";

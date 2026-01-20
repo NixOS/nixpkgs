@@ -18,13 +18,13 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5_2;
+      django = prev.django_5;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.15.1";
+  version = "5.15.2";
 
   pyproject = true;
 
@@ -37,7 +37,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-9k6H9/XW7vbXix+zadxHCNl9UJ3yE1ONa/+VRvIGk28=";
+    hash = "sha256-qNv3aaPyQ/bOrPbK7u9vtq8R1MFqXLJzvLUZfVgjMK0=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -65,10 +65,7 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   pythonRelaxDeps = [
-    "celery"
     "certifi"
-    "cyrtranslit"
-    "django-appconf"
     "urllib3"
   ];
 
@@ -142,6 +139,7 @@ python.pkgs.buildPythonApplication rec {
       translate-toolkit
       translation-finder
       unidecode
+      urllib3
       user-agents
       weblate-language-data
       weblate-schemas

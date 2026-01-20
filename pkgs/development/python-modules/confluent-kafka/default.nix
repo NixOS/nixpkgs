@@ -21,7 +21,6 @@
   pyflakes,
   pyrsistent,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdkafka,
   requests,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "confluent-kafka";
   version = "2.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "confluentinc";

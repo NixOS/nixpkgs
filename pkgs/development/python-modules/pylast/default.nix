@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "7.0.0";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
     tag = version;
-    hash = "sha256-u+wQxw0F/1oB8Kr4terSPo/8/RyPhiKxU0GruZo73H0=";
+    hash = "sha256-MV7NLh++2GxRvnF30Q3zBOgM6dT8tI/KpQ1YB4rMd1s=";
   };
 
   build-system = [

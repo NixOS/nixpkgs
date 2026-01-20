@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-p1gqom9saNEIm6FXinEuIJtMGwjGfQx9uLpR2kb46Uw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   patches = [ ./update-compatible-with-non-flatpak-env.patch ];
   postPatch = ''

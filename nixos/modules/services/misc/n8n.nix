@@ -6,6 +6,18 @@
 }:
 let
   cfg = config.services.n8n;
+
+  envVarToCredName = varName: lib.toLower varName;
+
+  # Partition environment variables into regular and file-based (_FILE suffix)
+  regularEnv = lib.filterAttrs (name: _value: !(lib.hasSuffix "_FILE" name)) cfg.environment;
+  fileBasedEnv = lib.filterAttrs (name: _value: lib.hasSuffix "_FILE" name) cfg.environment;
+
+  # Transform file-based env vars to point to credentials directory
+  fileBasedEnvTransformed = lib.mapAttrs' (
+    varName: _secretPath: lib.nameValuePair varName "%d/${envVarToCredName varName}"
+  ) fileBasedEnv;
+
 in
 {
   imports = [
@@ -32,6 +44,18 @@ in
       description = ''
         Environment variables to pass to the n8n service.
         See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
+
+        Environment variables ending with `_FILE` are automatically handled as secrets:
+        they are loaded via systemd credentials for secure access with `DynamicUser=true`.
+
+        This can be useful to pass secrets via tools like `agenix` or `sops-nix`.
+      '';
+      example = lib.literalExpression ''
+        {
+          N8N_ENCRYPTION_KEY_FILE = "/run/n8n/encryption_key";
+          DB_POSTGRESDB_PASSWORD_FILE = "/run/n8n/db_postgresdb_password";
+          WEBHOOK_URL = "https://n8n.example.com";
+        }
       '';
       type = lib.types.submodule {
         freeformType =
@@ -92,14 +116,21 @@ in
       description = "n8n service";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = cfg.environment // {
-        HOME = config.services.n8n.environment.N8N_USER_FOLDER;
-      };
+      environment =
+        regularEnv
+        // {
+          HOME = config.services.n8n.environment.N8N_USER_FOLDER;
+        }
+        // fileBasedEnvTransformed;
       serviceConfig = {
         Type = "simple";
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         StateDirectory = "n8n";
+
+        LoadCredential = lib.mapAttrsToList (
+          varName: secretPath: "${envVarToCredName varName}:${secretPath}"
+        ) fileBasedEnv;
 
         # Basic Hardening
         NoNewPrivileges = "yes";

@@ -20,15 +20,21 @@
 
 buildPythonPackage rec {
   pname = "aiosendspin";
-  version = "1.2.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = version;
-    hash = "sha256-3vTEfXeFqouPswRKST/9U7yg9ah7J9m2KAMoxaBZNR0=";
+    hash = "sha256-9VhNtfXH2r/cGkscz51PIK2/66pPOGv0S0IpO0wFvO4=";
   };
+
+  # https://github.com/Sendspin/aiosendspin/blob/1.2.0/pyproject.toml#L7
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   build-system = [
     setuptools

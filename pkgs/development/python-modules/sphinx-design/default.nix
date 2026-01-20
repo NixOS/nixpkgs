@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   sphinx,
@@ -11,9 +10,7 @@ buildPythonPackage rec {
   pname = "sphinx-design";
   version = "0.6.1";
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

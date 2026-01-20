@@ -163,6 +163,7 @@ mapAliases (
     vimproc = vimproc-vim;
     vimshell = vimshell-vim;
     vinegar = vim-vinegar;
+    vscode-diff-nvim = codediff-nvim; # Added 2026-01-12
     watchdogs = vim-watchdogs;
     WebAPI = webapi-vim;
     wombat256 = wombat256-vim; # backwards compat, added 2015-7-8

@@ -170,6 +170,7 @@
       "emilazy": 18535642
     },
     "members": {
+      "Samasaur1": 30577766,
       "reckenrode": 7413633,
       "toonn": 1486805
     },
@@ -211,7 +212,6 @@
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
-      "frogamic": 10263813,
       "gador": 1883533,
       "griff": 4368,
       "groodt": 343415,
@@ -276,9 +276,7 @@
   "documentation-team": {
     "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
     "id": 6590023,
-    "maintainers": {
-      "alejandrosame": 1078000
-    },
+    "maintainers": {},
     "members": {
       "hsjobeki": 50398876,
       "wamirez": 24505474
@@ -424,10 +422,10 @@
     "maintainers": {
       "Mic92": 96200,
       "kalbasit": 87115,
+      "katexochen": 49727155,
       "zowoq": 59103226
     },
     "members": {
-      "katexochen": 49727155,
       "mfrw": 4929861,
       "qbit": 68368
     },
@@ -484,9 +482,9 @@
       "wrmilling": 6162814
     },
     "members": {
-      "azey7f": 41077433,
       "frederictobiasc": 26125115,
       "heywoodlh": 18178614,
+      "maevii": 41077433,
       "rorosen": 76747196
     },
     "name": "k3s"
@@ -732,7 +730,9 @@
       "philiptaron": 43863,
       "zowoq": 59103226
     },
-    "members": {},
+    "members": {
+      "mdaniels5757": 8762511
+    },
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {

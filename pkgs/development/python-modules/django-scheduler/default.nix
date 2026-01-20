@@ -7,7 +7,6 @@
   pytestCheckHook,
   pytest-django,
   python-dateutil,
-  pythonOlder,
   pytz,
   setuptools,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "django-scheduler";
   version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "llazzaro";

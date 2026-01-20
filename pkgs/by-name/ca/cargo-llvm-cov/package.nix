@@ -91,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wucke13
       matthiasbeyer
       CobaltCause
+      chrjabs
     ];
 
     broken = stdenv.targetPlatform.isRedox;

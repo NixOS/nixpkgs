@@ -50,7 +50,7 @@ buildGoModule rec {
     downloadPage = "https://github.com/tdewolff/minify";
     changelog = "https://github.com/tdewolff/minify/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "minify";
   };
 }

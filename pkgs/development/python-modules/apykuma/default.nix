@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apykuma";
   version = "1.2.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "apykuma";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Dxlyi0syoq+sfgjMLWHhpeKhDFgpfQrp18DJeBjrAEg=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Small library to notify Uptime Kuma that the service is up";
     homepage = "https://github.com/PerchunPak/apykuma";
-    changelog = "https://github.com/PerchunPak/apykuma/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/PerchunPak/apykuma/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ PerchunPak ];
   };
-}
+})

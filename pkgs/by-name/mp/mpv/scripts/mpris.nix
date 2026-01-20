@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
     rev = version;
-    hash = "sha256-vZIO6ILatIWa9nJYOp4AMKwvaZLahqYWRLMDOizyBI0=";
+    hash = "sha256-Q2kNaXZtI6U+x2f00x5CiHZq4o64xFTNC/3W4IiP0+4=";
   };
   passthru.updateScript = gitUpdater { };
 

@@ -51,6 +51,9 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
+  rustSupport ? false,
+  cargo,
+  rustc,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
@@ -168,6 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     docbook_xml_dtd_45
     libxslt
+  ]
+  ++ lib.optionals rustSupport [
+    cargo
+    rustc
   ];
   buildInputs = [
     curl
@@ -234,7 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
+  # Starting with future Git version 3.0.0, rust will be mandatory. For now, it's optional.
+  ++ lib.optional rustSupport "WITH_RUST=YesPlease";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
@@ -349,7 +358,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Also put git-http-backend into $PATH, so that we can use smart
     # HTTP(s) transports for pushing
-    ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+    ln -s $out/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $out/bin/git-http-backend
     ln -s $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump
   ''
   + lib.optionalString perlSupport ''

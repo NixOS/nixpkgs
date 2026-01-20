@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "synchronizer";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-0XtPHpDlyH1h8W2ZlRvJbZjCN9WP5mzk2N01WFd8eLQ=";
   };
 

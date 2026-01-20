@@ -480,7 +480,6 @@ py.pkgs.toPythonApplication (
       license = lib.licenses.mit;
       mainProgram = "az";
       maintainers = with lib.maintainers; [ katexochen ];
-      teams = [ lib.teams.stridtech ];
       platforms = lib.platforms.all;
     };
   }

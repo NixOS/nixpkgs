@@ -5,7 +5,6 @@
   azure-mgmt-core,
   azure-common,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
   azure-cli,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-resource-deploymentstacks";
   version = "1.0.0b1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_mgmt_resource_deploymentstacks";

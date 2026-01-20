@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "2.2.0";
+  version = "2.2.1";
 
   outputs = [
     "out"
@@ -40,12 +40,8 @@ stdenv.mkDerivation rec {
     owner = "gnuwget";
     repo = "wget2";
     tag = "v${version}";
-    hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
+    hash = "sha256-od5Zyeod3auMY3u0IxMEMHnGeKGzEgMk+W5jjMQqSXc=";
   };
-
-  patches = [
-    ./gettext-0.25.patch
-  ];
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''

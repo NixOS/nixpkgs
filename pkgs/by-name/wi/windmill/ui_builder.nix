@@ -2,7 +2,7 @@
 { fetchzip }:
 
 fetchzip {
-  url = "https://pub-06154ed168a24e73a86ab84db6bf15d8.r2.dev/ui_builder-9e76079.tar.gz";
-  sha256 = "1lxbfqfx8dhrf585gfh7x7098nbmyarja94cjp43sygvp4c6yw4g";
+  url = "https://pub-06154ed168a24e73a86ab84db6bf15d8.r2.dev/ui_builder-7a79f03.tar.gz";
+  sha256 = "1r5dkymjlqngwvpiv11pr0sdhkw0wp4jg0rhrwzczl3jjnc2azwq";
   stripRoot = false;
 }

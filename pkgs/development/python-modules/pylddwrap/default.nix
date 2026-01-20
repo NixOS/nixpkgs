@@ -5,7 +5,6 @@
   fetchFromGitHub,
   icontract,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
   setuptools,
   typing-extensions,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "pylddwrap";
   version = "1.2.2";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";

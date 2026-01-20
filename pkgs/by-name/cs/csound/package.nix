@@ -24,26 +24,18 @@
   fltk ? null,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csound";
-  version = "6.18.1-unstable-2024-07-02";
+  version = "7.0.0-beta.10";
 
   hardeningDisable = [ "format" ];
 
   src = fetchFromGitHub {
     owner = "csound";
     repo = "csound";
-    rev = "2536da284dd70ec7272040cb0763f70ae57123c4";
-    sha256 = "sha256-NDYltwmjBsX1DWCjy8/4cXMSl3/mK+HaQHSKUmRR9TI=";
+    tag = finalAttrs.version;
+    hash = "sha256-l3dSVt5rgyj98ZCZltqKAJx/0Afl4R03flLXBcivtwg=";
   };
-
-  patches = [
-    # Fix typo that breaks build
-    (fetchpatch {
-      url = "https://github.com/csound/csound/commit/bb9bafcfa17a87d3733eda1e25a812fd0be08ac6.diff";
-      hash = "sha256-0M047uALPAoyQP0LbfBAybb2DWQ2/6QwZXxUjs1O1fE=";
-    })
-  ];
 
   cmakeFlags = [
     "-DBUILD_CSOUND_AC=0"
@@ -96,4 +88,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

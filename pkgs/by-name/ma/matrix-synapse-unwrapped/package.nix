@@ -14,31 +14,30 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.144.0";
-  format = "pyproject";
+  version = "1.145.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-7m0VHiTNx00bgWFbbdXX6tX9pN89IXHbvx04pp2IwnE=";
+    hash = "sha256-JFMxnp4//Q8t6LZf6L2jJxaShE51r4MY7eJvD9JhhVo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-CKvdWo9/f8Uhi5idgRhyuZwYua6gQzoKz21XNMaXdl0=";
+    hash = "sha256-CnytwGtv/ZoJl03XFLLMTHDiRhWDgWlJD8L/QRiebyM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools_rust>=1.3,<=1.11.1" "setuptools_rust<=1.12,>=1.3" \
-      --replace-fail "poetry-core>=2.0.0,<=2.1.3" "poetry-core>=2.0.0,<=2.3.0"
-  '';
-
-  build-system = with python3Packages; [
-    poetry-core
-    setuptools-rust
-  ];
+  build-system =
+    with python3Packages;
+    [
+      poetry-core
+      setuptools-rust
+    ]
+    ++ [
+      rustPlatform.maturinBuildHook
+    ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -53,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     libiconv
   ];
 
-  pythonRemoveDeps = [ "setuptools_rust" ];
+  pythonRemoveDeps = [ "setuptools-rust" ];
 
   dependencies =
     with python3Packages;
@@ -80,6 +79,8 @@ python3Packages.buildPythonApplication rec {
       pydantic
       pymacaroons
       pyopenssl
+      pyparsing
+      pyrsistent
       pyyaml
       service-identity
       signedjson

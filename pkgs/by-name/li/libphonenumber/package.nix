@@ -15,19 +15,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.21";
+  version = "9.0.22";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2YiTjudHEKl3JJMF4jV/DpQFZbBEb4z6WZxU+jdGVx0=";
+    hash = "sha256-gQcMpwVf49m/f62ABd7/IluLe8mUjapNtnrPSmaLJJ0=";
   };
 
   patches = [
     # An earlier version of this patch was submitted upstream but did not get
     # any interest there - https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
+    # Fix include directory in generated cmake files with split outputs
+    ./cmake-include-dir.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   nativeBuildInputs = [

@@ -4061,7 +4061,7 @@ broken-packages:
   - minizinc-process # failure in job https://hydra.nixos.org/build/233211497 at 2023-09-02
   - minst-idx # failure in job https://hydra.nixos.org/build/233259901 at 2023-09-02
   - mios # failure in job https://hydra.nixos.org/build/233251863 at 2023-09-02
-  - MIP # failure in job https://hydra.nixos.org/build/233199688 at 2023-09-02
+  - MIP-glpk # incompatible with extended-reals >=0.2.7.0, https://github.com/msakai/haskell-MIP/commit/60a5ee234fc6667d2c34152761fa5a54a6f6e533
   - mirror-tweet # failure in job https://hydra.nixos.org/build/233216951 at 2023-09-02
   - mismi-p # failure in job https://hydra.nixos.org/build/233257227 at 2023-09-02
   - mit-3qvpPyAi6mH # failure in job https://hydra.nixos.org/build/233229967 at 2023-09-02

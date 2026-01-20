@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   python,
   pythonAtLeast,
 }:
@@ -25,9 +24,6 @@ buildPythonPackage rec {
     substituteInPlace test/test_selector.py \
       --replace "test_events_watched_outside_test_are_ignored" "xtest_events_watched_outside_test_are_ignored"
   '';
-
-  # https://github.com/Martiusweb/asynctest/issues/132
-  doCheck = pythonOlder "3.7";
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

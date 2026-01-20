@@ -16,6 +16,10 @@ stdenv.mkDerivation {
     hash = "sha256-fUaVHE3nxq3fU7DYCvaQTOoMzax/qFH8cMegFLLybNk=";
   };
 
+  # httptunnel makes liberal use of old C features, just selecting an old version
+  # is easier than patching around language updates.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     autoreconfHook
   ];

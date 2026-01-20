@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "leesonwai";
     repo = "sums";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-X+AMUH8nJli0Um1bH0gDGLnfHGknqea3DZxH+tdTEr8=";
   };
 

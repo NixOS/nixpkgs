@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "cppclean";
   version = "0.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "myint";

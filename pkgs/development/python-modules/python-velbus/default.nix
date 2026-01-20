@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-velbus";
   version = "2.1.14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

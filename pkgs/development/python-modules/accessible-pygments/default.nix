@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   hatch-vcs,
   hatch-fancy-pypi-readme,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "accessible-pygments";
   version = "0.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "accessible_pygments";

@@ -30,7 +30,7 @@ in
 buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mypaint";

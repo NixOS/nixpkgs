@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pymongo-search-utils";
-  version = "0.1.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mongodb-labs";
     repo = "pymongo-search-utils";
     tag = version;
-    hash = "sha256-R0GYfVeLc0zfzfEGBil/AHyt20Y0bEo+eQ9wtdNwJL8=";
+    hash = "sha256-nNXJwRtN5AICpI/OdS+ToYbUIfMSL88XiO6Hrh2R8NA=";
   };
 
   build-system = [

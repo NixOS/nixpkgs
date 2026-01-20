@@ -24,7 +24,7 @@ buildPythonPackage rec {
     description = "Tools for working with Coq proof assistant";
     homepage = "https://pypi.org/project/coq-tools/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ siraben ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -14,7 +14,6 @@
   pyopenssl,
   pytestCheckHook,
   python-pkcs11,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "asyncssh";
   version = "2.21.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "murat-dogan";
       repo = "node-datachannel";
-      rev = "refs/tags/v${nodeDatachannel.version}";
+      tag = "v${nodeDatachannel.version}";
       hash = "sha256-r5tBg645ikIWm+RU7Muw/JYyd7AMpkImD0Xygtm1MUk=";
     };
 
@@ -68,13 +68,13 @@ in
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "mrxdst";
     repo = "webtorrent-mpv-hook";
     rev = "v${version}";
-    hash = "sha256-qFeQBVPZZFKkxz1fhK3+ah3TPDovklhhQwtv09TiSqo=";
+    hash = "sha256-p4Mggt3J8QOok/uj97eCchT7H9HPuDjoyV82MHHkkZM=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
@@ -85,7 +85,7 @@ buildNpmPackage rec {
     rm -rf src/bin.ts
   '';
 
-  npmDepsHash = "sha256-fKzXdbtxC2+63/GZdvPOxvBpQ5rzgvfseigOgpP1n5I=";
+  npmDepsHash = "sha256-tL+MAgiKhwygoAtZaA4nZJ5bq5W5jkYYxOF8Du0rBl8=";
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
 

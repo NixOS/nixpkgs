@@ -95,6 +95,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.eclairevoyant ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      figsoda
+    ];
   };
 })

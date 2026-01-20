@@ -7,7 +7,6 @@
   k5test,
   krb5-c, # C krb5 library
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "krb5";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,7 +39,10 @@ buildPythonPackage rec {
     description = "Kerberos API bindings for Python";
     homepage = "https://github.com/jborean93/pykrb5";
     license = lib.licenses.mit;
-    teams = [ lib.teams.deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
     broken = stdenv.hostPlatform.isDarwin; # TODO: figure out how to build on Darwin
   };
 }

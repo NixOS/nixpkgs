@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pathspec";
   version = "0.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   flake8,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-flake8";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "coherent-oss";

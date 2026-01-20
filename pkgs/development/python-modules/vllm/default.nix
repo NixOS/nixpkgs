@@ -313,12 +313,10 @@ let
 
 in
 
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = torch.stdenv; } rec {
   pname = "vllm";
   version = "0.13.0";
   pyproject = true;
-
-  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "vllm-project";

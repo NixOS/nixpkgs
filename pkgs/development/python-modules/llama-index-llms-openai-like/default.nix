@@ -5,7 +5,6 @@
   hatchling,
   llama-index-core,
   llama-index-llms-openai,
-  pythonOlder,
   transformers,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "llama-index-llms-openai-like";
   version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_llms_openai_like";

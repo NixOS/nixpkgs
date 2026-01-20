@@ -56,20 +56,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==72.1.0" ""
+      --replace-fail "setuptools==72.1.0" "setuptools"
   '';
 
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  # trying to relax only pymupdf makes the whole build fail
-  pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    "imgaug"
-    "visualdl"
-    "opencv-contrib-python"
   ];
 
   dependencies = [

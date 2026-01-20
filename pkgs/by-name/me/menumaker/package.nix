@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
   };
 
-  format = "other";
+  pyproject = false;
 
   meta = {
     description = "Heuristics-driven menu generator for several window managers";

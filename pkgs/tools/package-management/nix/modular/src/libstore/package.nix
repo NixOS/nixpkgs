@@ -8,6 +8,7 @@
   nix-util,
   boost,
   curl,
+  aws-c-common,
   aws-sdk-cpp,
   aws-crt-cpp,
   libseccomp,
@@ -24,7 +25,9 @@
 
   withAWS ?
     # Default is this way because there have been issues building this dependency
-    stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin),
+    stdenv.hostPlatform == stdenv.buildPlatform
+    && (stdenv.isLinux || stdenv.isDarwin)
+    && lib.meta.availableOn stdenv.hostPlatform aws-c-common,
 }:
 
 mkMesonLibrary (finalAttrs: {

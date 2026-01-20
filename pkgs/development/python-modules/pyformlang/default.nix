@@ -6,7 +6,6 @@
   numpy,
   pydot,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyformlang";
   version = "1.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

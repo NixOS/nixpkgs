@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   aiohttp,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pyfreedompro";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

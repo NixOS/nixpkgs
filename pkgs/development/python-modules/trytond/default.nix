@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   defusedxml,
   lxml,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pname = "trytond";
   version = "7.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

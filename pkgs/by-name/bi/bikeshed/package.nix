@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bikeshed";
-  version = "7.0.6";
+  version = "7.0.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0lO5TlAnUMtJp81XQEXpxt3yBz3zx6ff+vO/LYJfFZA=";
+    hash = "sha256-s+NHSOHqJl89/sB5b3SWS+dT7WpsSv9tedoOfuDA2ls=";
   };
 
   patches = [ ./remove-install-check.patch ];

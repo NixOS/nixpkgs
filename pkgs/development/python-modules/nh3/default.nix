@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   rustPlatform,
   libiconv,
   fetchFromGitHub,
@@ -19,8 +18,7 @@ let
 in
 buildPythonPackage {
   inherit pname version src;
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;

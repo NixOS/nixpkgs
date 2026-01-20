@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
   version = "2.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jkwill87";

@@ -12,7 +12,6 @@
   paramiko,
   pyparsing,
   pyserial,
-  pythonOlder,
   pyyaml,
   scp,
   setuptools,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "junos-eznc";
   version = "2.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Juniper";

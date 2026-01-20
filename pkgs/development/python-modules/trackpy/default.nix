@@ -9,7 +9,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   scipy,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "trackpy";
   version = "0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "soft-matter";

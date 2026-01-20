@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   smbus-cffi,
   urwid,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pijuice";
   version = "1.7";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PiSupply";

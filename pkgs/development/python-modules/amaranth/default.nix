@@ -1,14 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   jschon,
   pyvcd,
   jinja2,
-  importlib-resources,
-  importlib-metadata,
   git,
 
   # for tests
@@ -22,8 +19,6 @@ buildPythonPackage rec {
   pname = "amaranth";
   version = "0.5.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
@@ -45,9 +40,7 @@ buildPythonPackage rec {
     jschon
     jinja2
     pyvcd
-  ]
-  ++ lib.optional (pythonOlder "3.9") importlib-resources
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

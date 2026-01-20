@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   numpy,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ancp-bids";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   # `tests/data` dir missing from PyPI dist
   src = fetchFromGitHub {

@@ -7,7 +7,6 @@
   poetry-core,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   testfixtures,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytest-golden";
   version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oprypin";

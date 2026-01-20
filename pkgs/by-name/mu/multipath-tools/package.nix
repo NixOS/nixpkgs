@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   makeFlags = [
+    "WARN_ONLY=1"
     "LIB=lib"
     "prefix=$(out)"
     "systemd_prefix=$(out)"

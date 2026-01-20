@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
   version = "2021.1110";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

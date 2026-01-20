@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   nativeBuildInputs = [
     cargo-tauri.hook

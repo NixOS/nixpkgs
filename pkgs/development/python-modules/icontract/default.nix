@@ -9,7 +9,6 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "icontract";
   version = "2.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";

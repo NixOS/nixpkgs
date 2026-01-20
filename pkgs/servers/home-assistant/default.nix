@@ -50,7 +50,7 @@ let
         src = fetchFromGitHub {
           owner = "tkdrob";
           repo = "aioskybell";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
@@ -60,7 +60,7 @@ let
         src = fetchFromGitHub {
           owner = "bachya";
           repo = "aiowatttime";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
         postPatch = ''
@@ -95,12 +95,22 @@ let
         ];
       });
 
+      google-genai = super.google-genai.overridePythonAttrs rec {
+        version = "1.38.0";
+        src = fetchFromGitHub {
+          owner = "googleapis";
+          repo = "python-genai";
+          tag = "v${version}";
+          hash = "sha256-gJaLEpNKHl6n1MvQDIUW7ynsHYH2eEPGsYso5jSysNg=";
+        };
+      };
+
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
           owner = "burnash";
           repo = "gspread";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
         };
         dependencies = with self; [
@@ -121,11 +131,12 @@ let
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
+        pyproject = null;
 
         src = fetchFromGitHub {
           owner = "engrbm87";
           repo = "notifications_android_tv";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
@@ -144,7 +155,7 @@ let
         version = "2.2";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
@@ -200,7 +211,7 @@ let
         src = fetchFromGitHub {
           owner = "gagebenne";
           repo = "pydexcom";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
         };
       });
@@ -210,7 +221,7 @@ let
         src = fetchFromGitHub {
           owner = "ChrisMandich";
           repo = "PyFlume";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
         };
         dependencies = oldAttrs.propagatedBuildInputs or [ ] ++ [
@@ -218,21 +229,12 @@ let
         ];
       });
 
-      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
           owner = "AustinBrunkhorst";
           repo = "pysnooz";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
         patches = [ ];
@@ -244,7 +246,7 @@ let
         src = fetchFromGitHub {
           owner = "home-assistant-libs";
           repo = "pytradfri";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
         patches = [ ];
@@ -291,7 +293,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.12.5";
+  hassVersion = "2026.1.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -312,13 +314,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-RSrWk7SZIOvOhvVXBwc10w9Yyqd2rcxdUVuq2snMm9g=";
+    hash = "sha256-+H+ujcJ7uYLNFfm05V7FBdogGGUSkC1b6PaWJ5Zu24k=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-cl5kTpYhsZnf7etPRSgVWd/fH9zTc1OnkRTjbUp/M3U=";
+    hash = "sha256-uWcSCmarOtfYIVYPz8wAgO8tx15MJcEP1Wv3h8YT0xI=";
   };
 
   build-system = with python.pkgs; [

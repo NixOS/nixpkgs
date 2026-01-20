@@ -48,6 +48,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       oxalica
       matthiasbeyer
+      chrjabs
     ];
     mainProgram = "cargo-asm";
   };

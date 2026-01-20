@@ -42,8 +42,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   # Using substituteInPlace because no clean upstream backport for GCC 15 exists for this version of Skia, newer versions fix this with large refactorings.
   postPatch = ''
-    substituteInPlace include/private/SkSLProgramKind.h \
-      --replace-fail "#include <cinttypes>" "#include <cinttypes>
     #include <cstdint>"
     substituteInPlace src/sksl/transform/SkSLTransform.h \
       --replace-fail "#include <vector>" "#include <vector>

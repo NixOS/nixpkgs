@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  nativeBuildInputs = [ zig_0_14.hook ];
+  nativeBuildInputs = [ zig_0_14 ];
 
   buildInputs = [
     glfw

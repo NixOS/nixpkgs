@@ -2263,7 +2263,6 @@ dont-distribute-packages:
  - minimung
  - minioperational
  - minirotate
- - MIP-glpk
  - mismi-kernel
  - mismi-s3-core
  - miss
