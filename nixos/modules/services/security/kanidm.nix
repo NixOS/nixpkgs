@@ -77,6 +77,8 @@ let
     filteredPaths ++ filteredNew
   ) [ ];
 
+  parentFolderOf = filePath: lib.concatStringsSep "/" (lib.dropEnd 1 (splitString "/" filePath));
+
   defaultServiceConfig = {
     # Setting the type to notify enables additional healthchecks, ensuring units
     # after and requiring kanidm-* wait for it to complete startup
@@ -283,7 +285,6 @@ in
           db_path = mkOption {
             description = "Path to Kanidm database.";
             default = "/var/lib/kanidm/kanidm.db";
-            readOnly = true;
             type = types.path;
           };
           tls_chain = mkOption {
@@ -928,7 +929,10 @@ in
             ++ optional enableServerBackup cfg.serverSettings.online_backup.path
             ++ optional (
               cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-            ) cfg.unixSettings.home_mount_prefix;
+            ) cfg.unixSettings.home_mount_prefix
+            ++ optional (
+              cfg.serverSettings.db_path != "/var/lib/kanidm"
+            ) parentFolderOf cfg.serverSettings.db_path;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
