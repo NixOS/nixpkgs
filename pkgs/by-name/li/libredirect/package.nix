@@ -124,7 +124,7 @@ else
     installCheckPhase = ''
       (
         source "$hook/nix-support/setup-hook"
-        NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true:/bar/baz=$(mktemp -d)" ./test
+        NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true:/bar/baz=$(mktemp -d):/run/sock=$PWD/test.sock" ./test
       )
     '';
 

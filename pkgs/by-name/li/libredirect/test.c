@@ -8,15 +8,31 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/un.h>
 #include <sys/wait.h>
 
 #define TESTDIR "/bar/baz"
 #define TESTPATH "/foo/bar/test"
+#define TESTSOCK "/run/sock"
 #define SUBTEST "./test sub"
 
 extern char **environ;
+
+void test_bind(void) {
+    int fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    assert(fd != -1);
+    struct sockaddr_un addr = {
+        .sun_family = AF_UNIX,
+        .sun_path = TESTSOCK,
+    };
+    unlink(TESTSOCK);
+    int ret = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
+    assert(ret == 0);
+    close(fd);
+}
 
 void test_spawn(void) {
     pid_t pid;
@@ -160,6 +176,7 @@ int main(int argc, char *argv[])
     assert(mktemp(buf) == buf);
     assert_mktemp_path(TESTDIR "/temp", "", buf);
 
+    test_bind();
     test_spawn();
     test_system();
     test_stat_with_null_path();
