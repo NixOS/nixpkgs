@@ -24,10 +24,24 @@ let
       let
         result = f origArgs;
         overrideWith =
+          # Preserve the plain arguments whenever possible,
+          # as `overrideStdenvCompat` works more reliably with `args.stdenv`
+          # than `result.__stdenvPythonCompat`.
+          # TODO(@ShamrockLee): After `overrideStdenvCompat` is fully deprecated,
+          # simplify as
+          # ```nix
+          # newArgs: lib.extends (lib.toExtension newArgs) origArgs
+          # ```
           if lib.isFunction origArgs then
-            newArgs: lib.extends (_: lib.toFunction newArgs) origArgs
+            newArgs: lib.extends (lib.toExtension newArgs) origArgs
           else
-            newArgs: origArgs // lib.toFunction newArgs origArgs;
+            newArgs:
+            if !(lib.isFunction newArgs) then
+              origArgs // newArgs
+            else if !(lib.isFunction (newArgs origArgs)) then
+              origArgs // newArgs origArgs
+            else
+              finalAttrs: origArgs // newArgs finalAttrs origArgs;
       in
       if lib.isAttrs result then
         result
@@ -53,15 +67,21 @@ let
       f':
       lib.mirrorFunctionArgs f (
         args:
-        if !(lib.isFunction args) && (args ? stdenv) then
-          lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+        let
+          result = f args;
+          applyMsgStdenvArg = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
             ${
               args.name or args.pname or "<unnamed>"
             }: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
               buildPythonPackage.override { stdenv = customStdenv; } { }
-          '' (f'.override { inherit (args) stdenv; } (removeAttrs args [ "stdenv" ]))
+          '';
+        in
+        if !(lib.isFunction args) && (args ? stdenv) then
+          f'.override { stdenv = applyMsgStdenvArg args.stdenv; } (removeAttrs args [ "stdenv" ])
+        else if result ? __stdenvPythonCompat then
+          f'.override { stdenv = applyMsgStdenvArg result.__stdenvPythonCompat; } args
         else
-          f args
+          result
       )
       // {
         # Preserve the effect of overrideStdenvCompat when calling `buildPython*.override`.
