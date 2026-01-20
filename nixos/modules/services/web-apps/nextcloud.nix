@@ -7,10 +7,6 @@
 let
   cfg = config.services.nextcloud;
 
-  overridePackage = cfg.package.override {
-    inherit (config.security.pki) caBundle;
-  };
-
   fpm = config.services.phpfpm.pools.nextcloud;
 
   jsonFormat = pkgs.formats.json { };
@@ -53,13 +49,13 @@ let
   };
 
   webroot =
-    pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
+    pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps"
       {
         preferLocalBuild = true;
       }
       ''
         mkdir $out
-        ln -sfv "${overridePackage}"/* "$out"
+        ln -sfv "${cfg.package}"/* "$out"
         ${lib.concatStrings (
           lib.mapAttrsToList (
             name: store:
@@ -1221,13 +1217,13 @@ in
             If you have an existing installation with a custom table prefix, make sure it is
             set correctly in `config.php` and remove the option from your NixOS config.
           '')
-          ++ (lib.optional (lib.versionOlder overridePackage.version "26") (upgradeWarning 25 "23.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "27") (upgradeWarning 26 "23.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "32") (upgradeWarning 31 "25.11"));
+          ++ (lib.optional (lib.versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
@@ -1289,7 +1285,7 @@ in
           }
           {
             assertion =
-              lib.versionAtLeast overridePackage.version "32.0.0"
+              lib.versionAtLeast cfg.package.version "32.0.0"
               || (cfg.config.adminuser != null && cfg.config.adminpassFile != null);
             message = ''
               Disabling initial admin user creation is only available on Nextcloud >= 32.0.0.
@@ -1622,6 +1618,7 @@ in
               "upgrade.disable-web" = true;
               # NixOS already provides its own integrity check and the nix store is read-only, therefore Nextcloud does not need to do its own integrity checks.
               "integrity.check.disabled" = true;
+              "default_certificates_bundle_path" = config.security.pki.caBundle;
             }
             (lib.mkIf cfg.configureRedis {
               "memcache.distributed" = ''\OC\Memcache\Redis'';
