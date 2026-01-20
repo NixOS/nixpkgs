@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  intltool,
   pkg-config,
   qt6,
   libqalculate,
@@ -21,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = with qt6; [
     qmake
-    intltool
     pkg-config
     qttools
     wrapQtAppsHook
