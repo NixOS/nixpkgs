@@ -23,9 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (
-    stdenvNoCC.buildPlatform.libc == "glibc"
-  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (lib.meta.availableOn stdenvNoCC.buildPlatform buildPackages.glibcLocales) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   makeFlags = [ "all" ];
   enableParallelBuilding = false;

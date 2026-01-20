@@ -173,7 +173,7 @@ mkDerivation (
     postInstall = ''
       wrapProgram $out/bin/tamarin-prover \
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform glibcLocales) ''
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
     ''
     + ''

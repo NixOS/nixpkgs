@@ -57,7 +57,7 @@ mkPackage rec {
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString stdenv.hostPlatform.isLinux "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform glibcLocales) "${glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
     # not patchShebangs, there is /bin/bash in the body of the script as well

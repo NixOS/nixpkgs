@@ -80,7 +80,6 @@ let
     removeReferencesTo
     pkg-config
     coreutils
-    glibcLocales
     emscripten
     ;
 
@@ -657,8 +656,8 @@ lib.fix (
       propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
       env =
-        optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-          LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+        optionalAttrs (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocales) {
+          LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         }
         // env';
 
@@ -1069,24 +1068,7 @@ lib.fix (
               "NIX_${ghcCommandCaps}_LIBDIR" =
                 if ghc.isHaLVM or false then "${ghcEnv}/lib/HaLVM-${ghc.version}" else "${ghcEnv}/${ghcLibdir}";
             }
-            // optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-              # TODO: Why is this written in terms of `buildPackages`, unlike
-              # the outer `env`?
-              #
-              # According to @sternenseemann [1]:
-              #
-              # > The condition is based on `buildPlatform`, so it needs to
-              # > match. `LOCALE_ARCHIVE` is set to accompany `LANG` which
-              # > concerns things we execute on the build platform like
-              # > `haddock`.
-              # >
-              # > Arguably the outer non `buildPackages` one is incorrect and
-              # > probably works by accident in most cases since the locale
-              # > archive is not platform specific (the trouble is that it
-              # > may sometimes be impossible to cross-compile). At least
-              # > that would be my assumption.
-              #
-              # [1]: https://github.com/NixOS/nixpkgs/pull/424368#discussion_r2202683378
+            // optionalAttrs (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocales) {
               LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
             }
             // env';

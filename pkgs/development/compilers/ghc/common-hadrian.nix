@@ -577,7 +577,7 @@ stdenv.mkDerivation (
       ''
         export LANG="en_US.UTF-8"
       ''
-      + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+      + lib.optionalString (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocales) ''
         export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
       ''
     )
