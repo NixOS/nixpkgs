@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
     dict
-    glibcLocales
     libfaketime
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   dontUnpack = true;

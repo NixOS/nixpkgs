@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   fetchpatch,
@@ -92,9 +93,11 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [
-    glibcLocales
     perl
     xvfb-run
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ (with python.pkgs; [
     mysqlclient

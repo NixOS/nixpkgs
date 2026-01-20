@@ -69,6 +69,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
     glibcLocales
   ];
 

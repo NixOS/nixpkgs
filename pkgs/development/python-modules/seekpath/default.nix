@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -35,7 +36,9 @@ buildPythonPackage rec {
     bz = [ scipy ];
   };
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   pythonImportsCheck = [ "seekpath" ];
 

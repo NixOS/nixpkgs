@@ -104,6 +104,9 @@
         export LOCALE_ARCHIVE=@out@/lib/locale/locale-archive
       '';
 
-      meta.description = "Locale information for the GNU C Library";
+      meta = {
+        description = "Locale information for the GNU C Library";
+        platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isGnu;
+      };
     }
   )

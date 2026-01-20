@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     LANG = "C.UTF-8";
   }
-  // lib.optionalAttrs (glibcLocales != null) {
+  // lib.optionalAttrs (lib.meta.availableOn stdenv.hostPlatform glibcLocales) {
     LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
   };
 

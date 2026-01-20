@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -26,8 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    glibcLocalesUtf8
     responses
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocalesUtf8) [
+    glibcLocalesUtf8
   ];
 
   preCheck = ''

@@ -57,8 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoconf-archive
     autoreconfHook
-    glibcLocales
     pkg-config
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   buildInputs = [

@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   lib,
+  stdenv,
   fetchPypi,
   glibcLocales,
   unittestCheckHook,
@@ -18,7 +19,9 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

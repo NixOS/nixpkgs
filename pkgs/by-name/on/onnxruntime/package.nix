@@ -156,12 +156,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     eigen
-    glibcLocales
     howard-hinnant-date
     libpng
     nlohmann_json
     microsoft-gsl
     zlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
     cpuinfo

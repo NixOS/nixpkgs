@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   mock,
@@ -26,6 +27,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     mock
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform pkgs.glibcLocales) [
     pkgs.glibcLocales
   ];
   propagatedBuildInputs = [

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   glibcLocales,
@@ -24,7 +25,9 @@ buildPythonPackage rec {
     sha256 = "cf3ce7626305d218a8bf2b6a219266ef8061aceeefc1c70a54170f4105465202";
   };
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   LC_ALL = "en_US.UTF-8";
 

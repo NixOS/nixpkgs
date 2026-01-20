@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchurl,
   glibcLocales,
@@ -16,7 +17,9 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.utf-8";
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   meta = {
     description = "Lightweight way of building RPMs, and sabotaging them";

@@ -6903,24 +6903,15 @@ with pkgs;
         package = windows.mcfgthreads;
       };
 
-  # Only supported on Linux and only on glibc
-  glibcLocales =
-    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu then
-      callPackage ../development/libraries/glibc/locales.nix {
-        stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
-        withLinuxHeaders = !stdenv.cc.isGNU;
-      }
-    else
-      null;
-  glibcLocalesUtf8 =
-    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu then
-      callPackage ../development/libraries/glibc/locales.nix {
-        stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
-        withLinuxHeaders = !stdenv.cc.isGNU;
-        allLocales = false;
-      }
-    else
-      null;
+  glibcLocales = callPackage ../development/libraries/glibc/locales.nix {
+    stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
+    withLinuxHeaders = !stdenv.cc.isGNU;
+  };
+  glibcLocalesUtf8 = callPackage ../development/libraries/glibc/locales.nix {
+    stdenv = if (!stdenv.cc.isGNU) then gccStdenv else stdenv;
+    withLinuxHeaders = !stdenv.cc.isGNU;
+    allLocales = false;
+  };
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 

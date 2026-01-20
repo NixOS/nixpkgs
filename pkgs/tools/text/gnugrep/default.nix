@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
+  buildPackages,
   updateAutotoolsGnuConfigScriptsHook,
-  glibcLocales,
   fetchurl,
   pcre2,
   libiconv,
@@ -49,7 +49,9 @@ stdenv.mkDerivation {
 
   nativeCheckInputs = [
     perl
-    glibcLocales
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform buildPackages.glibcLocales) [
+    buildPackages.glibcLocales
   ];
   outputs = [
     "out"

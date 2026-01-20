@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   arrow,
   buildPythonPackage,
   fetchFromGitHub,
@@ -32,9 +33,11 @@ buildPythonPackage {
 
   buildInputs = [
     freetype
-    glibcLocales
     libjpeg
     zlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ];
 
   propagatedBuildInputs = [

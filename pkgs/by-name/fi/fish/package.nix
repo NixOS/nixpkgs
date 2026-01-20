@@ -347,10 +347,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     coreutils
-    glibcLocales
     (python3.withPackages (ps: [ ps.pexpect ]))
     procps
     sphinx
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # For the getconf command, used in default-setup-path.fish

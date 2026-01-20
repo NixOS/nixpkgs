@@ -207,12 +207,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     cacert
     foreman
-    glibcLocales
     python3
     netcat
     nix-eval-jobs
     openldap
     postgresql
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   env = {

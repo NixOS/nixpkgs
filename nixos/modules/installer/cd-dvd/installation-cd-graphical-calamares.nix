@@ -14,14 +14,18 @@ in
   # required for kpmcore to work correctly
   programs.partition-manager.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    # Calamares for graphical installation
-    calamares-nixos
-    calamares-nixos-autostart
-    calamares-nixos-extensions
-    # Get list of locales
-    glibcLocales
-  ];
+  environment.systemPackages =
+    with pkgs;
+    [
+      # Calamares for graphical installation
+      calamares-nixos
+      calamares-nixos-autostart
+      calamares-nixos-extensions
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+      # Get list of locales
+      glibcLocales
+    ];
 
   # Support choosing from any locale
   i18n.supportedLocales = [ "all" ];

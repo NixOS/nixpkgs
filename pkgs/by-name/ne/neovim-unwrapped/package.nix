@@ -143,8 +143,10 @@ stdenv.mkDerivation (
       utf8proc
     ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      glibcLocales
       procps
+    ]
+    ++ lib.optionals (glibcLocales != null && lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+      glibcLocales
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
       # Provide libintl for non-glibc platforms

@@ -21,6 +21,8 @@ stdenvNoCC.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [
     bashInteractive
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenvNoCC.buildPlatform glibcLocales) [
     glibcLocales
   ];
   preCheck = "export LC_ALL=en_US.UTF-8";

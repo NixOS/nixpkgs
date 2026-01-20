@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   exceptiongroup,
   fetchFromGitHub,
@@ -57,8 +58,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    glibcLocales
     pytestCheckHook
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ]
   ++ lib.concatAttrValues optional-dependencies;
 

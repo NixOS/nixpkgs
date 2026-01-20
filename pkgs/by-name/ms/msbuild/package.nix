@@ -51,7 +51,7 @@ mkPackage rec {
     makeWrapper
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
     glibcLocales
   ];
 

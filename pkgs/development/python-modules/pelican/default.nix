@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -61,11 +62,13 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pygments" ];
 
   buildInputs = [
-    glibcLocales
     pandoc
     git
     markdown
     typogrify
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
   ];
 
   dependencies = [

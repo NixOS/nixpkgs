@@ -35,7 +35,9 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ hatchling ];
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   dependencies =
     with python3Packages;

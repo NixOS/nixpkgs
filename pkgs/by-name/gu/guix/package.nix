@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     git
     graphviz
     gettext
-    glibcLocales
     guile
     guile-avahi
     guile-gcrypt
@@ -91,6 +90,9 @@ stdenv.mkDerivation rec {
     scheme-bytestructures
     slirp4netns
     texinfo
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform glibcLocales) [
+    glibcLocales
   ];
 
   buildInputs = [

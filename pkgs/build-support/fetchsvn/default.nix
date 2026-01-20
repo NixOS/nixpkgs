@@ -62,8 +62,8 @@ else
     nativeBuildInputs = [
       cacert
       subversion
-      glibcLocales
     ]
+    ++ lib.optional (lib.meta.availableOn stdenvNoCC.buildPlatform glibcLocales) glibcLocales
     ++ lib.optional sshSupport openssh;
 
     SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;

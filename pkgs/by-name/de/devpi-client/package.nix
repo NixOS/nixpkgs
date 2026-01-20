@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   devpi-server,
   git,
   glibcLocales,
@@ -24,7 +25,9 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-changelog-shortener
   ];
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform glibcLocales) [
+    glibcLocales
+  ];
 
   dependencies = with python3.pkgs; [
     build
