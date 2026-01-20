@@ -168,6 +168,7 @@ stdenvNoCC.mkDerivation (
         };
 
       tests = {
+        # Don't run this in CI because it's not reproducible
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
       };
     };
