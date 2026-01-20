@@ -155,6 +155,10 @@ buildGoModule (finalAttrs: {
 
         # Fails because we vendor dependencies
         "TestLicenseHeaders"
+
+        # Uses testing/synctest with gonotify.DirWatcher which spawns goroutines
+        # that block on inotify syscalls incompatible with synctest's bubble mechanism
+        "TestDNSTrampleRecovery"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
