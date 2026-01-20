@@ -15,6 +15,7 @@
   nix-update-script,
   ffmpegSupport ? true,
   versionCheckHook,
+  fetchpatch2,
 }:
 
 buildGoModule (finalAttrs: {
@@ -62,6 +63,12 @@ buildGoModule (finalAttrs: {
 
   CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/navidrome/navidrome/commit/84bf4fac04f55c01a6af324c4145b508c932236b.patch";
+      hash = "sha256-AStdd0wP7+3J2eyjEbXqoA3tJNfOLiZRoNFFyiJw1Fc=";
+    })
+  ];
   postPatch = ''
     patchShebangs ui/bin/update-workbox.sh
   '';
