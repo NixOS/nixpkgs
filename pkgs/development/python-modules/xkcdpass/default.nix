@@ -4,7 +4,6 @@
   fetchPypi,
   installShellFiles,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xkcdpass" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # https://github.com/redacted/XKCD-password-generator/issues/138
     "test_entropy_printout_valid_input"
   ];
