@@ -38,6 +38,17 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-tandoor-recipes-migrating-media-option-move": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-move",
+    "index.html#module-services-tandoor-recipes-migrating-media-option-1"
+  ],
+  "module-services-tandoor-recipes-migrating-media-option-postgresql": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-postgresql",
+    "index.html#module-services-tandoor-recipes-migrating-media-option-2"
+  ],
+  "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
+    "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
@@ -1106,6 +1117,12 @@
   ],
   "module-services-samba-configuring-file-share": [
     "index.html#module-services-samba-configuring-file-share"
+  ],
+  "module-services-tandoor-recipes": [
+    "index.html#module-services-tandoor-recipes"
+  ],
+  "module-services-tandoor-recipes-migrating-media": [
+    "index.html#module-services-tandoor-recipes-migrating-media"
   ],
   "module-services-litestream": [
     "index.html#module-services-litestream"

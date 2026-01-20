@@ -84,6 +84,7 @@ jobs:
     # even though they are unused when working with the merge queue.
     permissions:
       # compare
+      pull-requests: write
       statuses: write
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
