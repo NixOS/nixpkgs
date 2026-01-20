@@ -13743,6 +13743,8 @@ self: super: with self; {
 
   pykerberos = callPackage ../development/python-modules/pykerberos { krb5-c = pkgs.krb5; };
 
+  pykep = callPackage ../development/python-modules/pykep { };
+
   pykeyatome = callPackage ../development/python-modules/pykeyatome { };
 
   pykira = callPackage ../development/python-modules/pykira { };
