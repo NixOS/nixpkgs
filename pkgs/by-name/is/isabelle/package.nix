@@ -88,7 +88,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
-  version = "2025-1";
+  version = "2025-2";
 
   dirname = "Isabelle${finalAttrs.version}";
 
@@ -96,17 +96,17 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
-        hash = "sha256-WKlrsXP6oZHy6NTaaQYpddtgE2QGhBZ4uKai61dtQ14=";
+        hash = "sha256-jxh0luKV8WmVLpRHRa+eSuAMnBzS7UytvPfYmOREkT4=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
-        hash = "sha256-0SA28X3fIKMV3wZtlJvBxq9MZkI6GevVuSNzgqJ4xQU=";
+        hash = "sha256-ogpQe8fBJw2L6WqfP77AY0U4d4nS3CxNPfYmDUe/szw=";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
-        hash = "sha256-BUhdK8qhdV2Den+4bbdd9T6MD/BtGpxp+1Axj21NxrI=";
+        hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
       };
 
   nativeBuildInputs = [ java ];
