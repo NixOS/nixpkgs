@@ -9,19 +9,15 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "80.9.0";
+  version = "80.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     tag = "v${version}";
-    hash = "sha256-wueVQsV0ja/iPFRK7OKV27FQ7hYKF8cP3WH5wJeIXnI=";
+    hash = "sha256-js2vvW7I5JRSTo4vO/9fKTwXGnY9uw2IlEIDqi1Z+WU=";
   };
-
-  patches = [
-    ./tag-date.patch
-  ];
 
   # Drop dependency on coherent.license, which in turn requires coherent.build
   postPatch = ''
