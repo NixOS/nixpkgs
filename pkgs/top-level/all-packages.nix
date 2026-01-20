@@ -8282,7 +8282,6 @@ with pkgs;
   };
 
   xcb-util-cursor = xorg.xcbutilcursor;
-  xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
@@ -10720,9 +10719,7 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  i3 = callPackage ../applications/window-managers/i3 {
-    xcb-util-cursor = if stdenv.hostPlatform.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
-  };
+  i3 = callPackage ../applications/window-managers/i3 { };
 
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
