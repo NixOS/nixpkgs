@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pythonAtLeast,
 
   ## wandb-core
-  buildGo125Module,
+  buildGoModule,
   gitMinimal,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
 
   ## gpu-stats
@@ -20,11 +22,9 @@
 
   # dependencies
   click,
-  docker-pycreds,
   gitpython,
   platformdirs,
   protobuf,
-  psutil,
   pydantic,
   pyyaml,
   requests,
@@ -73,16 +73,15 @@
   torch,
   torchvision,
   tqdm,
-  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.21.4";
+  version = "0.24.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-1l68nU/rmYg/Npg1EVraGr2tu/lkNAo9M7Q0IyckEoc=";
+    hash = "sha256-dICa/sIFEHI59gJxrvWyI9Uc3rbwXi+Xh60O/hElZh0=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -110,7 +109,7 @@ let
     };
   };
 
-  wandb-core = buildGo125Module rec {
+  wandb-core = buildGoModule rec {
     pname = "wandb-core";
     inherit src version;
 
@@ -128,6 +127,7 @@ let
 
     nativeBuildInputs = [
       gitMinimal
+      writableTmpDirAsHomeHook
     ];
 
     nativeInstallCheckInputs = [
@@ -196,11 +196,9 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    docker-pycreds
     gitpython
     platformdirs
     protobuf
-    psutil
     pydantic
     pyyaml
     requests
@@ -388,14 +386,17 @@ buildPythonPackage rec {
 
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
     "test_setup_offline"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: '...' object has no attribute '__annotations__'
+    "test_watch_graph_torch_jit"
+    "test_watch_parameters_torch_jit"
   ];
-
-  pythonImportsCheck = [ "wandb" ];
 
   meta = {
     description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
-    changelog = "https://github.com/wandb/wandb/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wandb/wandb/raw/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     broken = gpu-stats.meta.broken || wandb-core.meta.broken;
