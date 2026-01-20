@@ -39,7 +39,6 @@
   colorama,
   # python-version-dependent
   pythonOlder,
-  importlib-metadata,
   typing-extensions,
   # tests
   pytest-xdist,
@@ -94,7 +93,6 @@ buildPythonPackage rec {
       looseversion
     ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
     ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
     downloaders = [
       boto3

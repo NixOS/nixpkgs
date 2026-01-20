@@ -2,10 +2,8 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  importlib-metadata,
   pytestCheckHook,
 }:
 
@@ -24,10 +22,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  dependencies = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

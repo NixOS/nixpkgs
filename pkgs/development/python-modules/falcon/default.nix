@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   isPyPy,
   fetchFromGitHub,
 
@@ -21,7 +20,6 @@
   pyyaml,
   rapidjson,
   requests,
-  testtools,
   ujson,
   uvicorn,
   websockets,
@@ -72,8 +70,7 @@ buildPythonPackage rec {
     msgpack
     mujson
     ujson
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ testtools ];
+  ];
 
   enabledTestPaths = [ "tests" ];
 

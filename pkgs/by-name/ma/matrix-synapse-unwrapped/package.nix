@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       poetry-core
+      setuptools-rust
     ]
     ++ [
       rustPlatform.maturinBuildHook
@@ -51,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     libiconv
   ];
 
-  pythonRemoveDeps = [ "setuptools_rust" ];
+  pythonRemoveDeps = [ "setuptools-rust" ];
 
   dependencies =
     with python3Packages;
@@ -82,7 +83,6 @@ python3Packages.buildPythonApplication rec {
       pyrsistent
       pyyaml
       service-identity
-      setuptools-rust
       signedjson
       sortedcontainers
       treq

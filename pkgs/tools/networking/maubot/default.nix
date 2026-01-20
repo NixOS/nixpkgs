@@ -44,7 +44,6 @@ let
     pname = "maubot";
     version = "0.5.1";
     format = "setuptools";
-    disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {
       inherit pname version;

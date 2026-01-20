@@ -14,7 +14,6 @@
   alabaster,
   docutils,
   imagesize,
-  importlib-metadata,
   jinja2,
   packaging,
   pygments,
@@ -86,8 +85,7 @@ buildPythonPackage rec {
     # extra[docs]
     sphinxcontrib-websupport
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 
