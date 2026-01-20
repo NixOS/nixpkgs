@@ -1497,7 +1497,6 @@ in
           "~@timer"
         ];
         SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
       };
     };
 
