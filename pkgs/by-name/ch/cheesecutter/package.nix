@@ -19,6 +19,9 @@ stdenv.mkDerivation {
   };
 
   patches = [
+    # https://github.com/theyamo/CheeseCutter/pull/60
+    ./1001-cheesecutter-Pin-C-standard-to-C99.patch
+
     ./0001-Drop-baked-in-build-date-for-r13y.patch
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Prepend-libSDL.dylib-to-macOS-SDL-loader.patch;
