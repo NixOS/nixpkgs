@@ -7,6 +7,7 @@
   doxygen,
   dynarmic,
   enet,
+  fetchpatch,
   fetchzip,
   fmt,
   ffmpeg_6-headless,
@@ -118,6 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
+  ];
+
+  patches = [
+    (fetchpatch {
+      # Fix darwin build
+      url = "https://github.com/azahar-emu/azahar/pull/1657.patch";
+      hash = "sha256-KtJW/ZtHnyzTC65sM/Cf99onraM+H0q/hAETcIyxb4U=";
+    })
   ];
 
   postPatch = ''
