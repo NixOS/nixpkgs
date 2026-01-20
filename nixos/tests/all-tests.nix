@@ -388,6 +388,7 @@ in
   connman = runTest ./connman.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
+  containerd = runTest ./containerd.nix;
   containers-bridge = runTest ./containers-bridge.nix;
   containers-custom-pkgs = runTest ./containers-custom-pkgs.nix;
   containers-ephemeral = runTest ./containers-ephemeral.nix;
