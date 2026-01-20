@@ -6,7 +6,6 @@
   h11,
   maxminddb,
   pytestCheckHook,
-  pythonAtLeast,
   requests-mock,
   pytest-httpserver,
   requests,
@@ -45,13 +44,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "geoip2" ];
-
-  disabledTests =
-    lib.optionals (pythonAtLeast "3.10") [
-      # https://github.com/maxmind/GeoIP2-python/pull/136
-      "TestAsyncClient"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.10") [ "test_request" ];
 
   meta = {
     description = "GeoIP2 webservice client and database reader";
