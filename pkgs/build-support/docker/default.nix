@@ -1,4 +1,5 @@
 {
+  attr,
   bash,
   buildPackages,
   cacert,
@@ -115,6 +116,20 @@ let
     compressors.${compressor}
       or (throw "in docker image ${imageName}: compressor must be one of: [${toString (builtins.attrNames compressors)}]");
 
+  xAttrSupportTest = p: ''
+    # Verify xattrs support upfront. Without this check, a script that silently
+    # tolerates missing xattrs would cause a build impurity: the output depends
+    # on whether the filesystem supports xattrs.
+    (
+      test_file="${p}/.nix-xattr-test-$RANDOM$RANDOM"
+      touch "$test_file"
+      if ! ${attr}/bin/setfattr -n user.nixtest -v 1 "$test_file" 2>/dev/null; then
+        echo "error: preserveXAttrsInRootLayer=true but xattrs not supported" >&2
+        exit 1
+      fi
+      rm "$test_file"
+    )
+  '';
 in
 rec {
   examples = callPackage ./examples.nix {
@@ -538,6 +553,8 @@ rec {
       postMount = ''
         mkdir -p mnt/{dev,proc,sys,tmp} mnt${storeDir}
 
+        ${lib.optionalString preserveXAttrsInRootLayer (xAttrSupportTest "mnt")}
+
         # Mount /dev, /sys and the nix store as shared folders.
         mount --rbind /dev mnt/dev
         mount --rbind /sys mnt/sys
@@ -565,7 +582,7 @@ rec {
 
         echo "Packing layer..."
         mkdir -p $out
-        tarhash=$(tar ${lib.optionalString preserveXAttrsInRootLayer ''--xattrs --xattrs-include='*' ''}-C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
+        tarhash=$(tar ${lib.optionalString preserveXAttrsInRootLayer "--xattrs --xattrs-include='*' "}-C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
                     tee -p $out/layer.tar |
                     ${lib.getExe tarsum})
 
@@ -1096,6 +1113,7 @@ rec {
                 proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -e -c '
                   if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                   source $stdenv/setup
+                  ${lib.optionalString preserveXAttrsInRootLayer (xAttrSupportTest ".")}
                   eval "$fakeRootCommands"
                   tar \
                     ${lib.optionalString preserveXAttrsInRootLayer ''--xattrs --xattrs-include='"'"'*'"'"' ''}\
@@ -1116,6 +1134,7 @@ rec {
                   if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                   source $stdenv/setup
                   cd old_out
+                  ${lib.optionalString preserveXAttrsInRootLayer (xAttrSupportTest ".")}
                   eval "$fakeRootCommands"
                   tar \
                     ${lib.optionalString preserveXAttrsInRootLayer ''--xattrs --xattrs-include='"'"'*'"'"' ''}\
