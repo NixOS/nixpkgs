@@ -4,7 +4,6 @@
   fetchFromGitHub,
   marshmallow,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
   typeguard,
   typing-inspect,
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # TypeError: UserId is not a dataclass and cannot be turned into one.
     "test_newtype"
   ];
