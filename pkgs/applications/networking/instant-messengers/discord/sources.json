@@ -1,8 +1,8 @@
 {
   "linux-canary": {
-    "hash": "sha256-2o0SBMbtozibAIL7lHDJ2LfNjbDKY578PvcNdFs/AC4=",
-    "url": "https://canary.dl2.discordapp.net/apps/linux/0.0.844/discord-canary-0.0.844.tar.gz",
-    "version": "0.0.844"
+    "hash": "sha256-jomLXlIr+ajJspmh/seNb48alPSuCw8ybYkfc0uAziE=",
+    "url": "https://canary.dl2.discordapp.net/apps/linux/0.0.852/discord-canary-0.0.852.tar.gz",
+    "version": "0.0.852"
   },
   "linux-development": {
     "hash": "sha256-EVkjWoqWl9Z+iHCLPOLu4PIUb2wC3HVcPVjOVz++IVw=",
@@ -15,19 +15,19 @@
     "version": "0.0.172"
   },
   "linux-stable": {
-    "hash": "sha256-/NfgHBXsUWYoDEVGz13GBU1ISpSdB5OmrjhSN25SBMg=",
-    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.119/discord-0.0.119.tar.gz",
-    "version": "0.0.119"
+    "hash": "sha256-4rJ0l0zSoOz7L65sy3Gegcsb/nJGGFu6h5TGAb0fqUI=",
+    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.120/discord-0.0.120.tar.gz",
+    "version": "0.0.120"
   },
   "osx-canary": {
-    "hash": "sha256-qh5+hCEQXivdugj5jzS+i1ftmyh6l2YEE63oS+qV2Go=",
-    "url": "https://canary.dl2.discordapp.net/apps/osx/0.0.948/DiscordCanary.dmg",
-    "version": "0.0.948"
+    "hash": "sha256-ZzqakVB2Rkcq5zME2WnSCw1CLzpD3VDM/pu4nQ7rRNs=",
+    "url": "https://canary.dl2.discordapp.net/apps/osx/0.0.956/DiscordCanary.dmg",
+    "version": "0.0.956"
   },
   "osx-development": {
-    "hash": "sha256-y840b3WlWnSK+22l7AoasQbDmbB+2LOzbxA13yJxrPA=",
-    "url": "https://development.dl2.discordapp.net/apps/osx/0.0.106/DiscordDevelopment.dmg",
-    "version": "0.0.106"
+    "hash": "sha256-B1//zMlTv2+RWHfWZSaaU8ubVOwWob+EYjNdtFRwlgg=",
+    "url": "https://development.dl2.discordapp.net/apps/osx/0.0.107/DiscordDevelopment.dmg",
+    "version": "0.0.107"
   },
   "osx-ptb": {
     "hash": "sha256-tjWbvWOvSinVZDvJYFFcbmr+y7W5PmIr/alrS82ECBo=",
@@ -35,8 +35,8 @@
     "version": "0.0.204"
   },
   "osx-stable": {
-    "hash": "sha256-OjHYJNZlM/cOLM61qvoauzNl3f/GVPdJMsnM+kxc/38=",
-    "url": "https://stable.dl2.discordapp.net/apps/osx/0.0.371/Discord.dmg",
-    "version": "0.0.371"
+    "hash": "sha256-PkZU/1GxPmfxq2qP/5gGU85EFYPI1V42iHfoy9x9fKI=",
+    "url": "https://stable.dl2.discordapp.net/apps/osx/0.0.372/Discord.dmg",
+    "version": "0.0.372"
   }
 }
