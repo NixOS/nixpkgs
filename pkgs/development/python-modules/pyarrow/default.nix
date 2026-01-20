@@ -32,6 +32,10 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/python";
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin-timezone-absent.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     cython

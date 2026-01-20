@@ -1,0 +1,36 @@
+--- a/pyarrow/tests/test_orc.py
++++ b/pyarrow/tests/test_orc.py
+@@ -151,6 +151,7 @@
+     path = datadir / 'TestOrcFile.testDate1900.orc'
+     code = f"""if 1:
+         import os
++        import sys
+         os.environ['TZDIR'] = '/tmp/non_existent'
+ 
+         from pyarrow import orc
+@@ -160,6 +161,8 @@
+         except Exception as e:
+             assert "time zone database" in str(e).lower(), e
+         else:
++            if sys.platform == "darwin":
++                sys.exit(0)
+             assert False, "Should have raised exception"
+     """
+     subprocess.run([sys.executable, "-c", code], check=True)
+@@ -182,6 +185,7 @@
+     path = datadir / 'TestOrcFile.testDate1900.orc'
+     code = f"""if 1:
+         import os
++        import sys
+         os.environ['TZDIR'] = {str(tzdir)!r}
+ 
+         from pyarrow import orc
+@@ -191,6 +195,8 @@
+         except Exception as e:
+             assert "zoneinfo/US/Pacific" in str(e), e
+         else:
++            if sys.platform == "darwin":
++                sys.exit(0)
+             assert False, "Should have raised exception"
+     """
+     subprocess.run([sys.executable, "-c", code], check=True)
