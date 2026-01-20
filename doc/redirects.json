@@ -99,6 +99,9 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "dont-systemd-verify-units": [
+    "index.html#dont-systemd-verify-units"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
@@ -689,6 +692,33 @@
   ],
   "glibcxxassertions": [
     "index.html#glibcxxassertions"
+  ],
+  "systemd-verify-allow-unknown-keys": [
+    "index.html#systemd-verify-allow-unknown-keys"
+  ],
+  "systemd-verify-allow-unknown-sections": [
+    "index.html#systemd-verify-allow-unknown-sections"
+  ],
+  "systemd-verify-disable-default-unknown-keys": [
+    "index.html#systemd-verify-disable-default-unknown-keys"
+  ],
+  "systemd-verify-extra-units": [
+    "index.html#systemd-verify-extra-units"
+  ],
+  "systemd-verify-skip-default-paths": [
+    "index.html#systemd-verify-skip-default-paths"
+  ],
+  "systemd-verify-skip-units": [
+    "index.html#systemd-verify-skip-units"
+  ],
+  "systemd-verify-units-hook": [
+    "index.html#systemd-verify-units-hook"
+  ],
+  "systemd-verify-units-hook-exclusive-variables": [
+    "index.html#systemd-verify-units-hook-exclusive-variables"
+  ],
+  "systemd-verify-units-hook-variables-controlling": [
+    "index.html#systemd-verify-units-hook-variables-controlling"
   ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
