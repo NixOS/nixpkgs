@@ -12,10 +12,6 @@
 }:
 
 let
-  # TODO(reckenrode): Remove on after the `sourceRelease` migration has been merged.
-  # system_cmds does not actually require private libdispatch APIs.
-  libdispatch = sourceRelease "libdispatch"; # Has to match the version of the SDK
-
   Libc = sourceRelease "Libc";
   libmalloc = sourceRelease "libmalloc";
   OpenDirectory = sourceRelease "OpenDirectory";
@@ -53,11 +49,6 @@ let
         '${xnu}/libsyscall/wrappers/libproc/libproc_private.h' \
         '${xnu}/libsyscall/wrappers/spawn/spawn_private.h'
       touch "$out/include/btm.h"
-
-      cp -r '${libdispatch}/private' "$out/include/dispatch"
-      # Work around availability headers compatibility issue when building with an unprocessed SDK.
-      chmod -R u+w "$out/include/dispatch"
-      find "$out/include/dispatch" -name '*.h' -exec sed -i {} -e 's/, bridgeos([^)]*)//g' \;
 
       install -D -t "$out/include/System/i386" \
         '${xnu}/osfmk/i386/cpu_capabilities.h'
@@ -130,6 +121,10 @@ mkAppleDerivation {
       substituteInPlace $src \
         --replace-fail 'printw(tbuf)' 'printw("%s", tbuf);'
     done
+
+    # The libdispatch APIs it uses aren’t actually private. They’re available in the public headers.
+    substituteInPlace memory_pressure/memory_pressure.c \
+      --replace-fail '<dispatch/private.h>' '<dispatch/dispatch.h>'
   '';
 
   preConfigure = ''
