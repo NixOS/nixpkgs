@@ -269,7 +269,8 @@ python3Packages.buildPythonApplication rec {
     install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
     install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
-    install -D -t $out/share/pixmaps qt/launcher/lin/anki.{png,xpm}
+    install -D -t $out/share/icons/hicolor/176x176/apps qt/launcher/lin/anki.png
+    install -D -t $out/share/icons/hicolor/32x32/apps qt/launcher/lin/anki.xpm
     installManPage qt/launcher/lin/anki.1
 
     runHook postInstall
