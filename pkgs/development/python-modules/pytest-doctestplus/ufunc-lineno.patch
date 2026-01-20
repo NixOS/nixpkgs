@@ -1,0 +1,15 @@
+--- a/pytest_doctestplus/plugin.py
++++ b/pytest_doctestplus/plugin.py
+@@ -831,6 +831,12 @@
+     def __init__(self, *args, doctest_ufunc=False, **kwargs):
+         super().__init__(*args, **kwargs)
+         self._doctest_ufunc = doctest_ufunc
++
++    def _find_lineno(self, obj, source_lines):
++        try:
++            return super()._find_lineno(obj, source_lines)
++        except AttributeError:
++            return 0
+ 
+     @classmethod
+     def check_required_modules(cls, mods):

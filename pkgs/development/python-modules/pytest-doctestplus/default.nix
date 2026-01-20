@@ -23,6 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-hKxTniN7BHDdIHqxNGOuvD7Rk5ChSh1Zn6fo6G+Uty4=";
   };
 
+  patches = [
+    ./ufunc-lineno.patch
+  ];
+
   postPatch = ''
     substituteInPlace pytest_doctestplus/plugin.py \
       --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
