@@ -7,6 +7,7 @@ add_project_arguments(
     '-DCOMMON_DIGEST_FOR_RFC_1321', # To enable legacy `MD5` APIs in CommonCrypto.
     # This is not defined automatically by Clang. Not having them defined causes compilation failures.
     '-DTARGET_OS_BRIDGE=0',
+    '-DTARGET_OS_EXCLAVEKIT=0',
     language : 'c',
 )
 

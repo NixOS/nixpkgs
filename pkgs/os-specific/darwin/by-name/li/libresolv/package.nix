@@ -8,13 +8,7 @@
 
 let
   configd = sourceRelease "configd";
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  dyld = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "dyld";
-    rev = "dyld-1160.6";
-    hash = "sha256-6P/Da6xP19vmaCROoYv9pl7DaW3/U+qZBJT8PD33bn0=";
-  };
+  dyld = sourceRelease "dyld";
   Libinfo = sourceRelease "Libinfo";
   Libnotify = sourceRelease "Libnotify";
 
