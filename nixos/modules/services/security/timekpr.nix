@@ -35,8 +35,7 @@ in
       members = cfg.adminUsers;
     };
 
-    environment.systemPackages = [
-      # Add timekpr to system packages so that polkit can find it
+    security.polkit.packages = [
       cfg.package
     ];
     services.dbus.enable = true;

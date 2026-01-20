@@ -260,7 +260,9 @@ in
     ];
     environment.systemPackages = [
       pkgs.adwaita-icon-theme
-      pkgs.gdm # For polkit rules
+    ];
+    security.polkit.packages = [
+      pkgs.gdm
     ];
 
     # We dont use the upstream gdm service
