@@ -1485,16 +1485,19 @@ with pkgs;
   amule-daemon = amule.override {
     monolithic = false;
     enableDaemon = true;
+    mainProgram = "amuled";
   };
 
   amule-gui = amule.override {
     monolithic = false;
     client = true;
+    mainProgram = "amulegui";
   };
 
   amule-web = amule.override {
     monolithic = false;
     httpServer = true;
+    mainProgram = "amuleweb";
   };
 
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
@@ -13445,7 +13448,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nixComponents = nixVersions.nixComponents_2_32;
+    nixComponents = nixVersions.nixComponents_2_33;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
