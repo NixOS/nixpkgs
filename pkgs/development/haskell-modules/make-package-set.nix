@@ -277,18 +277,19 @@ package-set { inherit pkgs lib callPackage; } self
         revision = null;
         sha256 = null;
       },
+      extraCabal2nixOptions ? "",
     }:
     args:
     let
       pkgver = "${pkg}-${ver}";
-      firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
+      firstRevision = self.callCabal2nixWithOptions pkg (pkgs.fetchzip {
         url =
           if candidate then
             "mirror://hackage/${pkgver}/candidate/${pkgver}.tar.gz"
           else
             "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
         inherit sha256;
-      }) args;
+      }) extraCabal2nixOptions args;
     in
     overrideCabal (orig: {
       revision = rev.revision;
