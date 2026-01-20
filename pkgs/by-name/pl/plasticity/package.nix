@@ -18,6 +18,7 @@
   libnotify,
   libxkbcommon,
   libgbm,
+  libGL,
   nspr,
   nss,
   openssl,
@@ -33,11 +34,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "25.2.11";
+  version = "25.3.8";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
+    hash = "sha256-b3SsVd5y0GvM2cnil+ar4OGoaNlQn13gIEfzqOs4HfI=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -115,9 +116,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
   preFixup = ''
-    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
+    patchelf --add-needed libGL.so.1 \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          libGL
+        ]
+      }" \
+      $out/bin/Plasticity
+
+    rm "$out/lib/Plasticity/libvulkan.so.1"
+    ln -s -t "$out/lib/Plasticity" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
   meta = {
