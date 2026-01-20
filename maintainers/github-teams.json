@@ -422,10 +422,10 @@
     "maintainers": {
       "Mic92": 96200,
       "kalbasit": 87115,
+      "katexochen": 49727155,
       "zowoq": 59103226
     },
     "members": {
-      "katexochen": 49727155,
       "mfrw": 4929861,
       "qbit": 68368
     },
@@ -730,7 +730,9 @@
       "philiptaron": 43863,
       "zowoq": 59103226
     },
-    "members": {},
+    "members": {
+      "mdaniels5757": 8762511
+    },
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {

@@ -5,10 +5,8 @@
   marshmallow,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   typeguard,
-  typing-extensions,
   typing-inspect,
 }:
 
@@ -29,8 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     marshmallow
     typing-inspect
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

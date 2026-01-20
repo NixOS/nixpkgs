@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "google-alloydb-auth-proxy";
-  version = "1.13.9";
+  version = "1.13.10";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "alloydb-auth-proxy";
     tag = "v${version}";
-    hash = "sha256-VCfK2EcFerIxqaAEY9KnfPLqwOJaz6CVRbTQGzTM6SY=";
+    hash = "sha256-e+m7vr/N4Ij8X89f12ZjJDh60hOMQXQOBOaVE4TUVaA=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-sC+bAlzb+Pcj0+NQDaUeyjr6I+fv7cQ3+JHJKKtmiT4=";
+  vendorHash = "sha256-PKtN0HvIzxr42XpandoHqqK9N0ohq2dXxGbnIlMO8mo=";
 
   checkFlags = [
     "-short"
