@@ -3,22 +3,22 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  nasm,
+  yasm,
   cpuinfo,
   libdovi,
   hdr10plus,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "svt-av1-psy";
-  version = "3.0.2-unstable-2025-04-21";
+  pname = "svt-av1-psyex";
+  version = "3.0.2-B";
 
   src = fetchFromGitHub {
-    owner = "psy-ex";
-    repo = "svt-av1-psy";
-    rev = "3745419c40267d294202b52f48f069aff56cdb78";
-    hash = "sha256-iAw2FiEsBGB4giWqzo1EJZok26WSlq7brq9kJubnkAQ=";
+    owner = "BlueSwordM";
+    repo = "svt-av1-psyex";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-klfrbow8UtpIPwIgt8tK7FP7Jp6In9nxfOZrdi1PsHo=";
   };
 
   cmakeBuildType = "Release";
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    nasm
+    yasm
   ];
 
   buildInputs = [
@@ -51,17 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     cpuinfo
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    branch = "master";
-    tagPrefix = "v";
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
-    homepage = "https://github.com/psy-ex/svt-av1-psy";
+    homepage = "https://github.com/BlueSwordM/svt-av1-psyex";
     description = "Scalable Video Technology AV1 Encoder and Decoder";
 
     longDescription = ''
-      SVT-AV1-PSY is the Scalable Video Technology for AV1 (SVT-AV1 Encoder and Decoder)
+      SVT-AV1-PSYEX is the Scalable Video Technology for AV1 (SVT-AV1 Encoder and Decoder)
       with perceptual enhancements for psychovisually optimal AV1 encoding.
       The goal is to create the best encoding implementation for perceptual quality with AV1.
     '';
@@ -71,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      ccicnce113424
+    ];
     mainProgram = "SvtAv1EncApp";
   };
 })

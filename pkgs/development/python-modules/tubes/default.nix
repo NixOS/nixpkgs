@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  characteristic,
   six,
   twisted,
 }:
@@ -21,7 +20,6 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [
-    characteristic
     six
     twisted
   ];

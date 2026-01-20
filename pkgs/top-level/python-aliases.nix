@@ -98,6 +98,7 @@ mapAliases {
   can = throw "'can' has been renamed to/replaced by 'python-can'"; # Converted to throw 2025-10-29
   casbin = pycasbin; # added 2025-06-12
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
+  characteristic = throw "'characteristic' has been removed because it is no longer maintained upstream"; # Added 2026-01-14
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
