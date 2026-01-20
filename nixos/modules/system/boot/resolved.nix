@@ -77,11 +77,6 @@ in
       [ "services" "resolved" "dnsovertls" ]
       [ "services" "resolved" "settings" "Resolve" "DNSOverTLS" ]
     )
-    {
-      warnings = optional (
-        cfg.extraConfig != ""
-      ) "services.resolved.extraConfig is deprecated; use services.resolved.settings.Resolve";
-    }
   ];
 
   options = {
@@ -169,6 +164,10 @@ in
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
       ];
+
+      warnings = optional (
+        cfg.extraConfig != ""
+      ) "services.resolved.extraConfig is deprecated; use services.resolved.settings.Resolve";
 
       users.users.systemd-resolve.group = "systemd-resolve";
 
