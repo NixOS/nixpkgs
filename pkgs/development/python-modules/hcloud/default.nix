@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hcloud";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BMaVHZBkfh4KYVqDnB+JDJChTgTPy/llAB0qzl0hvQk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-/Y5mjersmXo/6t5e3Te+BZpT5MvBT7AGCXZnUC737U0=";
   };
 
   build-system = [ setuptools ];
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Hetzner Cloud API";
     homepage = "https://github.com/hetznercloud/hcloud-python";
-    changelog = "https://github.com/hetznercloud/hcloud-python/releases/tag/v${version}";
+    changelog = "https://github.com/hetznercloud/hcloud-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liff ];
   };
-}
+})

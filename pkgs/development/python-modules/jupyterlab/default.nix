@@ -8,7 +8,6 @@
   hatchling,
   async-lru,
   httpx,
-  importlib-metadata,
   ipykernel,
   jinja2,
   jupyter-core,
@@ -75,8 +74,7 @@ buildPythonPackage rec {
     tornado
     traitlets
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   makeWrapperArgs = [
     "--set"

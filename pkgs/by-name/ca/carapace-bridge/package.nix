@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "carapace-bridge";
-  version = "1.4.10";
+  version = "1.4.11";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6CCLSwbAYkMelaM5ac1I1kwOlWKPSOU9M9/2Dybt55I=";
+    hash = "sha256-npy20q8Fmi4KKN/q41iG6sWmuQVLhiHyUCGVUwS0FsA=";
   };
 
   # buildGoModule tries to run `go mod vendor` instead of `go work vendor` on

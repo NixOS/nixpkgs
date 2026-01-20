@@ -5,7 +5,6 @@
   fetchPypi,
   git, # shells out to git
   hatchling,
-  importlib-resources,
   incremental,
   jinja2,
   mock,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     incremental
     jinja2
   ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   preCheck = ''

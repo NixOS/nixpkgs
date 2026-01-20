@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs-tools";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${version}";
-    hash = "sha256-3tVCsMXrNTFhTQit4PNTXtHOXq8GSEWdLBJ9iqtgWyQ=";
+    hash = "sha256-ZcH2FBKsbBtTYfRQgPfOOODDpyB7VydcO7F7pq8xzD0=";
   };
 
-  cargoHash = "sha256-CL+aTPllQqa22ENU2FWhBMSe0Mf1MAfemytIiqf0bHk=";
+  cargoHash = "sha256-fVmwZw34lK6eKkqNT/SW5wzeeyWg6Qp48eso6yibICE=";
 
   buildAndTestSubdir = pname;
 

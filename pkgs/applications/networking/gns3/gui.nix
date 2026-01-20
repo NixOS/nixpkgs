@@ -39,21 +39,16 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ qt5.qtwayland ];
 
-  dependencies =
-    with pythonPackages;
-    [
-      distro
-      jsonschema
-      psutil
-      pyqt5
-      sentry-sdk
-      setuptools
-      sip
-      truststore
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-    ];
+  dependencies = with pythonPackages; [
+    distro
+    jsonschema
+    psutil
+    pyqt5
+    sentry-sdk
+    setuptools
+    sip
+    truststore
+  ];
 
   dontWrapQtApps = true;
 

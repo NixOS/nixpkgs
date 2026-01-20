@@ -16,7 +16,7 @@ let
     oxipng
   ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "upsies";
   version = "2026.01.03";
   pyproject = true;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     domain = "codeberg.org";
     owner = "plotski";
     repo = "upsies";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ya1v0DR5a4fPsFVJKVSDbgy+hWE136aRV3pFMExlRhU=";
   };
 
@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
       pytestCheckHook
       trustme
     ]
-    ++ runtimeDeps;
+    ++ finalAttrs.passthru.runtimeDeps;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fail during object comparisons on Darwin
@@ -110,10 +110,14 @@ python3Packages.buildPythonApplication rec {
     "--suffix"
     "PATH"
     ":"
-    (lib.makeBinPath runtimeDeps)
+    (lib.makeBinPath finalAttrs.passthru.runtimeDeps)
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    inherit runtimeDeps;
+  };
 
   meta = {
     description = "Toolkit for collecting, generating, normalizing and sharing video metadata";
@@ -122,4 +126,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "upsies";
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})
