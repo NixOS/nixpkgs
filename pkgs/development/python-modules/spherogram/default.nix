@@ -16,16 +16,16 @@
   snappy-manifolds,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "spherogram";
-  version = "2.3";
+  version = "2.4-unstable-2026-01-20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "spherogram";
-    tag = "${version}_as_released";
-    hash = "sha256-uqc+3xS4xulXR0tZlNuyC5Zz5OztR6c4PZWpsvU+4Pw=";
+    rev = "d1353546fda1d7dc130ae4e7046e30ebbcc8f4c8";
+    hash = "sha256-4gKkAzNWtDSJD2xyCRVTdWcHU0IJg8imkvMJhbTUDFE=";
   };
 
   build-system = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Spherical diagrams for 3-manifold topology";
     homepage = "https://snappy.computop.org/spherogram.html";
-    changelog = "https://github.com/3-manifolds/Spherogram/releases/tag/${src.tag}";
+    # changelog = "https://github.com/3-manifolds/Spherogram/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
