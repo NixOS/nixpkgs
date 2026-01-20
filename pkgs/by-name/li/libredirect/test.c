@@ -34,6 +34,35 @@ void test_bind(void) {
     close(fd);
 }
 
+void test_connect(void) {
+    // server
+    int server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    assert(server_fd != -1);
+    struct sockaddr_un server_addr = {
+        .sun_family = AF_UNIX,
+        .sun_path = TESTSOCK,
+    };
+    unlink(TESTSOCK);
+    int bind_ret = bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr));
+    assert(bind_ret == 0);
+    int listen_ret = listen(server_fd, 5);
+    assert(listen_ret == 0);
+
+    // client
+    int client_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    assert(client_fd != -1);
+    struct sockaddr_un client_addr = {
+        .sun_family = AF_UNIX,
+        .sun_path = TESTSOCK,
+    };
+    int connect_ret = connect(client_fd, (struct sockaddr *)&client_addr, sizeof(client_addr));
+    assert(connect_ret == 0);
+
+    // clean up
+    close(server_fd);
+    close(client_fd);
+}
+
 void test_spawn(void) {
     pid_t pid;
     int ret;
@@ -177,6 +206,7 @@ int main(int argc, char *argv[])
     assert_mktemp_path(TESTDIR "/temp", "", buf);
 
     test_bind();
+    test_connect();
     test_spawn();
     test_system();
     test_stat_with_null_path();
