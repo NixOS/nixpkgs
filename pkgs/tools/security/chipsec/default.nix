@@ -7,6 +7,9 @@
   nasm,
   python3,
   withDriver ? false,
+  # If this is disabled, you need to manually provide logs output with `-l`,
+  # else if it's enabled, they will be automatically created in `/tmp/chipsec`.
+  withAutoLogs ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-8QiFIk9bq/yX26jw9aOd6wtt+WDUwfLBUVD5hL30RKE=";
   };
 
-  patches = [
+  patches = lib.optionals withAutoLogs [
     ./log-path.diff
   ];
 
@@ -62,6 +65,10 @@ python3.pkgs.buildPythonApplication rec {
       rm chipsec.ko.xz
     popd
   '';
+
+  makeWrapperArgs = lib.optionalString (!withAutoLogs) [
+    "--add-flags -nl" # don't save logs automatically
+  ];
 
   pythonImportsCheck = [
     "chipsec"
