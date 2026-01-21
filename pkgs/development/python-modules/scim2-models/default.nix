@@ -9,15 +9,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scim2-models";
-  version = "0.4.1";
+  version = "0.5.1";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-scim";
     repo = "scim2-models";
-    tag = finalAttrs.version;
-    hash = "sha256-cc9nSqED+gfBHC3QpeHnQ6lBnmvdHa6edp/WGiuiDfc=";
+    tag = version;
+    hash = "sha256-ahwHmWsM9IoK+yq0Qd0c2+kagMlXGi80/rAB4UQsf6U=";
   };
 
   build-system = [ hatchling ];
