@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyplatec";
-  version = "1.4.0";
+  version = "1.4.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPlatec";
     inherit version;
-    sha256 = "0kqx33flcrrlipccmqs78d14pj5749bp85b6k5fgaq2c7yzz02jg";
+    sha256 = "sha256-PXQlJtC4Z0ifphqTelOuBQS5wubxCH/f0PSWnE7OeNg=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-std=c++11";
