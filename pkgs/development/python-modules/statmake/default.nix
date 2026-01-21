@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "statmake";
-  version = "1.1.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daltonmaag";
     repo = "statmake";
     tag = "v${version}";
-    hash = "sha256-UqL3l27Icu5DoVvFYctbOF7gvKvVV6hK1R5A1y9SYkU=";
+    hash = "sha256-PlMbJuJUkUjKXhkcCfLO5G3R1z9Zwf9qKYj9olOANno=";
   };
 
   build-system = [
