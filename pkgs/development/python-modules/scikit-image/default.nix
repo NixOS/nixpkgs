@@ -34,14 +34,14 @@ let
   installedPackageRoot = "${placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.25.2";
+    version = "0.26.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
       tag = "v${version}";
-      hash = "sha256-viRX7Uh9coacueI6gJHBtOay/UIiUQkBfjpmDLJgyZ4=";
+      hash = "sha256-VpvlG2ECbq+FWLZ4RfdbbR3V6Fbw0RIvnVp+w0Rp+8o=";
     };
 
     postPatch = ''
