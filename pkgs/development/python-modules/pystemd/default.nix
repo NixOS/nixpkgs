@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.13.4";
+  version = "0.15.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "pystemd";
     tag = "v${version}";
-    hash = "sha256-Ph0buiyH2cLRXyqgA8DmpE9crb/x8OaerIoZuv8hjMI=";
+    hash = "sha256-qFBa2hIcF0hyb+QyVpFG0qOpWsVVVTGCqgfChic6JCI=";
   };
 
   buildInputs = [ systemd ];
