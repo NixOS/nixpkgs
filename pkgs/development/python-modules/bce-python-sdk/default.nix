@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.9.57";
+  version = "0.9.59";
 in
 buildPythonPackage {
   pname = "bce-python-sdk";
@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "bce_python_sdk";
     inherit version;
-    hash = "sha256-797kmORvaBg/W31BnPgFJLzsLAzWHe+ABdNYtP7PQ4E=";
+    hash = "sha256-VK0JOUsKW6+Mjvh6yRn50RHBsFNghihrgK2nFlHY5Mg=";
   };
 
   patches = [
