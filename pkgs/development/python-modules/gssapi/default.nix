@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.9.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
     tag = "v${version}";
-    hash = "sha256-Y53HoLcamoFIrwZtNcL1BOrzBjRD09mT3AiS0QUT7dY=";
+    hash = "sha256-A1y3PD+zycKxlZT2vZ9b9p8SMr+aZA62CIAUpi4eOvo=";
   };
 
   postPatch = ''
