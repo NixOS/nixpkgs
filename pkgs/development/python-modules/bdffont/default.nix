@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "bdffont";
-  version = "0.0.32";
+  version = "0.0.35";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bdffont";
     inherit version;
-    hash = "sha256-5O1AlidPMhp0ztzBi/eHJToFSKMcx+EuQHltt/w4goQ=";
+    hash = "sha256-b6iUpGiwBF35hQb7B4ONyjG+63nQqfoXamJPRb8VuWI=";
   };
 
   build-system = [ hatchling ];
