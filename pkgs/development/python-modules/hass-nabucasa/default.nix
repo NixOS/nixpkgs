@@ -11,6 +11,7 @@
   fetchFromGitHub,
   freezegun,
   grpcio,
+  icmplib,
   josepy,
   litellm,
   pycognito,
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "1.7.0";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-22DCn6ITrpH4bevAvfogA1f4llwuk5vIn3rKieedVfg=";
+    hash = "sha256-qTOfZy74bF/e8Tw0FMjS53y7prCqIDlBXTDkVG3DUsQ=";
   };
 
   postPatch = ''
@@ -50,11 +51,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "acme"
-    "snitun"
-  ];
 
   dependencies = [
     acme
@@ -65,6 +61,7 @@ buildPythonPackage rec {
     ciso8601
     cryptography
     grpcio
+    icmplib
     josepy
     litellm
     pycognito
