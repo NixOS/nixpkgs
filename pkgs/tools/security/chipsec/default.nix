@@ -81,6 +81,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       johnazoidberg
       erdnaxe
+      staslyakhov
     ];
     platforms = if withDriver then [ "x86_64-linux" ] else with lib.platforms; linux ++ darwin;
     # https://github.com/chipsec/chipsec/issues/1793
