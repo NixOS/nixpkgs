@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "expandvars";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mK3YJot2Df7kV73hwXv3RXlf3rwit92rdf0yeGU/HgU=";
+    hash = "sha256-bFgit7dWqZo1a5Fd0SZ/UquKTvqhNZY71/S9XTaPcdc=";
   };
 
   patches = [
