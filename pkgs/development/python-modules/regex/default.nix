@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "2025.11.3";
+  version = "2026.1.15";
 in
 buildPythonPackage {
   pname = "regex";
@@ -18,7 +18,7 @@ buildPythonPackage {
     owner = "mrabarnett";
     repo = "mrab-regex";
     tag = version;
-    hash = "sha256-KEn+8DoAAq2OBqnl7vluqn1UPBpIfmO1v4wxKUZrcyA=";
+    hash = "sha256-siSyt5maiAjeU4LjOLUo82ubsjtNCeRbdwgYu2DdwBE=";
   };
 
   build-system = [ setuptools ];
