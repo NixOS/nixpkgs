@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.35.3";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-KOq3qxt3AyWQIOG0+HUbNr15u85tyTEstoUkYBFkpC4=";
+    hash = "sha256-G7DkWIjFmNyAyNAfOupncIbDbImITl5Av8r0ibTlDMs=";
   };
 
   build-system = [ setuptools ];
@@ -114,7 +114,7 @@ buildPythonPackage rec {
     description = "Download and publish models and other files on the huggingface.co hub";
     mainProgram = "hf";
     homepage = "https://github.com/huggingface/huggingface_hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
