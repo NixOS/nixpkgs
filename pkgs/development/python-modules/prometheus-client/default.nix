@@ -4,29 +4,39 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  asgiref,
   twisted,
+  pytest-benchmark,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.22.1";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
     tag = "v${version}";
-    hash = "sha256-DEuIoVpRDJTd9qXBeHa5jrBscmGgosCKAluqCuUBzuU=";
+    hash = "sha256-4swqhoCVrD7GflFbQX+QH9yGVDjbfwXvd7trs30STQQ=";
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ asgiref ];
 
   optional-dependencies.twisted = [ twisted ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "prometheus_client" ];
 
