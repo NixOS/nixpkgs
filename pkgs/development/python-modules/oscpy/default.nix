@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "oscpy";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "oscpy";
-    rev = "v${version}";
-    hash = "sha256-Luj36JLgU9xbBMydeobyf98U5zs5VwWQOPGV7TPXQwA=";
+    tag = "v${version}";
+    hash = "sha256-sumpJ2y9lpd0UhQjk4zVDp3SipBwh3NBkJ3dqWs18IE=";
   };
 
   patches = [
