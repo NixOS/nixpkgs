@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "1.0.2";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyppeteer";
     repo = "pyppeteer";
     tag = version;
-    hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
+    hash = "sha256-LYyV4Wzz4faewSsGjNe0i/9BLbCHzzEns2ZL2MYkGWw=";
   };
 
   postPatch = ''
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
-    changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyppeteer/pyppeteer/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kmein ];
   };
