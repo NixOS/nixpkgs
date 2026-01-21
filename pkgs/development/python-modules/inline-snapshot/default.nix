@@ -13,7 +13,6 @@
   pyright,
   pytest-freezer,
   pytest-mock,
-  pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     pyright
     pytest-freezer
     pytest-mock
-    pytest-subtests
     pytest-xdist
     pytestCheckHook
     time-machine

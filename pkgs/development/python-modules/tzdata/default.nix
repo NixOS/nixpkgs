@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytest-subtests,
   pytestCheckHook,
   setuptools,
 }:
@@ -21,7 +20,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-subtests
   ];
 
   pythonImportsCheck = [ "tzdata" ];
