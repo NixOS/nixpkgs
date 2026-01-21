@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "kfactory";
-  version = "2.0.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     # assert kf.config.project_dir is not None
     # E   AssertionError: assert None is not None
     leaveDotGit = true;
-    hash = "sha256-eZRNUb2Qw2HcR2W1pf15ulEt7ZCJwi60SuGdte/cG8E=";
+    hash = "sha256-6z2JlndmuegpCAf74YRa/qVVjFOWv1Xy3dabeWlOmbs=";
   };
 
   build-system = [
