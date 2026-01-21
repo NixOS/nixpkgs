@@ -43,14 +43,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-hyKJlq9736ngCQ1FUvP9miz7lMlwd+Y3Rcl6kfYDtsg=";
+    hash = "sha256-VBo0+8lOXWbi3a9FT0qcEkyoxzVAm+QLrBtHmRjUHbg=";
   };
 
   format = "pyproject";
