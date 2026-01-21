@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "7.3.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pinecone-io";
     repo = "pinecone-python-client";
     tag = "v${version}";
-    hash = "sha256-PT8Jr3sq5iZ9VFt6H6t4lLk72FXnHdyPUbcNGftg4QU=";
+    hash = "sha256-4oj1TBVykWvPtmfdRUgRojTds9bCWj9XOrcNRzUspKA=";
   };
 
   build-system = [
