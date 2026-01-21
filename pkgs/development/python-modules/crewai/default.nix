@@ -46,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "crewai";
-  version = "1.7.2";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = version;
-    hash = "sha256-liJS3hrNsyAt49ROUi3/pWXfMP2wA/bFyy6yEOV6Rrk=";
+    hash = "sha256-MQx1FOh2bwbkDbvR6aP5z071xwbGT8bxK9OjhskdVyI=";
   };
 
   sourceRoot = "${src.name}/lib/crewai";
@@ -449,7 +449,7 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";
     homepage = "https://github.com/crewAIInc/crewAI";
-    changelog = "https://github.com/crewAIInc/crewAI/releases/tag/${version}";
+    changelog = "https://github.com/crewAIInc/crewAI/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;
