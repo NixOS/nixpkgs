@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "dvc-s3";
-  version = "3.2.2";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dvc_s3";
     inherit version;
-    hash = "sha256-Dqcsm2sADf6hqDTUEGczts3HRdCm7h1cCluMg0RnFxY=";
+    hash = "sha256-8dcYpE3O5Rkb60bkSt9LsiiCy46czdjyZAB4q8VkV9Q=";
   };
 
   # Prevent circular dependency
