@@ -8,6 +8,7 @@
   description,
   maintainers,
   passthru ? { },
+  env ? { },
 }:
 
 {
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
     src
     gitSrc
     passthru
+    env
     ;
 
   separateDebugInfo = true;

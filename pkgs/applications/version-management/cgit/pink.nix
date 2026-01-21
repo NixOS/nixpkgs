@@ -21,6 +21,10 @@ callPackage (import ./common.nix rec {
     sha256 = "0w43a35mhc2qf2gjkxjlnkf2lq8g0snf34iy5gqx2678yq7llpa0";
   };
 
+  # C23 (which is the default since GCC 15) introduced the `unreachable` macro,
+  # which conflicts with a function called `unreachable` in the `gitSrc` tree.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   homepage = "https://git.causal.agency/cgit-pink/about/";
   description = "cgit fork aiming for better maintenance";
   maintainers = with lib.maintainers; [ sternenseemann ];
