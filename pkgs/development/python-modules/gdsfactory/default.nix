@@ -46,14 +46,14 @@
 }:
 buildPythonPackage rec {
   pname = "gdsfactory";
-  version = "9.20.1";
+  version = "9.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "gdsfactory";
     tag = "v${version}";
-    hash = "sha256-TpMi0Rv6sQA8uAPGl6iR1qgTU7havBlWmdz98DROoSk=";
+    hash = "sha256-x6JhTcLhefRiV+oCqtWmsUyNxlrk3hZY3AJj/a/0j98=";
   };
 
   build-system = [ flit-core ];
