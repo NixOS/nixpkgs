@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "arch";
-  version = "7.2.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bashtage";
     repo = "arch";
     tag = "v${version}";
-    hash = "sha256-3H/6mdPg8rg+N1wecqLDzc7Ot3SnUVpOagns4PsTD/Q=";
+    hash = "sha256-qw8sSgsMu6YTiQlzsrePnDKkFBtrxD9RK6ZZE5jFeX0=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Autoregressive Conditional Heteroskedasticity (ARCH) and other tools for financial econometrics";
     homepage = "https://github.com/bashtage/arch";
-    changelog = "https://github.com/bashtage/arch/releases/tag/v${version}";
+    changelog = "https://github.com/bashtage/arch/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
   };
