@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "reflex-chakra";
-  version = "0.8.2";
+  version = "0.8.2post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex-chakra";
     tag = "v${version}";
-    hash = "sha256-6KWIpTtr2tNBxXoj2hY0zuX0bpSUvsoA1Y7uwln3HDY=";
+    hash = "sha256-DugZRZpGP90EFkBjpAS1XkjrNPG6WWwCQPUcEZJ0ff8=";
   };
 
   build-system = [
