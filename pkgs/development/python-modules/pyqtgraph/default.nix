@@ -28,14 +28,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.13.7";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
     tag = "pyqtgraph-${version}";
-    hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
+    hash = "sha256-T5rhaBtcKP/sYjCmYNMYR0BGttkiLhWTfEbZNeAdJJ0=";
   };
 
   patches = [
