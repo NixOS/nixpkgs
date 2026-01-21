@@ -46,14 +46,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "autobahn";
-  version = "25.12.2";
+  version = "202601101042";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crossbario";
     repo = "autobahn-python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vSS7DpfGfNwQT8OsgEXJaP5J40QFIopdAD94/y7/jFY=";
+    tag = "master-${version}";
+    hash = "sha256-UloNdeeTPor+4NkVHKFvZp7aXULIEJ7W635+ToywhCY=";
   };
 
   build-system = [
