@@ -2,33 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   django,
   dj-database-url,
+  django-test-migrations,
   pytest-django,
+  pytest-playwright,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "4.1.0";
+  version = "4.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
     tag = "v${version}";
-    hash = "sha256-QcJUKGhWPUHhVVsEZhhjN411Pz4Wn7OL2fhotPOGVm4=";
+    hash = "sha256-U4NOFnZOGgXStE9adixkFmf4jm6fZ2dgSmw0ainMVd0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ django ];
 
   nativeCheckInputs = [
     dj-database-url
+    django-test-migrations
     pytest-django
+    pytest-playwright
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # RuntimeError: Playwright failed to start. This often happens if browser drivers are missing.
+    "src/polymorphic/tests/test_admin.py"
+    "src/polymorphic/tests/examples/views/test.py::ViewExampleTests::test_view_example"
   ];
 
   pythonImportsCheck = [ "polymorphic" ];
