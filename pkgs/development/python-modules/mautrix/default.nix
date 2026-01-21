@@ -18,29 +18,21 @@
   aiosqlite,
   asyncpg,
   ruamel-yaml,
-  fetchpatch,
 
   withOlm ? false,
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.20.8";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-giK8JZ6nzsA8SV6CzDNEbJmbwDju9t6fLJr/oXNjvKs=";
+    hash = "sha256-4nEjKIWzXd0e/cLL4py9SS+/YIcGHq2f+cCTEY2ENmE=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mautrix/python/commit/0349445bd6992ac8f294582e85c3f61ce5c863b3.patch";
-      hash = "sha256-JYuFuzdwnyOdnxWg094uVKcaGza6I6hNUXUp75msRTI=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -75,7 +67,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
-    changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
+    changelog = "https://github.com/mautrix/python/releases/tag/${src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       nyanloutre
