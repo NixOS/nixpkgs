@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.23.1";
+  version = "4.24.0";
 in
 buildPythonPackage {
   pname = "bundlewrap";
@@ -30,7 +30,7 @@ buildPythonPackage {
     owner = "bundlewrap";
     repo = "bundlewrap";
     tag = version;
-    hash = "sha256-Nzfx2L/FlYXQcbKq/cuRZ+PWnjv4HDld9q01nwQ1sA8=";
+    hash = "sha256-ayLceqYZC4cNuz9C6v2+W2TuiGWQeLMssbvwZ0N0n78=";
   };
 
   build-system = [ setuptools ];
@@ -63,7 +63,7 @@ buildPythonPackage {
   meta = {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
-    changelog = "https://github.com/bundlewrap/bundlewrap/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bundlewrap/bundlewrap/blob/${src.tag}/CHANGELOG.md";
     mainProgram = "bw";
     license = [ lib.licenses.gpl3 ];
     maintainers = with lib.maintainers; [ wamserma ];
