@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglehub";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eOAja95/G6Aod8jwQQ4Sxc3KxBrGBOPGrYZe5l6am+c=";
   };
 
