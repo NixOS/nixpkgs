@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.11.12";
+  version = "0.11.13";
 in
 python3Packages.buildPythonApplication {
   pname = "ablog";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "sunpy";
     repo = "ablog";
     tag = "v${version}";
-    hash = "sha256-bPTaxkuIKeypfnZItG9cl51flHBIx/yg0qENuiqQgY4=";
+    hash = "sha256-RG4GxD14fCxy/37onGN/WOgDmwgYEXQdYuq0nAOJIm4=";
   };
 
   build-system = with python3Packages; [
