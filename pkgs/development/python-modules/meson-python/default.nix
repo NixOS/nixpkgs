@@ -13,6 +13,7 @@
   tomli,
 
   # tests
+  cmake,
   cython,
   gitMinimal,
   pytestCheckHook,
@@ -30,14 +31,6 @@ buildPythonPackage rec {
     hash = "sha256-mVnRmKpptX/P01SjRRjG95W3gac+0GVvTQFmAWDMJVM=";
   };
 
-  patches = [
-    (fetchpatch {
-      # TODO: Remove in 0.19.0
-      url = "https://github.com/mesonbuild/meson-python/commit/1e69e7a23f2b24d688dc4220e93de6f0e2bcf9d2.patch";
-      hash = "sha256-FC2ll/OrLV1R0CDB6UkrknVASJQ7rSU+sApdAk75x44=";
-    })
-  ];
-
   build-system = [
     meson
     ninja
@@ -53,11 +46,14 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
+    cmake
     cython
     gitMinimal
     pytestCheckHook
     pytest-mock
   ];
+
+  dontUseCmakeConfigure = true;
 
   # meson-python respectes MACOSX_DEPLOYMENT_TARGET, but compares it with the
   # actual platform version during tests, which mismatches.
