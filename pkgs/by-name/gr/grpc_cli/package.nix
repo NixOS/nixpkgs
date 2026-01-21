@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc_cli";
-  version = "1.75.1";
+  version = "1.76.0";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
