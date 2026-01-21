@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "termgraph";
-  version = "0.5.3";
+  version = "0.7.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkaz";
     repo = "termgraph";
     tag = "v${version}";
-    hash = "sha256-0J9mEpDIdNEYwO+A+HBOaSw+Ct+HsbSPwGQYuYH6NN8=";
+    hash = "sha256-DptokK79yAfQDuhN2d/HfcaRq//0pF81VkhMfz05Hb0=";
   };
 
   propagatedBuildInputs = [ colorama ];
