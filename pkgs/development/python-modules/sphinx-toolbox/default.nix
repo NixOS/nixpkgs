@@ -21,13 +21,13 @@
 }:
 buildPythonPackage rec {
   pname = "sphinx-toolbox";
-  version = "4.0.0";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "sphinx_toolbox";
-    hash = "sha256-SMMUUdsuLYxxwDk55yoZ73vJLKeFCmLbY/x7uDlbZ4U=";
+    hash = "sha256-wwpPhsTCnpetsOuTN9NfUJPLlqRPScr/z31bxYqIt4E=";
   };
 
   postPatch = ''
