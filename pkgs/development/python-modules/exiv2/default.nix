@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "exiv2";
-  version = "0.17.5";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
     tag = version;
-    hash = "sha256-MQNovei1Y8EZTF8hEyIWLaL2NbQPCB6FGbVfDHIvNVo=";
+    hash = "sha256-lYz0TWiiBtpwZ56Oiy2v8DFBXoofMv60hxsG0q7Cx9Y=";
   };
 
   # FAIL: test_localisation (test_types.TestTypesModule.test_localisation)
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Low level Python interface to the Exiv2 C++ library";
     homepage = "https://github.com/jim-easterbrook/python-exiv2";
-    changelog = "https://python-exiv2.readthedocs.io/en/release-${version}/misc/changelog.html";
+    changelog = "https://python-exiv2.readthedocs.io/en/release-${src.tag}/misc/changelog.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ zebreus ];
   };
