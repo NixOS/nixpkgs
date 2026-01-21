@@ -1,6 +1,5 @@
 {
   lib,
-  buildPackages,
   stdenv,
   rustPlatform,
   fetchCrate,
@@ -41,14 +40,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkType = "debug";
-
-  postBuild = ''
-    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  '';
-
-  postInstall = ''
-    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  '';
 
   passthru = {
     tests.version = testers.testVersion { package = rav1e; };

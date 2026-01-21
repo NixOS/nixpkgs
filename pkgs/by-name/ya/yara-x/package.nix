@@ -1,6 +1,5 @@
 {
   lib,
-  buildPackages,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
@@ -30,14 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-c
   ];
 
-  postBuild = ''
-    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  '';
-
-  postInstall = ''
-    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
       --bash <($out/bin/yr completion bash) \
       --fish <($out/bin/yr completion fish) \

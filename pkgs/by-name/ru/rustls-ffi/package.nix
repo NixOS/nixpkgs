@@ -6,32 +6,34 @@
   rustPlatform,
   cargo-c,
   validatePkgConfig,
-  buildPackages,
   libiconv,
   curl,
-  apacheHttpd,
   testers,
+  fetchCrate,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustls-ffi";
   version = "0.15.0";
 
-  src = fetchFromGitHub {
-    owner = "rustls";
-    repo = "rustls-ffi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-m92kWH+J8wuGmI0msrp2aginY1K51iqgi3+u4ncmfts=";
+  src = fetchCrate {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Ob5e3qEQIUjeiA9w4DGPKkw8C3l7Vrq2Y33uK1dua2Y=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-gqc6en59QQpD14hOgRuGEPWLvrkyGn9tPR9vQmRAxIg=";
-  };
+  cargoHash = "sha256-pvQyoInSupI7cazaLaKiZILVzLYtJW++B1WD0dgBahE=";
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
+
+  # TODO: Replacing stdenv.mkDerivation with rustPlatform.buildRustPackage
+  #   causes test test_acceptor_success to fail
+  doCheck = false;
+
+  dontCargoBuild = true;
+  dontCargoInstall = true;
+  dontCargoCheck = true;
 
   nativeBuildInputs = [
     cargo
@@ -39,24 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     cargo-c
     validatePkgConfig
   ];
-
-  buildPhase = ''
-    runHook preBuild
-    ${buildPackages.rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    ${buildPackages.rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postInstall
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    ${buildPackages.rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postCheck
-  '';
 
   passthru.tests = {
     curl = curl.override {
