@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   zlib,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +28,8 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   doCheck = false; # integration tests depend on changing cargo config
 
   meta = {
@@ -37,6 +40,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
+    mainProgram = "cargo-edit";
     maintainers = with lib.maintainers; [
       gerschtli
       jb55
