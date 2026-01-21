@@ -40,12 +40,7 @@ buildPythonPackage rec {
     idna
     libsoup_3
     packaging
-    (pygobject3.overrideAttrs (o: {
-      src = fetchurl {
-        url = "mirror://gnome/sources/pygobject/3.52/pygobject-3.52.3.tar.gz";
-        hash = "sha256-AOQn0pHpV0Yqj61lmp+ci+d2/4Kot2vfQC8eruwIbYI=";
-      };
-    }))
+    pygobject3
     pyopenssl
   ];
 
