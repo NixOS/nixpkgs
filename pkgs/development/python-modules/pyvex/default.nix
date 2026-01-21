@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvex";
   version = "9.2.194";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "pyvex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-65ZjHXxYGfZPUFG1eloGa51CSyo4XTVMs3O3n8le69Q=";
     fetchSubmodules = true;
   };
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
