@@ -16,13 +16,18 @@
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.16";
+  version = "1.3.17";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K2xwVExtHUygBqqjFJWODvNRTcgf/94bI/LsQaV5H50=";
+    hash = "sha256-8/rJrmefZlhZJcwAxfaDmuNsHQMVdhlXHe4YrMBbnAE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>="
+  '';
 
   build-system = [ setuptools-scm ];
 
@@ -48,9 +53,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Full git clone required for test_doc_examples
     "tests/test_doc_examples.py"
-    # test_reinitialize_module segfaults python
-    # https://github.com/mehcode/python-xmlsec/issues/203
-    "tests/test_xmlsec.py"
   ];
 
   pythonImportsCheck = [ "xmlsec" ];
