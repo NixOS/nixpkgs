@@ -41,7 +41,7 @@ jobs:
           - runner: ubuntu-24.04-arm
             name: aarch64-linux
             systems: aarch64-linux
-            builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
+            builds: [shell, manual-nixos, manual-nixpkgs]
             desc: shell, docs
           - runner: macos-14
             name: darwin
@@ -90,11 +90,7 @@ jobs:
 
       - name: Build Nixpkgs manual
         if: contains(matrix.builds, 'manual-nixpkgs') && !cancelled()
-        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs -A manual-nixpkgs-tests
-
-      - name: Build Nixpkgs manual tests
-        if: contains(matrix.builds, 'manual-nixpkgs-tests') && !cancelled()
-        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs
 
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()

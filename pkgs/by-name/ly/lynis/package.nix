@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "CISOfy";
     repo = "lynis";
     tag = finalAttrs.version;
-    hash = "sha256-XMgC6KjkLgjSOBHBx7WM7C2Vm3Z/lto7CFs10kIxwZc=";
+    hash = "sha256-f1iV9OBkycrwP3ydjaGMX45JIBtzZKHEJqnEoVuZPu4=";
   };
 
   nativeBuildInputs = [

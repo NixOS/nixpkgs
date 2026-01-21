@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "mainsail";
-  version = "2.15.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
     rev = "v${version}";
-    hash = "sha256-JmN5VPj4h83gLx/UsT69mXFxyvCHir0tl7zN2Q7eMOc=";
+    hash = "sha256-lKLoY5FHO34bT/3apmfVkuW0E1h4/K4r2thF9ht03U4=";
   };
 
-  npmDepsHash = "sha256-8rUhDo1l0oLENWwy56UzwlSGIBJtTPsH6w5OX8tnp6U=";
+  npmDepsHash = "sha256-HIErBrQ0VP4vdCFZe7uT5b1q+QdSSf08CIQmNcSryZ8=";
 
   nodejs = nodejs_20;
 

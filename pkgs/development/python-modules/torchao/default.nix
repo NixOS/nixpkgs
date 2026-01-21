@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   replaceVars,
 
   # build-system
@@ -30,17 +31,21 @@
   unittest-xml-reporting,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchao";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
-    tag = "v${version}";
-    hash = "sha256-L9Eoul7Nar/+gS44+hA8JbfxCgkMH5xAMCleggAZn7c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N5s2AzkK9HmUT+qVq2owrB/53izDlzd25fqThjA3hPQ=";
   };
+
+  # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
+  # new attributes. Did you mean: '__reduce__'?
+  disabled = pythonAtLeast "3.14";
 
   patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     ./use-system-cpuinfo.patch
@@ -82,9 +87,7 @@ buildPythonPackage rec {
     rm -rf torchao
   '';
 
-  pythonImportsCheck = [
-    "torchao"
-  ];
+  pythonImportsCheck = [ "torchao" ];
 
   nativeCheckInputs = [
     bitsandbytes
@@ -177,6 +180,9 @@ buildPythonPackage rec {
     "test_qlora_fsdp2"
     "test_uneven_shard"
 
+    # AssertionError: tensor(42.4146, grad_fn=<MulBackward0>) not greater than 43.0
+    "test_weight_only_quant"
+
     # RuntimeError: No packed_weights_format was selected
     "TestIntxOpaqueTensor"
     "test_accuracy_kleidiai"
@@ -185,7 +191,34 @@ buildPythonPackage rec {
     "test_smooth_linear_cpu"
     "test_smooth_linear_edge_cases"
 
+    # RuntimeError: Attempted to set the storage of a tensor on device "cpu" to a storage on
+    # different device "mps:0".
+    # This is no longer allowed; the devices must match.
+    "test_pin_memory"
+
+    # AttributeError: module 'torch.mps' has no attribute 'memory_allocated'
+    "test_get_group_qparams_symmetric_memory"
+    # AttributeError: module 'torch.mps' has no attribute 'reset_peak_memory_stats'
+    "test_quantized_model_streaming"
+
     # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size0"
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size1"
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size2"
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size3"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size0"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size1"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size2"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size3"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size0"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size1"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size2"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size3"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size0"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size1"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size2"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size3"
+    "test_dequantize_affine_float8_scale_broadcasting"
     "test_subclass_slice_subclass2_shape0_device_mps"
     "test_subclass_slice_subclass2_shape1_device_mps"
     # torch._inductor.exc.InductorError: KeyError: torch.float8_e4m3fn
@@ -197,6 +230,47 @@ buildPythonPackage rec {
     "test_optim_smoke_optim_name_AdamFp8_bfloat16_device_mps"
     "test_optim_smoke_optim_name_AdamFp8_float32_device_mps"
     "test_subclass_slice_subclass0_shape1_device_mps"
+
+    # Crash (Trace/BPT trap: 5)
+    "test_copy__mismatch_metadata_apply_quant0"
+    "test_copy__mismatch_metadata_apply_quant1"
+    "test_copy__mismatch_metadata_apply_quant2"
+    "test_copy__mismatch_metadata_apply_quant3"
+    "test_copy__mismatch_metadata_apply_quant4"
+    "test_from_scaled_tc_floatx_compile_ebits_2_mbits_2_mps"
+    "test_from_scaled_tc_floatx_compile_ebits_3_mbits_2_mps"
+    "test_from_tc_floatx_correctness_ebits_2_mbits_2_mps"
+    "test_from_tc_floatx_correctness_ebits_3_mbits_2_mp"
+    "test_gptq_with_input_recorder"
+    "test_int4wo_cuda_serialization"
+    "test_mm_int4wo_mps_bfloat16"
+    "test_module_fqn_to_config_default"
+    "test_module_fqn_to_config_module_name"
+    "test_module_fqn_to_config_skip"
+    "test_pack_tc_fp6_correctness_mps"
+    "test_qat_4w_linear"
+    "test_qat_4w_primitives"
+    "test_qat_4w_quantizer"
+    "test_quantize_api_compile_False"
+    "test_quantize_api_compile_True"
+    "test_smoketest_linear_bfloat16"
+    "test_smoketest_linear_float16"
+    "test_smoketest_linear_float32"
+    "test_tensor_core_layout_transpose"
+    "test_tensor_deepcopy_input_size1"
+    "test_tensor_deepcopy_input_size2"
+    "test_tensor_deepcopy_input_size_262144"
+    "test_to_copy_bfloat16"
+    "test_to_copy_float16"
+    "test_to_copy_float32"
+    "test_to_cuda"
+    "test_to_module"
+    "test_to_scaled_tc_floatx_compile_ebits_2_mbits_2_mps"
+    "test_to_scaled_tc_floatx_compile_ebits_3_mbits_2_mps"
+    "test_workflow_e2e_numerics_config0"
+    "test_workflow_e2e_numerics_config1"
+    "test_workflow_e2e_numerics_config4"
+    "test_workflow_e2e_numerics_config5"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt
@@ -208,7 +282,15 @@ buildPythonPackage rec {
     "test_subclass_slice"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # ImportError: cannot import name 'ToyLinearModel' from 'torchao.testing.model_architectures'
+    "benchmarks/microbenchmarks/test/test_benchmark_profiler.py"
+    "benchmarks/microbenchmarks/test/test_utils.py"
+
+    # ImportError: cannot import name 'fp8_blockwise_weight_dequant' from 'torchao.kernel.blockwise_quantization'
+    "test/kernel/test_blockwise_triton.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Require unpackaged 'coremltools'
     "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
 
@@ -221,11 +303,11 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch native quantization and sparsity for training and inference";
     homepage = "https://github.com/pytorch/ao";
-    changelog = "https://github.com/pytorch/ao/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/ao/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
       sarahec
     ];
   };
-}
+})

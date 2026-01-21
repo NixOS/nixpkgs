@@ -23,8 +23,7 @@ buildPythonPackage rec {
     owner = "jeffkaufman";
     repo = "icdiff";
     tag = "release-${version}";
-    hash = "sha256-ykQLF2b47RZSlrJXYpZ03evhpcGfVyTYwpO2UbmWqrY=";
-    deepClone = true;
+    hash = "sha256-SbgUBWaNT8akYKXYef/94vqZqJannZv+TxfbCnHKQtw=";
   };
 
   patches = [ ./0001-Don-t-test-black-or-flake8.patch ];
