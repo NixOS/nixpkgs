@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  hatch-vcs,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-NBmzoUb2una3+eWqR1HraVPibaRb9I51aYwskrjxskQ=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
