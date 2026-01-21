@@ -5,23 +5,25 @@
   setuptools,
   click,
   jinja2,
+  python-dotenv,
   pyyaml,
   rich,
   pytest-cov-stub,
   pytestCheckHook,
   scikit-learn,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "agentic-threat-hunting-framework";
-  version = "0.2.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nebulock-Inc";
     repo = "agentic-threat-hunting-framework";
     tag = "v${version}";
-    hash = "sha256-rt7WmBCbSqoZBpwGi7dzh8QDw8Iby3LSdavnCot1Hr0=";
+    hash = "sha256-WU58wQGlUgbOqcIE7EKtABNvTKtvTiRO9iJLW4gXDlI=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +31,7 @@ buildPythonPackage rec {
   dependencies = [
     click
     jinja2
+    python-dotenv
     pyyaml
     rich
   ];
@@ -40,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
+    requests
   ];
 
   pythonImportsCheck = [ "athf" ];
