@@ -1,0 +1,397 @@
+diff --git a/tests/aio/test_storage.py b/tests/aio/test_storage.py
+index 43fc5b1..9aa86ed 100644
+--- a/tests/aio/test_storage.py
++++ b/tests/aio/test_storage.py
+@@ -153,94 +153,6 @@ class TestBaseStorage:
+             marks=pytest.mark.memory,
+             id="in-memory",
+         ),
+-        pytest.param(
+-            "async+redis://localhost:7379",
+-            {},
+-            RedisStorage,
+-            lf("redis_basic"),
+-            marks=pytest.mark.redis,
+-            id="redis",
+-        ),
+-        pytest.param(
+-            "async+redis+unix:///tmp/limits.redis.sock",
+-            {},
+-            RedisStorage,
+-            lf("redis_uds"),
+-            marks=pytest.mark.redis,
+-            id="redis-uds",
+-        ),
+-        pytest.param(
+-            "async+redis+unix://:password/tmp/limits.redis.sock",
+-            {},
+-            RedisStorage,
+-            lf("redis_uds"),
+-            marks=pytest.mark.redis,
+-            id="redis-uds-auth",
+-        ),
+-        pytest.param(
+-            "async+memcached://localhost:22122",
+-            {},
+-            MemcachedStorage,
+-            lf("memcached"),
+-            marks=pytest.mark.memcached,
+-            id="memcached",
+-        ),
+-        pytest.param(
+-            "async+memcached://localhost:22122,localhost:22123",
+-            {},
+-            MemcachedStorage,
+-            lf("memcached_cluster"),
+-            marks=pytest.mark.memcached,
+-            id="memcached-cluster",
+-        ),
+-        pytest.param(
+-            "async+redis+sentinel://localhost:26379",
+-            {"service_name": "mymaster"},
+-            RedisSentinelStorage,
+-            lf("redis_sentinel"),
+-            marks=pytest.mark.redis_sentinel,
+-            id="redis-sentinel",
+-        ),
+-        pytest.param(
+-            "async+redis+sentinel://localhost:26379/mymaster",
+-            {},
+-            RedisSentinelStorage,
+-            lf("redis_sentinel"),
+-            marks=pytest.mark.redis_sentinel,
+-            id="redis-sentinel-service-name-url",
+-        ),
+-        pytest.param(
+-            "async+redis+sentinel://:sekret@localhost:36379/mymaster",
+-            {"password": "sekret"},
+-            RedisSentinelStorage,
+-            lf("redis_sentinel_auth"),
+-            marks=pytest.mark.redis_sentinel,
+-            id="redis-sentinel-auth",
+-        ),
+-        pytest.param(
+-            "async+redis+cluster://localhost:7001/",
+-            {},
+-            RedisClusterStorage,
+-            lf("redis_cluster"),
+-            marks=pytest.mark.redis_cluster,
+-            id="redis-cluster",
+-        ),
+-        pytest.param(
+-            "async+redis+cluster://:sekret@localhost:8400/",
+-            {},
+-            RedisClusterStorage,
+-            lf("redis_auth_cluster"),
+-            marks=pytest.mark.redis_cluster,
+-            id="redis-cluster-auth",
+-        ),
+-        pytest.param(
+-            "async+mongodb://localhost:37017/",
+-            {},
+-            MongoDBStorage,
+-            lf("mongodb"),
+-            marks=pytest.mark.mongodb,
+-            id="mongodb",
+-        ),
+     ],
+ )
+ class TestConcreteStorages:
+diff --git a/tests/test_storage.py b/tests/test_storage.py
+index f9698c0..2062e3a 100644
+--- a/tests/test_storage.py
++++ b/tests/test_storage.py
+@@ -148,102 +148,6 @@ class TestBaseStorage:
+     "uri, args, expected_instance, fixture",
+     [
+         pytest.param("memory://", {}, MemoryStorage, None, id="in-memory"),
+-        pytest.param(
+-            "redis://localhost:7379",
+-            {},
+-            RedisStorage,
+-            lf("redis_basic"),
+-            marks=pytest.mark.redis,
+-            id="redis",
+-        ),
+-        pytest.param(
+-            "redis+unix:///tmp/limits.redis.sock",
+-            {},
+-            RedisStorage,
+-            lf("redis_uds"),
+-            marks=pytest.mark.redis,
+-            id="redis-uds",
+-        ),
+-        pytest.param(
+-            "redis+unix://:password/tmp/limits.redis.sock",
+-            {},
+-            RedisStorage,
+-            lf("redis_uds"),
+-            marks=pytest.mark.redis,
+-            id="redis-uds-auth",
+-        ),
+-        pytest.param(
+-            "memcached://localhost:22122",
+-            {},
+-            MemcachedStorage,
+-            lf("memcached"),
+-            marks=pytest.mark.memcached,
+-            id="memcached",
+-        ),
+-        pytest.param(
+-            "memcached://localhost:22122,localhost:22123",
+-            {},
+-            MemcachedStorage,
+-            lf("memcached_cluster"),
+-            marks=pytest.mark.memcached,
+-            id="memcached-cluster",
+-        ),
+-        pytest.param(
+-            "memcached:///tmp/limits.memcached.sock",
+-            {},
+-            MemcachedStorage,
+-            lf("memcached_uds"),
+-            marks=pytest.mark.memcached,
+-            id="memcached-uds",
+-        ),
+-        pytest.param(
+-            "redis+sentinel://localhost:26379",
+-            {"service_name": "mymaster"},
+-            RedisSentinelStorage,
+-            lf("redis_sentinel"),
+-            marks=pytest.mark.redis_sentinel,
+-            id="redis-sentinel",
+-        ),
+-        pytest.param(
+-            "redis+sentinel://localhost:26379/mymaster",
+-            {},
+-            RedisSentinelStorage,
+-            lf("redis_sentinel"),
+-            marks=pytest.mark.redis_sentinel,
+-            id="redis-sentinel-service-name-url",
+-        ),
+-        pytest.param(
+-            "redis+sentinel://:sekret@localhost:36379/mymaster",
+-            {"password": "sekret"},
+-            RedisSentinelStorage,
+-            lf("redis_sentinel_auth"),
+-            marks=pytest.mark.redis_sentinel,
+-            id="redis-sentinel-auth",
+-        ),
+-        pytest.param(
+-            "redis+cluster://localhost:7001/",
+-            {},
+-            RedisClusterStorage,
+-            lf("redis_cluster"),
+-            marks=pytest.mark.redis_cluster,
+-            id="redis-cluster",
+-        ),
+-        pytest.param(
+-            "redis+cluster://:sekret@localhost:8400/",
+-            {},
+-            RedisClusterStorage,
+-            lf("redis_auth_cluster"),
+-            marks=pytest.mark.redis_cluster,
+-            id="redis-cluster-auth",
+-        ),
+-        pytest.param(
+-            "mongodb://localhost:37017/",
+-            {},
+-            MongoDBStorage,
+-            lf("mongodb"),
+-            marks=pytest.mark.mongodb,
+-            id="mongodb",
+-        ),
+     ],
+ )
+ class TestConcreteStorages:
+diff --git a/tests/utils.py b/tests/utils.py
+index 3341bcf..6dc2bc3 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -90,186 +90,11 @@ ALL_STORAGES = {
+     "memory": pytest.param(
+         "memory://", {}, None, marks=pytest.mark.memory, id="in-memory"
+     ),
+-    "redis": pytest.param(
+-        "redis://localhost:7379",
+-        {},
+-        lf("redis_basic"),
+-        marks=pytest.mark.redis,
+-        id="redis_basic",
+-    ),
+-    "memcached": pytest.param(
+-        "memcached://localhost:22122",
+-        {},
+-        lf("memcached"),
+-        marks=[pytest.mark.memcached, pytest.mark.flaky],
+-        id="memcached",
+-    ),
+-    "memcached-cluster": pytest.param(
+-        "memcached://localhost:22122,localhost:22123",
+-        {},
+-        lf("memcached_cluster"),
+-        marks=[pytest.mark.memcached, pytest.mark.flaky],
+-        id="memcached-cluster",
+-    ),
+-    "redis-cluster": pytest.param(
+-        "redis+cluster://localhost:7001/",
+-        {},
+-        lf("redis_cluster"),
+-        marks=pytest.mark.redis_cluster,
+-        id="redis-cluster",
+-    ),
+-    "redis-cluster_auth": pytest.param(
+-        "redis+cluster://:sekret@localhost:8400/",
+-        {},
+-        lf("redis_auth_cluster"),
+-        marks=pytest.mark.redis_cluster,
+-        id="redis-cluster-auth",
+-    ),
+-    "redis-ssl-cluster": pytest.param(
+-        "redis+cluster://localhost:8301",
+-        {
+-            "ssl": True,
+-            "ssl_cert_reqs": "required",
+-            "ssl_keyfile": "./tests/tls/client.key",
+-            "ssl_certfile": "./tests/tls/client.crt",
+-            "ssl_ca_certs": "./tests/tls/ca.crt",
+-        },
+-        lf("redis_ssl_cluster"),
+-        marks=pytest.mark.redis_cluster,
+-        id="redis-ssl-cluster",
+-    ),
+-    "redis-sentinel": pytest.param(
+-        "redis+sentinel://localhost:26379/mymaster",
+-        {"use_replicas": False},
+-        lf("redis_sentinel"),
+-        marks=pytest.mark.redis_sentinel,
+-        id="redis-sentinel",
+-    ),
+-    "mongodb": pytest.param(
+-        "mongodb://localhost:37017/",
+-        {},
+-        lf("mongodb"),
+-        marks=pytest.mark.mongodb,
+-        id="mongodb",
+-    ),
+-    "valkey": pytest.param(
+-        "valkey://localhost:12379",
+-        {},
+-        lf("valkey_basic"),
+-        marks=pytest.mark.valkey,
+-        id="valkey_basic",
+-    ),
+-    "valkey-cluster": pytest.param(
+-        "valkey+cluster://localhost:2001/",
+-        {},
+-        lf("valkey_cluster"),
+-        marks=pytest.mark.valkey_cluster,
+-        id="valkey-cluster",
+-    ),
+ }
+ ALL_STORAGES_ASYNC = {
+     "memory": pytest.param(
+         "async+memory://", {}, None, marks=pytest.mark.memory, id="in-memory"
+     ),
+-    "redis": pytest.param(
+-        "async+redis://localhost:7379",
+-        {
+-            "implementation": ASYNC_REDIS_IMPLEMENTATION,
+-        },
+-        lf("redis_basic"),
+-        marks=pytest.mark.redis,
+-        id="redis",
+-    ),
+-    "memcached": pytest.param(
+-        "async+memcached://localhost:22122",
+-        {
+-            "implementation": ASYNC_MEMCACHED_IMPLEMENTATION,
+-        },
+-        lf("memcached"),
+-        marks=[pytest.mark.memcached, pytest.mark.flaky],
+-        id="memcached",
+-    ),
+-    "memcached-cluster": pytest.param(
+-        "async+memcached://localhost:22122,localhost:22123",
+-        {
+-            "implementation": ASYNC_MEMCACHED_IMPLEMENTATION,
+-        },
+-        lf("memcached_cluster"),
+-        marks=[pytest.mark.memcached, pytest.mark.flaky],
+-        id="memcached-cluster",
+-    ),
+-    "memcached-sasl": pytest.param(
+-        "async+memcached://user:password@localhost:22124",
+-        {
+-            "implementation": ASYNC_MEMCACHED_IMPLEMENTATION,
+-        },
+-        lf("memcached_sasl"),
+-        marks=[pytest.mark.memcached, pytest.mark.flaky],
+-        id="memcached-sasl",
+-    ),
+-    "redis-cluster": pytest.param(
+-        "async+redis+cluster://localhost:7001/",
+-        {
+-            "implementation": ASYNC_REDIS_IMPLEMENTATION,
+-        },
+-        lf("redis_cluster"),
+-        marks=pytest.mark.redis_cluster,
+-        id="redis-cluster",
+-    ),
+-    "redis-cluster-auth": pytest.param(
+-        "async+redis+cluster://:sekret@localhost:8400/",
+-        {
+-            "implementation": ASYNC_REDIS_IMPLEMENTATION,
+-        },
+-        lf("redis_auth_cluster"),
+-        marks=pytest.mark.redis_cluster,
+-        id="redis-cluster-auth",
+-    ),
+-    "redis-ssl-cluster": pytest.param(
+-        "async+redis+cluster://localhost:8301",
+-        {
+-            "ssl": True,
+-            "ssl_cert_reqs": "required",
+-            "ssl_keyfile": "./tests/tls/client.key",
+-            "ssl_certfile": "./tests/tls/client.crt",
+-            "ssl_ca_certs": "./tests/tls/ca.crt",
+-            "implementation": ASYNC_REDIS_IMPLEMENTATION,
+-        },
+-        lf("redis_ssl_cluster"),
+-        marks=pytest.mark.redis_cluster,
+-        id="redis-ssl-cluster",
+-    ),
+-    "redis-sentinel": pytest.param(
+-        "async+redis+sentinel://localhost:26379/mymaster",
+-        {
+-            "use_replicas": False,
+-            "implementation": ASYNC_REDIS_IMPLEMENTATION,
+-        },
+-        lf("redis_sentinel"),
+-        marks=pytest.mark.redis_sentinel,
+-        id="redis-sentinel",
+-    ),
+-    "mongodb": pytest.param(
+-        "async+mongodb://localhost:37017/",
+-        {},
+-        lf("mongodb"),
+-        marks=pytest.mark.mongodb,
+-        id="mongodb",
+-    ),
+-    "valkey": pytest.param(
+-        "async+valkey://localhost:12379",
+-        {},
+-        lf("valkey_basic"),
+-        marks=pytest.mark.valkey,
+-        id="valkey_basic",
+-    ),
+-    "valkey-cluster": pytest.param(
+-        "async+valkey+cluster://localhost:2001/",
+-        {},
+-        lf("valkey_cluster"),
+-        marks=pytest.mark.valkey_cluster,
+-        id="valkey-cluster",
+-    ),
+ }
+ 
+ all_storage = pytest.mark.parametrize("uri, args, fixture", ALL_STORAGES.values())

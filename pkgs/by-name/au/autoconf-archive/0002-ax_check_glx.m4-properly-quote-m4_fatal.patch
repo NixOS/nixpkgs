@@ -1,0 +1,37 @@
+From e25f8d9e3ead52f998535b86c763065c5b45cc59 Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz93@gmail.com>
+Date: Sat, 19 Oct 2024 21:57:16 -0400
+Subject: [PATCH 2/3] ax_check_glx.m4: properly quote m4_fatal
+
+It needs to only run as an argument of m4_if, not all the time.
+
+Fixes: 40ca66e7e52bb63e3eee2514855fcf3ad2df7673
+---
+ m4/ax_check_glx.m4 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/m4/ax_check_glx.m4 b/m4/ax_check_glx.m4
+index c7890d9..b5027f9 100644
+--- a/m4/ax_check_glx.m4
++++ b/m4/ax_check_glx.m4
+@@ -61,7 +61,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 9
++#serial 10
+ 
+ # example program
+ m4_define([_AX_CHECK_GLX_PROGRAM],
+@@ -183,7 +183,7 @@ AC_DEFUN([_AX_CHECK_GLX_HEADERS],
+ AC_DEFUN([_AX_CHECK_GLX_MANUAL_LIBS_GENERIC],
+ [dnl
+  ax_check_glx_manual_libs_generic_extra_libs="$1"
+- m4_if($1, [], m4_fatal([$0: argument must not be empty]))
++ m4_if($1, [], [m4_fatal([$0: argument must not be empty])])
+ 
+  AC_LANG_PUSH([C])
+  _AX_CHECK_GLX_SAVE_FLAGS()
+-- 
+2.46.1
+

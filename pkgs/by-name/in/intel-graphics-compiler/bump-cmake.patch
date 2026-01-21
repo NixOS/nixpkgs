@@ -1,0 +1,63 @@
+From bc76a7087e4621269bdf9080581088a6c8f6b3a6 Mon Sep 17 00:00:00 2001
+From: Chris Mayo <aklhfex@gmail.com>
+Date: Tue, 20 May 2025 19:27:57 +0100
+Subject: [PATCH] Raise minimum CMake version to 3.5
+
+For compatibility with CMake 4.0, which also removes CMP0043 OLD - there
+are no uses of COMPILE_DEFINITIONS_<CONFIG>.
+
+Signed-off-by: Chris Mayo <aklhfex@gmail.com>
+---
+ external/SPIRV-Tools/CMakeLists.txt             | 2 +-
+ visa/CMakeLists.txt                             | 7 +------
+ visa/iga/GEDLibrary/GED_external/CMakeLists.txt | 6 +-----
+ 4 files changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/external/SPIRV-Tools/CMakeLists.txt b/external/SPIRV-Tools/CMakeLists.txt
+index d2e3f63fb0d3..75f013409990 100644
+--- a/igc/external/SPIRV-Tools/CMakeLists.txt
++++ b/igc/external/SPIRV-Tools/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ #
+ #============================ end_copyright_notice =============================
+ 
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ 
+ message(STATUS "============================ SPIRV-Tools project ============================")
+ 
+diff --git a/visa/CMakeLists.txt b/visa/CMakeLists.txt
+index a96924e907c5..1e4b57516ce8 100644
+--- a/igc/visa/CMakeLists.txt
++++ b/igc/visa/CMakeLists.txt
+@@ -74,12 +74,7 @@ if (WIN32 OR UNIX)
+   add_subdirectory(iga/IGAExe)
+ endif (WIN32 OR UNIX)
+ 
+-if(WIN32)
+-  cmake_minimum_required(VERSION 3.1)
+-  cmake_policy(SET CMP0043 OLD)
+-else()
+-  cmake_minimum_required(VERSION 2.8.12)
+-endif(WIN32)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # In the case where this is the IGC build we need to add a dummy custom target check_headers
+ add_custom_target(check_headers)
+diff --git a/visa/iga/GEDLibrary/GED_external/CMakeLists.txt b/visa/iga/GEDLibrary/GED_external/CMakeLists.txt
+index e40313fc1944..275fff1114a6 100644
+--- a/igc/visa/iga/GEDLibrary/GED_external/CMakeLists.txt
++++ b/igc/visa/iga/GEDLibrary/GED_external/CMakeLists.txt
+@@ -7,11 +7,7 @@
+ #============================ end_copyright_notice =============================
+ 
+ # GEDLibrary/GED
+-if(WIN32)
+-    cmake_minimum_required(VERSION 3.1)
+-else()
+-    cmake_minimum_required(VERSION 2.8.12)
+-endif(WIN32)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(GEDLibrary)
+ 

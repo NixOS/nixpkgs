@@ -1,0 +1,60 @@
+From 331e8b9158f1bb3b4ff5db2c17a16a60640e0c12 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 10 Jun 2025 00:40:59 +0900
+Subject: [PATCH 14/30] musl: introduce dummy functions for mallinfo(),
+ malloc_info(), and malloc_trim()
+
+These functions are not provided by musl.
+---
+ src/include/musl/malloc.h | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 src/include/musl/malloc.h
+
+diff --git a/src/include/musl/malloc.h b/src/include/musl/malloc.h
+new file mode 100644
+index 0000000000..9d15d4bf91
+--- /dev/null
++++ b/src/include/musl/malloc.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include <errno.h>
++#include <stdio.h>
++
++/* struct mallinfo2 will be defined and struct mallinfo is converted to struct mallinfo2 in
++ * override/malloc.h. Hence, here we define struct mallinfo. */
++
++struct mallinfo {
++        int arena;    /* non-mmapped space allocated from system */
++        int ordblks;  /* number of free chunks */
++        int smblks;   /* number of fastbin blocks */
++        int hblks;    /* number of mmapped regions */
++        int hblkhd;   /* space in mmapped regions */
++        int usmblks;  /* always 0, preserved for backwards compatibility */
++        int fsmblks;  /* space available in freed fastbin blocks */
++        int uordblks; /* total allocated space */
++        int fordblks; /* total free space */
++        int keepcost; /* top-most, releasable (via malloc_trim) space */
++};
++
++static inline struct mallinfo mallinfo(void) {
++        return (struct mallinfo) {};
++}
++
++static inline int malloc_info(int options, FILE *stream) {
++        if (options != 0)
++                errno = EINVAL;
++        else
++                errno = EOPNOTSUPP;
++        return -1;
++}
++
++static inline int malloc_trim(size_t pad) {
++        return 0;
++}
++
++#include_next <malloc.h>
+-- 
+2.51.0
+

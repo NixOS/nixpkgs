@@ -1,0 +1,27 @@
+From f9dfacc4b92faa7b60ae37489aa58520b4da95d7 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sun, 5 Oct 2025 14:34:43 +0200
+Subject: [PATCH] app/CMakeLists.txt: Drop explicit dependency on rlottie
+
+- If rlottie is built via Meson instead of CMake, then there will be no CMake module to find here.
+- rlottie-qml already links against rlottie, and there is no direct usage of rlottie headers in this project,
+  so explicitly pulling it in shouldn't be necessary.
+---
+ app/CMakeLists.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index c1f0b85..7a59db5 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -1,7 +1,6 @@
+ find_package(Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
+ 
+ find_package(QuickFlux REQUIRED)
+-find_package(rlottie REQUIRED)
+ find_package(rLottieQml REQUIRED)
+ 
+ #"qtdclient.cpp" "qtdthread.cpp" "qml.qrc"
+-- 
+2.51.0
+

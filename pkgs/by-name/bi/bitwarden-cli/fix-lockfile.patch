@@ -1,0 +1,56 @@
+diff --git a/package-lock.json b/package-lock.json
+index 32d5abebb913..fea866c148c9 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -231,51 +231,6 @@
+         "bw": "build/bw.js"
+       }
+     },
+-    "apps/cli/node_modules/define-lazy-prop": {
+-      "version": "2.0.0",
+-      "license": "MIT",
+-      "engines": {
+-        "node": ">=8"
+-      }
+-    },
+-    "apps/cli/node_modules/is-docker": {
+-      "version": "2.2.1",
+-      "license": "MIT",
+-      "bin": {
+-        "is-docker": "cli.js"
+-      },
+-      "engines": {
+-        "node": ">=8"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/sindresorhus"
+-      }
+-    },
+-    "apps/cli/node_modules/is-wsl": {
+-      "version": "2.2.0",
+-      "license": "MIT",
+-      "dependencies": {
+-        "is-docker": "^2.0.0"
+-      },
+-      "engines": {
+-        "node": ">=8"
+-      }
+-    },
+-    "apps/cli/node_modules/open": {
+-      "version": "8.4.2",
+-      "license": "MIT",
+-      "dependencies": {
+-        "define-lazy-prop": "^2.0.0",
+-        "is-docker": "^2.1.1",
+-        "is-wsl": "^2.2.0"
+-      },
+-      "engines": {
+-        "node": ">=12"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/sindresorhus"
+-      }
+-    },
+     "apps/desktop": {
+       "name": "@bitwarden/desktop",
+       "version": "2025.12.1",

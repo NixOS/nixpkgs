@@ -1,0 +1,24 @@
+diff --git a/pathnames.h b/pathnames.h
+index cb44caa4..354fdf05 100644
+--- a/pathnames.h
++++ b/pathnames.h
+@@ -124,7 +124,7 @@
+ 
+ /* Location of ssh-keysign for hostbased authentication */
+ #ifndef _PATH_SSH_KEY_SIGN
+-#define _PATH_SSH_KEY_SIGN		"/usr/libexec/ssh-keysign"
++#define _PATH_SSH_KEY_SIGN		"ssh-keysign"
+ #endif
+ 
+ /* Location of ssh-pkcs11-helper to support keys in tokens */
+--- a/sshconnect2.c
++++ b/sshconnect2.c
+@@ -2021,7 +2021,7 @@
+ 
+ 		debug3_f("[child] pid=%ld, exec %s",
+ 		    (long)getpid(), _PATH_SSH_KEY_SIGN);
+-		execl(_PATH_SSH_KEY_SIGN, _PATH_SSH_KEY_SIGN, (char *)NULL);
++		execlp(_PATH_SSH_KEY_SIGN, _PATH_SSH_KEY_SIGN, (char *)NULL);
+ 		fatal_f("exec(%s): %s", _PATH_SSH_KEY_SIGN,
+ 		    strerror(errno));
+ 	}

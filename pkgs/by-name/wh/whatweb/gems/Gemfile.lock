@@ -1,0 +1,26 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    getoptlong (0.2.1)
+    ipaddr (1.2.7)
+    json (2.13.2)
+    public_suffix (6.0.2)
+    resolv (0.6.2)
+    resolv-replace (0.1.1)
+      resolv
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  addressable
+  getoptlong
+  ipaddr
+  json
+  resolv-replace
+
+BUNDLED WITH
+   2.7.1

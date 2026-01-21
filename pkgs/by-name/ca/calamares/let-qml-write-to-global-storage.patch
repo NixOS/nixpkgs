@@ -1,0 +1,33 @@
+diff --git a/src/libcalamares/GlobalStorage.h b/src/libcalamares/GlobalStorage.h
+index 37ea332d2..b9e629350 100644
+--- a/src/libcalamares/GlobalStorage.h
++++ b/src/libcalamares/GlobalStorage.h
+@@ -56,13 +56,6 @@ public:
+      */
+     explicit GlobalStorage( QObject* parent = nullptr );
+ 
+-    /** @brief Insert a key and value into the store
+-     *
+-     * The @p value is added to the store with key @p key. If @p key
+-     * already exists in the store, its existing value is overwritten.
+-     * The changed() signal is emitted regardless.
+-     */
+-    void insert( const QString& key, const QVariant& value );
+     /** @brief Removes a key and its value
+      *
+      * The @p key is removed from the store. If the @p key does not
+@@ -123,6 +116,14 @@ public:
+     QVariantMap data() const { return m; }
+ 
+ public Q_SLOTS:
++    /** @brief Insert a key and value into the store
++     *
++     * The @p value is added to the store with key @p key. If @p key
++     * already exists in the store, its existing value is overwritten.
++     * The changed() signal is emitted regardless.
++     */
++    void insert( const QString& key, const QVariant& value );
++
+     /** @brief Does the store contain the given key?
+      *
+      * This can distinguish an explicitly-inserted QVariant() from

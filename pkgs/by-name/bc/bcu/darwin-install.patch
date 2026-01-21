@@ -1,0 +1,10 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0d6b915..0a004f7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,4 +32,5 @@ elseif (MACOS)
+         link_directories(${LIBUSB_LIBRARY_DIRS} ${LIBFTDI_LIBRARY_DIRS} ${LIBYAML_LIBRARY_DIRS})
+         target_link_libraries (bcu_mac ${LIBUSB_LIBDIR}/lib${LIBUSB_LIBRARIES}.dylib ${LIBFTDI_LIBDIR}/${LIBFTDI_MODULE_NAME}.dylib ${LIBYAML_LIBDIR}/lib${LIBYAML_LIBRARIES}.dylib -lpthread -lm)
+         execute_process( COMMAND sh ${PROJECT_SOURCE_DIR}/create_version_h.sh ${PROJECT_SOURCE_DIR} )
++        install(TARGETS bcu_mac DESTINATION bin)
+ endif ()

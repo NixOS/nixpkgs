@@ -1,0 +1,31 @@
+From bce660de0316a3b757d0274d1871eb8d1a1a51f4 Mon Sep 17 00:00:00 2001
+From: Kirill Radzikhovskyy <kirillrdy@gmail.com>
+Date: Thu, 1 Jan 2026 13:21:12 +1100
+Subject: [PATCH] Fix ast.Num/ast.Index removal in Python 3.14
+
+---
+ pypytools/unroll.py | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/pypytools/unroll.py b/pypytools/unroll.py
+index 4bfcd5d..e5a9a69 100644
+--- a/pypytools/unroll.py
++++ b/pypytools/unroll.py
+@@ -81,8 +81,16 @@ def unroll(self, fornode):
+         items = self.extravars[fornode.iter.id]
+         body = []
+         for i in range(len(items)):
++            if hasattr(ast, 'Num'):
++                val = ast.Num(n=i)
++            else:
++                val = ast.Constant(value=i)
++            if hasattr(ast, 'Index'):
++                slice = ast.Index(value=val)
++            else:
++                slice = val
+             item = ast.Subscript(value=ast.Name(id=fornode.iter.id, ctx=ast.Load()),
+-                                 slice=ast.Index(value=ast.Num(n=i)),
++                                 slice=slice,
+                                  ctx=ast.Load())
+             assign = ast.Assign(targets=[fornode.target],
+                                 value=item)

@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index 19bd5be..d12a927 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -14,7 +14,6 @@ AC_ARG_ENABLE([sanitizers], AS_HELP_STRING([--enable-sanitizers], [Enable addres
+     [SANITIZERS="-fsanitize=address,bool,float-cast-overflow,integer-divide-by-zero,return,returns-nonnull-attribute,shift-exponent,signed-integer-overflow,unreachable,vla-bound -fsanitize-coverage=trace-pc-guard,indirect-calls,trace-cmp"], [SANITIZERS=""])
+ AC_SUBST([SANITIZERS])
+ 
+-AM_ICONV
+ 
+ AC_CANONICAL_HOST
+ AS_CASE([$host],

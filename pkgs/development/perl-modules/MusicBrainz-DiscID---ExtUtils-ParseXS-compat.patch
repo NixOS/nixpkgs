@@ -1,0 +1,19 @@
+Patch from Fedora to fix ExtUtils::ParseXS ≥ 3.57:
+
+  Unparseable XSUB parameter: 'offsets ...' in DiscID.xs, line 116
+
+https://bugzilla-attachments.redhat.com/attachment.cgi?id=2089957
+https://bugzilla.redhat.com/show_bug.cgi?id=2364631
+
+diff -up MusicBrainz-DiscID-0.06/DiscID.xs.orig MusicBrainz-DiscID-0.06/DiscID.xs
+--- MusicBrainz-DiscID-0.06/DiscID.xs.orig	2025-05-15 14:01:31.501503137 +0200
++++ MusicBrainz-DiscID-0.06/DiscID.xs	2025-05-15 14:02:10.538285963 +0200
+@@ -113,7 +113,7 @@ discid_get_track_length( disc, track_num
+ ## Provides the TOC of a known CD.
+ ##
+ int
+-discid_put( disc, first_track, sectors, offsets ... )
++discid_put( disc, first_track, sectors, offsets, ... )
+   DiscId *disc
+   int first_track
+   int sectors

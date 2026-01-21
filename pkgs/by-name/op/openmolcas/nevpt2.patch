@@ -1,0 +1,22 @@
+diff --git a/src/gctime.c b/src/gctime.c
+index 34fcb6f..832459c 100644
+--- a/src/gctime.c
++++ b/src/gctime.c
+@@ -1,14 +1,15 @@
++#include <string.h>
+ typedef long f77_int;     /* Fortran integer type */
+ typedef char * f77_char;    /* Fortran character argument */
+ #define CH_F2C(X) ((char *) (X))  /* How to get char ptr from F77 argument */
+-gctime (fstr, lstr) f77_char *fstr; int lstr; {
++int gctime (fstr, lstr) f77_char *fstr; int lstr; {
+    long time(), t;
+    char *ctime();
+    t = time ( (long *) 0);
+    strcpy(CH_F2C(fstr),ctime(&t));
+    return (0);
+    }
+-gctime_(fstr, lstr) f77_char *fstr; int lstr; {
++int gctime_(fstr, lstr) f77_char *fstr; int lstr; {
+    long time(), t;
+    char *ctime();
+    t = time ( (long *) 0);

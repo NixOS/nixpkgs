@@ -1,0 +1,119 @@
+diff --git a/prpr-avc/Cargo.toml b/prpr-avc/Cargo.toml
+index 257c575..bf35b10 100644
+--- a/prpr-avc/Cargo.toml
++++ b/prpr-avc/Cargo.toml
+@@ -9,3 +9,6 @@ edition = "2021"
+ sasa = { git = "https://github.com/Mivik/sasa", default-features = false }
+ thiserror = "1.0.56"
+ tracing = "0.1.37"
++
++[build-dependencies]
++pkg-config = "0.3"
+diff --git a/prpr-avc/build.rs b/prpr-avc/build.rs
+index 961b032..6d0b714 100644
+--- a/prpr-avc/build.rs
++++ b/prpr-avc/build.rs
+@@ -1,10 +1,7 @@
+ use std::path::Path;
+ 
+ fn main() {
+-    let libs_dir = std::env::var("PRPR_AVC_LIBS").unwrap_or_else(|_| format!("{}/static-lib", std::env::var("CARGO_MANIFEST_DIR").unwrap()));
+-    let libs_path = Path::new(&libs_dir).join(std::env::var("TARGET").unwrap());
+-    let libs_path = libs_path.display();
+-    println!("cargo:rustc-link-search={libs_path}");
+-    println!("cargo:rustc-link-lib=z");
+-    println!("cargo:rerun-if-changed={libs_path}");
++    for lib in ["libavformat", "libavcodec", "libavutil", "libswscale", "libswresample"] {
++        let _ = pkg_config::Config::new().statik(false).probe(lib);
++    }
+ }
+diff --git a/prpr-avc/src/ffi.rs b/prpr-avc/src/ffi.rs
+index 8218ef3..a2c7f6a 100644
+--- a/prpr-avc/src/ffi.rs
++++ b/prpr-avc/src/ffi.rs
+@@ -6,7 +6,6 @@ pub const AV_SAMPLE_FMT_FLT: AVSampleFormat = 3;
+ 
+ pub const AV_ROUND_UP: AVRounding = 0;
+ 
+-#[link(name = "avformat", kind = "static")]
+ extern "C" {
+     pub fn avformat_alloc_context() -> *mut AVFormatContext;
+     pub fn avformat_free_context(s: *mut AVFormatContext);
+@@ -20,7 +19,6 @@ extern "C" {
+     pub fn av_read_frame(s: *mut AVFormatContext, pkt: *mut AVPacket) -> ::std::os::raw::c_int;
+ }
+ 
+-#[link(name = "avutil", kind = "static")]
+ extern "C" {
+     pub fn av_strerror(errnum: ::std::os::raw::c_int, errbuf: *mut ::std::os::raw::c_char, errbuf_size: usize) -> ::std::os::raw::c_int;
+     pub fn av_frame_alloc() -> *mut AVFrame;
+@@ -29,7 +27,6 @@ extern "C" {
+     pub fn av_rescale_rnd(a: i64, b: i64, c: i64, r: AVRounding) -> i64;
+ }
+ 
+-#[link(name = "avcodec", kind = "static")]
+ extern "C" {
+     pub fn avcodec_find_decoder(id: AVCodecID) -> *mut AVCodec;
+     pub fn avcodec_alloc_context3(codec: *const AVCodec) -> *mut AVCodecContext;
+@@ -43,7 +40,6 @@ extern "C" {
+     pub fn avcodec_default_get_format(s: *mut AVCodecContext, fmt: *const AVPixelFormat) -> AVPixelFormat;
+ }
+ 
+-#[link(name = "swscale", kind = "static")]
+ extern "C" {
+     pub fn sws_getContext(
+         srcW: ::std::os::raw::c_int,
+@@ -68,10 +64,9 @@ extern "C" {
+     ) -> ::std::os::raw::c_int;
+ }
+ 
+-#[link(name = "swresample", kind = "static")]
+ extern "C" {
+-    pub fn swr_alloc_set_opts(
+-        s: *mut SwrContext,
++    pub fn swr_alloc_set_opts2(
++        ps: *mut *mut SwrContext,
+         out_ch_layout: i64,
+         out_sample_fmt: AVSampleFormat,
+         out_sample_rate: ::std::os::raw::c_int,
+@@ -80,7 +75,7 @@ extern "C" {
+         in_sample_rate: ::std::os::raw::c_int,
+         log_offset: ::std::os::raw::c_int,
+         log_ctx: *mut ::std::os::raw::c_void,
+-    ) -> *mut SwrContext;
++    ) -> ::std::os::raw::c_int;
+     pub fn swr_init(s: *mut SwrContext) -> ::std::os::raw::c_int;
+     pub fn swr_get_delay(s: *const SwrContext, base: ::std::os::raw::c_int) -> i64;
+     pub fn swr_convert(
+diff --git a/prpr-avc/src/swr.rs b/prpr-avc/src/swr.rs
+index 7288a51..c00b874 100644
+--- a/prpr-avc/src/swr.rs
++++ b/prpr-avc/src/swr.rs
+@@ -5,8 +5,9 @@ pub struct SwrContext(OwnedPtr<ffi::SwrContext>);
+ impl SwrContext {
+     pub fn new(in_format: &AudioStreamFormat, out_format: &AudioStreamFormat) -> Result<Self> {
+         unsafe {
+-            OwnedPtr::new(ffi::swr_alloc_set_opts(
+-                null_mut(),
++            let mut raw: *mut ffi::SwrContext = null_mut();
++            let ret = ffi::swr_alloc_set_opts2(
++                &mut raw,
+                 out_format.channel_layout as _,
+                 out_format.sample_fmt,
+                 out_format.sample_rate,
+@@ -15,9 +16,12 @@ impl SwrContext {
+                 in_format.sample_rate,
+                 0,
+                 null_mut(),
+-            ))
+-            .map(|ctx| Self(ctx))
+-            .ok_or(Error::AllocationFailed)
++            );
++            if ret < 0 || raw.is_null() {
++                Err(Error::AllocationFailed)
++            } else {
++                OwnedPtr::new(raw).map(|ctx| Self(ctx)).ok_or(Error::AllocationFailed)
++            }
+         }
+     }
+ 

@@ -1,0 +1,38 @@
+From 0a1c3a87ff80f8295bc60624a4e354a9ee6c181d Mon Sep 17 00:00:00 2001
+From: Yureka <yuka@yuka.dev>
+Date: Sat, 7 Aug 2021 09:16:46 +0200
+Subject: [PATCH] emulate clang 'sysroot + /include' logic
+
+Authored-By: Alexander Khovansky <alex@khovansky.me>
+Co-Authored-By: Yureka <yuka@yuka.dev>
+
+Clang provided by nix patches out logic that appends 'sysroot + /include'
+to the include path as well as automatic inclusion of libcxx includes (/include/c++/v1).
+The patch below adds that logic back by introducing cflags emulating this behavior to emcc
+invocations directly.
+
+Important note: with non-nix clang, sysroot/include dir ends up being the last
+in the include search order, right after the resource root.
+Hence usage of -idirafter. Clang also documents an -isystem-after flag
+but it doesn't appear to work
+---
+ tools/compile.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/compile.py b/tools/compile.py
+index 0cc5d33e3..e2586db0e 100644
+--- a/tools/compile.py
++++ b/tools/compile.py
+@@ -86,6 +86,9 @@ def get_cflags(user_args):
+   # We add these to the user's flags (newargs), but not when building .s or .S assembly files
+   cflags = get_clang_flags(user_args)
+   cflags.append('--sysroot=' + cache.get_sysroot(absolute=True))
++  cflags.append('-resource-dir=@resourceDir@')
++  cflags.append('-idirafter' + cache.get_sysroot(absolute=True) + os.path.join('/include'))
++  cflags.append('-iwithsysroot' + os.path.join('/include','c++','v1'))
+ 
+   if settings.EMSCRIPTEN_TRACING:
+     cflags.append('-D__EMSCRIPTEN_TRACING__=1')
+-- 
+2.51.0
+

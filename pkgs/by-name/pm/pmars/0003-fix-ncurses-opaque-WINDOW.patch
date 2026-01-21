@@ -1,0 +1,41 @@
+diff '--color=auto' -ruN a/src/curdisp.c b/src/curdisp.c
+--- a/src/curdisp.c	2026-01-03 04:22:43.000000000 +0100
++++ b/src/curdisp.c	2026-01-11 20:40:22.526484970 +0100
+@@ -33,12 +33,6 @@
+ extern unsigned long loopDelayAr[SPEEDLEVELS];
+ static int use_color;
+ 
+-/* For window structure in BSD 4.4/Curses 8.x library */
+-#ifdef BSD44
+-#define _curx curx
+-#define _cury cury
+-#endif
+-
+ typedef struct win_st {
+   WINDOW *win;
+   int     page;
+@@ -461,11 +455,11 @@
+           str--;
+           maxchar++;
+           leaveok(curwin, TRUE);
+-          if (ox = curwin->_curx) {
+-            mvwaddch(curwin, curwin->_cury, --ox, ' ');
+-            wmove(curwin, curwin->_cury, ox);
++          if (ox = getcurx(curwin)) {
++            mvwaddch(curwin, getcury(curwin), --ox, ' ');
++            wmove(curwin, getcury(curwin), ox);
+           } else {
+-            oy = curwin->_cury - 1;
++            oy = getcury(curwin) - 1;
+             mvwaddch(curwin, oy, COLS - 1, ' ');
+             wmove(curwin, oy, COLS - 1);
+           }
+@@ -477,7 +471,7 @@
+         leaveok(curwin, TRUE);
+         for (getyx(curwin, oy, ox); str > ostr; str--, maxchar++) {
+           if (ox--)
+-            mvwaddch(curwin, curwin->_cury, ox, ' ');
++            mvwaddch(curwin, getcury(curwin), ox, ' ');
+           else
+           mvwaddch(curwin, oy, ox = COLS, ' ');
+         }
