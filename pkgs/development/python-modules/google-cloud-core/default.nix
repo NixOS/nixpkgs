@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-core";
-  version = "2.4.3";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-cloud-core";
     tag = "v${version}";
-    hash = "sha256-hYOtpHIHJVITrei6/0m1YteTog2WBWCUFCl/Zr6BLlc=";
+    hash = "sha256-mB0gHxyK+g+e5I/3TRVAyQzPu005ug7fTvRNxciJ9LQ=";
   };
 
   build-system = [ setuptools ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/googleapis/python-cloud-core";
-    changelog = "https://github.com/googleapis/python-cloud-core/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-cloud-core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
