@@ -174,10 +174,6 @@ with haskellLib;
     }
   );
 
-  # 2025-09-20: Too strict bound on filepath (<1.5)
-  # https://github.com/dan-t/cabal-cargs/issues/10
-  cabal-cargs = doJailbreak super.cabal-cargs;
-
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
   extensions = doJailbreak (
@@ -277,9 +273,6 @@ with haskellLib;
       "vector-tests-O0"
       "vector-tests-O2"
     ];
-    # Ironically, we still need to build the doctest suite.
-    # vector-0.13.2.0 has a doctest < 0.24 constraint
-    jailbreak = true;
     # inspection-testing doesn't work on all archs & ABIs
     doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
@@ -317,10 +310,6 @@ with haskellLib;
 
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
-
-  # 2025-09-20: Restrictive upper bound on hashable.
-  # https://github.com/softwarefactory-project/matrix-client-haskell/issues/46
-  matrix-client = doJailbreak super.matrix-client;
 
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
@@ -410,10 +399,6 @@ with haskellLib;
       sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
     };
   }) super.leveldb-haskell;
-
-  # 2025-08-08: Allow inspection-testing >= 0.6 in fused-effects' test-suite
-  # https://github.com/fused-effects/fused-effects/pull/466
-  fused-effects = doJailbreak super.fused-effects;
 
   # 2025-08-08: Allow QuickCheck >= 2.15 in selective's test-suite
   # https://github.com/snowleopard/selective/pull/81
@@ -651,10 +636,6 @@ with haskellLib;
     }))
   ];
 
-  # Too strict bounds on servant
-  # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
-  arch-web = doJailbreak super.arch-web;
-
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
@@ -883,10 +864,6 @@ with haskellLib;
       includes = [ "test/djot-reader.native" ];
     })
   ] super.pandoc;
-
-  # Too strict bounds on QuickCheck (<2.15), containers (<0.7), hashable (<1.5), pandoc (<3.7)
-  # https://github.com/jaspervdj/patat/issues/194
-  patat = doJailbreak super.patat;
 
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
@@ -1125,9 +1102,6 @@ with haskellLib;
   # https://github.com/pixbi/duplo/issues/25
   duplo = doJailbreak super.duplo;
 
-  # https://github.com/fgaz/dual/pull/3
-  dual-game = doJailbreak super.dual-game;
-
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary pkgs.libmikmod super.mikmod;
 
@@ -1191,12 +1165,6 @@ with haskellLib;
   #    then self.buildHaskellPackages.doctest-discover
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
-
-  # 2025-02-10: Too strict bounds on doctest < 0.22
-  tasty-checklist = doJailbreak super.tasty-checklist;
-
-  # 2025-02-10: Too strict bounds on hedgehog < 1.5
-  tasty-sugar = doJailbreak super.tasty-sugar;
 
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
@@ -1978,9 +1946,6 @@ with haskellLib;
     "--haddock-option=--optghc=-fno-safe-haskell"
   ] super.alg;
 
-  # 2025-02-11: Too strict bounds on hedgehog < 1.5
-  nothunks = doJailbreak super.nothunks;
-
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
@@ -2033,10 +1998,6 @@ with haskellLib;
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
-
-  # Too strict version bounds on ghc-events
-  # https://github.com/mpickering/hs-speedscope/issues/16
-  hs-speedscope = doJailbreak super.hs-speedscope;
 
   # Missing test files in sdist tarball:
   # https://gitlab.com/dpwiz/geomancy-layout/-/issues/1
@@ -2266,10 +2227,6 @@ with haskellLib;
   # https://github.com/hadolint/hadolint/issues/1127
   hadolint = doJailbreak super.hadolint;
 
-  # Too strict lower bounds on (test) deps
-  # https://github.com/phadej/puresat/issues/6
-  puresat = doJailbreak super.puresat;
-
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
 
@@ -2313,14 +2270,6 @@ with haskellLib;
   }) super.json-to-haskell;
   # https://github.com/fieldstrength/aeson-deriving/issues/5
   aeson-deriving = dontCheck super.aeson-deriving;
-
-  # 2025-02-11: Too strict bounds on tasty < 1.5, all of the below.
-  morpheus-graphql-app = doJailbreak super.morpheus-graphql-app;
-  morpheus-graphql-client = doJailbreak super.morpheus-graphql-client;
-  morpheus-graphql-core = doJailbreak super.morpheus-graphql-core;
-  morpheus-graphql-server = doJailbreak super.morpheus-graphql-server;
-  morpheus-graphql-tests = doJailbreak super.morpheus-graphql-tests;
-  morpheus-graphql = doJailbreak super.morpheus-graphql;
 
   drunken-bishop = doJailbreak super.drunken-bishop;
   # https://github.com/SupercedeTech/dropbox-client/issues/1
@@ -2606,9 +2555,6 @@ with haskellLib;
   # 2025-08-06: Upper bounds on containers <0.7 and hedgehog < 1.5 too strict.
   hermes-json = doJailbreak super.hermes-json;
 
-  # Allow containers >= 0.7, https://github.com/nomeata/arbtt/issues/181
-  arbtt = doJailbreak super.arbtt;
-
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
   hexstring = overrideCabal (old: {
@@ -2712,9 +2658,6 @@ with haskellLib;
   composite-aeson = doJailbreak super.composite-aeson;
 
   hashable = lib.pipe super.hashable [
-    # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
-    doJailbreak
-
     # Big-endian POWER:
     # Test suite xxhash-tests: RUNNING...
     # xxhash
@@ -2753,15 +2696,11 @@ with haskellLib;
 
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
   serialise = dontCheck super.serialise;
-  # https://github.com/Bodigrim/data-array-byte/issues/1
-  data-array-byte = doJailbreak super.data-array-byte;
   # 2025-02-06: Allow tasty-quickcheck == 0.11.*
   # https://github.com/google/ghc-source-gen/issues/120
   ghc-source-gen = doJailbreak super.ghc-source-gen;
   # https://github.com/byteverse/bytebuild/issues/20#issuecomment-2652113837
   bytebuild = doJailbreak super.bytebuild;
-  # https://github.com/haskellari/lattices/issues/132
-  lattices = doJailbreak super.lattices;
 
   # Too strict bounds on tasty <1.5 and tasty-quickcheck <0.11
   # https://github.com/phadej/aeson-extra/issues/62
@@ -2788,9 +2727,6 @@ with haskellLib;
   # tests can't find the test binary anymore - parseargs-example
   parseargs = dontCheck super.parseargs;
 
-  # base <4.14
-  decimal-literals = doJailbreak super.decimal-literals;
-
   # Test failure https://gitlab.com/lysxia/ap-normalize/-/issues/2
   ap-normalize = dontCheck super.ap-normalize;
 
@@ -2803,10 +2739,7 @@ with haskellLib;
     })
   ] super.heist;
 
-  heist-extra = doJailbreak super.heist-extra; # base <4.18.0.0.0
-  unionmount = doJailbreak super.unionmount; # base <4.18
   tailwind = doJailbreak super.tailwind; # base <=4.17.0.0
-  commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
 
   # 2025-09-03: Disable tests until this is solved:
   # https://github.com/clash-lang/ghc-typelits-extra/issues/60
@@ -2911,10 +2844,6 @@ with haskellLib;
     ];
   }) super.tree-diff;
 
-  # base <4.19
-  # https://github.com/well-typed/large-records/issues/168
-  large-generics = doJailbreak super.large-generics;
-
   # Too strict bound on bytestring < 0.12
   # https://github.com/raehik/heystone/issues/2
   heystone = doJailbreak super.heystone;
@@ -3013,14 +2942,6 @@ with haskellLib;
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
-  # Forbids QuickCheck >= 2.15
-  # https://github.com/mchav/granite/issues/12#issuecomment-3360209408
-  granite = doJailbreak super.granite;
-
-  # Erroneously forbids vector >= 0.13.2.0
-  # https://github.com/mchav/snappy-hs/commit/400490df38e0db7f353c0427f034a231bdf73098#r167007963
-  snappy-hs = doJailbreak super.snappy-hs;
-
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
   # Hackage release trails a good deal behind master
@@ -3089,9 +3010,6 @@ with haskellLib;
   # doctests are failing https://github.com/alpmestan/taggy-lens/issues/8
   taggy-lens = dontCheck super.taggy-lens;
 
-  # https://github.com/snoyberg/http-client/pull/563
-  http-client-tls = doJailbreak super.http-client-tls;
-
   # 2025-09-03: allow bytestring 0.12
   # https://github.com/wangbj/hashing/issues/4
   hashing = lib.pipe super.hashing [
@@ -3132,9 +3050,6 @@ with haskellLib;
 
   # 2025-04-09: jailbreak to allow hedgehog >= 1.5
   hw-int = warnAfterVersion "0.0.2.0" (doJailbreak super.hw-int);
-
-  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
-  chimera = warnAfterVersion "0.4.1.0" (doJailbreak super.chimera);
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
@@ -3192,9 +3107,6 @@ with haskellLib;
 
   # 2025-04-09: missing dependency - somehow it's not listed on hackage
   broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
-
-  # 2025-04-09: jailbreak to allow template-haskell >= 2.21, th-abstraction >= 0.7
-  kind-generics-th = warnAfterVersion "0.2.3.3" (doJailbreak super.kind-generics-th);
 
   # 2025-04-09: jailbreak to allow aeson >= 2.2, base >= 4.19, text >= 2.1
   ebird-api = warnAfterVersion "0.2.0.0" (doJailbreak super.ebird-api);
@@ -3292,10 +3204,6 @@ with haskellLib;
   # 2025-04-23: Allow bytestring >= 0.12
   # https://github.com/mrkkrp/wave/issues/48
   wave = doJailbreak super.wave;
-
-  # 2025-04-23: disable bounds microlens <0.5, QuickCheck < 2.16
-  # https://github.com/debug-ito/wild-bind/issues/7
-  wild-bind = doJailbreak super.wild-bind;
 
   # Test suite no longer compiles with hspec-hedgehog >= 0.3
   finitary = dontCheck super.finitary;
