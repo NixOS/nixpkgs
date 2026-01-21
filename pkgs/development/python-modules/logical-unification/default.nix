@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "logical-unification";
-  version = "0.4.6";
+  version = "0.4.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
     tag = "v${version}";
-    hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
+    hash = "sha256-m1wB7WOGb/io4Z7Zfl/rckh08j6IKSiiwFKMvl5UzHg=";
   };
 
   propagatedBuildInputs = [
