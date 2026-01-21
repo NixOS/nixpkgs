@@ -1211,6 +1211,14 @@ assertNoAdditions {
     '';
   };
 
+  evergarden-nvim = super.evergarden-nvim.overrideAttrs {
+    # optional modules
+    nvimSkipModules = [
+      "evergarden.extras"
+      "minidoc"
+    ];
+  };
+
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };

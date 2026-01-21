@@ -5072,6 +5072,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  evergarden-nvim = buildVimPlugin {
+    pname = "nvim";
+    version = "0-unstable-2026-01-11";
+    src = fetchgit {
+      url = "https://codeberg.org/evergarden/nvim";
+      rev = "124f7d142ed328fe413888b10ae39d94ee695560";
+      hash = "sha256-TeWsXdiCbNCFWMgCixDIu2yQ7R8uTWVScben6rOPsx8=";
+    };
+    meta.homepage = "https://codeberg.org/everviolet/nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   executor-nvim = buildVimPlugin {
     pname = "executor.nvim";
     version = "0-unstable-2025-08-15";
