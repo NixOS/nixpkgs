@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "1.1.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skorch-dev";
     repo = "skorch";
     tag = "v${version}";
-    sha256 = "sha256-f0g/kn3HhvYfGDgLpA7gAnYocJrYqHUq680KrGuoPCQ=";
+    sha256 = "sha256-7cCtrLy80LUlo+og7F98bexDcLim3lY/MVa7HHYlsfE=";
   };
 
   # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
