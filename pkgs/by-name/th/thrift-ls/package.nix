@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "thrift-ls";
-  version = "0.2.9";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "joyme123";
     repo = "thrift-ls";
     rev = "v${version}";
-    hash = "sha256-Gmqm1D+zcXtqFEraHjivqIqFz0AZCJd3pnH4zKE/jxw=";
+    hash = "sha256-v1PUrIHgdKqH7D5/KkJuNYYPMbjY817BGOix8B64sOA=";
   };
 
   vendorHash = "sha256-SGCJ12BxjFUQ7bnaNY0bvrrtm2qNNrwYKKfNEi1lPco=";

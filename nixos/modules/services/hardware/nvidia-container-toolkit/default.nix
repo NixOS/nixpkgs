@@ -120,6 +120,26 @@
 
         package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
 
+        disable-hooks = lib.mkOption {
+          type = lib.types.listOf lib.types.nonEmptyStr;
+          default = [ "create-symlinks" ];
+          description = ''
+            List of hooks to disable when generating the CDI specification.
+            Each hook name will be passed as `--disable-hook <hook-name>` to nvidia-ctk.
+            Set to an empty list to disable no hooks.
+          '';
+        };
+
+        enable-hooks = lib.mkOption {
+          type = lib.types.listOf lib.types.nonEmptyStr;
+          default = [ ];
+          description = ''
+            List of hooks to enable when generating the CDI specification.
+            Each hook name will be passed as `--enable-hook <hook-name>` to nvidia-ctk.
+            Set to an empty list to enable no hooks.
+          '';
+        };
+
         extraArgs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
@@ -306,6 +326,8 @@
                   device-name-strategy
                   discovery-mode
                   mounts
+                  disable-hooks
+                  enable-hooks
                   extraArgs
                   ;
                 nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;

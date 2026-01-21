@@ -4,7 +4,7 @@
   fetchurl,
   libX11,
   bison,
-  ksh,
+  mksh,
   perl,
   libXinerama,
   libXt,
@@ -33,15 +33,18 @@
   flex,
   libXpm,
   rpcsvc-proto,
+  sessreg,
+  pkg-config,
+  lmdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cde";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdesktopenv/cde-${version}.tar.gz";
-    hash = "sha256-caslezz2kbljwApv5igDPH345PK2YqQUTi1YZgvM1Dw=";
+    url = "mirror://sourceforge/cdesktopenv/cde-${finalAttrs.version}.tar.gz";
+    hash = "sha256-K1jAjr8Ka7nUoyGRzSXiBPXYy6gbzKo2/HL1xKqXmFQ=";
   };
 
   postPatch = ''
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace configure.ac \
-      --replace "-I/usr/include/tirpc" "-I${libtirpc.dev}/include/tirpc"
+      --replace-warn "-I/usr/include/tirpc" "-I${libtirpc.dev}/include/tirpc"
 
     patchShebangs autogen.sh config.rpath contrib programs
   '';
@@ -82,9 +85,11 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     tcl
     libXaw
-    ksh
+    mksh
     libxcrypt
     libXpm
+    sessreg
+    lmdb
   ];
   nativeBuildInputs = [
     bison
@@ -100,9 +105,14 @@ stdenv.mkDerivation rec {
     perl
     flex
     rpcsvc-proto
+    pkg-config
   ];
 
   enableParallelBuilding = true;
+
+  # Can probably remove after next release
+  # https://sourceforge.net/p/cdesktopenv/code/ci/f0154141b1f1501490bac8e0235214bf8f00f715/
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   preConfigure = ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
@@ -123,4 +133,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
