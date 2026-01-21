@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langfuse";
-  version = "3.11.2";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-CZa1nzgGHQSx/cPkOxbDsfkWpgr/veWRN8zgHeYrJOw=";
+    tag = "v${version}";
+    hash = "sha256-LHKNy5KSJhRhxkrp4+pjD0GGHTooaj7adrRA7I4mbdo=";
   };
 
   # https://github.com/langfuse/langfuse/issues/9618
