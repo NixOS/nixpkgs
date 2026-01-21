@@ -4,12 +4,16 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
   version = "3.13.1";
   pyproject = true;
+
+  # https://github.com/maxfischer2781/asyncstdlib/issues/189
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "maxfischer2781";

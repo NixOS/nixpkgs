@@ -413,6 +413,8 @@ let
 
         dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
 
+        dns-client-miou-unix = callPackage ../development/ocaml-modules/dns/client-miou-unix.nix { };
+
         dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
         dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
@@ -668,12 +670,17 @@ let
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
         frama-c = callPackage ../development/ocaml-modules/frama-c {
-          framac = pkgs.framac.override { ocamlPackages = self; };
+          framac = pkgs.framac.override {
+            ocamlPackages = self;
+            why3 = pkgs.why3.override { ocamlPackages = self; };
+          };
         };
 
         frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
 
-        frama-c-luncov = callPackage ../development/ocaml-modules/frama-c-luncov { };
+        frama-c-luncov = callPackage ../development/ocaml-modules/frama-c-luncov {
+          why3 = pkgs.why3.override { ocamlPackages = self; };
+        };
 
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;

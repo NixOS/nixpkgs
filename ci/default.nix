@@ -172,7 +172,6 @@ rec {
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { inherit pkgs; });
-  manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
   nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
     nix = pkgs.nixVersions.latest;
   };

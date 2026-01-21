@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   stdenv,
   pkg-config,
   makeWrapper,
@@ -13,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bilibili-tui";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "MareDevi";
     repo = "bilibili-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nWUFcKQgUNaiVU0zgSB8LTdvUruc8fovCAembQz5w3I=";
+    hash = "sha256-LACNDpVhlYEgT3fN+Ff2MVipblUqPlqwOUpTLaXSCbk=";
   };
 
-  cargoHash = "sha256-KvJpMQuvZM/s3b4/Pzmeucb95KeuuUx4bz3sJsKyLc8=";
+  cargoHash = "sha256-q3jRjmzQA64sZjVShoEmu1x2CFOAgBGgZYyTq7Lg4is=";
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
@@ -40,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal user interface (TUI) client for Bilibili";

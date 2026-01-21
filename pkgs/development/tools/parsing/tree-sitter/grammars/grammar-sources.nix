@@ -710,9 +710,9 @@
   };
 
   pgn = {
-    version = "1.4.2";
+    version = "1.4.3";
     url = "github:rolandwalker/tree-sitter-pgn";
-    hash = "sha256-pGUSsmm+YUvfvt5c4tPs6tmEcFh3DZoDtVf+EpFhOo0=";
+    hash = "sha256-7N0irNJt/tiKywUSZAIVt/E1urNXDMG+hYvu+EPpfXA=";
     meta = {
       license = lib.licenses.bsd2;
     };

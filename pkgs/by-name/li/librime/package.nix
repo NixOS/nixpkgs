@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
     rev = version;
-    sha256 = "sha256-zKc9Xxv+DHOfwpMaXeG34NwdGbXH6XP3ua+LrivQvBU=";
+    sha256 = "sha256-Jbo6Svt/d00ZJwtYkWMKFeKzpFFYhbnm3m2alDxRGvU=";
   };
 
   nativeBuildInputs = [

@@ -68,7 +68,7 @@
   pkg-config,
   poppler,
   proj,
-  python3,
+  python3Packages,
   qhull,
   rav1e,
   sqlite,
@@ -98,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
-    python3.pkgs.setuptools
-    python3.pkgs.wrapPython
+    python3Packages.setuptools
+    python3Packages.wrapPython
     swig
   ]
   ++ lib.optionals useJava [
@@ -202,8 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
       libwebp
       zlib
       zstd
-      python3
-      python3.pkgs.numpy
+      python3Packages.python
+      python3Packages.numpy
     ]
     ++ tileDbDeps
     ++ libAvifDeps
@@ -219,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ darwinDeps
     ++ nonDarwinDeps;
 
-  pythonPath = [ python3.pkgs.numpy ];
+  pythonPath = [ python3Packages.numpy ];
   postInstall = ''
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   ''
@@ -238,14 +238,14 @@ stdenv.mkDerivation (finalAttrs: {
     pushd autotest
 
     export HOME=$(mktemp -d)
-    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+    export PYTHONPATH="$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
     # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
     export CI=1
   '';
-  nativeInstallCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-benchmark
     pytest-env

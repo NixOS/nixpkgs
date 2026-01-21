@@ -1485,16 +1485,19 @@ with pkgs;
   amule-daemon = amule.override {
     monolithic = false;
     enableDaemon = true;
+    mainProgram = "amuled";
   };
 
   amule-gui = amule.override {
     monolithic = false;
     client = true;
+    mainProgram = "amulegui";
   };
 
   amule-web = amule.override {
     monolithic = false;
     httpServer = true;
+    mainProgram = "amuleweb";
   };
 
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
@@ -8278,7 +8281,6 @@ with pkgs;
   };
 
   xcb-util-cursor = xorg.xcbutilcursor;
-  xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
@@ -10716,9 +10718,7 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  i3 = callPackage ../applications/window-managers/i3 {
-    xcb-util-cursor = if stdenv.hostPlatform.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
-  };
+  i3 = callPackage ../applications/window-managers/i3 { };
 
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
@@ -12861,10 +12861,6 @@ with pkgs;
     cudaSupport = true;
   };
 
-  math-preview = callPackage ../by-name/ma/math-preview/package.nix {
-    nodejs = nodejs_20;
-  };
-
   p4est-sc-dbg = p4est-sc.override { debug = true; };
 
   p4est-dbg = p4est.override { debug = true; };
@@ -13444,7 +13440,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nixComponents = nixVersions.nixComponents_2_32;
+    nixComponents = nixVersions.nixComponents_2_33;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

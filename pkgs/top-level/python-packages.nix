@@ -362,8 +362,6 @@ self: super: with self; {
 
   aioimmich = callPackage ../development/python-modules/aioimmich { };
 
-  aioinflux = callPackage ../development/python-modules/aioinflux { };
-
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiojellyfin = callPackage ../development/python-modules/aiojellyfin { };
@@ -2626,8 +2624,6 @@ self: super: with self; {
   channels-redis = callPackage ../development/python-modules/channels-redis { };
 
   character-encoding-utils = callPackage ../development/python-modules/character-encoding-utils { };
-
-  characteristic = callPackage ../development/python-modules/characteristic { };
 
   chardet = callPackage ../development/python-modules/chardet { };
 
@@ -5125,6 +5121,10 @@ self: super: with self; {
 
   exiv2 = callPackage ../development/python-modules/exiv2 { inherit (pkgs) exiv2; };
 
+  exllamav2 = callPackage ../development/python-modules/exllamav2 { };
+
+  exllamav3 = callPackage ../development/python-modules/exllamav3 { };
+
   expandvars = callPackage ../development/python-modules/expandvars { };
 
   expects = callPackage ../development/python-modules/expects { };
@@ -5948,7 +5948,7 @@ self: super: with self; {
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
 
-  gdal = toPythonModule (pkgs.gdal.override { python3 = python; });
+  gdal = toPythonModule (pkgs.gdal.override { python3Packages = self; });
 
   gdata = callPackage ../development/python-modules/gdata { };
 
@@ -12297,8 +12297,6 @@ self: super: with self; {
   pkginfo2 = callPackage ../development/python-modules/pkginfo2 { };
 
   pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
-
-  pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   plac = callPackage ../development/python-modules/plac { };
 

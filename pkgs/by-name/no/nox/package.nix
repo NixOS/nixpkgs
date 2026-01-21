@@ -14,7 +14,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1qcbhdnhdhhv7q6cqdgv0q55ic8fk18526zn2yb12x9r1s0lfp9z";
   };
 
-  patches = [ ./nox-review-wip.patch ];
+  patches = [
+    ./nox-review-wip.patch
+    # https://github.com/madjar/nox/pull/100
+    ./move-to-attrs.patch
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -25,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     dogpile-cache
     click
     requests
-    characteristic
+    attrs
     setuptools # pkg_resources is imported during runtime
   ];
 
