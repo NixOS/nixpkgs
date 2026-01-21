@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-xWqZ7J32aaQGYv5GlgMhr25LFBBsFNsihwnBYo4jhI0=";
+    hash = "sha256-mVnRmKpptX/P01SjRRjG95W3gac+0GVvTQFmAWDMJVM=";
   };
 
   patches = [
