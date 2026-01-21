@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-am3X++5YGQnu7Gp1bP8df3w3YGOxTkopjcSYAwnlWXA=";
+    hash = "sha256-NIhxymSOxqmpg6E6tibArM4C9RW54ZgzMrF695eVIcU=";
   };
 
   build-system = [
