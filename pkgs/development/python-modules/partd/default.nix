@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "partd";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "partd";
     tag = version;
-    hash = "sha256-EK+HNSPh2b7jwpc6jwH/n+6HDgHhRfBeaRuiDIWVG28=";
+    hash = "sha256-GtIo6n87TmM5aRgtRyxhhXXAINpPCFbjZ/sQz/vkcoA=";
   };
 
   patches = [
