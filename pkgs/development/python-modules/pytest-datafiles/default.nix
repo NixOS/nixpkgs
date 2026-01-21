@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-datafiles";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "omarkohl";
     repo = "pytest-datafiles";
     tag = version;
-    hash = "sha256-YFD8M5TG6VtLRX04R3u0jtYDDlaK32D4ArWxS6x2b/E=";
+    hash = "sha256-xB96JAUlEicIrTET1L363H8O2JwCTuUWr9jX/70uFvs=";
   };
 
   buildInputs = [
