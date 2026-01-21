@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eMfFiNqILLom1Q4uCY76LOJijqnzD07KgD69GCxexGY=";
   };
 
