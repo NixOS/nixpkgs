@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "price-parser";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "price-parser";
     tag = version;
-    hash = "sha256-9f/+Yw94SVvg9fl9zYR9YEMwAgKHwySG5cysPMomnA0=";
+    hash = "sha256-1aMWRyrmvilON+crWibrREIN2Rf3hCzewI+vmRppvrg=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Extract price amount and currency symbol from a raw text string";
     homepage = "https://github.com/scrapinghub/price-parser";
-    changelog = "https://github.com/scrapinghub/price-parser/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/scrapinghub/price-parser/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ thanegill ];
   };
