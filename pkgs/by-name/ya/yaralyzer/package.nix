@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yaralyzer";
-  version = "1.0.9";
+  version = "1.0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
     tag = "v${version}";
-    hash = "sha256-OGMvDPwR4WFINKJpoP242Xhi3mhDzrUypClVGgIIHJI=";
+    hash = "sha256-MhfZ/8JJaWDiDVUA4av32LzqfQmJr9L9x6AdCU0jo2c=";
   };
 
   build-system = with python3.pkgs; [
