@@ -14,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.34.0";
+    version = "1.39.1";
     pyproject = true;
 
     # to avoid breakage, every package in opentelemetry-python must inherit this version, src, and meta
@@ -22,7 +22,7 @@ let
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       tag = "v${version}";
-      hash = "sha256-fAXcS2VyDMk+UDW3ru5ZvwzXjydsY1uFcT2GvZuiGWw=";
+      hash = "sha256-GEcGADUdci6W2vfeXt/rjQOL/7r4RBxgyq+vy6tivBc=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
