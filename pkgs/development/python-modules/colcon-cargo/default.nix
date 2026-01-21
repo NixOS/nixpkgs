@@ -13,14 +13,14 @@
 }:
 buildPythonPackage rec {
   pname = "colcon-cargo";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-cargo";
     tag = version;
-    hash = "sha256-Do8i/Z1nn8wsj0xzCQdSaaXoDf9N34SiMb/GIe4YOs4=";
+    hash = "sha256-jhc5mN4jnLk2zLj01sBm63acrku/FIexnIWCQ6GKDKA=";
   };
 
   build-system = [ setuptools ];
