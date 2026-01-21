@@ -8,7 +8,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "model-bakery";
   version = "1.23.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AwdHsysCaxSS6+dH1gO7dyV2Q4PIA84Mc810KNrqP/g=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Object factory for Django";
     homepage = "https://github.com/model-bakers/model_bakery";
-    changelog = "https://github.com/model-bakers/model_bakery/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/model-bakers/model_bakery/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
