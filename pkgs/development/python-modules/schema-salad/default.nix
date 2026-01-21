@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.9.20250723145140";
+  version = "8.9.20251102115403";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = version;
-    hash = "sha256-FEdv0VORkvXhqXPrmyCZ1Ib5Lz4fKwRkEqEcEXpfGq8=";
+    hash = "sha256-3axwM3fSxDIG1P0CvcqzqwpdDkhg/5pY7AmjUpU3mEk=";
   };
 
   pythonRelaxDeps = [ "mistune" ];
