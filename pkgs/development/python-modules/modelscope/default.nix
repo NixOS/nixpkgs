@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.33.0";
+  version = "1.34.0";
 in
 buildPythonPackage {
   pname = "modelscope";
@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "modelscope";
     repo = "modelscope";
     tag = "v${version}";
-    hash = "sha256-CEaeO6oD1enGKT87anc3qSynDaN8pTC4utNoMBTvL84=";
+    hash = "sha256-Uq8qmU8ZmNRegaWHn1hlDDpRjWjgfecBvJklmhW36eM=";
   };
 
   build-system = [ setuptools ];
