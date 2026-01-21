@@ -541,6 +541,8 @@ in
             -o '${cfg.user}' -g '${cfg.group}' \
             "$tmpfile" \
             ${iniPathQuoted}
+
+          rm "$tmpfile"
         '';
       };
 
