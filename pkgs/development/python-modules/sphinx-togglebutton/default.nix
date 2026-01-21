@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "sphinx-togglebutton";
-  version = "0.3.2";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qwyLNmQnsB5MiYAtXQeEcsQn+m6dEtUhw0+gRCVZ3Ho=";
+    hash = "sha256-BMMyaS/V9TY60CoAHmkzaXZ9bB8OWCeXcKKutXG0cqE=";
   };
 
   nativeBuildInputs = [
