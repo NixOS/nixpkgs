@@ -564,7 +564,7 @@ let
 
         # Required for Nova
         # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
-        RUST_FW_LOADER_ABSTRACTIONS = whenAtLeast "6.12" yes;
+        RUST_FW_LOADER_ABSTRACTIONS = lib.mkIf withRust (whenAtLeast "6.12" yes);
       }
       //
         lib.optionalAttrs
