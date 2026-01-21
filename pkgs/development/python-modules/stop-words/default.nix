@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "stop-words";
-  version = "2018.7.23";
+  version = "2025.11.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bfOtX13ml9qkN+REXIbHNgTmvBON0NwPrFVmSqTmsD4=";
+    hash = "sha256-BFkHK1SxHkOm+0xbBb2ofSrM/E8UwWl5dPNzmvD3tD0=";
   };
 
   build-system = [ setuptools ];
