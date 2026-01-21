@@ -11,12 +11,12 @@
 }:
 let
   pname = "pytest-html";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchPypi {
     pname = "pytest_html";
     inherit version;
-    hash = "sha256-cKAeiuWAD0oHS1akyxAlyPT5sDi7pf4x48mOuZZobwc=";
+    hash = "sha256-tqiMulB1ANhwmVkgHi51fTlB6Fn9F8/U7Yexb8DGeRI=";
   };
 
   web-assets = buildNpmPackage {
