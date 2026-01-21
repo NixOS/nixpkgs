@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.33.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ute8puO2qc679ttZgzQRnVO8OuBmYnqLT3y7faHpRgA=";
+    hash = "sha256-VKULy45bYn5TmxU7TbOVK98r0pRMWAwissmgx0Ee/8w=";
   };
 
   build-system = [ setuptools ];
