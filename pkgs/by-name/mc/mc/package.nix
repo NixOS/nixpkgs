@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
     "--disable-configure-args"
   ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
       --replace /bin/rm ${coreutils}/bin/rm
