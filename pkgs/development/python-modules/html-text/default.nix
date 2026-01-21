@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "html-text";
-  version = "0.6.2";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zytedata";
     repo = "html-text";
-    tag = finalAttrs.version;
-    hash = "sha256-e9gkibQv8mn1Jbt77UmpauOeTqhJQhY9R5Sge/iYi+U=";
+    tag = version;
+    hash = "sha256-KLWgdVHGYRiQ61hMNx+Kcx9mE7d/TsBe110TfCe+ejU=";
   };
 
   build-system = [ setuptools ];
