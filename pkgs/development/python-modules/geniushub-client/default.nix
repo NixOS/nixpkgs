@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "geniushub-client";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "manzanotti";
     repo = "geniushub-client";
     tag = "v${version}";
-    hash = "sha256-Gq2scYos7E8me1a4x7NanHRq2eYWuU2uSUwM+O1TPb8=";
+    hash = "sha256-RBXqSpumJMLZIT+nQr/BUE315krjRy/Qk9OlX9Ukn3Y=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Genius Hub systems";
     homepage = "https://github.com/manzanotti/geniushub-client";
-    changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
+    changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
