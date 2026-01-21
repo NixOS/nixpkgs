@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "4.1.0";
+  version = "4.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
     tag = "v${version}";
-    hash = "sha256-QcJUKGhWPUHhVVsEZhhjN411Pz4Wn7OL2fhotPOGVm4=";
+    hash = "sha256-U4NOFnZOGgXStE9adixkFmf4jm6fZ2dgSmw0ainMVd0=";
   };
 
   build-system = [ setuptools ];
