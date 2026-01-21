@@ -30,7 +30,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "nixpkgs-updaters-library";
-  version = "3.0.0";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -38,8 +38,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "nixpkgs-updaters-library";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0N88valEw+QElMjy84TBKGuqqh9anKhHdW0jQfQ4qd4=";
+    tag = "v${version}";
+    hash = "sha256-y6EVoxu/3aBRce2bQsnlt/faZY17b8Rr4hd7wsTPnjE=";
   };
 
   postPatch = ''
