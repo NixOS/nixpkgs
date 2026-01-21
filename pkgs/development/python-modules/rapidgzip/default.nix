@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.14.5";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+u1GAToaYqUZPElhWolmg+pcFO1HRLy0vRhpsUIFUdg=";
+    hash = "sha256-ixJPKbwS3kJJq4HoPlrTXmd0KhqP9Ky2G3TA2f2hwU4=";
   };
 
   prePatch = ''
