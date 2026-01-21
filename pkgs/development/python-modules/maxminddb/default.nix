@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "maxminddb";
-  version = "2.8.2";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JqjlNiKNjMKMW49XSlcaJwS+/OOzaM7KWTp21WtlkPk=";
+    hash = "sha256-l5KxliWUXf8Ubi4xh/nkcLgjMKkS986lWBuL1a8w2os=";
   };
 
   buildInputs = [ libmaxminddb ];
