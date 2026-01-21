@@ -6,15 +6,15 @@
   aiohttp,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "mac-vendor-lookup";
   version = "0.1.15";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bauerj";
     repo = "mac_vendor_lookup";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RLCEyDalwQUVmcZdVPN1cyKLIPbWcZfjzIkClUZCeJU=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
