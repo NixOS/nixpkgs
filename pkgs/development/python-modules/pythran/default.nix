@@ -24,14 +24,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pythran";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     tag = version;
-    hash = "sha256-GZSVcB4JIx02eiUb9d7o5cUAyICIoH6m0mz4TL7a9PY=";
+    hash = "sha256-H13FGApWCgBLWOtoZ5yEIV4Z+KAOK3Xs4KFM4oLmKmk=";
   };
 
   patches = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.rev}/Changelog";
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.tag}/Changelog";
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;
