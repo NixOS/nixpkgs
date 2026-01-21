@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "multiscale-spatial-image";
-  version = "2.0.3";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";
     tag = "v${version}";
-    hash = "sha256-wKSzhlNXIXOFEK8+xfKF6zTFr0+mdFhhvjWiHAKphk0=";
+    hash = "sha256-uF9ZccLvP1ref6qn3l6EpedsoK29Q8lAdr68JjsYMis=";
   };
 
   build-system = [ hatchling ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generate a multiscale, chunked, multi-dimensional spatial image data structure that can serialized to OME-NGFF";
     homepage = "https://github.com/spatial-image/multiscale-spatial-image";
-    changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/v${version}";
+    changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
