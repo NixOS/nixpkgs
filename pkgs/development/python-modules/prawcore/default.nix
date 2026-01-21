@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "prawcore";
-  version = "2.4.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "prawcore";
     tag = "v${version}";
-    hash = "sha256-tECZRx6VgyiJDKHvj4Rf1sknFqUhz3sDFEsAMOeB7/g=";
+    hash = "sha256-R1nFKypVTKfFQxJ3zSrxwb4Wwat5nARc5MF026qMMyQ=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level communication layer for PRAW";
     homepage = "https://praw.readthedocs.org/";
-    changelog = "https://github.com/praw-dev/prawcore/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/praw-dev/prawcore/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
