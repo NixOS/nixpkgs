@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
   meta = {
     description = "Implementation of the rsync remote-delta algorithm";
     homepage = "https://librsync.sourceforge.net/";
