@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.18.0";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_language";
     inherit version;
-    hash = "sha256-dblTX2tCTJwI/h7118zkKTJZGoDac6HacsWR39xpxB4=";
+    hash = "sha256-O4j26r0cJBOhxskYy+QKIqXRRAGTAwlxfbtwmzU8bGQ=";
   };
 
   build-system = [ setuptools ];
