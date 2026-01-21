@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservicesbackup";
-  version = "9.2.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_recoveryservicesbackup";
     inherit version;
-    hash = "sha256-xAKz4ipsOHnfVrw34AYxQsM1LFECWZ/xAtGYJPGzKyk=";
+    hash = "sha256-DKw8a4cjBjWbvEdQHRhLcAhGzlSPk/nA9u99HRC3I+k=";
   };
 
   build-system = [ setuptools ];
