@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-webdav";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zefu8uvINBWo3b3LV5vyGaN5fGfnpi1FaMXILeK2pQg=";
+    hash = "sha256-PA0Er7CYWiwVbwtxn0uUN85KzTRmR9j2/uBDtekXx24=";
   };
 
   # Prevent circular dependency
