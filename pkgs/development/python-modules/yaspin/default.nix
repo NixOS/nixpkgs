@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yaspin";
-  version = "3.1.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pavdmyt";
     repo = "yaspin";
     tag = "v${version}";
-    hash = "sha256-4IWaAPqzGri7V8X2gL607F5GlWfIFDlBBpDwSe4sz9I=";
+    hash = "sha256-uHW0lSkmNYZh4OGCFgaiIoqhY6KFojSyyEezTNxYqMw=";
   };
 
   build-system = [ poetry-core ];
