@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   # NOTE: In case you wish to override, don't override version, override
   # `fullVersion`.
   version = builtins.elemAt (lib.splitString "-" finalAttrs.fullVersion) 1;
-  fullVersion = "R-4.34-202411201800";
+  fullVersion = "R-4.38-202512010920";
 
   hardeningDisable = [ "format" ];
 
@@ -23,17 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
     # equal on all linux systems as well as all darwin systems. Even though each
     # of these zip archives themselves contains a different hash.
     x86_64-linux.platform = "gtk-linux-x86_64";
-    x86_64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    x86_64-linux.hash = "sha256-XR3BfYlnF4/ZAVc1awoJwOVnVNf6bYMmedMsPYdcYnU=";
     aarch64-linux.platform = "gtk-linux-aarch64";
-    aarch64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    aarch64-linux.hash = "sha256-XR3BfYlnF4/ZAVc1awoJwOVnVNf6bYMmedMsPYdcYnU=";
     ppc64le-linux.platform = "gtk-linux-ppc64le";
-    ppc64le-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    ppc64le-linux.hash = "sha256-XR3BfYlnF4/ZAVc1awoJwOVnVNf6bYMmedMsPYdcYnU=";
     riscv64-linux.platform = "gtk-linux-riscv64";
-    riscv64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
+    riscv64-linux.hash = "sha256-XR3BfYlnF4/ZAVc1awoJwOVnVNf6bYMmedMsPYdcYnU=";
     x86_64-darwin.platform = "cocoa-macosx-x86_64";
-    x86_64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI=";
+    x86_64-darwin.hash = "sha256-UofSPPozhIiqmRW6/ZckgZZTUtEn/+CIWvrj2ieih5M=";
     aarch64-darwin.platform = "cocoa-macosx-aarch64";
-    aarch64-darwin.hash = "sha256-jvxmoRFGquYClPgMqWi2ylw26YiGSG5bONnM1PcjlTM=";
+    aarch64-darwin.hash = "sha256-Ko4yi1hTofn7mGk3ZFWMyFRA4JYLy0PRCEn0LwvVTV0=";
   };
   passthru.srcMetadata =
     finalAttrs.passthru.srcMetadataByPlatform.${stdenv.hostPlatform.system} or null;
