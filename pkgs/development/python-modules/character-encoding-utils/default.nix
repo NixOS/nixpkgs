@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "character-encoding-utils";
-  version = "0.0.9";
+  version = "0.0.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "character_encoding_utils";
     inherit version;
-    hash = "sha256-QxnXNerl7qncoBxhfC3G0ar+YprfBpn6pWnUKakNR+c=";
+    hash = "sha256-sOXdpO7c2EpbNbJK1WIYx/Xb5UGIMW8daw154V/NpU0=";
   };
 
   build-system = [ hatchling ];
