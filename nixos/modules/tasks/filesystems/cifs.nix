@@ -10,6 +10,7 @@ with lib;
 let
 
   inInitrd = config.boot.initrd.supportedFilesystems.cifs or false;
+  mount_cifs = "${lib.getBin pkgs.cifs-utils}/sbin/mount.cifs";
 
 in
 
@@ -29,10 +30,10 @@ in
     ];
 
     boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable) ''
-      copy_bin_and_libs ${pkgs.cifs-utils}/sbin/mount.cifs
+      copy_bin_and_libs ${mount_cifs}
     '';
 
-    boot.initrd.systemd.extraBin."mount.cifs" = mkIf inInitrd "${pkgs.cifs-utils}/sbin/mount.cifs";
+    boot.initrd.systemd.extraBin."mount.cifs" = mkIf inInitrd mount_cifs;
 
   };
 }
