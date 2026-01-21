@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pdbfixer";
-  version = "1.11";
+  version = "1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "pdbfixer";
     tag = "v${version}";
-    hash = "sha256-Xk3m2w1p3Wu4g6qKGOH679wkKT0LKZLgGn/ARn219fQ=";
+    hash = "sha256-X2P5cWmdvAjY9dMFB+R21advkdYizR8PmevMPR0RR0o=";
   };
 
   nativeBuildInputs = [
