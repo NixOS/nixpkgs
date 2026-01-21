@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
-  version = "0.6.3";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiosyncthing";
     tag = "v${version}";
-    hash = "sha256-vn8S2/kRW5C2Hbes9oLM4LGm1jWWK0zeLdujR14y6EI=";
+    hash = "sha256-0jx61zs6yQqAIwSOO1zCUOkoZES+K/POtIGoWzr29bI=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the Syncthing REST API";
     homepage = "https://github.com/zhulik/aiosyncthing";
-    changelog = "https://github.com/zhulik/aiosyncthing/releases/tag/v${version}";
+    changelog = "https://github.com/zhulik/aiosyncthing/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
