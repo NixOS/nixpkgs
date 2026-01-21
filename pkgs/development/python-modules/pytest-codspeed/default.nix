@@ -17,7 +17,7 @@ let
   instrument-hooks = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "instrument-hooks";
-    tag = "v${version}";
+    tag = "b003e5024d61cfb784d6ac6f3ffd7d61bf7b9ec9";
     hash = "sha256-JTSH4wOpOGJ97iV6sagiRUu8d3sKM2NJRXcB3NmozNQ=";
   };
 in
