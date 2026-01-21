@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "iniconfig";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OrvS4ws2cz/uePnH9zCPLQBQ6I8Ah/0lwmRfY8dz4cc=";
+    hash = "sha256-x2MVx32waGUNScW1YxR3SngE3xb+5EAsHxnW0V2MRzA=";
   };
 
   build-system = [ hatchling ];
