@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "python-xz";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oYjwQ26BFFXxvaYdzp2+bw/BQwM0v/n1r9DmaLs1R3Q=";
+    hash = "sha256-yNxRBweZ7p533dndIHoRzJFw6SmFQvgecYcHLg1UNHg=";
   };
 
   build-system = [ setuptools-scm ];
