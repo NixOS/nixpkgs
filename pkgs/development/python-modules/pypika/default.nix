@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   parameterized,
   unittestCheckHook,
   setuptools,
@@ -16,18 +15,9 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kayak";
     repo = "pypika";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gjHr4tWy1kL7IxOe5QmH0S/HB+MsF/IOIQcTu3yjv6c=";
   };
-
-  patches = [
-    # Fix ast deprecation warnings, https://github.com/HENNGE/arsenic/pull/160
-    (fetchpatch {
-      name = "ast-deprecation.patch";
-      url = "https://github.com/pyctrl/pypika/commit/e302e4d1c26242bcff61b50e0e8f157f181e1bc0.patch";
-      hash = "sha256-pbJwOE5xaAapMKdm1xsNrISbCzHIKuhCgA2lA0vB1T8=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
