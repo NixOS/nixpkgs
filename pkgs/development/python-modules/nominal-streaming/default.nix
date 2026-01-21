@@ -43,8 +43,8 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    patches = 
+    src = nominal-streaming-src;
+    patches = [ ];
     hash = "sha256-xjanEdZpX2kWJqi0dYXuvoJem9MBTWoU12uAzajsj84=";
   };
   # cargoDeps = rustPlatform.importCargoLock {
