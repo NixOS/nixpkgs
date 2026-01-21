@@ -20,21 +20,23 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gssapi";
   version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
-    repo = "python-${pname}";
-    tag = "v${version}";
+    repo = "python-gssapi";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A1y3PD+zycKxlZT2vZ9b9p8SMr+aZA62CIAUpi4eOvo=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython == 3.1.3" Cython
     substituteInPlace setup.py \
-      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5-c}"'
+      --replace-fail 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5-c}"'
   '';
 
   env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
@@ -70,8 +72,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gssapi" ];
 
   meta = {
-    homepage = "https://pypi.python.org/pypi/gssapi";
+    changelog = "https://github.com/pythongssapi/python-gssapi/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/pythongssapi/python-gssapi";
     description = "Python GSSAPI Wrapper";
     license = lib.licenses.mit;
   };
-}
+})
