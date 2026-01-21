@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "supabase";
-  version = "2.17.0";
+  version = "2.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
-    rev = "v${version}";
-    hash = "sha256-psfDs5BCtUjyPsfLwksNvzLmUKmYDvmxKIDPQE/NmQU=";
+    tag = "v${version}";
+    hash = "sha256-TRATa+lDRm2MDuARXfBRWnWYUak8i1fW7rr5ujWN8TY=";
   };
 
   build-system = [ poetry-core ];
