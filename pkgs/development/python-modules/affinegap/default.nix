@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "affinegap";
-  version = "1.12";
+  version = "2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "affinegap";
-    tag = "v${version}";
-    hash = "sha256-9eX41eoME5Vdtq+c04eQbMYnViy6QKOhKkafrkeMylI=";
+    tag = "pypideploy${version}";
+    hash = "sha256-TuydLF3YfeVIP2y2uDQH+oZ9Y2b325ZFEM0Fiu0Xhus=";
   };
 
   build-system = [
