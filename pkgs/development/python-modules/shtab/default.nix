@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.7.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "shtab";
     tag = "v${version}";
-    hash = "sha256-ngTAST+6lBek0PHvULmlJZAHVU49YN5+XAu5KEk6cIM=";
+    hash = "sha256-VK3+JLb9Lh+YHixMa1Hjm5bYJ9vSmMPIkN6c3DeHDo8=";
   };
 
   patches = [
