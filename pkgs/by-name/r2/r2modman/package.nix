@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.11";
+  version = "3.2.12";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cnaP5DbEqYEkTPd1QWNArvMMr7UbX/danXa7ISfPpc=";
+    hash = "sha256-ncGt5RwOjxLO9NUFlw0lGjO7CmIZrE7qthE1dqAV54M=";
   };
 
   missingHashes = ./missing-hashes.json;
