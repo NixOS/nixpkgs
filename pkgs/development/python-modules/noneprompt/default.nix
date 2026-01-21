@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "noneprompt";
-  version = "0.1.9";
+  version = "0.1.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M4uLuJqNIu818d7bOqfBsijPE5lzvcQ8X/w+72RFfbk=";
+    hash = "sha256-aCJpGPKhVDqjgMqtpcOArlyjj1cpInjFv9O3KJ8axts=";
   };
 
   build-system = [ poetry-core ];
