@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "5.0.0";
+  version = "6.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aBgMrRVAYr1bXZ/83UZPjeaTRBSyVGKugHsAuN+TRd4=";
+    hash = "sha256-L56cuVTnh3Iysshj9ySkSgbrmNnH691pkUh26Uh7lPg=";
   };
 
   pythonImportsCheck = [ "uritools" ];
