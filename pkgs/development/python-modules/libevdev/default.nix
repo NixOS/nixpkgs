@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "libevdev";
-  version = "0.12";
+  version = "0.13.1";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AulSYy7GwknLucZvb6AAEupEiwZgbHfNE5EzvC/kawg=";
+    hash = "sha256-3DNpzRQBdnueyxEXzWtz+rqQOOO9nhaVpxCp6dlBXo0=";
   };
 
   patches = [
