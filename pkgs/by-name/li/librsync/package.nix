@@ -28,6 +28,15 @@ stdenv.mkDerivation rec {
     popt
   ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ]
+  # Avoid cycle dependence between out and lib outputs on Darwin, by using bin
+  # instead of lib
+  ++ (if stdenv.hostPlatform.isDarwin then [ "bin" ] else [ "lib" ]);
+
   meta = {
     description = "Implementation of the rsync remote-delta algorithm";
     homepage = "https://librsync.sourceforge.net/";
