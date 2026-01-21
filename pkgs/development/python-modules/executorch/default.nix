@@ -85,6 +85,15 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           "CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)" \
           "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
+    ''
+    # Fix build with GCC>=15
+    + ''
+      substituteInPlace third-party/flatcc/include/flatcc/portable/grisu3_print.h \
+        --replace-fail \
+          'static char hexdigits[16] = "0123456789ABCDEF";' \
+          'static char hexdigits[17] = "0123456789ABCDEF";'
+
+      sed -i "1i #include <cstdint>" backends/apple/coreml/runtime/inmemoryfs/memory_buffer.hpp
     '';
 
   env = {
