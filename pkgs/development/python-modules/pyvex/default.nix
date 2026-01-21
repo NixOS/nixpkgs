@@ -5,22 +5,32 @@
   buildPythonPackage,
   buildPackages,
   cffi,
-  fetchPypi,
+  fetchFromGitHub,
   pycparser,
   setuptools,
+  scikit-build-core,
+  cmake,
+  ninja,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvex";
-  version = "9.2.154";
+  version = "9.2.197";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
+  src = fetchFromGitHub {
+    owner = "angr";
+    repo = "pyvex";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FRt+tCQLK2GFIwgCvUoRmxPGBryceJ+62tSK9WLMKQk=";
+    fetchSubmodules = true;
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    scikit-build-core
+  ];
 
   dependencies = [
     bitstring
@@ -30,7 +40,13 @@ buildPythonPackage (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    cffi
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
@@ -44,15 +60,13 @@ buildPythonPackage (finalAttrs: {
 
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
-    substituteInPlace pyvex_c/Makefile \
-      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
-  # No tests are available on PyPI, GitHub release has tests
-  # Switch to GitHub release after all angr parts are present
-  doCheck = false;
-
   pythonImportsCheck = [ "pyvex" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Python interface to libVEX and VEX IR";
