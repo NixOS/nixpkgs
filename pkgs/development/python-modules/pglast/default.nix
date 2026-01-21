@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "7.10";
+  version = "7.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AHJauP7dc0MEfhK8ZimUHKE5V/TC8t88XSri2gUnlsk=";
+    hash = "sha256-d67Xi7eMDlbxaaQYM/b9x85jqjgwuMdx/CYxBaiDR0U=";
   };
 
   build-system = [ setuptools ];
