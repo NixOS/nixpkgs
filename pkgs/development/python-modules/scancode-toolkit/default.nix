@@ -60,12 +60,12 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "32.4.1";
+  version = "32.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qZUILeB1lGv0V9Uq81/aOI9pJTtayfZH/O5kwNnpf28=";
+    hash = "sha256-WXAZCk0aRmKb1UU1ud95mZFHAMC9U+gDRd9w7TZTVSA=";
   };
 
   dontConfigure = true;
