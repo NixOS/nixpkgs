@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "2.0.0";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "pycapnp";
     tag = "v${version}";
-    hash = "sha256-SVeBRJMMR1Z8+S+QoiUKGRFGUPS/MlmWLi1qRcGcPoE=";
+    hash = "sha256-oRgO/FuNxNMSUla+jIypD/dAvFi27TkEfCHbqovhq9I=";
   };
 
   patches = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cython wrapping of the C++ Cap'n Proto library";
     homepage = "https://capnproto.github.io/pycapnp/";
-    changelog = "https://github.com/capnproto/pycapnp/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/capnproto/pycapnp/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ Liamolucko ];
   };
