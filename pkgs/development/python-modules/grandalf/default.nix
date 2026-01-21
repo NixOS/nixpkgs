@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "grandalf";
-  version = "0.7";
+  version = "0.55555";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bdcht";
     repo = "grandalf";
-    rev = "v${version}";
-    hash = "sha256-j2SvpQvDMfwoj2PAQSxzEIyIzzJ61Eb9wgetKyni6A4=";
+    tag = "v${version}";
+    hash = "sha256-/kPGblngJRQWF+k6UZF4YRko1dKJPRuqCy8c3QpfA3E=";
   };
 
   propagatedBuildInputs = [
