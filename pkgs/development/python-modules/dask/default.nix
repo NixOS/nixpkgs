@@ -41,21 +41,15 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.12.0";
+  version = "2026.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
+    hash = "sha256-PCxIryFPwoSQ4xUA2lM6cPVzgBvr6RYikxvpjLXxjwQ=";
   };
-
-  # https://github.com/dask/dask/issues/12043
-  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
-    substituteInPlace dask/dataframe/dask_expr/tests/_util.py \
-      --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
-  '';
 
   build-system = [
     setuptools
