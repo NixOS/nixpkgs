@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
-    "python"
     "db"
   ];
 
@@ -112,9 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
-
     mkdir -p $db/bin $db/share/kea
     mv $out/bin/kea-admin $db/bin/
     mv $out/share/kea/scripts $db/share/kea/
