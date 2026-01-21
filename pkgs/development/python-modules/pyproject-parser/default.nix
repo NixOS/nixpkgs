@@ -20,13 +20,13 @@
 }:
 buildPythonPackage rec {
   pname = "pyproject-parser";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyproject_parser";
     inherit version;
-    hash = "sha256-/x3bXUJsbYs4rXPNotXK8/VohSy04M+Gk0XInoyg+3Y=";
+    hash = "sha256-QEe9miURXkABmeZyzZ2Pi6QF2BSNZadsvzr7z3fpZuI=";
   };
 
   build-system = [
