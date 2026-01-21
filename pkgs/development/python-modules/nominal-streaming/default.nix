@@ -7,6 +7,7 @@
   rustPlatform,
   setuptools,
   typing-extensions,
+  openssl,
   uv,
 }:
 let
@@ -35,6 +36,11 @@ buildPythonPackage rec {
     cp ${src}/Cargo.lock ./
     runHook postPatch
   '';
+
+  env = {
+    CARGO_TARGET_DIR = "target";
+    OPENSSL_NO_VENDOR = "1";
+  };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
@@ -65,7 +71,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ]);
 
-  buildInputs = [ ];
+  buildInputs = [ openssl ];
 
   dependencies = [
     python-dateutil
