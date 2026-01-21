@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "eval_type_backport";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3DV2xMXRImkl1kyvVLTDAQiRPPSnjBRHHTl1S9Usjag=";
   };
 
