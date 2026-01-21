@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "bubop";
-  version = "0.1.12";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "bubop";
-    rev = "v${version}";
-    hash = "sha256-p4Mv73oX5bsYKby7l0nGon89KyAMIUhDAEKSTNB++Cw=";
+    tag = "v${version}";
+    hash = "sha256-NXA3UDOkCoj4dm3UO/X0w2Mpx4bw3yFO6oyOzsPgtrU=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bergercookie's Useful Bits Of Python; helper libraries for Bergercookie's programs";
     homepage = "https://github.com/bergercookie/bubop";
-    changelog = "https://github.com/bergercookie/bubop/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bergercookie/bubop/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
