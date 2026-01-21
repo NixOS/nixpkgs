@@ -41,6 +41,7 @@ appimageTools.wrapType2 rec {
     description = "Markdown editor for writing academic texts and taking notes";
     homepage = "https://www.zettlr.com";
     platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ maj0e ];
     license = lib.licenses.gpl3;
     mainProgram = "zettlr";
   };
