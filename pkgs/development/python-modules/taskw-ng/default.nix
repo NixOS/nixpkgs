@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "taskw-ng";
-  version = "0.2.7";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "taskw-ng";
-    tag = "v${version}";
-    hash = "sha256-KxXLSDvUclQlNbMR+Zzl6tgBrH2QxqjLVoyBK3OiKVU=";
+    tag = version;
+    hash = "sha256-hTZi6Y3jVlBI+CGQtHZ4PBU5rjEjE2l8o2rusCkEma0=";
   };
 
   pythonRelaxDeps = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with the Taskwarrior API";
     homepage = "https://github.com/bergercookie/taskw-ng";
-    changelog = "https://github.com/bergercookie/taskw-ng/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/bergercookie/taskw-ng/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
