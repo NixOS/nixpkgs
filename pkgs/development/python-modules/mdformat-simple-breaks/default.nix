@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-simple-breaks";
-  version = "0.0.1";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "csala";
     repo = "mdformat-simple-breaks";
     tag = "v${version}";
-    hash = "sha256-4lJHB4r9lI2uGJ/BmFFc92sumTRKBBwiRmGBdQkzfd0=";
+    hash = "sha256-w0qPxIlCFMvs7p2Lya/ATkQN9wVt8ipsePZgonN/qpc=";
   };
 
   nativeBuildInputs = [ flit-core ];
