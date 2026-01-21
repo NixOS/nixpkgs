@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shared";
-  version = "0.0.9";
+  version = "0.0.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyrustic";
     repo = "shared";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-roczP6WxpZ1AHjaD7XyjxYgb7hsP8a7hC6A3SYPNobQ=";
+    tag = version;
+    hash = "sha256-5O/eaVL83gWoh0msparEjcTU+5K532f495OVwkoyJO8=";
   };
 
   build-system = [ setuptools ];
