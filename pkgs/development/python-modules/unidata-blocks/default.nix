@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "unidata-blocks";
-  version = "0.0.18";
+  version = "0.0.24";
   pyproject = true;
 
   src = fetchPypi {
     pname = "unidata_blocks";
     inherit version;
-    hash = "sha256-ptmkFJKRXXPE+EE5sXR562rChzQr/WOWZoQno6EFQ8U=";
+    hash = "sha256-yQJW4u0v9TrYNPOeEqhOnCcuyrgpj4Qy1ayLBeCgp2E=";
   };
 
   build-system = [ hatchling ];
