@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "qasync";
-  version = "0.27.1";
+  version = "0.28.0";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "CabbageDevelopment";
     repo = "qasync";
     tag = "v${version}";
-    hash = "sha256-oXzwilhJ1PhodQpOZjnV9gFuoDy/zXWva9LhhK3T00g=";
+    hash = "sha256-eQJ1Yszl95IycggSyWcD3opAO1rfBdNp14y8eHDMJY4=";
   };
 
   postPatch = ''
