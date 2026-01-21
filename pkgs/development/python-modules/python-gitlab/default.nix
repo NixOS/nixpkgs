@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_gitlab";
     inherit version;
-    hash = "sha256-5Nk0Qw9k78CeYgi3gsYcwKM4lSd2XgP/vvF/QyPc5EE=";
+    hash = "sha256-HDTaPeQK0hZ114gTb3PSCmBklRPmkvUsWpcgQ025fEY=";
   };
 
   build-system = [ setuptools ];
