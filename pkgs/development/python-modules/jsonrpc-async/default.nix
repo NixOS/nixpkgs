@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-async";
-    rev = version;
-    hash = "sha256-KOnycsOZFDEVj8CJDwGbdtbOpMPQMVdrXbHG0fzr9PI=";
+    tag = version;
+    hash = "sha256-WcO2mj5QYZTMnFTNo1ABgpJPxM+GREVIf+z9viFDJHM=";
   };
 
   patches = [
