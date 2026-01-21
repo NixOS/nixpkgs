@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "py7zr";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miurahr";
     repo = "py7zr";
     tag = "v${version}";
-    hash = "sha256-uV4zBQZlHfHgM/NiVSjI5I9wJRk9i4ihJn4B2R6XRuM=";
+    hash = "sha256-lWZni9yhS5otWL1cyi8qZx2JLExbDiTPTadKKnDB2Ds=";
   };
 
   build-system = [
