@@ -22,11 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-EY5jAzcAHY4lmGsitVFtFMijEfAaSCifCjkdJhU2N1g=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools >= 36.4, < 72.2" setuptools
-  '';
-
   build-system = [
     cython
     pkgconfig
