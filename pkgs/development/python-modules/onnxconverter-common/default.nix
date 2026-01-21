@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "onnxconverter-common";
-  version = "0.16.0";
+  version = "1.16.0";
 
   pyproject = true;
 
