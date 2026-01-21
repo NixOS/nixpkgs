@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "tracerite";
-  version = "1.1.3";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";
     tag = "v${version}";
-    hash = "sha256-T210vRXFWlTs5ke13DVvZEVsonXiT+g6xSI63+DxLXc=";
+    hash = "sha256-UXIQc5rXVaZuZj5xu2X9H38vKWAM+AoKrKfudovUhwA=";
   };
 
   build-system = [ setuptools-scm ];
