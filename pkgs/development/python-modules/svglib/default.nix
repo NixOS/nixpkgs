@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "svglib";
-  version = "1.5.1";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Oudl06lAnuYMD7TSTC3raoBheqknBU9bzX/JjwaV5Yc=";
+    hash = "sha256-TDiidKdE7w0Wd/VdXWL8D7eYgZ+BPlKHKnluYVdBcz0=";
   };
 
   propagatedBuildInputs = [
