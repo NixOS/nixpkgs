@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pulp";
-  version = "2.8.0";
+  version = "3.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "pulp";
     tag = version;
-    hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
+    hash = "sha256-b9qTJqSC8G3jxcqS4mkQ1gOLLab+YzYaNClRwD6I/hk=";
   };
 
   postPatch = ''
