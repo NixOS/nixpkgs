@@ -121,6 +121,11 @@ module.exports = async ({ github, context, core, dry }) => {
       return []
     }
 
+    // Forks don't have NixOS teams, return empty list
+    if (isFork) {
+      return []
+    }
+
     if (!members[team_slug]) {
       members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
         org: context.repo.owner,
