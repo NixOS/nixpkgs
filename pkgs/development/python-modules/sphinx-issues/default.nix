@@ -6,14 +6,14 @@
 }:
 buildPythonPackage rec {
   pname = "sphinx-issues";
-  version = "3.0.1";
+  version = "5.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "sphinx-issues";
-    rev = version;
-    sha256 = "1lns6isq9kwcw8z4jwgy927f7idx9srvri5adaa5zmypw5x47hha";
+    tag = version;
+    sha256 = "sha256-/nc5gtZbE1ziMPWIkZTkevMfVkNtJYL/b5QLDeMhzUs=";
   };
 
   pythonImportsCheck = [ "sphinx_issues" ];
