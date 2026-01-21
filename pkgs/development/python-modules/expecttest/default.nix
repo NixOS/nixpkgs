@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "expecttest";
   version = "0.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "expecttest";
-    tag = "v${version}"; # no tags
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/BMaQD3ZgYiprRYZ/fIlW7mStyFGzsjqup62tegBP7Y=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage {
     homepage = "https://github.com/pytorch/expecttest";
     platforms = lib.platforms.unix;
   };
-}
+})
