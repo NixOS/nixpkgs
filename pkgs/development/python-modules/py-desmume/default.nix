@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "py-desmume";
-  version = "0.0.7";
+  version = "0.0.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "py-desmume";
     tag = version;
-    hash = "sha256-aH7f/BI89VLUGqwA8Y7ThSpmKxWffYRETT/+EjPVTg8=";
+    hash = "sha256-AlejNgCgncZGCS/xOb3FZiLuEtMsMcprnhnM759aKgY=";
     fetchSubmodules = true;
   };
 
