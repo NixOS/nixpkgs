@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "shaperglot";
-  version = "0.6.4";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
     tag = "v${version}";
-    hash = "sha256-O6z7TJpC54QkqX5/G1HKSvaDYty7B9BnCQ4FpsLsEMs=";
+    hash = "sha256-Jh2/Rr7bIPFiblUZFS8KiQtMwmtMuOGCSV2w7LMCbq8=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to test OpenType fonts for language support";
     homepage = "https://github.com/googlefonts/shaperglot";
-    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
     mainProgram = "shaperglot";
