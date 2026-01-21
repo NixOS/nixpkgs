@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.3.1";
+  version = "4.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
     tag = version;
-    hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
+    hash = "sha256-mGX61fAbFwheamOgK5lq/A/3FmTCuv0UfAlhOUwX2zg=";
   };
 
   patches = [ ./httpx-compat.patch ];
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
+    changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${src.tag}";
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = lib.licenses.mit;
