@@ -10,13 +10,13 @@
 }:
 buildPythonPackage rec {
   pname = "solidpython2";
-  version = "2.1.0";
+  version = "2.1.3";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "jeff-dh";
     repo = "SolidPython";
-    rev = "v${version}";
-    hash = "sha256-Tq3hrsC2MmueCqChk6mY/u/pCjF/pFuU2o3K+qw7ImY=";
+    tag = "v${version}";
+    hash = "sha256-3A1vYqIHFUiOH2cEx/XSOien3PmNpMAhLOe3T1yubx4=";
   };
 
   # NOTE: this patch makes tests runnable outside the source-tree
