@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchpatch2,
   makeWrapper,
+  nixosTests,
 }:
 let
   python = python3;
@@ -197,6 +198,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
 
   passthru = {
     inherit python;
+    tests = nixosTests.pdfding;
     frontend = callPackage ./frontend.nix { };
     updateScript = ./update.sh;
   };

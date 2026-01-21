@@ -1213,6 +1213,10 @@ in
   pass-secret-service = runTest ./pass-secret-service.nix;
   password-option-override-ordering = runTest ./password-option-override-ordering.nix;
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
+  pdfding = import ./web-apps/pdfding {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   pdns-recursor = runTest ./pdns-recursor.nix;
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
