@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.4.4";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
     tag = version;
-    hash = "sha256-6y55JJ3R/JEEneM10UPHIDpSopaybY5XHJPiU+77ke4=";
+    hash = "sha256-Jg9GNw93uA+Lg7/kiQb+tfXXuoggQI0Nkz7cwRqq8FQ=";
   };
 
   postPatch = ''
@@ -134,7 +134,7 @@ buildPythonPackage rec {
     description = "Python package to read and write geospatial raster data";
     mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
-    changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/rasterio/rasterio/blob/${src.tag}/CHANGES.txt";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
