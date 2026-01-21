@@ -21,13 +21,13 @@
   testers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apprise";
   version = "1.9.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-L3PMHgJk+xGf25t83oLo/eQKD1MayIXYxvDPD24TrsI=";
   };
 
@@ -68,16 +68,16 @@ buildPythonPackage rec {
   passthru = {
     tests.version = testers.testVersion {
       package = apprise;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
-    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "apprise";
   };
-}
+})
