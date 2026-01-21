@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "orderedmultidict";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BAcLu16HKRzJv6Ud9BNnf68hQcc8YdKl97Jr6jzYgq0=";
+    hash = "sha256-FqeuhDLgLMmH0tbVry31k4JY+HyHBnXHPud6CSDm9KY=";
   };
 
   build-system = [ setuptools ];
