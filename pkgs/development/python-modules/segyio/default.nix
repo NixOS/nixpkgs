@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "segyio";
-  version = "1.9.13";
+  version = "1.9.14";
   pyproject = false; # Built with cmake
 
   patches = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "equinor";
     repo = "segyio";
     tag = "v${version}";
-    hash = "sha256-uVQ5cs9EPGUTSbaclLjFDwnbJevtv6ie94FLi+9vd94=";
+    hash = "sha256-Gprxxz4wUDrThCghW1Z1dHTjeJCrcDxuwguVC+i+ydc=";
   };
 
   nativeBuildInputs = [
