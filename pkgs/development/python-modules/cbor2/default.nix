@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.7.0";
+  version = "5.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P22EP0200OxQHEZFPCKk++uxq/tbdA4byrNMYVzXQGs=";
+    hash = "sha256-sZw1/K6WiKwB73W61dsnMAwlN+tO4A7QfgXYRWoNSTE=";
   };
 
   build-system = [
