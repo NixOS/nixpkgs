@@ -357,6 +357,38 @@ def get_build_image_variants(
     return j
 
 
+def get_nixpkgs_path_from_build_attr(
+    build_attr: BuildAttr,
+    instantiate_flags: Args | None = None,
+) -> Path | None:
+    path = (
+        f'"{build_attr.path.resolve()}"'
+        if isinstance(build_attr.path, Path)
+        else build_attr.path
+    )
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import {path};
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              set.{build_attr.to_attr("pkgs.path")}
+            """),
+            *dict_to_flags(instantiate_flags),
+        ],
+        stdout=PIPE,
+        check=False,
+    )
+    if r.returncode:
+        return None
+    return Path(r.stdout.strip())
+
+
 def get_build_image_variants_flake(
     flake: Flake,
     eval_flags: Args | None = None,
