@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-gfm";
-  version = "0.3.6";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-gfm";
     tag = version;
-    hash = "sha256-c1jJwyTL8IgQnIAJFoPSuJ8VEYgnQ4slZyV0bHlUHLQ=";
+    hash = "sha256-Vijt5P3KRL4jkU8AI2lAsJkvFne/l3utUkjHUs8PQHI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
