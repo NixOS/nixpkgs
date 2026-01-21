@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "cloudsmith-api";
-  version = "2.0.22";
+  version = "2.0.23";
   format = "wheel";
 
   src = fetchPypi {
     pname = "cloudsmith_api";
     inherit format version;
-    hash = "sha256-FZcDjrK5+oHC3dVBSXf+txW6hofP6OkmkjO4NJF05YQ=";
+    hash = "sha256-CfNgISONtTrabCoNUzHbMMVKDwGj8fdmSwh1FfzH10g=";
   };
 
   propagatedBuildInputs = [
