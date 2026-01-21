@@ -15,11 +15,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-AFOgcYPQaUg70GJhS8YcuAgMV32mHN9+ExsGThoa8Yg=";
   };
 
-  patches = [
-    # I am not 100% sure that this is ok, but it breaks repeatable builds.
-    ./remove-pot-creation-date.patch
-  ];
-
   patchPhase = ''
     sed -e "s@= /usr/bin/@= @g" \
       -e "s@/usr/@$out/@" \
