@@ -22,7 +22,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.0.dev47-unstable-2026-01-12";
+  version = "3.0.0.dev47";
   pyproject = true;
 
   src = fetchFromGitHub {
