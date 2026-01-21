@@ -4,6 +4,7 @@
   buildPythonPackage,
   c-ares,
   cffi,
+  cmake,
   fetchPypi,
   idna,
   setuptools,
@@ -19,6 +20,9 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-WjwknIMEMmMUOYFfmoGEY0FvKoy9semI54dX3prnUIE=";
   };
+
+  nativeBuildInputs = [ cmake ];
+  dontUseCmakeConfigure = true;
 
   build-system = [ setuptools ];
 
