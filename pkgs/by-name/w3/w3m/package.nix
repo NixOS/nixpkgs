@@ -115,6 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./configure --replace /usr /no-such-path
   '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   enableParallelBuilding = false;
 
   passthru.tests.version = testers.testVersion {
