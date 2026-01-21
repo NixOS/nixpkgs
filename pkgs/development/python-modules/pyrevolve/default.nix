@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyrevolve";
-  version = "2.2.6";
+  version = "2.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-jjiFOlxXjaa4L4IEtojeeS0jx4GsftAeIGBpJLhUcY4=";
+    hash = "sha256-JNK/+9Fl9CKmRSdkmvN6XENrldFuX1ybIwYOMbGO7uI=";
   };
 
   postPatch = ''
