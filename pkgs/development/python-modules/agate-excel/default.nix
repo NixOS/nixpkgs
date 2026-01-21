@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "agate-excel";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KEJmGMkHRxEebVZumD2Djx4vrmQeppcNessOnUs4QJE=";
+    hash = "sha256-7tHcYjnw6Wcg2WLcG9+0SW4ZaHMyyCf9ix5YepF+ogI=";
   };
 
   propagatedBuildInputs = [
