@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "distorm3";
-  version = "3.5.2b";
+  version = "3.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
     tag = version;
-    hash = "sha256-2ftEV3TMS3HT7f96k+Pwt3Mm31fVEXcHpcbbz05jycU=";
+    hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
   };
 
   build-system = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "Disassembler library for x86/AMD64";
     homepage = "https://github.com/gdabah/distorm";
-    changelog = "https://github.com/gdabah/distorm/releases/tag/${version}";
+    changelog = "https://github.com/gdabah/distorm/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
