@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rich-argparse";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hamdanal";
     repo = "rich-argparse";
     tag = "v${version}";
-    hash = "sha256-gLXFiWgGMDOUbTyoSgTr0XfotVfDxwMqPdsfE4KHzXM=";
+    hash = "sha256-gzPz8vRxZyZ6Du2r4PdqHjeeLkXZV8eDdX0d+TMrVUc=";
   };
 
   build-system = [ hatchling ];
