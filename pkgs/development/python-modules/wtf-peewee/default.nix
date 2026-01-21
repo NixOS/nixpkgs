@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "wtf-peewee";
-  version = "3.0.6";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gZZEam46tk8SJ/ulqKsxvoF3X3PYGfdfyv7P1cDAC5I=";
+    hash = "sha256-Y2eVVl0Tg5K1Iw3lE6icxq0AJKdqfIBt20wQdSO19Bo=";
   };
 
   nativeBuildInputs = [ setuptools ];
