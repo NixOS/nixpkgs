@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
     tag = version;
-    hash = "sha256-kzEuICajlV8mgD0YLhwFJaDQVxYZo9jv3sr/r/P0VG0=";
+    hash = "sha256-aonL08avVZlpGQ/FCZnrsPMvu1lbhRiadzKf/oPndZk=";
   };
 
   postPatch = ''
