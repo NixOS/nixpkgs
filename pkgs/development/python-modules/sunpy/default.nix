@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "7.0.2";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "sunpy";
     repo = "sunpy";
     tag = "v${version}";
-    hash = "sha256-1LT6Dr9OZYIZkOICSYD8lt5v3Gn1gZGN4GWeJL6IH5w=";
+    hash = "sha256-FeKmg3dZfbbjt1lDliF4uXf8PvM3J5HWtYqKRriJ4l0=";
   };
 
   # As of 2025-10-15, this requires numpy >=1.25.0,<2.3.
