@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "junitparser";
-  version = "3.2.0";
+  version = "4.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "weiwei";
     repo = "junitparser";
-    rev = version;
-    hash = "sha256-efP9t5eto6bcjk33wpJmunLlPH7wUwAa6/OjjYG/fgM=";
+    tag = version;
+    hash = "sha256-+81n5xW9SEE+NZbYKxXu6xupoq4/haUZokVardh43iM=";
   };
 
   nativeCheckInputs = [
