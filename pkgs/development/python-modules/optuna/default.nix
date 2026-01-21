@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.5.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${version}";
-    hash = "sha256-qaCOpqKRepm/a1Nh98PV6RcRkadLK5E429pn1zaWQDA=";
+    hash = "sha256-SbEmJ4V4pyxMUx3GPMqBUDLq4AslwichbZNmNwmNm0o=";
   };
 
   build-system = [
