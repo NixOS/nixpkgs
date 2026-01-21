@@ -77,6 +77,7 @@ callPackage ./generic.nix {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       rafaelrc
+      sandarukasa
     ];
     platforms = [ "x86_64-linux" ];
   };
