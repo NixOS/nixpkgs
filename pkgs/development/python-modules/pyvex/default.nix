@@ -5,13 +5,14 @@
   buildPythonPackage,
   buildPackages,
   cffi,
-  fetchPypi,
+  fetchFromGitHub,
   pycparser,
   pythonOlder,
   setuptools,
   scikit-build-core,
   cmake,
   ninja,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,12 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-obM8FsChD5ZR8O8CNgKsqC+x9+1WjFMscUUtLi91oQA=";
+  src = fetchFromGitHub {
+    owner = "angr";
+    repo = "pyvex";
+    tag = "v${version}";
+    hash = "sha256-65ZjHXxYGfZPUFG1eloGa51CSyo4XTVMs3O3n8le69Q=";
+    fetchSubmodules = true;
   };
 
   build-system = [
@@ -61,11 +65,11 @@ buildPythonPackage rec {
     export CC=${stdenv.cc.targetPrefix}cc
   '';
 
-  # No tests are available on PyPI, GitHub release has tests
-  # Switch to GitHub release after all angr parts are present
-  doCheck = false;
-
   pythonImportsCheck = [ "pyvex" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Python interface to libVEX and VEX IR";
