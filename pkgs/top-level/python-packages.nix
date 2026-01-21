@@ -21052,8 +21052,6 @@ self: super: with self; {
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
-  ypy-websocket = callPackage ../development/python-modules/ypy-websocket { };
-
   yq = callPackage ../development/python-modules/yq { inherit (pkgs) jq; };
 
   yt-dlp = toPythonModule (pkgs.yt-dlp.override { python3Packages = self; });
