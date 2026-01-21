@@ -1,54 +1,56 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   python-dateutil,
   types-python-dateutil,
+  tzdata,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
   pytz,
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arrow";
   version = "1.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7QzAUOmAAbh3noTUYbAJjErFl+iHBKZVWCsh0RblJtc=";
+  src = fetchFromGitHub {
+    owner = "crsmithdev";
+    repo = "arrow";
+    tag = finalAttrs.version;
+    hash = "sha256-nK78Lo+7eitB+RS7BZkM+BNudviirAowc4a1uQdLC0w=";
   };
 
-  postPatch = ''
-    # no coverage reports
-    sed -i "/addopts/d" tox.ini
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [ flit-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     types-python-dateutil
+    tzdata
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     pytz
     simplejson
   ];
 
   # ParserError: Could not parse timezone expression "America/Nuuk"
-  disabledTests = [ "test_parse_tz_name_zzz" ];
+  #disabledTests = [ "test_parse_tz_name_zzz" ];
 
   pythonImportsCheck = [ "arrow" ];
 
   meta = {
+    changelog = "https://github.com/arrow-py/arrow/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for date manipulation";
     homepage = "https://github.com/crsmithdev/arrow";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})
