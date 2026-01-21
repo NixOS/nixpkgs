@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \
       quickemu
+
+    substituteInPlace quickemu \
+      --replace-fail 'readonly VERSION="4.9.8"' 'readonly VERSION="${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
