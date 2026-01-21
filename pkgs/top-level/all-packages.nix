@@ -10208,10 +10208,6 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
-  chuck = callPackage ../applications/audio/chuck {
-    inherit (darwin) DarwinTools;
-  };
-
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   cni = callPackage ../applications/networking/cluster/cni { };
