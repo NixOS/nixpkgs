@@ -59,6 +59,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "gast"
+    "beniget"
+  ];
+
   pythonImportsCheck = [
     "pythran"
     "pythran.backend"
