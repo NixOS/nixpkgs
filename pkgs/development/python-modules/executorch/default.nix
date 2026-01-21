@@ -46,7 +46,7 @@
   writableTmpDirAsHomeHook,
   yaspin,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "executorch";
   version = "1.0.1";
   pyproject = true;
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "executorch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
 
     # The ExecuTorch repo must be cloned into a directory named exactly `executorch`.
     # See https://github.com/pytorch/executorch/issues/6475 for progress on a fix for this restriction.
@@ -63,7 +63,6 @@ buildPythonPackage rec {
     fetchSubmodules = true;
     hash = "sha256-h+nmipFDO/cdPTQXrjM5EkH//wHKBAvlDIp6SBbGN/8=";
   };
-  # src = /home/gaetan/nix/nixpkgs-packages/executorch;
 
   postPatch =
     # Hardcode the default flatc binary path to the nixpkgs flatc
@@ -89,7 +88,7 @@ buildPythonPackage rec {
     '';
 
   env = {
-    BUILD_VERSION = version;
+    BUILD_VERSION = finalAttrs.version;
   };
 
   build-system = [
@@ -194,7 +193,7 @@ buildPythonPackage rec {
   meta = {
     description = "On-device AI across mobile, embedded and edge for PyTorch";
     homepage = "https://github.com/pytorch/executorch";
-    changelog = "https://github.com/pytorch/executorch/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/executorch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
@@ -204,4 +203,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})
