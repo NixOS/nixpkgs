@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "geoip2";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7j+H8M6TJetkhP4Yy9l3GgPQorrR3RVvo1hPr6Vi05o=";
+    hash = "sha256-bJ3tGVP46xYEPtCo6iDm6VJOp7Zet0VyThJJCspE7wA=";
   };
 
   build-system = [
