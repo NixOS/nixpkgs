@@ -25,19 +25,16 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.7.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-IOnkns0TBZjxyjih2FCQ4aYAFHucAvpvFdactT2Wj9o=";
+    hash = "sha256-m8y7O0Dj3hA1H49QaOEF0PQIOxpl+ge2Y0+8QBpih/0=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.0.10,<3.2.0" "Cython>=3.0.10"
-
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
