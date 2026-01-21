@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "jishaku";
-  version = "2.6.0";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gorialis";
     repo = "jishaku";
     tag = version;
-    hash = "sha256-+J8Tr8jPN9K3eHLOuJTaP3We5A1kiyn9/yI1KChbuMY=";
+    hash = "sha256-8kSdzrut7LYjglpHc5dToOIQTrPsW4lVAeIWY4rzdmU=";
   };
 
   patches = [
