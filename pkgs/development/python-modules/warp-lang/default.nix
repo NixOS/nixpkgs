@@ -39,7 +39,7 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.10.0";
+  version = "1.11.0";
 
   libmathdx = callPackage ./libmathdx.nix { };
 in
@@ -57,7 +57,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-9OEyYdVq+/SzxHfNT+sa/YeBKklaUfpKUiJZuiuzxhQ=";
+    hash = "sha256-wV4F6E4l0lfPB8zk/XhmdMNk649j5aJelW/DVu2R5mM=";
   };
 
   patches = lib.optionals standaloneSupport [
@@ -314,7 +314,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } {
       JAX and Paddle.
     '';
     homepage = "https://github.com/NVIDIA/warp";
-    changelog = "https://github.com/NVIDIA/warp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/NVIDIA/warp/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [ yzx9 ];
