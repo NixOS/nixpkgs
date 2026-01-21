@@ -1,10 +1,12 @@
 {
+  backports-zstd,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   typing-extensions,
   zstd-c,
 }:
@@ -22,24 +24,19 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # pyzst specifies setuptools<74 because 74+ drops `distutils.msvc9compiler`,
-    # required for Python 3.9 under Windows
-    substituteInPlace pyproject.toml \
-        --replace-fail '"setuptools>=64,<74"' '"setuptools"'
-
     # pyzst needs a copy of upstream zstd's license
     ln -s ${zstd-c.src}/LICENSE zstd
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.13") [
+  dependencies = [
+    backports-zstd
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
   ];
 
