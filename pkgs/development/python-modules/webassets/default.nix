@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "webassets";
-  version = "2.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FnEyM3Z3yM7clwUJD21I2j+yYsjgsnc7KfM1LwUBgc0=";
+    hash = "sha256-BSDl/W+8wBL0hv78YblmR02o/Bs1sFaansLLB4LxYHo=";
   };
 
   patches = [
