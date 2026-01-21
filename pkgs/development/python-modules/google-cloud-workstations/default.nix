@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-workstations";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_workstations";
     inherit version;
-    hash = "sha256-/CwdmF9fSTDPXbWTq3o+ZaWvgd/F2wVB7zboSOQ7+GY=";
+    hash = "sha256-poGhvPGpD+qOFacXsSqwaki5EZaTMQpAoXh7X0kqUsc=";
   };
 
   build-system = [ setuptools ];
