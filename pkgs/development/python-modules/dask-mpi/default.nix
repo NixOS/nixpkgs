@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dask-mpi";
-  version = "2022.4.0";
+  version = "2025.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CgTx19NaBs3/UGWTMw1EFOokLJFySYzhkfV0LqxJnhc=";
+    hash = "sha256-YxQOdPrILlB5jlfn/b3SVKUTg87lyjeqazRbGHF1g8A=";
   };
 
   patches = [
