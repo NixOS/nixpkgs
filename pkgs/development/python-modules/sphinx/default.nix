@@ -31,8 +31,6 @@
 
   # check phase
   defusedxml,
-  filelock,
-  html5lib,
   pytestCheckHook,
   pytest-xdist,
   typing-extensions,
@@ -91,8 +89,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     defusedxml
-    filelock
-    html5lib
     pytestCheckHook
     pytest-xdist
     typing-extensions
