@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyadjoint-ad";
-  version = "2025.10.0";
+  version = "2025.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfin-adjoint";
     repo = "pyadjoint";
-    tag = finalAttrs.version;
-    hash = "sha256-caW2X4q0mHnD8CEh5jjelD4xBth/R/8/P3m0tTeO/LQ=";
+    tag = version;
+    hash = "sha256-UI1eRB9hy4lb/s18NjaAyjH3HvDwRbRzk0ZuWxf1Uuc=";
   };
 
   build-system = [
