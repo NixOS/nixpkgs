@@ -11,7 +11,7 @@
   python,
   radicale,
   recurring-ical-events,
-  requests,
+  niquests,
   hatchling,
   hatch-vcs,
   proxy-py,
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.2.1";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-FsIF4BcwAUyYw8J7o4j4CnSd8eIc1Yd5WtxErC6RZ7Y=";
+    hash = "sha256-v+r52YBrtE/FgUxOQoN0uLDmDOjJM7OvKQE1vZ49F+A=";
   };
 
   build-system = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   dependencies = [
     dnspython
     lxml
-    requests
+    niquests
     icalendar
     icalendar-searcher
     recurring-ical-events
