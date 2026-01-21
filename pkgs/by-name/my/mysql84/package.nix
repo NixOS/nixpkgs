@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.7";
+  version = "8.4.8";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wL8zqUzbkI8UmuoHl6/7GxOSYszw4Ll4ehckYgdULmk=";
+    hash = "sha256-vp2Wzfh/J2lSos3ZYPEGuWCohg5GwRXtOcG18uA4eiA=";
   };
 
   nativeBuildInputs = [
