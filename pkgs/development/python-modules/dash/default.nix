@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8LR0iNc8lJBKzbJuvZ8jzta1G3TbQ9yIBSXFvvyeqmI=";
   };
 
