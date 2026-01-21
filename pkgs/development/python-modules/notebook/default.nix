@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "7.5.0";
+  version = "7.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook";
     tag = "v${version}";
-    hash = "sha256-EKfe3uqIwb+kKmSuU7aIinNj1nkRaBvg3liV6RiR3xc=";
+    hash = "sha256-7/t5sJAmR8RJH+bJzU2WHhs7VG62+uJZ2Slo7XIK3Rc=";
   };
 
   postPatch = ''
