@@ -103,10 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     gettext
-    nasm
     orc
     libshout
     glib
+  ]
+  # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/bb7069bd6fff80e8599d6e79f3f000b83dbce4d6/subprojects/gst-plugins-good/meson.build#L435-443
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    nasm
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
@@ -208,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "asm" true)
   ]
   ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"

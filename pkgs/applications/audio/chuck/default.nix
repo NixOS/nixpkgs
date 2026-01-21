@@ -12,12 +12,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2.0";
+  version = "1.5.5.5";
   pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
+    sha256 = "sha256-fxbTW0wcKn1q6psRhhCe6pHFJTPFfZUTCmlGr7gFoRU=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libsndfile ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
-
-  patches = [ ./darwin-limits.patch ];
 
   makeFlags = [
     "-C src"

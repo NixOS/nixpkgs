@@ -14,6 +14,23 @@ with haskellLib;
     else
       super.network;
 
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # See configuration-nix.nix, where iserv-proxy and network are handled.
+  # On Windows, network depends on temporary (see above), which depends on random, which depends on splitmix.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) random splitmix temporary; }
+    )
+    random
+    splitmix
+    temporary
+    ;
+
   # https://github.com/fpco/streaming-commons/pull/84
   streaming-commons = appendPatch (fetchpatch {
     name = "fix-headers-case.patch";

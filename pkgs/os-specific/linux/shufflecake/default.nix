@@ -8,7 +8,8 @@
   lvm2,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "shufflecake";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "shufflecake";
   version = "0.5.5";
 
   src = fetchFromGitea {

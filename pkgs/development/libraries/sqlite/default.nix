@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
+  tcl,
   zlib,
   readline,
   ncurses,
@@ -27,17 +28,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.51.1";
+  version = "3.51.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-TyRFzXBHlyTTKtAV7H/Tf7tvYTABO9S/vIDDK+tCt+A=";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+    hash = "sha256-hREPdi1QeUFNmd1deRe8P/fgWHbmzL0T2ElqOBfyCCk=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-cygHoBzJ/K8ftBxw5Bam7dUVlXeI89Wud/7J2BtuIns=";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-xuMNB8XpwSaQHFTY18kKnBo3B4JFUX8GCzxpxN5Dv10=";
   };
 
   outputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    tcl
   ];
   buildInputs = [
     zlib
@@ -74,10 +76,13 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
+  env.TCLLIBDIR = "${placeholder "out"}/lib";
+
   configureFlags = [
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
+    "--with-tcl=${lib.getLib tcl}/lib"
   ]
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
@@ -123,7 +128,7 @@ stdenv.mkDerivation rec {
     mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
   '';
 
-  doCheck = false; # fails to link against tcl
+  doCheck = true;
 
   passthru = {
     tests = {

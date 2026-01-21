@@ -283,6 +283,14 @@ lib.extendMkDerivation {
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
+      runtimeDepsCheckHook =
+        if isBootstrapPackage then
+          pythonRuntimeDepsCheckHook.override {
+            inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+          }
+        else
+          pythonRuntimeDepsCheckHook;
+
     in
     {
       inherit name;
@@ -330,17 +338,11 @@ lib.extendMkDerivation {
           else
             pypaBuildHook
         )
-        (
-          if isBootstrapPackage then
-            pythonRuntimeDepsCheckHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-            }
-          else
-            pythonRuntimeDepsCheckHook
-        )
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
         wheelUnpackHook
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "egg") [
         eggUnpackHook

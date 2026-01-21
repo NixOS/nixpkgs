@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.32.0";
+  version = "1.34.0";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "mobile-broadband";
     repo = "libmbim";
     rev = version;
-    hash = "sha256-+4INXuH2kbKs9C6t4bOJye7yyfYH/BLukmgDVvXo+u0=";
+    hash = "sha256-NhSjW1ZK4XFv7L/IaoTjN5ojwjTDQa178k73zoaneuE=";
   };
 
   mesonFlags = [

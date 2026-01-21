@@ -11,7 +11,8 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "r8168-${kernel.version}-${version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "r8168";
   # on update please verify that the source matches the realtek version
   version = "8.055.00";
 

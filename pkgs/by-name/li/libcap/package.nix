@@ -23,6 +23,8 @@
   squid,
   tor,
   uwsgi,
+  testers,
+  libcap,
 }:
 
 assert usePam -> pam != null;
@@ -127,6 +129,9 @@ stdenv.mkDerivation rec {
       tor
       uwsgi
       ;
+    pkg-config = testers.hasPkgConfigModules {
+      package = libcap;
+    };
   };
 
   meta = {
@@ -134,5 +139,9 @@ stdenv.mkDerivation rec {
     homepage = "https://sites.google.com/site/fullycapable";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+    pkgConfigModules = [
+      "libcap"
+      "libpsx"
+    ];
   };
 }

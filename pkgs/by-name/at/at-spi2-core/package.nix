@@ -7,6 +7,7 @@
   pkg-config,
   gobject-introspection,
   buildPackages,
+  withDconf ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform dconf,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -26,9 +27,9 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at-spi2-core";
-  version = "2.58.2";
+  version = "2.58.3";
 
   outputs = [
     "out"
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-ooI7li7RbN1csfxTZQKf0hg5TYUqzUCYsyGFS9ZpL24=";
+    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor finalAttrs.version}/at-spi2-core-${finalAttrs.version}.tar.xz";
+    hash = "sha256-sPq+psl0LtqMnGdfm4wdG6u6HagtoD6hEDcQIzcXwbA=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +91,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Duse_systemd=false"
+  ]
+  ++ lib.optionals (!withIntrospection) [
+    (lib.mesonEnable "introspection" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # The adaptor is only available as a shared object, as gtk2 loads it dynamically
+    (lib.mesonBool "gtk2_atk_adaptor" false)
   ];
 
   passthru = {
@@ -102,7 +110,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot use wrapGAppsHook'due to a dependency cycle
     wrapProgram $out/libexec/at-spi-bus-launcher \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      ${lib.optionalString withDconf ''--prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"''} \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 
@@ -114,4 +122,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

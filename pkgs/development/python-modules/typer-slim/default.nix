@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "typer-slim";
-  version = "0.19.2";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-mMsOEI4FpLkLkpjxjnUdmKdWD65Zx3Z1+L+XsS79k44=";
+    hash = "sha256-MvrwHemciLa2m0QUTZNuCLa7x63RKWFzJ5k6Ask25ZY=";
   };
 
   postPatch = ''

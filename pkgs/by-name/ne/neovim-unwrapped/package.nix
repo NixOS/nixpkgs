@@ -106,6 +106,8 @@ stdenv.mkDerivation (
       hash = "sha256-OsvLB9kynCbQ8PDQ2VQ+L56iy7pZ0ZP69J2cEG8Ad8A=";
     };
 
+    strictDeps = true;
+
     patches = [
       # introduce a system-wide rplugin.vim in addition to the user one
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
@@ -143,6 +145,10 @@ stdenv.mkDerivation (
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       glibcLocales
       procps
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
+      # Provide libintl for non-glibc platforms
+      gettext
     ];
 
     doCheck = false;

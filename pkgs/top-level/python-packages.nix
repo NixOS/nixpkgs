@@ -13085,6 +13085,8 @@ self: super: with self; {
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
+  pybreaker = callPackage ../development/python-modules/pybreaker { };
+
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pybrowsers = callPackage ../development/python-modules/pybrowsers { };
@@ -19480,6 +19482,8 @@ self: super: with self; {
   typer = callPackage ../development/python-modules/typer { };
 
   typer-config = callPackage ../development/python-modules/typer-config { };
+
+  typer-injector = callPackage ../development/python-modules/typer-injector { };
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 

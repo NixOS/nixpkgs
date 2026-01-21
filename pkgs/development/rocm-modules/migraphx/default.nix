@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.onnx
   ];
 
-  LDFLAGS = "-Wl,--allow-shlib-undefined";
+  env.LDFLAGS = "-Wl,--allow-shlib-undefined";
 
   cmakeFlags = [
     "-DMIGRAPHX_ENABLE_GPU=ON"
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${abseil-cpp}/include -I${hipblas-common}/include"
+    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${lib.getInclude abseil-cpp}/include -I${hipblas-common}/include"
     patchShebangs tools
 
     # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
