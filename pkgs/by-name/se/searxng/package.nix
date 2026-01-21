@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-11-21";
+    version = "0-unstable-2026-01-11";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "b876d0bed01422687f3f044658cab0afa9e0e19f";
-      hash = "sha256-K9nGtWOkVksxmD/3QIiSt/uVCBBghxA6baCgqoVoaj0=";
+      rev = "cf74e1d9e9ad662aef450ddd79aedee43554dc3c";
+      hash = "sha256-hKnfZBPr8rJyZAYBtVXpyzXwBQqg2DPFwqzH08qCITs=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
@@ -31,9 +31,8 @@ python.pkgs.toPythonModule (
       "flask-babel"
       "httpx-socks"
       "lxml"
-      "setproctitle"
+      "msgspec"
       "typer-slim"
-      "typing-extensions"
       "whitenoise"
     ];
 
@@ -62,9 +61,7 @@ python.pkgs.toPythonModule (
       with python.pkgs;
       [
         babel
-        brotli
         certifi
-        cryptography
         fasttext-predict
         flask
         flask-babel
@@ -78,13 +75,14 @@ python.pkgs.toPythonModule (
         pygments
         python-dateutil
         pyyaml
-        setproctitle
+        sniffio
         typer-slim
-        uvloop
+        typing-extensions
         valkey
         whitenoise
       ]
       ++ httpx.optional-dependencies.http2
+      ++ httpx.optional-dependencies.socks
       ++ httpx-socks.optional-dependencies.asyncio;
 
     # tests try to connect to network
