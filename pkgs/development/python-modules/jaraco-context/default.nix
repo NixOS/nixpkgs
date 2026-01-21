@@ -19,6 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-2UYG1xXnH1kjYNvB6EKJPRZJ1Zd0yYhTDBTdrNFN1p4=";
   };
 
+  postPatch = ''
+    sed -i "/coherent.licensed/d" pyproject.toml
+  '';
+
   pythonNamespaces = [ "jaraco" ];
 
   build-system = [ setuptools-scm ];
