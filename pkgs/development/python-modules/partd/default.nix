@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
+  versioneer,
 
   # dependencies
   locket,
@@ -33,15 +33,10 @@ buildPythonPackage rec {
     hash = "sha256-GtIo6n87TmM5aRgtRyxhhXXAINpPCFbjZ/sQz/vkcoA=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # python 3.12 support; https://github.com/dask/partd/pull/70
-      url = "https://github.com/dask/partd/pull/70/commits/c96a034367cb9fee0a0900f758b802aeef8a8a41.patch";
-      hash = "sha256-QlSIrFQQQo9We/gf7WSgmWrxdt3rxXQcyvJnFm8R5cM=";
-    })
+  nativeBuildInputs = [
+    setuptools
+    versioneer
   ];
-
-  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     locket
