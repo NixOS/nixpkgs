@@ -16,15 +16,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
+  version = "1550555070624";
   pname = "beancount";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beancount";
-    tag = version;
-    hash = "sha256-XWTgaBvB4/SONL44afvprZwJUVrkoda5XLGNxad0kec=";
+    tag = "archive/isaacasay/fixed-incorrect-variable-displayed-in-er-${version}";
+    hash = "sha256-5TdFDrWTOjJGsDhUdd7WmxM7Qdv+/vrKGQtvSNtNlyE=";
   };
 
   patches = [
