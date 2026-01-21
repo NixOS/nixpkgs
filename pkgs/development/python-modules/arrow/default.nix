@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1FQGF2SMtfiVcw8a2MgqZfLa0BZvV7dfPKVHWcTWeoU=";
+    hash = "sha256-7QzAUOmAAbh3noTUYbAJjErFl+iHBKZVWCsh0RblJtc=";
   };
 
   postPatch = ''
