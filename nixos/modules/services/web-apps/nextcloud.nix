@@ -52,7 +52,7 @@ let
     };
   };
 
-  webroot =
+  packageWithApps =
     pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
       {
         preferLocalBuild = true;
@@ -73,6 +73,9 @@ let
           ) appStores
         )}
       '';
+
+  webroot =
+    if cfg.enableCompressedAssets then pkgs.compressDrvWeb packageWithApps { } else packageWithApps;
 
   inherit (cfg) datadir;
 
@@ -472,6 +475,12 @@ in
     phpPackage = lib.mkPackageOption pkgs "php" {
       default = [ "php84" ];
       example = "php82";
+    };
+
+    enableCompressedAssets = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to provide gzip, brotli and zstd pre-compressed assets for lower CPU usage and less transfer size in production. This leads to longer build times and bigger derivation size.";
     };
 
     finalPackage = lib.mkOption {
