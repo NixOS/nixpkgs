@@ -56,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+
     updateScript = nix-update-script { };
   };
 
