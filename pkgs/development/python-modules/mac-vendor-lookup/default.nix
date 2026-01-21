@@ -8,14 +8,14 @@
 
 buildPythonPackage {
   pname = "mac-vendor-lookup";
-  version = "0.1.12";
+  version = "0.1.15";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bauerj";
     repo = "mac_vendor_lookup";
-    rev = "90dbea48f8a9d567b5f9039ebd151ddfe7d12a19";
-    hash = "sha256-mPPJDrWdyvkTdb4WfeTNYwuC+Ek9vH7ORKRTREg+vK8=";
+    tag = version;
+    hash = "sha256-RLCEyDalwQUVmcZdVPN1cyKLIPbWcZfjzIkClUZCeJU=";
   };
 
   postPatch = ''
