@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "libpysal";
-  version = "4.13.0";
+  version = "4.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "libpysal";
     tag = "v${version}";
-    hash = "sha256-lUaSUNNT2alfbBOjo59Dbjc3Yrkim3ZQHdLbxdrhDFw=";
+    hash = "sha256-epwviJtQ97MxUA4Gpw6SJceCdBPFXnZBF13A1HiJcOo=";
   };
 
   build-system = [ setuptools-scm ];
