@@ -28,12 +28,12 @@
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "3.5";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1Mb5z4H1LWkjCGZ5a4KvvM3sPbeuT70bZep1D+7VADc=";
+    hash = "sha256-JrfDV6zMDIzeVYrUhig3KLZbapXYXuHNZrr6tMgWhQk=";
   };
 
   # backport patch to fix tests with Python 3.13.4
