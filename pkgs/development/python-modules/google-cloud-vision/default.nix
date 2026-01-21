@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.11.0";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit version;
-    hash = "sha256-w8tX3yzxUuvmLrqumx1d7/Wiauxb1uHH9n5Ev29FGPQ=";
+    hash = "sha256-MACaIsl5s7D1LBBYprYbsZo+qPJoYRRm/L8wm3T/RzQ=";
   };
 
   build-system = [ setuptools ];
