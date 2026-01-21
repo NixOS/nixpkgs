@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.21";
+  version = "0.0.24";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pcffont";
     inherit version;
-    hash = "sha256-RWmR6shNFuJytOfRAVTiNdIJMRpkBchBj8zOy4ybE9o=";
+    hash = "sha256-Sax3bUs6ogQ+LuUAy6k1zEfN4WT81zm1LzP2s/6Pecg=";
   };
 
   build-system = [ hatchling ];
