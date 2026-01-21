@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "convertertools";
-  version = "0.6.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "convertertools";
     tag = "v${version}";
-    hash = "sha256-Oy1Nf/mS2Lr2N7OB27QDlW+uuhafib2kolEXzXLppWU=";
+    hash = "sha256-YLEZGTq3wtiLsqQkdxcdM4moUEYPN29Uai5o81FUtVc=";
   };
 
   build-system = [
