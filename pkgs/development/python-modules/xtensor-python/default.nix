@@ -13,13 +13,13 @@
 toPythonModule (
   stdenv.mkDerivation (finalAttrs: {
     pname = "xtensor-python";
-    version = "0.28.0";
+    version = "0.29.0";
 
     src = fetchFromGitHub {
       owner = "xtensor-stack";
       repo = "xtensor-python";
-      tag = finalAttrs.version;
-      hash = "sha256-xByqAYtSRKOnllMUFdRM25bXGft/43EEpEMIlcjdrgE=";
+      tag = version;
+      hash = "sha256-GN1X46gmeXh3pM6sw9sSUahLOxnSoimoY+K66vy8SxM=";
     };
 
     nativeBuildInputs = [ cmake ];
