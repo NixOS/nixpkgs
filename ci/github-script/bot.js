@@ -344,6 +344,15 @@ module.exports = async ({ github, context, core, dry }) => {
       evalLabels['8.has: package (new)'] =
         hasNewPackages && commitsIndicateNewPackage
 
+      // Label package update PRs: "packagename: X.Y.Z -> A.B.C"
+      // Matches versions like: 1.2.3, 0-unstable-2024-01-15, 1.3rc1, alpha, unstable
+      // Exclude NixOS module commits like "nixos/ncps: types.str -> types.path"
+      const updatePackagePattern = /(?<!nixos\/\S+): [\w.-]+ (->|→) [\w.-]+/
+      const commitsIndicateUpdate = commitMessages.some((msg) =>
+        updatePackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (update)'] = commitsIndicateUpdate
+
       // TODO: Get "changed packages" information from list of changed by-name files
       // in addition to just the Eval results, to make this work for these packages
       // when Eval results have expired as well.
