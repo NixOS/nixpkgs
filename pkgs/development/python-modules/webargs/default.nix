@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.7.0";
+  version = "8.7.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DGF97BntTx/2skfNc4VelJ2HBS1xkAk4tx8Mr9kvGRs=";
+    hash = "sha256-eZv5A5x2wj/Y3BlREHp1qeVhIDwV1q6PicHkbiNGNsE=";
   };
 
   patches = [
