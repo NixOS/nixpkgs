@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.22";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "mdformat";
     tag = version;
-    hash = "sha256-WvbGCqfzh7KlNXIGJq09goiyLzVgU7c1+qmsLrIW38k=";
+    hash = "sha256-fo4xO4Y89qPAggEjwuf6dnTyu1JzhZVdJyUqGNpti7g=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
-    changelog = "https://github.com/executablebooks/mdformat/blob/${version}/docs/users/changelog.md";
+    changelog = "https://github.com/executablebooks/mdformat/blob/${src.tag}/docs/users/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
