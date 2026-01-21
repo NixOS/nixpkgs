@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "mypy-protobuf";
-  version = "3.6.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AvJC6zQJ9miJ8rGjqlg1bsTZCc3Q+TEVYi6ecDZuyjw=";
+    hash = "sha256-b90c/btEGccTKR2ACjMtS7plENvRNB7ZXgvMgvyttrU=";
   };
 
   pythonRelaxDeps = [ "protobuf" ];
