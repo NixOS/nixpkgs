@@ -17,6 +17,7 @@
   nanobind,
   nlohmann_json,
   pybind11,
+  typing-extensions,
   # linux-only
   openblas,
 
@@ -42,14 +43,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.1";
+  version = "0.30.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
+    hash = "sha256-Y4RTkGcDCZ9HLyflN0qYhPt/oVOsBhF1mHnKM4n1/ys=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -59,9 +60,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "nanobind==2.10.2" "nanobind"
-
     substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
       --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
   '';
@@ -89,6 +87,7 @@ buildPythonPackage (finalAttrs: {
       (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
     ];
   };
 
@@ -103,9 +102,9 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     fmt
     gguf-tools
-    nanobind
     nlohmann_json
     pybind11
+    typing-extensions
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openblas
